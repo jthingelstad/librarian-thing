@@ -39,8 +39,7 @@ interface JmapMailbox {
  * resolving by role alone files every Thingy magic link and Dispatch email into
  * the folder shared with the other agents.
  */
-const SENT_FOLDER =
-  process.env.THINGY_EMAIL_SENT_FOLDER?.trim() || 'Thingy-Sent';
+const SENT_FOLDER = process.env.THINGY_EMAIL_SENT_FOLDER?.trim() || 'Thingy-Sent';
 
 /**
  * Prefer our own named child of Sent; fall back to the role parent so a renamed
@@ -51,9 +50,7 @@ export function pickSentMailbox(
   sentRootId: string,
   folderName: string = SENT_FOLDER
 ): JmapMailbox | undefined {
-  const child = mailboxes.find(
-    (mailbox) => mailbox.parentId === sentRootId && mailbox.name === folderName
-  );
+  const child = mailboxes.find((mailbox) => mailbox.parentId === sentRootId && mailbox.name === folderName);
   if (child?.id) return child;
   return mailboxes.find((mailbox) => mailbox.id === sentRootId);
 }
