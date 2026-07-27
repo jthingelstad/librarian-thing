@@ -31,18 +31,18 @@
       <div class="form-grid">
         <div class="full">
           <label for="title">Title</label>
-          <input id="title" name="title" value="{{ row.title if is_edit else '' }}" required
+          <input id="title" name="title" value="{{ row.title if is_edit else 'WT' ~ defaults.get('seq','') }}" required
                  placeholder="WT351">
         </div>
 
         {% if not is_edit %}
           <div class="nl-only">
             <label for="seq">Issue number</label>
-            <input id="seq" type="number" name="seq" min="1" placeholder="e.g. 351">
+            <input id="seq" type="number" name="seq" min="1" value="{{ defaults.get('seq','') }}" placeholder="e.g. 351">
           </div>
           <div class="nl-only">
             <label for="pub_date">Publish date</label>
-            <input id="pub_date" type="date" name="pub_date">
+            <input id="pub_date" type="date" name="pub_date" value="{{ defaults.get('pub_date','') }}">
           </div>
           <div class="nl-only">
             <label for="day_count">Day count</label>

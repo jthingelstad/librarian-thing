@@ -528,6 +528,22 @@ def _m_0025_issue_publish_legs(conn: sqlite3.Connection) -> None:
     )
 
 
+def _m_0026_issue_source_syncs(conn: sqlite3.Connection) -> None:
+    """Persist last source-sync evidence independently of item changes."""
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS issue_source_syncs (
+          issue_number INTEGER PRIMARY KEY
+            REFERENCES issue_windows(issue_number) ON DELETE CASCADE,
+          status TEXT NOT NULL,
+          message TEXT NOT NULL DEFAULT '',
+          evidence_json TEXT NOT NULL DEFAULT '{}',
+          synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+        """
+    )
+
+
 def _m_0020_drop_issue_cards(conn: sqlite3.Connection) -> None:
     """Drop the issue_cards table — the Discord phase cards were retired in
     favour of the web production page; nothing reads these handles anymore."""
@@ -731,6 +747,11 @@ MIGRATIONS: tuple[Migration, ...] = (
         id="0025_issue_publish_legs",
         description="Add durable per-leg state for the safe publish runbook",
         apply=_m_0025_issue_publish_legs,
+    ),
+    Migration(
+        id="0026_issue_source_syncs",
+        description="Add durable last source-sync evidence per issue",
+        apply=_m_0026_issue_source_syncs,
     ),
 )
 

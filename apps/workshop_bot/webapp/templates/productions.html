@@ -19,6 +19,18 @@
     <div class="toolbar"><a class="btn" href="/productions/new">New issue</a></div>
   </div>
 
+  {% if suggestion %}
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Next issue: WT{{ suggestion.seq }}</h2>
+          <div class="muted">Suggested return date: {{ suggestion.pub_date }}. You can adjust the number, date, or window before creating it.</div>
+        </div>
+        <a class="btn" href="/productions/new">Plan WT{{ suggestion.seq }}</a>
+      </div>
+    </section>
+  {% endif %}
+
   <form method="post" action="/productions/bulk-status">
     <section class="panel tight">
       <div class="toolbar">

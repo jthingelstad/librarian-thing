@@ -621,6 +621,15 @@ CREATE TABLE IF NOT EXISTS issue_items (
 CREATE INDEX IF NOT EXISTS idx_issue_items_issue_section_pos
   ON issue_items(issue_number, section, position);
 
+CREATE TABLE IF NOT EXISTS issue_source_syncs (
+  issue_number INTEGER PRIMARY KEY
+    REFERENCES issue_windows(issue_number) ON DELETE CASCADE,
+  status TEXT NOT NULL,
+  message TEXT NOT NULL DEFAULT '',
+  evidence_json TEXT NOT NULL DEFAULT '{}',
+  synced_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- Editorial comments — Eddy's draft-review items, anchored to issue_items
 -- rows (or to a whole section / the whole issue) and stamped with a
 -- stable human-readable handle for the HTML drawer + Discord lookup.

@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+from datetime import date, timedelta
 
 from aiohttp import web
 
@@ -23,7 +24,7 @@ from ..jobs import _base, production_ops, production_state, publish, put_to_bed,
 from ..tools import content_store, db, issue_items, issue_items_render, s3
 from ..tools.content import atoms_view
 from ..tools.content import production_types as ptypes
-from . import server
+from . import issue_workflow, server
 from .render import render
 
 
@@ -143,7 +144,20 @@ async def productions_list(request: web.Request) -> web.Response:
                 "shipped": shipped,
             }
         )
-    return render("productions.html", request, groups=groups, show_all=show_all)
+    active = await asyncio.to_thread(db.get_active_issue_window)
+    suggestion = None
+    if active is None and not show_all:
+        suggestion = {
+            "seq": await asyncio.to_thread(db.next_production_seq, "newsletter"),
+            "pub_date": issue_workflow.suggested_publish_date(),
+        }
+    return render(
+        "productions.html",
+        request,
+        groups=groups,
+        show_all=show_all,
+        suggestion=suggestion,
+    )
 
 
 # Bulk lifecycle actions from the registry list (checkbox select → one POST).
@@ -182,7 +196,7 @@ async def production_status(request: web.Request) -> web.Response:
     raise web.HTTPFound(f"/productions/{pid}")
 
 
-def _render_form(request, *, mode, row=None, error=None, status=200):
+def _render_form(request, *, mode, row=None, error=None, status=200, defaults=None):
     types = [(k, ptypes.PRODUCTION_TYPES[k].label) for k in _TYPE_ORDER]
     return render(
         "production_form.html",
@@ -194,11 +208,16 @@ def _render_form(request, *, mode, row=None, error=None, status=200):
         types=types,
         phases_json=_PHASES_JSON,
         statuses=ptypes.STATUSES,
+        defaults=defaults or {},
     )
 
 
 async def production_new_form(request: web.Request) -> web.Response:
-    return _render_form(request, mode="new")
+    defaults = {
+        "seq": await asyncio.to_thread(db.next_production_seq, "newsletter"),
+        "pub_date": issue_workflow.suggested_publish_date(),
+    }
+    return _render_form(request, mode="new", defaults=defaults)
 
 
 async def production_edit_form(request: web.Request) -> web.Response:
@@ -416,6 +435,16 @@ def _newsletter_page_data(row) -> dict:
         else production_state.build_state(n)
     )
     atoms = atoms_view.build(n, row["id"])
+    window = db.get_active_issue_window(n) or {}
+    source_sync = db.get_source_sync(n)
+    next_action = issue_workflow.next_action(row=row, state=state, source_sync=source_sync)
+    thursday_target = ""
+    try:
+        thursday_target = (
+            date.fromisoformat(window.get("pub_date", "")) - timedelta(days=2)
+        ).isoformat()
+    except ValueError:
+        pass
     return {
         "row": row,
         "ptype": "newsletter",
@@ -430,6 +459,10 @@ def _newsletter_page_data(row) -> dict:
         "currently": db.currently_get_entries(n),
         "currently_types": [t["label"] for t in db.currently_list_types()],
         "comments": issue_items.list_open_comments(n),
+        "window": window,
+        "source_sync": source_sync,
+        "next_action": next_action,
+        "thursday_target": thursday_target,
         # Live DB render — the DB is the draft (S3 draft.html is retired).
         "review_url": f"/productions/{row['id']}/preview",
         "phases": list(ptypes.phases_for("newsletter")),

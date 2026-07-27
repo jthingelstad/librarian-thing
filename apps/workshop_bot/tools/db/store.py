@@ -10,6 +10,7 @@ stable surface. Edit the domain module, not this aggregator:
 - ``_issues``          — issue windows + publishing-spine phase/cards
 - ``_productions``     — newsletter issue registry mirror
 - ``_publishing``      — durable per-leg publish runbook state
+- ``_source_sync``     — durable last source-sync evidence
 - ``_locks``           — job locks (single-asset serialization)
 - ``_currently``       — per-issue ``## Currently`` values + canonical types
 - ``_runtime``         — draft digests + agent-run telemetry
@@ -26,5 +27,6 @@ from ._locks import *  # noqa: F401,F403
 from ._productions import *  # noqa: F401,F403
 from ._publishing import *  # noqa: F401,F403
 from ._runtime import *  # noqa: F401,F403
+from ._source_sync import *  # noqa: F401,F403
 from ._subscribers import *  # noqa: F401,F403
 from ._tasks import *  # noqa: F401,F403

@@ -69,6 +69,16 @@ class ProductionPageTests(unittest.IsolatedAsyncioTestCase):
         body = await (await c.get("/productions/WT360", headers=H)).text()
         self.assertIn("Start working", body)
         self.assertNotIn(">Content<", body)  # no editing until started
+        self.assertIn("Next action", body)
+        self.assertIn("Thursday target 2026-06-25", body)
+        self.assertIn("Sources never synced", body)
+
+    async def test_empty_home_proposes_computed_post_break_issue(self):
+        c = await self._client()
+        body = await (await c.get("/productions", headers=H)).text()
+        self.assertIn("Next issue: WT1", body)
+        form = await (await c.get("/productions/new", headers=H)).text()
+        self.assertIn('name="seq" min="1" value="1"', form)
 
     async def test_build_page_edits_content(self):
         c = await self._client()

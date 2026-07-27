@@ -124,7 +124,9 @@
       <h1>{{ row.title }}</h1>
       <div class="title-meta">
         {% if row.pub_date %}<span>Publishes {{ row.pub_date }}</span>{% endif %}
-        {% if row.due_at %}<span>Due {{ row.due_at }}</span>{% endif %}
+        {% if thursday_target %}<span>Thursday target {{ thursday_target }}</span>{% endif %}
+        {% if window.end_date %}<span>Content cutoff {{ window.end_date }}</span>{% endif %}
+        <span>Sources {{ source_sync.synced_at if source_sync else "never synced" }}{% if source_sync and source_sync.status != "succeeded" %} (partial){% endif %}</span>
         <span>{{ "~" + (state.word_count|string) + " words" if state.word_count is defined else "No draft yet" }}</span>
         {% if state.days_to_pub is defined and state.days_to_pub is not none %}<span>{{ state.days_to_pub }}</span>{% endif %}
       </div>
@@ -151,6 +153,28 @@
       {% endif %}
     </div>
   </div>
+
+  <section class="panel tight">
+    <div class="panel-head" style="padding:0; min-height:auto;">
+      <div>
+        <span class="muted">Next action</span>
+        <h2 style="margin:.15rem 0 0;">{{ next_action.label }}</h2>
+      </div>
+      {% if next_action.kind == "link" %}
+        <a class="btn" href="{{ next_action.url }}">{{ next_action.label }}</a>
+      {% elif next_action.kind == "publish" %}
+        <form method="post" action="/productions/{{ row.id }}/publish">
+          <input type="hidden" name="leg" value="{{ next_action.value }}">
+          <button class="btn" type="submit">{{ next_action.label }}</button>
+        </form>
+      {% else %}
+        <form method="post" action="{{ next_action.url }}">
+          {% if next_action.field %}<input type="hidden" name="{{ next_action.field }}" value="{{ next_action.value }}">{% endif %}
+          <button class="btn" type="submit">{{ next_action.label }}</button>
+        </form>
+      {% endif %}
+    </div>
+  </section>
 
   {% if phase == "planned" %}
     <div class="issue-layout">
@@ -183,7 +207,7 @@
   {% else %}
     <div class="issue-layout">
       <section class="main-stack">
-        <section class="panel flush">
+        <section class="panel flush" id="issue-canvas">
           <div class="panel-head">
             <h2>Issue Canvas</h2>
             <div class="toolbar">
@@ -215,7 +239,7 @@
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="cover">
           <div class="panel-head" style="padding:0 0 .85rem; min-height:auto;">
             <h2>Cover</h2>
             <span class="meta">{{ "ready" if state.cover_present else "missing" }}</span>
@@ -286,7 +310,7 @@
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="pipeline">
           <div class="panel-head" style="padding:0 0 .85rem; min-height:auto;">
             <h2>Pipeline</h2>
             <span class="meta">{{ phase }}</span>
@@ -356,7 +380,7 @@
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="eddy-notes">
           <div class="panel-head" style="padding:0 0 .85rem; min-height:auto;">
             <h2>Currently</h2>
             <span class="meta">{{ currently|length }} item(s)</span>

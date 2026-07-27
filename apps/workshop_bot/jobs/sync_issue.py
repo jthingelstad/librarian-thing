@@ -77,6 +77,13 @@ async def run(ctx: "_base.JobContext") -> "_base.JobResult":
         elif res.get("observed"):
             bits.append(f"{res['observed']} {source} items")
     summary = ", ".join(bits) or "no source updates"
+    await asyncio.to_thread(
+        db.record_source_sync,
+        n,
+        ok=ok,
+        message=summary,
+        evidence=sync_result,
+    )
 
     mark = "✅" if ok else "⚠️"
     return _base.JobResult(
