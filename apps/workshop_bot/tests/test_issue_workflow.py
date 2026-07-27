@@ -32,14 +32,18 @@ def test_planned_issue_next_action_is_start():
 def test_build_issue_requires_sync_then_intro():
     row = {"id": "WT351", "phase": "build"}
     state = {"intro_present": False}
-    assert issue_workflow.next_action(
-        row=row, state=state, source_sync=None
-    )["label"] == "Sync sources"
-    assert issue_workflow.next_action(
-        row=row,
-        state=state,
-        source_sync={"status": "succeeded"},
-    )["label"] == "Write the intro"
+    assert (
+        issue_workflow.next_action(row=row, state=state, source_sync=None)["label"]
+        == "Sync sources"
+    )
+    assert (
+        issue_workflow.next_action(
+            row=row,
+            state=state,
+            source_sync={"status": "succeeded"},
+        )["label"]
+        == "Write the intro"
+    )
 
 
 def test_publish_issue_advances_in_dependency_order():
@@ -52,6 +56,7 @@ def test_publish_issue_advances_in_dependency_order():
         "email_confirmed": False,
         "close_ready": False,
     }
-    assert issue_workflow.next_action(
-        row=row, state=state, source_sync={}
-    )["label"] == "Publish website"
+    assert (
+        issue_workflow.next_action(row=row, state=state, source_sync={})["label"]
+        == "Publish website"
+    )

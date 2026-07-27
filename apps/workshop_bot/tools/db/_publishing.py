@@ -113,7 +113,7 @@ def get_publish_legs(issue_number: int) -> dict[str, dict[str, Any]]:
         row = dict(raw)
         try:
             row["evidence"] = json.loads(row.pop("evidence_json") or "{}")
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             row["evidence"] = {}
         result[row["leg"]] = row
     return result

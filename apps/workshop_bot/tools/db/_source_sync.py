@@ -43,6 +43,6 @@ def get_source_sync(issue_number: int) -> Optional[dict[str, Any]]:
     row = dict(raw)
     try:
         row["evidence"] = json.loads(row.pop("evidence_json") or "{}")
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         row["evidence"] = {}
     return row

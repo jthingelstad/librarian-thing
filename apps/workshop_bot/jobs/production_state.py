@@ -215,8 +215,7 @@ def publish_state(n: Optional[int] = None, *, window: Optional[dict] = None) -> 
             BTN_RECOMPOSE: recompose_needed,
             BTN_EMAIL: email_ready and email_leg.get("status") not in ("running", "succeeded"),
             BTN_WEBSITE: (
-                bool(buttondown_id)
-                and website_leg.get("status") not in ("running", "succeeded")
+                bool(buttondown_id) and website_leg.get("status") not in ("running", "succeeded")
             ),
             BTN_PODCAST: (
                 any_section and audio_leg.get("status") not in ("running", "succeeded", "waived")
