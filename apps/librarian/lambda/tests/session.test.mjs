@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { renderFaqAnswer, searchFaq } from '../dist/shared/faq.mjs';
 import { buildMagicLink, createMagicToken, magicTokenHash, validMagicToken } from '../dist/shared/magic-link.mjs';
-import { buildJmapEmailCalls, buildMagicLinkJmapCalls, magicLinkEmailHtml, magicLinkEmailText, requireMethodResponse } from '../dist/shared/jmap-mail.mjs';
+import { buildJmapEmailCalls, buildMagicLinkJmapCalls, magicLinkEmailHtml, magicLinkEmailText, pickSentMailbox, requireMethodResponse } from '../dist/shared/jmap-mail.mjs';
 import { createSessionToken, createSessionTokenForSub, emailHash, normalizeEmail, verifyToken } from '../dist/shared/session.mjs';
 import { entitlementsForSessionPayload, handler as authHandler, magicLinkBaseWithReturnPath } from '../dist/auth/handler.mjs';
 import {
@@ -897,4 +897,38 @@ test('Bedrock converse stream reader reconstructs streamed tool use input', asyn
     toolUse: { toolUseId: 'tool-1', name: 'search_archive', input: { query: 'RSS' } }
   }]);
   assert.equal(result.stopReason, 'tool_use');
+});
+
+// The Fastmail account is shared by several agents: only the top-level Sent
+// carries the JMAP "sent" role, and each agent has a plain named child under it.
+// Resolving by role alone filed every Thingy magic link into the shared Sent.
+const SHARED_MAILBOXES = [
+  { id: 'sent-root', name: 'Sent', parentId: null, role: 'sent' },
+  { id: 'drafts', name: 'Drafts', parentId: null, role: 'drafts' },
+  { id: 'thingy-sent', name: 'Thingy-Sent', parentId: 'sent-root' },
+  { id: 'elixir-sent', name: 'Elixir-Sent', parentId: 'sent-root' }
+];
+
+test('JMAP sent mailbox resolves to Thingy own child of Sent', () => {
+  const picked = pickSentMailbox(SHARED_MAILBOXES, 'sent-root', 'Thingy-Sent');
+  assert.equal(picked.id, 'thingy-sent');
+});
+
+test('JMAP sent mailbox never picks another agent folder', () => {
+  const picked = pickSentMailbox(SHARED_MAILBOXES, 'sent-root', 'Thingy-Sent');
+  assert.notEqual(picked.id, 'elixir-sent');
+});
+
+test('JMAP sent mailbox falls back to shared Sent rather than failing to send', () => {
+  const picked = pickSentMailbox(SHARED_MAILBOXES, 'sent-root', 'Missing-Sent');
+  assert.equal(picked.id, 'sent-root');
+});
+
+test('JMAP sent mailbox ignores a same-named folder under another parent', () => {
+  const decoys = [
+    ...SHARED_MAILBOXES,
+    { id: 'archive-root', name: 'Archive', parentId: null, role: 'archive' },
+    { id: 'decoy', name: 'Thingy-Sent', parentId: 'archive-root' }
+  ];
+  assert.equal(pickSentMailbox(decoys, 'sent-root', 'Thingy-Sent').id, 'thingy-sent');
 });

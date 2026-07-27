@@ -1,3 +1,4 @@
+import { logEvent } from './logging.mjs';
 import { tinylyticsPixelHtml } from './tinylytics-email.mjs';
 
 const JMAP_SESSION_URL = 'https://api.fastmail.com/jmap/session';
@@ -24,7 +25,37 @@ interface JmapIdentity {
 
 interface JmapMailbox {
   id?: string;
+  name?: string;
+  parentId?: string | null;
   role?: string;
+}
+
+/**
+ * Mailbox Thingy files its outbound mail into.
+ *
+ * The Fastmail account is shared by several agents and uses a per-agent scheme
+ * (Thingy-Sent, Elixir-Sent, Oliver-Sent, Otto-Sent). Only the top-level Sent
+ * carries the JMAP `sent` role — the agent folders are plain named children — so
+ * resolving by role alone files every Thingy magic link and Dispatch email into
+ * the folder shared with the other agents.
+ */
+const SENT_FOLDER =
+  process.env.THINGY_EMAIL_SENT_FOLDER?.trim() || 'Thingy-Sent';
+
+/**
+ * Prefer our own named child of Sent; fall back to the role parent so a renamed
+ * folder degrades to "misfiled" rather than "magic link never sent".
+ */
+export function pickSentMailbox(
+  mailboxes: JmapMailbox[],
+  sentRootId: string,
+  folderName: string = SENT_FOLDER
+): JmapMailbox | undefined {
+  const child = mailboxes.find(
+    (mailbox) => mailbox.parentId === sentRootId && mailbox.name === folderName
+  );
+  if (child?.id) return child;
+  return mailboxes.find((mailbox) => mailbox.id === sentRootId);
 }
 
 interface SendContext {
@@ -156,7 +187,17 @@ async function loadSendContext(session: JmapSession, fromEmail: string): Promise
   }
   const response = await jmapCall(session.apiUrl, [
     ['Identity/get', { accountId: submissionAccountId, ids: null }, 'identity'],
-    ['Mailbox/get', { accountId: mailAccountId, ids: null }, 'mailboxes']
+    [
+      'Mailbox/get',
+      {
+        accountId: mailAccountId,
+        ids: null,
+        // name + parentId are needed to find our own child of Sent; role alone
+        // only ever resolves the shared top-level folder.
+        properties: ['id', 'name', 'parentId', 'role']
+      },
+      'mailboxes'
+    ]
   ]);
   const identities =
     (requireMethodResponse(response.methodResponses, 'Identity/get', 'identity').list as JmapIdentity[] | undefined) ||
@@ -165,11 +206,19 @@ async function loadSendContext(session: JmapSession, fromEmail: string): Promise
     (requireMethodResponse(response.methodResponses, 'Mailbox/get', 'mailboxes').list as JmapMailbox[] | undefined) ||
     [];
   const drafts = mailboxes.find((mailbox) => mailbox.role === 'drafts');
-  const sent = mailboxes.find((mailbox) => mailbox.role === 'sent');
+  const sentRoot = mailboxes.find((mailbox) => mailbox.role === 'sent');
   const identity = pickIdentity(identities, fromEmail);
   if (!identity?.id) throw new Error(`No JMAP identity available for ${fromEmail}`);
   if (!drafts?.id) throw new Error('No JMAP drafts mailbox available');
+  if (!sentRoot?.id) throw new Error('No JMAP sent mailbox available');
+  const sent = pickSentMailbox(mailboxes, sentRoot.id);
   if (!sent?.id) throw new Error('No JMAP sent mailbox available');
+  if (sent.id === sentRoot.id) {
+    logEvent('WARN', 'jmap_sent_folder_missing', {
+      folder: SENT_FOLDER,
+      detail: 'filing into the shared Sent folder'
+    });
+  }
   return {
     apiUrl: session.apiUrl,
     mailAccountId,
