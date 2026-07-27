@@ -11,5 +11,5 @@ truth for how things work today.
 
 | Path | What it is |
 |---|---|
-| [`design/`](design/) | Design briefs + specs + progress logs: the Studio issue workspace design, atom model, workshop content-loop design brief, bot redesign spec, content-loop progress log, and publishing-workflow ship-night planning brief. |
+| [`design/`](design/) | Design briefs + specs + progress logs: the active fall publication readiness program, Studio issue workspace design, atom model, workshop content-loop design brief, bot redesign spec, content-loop progress log, and publishing-workflow ship-night planning brief. |
 | [`audits/`](audits/README.md) | One-off archive/content audit outputs (archive audit, LLM audit, missing micro.blog posts / photos) + the apply-fixes references. |
