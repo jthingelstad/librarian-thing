@@ -29,6 +29,7 @@ from apps.workshop_bot.jobs import (  # noqa: E402
     compose_envelope,
     production_ops,
     production_state,
+    publish,
     put_to_bed,
 )
 from apps.workshop_bot.tests._fixtures import DBTestCase as _DBTestCase  # noqa: E402
@@ -187,6 +188,30 @@ class PublishStateTests(_DBTestCase):
         self.assertTrue(st["email_shipped"])
         self.assertTrue(st["gates"][production_state.BTN_WEBSITE])
 
+    def test_completed_legs_leave_only_failed_leg_retryable(self):
+        _window(458)
+        db.set_issue_phase(458, "publish")
+        self._seed_built(subject="S", description="d", buttondown_id="em_x")
+        content_store.write_issue(458, "echoes.md", "Echoes.")
+        db.publish_leg_set(458, "audio", "succeeded")
+        db.publish_leg_set(458, "email", "succeeded")
+        db.publish_leg_set(458, "website", "failed", message="planned failure")
+        st = production_state.publish_state(458)
+        self.assertFalse(st["gates"][production_state.BTN_PODCAST])
+        self.assertFalse(st["gates"][production_state.BTN_EMAIL])
+        self.assertTrue(st["gates"][production_state.BTN_WEBSITE])
+        self.assertFalse(st["gates"][production_state.BTN_ALL])
+
+    def test_close_ready_requires_delivery_website_and_audio_or_waiver(self):
+        _window(458)
+        db.set_issue_phase(458, "publish")
+        self._seed_built(subject="S", description="d", buttondown_id="em_x")
+        db.publish_leg_set(458, "website", "succeeded")
+        db.publish_leg_set(458, "email_delivery", "succeeded")
+        self.assertFalse(production_state.publish_state(458)["close_ready"])
+        db.publish_leg_set(458, "audio", "waived")
+        self.assertTrue(production_state.publish_state(458)["close_ready"])
+
     def test_recompose_gate_off_when_echoes_present(self):
         _window(458)
         db.set_issue_phase(458, "publish")
@@ -226,6 +251,37 @@ class PublishStateTests(_DBTestCase):
             res = asyncio.run(production_ops.recompose(_base.JobContext()))
         self.assertTrue(res.ok, res.message)
         m_echoes.assert_awaited_once()
+
+
+class PublishLegTrackingTests(_DBTestCase):
+    def test_tracked_leg_persists_success_evidence(self):
+        _window(458)
+        operation = AsyncMock(
+            return_value=_base.JobResult(
+                True,
+                "website shipped",
+                data={"commit_sha": "abc123"},
+            )
+        )
+        result = asyncio.run(
+            publish._run_tracked(_base.JobContext(), "website", operation, issue_number=458)
+        )
+        self.assertTrue(result.ok)
+        leg = db.get_publish_legs(458)["website"]
+        self.assertEqual(leg["status"], "succeeded")
+        self.assertEqual(leg["evidence"]["commit_sha"], "abc123")
+        self.assertEqual(leg["attempt_count"], 1)
+
+    def test_tracked_leg_persists_failure_for_recovery(self):
+        _window(458)
+        operation = AsyncMock(return_value=_base.JobResult(False, "planned website failure"))
+        result = asyncio.run(
+            publish._run_tracked(_base.JobContext(), "website", operation, issue_number=458)
+        )
+        self.assertFalse(result.ok)
+        leg = db.get_publish_legs(458)["website"]
+        self.assertEqual(leg["status"], "failed")
+        self.assertIn("planned website failure", leg["message"])
 
 
 class PutToBedTests(_DBTestCase):
@@ -268,6 +324,9 @@ class PutToBedTests(_DBTestCase):
         _window(n)
         db.set_issue_phase(n, "publish")
         issues_root, audio_manifest = self._seed_filing_artifacts(n)
+        db.publish_leg_set(n, "website", "succeeded")
+        db.publish_leg_set(n, "email_delivery", "succeeded")
+        db.publish_leg_set(n, "audio", "waived")
         ctx = _base.JobContext()
         with (
             patch.object(put_to_bed, "ISSUES_ROOT", issues_root),

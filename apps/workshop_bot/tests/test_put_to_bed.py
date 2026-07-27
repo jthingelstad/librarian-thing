@@ -99,6 +99,12 @@ def _set_active_window(n: int, pub_date: str = "2026-05-16") -> None:
     )
 
 
+def _complete_runbook(n: int, *, audio: str = "succeeded") -> None:
+    db.publish_leg_set(n, "website", "succeeded", message="test website")
+    db.publish_leg_set(n, "email_delivery", "succeeded", message="test delivery")
+    db.publish_leg_set(n, "audio", audio, message="test audio")
+
+
 class PutToBedTests(DBTestCase):
     def setUp(self) -> None:
         super().setUp()
@@ -135,6 +141,7 @@ class PutToBedTests(DBTestCase):
         _write_issue_files(self._fake_repo, 348)
         _write_audio_manifest(self._fake_repo, 348)
         _set_active_window(348)
+        _complete_runbook(348)
         self.assertEqual(db.get_active_issue_window()["issue_number"], 348)
 
         result = self._run()
@@ -183,6 +190,7 @@ class PutToBedTests(DBTestCase):
     def test_idempotent_rerun_replaces_link_rows(self) -> None:
         _write_issue_files(self._fake_repo, 348)
         _set_active_window(348)
+        _complete_runbook(348, audio="waived")
         result1 = self._run()
         self.assertTrue(result1.ok)
 
@@ -235,6 +243,7 @@ class PutToBedTests(DBTestCase):
     def test_rerun_after_close_returns_no_active_issue(self) -> None:
         _write_issue_files(self._fake_repo, 348)
         _set_active_window(348)
+        _complete_runbook(348, audio="waived")
         first = self._run()
         self.assertTrue(first.ok)
         second = self._run()

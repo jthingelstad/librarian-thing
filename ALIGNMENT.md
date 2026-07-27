@@ -50,8 +50,10 @@ not belong in Studio's active product.
 4. Studio renders preview directly from the DB.
 5. Eddy review runs on demand and stores anchored comments.
 6. Studio publishes email, website, and audio.
-7. Studio files the issue into `data/issues/` and the issue data layer.
-8. Weekly renders public artifacts from Studio's generated handoff.
+7. Studio's durable publish runbook records each leg, requires manual
+   Buttondown delivery confirmation, and allows an explicit audio waiver.
+8. Studio files the issue into `data/issues/` only when the runbook is complete.
+9. Weekly renders public artifacts from Studio's generated handoff.
 
 ## Next Work
 
@@ -64,4 +66,4 @@ Build toward a boring, excellent issue dashboard:
 - live preview
 - Eddy notes
 - explicit publish legs
-- clear recovery actions when a leg fails
+- durable per-leg state and clear recovery actions when a leg fails

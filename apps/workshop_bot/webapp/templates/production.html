@@ -266,9 +266,11 @@
               {{ readiness(state.description, "Description", "ready" if state.description else "missing") }}
               {{ readiness(state.haiku_present, "Haiku", "ready" if state.haiku_present else "missing") }}
               {{ readiness(state.echoes_present, "Echoes", "ready" if state.echoes_present else "missing") }}
-              {{ readiness(state.gates["publish:email"], "Email", "sent" if state.email_shipped else "ready" if state.gates["publish:email"] else (state.email_missing|join(", ") or "blocked")) }}
-              {{ readiness(state.gates["publish:website"], "Website", "ready" if state.gates["publish:website"] else "waiting") }}
-              {{ readiness(state.gates["publish:podcast"], "Audio", "shipped" if state.audio_shipped else "ready" if state.gates["publish:podcast"] else "waiting") }}
+              {{ readiness(state.gates["publish:email"], "Buttondown draft", "created" if state.email_shipped else "ready" if state.gates["publish:email"] else (state.email_missing|join(", ") or "blocked")) }}
+              {{ readiness(state.email_confirmed, "Buttondown delivery", "confirmed" if state.email_confirmed else "confirm after scheduling/sending") }}
+              {{ readiness(state.website_shipped, "Website", "shipped" if state.website_shipped else "ready" if state.gates["publish:website"] else "waiting") }}
+              {{ readiness(state.audio_shipped or state.audio_waived, "Audio", "shipped" if state.audio_shipped else "waived" if state.audio_waived else "ready" if state.gates["publish:podcast"] else "waiting") }}
+              {{ readiness(state.close_ready, "Close issue", "ready" if state.close_ready else "waiting") }}
             {% else %}
               {{ readiness(state.intro_present, "Intro", "ready" if state.intro_present else "missing") }}
               {{ readiness(state.cover_present, "Cover", "ready" if state.cover_present else "missing") }}
@@ -294,6 +296,17 @@
               <span class="phase-step {{ 'current' if p == phase else 'done' if loop.index0 < current_phase_index else '' }}">{{ p }}</span>
             {% endfor %}
           </div>
+          {% if phase == "publish" %}
+            <div class="readiness-list">
+              {% for key, lbl in [("audio","Audio"),("email","Buttondown draft"),("website","Website"),("email_delivery","Delivery confirmation")] %}
+                {% set leg_state = state.publish_legs.get(key, {}) %}
+                {{ readiness(leg_state.get("status") in ("succeeded","waived"), lbl, leg_state.get("status","waiting")) }}
+                {% if leg_state.get("status") == "failed" and leg_state.get("message") %}
+                  <div class="muted" style="padding:0 0 .55rem 1.5rem;">{{ leg_state.get("message") }}</div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
           <div class="actions" style="margin-top:.65rem;">
             {% if phase in ("write", "build") %}
               <form method="post" action="/productions/{{ row.id }}/phase">
@@ -305,12 +318,34 @@
               {% for leg, lbl in [("email","Email"),("website","Website"),("audio","Audio"),("all","Ship all")] %}
                 <form method="post" action="/productions/{{ row.id }}/publish"
                       onsubmit="return confirm('Ship {{ lbl }} for {{ row.id }}? This is live.');">
-                  <input type="hidden" name="leg" value="{{ leg }}"><button class="btn" type="submit">{{ lbl }}</button>
+                  <input type="hidden" name="leg" value="{{ leg }}">
+                  {% set enabled = state.gates["publish:" ~ leg] if leg != "audio" else state.gates["publish:podcast"] %}
+                  <button class="btn" type="submit" {{ "" if enabled else "disabled" }}>{{ lbl }}</button>
                 </form>
               {% endfor %}
+              {% if state.email_shipped and not state.email_confirmed %}
+                <form method="post" action="/productions/{{ row.id }}/publish-ack"
+                      onsubmit="return confirm('Confirm the Buttondown email for {{ row.id }} is scheduled or sent?');">
+                  <input type="hidden" name="action" value="confirm-email">
+                  <button class="btn soft" type="submit">Confirm email scheduled/sent</button>
+                </form>
+              {% endif %}
+              {% if not state.audio_shipped and not state.audio_waived %}
+                <form method="post" action="/productions/{{ row.id }}/publish-ack"
+                      onsubmit="return confirm('Waive audio for {{ row.id }}?');">
+                  <input type="hidden" name="action" value="waive-audio">
+                  <button class="btn ghost" type="submit">Waive audio</button>
+                </form>
+              {% elif state.audio_waived %}
+                <form method="post" action="/productions/{{ row.id }}/publish-ack">
+                  <input type="hidden" name="action" value="require-audio">
+                  <button class="btn ghost" type="submit">Require audio</button>
+                </form>
+              {% endif %}
               <form method="post" action="/productions/{{ row.id }}/publish"
                     onsubmit="return confirm('Put {{ row.id }} to bed?');">
-                <input type="hidden" name="leg" value="bed"><button class="btn ghost" type="submit">Put to bed</button>
+                <input type="hidden" name="leg" value="bed">
+                <button class="btn ghost" type="submit" {{ "" if state.close_ready else "disabled" }}>Put to bed</button>
               </form>
               <form method="post" action="/productions/{{ row.id }}/phase">
                 <input type="hidden" name="phase" value="build"><button class="btn ghost" type="submit">Reopen build</button>

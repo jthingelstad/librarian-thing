@@ -158,11 +158,46 @@ def _missing_list_message(issue_number: int, missing: list[str], dest: str) -> s
 # ---------- publish audio ----------
 
 
-async def publish_audio(ctx: "_base.JobContext") -> "_base.JobResult":
+async def _run_tracked(
+    ctx: "_base.JobContext",
+    leg: str,
+    operation,
+    *,
+    issue_number: int | None = None,
+) -> "_base.JobResult":
+    """Run one publish leg while persisting progress and recovery evidence."""
+    window = db.get_active_issue_window(issue_number)
+    if window is None:
+        return _base.JobResult(False, "❌ no active issue window — start one in Studio first.")
+    n = int(window["issue_number"])
+    db.publish_leg_start(n, leg)
+    try:
+        result = await operation(ctx, issue_number=n)
+    except Exception as exc:
+        db.publish_leg_finish(
+            n,
+            leg,
+            ok=False,
+            message=f"{type(exc).__name__}: {exc}",
+        )
+        raise
+    db.publish_leg_finish(
+        n,
+        leg,
+        ok=result.ok,
+        message=result.message,
+        evidence=result.data or {},
+    )
+    return result
+
+
+async def _publish_audio(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
     """Render the transcript from current DB state, then TTS + upload the
     MP3. Idempotent on transcript hash (no-ops when the manifest entry
     matches)."""
-    window = db.get_active_issue_window()
+    window = db.get_active_issue_window(issue_number)
     if window is None:
         return _base.JobResult(False, "❌ no active issue window — start one in Studio first.")
     n = int(window["issue_number"])
@@ -177,16 +212,24 @@ async def publish_audio(ctx: "_base.JobContext") -> "_base.JobResult":
     return await render_audio.run(ctx)
 
 
+async def publish_audio(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
+    return await _run_tracked(ctx, "audio", _publish_audio, issue_number=issue_number)
+
+
 # ---------- publish buttondown ----------
 
 
-async def publish_buttondown(ctx: "_base.JobContext") -> "_base.JobResult":
+async def _publish_buttondown(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
     """POST/PATCH the daily-rendered buttondown.md to Buttondown.
     Captures id + absolute_url into metadata.json, then re-renders the
     archive so its front matter carries the freshly-minted URL.
     Refuses with a missing-list if any required atom isn't yet
     present."""
-    window = db.get_active_issue_window()
+    window = db.get_active_issue_window(issue_number)
     if window is None:
         return _base.JobResult(False, "❌ no active issue window — start one in Studio first.")
     n = int(window["issue_number"])
@@ -260,14 +303,22 @@ async def publish_buttondown(ctx: "_base.JobContext") -> "_base.JobResult":
     )
 
 
+async def publish_buttondown(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
+    return await _run_tracked(ctx, "email", _publish_buttondown, issue_number=issue_number)
+
+
 # ---------- publish website ----------
 
 
-async def publish_website(ctx: "_base.JobContext") -> "_base.JobResult":
+async def _publish_website(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
     """Render archive + transcript from current DB state, then commit them +
     the manifest to GitHub. Idempotent — put_tree no-ops when every blob
     SHA matches the existing tree."""
-    window = db.get_active_issue_window()
+    window = db.get_active_issue_window(issue_number)
     if window is None:
         return _base.JobResult(False, "❌ no active issue window — start one in Studio first.")
     n = int(window["issue_number"])
@@ -330,16 +381,24 @@ async def publish_website(ctx: "_base.JobContext") -> "_base.JobResult":
     )
 
 
+async def publish_website(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
+    return await _run_tracked(ctx, "website", _publish_website, issue_number=issue_number)
+
+
 # ---------- publish all (default no-arg) ----------
 
 
-async def publish_all(ctx: "_base.JobContext") -> "_base.JobResult":
+async def publish_all(
+    ctx: "_base.JobContext", *, issue_number: int | None = None
+) -> "_base.JobResult":
     """Run audio → buttondown → website, the standard ship order. Each
     stage is the same subcommand function called individually — so a
     failure mid-sequence stops the chain but leaves a clean partial
     state (e.g. audio + buttondown shipped, website failed; just
     re-run Publish Website in Studio to finish)."""
-    window = db.get_active_issue_window()
+    window = db.get_active_issue_window(issue_number)
     if window is None:
         return _base.JobResult(False, "❌ no active issue window — start one in Studio first.")
     n = int(window["issue_number"])
@@ -364,7 +423,7 @@ async def publish_all(ctx: "_base.JobContext") -> "_base.JobResult":
         f"⏳ `publish buttondown`\n"
         f"⏳ `publish website`"
     )
-    audio_result = await publish_audio(ctx)
+    audio_result = await publish_audio(ctx, issue_number=n)
     if not audio_result.ok:
         await _refresh(
             f"❌ Ship failed for **WT{n}** at `publish audio` — see #editorial above.\n"
@@ -381,7 +440,7 @@ async def publish_all(ctx: "_base.JobContext") -> "_base.JobResult":
         f"📨 `publish buttondown` _(posting…)_\n"
         f"⏳ `publish website`"
     )
-    bd_result = await publish_buttondown(ctx)
+    bd_result = await publish_buttondown(ctx, issue_number=n)
     if not bd_result.ok:
         await _refresh(
             f"❌ Ship failed for **WT{n}** at `publish buttondown` — see #editorial above.\n"
@@ -398,7 +457,7 @@ async def publish_all(ctx: "_base.JobContext") -> "_base.JobResult":
         f"✅ `publish buttondown`\n"
         f"🌐 `publish website` _(committing…)_"
     )
-    web_result = await publish_website(ctx)
+    web_result = await publish_website(ctx, issue_number=n)
     if not web_result.ok:
         await _refresh(
             f"⚠️ Ship for **WT{n}** mostly done — website commit failed.\n"

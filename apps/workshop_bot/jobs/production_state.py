@@ -142,6 +142,11 @@ def publish_state(n: Optional[int] = None, *, window: Optional[dict] = None) -> 
     # Publish-stamped fields live on the issue window, not the content row.
     buttondown_id = (window.get("buttondown_id") or "").strip()
     absolute_url = (window.get("absolute_url") or "").strip()
+    legs = db.get_publish_legs(n)
+    audio_leg = legs.get("audio") or {}
+    email_leg = legs.get("email") or {}
+    website_leg = legs.get("website") or {}
+    delivery_leg = legs.get("email_delivery") or {}
     cta_files = sorted(
         f for f in files if (f.startswith("cta-") or f.startswith("thanks-")) and f.endswith(".md")
     )
@@ -188,14 +193,42 @@ def publish_state(n: Optional[int] = None, *, window: Optional[dict] = None) -> 
         "buttondown_url": (publish._draft_url(buttondown_id) if buttondown_id else ""),
         "absolute_url": absolute_url,
         "email_missing": email_missing,
-        "audio_shipped": f"weekly-thing-{n}.mp3" in files,
+        "audio_shipped": (
+            audio_leg.get("status") == "succeeded" or f"weekly-thing-{n}.mp3" in files
+        ),
+        "audio_waived": audio_leg.get("status") == "waived",
         "email_shipped": bool(buttondown_id),
+        "email_confirmed": delivery_leg.get("status") == "succeeded",
+        "website_shipped": website_leg.get("status") == "succeeded",
+        "publish_legs": legs,
+        "close_ready": bool(
+            buttondown_id
+            and website_leg.get("status") == "succeeded"
+            and delivery_leg.get("status") == "succeeded"
+            and (
+                audio_leg.get("status") in ("succeeded", "waived")
+                or f"weekly-thing-{n}.mp3" in files
+            )
+        ),
         "review_url": f"/productions/WT{n}/preview",
         "gates": {
             BTN_RECOMPOSE: recompose_needed,
-            BTN_EMAIL: email_ready,
-            BTN_WEBSITE: bool(buttondown_id),
-            BTN_PODCAST: any_section,
-            BTN_ALL: email_ready,
+            BTN_EMAIL: email_ready and email_leg.get("status") not in ("running", "succeeded"),
+            BTN_WEBSITE: (
+                bool(buttondown_id)
+                and website_leg.get("status") not in ("running", "succeeded")
+            ),
+            BTN_PODCAST: (
+                any_section and audio_leg.get("status") not in ("running", "succeeded", "waived")
+            ),
+            BTN_ALL: (
+                email_ready
+                and echoes_present
+                and any_section
+                and not any(
+                    (legs.get(leg) or {}).get("status") in ("running", "succeeded", "waived")
+                    for leg in ("audio", "email", "website")
+                )
+            ),
         },
     }

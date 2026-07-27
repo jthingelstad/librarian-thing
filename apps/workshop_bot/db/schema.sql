@@ -260,6 +260,22 @@ CREATE TABLE IF NOT EXISTS issue_windows (
 CREATE INDEX IF NOT EXISTS idx_issue_windows_active
   ON issue_windows(is_active) WHERE is_active = 1;
 
+-- Durable publish-runbook state. Jobs update their own leg so the web app can
+-- recover after a restart and show partial completion without reconstructing
+-- it from Discord messages.
+CREATE TABLE IF NOT EXISTS issue_publish_legs (
+  issue_number INTEGER NOT NULL REFERENCES issue_windows(issue_number) ON DELETE CASCADE,
+  leg          TEXT NOT NULL,
+  status       TEXT NOT NULL, -- running | succeeded | failed | waived
+  message      TEXT NOT NULL DEFAULT '',
+  evidence_json TEXT NOT NULL DEFAULT '{}',
+  attempt_count INTEGER NOT NULL DEFAULT 0,
+  started_at   TEXT,
+  completed_at TEXT,
+  updated_at   TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (issue_number, leg)
+);
+
 -- (The issue_cards table — per-phase Discord card handles — was retired with
 -- the phase cards; production status is the web scoreboard now. Migration 0020
 -- drops it on existing DBs.)

@@ -599,9 +599,44 @@ async def production_publish(request: web.Request) -> web.Response:
         "all": publish.publish_all,
     }
     if leg == "bed":
-        await put_to_bed.run(ctx)
+        await put_to_bed.run(ctx, issue_number=int(row["seq"]))
     elif leg in legs:
-        await legs[leg](ctx)
+        await legs[leg](ctx, issue_number=int(row["seq"]))
+    raise web.HTTPFound(f"/productions/{row['id']}")
+
+
+async def production_publish_ack(request: web.Request) -> web.Response:
+    """Record the two human decisions the automated legs cannot observe."""
+    if not _same_origin(request):
+        raise web.HTTPForbidden(text="bad origin")
+    row = await _load_row(request)
+    if row["production_type"] != "newsletter":
+        raise web.HTTPBadRequest(text="not a newsletter")
+    n = int(row["seq"])
+    data = await request.post()
+    action = (data.get("action") or "").strip()
+    if action == "confirm-email":
+        if not (db.get_issue_window(n) or {}).get("buttondown_id"):
+            raise web.HTTPBadRequest(text="create the Buttondown draft first")
+        db.publish_leg_set(
+            n,
+            "email_delivery",
+            "succeeded",
+            message="Jamie confirmed the Buttondown email is scheduled or sent.",
+            evidence={"confirmed_by": _login(request)},
+        )
+    elif action == "waive-audio":
+        db.publish_leg_set(
+            n,
+            "audio",
+            "waived",
+            message="Jamie explicitly waived audio for this issue.",
+            evidence={"waived_by": _login(request)},
+        )
+    elif action == "require-audio":
+        db.publish_leg_set(n, "audio", "failed", message="Audio waiver removed; publish Audio.")
+    else:
+        raise web.HTTPBadRequest(text="unknown publish acknowledgment")
     raise web.HTTPFound(f"/productions/{row['id']}")
 
 
@@ -794,6 +829,7 @@ def add_routes(app: web.Application) -> None:
             web.post("/productions/{pid}/phase", production_phase),
             web.post("/productions/{pid}/status", production_status),
             web.post("/productions/{pid}/publish", production_publish),
+            web.post("/productions/{pid}/publish-ack", production_publish_ack),
             web.post("/productions/{pid}/sync", production_sync),
             web.post("/productions/{pid}/review", production_review),
             web.post("/productions/{pid}/continuity", production_continuity),

@@ -31,5 +31,13 @@ podcast episodes, projects, seeds, and gardening are not active Studio work.
 
 ## Exit
 
-When the issue has shipped, Put to bed files it into the archive tables, closes
-the active issue window, and leaves Studio ready for the next newsletter issue.
+Studio records durable state for the Audio, Buttondown draft, Website, and
+Buttondown delivery-confirmation legs. A failed leg does not erase successful
+legs; the web runbook offers the incomplete leg as the recovery action.
+
+Audio is expected for a normal issue but may be explicitly waived. Buttondown
+draft creation is not the same as delivery: Jamie confirms in Studio after the
+message is scheduled or sent. Put to bed is available only after Website and
+delivery confirmation succeed and Audio either succeeds or is waived. It then
+files the issue into the archive tables, closes the active issue window, and
+leaves Studio ready for the next newsletter issue.

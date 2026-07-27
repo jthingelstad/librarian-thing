@@ -191,6 +191,41 @@ class WebappProductionsTests(unittest.IsolatedAsyncioTestCase):
         r = await c.get("/productions/WT999/edit", headers=H, allow_redirects=False)
         self.assertEqual(r.status, 404)
 
+    async def test_publish_ack_requires_buttondown_before_delivery_confirmation(self):
+        c = await self._client()
+        db.plan_issue_window(
+            issue_number=360,
+            pub_date="2026-07-11",
+            end_date="2026-07-10",
+            start_date="2026-07-03",
+            day_count=7,
+        )
+        r = await c.post(
+            "/productions/WT360/publish-ack",
+            headers=H,
+            allow_redirects=False,
+            data={"action": "confirm-email"},
+        )
+        self.assertEqual(r.status, 400)
+
+    async def test_publish_ack_records_audio_waiver(self):
+        c = await self._client()
+        db.plan_issue_window(
+            issue_number=360,
+            pub_date="2026-07-11",
+            end_date="2026-07-10",
+            start_date="2026-07-03",
+            day_count=7,
+        )
+        r = await c.post(
+            "/productions/WT360/publish-ack",
+            headers=H,
+            allow_redirects=False,
+            data={"action": "waive-audio"},
+        )
+        self.assertEqual(r.status, 302)
+        self.assertEqual(db.get_publish_legs(360)["audio"]["status"], "waived")
+
 
 if __name__ == "__main__":
     unittest.main()

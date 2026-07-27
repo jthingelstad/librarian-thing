@@ -507,6 +507,27 @@ def _m_0019_issue_windows_publish_record(conn: sqlite3.Connection) -> None:
     _add_column_if_missing(conn, "issue_windows", "absolute_url", "TEXT NOT NULL DEFAULT ''")
 
 
+def _m_0025_issue_publish_legs(conn: sqlite3.Connection) -> None:
+    """Add durable per-leg state for the web publish runbook."""
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS issue_publish_legs (
+          issue_number INTEGER NOT NULL
+            REFERENCES issue_windows(issue_number) ON DELETE CASCADE,
+          leg TEXT NOT NULL,
+          status TEXT NOT NULL,
+          message TEXT NOT NULL DEFAULT '',
+          evidence_json TEXT NOT NULL DEFAULT '{}',
+          attempt_count INTEGER NOT NULL DEFAULT 0,
+          started_at TEXT,
+          completed_at TEXT,
+          updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+          PRIMARY KEY (issue_number, leg)
+        )
+        """
+    )
+
+
 def _m_0020_drop_issue_cards(conn: sqlite3.Connection) -> None:
     """Drop the issue_cards table — the Discord phase cards were retired in
     favour of the web production page; nothing reads these handles anymore."""
@@ -705,6 +726,11 @@ MIGRATIONS: tuple[Migration, ...] = (
         id="0024_issue_items_body_override",
         description="Add issue_items.body_override for atomic Studio body edits",
         apply=_m_0024_issue_items_body_override,
+    ),
+    Migration(
+        id="0025_issue_publish_legs",
+        description="Add durable per-leg state for the safe publish runbook",
+        apply=_m_0025_issue_publish_legs,
     ),
 )
 

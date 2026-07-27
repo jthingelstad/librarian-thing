@@ -181,8 +181,8 @@ def file_issue(
             raise
 
 
-async def run(ctx: "_base.JobContext") -> "_base.JobResult":
-    window = db.get_active_issue_window()
+async def run(ctx: "_base.JobContext", *, issue_number: int | None = None) -> "_base.JobResult":
+    window = db.get_active_issue_window(issue_number)
     if window is None:
         msg = (
             "🛏️ nothing to put to bed — no active issue. Start the next issue in Studio when ready."
@@ -198,6 +198,30 @@ async def run(ctx: "_base.JobContext") -> "_base.JobResult":
         )
         await ctx.post("DISCORD_CHANNEL_EDITORIAL", msg, persona="eddy")
         return _base.JobResult(False, msg, data={"issue_number": n})
+
+    legs = db.get_publish_legs(n)
+    audio_status = (legs.get("audio") or {}).get("status")
+    website_status = (legs.get("website") or {}).get("status")
+    delivery_status = (legs.get("email_delivery") or {}).get("status")
+    missing_steps = []
+    if website_status != "succeeded":
+        missing_steps.append("Website publish")
+    if delivery_status != "succeeded":
+        missing_steps.append("Buttondown scheduled/sent confirmation")
+    if audio_status not in ("succeeded", "waived"):
+        missing_steps.append("Audio publish or explicit waiver")
+    if missing_steps:
+        msg = (
+            f"❌ can't put **WT{n}** to bed — the publish runbook is incomplete: "
+            + ", ".join(missing_steps)
+            + "."
+        )
+        await ctx.post("DISCORD_CHANNEL_EDITORIAL", msg, persona="eddy")
+        return _base.JobResult(
+            False,
+            msg,
+            data={"issue_number": n, "missing_steps": missing_steps},
+        )
 
     if not (meta.get("buttondown_id") and meta.get("absolute_url")):
         msg = (
