@@ -445,6 +445,17 @@ def _newsletter_page_data(row) -> dict:
         ).isoformat()
     except ValueError:
         pass
+    comments = issue_items.list_open_comments(n)
+    comments_by_item: dict[int, list[dict]] = {}
+    comments_by_section: dict[str, list[dict]] = {}
+    general_comments: list[dict] = []
+    for comment in comments:
+        if comment.get("item_id") is not None:
+            comments_by_item.setdefault(int(comment["item_id"]), []).append(comment)
+        elif comment.get("section"):
+            comments_by_section.setdefault(str(comment["section"]), []).append(comment)
+        else:
+            general_comments.append(comment)
     return {
         "row": row,
         "ptype": "newsletter",
@@ -458,7 +469,12 @@ def _newsletter_page_data(row) -> dict:
         "meta": _json_content(content_store.read_issue(n, "metadata.json") or ""),
         "currently": db.currently_get_entries(n),
         "currently_types": [t["label"] for t in db.currently_list_types()],
-        "comments": issue_items.list_open_comments(n),
+        "comments": comments,
+        "comments_by_item": comments_by_item,
+        "comments_by_section": comments_by_section,
+        "general_comments": general_comments,
+        "haiku": content_store.read_issue(n, "haiku.md") or "",
+        "echoes": content_store.read_issue(n, "echoes.md") or "",
         "window": window,
         "source_sync": source_sync,
         "next_action": next_action,
@@ -503,8 +519,8 @@ async def production_atom_save(request: web.Request) -> web.Response:
     row = await _load_row(request)
     data = await request.post()
     name = (data.get("name") or "").strip()
-    if not name:
-        raise web.HTTPBadRequest(text="missing name")
+    if name not in _EDITOR_ATOM_NAMES:
+        raise web.HTTPBadRequest(text=f"not an editor-writable atom: {name!r}")
     value = data.get("value") or ""
     await asyncio.to_thread(content_store.set, row["id"], name, value, by=f"web:{_login(request)}")
     # The DB is the draft — a save IS the update. No projection to refire.
@@ -701,6 +717,28 @@ async def production_review(request: web.Request) -> web.Response:
     raise web.HTTPFound(f"/productions/{row['id']}")
 
 
+async def production_comment_resolve(request: web.Request) -> web.Response:
+    if not _same_origin(request):
+        raise web.HTTPForbidden(text="bad origin")
+    row = await _load_row(request)
+    data = await request.post()
+    try:
+        comment_id = int(data.get("comment_id") or 0)
+    except ValueError:
+        raise web.HTTPBadRequest(text="invalid comment id")
+    resolved = await asyncio.to_thread(
+        issue_items.close_comment,
+        comment_id,
+        int(row["seq"]),
+    )
+    if not resolved:
+        raise web.HTTPNotFound(text="open comment not found for this issue")
+    target = (data.get("return_to") or "").strip()
+    if not target.startswith("#"):
+        target = "#eddy-notes"
+    raise web.HTTPFound(f"/productions/{row['id']}{target}")
+
+
 async def production_continuity(request: web.Request) -> web.Response:
     """Continuity-while-you-write for the newsletter intro — the highest-value
     writing surface. Surfaces what Jamie has already published on the intro's
@@ -865,6 +903,7 @@ def add_routes(app: web.Application) -> None:
             web.post("/productions/{pid}/publish-ack", production_publish_ack),
             web.post("/productions/{pid}/sync", production_sync),
             web.post("/productions/{pid}/review", production_review),
+            web.post("/productions/{pid}/comments/resolve", production_comment_resolve),
             web.post("/productions/{pid}/continuity", production_continuity),
             web.post("/productions/{pid}/cover-upload", production_cover_upload),
         ]

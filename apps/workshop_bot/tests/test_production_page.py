@@ -19,7 +19,7 @@ from aiohttp import web  # noqa: E402
 from aiohttp.test_utils import TestClient, TestServer  # noqa: E402
 
 from apps.workshop_bot.tests._fixtures import FakeWorkspace, patch_s3  # noqa: E402
-from apps.workshop_bot.tools import content_store, db  # noqa: E402
+from apps.workshop_bot.tools import content_store, db, issue_items  # noqa: E402
 from apps.workshop_bot.tools.db.connection import connect  # noqa: E402
 from apps.workshop_bot.webapp import routes, server  # noqa: E402
 
@@ -136,6 +136,54 @@ class ProductionPageTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             json.loads(content_store.read_issue(360, "cover.json"))["caption"], "A creek"
         )
+
+    async def test_editorial_comment_can_be_resolved_in_page(self):
+        c = await self._client()
+        db.plan_issue_window(
+            issue_number=360,
+            pub_date="2026-06-27",
+            end_date="2026-06-26",
+            start_date="2026-06-19",
+            day_count=7,
+        )
+        db.set_issue_phase(360, "build")
+        comment = issue_items.write_comment(
+            issue_number=360,
+            scope="issue",
+            body_md="Clarify the ending.",
+        )
+        body = await (await c.get("/productions/WT360", headers=H)).text()
+        self.assertIn("Clarify the ending.", body)
+        self.assertIn(">Resolve<", body)
+        response = await c.post(
+            "/productions/WT360/comments/resolve",
+            headers=H,
+            allow_redirects=False,
+            data={"comment_id": str(comment["id"]), "return_to": "#eddy-notes"},
+        )
+        self.assertEqual(response.status, 302)
+        self.assertEqual(issue_items.list_open_comments(360), [])
+
+    async def test_package_surface_edits_haiku_and_echoes(self):
+        c = await self._client()
+        db.plan_issue_window(
+            issue_number=360,
+            pub_date="2026-06-27",
+            end_date="2026-06-26",
+            start_date="2026-06-19",
+            day_count=7,
+        )
+        db.set_issue_phase(360, "build")
+        body = await (await c.get("/productions/WT360", headers=H)).text()
+        self.assertIn(">Package<", body)
+        self.assertIn("generated option · Jamie-selected", body)
+        await c.post(
+            "/productions/WT360/atom",
+            headers=H,
+            allow_redirects=False,
+            data={"name": "haiku.md", "value": "Three quiet lines"},
+        )
+        self.assertEqual(content_store.read_issue(360, "haiku.md"), "Three quiet lines")
 
     async def test_legacy_non_newsletter_page_is_gone(self):
         c = await self._client()

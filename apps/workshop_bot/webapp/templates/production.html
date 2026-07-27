@@ -24,6 +24,22 @@
   "closer": "Closer"
 } %}
 
+{% macro editorial_note(c, return_to) %}
+  <div class="row" style="display:block; margin:.55rem 0;">
+    <div class="toolbar">
+      <span class="badge {{ 'warn' if c.verdict == 'blocker' else 'neutral' }}">{{ c.handle }}</span>
+      <span class="muted">{{ c.verdict }}</span>
+      <form method="post" action="/productions/{{ row.id }}/comments/resolve" style="margin-left:auto;">
+        <input type="hidden" name="comment_id" value="{{ c.id }}">
+        <input type="hidden" name="return_to" value="{{ return_to }}">
+        <button class="btn ghost" type="submit">Resolve</button>
+      </form>
+    </div>
+    {% if c.anchor_text %}<div class="muted" style="margin-top:.35rem;">{{ c.anchor_text }}</div>{% endif %}
+    <div style="margin-top:.35rem;">{{ c.body_md|markdown }}</div>
+  </div>
+{% endmacro %}
+
 {% macro atom_row(a) %}
   {% set anchor = "atom-" ~ (a.key|replace(":", "-")) %}
   <article class="issue-atom {{ 'is-muted' if not a.selected else '' }}" id="{{ anchor }}">
@@ -110,6 +126,11 @@
           </details>
         {% endif %}
       </details>
+    {% endif %}
+    {% if a.item_id %}
+      {% for c in comments_by_item.get(a.item_id, []) %}
+        {{ editorial_note(c, "#" ~ anchor) }}
+      {% endfor %}
     {% endif %}
   </article>
 {% endmacro %}
@@ -226,6 +247,9 @@
                   <h3>{{ section_labels.get(g.kind, g.kind) }}</h3>
                   <span>{{ g.atoms|length }} atom{{ "" if g.atoms|length == 1 else "s" }}</span>
                 </div>
+                {% for c in comments_by_section.get(g.kind, []) %}
+                  {{ editorial_note(c, "#issue-canvas") }}
+                {% endfor %}
                 {% if g.kind == "notable" %}
                   <div class="issue-preamble">{{ notable_preamble|markdown }}</div>
                 {% endif %}
@@ -241,9 +265,10 @@
 
         <section class="panel" id="cover">
           <div class="panel-head" style="padding:0 0 .85rem; min-height:auto;">
-            <h2>Cover</h2>
-            <span class="meta">{{ "ready" if state.cover_present else "missing" }}</span>
+            <h2>Package</h2>
+            <span class="meta">cover · envelope · closer · echoes</span>
           </div>
+          <div class="secthead"><h3>Cover</h3><span class="surface">Jamie-authored metadata</span></div>
           <form method="post" action="/productions/{{ row.id }}/cover" class="pform">
             <div class="form-grid">
               <div class="full"><label>Caption</label><input name="caption" value="{{ cover.get('caption','') }}"></div>
@@ -258,17 +283,26 @@
             <input type="file" name="cover" accept="image/jpeg">
             <div class="actions"><button class="btn ghost" type="submit">Upload cover</button></div>
           </form>
-        </section>
 
-        <section class="panel">
-          <div class="panel-head" style="padding:0 0 .85rem; min-height:auto;">
-            <h2>Email Envelope</h2>
-            <span class="meta">{{ "ready" if meta.get('subject') and meta.get('description') else "drafting" }}</span>
-          </div>
+          <div class="secthead"><h3>Email envelope</h3><span class="surface">Jamie-selected</span></div>
           <form method="post" action="/productions/{{ row.id }}/meta" class="pform">
             <label>Subject</label><input name="subject" value="{{ meta.get('subject','') }}">
             <label>Description</label><textarea name="description" rows="2">{{ meta.get('description','') }}</textarea>
             <div class="actions"><button class="btn" type="submit">Save envelope</button></div>
+          </form>
+
+          <div class="secthead"><h3>Haiku</h3><span class="surface">generated option · Jamie-selected</span></div>
+          <form method="post" action="/productions/{{ row.id }}/atom" class="pform">
+            <input type="hidden" name="name" value="haiku.md">
+            <textarea name="value" rows="4">{{ haiku }}</textarea>
+            <div class="actions"><button class="btn" type="submit">Save haiku</button></div>
+          </form>
+
+          <div class="secthead"><h3>Echoes</h3><span class="surface">generated draft · Jamie-reviewed</span></div>
+          <form method="post" action="/productions/{{ row.id }}/atom" class="pform">
+            <input type="hidden" name="name" value="echoes.md">
+            <textarea name="value" rows="8">{{ echoes }}</textarea>
+            <div class="actions"><button class="btn" type="submit">Save Echoes</button></div>
           </form>
         </section>
       </section>
@@ -416,14 +450,10 @@
             <h2>Eddy's Notes</h2>
             <span class="meta">{{ comments|length }} open</span>
           </div>
-          {% for c in comments %}
-            <div class="row" style="display:block;">
-              <span class="badge neutral">{{ c.handle }}</span>
-              {% if c.anchor_text %}<span class="muted">{{ c.anchor_text }}</span>{% endif %}
-              <div style="margin-top:.35rem;">{{ c.body_md }}</div>
-            </div>
+          {% for c in general_comments %}
+            {{ editorial_note(c, "#eddy-notes") }}
           {% else %}
-            <div class="muted">No open editorial notes.</div>
+            <div class="muted">{{ "Anchored notes appear beside their issue content." if comments else "No open editorial notes." }}</div>
           {% endfor %}
         </section>
       </aside>

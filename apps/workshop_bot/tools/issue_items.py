@@ -695,6 +695,18 @@ def close_all_open_comments(issue_number: int) -> int:
         return int(cur.rowcount or 0)
 
 
+def close_comment(comment_id: int, issue_number: int) -> bool:
+    """Resolve one still-open comment, scoped to its issue."""
+    with connect() as conn:
+        cur = conn.execute(
+            "UPDATE editorial_comments SET closed_at = datetime('now') "
+            "WHERE id = ? AND issue_number = ? "
+            "  AND replaced_by_id IS NULL AND closed_at IS NULL",
+            (int(comment_id), int(issue_number)),
+        )
+        return bool(cur.rowcount)
+
+
 def supersede(comment_id: int, by_id: int) -> None:
     """Mark ``comment_id`` as superseded by ``by_id``. The replacement
     stays in the history; the previous handle keeps pointing at its
