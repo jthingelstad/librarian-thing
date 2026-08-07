@@ -51,8 +51,20 @@ jobs:
           MICROBLOG_API_KEY: ${{ secrets.MICROBLOG_API_KEY }}
           MICROBLOG_MICROPUB_URL: ${{ secrets.MICROBLOG_MICROPUB_URL }}
         run: |
+          # Without the key we cannot ingest, but we still let the podcast import
+          # and commit run so that half an outage does not become a whole one. The
+          # run is failed at the end instead: a green run here hid a two-month
+          # blog-ingest gap once already.
           if [[ -z "$MICROBLOG_API_KEY" ]]; then
-            echo "MICROBLOG_API_KEY is not configured; skipping blog ingest."
+            echo "::error title=Blog ingest skipped::MICROBLOG_API_KEY is not configured, so thingelstad.com posts were NOT ingested. data/blog is stale. Set the secret, or remove this step if Micro.blog ingest is retired."
+            {
+              echo "### Blog ingest skipped"
+              echo
+              echo "\`MICROBLOG_API_KEY\` is not configured, so no Micro.blog posts were ingested."
+              echo "\`data/blog\` is stale and any Librarian, Thingy, or newsletter answer drawn"
+              echo "from it is out of date."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "BLOG_INGEST_SKIPPED=1" >> "$GITHUB_ENV"
             exit 0
           fi
           uv run --locked --no-dev python pipeline/blog/ingest_blog.py --since-last
@@ -81,3 +93,10 @@ jobs:
           fi
           git commit -m "Sync external publishing content"
           git push
+
+      - name: Fail if any ingest was skipped
+        if: always() && env.BLOG_INGEST_SKIPPED == '1'
+        run: |
+          echo "Blog ingest was skipped because MICROBLOG_API_KEY is not configured."
+          echo "Podcast content still synced. Failing so this does not report green."
+          exit 1
