@@ -12,7 +12,8 @@ name: Studio — Sync External Content
 
 on:
   schedule:
-    - cron: '17 * * * *'
+    # Weekly safety-net refresh; publishing events below still sync immediately.
+    - cron: '17 11 * * 1'
   workflow_dispatch:
   repository_dispatch:
     types:
