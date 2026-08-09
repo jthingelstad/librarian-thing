@@ -27,6 +27,22 @@ pipeline, and the eval loop. The Thingy *product* roadmap and web-surface tasks 
 - [ ] Add a deploy summary that says whether corpus upload was skipped or refreshed and why.
 - [ ] Revisit whether old pre-server-side conversation records can be deleted from DynamoDB now that canonical conversation rows are the only supported structure.
 
+## Agentic Interface (WebMCP) — Proposal, Not Approved
+
+Thingy proposes exposing the archive as callable tools to AI agents in the reader's browser via
+WebMCP. The full design lives in `thingy.thingelstad.com/docs/WEBMCP.md`. Phase 1 is web-only and
+needs nothing here. Phase 2 is the Studio half and would change the Librarian contract, so it needs
+Jamie's sign-off before any work starts.
+
+- [ ] Decide whether to expose archive tools over HTTP at all. Today `ARCHIVE_TOOLS` is only reachable inside the Bedrock agent loop; `/retrieve` is operator-only and bridge-secret gated, so it is not a substitute.
+- [ ] If yes: add `POST /tools` (list specs) and `POST /tools/call` (run one tool) to the Stream Lambda, authenticated with the normal reader session token — no new credential.
+- [ ] Define a `PUBLIC_ARCHIVE_TOOLS` allowlist rather than exposing all of `ARCHIVE_TOOLS`. Dispatch planner tools stay out.
+- [ ] Validate arguments and apply `normalizeScope()` at the route boundary so corpus boundaries hold for external callers.
+- [ ] Give tool calls their own rate limit — cheaper than `/chat`, so a higher ceiling, but still bounded.
+- [ ] Add the routes to `librarian-contract.mts` as an additive v1 change and regenerate `contracts/librarian-api.v1.json`.
+- [ ] Add an optional `client_surface` field on conversation/eval records so the operator report can tell a WebMCP turn from a web-UI turn.
+- [ ] Separately decide whether a remote MCP server (non-browser clients) is ever wanted. That needs OAuth or personal access tokens and is a different product decision; WebMCP deliberately defers it.
+
 ## Quality And Tests
 
 - [ ] Add end-to-end Lambda handler tests or a repeatable live QA harness for modes, auth, conversations, and evaluator flow.
