@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-07T11:52:40+00:00",
-  "highest_id": 5965774,
-  "post_count": 10396,
+  "generated_at": "2026-08-10T11:34:18+00:00",
+  "highest_id": 5967547,
+  "post_count": 10403,
   "posts": {
     "1003356": {
       "path": "posts/2019/12/2019-12-22-big-crowd-at.md",
@@ -43106,6 +43106,48 @@
       "published": "2026-08-07T09:59:56+00:00",
       "title": "",
       "url": "https://www.thingelstad.com/2026/08/07/on-layover-in-ams-on.html"
+    },
+    "5965939": {
+      "path": "posts/2026/08/2026-08-07-arrived-in-porto-portugal.md",
+      "published": "2026-08-07T15:13:44+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/08/07/arrived-in-porto-portugal.html"
+    },
+    "5965985": {
+      "path": "posts/2026/08/2026-08-07-105825.md",
+      "published": "2026-08-07T15:58:25+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/08/07/105825.html"
+    },
+    "5965986": {
+      "path": "posts/2026/08/2026-08-07-pasteis-de-nata.md",
+      "published": "2026-08-07T16:01:32+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/08/07/pasteis-de-nata.html"
+    },
+    "5966103": {
+      "path": "posts/2026/08/2026-08-07-porto-at-night-view-from.md",
+      "published": "2026-08-07T20:19:24+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/08/07/porto-at-night-view-from.html"
+    },
+    "5967543": {
+      "path": "posts/2026/08/2026-08-06-porto-day.md",
+      "published": "2026-08-06T22:00:00+00:00",
+      "title": "Porto 2026 — Day 0",
+      "url": "https://www.thingelstad.com/2026/08/06/porto-day.html"
+    },
+    "5967546": {
+      "path": "posts/2026/08/2026-08-07-porto-day.md",
+      "published": "2026-08-07T21:00:00+00:00",
+      "title": "Porto 2026 — Day 1",
+      "url": "https://www.thingelstad.com/2026/08/07/porto-day.html"
+    },
+    "5967547": {
+      "path": "posts/2026/08/2026-08-08-porto-day.md",
+      "published": "2026-08-08T22:00:00+00:00",
+      "title": "Porto 2026 — Day 2",
+      "url": "https://www.thingelstad.com/2026/08/08/porto-day.html"
     },
     "653561": {
       "path": "posts/2018/07/2018-07-20-clocks.md",
