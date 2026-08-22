@@ -102,7 +102,7 @@ install_bot() {
         <string>1</string>
     </dict>
     <key>RunAtLoad</key>
-    <false/>
+    <true/>
     <key>KeepAlive</key>
     <true/>
     <key>ThrottleInterval</key>

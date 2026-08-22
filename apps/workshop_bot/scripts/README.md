@@ -18,6 +18,8 @@ apps/workshop_bot/scripts/admin.sh tail      # tail -F logs/workshop.{log,err}
 ```
 
 The plist runs `.venv/bin/python -m apps.workshop_bot.bot` with the repo root as working directory.
+It starts automatically when the user launchd domain loads after login, and
+launchd keeps it running if the process exits.
 
 **Environment** — `admin.sh` uses the uv-managed `<repo>/.venv` exclusively.
 
