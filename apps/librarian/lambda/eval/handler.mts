@@ -14,7 +14,7 @@ import {
   turnSkPrefix,
   userConversationPk
 } from '../shared/user-conversations.mjs';
-import { markUserConversationEvalPosted, updateUserConversationEvaluation } from '../shared/conversation-store.mjs';
+import { updateUserConversationEvaluation } from '../shared/conversation-store.mjs';
 
 const DEFAULT_SCAN_PAGES = 20;
 const DEFAULT_MAX_CONVERSATIONS = 12;
@@ -28,8 +28,6 @@ interface DueConversation {
   subscriberHash: string;
   conversation: ConversationSummary;
   needsReview: boolean;
-  needsPost: boolean;
-  shouldPost: boolean;
 }
 
 function objectValue(value: unknown): JsonRecord {
@@ -117,62 +115,6 @@ function normalizeEvalPayload(value: unknown = {}) {
       improvements: boundedList(assessment.improvements, 6, 180)
     }
   };
-}
-
-function citationLabel(value: unknown) {
-  const citation = objectValue(value);
-  if (citation.issue_number) return `WT${citation.issue_number}`;
-  return String(citation.subject || citation.url || citation.source_kind || '');
-}
-
-function sourceLabels(turns: EvalTurn[] = [], limit = 10) {
-  const labels: string[] = [];
-  for (const turn of turns) {
-    for (const citation of turn.citations || []) {
-      const label = citationLabel(citation);
-      if (label && !labels.includes(label)) labels.push(label);
-      if (labels.length >= limit) return labels;
-    }
-  }
-  return labels;
-}
-
-function discordConversationCard({ conversation, turns }: { conversation: ConversationSummary; turns: EvalTurn[] }) {
-  const flags = Array.isArray(conversation.eval_flags) ? conversation.eval_flags : [];
-  const improvements = Array.isArray(conversation.eval_improvements) ? conversation.eval_improvements : [];
-  const sources = sourceLabels(turns);
-  const mode = conversation.mode || 'thingy';
-  const lines = [
-    `**Thingy · \`${conversation.id}\`** · ${conversation.turn_count} turn${conversation.turn_count === 1 ? '' : 's'} · ${mode} · ${conversation.eval_quality || 'watch'}`,
-    conversation.eval_topic ? `**Topic:** ${conversation.eval_topic}` : '',
-    conversation.eval_reader ? `**Reader:** ${conversation.eval_reader}` : '',
-    conversation.eval_thingy ? `**Thingy:** ${conversation.eval_thingy}` : '',
-    conversation.eval_takeaway ? `**Takeaway:** ${conversation.eval_takeaway}` : '',
-    flags.length ? `**Eval flags:** ${flags.join(', ')}` : '',
-    improvements.length ? `**Improvements:** ${improvements.join('; ')}` : '',
-    `Sources: ${sources.length ? sources.join(', ') : '—'}`,
-    `Use \`/thingy show id:${conversation.id}\` for the transcript.`
-  ].filter(Boolean);
-  const content = lines.join('\n');
-  return content.length <= 1900 ? content : `${content.slice(0, 1890).trim()}…`;
-}
-
-async function postDiscordWebhook({ conversation, turns }: { conversation: ConversationSummary; turns: EvalTurn[] }) {
-  const url = String(process.env.DISCORD_CONVERSATION_WEBHOOK_URL || '').trim();
-  if (!url) return { skipped: true };
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      content: discordConversationCard({ conversation, turns }),
-      allowed_mentions: { parse: [] }
-    })
-  });
-  if (!response.ok) {
-    const text = await response.text().catch(() => '');
-    throw new Error(`Discord webhook HTTP ${response.status}: ${text.slice(0, 200)}`);
-  }
-  return { posted: true };
 }
 
 export function evalSystemPrompt() {
@@ -324,13 +266,8 @@ async function loadConversationMetadata({
 }
 
 function conversationNeedsWork(conversation: ConversationSummary | null) {
-  if (!conversation || Number(conversation.turn_count || 0) <= 0) return { needsReview: false, needsPost: false };
-  const webhookConfigured = Boolean(String(process.env.DISCORD_CONVERSATION_WEBHOOK_URL || '').trim());
-  const needsReview =
-    !conversation.last_request_id || conversation.last_request_id !== conversation.eval_last_request_id;
-  const needsPost =
-    webhookConfigured && conversation.eval_status === 'reviewed' && !conversation.eval_posted_to_chatter_at;
-  return { needsReview, needsPost };
+  if (!conversation || Number(conversation.turn_count || 0) <= 0) return false;
+  return !conversation.last_request_id || conversation.last_request_id !== conversation.eval_last_request_id;
 }
 
 async function dueConversations({
@@ -345,9 +282,9 @@ async function dueConversations({
     const rows: DueConversation[] = [];
     for (const ref of eventRefs) {
       const conversation = await loadConversationMetadata({ tableName, ...ref });
-      const { needsReview, needsPost } = conversationNeedsWork(conversation);
-      if (conversation && (needsReview || needsPost)) {
-        rows.push({ ...ref, conversation, needsReview, needsPost, shouldPost: needsPost || needsReview });
+      const needsReview = conversationNeedsWork(conversation);
+      if (conversation && needsReview) {
+        rows.push({ ...ref, conversation, needsReview });
       }
     }
     return rows;
@@ -360,7 +297,6 @@ async function dueConversations({
 
   const maxPages = Number(process.env.EVAL_SCAN_MAX_PAGES || DEFAULT_SCAN_PAGES);
   const maxConversations = Number(process.env.EVAL_MAX_CONVERSATIONS || DEFAULT_MAX_CONVERSATIONS);
-  const postScanResults = envBool('EVAL_POST_SCAN_RESULTS', false);
   const rows: DueConversation[] = [];
   let exclusiveStartKey: ScanCommandOutput['LastEvaluatedKey'];
   let pages = 0;
@@ -387,14 +323,12 @@ async function dueConversations({
       const subscriberHash = subscriberHashFromUserPk(item.pk?.S);
       const conversation = conversationSummaryFromItem(item);
       if (!subscriberHash || !conversation.id) continue;
-      const { needsReview, needsPost } = conversationNeedsWork(conversation);
-      if (!needsReview && !needsPost) continue;
+      const needsReview = conversationNeedsWork(conversation);
+      if (!needsReview) continue;
       rows.push({
         subscriberHash,
         conversation,
-        needsReview,
-        needsPost,
-        shouldPost: postScanResults && (needsReview || needsPost)
+        needsReview
       });
     }
     exclusiveStartKey = response.LastEvaluatedKey;
@@ -410,10 +344,9 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
   if (!tableName) throw new Error('TABLE_NAME is required');
   const candidates = await dueConversations({ tableName, event });
   let reviewed = 0;
-  let posted = 0;
   let skipped = 0;
   let failed = 0;
-  for (const { subscriberHash, conversation, needsReview, shouldPost } of candidates) {
+  for (const { subscriberHash, conversation, needsReview } of candidates) {
     try {
       const conversationId = String(conversation.id || '');
       const turns = await loadConversationTurns({ tableName, subscriberHash, conversationId });
@@ -421,21 +354,19 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
         skipped += 1;
         continue;
       }
-      let reviewedConversation = conversation;
       if (needsReview) {
         const result = await evaluateConversation({ conversation, turns });
-        reviewedConversation =
-          (await updateUserConversationEvaluation({
-            dynamodb,
-            tableName,
-            subscriberHash,
-            conversationId,
-            summary: result.summary,
-            assessment: result.assessment,
-            model: result.model,
-            lastRequestId: conversation.last_request_id,
-            logEvent
-          })) || conversation;
+        await updateUserConversationEvaluation({
+          dynamodb,
+          tableName,
+          subscriberHash,
+          conversationId,
+          summary: result.summary,
+          assessment: result.assessment,
+          model: result.model,
+          lastRequestId: conversation.last_request_id,
+          logEvent
+        });
         reviewed += 1;
         logEvent('info', 'conversation_evaluated', {
           conversation_id: conversation.id,
@@ -444,22 +375,6 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
           flags: result.assessment.flags,
           output_tokens: result.usage?.outputTokens
         });
-      }
-      if (shouldPost && !reviewedConversation.eval_posted_to_chatter_at) {
-        const webhookResult = await postDiscordWebhook({ conversation: reviewedConversation, turns });
-        if (webhookResult.posted) {
-          await markUserConversationEvalPosted({
-            dynamodb,
-            tableName,
-            subscriberHash,
-            conversationId
-          });
-          posted += 1;
-          logEvent('info', 'conversation_eval_posted', {
-            conversation_id: conversation.id,
-            subscriber_hash: subscriberHash
-          });
-        }
       }
     } catch (error) {
       failed += 1;
@@ -476,7 +391,6 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
   const payload = {
     ok: failed === 0,
     reviewed,
-    posted,
     skipped,
     failed,
     candidate_count: candidates.length,

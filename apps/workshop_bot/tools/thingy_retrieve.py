@@ -48,11 +48,11 @@ def _stream_base() -> str:
     return (os.environ.get("LIBRARIAN_STREAM_URL") or DEFAULT_STREAM_URL).rstrip("/")
 
 
-def _bridge_secret() -> str:
-    secret = os.environ.get("LIBRARIAN_BRIDGE_SECRET", "").strip()
+def _retrieve_secret() -> str:
+    secret = os.environ.get("LIBRARIAN_RETRIEVE_SECRET", "").strip()
     if not secret:
         raise ThingyRetrieveError(
-            "LIBRARIAN_BRIDGE_SECRET is not set; Librarian retrieval is disabled"
+            "LIBRARIAN_RETRIEVE_SECRET is not set; Librarian retrieval is disabled"
         )
     return secret
 
@@ -80,7 +80,7 @@ def retrieve(
         raise ThingyRetrieveError("query must be non-empty")
     url = _stream_base() + "/retrieve"
     payload: dict[str, Any] = {
-        "bridge_secret": _bridge_secret(),
+        "bridge_secret": _retrieve_secret(),
         "query": query,
         "k": int(k),
     }

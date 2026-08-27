@@ -1,6 +1,5 @@
 import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
-import { GetItemCommand, PutItemCommand, TransactWriteItemsCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
-import type { AttributeValue, TransactWriteItem } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, PutItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { bedrock, dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
 import {
   createSubscriber,
@@ -30,40 +29,19 @@ import {
   stableHash,
   verifyToken
 } from '../shared/session.mjs';
-import {
-  authProfile,
-  discordConnectionMemoryUpdate,
-  getUserMemory,
-  recordUserPreferredName
-} from '../shared/user-memory.mjs';
+import { authProfile, getUserMemory, recordUserPreferredName } from '../shared/user-memory.mjs';
 import { deleteThingyProfile, sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
-import {
-  DISCORD_LINK_TTL_SECONDS,
-  createLinkCode,
-  createLinkState,
-  currentEntitlementsForEmail,
-  discordCodeKey,
-  discordConnectionPut,
-  discordStateKey,
-  discordUserHash,
-  dynamoNumber,
-  dynamoString,
-  isSupportingEntitlement,
-  linkHash,
-  normalizeDiscordIdentity,
-  nowSeconds
-} from '../shared/discord-link.mjs';
 import {
   availableConversationModes,
   entitlementsForSubscriber,
   isOwnerSubscriberHash
 } from '../shared/conversation-modes.mjs';
-import crypto from 'node:crypto';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
 import { handleUserConversations } from './conversation-routes.mjs';
 import { handleDispatch } from './dispatch-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
+import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
 
 const AUTH_RATE_LIMIT_MAX = 30;
@@ -252,17 +230,6 @@ export function entitlementsForSessionPayload(payload: JsonRecord, nowSeconds = 
   return Array.from(entitlements);
 }
 
-function entitlementsWithOwner(subscriberHash: unknown, entitlements: readonly unknown[] = []) {
-  const values = new Set<string>(Array.isArray(entitlements) ? entitlements.map(String) : []);
-  if (isOwnerSubscriberHash(subscriberHash)) {
-    values.add('owner');
-    values.add('supporting_member');
-    values.add('trusted_circle');
-  }
-  if (!values.size) values.add('reader');
-  return Array.from(values);
-}
-
 async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
   const bearer = extractBearer(event, body);
   const payload = verifyToken(bearer);
@@ -423,338 +390,6 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
     return jsonResponse(200, { status: 'deleted', ok: true, deleted_at: result.deleted_at }, event);
   }
   return jsonResponse(400, { error: 'Unsupported memory action.' }, event);
-}
-
-function bridgeSecretOk(body: JsonRecord) {
-  const expected = process.env.DISCORD_BRIDGE_SECRET || '';
-  if (!expected) return null;
-  const supplied = String(body.bridge_secret || body.secret || '');
-  const expectedBuf = Buffer.from(expected, 'utf8');
-  const suppliedBuf = Buffer.from(supplied, 'utf8');
-  return expectedBuf.length === suppliedBuf.length && crypto.timingSafeEqual(expectedBuf, suppliedBuf);
-}
-
-function discordLinkBaseWithState(state: string) {
-  try {
-    const base = new URL(process.env.THINGY_MAGIC_LINK_BASE_URL || 'https://thingy.thingelstad.com/');
-    base.pathname = '/discord/';
-    base.search = '';
-    base.searchParams.set('state', state);
-    base.hash = '';
-    return base.toString();
-  } catch {
-    return `https://thingy.thingelstad.com/discord/?state=${encodeURIComponent(state)}`;
-  }
-}
-
-async function getDynamoItem(key: Record<string, AttributeValue>, consistent = true) {
-  const tableName = process.env.TABLE_NAME;
-  if (!tableName) throw new Error('TABLE_NAME is required');
-  const response = await dynamodb.send(
-    new GetItemCommand({
-      TableName: tableName,
-      Key: key,
-      ConsistentRead: consistent
-    })
-  );
-  return response?.Item || null;
-}
-
-async function handleDiscordLinkStart(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const secretState = bridgeSecretOk(body);
-  if (secretState === null) {
-    logEvent('warning', 'discord_link_start_disabled');
-    return jsonResponse(503, { error: 'Discord linking is not enabled.' }, event);
-  }
-  if (!secretState) {
-    logEvent('warning', 'discord_link_start_bad_secret');
-    return jsonResponse(401, { error: 'Bridge secret rejected.' }, event);
-  }
-  const userHash = discordUserHash(body.discord_user_id);
-  if (!userHash) return jsonResponse(400, { error: 'discord_user_id is required.' }, event);
-  const identity = normalizeDiscordIdentity(body);
-  const state = createLinkState();
-  const now = nowSeconds();
-  const expiresAt = now + DISCORD_LINK_TTL_SECONDS;
-  await dynamodb.send(
-    new PutItemCommand({
-      TableName: process.env.TABLE_NAME,
-      Item: {
-        ...discordStateKey(state),
-        discord_user_hash: dynamoString(userHash),
-        username: dynamoString(identity.username),
-        global_name: dynamoString(identity.global_name),
-        display_name: dynamoString(identity.display_name),
-        guild_id: dynamoString(identity.guild_id),
-        created_at: dynamoNumber(now),
-        expires_at: dynamoNumber(expiresAt),
-        ttl: dynamoNumber(expiresAt)
-      }
-    })
-  );
-  logEvent('info', 'discord_link_started', {
-    discord_user_hash: userHash.slice(0, 12),
-    duration_ms: Math.round(performance.now() - start)
-  });
-  return jsonResponse(
-    200,
-    {
-      status: 'discord_link_started',
-      state,
-      link: discordLinkBaseWithState(state),
-      expires_at: expiresAt
-    },
-    event
-  );
-}
-
-async function handleDiscordLinkCode(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const payload = verifyToken(extractBearer(event, body));
-  if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
-    logEvent('info', 'discord_link_code_rejected_auth');
-    return jsonResponse(401, { error: 'Sign in again to connect Discord.' }, event);
-  }
-  const email = normalizeEmail(body.email);
-  if (!EMAIL_RE.test(email) || emailHash(email) !== payload.sub) {
-    return jsonResponse(400, { error: 'Thingy needs your signed-in email to verify Discord access.' }, event);
-  }
-  const entitlement = await currentEntitlementsForEmail(email);
-  const entitlements = entitlementsWithOwner(payload.sub, entitlement.entitlements);
-  if (!isSupportingEntitlement(entitlements)) {
-    logEvent('info', 'discord_link_code_not_supporting', { subscriber_hash: payload.sub, status: entitlement.status });
-    return jsonResponse(
-      403,
-      {
-        status: 'supporting_member_required',
-        error: 'Discord is available to Weekly Thing Supporting Members.'
-      },
-      event
-    );
-  }
-  const state = String(body.state || '').trim();
-  if (!state) return jsonResponse(400, { error: 'Start in Discord with /thingy verify first.' }, event);
-  const stateItem = await getDynamoItem(discordStateKey(state));
-  const expiresAt = Number(stateItem?.expires_at?.N || 0);
-  const now = nowSeconds();
-  if (!stateItem || expiresAt < now) {
-    return jsonResponse(
-      400,
-      { status: 'discord_link_expired', error: 'That Discord verification link expired. Run /thingy verify again.' },
-      event
-    );
-  }
-  const code = createLinkCode();
-  const codeExpiresAt = now + DISCORD_LINK_TTL_SECONDS;
-  const stateHash = linkHash(state);
-  const identity = normalizeDiscordIdentity({
-    username: stateItem.username?.S,
-    global_name: stateItem.global_name?.S,
-    display_name: stateItem.display_name?.S,
-    guild_id: stateItem.guild_id?.S
-  });
-  await dynamodb.send(
-    new PutItemCommand({
-      TableName: process.env.TABLE_NAME,
-      Item: {
-        ...discordCodeKey(code),
-        state_hash: dynamoString(stateHash),
-        subscriber_hash: dynamoString(payload.sub),
-        email: dynamoString(email),
-        email_hash: dynamoString(emailHash(email)),
-        discord_user_hash: dynamoString(stateItem.discord_user_hash?.S || ''),
-        username: dynamoString(identity.username),
-        global_name: dynamoString(identity.global_name),
-        display_name: dynamoString(identity.display_name),
-        guild_id: dynamoString(identity.guild_id),
-        entitlements_json: dynamoString(JSON.stringify(entitlements)),
-        created_at: dynamoNumber(now),
-        expires_at: dynamoNumber(codeExpiresAt),
-        ttl: dynamoNumber(codeExpiresAt)
-      }
-    })
-  );
-  await dynamodb.send(
-    new UpdateItemCommand({
-      TableName: process.env.TABLE_NAME,
-      Key: discordStateKey(state),
-      UpdateExpression: 'SET #subscriber_hash = :subscriber_hash, #email_hash = :email_hash, #code_hash = :code_hash',
-      ExpressionAttributeNames: {
-        '#subscriber_hash': 'subscriber_hash',
-        '#email_hash': 'email_hash',
-        '#code_hash': 'code_hash'
-      },
-      ExpressionAttributeValues: {
-        ':subscriber_hash': dynamoString(payload.sub),
-        ':email_hash': dynamoString(emailHash(email)),
-        ':code_hash': dynamoString(linkHash(code))
-      }
-    })
-  );
-  logEvent('info', 'discord_link_code_created', {
-    subscriber_hash: payload.sub,
-    discord_user_hash: String(stateItem.discord_user_hash?.S || '').slice(0, 12),
-    duration_ms: Math.round(performance.now() - start)
-  });
-  return jsonResponse(
-    200,
-    {
-      status: 'discord_link_code_created',
-      code,
-      expires_at: codeExpiresAt,
-      discord_user: identity,
-      entitlements
-    },
-    event
-  );
-}
-
-async function handleDiscordLinkConfirm(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const secretState = bridgeSecretOk(body);
-  if (secretState === null) return jsonResponse(503, { error: 'Discord linking is not enabled.' }, event);
-  if (!secretState) return jsonResponse(401, { error: 'Bridge secret rejected.' }, event);
-  const code = String(body.code || '')
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g, '');
-  if (!code) return jsonResponse(400, { error: 'code is required.' }, event);
-  const suppliedUserHash = discordUserHash(body.discord_user_id);
-  if (!suppliedUserHash) return jsonResponse(400, { error: 'discord_user_id is required.' }, event);
-  const codeKey = discordCodeKey(code);
-  const codeItem = await getDynamoItem(codeKey);
-  const expiresAt = Number(codeItem?.expires_at?.N || 0);
-  const now = nowSeconds();
-  const codeUserHash = codeItem?.discord_user_hash?.S || '';
-  if (!codeItem || expiresAt < now || codeItem.used_at || codeUserHash !== suppliedUserHash) {
-    logEvent('info', 'discord_link_confirm_rejected', {
-      reason: !codeItem ? 'not_found' : expiresAt < now ? 'expired' : codeItem.used_at ? 'used' : 'wrong_user',
-      discord_user_hash: suppliedUserHash.slice(0, 12)
-    });
-    return jsonResponse(
-      400,
-      { status: 'discord_link_invalid', error: 'That Discord verification code is invalid or expired.' },
-      event
-    );
-  }
-  const email = normalizeEmail(codeItem.email?.S || '');
-  const subscriberHash = codeItem.subscriber_hash?.S || '';
-  let entitlement;
-  try {
-    entitlement = await currentEntitlementsForEmail(email);
-  } catch (error) {
-    logEvent('warning', 'discord_link_confirm_entitlement_lookup_failed', {
-      subscriber_hash: subscriberHash,
-      error_type: errorName(error)
-    });
-    return jsonResponse(502, { error: 'Could not verify supporting membership right now.' }, event);
-  }
-  const entitlements = entitlementsWithOwner(subscriberHash, entitlement.entitlements);
-  if (!isSupportingEntitlement(entitlements) || emailHash(email) !== subscriberHash) {
-    logEvent('info', 'discord_link_confirm_not_supporting', {
-      subscriber_hash: subscriberHash,
-      status: entitlement.status
-    });
-    return jsonResponse(
-      403,
-      {
-        status: 'supporting_member_required',
-        error: 'Discord is available to Weekly Thing Supporting Members.'
-      },
-      event
-    );
-  }
-  const identity = normalizeDiscordIdentity({
-    username: body.username || codeItem.username?.S,
-    global_name: body.global_name || codeItem.global_name?.S,
-    display_name: body.display_name || codeItem.display_name?.S,
-    guild_id: body.guild_id || codeItem.guild_id?.S
-  });
-  const connectedAt = new Date().toISOString();
-  const discordConnection = {
-    ...identity,
-    connected: true,
-    guild_id: identity.guild_id,
-    connected_at: connectedAt,
-    last_verified_at: connectedAt
-  };
-  const tableName = process.env.TABLE_NAME;
-  const connectionRecord = {
-    ...discordConnection,
-    discord_user_hash: suppliedUserHash,
-    subscriber_hash: subscriberHash,
-    email,
-    entitlements
-  };
-  const memoryUpdate = discordConnectionMemoryUpdate(tableName, subscriberHash, discordConnection, connectedAt);
-  if (!tableName || !memoryUpdate) {
-    logEvent('warning', 'discord_link_confirm_memory_unavailable', { subscriber_hash: subscriberHash });
-    return jsonResponse(500, { error: 'Thingy could not save that Discord link right now. Please try again.' }, event);
-  }
-  try {
-    await dynamodb.send(
-      new TransactWriteItemsCommand({
-        TransactItems: [
-          {
-            Update: {
-              TableName: tableName,
-              Key: codeKey,
-              UpdateExpression: 'SET #used_at = :used_at',
-              ConditionExpression: 'attribute_exists(pk) AND attribute_not_exists(#used_at) AND #expires_at >= :now',
-              ExpressionAttributeNames: {
-                '#used_at': 'used_at',
-                '#expires_at': 'expires_at'
-              },
-              ExpressionAttributeValues: {
-                ':used_at': dynamoNumber(now),
-                ':now': dynamoNumber(now)
-              }
-            }
-          },
-          { Put: discordConnectionPut(tableName, connectionRecord) },
-          { Update: memoryUpdate as TransactWriteItem['Update'] }
-        ]
-      })
-    );
-  } catch (error) {
-    const errorType = errorName(error);
-    logEvent('warning', 'discord_link_confirm_persist_failed', {
-      subscriber_hash: subscriberHash,
-      error_type: errorType
-    });
-    if (errorType === 'TransactionCanceledException') {
-      return jsonResponse(
-        400,
-        { status: 'discord_link_invalid', error: 'That Discord verification code is invalid or expired.' },
-        event
-      );
-    }
-    return jsonResponse(500, { error: 'Thingy could not save that Discord link right now. Please try again.' }, event);
-  }
-  const memory = await getUserMemory(subscriberHash, { consistent: true });
-  if (!memory?.discord_connection) {
-    logEvent('warning', 'discord_link_confirm_profile_missing', { subscriber_hash: subscriberHash });
-    return jsonResponse(500, { error: 'Thingy could not save that Discord link right now. Please try again.' }, event);
-  }
-  logEvent('info', 'discord_link_confirmed', {
-    subscriber_hash: subscriberHash,
-    discord_user_hash: suppliedUserHash.slice(0, 12),
-    duration_ms: Math.round(performance.now() - start)
-  });
-  return jsonResponse(
-    200,
-    {
-      status: 'discord_linked',
-      ok: true,
-      supporting_member: true,
-      entitlements,
-      profile: {
-        ...authProfile(memory),
-        entitlements,
-        modes: availableConversationModes(entitlements)
-      },
-      discord_connection: discordConnection
-    },
-    event
-  );
 }
 
 async function storeMagicLink({
@@ -963,32 +598,12 @@ async function authHandler(event: LibrarianHttpEvent) {
     return jsonResponse(429, { error: 'Too many access attempts. Please try again later.' }, event);
   }
   if (
-    ![
-      'check',
-      'subscribe',
-      'resend_confirmation',
-      'complete_magic_link',
-      'refresh_session',
-      'update_profile',
-      'discord_link_start',
-      'discord_link_code',
-      'discord_link_confirm'
-    ].includes(action)
+    !['check', 'subscribe', 'resend_confirmation', 'complete_magic_link', 'refresh_session', 'update_profile'].includes(
+      action
+    )
   ) {
     logEvent('info', 'auth_rejected_invalid_action', { email_hash: hashedEmail, action });
     return jsonResponse(400, { error: 'Unsupported subscriber action.' }, event);
-  }
-
-  if (action === 'discord_link_start') {
-    return await handleDiscordLinkStart(event, body, start);
-  }
-
-  if (action === 'discord_link_code') {
-    return await handleDiscordLinkCode(event, body, start);
-  }
-
-  if (action === 'discord_link_confirm') {
-    return await handleDiscordLinkConfirm(event, body, start);
   }
 
   if (action === 'complete_magic_link') {

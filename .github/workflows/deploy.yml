@@ -245,7 +245,7 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
-          LIBRARIAN_BRIDGE_SECRET: ${{ secrets.LIBRARIAN_BRIDGE_SECRET }}
+          LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
           LIBRARIAN_SESSION_SECRET: ${{ secrets.LIBRARIAN_SESSION_SECRET }}
 
       # Powers /ops/ and /status.json on the site. Reads S3 for the deployed

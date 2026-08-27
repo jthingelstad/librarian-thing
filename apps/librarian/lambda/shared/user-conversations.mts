@@ -280,8 +280,7 @@ export function conversationSummaryFromItem(item: DynamoItem | undefined) {
     eval_topic: String(o.eval_topic || ''),
     eval_reader: String(o.eval_reader || ''),
     eval_thingy: String(o.eval_thingy || ''),
-    eval_takeaway: String(o.eval_takeaway || ''),
-    eval_posted_to_chatter_at: String(o.eval_posted_to_chatter_at || '')
+    eval_takeaway: String(o.eval_takeaway || '')
   };
 }
 

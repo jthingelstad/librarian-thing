@@ -44,22 +44,12 @@ Parameters:
   SessionSecret:
     Type: String
     NoEcho: true
-  DiscordBridgeSecret:
+  LibrarianRetrieveSecret:
     Type: String
     NoEcho: true
-    Default: ""
     Description: >
-      Shared secret for trusted Discord bridge calls, including web-account
-      linking, role validation, Discord mention answers, and operator
-      retrieval. Leave empty to disable bridge-only actions.
-  DiscordConversationWebhookUrl:
-    Type: String
-    NoEcho: true
-    Default: ""
-    Description: >
-      Optional Discord incoming webhook URL for Thingy conversation eval
-      cards. When set, the background eval Lambda posts reviewed
-      conversations directly to Discord and marks them posted.
+      Shared secret for trusted service-to-service calls to the critical
+      Librarian retrieval endpoint.
   LogLevel:
     Type: String
     Default: INFO
@@ -250,7 +240,6 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BUTTONDOWN_API_KEY: !Ref ButtondownApiKey
           SESSION_SECRET: !Ref SessionSecret
-          DISCORD_BRIDGE_SECRET: !Ref DiscordBridgeSecret
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
           FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
@@ -286,7 +275,7 @@ Resources:
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           SESSION_SECRET: !Ref SessionSecret
-          DISCORD_BRIDGE_SECRET: !Ref DiscordBridgeSecret
+          LIBRARIAN_RETRIEVE_SECRET: !Ref LibrarianRetrieveSecret
           LOG_LEVEL: !Ref LogLevel
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
           THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
@@ -319,7 +308,6 @@ Resources:
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
           THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
           THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
-          DISCORD_CONVERSATION_WEBHOOK_URL: !Ref DiscordConversationWebhookUrl
       Handler: eval/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1
@@ -351,7 +339,6 @@ Resources:
           THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
           FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
-          DISCORD_CONVERSATION_WEBHOOK_URL: !Ref DiscordConversationWebhookUrl
       Handler: dispatch/handler.handler
       MemorySize: 2048
       ReservedConcurrentExecutions: 1

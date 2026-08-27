@@ -35,7 +35,6 @@ def conversation(
         eval_reader="",
         eval_thingy="",
         eval_takeaway="Ground the answer more carefully.",
-        eval_posted_to_chatter_at="",
         turns=turns or [],
     )
 

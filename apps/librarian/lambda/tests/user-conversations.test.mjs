@@ -23,10 +23,10 @@ test('fromDynamoAttr unmarshals the attribute types canonical conversation rows 
   assert.equal(fromDynamoAttr({ BOOL: true }), true);
   assert.equal(fromDynamoAttr({ NULL: true }), null);
   assert.deepEqual(fromDynamoAttr({ L: [{ S: '12' }, { S: '13' }] }), ['12', '13']);
-  assert.deepEqual(
-    fromDynamoAttr({ M: { issue_number: { S: '247' }, subject: { S: 'A subject' } } }),
-    { issue_number: '247', subject: 'A subject' }
-  );
+  assert.deepEqual(fromDynamoAttr({ M: { issue_number: { S: '247' }, subject: { S: 'A subject' } } }), {
+    issue_number: '247',
+    subject: 'A subject'
+  });
   assert.equal(fromDynamoAttr(null), null);
   assert.equal(fromDynamoAttr('raw'), null);
 });
@@ -91,25 +91,30 @@ test('conversationSummaryFromItem unmarshals metadata rows', () => {
     eval_topic: '',
     eval_reader: 'Reader explored RSS.',
     eval_thingy: '',
-    eval_takeaway: '',
-    eval_posted_to_chatter_at: ''
+    eval_takeaway: ''
   });
 });
 
 test('conversationSummaryFromItem prefers eval topic for generated titles', () => {
-  assert.equal(conversationSummaryFromItem({
-    sk: { S: 'conversation#c1' },
-    title: { S: 'Tell me about Hector Fernandez.' },
-    title_source: { S: 'auto' },
-    eval_topic: { S: 'Who is Hector Fernandez' }
-  }).title, 'Who is Hector Fernandez');
+  assert.equal(
+    conversationSummaryFromItem({
+      sk: { S: 'conversation#c1' },
+      title: { S: 'Tell me about Hector Fernandez.' },
+      title_source: { S: 'auto' },
+      eval_topic: { S: 'Who is Hector Fernandez' }
+    }).title,
+    'Who is Hector Fernandez'
+  );
 
-  assert.equal(conversationSummaryFromItem({
-    sk: { S: 'conversation#c2' },
-    title: { S: 'My custom title' },
-    title_source: { S: 'user' },
-    eval_topic: { S: 'Evaluator topic' }
-  }).title, 'My custom title');
+  assert.equal(
+    conversationSummaryFromItem({
+      sk: { S: 'conversation#c2' },
+      title: { S: 'My custom title' },
+      title_source: { S: 'user' },
+      eval_topic: { S: 'Evaluator topic' }
+    }).title,
+    'My custom title'
+  );
 });
 
 test('loadUserConversationSummaries returns up to the account overview limit', async () => {
@@ -158,7 +163,10 @@ test('turns expand into messages and compact history', () => {
   assert.equal(turn.feedback_comment, 'Missed the obvious source.');
   assert.deepEqual(turn.tool_names, ['archive_lens']);
   assert.equal(turn.tool_trace.calls[0].name, 'archive_lens');
-  assert.deepEqual(messagesFromTurns([turn]).map((item) => item.role), ['user', 'assistant']);
+  assert.deepEqual(
+    messagesFromTurns([turn]).map((item) => item.role),
+    ['user', 'assistant']
+  );
   assert.deepEqual(messagesFromTurns([turn])[1].tool_names, ['archive_lens']);
   assert.deepEqual(historyFromTurns([turn]), [
     { role: 'user', content: 'Question?' },
@@ -183,15 +191,17 @@ test('artifact-only turns expand into assistant artifact messages', () => {
     artifact_json: artifactDynamoString(artifact)
   });
   assert.equal(turn.artifact.title, 'Curiosity Map: RSS');
-  assert.deepEqual(messagesFromTurns([turn]), [{
-    role: 'assistant',
-    content: '',
-    citations: [],
-    created_at: '2026-06-06T02:00:00.000Z',
-    request_id: 'r-map',
-    artifact,
-    tool_names: []
-  }]);
+  assert.deepEqual(messagesFromTurns([turn]), [
+    {
+      role: 'assistant',
+      content: '',
+      citations: [],
+      created_at: '2026-06-06T02:00:00.000Z',
+      request_id: 'r-map',
+      artifact,
+      tool_names: []
+    }
+  ]);
   assert.deepEqual(historyFromTurns([turn]), []);
 });
 
@@ -209,7 +219,10 @@ test('oversized artifacts are compacted without corrupting JSON', () => {
       source_refs: [{ title: `Source ${index}`, url: `https://example.com/${index}`, reason: 'Fixture' }]
     })),
     edges: Array.from({ length: 40 }, (_, index) => ({ from: 'long', to: `node-${index}`, why: 'Fixture edge' })),
-    sources: Array.from({ length: 20 }, (_, index) => ({ title: `Source ${index}`, url: `https://example.com/${index}` })),
+    sources: Array.from({ length: 20 }, (_, index) => ({
+      title: `Source ${index}`,
+      url: `https://example.com/${index}`
+    })),
     prompt: 'Follow this huge map.'
   };
   const json = artifactJsonForStorage(artifact);

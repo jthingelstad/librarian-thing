@@ -1,11 +1,10 @@
 // Per-user profile backed by the existing Librarian DynamoDB table.
 //
-// Each user (web subscriber or Discord member) gets one row keyed by
+// Each reader gets one row keyed by
 // the session token's `sub`. The row tracks basic account metadata only:
 //
 //   - first_seen_at / last_seen_at / turn_count
 //   - preferred_name                 — what Thingy should call the reader
-//   - discord_connection             — linked Discord identity, if any
 //
 // Conversations themselves are stored server-side per conversation
 // (user-conversations.mjs); this row deliberately carries no AI-derived
@@ -18,21 +17,11 @@
 // have the AWS SDK installed.
 
 import { logEvent } from './logging.mjs';
-import type { AttributeValue, UpdateItemCommandInput } from '@aws-sdk/client-dynamodb';
+import type { AttributeValue } from '@aws-sdk/client-dynamodb';
 
 const TTL_DAYS_DEFAULT = 365;
 
 type DynamoItem = Record<string, AttributeValue>;
-
-interface DiscordConnection {
-  connected?: boolean;
-  username?: string;
-  global_name?: string;
-  display_name?: string;
-  guild_id?: string;
-  connected_at?: string;
-  last_verified_at?: string;
-}
 
 export interface UserMemory {
   sub?: string;
@@ -41,7 +30,6 @@ export interface UserMemory {
   last_seen_at?: string;
   preferred_name?: string;
   turn_count?: number;
-  discord_connection?: DiscordConnection | null;
 }
 
 function errorName(error: unknown) {
@@ -60,38 +48,6 @@ function memoryKey(sub: unknown): DynamoItem {
   return { pk: dynamoString(`user#${sub}`), sk: dynamoString('memory') };
 }
 
-function readDiscordConnection(value: AttributeValue | undefined): DiscordConnection | null {
-  const item = value?.M || null;
-  if (!item) return null;
-  const connectedAt = item.connected_at?.S || '';
-  const username = item.username?.S || '';
-  const globalName = item.global_name?.S || '';
-  if (!connectedAt && !username && !globalName) return null;
-  return {
-    connected: item.connected?.BOOL !== false,
-    username,
-    global_name: globalName,
-    display_name: item.display_name?.S || globalName || username,
-    guild_id: item.guild_id?.S || '',
-    connected_at: connectedAt,
-    last_verified_at: item.last_verified_at?.S || connectedAt
-  };
-}
-
-function writeDiscordConnection(connection: DiscordConnection = {}): AttributeValue {
-  return {
-    M: {
-      connected: { BOOL: connection.connected !== false },
-      username: dynamoString(connection.username || ''),
-      global_name: dynamoString(connection.global_name || ''),
-      display_name: dynamoString(connection.display_name || connection.global_name || connection.username || ''),
-      guild_id: dynamoString(connection.guild_id || ''),
-      connected_at: dynamoString(connection.connected_at || ''),
-      last_verified_at: dynamoString(connection.last_verified_at || connection.connected_at || '')
-    }
-  };
-}
-
 function ttlFromNow() {
   const days = Number(process.env.LIBRARIAN_USER_MEMORY_TTL_DAYS || TTL_DAYS_DEFAULT);
   return Math.floor(Date.now() / 1000) + days * 86400;
@@ -104,8 +60,7 @@ export function memoryDynamoItem(
   overrides: UserMemory = {}
 ): DynamoItem {
   const version = Number(overrides.version ?? memory.version ?? 0);
-  const discordConnection = overrides.discord_connection ?? memory.discord_connection;
-  const item: DynamoItem = {
+  return {
     pk: dynamoString(`user#${sub}`),
     sk: dynamoString('memory'),
     version: dynamoNumber(version),
@@ -115,8 +70,6 @@ export function memoryDynamoItem(
     turn_count: dynamoNumber(overrides.turn_count ?? memory.turn_count ?? 0),
     ttl: dynamoNumber(ttlFromNow())
   };
-  if (discordConnection) item.discord_connection = writeDiscordConnection(discordConnection);
-  return item;
 }
 
 // ---------- public API ----------
@@ -151,8 +104,7 @@ export function memoryFromItem(item: DynamoItem | undefined, sub: unknown = ''):
     first_seen_at: item.first_seen_at?.S || '',
     last_seen_at: item.last_seen_at?.S || '',
     preferred_name: item.preferred_name?.S || '',
-    turn_count: Number(item.turn_count?.N || 0),
-    discord_connection: readDiscordConnection(item.discord_connection)
+    turn_count: Number(item.turn_count?.N || 0)
   };
 }
 
@@ -260,94 +212,8 @@ export async function recordUserPreferredName(sub: unknown, name: unknown) {
   }
 }
 
-function normalizedDiscordConnection(
-  connection: DiscordConnection = {},
-  nowIso = new Date().toISOString()
-): DiscordConnection {
-  return {
-    connected: true,
-    username: String(connection.username || '')
-      .trim()
-      .slice(0, 80),
-    global_name: String(connection.global_name || '')
-      .trim()
-      .slice(0, 80),
-    display_name: String(connection.display_name || connection.global_name || connection.username || '')
-      .trim()
-      .slice(0, 80),
-    guild_id: String(connection.guild_id || '')
-      .trim()
-      .slice(0, 80),
-    connected_at: String(connection.connected_at || nowIso),
-    last_verified_at: String(connection.last_verified_at || nowIso)
-  };
-}
-
-export function discordConnectionMemoryUpdate(
-  tableName: string | undefined,
-  sub: unknown,
-  connection: DiscordConnection = {},
-  nowIso = new Date().toISOString()
-): UpdateItemCommandInput | null {
-  if (!tableName || !sub) return null;
-  const value = normalizedDiscordConnection(connection, nowIso);
-  return {
-    TableName: tableName,
-    Key: memoryKey(sub),
-    UpdateExpression: [
-      'SET #discord_connection = :discord_connection',
-      '#first_seen_at = if_not_exists(#first_seen_at, :now)',
-      '#last_seen_at = :now',
-      '#ttl = :ttl',
-      '#version = if_not_exists(#version, :zero) + :one'
-    ].join(', '),
-    ExpressionAttributeNames: {
-      '#discord_connection': 'discord_connection',
-      '#first_seen_at': 'first_seen_at',
-      '#last_seen_at': 'last_seen_at',
-      '#ttl': 'ttl',
-      '#version': 'version'
-    },
-    ExpressionAttributeValues: {
-      ':discord_connection': writeDiscordConnection(value),
-      ':now': dynamoString(nowIso),
-      ':ttl': dynamoNumber(ttlFromNow()),
-      ':zero': dynamoNumber(0),
-      ':one': dynamoNumber(1)
-    }
-  };
-}
-
-export async function recordDiscordConnection(sub: unknown, connection: DiscordConnection = {}) {
-  const tableName = process.env.TABLE_NAME;
-  const nowIso = new Date().toISOString();
-  const params = discordConnectionMemoryUpdate(tableName, sub, connection, nowIso);
-  if (!params) return { ok: false, error: 'Missing memory write context.' };
-  try {
-    const { UpdateItemCommand } = await import('@aws-sdk/client-dynamodb');
-    const { dynamodb } = await import('./aws-clients.mjs');
-    const response = await dynamodb.send(
-      new UpdateItemCommand({
-        ...params,
-        ReturnValues: 'ALL_NEW'
-      })
-    );
-    logEvent('info', 'user_discord_connection_recorded');
-    return {
-      ok: true,
-      memory: memoryFromItem(response?.Attributes, sub),
-      discord_connection: normalizedDiscordConnection(connection, nowIso)
-    };
-  } catch (error) {
-    logEvent('warning', 'user_discord_connection_write_failed', {
-      error_type: errorName(error)
-    });
-    return { ok: false, error: 'Memory write failed.' };
-  }
-}
-
 // Shape the profile for an auth response. Returning users get the
-// `returning` flag so the frontend (web or Discord) can welcome them back.
+// `returning` flag so the frontend can welcome them back.
 // The empty arrays are a frozen contract shape: web clients deployed
 // before the synthesized-memory removal still read these keys.
 export function authProfile(memory: UserMemory | null | undefined) {
@@ -365,7 +231,6 @@ export function authProfile(memory: UserMemory | null | undefined) {
     recent_prompts: [],
     prior_session_summaries: [],
     learned_profile: [],
-    memory_synthesis: {},
-    discord_connection: memory.discord_connection || null
+    memory_synthesis: {}
   };
 }

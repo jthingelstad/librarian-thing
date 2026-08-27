@@ -44,7 +44,7 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 3. **Package both Lambda bundles** (`auth/` + `chat/`) — separate npm install + zip per bundle. Bundles ship independently because the auth Lambda is REST and the chat Lambda is response-streamed Function URL.
 4. **Upload zips** to `s3://{bucket}/code/{auth,chat}-lambda/<unix-ts>.zip`. Timestamp keys so CloudFormation always sees a new version.
 5. **Optional**: all corpus uploaders run — Weekly Thing corpus + graph, blog corpus, podcast corpus.
-6. **CloudFormation update-stack** with the new code keys + secrets from `.env`: `SESSION_SECRET`, `DISCORD_BRIDGE_SECRET`, `BUTTONDOWN_API_KEY`.
+6. **CloudFormation update-stack** with the new code keys + secrets from `.env`: `SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`.
 7. **30-day log retention** on the auto-created log groups (`configure_log_retention`).
 8. **Update `.env`** with the latest stack outputs: `LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`.
 
@@ -65,8 +65,7 @@ Pulled from the repo-root `.env`. Required:
 |---|---|---|
 | `BUTTONDOWN_API_KEY` | account secrets | Auth Lambda's subscriber verification |
 | `LIBRARIAN_SESSION_SECRET` | (auto-generated if missing) | HMAC signing for session JWTs |
-| `LIBRARIAN_BRIDGE_SECRET` | shared secret | operator conversation reads + `/retrieve` auth |
-| `DISCORD_CONVERSATION_WEBHOOK_URL` | Discord incoming webhook | Eval and Dispatch Lambdas post operator cards to `#chatter`; no Discord bot runtime required |
+| `LIBRARIAN_RETRIEVE_SECRET` | shared secret | trusted `/retrieve` service auth |
 | `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` | the `wt-archive` IAM user | Deploys + corpus upload |
 
 The CloudFormation stack uses an IAM service role for execution; the local AWS credentials are just for `cloudformation:UpdateStack` + `s3:PutObject`.

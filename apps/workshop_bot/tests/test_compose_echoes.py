@@ -248,7 +248,7 @@ class ComposeEchoesRunTests(_DBTestCase):
         quality bar for echoes requires real semantic retrieval."""
         self._window()
         self._mock_retrieve.side_effect = thingy_retrieve.ThingyRetrieveError(
-            "LIBRARIAN_BRIDGE_SECRET is not set",
+            "LIBRARIAN_RETRIEVE_SECRET is not set",
         )
         ctx, fc = self._ctx(reply="should not be used")
         result = asyncio.run(

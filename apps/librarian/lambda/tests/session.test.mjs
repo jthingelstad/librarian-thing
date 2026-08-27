@@ -2,12 +2,28 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { renderFaqAnswer, searchFaq } from '../dist/shared/faq.mjs';
 import { buildMagicLink, createMagicToken, magicTokenHash, validMagicToken } from '../dist/shared/magic-link.mjs';
-import { buildJmapEmailCalls, buildMagicLinkJmapCalls, magicLinkEmailHtml, magicLinkEmailText, pickSentMailbox, requireMethodResponse } from '../dist/shared/jmap-mail.mjs';
-import { createSessionToken, createSessionTokenForSub, emailHash, normalizeEmail, verifyToken } from '../dist/shared/session.mjs';
-import { entitlementsForSessionPayload, handler as authHandler, magicLinkBaseWithReturnPath } from '../dist/auth/handler.mjs';
+import {
+  buildJmapEmailCalls,
+  buildMagicLinkJmapCalls,
+  magicLinkEmailHtml,
+  magicLinkEmailText,
+  pickSentMailbox,
+  requireMethodResponse
+} from '../dist/shared/jmap-mail.mjs';
+import {
+  createSessionToken,
+  createSessionTokenForSub,
+  emailHash,
+  normalizeEmail,
+  verifyToken
+} from '../dist/shared/session.mjs';
+import {
+  entitlementsForSessionPayload,
+  handler as authHandler,
+  magicLinkBaseWithReturnPath
+} from '../dist/auth/handler.mjs';
 import {
   authProfile,
-  discordConnectionMemoryUpdate,
   memoryDynamoItem,
   memoryFromItem,
   recordUserTurn,
@@ -17,14 +33,6 @@ import { renderTemplate, agentUserPrompt } from '../dist/shared/prompts.mjs';
 import { subscriberStatus } from '../dist/shared/buttondown.mjs';
 import { deleteThingyProfile, tokenIssuedAfterProfileDeletion } from '../dist/shared/profile-deletion.mjs';
 import { dynamodb, s3 } from '../dist/shared/aws-clients.mjs';
-import {
-  createLinkCode,
-  createLinkState,
-  discordConnectionPut,
-  discordUserHash,
-  isSupportingEntitlement,
-  normalizeDiscordIdentity
-} from '../dist/shared/discord-link.mjs';
 import {
   availableConversationModes,
   canUseConversationMode,
@@ -89,15 +97,18 @@ test('legacy memory actions are rejected', async () => {
   const { token } = createSessionToken('reader@example.com', 'legacy-memory-action');
   try {
     for (const action of ['synthesize', 'update', 'resynthesize', 'delete']) {
-      const response = await authHandler({
-        httpMethod: 'POST',
-        path: '/memory',
-        headers: {
-          authorization: `Bearer ${token}`,
-          origin: 'https://thingy.thingelstad.com'
+      const response = await authHandler(
+        {
+          httpMethod: 'POST',
+          path: '/memory',
+          headers: {
+            authorization: `Bearer ${token}`,
+            origin: 'https://thingy.thingelstad.com'
+          },
+          body: JSON.stringify({ action })
         },
-        body: JSON.stringify({ action })
-      }, { awsRequestId: `legacy-${action}` });
+        { awsRequestId: `legacy-${action}` }
+      );
       assert.equal(response.statusCode, 400);
       assert.match(JSON.parse(response.body).error, /Unsupported memory action/);
     }
@@ -141,9 +152,7 @@ test('deleteThingyProfile deletes Thingy-local rows, artifacts, and writes a mar
     }
     if (command.constructor.name === 'QueryCommand' && command.input.IndexName === 'SubscriberHashIndex') {
       return {
-        Items: [
-          { pk: { S: 'discord_user#xyz' }, sk: { S: 'connection' } }
-        ]
+        Items: [{ pk: { S: 'linked#xyz' }, sk: { S: 'connection' } }]
       };
     }
     if (command.constructor.name === 'BatchWriteItemCommand') {
@@ -169,10 +178,16 @@ test('deleteThingyProfile deletes Thingy-local rows, artifacts, and writes a mar
     const batch = dynamoCalls.find((call) => call.name === 'BatchWriteItemCommand');
     const deletes = batch.input.RequestItems['thingy-test-table'].map((request) => request.DeleteRequest.Key);
     assert.equal(deletes.length, 4);
-    assert.equal(deletes.some((key) => key.sk.S === 'profile-deleted'), false);
-    assert.ok(deletes.some((key) => key.pk.S === 'discord_user#xyz'));
+    assert.equal(
+      deletes.some((key) => key.sk.S === 'profile-deleted'),
+      false
+    );
+    assert.ok(deletes.some((key) => key.pk.S === 'linked#xyz'));
     assert.ok(deletes.some((key) => key.pk.S === 'session#abc'));
-    assert.equal(dynamoCalls.some((call) => call.name === 'ScanCommand'), false);
+    assert.equal(
+      dynamoCalls.some((call) => call.name === 'ScanCommand'),
+      false
+    );
     assert.ok(dynamoCalls.some((call) => call.input.IndexName === 'EmailHashIndex'));
     assert.ok(dynamoCalls.some((call) => call.input.IndexName === 'SubscriberHashIndex'));
 
@@ -182,13 +197,15 @@ test('deleteThingyProfile deletes Thingy-local rows, artifacts, and writes a mar
     assert.ok(put.input.Item.deleted_at.S);
     assert.ok(Number(put.input.Item.deleted_at_ms.N) > 0);
 
-    assert.deepEqual(s3Calls, [{
-      name: 'DeleteObjectCommand',
-      input: {
-        Bucket: 'artifact-bucket',
-        Key: 'dispatches/draft-1.json'
+    assert.deepEqual(s3Calls, [
+      {
+        name: 'DeleteObjectCommand',
+        input: {
+          Bucket: 'artifact-bucket',
+          Key: 'dispatches/draft-1.json'
+        }
       }
-    }]);
+    ]);
   } finally {
     dynamodb.send = originalDynamoSend;
     s3.send = originalS3Send;
@@ -212,19 +229,21 @@ test('memory delete_profile route deletes local rows and writes marker', async (
     if (command.constructor.name === 'GetItemCommand') return {};
     if (command.constructor.name === 'QueryCommand' && !command.input.IndexName) {
       return {
-        Items: [{
-          pk: { S: `user#${emailHash('reader@example.com')}` },
-          sk: { S: 'dispatch#draft-1' },
-          content_artifact_bucket: { S: 'artifact-bucket' },
-          content_artifact_key: { S: 'dispatches/draft-1.json' }
-        }]
+        Items: [
+          {
+            pk: { S: `user#${emailHash('reader@example.com')}` },
+            sk: { S: 'dispatch#draft-1' },
+            content_artifact_bucket: { S: 'artifact-bucket' },
+            content_artifact_key: { S: 'dispatches/draft-1.json' }
+          }
+        ]
       };
     }
     if (command.constructor.name === 'QueryCommand' && command.input.IndexName === 'EmailHashIndex') {
       return { Items: [{ pk: { S: 'session#abc' }, sk: { S: 'session' } }] };
     }
     if (command.constructor.name === 'QueryCommand' && command.input.IndexName === 'SubscriberHashIndex') {
-      return { Items: [{ pk: { S: 'discord_user#xyz' }, sk: { S: 'connection' } }] };
+      return { Items: [{ pk: { S: 'linked#xyz' }, sk: { S: 'connection' } }] };
     }
     if (command.constructor.name === 'BatchWriteItemCommand') return { UnprocessedItems: {} };
     if (command.constructor.name === 'PutItemCommand') return {};
@@ -236,15 +255,18 @@ test('memory delete_profile route deletes local rows and writes marker', async (
   };
 
   try {
-    const response = await authHandler({
-      httpMethod: 'POST',
-      path: '/memory',
-      headers: {
-        authorization: `Bearer ${token}`,
-        origin: 'https://thingy.thingelstad.com'
+    const response = await authHandler(
+      {
+        httpMethod: 'POST',
+        path: '/memory',
+        headers: {
+          authorization: `Bearer ${token}`,
+          origin: 'https://thingy.thingelstad.com'
+        },
+        body: JSON.stringify({ action: 'delete_profile' })
       },
-      body: JSON.stringify({ action: 'delete_profile' })
-    }, { awsRequestId: 'delete-profile-route' });
+      { awsRequestId: 'delete-profile-route' }
+    );
     const body = JSON.parse(response.body);
     assert.equal(response.statusCode, 200);
     assert.equal(body.status, 'deleted');
@@ -252,7 +274,10 @@ test('memory delete_profile route deletes local rows and writes marker', async (
     assert.ok(dynamoCalls.some((call) => call.name === 'BatchWriteItemCommand'));
     assert.ok(dynamoCalls.some((call) => call.input.IndexName === 'EmailHashIndex'));
     assert.ok(dynamoCalls.some((call) => call.input.IndexName === 'SubscriberHashIndex'));
-    assert.equal(dynamoCalls.some((call) => call.name === 'ScanCommand'), false);
+    assert.equal(
+      dynamoCalls.some((call) => call.name === 'ScanCommand'),
+      false
+    );
     assert.equal(s3Calls.length, 1);
   } finally {
     dynamodb.send = originalDynamoSend;
@@ -271,27 +296,36 @@ test('session refresh entitlements do not renew stale privileged claims', () => 
   try {
     const now = 1000;
     assert.deepEqual(
-      entitlementsForSessionPayload({
-        sub: emailHash('reader@example.com'),
-        entitlements: ['reader', 'supporting_member'],
-        entitlements_verified_until: now - 1
-      }, now),
+      entitlementsForSessionPayload(
+        {
+          sub: emailHash('reader@example.com'),
+          entitlements: ['reader', 'supporting_member'],
+          entitlements_verified_until: now - 1
+        },
+        now
+      ),
       ['reader']
     );
     assert.deepEqual(
-      entitlementsForSessionPayload({
-        sub: emailHash('reader@example.com'),
-        entitlements: ['reader', 'supporting_member'],
-        entitlements_verified_until: now + 1
-      }, now),
+      entitlementsForSessionPayload(
+        {
+          sub: emailHash('reader@example.com'),
+          entitlements: ['reader', 'supporting_member'],
+          entitlements_verified_until: now + 1
+        },
+        now
+      ),
       ['reader', 'supporting_member']
     );
     assert.deepEqual(
-      entitlementsForSessionPayload({
-        sub: emailHash('jamie@thingelstad.com'),
-        entitlements: ['reader'],
-        entitlements_verified_until: now - 1
-      }, now),
+      entitlementsForSessionPayload(
+        {
+          sub: emailHash('jamie@thingelstad.com'),
+          entitlements: ['reader'],
+          entitlements_verified_until: now - 1
+        },
+        now
+      ),
       ['reader', 'owner', 'supporting_member', 'trusted_circle']
     );
   } finally {
@@ -302,9 +336,9 @@ test('session refresh entitlements do not renew stale privileged claims', () => 
   }
 });
 
-test('discord bridge token round trips with non-email sub', () => {
+test('refreshed session token round trips with a stable subject hash', () => {
   process.env.SESSION_SECRET = 'test-secret';
-  const sub = 'discord:0123456789abcdef0123456789abcdef';
+  const sub = '0123456789abcdef0123456789abcdef';
   const { token, sessionId, expiresAt } = createSessionTokenForSub(sub, 'session-d1', {
     entitlements: ['reader']
   });
@@ -393,52 +427,25 @@ test('authProfile returns returning=false for first-time users', () => {
   assert.deepEqual(authProfile(null), { returning: false });
 });
 
-test('Discord link helpers normalize identity and hide raw user ids behind hashes', () => {
-  const state = createLinkState();
-  const code = createLinkCode();
-  assert.match(state, /^[A-Za-z0-9_-]{20,}$/);
-  assert.match(code, /^[A-Z0-9]{6,8}$/);
-  assert.match(discordUserHash('1234567890'), /^[a-f0-9]{64}$/);
-  assert.equal(discordUserHash('bad user id with spaces'), '');
-  assert.deepEqual(
-    normalizeDiscordIdentity({ username: 'thingy', global_name: 'Thingy Bot', guild_id: 'guild-1' }),
-    {
-      username: 'thingy',
-      global_name: 'Thingy Bot',
-      display_name: 'Thingy Bot',
-      guild_id: 'guild-1'
-    }
-  );
-  assert.equal(isSupportingEntitlement(['reader']), false);
-  assert.equal(isSupportingEntitlement(['reader', 'supporting_member']), true);
-  assert.equal(isSupportingEntitlement(['reader', 'owner']), true);
-});
-
 test('memoryFromItem keeps the basic profile and ignores legacy synthesized fields', () => {
-  const memory = memoryFromItem({
-    version: { N: '3' },
-    first_seen_at: { S: '2026-01-01T00:00:00Z' },
-    last_seen_at: { S: '2026-01-02T00:00:00Z' },
-    preferred_name: { S: 'Jamie' },
-    turn_count: { N: '7' },
-    // Legacy attributes still present on pre-simplification rows.
-    current_session_questions: { L: [{ M: { ts: { S: '2026-01-02T00:00:00Z' }, question: { S: 'What about RSS?' } } }] },
-    recent_prompts: { L: [{ M: { ts: { S: '2026-01-01T00:00:00Z' }, question: { S: 'Tell me about OPML.' } } }] },
-    synthesized_history: { L: [] },
-    learned_profile: { L: [{ M: { label: { S: 'RSS workflows' }, summary: { S: 'Often explores RSS.' } } }] },
-    memory_synthesis: { M: { status: { S: 'current' } } },
-    discord_connection: {
-      M: {
-        connected: { BOOL: true },
-        username: { S: 'thingy_user' },
-        global_name: { S: 'Thingy User' },
-        display_name: { S: 'Thingy User' },
-        guild_id: { S: 'guild-1' },
-        connected_at: { S: '2026-01-02T00:00:00Z' },
-        last_verified_at: { S: '2026-01-03T00:00:00Z' }
-      }
-    }
-  }, 'subscriber-hash');
+  const memory = memoryFromItem(
+    {
+      version: { N: '3' },
+      first_seen_at: { S: '2026-01-01T00:00:00Z' },
+      last_seen_at: { S: '2026-01-02T00:00:00Z' },
+      preferred_name: { S: 'Jamie' },
+      turn_count: { N: '7' },
+      // Legacy attributes still present on pre-simplification rows.
+      current_session_questions: {
+        L: [{ M: { ts: { S: '2026-01-02T00:00:00Z' }, question: { S: 'What about RSS?' } } }]
+      },
+      recent_prompts: { L: [{ M: { ts: { S: '2026-01-01T00:00:00Z' }, question: { S: 'Tell me about OPML.' } } }] },
+      synthesized_history: { L: [] },
+      learned_profile: { L: [{ M: { label: { S: 'RSS workflows' }, summary: { S: 'Often explores RSS.' } } }] },
+      memory_synthesis: { M: { status: { S: 'current' } } }
+    },
+    'subscriber-hash'
+  );
 
   assert.equal(memory.sub, 'subscriber-hash');
   assert.equal(memory.version, 3);
@@ -449,25 +456,22 @@ test('memoryFromItem keeps the basic profile and ignores legacy synthesized fiel
   assert.equal(Object.hasOwn(memory, 'synthesized_history'), false);
   assert.equal(Object.hasOwn(memory, 'learned_profile'), false);
   assert.equal(Object.hasOwn(memory, 'memory_synthesis'), false);
-  assert.equal(memory.discord_connection.display_name, 'Thingy User');
 });
 
 test('recordUserTurn increments the turn counter and keeps the profile basics', async () => {
   const priorTable = process.env.TABLE_NAME;
   process.env.TABLE_NAME = 'thingy-test-table';
   const originalDynamoSend = dynamodb.send;
-  const storedItem = memoryDynamoItem('subscriber-hash', {
-    version: 4,
-    first_seen_at: '2026-01-01T00:00:00.000Z',
-    preferred_name: 'Jamie',
-    turn_count: 7,
-    discord_connection: {
-      connected: true,
-      username: 'thingy_user',
-      display_name: 'Thingy User',
-      connected_at: '2026-01-01T00:00:00.000Z'
-    }
-  }, '2026-01-01T00:00:00.000Z');
+  const storedItem = memoryDynamoItem(
+    'subscriber-hash',
+    {
+      version: 4,
+      first_seen_at: '2026-01-01T00:00:00.000Z',
+      preferred_name: 'Jamie',
+      turn_count: 7
+    },
+    '2026-01-01T00:00:00.000Z'
+  );
   let writtenMemory = null;
 
   dynamodb.send = async (command) => {
@@ -486,7 +490,6 @@ test('recordUserTurn increments the turn counter and keeps the profile basics', 
     assert.equal(memory.version, 5);
     assert.equal(memory.preferred_name, 'Jamie');
     assert.equal(memory.first_seen_at, '2026-01-01T00:00:00.000Z');
-    assert.equal(memory.discord_connection.display_name, 'Thingy User');
     assert.equal(Object.hasOwn(writtenMemory, 'recent_prompts'), false);
     assert.equal(Object.hasOwn(writtenMemory, 'learned_profile'), false);
   } finally {
@@ -509,71 +512,12 @@ test('recordUserPreferredName reports failure when memory storage is not configu
   }
 });
 
-test('Discord link write builders store profile metadata as explicit fields', () => {
-  const connectedAt = '2026-06-10T12:00:00.000Z';
-  const memoryUpdate = discordConnectionMemoryUpdate('table-name', 'subscriber-hash', {
-    username: 'thingy_user',
-    global_name: 'Thingy User',
-    display_name: 'Thingy User',
-    guild_id: 'guild-1',
-    connected_at: connectedAt,
-    last_verified_at: connectedAt
-  }, connectedAt);
-  const discordValue = memoryUpdate.ExpressionAttributeValues[':discord_connection'].M;
-
-  assert.equal(memoryUpdate.Key.pk.S, 'user#subscriber-hash');
-  assert.equal(memoryUpdate.Key.sk.S, 'memory');
-  assert.equal(discordValue.username.S, 'thingy_user');
-  assert.equal(discordValue.display_name.S, 'Thingy User');
-  assert.equal(discordValue.connected.BOOL, true);
-
-  const bridgePut = discordConnectionPut('table-name', {
-    discord_user_hash: 'discord-hash',
-    subscriber_hash: 'subscriber-hash',
-    email: 'Reader@Example.com',
-    username: 'thingy_user',
-    display_name: 'Thingy User',
-    entitlements: ['reader', 'supporting_member'],
-    connected_at: connectedAt,
-    last_verified_at: connectedAt
-  });
-
-  assert.equal(bridgePut.Item.pk.S, 'discord_user#discord-hash');
-  assert.equal(bridgePut.Item.subscriber_hash.S, 'subscriber-hash');
-  assert.equal(bridgePut.Item.email.S, 'reader@example.com');
-  assert.deepEqual(JSON.parse(bridgePut.Item.entitlements_json.S), ['reader', 'supporting_member']);
-});
-
-test('full memory item rewrites preserve Discord connection metadata', () => {
-  const connectedAt = '2026-06-10T12:00:00.000Z';
-  const item = memoryDynamoItem('subscriber-hash', {
-    version: 4,
-    discord_connection: {
-      connected: true,
-      username: 'thingy_user',
-      global_name: 'Thingy User',
-      display_name: 'Thingy User',
-      guild_id: 'guild-1',
-      connected_at: connectedAt,
-      last_verified_at: connectedAt
-    }
-  }, '2026-06-10T12:05:00.000Z', {
-    version: 5,
-    turn_count: 8
-  });
-
-  assert.equal(item.turn_count.N, '8');
-  assert.equal(item.pk.S, 'user#subscriber-hash');
-  assert.equal(item.version.N, '5');
-  assert.equal(item.discord_connection.M.username.S, 'thingy_user');
-  assert.equal(item.discord_connection.M.display_name.S, 'Thingy User');
-  assert.equal(item.discord_connection.M.connected_at.S, connectedAt);
-});
-
-test('full memory item rewrites omit blank Discord connection metadata', () => {
+test('full memory item rewrites keep only the basic profile fields', () => {
   const item = memoryDynamoItem('subscriber-hash', {}, '2026-06-10T12:05:00.000Z');
 
-  assert.equal(Object.hasOwn(item, 'discord_connection'), false);
+  assert.equal(item.pk.S, 'user#subscriber-hash');
+  assert.equal(item.sk.S, 'memory');
+  assert.equal(Object.hasOwn(item, 'recent_prompts'), false);
 });
 
 test('authProfile reflects turn_count and keeps legacy keys as empty arrays', () => {
@@ -600,12 +544,8 @@ test('reader context carries profile basics and ignores legacy prompt arrays', (
   const profile = normalizeUserProfile({
     turn_count: 9,
     preferred_name: 'Jamie',
-    recent_prompts: [
-      { question: 'What did Jamie say about RSS?' }
-    ],
-    current_session_questions: [
-      { question: 'Fallback current-session question.' }
-    ]
+    recent_prompts: [{ question: 'What did Jamie say about RSS?' }],
+    current_session_questions: [{ question: 'Fallback current-session question.' }]
   });
   const prompt = readerContextPrompt({}, profile);
 
@@ -615,23 +555,6 @@ test('reader context carries profile basics and ignores legacy prompt arrays', (
   assert.match(prompt, /Prior Thingy turns known to client: 9/);
   assert.doesNotMatch(prompt, /Client-known recent Thingy prompts/);
   assert.doesNotMatch(prompt, /What did Jamie say about RSS/);
-});
-
-test('authProfile surfaces Discord metadata without explicit memory fields', () => {
-  const memory = {
-    turn_count: 4,
-    discord_connection: {
-      connected: true,
-      username: 'thingy_user',
-      display_name: 'Thingy User',
-      connected_at: '2026-06-10T12:00:00.000Z'
-    }
-  };
-  const profile = authProfile(memory);
-  assert.equal(profile.discord_connection.display_name, 'Thingy User');
-  assert.equal(Object.hasOwn(profile, 'remembered_facts'), false);
-  assert.equal(Object.hasOwn(profile, 'interests'), false);
-  assert.equal(Object.hasOwn(profile, 'synthesized_memories'), false);
 });
 
 test('email normalization is stable', () => {
@@ -787,7 +710,10 @@ test('buttondown subscriber status maps active and inactive states', () => {
 });
 
 test('prompt template renderer substitutes named placeholders', () => {
-  assert.equal(renderTemplate('Hello {{ name }} from {{ place }}.', { name: 'Thingy', place: 'the archive' }), 'Hello Thingy from the archive.');
+  assert.equal(
+    renderTemplate('Hello {{ name }} from {{ place }}.', { name: 'Thingy', place: 'the archive' }),
+    'Hello Thingy from the archive.'
+  );
 });
 
 test('agent user prompt renders dynamic conversation context', () => {
@@ -810,12 +736,15 @@ test('preflight JSON parser tolerates fenced strict JSON', () => {
 });
 
 test('preflight normalizer keeps rewrites/direct answers safe and structured', () => {
-  const rewrite = normalizePreflightDecision({
-    action: 'rewrite',
-    category: 'archive_rewrite',
-    rewritten_question: 'Pick one archive thread and tell it as a concise story.',
-    answer_guidance: 'Keep the playful intent.'
-  }, 'Tell me a story.');
+  const rewrite = normalizePreflightDecision(
+    {
+      action: 'rewrite',
+      category: 'archive_rewrite',
+      rewritten_question: 'Pick one archive thread and tell it as a concise story.',
+      answer_guidance: 'Keep the playful intent.'
+    },
+    'Tell me a story.'
+  );
   assert.equal(rewrite.action, 'rewrite');
   assert.equal(rewrite.category, 'archive_rewrite');
   assert.equal(rewrite.original_question, 'Tell me a story.');
@@ -824,7 +753,10 @@ test('preflight normalizer keeps rewrites/direct answers safe and structured', (
   const badRewrite = normalizePreflightDecision({ action: 'rewrite', category: 'archive_rewrite' }, 'Surprise me.');
   assert.equal(badRewrite.action, 'pass');
 
-  const direct = normalizePreflightDecision({ action: 'direct', category: 'privacy_refusal' }, 'Where does Jamie live?');
+  const direct = normalizePreflightDecision(
+    { action: 'direct', category: 'privacy_refusal' },
+    'Where does Jamie live?'
+  );
   assert.equal(direct.action, 'direct');
   assert.equal(direct.category, 'privacy_refusal');
   assert.match(direct.direct_answer, /public archive/i);
@@ -844,7 +776,10 @@ test('FAQ search returns authoritative shared FAQ entries', () => {
   assert.equal(results[0].question, 'How do I unsubscribe?');
   assert.equal(results[0].url, '/faq/');
   assert.match(results[0].answer_text, /unsubscribe link/);
-  assert.equal(renderFaqAnswer('over {{yearsActive}} years and {{issueCount}} issues', { yearsActive: 10, issueCount: 345 }), 'over 10 years and 345 issues');
+  assert.equal(
+    renderFaqAnswer('over {{yearsActive}} years and {{issueCount}} issues', { yearsActive: 10, issueCount: 345 }),
+    'over 10 years and 345 issues'
+  );
 });
 
 test('feedback helpers accept only expected reactions and request ids', () => {
@@ -860,15 +795,18 @@ test('feedback helpers accept only expected reactions and request ids', () => {
 
 test('Bedrock converse stream reader emits incremental text deltas', async () => {
   const deltas = [];
-  const result = await readConverseStream({
-    stream: [
-      { messageStart: { role: 'assistant' } },
-      { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'First ' } } },
-      { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'second.' } } },
-      { messageStop: { stopReason: 'end_turn' } },
-      { metadata: { usage: { outputTokens: 3 } } }
-    ]
-  }, { onTextDelta: (delta) => deltas.push(delta) });
+  const result = await readConverseStream(
+    {
+      stream: [
+        { messageStart: { role: 'assistant' } },
+        { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'First ' } } },
+        { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'second.' } } },
+        { messageStop: { stopReason: 'end_turn' } },
+        { metadata: { usage: { outputTokens: 3 } } }
+      ]
+    },
+    { onTextDelta: (delta) => deltas.push(delta) }
+  );
 
   assert.deepEqual(deltas, ['First ', 'second.']);
   assert.equal(result.text, 'First second.');
@@ -893,9 +831,11 @@ test('Bedrock converse stream reader reconstructs streamed tool use input', asyn
     ]
   });
 
-  assert.deepEqual(result.message.content, [{
-    toolUse: { toolUseId: 'tool-1', name: 'search_archive', input: { query: 'RSS' } }
-  }]);
+  assert.deepEqual(result.message.content, [
+    {
+      toolUse: { toolUseId: 'tool-1', name: 'search_archive', input: { query: 'RSS' } }
+    }
+  ]);
   assert.equal(result.stopReason, 'tool_use');
 });
 

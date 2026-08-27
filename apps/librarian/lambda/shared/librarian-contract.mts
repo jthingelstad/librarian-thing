@@ -30,20 +30,6 @@ function endpoint(actions: Record<string, Record<string, unknown>> = {}) {
 }
 
 const mode = object({ id: string, label: string, description: string }, ['id', 'label']);
-const discordConnection = object({
-  connected: boolean,
-  username: string,
-  global_name: string,
-  display_name: string,
-  guild_id: string,
-  connected_at: string,
-  last_verified_at: string,
-  user_name: string,
-  globalName: string,
-  displayName: string,
-  connectedAt: string
-});
-const nullableDiscordConnection = { anyOf: [ref('discordConnection'), { type: 'null' }] };
 const profile = object({
   email: string,
   status: string,
@@ -55,10 +41,6 @@ const profile = object({
   entitlements: arrayOf(string),
   modes: arrayOf(ref('mode')),
   supporting_member: boolean,
-  discord_connection: nullableDiscordConnection,
-  discordConnection: nullableDiscordConnection,
-  discord_user: nullableDiscordConnection,
-  discordUser: nullableDiscordConnection,
   current_session_questions: unknownArray,
   recent_prompts: unknownArray,
   prior_session_summaries: unknownArray,
@@ -234,7 +216,6 @@ export const LIBRARIAN_CONTRACT = {
   compatibility: 'additive',
   $defs: {
     mode,
-    discordConnection,
     profile,
     conversation,
     conversationMessage,

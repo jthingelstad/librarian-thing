@@ -10,7 +10,6 @@ import type {
 } from '@aws-sdk/client-bedrock-runtime';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import type { CorpusChunk } from '../shared/retrieval.mjs';
 import {
   agentModel,
   advancedModel,
@@ -41,7 +40,6 @@ import { prioritizeCitationsForAnswer } from '../shared/citations.mjs';
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
 import { compactSource, retrieve } from '../shared/retrieval.mjs';
-import { currentEntitlementsForEmail, loadDiscordConnection } from '../shared/discord-link.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../shared/feedback.mjs';
 import {
   PREFLIGHT_SYSTEM_PROMPT,
@@ -149,18 +147,13 @@ function privacyPreflight(question: unknown) {
   );
 }
 
-function bridgeSecretOk(body: JsonRecord) {
-  // Constant-time equality against DISCORD_BRIDGE_SECRET. Returns `null`
-  // when the secret isn't configured (so callers can return 503 instead
-  // of 401 — telling operators "feature is off" vs "your secret is wrong").
-  // Mirrors auth/handler.mjs#bridgeSecretOk; kept duplicated here because
-  // shared/ doesn't carry crypto helpers and the chat Lambda is a separate
-  // bundle (re-exporting across bundles would add build complexity for a
-  // 5-line helper).
-  const expected = process.env.DISCORD_BRIDGE_SECRET || '';
+export function retrieveSecretOk(body: JsonRecord) {
+  const expected = process.env.LIBRARIAN_RETRIEVE_SECRET || '';
   if (!expected) return null;
   const expectedBuf = Buffer.from(expected, 'utf8');
-  const suppliedBuf = Buffer.from(String(body.bridge_secret || ''), 'utf8');
+  // Keep bridge_secret as a request-body alias so existing /retrieve clients
+  // remain compatible while the deployment credential gets a neutral name.
+  const suppliedBuf = Buffer.from(String(body.retrieve_secret || body.bridge_secret || ''), 'utf8');
   return expectedBuf.length === suppliedBuf.length && crypto.timingSafeEqual(expectedBuf, suppliedBuf);
 }
 
@@ -261,243 +254,6 @@ function bedrockMessageText(message: Message | undefined) {
     if ('text' in content && content.text) parts.push(content.text);
   }
   return parts.join('\n').trim();
-}
-
-function sourceLinkLabel(source: CorpusChunk) {
-  const kind = String(source.source_kind || '').toLowerCase();
-  if (kind === 'blog') return source.subject || 'thingelstad.com';
-  if (kind === 'podcast') {
-    const episode = source.episode_number ? `Another Thing ${source.episode_number}` : 'Another Thing';
-    return source.subject ? `${episode}: ${source.subject}` : episode;
-  }
-  if (source.issue_number) return `WT${source.issue_number}${source.subject ? `: ${source.subject}` : ''}`;
-  return source.subject || source.url || 'Archive source';
-}
-
-function sourceUrl(source: CorpusChunk) {
-  return source.url || source.transcript_url || source.audio_url || '';
-}
-
-function thingyBaseUrl() {
-  const raw = String(process.env.THINGY_MAGIC_LINK_BASE_URL || 'https://thingy.thingelstad.com/').trim();
-  try {
-    const url = new URL(raw);
-    url.pathname = '/';
-    url.search = '';
-    url.hash = '';
-    return url.toString().replace(/\/$/, '');
-  } catch {
-    return 'https://thingy.thingelstad.com';
-  }
-}
-
-function continuationUrl(question: unknown) {
-  const url = new URL('/chat/', thingyBaseUrl());
-  url.searchParams.set('prompt', String(question || '').slice(0, 500));
-  url.searchParams.set('from', 'discord');
-  return url.toString();
-}
-
-function discordContextMessages(value: unknown) {
-  const items = Array.isArray(value) ? value : [];
-  return (
-    items
-      .slice(-8)
-      .map((value) => {
-        const item = objectValue(value);
-        const author = String(item.author || item.display_name || 'member')
-          .replace(/\s+/g, ' ')
-          .slice(0, 40);
-        const content = String(item.content || '')
-          .replace(/\s+/g, ' ')
-          .slice(0, 260);
-        return content ? `${author}: ${content}` : '';
-      })
-      .filter(Boolean)
-      .join('\n') || 'No extra Discord thread context supplied.'
-  );
-}
-
-async function generateDiscordMentionAnswer({
-  question,
-  contextMessages,
-  sources
-}: {
-  question: string;
-  contextMessages: string;
-  sources: CorpusChunk[];
-}) {
-  const sourceBlock =
-    sources
-      .map((source, index) =>
-        [
-          `[${index + 1}] ${sourceLinkLabel(source)}`,
-          `URL: ${sourceUrl(source)}`,
-          `Excerpt: ${String(source.text || '')
-            .replace(/\s+/g, ' ')
-            .slice(0, 900)}`
-        ].join('\n')
-      )
-      .join('\n\n') || 'No sources found.';
-  const system = [
-    'You are Thingy in a Supporting Member Discord #general channel.',
-    "Answer only from Jamie Thingelstad's published archive and the supplied Discord context.",
-    'Stay concise: usually 80-180 words. Be useful in the flow of a shared discussion.',
-    'Use normal Markdown links on source titles when a source URL is supplied.',
-    'Do not speak as Jamie or imply private knowledge. Invite deeper work in the web app when needed.'
-  ].join('\n');
-  const user = [
-    'Discord context:',
-    contextMessages,
-    '',
-    'Member mention:',
-    question,
-    '',
-    'Retrieved archive sources:',
-    sourceBlock
-  ].join('\n');
-  const response = await bedrock.send(
-    new ConverseCommand({
-      modelId: agentModel(),
-      system: [{ text: system }, { cachePoint: { type: 'default' } }],
-      messages: [{ role: 'user', content: [{ text: user }] }],
-      inferenceConfig: { maxTokens: 600, temperature: 0.4 }
-    })
-  );
-  return sanitizeAnswerProse(bedrockMessageText(response.output?.message));
-}
-
-async function handleDiscordMentionRoute({
-  event,
-  responseStream,
-  requestId,
-  summary,
-  start
-}: {
-  event: LibrarianHttpEvent;
-  responseStream: ResponseStream;
-  requestId: string;
-  summary: RequestSummary;
-  start: number;
-}) {
-  const body = parseBody(event);
-  const secretState = bridgeSecretOk(body);
-  if (secretState === null) {
-    const s503 = jsonResponseStream(responseStream, 503);
-    s503.write(JSON.stringify({ status: 'disabled', error: 'Discord mention answering is not enabled.' }));
-    s503.end();
-    return;
-  }
-  if (!secretState) {
-    const s401 = jsonResponseStream(responseStream, 401);
-    s401.write(JSON.stringify({ status: 'unauthorized', error: 'Bridge secret rejected.' }));
-    s401.end();
-    return;
-  }
-  const question = String(body.message || body.question || '').trim();
-  if (!question) {
-    const s400 = jsonResponseStream(responseStream, 400);
-    s400.write(JSON.stringify({ status: 'invalid', error: 'message is required.' }));
-    s400.end();
-    return;
-  }
-  const connection = await loadDiscordConnection(body.discord_user_id);
-  if (!connection?.subscriber_hash || !connection.email) {
-    const s403 = jsonResponseStream(responseStream, 403);
-    s403.write(
-      JSON.stringify({
-        status: 'discord_link_required',
-        error: 'Thingy can answer linked Supporting Members in Discord.',
-        verify_hint: 'Run /thingy verify in the validation channel.'
-      })
-    );
-    s403.end();
-    return;
-  }
-  let entitlement;
-  try {
-    entitlement = await currentEntitlementsForEmail(connection.email);
-  } catch (error) {
-    logEvent('warning', 'discord_mention_entitlement_lookup_failed', {
-      subscriber_hash: connection.subscriber_hash,
-      error_type: errorName(error)
-    });
-    const s502 = jsonResponseStream(responseStream, 502);
-    s502.write(
-      JSON.stringify({
-        status: 'entitlement_unavailable',
-        error: 'Thingy could not verify Supporting Membership right now.'
-      })
-    );
-    s502.end();
-    return;
-  }
-  if (!entitlement.supporting_member) {
-    const s403 = jsonResponseStream(responseStream, 403);
-    s403.write(
-      JSON.stringify({
-        status: 'supporting_member_required',
-        error: 'Discord Thingy is available to Weekly Thing Supporting Members.',
-        remove_role: true
-      })
-    );
-    s403.end();
-    return;
-  }
-  if (
-    !(await checkRateLimit(
-      `discord_mention#${connection.subscriber_hash}`,
-      Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)
-    ))
-  ) {
-    const s429 = jsonResponseStream(responseStream, 429);
-    s429.write(
-      JSON.stringify({ status: 'rate_limited', error: 'Thingy is at the hourly Discord limit for this member.' })
-    );
-    s429.end();
-    return;
-  }
-  try {
-    const contextMessages = discordContextMessages(body.context);
-    const sources = (await retrieve(question, 6, { scope: 'all' })).map((source) => compactSource(source, 900));
-    const answer = await generateDiscordMentionAnswer({ question, contextMessages, sources });
-    const payload = {
-      status: 'ok',
-      request_id: requestId,
-      answer,
-      continuation_url: continuationUrl(question),
-      sources: sources.slice(0, 5).map((source) => ({
-        title: sourceLinkLabel(source),
-        url: sourceUrl(source),
-        source_kind: source.source_kind || '',
-        issue_number: source.issue_number || null
-      }))
-    };
-    const s200 = jsonResponseStream(responseStream, 200);
-    s200.write(JSON.stringify(payload));
-    s200.end();
-    logEvent('info', 'discord_mention_completed', {
-      ...summary,
-      subscriber_hash: connection.subscriber_hash,
-      source_count: sources.length,
-      duration_ms: Math.round(performance.now() - start)
-    });
-  } catch (error) {
-    const s500 = jsonResponseStream(responseStream, 500);
-    s500.write(
-      JSON.stringify({
-        status: 'failed',
-        error: 'Thingy could not answer in Discord right now.',
-        request_id: requestId
-      })
-    );
-    s500.end();
-    logEvent('error', 'discord_mention_failed', {
-      ...summary,
-      subscriber_hash: connection.subscriber_hash,
-      error_type: errorName(error)
-    });
-  }
 }
 
 function writeSse(stream: ResponseStream, event: string, data: unknown) {
@@ -1131,24 +887,24 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   }
 
   if (method === 'POST' && path.endsWith('/retrieve')) {
-    // Operator-only retrieval. Same Bedrock embed → vector search → Cohere
+    // Service retrieval. Same Bedrock embed → vector search → Cohere
     // rerank pipeline /chat uses, exposed as a passages-only JSON response
-    // (no Sonnet call). Auth via DISCORD_BRIDGE_SECRET, not per-user token —
+    // (no Sonnet call). Auth via LIBRARIAN_RETRIEVE_SECRET, not per-user token —
     // the caller is workshop_bot, not a reader. Used by compose-closer to
     // ground "From the Archive" picks on actual archive content rather
     // than vocabulary-only BM25 matches.
     const body = parseBody(event);
-    const secretState = bridgeSecretOk(body);
+    const secretState = retrieveSecretOk(body);
     if (secretState === null) {
       const s503 = jsonResponseStream(responseStream, 503);
-      s503.write(JSON.stringify({ error: 'Bridge retrieval is not enabled.' }));
+      s503.write(JSON.stringify({ error: 'Service retrieval is not enabled.' }));
       s503.end();
-      logEvent('warning', 'retrieve_bridge_disabled', { ...summary });
+      logEvent('warning', 'retrieve_service_disabled', { ...summary });
       return;
     }
     if (!secretState) {
       const s401 = jsonResponseStream(responseStream, 401);
-      s401.write(JSON.stringify({ error: 'Bridge secret rejected.' }));
+      s401.write(JSON.stringify({ error: 'Retrieval secret rejected.' }));
       s401.end();
       logEvent('warning', 'retrieve_bad_secret', { ...summary });
       return;
@@ -1197,11 +953,6 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
 
   if (method === 'POST' && path.endsWith('/curiosity-map')) {
     await handleCuriosityMapRoute({ event, responseStream, requestId, summary, start });
-    return;
-  }
-
-  if (method === 'POST' && path.endsWith('/discord/mention')) {
-    await handleDiscordMentionRoute({ event, responseStream, requestId, summary, start });
     return;
   }
 

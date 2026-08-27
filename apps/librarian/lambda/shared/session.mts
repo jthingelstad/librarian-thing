@@ -79,9 +79,7 @@ export function createSessionToken(
   };
 }
 
-// Mint a session token for a non-email subject — used by the Discord
-// bridge, which identifies users by Discord user id rather than email.
-// `sub` should be a stable, namespaced string like "discord:<hash>".
+// Refresh a session token from an already verified, stable subject hash.
 export function createSessionTokenForSub(
   sub: string,
   sessionId = crypto.randomBytes(18).toString('base64url'),

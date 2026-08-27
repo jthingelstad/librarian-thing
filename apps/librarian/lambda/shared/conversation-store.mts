@@ -111,10 +111,6 @@ interface EvaluationInput extends ConversationContext {
   logEvent?: LogEvent;
 }
 
-interface MarkEvaluationInput extends ConversationContext {
-  postedAt?: string;
-}
-
 interface RecordArtifactInput extends ConversationContext {
   artifact?: JsonObject | null;
   scope?: unknown;
@@ -782,40 +778,6 @@ export async function updateUserConversationEvaluation({
     });
     return null;
   }
-}
-
-export async function markUserConversationEvalPosted({
-  dynamodb,
-  tableName,
-  subscriberHash,
-  conversationId,
-  postedAt = new Date().toISOString()
-}: MarkEvaluationInput) {
-  const validId = validConversationId(conversationId);
-  if (!tableReady({ tableName, subscriberHash }) || !validId) return null;
-  const response = await dynamodb.send(
-    new UpdateItemCommand({
-      TableName: tableName,
-      Key: {
-        pk: dynamoString(userConversationPk(subscriberHash)),
-        sk: dynamoString(conversationSk(validId))
-      },
-      UpdateExpression: 'SET #eval_posted_to_chatter_at = :posted_at, #updated_at = :updated_at, #ttl = :ttl',
-      ConditionExpression: 'attribute_exists(pk)',
-      ExpressionAttributeNames: {
-        '#eval_posted_to_chatter_at': 'eval_posted_to_chatter_at',
-        '#updated_at': 'updated_at',
-        '#ttl': 'ttl'
-      },
-      ExpressionAttributeValues: {
-        ':posted_at': dynamoString(postedAt),
-        ':updated_at': dynamoString(postedAt),
-        ':ttl': dynamoNumber(conversationTtlSeconds(postedAt))
-      },
-      ReturnValues: 'ALL_NEW'
-    })
-  );
-  return response.Attributes ? conversationSummaryFromItem(response.Attributes) : null;
 }
 
 export async function recordUserArtifactConversation({

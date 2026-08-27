@@ -10,7 +10,6 @@ import {
   recoverStaleDispatches,
   upsertDispatchDraft
 } from '../dist/shared/dispatch-store.mjs';
-import { discordDispatchCard } from '../dist/shared/dispatch-worker.mjs';
 import { dispatchContentArtifactKey } from '../dist/shared/dispatch-artifacts.mjs';
 import {
   analyzeDispatchSourceFit,
@@ -24,30 +23,29 @@ import {
 
 test('dispatch availability enforces active and rolling 24-hour limits', () => {
   const nowSeconds = Math.floor(Date.parse('2026-06-08T12:00:00Z') / 1000);
-  assert.deepEqual(
-    dispatchAvailabilityFromRows([{ id: 'd1', status: 'queued' }], { nowSeconds }),
-    {
-      allowed: false,
-      reason: 'active',
-      message: 'A Dispatch is already being prepared. Wait for that one to finish before starting another.',
-      active_dispatch_id: 'd1'
-    }
-  );
+  assert.deepEqual(dispatchAvailabilityFromRows([{ id: 'd1', status: 'queued' }], { nowSeconds }), {
+    allowed: false,
+    reason: 'active',
+    message: 'A Dispatch is already being prepared. Wait for that one to finish before starting another.',
+    active_dispatch_id: 'd1'
+  });
 
-  const limited = dispatchAvailabilityFromRows([
-    { id: 'd2', status: 'sent', sent_at: '2026-06-08T00:00:00Z' }
-  ], { nowSeconds });
+  const limited = dispatchAvailabilityFromRows([{ id: 'd2', status: 'sent', sent_at: '2026-06-08T00:00:00Z' }], {
+    nowSeconds
+  });
   assert.equal(limited.allowed, false);
   assert.equal(limited.reason, 'cooldown');
   assert.equal(limited.retry_after_seconds, 43200);
 
-  assert.equal(dispatchAvailabilityFromRows([
-    { id: 'd2', status: 'sent', sent_at: '2026-06-08T00:00:00Z' }
-  ], { nowSeconds, owner: true }).allowed, true);
+  assert.equal(
+    dispatchAvailabilityFromRows([{ id: 'd2', status: 'sent', sent_at: '2026-06-08T00:00:00Z' }], {
+      nowSeconds,
+      owner: true
+    }).allowed,
+    true
+  );
 
-  assert.equal(dispatchAvailabilityFromRows([
-    { id: 'd3', status: 'ready' }
-  ], { nowSeconds }).allowed, true);
+  assert.equal(dispatchAvailabilityFromRows([{ id: 'd3', status: 'ready' }], { nowSeconds }).allowed, true);
 });
 test('dispatch availability ignores stale leased and unclaimed queued active rows', () => {
   const nowSeconds = Math.floor(Date.parse('2026-06-08T12:00:00Z') / 1000);
@@ -96,13 +94,15 @@ test('dispatchForClient includes draft state but omits generated content', () =>
     brief_json: { S: JSON.stringify({ coverage_status: 'focused', working_angle: 'RSS as ownership infrastructure' }) },
     template_test: { BOOL: true },
     messages: {
-      L: [{
-        M: {
-          role: { S: 'user' },
-          text: { S: 'Open web please' },
-          time: { S: '2026-06-08T12:00:00.000Z' }
+      L: [
+        {
+          M: {
+            role: { S: 'user' },
+            text: { S: 'Open web please' },
+            time: { S: '2026-06-08T12:00:00.000Z' }
+          }
         }
-      }]
+      ]
     },
     content_artifact_bucket: { S: 'private-bucket' },
     content_artifact_key: { S: 'artifacts/dispatches/abc/d1.json' },
@@ -167,7 +167,10 @@ test('dispatches are addressable by id lookup rows', async () => {
 
   const queuedItems = [...items.values()];
   assert.equal(queuedItems.length, 2);
-  assert.equal(queuedItems.some((item) => item.ttl), false);
+  assert.equal(
+    queuedItems.some((item) => item.ttl),
+    false
+  );
 
   const loaded = await getUserDispatch({
     dynamodb,
@@ -204,7 +207,7 @@ test('dispatch drafts get short-lived ttl on canonical and lookup rows', async (
     }
   };
   const now = '2026-06-08T12:00:00.000Z';
-  const expectedTtl = Math.floor(Date.parse(now) / 1000) + (7 * 24 * 60 * 60);
+  const expectedTtl = Math.floor(Date.parse(now) / 1000) + 7 * 24 * 60 * 60;
 
   const draft = await upsertDispatchDraft({
     dynamodb,
@@ -217,13 +220,15 @@ test('dispatch drafts get short-lived ttl on canonical and lookup rows', async (
       working_angle: 'RSS as ownership infrastructure',
       selected_sources: [{ id: 'S1', label: 'WT10', title: 'Open web', why: 'Primary source' }]
     },
-    messages: [{
-      id: 'archive-fit',
-      role: 'assistant',
-      kind: 'progress',
-      status: 'complete',
-      text: 'Checked archive coverage.'
-    }],
+    messages: [
+      {
+        id: 'archive-fit',
+        role: 'assistant',
+        kind: 'progress',
+        status: 'complete',
+        text: 'Checked archive coverage.'
+      }
+    ],
     now
   });
 
@@ -255,14 +260,16 @@ test('stale shaping dispatch drafts recover to the implied draft state', async (
     dynamodb,
     tableName: 'table',
     subscriberHash: 'reader-hash',
-    rows: [{
-      id: 'dispatch-1',
-      status: 'shaping',
-      prompt: 'RSS and publishing',
-      direction: 'How RSS reading habits feed a creative publishing workflow.',
-      created_at: '2026-06-08T12:00:00.000Z',
-      updated_at: '2026-06-08T12:00:00.000Z'
-    }]
+    rows: [
+      {
+        id: 'dispatch-1',
+        status: 'shaping',
+        prompt: 'RSS and publishing',
+        direction: 'How RSS reading habits feed a creative publishing workflow.',
+        created_at: '2026-06-08T12:00:00.000Z',
+        updated_at: '2026-06-08T12:00:00.000Z'
+      }
+    ]
   });
 
   assert.equal(recovered, 1);
@@ -271,18 +278,23 @@ test('stale shaping dispatch drafts recover to the implied draft state', async (
 });
 
 test('dispatch template test payload renders placeholder content with real source links', () => {
-  const sources = [{
-    id: 'S1',
-    label: 'WT10',
-    title: 'Open web',
-    url: 'https://weekly.example/10',
-    source_kind: 'weekly_thing',
-    publish_date: '2026-01-01'
-  }];
-  const payload = dispatchTemplateTestPayload({
-    prompt: 'Explore RSS',
-    direction: 'Template-test the Dispatch email around RSS and ownership.'
-  }, sources);
+  const sources = [
+    {
+      id: 'S1',
+      label: 'WT10',
+      title: 'Open web',
+      url: 'https://weekly.example/10',
+      source_kind: 'weekly_thing',
+      publish_date: '2026-01-01'
+    }
+  ];
+  const payload = dispatchTemplateTestPayload(
+    {
+      prompt: 'Explore RSS',
+      direction: 'Template-test the Dispatch email around RSS and ownership.'
+    },
+    sources
+  );
   const html = dispatchHtmlEmail(payload, sources);
 
   assert.equal(payload.subject, 'Thingy Dispatch — Template-test the Dispatch email around RSS and ownership.');
@@ -414,26 +426,32 @@ test('parseDispatchJson handles fenced JSON', () => {
 });
 
 test('dispatchHtmlEmail renders request provenance authorship boundary and linked sources', () => {
-  const html = dispatchHtmlEmail({
-    title: 'Ownership Dispatch',
-    preview: 'A short preview.',
-    intro: 'Thingy found a *thread* [S1].',
-    sections: [{ heading: 'The thread', body: 'This depends on **ownership** and [S1].' }],
-    closing: 'Keep exploring.',
-    followups: ['What changed over time?']
-  }, [{
-    id: 'S1',
-    label: 'WT10',
-    title: 'Open web',
-    url: 'https://weekly.example/10',
-    source_kind: 'weekly_thing',
-    publish_date: '2026-01-01'
-  }], {
-    dispatchId: 'dispatch-123',
-    toEmail: 'reader@example.com',
-    requestedAt: '2026-06-08T12:00:00.000Z',
-    requestSummary: 'Explore ownership and the open web from the archive.'
-  });
+  const html = dispatchHtmlEmail(
+    {
+      title: 'Ownership Dispatch',
+      preview: 'A short preview.',
+      intro: 'Thingy found a *thread* [S1].',
+      sections: [{ heading: 'The thread', body: 'This depends on **ownership** and [S1].' }],
+      closing: 'Keep exploring.',
+      followups: ['What changed over time?']
+    },
+    [
+      {
+        id: 'S1',
+        label: 'WT10',
+        title: 'Open web',
+        url: 'https://weekly.example/10',
+        source_kind: 'weekly_thing',
+        publish_date: '2026-01-01'
+      }
+    ],
+    {
+      dispatchId: 'dispatch-123',
+      toEmail: 'reader@example.com',
+      requestedAt: '2026-06-08T12:00:00.000Z',
+      requestSummary: 'Explore ownership and the open web from the archive.'
+    }
+  );
   assert.match(html, /Thingy Dispatch/);
   assert.match(html, /requested by reader@example\.com on 2026-06-08 12:00Z/);
   assert.match(html, /<strong[^>]*>Request<\/strong>Explore ownership and the open web from the archive\./);
@@ -444,7 +462,10 @@ test('dispatchHtmlEmail renders request provenance authorship boundary and linke
   assert.match(html, /href="https:\/\/thingy\.thingelstad\.com\/"/);
   assert.match(html, /Written by Thingy, not Jamie/);
   assert.match(html, /https:\/\/weekly\.example\/10/);
-  assert.match(html, /https:\/\/tinylytics\.app\/pixel\/u5bRAyyJvMXUrz6zbTz5\.gif\?path=%2Femail%2Fthingy%2Fdispatch%2Fdispatch-123/);
+  assert.match(
+    html,
+    /https:\/\/tinylytics\.app\/pixel\/u5bRAyyJvMXUrz6zbTz5\.gif\?path=%2Femail%2Fthingy%2Fdispatch%2Fdispatch-123/
+  );
   assert.match(html, /href="#source-S1"[^>]*>1<\/a>/);
   assert.match(html, /id="source-S1"/);
   assert.doesNotMatch(html, /<strong>S1<\/strong>/);
@@ -452,22 +473,31 @@ test('dispatchHtmlEmail renders request provenance authorship boundary and linke
 });
 
 test('dispatch email rendering preserves paragraph breaks and normalizes subject prefix', () => {
-  const payload = dispatchTemplateTestPayload({
-    prompt: 'Explore RSS',
-    direction: 'RSS and ownership'
-  }, []);
-  const html = dispatchHtmlEmail({
-    ...payload,
-    subject: 'A custom generated title',
-    intro: 'First paragraph has useful setup.\n\nSecond paragraph should not be eaten.',
-    sections: [{
-      heading: 'The thread',
-      body: 'Sentence one. Sentence two should not run into sentence three. Sentence three keeps breathing room.'
-    }]
-  }, [], {
-    toEmail: 'reader@example.com',
-    requestedAt: '2026-06-08T12:00:00.000Z'
-  });
+  const payload = dispatchTemplateTestPayload(
+    {
+      prompt: 'Explore RSS',
+      direction: 'RSS and ownership'
+    },
+    []
+  );
+  const html = dispatchHtmlEmail(
+    {
+      ...payload,
+      subject: 'A custom generated title',
+      intro: 'First paragraph has useful setup.\n\nSecond paragraph should not be eaten.',
+      sections: [
+        {
+          heading: 'The thread',
+          body: 'Sentence one. Sentence two should not run into sentence three. Sentence three keeps breathing room.'
+        }
+      ]
+    },
+    [],
+    {
+      toEmail: 'reader@example.com',
+      requestedAt: '2026-06-08T12:00:00.000Z'
+    }
+  );
   const text = dispatchTextEmail(payload, [], {
     toEmail: 'reader@example.com',
     requestedAt: '2026-06-08T12:00:00.000Z',
@@ -476,7 +506,10 @@ test('dispatch email rendering preserves paragraph breaks and normalizes subject
 
   assert.equal(payload.subject, 'Thingy Dispatch — RSS and ownership');
   assert.equal(dispatchSubject('Dispatch: Old shape title'), 'Thingy Dispatch — Old shape title');
-  assert.match(html, /display:none;max-height:0;max-width:0;overflow:hidden;opacity:0;color:transparent;line-height:1px;font-size:1px;">A low-cost Thingy Dispatch template test/);
+  assert.match(
+    html,
+    /display:none;max-height:0;max-width:0;overflow:hidden;opacity:0;color:transparent;line-height:1px;font-size:1px;">A low-cost Thingy Dispatch template test/
+  );
   assert.match(html, /First paragraph has useful setup\./);
   assert.match(html, /Second paragraph should not be eaten\./);
   assert.match(text, /This Thingy Dispatch was requested by reader@example\.com on 2026-06-08 12:00Z\./);
@@ -485,69 +518,92 @@ test('dispatch email rendering preserves paragraph breaks and normalizes subject
 });
 
 test('dispatch renderer turns source refs and followups into normal links', () => {
-  const html = dispatchHtmlEmail({
-    title: 'Home Automation',
-    preview: 'A dispatch about coordination.',
-    intro: 'In Weekly Thing 336, Jamie draws a privacy line around smart devices. [S1]\n\nThe blog post "My GTD Structure" maps routine work into a system. [S2]',
-    sections: [{
-      heading: 'Thread',
-      body: 'This leans on [S1] when no source title is nearby.'
-    }],
-    closing: '',
-    followups: ['How does this connect to OmniFocus?']
-  }, [{
-    id: 'S1',
-    label: 'WT336',
-    title: 'Weekly Thing 336 / Culture, Retention, Transmission',
-    url: '/archive/336/',
-    source_kind: 'weekly_thing',
-    publish_date: '2026-01-01'
-  }, {
-    id: 'S2',
-    label: 'Blog',
-    title: 'My GTD Structure',
-    url: 'https://www.thingelstad.com/2024/09/02/my-gtd-structure.html',
-    source_kind: 'blog',
-    publish_date: '2024-09-02'
-  }]);
+  const html = dispatchHtmlEmail(
+    {
+      title: 'Home Automation',
+      preview: 'A dispatch about coordination.',
+      intro:
+        'In Weekly Thing 336, Jamie draws a privacy line around smart devices. [S1]\n\nThe blog post "My GTD Structure" maps routine work into a system. [S2]',
+      sections: [
+        {
+          heading: 'Thread',
+          body: 'This leans on [S1] when no source title is nearby.'
+        }
+      ],
+      closing: '',
+      followups: ['How does this connect to OmniFocus?']
+    },
+    [
+      {
+        id: 'S1',
+        label: 'WT336',
+        title: 'Weekly Thing 336 / Culture, Retention, Transmission',
+        url: '/archive/336/',
+        source_kind: 'weekly_thing',
+        publish_date: '2026-01-01'
+      },
+      {
+        id: 'S2',
+        label: 'Blog',
+        title: 'My GTD Structure',
+        url: 'https://www.thingelstad.com/2024/09/02/my-gtd-structure.html',
+        source_kind: 'blog',
+        publish_date: '2024-09-02'
+      }
+    ]
+  );
 
   assert.match(html, /<a href="https:\/\/weekly\.thingelstad\.com\/archive\/336\/"[^>]*>Weekly Thing 336<\/a>/);
-  assert.match(html, /<a href="https:\/\/www\.thingelstad\.com\/2024\/09\/02\/my-gtd-structure\.html"[^>]*>My GTD Structure<\/a>/);
-  assert.match(html, /href="https:\/\/thingy\.thingelstad\.com\/chat\/\?prompt=How\+does\+this\+connect\+to\+OmniFocus%3F"/);
+  assert.match(
+    html,
+    /<a href="https:\/\/www\.thingelstad\.com\/2024\/09\/02\/my-gtd-structure\.html"[^>]*>My GTD Structure<\/a>/
+  );
+  assert.match(
+    html,
+    /href="https:\/\/thingy\.thingelstad\.com\/chat\/\?prompt=How\+does\+this\+connect\+to\+OmniFocus%3F"/
+  );
   assert.doesNotMatch(html, /<strong>S1<\/strong> WT336/);
   assert.doesNotMatch(html, /\(2024-09-02\)/);
 });
 
 test('dispatch renderer formats markdown lists and source-only refs as footnotes', () => {
-  const html = dispatchHtmlEmail({
-    title: 'Crypto Dispatch',
-    preview: 'A dispatch about crypto.',
-    intro: '',
-    sections: [{
-      heading: 'So What',
-      body: [
-        'Synthesizing across the archive, Jamie sees crypto as:',
-        '',
-        '1. A technology that asks important questions about autonomy. [S1]',
-        '2. A space plagued by bad actors. [S2]',
-        '3. An energy-intensive system whose costs are real.'
-      ].join('\n')
-    }],
-    closing: '',
-    followups: []
-  }, [{
-    id: 'S1',
-    label: 'Blog',
-    title: 'Polarizing Technology: Encryption and Crypto',
-    url: 'https://www.thingelstad.com/2022/12/27/polarizing-technology-encryption.html',
-    source_kind: 'blog'
-  }, {
-    id: 'S2',
-    label: 'WT229',
-    title: 'Weekly Thing #229 / Time, Zolatron, Maigret',
-    url: '/archive/229/',
-    source_kind: 'weekly_thing'
-  }]);
+  const html = dispatchHtmlEmail(
+    {
+      title: 'Crypto Dispatch',
+      preview: 'A dispatch about crypto.',
+      intro: '',
+      sections: [
+        {
+          heading: 'So What',
+          body: [
+            'Synthesizing across the archive, Jamie sees crypto as:',
+            '',
+            '1. A technology that asks important questions about autonomy. [S1]',
+            '2. A space plagued by bad actors. [S2]',
+            '3. An energy-intensive system whose costs are real.'
+          ].join('\n')
+        }
+      ],
+      closing: '',
+      followups: []
+    },
+    [
+      {
+        id: 'S1',
+        label: 'Blog',
+        title: 'Polarizing Technology: Encryption and Crypto',
+        url: 'https://www.thingelstad.com/2022/12/27/polarizing-technology-encryption.html',
+        source_kind: 'blog'
+      },
+      {
+        id: 'S2',
+        label: 'WT229',
+        title: 'Weekly Thing #229 / Time, Zolatron, Maigret',
+        url: '/archive/229/',
+        source_kind: 'weekly_thing'
+      }
+    ]
+  );
 
   assert.match(html, /<ol style="padding-left:24px/);
   assert.match(html, /<li style="margin:0 0 8px;">A technology that asks important questions about autonomy\.<sup/);
@@ -559,30 +615,37 @@ test('dispatch renderer formats markdown lists and source-only refs as footnotes
 });
 
 test('dispatch renderer converts markdown blockquotes to email HTML', () => {
-  const html = dispatchHtmlEmail({
-    title: 'Quoted Dispatch',
-    preview: 'A dispatch with a quote.',
-    intro: '',
-    sections: [{
-      heading: 'Archive Voice',
-      body: [
-        'The archive frames the point this way:',
-        '',
-        '> Privacy is not a feature toggle.',
-        '> It is a design constraint with *teeth*. [S1]',
-        '',
-        'That quote shapes the rest of the Dispatch.'
-      ].join('\n')
-    }],
-    closing: '',
-    followups: []
-  }, [{
-    id: 'S1',
-    label: 'Blog',
-    title: 'Privacy as Design Constraint',
-    url: 'https://www.thingelstad.com/2024/01/01/privacy-design.html',
-    source_kind: 'blog'
-  }]);
+  const html = dispatchHtmlEmail(
+    {
+      title: 'Quoted Dispatch',
+      preview: 'A dispatch with a quote.',
+      intro: '',
+      sections: [
+        {
+          heading: 'Archive Voice',
+          body: [
+            'The archive frames the point this way:',
+            '',
+            '> Privacy is not a feature toggle.',
+            '> It is a design constraint with *teeth*. [S1]',
+            '',
+            'That quote shapes the rest of the Dispatch.'
+          ].join('\n')
+        }
+      ],
+      closing: '',
+      followups: []
+    },
+    [
+      {
+        id: 'S1',
+        label: 'Blog',
+        title: 'Privacy as Design Constraint',
+        url: 'https://www.thingelstad.com/2024/01/01/privacy-design.html',
+        source_kind: 'blog'
+      }
+    ]
+  );
 
   assert.match(html, /<blockquote style="border-left:4px solid #d8e1dd/);
   assert.match(html, /Privacy is not a feature toggle\./);
@@ -590,60 +653,6 @@ test('dispatch renderer converts markdown blockquotes to email HTML', () => {
   assert.match(html, /href="#source-S1"[^>]*>1<\/a>/);
   assert.doesNotMatch(html, /&gt; Privacy is not/);
   assert.doesNotMatch(html, /> Privacy is not/);
-});
-
-test('dispatch Discord card summarizes sent dispatch without body content', () => {
-  const card = discordDispatchCard({
-    dispatch: {
-      id: 'dispatch-1',
-      to_email: 'reader@example.com',
-      direction: 'Explore home automation as coordination infrastructure.',
-      template_test: true
-    },
-    result: {
-      subject: 'Thingy Dispatch — Home Automation as Coordination Infrastructure',
-      preview: 'How systems thinking reduces friction in family routines.',
-      model: 'template-test',
-      usage: { inputTokens: 12, outputTokens: 34 },
-      sources: [
-        { label: 'WT336', title: 'Weekly Thing 336 / Culture, Retention, Transmission' },
-        { label: 'Blog', title: 'My GTD Structure' }
-      ],
-      text: 'full dispatch body should not appear'
-    }
-  });
-
-  assert.match(card, /Thingy Dispatch · `dispatch-1`/);
-  assert.match(card, /template test/);
-  assert.match(card, /reader@example\.com/);
-  assert.match(card, /Thingy Dispatch — Home Automation/);
-  assert.match(card, /WT336 · Weekly Thing 336/);
-  assert.match(card, /Tokens:\*\* in 12 \/ out 34/);
-  assert.doesNotMatch(card, /full dispatch body/);
-  assert.ok(card.length <= 1900);
-});
-
-test('dispatch Discord card escapes user-controlled markdown', () => {
-  const card = discordDispatchCard({
-    dispatch: {
-      id: 'dispatch-[1]',
-      to_email: 'reader_name@example.com',
-      direction: 'Explore **bold** `code` and [links](https://example.com).'
-    },
-    result: {
-      subject: 'Thingy Dispatch — [Title] *emphasis*',
-      preview: 'Preview with > quote and _underlines_.',
-      model: 'anthropic.model',
-      usage: { inputTokens: 1, outputTokens: 2 },
-      sources: [{ label: 'WT_1', title: 'A *Source*' }]
-    }
-  });
-
-  assert.match(card, /dispatch-\\\[1\\\]/);
-  assert.match(card, /\\\*\\\*bold\\\*\\\*/);
-  assert.match(card, /\\`code\\`/);
-  assert.match(card, /\\\[links\\\]\\\(https:\/\/example\.com\\\)/);
-  assert.match(card, /WT\\_1 · A \\\*Source\\\*/);
 });
 
 test('Dispatch worker treats conditional claim races as idempotent conflicts', async () => {
@@ -656,9 +665,16 @@ test('Dispatch worker treats conditional claim races as idempotent conflicts', a
 });
 
 test('dispatch planner mode is hidden from pickers but usable by readers', async () => {
-  const { availableConversationModes, canUseConversationMode, conversationModePrompt } = await import('../dist/shared/conversation-modes.mjs');
-  assert.equal(availableConversationModes(['reader']).some((mode) => mode.id === 'dispatch'), false);
-  assert.equal(availableConversationModes(['reader', 'owner']).some((mode) => mode.id === 'dispatch'), false);
+  const { availableConversationModes, canUseConversationMode, conversationModePrompt } =
+    await import('../dist/shared/conversation-modes.mjs');
+  assert.equal(
+    availableConversationModes(['reader']).some((mode) => mode.id === 'dispatch'),
+    false
+  );
+  assert.equal(
+    availableConversationModes(['reader', 'owner']).some((mode) => mode.id === 'dispatch'),
+    false
+  );
   assert.equal(canUseConversationMode('dispatch', ['reader']), true);
   const prompt = conversationModePrompt('dispatch');
   assert.match(prompt, /Dispatch Planner/);

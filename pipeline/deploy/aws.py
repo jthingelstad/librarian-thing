@@ -263,8 +263,7 @@ def deploy_stack(
     allowed_origin: str,
     buttondown_api_key: str,
     session_secret: str | None,
-    discord_bridge_secret: str | None,
-    discord_conversation_webhook_url: str | None,
+    librarian_retrieve_secret: str | None,
     fastmail_jmap_token: str | None,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
@@ -302,31 +301,19 @@ def deploy_stack(
         }
         generated_session_secret = True
 
-    bridge_parameter: dict[str, str | bool]
-    if discord_bridge_secret:
-        bridge_parameter = {
-            "ParameterKey": "DiscordBridgeSecret",
-            "ParameterValue": discord_bridge_secret,
+    retrieve_parameter: dict[str, str | bool]
+    if librarian_retrieve_secret:
+        retrieve_parameter = {
+            "ParameterKey": "LibrarianRetrieveSecret",
+            "ParameterValue": librarian_retrieve_secret,
         }
-    elif exists:
-        bridge_parameter = {"ParameterKey": "DiscordBridgeSecret", "UsePreviousValue": True}
-    else:
-        # No env value and no existing stack — leave empty (bridge disabled).
-        bridge_parameter = {"ParameterKey": "DiscordBridgeSecret", "ParameterValue": ""}
-
-    webhook_parameter: dict[str, str | bool]
-    if discord_conversation_webhook_url:
-        webhook_parameter = {
-            "ParameterKey": "DiscordConversationWebhookUrl",
-            "ParameterValue": discord_conversation_webhook_url,
-        }
-    elif exists and "DiscordConversationWebhookUrl" in existing_parameter_keys:
-        webhook_parameter = {
-            "ParameterKey": "DiscordConversationWebhookUrl",
+    elif exists and "LibrarianRetrieveSecret" in existing_parameter_keys:
+        retrieve_parameter = {
+            "ParameterKey": "LibrarianRetrieveSecret",
             "UsePreviousValue": True,
         }
     else:
-        webhook_parameter = {"ParameterKey": "DiscordConversationWebhookUrl", "ParameterValue": ""}
+        raise RuntimeError("LIBRARIAN_RETRIEVE_SECRET is required")
 
     if fastmail_jmap_token:
         fastmail_parameter = {
@@ -350,8 +337,7 @@ def deploy_stack(
         {"ParameterKey": "PodcastCorpusKey", "ParameterValue": podcast_corpus_key},
         {"ParameterKey": "ButtondownApiKey", "ParameterValue": buttondown_api_key},
         session_parameter,
-        bridge_parameter,
-        webhook_parameter,
+        retrieve_parameter,
         fastmail_parameter,
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
@@ -580,8 +566,7 @@ def main() -> int:
         upload_librarian_corpora(args, bucket)
 
     session_secret = os.environ.get("LIBRARIAN_SESSION_SECRET")
-    discord_bridge_secret = os.environ.get("LIBRARIAN_BRIDGE_SECRET") or None
-    discord_conversation_webhook_url = os.environ.get("DISCORD_CONVERSATION_WEBHOOK_URL") or None
+    librarian_retrieve_secret = os.environ.get("LIBRARIAN_RETRIEVE_SECRET") or None
     fastmail_jmap_token = (
         os.environ.get("FASTMAIL_JMAP_TOKEN")
         or os.environ.get("THINGY_FASTMAIL_JMAP_TOKEN")
@@ -600,8 +585,7 @@ def main() -> int:
         allowed_origin=args.allowed_origin,
         buttondown_api_key=require_env("BUTTONDOWN_API_KEY"),
         session_secret=session_secret,
-        discord_bridge_secret=discord_bridge_secret,
-        discord_conversation_webhook_url=discord_conversation_webhook_url,
+        librarian_retrieve_secret=librarian_retrieve_secret,
         fastmail_jmap_token=fastmail_jmap_token,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,

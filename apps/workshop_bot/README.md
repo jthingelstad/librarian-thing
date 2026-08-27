@@ -58,7 +58,7 @@ The runtime reads the repo-root `.env`.
 | `PINBOARD_API_TOKEN` | Source sync / bookmark reads |
 | `MICROBLOG_API_KEY` | Journal source sync |
 | `OPENAI_API_KEY` | TTS for the audio pipeline |
-| `LIBRARIAN_BRIDGE_SECRET` | Semantic archive retrieval |
+| `LIBRARIAN_RETRIEVE_SECRET` | Semantic archive retrieval |
 | `GITHUB_PAT_TOKEN` | Website publish commit |
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_DEFAULT_REGION` | S3 assets |
 | `WORKSHOP_DB_PATH` | SQLite path, defaults to `apps/workshop_bot/data/workshop.db` |

@@ -8,10 +8,10 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 
 Four Lambdas in `infra/cloudformation.yaml`:
 
-- **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, Discord bridge token minting, profile updates, and Dispatch drafting routes. Memory 1024 MB, timeout 35s.
+- **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, profile updates, and Dispatch drafting routes. Memory 1024 MB, timeout 35s.
 - **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON-only retrieval for workshop_bot). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
-- **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band, writes summary/quality/flags back to canonical conversation rows, and posts operator cards directly to Discord through `DISCORD_CONVERSATION_WEBHOOK_URL`. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
-- **`LibrarianDispatchFunction`** (`lambda/dispatch/handler.mts`) — DynamoDB Stream consumer. Generates queued Dispatch drafts, renders and sends approved email through Fastmail/JMAP, persists lifecycle state, and posts operator cards to Discord. Memory 2048 MB, timeout 300s, ReservedConcurrentExecutions = 1.
+- **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
+- **`LibrarianDispatchFunction`** (`lambda/dispatch/handler.mts`) — DynamoDB Stream consumer. Generates queued Dispatch drafts, renders and sends approved email through Fastmail/JMAP, and persists lifecycle state. Memory 2048 MB, timeout 300s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
 
@@ -38,9 +38,9 @@ The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
 
 ### The `/retrieve` endpoint
 
-Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with bridge-secret auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `workshop_bot` for its `archive__retrieve` agent tool + several pre-injection helpers (compose-closer, pinboard-scan resonance, draft-review echoes, promotion-prep thread context, compose-subject thread awareness).
+Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with service-retrieval auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `workshop_bot` for its `archive__retrieve` agent tool + several pre-injection helpers (compose-closer, pinboard-scan resonance, draft-review echoes, promotion-prep thread context, compose-subject thread awareness).
 
-The `bridgeSecretOk` helper in `chat/runtime.mts` mirrors the same check in `auth/handler.mts` — both compare against `DISCORD_BRIDGE_SECRET` via `crypto.timingSafeEqual`. It's duplicated rather than shared because the two artifacts ship separately and adding a shared `crypto` helper would add build complexity for 5 lines.
+The `retrieveSecretOk` helper in `chat/runtime.mts` compares against `LIBRARIAN_RETRIEVE_SECRET` via `crypto.timingSafeEqual`. The request body still accepts the historical `bridge_secret` field so existing trusted clients keep the versioned `/retrieve` contract.
 
 ## Deploy
 
@@ -67,7 +67,7 @@ Deploy steps:
 2. Package the shared auth/eval/dispatch artifact and the separate streaming chat artifact.
 3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
-5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `DISCORD_BRIDGE_SECRET`, `DISCORD_CONVERSATION_WEBHOOK_URL`, `BUTTONDOWN_API_KEY`).
+5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`).
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
@@ -96,8 +96,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `BLOG_CORPUS_KEY`, `PODCAST_CORPUS_KEY` | stream | Optional source-specific corpora loaded lazily |
 | `BUTTONDOWN_API_KEY` | auth | Email subscriber verification |
 | `SESSION_SECRET` | both | HMAC secret for session JWTs |
-| `DISCORD_BRIDGE_SECRET` | auth + stream | Bridge-secret auth for Discord token minting + `/retrieve` |
-| `DISCORD_CONVERSATION_WEBHOOK_URL` | eval + dispatch | Discord incoming webhook for posting reviewed conversation cards and sent Dispatch cards to `#chatter` |
+| `LIBRARIAN_RETRIEVE_SECRET` | stream | Trusted service auth for `/retrieve` |
 | `FASTMAIL_JMAP_TOKEN` | auth | Fastmail JMAP bearer token for sending magic links; aliases `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` also work locally |
 | `THINGY_MAGIC_LINK_FROM_EMAIL` | auth | Magic-link From address, default `thingy@thingelstad.com` |
 | `THINGY_MAGIC_LINK_BASE_URL` | auth | Public URL used when building `?login_token=` links, default `https://thingy.thingelstad.com/` |
@@ -122,11 +121,11 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 - **Prompts live in `prompts/`** as `.md` files. `loadToolSpecs()` reads them. Edits need a redeploy.
 - **All structured logging via `logEvent(level, message, fields)`** — JSON output, CloudWatch-Insights-readable.
 - **Magic-link auth is mandatory.** Public `/auth` always sends a Fastmail/JMAP magic link before minting an email session; there is no direct session fallback after subscriber validation.
-- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Discord bridge subs are prefixed `discord:` so they're trivially distinguishable. Reader sessions last ten days, and a still-valid session can be refreshed by `/auth` `action=refresh_session`.
+- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Reader sessions last ten days, and a still-valid session can be refreshed by `/auth` `action=refresh_session`.
 - **Privacy guarding** lives in `chat/runtime.mts#privacyGuardAnswer`. Don't bypass; readers ask questions that leak their own PII and we don't echo it.
 - **Conversation modes are entitlement-gated.** `thingy` is for all readers, `research_guide` requires `supporting_member`, `thought_partner` requires `owner`, and `trusted_circle` requires `trusted_circle`.
 - **Citations use `#NNN` for Weekly Thing sources.** Blog and podcast sources should be cited by title/permalink because they do not have issue numbers.
-- **Bridge-secret check is `crypto.timingSafeEqual`** — duplicated in two files (`chat/runtime.mts` + `auth/handler.mts`) because the two artifacts ship separately. Don't refactor to a shared helper without re-checking the bundle topology.
+- **Retrieval-secret checks use `crypto.timingSafeEqual`** in `chat/runtime.mts`; preserve constant-time comparison when changing `/retrieve` authentication.
 
 ## Known follow-ups
 

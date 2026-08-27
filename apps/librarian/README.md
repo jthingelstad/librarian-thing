@@ -8,10 +8,10 @@ The AWS Lambda agent that answers reader questions against Jamie Thingelstad's p
 
 Four Lambdas behind one CloudFormation stack:
 
-- **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, Discord bridge token minting, Dispatch drafting routes, profile updates, and per-answer feedback reactions.
+- **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, Dispatch drafting routes, profile updates, and per-answer feedback reactions.
 - **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON retrieval used by `workshop_bot` for its `archive__retrieve` tool + several pre-injection helpers).
-- **Eval Lambda** (DynamoDB Stream trigger) — reviews updated server-side conversations out of band, writes summary/quality metadata back to DynamoDB, and posts operator cards directly to Discord via incoming webhook when configured.
-- **Dispatch Lambda** (DynamoDB Stream trigger) — generates queued Dispatch drafts, sends approved email through Fastmail/JMAP, persists lifecycle state, and posts operator cards to Discord.
+- **Eval Lambda** (DynamoDB Stream trigger) — reviews updated server-side conversations out of band and writes summary/quality metadata back to DynamoDB.
+- **Dispatch Lambda** (DynamoDB Stream trigger) — generates queued Dispatch drafts, sends approved email through Fastmail/JMAP, and persists lifecycle state.
 
 The Q&A intelligence lives entirely here. Retrieval is **Bedrock Cohere embed → vector search → Cohere rerank** against a pre-embedded corpus in S3, with BM25 lexical fallback. Generation is Claude Sonnet via Bedrock Converse (cross-region inference profile, tool use enabled).
 
@@ -27,7 +27,7 @@ apps/librarian/
 │   │   ├── handler.mts    (streaming entrypoint)
 │   │   └── runtime.mts    (agent loop and routes)
 │   ├── auth/         ← Auth Lambda — /auth, /feedback, conversations, Dispatch routes
-│   ├── eval/         ← Eval Lambda — conversation reviews + Discord webhook cards
+│   ├── eval/         ← Eval Lambda — conversation reviews
 │   ├── dispatch/     ← Dispatch Lambda — generation, delivery, and lifecycle worker
 │   ├── shared/       ← AWS clients, retrieval, Bedrock streaming, sessions, Dispatch helpers
 │   ├── prompts/      ← editable system prompts (packaged into both deployment artifacts)
@@ -75,9 +75,9 @@ then uploads the updated corpus artifacts.
 | POST | `/chat` | session token (bearer) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer) | Agentic contextual welcome for authenticated users |
 | POST | `/curiosity-map` | session token (bearer) | Generate and optionally store a curiosity-map artifact |
-| POST | `/retrieve` | bridge secret (body) | JSON semantic retrieval — top-K archive passages, used by `workshop_bot` |
+| POST | `/retrieve` | retrieval secret (body) | JSON semantic retrieval — top-K archive passages, used by `workshop_bot` |
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
-| POST | `/auth` | none / bridge secret / session token | Magic-link auth, Discord bridge mint, user conversation management, profile updates, and Dispatch drafting |
+| POST | `/auth` | none / session token | Magic-link auth, user conversation management, profile updates, and Dispatch drafting |
 | POST | `/memory` | session token (bearer) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
 
 ## Versioned client contract
@@ -113,8 +113,7 @@ introduce a new major artifact rather than weakening the existing schema.
 Env vars are set in CloudFormation at deploy time from the repo-root `.env`. The full list (with deploy-side handling) is in [`CLAUDE.md`](CLAUDE.md). The headline secrets:
 
 - `SESSION_SECRET` — HMAC signing key for session tokens
-- `DISCORD_BRIDGE_SECRET` — shared secret for Discord token minting and `/retrieve`
-- `DISCORD_CONVERSATION_WEBHOOK_URL` — optional incoming webhook used by eval and Dispatch Lambdas to post operator cards to Discord
+- `LIBRARIAN_RETRIEVE_SECRET` — shared secret for trusted `/retrieve` clients
 - `BUTTONDOWN_API_KEY` — subscriber email verification
 - `FASTMAIL_JMAP_TOKEN` — optional Fastmail JMAP token used to send Thingy magic-link login emails from `thingy@thingelstad.com`
 - `THINGY_TINYLYTICS_EMAIL_SITE_UID` — optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID

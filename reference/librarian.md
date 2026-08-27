@@ -72,8 +72,7 @@ Local `.env` values used by upload/build scripts:
 - `BEDROCK_RERANK_REGION` (optional; defaults to `us-west-2`, where the Bedrock Rerank API exposes Cohere Rerank 3.5)
 - `LIBRARIAN_LOG_LEVEL` (optional; defaults to `INFO`)
 - `LIBRARIAN_AUTH_RATE_LIMIT_MAX` (optional; defaults to 30 auth attempts per client identity per hour)
-- `DISCORD_BRIDGE_SECRET` for Discord bridge token minting and bridge-secret retrieval.
-- `DISCORD_CONVERSATION_WEBHOOK_URL` for event-driven eval cards posted directly to Discord.
+- `LIBRARIAN_RETRIEVE_SECRET` for trusted service-to-service retrieval.
 - `FASTMAIL_JMAP_TOKEN` / `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` for magic-link email.
 - `THINGY_MAGIC_LINK_FROM_EMAIL` and `THINGY_MAGIC_LINK_BASE_URL` for login email construction.
 - `LIBRARIAN_USER_MEMORY_TTL_DAYS` (optional; defaults to 365 days.)
@@ -115,14 +114,6 @@ Mode availability is encoded in the signed session token as entitlements and enf
 | `trusted_circle` | `trusted_circle` | `thingy-trusted-circle`, `thingy-family`, or `thingy-close-friends` tag |
 
 Modes change Thingy's posture, not corpus access. Thought Partner is more candid and challenging for Jamie; Research Guide leans into timelines and reading paths; Trusted Circle is warmer and closer; default Thingy is concise, useful, and reader-facing.
-
-### Discord bridge auth
-
-The workshop-bot Discord bridge (`apps/workshop_bot/personas/thingy.py`) gets a fourth `/auth` action: `discord_bridge`. The bridge POSTs `{action: "discord_bridge", bridge_secret, discord_user_id, source: "discord"}` and receives a normal session token whose `sub` is `discord:<sha256(user_id)[:32]>` instead of an email hash. Per-Discord-user rate limits work transparently because the chat handler treats `payload.sub` as an opaque key.
-
-The bridge action is gated by `DISCORD_BRIDGE_SECRET` (CloudFormation parameter `DiscordBridgeSecret`). When that env var is empty the action returns 503 ("Discord bridge is not enabled"), so the bridge is off by default until the secret is configured. Token mints are rate-limited per Discord user (default 60/hour, override via `DISCORD_BRIDGE_RATE_LIMIT_MAX`).
-
-Operator conversation review is API-owned. The Eval Lambda posts review summaries directly to Discord through `DISCORD_CONVERSATION_WEBHOOK_URL`, and the local operator report reads canonical rows from DynamoDB. The Discord bridge no longer exposes transcript-read slash commands or `/auth` operator read actions; Discord is notification/member-presence tooling only and is not in the reader request path.
 
 ### Per-user memory
 
@@ -168,7 +159,7 @@ Successful conversations are stored as canonical server-side rows in DynamoDB:
 - `turn#<conversation>#<timestamp>#<request>` rows with prompt, answer, citations, source scope, tool trace, feedback reaction/comment, runtime metadata, and artifacts
 - `memory` rows with per-user continuity data
 
-The Eval Lambda is triggered by DynamoDB Streams. It reviews updated conversations out of band, writes `eval_*` fields back to the conversation row, updates generated titles when appropriate, and posts compact cards to Discord through a webhook. The local operator report (`apps/librarian/admin/operator_report.py`) reads these same canonical rows and generates a static HTML report on Jamie's Desktop.
+The Eval Lambda is triggered by DynamoDB Streams. It reviews updated conversations out of band, writes `eval_*` fields back to the conversation row, and updates generated titles when appropriate. The local operator report (`apps/librarian/admin/operator_report.py`) reads these same canonical rows and generates a static HTML report on Jamie's Desktop.
 
 The reader UI lets users upvote/downvote responses and optionally explain downvotes. Feedback is stored on the matching turn and appears in operator review.
 

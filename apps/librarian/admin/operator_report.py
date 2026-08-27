@@ -153,7 +153,6 @@ class Conversation:
     eval_reader: str
     eval_thingy: str
     eval_takeaway: str
-    eval_posted_to_chatter_at: str
     is_owner: bool = False
     turns: list[Turn] = field(default_factory=list)
 
@@ -182,7 +181,6 @@ class Conversation:
             eval_reader=str(row.get("eval_reader") or ""),
             eval_thingy=str(row.get("eval_thingy") or ""),
             eval_takeaway=str(row.get("eval_takeaway") or ""),
-            eval_posted_to_chatter_at=str(row.get("eval_posted_to_chatter_at") or ""),
         )
 
     @property
@@ -456,11 +454,6 @@ def render_conversation_card(c: Conversation, *, open_by_default: bool = False) 
     search_text = compact(c.search_text, 4000)
     status_tokens = " ".join(c.filter_tokens)
     open_attr = " open" if open_by_default else ""
-    posted = (
-        f" · eval posted {h(local_time(c.eval_posted_to_chatter_at))}"
-        if c.eval_posted_to_chatter_at
-        else ""
-    )
     return (
         f'<details class="conversation-card" data-quality="{h(c.eval_quality)}" data-status="{h(status_tokens)}" '
         f'data-scope="{h(c.scope)}" data-mode="{h(c.mode or "thingy")}" data-reader="{h(c.reader_kind)}" data-flags="{h(" ".join(c.eval_flags))}" data-search="{h(search_text)}"{open_attr}>'
@@ -478,7 +471,7 @@ def render_conversation_card(c: Conversation, *, open_by_default: bool = False) 
         f'<div class="chipline">{owner}{mode_chip}{attention}{flags}</div>'
         "</summary>"
         '<div class="conversation-body">'
-        f'<p class="meta"><code>{h(c.conversation_id)}</code>{posted}</p>'
+        f'<p class="meta"><code>{h(c.conversation_id)}</code></p>'
         '<section class="eval-grid">'
         f"<div><h3>Reader</h3><p>{h(c.eval_reader or 'No reader assessment yet.')}</p></div>"
         f"<div><h3>Thingy</h3><p>{h(c.eval_thingy or 'No Thingy assessment yet.')}</p></div>"
