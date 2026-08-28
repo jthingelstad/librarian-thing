@@ -40,7 +40,7 @@ jobs:
           # workflow. GITHUB_TOKEN pushes do not trigger downstream workflows.
           token: ${{ secrets.STUDIO_PAT_TOKEN || github.token }}
 
-      - uses: astral-sh/setup-uv@v9.0.0
+      - uses: astral-sh/setup-uv@v10.0.1
         with:
           enable-cache: true
           prune-cache: true
