@@ -56,6 +56,12 @@ jobs:
 
       - run: uv sync --locked
 
+      - name: Install Lambda dependencies
+        run: npm --prefix apps/librarian/lambda ci
+
+      - name: Audit Lambda dependencies
+        run: npm --prefix apps/librarian/lambda audit --audit-level=high
+
       - name: Lint
         run: uv run --locked ruff check .
 
