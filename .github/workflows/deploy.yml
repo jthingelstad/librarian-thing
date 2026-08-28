@@ -1,17 +1,17 @@
-name: Studio — Production & Handoff
+name: Librarian — Corpus & API
 
-# Studio owns production. This workflow builds archive/site inputs from the
-# canonical sources, updates the Librarian runtime artifacts, and hands the
-# generated 11ty inputs to weekly.thingelstad.com, which only renders + deploys.
-# Pushes to main commit the handoff automatically. Manual runs default to a
-# dry-run diff unless push_to_weekly is checked.
+# This repo owns the corpus the Librarian API answers from, and the API
+# itself. On a push that touches canonical data or the pipeline, it rebuilds
+# the affected corpora, uploads the embedded artifacts to S3, redeploys the
+# Lambda when its code changed, and hands the topic graph to
+# weekly.thingelstad.com — the one cross-repo push left here. Publishing is
+# WT Builder's job; issue text arrives in data/issues/ as commits from it.
 
 on:
   push:
     branches: [main]
     paths:
       - 'data/issues/**'
-      - 'data/audio/**'
       - 'data/blog/**'
       - 'data/podcast/**'
       - 'pipeline/**'
@@ -22,8 +22,8 @@ on:
       - 'uv.lock'
   workflow_dispatch:
     inputs:
-      push_to_weekly:
-        description: 'Commit generated inputs to the website repo'
+      push_graph:
+        description: 'Commit data/librarian/graph.json to the website repo'
         type: boolean
         default: false
 
@@ -31,7 +31,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: studio-production
+  group: librarian-production
   cancel-in-progress: false
 
 jobs:
@@ -59,32 +59,16 @@ jobs:
       - name: Lint
         run: uv run --locked ruff check .
 
-      - name: Format
-        run: uv run --locked ruff format --check .
-
-      - name: Audit locked Python dependencies
-        run: |
-          uv export --locked --no-dev --no-emit-project --format requirements-txt > /tmp/requirements.txt
-          sed -i '/^-e \.\/librarian-core$/d' /tmp/requirements.txt
-          uvx --from pip-audit==2.10.1 pip-audit --requirement /tmp/requirements.txt --disable-pip
-
-      - name: Install Lambda dependencies
-        run: npm --prefix apps/librarian/lambda ci
-
-      - name: Audit Lambda dependencies
-        run: npm --prefix apps/librarian/lambda audit --audit-level=high
-
-      - name: Detect changed production surfaces
+      - name: Detect changes
         id: changes
-        shell: bash
         run: |
+          set -euo pipefail
+
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # Manual production runs are intentionally full refreshes.
             {
               echo "weekly_corpus=true"
               echo "blog_corpus=true"
               echo "podcast_corpus=true"
-              echo "site_handoff=true"
               echo "lambda=true"
             } >> "$GITHUB_OUTPUT"
             exit 0
@@ -103,58 +87,41 @@ jobs:
           has_change() {
             local pattern
             for pattern in "$@"; do
-              if grep -Eq "$pattern" <<< "$changed"; then
+              if grep -qE "$pattern" <<< "$changed"; then
                 return 0
               fi
             done
             return 1
           }
 
-          shared_corpus=false
-          if has_change \
-            '^pyproject\.toml$' \
-            '^uv\.lock$' \
-            '^librarian-core/' \
-            '^pipeline/deploy/upload_corpus\.py$'; then
-            shared_corpus=true
-          fi
-
           weekly_corpus=false
-          if [[ "$shared_corpus" == "true" ]] || has_change \
+          if has_change \
             '^data/issues/' \
-            '^data/audio/' \
-            '^pipeline/content/' \
             '^pipeline/corpus/build\.py$' \
-            '^pipeline/graph/' \
-            '^pipeline/deploy/upload_corpus\.py$'; then
+            '^pipeline/deploy/upload_corpus\.py$' \
+            '^librarian-core/' \
+            '^pyproject\.toml$' \
+            '^uv\.lock$'; then
             weekly_corpus=true
           fi
 
           blog_corpus=false
-          if [[ "$shared_corpus" == "true" ]] || has_change \
+          if has_change \
             '^data/blog/' \
             '^pipeline/blog/' \
-            '^pipeline/deploy/upload_blog_corpus\.py$'; then
+            '^pipeline/deploy/upload_blog_corpus\.py$' \
+            '^librarian-core/'; then
             blog_corpus=true
           fi
 
           podcast_corpus=false
-          if [[ "$shared_corpus" == "true" ]] || has_change \
+          if has_change \
             '^data/podcast/' \
             '^pipeline/podcast/' \
             '^pipeline/corpus/build_podcast\.py$' \
-            '^pipeline/deploy/upload_podcast_corpus\.py$'; then
+            '^pipeline/deploy/upload_podcast_corpus\.py$' \
+            '^librarian-core/'; then
             podcast_corpus=true
-          fi
-
-          site_handoff=false
-          if has_change \
-            '^data/issues/' \
-            '^data/audio/' \
-            '^pipeline/content/' \
-            '^pipeline/graph/' \
-            '^pipeline/deploy/push_site_inputs\.py$'; then
-            site_handoff=true
           fi
 
           lambda=false
@@ -168,26 +135,14 @@ jobs:
             echo "weekly_corpus=$weekly_corpus"
             echo "blog_corpus=$blog_corpus"
             echo "podcast_corpus=$podcast_corpus"
-            echo "site_handoff=$site_handoff"
             echo "lambda=$lambda"
           } >> "$GITHUB_OUTPUT"
-
-      # Materialize apps/site/archive/{N}.md + _data/emails.json from the
-      # canonical data/issues/{N}/ store. Runs before tests because
-      # test_audio_script reads archive files as fixtures, and apps/site/ is a
-      # transient build artifact in Studio (built here, not committed).
-      - name: Build archive from data/issues/
-        run: uv run --locked python pipeline/content/content.py build
 
       - name: Run Python tests
         run: uv run --locked python -m unittest discover -s tests -p 'test_*.py' -t .
 
       - name: Run Lambda tests
         run: npm --prefix apps/librarian/lambda run verify
-
-      # Note: landing-page stats (subscriber/supporter numbers) are NOT produced
-      # here — weekly fetches its own in its CI. Studio no longer refreshes or
-      # hands off stats.json.
 
       - name: Build Weekly Thing corpus
         if: steps.changes.outputs.weekly_corpus == 'true'
@@ -197,9 +152,9 @@ jobs:
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build_podcast.py
 
-      # data/librarian/graph.json powers the site's topic pages.
+      # data/librarian/graph.json powers the website's topic pages.
       - name: Build graph for site topics
-        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.site_handoff == 'true'
+        if: steps.changes.outputs.weekly_corpus == 'true' || inputs.push_graph == true
         run: uv run --locked python pipeline/graph/build.py
 
       # Embed every corpus the Librarian API can load. Each upload reuses
@@ -231,13 +186,8 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
-      - name: Detect Lambda changes
-        id: lambda-changes
-        run: |
-          echo "changed=${{ steps.changes.outputs.lambda }}" >> "$GITHUB_OUTPUT"
-
       - name: Deploy Thingy Lambda
-        if: steps.lambda-changes.outputs.changed == 'true'
+        if: steps.changes.outputs.lambda == 'true'
         run: uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -248,29 +198,15 @@ jobs:
           LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
           LIBRARIAN_SESSION_SECRET: ${{ secrets.LIBRARIAN_SESSION_SECRET }}
 
-      # Powers /ops/ and /status.json on the site. Reads S3 for the deployed
-      # corpus timestamp; non-fatal if S3 fails.
-      - name: Generate pipeline status report
-        continue-on-error: true
-        run: uv run --locked python pipeline/status.py --json apps/site/_data/status.json
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
-          LIBRARIAN_BUCKET: weekly-thing-librarian
-
-      # Handoff. Ships the generated 11ty inputs to the website repo as one
-      # atomic commit on normal pushes. Manual runs are dry-run by default for
-      # inspection, unless push_to_weekly is checked.
-      - name: Hand off site inputs to the website repo
-        if: steps.changes.outputs.site_handoff == 'true'
+      # The one cross-repo push: the topic graph, to the render surface.
+      # Everything else the old site handoff shipped is WT Builder's to send.
+      - name: Hand off graph.json to the website repo
+        if: steps.changes.outputs.weekly_corpus == 'true' || inputs.push_graph == true
         run: |
-          if [[ "${{ github.event_name }}" == "push" || "${{ inputs.push_to_weekly }}" == "true" ]]; then
-            echo "Committing site inputs to the website repo."
-            uv run --locked python pipeline/deploy/push_site_inputs.py --push
+          if [[ "${{ github.event_name }}" == "push" || "${{ inputs.push_graph }}" == "true" ]]; then
+            uv run --locked python pipeline/deploy/push_graph.py --push
           else
-            echo "Manual dry-run diff only (set push_to_weekly = true to commit)."
-            uv run --locked python pipeline/deploy/push_site_inputs.py
+            uv run --locked python pipeline/deploy/push_graph.py
           fi
         env:
           GITHUB_PAT_TOKEN: ${{ secrets.STUDIO_PAT_TOKEN }}

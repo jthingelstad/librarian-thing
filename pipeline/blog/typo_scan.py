@@ -51,7 +51,7 @@ load_dotenv()
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-from apps.workshop_bot.tools.llm import anthropic_client  # noqa: E402
+import anthropic_client  # noqa: E402
 
 BLOG_POSTS_DIR = REPO / "data" / "blog" / "posts"
 RUN_DIR = REPO / "tmp" / "blog-typos"

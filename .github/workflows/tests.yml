@@ -29,7 +29,7 @@ jobs:
           sed -i '/^-e \.\/librarian-core$/d' /tmp/requirements.txt
           uvx --from pip-audit==2.10.1 pip-audit --requirement /tmp/requirements.txt --disable-pip
       - name: Tests
-        run: uv run --locked pytest tests/ apps/workshop_bot/tests/ -q
+        run: uv run --locked pytest tests/ -q
 
   lambda:
     runs-on: ubuntu-latest

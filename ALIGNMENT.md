@@ -1,69 +1,44 @@
 # Project Alignment
 
-Studio is the private website for publishing **The Weekly Thing** newsletter.
-The goal is not a general publishing brain. The goal is to make the weekly
-newsletter issue path reliable, clear, and excellent.
+This repository is the **Librarian**: the canonical archives of Jamie's
+publishing, the corpora built from them, and the API that answers questions
+from them. It is deliberately not a publishing system anymore.
 
 ## North Star
 
-**Studio helps Jamie publish each newsletter issue.**
+**The Librarian keeps the archive true and answerable.**
 
-- The newsletter issue is the only first-class work object.
-- The Studio web app is the primary operator surface.
-- Eddy is the only assistant.
-- Jamie writes every word.
-- Eddy reviews, critiques, packages, and helps with newsletter-specific
-  shipping work.
-- Blog posts, podcast episodes, generic projects, seeds, gardening, campaigns,
-  membership automation, and multi-agent staffing are out of scope.
+- Canonical issue, blog, and podcast content lives here.
+- The corpus builds and the `/retrieve` contract are the product.
+- Publishing belongs to WT Builder; rendering belongs to the surfaces.
+- Nothing here writes to a reader.
 
 ## Boundaries
 
 | Repo / host | Role |
 |---|---|
-| **studio-thing** | Private newsletter publishing app, canonical issue source, publish pipeline, Librarian API/corpus inputs |
+| **librarian-thing** | Canonical archives, corpus builds, Librarian API |
+| **wt-builder** | Authors and publishes each issue; commits issue text into `data/issues/` after publication |
 | **weekly.thingelstad.com** | Public newsletter render/deploy surface |
-| **thingy.thingelstad.com** | Query surface backed by the Librarian API |
+| **another.thingelstad.com** | Podcast publish surface; episodes are ingested here |
+| **thingy.thingelstad.com** | Query surface — live client of the Librarian API |
 
-The repo boundary rule is now simpler: if it does not help publish the next
-newsletter issue or maintain the newsletter archive/API support path, it does
-not belong in Studio's active product.
+The boundary rule: if it publishes, it is downstream in its own repo. If it
+is the archive, the corpus, or the retrieval path, it lives here.
 
-## Current Model
+## Content flow
 
-- **Issue registry:** newsletter issues are mirrored in the existing
-  `productions` table as an internal compatibility detail, but only
-  `production_type='newsletter'` is supported.
-- **Web first:** lifecycle actions live in Studio pages, not chat. Slash
-  commands are repair/ad-hoc tools.
-- **DB draft:** authored content and issue items live in the workshop DB; render
-  and publish jobs build from current DB state.
-- **Eddy only:** Eddy handles editorial review and ad-hoc assistance. Other
-  persona runtimes are retired from the active process.
-- **No garden:** seeds and garden tending are deleted.
+1. WT Builder publishes an issue, then commits its canonical text into
+   `data/issues/{N}/`.
+2. The sync workflow pulls blog posts from Micro.blog and podcast episodes
+   from `another.thingelstad.com` into `data/`.
+3. Any `data/` change rebuilds the affected corpora, embeds them, uploads to
+   S3, and hands the topic graph to `weekly.thingelstad.com`.
+4. Thingy answers from the deployed corpus through `/retrieve`.
 
-## Publishing Chain
+## What was retired
 
-1. Studio defines and opens the issue.
-2. Studio syncs source items from Pinboard and micro.blog into `issue_items`.
-3. Jamie edits content in Studio.
-4. Studio renders preview directly from the DB.
-5. Eddy review runs on demand and stores anchored comments.
-6. Studio publishes email, website, and audio.
-7. Studio's durable publish runbook records each leg, requires manual
-   Buttondown delivery confirmation, and allows an explicit audio waiver.
-8. Studio files the issue into `data/issues/` only when the runbook is complete.
-9. Weekly renders public artifacts from Studio's generated handoff.
-
-## Next Work
-
-Build toward a boring, excellent issue dashboard:
-
-- current issue as the home page
-- source sync status
-- completeness and publish gates
-- inline issue editing
-- live preview
-- Eddy notes
-- explicit publish legs
-- durable per-leg state and clear recovery actions when a leg fails
+Studio — the workshop web app, Eddy and the persona staff, the site handoff,
+the audio pipeline, and the Buttondown config — is preserved in git history
+at the rename boundary (studio-thing → librarian-thing, 2026-08-28).
+Publishing machinery that is still needed lives in WT Builder, written fresh.

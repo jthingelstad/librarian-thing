@@ -1,40 +1,27 @@
 """Editorial link extraction for The Weekly Thing archive bodies.
 
-Shared between the website build pipeline (``pipeline/content/content.py``)
-and workshop_bot's ``compose-archive`` job. Both need the same Notable / Briefly
-extraction rules — the era-specific section name variants (emoji-suffixed
-MailChimp-era headings like ``Notable Links 📌``), the H3-link-only rule for
-Notable, the bolded-link-only rule for Briefly — and pulling them into one
-module keeps the two callers from drifting.
+Used by the corpus build: the era-specific section name variants
+(emoji-suffixed MailChimp-era headings like ``Notable Links 📌``), the
+H3-link-only rule for Notable, and the bolded-link-only rule for Briefly.
+The website-build and workshop callers this once served are retired; the
+rules live on because nine years of archive bodies still carry every era.
 
 Surface:
   extract_links(markdown_body) -> {"notable": [...], "briefly": [...], "all_curated": [...]}
   extract_domains(links) -> sorted list of unique non-excluded FQDNs
   count_words(markdown_body) -> int
 
-The excluded-domain list is hand-curated in
-``pipeline/content/domain_exclusions.py``; this module imports from there to
-avoid duplicating the data (workshop_bot's ``tools/avoid_domains.py`` is a
-separate maintained copy used for Pinboard pre-filtering — see the workshop_bot
-CLAUDE.md for why those two intentionally aren't unified).
+The hand-curated excluded-domain list lives beside this module in
+``domain_exclusions.py`` — promoted into librarian_core when its previous
+home, ``pipeline/content/``, retired.
 """
 
 from __future__ import annotations
 
 import re
-import sys
-from pathlib import Path
 from urllib.parse import urlparse
 
-# Reuse the canonical exclusion list rather than copy it. The path lookup keeps
-# librarian_core importable even when the consumer hasn't put pipeline/content
-# on sys.path — needed because compose-archive imports librarian_core directly,
-# without pulling in pipeline/.
-_PIPELINE_CONTENT = Path(__file__).resolve().parents[2] / "pipeline" / "content"
-if str(_PIPELINE_CONTENT) not in sys.path:
-    sys.path.insert(0, str(_PIPELINE_CONTENT))
-
-from domain_exclusions import is_excluded  # noqa: E402
+from .domain_exclusions import is_excluded
 
 NOTABLE_SECTIONS = {
     "Notable",

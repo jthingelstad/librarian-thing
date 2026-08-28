@@ -1,24 +1,27 @@
 # How The Weekly Thing works
 
-This is the **editorial north star** — the canonical, plain-English description of how an issue of
-*The Weekly Thing* is made and shipped. It's what we design the implementation against and verify
-it against. (See [`CLAUDE.md`](CLAUDE.md) for the discipline around that.)
+This is the **editorial reference** for *The Weekly Thing* — how the
+newsletter's sections, voice, and conventions work, in plain English.
 
-**Start here:** [`publishing-process.md`](publishing-process.md) — the newsletter issue spine,
-scope, and operator surface. Everything else is detail behind it.
+It was written as Studio's north star. Publishing now lives in
+[WT Builder](https://github.com/jthingelstad/wt-builder), so these documents
+serve as reference for the newsletter itself and for the archive this repo
+keeps; the Studio process documents they used to sit beside are preserved in
+git history. If a document here contradicts WT Builder's own contracts,
+WT Builder's are current.
+
+**Start here:** [`sections.md`](sections.md) — what each section of the
+newsletter is. Everything else is detail behind it.
 
 ## When to read each
 
 | If you want to understand… | Read |
 |---|---|
-| The overall process + phase machinery | [`publishing-process.md`](publishing-process.md) |
-| A single phase | [`phases/build.md`](phases/build.md) · [`phases/publish.md`](phases/publish.md) |
 | What's in an issue + how it's formatted | [`sections.md`](sections.md) |
 | The Journal (micro.blog → issue) | [`journal-handling.md`](journal-handling.md) |
 | How a post becomes a Featured section | [`featured-posts.md`](featured-posts.md) |
 | The Echoes archive note | [`echoes.md`](echoes.md) |
 | How it should sound | [`voice-and-style.md`](voice-and-style.md) |
-| Eddy's role | [`agents/eddy.md`](agents/eddy.md) |
 | How issues are identified + titled | [`identifiers.md`](identifiers.md) |
 
 ## What's *not* here

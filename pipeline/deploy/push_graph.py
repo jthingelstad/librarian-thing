@@ -36,7 +36,10 @@ def main() -> int:
     args = ap.parse_args()
 
     if not GRAPH.exists():
-        print("data/librarian/graph.json not found — run pipeline/graph/build.py first.", file=sys.stderr)
+        print(
+            "data/librarian/graph.json not found — run pipeline/graph/build.py first.",
+            file=sys.stderr,
+        )
         return 1
 
     files = [(GRAPH.relative_to(REPO_ROOT).as_posix(), GRAPH.read_bytes())]
@@ -50,9 +53,7 @@ def main() -> int:
     remote = {e["path"]: e["sha"] for e in tree.get("tree", []) if e.get("type") == "blob"}
     path, content = files[0]
     local = github_repo.git_blob_sha(content)
-    state = (
-        "added" if path not in remote else "changed" if remote[path] != local else "unchanged"
-    )
+    state = "added" if path not in remote else "changed" if remote[path] != local else "unchanged"
     print(f"DRY RUN vs {github_repo._repo()}@{args.branch}: graph.json {state}.")
     return 0
 

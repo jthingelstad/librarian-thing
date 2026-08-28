@@ -6,7 +6,7 @@ to appear. Two things are defined here: the **short identifier** (`WT<NUM>`) and
 
 Where this sits in the system: the identifier is what every surface uses to
 refer to an issue; the subject line is a **Publish-phase** input composed by
-[Eddy](agents/eddy.md) (see [`phases/publish.md`](phases/publish.md)). For the
+the retired Studio process (specs in git history). For the
 per-section body formatting and the platform eras, see [`sections.md`](sections.md).
 
 ## The short identifier: `WT<NUM>`

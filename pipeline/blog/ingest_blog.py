@@ -57,11 +57,11 @@ load_dotenv()
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-# Reuse the workshop bot's proven micro.blog content extraction (stdlib +
-# requests only; all package __init__.py are empty, so this is a lightweight
-# import). ``_content_to_markdown`` coerces the mf2 ``content`` value (native
-# markdown string, or {html|markdown|value} dict) to markdown.
-from apps.workshop_bot.tools.content.microblog import _content_to_markdown  # noqa: E402
+# Micro.blog content extraction (stdlib + requests only), promoted here when
+# the workshop bot retired. ``_content_to_markdown`` coerces the mf2
+# ``content`` value (native markdown string, or {html|markdown|value} dict)
+# to markdown.
+from microblog import _content_to_markdown  # noqa: E402
 
 BLOG_DIR = REPO / "data" / "blog"
 INDEX_PATH = BLOG_DIR / "index.json"

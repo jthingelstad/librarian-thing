@@ -8,7 +8,7 @@ How a journal post gets promoted to its own standalone section. The key idea is 
 A post becomes Featured by being in micro.blog's **`Featured` category** — Jamie's editorial call,
 made where he writes. Nothing in the workshop *decides* what's featured; it reads the category.
 (This is deliberate: the same reason Eddy's reorder pass is ordering-only — the human classifies,
-the machine arranges. See [`agents/eddy.md`](agents/eddy.md).)
+the machine arranges. Eddy is retired; its spec is in git history.)
 
 ## Arrange (at render)
 

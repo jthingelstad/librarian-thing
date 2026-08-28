@@ -1,4 +1,4 @@
-.PHONY: build clean content-build librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-deploy audio audio-issue refresh-copy refresh-copy-dry test test-lambda test-workshop test-workshop-env
+.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy test test-lambda
 
 PYTHON ?= uv run --locked python
 
@@ -31,44 +31,26 @@ librarian-graph:
 librarian-graph-upload:
 	$(PYTHON) pipeline/graph/build.py --upload
 
+# Dry-run diff of graph.json against the website repo; CI pushes with --push.
+librarian-graph-push:
+	$(PYTHON) pipeline/deploy/push_graph.py
+
 librarian-deploy:
 	$(PYTHON) pipeline/deploy/aws.py $(ARGS)
 
-# Build the generated artifacts Studio hands to downstream surfaces.
+# Build every generated Librarian artifact.
 build:
-	$(PYTHON) pipeline/content/content.py build
 	$(PYTHON) pipeline/corpus/build.py
 	$(PYTHON) pipeline/graph/build.py
 
 clean:
-	rm -rf cache tmp test-results playwright-report
+	rm -rf cache tmp test-results
 	rm -f data/librarian/*.embedded.json
 	find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
 	find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
-content-build:
-	$(PYTHON) pipeline/content/content.py build
-
-refresh-copy:
-	$(PYTHON) pipeline/content/refresh_marketing_copy.py
-
-refresh-copy-dry:
-	$(PYTHON) pipeline/content/refresh_marketing_copy.py --dry-run
-
-audio:
-	$(PYTHON) pipeline/audio/audio.py build --latest
-
-audio-issue:
-	$(PYTHON) pipeline/audio/audio.py build --issue $(ISSUE)
-
 test:
-	$(PYTHON) -m unittest discover -s tests -p 'test_*.py' -t .
+	uv run --locked pytest tests/ -q
 
 test-lambda:
-	npm --prefix apps/librarian/lambda test
-
-test-workshop:
-	$(PYTHON) -m unittest discover -s apps/workshop_bot/tests -t .
-
-test-workshop-env:
-	set -a; source .env; set +a; $(PYTHON) -m unittest discover -s apps/workshop_bot/tests -t .
+	npm --prefix apps/librarian/lambda run verify

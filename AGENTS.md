@@ -1,66 +1,54 @@
-# AGENTS.md — Studio
+# AGENTS.md — Librarian
 
-Orientation for Codex working in this repo. Read `README.md` for the human
-overview and `ALIGNMENT.md` for the current cross-repo map.
+Orientation for agents working in this repo. Read `README.md` for the human
+overview and `ALIGNMENT.md` for the cross-repo map.
 
 ## What this repo is
 
-Studio is the private publishing system for **The Weekly Thing** newsletter. The
-goal is not a general publishing brain; it is to make each newsletter issue
-easy to assemble, review, package, and ship.
+The **Librarian API and the corpora it answers from** — the archive side of
+The Weekly Thing. Canonical issue, blog, and podcast content lives in
+`data/`; the corpus builds live in `pipeline/`; the API lives in
+`apps/librarian/`.
 
-The first-class work object is a **newsletter issue**. The private tailnet-only
-**web app** is the work surface. Eddy is the only active assistant. Authored
-content lives in the workshop **DB**; S3 is publishing-only. **The one rule:
-Jamie writes every word.** See `apps/workshop_bot/CLAUDE.md` for the current
-runtime model.
+This repo does not publish. WT Builder authors and sends each issue, and
+commits the canonical issue text into `data/issues/` afterwards. Blog and
+podcast content is ingested by the sync workflow. This repo's job is to keep
+the archive true, build the corpora, and serve retrieval.
 
-Retired from the active product: Scout, Linky, Marky, Patty, generic
-productions, projects, blog-post production, podcast production, seeds,
-gardening, campaigns, and proactive slate/garden check-ins.
-
-The decision rule for where code belongs:
-
-> If it's a publishing surface, it's its own repo/host, downstream. If it's *upstream* of
-> publishing — capture, research, the editorial source of truth, production, or the staff —
-> it lives here in Studio.
+Until 2026-08-28 this repo was Studio, the publishing system. The workshop
+bot, Eddy, the site handoff, and the audio pipeline are preserved in git
+history at the rename boundary (studio-thing → librarian-thing), not here.
 
 ## Layout
 
-- `apps/workshop_bot/` — Eddy, the newsletter issue state engine, and the
-  tailnet web app (`webapp/`). Studio core.
-- `apps/librarian/` — Librarian API (Lambda + infra + admin). Deployed from Studio.
+- `apps/librarian/` — Librarian API (Lambda + infra + admin). Deployed from here.
 - `librarian-core/` — shared `librarian_core` package (corpus/graph/retrieval/links).
-- `pipeline/` — production: build, stats, status, audio, corpus, graph, deploy.
-- `data/issues/` — editorial source of truth (canonical issue content).
-- `data/audio/` — audio production source (manifest, scripts, bumpers).
-- `data/blog/` — blog drafts + post archive.
-- `content/buttondown/` — Buttondown newsletter config (source of truth for the runtime).
-- `docs/`, `notes/`, `reference/` — architecture, staff, editorial reference.
-- `tests/` — Python tests (librarian / corpus / content / audio).
+- `pipeline/corpus/`, `pipeline/graph/`, `pipeline/deploy/` — builds and deploys.
+- `pipeline/blog/`, `pipeline/podcast/` — content ingest and maintenance.
+- `pipeline/audits/`, `pipeline/one-shot/` — archive maintenance, completed migrations.
+- `data/issues/` — canonical issue content. **WT Builder writes new issues here.**
+- `data/blog/`, `data/podcast/` — ingested content.
+- `data/librarian/` — built corpus and graph artifacts.
+- `tests/` — Python tests (corpus / content shape / dashboard).
 
-## Critical context — Studio is live
+## Hard constraints
 
-This repo was extracted from `weekly.thingelstad.com` with `git filter-repo` (history
-preserved) and is now the live producer. Several hard constraints follow:
-
-- **Studio is authoritative for anything that ships.** Canonical issue content,
-  authoring agents, production pipelines, corpus generation, and the Librarian API live
-  here. Weekly only renders generated inputs handed off from Studio.
-- **The publishing path has no recovery flow.** A botched ship-path change can still
-  skip a week. Treat workflow, bot, Buttondown, audio, and handoff changes as production
-  changes.
-- **Secrets live here by concern.** Studio holds production credentials for publishing,
-  corpus/Lambda deploys, and the cross-repo handoff. Weekly should only retain secrets
-  for its own landing-page stats fetch.
-- **The Librarian API `/retrieve` is a versioned contract.** Thingy is a live client across
-  a repo boundary — casual changes to the API break it. Version before changing.
-- **Preserve history.** If more code moves in from `weekly`, use `git filter-repo` — never
-  copy-paste.
+- **The Librarian API `/retrieve` is a versioned contract.** Thingy is a live
+  client across a repo boundary — casual changes break it. Version before
+  changing.
+- **`data/issues/` is written by WT Builder.** Do not hand-edit new issues
+  here; fix them in WT Builder and re-send the archive leg. Historical
+  repairs (pre-Builder issues) are fine and are what `pipeline/audits/` is
+  for.
+- **One cross-repo push remains:** `data/librarian/graph.json` to
+  `weekly.thingelstad.com` (topic pages). Do not add others — publishing
+  handoffs belong to WT Builder.
+- **Secrets:** corpus/Lambda deploy credentials live in this repo's CI
+  secrets. Nothing here holds publishing credentials anymore.
+- **Preserve history.** Never copy-paste code between repos; move with
+  history or write fresh.
 
 ## First checks
-
-Before editing:
 
 ```sh
 git status --short
@@ -70,27 +58,19 @@ There may be user work in progress. Do not revert unrelated changes.
 
 ## Python environment
 
-This repo uses uv with a locked `.venv/` on Python 3.14.
-
-Use:
+uv with a locked `.venv/` on Python 3.14:
 
 ```sh
 uv sync --locked
-uv run --locked python
-uv run --locked pytest
+uv run pytest tests/ -q
 ```
 
-Do not use bare `python`, `python3`, or pip-managed environments in this checkout.
+Do not use bare `python`, `python3`, or pip-managed environments here.
 
 ## Thingy / Librarian
 
-Thingy's backend lives in `apps/librarian/`. For Lambda work, read:
-
-```sh
-sed -n '1,140p' apps/librarian/CLAUDE.md
-```
-
-Lambda tests are Node tests:
+The Lambda lives in `apps/librarian/`. For Lambda work, read
+`apps/librarian/CLAUDE.md`. Lambda tests are Node tests:
 
 ```sh
 npm --prefix apps/librarian/lambda test
@@ -101,18 +81,3 @@ Deploy code-only Librarian changes with the corpus upload skipped:
 ```sh
 make librarian-deploy ARGS="--skip-corpus-upload"
 ```
-
-Direct equivalent:
-
-```sh
-uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
-```
-
-Only do a full corpus deploy when corpus artifacts, embedding schema, or source content
-actually need re-uploading.
-
-## When in doubt
-
-Check `ALIGNMENT.md` for repo boundaries and the phase docs for migration history. If a
-task would alter the live publishing path, cross-repo handoff, API contract, or secrets,
-stop and confirm with Jamie first.
