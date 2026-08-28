@@ -1,12 +1,10 @@
-"""GitHub Git Data API client — atomic multi-file commits to the website repo.
+"""GitHub Git Data API client — atomic multi-file commits to another repo.
 
-Workshop_bot ships an issue by (1) sending the email draft to Buttondown and
-(2) committing the website-ready archive/transcript files to the
-weekly.thingelstad.com repo. This module owns (2). It bundles every file in a
-single commit via the Git Data API rather than the Contents API, so a ship
-that touches archive.md + metadata.json + links.json + transcript/*.txt lands
-as one atomic commit (one push, one CI trigger, one diff to review) instead of
-a per-file commit storm.
+Promoted out of the retired workshop_bot: the graph handoff to
+weekly.thingelstad.com is the one cross-repo push this repository still makes.
+It bundles every file in a single commit via the Git Data API rather than the
+Contents API, so a push lands as one atomic commit (one push, one CI trigger,
+one diff to review) instead of a per-file commit storm.
 
 Idempotent: if every file's content already matches what's at HEAD, no commit
 is created and the existing HEAD SHA is returned. Re-running a ship is safe
