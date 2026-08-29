@@ -29,6 +29,9 @@ on:
 
 permissions:
   contents: read
+  # OIDC deploy credentials - the job assumes WeeklyThingLibrarianDeployOidc
+  # instead of using static access keys.
+  id-token: write
 
 concurrency:
   group: librarian-production
@@ -42,6 +45,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          aws-region: us-east-1
 
       - uses: astral-sh/setup-uv@v10.0.1
         with:
@@ -169,36 +178,24 @@ jobs:
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_corpus.py
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Upload embedded blog corpus to S3
         if: steps.changes.outputs.blog_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_blog_corpus.py
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Upload embedded podcast corpus to S3
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Deploy Thingy Lambda
         if: steps.changes.outputs.lambda == 'true'
         run: uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
           LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
