@@ -376,7 +376,23 @@ def deploy_stack(
         )
         waiter_name = "stack_create_complete"
 
-    cloudformation.get_waiter(waiter_name).wait(StackName=stack_name)
+    try:
+        cloudformation.get_waiter(waiter_name).wait(StackName=stack_name)
+    except Exception:
+        # Surface the actual resource failures - the waiter error alone only
+        # says the stack rolled back, which is undiagnosable from CI logs.
+        try:
+            events = cloudformation.describe_stack_events(StackName=stack_name)["StackEvents"]
+            for event in events[:40]:
+                status = event.get("ResourceStatus", "")
+                if "FAILED" in status or "ROLLBACK" in status:
+                    print(
+                        f"CFN {status} {event.get('LogicalResourceId')}: "
+                        f"{event.get('ResourceStatusReason', '')}"
+                    )
+        except Exception as inner:
+            print(f"Could not fetch stack events: {inner}")
+        raise
     return stack_outputs(cloudformation, stack_name), generated_session_secret
 
 

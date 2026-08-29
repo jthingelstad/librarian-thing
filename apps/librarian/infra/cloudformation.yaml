@@ -329,6 +329,10 @@ Resources:
 
   LibrarianEvalEventSource:
     Type: AWS::Lambda::EventSourceMapping
+    # The OnFailure destination is permission-checked when the mapping is
+    # updated; make sure the role (with sqs:SendMessage on the DLQ) updates
+    # first or the mapping update can fail against the stale role.
+    DependsOn: LibrarianFunctionRole
     Properties:
       EventSourceArn: !GetAtt LibrarianTable.StreamArn
       FunctionName: !Ref LibrarianEvalFunction
