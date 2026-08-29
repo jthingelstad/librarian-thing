@@ -95,7 +95,13 @@ export function htmlResponse(
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'content-security-policy':
-        "default-src 'none'; style-src 'unsafe-inline'; img-src https://thingy.thingelstad.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+        // form-action must include https: - Chrome enforces this directive
+        // against the REDIRECT CHAIN of a form submission, so 'self' alone
+        // silently swallowed the OAuth consent redirect to the client's
+        // callback (claude.ai) while the server had already issued the code.
+        // The real control on redirect targets is the server-side exact
+        // redirect_uri validation against the registered client.
+        "default-src 'none'; style-src 'unsafe-inline'; img-src https://thingy.thingelstad.com; form-action 'self' https:; base-uri 'none'; frame-ancestors 'none'",
       'referrer-policy': 'no-referrer',
       'x-content-type-options': 'nosniff',
       'x-frame-options': 'DENY',
