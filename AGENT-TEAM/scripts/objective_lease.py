@@ -152,11 +152,16 @@ def check_base(objective: str, lease_id: str) -> dict:
     if not isinstance(starting_head, str) or not starting_head:
         raise SystemExit("lease has no valid starting_head; inspect it manually")
     remote_head = git("rev-parse", "origin/main")
-    if remote_head != starting_head:
-        raise SystemExit("origin/main moved after the lease was claimed; do not push")
     current_head = git("rev-parse", "HEAD")
     if not is_ancestor(starting_head, current_head):
         raise SystemExit("current HEAD is not descended from the leased starting_head")
+    # origin/main may only have moved by THIS run's own pushes: it must sit
+    # on the fast-forward line between the leased starting_head and HEAD.
+    # Anything else is third-party movement and stays a hard stop.
+    if remote_head != starting_head and not (
+        is_ancestor(starting_head, remote_head) and is_ancestor(remote_head, current_head)
+    ):
+        raise SystemExit("origin/main moved after the lease was claimed; do not push")
     return lease
 
 

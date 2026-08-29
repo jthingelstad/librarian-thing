@@ -132,11 +132,27 @@ def test_check_base_rejects_upstream_movement(tmp_path: Path, monkeypatch):
 
     monkeypatch.setattr(objective_lease, "git", fake_git)
     monkeypatch.setattr(objective_lease, "fetch_origin", lambda: None)
-    monkeypatch.setattr(objective_lease, "is_ancestor", lambda ancestor, descendant: True)
+    # Linear history for this run: abc123 -> my-first-push -> current-run-commit.
+    # someone-else-pushed is off that line.
+    chain = ["abc123", "my-first-push", "current-run-commit"]
+
+    def fake_is_ancestor(ancestor: str, descendant: str) -> bool:
+        return (
+            ancestor in chain
+            and descendant in chain
+            and chain.index(ancestor) <= chain.index(descendant)
+        )
+
+    monkeypatch.setattr(objective_lease, "is_ancestor", fake_is_ancestor)
     objective_lease.claim(
         "improve", holder_id="thread-2", starting_head="abc123", lease_id="lease-2"
     )
     objective_lease.check_base("improve", "lease-2")
+    # origin/main advanced by this run's own earlier push: still allowed,
+    # so one lease can carry a multi-commit run.
+    remote["head"] = "my-first-push"
+    objective_lease.check_base("improve", "lease-2")
+    # Third-party movement stays a hard stop.
     remote["head"] = "someone-else-pushed"
     with pytest.raises(SystemExit, match="origin/main moved"):
         objective_lease.check_base("improve", "lease-2")
