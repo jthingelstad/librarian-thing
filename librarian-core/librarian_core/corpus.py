@@ -265,7 +265,7 @@ def key_points_for_sections(sections: list[tuple[str, str]], limit: int = 5) -> 
     return points
 
 
-def chunk_section(text: str, max_words: int = 260, overlap_words: int = 40) -> list[str]:
+def chunk_section(text: str, max_words: int = 400, overlap_words: int = 60) -> list[str]:
     tokens = words(text)
     if len(tokens) <= max_words:
         return [text.strip()] if text.strip() else []
@@ -300,9 +300,9 @@ def chunk_section(text: str, max_words: int = 260, overlap_words: int = 40) -> l
 # into the same embedded corpus alongside issue chunks so semantic
 # retrieval surfaces them naturally:
 #
-#   - apps/site/about.njk           → site:about           page-prose chunks
-#   - apps/site/support.njk         → site:members         page-prose chunks
-#   - apps/site/_data/support.json  → site:nonprofit-history structured-fact chunk
+#   - data/site/about.njk           → site:about           page-prose chunks
+#   - data/site/support.njk         → site:members         page-prose chunks
+#   - data/site/_data/support.json  → site:nonprofit-history structured-fact chunk
 #   - apps/librarian/lambda/shared/faq.json → faq:<section>:<index> chunks
 #
 # **Privacy fence:** these chunks must never carry subscriber/member
@@ -433,7 +433,7 @@ def _site_page_chunks(
     if support_data_path.exists():
         try:
             support_data = json.loads(support_data_path.read_text(encoding="utf-8"))
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             support_data = {}
     yearly_price = support_data.get("yearly_price") or 48
     replacements["support.yearly_price"] = str(yearly_price)
@@ -689,6 +689,7 @@ def build_corpus(
                         "word_count": len(words(chunk_text)),
                         "content_kind": content_kind(section),
                         "topics": topics,
+                        "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
                     }
                 )
@@ -735,6 +736,7 @@ def build_corpus(
         "source": "apps/site/archive",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "embedding_model": None,
+        "embed_recipe": EMBED_RECIPE_VERSION,
         "issue_count": len(issues),
         "chunk_count": len(chunks),
         "link_count": len(links),
@@ -1095,6 +1097,7 @@ def build_blog_corpus(
         "source": "data/blog/posts",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "embedding_model": None,
+        "embed_recipe": EMBED_RECIPE_VERSION,
         "issue_count": 0,
         "post_count": post_count,
         "chunk_count": len(chunks),
@@ -1288,6 +1291,7 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
         "source": "data/podcast/another-thing/episodes",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "embedding_model": None,
+        "embed_recipe": EMBED_RECIPE_VERSION,
         "issue_count": 0,
         "episode_count": episode_count,
         "chunk_count": len(chunks),
@@ -1298,6 +1302,14 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
         "links": links,
         "chunks": chunks,
     }
+
+
+# Version of the embed-input construction below. The incremental embed cache
+# is keyed on chunk id, and ids hash only the chunk TEXT - so an edit to the
+# header lines handed to the embedding model would silently reuse stale
+# vectors. Bump this whenever _embed_input changes shape; the uploader treats
+# a mismatch as a cold cache and re-embeds everything (a few dollars, minutes).
+EMBED_RECIPE_VERSION = 2
 
 
 def _embed_input(chunk: dict[str, Any]) -> str:
@@ -1323,14 +1335,18 @@ def _embed_input(chunk: dict[str, Any]) -> str:
             lines.append(f"Summary: {chunk['summary']}")
         lines.append(chunk["text"])
         return "\n".join(lines)
-    return "\n".join(
-        [
-            f"Weekly Thing #{chunk['issue_number']}: {chunk['subject']}",
-            f"Section: {chunk['section']}",
-            f"Topics: {', '.join(chunk.get('topics', []))}",
-            chunk["text"],
-        ]
-    )
+    lines = [f"Weekly Thing #{chunk['issue_number']}: {chunk['subject']}"]
+    if chunk.get("publish_date"):
+        lines.append(f"Published: {chunk['publish_date']}")
+    # Contextual retrieval: most chunks are one short section, so the issue
+    # abstract is what situates them. The issue-level Topics line is gone -
+    # every chunk in an issue carried the same six topics, which polluted
+    # the embedding with identical non-content tokens.
+    if chunk.get("issue_abstract"):
+        lines.append(f"Issue summary: {chunk['issue_abstract']}")
+    lines.append(f"Section: {chunk['section']}")
+    lines.append(chunk["text"])
+    return "\n".join(lines)
 
 
 def fetch_bedrock_embeddings(

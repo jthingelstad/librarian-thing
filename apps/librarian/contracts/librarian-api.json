@@ -636,6 +636,7 @@
       "actions": {}
     },
     "/chat": {
+      "actions": {},
       "request": {
         "type": "object",
         "properties": {
@@ -667,6 +668,7 @@
       }
     },
     "/retrieve": {
+      "actions": {},
       "request": {
         "type": "object",
         "properties": {

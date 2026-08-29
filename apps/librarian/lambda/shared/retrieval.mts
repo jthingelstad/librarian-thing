@@ -349,11 +349,12 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
       inlineDocumentSource: {
         type: 'TEXT',
         textDocument: {
+          // No Topics line: WT topics are issue-level, identical for every
+          // chunk in an issue, and only diluted the rerank signal.
           text: [
             header,
             `Date: ${source.publish_date || ''}`,
             `Section: ${source.section || ''}`,
-            `Topics: ${(source.topics || []).join(', ')}`,
             String(source.text || '')
               .replace(/\s+/g, ' ')
               .slice(0, 1800)

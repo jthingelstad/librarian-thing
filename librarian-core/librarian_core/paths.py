@@ -11,7 +11,10 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 PROJECTS_DIR = REPO.parent
 ARCHIVE_DIR = REPO / "data" / "issues"
-SITE_DIR = REPO / "apps" / "site"
+# Site grounding pages moved to the weekly.thingelstad.com repo in the
+# 2026-08 split; the corpus build reads the snapshots in data/site/ so it
+# stays self-contained (see data/site/README.md for the re-copy step).
+SITE_DIR = REPO / "data" / "site"
 FAQ_PATH = REPO / "apps" / "librarian" / "lambda" / "shared" / "faq.json"
 CORPUS_PATH = REPO / "data" / "librarian" / "corpus.json"
 GRAPH_PATH = REPO / "data" / "librarian" / "graph.json"

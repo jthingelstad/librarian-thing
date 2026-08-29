@@ -255,3 +255,23 @@ class LibrarianCorpusTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DefaultSiteGroundingTest(unittest.TestCase):
+    def test_repo_site_snapshots_produce_grounding_chunks(self):
+        # Regression guard for the 2026-08 repo split: the about/support
+        # templates left this repo and the corpus silently built with zero
+        # site_page chunks. The build must find the data/site snapshots.
+        from librarian_core import corpus as core_corpus
+        from librarian_core.paths import SITE_DIR
+
+        self.assertTrue(
+            (SITE_DIR / "about.njk").exists(),
+            f"site grounding snapshot missing: {SITE_DIR}/about.njk (see data/site/README.md)",
+        )
+        chunks = core_corpus._site_page_chunks(
+            site_dir=SITE_DIR, issue_count=350, years_active=9, latest_issue_number=350
+        )
+        ids = {c["id"].rsplit(":", 1)[0] for c in chunks}
+        self.assertIn("site:about", ids)
+        self.assertIn("site:members", ids)

@@ -18,6 +18,7 @@ import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
 from dotenv import load_dotenv
 from librarian_core.corpus import (
+    EMBED_RECIPE_VERSION,
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
     add_bedrock_embeddings,
@@ -65,6 +66,13 @@ def build_chunk_cache(old_corpus: dict, model: str, dimensions: int) -> dict[str
     """
     cached_model = old_corpus.get("embedding_model")
     cached_dims = old_corpus.get("embedding_dimensions")
+    cached_recipe = old_corpus.get("embed_recipe")
+    if cached_recipe != EMBED_RECIPE_VERSION:
+        print(
+            f"Cached corpus embed recipe {cached_recipe!r} != current {EMBED_RECIPE_VERSION!r}; "
+            "ignoring cache and doing full embed"
+        )
+        return {}
     if cached_model != model or cached_dims != dimensions:
         print(
             f"Cached corpus uses {cached_model}/{cached_dims}, requested {model}/{dimensions}; "

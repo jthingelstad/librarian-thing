@@ -192,6 +192,7 @@ export const LIBRARIAN_CONTRACT = {
     // SSE agent loop. The response body is the stream_events sequence below;
     // request fields are listed here so removing one is a contract change.
     '/chat': {
+      actions: {},
       request: object(
         {
           question: string,
@@ -206,6 +207,7 @@ export const LIBRARIAN_CONTRACT = {
     },
     // Service retrieval for trusted internal clients (wt-builder). JSON-only.
     '/retrieve': {
+      actions: {},
       request: object(
         {
           query: string,

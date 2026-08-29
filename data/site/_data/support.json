@@ -1,0 +1,34 @@
+{
+  "stripe_yearly_url": "https://buy.stripe.com/6oUeUU9Cd6MtahW8jteIw05",
+  "yearly_price": 48,
+  "current": {
+    "nonprofit": "Signal",
+    "short_name": "Signal",
+    "url": "https://signal.org",
+    "description": "Signal is the gold standard for private communication on the internet. Built and operated by the nonprofit Signal Technology Foundation, Signal offers end-to-end encrypted messaging and calling with no ads, no trackers, and no data collection. The app is free, the protocol is open source, and the organization is funded by donations — which is what keeps it independent and accountable to users instead of advertisers or acquirers.",
+    "year": 2026,
+    "year_label": "Ninth Year",
+    "stripe_donate_url": "https://buy.stripe.com/00waEEcOp5Ip2PubvFeIw04",
+    "logo": "/img/logos/signal.png"
+  },
+  "past": [
+    {
+      "nonprofit": "Electronic Frontier Foundation",
+      "short_name": "EFF",
+      "url": "https://www.eff.org",
+      "year": 2025,
+      "year_label": "Year 8",
+      "amount_raised": 1164.92,
+      "logo": "/img/logos/eff.png"
+    },
+    {
+      "nonprofit": "Creative Commons",
+      "short_name": "CC",
+      "url": "https://creativecommons.org",
+      "year": 2024,
+      "year_label": "Year 7",
+      "amount_raised": 623.87,
+      "logo": "/img/logos/creative-commons.png"
+    }
+  ]
+}

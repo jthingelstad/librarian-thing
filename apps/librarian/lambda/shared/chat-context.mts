@@ -1,7 +1,12 @@
 import { entitlementContext, isOwnerSubscriberHash } from './conversation-modes.mjs';
 
-const MAX_HISTORY_MESSAGES = 8;
-const MAX_HISTORY_CHARS = 4000;
+// A research conversation is the product's long game; 8 messages at 700
+// chars made Thingy forget the thread fast and read truncated versions of
+// its own answers. The static system prompt is cached and history rides
+// after the cachePoint, so the wider window costs little.
+const MAX_HISTORY_MESSAGES = 24;
+const MAX_HISTORY_CHARS = 16000;
+const MAX_HISTORY_MESSAGE_CHARS = 1500;
 
 interface HistoryItem {
   role: 'user' | 'assistant';
@@ -31,20 +36,23 @@ interface UserProfile {
 
 export function sanitizeHistory(history: unknown): HistoryItem[] {
   if (!Array.isArray(history)) return [];
+  // Walk newest-first so the char budget evicts the OLDEST turns. The
+  // previous oldest-first walk broke on budget overflow and silently
+  // dropped the most recent messages - the ones the reply depends on.
   const cleaned: HistoryItem[] = [];
   let chars = 0;
-  for (const item of history.slice(-MAX_HISTORY_MESSAGES)) {
+  for (const item of history.slice(-MAX_HISTORY_MESSAGES).reverse()) {
     const role = item?.role === 'assistant' ? 'assistant' : item?.role === 'user' ? 'user' : '';
     const content = String(item?.content || '')
       .trim()
       .replace(/\s+/g, ' ');
     if (!role || !content) continue;
-    const clipped = content.slice(0, 700);
+    const clipped = content.slice(0, MAX_HISTORY_MESSAGE_CHARS);
+    if (chars + clipped.length > MAX_HISTORY_CHARS) break;
     chars += clipped.length;
-    if (chars > MAX_HISTORY_CHARS) break;
     cleaned.push({ role, content: clipped });
   }
-  return cleaned;
+  return cleaned.reverse();
 }
 
 export function conversationContext(history: HistoryItem[]) {

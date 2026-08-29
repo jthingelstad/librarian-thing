@@ -1,0 +1,41 @@
+---
+layout: layouts/page.njk
+pageTitle: About
+hidePageTitle: true
+description: About Jamie Thingelstad and the Weekly Thing newsletter.
+permalink: /about/
+---
+<div class="about-page">
+  <header class="about-hero">
+    <p class="eyebrow">About</p>
+    <h1 class="about-title">The Weekly Thing &mdash; <em>and the person writing it</em>.</h1>
+    <p class="about-lede">The Weekly Thing started in May 2017 as a simple experiment: share the most interesting things found on the internet each week with friends and colleagues. {{ archiveStats.yearsActive }} years and {{ collections.issuesByDate[0].data.number }}+ issues later, it&rsquo;s still going.</p>
+  </header>
+
+  <section class="about-intro-text">
+    <p>Each issue is a curated collection of links, commentary, and observations spanning technology, culture, the indie web, and the occasional unexpected rabbit hole. It&rsquo;s one person&rsquo;s lens on what&rsquo;s interesting &mdash; not an algorithm, not a feed, just considered curation.</p>
+    <p>Selected issues are also available as audio, with a <a href="/podcast.xml">podcast feed</a> for podcast apps.</p>
+    <p>The newsletter is and always will be free. <a href="/members/">Supporting Members</a> contribute to a nonprofit selected each year, with 100% of fees donated.</p>
+  </section>
+
+  <section class="about-bio-section">
+    <p class="eyebrow">Hi, I&rsquo;m Jamie</p>
+    <div class="about-intro">
+      <img src="/img/jamie-thingelstad.jpg" alt="Jamie Thingelstad" class="about-page-photo" loading="lazy" width="300" height="300">
+      <div class="about-bio">
+        <p>Jamie Thingelstad is an experienced technology executive with a successful track record of product and platform innovation and technology leadership for large-scale financial services, media, retail, and software-as-a-service technology companies.</p>
+        <p>He currently serves as Senior Vice President, Chief Technology Officer of <a href="https://www.spscommerce.com">SPS Commerce</a> (NASDAQ: SPSC), the leading provider of retail cloud services powering the largest retail business network connecting companies in the retail industry.</p>
+        <p>Previously, Jamie served as CTO at 8thBridge, led technology at the Wall Street Journal Digital Network and Dow Jones, and was the founding CTO of BigCharts (acquired by MarketWatch). He began his career launching WebSpan in 1994 while studying at the University of Minnesota&rsquo;s Institute of Technology.</p>
+        <p>Jamie has served on the Board of Directors for the Minnesota Technology Association, Minnestar, and CaringBridge. He is the recipient of numerous awards including Forty Under 40, Titans of Technology, and the 2021 ORBIE CIO of the Year award.</p>
+        <p>He lives in Minneapolis, Minnesota with his wife, two children, and their dog.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-subscribe">
+    <p class="eyebrow">Subscribe</p>
+    <h2>Get it in your inbox every weekend.</h2>
+    {% set subscribeId = "about" %}
+    {% include "partials/subscribe-form.njk" %}
+  </section>
+</div>

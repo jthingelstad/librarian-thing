@@ -1,0 +1,130 @@
+---
+layout: layouts/base.njk
+pageTitle: Supporting Membership
+description: Support the Weekly Thing and help fund a nonprofit each year.
+permalink: /members/
+---
+<section class="support-hero">
+  <div class="container-narrow">
+    <p class="eyebrow">Membership</p>
+    <h1 class="support-hero-title">Free for everyone. <em>Members fund a nonprofit</em>.</h1>
+    <p class="support-hero-lede">The Weekly Thing is free for everyone, always. Supporting Members contribute to a community giving program where <strong>100% of membership fees go directly to a nonprofit</strong> selected each year.</p>
+  </div>
+</section>
+
+<div class="support-page container-narrow">
+  <div id="support-thanks" class="support-thanks" hidden>
+    <p><strong>Thank you for your gift.</strong> 100% goes to {{ support.current.short_name or support.current.nonprofit }}. The amount-raised stat updates on the next site build.</p>
+  </div>
+  <script>
+    if (new URLSearchParams(location.search).get('thanks') === '1') {
+      document.getElementById('support-thanks').hidden = false;
+    }
+  </script>
+
+  {% if supportTotals.totalRaised > 0 %}
+  <section class="support-impact">
+    <p class="eyebrow">Total impact</p>
+    <p class="support-impact-figure">${{ supportTotals.totalRaised | currency }}</p>
+    <p class="support-impact-caption">raised for great digital nonprofits since {{ supportTotals.sinceYear }}.</p>
+  </section>
+  {% endif %}
+
+  <section class="support-how">
+    <p class="eyebrow">Become a member</p>
+    <h2>Two ways to give</h2>
+    <div class="support-how-grid">
+      <div class="support-how-col">
+        <h3>Recurring &middot; ${{ support.yearly_price }}/year</h3>
+        <p>If the Weekly Thing has earned a place in your week, become a Supporting Member. It&rsquo;s ${{ support.yearly_price }} a year &mdash; less than a coffee a month &mdash; and every dollar funds a nonprofit doing meaningful work for the open web. Cancel anytime.</p>
+        {% include "partials/upgrade-form.njk" %}
+      </div>
+      {% if support.current.stripe_donate_url %}
+      <div class="support-how-col">
+        <h3>One-Time &middot; Any amount</h3>
+        <p>Not ready to commit annually? A single gift in any amount keeps the program going and funds the cause. ${{ support.yearly_price }} matches a year of membership, but anything you&rsquo;d like to give is welcome.</p>
+        <p><a href="{{ support.current.stripe_donate_url }}" class="btn btn-primary" data-tinylytics-event="support.donate">Make a One-Time Gift</a></p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if support.current %}
+  <section class="support-current">
+    <p class="eyebrow">{{ support.current.year_label or support.current.year }} &middot; The Supporting Member nonprofit pick</p>
+    <h2>{{ support.current.nonprofit }}</h2>
+    <p>{{ support.current.description }} <a href="{{ site.thingyUrl }}/chat/?prompt={{ ('Tell me about ' + (support.current.short_name or support.current.nonprofit)) | urlencode }}" data-tinylytics-event="support.thingy_handoff">Chat with Thingy about {{ support.current.short_name or support.current.nonprofit }} &rarr;</a></p>
+    <div class="support-current-action">
+      <a href="{{ support.current.url }}" class="btn btn-secondary">Visit {{ support.current.short_name or support.current.nonprofit }} &rarr;</a>
+      {% if support.current.logo %}
+      <img src="{{ support.current.logo }}" alt="{{ support.current.nonprofit }} logo" class="support-current-logo">
+      {% endif %}
+    </div>
+
+    <div class="support-stats">
+      {% if support.current.amount_raised %}
+      <div class="support-stat">
+        <span class="stat-value">${{ support.current.amount_raised | currency }}</span>
+        <span class="stat-label">donated to {{ support.current.short_name or support.current.nonprofit }}</span>
+      </div>
+      {% elif stats.amount_raised > 0 %}
+      <div class="support-stat">
+        <span class="stat-value">${{ stats.amount_raised | currency }}</span>
+        <span class="stat-label">raised for {{ support.current.short_name or support.current.nonprofit }} so far</span>
+      </div>
+      {% endif %}
+      {% if stats.premium_subscriber_count > 0 %}
+      <div class="support-stat">
+        <span class="stat-value">{{ stats.premium_subscriber_count }}</span>
+        <span class="stat-label">supporting members</span>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="support-benefits">
+    <p class="eyebrow">Member extras</p>
+    <h2>A useful perk, too</h2>
+    <p>The main reason to become a Supporting Member is still the giving program: 100% of membership fees go to the nonprofit selected each year. Supporting Members also get an extra on top.</p>
+
+    <div class="support-benefits-grid">
+      <div class="support-benefit">
+        <h3>Thingy Dispatch</h3>
+        <p><a href="{{ site.thingyUrl }}/">Thingy</a>, the agent that knows every issue of the Weekly Thing, every blog post, and every episode of Another Thing, is available to all subscribers. Supporting Members can also use Thingy Dispatch to request a special one-of-one research email on a topic they choose.</p>
+      </div>
+    </div>
+  </section>
+
+  {% if support.past.length > 0 %}
+  <section class="support-history">
+    <p class="eyebrow">History</p>
+    <h2>Past nonprofits supported</h2>
+    <table class="support-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Nonprofit</th>
+          <th>Raised</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for org in support.past %}
+        <tr>
+          <td>{{ org.year_label or org.year }}</td>
+          <td>
+            <a href="{{ org.url }}" class="support-table-org">
+              {% if org.logo %}
+              <img src="{{ org.logo }}" alt="{{ org.nonprofit }} logo" class="support-table-logo">
+              {% endif %}
+              <span>{{ org.nonprofit }}</span>
+            </a>
+          </td>
+          <td>{% if org.amount_raised %}${{ org.amount_raised | currency }}{% else %}&mdash;{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% endif %}
+</div>
