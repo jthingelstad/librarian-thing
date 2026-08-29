@@ -1,9 +1,9 @@
 """Build a citation-ready corpus for the archive librarian.
 
-Reads ``apps/site/archive/*.md``, splits each issue into chunks with topic/section
-metadata, and (optionally) calls Bedrock Cohere to embed every chunk. The
-resulting dict is JSON-serializable and is consumed by Thingy, the workshop
-bot, and the graph builder.
+Reads ``data/issues/{N}/archive.md``, splits each issue into chunks with
+topic/section metadata, and (optionally) calls Bedrock Cohere to embed every
+chunk. The resulting dict is JSON-serializable and is consumed by Thingy and
+the graph builder.
 """
 
 from __future__ import annotations
@@ -733,7 +733,7 @@ def build_corpus(
 
     return {
         "version": 2,
-        "source": "apps/site/archive",
+        "source": "data/issues",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "embedding_model": None,
         "embed_recipe": EMBED_RECIPE_VERSION,

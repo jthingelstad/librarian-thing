@@ -9,7 +9,7 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 Three Lambdas in `infra/cloudformation.yaml`:
 
 - **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, and profile updates. Memory 1024 MB, timeout 35s.
-- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON-only retrieval for workshop_bot). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
+- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (hybrid JSON-only retrieval for wt-builder). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
@@ -30,14 +30,15 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
 
 - **`embedQuery`** — Bedrock Cohere `embed-english-v3` (us-east-1).
-- **`retrieveSemantic`** — cosine similarity against pre-embedded corpus chunks.
-- **`retrieveLexical`** — BM25 fallback if semantic returns nothing.
-- **`rerankSources`** — Bedrock Cohere `rerank-v3-5:0` (us-west-2 — only region with rerank). Capped at top 40 candidates.
-- **`retrieve`** — orchestrator that does semantic → rerank, falls back to lexical → rerank on error.
+- **`semanticScore`** — cosine similarity against pre-embedded corpus chunks; year/section filters run inside the scan (before the top-K slice), not as a post-filter.
+- **`retrieveLexical`** — TF-IDF term-vector scoring over an in-memory index, with the same in-scan filters. Not a fallback: it always runs (free, and carries proper nouns dense retrieval misses).
+- **`fuseCandidates`** — reciprocal-rank fusion (RRF, k=60) of the semantic and lexical lists; rank-based because cosine and TF-IDF scores aren't on a comparable scale.
+- **`rerankSources`** — Bedrock Cohere `rerank-v3-5:0` (us-west-2 — only region with rerank) over the fused pool, capped at max(limit×5, 100) candidates.
+- **`retrieve`** — orchestrator: both engines scan every query, RRF merges, one rerank orders the fused pool; degrades to lexical-only if the embedding call fails.
 
 ### The `/retrieve` endpoint
 
-Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with service-retrieval auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `workshop_bot` for its `archive__retrieve` agent tool + several pre-injection helpers (compose-closer, pinboard-scan resonance, draft-review echoes, promotion-prep thread context, compose-subject thread awareness).
+Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with service-retrieval auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `wt-builder` (`src/server/integrations/librarian.ts`) — e.g. the Echoes retrieval in the compose flow. workshop_bot, the original client, was retired with Studio on 2026-08-28.
 
 The `retrieveSecretOk` helper in `chat/runtime.mts` compares against `LIBRARIAN_RETRIEVE_SECRET` via `crypto.timingSafeEqual`. The request body still accepts the historical `bridge_secret` field so existing trusted clients keep the versioned `/retrieve` contract.
 
@@ -77,8 +78,8 @@ CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step
 `lambda/tests/*.test.mjs` — Node tests for shared modules (`session`, `conversations`, `attribution`, FAQ search, Bedrock stream parsing, etc.). No end-to-end handler invocation tests — handlers depend on Bedrock + S3 + DynamoDB mocks that don't exist yet.
 
 ```bash
-npm run librarian:test
-# or: cd apps/librarian/lambda && npm test
+npm --prefix apps/librarian/lambda test
+# or from lambda/: npm test; make test-lambda runs the fuller `npm run verify`
 ```
 
 Python tests don't cover this directory — the Lambda is pure Node.
@@ -129,5 +130,5 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 ## Known follow-ups
 
 - **No end-to-end handler tests.** Mocking Bedrock + DynamoDB + S3 in Node test is non-trivial; the agent-loop path is exercised in production via real reader Q&A.
-- **No automated live QA harness.** Mode/auth/conversation/eval checks are still run manually against the live API when needed.
-- **Operator reads are private.** Static conversation reports remain available locally, and Studio's `/thingy/` route provides read-only corpus health and a grouped quality queue behind Studio's loopback-only Tailscale identity gate. Any public or non-tailnet dashboard still needs stronger owner/admin auth first.
+- **No automated live QA harness for chat.** Mode/auth/conversation/eval checks are still run manually against the live API when needed. Retrieval now has one: `lambda/scripts/golden-retrieval.mjs` (`npm run golden` in `lambda/`) runs golden questions against the live `/retrieve` endpoint.
+- **Operator reads are private.** Static conversation reports remain available locally (`admin/operator_report.py`). The Studio `/thingy/` dashboard route retired with Studio on 2026-08-28. Any public dashboard still needs stronger owner/admin auth first.

@@ -9,12 +9,12 @@ The AWS Lambda agent that answers reader questions against Jamie Thingelstad's p
 Three Lambdas behind one CloudFormation stack:
 
 - **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, profile updates, and per-answer feedback reactions.
-- **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON retrieval used by `workshop_bot` for its `archive__retrieve` tool + several pre-injection helpers).
+- **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (hybrid JSON retrieval used by `wt-builder` for Echoes and other compose-time helpers).
 - **Eval Lambda** (DynamoDB Stream trigger) — reviews updated server-side conversations out of band and writes summary/quality metadata back to DynamoDB.
 
 > Historical note: the Dispatch feature was removed 2026-08; old dispatch rows expire via TTL.
 
-The Q&A intelligence lives entirely here. Retrieval is **Bedrock Cohere embed → vector search → Cohere rerank** against a pre-embedded corpus in S3, with BM25 lexical fallback. Generation is Claude Sonnet via Bedrock Converse (cross-region inference profile, tool use enabled).
+The Q&A intelligence lives entirely here. Retrieval is **hybrid** against a pre-embedded corpus in S3: TF-IDF lexical and Bedrock Cohere cosine both run on every query (filters applied in-scan), reciprocal-rank fusion merges them, and Cohere rerank orders the fused pool (up to 100 candidates); it degrades to lexical-only if embedding fails. Generation is Claude Sonnet via Bedrock Converse (cross-region inference profile, tool use enabled).
 
 ## Layout
 
@@ -75,7 +75,7 @@ then uploads the updated corpus artifacts.
 | POST | `/chat` | session token (bearer) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer) | Agentic contextual welcome for authenticated users |
 | POST | `/curiosity-map` | session token (bearer) | Generate and optionally store a curiosity-map artifact |
-| POST | `/retrieve` | retrieval secret (body) | JSON semantic retrieval — top-K archive passages, used by `workshop_bot` |
+| POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Magic-link auth, user conversation management, and profile updates |
 | POST | `/memory` | session token (bearer) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
@@ -137,4 +137,4 @@ The `admin/` directory has its own [`README.md`](admin/README.md) for operator r
 
 - [`CLAUDE.md`](CLAUDE.md) — operational memory (Bedrock model gotchas, retrieve internals, conventions)
 - [`../../reference/librarian.md`](../../reference/librarian.md) — full runtime guide
-- [`../workshop_bot/tools/thingy_retrieve.py`](../workshop_bot/tools/thingy_retrieve.py) — workshop_bot's client for the `/retrieve` endpoint
+- `wt-builder`'s `src/server/integrations/librarian.ts` — WT Builder's client for the `/retrieve` endpoint (workshop_bot's client retired with Studio, 2026-08-28)

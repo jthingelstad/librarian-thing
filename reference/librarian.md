@@ -4,10 +4,10 @@ Thingy is an authenticated chat interface for Jamie Thingelstad's public archive
 
 ## Local Artifacts
 
-- `npm run librarian:corpus` builds `data/librarian/corpus.json` from the cleaned generated archive.
+- `make librarian-corpus` builds `data/librarian/corpus.json` from the canonical archive in `data/issues/`.
 - The local corpus is text-only and citation-ready. It includes issue summaries, topic metadata, and chunk-level retrieval metadata. It is gitignored and rebuilt on demand.
-- Embedded corpus files should not be committed. `npm run librarian:corpus:upload` generates Bedrock Cohere embeddings and pushes the deployable corpus to S3. **Incremental by default**: it fetches the existing S3 corpus once at the start, copies cached embeddings onto unchanged chunks (matched by content-deterministic chunk_id), and only sends the leftover chunks to Bedrock. Pass `--full` to skip the cache and re-embed everything — needed only after a chunking-schema change or to repair a corrupted cache. The cache is automatically invalidated if the deployed corpus's `embedding_model` or `embedding_dimensions` no longer match the current request, with a warning.
-- `npm run librarian:graph` builds `data/librarian/graph.json`, the offline entity/trope/similarity artifact used by the archive tools.
+- Embedded corpus files should not be committed. `make librarian-corpus-upload` generates Bedrock Cohere embeddings and pushes the deployable corpus to S3. **Incremental by default**: it fetches the existing S3 corpus once at the start, copies cached embeddings onto unchanged chunks (matched by content-deterministic chunk_id), and only sends the leftover chunks to Bedrock. Pass `--full` (`uv run --locked python pipeline/deploy/upload_corpus.py --full`) to skip the cache and re-embed everything — needed only after a chunking-schema change or to repair a corrupted cache. The cache is automatically invalidated if the deployed corpus's `embedding_model` or `embedding_dimensions` no longer match the current request, with a warning.
+- `make librarian-graph` builds `data/librarian/graph.json`, the offline entity/trope/similarity artifact used by the archive tools.
 - `pipeline/deploy/bedrock_logging.py` inspects or enables account-level Bedrock invocation logging to the private Librarian bucket.
 
 The previous Python eval pipeline under `pipeline/eval/` was removed. Conversation quality review now happens through the event-driven Eval Lambda described below.
@@ -31,11 +31,12 @@ The FAQ content lives in `apps/librarian/lambda/shared/faq.json`. Eleventy rende
 ## Commands
 
 ```sh
-npm run librarian:corpus
-npm run librarian:graph
-npm run librarian:bedrock:logging
-npm run librarian:corpus:upload
-npm run librarian:deploy
+make librarian-corpus
+make librarian-graph
+make librarian-corpus-upload
+make librarian-corpora-upload
+make librarian-deploy
+uv run --locked python pipeline/deploy/bedrock_logging.py
 ```
 
 After deployment, the deploy script writes the CloudFormation `LibrarianApiUrl` and `LibrarianStreamUrl` outputs to `.env` as `LIBRARIAN_API_URL` and `LIBRARIAN_STREAM_URL`. The static site reads those values during build, with the current production URLs kept only as a fallback in `apps/site/_data/site.js`.
@@ -92,7 +93,7 @@ The stack already creates a Lambda execution role for Thingy. The remaining prod
 - Create a `weekly-thing-librarian-cloudformation` service role trusted by CloudFormation.
 - Give that service role permissions only for the Librarian stack resources: Lambda, API Gateway HTTP API, DynamoDB table, the Lambda execution role, CloudWatch log groups, CloudWatch alarms/dashboard, and `s3://$LIBRARIAN_BUCKET/*`.
 - Create a narrow deploy identity, preferably a GitHub Actions OIDC role if deployments move into Actions, that can upload private Librarian S3 artifacts and update only the `weekly-thing-librarian` CloudFormation stack.
-- Set `LIBRARIAN_CLOUDFORMATION_ROLE_ARN` to the service role ARN before running `npm run librarian:deploy`.
+- Set `LIBRARIAN_CLOUDFORMATION_ROLE_ARN` to the service role ARN before running `make librarian-deploy`.
 
 The deploy script passes `LIBRARIAN_CLOUDFORMATION_ROLE_ARN` to CloudFormation when present, so the caller only needs permission to upload artifacts, update the stack, and pass that one service role.
 
@@ -117,7 +118,7 @@ Modes change Thingy's posture, not corpus access. Thought Partner is more candid
 
 ### Per-user memory
 
-Auth returns a `profile` field populated from a per-user memory row in the existing DynamoDB table (key `user#{sub}` / `memory`). The chat handler updates this row at the end of each turn and Bedrock-summarizes previous conversations, rolling them into a compact per-user history. The agent can also store explicit reader-provided facts through `remember_user`, such as preferred name, archive interests, or answer-style preferences.
+Auth returns a `profile` field populated from a per-user memory row in the existing DynamoDB table (key `user#{sub}` / `memory`). The chat handler updates this row at the end of each turn and Bedrock-summarizes previous conversations, rolling them into a compact per-user history.
 
 The `profile` shape is:
 
@@ -167,7 +168,7 @@ The reader UI lets users upvote/downvote responses and optionally explain downvo
 
 `POST /feedback` is served by the streaming Lambda Function URL and requires a valid session token. It accepts `request_id`, `reaction` (`up` or `down`), and optional `comment`, then updates the matching turn when it belongs to the same subscriber hash.
 
-Thingy uses hybrid retrieval. It merges semantic embedding matches, lexical matches, and issue-summary/topic graph matches, reranks the top candidates with Cohere Rerank 3.5 through the Bedrock Agent Runtime rerank API, then applies context-aware recency and issue diversity. Current/recommendation questions prefer newer material when relevance is close. History/evolution questions intentionally preserve sources across eras.
+Thingy uses hybrid retrieval. Every query runs two engines over the scoped corpora — TF-IDF lexical scoring and cosine similarity over the pre-embedded chunks — with year/section filters applied inside each engine's scan, not as a post-filter. The two ranked lists are merged by reciprocal-rank fusion into a pool of up to 100 candidates, which is reranked once with Cohere Rerank 3.5 through the Bedrock Agent Runtime rerank API. Results carry age labels so answers can weigh recency; if the embedding call fails, fusion degrades gracefully to lexical-only.
 
 Chat requests run through a tool-using Claude Sonnet 4.6 loop capped by `MAX_TOOL_TURNS` (default 8). The agent can call:
 
@@ -189,7 +190,6 @@ Chat requests run through a tool-using Claude Sonnet 4.6 loop capped by `MAX_TOO
 - `source_neighborhood(source_kind?, url?, issue_number?)`
 - `archive_gems(theme?, mood?, source_kind?)`
 - `claim_check(claim)`
-- `remember_user(...)`
 
 Thingy uses magic-link auth, rate limits, server-side history, and DynamoDB logging. Tool status is emitted over the streaming Function URL as `status` events, and the UI keeps the archive work visible/collapsible after completion.
 
@@ -230,16 +230,16 @@ Tinylytics is only used by the website/browser. The Librarian API does not emit 
 For a normal code-only Thingy deployment:
 
 ```sh
-python pipeline/deploy/aws.py --skip-corpus-upload
+make librarian-deploy ARGS="--skip-corpus-upload"
 ```
 
 For a full corpus refresh and deploy:
 
 ```sh
-python pipeline/deploy/aws.py
+make librarian-deploy
 ```
 
-`python pipeline/deploy/aws.py` packages both Lambdas, uploads their zip files, builds/uploads all three embedded corpus artifacts, builds/uploads the Weekly Thing graph artifact, and updates the CloudFormation stack. Use `make librarian-corpora-upload` by itself only when the deployed code is unchanged and only API corpus artifacts need to be refreshed.
+`make librarian-deploy` (`uv run --locked python pipeline/deploy/aws.py`) packages both Lambdas, uploads their zip files, builds/uploads all three embedded corpus artifacts, builds/uploads the Weekly Thing graph artifact, and updates the CloudFormation stack. Use `make librarian-corpora-upload` by itself only when the deployed code is unchanged and only API corpus artifacts need to be refreshed.
 
 New external publishing content has its own ingest step before corpus upload:
 
