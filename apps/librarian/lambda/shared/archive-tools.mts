@@ -39,6 +39,7 @@ interface ToolArgs {
   query?: unknown;
   limit?: unknown;
   kind?: unknown;
+  include_utility?: unknown;
   year_start?: unknown;
   year_end?: unknown;
   scope?: unknown;
@@ -1136,21 +1137,25 @@ async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}
 // expensive context for the Bedrock loop and over the MCP result cap.
 // Caps arrays with an honest omitted count and trims verbose fields;
 // counts and aggregate numbers are never altered.
-const LENS_ARRAY_CAP = 40;
-const LENS_TEXT_CAP = 500;
+// Caps scale down with nesting: the timeline is ~40 years each carrying
+// evidence arrays, so inner lists get much smaller budgets than outer ones.
+const LENS_ARRAY_CAPS = [40, 24, 6, 4];
+const LENS_TEXT_CAPS = [500, 400, 240, 160];
 
 function compactLensPayload<T>(value: T, depth = 0): T {
+  const textCap = LENS_TEXT_CAPS[Math.min(depth, LENS_TEXT_CAPS.length - 1)];
   if (depth > 6 || value === null || typeof value !== 'object') {
-    if (typeof value === 'string' && value.length > LENS_TEXT_CAP) {
-      return `${value.slice(0, LENS_TEXT_CAP)}…` as unknown as T;
+    if (typeof value === 'string' && value.length > textCap) {
+      return `${value.slice(0, textCap)}…` as unknown as T;
     }
     return value;
   }
   if (Array.isArray(value)) {
-    const capped = value.slice(0, LENS_ARRAY_CAP).map((item) => compactLensPayload(item, depth + 1));
-    if (value.length > LENS_ARRAY_CAP) {
+    const arrayCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
+    const capped = value.slice(0, arrayCap).map((item) => compactLensPayload(item, depth + 1));
+    if (value.length > arrayCap) {
       (capped as unknown[]).push({
-        omitted: value.length - LENS_ARRAY_CAP,
+        omitted: value.length - arrayCap,
         note: 'narrow with year_range or limit for the rest'
       });
     }
@@ -1487,6 +1492,27 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   };
 }
 
+const UTILITY_REFERENCE_DOMAINS = new Set([
+  'en.wikipedia.org',
+  'wikipedia.org',
+  'linkedin.com',
+  'www.linkedin.com',
+  'twitter.com',
+  'x.com',
+  'instagram.com',
+  'www.instagram.com',
+  'facebook.com',
+  'www.facebook.com',
+  'poap.gallery',
+  'poap.xyz',
+  'app.poap.xyz',
+  'collectors.poap.xyz',
+  'poap.delivery',
+  'amazon.com',
+  'www.amazon.com',
+  'micro.blog'
+]);
+
 // Aggregate the link graph: which domains Jamie links to most, with per-year
 // counts, first/last seen, and sample titles. One deterministic call for
 // "who/what does Jamie reference most" instead of guess-then-verify.
@@ -1503,11 +1529,20 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
     samples: string[];
   }
   const domains = new Map<string, DomainAgg>();
+  // Utility and social domains dominate raw counts (Wikipedia references,
+  // LinkedIn profiles, POAP infrastructure) without saying anything about
+  // whose WRITING Jamie follows. Excluded by default, reported honestly.
+  const includeUtility = input.include_utility === true;
+  let excludedUtilityLinks = 0;
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     for (const link of (corpus.links as Array<Record<string, unknown>> | undefined) || []) {
       const domain = String(link.domain || '').toLowerCase();
       if (!domain || domain.endsWith('thingelstad.com')) continue;
+      if (!includeUtility && UTILITY_REFERENCE_DOMAINS.has(domain)) {
+        excludedUtilityLinks += 1;
+        continue;
+      }
       const date = String(link.publish_date || '');
       const year = Number(date.slice(0, 4)) || null;
       if (yearStart && (!year || year < yearStart)) continue;
@@ -1528,6 +1563,7 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
     year_start: yearStart,
     year_end: yearEnd,
     total_domains: domains.size,
+    excluded_utility_links: excludedUtilityLinks,
     top: ranked.map(([domain, agg]) => ({
       domain,
       count: agg.count,

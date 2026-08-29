@@ -532,6 +532,10 @@
       "limit": {
        "type": "integer",
        "description": "Max domains, default 20, max 40"
+      },
+      "include_utility": {
+       "type": "boolean",
+       "description": "Include utility/social domains (Wikipedia, LinkedIn, POAP, social profiles) excluded by default"
       }
      }
     }
