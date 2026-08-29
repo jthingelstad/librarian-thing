@@ -221,7 +221,7 @@ The site loads Tinylytics with `events` and `beacon` enabled. Thingy emits these
 - `librarian.feedback_submit` with value `up` or `down`
 - `librarian.feedback_error` with value `client` or `server`
 - `librarian.source_click` with the cited issue number
-- mode, source picker, curiosity map, voice input, and conversation events may also be emitted by the web client; keep this list aligned with the Thingy web repo when changing the UI.
+- voice input and conversation events may also be emitted by the web client; keep this list aligned with the Thingy web repo when changing the UI. (Mode picker, source picker, and curiosity map events retired 2026-08-29 with the chat streamline.)
 
 Tinylytics is only used by the website/browser. The Librarian API does not emit server-side Tinylytics events.
 

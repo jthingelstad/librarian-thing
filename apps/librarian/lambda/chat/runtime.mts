@@ -21,12 +21,7 @@ import {
 } from '../shared/aws-clients.mjs';
 import { readConverseStream } from '../shared/bedrock-stream.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
-import {
-  buildCuriosityMap,
-  buildWelcomeSpark,
-  experienceFromToolResults,
-  generateWelcome
-} from '../shared/archive-experience.mjs';
+import { generateWelcome } from '../shared/archive-experience.mjs';
 import { ARCHIVE_TOOLS, collectToolCitations, toolSpecs, weeklyIssueCatalog } from '../shared/archive-tools.mjs';
 import {
   conversationContext,
@@ -58,7 +53,6 @@ import {
   getUserConversationMetadata,
   loadUserConversationHistory,
   loadUserConversationSummaries,
-  recordUserArtifactConversation,
   recordUserConversationFeedback,
   recordUserConversationTurn
 } from '../shared/conversation-store.mjs';
@@ -79,7 +73,6 @@ type JsonRecord = Record<string, unknown>;
 type Claims = Record<string, unknown>;
 type ChatHistory = Parameters<typeof conversationContext>[0];
 type ResponseStream = Writable;
-type RequestSummary = Record<string, unknown>;
 type PreflightDecision = ReturnType<typeof normalizePreflightDecision>;
 type BedrockJson = NonNullable<Extract<NonNullable<ToolResultBlock['content']>[number], { json?: unknown }>['json']>;
 
@@ -320,9 +313,7 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
     case 'entity_lens':
       return query ? `Checking where ${query} appears across the archive.` : 'Checking where the named entity appears.';
     case 'archive_gems':
-      return query
-        ? `Looking for a surprising archive spark around ${query}.`
-        : 'Looking for a surprising archive spark.';
+      return query ? `Looking for a surprising archive gem around ${query}.` : 'Looking for a surprising archive gem.';
     case 'claim_check':
       return query ? `Verifying ${query} against archive evidence.` : 'Verifying the claim against archive evidence.';
     default:
@@ -639,10 +630,7 @@ async function streamBedrockAgentAnswer(
     await weeklyIssueCatalog(),
     evidencedIssueNumbers(toolResults)
   );
-  const experience = experienceFromToolResults(toolResults, answer, question);
-  if (experience && !shouldStopWriting()) {
-    writeSse(responseStream, 'experience', { experience });
-  }
+
   logEvent('info', 'agent_streamed', {
     request_id: options.requestId,
     conversation_id: options.conversationId,
@@ -651,7 +639,6 @@ async function streamBedrockAgentAnswer(
     mode,
     tool_turns: toolResults.length,
     citation_count: citations.length,
-    experience_kind: experience?.kind,
     duration_ms: Math.round(performance.now() - start),
     answer_chars: answer.length,
     output_tokens: usage?.outputTokens,
@@ -661,7 +648,6 @@ async function streamBedrockAgentAnswer(
   return {
     answer,
     citations,
-    experience,
     toolTrace,
     metrics: {
       model: agentModel(),
@@ -693,104 +679,6 @@ function jsonResponseStream(responseStream: ResponseStream, statusCode: number) 
       'x-librarian-contract-version': LIBRARIAN_CONTRACT_VERSION
     }
   });
-}
-
-async function handleCuriosityMapRoute({
-  event,
-  responseStream,
-  requestId,
-  summary,
-  start
-}: {
-  event: LibrarianHttpEvent;
-  responseStream: ResponseStream;
-  requestId: string;
-  summary: RequestSummary;
-  start: number;
-}) {
-  const body = parseBody(event);
-  const payload = verifyToken(extractBearer(event, body));
-  if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
-    const s401 = jsonResponseStream(responseStream, 401);
-    s401.write(
-      JSON.stringify({ error: 'Please validate your subscriber email to use the librarian.', request_id: requestId })
-    );
-    s401.end();
-    logEvent('warning', 'curiosity_map_unauthorized', { ...summary });
-    return;
-  }
-  const subscriberHash = String(payload.sub || '');
-  const requestedConversationId = validConversationId(body.conversation_id || body.conversationId);
-  const modeAccess = await resolveRequestedConversationMode({
-    body,
-    payload,
-    subscriberHash,
-    conversationId: requestedConversationId
-  });
-  if (!modeAccess.ok) {
-    const s403 = jsonResponseStream(responseStream, 403);
-    s403.write(JSON.stringify({ error: modeAccess.error, request_id: requestId }));
-    s403.end();
-    return;
-  }
-  if (
-    !(await checkRateLimit(`curiosity_map#${subscriberHash}`, Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)))
-  ) {
-    const s429 = jsonResponseStream(responseStream, 429);
-    s429.write(JSON.stringify({ error: 'Thingy is at the hourly limit for this session.', request_id: requestId }));
-    s429.end();
-    return;
-  }
-  try {
-    const scope = normalizeScope(body.scope);
-    const conversations = await loadUserConversationSummaries({
-      dynamodb,
-      tableName: process.env.TABLE_NAME,
-      subscriberHash,
-      limit: 12,
-      logEvent
-    });
-    const map = await buildCuriosityMap({
-      conversations,
-      scope,
-      center: body.center || body.topic || body.query
-    });
-    const conversationId = requestedConversationId || crypto.randomUUID();
-    const center = map.center?.label || String(map.title || '').replace(/^Curiosity Map:\s*/i, '') || 'archive';
-    const conversation = await recordUserArtifactConversation({
-      dynamodb,
-      tableName: process.env.TABLE_NAME,
-      subscriberHash,
-      conversationId,
-      artifact: map,
-      scope,
-      mode: modeAccess.mode,
-      requestId,
-      title: map.title || 'Curiosity Map',
-      preview: `Explore branches from ${center}.`,
-      logEvent,
-      preserveConversationSummary: Boolean(requestedConversationId)
-    });
-    const s200 = jsonResponseStream(responseStream, 200);
-    s200.write(JSON.stringify({ ...map, request_id: requestId, conversation_id: conversationId, conversation }));
-    s200.end();
-    logEvent('info', 'curiosity_map_completed', {
-      ...summary,
-      subscriber_hash: subscriberHash,
-      conversation_id: conversationId,
-      mode: modeAccess.mode,
-      attached_to_existing_conversation: Boolean(requestedConversationId),
-      node_count: map.nodes?.length || 0,
-      source_count: map.sources?.length || 0,
-      scope,
-      duration_ms: Math.round(performance.now() - start)
-    });
-  } catch (error) {
-    const s500 = jsonResponseStream(responseStream, 500);
-    s500.write(JSON.stringify({ error: 'Thingy could not draw a curiosity map right now.', request_id: requestId }));
-    s500.end();
-    logEvent('error', 'curiosity_map_failed', { ...summary, error_type: errorName(error) });
-  }
 }
 
 export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (event, responseStream, context) => {
@@ -941,11 +829,6 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     return;
   }
 
-  if (method === 'POST' && path.endsWith('/curiosity-map')) {
-    await handleCuriosityMapRoute({ event, responseStream, requestId, summary, start });
-    return;
-  }
-
   const isStreamRoute = method === 'POST' && (path.endsWith('/chat') || path.endsWith('/welcome'));
   const stream = streamFromResponse(responseStream, event, isStreamRoute ? 200 : 404);
   try {
@@ -1001,14 +884,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       }
       writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
       writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
-      let spark = null;
-      try {
-        spark = await buildWelcomeSpark({ conversations, scope });
-      } catch (error) {
-        logEvent('warning', 'welcome_spark_failed', { error_type: errorName(error) });
-      }
-      if (spark) writeSse(stream, 'experience', { experience: spark });
-      const answer = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode, spark });
+      const answer = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode });
       writeSse(stream, 'answer_delta', { delta: answer });
       writeSse(stream, 'done', { request_id: requestId, mode: modeAccess.mode });
       logEvent('info', 'welcome_completed', {
@@ -1017,7 +893,6 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         conversation_count: conversations.length,
         has_memory: Boolean(memory),
         has_preferred_name: Boolean(effectiveProfile.preferred_name),
-        has_spark: Boolean(spark),
         duration_ms: Math.round(performance.now() - start)
       });
       return;

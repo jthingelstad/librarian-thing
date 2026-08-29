@@ -111,17 +111,6 @@ interface EvaluationInput extends ConversationContext {
   logEvent?: LogEvent;
 }
 
-interface RecordArtifactInput extends ConversationContext {
-  artifact?: JsonObject | null;
-  scope?: unknown;
-  mode?: unknown;
-  requestId?: unknown;
-  title?: unknown;
-  preview?: unknown;
-  logEvent?: LogEvent;
-  preserveConversationSummary?: boolean;
-}
-
 function noopLog() {}
 
 function logger(logEvent?: LogEvent): LogEvent {
@@ -774,64 +763,6 @@ export async function updateUserConversationEvaluation({
     log('warning', 'user_conversation_evaluation_update_failed', {
       subscriber_hash: subscriberHash,
       conversation_id: validId,
-      error_type: errorName(error)
-    });
-    return null;
-  }
-}
-
-export async function recordUserArtifactConversation({
-  dynamodb,
-  tableName,
-  subscriberHash,
-  conversationId,
-  artifact,
-  scope,
-  mode = 'thingy',
-  requestId,
-  title,
-  preview,
-  logEvent,
-  preserveConversationSummary = false
-}: RecordArtifactInput) {
-  const log = logger(logEvent);
-  const validId = validConversationId(conversationId);
-  if (!tableReady({ tableName, subscriberHash }) || !validId || !artifact) return null;
-  const now = new Date().toISOString();
-  try {
-    await putTurn({
-      dynamodb,
-      tableName,
-      subscriberHash,
-      conversationId: validId,
-      requestId,
-      createdAt: now,
-      scope,
-      mode,
-      artifact
-    });
-    return await upsertConversation({
-      dynamodb,
-      tableName,
-      subscriberHash,
-      conversationId: validId,
-      title: conversationTitle(title || artifact.title || 'Artifact'),
-      preview: conversationPreview(preview || artifact.prompt || artifact.title || 'Artifact'),
-      scope,
-      mode,
-      requestId,
-      now,
-      lastQuestion: '',
-      incrementTurns: false,
-      preservePreview: preserveConversationSummary,
-      preserveLastQuestion: preserveConversationSummary
-    });
-  } catch (error) {
-    log('warning', 'user_artifact_conversation_record_failed', {
-      subscriber_hash: subscriberHash,
-      conversation_id: validId,
-      request_id: requestId,
-      artifact_kind: artifact?.kind,
       error_type: errorName(error)
     });
     return null;

@@ -1,7 +1,8 @@
-export const LIBRARIAN_CONTRACT_VERSION = '2.0.0';
-// Majors the server still answers for. 1.x clients predate the Dispatch
-// removal; drop '1' once the deployed Thingy web client vendors 2.0.0.
-export const SUPPORTED_CONTRACT_MAJORS = ['1', '2'];
+export const LIBRARIAN_CONTRACT_VERSION = '3.0.0';
+// Majors the server still answers for. 2.x clients predate the chat
+// streamline (curiosity map + experiences removed); drop '2' once the
+// deployed Thingy web client vendors 3.0.0.
+export const SUPPORTED_CONTRACT_MAJORS = ['2', '3'];
 
 const string = { type: 'string' } as const;
 const boolean = { type: 'boolean' } as const;
@@ -91,17 +92,6 @@ const citation = object({
   publish_date: string,
   section: string
 });
-const experience = object({
-  kind: string,
-  title: string,
-  intro: string,
-  prompt: string,
-  items: arrayOf(ref('archiveItem'))
-});
-const curiosityNode = object({ id: string, label: string, kind: string, prompt: string, why: string, weight: number }, [
-  'id',
-  'label'
-]);
 const accountOverview = object({
   first_seen_at: string,
   last_seen_at: string,
@@ -130,8 +120,6 @@ const apiProperties = {
   supporting_member: boolean,
   data: {},
   code: string,
-  nodes: arrayOf(ref('curiosityNode')),
-  sources: arrayOf(ref('archiveItem')),
   account: ref('accountOverview'),
   reaction: string,
   ok: boolean,
@@ -146,7 +134,6 @@ const streamProperties = {
   delta: string,
   answer: string,
   citations: arrayOf(ref('citation')),
-  experience: ref('experience'),
   commentary: string,
   detail: string,
   note: string,
@@ -168,8 +155,6 @@ export const LIBRARIAN_CONTRACT = {
     conversationMessage,
     archiveItem,
     citation,
-    experience,
-    curiosityNode,
     accountOverview,
     apiResponse: object(apiProperties),
     apiError: object({ error: string, message: string, errorMessage: string, request_id: string, requestId: string }),
@@ -188,7 +173,6 @@ export const LIBRARIAN_CONTRACT = {
     }),
     '/feedback': endpoint(),
     '/memory': endpoint(),
-    '/curiosity-map': endpoint(),
     // SSE agent loop. The response body is the stream_events sequence below;
     // request fields are listed here so removing one is a contract change.
     '/chat': {
@@ -237,7 +221,6 @@ export const LIBRARIAN_CONTRACT = {
     answer_delta: object(streamProperties, ['delta']),
     answer: object(streamProperties, ['answer']),
     citations: object(streamProperties, ['citations']),
-    experience: object(streamProperties, ['experience']),
     done: object(streamProperties),
     error: object(streamProperties, ['error'])
   }

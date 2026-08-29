@@ -175,6 +175,9 @@ test('turns expand into messages and compact history', () => {
 });
 
 test('artifact-only turns expand into assistant artifact messages', () => {
+  // Curiosity maps were retired 2026-08-29, but historical Dynamo rows still
+  // carry artifact_json; the read path must keep parsing them (the client
+  // hides artifact-only messages).
   const artifact = {
     kind: 'curiosity_map',
     title: 'Curiosity Map: RSS',
@@ -228,7 +231,6 @@ test('oversized artifacts are compacted without corrupting JSON', () => {
   const json = artifactJsonForStorage(artifact);
   assert.ok(json.length <= 20000);
   const parsed = JSON.parse(json);
-  assert.equal(parsed.kind, 'curiosity_map');
   assert.equal(parsed.compacted, true);
 
   const turn = conversationTurnFromItem({
@@ -237,6 +239,5 @@ test('oversized artifacts are compacted without corrupting JSON', () => {
     created_at: { S: '2026-06-06T02:00:00.000Z' },
     artifact_json: artifactDynamoString(artifact)
   });
-  assert.equal(turn.artifact.kind, 'curiosity_map');
-  assert.ok(turn.artifact.nodes.length > 0);
+  assert.ok(turn.artifact);
 });

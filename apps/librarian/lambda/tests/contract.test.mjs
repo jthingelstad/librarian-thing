@@ -21,11 +21,12 @@ test('generated Librarian contract artifact matches the backend source', () => {
 test('contract negotiation accepts supported majors and rejects the rest', () => {
   assert.equal(contractModule.supportsRequestedContract({}), true);
   assert.equal(contractModule.supportsRequestedContract({ 'X-Librarian-Contract-Version': artifact.version }), true);
-  // 1.x clients predate the Dispatch removal and stay accepted until the
-  // deployed web client vendors 2.0.0.
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '1.0.0' }), true);
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '2.4.0' }), true);
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '3.0.0' }), false);
+  // 2.x clients predate the chat streamline and stay accepted until the
+  // deployed web client vendors 3.0.0.
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '2.0.0' }), true);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '3.4.0' }), true);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '1.0.0' }), false);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '4.0.0' }), false);
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': 'not-semver' }), false);
 });
 
@@ -34,6 +35,8 @@ test('endpoint actions declare response-specific successful contracts', () => {
   assert.deepEqual(artifact.endpoints['/chat'].request.required, ['question']);
   assert.deepEqual(artifact.endpoints['/retrieve'].request.required, ['query']);
   assert.equal('/dispatch' in artifact.endpoints, false);
+  assert.equal('/curiosity-map' in artifact.endpoints, false);
+  assert.equal('experience' in artifact.stream_events, false);
 });
 
 test('JSON responses advertise the authoritative contract version', () => {

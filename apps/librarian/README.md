@@ -9,7 +9,7 @@ The AWS Lambda agent that answers reader questions against Jamie Thingelstad's p
 Three Lambdas behind one CloudFormation stack:
 
 - **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, profile updates, and per-answer feedback reactions.
-- **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (hybrid JSON retrieval used by `wt-builder` for Echoes and other compose-time helpers).
+- **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/feedback`, and `/retrieve` (hybrid JSON retrieval used by `wt-builder` for Echoes and other compose-time helpers).
 - **Eval Lambda** (DynamoDB Stream trigger) — reviews updated server-side conversations out of band and writes summary/quality metadata back to DynamoDB.
 
 > Historical note: the Dispatch feature was removed 2026-08; old dispatch rows expire via TTL.
@@ -24,7 +24,7 @@ apps/librarian/
 ├── CLAUDE.md         ← operational memory
 ├── contracts/        ← generated, versioned client contract artifacts
 ├── lambda/           ← Node.js Lambda code (runtime: Node 24, arm64)
-│   ├── chat/         ← Stream Lambda — /chat, /welcome, /curiosity-map, /retrieve
+│   ├── chat/         ← Stream Lambda — /chat, /welcome, /retrieve
 │   │   ├── handler.mts    (streaming entrypoint)
 │   │   └── runtime.mts    (agent loop and routes)
 │   ├── auth/         ← Auth Lambda — /auth, /feedback, conversations
@@ -74,7 +74,6 @@ then uploads the updated corpus artifacts.
 | GET | `/health` | none | Health check (returns model versions) |
 | POST | `/chat` | session token (bearer) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer) | Agentic contextual welcome for authenticated users |
-| POST | `/curiosity-map` | session token (bearer) | Generate and optionally store a curiosity-map artifact |
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Magic-link auth, user conversation management, and profile updates |

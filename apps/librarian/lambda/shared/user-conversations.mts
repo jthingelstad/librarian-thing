@@ -115,71 +115,9 @@ function boundedText(value: unknown, max = 500) {
     .slice(0, max);
 }
 
-function compactSourceRef(source: unknown) {
-  if (!source || typeof source !== 'object') return null;
-  const value = objectValue(source);
-  return {
-    title: boundedText(value.title || value.subject, 160),
-    url: boundedText(value.url, 500),
-    source_kind: boundedText(value.source_kind || value.kind, 40),
-    publish_date: boundedText(value.publish_date, 40),
-    reason: boundedText(value.reason, 240)
-  };
-}
-
-function compactCuriosityMapArtifact(artifact: JsonObject) {
-  const center = objectValue(artifact.center);
-  return {
-    kind: 'curiosity_map',
-    artifact_version: 1,
-    compacted: true,
-    title: boundedText(artifact.title, 120),
-    scope: boundedText(artifact.scope, 40),
-    center:
-      Object.keys(center).length > 0
-        ? {
-            id: boundedText(center.id, 80),
-            label: boundedText(center.label, 120),
-            kind: boundedText(center.kind, 40),
-            prompt: boundedText(center.prompt, 300),
-            why: boundedText(center.why, 240)
-          }
-        : null,
-    nodes: Array.isArray(artifact.nodes)
-      ? artifact.nodes.slice(0, 8).map((node) => {
-          const value = objectValue(node);
-          return {
-            id: boundedText(value.id, 80),
-            label: boundedText(value.label, 120),
-            kind: boundedText(value.kind, 40),
-            weight: Number(value.weight || 0),
-            prompt: boundedText(value.prompt, 300),
-            why: boundedText(value.why, 240),
-            source_refs: Array.isArray(value.source_refs)
-              ? value.source_refs.slice(0, 2).map(compactSourceRef).filter(Boolean)
-              : []
-          };
-        })
-      : [],
-    edges: Array.isArray(artifact.edges)
-      ? artifact.edges.slice(0, 12).map((edge) => {
-          const value = objectValue(edge);
-          return {
-            from: boundedText(value.from, 80),
-            to: boundedText(value.to, 80),
-            why: boundedText(value.why, 240)
-          };
-        })
-      : [],
-    sources: Array.isArray(artifact.sources) ? artifact.sources.slice(0, 5).map(compactSourceRef).filter(Boolean) : [],
-    prompt: boundedText(artifact.prompt, 300)
-  };
-}
-
 export function compactArtifactForStorage(artifact: unknown) {
   if (!artifact || typeof artifact !== 'object' || Array.isArray(artifact)) return null;
   const value = artifact as JsonObject;
-  if (value.kind === 'curiosity_map') return compactCuriosityMapArtifact(value);
   return {
     kind: boundedText(value.kind || 'artifact', 80),
     artifact_version: Number(value.artifact_version || value.version || 1),
