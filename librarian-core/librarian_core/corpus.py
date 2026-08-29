@@ -433,7 +433,7 @@ def _site_page_chunks(
     if support_data_path.exists():
         try:
             support_data = json.loads(support_data_path.read_text(encoding="utf-8"))
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             support_data = {}
     yearly_price = support_data.get("yearly_price") or 48
     replacements["support.yearly_price"] = str(yearly_price)

@@ -18,9 +18,9 @@ import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
 from dotenv import load_dotenv
 from librarian_core.corpus import (
-    EMBED_RECIPE_VERSION,
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
+    EMBED_RECIPE_VERSION,
     add_bedrock_embeddings,
     build_corpus,
 )

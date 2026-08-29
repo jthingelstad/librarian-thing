@@ -18,7 +18,6 @@ import os
 import tempfile
 from pathlib import Path
 
-import boto3
 from dotenv import load_dotenv
 from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
@@ -33,9 +32,9 @@ from librarian_core.corpus import (
 # so its own directory is on sys.path and upload_corpus resolves as a sibling.
 from upload_corpus import (  # noqa: E402
     build_chunk_cache,
-    upload_json_gzip,
     fetch_existing_corpus,
     merge_cached_embeddings,
+    upload_json_gzip,
 )
 
 
