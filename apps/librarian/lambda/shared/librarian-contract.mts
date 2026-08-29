@@ -187,13 +187,13 @@ export const LIBRARIAN_CONTRACT = {
       actions: {},
       request: object(
         {
-          question: string,
+          message: string,
           conversation_id: string,
           scope: string,
           mode: string,
           client_context: object({})
         },
-        ['question']
+        ['message']
       ),
       schema: ref('streamBase')
     },

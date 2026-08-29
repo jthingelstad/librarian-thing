@@ -32,7 +32,7 @@ test('contract negotiation accepts supported majors and rejects the rest', () =>
 
 test('endpoint actions declare response-specific successful contracts', () => {
   assert.deepEqual(artifact.endpoints['/conversations'].actions.list.required, ['conversations']);
-  assert.deepEqual(artifact.endpoints['/chat'].request.required, ['question']);
+  assert.deepEqual(artifact.endpoints['/chat'].request.required, ['message']);
   assert.deepEqual(artifact.endpoints['/retrieve'].request.required, ['query']);
   assert.equal('/dispatch' in artifact.endpoints, false);
   assert.equal('/curiosity-map' in artifact.endpoints, false);
