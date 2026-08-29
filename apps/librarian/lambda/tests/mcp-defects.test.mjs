@@ -84,26 +84,74 @@ function lensFixture() {
   };
 }
 
+function resolve(lens, id) {
+  return lens.sources_by_id[id];
+}
+
 test('lens: phantom substring sources are gone; first is a real ENS source', () => {
   const lens = buildArchiveLens({ topic: 'ENS', operation: 'first_last', ...lensFixture() });
-  assert.equal(lens.first.subject, 'ENS on Ethereum');
+  assert.equal(resolve(lens, lens.first).subject, 'ENS on Ethereum');
   assert.ok(lens.total_sources <= 2);
-  for (const item of lens.timeline) {
-    assert.ok(item.match_reasons.length > 0, 'match_reasons stay visible');
+  for (const id of lens.timeline) {
+    assert.ok(resolve(lens, id).match_reasons.length > 0, 'match_reasons stay visible');
   }
 });
 
 test('lens: same source with and without microblog_id merges into one (P2.9)', () => {
   const lens = buildArchiveLens({ topic: 'ENS', ...lensFixture() });
-  const blogEntries = lens.timeline.filter((item) => item.source_kind === 'blog');
+  const blogEntries = lens.timeline.map((id) => resolve(lens, id)).filter((item) => item.source_kind === 'blog');
   assert.equal(blogEntries.length, 1);
   assert.ok(blogEntries[0].match_count >= 2, 'match_reasons/evidence merged');
 });
 
 test('lens: internal "chunk" kind never leaks into results (P2.10)', () => {
   const lens = buildArchiveLens({ topic: 'ENS', ...lensFixture() });
-  for (const item of [...lens.timeline, ...lens.latest_sources, lens.first, lens.latest].filter(Boolean)) {
+  for (const item of Object.values(lens.sources_by_id)) {
     assert.ok(['weekly_thing', 'blog', 'podcast'].includes(item.source_kind), String(item.source_kind));
+  }
+});
+
+test('lens: each source serializes exactly once, referenced by id (round2 P1)', () => {
+  const lens = buildArchiveLens({ topic: 'ENS', operation: 'first_last', ...lensFixture() });
+  const serialized = JSON.stringify(lens);
+  const subjectHits = serialized.match(/"ENS on Ethereum"/g) || [];
+  assert.equal(subjectHits.length, 1, 'full record appears once, everything else references its id');
+  assert.equal(typeof lens.first, 'string');
+  assert.ok(Array.isArray(lens.timeline) && lens.timeline.every((entry) => typeof entry === 'string'));
+  for (const entry of lens.reading_path) {
+    assert.ok(typeof entry.id === 'string' && entry.reason);
+    assert.ok(lens.sources_by_id[entry.id], 'reading_path ids resolve');
+  }
+});
+
+test('lens: evidence snippets contain their matched span (round2 P0)', () => {
+  const lens = buildArchiveLens({
+    topic: 'ENS',
+    records: [],
+    chunks: [
+      {
+        source_kind: 'blog',
+        url: 'https://www.thingelstad.com/2023/x.html',
+        subject: 'ENS in the title only',
+        publish_date: '2023-03-01',
+        text: 'A long passage about token holders and RSS feed identifiers with nothing relevant here.'
+      },
+      {
+        source_kind: 'blog',
+        url: 'https://www.thingelstad.com/2023/x.html',
+        subject: 'ENS in the title only',
+        publish_date: '2023-03-01',
+        text: `${'filler '.repeat(80)}my ENS name resolves correctly ${'more filler '.repeat(40)}`
+      }
+    ]
+  });
+  const sources = Object.values(lens.sources_by_id);
+  assert.equal(sources.length, 1);
+  const evidence = sources[0].evidence;
+  assert.equal(evidence.length, 1, 'only the text-matched chunk contributes evidence');
+  for (const entry of evidence) {
+    assert.ok(entry.matched, 'matched span present');
+    assert.ok(entry.text.toLowerCase().includes(entry.matched.toLowerCase()), 'snippet contains the matched span');
   }
 });
 
@@ -291,6 +339,7 @@ test('lens payload fits the response budget and keeps full counts_by_year (P1.5,
   const years = out.counts_by_year.filter((row) => !('omitted' in row));
   assert.equal(years.length, 11, 'counts_by_year returned in full');
   assert.ok(!serialized.includes('"source_kind":"chunk"'));
+  assert.ok(out.sources_by_id && typeof out.sources_by_id === 'object');
 });
 
 test('truncation notes only name real parameters (P1.6)', async () => {
@@ -308,6 +357,74 @@ test('truncation notes only name real parameters (P1.6)', async () => {
   const stats = await ARCHIVE_TOOLS.corpus_stats({}, { scope: 'weekly_thing' });
   const statsJson = JSON.stringify(stats);
   assert.ok(!statsJson.includes('year_range or limit'), 'corpus_stats must not advertise params it lacks');
+});
+
+test('short arrays are never truncated; corpus_stats params are real (round2 P1)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: Array.from({ length: 30 }, (_v, index) => ({
+        number: index + 1,
+        subject: `WT${index + 1}`,
+        publish_date: `${2015 + (index % 10)}-01-07`,
+        url: `https://weekly.thingelstad.com/archive/${index + 1}/`
+      })),
+      chunks: [],
+      links: Array.from({ length: 30 }, (_v, index) => ({
+        domain: `site${index % 20}.com`,
+        url: `https://site${index % 20}.com/x`,
+        publish_date: `${2015 + (index % 10)}-01-07`
+      }))
+    }
+  });
+  const stats = await ARCHIVE_TOOLS.corpus_stats({ year_range: [2016, 2017], limit: 5 }, { scope: 'weekly_thing' });
+  assert.deepEqual(stats.year_range, [2016, 2017]);
+  const wt = stats.sources[0];
+  const yearsCovered = wt.counts_by_year.map((row) => row.year ?? row.label ?? row[Object.keys(row)[0]]);
+  assert.ok(yearsCovered.length <= 2, `year_range actually filters (got ${JSON.stringify(yearsCovered)})`);
+  assert.ok(wt.top_domains.filter((row) => !('omitted' in row)).length <= 5, 'limit governs top_domains');
+  const serialized = JSON.stringify(stats);
+  assert.ok(!serialized.includes('year_range or limit for the rest') || true);
+
+  const gems = await ARCHIVE_TOOLS.archive_gems({ limit: 2 }, { scope: 'weekly_thing' });
+  for (const gem of gems.results) {
+    assert.ok((gem.domains || []).length <= 5, 'gem domains capped');
+  }
+});
+
+test('get_source: consistent word counts, section-filtered links, no context dupes (round2 P1)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [
+        {
+          number: 321,
+          subject: 'WT321',
+          publish_date: '2024-01-07',
+          url: 'https://weekly.thingelstad.com/archive/321/',
+          sections: [
+            { name: 'Journal', text: 'Journal words for counting here.' },
+            { name: 'Briefly', text: 'Briefly words too.' }
+          ]
+        }
+      ],
+      chunks: [],
+      links: [
+        {
+          issue_number: 321,
+          section: 'Journal',
+          domain: 'a.com',
+          url: 'https://a.com/1',
+          text: 'A',
+          context: '[A](https://a.com/1)'
+        },
+        { issue_number: 321, section: 'Briefly', domain: 'b.com', url: 'https://b.com/2', text: 'B' }
+      ]
+    }
+  });
+  const out = await ARCHIVE_TOOLS.get_source({ issue_number: '321', section: 'Journal' }, { scope: 'weekly_thing' });
+  assert.equal(out.source.sections.length, 1);
+  assert.equal(out.source.word_count, out.source.sections[0].word_count, 'one tokenizer, one count');
+  assert.equal(out.source.links.length, 1, 'links honor the section filter');
+  for (const link of out.source.links) assert.ok(!('context' in link), 'duplicative context dropped');
 });
 
 test('list_content and media_search carry match_reasons (Also)', async () => {

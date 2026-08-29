@@ -30,7 +30,7 @@ interface LensSource extends LensItem {
   topics: Set<string>;
   domains: Set<string>;
   match_reasons: Set<string>;
-  evidence: Array<{ section: string; text: string }>;
+  evidence: Array<{ section: string; text: string; matched: string }>;
 }
 
 interface ArchiveLensInput {
@@ -46,7 +46,7 @@ interface YearBucket {
   year: number;
   source_count: number;
   evidence_count: number;
-  sources: ReturnType<typeof compactLensSource>[];
+  sources: string[];
   sections: Map<string, number>;
   domains: Map<string, number>;
 }
@@ -56,7 +56,7 @@ interface SourceBucket {
   source_count: number;
   evidence_count: number;
   dates: string[];
-  sources: ReturnType<typeof compactLensSource>[];
+  sources: string[];
 }
 
 function tokenize(value: unknown) {
@@ -128,6 +128,7 @@ export interface TopicMatcher {
   matches: (text: string) => boolean;
   matchedTokens: (text: string) => string[];
   findIndex: (text: string) => number;
+  findMatch: (text: string) => { index: number; match: string } | null;
 }
 
 export function compileTopicMatcher(topic: unknown): TopicMatcher {
@@ -155,15 +156,18 @@ export function compileTopicMatcher(topic: unknown): TopicMatcher {
     },
     matchedTokens,
     findIndex(text: string) {
+      return this.findMatch(text)?.index ?? -1;
+    },
+    findMatch(text: string) {
       if (phraseRe) {
         const match = phraseRe.exec(text);
-        if (match) return match.index;
+        if (match) return { index: match.index, match: match[0] };
       }
       for (const { re } of tokenRes) {
         const match = re.exec(text);
-        if (match) return match.index;
+        if (match) return { index: match.index, match: match[0] };
       }
-      return -1;
+      return null;
     }
   };
 }
@@ -213,6 +217,25 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   return reasons;
 }
 
+// Readable stable id for the sources_by_id map: wt-300, blog-987,
+// ep-4, or the url tail.
+export function lensSourceId(item: LensItem) {
+  if (item.issue_number !== undefined && item.issue_number !== null && String(item.issue_number) !== '') {
+    return `wt-${item.issue_number}`;
+  }
+  if (item.episode_number !== undefined && item.episode_number !== null && String(item.episode_number) !== '') {
+    return `ep-${item.episode_number}`;
+  }
+  if (item.microblog_id !== undefined && item.microblog_id !== null && String(item.microblog_id) !== '') {
+    return `blog-${item.microblog_id}`;
+  }
+  const tail = String(item.url || '')
+    .replace(/\/+$/, '')
+    .split('/')
+    .at(-1);
+  return `${normalizeLensSourceKind(item.source_kind)}-${tail || 'unknown'}`;
+}
+
 function sourceKey(item: LensItem) {
   // One identity per real source: a chunk that carries a url and a record
   // that carries the same url plus a microblog_id must collapse into one
@@ -253,15 +276,6 @@ function sourceFromChunk(chunk: LensItem): LensItem {
   };
 }
 
-function snippetFor(text: unknown, topic: unknown, matcher?: TopicMatcher) {
-  const clean = compactWhitespace(text);
-  if (!clean) return '';
-  const compiled = matcher || compileTopicMatcher(topic);
-  const index = compiled.findIndex(clean.toLowerCase());
-  if (index < 0) return clean.slice(0, 360);
-  return clean.slice(Math.max(0, index - 140), Math.min(clean.length, index + 260));
-}
-
 function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matcher?: TopicMatcher) {
   existing.match_count += 1;
   existing.sections.add(chunk.section || '');
@@ -269,17 +283,28 @@ function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matc
   for (const sourceTopic of chunk.topics || []) existing.topics.add(sourceTopic);
   for (const reason of lensMatchReasons(chunk, topic, matcher))
     existing.match_reasons.add(`${reason.field}: ${reason.match}`);
-  const snippet = snippetFor(chunk.text || '', topic, matcher);
-  if (snippet && existing.evidence.length < 3) {
-    existing.evidence.push({
-      section: chunk.section || '',
-      text: snippet
-    });
+  // Evidence must DEMONSTRATE the match: only chunks whose text actually
+  // contains the term contribute a snippet, the window centers on the
+  // match offset, and the matched span rides along so an agent can verify
+  // the hit. (Previously snippets were cut from the chunk start even when
+  // the match was in subject/topics, producing evidence without the term.)
+  if (existing.evidence.length < 3) {
+    const compiled = matcher || compileTopicMatcher(topic);
+    const clean = compactWhitespace(chunk.text || '');
+    const found = clean ? compiled.findMatch(clean.toLowerCase()) : null;
+    if (found) {
+      existing.evidence.push({
+        section: chunk.section || '',
+        text: clean.slice(Math.max(0, found.index - 140), Math.min(clean.length, found.index + 260)),
+        matched: found.match
+      });
+    }
   }
 }
 
 function compactLensSource(item: LensSource) {
   return {
+    id: lensSourceId(item),
     source_kind: item.source_kind,
     issue_number: item.issue_number ?? null,
     microblog_id: item.microblog_id,
@@ -340,7 +365,7 @@ function yearBuckets(items: LensSource[]) {
     bucket.evidence_count += item.match_count || 0;
     for (const section of item.sections || []) bucket.sections.set(section, (bucket.sections.get(section) || 0) + 1);
     for (const domain of item.domains || []) bucket.domains.set(domain, (bucket.domains.get(domain) || 0) + 1);
-    if (bucket.sources.length < 5) bucket.sources.push(compactLensSource(item));
+    if (bucket.sources.length < 5) bucket.sources.push(lensSourceId(item));
   }
   return Array.from(buckets.values())
     .sort((a, b) => b.year - a.year)
@@ -371,7 +396,7 @@ function sourceBuckets(items: LensSource[]) {
     bucket.source_count += 1;
     bucket.evidence_count += item.match_count || 0;
     if (item.publish_date) bucket.dates.push(item.publish_date);
-    if (bucket.sources.length < 6) bucket.sources.push(compactLensSource(item));
+    if (bucket.sources.length < 6) bucket.sources.push(lensSourceId(item));
   }
   return Array.from(buckets.values())
     .sort((a, b) => b.source_count - a.source_count || a.source_kind.localeCompare(b.source_kind))
@@ -388,10 +413,10 @@ function sourceBuckets(items: LensSource[]) {
 function readingPath(items: LensSource[], limit: number) {
   const chronological = sortByDateAsc(items);
   if (!chronological.length) return [];
-  const chosen = new Map<string, ReturnType<typeof compactLensSource> & { reason: string }>();
+  const chosen = new Map<string, { id: string; reason: string }>();
   const add = (item: LensSource | undefined, reason: string) => {
     if (!item) return;
-    chosen.set(sourceKey(item), { ...compactLensSource(item), reason });
+    chosen.set(sourceKey(item), { id: lensSourceId(item), reason });
   };
   add(chronological[0], 'earliest matched source');
   const buckets = yearBuckets(items).sort((a, b) => b.evidence_count - a.evidence_count);
@@ -462,10 +487,50 @@ export function buildArchiveLens({
 
   const matched = sortByDateAsc(Array.from(sources.values()).filter((item) => item.publish_date));
   const countsByYear = countsByPublishYear(matched);
-  const timeline = matched.slice(0, maxResults).map(compactLensSource);
-  const latest = [...matched].reverse().slice(0, maxResults).map(compactLensSource);
+  const timelineIds = matched.slice(0, maxResults).map(lensSourceId);
+  const latestIds = [...matched].reverse().slice(0, maxResults).map(lensSourceId);
   const years = yearBuckets(matched);
   const bySource = sourceBuckets(matched);
+  const path = readingPath(matched, Math.min(maxResults, 8));
+  const resultIds =
+    normalizedOperation === 'first_last'
+      ? [matched[0], matched.at(-1)].filter((item): item is LensSource => Boolean(item)).map(lensSourceId)
+      : normalizedOperation === 'reading_path'
+        ? path.map((entry) => entry.id)
+        : normalizedOperation === 'source_compare'
+          ? bySource.flatMap((bucket) => bucket.sample_sources).slice(0, maxResults)
+          : normalizedOperation === 'by_year'
+            ? years.flatMap((bucket) => bucket.sample_sources.slice(0, 2)).slice(0, maxResults)
+            : timelineIds;
+
+  // Every full source record appears exactly once, keyed by id; every
+  // other section references ids. (Previously the identical record - with
+  // evidence and domains - could be serialized six times per response.)
+  const referenced = new Set<string>([
+    ...timelineIds,
+    ...latestIds,
+    ...resultIds,
+    ...path.map((entry) => entry.id),
+    ...years.flatMap((bucket) => bucket.sample_sources),
+    ...bySource.flatMap((bucket) => bucket.sample_sources)
+  ]);
+  // Insertion order = citation priority (results, then timeline/latest,
+  // then bucket samples) so a downstream size cap drops the least
+  // important records first.
+  const byId = new Map(matched.map((item) => [lensSourceId(item), item]));
+  const priorityOrder = [
+    ...resultIds,
+    ...timelineIds,
+    ...latestIds,
+    ...path.map((entry) => entry.id),
+    ...years.flatMap((bucket) => bucket.sample_sources),
+    ...bySource.flatMap((bucket) => bucket.sample_sources)
+  ];
+  const sourcesById: Record<string, ReturnType<typeof compactLensSource>> = {};
+  for (const id of priorityOrder) {
+    const item = byId.get(id);
+    if (item && referenced.has(id) && !sourcesById[id]) sourcesById[id] = compactLensSource(item);
+  }
 
   return {
     operation: normalizedOperation,
@@ -474,22 +539,14 @@ export function buildArchiveLens({
     total_evidence_matches: matched.reduce((sum, item) => sum + (item.match_count || 0), 0),
     counts_by_year: countsByYear,
     year_count_summary: yearCountSummary(countsByYear),
-    first: matched[0] ? compactLensSource(matched[0]) : null,
-    latest: matched.at(-1) ? compactLensSource(matched.at(-1)!) : null,
-    results:
-      normalizedOperation === 'first_last'
-        ? [matched[0], matched.at(-1)].filter((item): item is LensSource => Boolean(item)).map(compactLensSource)
-        : normalizedOperation === 'reading_path'
-          ? readingPath(matched, Math.min(maxResults, 8))
-          : normalizedOperation === 'source_compare'
-            ? bySource.flatMap((bucket) => bucket.sample_sources).slice(0, maxResults)
-            : normalizedOperation === 'by_year'
-              ? years.flatMap((bucket) => bucket.sample_sources.slice(0, 2)).slice(0, maxResults)
-              : timeline,
-    timeline,
-    latest_sources: latest,
+    sources_by_id: sourcesById,
+    first: matched[0] ? lensSourceId(matched[0]) : null,
+    latest: matched.at(-1) ? lensSourceId(matched.at(-1)!) : null,
+    results: resultIds,
+    timeline: timelineIds,
+    latest_sources: latestIds,
     years,
     sources: bySource,
-    reading_path: readingPath(matched, Math.min(maxResults, 8))
+    reading_path: path
   };
 }

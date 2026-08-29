@@ -161,7 +161,13 @@ export function collectToolCitations(toolResults: ToolResult[] = []) {
   const sources: ArchiveRecord[] = [];
   for (const result of toolResults || []) {
     if (!result || result.error) continue;
-    if (Array.isArray(result.results)) sources.push(...result.results);
+    if (Array.isArray(result.results)) {
+      sources.push(...result.results.filter((entry): entry is ArchiveRecord => typeof entry === 'object'));
+    }
+    // Lens payloads reference sources by id; the full records live once in
+    // sources_by_id.
+    const byId = (result as Record<string, unknown>).sources_by_id;
+    if (byId && typeof byId === 'object') sources.push(...(Object.values(byId) as ArchiveRecord[]));
     if (result.source) sources.push(result.source);
     if (result.issue) sources.push(result.issue);
   }
@@ -437,18 +443,36 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     sections = sectionsFromChunks(chunks, wantedSection);
     body = sourceTextFromChunks(chunks, wantedSection).slice(0, 22000);
   }
+  // word_count everywhere from the same tokenizer over the same included
+  // text - the top-level count and per-section counts previously disagreed
+  // (stored build-time counts vs runtime tokenize).
+  const sectionSummaries = sections.map((section) => ({
+    name: section.name,
+    word_count: tokenize(section.text || '').length
+  }));
+  const wanted = wantedSection.toLowerCase();
+  const sectionLinks = wanted
+    ? links.filter((link) =>
+        String(link.section || '')
+          .toLowerCase()
+          .includes(wanted)
+      )
+    : links;
   return {
     source: {
       ...compactContentRecord(record),
-      word_count: tokenize(body).length,
+      word_count: sectionSummaries.length
+        ? sectionSummaries.reduce((sum, section) => sum + section.word_count, 0)
+        : tokenize(body).length,
       section_filter: wantedSection || null,
-      sections: sections.map((section) => ({ name: section.name, word_count: section.word_count })),
+      sections: sectionSummaries,
       // Links inside a single source all share the parent's identity;
       // repeating source_kind/issue_number/subject/publish_date/url on
-      // every entry was 6 redundant fields x 40 links.
-      links: links.slice(0, 40).map((link) => compactChildLink(link, record)),
+      // every entry was 6 redundant fields x 40 links. A section filter
+      // applies to links too.
+      links: sectionLinks.slice(0, 40).map((link) => compactChildLink(link, record)),
       body,
-      section_texts: sections
+      section_texts: sections.map((section) => ({ ...section, word_count: tokenize(section.text || '').length }))
     }
   };
 }
@@ -705,6 +729,10 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
 // the parent record's identity.
 function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRecord {
   const full = compactLink(link);
+  // context re-concatenated link_text + destination_url as markdown -
+  // pure duplication of two fields already present, and inconsistently
+  // populated across sections. Dropped.
+  delete (full as Record<string, unknown>).context;
   const child: Record<string, unknown> = {};
   const parentUrl = String(parent.url || (parent.issue_number ? `/archive/${parent.issue_number}/` : '') || '');
   for (const [key, value] of Object.entries(full)) {
@@ -857,12 +885,21 @@ function summarizeDomains(links: ArchiveRecord[], limit = 12) {
 
 async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
+  const [statsStartYear, statsEndYear] = parseYearRange(input.year_range || input.year);
+  const listLimit = Math.min(Math.max(Number(input.limit || 12), 3), 40);
+  const inStatsYears = (record: ArchiveRecord) => {
+    if (!statsStartYear && !statsEndYear) return true;
+    const year = recordYear(record);
+    if (statsStartYear && (!year || year < statsStartYear)) return false;
+    if (statsEndYear && (!year || year > statsEndYear)) return false;
+    return true;
+  };
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   const sources = [];
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
-    const records = latestByDate(contentRecords(corpus, kind));
-    const links = await linkRecords(kind);
+    const records = latestByDate(contentRecords(corpus, kind)).filter(inStatsYears);
+    const links = (await linkRecords(kind)).filter((link) => inStatsYears(link as ArchiveRecord));
     const linkKindCounts = new Map<string, number>();
     const categoryCounts = new Map<string, number>();
     for (const link of links) {
@@ -887,8 +924,10 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       newest: records[0] || null,
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
-      yearly_signals: yearlyContentSignals(records, { chunks: corpus.chunks || [] }),
-      top_domains: summarizeDomains(links),
+      yearly_signals: yearlyContentSignals(records, {
+        chunks: (corpus.chunks || []).filter((chunk) => inStatsYears(chunk as ArchiveRecord))
+      }),
+      top_domains: summarizeDomains(links, listLimit),
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category')
     };
@@ -915,8 +954,13 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     sources.push(stats);
   }
   return compactLensPayload(
-    { scope: effectiveScope(scope, requestedSource), source_kind: requestedSource || null, sources },
-    { params: ['source_kind'] }
+    {
+      scope: effectiveScope(scope, requestedSource),
+      source_kind: requestedSource || null,
+      year_range: statsStartYear || statsEndYear ? [statsStartYear, statsEndYear] : null,
+      sources
+    },
+    { params: ['source_kind', 'year_range', 'limit'] }
   );
 }
 
@@ -1241,8 +1285,13 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
   }
   if (Array.isArray(value)) {
     if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
+    // Never truncate short arrays: cutting 3 match_reasons or 5 domains
+    // saves nothing while the budget belongs on repeated large objects.
+    if (value.length <= 6) {
+      return value.map((item) => compactLensLevel(item, depth + 1, scale, note)) as unknown as T;
+    }
     const baseCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
-    const arrayCap = Math.max(1, Math.round(baseCap * scale));
+    const arrayCap = Math.max(6, Math.round(baseCap * scale));
     const capped = value.slice(0, arrayCap).map((item) => compactLensLevel(item, depth + 1, scale, note));
     if (value.length > arrayCap) {
       (capped as unknown[]).push({ omitted: value.length - arrayCap, note });
@@ -1252,6 +1301,20 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
   const out: Record<string, unknown> = {};
   for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
     if (key === 'topics' && depth > 0) continue; // issue-level topic tags repeat on every source
+    if (key === 'sources_by_id' && entry && typeof entry === 'object' && !Array.isArray(entry)) {
+      // The id-keyed record map is the payload's bulk; cap its ENTRY count
+      // under pressure. Insertion order is citation priority, so the least
+      // important records drop first and dangling ids stay resolvable via a
+      // narrower follow-up call.
+      const entries = Object.entries(entry as Record<string, unknown>);
+      const mapCap = Math.max(10, Math.round(60 * scale));
+      const kept = entries
+        .slice(0, mapCap)
+        .map(([id, record]) => [id, compactLensLevel(record, depth + 1, scale, note, key)]);
+      out[key] = Object.fromEntries(kept);
+      if (entries.length > mapCap) out.sources_omitted_for_size = entries.length - mapCap;
+      continue;
+    }
     out[key] = compactLensLevel(entry, depth + 1, scale, note, key);
   }
   return out as unknown as T;
@@ -1506,6 +1569,8 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
     mode: mood || 'serendipity',
     results: picked.map((item) => ({
       ...compactContentRecord(item.record),
+      // A gem names an issue; two dozen domains per gem was most of the payload.
+      domains: (item.record.domains || []).slice(0, 5),
       reason: item.reason,
       score: Number(item.score.toFixed(2)),
       link_count: item.link_count,

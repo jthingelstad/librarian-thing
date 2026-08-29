@@ -191,7 +191,7 @@
   {
     "toolSpec": {
       "name": "corpus_stats",
-      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with top subject/title terms, top chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically.",
+      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with top subject/title terms, top chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically. Accepts year_range and limit to retrieve years or domains a truncated response omitted.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -199,6 +199,19 @@
             "source_kind": {
               "type": "string",
               "enum": ["weekly_thing", "blog", "podcast"]
+            },
+            "year_range": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Max entries for top_domains and similar lists (3-40, default 12)."
             }
           }
         }
@@ -258,7 +271,7 @@
   {
     "toolSpec": {
       "name": "archive_lens",
-      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -295,7 +308,7 @@
   {
     "toolSpec": {
       "name": "entity_lens",
-      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
       "inputSchema": {
         "json": {
           "type": "object",

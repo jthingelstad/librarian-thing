@@ -84,21 +84,27 @@ test('matchesLensTopic accepts phrases and token overlap', () => {
 test('buildArchiveLens returns first latest year and source structure', () => {
   const lens = buildArchiveLens({ topic: 'RSS', operation: 'timeline', records, chunks });
 
+  const resolve = (id) => lens.sources_by_id[id];
   assert.equal(lens.total_sources, 3);
-  assert.equal(lens.first.issue_number, '10');
-  assert.equal(lens.latest.source_kind, 'podcast');
+  assert.equal(resolve(lens.first).issue_number, '10');
+  assert.equal(resolve(lens.latest).source_kind, 'podcast');
   assert.deepEqual(lens.counts_by_year.map((row) => row.year), [2026, 2020, 2017]);
   assert.equal(lens.years.find((row) => row.year === 2020).source_count, 1);
   assert.equal(lens.sources.find((row) => row.source_kind === 'blog').source_count, 1);
-  assert.match(lens.timeline[0].evidence[0].text, /open web/);
-  assert.ok(lens.timeline[0].match_reasons.some((reason) => reason.startsWith('topics:') || reason.startsWith('text:')));
+  assert.match(resolve(lens.timeline[0]).evidence[0].text, /open web/);
+  assert.ok(
+    resolve(lens.timeline[0]).match_reasons.some(
+      (reason) => reason.startsWith('topics:') || reason.startsWith('text:')
+    )
+  );
 });
 
 test('buildArchiveLens filters by year and shapes reading paths', () => {
   const lens = buildArchiveLens({ topic: 'RSS', operation: 'reading_path', records, chunks, yearRange: [2020, 2026], limit: 4 });
 
-  assert.equal(lens.first.source_kind, 'blog');
-  assert.equal(lens.latest.source_kind, 'podcast');
+  const resolve = (id) => lens.sources_by_id[id];
+  assert.equal(resolve(lens.first).source_kind, 'blog');
+  assert.equal(resolve(lens.latest).source_kind, 'podcast');
   assert.ok(lens.reading_path.length >= 2);
-  assert.ok(lens.results.every((item) => ['blog', 'podcast'].includes(item.source_kind)));
+  assert.ok(lens.results.every((id) => ['blog', 'podcast'].includes(resolve(id).source_kind)));
 });
