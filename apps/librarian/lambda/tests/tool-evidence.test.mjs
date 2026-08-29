@@ -124,6 +124,40 @@ test('link and aggregation shapes are harvested without a results key', () => {
   assert.equal(references.sources[1].id, 'domain:simonwillison.net');
 });
 
+test('media_search refs carry the exact image and its source page', () => {
+  // Real shape from toolMediaSearch: image_url is the image, source_url the
+  // page it appeared on; there is no plain url field.
+  const summary = summarizeToolEvidence({
+    query: 'minnehaha creek',
+    total_matches: 4,
+    results: [
+      {
+        image_url: 'https://cdn.thingelstad.com/img/creek-ride.jpg',
+        alt: 'Bike ride along Minnehaha Creek',
+        context: 'Morning ride before WT348 went out.',
+        source_kind: 'blog',
+        subject: 'Creek Ride',
+        source_url: 'https://www.thingelstad.com/2026/05/09/creek-ride.html',
+        publish_date: '2026-05-09'
+      }
+    ]
+  });
+  const ref = summary.sources[0];
+  assert.equal(ref.image_url, 'https://cdn.thingelstad.com/img/creek-ride.jpg');
+  assert.equal(ref.url, 'https://www.thingelstad.com/2026/05/09/creek-ride.html');
+  assert.ok(ref.id);
+  assert.match(ref.excerpt, /Morning ride/);
+});
+
+test('an image-only media ref still gets a stable id', () => {
+  const summary = summarizeToolEvidence({
+    results: [{ image_url: 'https://cdn.thingelstad.com/img/only.jpg', alt: 'Only an image' }]
+  });
+  const ref = summary.sources[0];
+  assert.equal(ref.id, 'https://cdn.thingelstad.com/img/only.jpg');
+  assert.equal(ref.image_url, 'https://cdn.thingelstad.com/img/only.jpg');
+});
+
 test('claim_check topic echo and error results survive', () => {
   const summary = summarizeToolEvidence({ claim: 'Jamie ran a marathon in 2019', results: [] });
   assert.equal(summary.topic, 'Jamie ran a marathon in 2019');

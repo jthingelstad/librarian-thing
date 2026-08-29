@@ -29,7 +29,16 @@ const SOURCE_ID_FIELDS = ['id', 'chunk_id', 'source_id'] as const;
 const EXCERPT_FIELDS = ['text', 'excerpt', 'quote', 'snippet', 'preview', 'context', 'summary', 'alt', 'body'] as const;
 // Result keys whose arrays are known to carry source-like records, plus a
 // shape sniff for everything else so new tools inherit evidence for free.
-const SOURCE_SHAPE_FIELDS = ['issue_number', 'url', 'subject', 'title', 'permalink', 'domain', 'label'] as const;
+const SOURCE_SHAPE_FIELDS = [
+  'issue_number',
+  'url',
+  'subject',
+  'title',
+  'permalink',
+  'domain',
+  'label',
+  'image_url'
+] as const;
 
 function objectValue(value: unknown): JsonRecord {
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonRecord) : {};
@@ -56,7 +65,7 @@ function stableSourceId(record: JsonRecord) {
   const issue = compactText(record.issue_number ?? record.issue ?? record.number, 12);
   const section = compactText(record.section, 40);
   if (issue) return section ? `wt:${issue}#${section}` : `wt:${issue}`;
-  const url = compactText(record.url || record.permalink || record.post_url, 200);
+  const url = compactText(record.url || record.permalink || record.post_url || record.image_url, 200);
   if (url) return url;
   const domain = compactText(record.domain, 120);
   if (domain) return `domain:${domain}`;
@@ -90,8 +99,12 @@ export function evidenceRef(value: unknown, rank: number): JsonRecord {
   if (kind) ref.source_kind = kind;
   const title = compactText(record.subject || record.title || record.label || record.entity || record.domain, 160);
   if (title) ref.title = title;
-  const url = compactText(record.url || record.permalink || record.post_url, 300);
+  // media_search names the page an image appeared on source_url; that is
+  // the ref's url, while image_url below names the exact image itself.
+  const url = compactText(record.url || record.permalink || record.post_url || record.source_url, 300);
   if (url) ref.url = url;
+  const imageUrl = compactText(record.image_url, 300);
+  if (imageUrl) ref.image_url = imageUrl;
   const date = compactText(record.publish_date || record.date || record.issue_year || record.year, 40);
   if (date) ref.publish_date = date;
   const section = compactText(record.section, 60);
