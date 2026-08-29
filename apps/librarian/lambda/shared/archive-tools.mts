@@ -1,4 +1,6 @@
-import { buildArchiveLens } from './archive-lens.mjs';
+import crypto from 'node:crypto';
+import { buildArchiveLens, compileTopicMatcher } from './archive-lens.mjs';
+import type { TopicMatcher } from './archive-lens.mjs';
 import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
 import { searchFaq } from './faq.mjs';
 import { loadToolSpecs } from './prompts.mjs';
@@ -201,7 +203,14 @@ async function issueSections(issue: ArchiveRecord) {
   return Array.from(grouped.entries(), ([name, parts]) => ({ name, text: parts.join('\n\n') }));
 }
 
-function normalizedDomain(value: unknown) {
+// The scope a tool ACTUALLY applied: a source_kind filter narrows scope,
+// and the emitted field must say so (defect: corpus_stats reported
+// scope "all" while returning a filtered payload).
+export function effectiveScope(scope: unknown, requestedSource: string) {
+  return requestedSource || normalizeScope(scope);
+}
+
+export function normalizedDomain(value: unknown) {
   return String(value || '')
     .toLowerCase()
     .replace(/^https?:\/\//, '')
@@ -417,8 +426,12 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
         word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
         text: String(section.text || '').slice(0, 14000)
       }));
+    // section filter applies to body too - previously section_texts was
+    // filtered while body still carried the whole issue.
     body = String(
-      issue?.body || sections.map((section) => `## ${section.name}\n${section.text || ''}`).join('\n\n')
+      wanted || !issue?.body
+        ? sections.map((section) => `## ${section.name}\n${section.text || ''}`).join('\n\n')
+        : issue.body
     ).slice(0, 22000);
   } else {
     sections = sectionsFromChunks(chunks, wantedSection);
@@ -430,7 +443,10 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
       word_count: tokenize(body).length,
       section_filter: wantedSection || null,
       sections: sections.map((section) => ({ name: section.name, word_count: section.word_count })),
-      links: links.slice(0, 40).map(compactLink),
+      // Links inside a single source all share the parent's identity;
+      // repeating source_kind/issue_number/subject/publish_date/url on
+      // every entry was 6 redundant fields x 40 links.
+      links: links.slice(0, 40).map((link) => compactChildLink(link, record)),
       body,
       section_texts: sections
     }
@@ -685,6 +701,30 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
   };
 }
 
+// A link listed INSIDE its own source: drop every field that just repeats
+// the parent record's identity.
+function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRecord {
+  const full = compactLink(link);
+  const child: Record<string, unknown> = {};
+  const parentUrl = String(parent.url || (parent.issue_number ? `/archive/${parent.issue_number}/` : '') || '');
+  for (const [key, value] of Object.entries(full)) {
+    if (value === undefined || value === null || value === '') continue;
+    if (
+      (key === 'source_kind' && value === parent.source_kind) ||
+      (key === 'corpus_kind' && value === parent.source_kind) ||
+      (key === 'issue_number' && String(value) === String(parent.issue_number ?? '')) ||
+      (key === 'subject' && value === parent.subject) ||
+      (key === 'publish_date' && value === parent.publish_date) ||
+      (key === 'microblog_id' && String(value) === String(parent.microblog_id ?? '')) ||
+      (key === 'url' && String(value) === parentUrl)
+    ) {
+      continue;
+    }
+    child[key] = value;
+  }
+  return child as ArchiveRecord;
+}
+
 function compactLink(link: ArchiveRecord): ArchiveRecord {
   return {
     source_kind: link.source_kind,
@@ -874,7 +914,10 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
     sources.push(stats);
   }
-  return compactLensPayload({ scope: normalizeScope(scope), sources });
+  return compactLensPayload(
+    { scope: effectiveScope(scope, requestedSource), source_kind: requestedSource || null, sources },
+    { params: ['source_kind'] }
+  );
 }
 
 async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -906,11 +949,9 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
   };
 }
 
-function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topic: unknown) {
-  const raw = String(topic || '')
-    .toLowerCase()
-    .trim();
-  if (!raw) return true;
+function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topic: unknown, matcher?: TopicMatcher) {
+  const compiled = matcher || compileTopicMatcher(topic);
+  if (!compiled.raw) return true;
   const haystack = [
     record.subject,
     record.section,
@@ -920,11 +961,7 @@ function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topi
   ]
     .join(' ')
     .toLowerCase();
-  if (haystack.includes(raw)) return true;
-  const tokens = tokenize(raw).filter((token) => token.length > 2);
-  if (!tokens.length) return false;
-  const matches = tokens.filter((token) => haystack.includes(token)).length;
-  return tokens.length <= 2 ? matches === tokens.length : matches >= Math.ceil(tokens.length * 0.7);
+  return compiled.matches(haystack);
 }
 
 function countList(values: unknown[], key: string) {
@@ -936,6 +973,26 @@ function countList(values: unknown[], key: string) {
   return Array.from(map.entries())
     .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
     .map(([name, count]) => ({ [key]: name, count }));
+}
+
+// The basis for each list_content result - the field that made the lens
+// substring bug diagnosable, applied to every filtering tool.
+function listContentMatchReasons(
+  record: ArchiveRecord,
+  filters: { topic: TopicMatcher; domain: string; linkKind: string; linkCategory: string }
+) {
+  const reasons: string[] = [];
+  if (filters.topic.raw) {
+    const matched = filters.topic.matchedTokens(
+      [record.subject, (record.topics || []).join(' ')].join(' ').toLowerCase()
+    );
+    reasons.push(matched.length ? `topic: ${matched.slice(0, 4).join(', ')}` : 'topic: matched in body text');
+  }
+  if (filters.domain) reasons.push(`domain: ${filters.domain}`);
+  if (filters.linkKind) reasons.push(`link_kind: ${filters.linkKind}`);
+  if (filters.linkCategory) reasons.push(`link_category: ${filters.linkCategory}`);
+  if (!reasons.length) reasons.push('in requested scope and date range');
+  return reasons;
 }
 
 async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -953,6 +1010,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
   const alsoInIssue = input.also_in_issue ?? input.issue_number;
   const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
+  const topicMatcher = compileTopicMatcher(topic);
   const results = [];
   const years = [];
   const sources = [];
@@ -969,7 +1027,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       const key = sourceRecordKey(record);
       const chunks = chunksBySource.get(key) || [];
       const links = linksBySource.get(key) || [];
-      if (topic && !sourceMatchesTopic(record, chunks, topic)) continue;
+      if (topic && !sourceMatchesTopic(record, chunks, topic, topicMatcher)) continue;
       if (
         domain &&
         ![...(record.domains || []), ...links.map((link) => link.domain || link.url)].some((value) =>
@@ -993,8 +1051,9 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
         results.push({
           ...compactContentRecord(record),
           link_count: links.length,
+          match_reasons: listContentMatchReasons(record, { topic: topicMatcher, domain, linkKind, linkCategory }),
           matching_sections: chunks
-            .filter((chunk) => !topic || sourceMatchesTopic(record, [chunk], topic))
+            .filter((chunk) => !topic || sourceMatchesTopic(record, [chunk], topic, topicMatcher))
             .map((chunk) => chunk.section)
             .filter(Boolean)
             .slice(0, 6)
@@ -1034,10 +1093,16 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       let body = String(issue.body || '');
       if (!body) body = (await issueSections(issue)).map((section) => section.text || '').join('\n\n');
       if (body.toLowerCase().includes(needle)) {
+        // Same shape as the chunk-corpus branch below - weekly_thing rows
+        // previously omitted source_kind/year/section/topics.
         results.push({
           issue_number: issue.number,
+          source_kind: 'weekly_thing',
           subject: issue.subject,
           publish_date: issue.publish_date,
+          year: Number(String(issue.publish_date || '').slice(0, 4)) || null,
+          section: null,
+          topics: issue.topics || [],
           url: issue.url,
           context: contextAround(body, phrase)
         });
@@ -1056,9 +1121,14 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       const chunks = chunksBySource.get(sourceRecordKey(record)) || [];
       const text = sourceTextFromChunks(chunks);
       if (!text.toLowerCase().includes(needle)) continue;
+      const compactRecord = compactContentRecord(record) as Record<string, unknown>;
       results.push({
         issue_number: null,
-        ...compactContentRecord(record),
+        ...compactRecord,
+        source_kind: compactRecord.source_kind || kind,
+        year: Number(String(compactRecord.publish_date || '').slice(0, 4)) || null,
+        section: compactRecord.section ?? null,
+        topics: compactRecord.topics || [],
         context: contextAround(text, phrase)
       });
       if (results.length >= limit) break;
@@ -1141,8 +1211,27 @@ async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}
 // evidence arrays, so inner lists get much smaller budgets than outer ones.
 const LENS_ARRAY_CAPS = [40, 15, 4, 3];
 const LENS_TEXT_CAPS = [500, 350, 200, 120];
+// The whole payload must fit one bounded response: limit only capped the
+// top-level array while timeline/years/latest_sources/sample_sources grew
+// independently to 48KB+. Scale every cap down until the serialized
+// payload fits the budget.
+export const LENS_PAYLOAD_MAX_CHARS = 24000;
+const LENS_CAP_SCALES = [1, 0.55, 0.3, 0.15];
+// Small count tables ARE the point of their tools - never cap them
+// (counts_by_year was being cut to 3 of 10 integers).
+const UNCAPPED_LIST_KEYS = new Set(['counts_by_year', 'year_count_summary', 'counts_by_source']);
 
-function compactLensPayload<T>(value: T, depth = 0): T {
+interface LensPayloadOptions {
+  params?: string[];
+  maxChars?: number;
+}
+
+function truncationNote(params: string[] | undefined) {
+  // The note must only name parameters the calling tool actually accepts.
+  return params?.length ? `narrow with ${params.join(', ')} for the rest` : 'ask a narrower question for the rest';
+}
+
+function compactLensLevel<T>(value: T, depth: number, scale: number, note: string, parentKey = ''): T {
   const textCap = LENS_TEXT_CAPS[Math.min(depth, LENS_TEXT_CAPS.length - 1)];
   if (depth > 6 || value === null || typeof value !== 'object') {
     if (typeof value === 'string' && value.length > textCap) {
@@ -1151,22 +1240,36 @@ function compactLensPayload<T>(value: T, depth = 0): T {
     return value;
   }
   if (Array.isArray(value)) {
-    const arrayCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
-    const capped = value.slice(0, arrayCap).map((item) => compactLensPayload(item, depth + 1));
+    if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
+    const baseCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
+    const arrayCap = Math.max(1, Math.round(baseCap * scale));
+    const capped = value.slice(0, arrayCap).map((item) => compactLensLevel(item, depth + 1, scale, note));
     if (value.length > arrayCap) {
-      (capped as unknown[]).push({
-        omitted: value.length - arrayCap,
-        note: 'narrow with year_range or limit for the rest'
-      });
+      (capped as unknown[]).push({ omitted: value.length - arrayCap, note });
     }
     return capped as unknown as T;
   }
   const out: Record<string, unknown> = {};
   for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
     if (key === 'topics' && depth > 0) continue; // issue-level topic tags repeat on every source
-    out[key] = compactLensPayload(entry, depth + 1);
+    out[key] = compactLensLevel(entry, depth + 1, scale, note, key);
   }
   return out as unknown as T;
+}
+
+function compactLensPayload<T>(value: T, options: LensPayloadOptions = {}): T {
+  const note = truncationNote(options.params);
+  const maxChars = options.maxChars || LENS_PAYLOAD_MAX_CHARS;
+  let result = value;
+  for (const scale of LENS_CAP_SCALES) {
+    result = compactLensLevel(value, 0, scale, note);
+    try {
+      if (JSON.stringify(result).length <= maxChars) return result;
+    } catch {
+      return result;
+    }
+  }
+  return result;
 }
 
 async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -1182,22 +1285,27 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     chunks.push(
       ...(corpus.chunks || []).map((chunk) => ({
         ...chunk,
-        source_kind: chunk.source_kind || kind
+        // "chunk" is internal storage typing; the public enum is the corpus
+        // kind this loop is reading.
+        source_kind: CORPUS_SOURCE_KINDS.has(String(chunk.source_kind || '')) ? chunk.source_kind : kind
       }))
     );
   }
-  return compactLensPayload({
-    scope: normalizeScope(scope),
-    source_kind: requestedSource || null,
-    ...buildArchiveLens({
-      topic,
-      operation: input.operation,
-      records,
-      chunks,
-      yearRange: input.year_range,
-      limit: Number(input.limit || 18)
-    })
-  });
+  return compactLensPayload(
+    {
+      scope: effectiveScope(scope, requestedSource),
+      source_kind: requestedSource || null,
+      ...buildArchiveLens({
+        topic,
+        operation: input.operation,
+        records,
+        chunks,
+        yearRange: input.year_range,
+        limit: Number(input.limit || 18)
+      })
+    },
+    { params: ['topic', 'operation', 'source_kind', 'year_range', 'limit'] }
+  );
 }
 
 function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
@@ -1376,10 +1484,27 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
     (a, b) =>
       b.score - a.score || String(b.record.publish_date || '').localeCompare(String(a.record.publish_date || ''))
   );
+  // Serendipity must actually vary: the ranking is deterministic, so the
+  // same 3-4 link-dense issues won the top slots forever and "pick a random
+  // issue" always returned the same handful. With no mood, sample randomly
+  // from the qualifying band (top quarter, at least 40) instead of taking
+  // the head of the fixed ranking. Moods keep their deterministic ranking.
+  let picked = candidates.slice(0, limit);
+  if (!mood && candidates.length > limit) {
+    const band = candidates.slice(0, Math.max(40, Math.ceil(candidates.length / 4)));
+    const sampled = [];
+    while (sampled.length < limit && band.length) {
+      const index = crypto.randomInt(band.length);
+      sampled.push(band.splice(index, 1)[0]);
+    }
+    picked = sampled;
+    for (const item of picked)
+      item.reason = `${item.reason} (randomly drawn from ${candidates.length} qualifying sources)`;
+  }
   return {
     theme: null,
     mode: mood || 'serendipity',
-    results: candidates.slice(0, limit).map((item) => ({
+    results: picked.map((item) => ({
       ...compactContentRecord(item.record),
       reason: item.reason,
       score: Number(item.score.toFixed(2)),
@@ -1429,8 +1554,13 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
         scored.push({ score: 1, item });
         continue;
       }
-      const score = terms.reduce((sum, term) => sum + (haystack.includes(term) ? 1 : 0), 0);
-      if (score > 0) scored.push({ score: score / terms.length, item });
+      const matchedTerms = terms.filter((term) => haystack.includes(term));
+      if (matchedTerms.length > 0) {
+        scored.push({
+          score: matchedTerms.length / terms.length,
+          item: { ...item, match_reasons: [`matched: ${matchedTerms.join(', ')}`] }
+        });
+      }
     }
   }
   scored.sort(
@@ -1447,7 +1577,8 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       issue_number: item.issue_number,
       subject: item.subject,
       source_url: item.source_url,
-      publish_date: item.publish_date
+      publish_date: item.publish_date,
+      match_reasons: item.match_reasons || ['no query terms - listed by recency']
     }))
   };
 }
@@ -1520,7 +1651,8 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
   const limit = Math.min(Math.max(Number(input.limit || 20), 1), 40);
   const yearStart = Number(input.year_start || 0) || null;
   const yearEnd = Number(input.year_end || 0) || null;
-  const kinds = scopeKinds(scope);
+  const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
+  const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   interface DomainAgg {
     count: number;
     byYear: Record<string, number>;
@@ -1537,7 +1669,10 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     for (const link of (corpus.links as Array<Record<string, unknown>> | undefined) || []) {
-      const domain = String(link.domain || '').toLowerCase();
+      // Shared normalization (strip www., lowercase) - corpus_stats and
+      // top_references previously counted www.macstories.net and
+      // macstories.net as different domains.
+      const domain = normalizedDomain(link.domain || link.url);
       if (!domain || domain.endsWith('thingelstad.com')) continue;
       if (!includeUtility && UTILITY_REFERENCE_DOMAINS.has(domain)) {
         excludedUtilityLinks += 1;
@@ -1559,7 +1694,8 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
   }
   const ranked = [...domains.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, limit);
   return {
-    scope: normalizeScope(scope),
+    scope: effectiveScope(scope, requestedSource),
+    source_kind: requestedSource || null,
     year_start: yearStart,
     year_end: yearEnd,
     total_domains: domains.size,

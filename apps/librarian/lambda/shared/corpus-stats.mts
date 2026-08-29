@@ -138,14 +138,87 @@ function topCounts(map: Map<string, number>, key: string, limit = 8) {
     .map(([name, count]) => ({ [key]: name, count }));
 }
 
+// Frequent function words and URL fragments that were dominating
+// top_text_terms ("for" 488, "https" 463, "com" 434).
+const EXTRA_STOPWORDS = new Set([
+  'for',
+  'the',
+  'with',
+  'this',
+  'that',
+  'from',
+  'are',
+  'was',
+  'were',
+  'has',
+  'have',
+  'had',
+  'you',
+  'your',
+  'not',
+  'all',
+  'can',
+  'will',
+  'one',
+  'two',
+  'its',
+  'out',
+  'get',
+  'got',
+  'more',
+  'new',
+  'now',
+  'how',
+  'what',
+  'when',
+  'where',
+  'some',
+  'they',
+  'them',
+  'their',
+  'then',
+  'than',
+  'just',
+  'like',
+  'over',
+  'only',
+  'very',
+  'into',
+  'off',
+  'our',
+  'who',
+  'why',
+  'his',
+  'her',
+  'she',
+  'him',
+  'way',
+  'via',
+  'per',
+  'here',
+  'there',
+  'these',
+  'those',
+  'https',
+  'http',
+  'www',
+  'com',
+  'org',
+  'net',
+  'html',
+  'href',
+  'amp',
+  'utm'
+]);
+
 function terms(value: unknown, { maxChars = 0 }: { maxChars?: number } = {}): string[] {
-  const text = String(value || '');
+  const text = String(value || '').replace(/https?:\/\/\S+/g, ' ');
   const input = maxChars ? text.slice(0, maxChars) : text;
   return (
     input
       .toLowerCase()
       .match(/[a-z][a-z0-9'-]{2,}/g)
-      ?.filter((term) => !STOPWORDS.has(term) && !/^\d+$/.test(term)) || []
+      ?.filter((term) => !STOPWORDS.has(term) && !EXTRA_STOPWORDS.has(term) && !/^\d+$/.test(term)) || []
   );
 }
 

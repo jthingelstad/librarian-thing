@@ -72,6 +72,23 @@ let corpusCache: Corpus | undefined;
 let blogCorpusCache: Corpus | undefined;
 let podcastCorpusCache: Corpus | undefined;
 let graphCache: Record<string, unknown> | undefined;
+
+// Test seam: prime the module caches with fixture corpora so tool handlers
+// can be exercised without S3. Production never calls this.
+export function primeCorpusCachesForTests(fixtures: {
+  weekly_thing?: Corpus;
+  blog?: Corpus;
+  podcast?: Corpus;
+  graph?: Record<string, unknown>;
+}) {
+  corpusCache = fixtures.weekly_thing;
+  blogCorpusCache = fixtures.blog;
+  podcastCorpusCache = fixtures.podcast;
+  graphCache = fixtures.graph;
+  indexedCache = undefined;
+  blogIndexedCache = undefined;
+  podcastIndexedCache = undefined;
+}
 let indexedCache: CorpusChunk[] | undefined;
 let blogIndexedCache: CorpusChunk[] | undefined;
 let podcastIndexedCache: CorpusChunk[] | undefined;

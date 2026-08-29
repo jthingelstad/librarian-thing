@@ -106,13 +106,70 @@ function inYearRange(item: LensItem, yearRange: unknown) {
 }
 
 function topicTokens(topic: unknown) {
-  return tokenize(topic).filter((token) => token.length > 2);
+  return tokenize(topic).filter((token) => token.length > 1);
 }
 
-export function matchesLensTopic(item: LensItem, topic: unknown) {
-  const rawTopic = compactWhitespace(topic).toLowerCase();
-  if (!rawTopic) return true;
-  const haystack = compactWhitespace(
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Word-boundary topic matching. Naive substring matching made
+// archive_lens(topic="ENS") match "sense", "Walgreens", and "citizens" -
+// 2,812 phantom evidence matches. Rules:
+// - the whole topic must match on word boundaries (letters/digits end);
+// - tokens shorter than 5 characters require an exact-token match;
+// - tokens of 5+ may also match as a word PREFIX (stemming: "publishing"
+//   matches "publish..."), never mid-word.
+export interface TopicMatcher {
+  raw: string;
+  tokens: string[];
+  phraseRe: RegExp | null;
+  tokenRes: Array<{ token: string; re: RegExp }>;
+  matches: (text: string) => boolean;
+  matchedTokens: (text: string) => string[];
+  findIndex: (text: string) => number;
+}
+
+export function compileTopicMatcher(topic: unknown): TopicMatcher {
+  const raw = compactWhitespace(topic).toLowerCase();
+  const tokens = topicTokens(topic);
+  const boundary = (body: string, allowPrefix: boolean) =>
+    new RegExp(`(?<![a-z0-9])${body}${allowPrefix ? '[a-z0-9]*' : '(?![a-z0-9])'}`, 'i');
+  const phraseRe = raw ? boundary(escapeRegExp(raw), false) : null;
+  const tokenRes = tokens.map((token) => ({
+    token,
+    re: boundary(escapeRegExp(token.length >= 6 ? token.slice(0, 5) : token), token.length >= 5)
+  }));
+  const matchedTokens = (text: string) => tokenRes.filter(({ re }) => re.test(text)).map(({ token }) => token);
+  return {
+    raw,
+    tokens,
+    phraseRe,
+    tokenRes,
+    matches(text: string) {
+      if (!raw) return true;
+      if (phraseRe && phraseRe.test(text)) return true;
+      if (!tokens.length) return false;
+      const matchCount = matchedTokens(text).length;
+      return tokens.length <= 2 ? matchCount === tokens.length : matchCount >= Math.ceil(tokens.length * 0.7);
+    },
+    matchedTokens,
+    findIndex(text: string) {
+      if (phraseRe) {
+        const match = phraseRe.exec(text);
+        if (match) return match.index;
+      }
+      for (const { re } of tokenRes) {
+        const match = re.exec(text);
+        if (match) return match.index;
+      }
+      return -1;
+    }
+  };
+}
+
+function lensHaystack(item: LensItem) {
+  return compactWhitespace(
     [
       item.subject,
       item.title,
@@ -123,18 +180,16 @@ export function matchesLensTopic(item: LensItem, topic: unknown) {
       Array.from(item.domains || []).join(' ')
     ].join(' ')
   ).toLowerCase();
-  if (haystack.includes(rawTopic)) return true;
-  const tokens = topicTokens(topic);
-  if (!tokens.length) return false;
-  const matchCount = tokens.filter(
-    (token) => haystack.includes(token) || (token.length >= 6 && haystack.includes(token.slice(0, 5)))
-  ).length;
-  return tokens.length <= 2 ? matchCount === tokens.length : matchCount >= Math.ceil(tokens.length * 0.7);
 }
 
-export function lensMatchReasons(item: LensItem, topic: unknown) {
-  const rawTopic = compactWhitespace(topic).toLowerCase();
-  const tokens = topicTokens(topic);
+export function matchesLensTopic(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
+  const compiled = matcher || compileTopicMatcher(topic);
+  if (!compiled.raw) return true;
+  return compiled.matches(lensHaystack(item));
+}
+
+export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
+  const compiled = matcher || compileTopicMatcher(topic);
   const fields: Array<[string, unknown]> = [
     ['subject', item.subject],
     ['title', item.title],
@@ -148,29 +203,40 @@ export function lensMatchReasons(item: LensItem, topic: unknown) {
   for (const [field, value] of fields) {
     const text = compactWhitespace(value).toLowerCase();
     if (!text) continue;
-    if (rawTopic && text.includes(rawTopic)) {
-      reasons.push({ field, match: rawTopic });
+    if (compiled.phraseRe && compiled.phraseRe.test(text)) {
+      reasons.push({ field, match: compiled.raw });
       continue;
     }
-    const matched = tokens.filter(
-      (token) => text.includes(token) || (token.length >= 6 && text.includes(token.slice(0, 5)))
-    );
+    const matched = compiled.matchedTokens(text);
     if (matched.length) reasons.push({ field, match: matched.slice(0, 4).join(', ') });
   }
   return reasons;
 }
 
 function sourceKey(item: LensItem) {
-  return [
-    item.source_kind || '',
-    item.issue_number || item.episode_number || item.microblog_id || '',
-    item.url || ''
-  ].join('\0');
+  // One identity per real source: a chunk that carries a url and a record
+  // that carries the same url plus a microblog_id must collapse into one
+  // entry (they previously produced duplicate results with different
+  // match_reasons).
+  const identity =
+    String(item.issue_number ?? '') ||
+    String(item.episode_number ?? '') ||
+    String(item.url || '').replace(/\/+$/, '') ||
+    String(item.microblog_id ?? '');
+  return [normalizeLensSourceKind(item.source_kind), identity].join('\0');
+}
+
+// "chunk" is an internal storage type; the public enum is
+// weekly_thing | blog | podcast (defect: chunk leaked into lens results).
+const PUBLIC_SOURCE_KINDS = new Set(['weekly_thing', 'blog', 'podcast']);
+function normalizeLensSourceKind(value: unknown) {
+  const raw = String(value || '').toLowerCase();
+  return PUBLIC_SOURCE_KINDS.has(raw) ? raw : 'weekly_thing';
 }
 
 function sourceFromChunk(chunk: LensItem): LensItem {
   return {
-    source_kind: chunk.source_kind || 'weekly_thing',
+    source_kind: normalizeLensSourceKind(chunk.source_kind),
     issue_number: chunk.issue_number ?? null,
     microblog_id: chunk.microblog_id,
     episode_number: chunk.episode_number,
@@ -187,29 +253,23 @@ function sourceFromChunk(chunk: LensItem): LensItem {
   };
 }
 
-function snippetFor(text: unknown, topic: unknown) {
+function snippetFor(text: unknown, topic: unknown, matcher?: TopicMatcher) {
   const clean = compactWhitespace(text);
   if (!clean) return '';
-  const lower = clean.toLowerCase();
-  const rawTopic = compactWhitespace(topic).toLowerCase();
-  let index = rawTopic ? lower.indexOf(rawTopic) : -1;
-  if (index < 0) {
-    for (const token of topicTokens(topic)) {
-      index = lower.indexOf(token);
-      if (index >= 0) break;
-    }
-  }
+  const compiled = matcher || compileTopicMatcher(topic);
+  const index = compiled.findIndex(clean.toLowerCase());
   if (index < 0) return clean.slice(0, 360);
   return clean.slice(Math.max(0, index - 140), Math.min(clean.length, index + 260));
 }
 
-function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown) {
+function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matcher?: TopicMatcher) {
   existing.match_count += 1;
   existing.sections.add(chunk.section || '');
   for (const domain of chunk.domains || []) existing.domains.add(domain);
   for (const sourceTopic of chunk.topics || []) existing.topics.add(sourceTopic);
-  for (const reason of lensMatchReasons(chunk, topic)) existing.match_reasons.add(`${reason.field}: ${reason.match}`);
-  const snippet = snippetFor(chunk.text || '', topic);
+  for (const reason of lensMatchReasons(chunk, topic, matcher))
+    existing.match_reasons.add(`${reason.field}: ${reason.match}`);
+  const snippet = snippetFor(chunk.text || '', topic, matcher);
   if (snippet && existing.evidence.length < 3) {
     existing.evidence.push({
       section: chunk.section || '',
@@ -360,23 +420,28 @@ export function buildArchiveLens({
   const normalizedOperation = normalizeLensOperation(operation);
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
   const sources = new Map<string, LensSource>();
+  // One compiled matcher per scan - the regexes are built once, not per item.
+  const matcher = compileTopicMatcher(topic);
 
   for (const record of records || []) {
-    if (!inYearRange(record, yearRange) || !matchesLensTopic(record, topic)) continue;
+    if (!inYearRange(record, yearRange) || !matchesLensTopic(record, topic, matcher)) continue;
     const source: LensSource = {
       ...record,
+      source_kind: normalizeLensSourceKind(record.source_kind),
       match_count: 1,
       sections: new Set([record.section || '']),
       topics: new Set(record.topics || []),
       domains: new Set(record.domains || []),
-      match_reasons: new Set(lensMatchReasons(record, topic).map((reason) => `${reason.field}: ${reason.match}`)),
+      match_reasons: new Set(
+        lensMatchReasons(record, topic, matcher).map((reason) => `${reason.field}: ${reason.match}`)
+      ),
       evidence: []
     };
     sources.set(sourceKey(source), source);
   }
 
   for (const chunk of chunks || []) {
-    if (!inYearRange(chunk, yearRange) || !matchesLensTopic(chunk, topic)) continue;
+    if (!inYearRange(chunk, yearRange) || !matchesLensTopic(chunk, topic, matcher)) continue;
     const key = sourceKey(chunk);
     if (!sources.has(key)) {
       const source = sourceFromChunk(chunk);
@@ -386,11 +451,13 @@ export function buildArchiveLens({
         sections: new Set([source.section || '']),
         topics: new Set(source.topics || []),
         domains: new Set(source.domains || []),
-        match_reasons: new Set(lensMatchReasons(chunk, topic).map((reason) => `${reason.field}: ${reason.match}`)),
+        match_reasons: new Set(
+          lensMatchReasons(chunk, topic, matcher).map((reason) => `${reason.field}: ${reason.match}`)
+        ),
         evidence: []
       });
     }
-    mergeSource(sources.get(key)!, chunk, topic);
+    mergeSource(sources.get(key)!, chunk, topic, matcher);
   }
 
   const matched = sortByDateAsc(Array.from(sources.values()).filter((item) => item.publish_date));

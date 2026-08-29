@@ -164,9 +164,15 @@ export async function handleMcpMessage(
       const result = await context.invokeTool(name, args);
       let text = JSON.stringify(result ?? null, null, 1);
       if (text.length > MCP_RESULT_MAX_CHARS) {
+        // Name only parameters THIS tool actually accepts.
+        const spec = mcpToolDeclarations([name])[0];
+        const paramNames = Object.keys(
+          (spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {}
+        );
+        const hint = paramNames.length ? `narrow the arguments (${paramNames.join(', ')})` : 'ask a narrower question';
         text =
           text.slice(0, MCP_RESULT_MAX_CHARS) +
-          `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; narrow the arguments (limit, year, section, topic) for a complete result]`;
+          `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; ${hint} for a complete result]`;
       }
       return {
         statusCode: 200,
