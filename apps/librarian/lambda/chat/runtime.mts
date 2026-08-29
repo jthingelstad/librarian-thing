@@ -914,7 +914,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     filters.scope = normalizeScope(body.scope ?? filters.scope);
     try {
       const passages = await retrieve(query, limit, filters);
-      const compact = passages.map((p) => compactSource(p, 1200));
+      const compact = passages.map((p) => compactSource(p, 2000));
       const s200 = jsonResponseStream(responseStream, 200);
       s200.write(
         JSON.stringify({

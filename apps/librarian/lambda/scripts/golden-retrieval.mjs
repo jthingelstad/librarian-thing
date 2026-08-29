@@ -23,8 +23,10 @@ const GOLDEN = [
     check: (passages) => passages.some((p) => /fastmail/i.test(p.text || ''))
   },
   {
-    name: 'proper noun: Tailscale',
-    request: { query: 'Tailscale networking' },
+    // Tailscale appears exactly once in the archive, in a 2026 blog post -
+    // so this probes cross-corpus lexical recall, not the WT corpus.
+    name: 'proper noun: Tailscale (blog-only mention, all scope)',
+    request: { query: 'Tailscale networking', scope: 'all', k: 12 },
     check: (passages) => passages.some((p) => /tailscale/i.test(p.text || ''))
   },
   {

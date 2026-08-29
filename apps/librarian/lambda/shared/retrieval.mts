@@ -308,7 +308,7 @@ function sourceAgeLabel(source: CorpusChunk) {
   return `about ${Math.max(Math.round(days / 365), 1)} years old`;
 }
 
-export function compactSource(source: CorpusChunk, textLimit = 1200) {
+export function compactSource(source: CorpusChunk, textLimit = 2000) {
   return {
     issue_number: source.issue_number,
     source_kind: source.source_kind,
@@ -365,9 +365,13 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
             header,
             `Date: ${source.publish_date || ''}`,
             `Section: ${source.section || ''}`,
+            // Cover the whole chunk: max_words=400 chunking produces up to
+            // ~2,600 chars, and a term past the slice is invisible to the
+            // reranker (found live: a query term at the tail of a chunk
+            // ranked below unrelated semantic noise).
             String(source.text || '')
               .replace(/\s+/g, ' ')
-              .slice(0, 1800)
+              .slice(0, 3000)
           ].join('\n')
         }
       }
