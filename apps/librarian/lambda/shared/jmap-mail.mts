@@ -76,6 +76,7 @@ interface MagicLinkEmailInput {
   expiresMinutes: number;
   context?: ReaderEmailContext;
   imageUrl?: string;
+  code?: string;
 }
 
 interface JmapEmailCallInput {
@@ -246,12 +247,15 @@ function emailMemberLine(context: ReaderEmailContext = {}) {
     : 'Thingy will open the archive in your browser.';
 }
 
-export function magicLinkEmailText({ magicLink, expiresMinutes, context = {} }: MagicLinkEmailInput) {
+export function magicLinkEmailText({ magicLink, expiresMinutes, context = {}, code = '' }: MagicLinkEmailInput) {
   return [
     emailGreeting(context),
     '',
     emailIntro(context),
     '',
+    // Leading "code is NNNNNN" phrasing is what Apple Mail's verification-
+    // code detector keys on; keep it before the link.
+    ...(code ? [`Your Thingy sign-in code is ${code}`, ''] : []),
     magicLink,
     '',
     `This link expires in ${expiresMinutes} minutes and can only be used once. It opens the archive agent in your browser.`,
@@ -273,7 +277,8 @@ export function magicLinkEmailHtml({
   magicLink,
   expiresMinutes,
   context = {},
-  imageUrl = jmapImageUrl()
+  imageUrl = jmapImageUrl(),
+  code = ''
 }: MagicLinkEmailInput) {
   const safeLink = escapeHtml(magicLink);
   const safeImageUrl = escapeHtml(imageUrl);
@@ -301,6 +306,16 @@ export function magicLinkEmailHtml({
                 <p style="font-size:16px;line-height:1.55;margin:0;color:#394943;">${intro}</p>
               </td>
             </tr>
+            ${
+              code
+                ? `<tr>
+              <td align="center" style="padding:18px 34px 2px;">
+                <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#658178;margin:0 0 6px;font-weight:700;">Your Thingy sign-in code is</p>
+                <p style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:34px;letter-spacing:0.28em;color:#14211d;margin:0;font-weight:750;">${escapeHtml(code)}</p>
+              </td>
+            </tr>`
+                : ''
+            }
             <tr>
               <td align="center" style="padding:24px 34px 14px;">
                 <a href="${safeLink}" style="display:inline-block;background:#223c35;color:#ffffff;text-decoration:none;border-radius:999px;padding:14px 22px;font-size:16px;line-height:1;font-weight:700;">Open Thingy</a>
@@ -455,15 +470,16 @@ export async function sendMagicLinkEmail({
   to,
   magicLink,
   expiresMinutes,
-  context = {}
+  context = {},
+  code = ''
 }: MagicLinkEmailInput & { to: string }) {
   const token = jmapToken();
   if (!token) throw new Error('FASTMAIL_JMAP_TOKEN is not configured');
   const fromEmail = jmapFromEmail();
   const session = await jmapSession();
   const sendContext = await loadSendContext(session, fromEmail);
-  const text = magicLinkEmailText({ magicLink, expiresMinutes, context });
-  const html = magicLinkEmailHtml({ magicLink, expiresMinutes, context });
+  const text = magicLinkEmailText({ magicLink, expiresMinutes, context, code });
+  const html = magicLinkEmailHtml({ magicLink, expiresMinutes, context, code });
   const response = await jmapCall(
     sendContext.apiUrl,
     buildMagicLinkJmapCalls({

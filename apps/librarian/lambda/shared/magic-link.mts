@@ -26,6 +26,30 @@ export function magicLinkBaseUrl() {
   return String(process.env.THINGY_MAGIC_LINK_BASE_URL || 'https://thingy.thingelstad.com/').trim();
 }
 
+const MAGIC_CODE_RE = /^[0-9]{6}$/;
+
+// The visible sign-in code that rides in the email alongside the link.
+// Six digits so Apple Mail's verification-code detection and Safari's
+// one-time-code autofill both engage; brute force is handled by the
+// attempt cap on the pending record, not by code entropy.
+export function createMagicCode() {
+  return String(crypto.randomInt(0, 1000000)).padStart(6, '0');
+}
+
+export function validMagicCode(code: unknown) {
+  const value = String(code || '')
+    .replace(/[^0-9]/g, '')
+    .trim();
+  return MAGIC_CODE_RE.test(value) ? value : '';
+}
+
+export function magicCodeHash(code: unknown) {
+  return crypto
+    .createHash('sha256')
+    .update(String(code || ''))
+    .digest('hex');
+}
+
 export function buildMagicLink(token: unknown, baseUrl = magicLinkBaseUrl()) {
   const value = validMagicToken(token);
   if (!value) throw new Error('Invalid magic token');

@@ -43,6 +43,7 @@ import {
 } from '../shared/prompt-preflight.mjs';
 import { errorFields, truthyEnv } from '../shared/logging.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
+import { chatDailyQuota, consumeDailyQuota } from '../shared/quota.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
@@ -60,7 +61,8 @@ import {
   canUseConversationMode,
   conversationModeDefinition,
   conversationModePrompt,
-  normalizeConversationMode
+  normalizeConversationMode,
+  isOwnerSubscriberHash
 } from '../shared/conversation-modes.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
 
@@ -882,6 +884,16 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         writeSse(stream, 'error', { error: 'Thingy is at the hourly limit for this session.', request_id: requestId });
         return;
       }
+      if (!isOwnerSubscriberHash(subscriberHash)) {
+        const quota = await consumeDailyQuota('chat', subscriberHash, chatDailyQuota());
+        if (!quota.allowed) {
+          writeSse(stream, 'error', {
+            error: "You've reached today's conversation limit. It resets at midnight UTC.",
+            request_id: requestId
+          });
+          return;
+        }
+      }
       writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
       writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
       const answer = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode });
@@ -940,6 +952,18 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         request_id: requestId
       });
       return;
+    }
+    // Daily per-user budget pool (independent from the MCP pool). Rate
+    // limits smooth bursts; this caps what any one reader can spend.
+    if (!isOwnerSubscriberHash(subscriberHash)) {
+      const quota = await consumeDailyQuota('chat', subscriberHash, chatDailyQuota());
+      if (!quota.allowed) {
+        writeSse(stream, 'error', {
+          error: "You've reached today's conversation limit. It resets at midnight UTC - see you tomorrow!",
+          request_id: requestId
+        });
+        return;
+      }
     }
     if (effectiveUserProfile.preferred_name) {
       await recordUserPreferredName(subscriberHash, effectiveUserProfile.preferred_name);
