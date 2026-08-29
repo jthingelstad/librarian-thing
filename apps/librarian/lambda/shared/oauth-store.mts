@@ -310,8 +310,9 @@ export async function createPendingAuthorization({
         state: dynamoString(state),
         code_challenge: dynamoString(codeChallenge),
         code_challenge_method: dynamoString('S256'),
-        email: dynamoString(''),
-        subscriber_hash: dynamoString(''),
+        // email and subscriber_hash are set by updatePending after the code
+        // verification step. They must be ABSENT until then: subscriber_hash
+        // keys a GSI, and DynamoDB rejects empty strings for index keys.
         entitlements: dynamoString('[]'),
         pending_status: dynamoString('awaiting_email'),
         created_at: dynamoNumber(createdAt),
