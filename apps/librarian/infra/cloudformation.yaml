@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Weekly Thing Archive Librarian API
 
 Parameters:
+  AlarmEmail:
+    Type: String
+    Default: jamie@thingelstad.com
+    Description: Email address that receives CloudWatch alarm notifications.
   AllowedOrigin:
     Type: CommaDelimitedList
     Default: https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080
@@ -181,6 +185,9 @@ Resources:
                   - dynamodb:ListStreams
                 Resource: !GetAtt LibrarianTable.StreamArn
               - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !GetAtt LibrarianEvalDlq.Arn
+              - Effect: Allow
                 Action: s3:GetObject
                 Resource:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${CorpusKey}
@@ -322,6 +329,10 @@ Resources:
 
   LibrarianEvalEventSource:
     Type: AWS::Lambda::EventSourceMapping
+    # The OnFailure destination is permission-checked when the mapping is
+    # updated; make sure the role (with sqs:SendMessage on the DLQ) updates
+    # first or the mapping update can fail against the stale role.
+    DependsOn: LibrarianFunctionRole
     Properties:
       EventSourceArn: !GetAtt LibrarianTable.StreamArn
       FunctionName: !Ref LibrarianEvalFunction
@@ -336,6 +347,9 @@ Resources:
           - Pattern: '{"dynamodb":{"Keys":{"pk":{"S":[{"prefix":"user#"}]}}}}'
       MaximumRetryAttempts: 3
       BisectBatchOnFunctionError: true
+      DestinationConfig:
+        OnFailure:
+          Destination: !GetAtt LibrarianEvalDlq.Arn
 
   LibrarianStreamFunctionUrl:
     Type: AWS::Lambda::Url
@@ -502,11 +516,53 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LibrarianApi}/*/*/*
 
-  # FOLLOW-UP (needs IAM): route alarms to an SNS topic and dead-letter the
-  # eval stream mapping to an SQS queue. The CI deploy user (wt-archive) has
-  # no sns:*/sqs:* permissions today, so those resources cannot be created
-  # from this stack yet - grant them, then restore the LibrarianAlarmTopic /
-  # LibrarianEvalDlq resources (see git history at this comment).
+  # Alarms previously had no AlarmActions - they fired into the void and
+  # nobody was notified when Thingy broke. Everything routes here now.
+  LibrarianAlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: weekly-thing-librarian-alarms
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlarmEmail
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  # Poison records on the eval stream mapping retry a bounded number of
+  # times, bisect to isolate the bad record, and land here instead of
+  # blocking the shard for the stream's full 24h retention.
+  LibrarianEvalDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: weekly-thing-librarian-eval-dlq
+      MessageRetentionPeriod: 1209600
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  LibrarianEvalDlqAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy eval stream mapping dead-lettered a record.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt LibrarianEvalDlq.QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
   LibrarianEvalErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -523,6 +579,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
@@ -543,6 +601,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
@@ -563,6 +623,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
@@ -583,6 +645,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
