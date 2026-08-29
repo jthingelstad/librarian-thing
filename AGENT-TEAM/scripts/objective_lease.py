@@ -90,7 +90,7 @@ def clear_stale(hours: float) -> dict:
         raise SystemExit("no lease is held")
     try:
         claimed = datetime.fromisoformat(str(lease["claimed_at"]).replace("Z", "+00:00"))
-    except (KeyError, ValueError):
+    except KeyError, ValueError:
         raise SystemExit("lease has no valid claimed_at; inspect it manually")
     age = now() - claimed
     if age < timedelta(hours=hours):
