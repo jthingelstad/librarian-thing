@@ -99,3 +99,32 @@ test('fuseCandidates falls back to a composite key when chunks have no id', () =
   assert.equal(fused.length, 1);
   assert.deepEqual(fused[0].retrieval_modes.sort(), ['lexical', 'semantic']);
 });
+
+test('journal twins dedupe by canonical blog URL, keeping the higher score', async () => {
+  const { dedupeJournalTwins } = await import('../dist/shared/retrieval.mjs');
+  const journal = {
+    id: 'wt-journal',
+    source_kind: 'chunk',
+    journal_post_urls: ['https://www.thingelstad.com/2026/05/09/post-one.html'],
+    _retrieval_score: 0.4
+  };
+  const blogTwin = {
+    id: 'blog-1',
+    source_kind: 'blog',
+    url: 'https://www.thingelstad.com/2026/05/09/post-one.html',
+    _retrieval_score: 0.9
+  };
+  const unrelated = { id: 'blog-2', source_kind: 'blog', url: 'https://www.thingelstad.com/other.html', _retrieval_score: 0.5 };
+
+  // Blog scored higher: the journal chunk drops.
+  let out = dedupeJournalTwins([journal, blogTwin, unrelated]);
+  assert.deepEqual(out.map((c) => c.id).sort(), ['blog-1', 'blog-2']);
+
+  // Journal scored higher: the blog twin drops.
+  out = dedupeJournalTwins([{ ...journal, _retrieval_score: 0.95 }, blogTwin, unrelated]);
+  assert.deepEqual(out.map((c) => c.id).sort(), ['blog-2', 'wt-journal']);
+
+  // No journal chunks: untouched.
+  out = dedupeJournalTwins([blogTwin, unrelated]);
+  assert.equal(out.length, 2);
+});

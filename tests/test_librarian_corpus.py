@@ -275,3 +275,50 @@ class DefaultSiteGroundingTest(unittest.TestCase):
         ids = {c["id"].rsplit(":", 1)[0] for c in chunks}
         self.assertIn("site:about", ids)
         self.assertIn("site:members", ids)
+
+
+class AuditExtractionTests(unittest.TestCase):
+    def test_media_currently_journal_extraction(self):
+        from librarian_core import corpus as core
+
+        body = "\n".join(
+            [
+                "Intro line.",
+                '<img alt="A red bike" src="https://example.com/a.jpg" width="600">',
+                "Caption for the bike.",
+                "![Sunset over lake](https://example.com/b.jpg)",
+            ]
+        )
+        images = core.extract_images(body)
+        self.assertEqual(
+            [i["url"] for i in images], ["https://example.com/a.jpg", "https://example.com/b.jpg"]
+        )
+        self.assertEqual(images[0]["alt"], "A red bike")
+        self.assertEqual(
+            core._media_context(body, "https://example.com/a.jpg"), "Caption for the bike."
+        )
+
+        journal = "\n".join(
+            [
+                "[Saturday @ 5:32 PM](https://www.thingelstad.com/2026/05/09/post-one.html)",
+                "Some entry text.",
+                "[Sunday @ 1:00 PM](https://www.thingelstad.com/2026/05/10/post-two.html)",
+            ]
+        )
+        self.assertEqual(
+            core.journal_post_urls(journal),
+            [
+                "https://www.thingelstad.com/2026/05/09/post-one.html",
+                "https://www.thingelstad.com/2026/05/10/post-two.html",
+            ],
+        )
+
+        currently = "\n".join(
+            [
+                "**Reading:** [Some Book](https://example.com/book) and loving it.",
+                "**Playing:** Zelda again.",
+            ]
+        )
+        entries = core.extract_currently_entries(currently)
+        self.assertEqual([e["kind"] for e in entries], ["reading", "playing"])
+        self.assertEqual(entries[0]["links"][0]["title"], "Some Book")

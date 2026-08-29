@@ -229,6 +229,90 @@ def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
     ]
 
 
+# --- media / currently / journal extraction (2026-08 tool audit) ----------
+#
+# The audit exercise showed three brute-force patterns in the agent: photo
+# questions (no media index), "what was Jamie reading/playing" (Currently
+# sections unexploited), and journal-vs-blog duplicate retrieval. These
+# build-time extractors close them. None of them alter chunk text, so the
+# id-keyed embed cache stays warm.
+
+_MEDIA_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I | re.S)
+_MEDIA_MD_IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+_JOURNAL_ENTRY_LINK_RE = re.compile(r"\[[^\]]*@[^\]]*\]\((https://www\.thingelstad\.com/[^)]+)\)")
+_CURRENTLY_LINE_RE = re.compile(r"^\*\*([A-Za-z][A-Za-z ]{2,20}):\*\*\s*(.+)$", re.M)
+_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)[^)]*\)")
+
+
+def _img_attr(tag: str, name: str) -> str:
+    match = re.search(rf"\b{name}\s*=\s*([\"\'])(.*?)\1", tag, re.I | re.S)
+    return " ".join((match.group(2) if match else "").split())
+
+
+def extract_images(text: str) -> list[dict[str, str]]:
+    """Every image in a markdown/html body as {url, alt}, attribute-order
+    agnostic, covering both <img> tags and markdown image syntax."""
+    out = []
+    for tag in _MEDIA_IMG_TAG_RE.findall(text or ""):
+        url = _img_attr(tag, "src")
+        if url:
+            out.append({"url": url, "alt": _img_attr(tag, "alt")})
+    for alt, url in _MEDIA_MD_IMG_RE.findall(text or ""):
+        out.append({"url": url, "alt": " ".join(alt.split())})
+    return out
+
+
+def _media_context(text: str, url: str, max_chars: int = 240) -> str:
+    """The prose nearest an image: the first non-empty, non-image line after
+    the tag (issue captions follow images), falling back to the line before."""
+    lines = (text or "").split("\n")
+    index = next(
+        (
+            i
+            for i, line in enumerate(lines)
+            if url in line and ("<img" in line or line.strip().startswith("!["))
+        ),
+        None,
+    )
+    if index is None:
+        return ""
+
+    def usable(line: str) -> bool:
+        clean = line.strip()
+        return bool(clean) and "<img" not in clean and not clean.startswith("![") and clean != "---"
+
+    for line in lines[index + 1 :]:
+        if usable(line):
+            return plain_text(line)[:max_chars]
+    for line in reversed(lines[:index]):
+        if usable(line):
+            return plain_text(line)[:max_chars]
+    return ""
+
+
+def journal_post_urls(section_text: str) -> list[str]:
+    """Canonical blog-post URLs of the journal entries inside a Journal
+    section chunk - the day-at-time entry links. Retrieval uses these to
+    dedupe a journal chunk against the standalone blog posts it reprints."""
+    return list(dict.fromkeys(_JOURNAL_ENTRY_LINK_RE.findall(section_text or "")))
+
+
+def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
+    """Typed entries from a Currently section: **Reading:** / **Playing:** /
+    **Watching:** / **Listening:** lines with their links and prose."""
+    entries = []
+    for label, rest in _CURRENTLY_LINE_RE.findall(section_text or ""):
+        links = [{"title": " ".join(t.split()), "url": u} for t, u in _MD_LINK_RE.findall(rest)]
+        entries.append(
+            {
+                "kind": label.strip().lower(),
+                "text": plain_text(rest)[:400],
+                "links": links,
+            }
+        )
+    return entries
+
+
 def content_kind(section: str) -> str:
     name = section.lower()
     if any(part in name for part in ("journal", "photo", "currently")):
@@ -589,6 +673,8 @@ def build_corpus(
     faq_path: Path | None = None,
 ) -> dict[str, Any]:
     chunks: list[dict[str, Any]] = []
+    media: list[dict[str, Any]] = []
+    currently: list[dict[str, Any]] = []
     issues = []
     links: list[dict[str, Any]] = []
     topic_index: dict[str, dict[str, Any]] = {}
@@ -670,12 +756,44 @@ def build_corpus(
             if publish_date and publish_date > entry["last_seen"]:
                 entry["last_seen"] = publish_date
 
+        for image in extract_images(body):
+            media.append(
+                {
+                    "url": image["url"],
+                    "alt": image["alt"],
+                    "context": _media_context(body, image["url"]),
+                    "source_kind": "weekly_thing",
+                    "issue_number": number,
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                }
+            )
         for section, section_body in sections:
+            if section.strip().lower() == "currently":
+                for entry in extract_currently_entries(section_body):
+                    currently.append(
+                        {
+                            **entry,
+                            "issue_number": number,
+                            "subject": subject,
+                            "publish_date": publish_date,
+                            "issue_url": url,
+                        }
+                    )
+            section_journal_urls = (
+                journal_post_urls(section_body) if section.strip().lower() == "journal" else []
+            )
             for index, chunk_text in enumerate(chunk_section(section_body)):
                 if TEMPLATE_LEAK_RE.search(chunk_text):
                     raise RuntimeError(
                         f"Template/generated content leaked into corpus for issue {number}"
                     )
+                chunk_journal_urls = [u for u in journal_post_urls(chunk_text)] or (
+                    section_journal_urls
+                    if len(section_journal_urls) and index == 0 and False
+                    else []
+                )
                 chunks.append(
                     {
                         "id": chunk_id(number, section, index, chunk_text),
@@ -691,6 +809,7 @@ def build_corpus(
                         "topics": topics,
                         "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
+                        **({"journal_post_urls": chunk_journal_urls} if chunk_journal_urls else {}),
                     }
                 )
 
@@ -744,6 +863,8 @@ def build_corpus(
         "topics": sorted(topic_index.values(), key=lambda item: item["name"]),
         "links": links,
         "chunks": chunks,
+        "media": media,
+        "currently": currently,
     }
 
 
@@ -976,6 +1097,7 @@ def build_blog_corpus(
     Journal get an ``also_in_issues`` cross-reference."""
     xref = journal_blog_xref(archive_dir) if include_xref else {}
     chunks: list[dict[str, Any]] = []
+    media: list[dict[str, Any]] = []
     posts: list[dict[str, Any]] = []
     links: list[dict[str, Any]] = []
     post_inputs: list[dict[str, Any]] = []
@@ -1064,6 +1186,18 @@ def build_blog_corpus(
         if also_in_issues:
             post_record["also_in_issues"] = also_in_issues
         posts.append(post_record)
+        for image in extract_images(body):
+            media.append(
+                {
+                    "url": image["url"],
+                    "alt": image["alt"],
+                    "context": _media_context(body, image["url"]) or plain_text(embed_text)[:240],
+                    "source_kind": "blog",
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                }
+            )
         for index, chunk_text in enumerate(chunk_section(embed_text)):
             # Content-deterministic id (text hash suffix): when a post's body is
             # edited in place (alt-text inlined, de-wrap, typo fix) without
@@ -1103,6 +1237,7 @@ def build_blog_corpus(
         "chunk_count": len(chunks),
         "link_count": len(links),
         "issues": [],
+        "media": media,
         "posts": posts,
         "topics": [],
         "links": links,

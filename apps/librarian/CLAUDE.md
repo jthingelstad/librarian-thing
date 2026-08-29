@@ -24,7 +24,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
-7. Run the Bedrock Converse agent loop with tool use. Tools include `search_faq`, `search_archive`, `get_source`, `find_links`, `corpus_stats`, `latest_content`, `list_content`, `archive_lens`, `entity_lens`, `source_neighborhood`, `archive_gems`, `claim_check`.
+7. Run the Bedrock Converse agent loop with tool use. Tools include `search_faq`, `search_archive`, `get_source`, `find_links`, `corpus_stats`, `latest_content`, `list_content`, `archive_lens`, `entity_lens`, `source_neighborhood`, `archive_gems`, `claim_check`, `media_search`, `currently_history`, `top_references`.
 8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:

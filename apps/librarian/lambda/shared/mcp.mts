@@ -13,7 +13,7 @@ import { toolSpecs } from './archive-tools.mjs';
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
 
-// Full read surface (Phase 4): every archive tool the chat agent binds.
+// Full read surface: every archive tool the chat agent binds.
 export const MCP_LAUNCH_TOOLS = [
   'search_archive',
   'get_source',
@@ -27,7 +27,10 @@ export const MCP_LAUNCH_TOOLS = [
   'entity_lens',
   'source_neighborhood',
   'archive_gems',
-  'claim_check'
+  'claim_check',
+  'media_search',
+  'currently_history',
+  'top_references'
 ];
 
 // Tool results are sized for the Bedrock loop, where 200KB of evidence is

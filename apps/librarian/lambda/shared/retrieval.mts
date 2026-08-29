@@ -585,6 +585,29 @@ export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilt
     );
   }
 
-  const fused = fuseCandidates(semantic, lexical, candidateLimit);
+  const fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
   return withAgeLabel((await rerankSources(query, fused, limit)).slice(0, limit));
+}
+
+// A Weekly Thing Journal chunk reprints blog posts; when both the journal
+// chunk and a standalone blog chunk for the same post URL surface as
+// candidates, keep the higher-scored one (Jamie's dedup ask - the URL is
+// the join key, stamped as journal_post_urls at corpus build).
+export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
+  const journalOwners = new Map<string, CorpusChunk>();
+  for (const candidate of candidates) {
+    for (const url of (candidate.journal_post_urls as string[] | undefined) || []) {
+      journalOwners.set(String(url), candidate);
+    }
+  }
+  if (!journalOwners.size) return candidates;
+  const dropped = new Set<CorpusChunk>();
+  for (const candidate of candidates) {
+    if (candidate.source_kind !== 'blog' || !candidate.url) continue;
+    const twin = journalOwners.get(String(candidate.url));
+    if (!twin || dropped.has(twin)) continue;
+    if ((twin._retrieval_score || 0) >= (candidate._retrieval_score || 0)) dropped.add(candidate);
+    else dropped.add(twin);
+  }
+  return candidates.filter((candidate) => !dropped.has(candidate));
 }

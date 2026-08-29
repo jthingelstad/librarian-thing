@@ -38,6 +38,9 @@ interface ArchiveRecord extends CorpusChunk {
 interface ToolArgs {
   query?: unknown;
   limit?: unknown;
+  kind?: unknown;
+  year_start?: unknown;
+  year_end?: unknown;
   scope?: unknown;
   year_range?: unknown;
   year?: unknown;
@@ -870,7 +873,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
     sources.push(stats);
   }
-  return { scope: normalizeScope(scope), sources };
+  return compactLensPayload({ scope: normalizeScope(scope), sources });
 }
 
 async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -1128,6 +1131,39 @@ async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}
   };
 }
 
+// Output shaping for the aggregate lenses. Their raw payloads reached
+// 200KB (hundreds of full source objects with repeated topics/text) -
+// expensive context for the Bedrock loop and over the MCP result cap.
+// Caps arrays with an honest omitted count and trims verbose fields;
+// counts and aggregate numbers are never altered.
+const LENS_ARRAY_CAP = 40;
+const LENS_TEXT_CAP = 500;
+
+function compactLensPayload<T>(value: T, depth = 0): T {
+  if (depth > 6 || value === null || typeof value !== 'object') {
+    if (typeof value === 'string' && value.length > LENS_TEXT_CAP) {
+      return `${value.slice(0, LENS_TEXT_CAP)}…` as unknown as T;
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    const capped = value.slice(0, LENS_ARRAY_CAP).map((item) => compactLensPayload(item, depth + 1));
+    if (value.length > LENS_ARRAY_CAP) {
+      (capped as unknown[]).push({
+        omitted: value.length - LENS_ARRAY_CAP,
+        note: 'narrow with year_range or limit for the rest'
+      });
+    }
+    return capped as unknown as T;
+  }
+  const out: Record<string, unknown> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (key === 'topics' && depth > 0) continue; // issue-level topic tags repeat on every source
+    out[key] = compactLensPayload(entry, depth + 1);
+  }
+  return out as unknown as T;
+}
+
 async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const topic = String(input.topic || input.query || '').trim();
   if (!topic) return { error: 'topic is required' };
@@ -1145,7 +1181,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
       }))
     );
   }
-  return {
+  return compactLensPayload({
     scope: normalizeScope(scope),
     source_kind: requestedSource || null,
     ...buildArchiveLens({
@@ -1156,7 +1192,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
       yearRange: input.year_range,
       limit: Number(input.limit || 18)
     })
-  };
+  });
 }
 
 function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
@@ -1366,6 +1402,143 @@ async function toolClaimCheck(input: ToolArgs = {}, { scope }: ToolContext = {})
   return { results };
 }
 
+// --- audit-driven tools (2026-08) -----------------------------------------
+
+// Lexical search over the media index the corpus build extracts from every
+// <img> and markdown image: alt text, nearby caption/context, and subject.
+async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const query = String(input.query || '')
+    .trim()
+    .toLowerCase();
+  const year = Number(input.year || 0) || null;
+  const limit = Math.min(Math.max(Number(input.limit || 8), 1), 12);
+  const terms = query.split(/[^a-z0-9]+/).filter((term) => term.length > 2);
+  const kinds = scopeKinds(scope);
+  const scored: Array<{ score: number; item: Record<string, unknown> }> = [];
+  for (const kind of kinds) {
+    const corpus = await loadCorpus(kind);
+    for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
+      if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
+      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''}`.toLowerCase();
+      if (!terms.length) {
+        scored.push({ score: 1, item });
+        continue;
+      }
+      const score = terms.reduce((sum, term) => sum + (haystack.includes(term) ? 1 : 0), 0);
+      if (score > 0) scored.push({ score: score / terms.length, item });
+    }
+  }
+  scored.sort(
+    (a, b) => b.score - a.score || String(b.item.publish_date || '').localeCompare(String(a.item.publish_date || ''))
+  );
+  return {
+    query: String(input.query || ''),
+    total_matches: scored.length,
+    results: scored.slice(0, limit).map(({ item }) => ({
+      image_url: item.url,
+      alt: item.alt,
+      context: item.context,
+      source_kind: item.source_kind,
+      issue_number: item.issue_number,
+      subject: item.subject,
+      source_url: item.source_url,
+      publish_date: item.publish_date
+    }))
+  };
+}
+
+// What Jamie was reading / playing / watching / listening to, from the
+// Currently sections, typed at corpus build.
+async function toolCurrentlyHistory(input: ToolArgs = {}) {
+  const kind = String(input.kind || '')
+    .trim()
+    .toLowerCase();
+  const year = Number(input.year || 0) || null;
+  const query = String(input.query || '')
+    .trim()
+    .toLowerCase();
+  const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
+  const corpus = await loadCorpus('weekly_thing');
+  const entries = ((corpus.currently as Array<Record<string, unknown>> | undefined) || []).filter((entry) => {
+    if (kind && String(entry.kind) !== kind) return false;
+    if (year && Number(String(entry.publish_date || '').slice(0, 4)) !== year) return false;
+    if (query && !`${entry.text || ''}`.toLowerCase().includes(query)) return false;
+    return true;
+  });
+  const byKind: Record<string, number> = {};
+  const byYear: Record<string, number> = {};
+  for (const entry of entries) {
+    byKind[String(entry.kind)] = (byKind[String(entry.kind)] || 0) + 1;
+    const entryYear = String(entry.publish_date || '').slice(0, 4) || 'unknown';
+    byYear[entryYear] = (byYear[entryYear] || 0) + 1;
+  }
+  return {
+    total: entries.length,
+    counts_by_kind: byKind,
+    counts_by_year: byYear,
+    entries: entries.slice(-limit).map((entry) => ({
+      kind: entry.kind,
+      text: entry.text,
+      links: entry.links,
+      issue_number: entry.issue_number,
+      publish_date: String(entry.publish_date || '').slice(0, 10),
+      issue_url: entry.issue_url
+    }))
+  };
+}
+
+// Aggregate the link graph: which domains Jamie links to most, with per-year
+// counts, first/last seen, and sample titles. One deterministic call for
+// "who/what does Jamie reference most" instead of guess-then-verify.
+async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const limit = Math.min(Math.max(Number(input.limit || 20), 1), 40);
+  const yearStart = Number(input.year_start || 0) || null;
+  const yearEnd = Number(input.year_end || 0) || null;
+  const kinds = scopeKinds(scope);
+  interface DomainAgg {
+    count: number;
+    byYear: Record<string, number>;
+    first: string;
+    last: string;
+    samples: string[];
+  }
+  const domains = new Map<string, DomainAgg>();
+  for (const kind of kinds) {
+    const corpus = await loadCorpus(kind);
+    for (const link of (corpus.links as Array<Record<string, unknown>> | undefined) || []) {
+      const domain = String(link.domain || '').toLowerCase();
+      if (!domain || domain.endsWith('thingelstad.com')) continue;
+      const date = String(link.publish_date || '');
+      const year = Number(date.slice(0, 4)) || null;
+      if (yearStart && (!year || year < yearStart)) continue;
+      if (yearEnd && (!year || year > yearEnd)) continue;
+      const agg = domains.get(domain) || { count: 0, byYear: {}, first: date, last: date, samples: [] };
+      agg.count += 1;
+      if (year) agg.byYear[String(year)] = (agg.byYear[String(year)] || 0) + 1;
+      if (date && (!agg.first || date < agg.first)) agg.first = date;
+      if (date && date > agg.last) agg.last = date;
+      const title = String(link.text || '').slice(0, 90);
+      if (title && agg.samples.length < 3 && !agg.samples.includes(title)) agg.samples.push(title);
+      domains.set(domain, agg);
+    }
+  }
+  const ranked = [...domains.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, limit);
+  return {
+    scope: normalizeScope(scope),
+    year_start: yearStart,
+    year_end: yearEnd,
+    total_domains: domains.size,
+    top: ranked.map(([domain, agg]) => ({
+      domain,
+      count: agg.count,
+      first_seen: agg.first.slice(0, 10),
+      last_seen: agg.last.slice(0, 10),
+      counts_by_year: agg.byYear,
+      sample_titles: agg.samples
+    }))
+  };
+}
+
 export const ARCHIVE_TOOLS = {
   search_faq: toolSearchFaq,
   search_archive: toolSearchArchive,
@@ -1384,7 +1557,10 @@ export const ARCHIVE_TOOLS = {
   source_neighborhood: toolSourceNeighborhood,
   entity_lens: toolEntityLens,
   archive_gems: toolArchiveGems,
-  claim_check: toolClaimCheck
+  claim_check: toolClaimCheck,
+  media_search: toolMediaSearch,
+  currently_history: toolCurrentlyHistory,
+  top_references: toolTopReferences
 };
 
 export function toolSpecs() {
