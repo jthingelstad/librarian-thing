@@ -13,8 +13,27 @@ import { toolSpecs } from './archive-tools.mjs';
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
 
-// Launch tool surface (design Phase 3). The fast-follow wave widens this.
-export const MCP_LAUNCH_TOOLS = ['search_archive', 'get_source', 'archive_lens', 'latest_content', 'corpus_stats'];
+// Full read surface (Phase 4): every archive tool the chat agent binds.
+export const MCP_LAUNCH_TOOLS = [
+  'search_archive',
+  'get_source',
+  'archive_lens',
+  'latest_content',
+  'corpus_stats',
+  'search_faq',
+  'quote_search',
+  'find_links',
+  'list_content',
+  'entity_lens',
+  'source_neighborhood',
+  'archive_gems',
+  'claim_check'
+];
+
+// Tool results are sized for the Bedrock loop, where 200KB of evidence is
+// cheap context. MCP clients pay tokens for every byte, so cap what a
+// single tools/call returns and say so honestly when trimmed.
+export const MCP_RESULT_MAX_CHARS = 48000;
 
 export const MCP_QUOTA_ERROR_CODE = -32029;
 
@@ -138,10 +157,16 @@ export async function handleMcpMessage(
     const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
     try {
       const result = await context.invokeTool(name, args);
+      let text = JSON.stringify(result ?? null, null, 1);
+      if (text.length > MCP_RESULT_MAX_CHARS) {
+        text =
+          text.slice(0, MCP_RESULT_MAX_CHARS) +
+          `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; narrow the arguments (limit, year, section, topic) for a complete result]`;
+      }
       return {
         statusCode: 200,
         payload: rpcResult(id, {
-          content: [{ type: 'text', text: JSON.stringify(result ?? null, null, 1) }],
+          content: [{ type: 'text', text }],
           isError: false
         })
       };

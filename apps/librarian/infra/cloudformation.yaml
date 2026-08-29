@@ -627,6 +627,39 @@ Resources:
         - Key: project
           Value: Thingy
 
+  # OAuth abuse and failure visibility: token/register rejections are 4xx
+  # responses, invisible to the Lambda Errors metric. A log metric filter
+  # counts the structured warning events the OAuth routes emit.
+  LibrarianOauthFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
+      FilterPattern: '?"oauth_token_pkce_failed" ?"oauth_token_code_binding_mismatch" ?"oauth_refresh_client_mismatch" ?"oauth_register_rejected" ?"oauth_token_code_rejected"'
+      MetricTransformations:
+        - MetricName: LibrarianOauthAuthFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: '1'
+          DefaultValue: 0
+
+  LibrarianOauthFailuresAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy OAuth endpoints are seeing a burst of auth failures.
+      Namespace: WeeklyThingLibrarian
+      MetricName: LibrarianOauthAuthFailures
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
   LibrarianAuthErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:

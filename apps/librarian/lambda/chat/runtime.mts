@@ -43,7 +43,7 @@ import {
 } from '../shared/prompt-preflight.mjs';
 import { errorFields, truthyEnv } from '../shared/logging.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
-import { chatDailyQuota, consumeDailyQuota, mcpDailyQuota } from '../shared/quota.mjs';
+import { chatDailyQuota, consumeDailyQuota, mcpDailyQuota, quotaMaxForEntitlements } from '../shared/quota.mjs';
 import { handleMcpMessage } from '../shared/mcp.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
@@ -753,7 +753,11 @@ async function handleMcpRoute({
     scope: grant.scope,
     spendQuota: async () => {
       if (unlimited) return { allowed: true, count: 0, max: 0 };
-      return consumeDailyQuota('mcp', grant.subscriberHash, mcpDailyQuota());
+      return consumeDailyQuota(
+        'mcp',
+        grant.subscriberHash,
+        quotaMaxForEntitlements(mcpDailyQuota(), grant.entitlements)
+      );
     },
     invokeTool: async (name, input) => {
       const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
@@ -971,7 +975,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         return;
       }
       if (!isOwnerSubscriberHash(subscriberHash)) {
-        const quota = await consumeDailyQuota('chat', subscriberHash, chatDailyQuota());
+        const welcomeMax = quotaMaxForEntitlements(
+          chatDailyQuota(),
+          Array.isArray(payload.entitlements) ? (payload.entitlements as string[]) : []
+        );
+        const quota = await consumeDailyQuota('chat', subscriberHash, welcomeMax);
         if (!quota.allowed) {
           writeSse(stream, 'error', {
             error: "You've reached today's conversation limit. It resets at midnight UTC.",
@@ -1042,7 +1050,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     // Daily per-user budget pool (independent from the MCP pool). Rate
     // limits smooth bursts; this caps what any one reader can spend.
     if (!isOwnerSubscriberHash(subscriberHash)) {
-      const quota = await consumeDailyQuota('chat', subscriberHash, chatDailyQuota());
+      const chatMax = quotaMaxForEntitlements(
+        chatDailyQuota(),
+        Array.isArray(payload.entitlements) ? (payload.entitlements as string[]) : []
+      );
+      const quota = await consumeDailyQuota('chat', subscriberHash, chatMax);
       if (!quota.allowed) {
         writeSse(stream, 'error', {
           error: "You've reached today's conversation limit. It resets at midnight UTC - see you tomorrow!",

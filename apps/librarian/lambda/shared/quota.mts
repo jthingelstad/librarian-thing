@@ -82,3 +82,9 @@ export async function readDailyQuota(surface: string, identity: string) {
     return { count: 0 };
   }
 }
+
+// Supporting members get double the daily pools - the entitlement tier is
+// the budget tier (design Phase 4).
+export function quotaMaxForEntitlements(base: number, entitlements: string[] = []) {
+  return entitlements.includes('supporting_member') ? base * 2 : base;
+}

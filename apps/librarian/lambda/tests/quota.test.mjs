@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  quotaMaxForEntitlements,
   DEFAULT_CHAT_DAILY_QUOTA,
   DEFAULT_MCP_DAILY_QUOTA,
   chatDailyQuota,
@@ -31,4 +32,10 @@ test('quota envs fall back to sane defaults', () => {
   process.env.CHAT_DAILY_QUOTA = '-3';
   assert.equal(chatDailyQuota(), DEFAULT_CHAT_DAILY_QUOTA);
   delete process.env.CHAT_DAILY_QUOTA;
+});
+
+test('supporting members get double daily pools', () => {
+  assert.equal(quotaMaxForEntitlements(50, ['reader']), 50);
+  assert.equal(quotaMaxForEntitlements(50, ['reader', 'supporting_member']), 100);
+  assert.equal(quotaMaxForEntitlements(500, []), 500);
 });

@@ -55,7 +55,7 @@ test('tools/call invokes the registry handler and wraps text content', async () 
 
 test('tools/call rejects tools outside the launch surface', async () => {
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 8, method: 'tools/call', params: { name: 'claim_check', arguments: {} } },
+    { jsonrpc: '2.0', id: 8, method: 'tools/call', params: { name: 'delete_everything', arguments: {} } },
     context()
   );
   assert.equal(reply.payload.error.code, -32602);
@@ -107,4 +107,14 @@ test('framing errors: batches, non-JSON-RPC, unknown methods', async () => {
 test('ping answers an empty result', async () => {
   const reply = await handleMcpMessage({ jsonrpc: '2.0', id: 3, method: 'ping' }, context());
   assert.deepEqual(reply.payload.result, {});
+});
+
+test('oversized tool results are truncated with an honest note', async () => {
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 11, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    context({ invokeTool: async () => ({ blob: 'x'.repeat(120000) }) })
+  );
+  const text = reply.payload.result.content[0].text;
+  assert.ok(text.length < 49000);
+  assert.match(text, /truncated at 48000 characters/);
 });
