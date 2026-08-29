@@ -44,7 +44,18 @@ export function sanitizeAnswerProse(answer: unknown) {
     )
     .replace(WT_ARCHIVE_URL_RE, 'WT$1')
     .replace(WT_ARCHIVE_PATH_RE, 'WT$1')
-    .replace(RAW_URL_RE, '');
+    // Bare URLs become markdown links instead of vanishing. The scope
+    // prompts tell the agent to cite blog/podcast sources "by title and
+    // link"; deleting the link whenever the model skipped markdown syntax
+    // silently broke that instruction.
+    .replace(RAW_URL_RE, (match) => {
+      const trailing = match.match(/[.,;:!?]+$/)?.[0] || '';
+      const url = trailing ? match.slice(0, -trailing.length) : match;
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) return match;
+      const display = url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+      const label = display.length > 60 ? `${display.slice(0, 57)}...` : display;
+      return `[${label}](${url})${trailing}`;
+    });
 
   return cleanSpacing(text);
 }

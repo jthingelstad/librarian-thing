@@ -24,6 +24,12 @@
  * returned unchanged — the reader may still appreciate a "we looked at
  * these" footer.
  *
+ * Catalog back-fill is evidence-gated: an issue number mentioned in the
+ * answer but missing from the collected citations only gets a catalog
+ * citation when that number also appeared somewhere in this turn's tool
+ * results. A number the model invented gets no citation — manufacturing
+ * a plausible-looking source for it would launder the hallucination.
+ *
  * Blog/podcast citations carry no WT/# token, so the mention filter can
  * never match them. They are always kept (the agent cites these sources by
  * title/link, not number) and appended after the issue citations.
@@ -79,7 +85,8 @@ function citationFromIssue(issueNumber: string | number, issueCatalog: IssueCata
 export function prioritizeCitationsForAnswer(
   citations: Citation[],
   answer: unknown,
-  issueCatalog: IssueCatalog = null
+  issueCatalog: IssueCatalog = null,
+  evidencedIssues: Set<number> | null = null
 ): Citation[] {
   const external: Citation[] = [];
   const issueCitations: Citation[] = [];
@@ -100,6 +107,7 @@ export function prioritizeCitationsForAnswer(
   }
   for (const issueNumber of firstSeen.keys()) {
     if (byIssue.has(issueNumber)) continue;
+    if (evidencedIssues && !evidencedIssues.has(issueNumber)) continue;
     const citation = citationFromIssue(issueNumber, issueCatalog);
     if (citation) byIssue.set(issueNumber, citation);
   }
@@ -109,4 +117,23 @@ export function prioritizeCitationsForAnswer(
     return (rankA ?? Number.MAX_SAFE_INTEGER) - (rankB ?? Number.MAX_SAFE_INTEGER);
   });
   return [...orderedIssues, ...external];
+}
+
+// Issue numbers that actually surfaced in this turn's tool results - the
+// evidence set that gates catalog back-fill above. Matches issue_number
+// fields and inline WT###/#### tokens inside tool result payloads.
+export function evidencedIssueNumbers(toolResults: unknown[]): Set<number> {
+  const evidenced = new Set<number>();
+  for (const result of toolResults || []) {
+    let serialized = '';
+    try {
+      serialized = JSON.stringify(result) || '';
+    } catch {
+      continue;
+    }
+    for (const match of serialized.matchAll(/(?:"issue_number"\s*:\s*"?|WT|#)(\d{1,4})\b/g)) {
+      evidenced.add(Number(match[1]));
+    }
+  }
+  return evidenced;
 }

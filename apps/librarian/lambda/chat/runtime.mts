@@ -36,7 +36,7 @@ import {
   readerContextPrompt,
   tokenEntitlements
 } from '../shared/chat-context.mjs';
-import { prioritizeCitationsForAnswer } from '../shared/citations.mjs';
+import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/citations.mjs';
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
 import { compactSource, retrieve } from '../shared/retrieval.mjs';
@@ -530,6 +530,9 @@ async function streamBedrockAgentAnswer(
   systemBlocks.push({ text: scopePromptLine(scope) });
   systemBlocks.push({ text: conversationModePrompt(mode) });
   for (let turn = 0; turn <= turnLimit; turn += 1) {
+    // The reader disconnected at the client deadline - stop the work, not
+    // just the writes, or the loop burns Bedrock turns nobody will see.
+    if (shouldStopWriting()) break;
     const requireDispatchBrief = forceDispatchBrief;
     forceDispatchBrief = false;
     // Dispatch research narration is tool-process text, not reader-facing
@@ -654,8 +657,18 @@ async function streamBedrockAgentAnswer(
   }
   const sanitizedAnswer = sanitizeAnswerProse(answer);
   answer = sanitizedAnswer;
+  // max_tokens truncation was previously logged but invisible to readers -
+  // the answer just stopped mid-sentence. Say so in the answer itself.
+  if (stopReason === 'max_tokens' && answer) {
+    answer = `${answer}\n\n*This answer hit its length limit - ask me to continue and I will pick up where it cut off.*`;
+  }
   if (!shouldStopWriting()) writeSse(responseStream, 'answer', { answer });
-  const citations = prioritizeCitationsForAnswer(collectToolCitations(toolResults), answer, await weeklyIssueCatalog());
+  const citations = prioritizeCitationsForAnswer(
+    collectToolCitations(toolResults),
+    answer,
+    await weeklyIssueCatalog(),
+    evidencedIssueNumbers(toolResults)
+  );
   const experience = experienceFromToolResults(toolResults, answer, question);
   if (experience && !shouldStopWriting()) {
     writeSse(responseStream, 'experience', { experience });
