@@ -41,18 +41,64 @@ test('search-shaped results become ranked evidence refs with excerpts', () => {
   assert.match(summary.sources[0].excerpt, /owning your words/);
 });
 
-test('a single source-shaped result (get_source/get_issue) is its own evidence', () => {
+test('a flat source-shaped result (get_section) is its own evidence', () => {
   const summary = summarizeToolEvidence({
     issue_number: 219,
-    source_kind: 'issue',
     subject: 'Weekly Thing 219',
     url: 'https://weekly.thingelstad.com/archive/219/',
     publish_date: '2022-06-11',
+    section: 'Journal',
     text: 'The fifth anniversary issue.'
   });
   assert.equal(summary.sources.length, 1);
   assert.equal(summary.sources[0].issue_number, '219');
+  assert.equal(summary.sources[0].section, 'Journal');
   assert.match(summary.sources[0].excerpt, /anniversary/);
+});
+
+test('get_issue nested envelope becomes the primary evidence', () => {
+  // Real shape from archive-tools.mts toolGetIssue: {issue: {number, ...}}.
+  const summary = summarizeToolEvidence({
+    issue: {
+      number: 219,
+      subject: 'Weekly Thing 219',
+      publish_date: '2022-06-11',
+      url: 'https://weekly.thingelstad.com/archive/219/',
+      topics: ['anniversary'],
+      sections: [{ name: 'Journal', word_count: 800 }],
+      body: 'The fifth anniversary issue opens with a look back.'
+    }
+  });
+  assert.equal(summary.sources.length, 1);
+  assert.equal(summary.sources[0].issue_number, '219');
+  assert.equal(summary.sources[0].title, 'Weekly Thing 219');
+  assert.match(summary.sources[0].excerpt, /anniversary issue opens/);
+});
+
+test('get_source nested envelope wins over its inner links array', () => {
+  // Real shape from toolGetSource: {source: {...record, links: [...], body}}.
+  const summary = summarizeToolEvidence({
+    source: {
+      issue_number: 300,
+      source_kind: 'weekly_thing',
+      subject: 'Weekly Thing 300',
+      url: 'https://weekly.thingelstad.com/archive/300/',
+      publish_date: '2025-01-01',
+      word_count: 2400,
+      sections: [{ name: 'Journal', word_count: 800 }],
+      links: [
+        { url: 'https://example.com/linked-a', domain: 'example.com', title: 'Linked A' },
+        { url: 'https://example.com/linked-b', domain: 'example.com', title: 'Linked B' }
+      ],
+      body: 'What Thingy actually read from issue three hundred.',
+      section_texts: [{ name: 'Journal', text: 'Journal text.' }]
+    }
+  });
+  assert.equal(summary.sources.length, 1);
+  assert.equal(summary.sources[0].issue_number, '300');
+  assert.equal(summary.sources[0].url, 'https://weekly.thingelstad.com/archive/300/');
+  assert.match(summary.sources[0].excerpt, /actually read/);
+  assert.ok(!JSON.stringify(summary.sources).includes('linked-a'));
 });
 
 test('link and aggregation shapes are harvested without a results key', () => {
@@ -166,6 +212,27 @@ test('usage accumulates across every Bedrock turn including cache metrics', () =
   assert.equal(totals.total_tokens, 1050 + 2300);
   assert.equal(totals.cache_read_input_tokens, 800);
   assert.equal(totals.cache_write_input_tokens, 1500);
+});
+
+test('the whole-trace bound is absolute under adversarial input', () => {
+  // Skeletons alone cannot save a trace built from enormous inputs; the
+  // bound must hold anyway, keeping earliest calls and honest metadata.
+  const calls = Array.from({ length: 200 }, (_value, index) => ({
+    name: `tool_${index}_${'x'.repeat(500)}`,
+    input: { query: 'y'.repeat(1000) },
+    ok: true,
+    duration_ms: index,
+    result: summarizeToolEvidence(searchResult(8))
+  }));
+  const stored = toolTraceDynamoString({ schema_version: TOOL_TRACE_SCHEMA_VERSION, calls }).S;
+  assert.ok(stored.length <= MAX_TOOL_TRACE_JSON_CHARS, `stored ${stored.length} chars`);
+  const parsed = JSON.parse(stored);
+  assert.notEqual(parsed.omitted, true);
+  assert.equal(parsed.schema_version, TOOL_TRACE_SCHEMA_VERSION);
+  assert.ok(parsed.calls_dropped > 0);
+  if (parsed.calls.length) {
+    assert.equal(parsed.calls[0].duration_ms, 0);
+  }
 });
 
 test('empty and null traces store safely', () => {

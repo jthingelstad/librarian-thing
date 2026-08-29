@@ -26,7 +26,7 @@ export const EVIDENCE_MAX_CALL_CHARS = 2800;
 export const EVIDENCE_MAX_COUNT_KEYS = 12;
 
 const SOURCE_ID_FIELDS = ['id', 'chunk_id', 'source_id'] as const;
-const EXCERPT_FIELDS = ['text', 'excerpt', 'quote', 'snippet', 'preview', 'context', 'summary', 'alt'] as const;
+const EXCERPT_FIELDS = ['text', 'excerpt', 'quote', 'snippet', 'preview', 'context', 'summary', 'alt', 'body'] as const;
 // Result keys whose arrays are known to carry source-like records, plus a
 // shape sniff for everything else so new tools inherit evidence for free.
 const SOURCE_SHAPE_FIELDS = ['issue_number', 'url', 'subject', 'title', 'permalink', 'domain', 'label'] as const;
@@ -163,14 +163,29 @@ export function summarizeToolEvidence(result: unknown): JsonRecord {
   const topic = compactText(record.topic || record.theme || record.entity || record.query || record.claim, 160);
   if (topic) summary.topic = topic;
 
-  // Evidence refs: a single source-shaped result counts as its own
-  // evidence; otherwise harvest source-like records from nested arrays.
+  // Evidence refs. Three shapes, in priority order:
+  // - the result itself is source-shaped (get_section);
+  // - a top-level envelope key holds one source-shaped object (get_issue's
+  //   `issue`, get_source's `source`) - that object is the primary evidence
+  //   and its inner arrays (links, section_texts) are NOT harvested as refs,
+  //   because they are not what Thingy read;
+  // - otherwise harvest source-like records from nested arrays.
   const state: HarvestState = { refs: [], seen: 0 };
   if (looksLikeSource(record)) {
     state.seen = 1;
     state.refs.push(evidenceRef(record, 1));
-  } else {
+    // A flat source-shaped result may still carry evidence arrays
+    // (domain_history: {domain, results: [...]}); harvest them too.
     harvest(record, state, 0);
+  } else {
+    const envelopes = Object.values(record).filter(
+      (value) => value && typeof value === 'object' && !Array.isArray(value) && looksLikeSource(value)
+    );
+    for (const envelope of envelopes) {
+      state.seen += 1;
+      state.refs.push(evidenceRef(envelope, state.seen));
+    }
+    if (!envelopes.length) harvest(record, state, 0);
   }
   const sources = state.refs.slice(0, EVIDENCE_MAX_SOURCES);
   if (sources.length) summary.sources = sources;
@@ -275,7 +290,24 @@ export function boundToolTrace(trace: unknown, maxChars: number): JsonRecord {
     calls[index] = callSkeleton(calls[index]);
     if (traceChars(bounded) <= maxChars) return bounded;
   }
-  return bounded;
+  // Still oversized (pathological inputs - enormous names/inputs or call
+  // counts): drop whole calls from the end, keeping the earliest ones.
+  let dropped = 0;
+  while (traceChars(bounded) > maxChars && calls.length) {
+    calls.pop();
+    dropped += 1;
+    bounded.calls_dropped = dropped;
+  }
+  if (traceChars(bounded) <= maxChars) return bounded;
+  // Last resort: metadata-only record. The bound is absolute.
+  return {
+    schema_version: record.schema_version,
+    prompt_fingerprint: record.prompt_fingerprint,
+    source_revision: record.source_revision,
+    calls: [],
+    calls_dropped: (Array.isArray(record.calls) ? record.calls.length : 0) || dropped,
+    truncation: { trace_overflow: true }
+  };
 }
 
 // --- Cumulative Bedrock usage --------------------------------------------

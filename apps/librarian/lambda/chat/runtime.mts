@@ -401,6 +401,10 @@ async function evaluatePromptPreflight(
     const text = bedrockMessageText(message);
     const parsed = parsePreflightJson(text);
     const preflight = normalizePreflightDecision(parsed || {}, question);
+    // Bedrock usage rides along so preflight-direct turns can persist real
+    // token metrics; preflightDynamoItem allow-lists fields, so this never
+    // reaches storage through the preflight record itself.
+    (preflight as JsonRecord).usage = response.usage;
     logEvent('info', 'prompt_preflight_completed', {
       action: preflight.action,
       category: preflight.category,
@@ -436,6 +440,18 @@ const AGENT_SYSTEM_PROMPT = agentSystemPrompt();
 function sourceRevision() {
   const key = String(process.env.LIBRARIAN_SOURCE_REVISION || '');
   return key.replace(/^code\//, '').replace(/\.zip$/, '') || 'unknown';
+}
+
+// Every persisted trace - agent loop, preflight-direct, deadline fallback -
+// carries the same version stamps so the evaluator can attribute any turn
+// to a prompt set and deployed revision.
+function stampedToolTrace(): ToolTrace {
+  return {
+    calls: [],
+    schema_version: TOOL_TRACE_SCHEMA_VERSION,
+    prompt_fingerprint: promptFingerprint(),
+    source_revision: sourceRevision()
+  };
 }
 
 function compactTraceValue(value: unknown, maxChars = 1200) {
@@ -477,12 +493,7 @@ async function streamBedrockAgentAnswer(
     }
   ];
   const toolResults: JsonRecord[] = [];
-  const toolTrace: ToolTrace = {
-    calls: [],
-    schema_version: TOOL_TRACE_SCHEMA_VERSION,
-    prompt_fingerprint: promptFingerprint(),
-    source_revision: sourceRevision()
-  };
+  const toolTrace: ToolTrace = stampedToolTrace();
   let answer = '';
   // Usage accumulates across EVERY Bedrock turn of the loop - a 7-turn
   // research run previously recorded only the final call's tokens.
@@ -1104,9 +1115,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         requestId,
         citations,
         preflight,
-        toolTrace: { calls: [] },
+        toolTrace: stampedToolTrace(),
         metrics: {
           model: fastModel(),
+          ...accumulateUsage(emptyUsageTotals(), (preflight as JsonRecord).usage),
           stop_reason: 'preflight_direct'
         },
         logEvent
@@ -1191,7 +1203,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         requestId,
         citations: [],
         preflight,
-        toolTrace: result?.toolTrace || { calls: [] },
+        toolTrace: result?.toolTrace || stampedToolTrace(),
         metrics: {
           ...(result?.metrics || {}),
           model: result?.metrics?.model || agentModel(),
