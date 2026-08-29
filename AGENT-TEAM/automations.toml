@@ -3,35 +3,41 @@ repo = "."
 timezone = "America/Chicago"
 
 # Calendar cadence only; deploy/alarm/incident follow-ups are manual starts.
-# All three start as PROPOSED — Jamie flips status to ACTIVE when he installs
-# the Codex tasks. There is no bare gpt-5.6 id; only -sol/-terra/-luna exist.
+# The prompts are the desired-state copy installed in Codex. There is no bare
+# gpt-5.6 id; only -sol/-terra/-luna exist.
 
 [[automation]]
-id = "librarian-operations"
+id = "run-the-librarian"
 name = "Run the Librarian"
 objective = "run"
 objective_file = "AGENT-TEAM/run-librarian.md"
-status = "PROPOSED"
+status = "ACTIVE"
 rrule = "RRULE:FREQ=WEEKLY;BYHOUR=8;BYMINUTE=20;BYDAY=SA"
 model = "gpt-5.6-terra"
 reasoning_effort = "high"
+execution_environment = "local"
+prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/librarian-thing/AGENT-TEAM/run-librarian.md` completely, then pursue the `run` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, deployment when required, and live acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
 
 [[automation]]
-id = "librarian-archivist"
+id = "keep-the-archive-true"
 name = "Keep the Archive True"
 objective = "archive"
 objective_file = "AGENT-TEAM/keep-archive-true.md"
-status = "PROPOSED"
+status = "ACTIVE"
 rrule = "RRULE:FREQ=WEEKLY;BYHOUR=7;BYMINUTE=30;BYDAY=SU"
 model = "gpt-5.6-terra"
 reasoning_effort = "high"
+execution_environment = "local"
+prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/librarian-thing/AGENT-TEAM/keep-archive-true.md` completely, then pursue the `archive` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, artifact publication when required, and acceptance from authoritative archive evidence. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
 
 [[automation]]
-id = "librarian-evaluator"
+id = "improve-thingy"
 name = "Improve Thingy"
 objective = "improve"
 objective_file = "AGENT-TEAM/improve-thingy.md"
-status = "PROPOSED"
+status = "ACTIVE"
 rrule = "RRULE:FREQ=WEEKLY;BYHOUR=9;BYMINUTE=0;BYDAY=MO"
 model = "gpt-5.6-sol"
 reasoning_effort = "xhigh"
+execution_environment = "local"
+prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/librarian-thing/AGENT-TEAM/improve-thingy.md` completely, then pursue the `improve` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, deployment when required, and natural reader-visible acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."

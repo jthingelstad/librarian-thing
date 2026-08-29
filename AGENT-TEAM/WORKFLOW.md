@@ -20,19 +20,27 @@ the Lambda stack is in scope, and `ALIGNMENT.md` when a question crosses repos.
 4. Only when a safe, authorized gap requires mutation, claim the checkout with
    `python3 AGENT-TEAM/scripts/objective_lease.py claim <run|archive|improve>`.
    Retain the returned `lease_id`; a held lease leaves the run read-only, and
-   never clear one merely because it looks old.
+   never clear one merely because it looks old. A normal claim records the
+   Codex thread as its holder, not the short-lived claim subprocess.
 5. Fix the gap at its source in the same run and pin it with a regression test;
    do not substitute a warning, a prompt rule, or a ticket chain.
-6. Run the repo gates before commit: `uv run --locked pytest tests/ -q` for
-   Python and `npm --prefix apps/librarian/lambda run verify` for the Lambda
-   (`AGENT-TEAM/scripts/verify.sh` runs both). Recheck the lease and preflight
-   state immediately before the first edit and before push.
+6. Run `AGENT-TEAM/scripts/verify.sh` before commit; it mirrors the Python and
+   Lambda CI gates, including formatting, lint, dependency audits, tests, and
+   the generated contract check. Immediately before the first edit and again
+   before push, run `objective_lease.py check-base <objective> --lease-id
+   <lease_id>`. This proves the lease is yours, the tree is clean, and
+   `origin/main` has not moved since the claim. Do not rerun start-of-run
+   preflight after committing: it correctly rejects the current run's ahead
+   commit as unpublished work.
 7. Commit and push only current-run work, directly to `main`.
 8. Verify live: the deploy workflow completes and the affected surface answers
    correctly. A green push is not acceptance; the running system is.
 9. Release the lease with `objective_lease.py release <objective> --lease-id
-   <lease_id>` once the tree is clean. If safe cleanup is impossible, leave the
-   lease in place and report it.
+   <lease_id>` only after the tree is clean and synchronized with `origin/main`.
+   Automatic stale clearing additionally requires an unchanged HEAD and a
+   recorded dead durable process. Otherwise inspect the holder and use
+   `clear-manual --holder-id <exact-id> --confirm-inactive`. If safe cleanup is
+   impossible, leave the lease in place and report it.
 
 ## Secret Safety
 
