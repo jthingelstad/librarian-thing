@@ -1,4 +1,4 @@
-import { UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { dynamodb } from './aws-clients.mjs';
 import { logEvent } from './logging.mjs';
 
@@ -63,5 +63,22 @@ export async function consumeDailyQuota(surface: string, identity: string, max: 
       error_type: error instanceof Error ? error.constructor.name : 'Error'
     });
     return { allowed: true, count: 0, max };
+  }
+}
+
+// Read-only peek for the account panel - never spends a unit.
+export async function readDailyQuota(surface: string, identity: string) {
+  const tableName = process.env.TABLE_NAME;
+  if (!tableName) return { count: 0 };
+  try {
+    const response = await dynamodb.send(
+      new GetItemCommand({
+        TableName: tableName,
+        Key: { pk: { S: quotaKey(surface, identity) }, sk: { S: 'quota' } }
+      })
+    );
+    return { count: Number(response.Item?.count?.N || '0') };
+  } catch {
+    return { count: 0 };
   }
 }

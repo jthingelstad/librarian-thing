@@ -92,6 +92,12 @@ const citation = object({
   publish_date: string,
   section: string
 });
+const quotaOverview = object({
+  day: string,
+  unlimited: boolean,
+  chat_used: number,
+  chat_max: { anyOf: [number, { type: 'null' }] }
+});
 const accountOverview = object({
   first_seen_at: string,
   last_seen_at: string,
@@ -99,7 +105,8 @@ const accountOverview = object({
   conversation_count: number,
   conversation_turn_count: number,
   oldest_conversation_at: string,
-  newest_conversation_at: string
+  newest_conversation_at: string,
+  quota: ref('quotaOverview')
 });
 
 const apiProperties = {
@@ -155,6 +162,7 @@ export const LIBRARIAN_CONTRACT = {
     conversationMessage,
     archiveItem,
     citation,
+    quotaOverview,
     accountOverview,
     apiResponse: object(apiProperties),
     apiError: object({ error: string, message: string, errorMessage: string, request_id: string, requestId: string }),

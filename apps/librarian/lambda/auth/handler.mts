@@ -24,6 +24,7 @@ import {
 } from '../shared/magic-link.mjs';
 import { sendMagicLinkEmail } from '../shared/jmap-mail.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
+import { chatDailyQuota, readDailyQuota, utcDayBucket } from '../shared/quota.mjs';
 import {
   createSessionToken,
   createSessionTokenForSub,
@@ -337,6 +338,17 @@ async function memoryAccountConversations(sub: string) {
   });
 }
 
+async function dailyQuotaOverview(sub: string) {
+  const unlimited = isOwnerSubscriberHash(sub);
+  const chat = unlimited ? null : await readDailyQuota('chat', sub);
+  return {
+    day: utcDayBucket(),
+    unlimited,
+    chat_used: chat?.count ?? 0,
+    chat_max: unlimited ? null : chatDailyQuota()
+  };
+}
+
 async function memoryProfileResponse(sub: string, event: LibrarianHttpEvent, extra: JsonRecord = {}) {
   const memory = await getUserMemory(sub, { consistent: true });
   const conversations = await memoryAccountConversations(sub);
@@ -360,7 +372,10 @@ async function memoryProfileResponse(sub: string, event: LibrarianHttpEvent, ext
       )
     },
     oldest_conversation_at: conversationDates[0] || '',
-    newest_conversation_at: conversationDates.at(-1) || ''
+    newest_conversation_at: conversationDates.at(-1) || '',
+    // Per-user daily budget pools, surfaced in the account panel. Additive
+    // contract field; the MCP pool joins in Phase 3.
+    quota: await dailyQuotaOverview(sub)
   };
   return jsonResponse(200, { status: 'ok', profile, account, ...extra }, event);
 }
@@ -694,9 +709,15 @@ async function authHandler(event: LibrarianHttpEvent) {
     return jsonResponse(429, { error: 'Too many access attempts. Please try again later.' }, event);
   }
   if (
-    !['check', 'subscribe', 'resend_confirmation', 'complete_magic_link', 'refresh_session', 'update_profile'].includes(
-      action
-    )
+    ![
+      'check',
+      'subscribe',
+      'resend_confirmation',
+      'complete_magic_link',
+      'verify_code',
+      'refresh_session',
+      'update_profile'
+    ].includes(action)
   ) {
     logEvent('info', 'auth_rejected_invalid_action', { email_hash: hashedEmail, action });
     return jsonResponse(400, { error: 'Unsupported subscriber action.' }, event);
