@@ -39,7 +39,10 @@ TRUST=$(cat <<JSON
       "Condition": {
         "StringEquals": {
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          "token.actions.githubusercontent.com:sub": "repo:jthingelstad/librarian-thing:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": [
+            "repo:jthingelstad/librarian-thing:ref:refs/heads/main",
+            "repo:jthingelstad@5351/librarian-thing@1258787307:ref:refs/heads/main"
+          ]
         }
       }
     }
