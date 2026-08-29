@@ -499,6 +499,48 @@ Resources:
       RouteKey: GET /health
       Target: !Sub integrations/${LibrarianIntegration}
 
+  OauthAuthorizeGetRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: GET /authorize
+      Target: !Sub integrations/${LibrarianIntegration}
+
+  OauthAuthorizePostRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: POST /authorize
+      Target: !Sub integrations/${LibrarianIntegration}
+
+  OauthTokenRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: POST /token
+      Target: !Sub integrations/${LibrarianIntegration}
+
+  OauthRegisterRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: POST /register
+      Target: !Sub integrations/${LibrarianIntegration}
+
+  OauthAuthorizationServerMetadataRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: GET /.well-known/oauth-authorization-server
+      Target: !Sub integrations/${LibrarianIntegration}
+
+  OauthProtectedResourceMetadataRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: GET /.well-known/oauth-protected-resource
+      Target: !Sub integrations/${LibrarianIntegration}
+
   LibrarianStage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:

@@ -26,6 +26,16 @@ The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and a
 
 Chat streams from `site.librarianStreamUrl + /chat`; there is no buffered API Gateway chat fallback. Welcome messages are generated agentically by `/welcome`, using authenticated profile, local-time context, previous conversations, and active entitlements. Conversations are server-side and canonical; the browser no longer sends the full history as the source of truth.
 
+The auth Lambda also serves an OAuth 2.1 authorization server for the MCP
+surface (Phase 2 of the Librarian MCP plan; the MCP resource server is Phase 3,
+pending). Endpoints: `/.well-known/oauth-authorization-server`,
+`/.well-known/oauth-protected-resource`, `/register`, `/authorize` (HTML
+email/code/consent flow reusing the Thingy sign-in code email), and `/token`
+(authorization_code + PKCE S256 and rotating refresh tokens with family
+revocation on reuse). OAuth records share the DynamoDB table with sha256-hashed
+secrets and ttl. Issuer defaults to `https://librarian.thingelstad.com`; set
+`LIBRARIAN_OAUTH_ISSUER` to override.
+
 The FAQ content lives in `apps/librarian/lambda/shared/faq.json`. Eleventy renders `/faq/` from that file, and the streaming Lambda packages the same file so Thingy can answer site, subscription, membership, RSS, privacy, and logistics questions through the `search_faq` tool.
 
 ## Commands

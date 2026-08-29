@@ -78,6 +78,23 @@ then uploads the updated corpus artifacts.
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Magic-link auth, user conversation management, and profile updates |
 | POST | `/memory` | session token (bearer) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
+| GET | `/.well-known/oauth-authorization-server` | none | OAuth 2.1 authorization-server metadata (RFC 8414) |
+| GET | `/.well-known/oauth-protected-resource` | none | OAuth protected-resource metadata (RFC 9728) |
+| POST | `/register` | none (rate limited) | OAuth dynamic client registration (RFC 7591 subset, public clients only) |
+| GET/POST | `/authorize` | emailed sign-in code | OAuth authorization pages: email, code, consent, then redirect with an auth code |
+| POST | `/token` | PKCE (public client) | OAuth token endpoint: `authorization_code` + PKCE and rotating `refresh_token` grants |
+
+## OAuth authorization server (MCP surface)
+
+The auth Lambda doubles as an OAuth 2.1 authorization server for MCP clients
+(Phase 2 of the Librarian MCP plan; the MCP resource server itself is Phase 3).
+Public clients register dynamically, authorize with PKCE (`S256` only), and
+readers verify with the same emailed six-digit Thingy sign-in code before a
+consent screen issues the code. Access tokens last an hour; refresh tokens
+rotate with family-wide revocation on reuse. All records live in the shared
+DynamoDB table with secrets stored as SHA-256 hashes; the supported scope is
+`archive:read`. The issuer defaults to `https://librarian.thingelstad.com`
+(override with `LIBRARIAN_OAUTH_ISSUER`).
 
 ## Versioned client contract
 

@@ -1,6 +1,5 @@
 import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
-import nodeCrypto from 'node:crypto';
-import { DeleteItemCommand, GetItemCommand, PutItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { bedrock, dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
 import {
   createSubscriber,
@@ -10,19 +9,16 @@ import {
   sendSubscriberReminder,
   subscriberStatus
 } from '../shared/buttondown.mjs';
-import { eventSummary, jsonResponse, methodAndPath, parseBody, clientSourceIp, userAgent } from '../shared/http.mjs';
+import { eventSummary, jsonResponse, methodAndPath, parseBody } from '../shared/http.mjs';
 import type { LibrarianHttpEvent, LibrarianHttpResponse } from '../shared/http.mjs';
+import { magicTokenHash, validMagicCode, validMagicToken } from '../shared/magic-link.mjs';
 import {
-  buildMagicLink,
-  createMagicToken,
-  createMagicCode,
-  magicCodeHash,
-  magicLinkTtlSeconds,
-  magicTokenHash,
-  validMagicCode,
-  validMagicToken
-} from '../shared/magic-link.mjs';
-import { sendMagicLinkEmail } from '../shared/jmap-mail.mjs';
+  clientIdentityHash,
+  redeemMagicRowByTokenHash,
+  sendLoginCodeEmail,
+  verifyPendingCode
+} from '../shared/magic-login.mjs';
+import type { MagicRedeemResult, Subscriber } from '../shared/magic-login.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
 import { chatDailyQuota, readDailyQuota, utcDayBucket } from '../shared/quota.mjs';
 import {
@@ -31,7 +27,6 @@ import {
   emailHash,
   extractBearer,
   normalizeEmail,
-  stableHash,
   verifyToken
 } from '../shared/session.mjs';
 import { authProfile, getUserMemory, recordUserPreferredName } from '../shared/user-memory.mjs';
@@ -44,17 +39,16 @@ import {
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
 import { handleUserConversations } from './conversation-routes.mjs';
+import { handleAuthorize, handleOauthMetadata, handleRegister, handleToken } from './oauth-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
 import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
 
 const AUTH_RATE_LIMIT_MAX = 30;
-const MAGIC_LINK_RATE_LIMIT_MAX = 6;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const ALLOWED_SOURCES = new Set(['thingy', 'site', 'hero', 'mid1', 'mid2', 'footer', 'about', 'issue']);
 
 type JsonRecord = Record<string, unknown>;
-type Subscriber = Awaited<ReturnType<typeof fetchSubscriber>>;
 
 function objectValue(value: unknown): JsonRecord {
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonRecord) : {};
@@ -72,24 +66,7 @@ function normalizeSource(value: unknown) {
   return ALLOWED_SOURCES.has(raw) ? raw : 'site';
 }
 
-export function magicLinkBaseWithReturnPath(returnPath = '') {
-  const raw = String(returnPath || '').trim();
-  const safeReturnPath = raw && raw.startsWith('/') && !raw.startsWith('//') ? raw.slice(0, 500) : '/chat/';
-  try {
-    const base = new URL(process.env.THINGY_MAGIC_LINK_BASE_URL || 'https://thingy.thingelstad.com/');
-    base.pathname = '/signin/';
-    base.search = '';
-    base.searchParams.set('return', safeReturnPath);
-    base.hash = '';
-    return base.toString();
-  } catch {
-    return undefined;
-  }
-}
-
-function clientIdentityHash(event: LibrarianHttpEvent) {
-  return stableHash(`${clientSourceIp(event) || 'unknown'}\0${userAgent(event) || ''}`);
-}
+export { magicLinkBaseWithReturnPath } from '../shared/magic-login.mjs';
 
 async function recordSession(sessionId: string, email: unknown, expiresAt: number) {
   const tableName = process.env.TABLE_NAME;
@@ -410,45 +387,6 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
   return jsonResponse(400, { error: 'Unsupported memory action.' }, event);
 }
 
-async function storeMagicLink({
-  token,
-  email,
-  source,
-  event,
-  subscriberStatusValue,
-  nowSeconds,
-  expiresAt
-}: {
-  token: string;
-  email: string;
-  source: string;
-  event: LibrarianHttpEvent;
-  subscriberStatusValue: string;
-  nowSeconds: number;
-  expiresAt: number;
-}) {
-  const tableName = process.env.TABLE_NAME;
-  if (!tableName) throw new Error('TABLE_NAME is required');
-  const tokenHash = magicTokenHash(token);
-  await dynamodb.send(
-    new PutItemCommand({
-      TableName: tableName,
-      Item: {
-        pk: dynamoString(`magic#${tokenHash}`),
-        sk: dynamoString('magic'),
-        email: dynamoString(normalizeEmail(email)),
-        email_hash: dynamoString(emailHash(email)),
-        source: dynamoString(source),
-        subscriber_status: dynamoString(subscriberStatusValue),
-        client_hash: dynamoString(clientIdentityHash(event)),
-        created_at: dynamoNumber(nowSeconds),
-        expires_at: dynamoNumber(expiresAt),
-        ttl: dynamoNumber(expiresAt)
-      }
-    })
-  );
-}
-
 async function sendLoginMagicLink({
   email,
   subscriber,
@@ -464,74 +402,34 @@ async function sendLoginMagicLink({
   start: number;
   returnPath?: string;
 }) {
-  const hashedEmail = emailHash(email);
-  const magicLimit = Number(process.env.THINGY_MAGIC_LINK_RATE_LIMIT_MAX || MAGIC_LINK_RATE_LIMIT_MAX);
-  if (!(await checkRateLimit(`auth#magic:${hashedEmail}`, magicLimit))) {
-    logEvent('warning', 'auth_magic_link_rate_limited', { email_hash: hashedEmail });
+  const result = await sendLoginCodeEmail({ email, subscriber, source, event, start, returnPath });
+  if (result.status === 'rate_limited') {
     return jsonResponse(429, { error: 'Too many sign-in emails. Please wait a bit and try again.' }, event);
   }
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  const ttlSeconds = magicLinkTtlSeconds();
-  const expiresAt = nowSeconds + ttlSeconds;
-  const token = createMagicToken();
-  const link = buildMagicLink(token, magicLinkBaseWithReturnPath(returnPath));
-  const status = subscriberStatus(subscriber);
-  let memory = null;
-  try {
-    memory = await getUserMemory(hashedEmail);
-  } catch (error) {
-    logEvent('warning', 'auth_magic_link_memory_lookup_failed', errorFields(error, { email_hash: hashedEmail }));
-  }
-  const emailContext = {
-    ...authProfile(memory),
-    subscriber_status: status,
-    source
-  };
-  const code = createMagicCode();
-  await storeMagicLink({ token, email, source, event, subscriberStatusValue: status, nowSeconds, expiresAt });
-  // The pending-code row lets the reader type the emailed code instead of
-  // clicking the link. One per email (latest send wins); it references the
-  // magic row so both paths redeem the same one-shot record.
-  await dynamodb.send(
-    new PutItemCommand({
-      TableName: process.env.TABLE_NAME,
-      Item: {
-        pk: dynamoString(`magiccode#${hashedEmail}`),
-        sk: dynamoString('magiccode'),
-        code_hash: dynamoString(magicCodeHash(code)),
-        token_hash: dynamoString(magicTokenHash(token)),
-        attempts: dynamoNumber(0),
-        created_at: dynamoNumber(nowSeconds),
-        expires_at: dynamoNumber(expiresAt),
-        ttl: dynamoNumber(expiresAt)
-      }
-    })
-  );
-  await sendMagicLinkEmail({
-    to: normalizeEmail(email),
-    magicLink: link,
-    expiresMinutes: Math.max(1, Math.round(ttlSeconds / 60)),
-    context: emailContext,
-    code
-  });
-  logEvent('info', 'auth_magic_link_sent', {
-    email_hash: hashedEmail,
-    subscriber_status: status,
-    returning: Boolean(emailContext.returning),
-    has_preferred_name: Boolean(emailContext.preferred_name),
-    expires_at: expiresAt,
-    duration_ms: Math.round(performance.now() - start)
-  });
   return jsonResponse(
     200,
     {
       status: 'magic_link_sent',
-      email: normalizeEmail(email),
-      expires_at: expiresAt,
+      email: result.email,
+      expires_at: result.expiresAt,
       message: 'Check your email for a sign-in link to Thingy.'
     },
     event
   );
+}
+
+// Map a shared magic redemption result onto the /auth JSON contract.
+async function magicRedeemResponse(result: MagicRedeemResult, event: LibrarianHttpEvent, start: number) {
+  if (result.status === 'ok') {
+    return authSuccessResponse(result.email, result.subscriber, 'thingy', event, start);
+  }
+  if (result.status === 'subscriber_unavailable') {
+    return jsonResponse(502, { error: 'Could not validate subscriber status right now.' }, event);
+  }
+  if (result.status === 'not_active') {
+    return jsonResponse(403, { status: result.subscriberStatus, error: 'That subscription is not active.' }, event);
+  }
+  return jsonResponse(400, { status: 'magic_link_invalid', error: 'That sign-in link is invalid or expired.' }, event);
 }
 
 async function completeMagicLink(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
@@ -546,87 +444,8 @@ async function completeMagicLink(event: LibrarianHttpEvent, body: JsonRecord, st
       event
     );
   }
-  return redeemMagicByTokenHash(magicTokenHash(token), event, start);
+  return magicRedeemResponse(await redeemMagicRowByTokenHash(magicTokenHash(token), event), event, start);
 }
-
-// Shared one-shot redemption used by both the link (login_token) and the
-// emailed code (action verify_code) - both burn the same magic row.
-async function redeemMagicByTokenHash(tokenHash: string, event: LibrarianHttpEvent, start: number) {
-  const tableName = process.env.TABLE_NAME;
-  if (!tableName) return jsonResponse(500, { error: 'Thingy sign-in is unavailable right now.' }, event);
-  const key = {
-    pk: dynamoString(`magic#${tokenHash}`),
-    sk: dynamoString('magic')
-  };
-  const loaded = await dynamodb.send(new GetItemCommand({ TableName: tableName, Key: key }));
-  const item = loaded.Item || null;
-  const email = normalizeEmail(item?.email?.S || '');
-  const expiresAt = Number(item?.expires_at?.N || 0);
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  if (!item || !email || expiresAt < nowSeconds || item.used_at) {
-    logEvent('info', 'auth_magic_link_rejected', {
-      token_hash_prefix: tokenHash.slice(0, 10),
-      reason: !item ? 'not_found' : expiresAt < nowSeconds ? 'expired' : 'used'
-    });
-    return jsonResponse(
-      400,
-      { status: 'magic_link_invalid', error: 'That sign-in link is invalid or expired.' },
-      event
-    );
-  }
-  try {
-    await dynamodb.send(
-      new UpdateItemCommand({
-        TableName: tableName,
-        Key: key,
-        UpdateExpression: 'SET #used_at = :used_at, #used_client_hash = :client_hash',
-        ConditionExpression: 'attribute_exists(pk) AND attribute_not_exists(#used_at) AND #expires_at >= :now',
-        ExpressionAttributeNames: {
-          '#used_at': 'used_at',
-          '#used_client_hash': 'used_client_hash',
-          '#expires_at': 'expires_at'
-        },
-        ExpressionAttributeValues: {
-          ':used_at': dynamoNumber(nowSeconds),
-          ':client_hash': dynamoString(clientIdentityHash(event)),
-          ':now': dynamoNumber(nowSeconds)
-        }
-      })
-    );
-  } catch (error) {
-    logEvent('info', 'auth_magic_link_redeem_race', {
-      token_hash_prefix: tokenHash.slice(0, 10),
-      error_type: errorName(error)
-    });
-    return jsonResponse(
-      400,
-      { status: 'magic_link_invalid', error: 'That sign-in link is invalid or expired.' },
-      event
-    );
-  }
-
-  let subscriber;
-  try {
-    subscriber = await fetchSubscriber(email);
-  } catch (error) {
-    logEvent('error', 'auth_magic_link_buttondown_lookup_failed', {
-      email_hash: emailHash(email),
-      error_type: errorName(error)
-    });
-    return jsonResponse(502, { error: 'Could not validate subscriber status right now.' }, event);
-  }
-  const status = subscriberStatus(subscriber);
-  if (status !== 'active' && status !== 'premium') {
-    logEvent('info', 'auth_magic_link_subscriber_not_active', {
-      email_hash: emailHash(email),
-      subscriber_status: status
-    });
-    return jsonResponse(403, { status, error: 'That subscription is not active.' }, event);
-  }
-  return authSuccessResponse(email, subscriber, 'thingy', event, start);
-}
-
-const MAGIC_CODE_MAX_ATTEMPTS = 5;
 
 async function verifyMagicCode(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
   const tableName = process.env.TABLE_NAME;
@@ -642,54 +461,12 @@ async function verifyMagicCode(event: LibrarianHttpEvent, body: JsonRecord, star
     event
   );
   if (!email || !code) return rejected;
-  const hashedEmail = emailHash(email);
-  const codeLimit = Number(process.env.THINGY_MAGIC_LINK_RATE_LIMIT_MAX || MAGIC_LINK_RATE_LIMIT_MAX);
-  if (!(await checkRateLimit(`auth#code:${hashedEmail}`, codeLimit * MAGIC_CODE_MAX_ATTEMPTS))) {
-    logEvent('warning', 'auth_code_rate_limited', { email_hash: hashedEmail });
+  const result = await verifyPendingCode(email, code, event);
+  if (result.status === 'rate_limited') {
     return jsonResponse(429, { error: 'Too many code attempts. Please wait a bit and try again.' }, event);
   }
-  const key = { pk: dynamoString(`magiccode#${hashedEmail}`), sk: dynamoString('magiccode') };
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  let attempts = 0;
-  try {
-    // Count the attempt atomically BEFORE comparing, so parallel guesses
-    // cannot dodge the cap.
-    const bumped = await dynamodb.send(
-      new UpdateItemCommand({
-        TableName: tableName,
-        Key: key,
-        UpdateExpression: 'ADD #attempts :one',
-        ConditionExpression: 'attribute_exists(pk) AND #expires_at >= :now',
-        ExpressionAttributeNames: { '#attempts': 'attempts', '#expires_at': 'expires_at' },
-        ExpressionAttributeValues: { ':one': dynamoNumber(1), ':now': dynamoNumber(nowSeconds) },
-        ReturnValues: 'ALL_NEW'
-      })
-    );
-    attempts = Number(bumped.Attributes?.attempts?.N || 0);
-    const storedCodeHash = String(bumped.Attributes?.code_hash?.S || '');
-    const tokenHash = String(bumped.Attributes?.token_hash?.S || '');
-    if (attempts > MAGIC_CODE_MAX_ATTEMPTS) {
-      // Burn the record; a fresh email is required.
-      await dynamodb.send(new DeleteItemCommand({ TableName: tableName, Key: key }));
-      logEvent('warning', 'auth_code_attempts_exhausted', { email_hash: hashedEmail });
-      return rejected;
-    }
-    const expected = Buffer.from(storedCodeHash, 'hex');
-    const actual = Buffer.from(magicCodeHash(code), 'hex');
-    if (expected.length !== actual.length || !nodeCrypto.timingSafeEqual(expected, actual)) {
-      logEvent('info', 'auth_code_mismatch', { email_hash: hashedEmail, attempts });
-      return rejected;
-    }
-    await dynamodb.send(new DeleteItemCommand({ TableName: tableName, Key: key }));
-    logEvent('info', 'auth_code_verified', { email_hash: hashedEmail, attempts });
-    return redeemMagicByTokenHash(tokenHash, event, start);
-  } catch (error) {
-    logEvent('info', 'auth_code_rejected', {
-      email_hash: hashedEmail,
-      error_type: errorName(error)
-    });
-    return rejected;
-  }
+  if (result.status === 'code_invalid') return rejected;
+  return magicRedeemResponse(result, event, start);
 }
 
 async function authHandler(event: LibrarianHttpEvent) {
@@ -871,6 +648,16 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
       response = await handleMemory(event, parseBody(event), start);
     } else if (method === 'POST' && path.endsWith('/conversations')) {
       response = await handleUserConversations(event, parseBody(event), { start, entitlementsForSessionPayload });
+    } else if (method === 'GET' && path.endsWith('/.well-known/oauth-authorization-server')) {
+      response = handleOauthMetadata(event);
+    } else if (method === 'GET' && path.endsWith('/.well-known/oauth-protected-resource')) {
+      response = handleOauthMetadata(event);
+    } else if (method === 'POST' && path.endsWith('/register')) {
+      response = await handleRegister(event);
+    } else if (method === 'POST' && path.endsWith('/token')) {
+      response = await handleToken(event);
+    } else if ((method === 'GET' || method === 'POST') && path.endsWith('/authorize')) {
+      response = await handleAuthorize(event, start);
     } else {
       response = jsonResponse(404, { error: 'Not found.' }, event);
     }

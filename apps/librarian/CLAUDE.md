@@ -116,6 +116,22 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 - **Embedding model is Cohere v3** at 1024 dimensions. Bumping to v4 would invalidate the entire embedded corpus — re-embed cost is $1-2 + ~3 minutes. Plan for it; don't drift accidentally.
 - **Thingy models** use cross-region inference profiles. Default is Sonnet 4.6 for main chat/persona work, fast is Haiku 4.5 for structured/background work, and advanced is Opus 4.6 for high-synthesis work. The deploy smoke test checks all three before CloudFormation runs.
 
+## OAuth authorization server (Phase 2 of the MCP plan)
+
+`lambda/auth/oauth-routes.mts` + `lambda/shared/oauth-store.mts` implement an
+OAuth 2.1 authorization server on the auth Lambda for the upcoming MCP surface
+(Phase 3). Public clients only: dynamic registration (`/register`), PKCE S256
+enforced, no client secrets. The `/authorize` flow reuses the magic-code login
+machinery (extracted to `lambda/shared/magic-login.mts` so the handler and
+oauth-routes share it without an import cycle) and renders small inline HTML
+pages. All OAuth rows live in the shared table (`oauthclient#`, `oauthpending#`,
+`oauthcode#`, `oauthaccess#`, `oauthrefresh#`, `oauthfamily#` pk prefixes) with
+secrets stored as sha256 hex and ttl set; refresh tokens rotate and reuse
+revokes the whole family via the family row (no GSI). Token/authorize responses
+deliberately skip CORS and the contract header; metadata endpoints are cached
+five minutes. Issuer comes from `LIBRARIAN_OAUTH_ISSUER` (default
+`https://librarian.thingelstad.com`).
+
 ## Conventions
 
 - **Prompts live in `prompts/`** as `.md` files. `loadToolSpecs()` reads them. Edits need a redeploy.
