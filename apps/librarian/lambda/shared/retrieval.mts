@@ -298,7 +298,7 @@ function sourceAgeLabel(source: CorpusChunk) {
   return `about ${Math.max(Math.round(days / 365), 1)} years old`;
 }
 
-export function compactSource(source: CorpusChunk, textLimit = 900) {
+export function compactSource(source: CorpusChunk, textLimit = 1200) {
   return {
     issue_number: source.issue_number,
     source_kind: source.source_kind,
@@ -341,7 +341,7 @@ function sourceHeader(source: CorpusChunk) {
 async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8): Promise<CorpusChunk[]> {
   if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, limit);
   const start = performance.now();
-  const top = sources.slice(0, Math.max(limit * 5, 40));
+  const top = sources.slice(0, Math.max(limit * 5, 100));
   const rerankInputs: RerankSource[] = top.map((source) => {
     const header = sourceHeader(source);
     return {
@@ -409,9 +409,16 @@ async function embedForCorpus(query: unknown, corpus: Corpus) {
 
 // Pure cosine scoring over one corpus's embedded chunks. Attaches
 // _retrieval_score so callers can merge candidates from multiple corpora and
-// re-sort before a single rerank (mixed scopes).
-function semanticScore(corpus: Corpus, queryEmbedding: number[], limit: number): CorpusChunk[] {
-  const chunks = (corpus.chunks || []).filter((chunk) => chunk.embedding);
+// re-sort before a single rerank (mixed scopes). The keep predicate runs
+// BEFORE the top-K slice - year/section filters must narrow the scan itself,
+// or a filtered query only ever sees survivors of the unfiltered top-K.
+export function semanticScore(
+  corpus: Corpus,
+  queryEmbedding: number[],
+  limit: number,
+  keep: (chunk: CorpusChunk) => boolean = () => true
+): CorpusChunk[] {
+  const chunks = (corpus.chunks || []).filter((chunk) => chunk.embedding && keep(chunk));
   if (!chunks.length) return [];
   return chunks
     .map((chunk) => ({ score: cosine(queryEmbedding, chunk.embedding), chunk }))
@@ -421,13 +428,19 @@ function semanticScore(corpus: Corpus, queryEmbedding: number[], limit: number):
     .map(({ score, chunk }) => ({ ...publicChunk(chunk), _retrieval_score: score }));
 }
 
-async function retrieveLexical(query: unknown, limit = 8, kind = 'weekly_thing'): Promise<CorpusChunk[]> {
+async function retrieveLexical(
+  query: unknown,
+  limit = 8,
+  kind = 'weekly_thing',
+  keep: (chunk: CorpusChunk) => boolean = () => true
+): Promise<CorpusChunk[]> {
   const start = performance.now();
   const queryTerms = new Map<string, number>();
   for (const term of tokenize(query)) queryTerms.set(term, (queryTerms.get(term) || 0) + 1);
   if (!queryTerms.size) return [];
   const scored: Array<{ score: number; chunk: CorpusChunk }> = [];
   for (const chunk of await indexedChunks(kind)) {
+    if (!keep(chunk)) continue;
     let score = 0;
     for (const [term, count] of queryTerms.entries()) score += (chunk._vector?.get(term) || 0) * count;
     if (score > 0) scored.push({ score: score / (chunk._norm || 1), chunk });
@@ -461,7 +474,7 @@ export function parseYearRange(value: unknown): [number | null, number | null] {
   return [null, null];
 }
 
-function matchesFilters(source: CorpusChunk, { yearRange, section }: RetrievalFilters = {}) {
+export function matchesFilters(source: CorpusChunk, { yearRange, section }: RetrievalFilters = {}) {
   const [startYear, endYear] = parseYearRange(yearRange);
   const year = Number(source.issue_year || 0);
   if (startYear && (!year || year < startYear)) return false;
@@ -480,25 +493,71 @@ function withAgeLabel(sources: CorpusChunk[]) {
   return sources.map((source) => ({ ...source, age_label: source.age_label || sourceAgeLabel(source) }));
 }
 
+function chunkKey(source: CorpusChunk) {
+  if (source.id != null) return `id:${String(source.id)}`;
+  return [
+    sourceKind(source),
+    String(source.issue_number ?? ''),
+    String(source.section ?? ''),
+    String(source.text || '').slice(0, 80)
+  ].join('|');
+}
+
+// Reciprocal-rank fusion of the semantic and lexical candidate lists. Rank-
+// based (not score-based) because cosine and TF-IDF scores are not on a
+// comparable scale. A chunk found by both engines gets both contributions;
+// the single downstream rerank then orders the fused pool on relevance.
+const RRF_K = 60;
+export function fuseCandidates(semantic: CorpusChunk[], lexical: CorpusChunk[], limit: number): CorpusChunk[] {
+  const fused = new Map<string, CorpusChunk>();
+  const lists: Array<[CorpusChunk[], string]> = [
+    [semantic, 'semantic'],
+    [lexical, 'lexical']
+  ];
+  for (const [list, mode] of lists) {
+    list.forEach((source, rank) => {
+      const key = chunkKey(source);
+      const existing = fused.get(key);
+      const contribution = 1 / (RRF_K + rank + 1);
+      if (existing) {
+        existing._retrieval_score = (existing._retrieval_score || 0) + contribution;
+        existing.retrieval_modes = [...new Set([...(existing.retrieval_modes || []), mode])];
+      } else {
+        fused.set(key, { ...source, _retrieval_score: contribution, retrieval_modes: [mode] });
+      }
+    });
+  }
+  return [...fused.values()].sort((a, b) => (b._retrieval_score || 0) - (a._retrieval_score || 0)).slice(0, limit);
+}
+
 // Scope is enforced HERE - by which corpus/corpora we scan, not by a
 // post-filter. weekly_thing scans the WT corpus (identical to today);
 // blog/podcast scan their own corpora; mixed scopes gather candidates from
-// each and rerank the union once. matchesFilters only applies year/section.
+// each and rerank the union once. Year/section filters are pushed into each
+// engine's scan via the keep predicate. Lexical always contributes (it is
+// in-memory and free, and carries proper nouns dense retrieval misses);
+// semantic is best-effort and the fusion degrades to lexical-only when the
+// embedding call fails.
 export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilters = {}) {
   const kinds = scopeKinds(filters.scope);
-  const candidateLimit = Math.max(limit * 5, 40);
+  const candidateLimit = Math.max(limit * 5, 100);
   const byScore = (a: CorpusChunk, b: CorpusChunk) => (b._retrieval_score || 0) - (a._retrieval_score || 0);
+  const keep = (chunk: CorpusChunk) => matchesFilters(chunk, filters);
+
+  const lexical: CorpusChunk[] = [];
+  for (const kind of kinds) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keep)));
+  lexical.sort(byScore);
+
+  const semantic: CorpusChunk[] = [];
   try {
     let queryEmbedding = null;
-    let semantic: CorpusChunk[] = [];
     for (const kind of kinds) {
       const corpus = await loadCorpus(kind);
       if (!(corpus.chunks || []).some((chunk) => chunk.embedding)) continue;
       if (!queryEmbedding) queryEmbedding = await embedForCorpus(query, corpus);
-      semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit));
+      semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit, keep));
     }
-    semantic = semantic.filter((source) => matchesFilters(source, filters)).sort(byScore);
-    if (semantic.length) return withAgeLabel((await rerankSources(query, semantic, limit)).slice(0, limit));
+    semantic.sort(byScore);
   } catch (error) {
     logEvent(
       'error',
@@ -510,8 +569,7 @@ export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilt
       })
     );
   }
-  let lexical: CorpusChunk[] = [];
-  for (const kind of kinds) lexical.push(...(await retrieveLexical(query, candidateLimit, kind)));
-  lexical = lexical.filter((source) => matchesFilters(source, filters)).sort(byScore);
-  return withAgeLabel((await rerankSources(query, lexical, limit)).slice(0, limit));
+
+  const fused = fuseCandidates(semantic, lexical, candidateLimit);
+  return withAgeLabel((await rerankSources(query, fused, limit)).slice(0, limit));
 }
