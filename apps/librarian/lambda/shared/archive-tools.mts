@@ -1139,8 +1139,8 @@ async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}
 // counts and aggregate numbers are never altered.
 // Caps scale down with nesting: the timeline is ~40 years each carrying
 // evidence arrays, so inner lists get much smaller budgets than outer ones.
-const LENS_ARRAY_CAPS = [40, 24, 6, 4];
-const LENS_TEXT_CAPS = [500, 400, 240, 160];
+const LENS_ARRAY_CAPS = [40, 15, 4, 3];
+const LENS_TEXT_CAPS = [500, 350, 200, 120];
 
 function compactLensPayload<T>(value: T, depth = 0): T {
   const textCap = LENS_TEXT_CAPS[Math.min(depth, LENS_TEXT_CAPS.length - 1)];
