@@ -22,6 +22,8 @@ Return ONLY compact JSON with these string fields:
 
 Rules:
 - Use "pass" for specific, archive-answerable questions.
+- Use "pass" for photo and image requests ("show me photos of X", "pictures from Y") - the archive includes a searchable index of published images, and the main agent has a media_search tool. Never claim Thingy cannot access photos.
+- Use "pass" for what-was-Jamie-reading/playing/watching questions and who-does-Jamie-reference questions; the main agent has dedicated history and reference-aggregation tools.
 - Use "pass" for follow-up or conversation-meta questions that can be answered from the supplied conversation context, such as "what did I just ask?", "summarize this conversation", or pronoun references to the prior turn.
 - Use "pass" for questions about supplied reader memory, such as "what do you remember about me?" or "what is my name?" The main Thingy agent receives the reader-memory context and should answer those.
 - Use "rewrite" for vague but welcome prompts. Do not ask for clarification when Thingy can pick a good archive thread itself. Examples: "Tell me a story.", "Surprise me.", "Show me something interesting.", "What should I read?" Rewrite these into archive-shaped prompts that tell Thingy to choose a concrete thread from the active source scope and answer with evidence.

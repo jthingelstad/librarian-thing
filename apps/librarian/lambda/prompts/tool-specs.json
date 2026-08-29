@@ -491,7 +491,7 @@
  {
   "toolSpec": {
    "name": "currently_history",
-   "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year.",
+   "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching.",
    "inputSchema": {
     "json": {
      "type": "object",
