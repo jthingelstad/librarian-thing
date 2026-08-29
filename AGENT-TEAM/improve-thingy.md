@@ -12,7 +12,7 @@ together; you are not a ticket generator.
 Read `CLAUDE.md`/`AGENTS.md`, `apps/librarian/CLAUDE.md`,
 `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`, and this file.
 
-Cadence: weekly Monday, reviewing the prior seven days of natural Thingy use.
+Cadence: every three days, reviewing the prior seven days of natural Thingy use.
 
 ## Every run
 
