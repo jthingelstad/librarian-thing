@@ -1,4 +1,4 @@
-export const LIBRARIAN_CONTRACT_VERSION = '3.0.0';
+export const LIBRARIAN_CONTRACT_VERSION = '3.1.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); drop '2' once the
 // deployed Thingy web client vendors 3.0.0.
@@ -96,7 +96,9 @@ const quotaOverview = object({
   day: string,
   unlimited: boolean,
   chat_used: number,
-  chat_max: { anyOf: [number, { type: 'null' }] }
+  chat_max: { anyOf: [number, { type: 'null' }] },
+  mcp_used: number,
+  mcp_max: { anyOf: [number, { type: 'null' }] }
 });
 const accountOverview = object({
   first_seen_at: string,
@@ -177,7 +179,8 @@ export const LIBRARIAN_CONTRACT = {
         'messages'
       ]),
       create: object({ conversation: apiProperties.conversation }, ['conversation']),
-      rename: object({ conversation: apiProperties.conversation }, ['conversation'])
+      rename: object({ conversation: apiProperties.conversation }, ['conversation']),
+      email_answer: object({ ok: boolean }, ['ok'])
     }),
     '/feedback': endpoint(),
     '/memory': endpoint(),

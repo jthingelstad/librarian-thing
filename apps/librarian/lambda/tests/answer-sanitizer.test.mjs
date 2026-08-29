@@ -82,3 +82,20 @@ test('removes leaked preflight annotations from reader-facing prose', () => {
   assert.equal(out, "I can't help infer that private detail.");
   assert.doesNotMatch(out, /Preflight/i);
 });
+
+test('removes tool-name narration blocks (the 2026-08-29 leak class)', () => {
+  const raw =
+    'The quote_search for "my words are mine" returned the exact issue. I have a good picture now.\n\n' +
+    'Jamie wrote that line in WT348.';
+  assert.equal(sanitizeAnswerProse(raw), 'Jamie wrote that line in WT348.');
+});
+
+test('removes let-me-compile narration before an inline answer marker', () => {
+  const raw = 'entity_lens shows the full run. Let me compile the timeline. Here is the story:\n\nIt starts in 2018.';
+  assert.equal(sanitizeAnswerProse(raw), 'Here is the story:\n\nIt starts in 2018.');
+});
+
+test('keeps prose that legitimately contains snake_case identifiers', () => {
+  const raw = 'Jamie renamed the field to issue_number in the corpus schema and wrote about why.';
+  assert.equal(sanitizeAnswerProse(raw), raw);
+});

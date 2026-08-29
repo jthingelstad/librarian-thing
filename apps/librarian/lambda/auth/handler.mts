@@ -20,7 +20,13 @@ import {
 } from '../shared/magic-login.mjs';
 import type { MagicRedeemResult, Subscriber } from '../shared/magic-login.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
-import { chatDailyQuota, readDailyQuota, utcDayBucket } from '../shared/quota.mjs';
+import {
+  chatDailyQuota,
+  mcpDailyQuota,
+  quotaMaxForEntitlements,
+  readDailyQuota,
+  utcDayBucket
+} from '../shared/quota.mjs';
 import {
   createSessionToken,
   createSessionTokenForSub,
@@ -315,18 +321,27 @@ async function memoryAccountConversations(sub: string) {
   });
 }
 
-async function dailyQuotaOverview(sub: string) {
+async function dailyQuotaOverview(sub: string, entitlements: string[] = []) {
   const unlimited = isOwnerSubscriberHash(sub);
-  const chat = unlimited ? null : await readDailyQuota('chat', sub);
+  const [chat, mcp] = unlimited
+    ? [null, null]
+    : await Promise.all([readDailyQuota('chat', sub), readDailyQuota('mcp', sub)]);
   return {
     day: utcDayBucket(),
     unlimited,
     chat_used: chat?.count ?? 0,
-    chat_max: unlimited ? null : chatDailyQuota()
+    chat_max: unlimited ? null : quotaMaxForEntitlements(chatDailyQuota(), entitlements),
+    mcp_used: mcp?.count ?? 0,
+    mcp_max: unlimited ? null : quotaMaxForEntitlements(mcpDailyQuota(), entitlements)
   };
 }
 
-async function memoryProfileResponse(sub: string, event: LibrarianHttpEvent, extra: JsonRecord = {}) {
+async function memoryProfileResponse(
+  sub: string,
+  event: LibrarianHttpEvent,
+  extra: JsonRecord = {},
+  entitlements: string[] = []
+) {
   const memory = await getUserMemory(sub, { consistent: true });
   const conversations = await memoryAccountConversations(sub);
   const conversationDates = conversations
@@ -350,9 +365,9 @@ async function memoryProfileResponse(sub: string, event: LibrarianHttpEvent, ext
     },
     oldest_conversation_at: conversationDates[0] || '',
     newest_conversation_at: conversationDates.at(-1) || '',
-    // Per-user daily budget pools, surfaced in the account panel. Additive
-    // contract field; the MCP pool joins in Phase 3.
-    quota: await dailyQuotaOverview(sub)
+    // Per-user daily budget pools (chat + mcp), surfaced in the account
+    // panel. Additive contract fields.
+    quota: await dailyQuotaOverview(sub, entitlements)
   };
   return jsonResponse(200, { status: 'ok', profile, account, ...extra }, event);
 }
@@ -367,12 +382,17 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
     .trim()
     .toLowerCase();
   if (action === 'get') {
-    return await memoryProfileResponse(String(payload.sub), event);
+    return await memoryProfileResponse(String(payload.sub), event, {}, entitlementsForSessionPayload(payload));
   }
   if (action === 'refresh_profile') {
     // No-op kept so web clients deployed before the synthesized-memory
     // removal get a normal profile back instead of an error.
-    return await memoryProfileResponse(String(payload.sub), event, { refreshed: false });
+    return await memoryProfileResponse(
+      String(payload.sub),
+      event,
+      { refreshed: false },
+      entitlementsForSessionPayload(payload)
+    );
   }
   if (action === 'delete_profile') {
     const result = await deleteThingyProfile(payload.sub);

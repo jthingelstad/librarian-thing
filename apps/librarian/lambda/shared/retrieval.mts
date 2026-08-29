@@ -591,8 +591,10 @@ export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilt
 
 // A Weekly Thing Journal chunk reprints blog posts; when both the journal
 // chunk and a standalone blog chunk for the same post URL surface as
-// candidates, keep the higher-scored one (Jamie's dedup ask - the URL is
-// the join key, stamped as journal_post_urls at corpus build).
+// candidates, the blog chunk always wins - the blog post is the canonical
+// home of the writing (Jamie's call, 2026-08-29). The URL is the join key,
+// stamped as journal_post_urls at corpus build. A journal chunk with no
+// blog twin in the pool stays.
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
   const journalOwners = new Map<string, CorpusChunk>();
   for (const candidate of candidates) {
@@ -605,9 +607,7 @@ export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
   for (const candidate of candidates) {
     if (candidate.source_kind !== 'blog' || !candidate.url) continue;
     const twin = journalOwners.get(String(candidate.url));
-    if (!twin || dropped.has(twin)) continue;
-    if ((twin._retrieval_score || 0) >= (candidate._retrieval_score || 0)) dropped.add(candidate);
-    else dropped.add(twin);
+    if (twin) dropped.add(twin);
   }
   return candidates.filter((candidate) => !dropped.has(candidate));
 }

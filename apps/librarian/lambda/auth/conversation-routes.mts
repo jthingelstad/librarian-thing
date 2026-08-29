@@ -4,14 +4,18 @@ import type { AttributeValue, QueryCommandOutput, WriteRequest } from '@aws-sdk/
 import { dynamodb } from '../shared/aws-clients.mjs';
 import { jsonResponse } from '../shared/http.mjs';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import { extractBearer, verifyToken } from '../shared/session.mjs';
+import { emailHash, extractBearer, normalizeEmail, verifyToken } from '../shared/session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { logEvent } from '../shared/logging.mjs';
 import {
   availableConversationModes,
   canUseConversationMode,
+  isOwnerSubscriberHash,
   normalizeConversationMode
 } from '../shared/conversation-modes.mjs';
+import { consumeDailyQuota, emailDailyQuota } from '../shared/quota.mjs';
+import { jmapConfigured, sendJmapEmail } from '../shared/jmap-mail.mjs';
+import { answerEmailHtml, answerEmailSubject, answerEmailText } from '../shared/answer-email.mjs';
 import {
   createUserConversation,
   getUserConversation,
@@ -156,6 +160,63 @@ export async function handleUserConversations(
         title: body.title
       });
       return jsonResponse(200, { conversation }, event);
+    }
+
+    if (action === 'email_answer') {
+      const conversationId = validConversationId(body.conversation_id || body.id);
+      if (!conversationId) return jsonResponse(400, { error: 'conversation_id is required.' }, event);
+      // Self-send only: the address must hash to the signed-in subject, so
+      // Thingy can never be used to mail an answer to someone else and the
+      // server never needs a plaintext address at rest.
+      const email = normalizeEmail(body.email);
+      if (!email || emailHash(email) !== subscriberHash) {
+        return jsonResponse(403, { error: 'Answers can only be emailed to your own signed-in address.' }, event);
+      }
+      if (!jmapConfigured()) {
+        return jsonResponse(503, { error: 'Email is not available right now.' }, event);
+      }
+      const result = await getUserConversation({ dynamodb, tableName, subscriberHash, conversationId });
+      if (!result) return jsonResponse(404, { error: 'Conversation not found.' }, event);
+      const requestId = String(body.request_id || '').trim();
+      const answers = (result.messages || []).filter(
+        (message) => message.role === 'assistant' && String(message.content || '').trim()
+      );
+      const target = requestId
+        ? answers.find((message) => String(message.request_id || '') === requestId)
+        : answers.at(-1);
+      if (!target) return jsonResponse(404, { error: 'No answer found to email.' }, event);
+      const questionFor = (result.messages || []).find(
+        (message) => message.role === 'user' && String(message.request_id || '') === String(target.request_id || '')
+      );
+      if (!isOwnerSubscriberHash(subscriberHash)) {
+        const quota = await consumeDailyQuota('email', subscriberHash, emailDailyQuota());
+        if (!quota.allowed) {
+          return jsonResponse(
+            429,
+            { error: `Daily email limit reached (${quota.max} per day). It resets at midnight UTC.` },
+            event
+          );
+        }
+      }
+      const emailInput = {
+        conversationTitle: result.conversation?.title,
+        question: questionFor?.content || '',
+        answer: target.content,
+        citations: Array.isArray(target.citations) ? (target.citations as Record<string, unknown>[]) : []
+      };
+      await sendJmapEmail({
+        to: email,
+        subject: answerEmailSubject(result.conversation?.title),
+        text: answerEmailText(emailInput),
+        html: answerEmailHtml(emailInput)
+      });
+      logEvent('info', 'answer_emailed', {
+        subscriber_hash: subscriberHash,
+        conversation_id: conversationId,
+        request_id: String(target.request_id || ''),
+        duration_ms: Math.round(performance.now() - start)
+      });
+      return jsonResponse(200, { ok: true }, event);
     }
 
     if (action === 'delete' || action === 'trash') {

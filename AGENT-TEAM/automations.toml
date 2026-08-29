@@ -1,0 +1,37 @@
+version = 2
+repo = "."
+timezone = "America/Chicago"
+
+# Calendar cadence only; deploy/alarm/incident follow-ups are manual starts.
+# All three start as PROPOSED — Jamie flips status to ACTIVE when he installs
+# the Codex tasks. There is no bare gpt-5.6 id; only -sol/-terra/-luna exist.
+
+[[automation]]
+id = "librarian-operations"
+name = "Run the Librarian"
+objective = "run"
+objective_file = "AGENT-TEAM/run-librarian.md"
+status = "PROPOSED"
+rrule = "RRULE:FREQ=WEEKLY;BYHOUR=8;BYMINUTE=20;BYDAY=SA"
+model = "gpt-5.6-terra"
+reasoning_effort = "high"
+
+[[automation]]
+id = "librarian-archivist"
+name = "Keep the Archive True"
+objective = "archive"
+objective_file = "AGENT-TEAM/keep-archive-true.md"
+status = "PROPOSED"
+rrule = "RRULE:FREQ=WEEKLY;BYHOUR=7;BYMINUTE=30;BYDAY=SU"
+model = "gpt-5.6-terra"
+reasoning_effort = "high"
+
+[[automation]]
+id = "librarian-evaluator"
+name = "Improve Thingy"
+objective = "improve"
+objective_file = "AGENT-TEAM/improve-thingy.md"
+status = "PROPOSED"
+rrule = "RRULE:FREQ=WEEKLY;BYHOUR=9;BYMINUTE=0;BYDAY=MO"
+model = "gpt-5.6-sol"
+reasoning_effort = "xhigh"

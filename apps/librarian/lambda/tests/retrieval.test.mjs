@@ -100,7 +100,7 @@ test('fuseCandidates falls back to a composite key when chunks have no id', () =
   assert.deepEqual(fused[0].retrieval_modes.sort(), ['lexical', 'semantic']);
 });
 
-test('journal twins dedupe by canonical blog URL, keeping the higher score', async () => {
+test('journal twins dedupe by canonical blog URL - blog always wins', async () => {
   const { dedupeJournalTwins } = await import('../dist/shared/retrieval.mjs');
   const journal = {
     id: 'wt-journal',
@@ -120,8 +120,13 @@ test('journal twins dedupe by canonical blog URL, keeping the higher score', asy
   let out = dedupeJournalTwins([journal, blogTwin, unrelated]);
   assert.deepEqual(out.map((c) => c.id).sort(), ['blog-1', 'blog-2']);
 
-  // Journal scored higher: the blog twin drops.
+  // Journal scored higher: the blog twin STILL wins (Jamie's call - the
+  // blog post is the canonical home of the writing).
   out = dedupeJournalTwins([{ ...journal, _retrieval_score: 0.95 }, blogTwin, unrelated]);
+  assert.deepEqual(out.map((c) => c.id).sort(), ['blog-1', 'blog-2']);
+
+  // No blog twin in the pool: the journal chunk stays.
+  out = dedupeJournalTwins([journal, unrelated]);
   assert.deepEqual(out.map((c) => c.id).sort(), ['blog-2', 'wt-journal']);
 
   // No journal chunks: untouched.
