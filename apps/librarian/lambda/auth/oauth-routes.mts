@@ -217,12 +217,13 @@ function consentPage(pendingId: string, clientName: string, scope: string) {
   const inner = `<h1>Allow ${escapeHtml(clientName)}?</h1>
 <p><strong>${escapeHtml(clientName)}</strong> wants to search and read The Weekly Thing archive as you.</p>
 <p class="muted">Scope: ${escapeHtml(scope)}</p>
-<form method="post" action="authorize">
+<form method="post" action="authorize" onsubmit="setTimeout(()=>{for(const b of this.querySelectorAll('button'))b.disabled=true},0)">
 ${hiddenPendingField(pendingId)}
 <input type="hidden" name="step" value="approve">
 <button type="submit" name="decision" value="approve">Allow</button>
 <button class="secondary" type="submit" name="decision" value="deny">Deny</button>
-</form>`;
+</form>
+<p class="muted">After you click Allow, this window hands off to the app - it may close or show the app's site.</p>`;
   return htmlResponse(200, pageHtml('Approve access', inner));
 }
 
@@ -232,7 +233,9 @@ function redirectWithParams(redirectUri: string, params: Record<string, string>)
     if (value !== '') url.searchParams.set(key, value);
   }
   return {
-    statusCode: 302,
+    // 303 See Other: the POST is done; fetch the redirect target with GET.
+    // Removes any browser ambiguity about re-posting the consent form.
+    statusCode: 303,
     headers: { location: url.toString(), 'cache-control': 'no-store' },
     body: ''
   };
