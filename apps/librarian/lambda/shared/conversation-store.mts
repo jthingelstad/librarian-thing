@@ -26,6 +26,10 @@ import { conversationTtlSeconds } from './retention.mjs';
 type LogEvent = (level: string, message: string, fields?: Record<string, unknown>) => void;
 type JsonObject = Record<string, unknown>;
 
+function objectValue(value: unknown): JsonObject {
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonObject) : {};
+}
+
 interface StoreContext {
   dynamodb: DynamoDBClient;
   tableName?: string;
@@ -392,7 +396,17 @@ async function putTurn({
     preflight: preflightDynamoItem(preflight),
     model: dynamoString(metrics.model),
     duration_ms: dynamoNumber(metrics.duration_ms),
+    // Cumulative across every Bedrock call in the agent loop (schema v2);
+    // rows older than the change carry the final call's output only.
     output_tokens: dynamoNumber(metrics.output_tokens),
+    input_tokens: dynamoNumber(metrics.input_tokens),
+    total_tokens: dynamoNumber(metrics.total_tokens),
+    cache_read_input_tokens: dynamoNumber(metrics.cache_read_input_tokens),
+    cache_write_input_tokens: dynamoNumber(metrics.cache_write_input_tokens),
+    bedrock_calls: dynamoNumber(metrics.bedrock_calls),
+    trace_schema_version: dynamoNumber(objectValue(toolTrace).schema_version),
+    prompt_fingerprint: dynamoString(objectValue(toolTrace).prompt_fingerprint),
+    source_revision: dynamoString(objectValue(toolTrace).source_revision),
     stop_reason: dynamoString(metrics.stop_reason),
     tool_count: dynamoNumber(toolNames.length),
     tool_names: dynamoStringList(toolNames, 20, 80),

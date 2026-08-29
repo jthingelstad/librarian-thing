@@ -324,10 +324,22 @@ def exact_turn(row: dict[str, Any]) -> dict[str, Any]:
         "runtime": {
             "model": str(row.get("model") or ""),
             "duration_ms": int(row.get("duration_ms") or 0),
+            # output_tokens is cumulative across the agent loop on schema v2
+            # rows; on older rows it is the final Bedrock call only.
             "output_tokens": int(row.get("output_tokens") or 0),
+            "input_tokens": int(row.get("input_tokens") or 0),
+            "total_tokens": int(row.get("total_tokens") or 0),
+            "cache_read_input_tokens": int(row.get("cache_read_input_tokens") or 0),
+            "cache_write_input_tokens": int(row.get("cache_write_input_tokens") or 0),
+            "bedrock_calls": int(row.get("bedrock_calls") or 0),
             "stop_reason": str(row.get("stop_reason") or ""),
             "tool_count": int(row.get("tool_count") or 0),
             "tool_names": [str(value) for value in row.get("tool_names") or []],
+        },
+        "versions": {
+            "trace_schema_version": int(row.get("trace_schema_version") or 0),
+            "prompt_fingerprint": str(row.get("prompt_fingerprint") or ""),
+            "source_revision": str(row.get("source_revision") or ""),
         },
         "tool_trace": parse_json_object(row.get("tool_trace_json")),
         "artifact": parse_json_object(row.get("artifact_json")),

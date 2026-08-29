@@ -1,13 +1,6 @@
 import crypto from 'node:crypto';
 import { ConverseCommand, ConverseStreamCommand } from '@aws-sdk/client-bedrock-runtime';
-import type {
-  ContentBlock,
-  Message,
-  SystemContentBlock,
-  TokenUsage,
-  Tool,
-  ToolResultBlock
-} from '@aws-sdk/client-bedrock-runtime';
+import type { ContentBlock, Message, SystemContentBlock, Tool, ToolResultBlock } from '@aws-sdk/client-bedrock-runtime';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import {
@@ -21,6 +14,13 @@ import {
 } from '../shared/aws-clients.mjs';
 import { readConverseStream } from '../shared/bedrock-stream.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
+import {
+  TOOL_TRACE_SCHEMA_VERSION,
+  accumulateUsage,
+  emptyUsageTotals,
+  summarizeToolEvidence
+} from '../shared/tool-evidence.mjs';
+import { promptFingerprint } from '../shared/prompts.mjs';
 import { generateWelcome } from '../shared/archive-experience.mjs';
 import { ARCHIVE_TOOLS, collectToolCitations, toolSpecs, weeklyIssueCatalog } from '../shared/archive-tools.mjs';
 import {
@@ -430,6 +430,14 @@ function agentQuestionForPreflight(question: string, preflight: PreflightDecisio
 
 const AGENT_SYSTEM_PROMPT = agentSystemPrompt();
 
+// The deployed artifact identity, from the CloudFormation StreamCodeKey the
+// deploy script already stamps (code/chat-lambda/<upload-ts>.zip). This is
+// the smallest existing seam that uniquely names a deployed revision.
+function sourceRevision() {
+  const key = String(process.env.LIBRARIAN_SOURCE_REVISION || '');
+  return key.replace(/^code\//, '').replace(/\.zip$/, '') || 'unknown';
+}
+
 function compactTraceValue(value: unknown, maxChars = 1200) {
   if (value == null) return value;
   if (typeof value === 'string') return value.slice(0, maxChars);
@@ -440,33 +448,6 @@ function compactTraceValue(value: unknown, maxChars = 1200) {
   } catch {
     return { compacted: true };
   }
-}
-
-function countResultItems(value: unknown) {
-  const result = objectValue(value);
-  return [
-    result.results,
-    result.results_a,
-    result.results_b,
-    result.reading_path,
-    result.related_sources,
-    result.incoming_links,
-    result.outgoing_links,
-    result.cross_source_links
-  ].reduce<number>((total, value) => total + (Array.isArray(value) ? value.length : 0), 0);
-}
-
-function traceToolResult(value: unknown) {
-  const result = objectValue(value);
-  return {
-    error: result.error ? String(result.error).slice(0, 300) : '',
-    result_count: countResultItems(result),
-    total_count: Number(result.total_count || 0),
-    scope: result.scope,
-    source_kind: result.source_kind,
-    mode: result.mode,
-    topic: result.topic || result.theme || result.entity || ''
-  };
 }
 
 async function streamBedrockAgentAnswer(
@@ -496,9 +477,16 @@ async function streamBedrockAgentAnswer(
     }
   ];
   const toolResults: JsonRecord[] = [];
-  const toolTrace: ToolTrace = { calls: [] };
+  const toolTrace: ToolTrace = {
+    calls: [],
+    schema_version: TOOL_TRACE_SCHEMA_VERSION,
+    prompt_fingerprint: promptFingerprint(),
+    source_revision: sourceRevision()
+  };
   let answer = '';
-  let usage: TokenUsage | undefined;
+  // Usage accumulates across EVERY Bedrock turn of the loop - a 7-turn
+  // research run previously recorded only the final call's tokens.
+  const usageTotals = emptyUsageTotals();
   let stopReason = '';
   const maxTurns = Number(process.env.MAX_TOOL_TURNS || DEFAULT_MAX_TOOL_TURNS);
   const turnLimit = maxTurns;
@@ -547,7 +535,7 @@ async function streamBedrockAgentAnswer(
         : undefined
     });
     const message = result.message;
-    usage = result.usage || usage;
+    accumulateUsage(usageTotals, result.usage);
     stopReason = result.stopReason || stopReason;
     messages.push(message);
     const toolUses = (message.content || []).flatMap((block) =>
@@ -599,7 +587,7 @@ async function streamBedrockAgentAnswer(
         input: compactTraceValue(toolInput, 1000),
         ok: ok && !result.error,
         duration_ms: Math.round(performance.now() - toolStart),
-        result: traceToolResult(result)
+        result: summarizeToolEvidence(result)
       });
       toolResults.push(result);
       resultBlocks.push({ toolResult: { toolUseId, content: [{ json: result as BedrockJson }] } });
@@ -645,7 +633,12 @@ async function streamBedrockAgentAnswer(
     citation_count: citations.length,
     duration_ms: Math.round(performance.now() - start),
     answer_chars: answer.length,
-    output_tokens: usage?.outputTokens,
+    bedrock_calls: usageTotals.bedrock_calls,
+    input_tokens: usageTotals.input_tokens,
+    output_tokens: usageTotals.output_tokens,
+    total_tokens: usageTotals.total_tokens,
+    cache_read_input_tokens: usageTotals.cache_read_input_tokens,
+    cache_write_input_tokens: usageTotals.cache_write_input_tokens,
     stop_reason: stopReason,
     deadline_exceeded: shouldStopWriting()
   });
@@ -656,7 +649,12 @@ async function streamBedrockAgentAnswer(
     metrics: {
       model: agentModel(),
       duration_ms: Math.round(performance.now() - start),
-      output_tokens: usage?.outputTokens,
+      bedrock_calls: usageTotals.bedrock_calls,
+      input_tokens: usageTotals.input_tokens,
+      output_tokens: usageTotals.output_tokens,
+      total_tokens: usageTotals.total_tokens,
+      cache_read_input_tokens: usageTotals.cache_read_input_tokens,
+      cache_write_input_tokens: usageTotals.cache_write_input_tokens,
       stop_reason: stopReason
     }
   };
@@ -1195,9 +1193,9 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         preflight,
         toolTrace: result?.toolTrace || { calls: [] },
         metrics: {
+          ...(result?.metrics || {}),
           model: result?.metrics?.model || agentModel(),
           duration_ms: Math.round(performance.now() - start),
-          output_tokens: result?.metrics?.output_tokens,
           stop_reason: 'app_deadline_exceeded'
         },
         logEvent

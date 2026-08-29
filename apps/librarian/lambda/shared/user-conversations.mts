@@ -1,11 +1,15 @@
 import type { AttributeValue } from '@aws-sdk/client-dynamodb';
+import { boundToolTrace } from './tool-evidence.mjs';
 
 export const USER_CONVERSATION_LIMIT = 50;
 export const USER_CONVERSATION_TURN_LIMIT = 80;
 export const MAX_HISTORY_MESSAGES = 8;
 export const MAX_HISTORY_CHARS = 4000;
 export const MAX_ARTIFACT_JSON_CHARS = 20000;
-export const MAX_TOOL_TRACE_JSON_CHARS = 16000;
+// Raised from 16000 when per-call structured evidence landed (schema v2).
+// boundToolTrace degrades individual calls to fit; the whole-trace
+// {omitted: true} fallback below is only for unserializable input.
+export const MAX_TOOL_TRACE_JSON_CHARS = 48000;
 
 const CONVERSATION_ID_RE = /^[A-Za-z0-9_.:-]{1,96}$/;
 
@@ -164,7 +168,13 @@ export function boundedJsonForStorage(value: unknown, maxChars = MAX_TOOL_TRACE_
 }
 
 export function toolTraceDynamoString(trace: unknown) {
-  return dynamoString(boundedJsonForStorage(trace, MAX_TOOL_TRACE_JSON_CHARS));
+  if (trace == null) return dynamoString('');
+  try {
+    const bounded = boundToolTrace(trace, MAX_TOOL_TRACE_JSON_CHARS);
+    return dynamoString(JSON.stringify(bounded));
+  } catch {
+    return dynamoString(boundedJsonForStorage(trace, MAX_TOOL_TRACE_JSON_CHARS));
+  }
 }
 
 export function citationDynamoItem(citation: JsonObject): AttributeValue {

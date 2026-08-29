@@ -134,6 +134,65 @@ def test_detail_contains_one_exact_conversation_and_parses_runtime_evidence():
     assert "reader-hash" not in str(payload)
 
 
+def test_exact_turn_backward_compatible_with_pre_schema_v2_rows():
+    old_row = {
+        "created_at": "2026-08-01T12:00:00Z",
+        "request_id": "request-old",
+        "question": "Old question",
+        "answer": "Old answer",
+        "output_tokens": Decimal("90"),
+        "tool_trace_json": '{"compacted":true,"omitted":true,"original_chars":52000}',
+    }
+    turn = conversation_review.exact_turn(old_row)
+    assert turn["runtime"]["output_tokens"] == 90
+    assert turn["runtime"]["input_tokens"] == 0
+    assert turn["runtime"]["bedrock_calls"] == 0
+    assert turn["versions"] == {
+        "trace_schema_version": 0,
+        "prompt_fingerprint": "",
+        "source_revision": "",
+    }
+    assert turn["tool_trace"]["omitted"] is True
+
+
+def test_exact_turn_exposes_schema_v2_usage_versions_and_evidence():
+    new_row = {
+        "created_at": "2026-08-29T12:00:00Z",
+        "request_id": "request-new",
+        "question": "New question",
+        "answer": "New answer",
+        "output_tokens": Decimal("640"),
+        "input_tokens": Decimal("210000"),
+        "total_tokens": Decimal("210640"),
+        "cache_read_input_tokens": Decimal("180000"),
+        "cache_write_input_tokens": Decimal("9000"),
+        "bedrock_calls": Decimal("4"),
+        "trace_schema_version": Decimal("2"),
+        "prompt_fingerprint": "abc123def456",
+        "source_revision": "chat-lambda/1788021805",
+        "tool_trace_json": (
+            '{"schema_version":2,"prompt_fingerprint":"abc123def456",'
+            '"source_revision":"chat-lambda/1788021805","calls":[{"name":"search_archive",'
+            '"ok":true,"duration_ms":420,"result":{"counts":{"results":3},"sources":'
+            '[{"rank":1,"id":"wt-300-journal","issue_number":"300","score":0.91,'
+            '"excerpt":"Owning your words."}]}}]}'
+        ),
+    }
+    turn = conversation_review.exact_turn(new_row)
+    runtime = turn["runtime"]
+    assert runtime["input_tokens"] == 210000
+    assert runtime["total_tokens"] == 210640
+    assert runtime["cache_read_input_tokens"] == 180000
+    assert runtime["cache_write_input_tokens"] == 9000
+    assert runtime["bedrock_calls"] == 4
+    assert turn["versions"]["trace_schema_version"] == 2
+    assert turn["versions"]["prompt_fingerprint"] == "abc123def456"
+    assert turn["versions"]["source_revision"] == "chat-lambda/1788021805"
+    evidence = turn["tool_trace"]["calls"][0]["result"]
+    assert evidence["counts"]["results"] == 3
+    assert evidence["sources"][0]["id"] == "wt-300-journal"
+
+
 def test_find_conversation_fails_closed_when_scan_limit_cannot_prove_absence():
     table = FakeTable(scan_pages=[{"Items": [], "LastEvaluatedKey": {"pk": "next"}}])
 

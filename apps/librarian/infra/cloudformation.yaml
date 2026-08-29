@@ -292,6 +292,9 @@ Resources:
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"
+          # Deployed-revision stamp for recorded turns; the timestamped code
+          # key already uniquely names each deployed artifact.
+          LIBRARIAN_SOURCE_REVISION: !Ref StreamCodeKey
       Handler: chat/handler.handler
       MemorySize: 3008
       ReservedConcurrentExecutions: 5
