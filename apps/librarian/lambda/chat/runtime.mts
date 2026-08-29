@@ -43,7 +43,9 @@ import {
 } from '../shared/prompt-preflight.mjs';
 import { errorFields, truthyEnv } from '../shared/logging.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
-import { chatDailyQuota, consumeDailyQuota } from '../shared/quota.mjs';
+import { chatDailyQuota, consumeDailyQuota, mcpDailyQuota } from '../shared/quota.mjs';
+import { handleMcpMessage } from '../shared/mcp.mjs';
+import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
@@ -672,15 +674,94 @@ function streamFromResponse(responseStream: ResponseStream, _event: LibrarianHtt
   });
 }
 
-function jsonResponseStream(responseStream: ResponseStream, statusCode: number) {
+function jsonResponseStream(responseStream: ResponseStream, statusCode: number, headers: Record<string, string> = {}) {
   return awslambda.HttpResponseStream.from(responseStream, {
     statusCode,
     headers: {
       'content-type': 'application/json; charset=utf-8',
       'cache-control': 'no-store',
-      'x-librarian-contract-version': LIBRARIAN_CONTRACT_VERSION
+      'x-librarian-contract-version': LIBRARIAN_CONTRACT_VERSION,
+      ...headers
     }
   });
+}
+
+const MCP_RATE_LIMIT_MAX = 300;
+
+// MCP streamable HTTP endpoint in stateless single-response mode. Auth is a
+// Librarian OAuth bearer token; the tool surface is the same ARCHIVE_TOOLS
+// registry the /chat agent loop binds in-process.
+async function handleMcpRoute({
+  event,
+  responseStream,
+  method,
+  summary,
+  start
+}: {
+  event: LibrarianHttpEvent;
+  responseStream: ResponseStream;
+  method: string;
+  summary: JsonRecord;
+  start: number;
+}) {
+  const issuer = String(process.env.LIBRARIAN_OAUTH_ISSUER || 'https://librarian.thingelstad.com').replace(/\/$/, '');
+  const wwwAuthenticate = `Bearer resource_metadata="${issuer}/.well-known/oauth-protected-resource"`;
+  const finish = (statusCode: number, payload: unknown, headers: Record<string, string> = {}) => {
+    const stream = jsonResponseStream(responseStream, statusCode, headers);
+    if (payload !== null) stream.write(JSON.stringify(payload));
+    stream.end();
+    logEvent('info', 'mcp_request_completed', {
+      ...summary,
+      status_code: statusCode,
+      duration_ms: Math.round(performance.now() - start)
+    });
+  };
+  if (method !== 'POST') {
+    finish(405, { error: 'Use POST for MCP requests.' }, { allow: 'POST' });
+    return;
+  }
+  const grant = await validateAccessToken(extractBearer(event));
+  if (!grant) {
+    finish(401, { error: 'A valid Librarian access token is required.' }, { 'www-authenticate': wwwAuthenticate });
+    return;
+  }
+  if (
+    !String(grant.scope || '')
+      .split(/\s+/)
+      .includes('archive:read')
+  ) {
+    finish(403, { error: 'This token does not carry the archive:read scope.' });
+    return;
+  }
+  if (!(await checkRateLimit(`mcp#${grant.subscriberHash}`, MCP_RATE_LIMIT_MAX))) {
+    finish(429, { error: 'MCP hourly rate limit reached. Please slow down.' });
+    return;
+  }
+  let message: unknown;
+  try {
+    message = JSON.parse(
+      String(event.body && event.isBase64Encoded ? Buffer.from(event.body, 'base64') : event.body || '')
+    );
+  } catch {
+    finish(400, { jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } });
+    return;
+  }
+  const unlimited = isOwnerSubscriberHash(grant.subscriberHash);
+  const result = await handleMcpMessage(message, {
+    subscriberHash: grant.subscriberHash,
+    entitlements: grant.entitlements,
+    scope: grant.scope,
+    spendQuota: async () => {
+      if (unlimited) return { allowed: true, count: 0, max: 0 };
+      return consumeDailyQuota('mcp', grant.subscriberHash, mcpDailyQuota());
+    },
+    invokeTool: async (name, input) => {
+      const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
+      if (!handler) throw new Error(`Unknown tool: ${name}`);
+      return await handler(input, { scope: 'all', subscriberHash: grant.subscriberHash });
+    }
+  });
+  finish(result.statusCode, result.payload);
 }
 
 export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (event, responseStream, context) => {
@@ -828,6 +909,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       s500.end();
       logEvent('error', 'retrieve_failed', { ...summary, error_type: errorName(error) });
     }
+    return;
+  }
+
+  if (path.endsWith('/mcp')) {
+    await handleMcpRoute({ event, responseStream, method, summary, start });
     return;
   }
 

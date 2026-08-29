@@ -273,3 +273,6 @@ curl -sS -i -X OPTIONS https://jcvud66qqpq53frvno5stoqntm0zqntw.lambda-url.us-ea
 ```
 
 The static site still needs its normal deploy after frontend or content changes.
+
+
+The `/mcp` endpoint (Phase 3, 2026-08-29) serves MCP streamable HTTP from the stream Lambda: launch tools are search_archive, get_source, archive_lens, latest_content, and corpus_stats; auth is a Librarian OAuth bearer token with the archive:read scope; each tools/call spends one unit of the per-user daily mcp quota (MCP_DAILY_QUOTA, default 500), independent of the chat pool.

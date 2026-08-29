@@ -9,7 +9,7 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 Three Lambdas in `infra/cloudformation.yaml`:
 
 - **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, and profile updates. Memory 1024 MB, timeout 35s.
-- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/feedback`, and `/retrieve` (hybrid JSON-only retrieval for wt-builder). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
+- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), and `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools, per-user daily mcp quota pool). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.

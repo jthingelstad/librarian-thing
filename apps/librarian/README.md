@@ -74,6 +74,7 @@ then uploads the updated corpus artifacts.
 | GET | `/health` | none | Health check (returns model versions) |
 | POST | `/chat` | session token (bearer) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer) | Agentic contextual welcome for authenticated users |
+| POST | `/mcp` | OAuth bearer token (`archive:read`) | MCP streamable HTTP endpoint binding the archive tool registry |
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Magic-link auth, user conversation management, and profile updates |
