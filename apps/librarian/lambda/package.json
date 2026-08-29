@@ -9,12 +9,13 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "contract:generate": "node scripts/export-contract.mjs",
-    "format": "prettier --write \"{auth,chat,dispatch,eval,shared}/**/*.mts\" \"scripts/**/*.mjs\" \"*.json\"",
-    "format:check": "prettier --check \"{auth,chat,dispatch,eval,shared}/**/*.mts\" \"scripts/**/*.mjs\" \"*.json\"",
+    "contract:generate:check": "node scripts/export-contract.mjs --check",
+    "format": "prettier --write \"{auth,chat,eval,shared}/**/*.mts\" \"scripts/**/*.mjs\" \"*.json\"",
+    "format:check": "prettier --check \"{auth,chat,eval,shared}/**/*.mts\" \"scripts/**/*.mjs\" \"*.json\"",
     "lint": "oxlint . --deny-warnings",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test tests/*.test.mjs",
-    "verify": "npm run contract:generate && npm run format:check && npm run lint && npm run typecheck && npm test",
+    "verify": "npm run contract:generate:check && npm run format:check && npm run lint && npm run typecheck && npm test",
     "golden": "node scripts/golden-retrieval.mjs"
   },
   "dependencies": {

@@ -6,12 +6,13 @@ The AWS Lambda agent that answers reader questions against Jamie Thingelstad's p
 
 ## What it is
 
-Four Lambdas behind one CloudFormation stack:
+Three Lambdas behind one CloudFormation stack:
 
-- **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, Dispatch drafting routes, profile updates, and per-answer feedback reactions.
+- **Auth Lambda** (REST via API Gateway) — handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC-signed session tokens, conversation list/get/create/rename/delete, profile updates, and per-answer feedback reactions.
 - **Stream Lambda** (Function URL, response streaming) — handles `/chat` (SSE-streamed agent loop with server-side conversation history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON retrieval used by `workshop_bot` for its `archive__retrieve` tool + several pre-injection helpers).
 - **Eval Lambda** (DynamoDB Stream trigger) — reviews updated server-side conversations out of band and writes summary/quality metadata back to DynamoDB.
-- **Dispatch Lambda** (DynamoDB Stream trigger) — generates queued Dispatch drafts, sends approved email through Fastmail/JMAP, and persists lifecycle state.
+
+> Historical note: the Dispatch feature was removed 2026-08; old dispatch rows expire via TTL.
 
 The Q&A intelligence lives entirely here. Retrieval is **Bedrock Cohere embed → vector search → Cohere rerank** against a pre-embedded corpus in S3, with BM25 lexical fallback. Generation is Claude Sonnet via Bedrock Converse (cross-region inference profile, tool use enabled).
 
@@ -26,10 +27,9 @@ apps/librarian/
 │   ├── chat/         ← Stream Lambda — /chat, /welcome, /curiosity-map, /retrieve
 │   │   ├── handler.mts    (streaming entrypoint)
 │   │   └── runtime.mts    (agent loop and routes)
-│   ├── auth/         ← Auth Lambda — /auth, /feedback, conversations, Dispatch routes
+│   ├── auth/         ← Auth Lambda — /auth, /feedback, conversations
 │   ├── eval/         ← Eval Lambda — conversation reviews
-│   ├── dispatch/     ← Dispatch Lambda — generation, delivery, and lifecycle worker
-│   ├── shared/       ← AWS clients, retrieval, Bedrock streaming, sessions, Dispatch helpers
+│   ├── shared/       ← AWS clients, retrieval, Bedrock streaming, sessions
 │   ├── prompts/      ← editable system prompts (packaged into both deployment artifacts)
 │   └── tests/        ← Node tests
 ├── infra/
@@ -77,13 +77,13 @@ then uploads the updated corpus artifacts.
 | POST | `/curiosity-map` | session token (bearer) | Generate and optionally store a curiosity-map artifact |
 | POST | `/retrieve` | retrieval secret (body) | JSON semantic retrieval — top-K archive passages, used by `workshop_bot` |
 | POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
-| POST | `/auth` | none / session token | Magic-link auth, user conversation management, profile updates, and Dispatch drafting |
+| POST | `/auth` | none / session token | Magic-link auth, user conversation management, and profile updates |
 | POST | `/memory` | session token (bearer) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
 
 ## Versioned client contract
 
 The backend source of truth is `lambda/shared/librarian-contract.mts`. It generates
-`contracts/librarian-api.v1.json` plus a SHA-256 sidecar. Thingy fetches the published
+`contracts/librarian-api.json` plus a SHA-256 sidecar. Thingy fetches the published
 artifact, verifies the checksum, and generates its runtime validators and TypeScript
 types from that single source. Both API front doors advertise
 `x-librarian-contract-version`, and clients may send the same header to negotiate
@@ -96,7 +96,7 @@ npm --prefix apps/librarian/lambda run contract:generate
 npm --prefix web run contract:sync
 ```
 
-Contract changes are additive within `1.x`. A breaking endpoint or SSE event change must
+Contract changes are additive within `2.x`. A breaking endpoint or SSE event change must
 introduce a new major artifact rather than weakening the existing schema.
 
 ## Tech stack

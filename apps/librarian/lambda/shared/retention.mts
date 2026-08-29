@@ -1,8 +1,6 @@
 const SECONDS_PER_DAY = 24 * 60 * 60;
 
 export const DEFAULT_CONVERSATION_RETENTION_DAYS = 45;
-export const DEFAULT_DISPATCH_DRAFT_RETENTION_DAYS = 7;
-export const DEFAULT_DISPATCH_HISTORY_RETENTION_DAYS = 90;
 
 type DateInput = Date | string | number;
 
@@ -23,18 +21,4 @@ export function ttlSecondsFrom(value: DateInput, days: number) {
 
 export function conversationTtlSeconds(now: DateInput = new Date()) {
   return ttlSecondsFrom(now, retentionDays('THINGY_CONVERSATION_RETENTION_DAYS', DEFAULT_CONVERSATION_RETENTION_DAYS));
-}
-
-export function dispatchDraftTtlSeconds(now: DateInput = new Date()) {
-  return ttlSecondsFrom(
-    now,
-    retentionDays('THINGY_DISPATCH_DRAFT_RETENTION_DAYS', DEFAULT_DISPATCH_DRAFT_RETENTION_DAYS)
-  );
-}
-
-export function dispatchHistoryTtlSeconds(now: DateInput = new Date()) {
-  return ttlSecondsFrom(
-    now,
-    retentionDays('THINGY_DISPATCH_HISTORY_RETENTION_DAYS', DEFAULT_DISPATCH_HISTORY_RETENTION_DAYS)
-  );
 }

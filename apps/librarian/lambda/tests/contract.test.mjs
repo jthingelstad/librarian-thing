@@ -5,10 +5,10 @@ import test from 'node:test';
 
 const contractModule = await import('../dist/shared/librarian-contract.mjs');
 const http = await import('../dist/shared/http.mjs');
-const artifactUrl = new URL('../../contracts/librarian-api.v1.json', import.meta.url);
+const artifactUrl = new URL('../../contracts/librarian-api.json', import.meta.url);
 const artifactContent = await readFile(artifactUrl, 'utf8');
 const artifact = JSON.parse(artifactContent);
-const artifactChecksum = (await readFile(new URL('../../contracts/librarian-api.v1.sha256', import.meta.url), 'utf8'))
+const artifactChecksum = (await readFile(new URL('../../contracts/librarian-api.sha256', import.meta.url), 'utf8'))
   .trim()
   .split(/\s+/)[0];
 
@@ -18,17 +18,22 @@ test('generated Librarian contract artifact matches the backend source', () => {
   assert.equal(createHash('sha256').update(artifactContent).digest('hex'), artifactChecksum);
 });
 
-test('contract negotiation remains additive for existing clients', () => {
+test('contract negotiation accepts supported majors and rejects the rest', () => {
   assert.equal(contractModule.supportsRequestedContract({}), true);
   assert.equal(contractModule.supportsRequestedContract({ 'X-Librarian-Contract-Version': artifact.version }), true);
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '1.9.0' }), true);
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '2.0.0' }), false);
+  // 1.x clients predate the Dispatch removal and stay accepted until the
+  // deployed web client vendors 2.0.0.
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '1.0.0' }), true);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '2.4.0' }), true);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '3.0.0' }), false);
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': 'not-semver' }), false);
 });
 
 test('endpoint actions declare response-specific successful contracts', () => {
   assert.deepEqual(artifact.endpoints['/conversations'].actions.list.required, ['conversations']);
-  assert.deepEqual(artifact.endpoints['/dispatch'].actions.list.required, ['dispatches']);
+  assert.deepEqual(artifact.endpoints['/chat'].request.required, ['question']);
+  assert.deepEqual(artifact.endpoints['/retrieve'].request.required, ['query']);
+  assert.equal('/dispatch' in artifact.endpoints, false);
 });
 
 test('JSON responses advertise the authoritative contract version', () => {

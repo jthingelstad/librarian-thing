@@ -39,7 +39,6 @@ import {
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
 import { handleUserConversations } from './conversation-routes.mjs';
-import { handleDispatch } from './dispatch-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
 import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
@@ -751,8 +750,6 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
       response = await handleMemory(event, parseBody(event), start);
     } else if (method === 'POST' && path.endsWith('/conversations')) {
       response = await handleUserConversations(event, parseBody(event), { start, entitlementsForSessionPayload });
-    } else if (method === 'POST' && path.endsWith('/dispatch')) {
-      response = await handleDispatch(event, parseBody(event), start);
     } else {
       response = jsonResponse(404, { error: 'Not found.' }, event);
     }

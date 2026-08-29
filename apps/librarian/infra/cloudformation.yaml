@@ -188,6 +188,8 @@ Resources:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${BlogCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${PodcastCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/artifacts/dispatches/*
+              # Dispatch was removed 2026-08; profile deletion still cleans
+              # up historical dispatch artifacts, so keep delete access here.
               - Effect: Allow
                 Action:
                   - s3:PutObject
@@ -318,37 +320,6 @@ Resources:
         - Key: project
           Value: Thingy
 
-  LibrarianDispatchFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Architectures:
-        - arm64
-      Code:
-        S3Bucket: !Ref CodeBucket
-        S3Key: !Ref CodeKey
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref LibrarianTable
-          CORPUS_BUCKET: !Ref CorpusBucket
-          CORPUS_KEY: !Ref CorpusKey
-          BLOG_CORPUS_KEY: !Ref BlogCorpusKey
-          PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
-          LOG_LEVEL: !Ref LogLevel
-          THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
-          THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
-          FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
-          THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
-      Handler: dispatch/handler.handler
-      MemorySize: 2048
-      ReservedConcurrentExecutions: 1
-      Role: !GetAtt LibrarianFunctionRole.Arn
-      Runtime: nodejs24.x
-      Timeout: 300
-      Tags:
-        - Key: project
-          Value: Thingy
-
   LibrarianEvalEventSource:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
@@ -358,19 +329,6 @@ Resources:
       BatchSize: 25
       MaximumBatchingWindowInSeconds: 30
       Enabled: true
-
-  LibrarianDispatchEventSource:
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      EventSourceArn: !GetAtt LibrarianTable.StreamArn
-      FunctionName: !Ref LibrarianDispatchFunction
-      StartingPosition: LATEST
-      BatchSize: 5
-      MaximumBatchingWindowInSeconds: 10
-      Enabled: true
-      FilterCriteria:
-        Filters:
-          - Pattern: '{"dynamodb":{"NewImage":{"item_type":{"S":["dispatch"]},"status":{"S":["queued","ready_to_send"]}}}}'
 
   LibrarianStreamFunctionUrl:
     Type: AWS::Lambda::Url
@@ -511,13 +469,6 @@ Resources:
     Properties:
       ApiId: !Ref LibrarianApi
       RouteKey: POST /memory
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  DispatchRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /dispatch
       Target: !Sub integrations/${LibrarianIntegration}
 
   HealthRoute:

@@ -28,7 +28,6 @@ import {
   generateWelcome
 } from '../shared/archive-experience.mjs';
 import { ARCHIVE_TOOLS, collectToolCitations, toolSpecs, weeklyIssueCatalog } from '../shared/archive-tools.mjs';
-import { DISPATCH_PLANNER_TOOLS, dispatchPlannerToolSpecs } from '../shared/dispatch-planner-tools.mjs';
 import {
   conversationContext,
   extractPreferredNameFromMessage,
@@ -507,20 +506,10 @@ async function streamBedrockAgentAnswer(
   let usage: TokenUsage | undefined;
   let stopReason = '';
   const maxTurns = Number(process.env.MAX_TOOL_TURNS || DEFAULT_MAX_TOOL_TURNS);
-  // A Dispatch turn may use the entire normal research budget before it has
-  // published the required brief. Reserve a forced brief call and one final
-  // response turn so the client always receives the structured planner state.
-  const turnLimit = maxTurns + (mode === 'dispatch' ? 2 : 0);
-  let forceDispatchBrief = false;
-  // Dispatch planner conversations get the brief/coverage tools on top of
-  // the archive tools; every other mode keeps the archive set only.
+  const turnLimit = maxTurns;
   type ToolHandler = (input?: JsonRecord, context?: JsonRecord) => unknown | Promise<unknown>;
-  const toolHandlers = (
-    mode === 'dispatch' ? { ...ARCHIVE_TOOLS, ...DISPATCH_PLANNER_TOOLS } : ARCHIVE_TOOLS
-  ) as Record<string, ToolHandler>;
-  const activeToolSpecs = (
-    mode === 'dispatch' ? [...toolSpecs(), ...dispatchPlannerToolSpecs()] : toolSpecs()
-  ) as Tool[];
+  const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
+  const activeToolSpecs = toolSpecs() as Tool[];
   // The static system prompt is cached; per-request blocks go after the
   // cachePoint so they don't bust the static prompt's prefix cache.
   const systemBlocks: SystemContentBlock[] = [{ text: AGENT_SYSTEM_PROMPT }, { cachePoint: { type: 'default' } }];
@@ -533,19 +522,14 @@ async function streamBedrockAgentAnswer(
     // The reader disconnected at the client deadline - stop the work, not
     // just the writes, or the loop burns Bedrock turns nobody will see.
     if (shouldStopWriting()) break;
-    const requireDispatchBrief = forceDispatchBrief;
-    forceDispatchBrief = false;
-    // Dispatch research narration is tool-process text, not reader-facing
-    // prose. The final sanitized answer still arrives in the answer event.
-    const streamAnswerDeltas = toolResults.length > 0 && mode !== 'dispatch';
+    const streamAnswerDeltas = toolResults.length > 0;
     const response = await bedrock.send(
       new ConverseStreamCommand({
         modelId: agentModel(),
         system: systemBlocks,
         messages,
         toolConfig: {
-          tools: activeToolSpecs,
-          ...(requireDispatchBrief ? { toolChoice: { tool: { name: 'update_dispatch_brief' } } } : {})
+          tools: activeToolSpecs
         },
         inferenceConfig: commandInferenceConfig()
       })
@@ -566,23 +550,10 @@ async function streamBedrockAgentAnswer(
       'toolUse' in block && block.toolUse ? [block.toolUse] : []
     );
     if (!toolUses.length) {
-      const briefPublished = toolTrace.calls.some((call) => call.name === 'update_dispatch_brief' && call.ok);
-      if (mode === 'dispatch' && !briefPublished && turn < turnLimit) {
-        messages.push({
-          role: 'user',
-          content: [
-            {
-              text: 'Publish the full current planner state with update_dispatch_brief now. Use status draft if the reader still needs to narrow or confirm it.'
-            }
-          ]
-        });
-        forceDispatchBrief = true;
-        continue;
-      }
       answer = bedrockMessageText(message) || result.text;
       break;
     }
-    const commentary = mode === 'dispatch' ? '' : activityCommentaryText(result.text);
+    const commentary = activityCommentaryText(result.text);
     const resultBlocks: ContentBlock[] = [];
     for (const [index, toolUse] of toolUses.entries()) {
       const toolName = String(toolUse.name || 'unknown_tool');
@@ -618,16 +589,6 @@ async function streamBedrockAgentAnswer(
           })
         );
         result = { error: `${toolName} failed: ${errorName(error)}` };
-      }
-      if (toolName === 'update_dispatch_brief' && result.brief && !result.error && !shouldStopWriting()) {
-        // Mirror the brief to the client as it forms; the reader locks it
-        // from the brief card, which queues generation via /dispatch.
-        writeSse(responseStream, 'dispatch_brief', {
-          brief: result.brief,
-          status: result.status || objectValue(result.brief).status || 'draft',
-          request_id: options.requestId,
-          conversation_id: options.conversationId
-        });
       }
       toolTrace.calls.push({
         name: toolName,
@@ -1111,12 +1072,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       contract_version: LIBRARIAN_CONTRACT_VERSION
     });
     writeSse(stream, 'status', { message: 'Understanding the request...' });
-    // Dispatch planner turns always run the planning agent — the preflight
-    // evaluator's direct-answer shortcut would skip the coverage tools.
-    const preflight =
-      modeAccess.mode === 'dispatch'
-        ? passThroughPreflight(question, 'Dispatch planner conversations always run the planning agent.')
-        : await evaluatePromptPreflight(question, scope, history, { readerContext, mode: modeAccess.mode });
+    const preflight = await evaluatePromptPreflight(question, scope, history, {
+      readerContext,
+      mode: modeAccess.mode
+    });
     if (preflight.action === 'direct') {
       preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
       const citations: Citation[] = [];

@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "types": ["node", "aws-lambda"]
   },
-  "include": ["auth/**/*", "chat/**/*", "dispatch/**/*", "eval/**/*", "shared/**/*"],
+  "include": ["auth/**/*", "chat/**/*", "eval/**/*", "shared/**/*"],
   "exclude": ["dist", "node_modules"]
 }

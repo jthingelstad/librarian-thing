@@ -52,18 +52,6 @@ and Thingy actually said. Conversations from the configured owner email
 defaulting to `jamie@thingelstad.com` are labeled as Jamie and can be filtered
 separately from real reader traffic.
 
-### `dispatch_report.py`
-
-Generates a separate local report for Thingy Dispatches. Dispatches are not chat
-conversations, so they get their own review surface: prompt, confirmed
-direction, status, generated subject/title, sources, delivery errors, token
-counts, and stored email content for eval/debugging.
-
-```bash
-uv run --locked python apps/librarian/admin/dispatch_report.py
-open ~/Desktop/Thingy\ Dispatch\ Report.html
-```
-
 ## Planned
 
 - **Log inspection** — convenience wrappers over CloudWatch Insights queries for the streaming, auth, and eval Lambdas.

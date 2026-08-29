@@ -2,8 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   conversationTtlSeconds,
-  dispatchDraftTtlSeconds,
-  dispatchHistoryTtlSeconds
 } from '../dist/shared/retention.mjs';
 
 test('Thingy retention windows default to the agreed shorter durations', () => {
@@ -12,6 +10,4 @@ test('Thingy retention windows default to the agreed shorter durations', () => {
   const day = 24 * 60 * 60;
 
   assert.equal(conversationTtlSeconds(now), epoch + (45 * day));
-  assert.equal(dispatchDraftTtlSeconds(now), epoch + (7 * day));
-  assert.equal(dispatchHistoryTtlSeconds(now), epoch + (90 * day));
 });

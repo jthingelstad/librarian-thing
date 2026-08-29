@@ -1,4 +1,7 @@
-export const LIBRARIAN_CONTRACT_VERSION = '1.0.0';
+export const LIBRARIAN_CONTRACT_VERSION = '2.0.0';
+// Majors the server still answers for. 1.x clients predate the Dispatch
+// removal; drop '1' once the deployed Thingy web client vendors 2.0.0.
+export const SUPPORTED_CONTRACT_MAJORS = ['1', '2'];
 
 const string = { type: 'string' } as const;
 const boolean = { type: 'boolean' } as const;
@@ -72,58 +75,6 @@ const conversationMessage = object({
   requestId: string,
   citations: unknownArray
 });
-const dispatchBriefSource = object({
-  id: string,
-  label: string,
-  title: string,
-  url: string,
-  source_kind: string,
-  publish_date: string,
-  why: string
-});
-const dispatchBrief = object({
-  user_goal: string,
-  working_angle: string,
-  coverage_status: { enum: ['thin', 'focused', 'broad', 'ambiguous'] },
-  selected_sources: arrayOf(ref('dispatchBriefSource')),
-  excluded_scope: arrayOf(string),
-  generation_instructions: string,
-  preheader_basis: string,
-  status: { enum: ['draft', 'ready'] }
-});
-const dispatchMessage = object({
-  id: string,
-  baseId: string,
-  scope: string,
-  role: { enum: ['user', 'assistant', 'system'] },
-  text: string,
-  time: string,
-  kind: string,
-  status: string,
-  startedAt: number,
-  completedAt: { anyOf: [number, string] }
-});
-const dispatchRow = object({
-  id: string,
-  dispatch_id: string,
-  status: string,
-  topic: string,
-  prompt: string,
-  direction: string,
-  conversation_id: string,
-  clarification_question: string,
-  clarification_answer: string,
-  brief: ref('dispatchBrief'),
-  subject: string,
-  title: string,
-  preview: string,
-  error: string,
-  messages: arrayOf(ref('dispatchMessage')),
-  created_at: string,
-  updated_at: string,
-  template_test: boolean,
-  source_count: number
-});
 const archiveItem = object({
   url: string,
   title: string,
@@ -176,10 +127,7 @@ const apiProperties = {
   conversations: arrayOf(ref('conversation')),
   conversation: ref('conversation'),
   messages: arrayOf(ref('conversationMessage')),
-  dispatches: arrayOf(ref('dispatchRow')),
-  dispatch: ref('dispatchRow'),
   supporting_member: boolean,
-  items: arrayOf(ref('dispatchRow')),
   data: {},
   code: string,
   nodes: arrayOf(ref('curiosityNode')),
@@ -204,25 +152,20 @@ const streamProperties = {
   note: string,
   kind: string,
   tool_name: string,
-  toolName: string,
-  brief: ref('dispatchBrief')
+  toolName: string
 };
 
 export const LIBRARIAN_CONTRACT = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'https://thingy.thingelstad.com/contracts/librarian-api.v1.json',
+  $id: 'https://thingy.thingelstad.com/contracts/librarian-api.json',
   title: 'Thingy Librarian API Contract',
   version: LIBRARIAN_CONTRACT_VERSION,
-  compatibility: 'additive',
+  compatibility: 'breaking',
   $defs: {
     mode,
     profile,
     conversation,
     conversationMessage,
-    dispatchBriefSource,
-    dispatchBrief,
-    dispatchMessage,
-    dispatchRow,
     archiveItem,
     citation,
     experience,
@@ -243,14 +186,47 @@ export const LIBRARIAN_CONTRACT = {
       create: object({ conversation: apiProperties.conversation }, ['conversation']),
       rename: object({ conversation: apiProperties.conversation }, ['conversation'])
     }),
-    '/dispatch': endpoint({
-      list: object({ dispatches: apiProperties.dispatches }, ['dispatches']),
-      save_draft: object({ dispatch: apiProperties.dispatch }, ['dispatch']),
-      status: object({ dispatch: apiProperties.dispatch }, ['dispatch'])
-    }),
     '/feedback': endpoint(),
     '/memory': endpoint(),
-    '/curiosity-map': endpoint()
+    '/curiosity-map': endpoint(),
+    // SSE agent loop. The response body is the stream_events sequence below;
+    // request fields are listed here so removing one is a contract change.
+    '/chat': {
+      request: object(
+        {
+          question: string,
+          conversation_id: string,
+          scope: string,
+          mode: string,
+          client_context: object({})
+        },
+        ['question']
+      ),
+      schema: ref('streamBase')
+    },
+    // Service retrieval for trusted internal clients (wt-builder). JSON-only.
+    '/retrieve': {
+      request: object(
+        {
+          query: string,
+          k: number,
+          scope: string,
+          filters: object({ yearRange: unknownArray, section: string }),
+          retrieve_secret: string,
+          bridge_secret: string
+        },
+        ['query']
+      ),
+      schema: object(
+        {
+          passages: arrayOf(ref('archiveItem')),
+          embedding_model: string,
+          rerank_model: string,
+          request_id: string
+        },
+        ['passages']
+      )
+    }
   },
   stream_events: {
     meta: object(streamProperties),
@@ -260,7 +236,6 @@ export const LIBRARIAN_CONTRACT = {
     answer: object(streamProperties, ['answer']),
     citations: object(streamProperties, ['citations']),
     experience: object(streamProperties, ['experience']),
-    dispatch_brief: object(streamProperties, ['brief']),
     done: object(streamProperties),
     error: object(streamProperties, ['error'])
   }
@@ -275,6 +250,5 @@ export function supportsRequestedContract(headers: Record<string, unknown> = {})
   const requested = requestedContractVersion(headers);
   if (!requested) return true;
   const requestedMajor = /^([0-9]+)\./.exec(requested)?.[1];
-  const currentMajor = /^([0-9]+)\./.exec(LIBRARIAN_CONTRACT_VERSION)?.[1];
-  return Boolean(requestedMajor && currentMajor && requestedMajor === currentMajor);
+  return Boolean(requestedMajor && SUPPORTED_CONTRACT_MAJORS.includes(requestedMajor));
 }

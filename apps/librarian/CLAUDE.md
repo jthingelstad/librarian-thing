@@ -2,16 +2,15 @@
 
 Operational notes for the Thingy Lambda stack. Human-facing overview lives in [`README.md`](README.md). The full runtime guide (env vars, IAM cleanup plan, retrieval architecture in depth, Tinylytics events, deployment checklist) is at [`../../reference/librarian.md`](../../reference/librarian.md). This file is the "what to keep in mind when editing here" memory.
 
-## Architecture: four Lambdas, one CloudFormation stack
+## Architecture: three Lambdas, one CloudFormation stack
 
 The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this monorepo is Python — that's intentional: the Lambda needs the AWS SDK v3 + response-streaming primitives, both of which are smoother in Node.
 
-Four Lambdas in `infra/cloudformation.yaml`:
+Three Lambdas in `infra/cloudformation.yaml`:
 
-- **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, profile updates, and Dispatch drafting routes. Memory 1024 MB, timeout 35s.
+- **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, and profile updates. Memory 1024 MB, timeout 35s.
 - **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/curiosity-map`, `/feedback`, and `/retrieve` (semantic JSON-only retrieval for workshop_bot). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
-- **`LibrarianDispatchFunction`** (`lambda/dispatch/handler.mts`) — DynamoDB Stream consumer. Generates queued Dispatch drafts, renders and sends approved email through Fastmail/JMAP, and persists lifecycle state. Memory 2048 MB, timeout 300s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
 
@@ -26,7 +25,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
 7. Run the Bedrock Converse agent loop with tool use. Tools include `search_faq`, `search_archive`, `get_source`, `find_links`, `corpus_stats`, `latest_content`, `list_content`, `archive_lens`, `entity_lens`, `source_neighborhood`, `archive_gems`, `claim_check`.
-8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters. Dispatch-planner conversations (`mode: dispatch`) also get `check_dispatch_fit` and `update_dispatch_brief` tools, and briefs stream to the client as `dispatch_brief` SSE events.
+8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
 
@@ -64,7 +63,7 @@ The `--skip-corpus-upload` flag is the **default for any code-only change**. Ful
 Deploy steps:
 
 1. Smoke-test the three Thingy model buckets — refuses to deploy if any configured default/fast/advanced model isn't invokable from this account.
-2. Package the shared auth/eval/dispatch artifact and the separate streaming chat artifact.
+2. Package the shared auth/eval artifact and the separate streaming chat artifact.
 3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
 5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`).
@@ -100,12 +99,12 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `FASTMAIL_JMAP_TOKEN` | auth | Fastmail JMAP bearer token for sending magic links; aliases `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` also work locally |
 | `THINGY_MAGIC_LINK_FROM_EMAIL` | auth | Magic-link From address, default `thingy@thingelstad.com` |
 | `THINGY_MAGIC_LINK_BASE_URL` | auth | Public URL used when building `?login_token=` links, default `https://thingy.thingelstad.com/` |
-| `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth + dispatch | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
+| `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
 | `THINGY_DEFAULT_MODEL` | all | `us.anthropic.claude-sonnet-4-6`; main chat/default persona work |
 | `THINGY_FAST_MODEL` | all | `us.anthropic.claude-haiku-4-5-20251001-v1:0`; small structured/background work |
-| `THINGY_ADVANCED_MODEL` | all | `us.anthropic.claude-opus-4-6-v1`; high-synthesis work like Dispatch generation |
+| `THINGY_ADVANCED_MODEL` | all | `us.anthropic.claude-opus-4-6-v1`; high-synthesis work |
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
@@ -114,7 +113,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 
 - **Rerank lives in us-west-2 only.** The rest of the stack is us-east-1. `BedrockAgentRuntimeClient` is constructed with explicit `region: 'us-west-2'` override. Don't move it.
 - **Embedding model is Cohere v3** at 1024 dimensions. Bumping to v4 would invalidate the entire embedded corpus — re-embed cost is $1-2 + ~3 minutes. Plan for it; don't drift accidentally.
-- **Thingy models** use cross-region inference profiles. Default is Sonnet 4.6 for main chat/persona work, fast is Haiku 4.5 for structured/background work, and advanced is Opus 4.6 for Dispatch generation. The deploy smoke test checks all three before CloudFormation runs.
+- **Thingy models** use cross-region inference profiles. Default is Sonnet 4.6 for main chat/persona work, fast is Haiku 4.5 for structured/background work, and advanced is Opus 4.6 for high-synthesis work. The deploy smoke test checks all three before CloudFormation runs.
 
 ## Conventions
 
@@ -131,4 +130,4 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 
 - **No end-to-end handler tests.** Mocking Bedrock + DynamoDB + S3 in Node test is non-trivial; the agent-loop path is exercised in production via real reader Q&A.
 - **No automated live QA harness.** Mode/auth/conversation/eval checks are still run manually against the live API when needed.
-- **Operator reads are private.** Static conversation/Dispatch reports remain available locally, and Studio's `/thingy/` route provides read-only corpus health and a grouped quality queue behind Studio's loopback-only Tailscale identity gate. Any public or non-tailnet dashboard still needs stronger owner/admin auth first.
+- **Operator reads are private.** Static conversation reports remain available locally, and Studio's `/thingy/` route provides read-only corpus health and a grouped quality queue behind Studio's loopback-only Tailscale identity gate. Any public or non-tailnet dashboard still needs stronger owner/admin auth first.

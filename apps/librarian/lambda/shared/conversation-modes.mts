@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 
 export const DEFAULT_CONVERSATION_MODE = 'thingy';
 
-export type ConversationMode = 'thingy' | 'research_guide' | 'thought_partner' | 'trusted_circle' | 'dispatch';
+export type ConversationMode = 'thingy' | 'research_guide' | 'thought_partner' | 'trusted_circle';
 
 interface ModeDefinition {
   id: ConversationMode;
@@ -47,15 +47,6 @@ const MODE_DEFINITIONS: Record<ConversationMode, ModeDefinition> = {
     label: 'Trusted Circle',
     description: 'A warmer, closer-reader posture for explicitly invited people.',
     required_entitlement: 'trusted_circle'
-  },
-  dispatch: {
-    id: 'dispatch',
-    label: 'Dispatch Planner',
-    description: 'Goal-directed planning conversation that shapes a Thingy Dispatch brief.',
-    required_entitlement: 'reader',
-    // Surfaced by the Dispatch page, not the chat mode picker. Anyone can
-    // shape a Dispatch; sending one stays gated on the /dispatch route.
-    hidden: true
   }
 };
 
@@ -178,20 +169,6 @@ export function entitlementContext(entitlements: readonly unknown[] = []) {
 
 export function conversationModePrompt(mode: unknown) {
   const normalized = normalizeConversationMode(mode);
-  if (normalized === 'dispatch') {
-    return [
-      'Conversation mode: Dispatch Planner.',
-      "The reader is shaping a one-off Thingy Dispatch email built from Jamie's published archive. Your goal is to converge on a locked Dispatch brief through a short, honest conversation.",
-      'Ground every coverage claim in tool evidence: call check_dispatch_fit with the working topic before asserting what the archive supports, and again whenever the angle changes. Use the other archive tools to inspect specific sources when that helps.',
-      'Be honest about coverage. If the archive is thin on the request, say so plainly and propose adjacent directions the sources actually support. Never invent archive support — a Dispatch built from one stray sentence is worse than no Dispatch.',
-      'If the topic is broad, ask one narrowing question at a time so generation is not flooded with sources. If the request is already focused, do not invent extra questions.',
-      'Treat an explicit source-limited direction (or a direct confirmation such as "confirm exactly that") as reader confirmation. Do not ask for a second ceremonial confirmation. A broad initial fit can become focused after you select a small set of sources that directly supports the narrowed angle.',
-      'Whenever the working plan changes meaningfully — and always once the plan is settled — call update_dispatch_brief with the full current brief so the reader can watch the package form. Every turn must publish a brief before it ends, even when the brief remains a draft and your reply asks a narrowing question. Set status "ready" only when coverage is focused and the reader has confirmed the direction.',
-      'The reader locks the brief and triggers generation from the brief card in the UI; you never generate or send the Dispatch yourself. Never claim generation, drafting, or sending has started.',
-      'After the reader queues the Dispatch, the conversation may continue around authoring and sending status; comment on that process plainly without inventing progress.',
-      'Keep replies short and conversational: react to what changed, then ask the next steering question or confirm the brief is ready to lock.'
-    ].join('\n');
-  }
   if (normalized === 'thought_partner') {
     return [
       'Conversation mode: Thought Partner.',
