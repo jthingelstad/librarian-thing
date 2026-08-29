@@ -1,545 +1,545 @@
 [
- {
-  "toolSpec": {
-   "name": "search_faq",
-   "description": "Search authoritative Weekly Thing FAQ entries. Use first for questions about subscribing, unsubscribing, cost, membership, RSS, schedule, breaks, archive access, search, Thingy, privacy, community, sharing, contact, site tooling, and how the newsletter works.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "query": {
-       "type": "string"
-      },
-      "limit": {
-       "type": "integer"
+  {
+    "toolSpec": {
+      "name": "search_faq",
+      "description": "Search authoritative Weekly Thing FAQ entries. Use first for questions about subscribing, unsubscribing, cost, membership, RSS, schedule, breaks, archive access, search, Thingy, privacy, community, sharing, contact, site tooling, and how the newsletter works.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
       }
-     },
-     "required": [
-      "query"
-     ]
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "search_archive",
-   "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, or section based on what comes back. year_range accepts a [start, end] array, a single \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "query": {
-       "type": "string"
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "section": {
-       "type": "string"
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "search_archive",
+      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, or section based on what comes back. year_range accepts a [start, end] array, a single \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "section": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
       }
-     },
-     "required": [
-      "query"
-     ]
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "get_source",
-   "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source with source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "source_kind": {
-       "type": "string"
-      },
-      "issue_number": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "microblog_id": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "episode_number": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "url": {
-       "type": "string"
-      },
-      "section": {
-       "type": "string"
+  },
+  {
+    "toolSpec": {
+      "name": "get_source",
+      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source with source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "source_kind": {
+              "type": "string"
+            },
+            "issue_number": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "microblog_id": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "episode_number": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "section": {
+              "type": "string"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "list_content",
-   "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year/year_range, topic/entity/query, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, or also_in_issue. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, or which blog posts crossed into Weekly Thing.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "source_kind": {
-       "type": "string"
-      },
-      "year": {
-       "type": [
-        "integer",
-        "string"
-       ]
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "topic": {
-       "type": "string"
-      },
-      "entity": {
-       "type": "string"
-      },
-      "query": {
-       "type": "string"
-      },
-      "domain": {
-       "type": "string"
-      },
-      "link_kind": {
-       "type": "string"
-      },
-      "link_category": {
-       "type": "string"
-      },
-      "target_resolved": {
-       "type": [
-        "boolean",
-        "string"
-       ]
-      },
-      "has_also_in_issues": {
-       "type": [
-        "boolean",
-        "string"
-       ]
-      },
-      "also_in_issue": {
-       "type": [
-        "integer",
-        "string"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "list_content",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year/year_range, topic/entity/query, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, or also_in_issue. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, or which blog posts crossed into Weekly Thing.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "source_kind": {
+              "type": "string"
+            },
+            "year": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "topic": {
+              "type": "string"
+            },
+            "entity": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "domain": {
+              "type": "string"
+            },
+            "link_kind": {
+              "type": "string"
+            },
+            "link_category": {
+              "type": "string"
+            },
+            "target_resolved": {
+              "type": [
+                "boolean",
+                "string"
+              ]
+            },
+            "has_also_in_issues": {
+              "type": [
+                "boolean",
+                "string"
+              ]
+            },
+            "also_in_issue": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "find_links",
-   "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "domain": {
-       "type": "string"
-      },
-      "topic": {
-       "type": "string"
-      },
-      "source_kind": {
-       "type": "string"
-      },
-      "link_kind": {
-       "type": "string"
-      },
-      "link_category": {
-       "type": "string"
-      },
-      "target_resolved": {
-       "type": [
-        "boolean",
-        "string"
-       ]
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "find_links",
+      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string"
+            },
+            "topic": {
+              "type": "string"
+            },
+            "source_kind": {
+              "type": "string"
+            },
+            "link_kind": {
+              "type": "string"
+            },
+            "link_category": {
+              "type": "string"
+            },
+            "target_resolved": {
+              "type": [
+                "boolean",
+                "string"
+              ]
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "corpus_stats",
-   "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with top subject/title terms, top chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "source_kind": {
-       "type": "string"
+  },
+  {
+    "toolSpec": {
+      "name": "corpus_stats",
+      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with top subject/title terms, top chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "source_kind": {
+              "type": "string"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "latest_content",
-   "description": "Return the newest indexed issues/posts/episodes deterministically by publish_date. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "source_kind": {
-       "type": "string"
-      },
-      "has_also_in_issues": {
-       "type": [
-        "boolean",
-        "string"
-       ]
-      },
-      "also_in_issue": {
-       "type": [
-        "integer",
-        "string"
-       ]
-      },
-      "issue_number": {
-       "type": [
-        "integer",
-        "string"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "latest_content",
+      "description": "Return the newest indexed issues/posts/episodes deterministically by publish_date. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "source_kind": {
+              "type": "string"
+            },
+            "has_also_in_issues": {
+              "type": [
+                "boolean",
+                "string"
+              ]
+            },
+            "also_in_issue": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "issue_number": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "quote_search",
-   "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "phrase": {
-       "type": "string"
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "quote_search",
+      "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "phrase": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "phrase"
+          ]
+        }
       }
-     },
-     "required": [
-      "phrase"
-     ]
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "archive_lens",
-   "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. Use this before semantic search when the user asks how a topic evolved or how attention changed over time.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "topic": {
-       "type": "string"
-      },
-      "operation": {
-       "type": "string"
-      },
-      "source_kind": {
-       "type": "string"
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "archive_lens",
+      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. Use this before semantic search when the user asks how a topic evolved or how attention changed over time.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string"
+            },
+            "operation": {
+              "type": "string"
+            },
+            "source_kind": {
+              "type": "string"
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "topic"
+          ]
+        }
       }
-     },
-     "required": [
-      "topic"
-     ]
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "entity_lens",
-   "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "entity": {
-       "type": "string"
-      },
-      "topic": {
-       "type": "string"
-      },
-      "operation": {
-       "type": "string"
-      },
-      "source_kind": {
-       "type": "string"
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "entity_lens",
+      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "entity": {
+              "type": "string"
+            },
+            "topic": {
+              "type": "string"
+            },
+            "operation": {
+              "type": "string"
+            },
+            "source_kind": {
+              "type": "string"
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "source_neighborhood",
-   "description": "Explore what connects to one known archive source. Given a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known, cross-source links, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "source_kind": {
-       "type": "string"
-      },
-      "issue_number": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "microblog_id": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "episode_number": {
-       "type": [
-        "string",
-        "integer"
-       ]
-      },
-      "url": {
-       "type": "string"
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "source_neighborhood",
+      "description": "Explore what connects to one known archive source. Given a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known, cross-source links, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "source_kind": {
+              "type": "string"
+            },
+            "issue_number": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "microblog_id": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "episode_number": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "archive_gems",
-   "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme/topic builds a reading path for that theme; otherwise mood/mode can bias toward forgotten, older, recent, or generally link-rich/cross-source sources. Optional source_kind and year_range narrow the pool.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "theme": {
-       "type": "string"
-      },
-      "topic": {
-       "type": "string"
-      },
-      "mood": {
-       "type": "string"
-      },
-      "mode": {
-       "type": "string"
-      },
-      "source_kind": {
-       "type": "string"
-      },
-      "year_range": {
-       "type": [
-        "array",
-        "string",
-        "object"
-       ]
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "archive_gems",
+      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme/topic builds a reading path for that theme; otherwise mood/mode can bias toward forgotten, older, recent, or generally link-rich/cross-source sources. Optional source_kind and year_range narrow the pool.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "theme": {
+              "type": "string"
+            },
+            "topic": {
+              "type": "string"
+            },
+            "mood": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "source_kind": {
+              "type": "string"
+            },
+            "year_range": {
+              "type": [
+                "array",
+                "string",
+                "object"
+              ]
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "claim_check",
-   "description": "Lightweight evidence check for one to four draft claims. Use sparingly before finalizing answers that hinge on specific factual claims, dates, counts, or source relationships. It searches the active source scope for supporting evidence and returns evidence_found or needs_caution with compact evidence.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "claim": {
-       "type": "string"
-      },
-      "claims": {
-       "type": "array",
-       "items": {
-        "type": "string"
-       }
-      },
-      "query": {
-       "type": "string"
-      },
-      "text": {
-       "type": "string"
+  },
+  {
+    "toolSpec": {
+      "name": "claim_check",
+      "description": "Lightweight evidence check for one to four draft claims. Use sparingly before finalizing answers that hinge on specific factual claims, dates, counts, or source relationships. It searches the active source scope for supporting evidence and returns evidence_found or needs_caution with compact evidence.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string"
+            },
+            "claims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "query": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "cachePoint": {
-   "type": "default"
-  }
- },
- {
-  "toolSpec": {
-   "name": "media_search",
-   "description": "Search the photo and image index across the archive by what the images show. Matches alt text, captions, and nearby context. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "query": {
-       "type": "string",
-       "description": "What the image should show, e.g. 'bike ride creek' or 'cabin winter'"
-      },
-      "year": {
-       "type": "integer"
-      },
-      "limit": {
-       "type": "integer",
-       "description": "Max results, default 8, max 12"
+  },
+  {
+    "cachePoint": {
+      "type": "default"
+    }
+  },
+  {
+    "toolSpec": {
+      "name": "media_search",
+      "description": "Search the photo and image index across the archive by what the images show. Matches alt text, captions, and nearby context. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url).",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "What the image should show, e.g. 'bike ride creek' or 'cabin winter'"
+            },
+            "year": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max results, default 8, max 12"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
       }
-     },
-     "required": [
-      "query"
-     ]
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "currently_history",
-   "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching.",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "kind": {
-       "type": "string",
-       "description": "Filter: reading, playing, watching, listening, installing, drinking, eating, buying"
-      },
-      "year": {
-       "type": "integer"
-      },
-      "query": {
-       "type": "string",
-       "description": "Substring filter on the entry text"
-      },
-      "limit": {
-       "type": "integer"
+  },
+  {
+    "toolSpec": {
+      "name": "currently_history",
+      "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "Filter: reading, playing, watching, listening, installing, drinking, eating, buying"
+            },
+            "year": {
+              "type": "integer"
+            },
+            "query": {
+              "type": "string",
+              "description": "Substring filter on the entry text"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
       }
-     }
     }
-   }
-  }
- },
- {
-  "toolSpec": {
-   "name": "top_references",
-   "description": "Who and what Jamie links to most: the link graph aggregated by domain with total counts, per-year counts, first/last seen, and sample titles. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then optionally deepen specific names with entity_lens. Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson).",
-   "inputSchema": {
-    "json": {
-     "type": "object",
-     "properties": {
-      "year_start": {
-       "type": "integer"
-      },
-      "year_end": {
-       "type": "integer"
-      },
-      "limit": {
-       "type": "integer",
-       "description": "Max domains, default 20, max 40"
-      },
-      "include_utility": {
-       "type": "boolean",
-       "description": "Include utility/social domains (Wikipedia, LinkedIn, POAP, social profiles) excluded by default"
+  },
+  {
+    "toolSpec": {
+      "name": "top_references",
+      "description": "Who and what Jamie links to most: the link graph aggregated by domain with total counts, per-year counts, first/last seen, and sample titles. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then optionally deepen specific names with entity_lens. Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson).",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "year_start": {
+              "type": "integer"
+            },
+            "year_end": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max domains, default 20, max 40"
+            },
+            "include_utility": {
+              "type": "boolean",
+              "description": "Include utility/social domains (Wikipedia, LinkedIn, POAP, social profiles) excluded by default"
+            }
+          }
+        }
       }
-     }
     }
-   }
   }
- }
 ]
