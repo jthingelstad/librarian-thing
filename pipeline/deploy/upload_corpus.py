@@ -27,6 +27,25 @@ from librarian_core.corpus import (
 from librarian_core.graph import build_graph
 
 
+def upload_json_gzip(bucket: str, key: str, path) -> None:
+    """Upload a JSON artifact gzip-compressed with ContentEncoding: gzip.
+
+    The corpus is ~10x smaller compressed, which is most of the Lambda cold
+    start. The Lambda loader sniffs the gzip magic bytes, so plain and
+    compressed objects both work during the transition.
+    """
+    import gzip as _gzip
+
+    data = Path(path).read_bytes()
+    boto3.client("s3").put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=_gzip.compress(data, 6),
+        ContentType="application/json",
+        ContentEncoding="gzip",
+    )
+
+
 def fetch_existing_corpus(bucket: str, key: str) -> dict | None:
     """Pull the previously-deployed corpus from S3 to use as an embedding cache.
 
@@ -34,7 +53,12 @@ def fetch_existing_corpus(bucket: str, key: str) -> dict | None:
     error). Callers fall through to a full re-embed when None is returned.
     """
     try:
-        body = boto3.client("s3").get_object(Bucket=bucket, Key=key)["Body"].read()
+        response = boto3.client("s3").get_object(Bucket=bucket, Key=key)
+        body = response["Body"].read()
+        if body[:2] == b"\x1f\x8b":
+            import gzip as _gzip
+
+            body = _gzip.decompress(body)
         corpus = json.loads(body)
     except (ClientError, NoCredentialsError) as exc:
         code = (
@@ -156,9 +180,7 @@ def main() -> int:
             handle.write(json.dumps(corpus, ensure_ascii=False) + "\n")
             upload_path = Path(handle.name)
 
-    boto3.client("s3").upload_file(
-        str(upload_path), args.bucket, args.key, ExtraArgs={"ContentType": "application/json"}
-    )
+    upload_json_gzip(args.bucket, args.key, upload_path)
     print(f"Uploaded embedded librarian corpus to s3://{args.bucket}/{args.key}")
     if not args.skip_graph:
         graph = build_graph(corpus)
@@ -167,12 +189,7 @@ def main() -> int:
         ) as handle:
             handle.write(json.dumps(graph, ensure_ascii=False) + "\n")
             graph_path = Path(handle.name)
-        boto3.client("s3").upload_file(
-            str(graph_path),
-            args.bucket,
-            args.graph_key,
-            ExtraArgs={"ContentType": "application/json"},
-        )
+        upload_json_gzip(args.bucket, args.graph_key, graph_path)
         print(f"Uploaded librarian graph to s3://{args.bucket}/{args.graph_key}")
     return 0
 

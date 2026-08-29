@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Weekly Thing Archive Librarian API
 
 Parameters:
+  AlarmEmail:
+    Type: String
+    Default: jamie@thingelstad.com
+    Description: Email address that receives CloudWatch alarm notifications.
   AllowedOrigin:
     Type: CommaDelimitedList
     Default: https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080
@@ -181,6 +185,9 @@ Resources:
                   - dynamodb:ListStreams
                 Resource: !GetAtt LibrarianTable.StreamArn
               - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !GetAtt LibrarianEvalDlq.Arn
+              - Effect: Allow
                 Action: s3:GetObject
                 Resource:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${CorpusKey}
@@ -329,6 +336,16 @@ Resources:
       BatchSize: 25
       MaximumBatchingWindowInSeconds: 30
       Enabled: true
+      # Eval only reads user#... conversation/turn rows; without a filter
+      # every rate-limit counter write invoked it too.
+      FilterCriteria:
+        Filters:
+          - Pattern: '{"dynamodb":{"Keys":{"pk":{"S":[{"prefix":"user#"}]}}}}'
+      MaximumRetryAttempts: 3
+      BisectBatchOnFunctionError: true
+      DestinationConfig:
+        OnFailure:
+          Destination: !GetAtt LibrarianEvalDlq.Arn
 
   LibrarianStreamFunctionUrl:
     Type: AWS::Lambda::Url
@@ -495,6 +512,75 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LibrarianApi}/*/*/*
 
+  # Alarms previously had no AlarmActions - they fired into the void and
+  # nobody was notified when Thingy broke. Everything routes here now.
+  LibrarianAlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: weekly-thing-librarian-alarms
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlarmEmail
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  # Poison records on the eval stream mapping retry a bounded number of
+  # times, bisect to isolate the bad record, and land here instead of
+  # blocking the shard for the stream's full 24h retention.
+  LibrarianEvalDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: weekly-thing-librarian-eval-dlq
+      MessageRetentionPeriod: 1209600
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  LibrarianEvalDlqAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy eval stream mapping dead-lettered a record.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt LibrarianEvalDlq.QueueName
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  LibrarianEvalErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy eval Lambda has errors.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref LibrarianEvalFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
   LibrarianAuthErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -511,6 +597,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
@@ -531,6 +619,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy
@@ -551,6 +641,8 @@ Resources:
       Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
       Tags:
         - Key: project
           Value: Thingy

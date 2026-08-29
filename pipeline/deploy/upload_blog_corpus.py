@@ -33,6 +33,7 @@ from librarian_core.corpus import (
 # so its own directory is on sys.path and upload_corpus resolves as a sibling.
 from upload_corpus import (  # noqa: E402
     build_chunk_cache,
+    upload_json_gzip,
     fetch_existing_corpus,
     merge_cached_embeddings,
 )
@@ -95,9 +96,7 @@ def main() -> int:
             handle.write(json.dumps(corpus, ensure_ascii=False) + "\n")
             out_path = Path(handle.name)
 
-    boto3.client("s3").upload_file(
-        str(out_path), args.bucket, args.key, ExtraArgs={"ContentType": "application/json"}
-    )
+    upload_json_gzip(args.bucket, args.key, out_path)
     print(f"Uploaded embedded blog corpus to s3://{args.bucket}/{args.key}")
     return 0
 

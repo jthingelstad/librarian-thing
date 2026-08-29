@@ -523,11 +523,20 @@ async function streamBedrockAgentAnswer(
     // just the writes, or the loop burns Bedrock turns nobody will see.
     if (shouldStopWriting()) break;
     const streamAnswerDeltas = toolResults.length > 0;
+    // A rolling cachePoint on the newest message caches the whole growing
+    // prefix (system prompt + conversation + tool results) between loop
+    // turns and between conversation turns - without it every Bedrock call
+    // re-paid for the full history.
+    const messagesForRequest = messages.map((entry, index) =>
+      index === messages.length - 1
+        ? { ...entry, content: [...(entry.content || []), { cachePoint: { type: 'default' as const } }] }
+        : entry
+    );
     const response = await bedrock.send(
       new ConverseStreamCommand({
         modelId: agentModel(),
         system: systemBlocks,
-        messages,
+        messages: messagesForRequest,
         toolConfig: {
           tools: activeToolSpecs
         },
@@ -888,6 +897,13 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       const s400 = jsonResponseStream(responseStream, 400);
       s400.write(JSON.stringify({ error: 'query is required.' }));
       s400.end();
+      return;
+    }
+    if (!(await checkRateLimit('service#retrieve', Number(process.env.RETRIEVE_RATE_LIMIT_MAX || 600)))) {
+      const s429 = jsonResponseStream(responseStream, 429);
+      s429.write(JSON.stringify({ error: 'Retrieval rate limit exceeded. Try again shortly.' }));
+      s429.end();
+      logEvent('warning', 'retrieve_rate_limited', { ...summary });
       return;
     }
     const requestedK = Number(body.k || 12);

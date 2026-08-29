@@ -2,6 +2,7 @@ import { InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
 import { RerankCommand } from '@aws-sdk/client-bedrock-agent-runtime';
 import type { RerankSource } from '@aws-sdk/client-bedrock-agent-runtime';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { gunzipSync } from 'node:zlib';
 import { bedrock, bedrockAgentRuntime, embeddingModel, rerankModel, s3 } from './aws-clients.mjs';
 import { errorFields, logEvent as sharedLogEvent, truthyEnv } from './logging.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
@@ -86,6 +87,15 @@ function rerankModelArn() {
   return `arn:aws:bedrock:${region}::foundation-model/${model}`;
 }
 
+// Corpus artifacts upload gzip-compressed (ContentEncoding: gzip) since
+// 2026-08; sniff the magic bytes so plain objects keep working too.
+async function bodyToJsonString(body: { transformToByteArray: () => Promise<Uint8Array> }) {
+  const bytes = await body.transformToByteArray();
+  const buffer = Buffer.from(bytes);
+  if (buffer.length > 2 && buffer[0] === 0x1f && buffer[1] === 0x8b) return gunzipSync(buffer).toString('utf8');
+  return buffer.toString('utf8');
+}
+
 export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
   if (kind === 'blog') return loadBlogCorpus();
   if (kind === 'podcast') return loadPodcastCorpus();
@@ -96,7 +106,7 @@ export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
   const start = performance.now();
   const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
   if (!response.Body) throw new Error('Corpus object body is empty');
-  corpusCache = JSON.parse(await response.Body.transformToString()) as Corpus;
+  corpusCache = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
   logEvent('info', 'corpus_loaded', {
     source: 's3',
     scope: 'weekly_thing',
@@ -130,7 +140,7 @@ async function loadOptionalCorpus({
   try {
     const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     if (!response.Body) throw new Error(`${kind} corpus object body is empty`);
-    const loaded = JSON.parse(await response.Body.transformToString()) as Corpus;
+    const loaded = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
     setCache(loaded);
     logEvent('info', 'corpus_loaded', {
       source: 's3',
@@ -191,7 +201,7 @@ export async function loadGraph(): Promise<Record<string, unknown>> {
   try {
     const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     if (!response.Body) throw new Error('Graph object body is empty');
-    graphCache = JSON.parse(await response.Body.transformToString()) as Record<string, unknown>;
+    graphCache = JSON.parse(await bodyToJsonString(response.Body)) as Record<string, unknown>;
     const issues =
       graphCache.issues && typeof graphCache.issues === 'object' && !Array.isArray(graphCache.issues)
         ? graphCache.issues
