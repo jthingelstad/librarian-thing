@@ -13,7 +13,7 @@ outcomes these three already own.
 |---|---|---|---|
 | **Run the Librarian** | `run-librarian.md` | Weekly Saturday, and after deploys, alarms, or incidents | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
 | **Keep the Archive True** | `keep-archive-true.md` | Weekly Sunday morning, and when ingest changes | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
-| **Improve Thingy** | `improve-thingy.md` | Weekly Monday, after the scheduled answer eval | Are Thingy's answers grounded, cited, honest, and improving? |
+| **Improve Thingy** | `improve-thingy.md` | Weekly Monday, from exact natural conversations | Are Thingy's answers grounded, cited, honest, and improving? |
 
 Choose the owner by the primary failed outcome, not by the file being edited:
 

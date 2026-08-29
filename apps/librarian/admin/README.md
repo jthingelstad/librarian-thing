@@ -6,6 +6,35 @@ This is the home for scripts that talk to the *live* librarian stack — DynamoD
 
 ## Tools
 
+### `conversation_review.py`
+
+Provides Codex a private, two-stage read path to natural Thingy conversations.
+It resolves the deployed table through CloudFormation and reads DynamoDB
+directly. It does not use Thingy's HTTP APIs, sign in, send email, create
+conversations, invoke a model grader, or write production state.
+
+First collect a bounded index. The index omits transcript text and subscriber
+hashes while retaining enough metadata, feedback, citation, tool, and runtime
+signals to choose a review sample:
+
+```bash
+uv run --locked python apps/librarian/admin/conversation_review.py list \
+  --days 7 --limit 30 --sort attention
+```
+
+Then retrieve one exact conversation at a time:
+
+```bash
+uv run --locked python apps/librarian/admin/conversation_review.py show \
+  <conversation-id>
+```
+
+Both commands emit JSON to stdout only. Their output is private reader evidence
+for the active Codex evaluation; never commit it or paste raw content into an
+issue, note, automation memory, or summary. The background evaluator fields are
+included only as triage hints. Codex makes the final quality judgment from the
+exact conversation, citations, tool trace, runtime metadata, and feedback.
+
 ### Studio Thingy Operations
 
 Studio's existing tailnet-only website exposes a read-only **Thingy** section at

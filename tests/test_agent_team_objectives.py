@@ -59,6 +59,18 @@ def test_automation_prompts_preserve_the_common_contract():
         assert "one replace-in-place Latest run" in prompt
 
 
+def test_improve_thingy_uses_direct_private_evidence_instead_of_the_http_eval():
+    plan = tomllib.loads((ROOT / "AGENT-TEAM/automations.toml").read_text())
+    improve = next(entry for entry in plan["automation"] if entry["objective"] == "improve")
+    prompt = improve["prompt"]
+
+    assert "direct read-only DynamoDB conversation-review tool" in prompt
+    assert "Do not call Thingy HTTP endpoints" in prompt
+    assert "make your own evidence-grounded evaluation" in prompt
+    assert not (ROOT / ".github/workflows/answer-eval.yml").exists()
+    assert not (ROOT / "apps/librarian/lambda/scripts/eval-answers.mjs").exists()
+
+
 def test_checkout_lease_is_atomic_and_release_is_fail_closed(tmp_path: Path, monkeypatch):
     lease_path = tmp_path / ".git" / "agent-team-lease.json"
     lease_path.parent.mkdir()
