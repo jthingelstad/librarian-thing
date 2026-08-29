@@ -45,6 +45,33 @@ def metadata(**overrides):
     return row
 
 
+def mcp_metadata(**overrides):
+    row = {
+        "pk": "user#reader-hash",
+        "sk": "mcp#2026-08-29T22:30:00.000Z#request-mcp-1",
+        "item_type": "mcp_tool_call",
+        "request_id": "request-mcp-1",
+        "created_at": "2026-08-29T22:30:00.000Z",
+        "tool_name": "search_archive",
+        "status": "ok",
+        "duration_ms": Decimal("125"),
+        "result_chars": Decimal("820"),
+        "response_truncated": False,
+        "arguments_json": '{"query":"exact private MCP query","limit":3}',
+        "trace_schema_version": Decimal("2"),
+        "source_revision": "chat-lambda/example",
+        "tool_trace_json": (
+            '{"schema_version":2,"surface":"mcp","external_answer_available":false,'
+            '"calls":[{"name":"search_archive","ok":true,"duration_ms":125,'
+            '"result":{"counts":{"results":3},"sources":[{"rank":1,'
+            '"issue_number":"300","url":"/archive/300/"}]}}]}'
+        ),
+        "external_answer_available": False,
+    }
+    row.update(overrides)
+    return row
+
+
 def test_index_is_bounded_private_and_does_not_expose_reader_identity_or_transcript():
     table = FakeTable(
         scan_pages=[{"Items": [metadata()]}],
@@ -210,3 +237,83 @@ def test_background_evaluation_is_marked_stale_after_a_new_turn():
     )
 
     assert evaluation["stale"] is True
+
+
+def test_mcp_index_is_bounded_private_and_surfaces_runtime_attention():
+    table = FakeTable(
+        scan_pages=[
+            {
+                "Items": [
+                    mcp_metadata(
+                        status="tool_error",
+                        duration_ms=Decimal("9000"),
+                        tool_trace_json=(
+                            '{"schema_version":2,"calls":[{"name":"search_archive",'
+                            '"ok":false,"duration_ms":9000,"result":{"error":"Timeout"}}]}'
+                        ),
+                    )
+                ]
+            }
+        ]
+    )
+
+    payload = conversation_review.collect_mcp_index(
+        table,
+        since_iso="2026-08-22T00:00:00Z",
+        limit=10,
+        max_candidates=20,
+        max_scan_pages=3,
+        configured_owner_hash="owner-hash",
+        reader_filter="all",
+        sort="attention",
+    )
+
+    assert payload["source"] == "direct_dynamodb_read_only"
+    assert payload["surface"] == "mcp"
+    assert payload["returned_mcp_calls"] == 1
+    record = payload["mcp_calls"][0]
+    assert record["request_id"] == "request-mcp-1"
+    assert record["reader_kind"] == "reader"
+    assert record["priority"] == "high"
+    assert record["attention_reasons"] == ["tool_error", "slow_tool"]
+    assert record["external_answer_available"] is False
+    assert record["signals"]["result_chars"] == 820
+    assert record["signals"]["client_response_truncated"] is False
+    assert "arguments" not in record
+    assert "tool_trace" not in record
+    assert "reader-hash" not in str(payload)
+
+
+def test_mcp_detail_exposes_exact_tool_evidence_and_honest_external_boundary():
+    payload = conversation_review.mcp_detail_record(
+        mcp_metadata(),
+        configured_owner_hash="owner-hash",
+    )
+
+    assert payload["request"]["request_id"] == "request-mcp-1"
+    assert payload["request"]["arguments"]["query"] == "exact private MCP query"
+    assert payload["runtime"]["result_chars"] == 820
+    assert payload["runtime"]["client_response_truncated"] is False
+    assert payload["tool_trace"]["calls"][0]["result"]["counts"]["results"] == 3
+    assert payload["external_client_outcome"]["final_answer_available"] is False
+    assert payload["external_client_outcome"]["feedback_available"] is False
+    assert "do not infer final-answer quality" in payload["external_client_outcome"]["note"]
+    assert "reader-hash" not in str(payload)
+
+
+def test_mcp_client_response_truncation_is_an_attention_signal():
+    priority, reasons = conversation_review.mcp_attention(mcp_metadata(response_truncated=True))
+
+    assert priority == "medium"
+    assert reasons == ["client_response_truncated"]
+
+
+def test_find_mcp_call_fails_closed_when_scan_limit_cannot_prove_absence():
+    table = FakeTable(scan_pages=[{"Items": [], "LastEvaluatedKey": {"pk": "next"}}])
+
+    with pytest.raises(RuntimeError, match="before the 1-page scan limit"):
+        conversation_review.find_mcp_call(
+            table,
+            requested_id="missing",
+            max_scan_pages=1,
+        )

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Read exact, private Thingy conversation evidence directly from DynamoDB.
+"""Read exact, private Thingy conversation and MCP evidence directly from DynamoDB.
 
 This is the Codex-facing evaluator path. It does not sign in to Thingy, call a
 Thingy HTTP endpoint, create a synthetic conversation, invoke a model grader,
-or write production state. ``list`` returns a bounded private index; ``show``
-returns one exact conversation and its turn metadata for Codex to judge.
+or write production state. ``list`` / ``show`` review native conversations;
+``mcp-list`` / ``mcp-show`` review real MCP tool calls without pretending the
+external client's prompt, final synthesis, or feedback is available.
 
 Raw output is private reader evidence. Keep it in the active Codex run only;
 never paste it into commits, issues, automation memory, or run summaries.
@@ -36,6 +37,7 @@ DEFAULT_LIMIT = 30
 DEFAULT_MAX_CANDIDATES = 100
 DEFAULT_MAX_SCAN_PAGES = 30
 DEFAULT_MAX_TURNS = 80
+MCP_SLOW_TOOL_MS = 8_000
 
 PRIVATE_NOTICE = (
     "Private reader evidence for the active Codex evaluation only. "
@@ -165,6 +167,35 @@ def scan_recent_conversations(
     return rows, pages, bool(exclusive_start_key)
 
 
+def scan_recent_mcp_calls(
+    table: Any,
+    *,
+    since_iso: str,
+    max_scan_pages: int,
+) -> tuple[list[dict[str, Any]], int, bool]:
+    rows: list[dict[str, Any]] = []
+    exclusive_start_key = None
+    pages = 0
+    while pages < max(1, max_scan_pages):
+        kwargs: dict[str, Any] = {
+            "FilterExpression": (
+                Attr("pk").begins_with("user#")
+                & Attr("sk").begins_with("mcp#")
+                & Attr("created_at").gte(since_iso)
+            )
+        }
+        if exclusive_start_key:
+            kwargs["ExclusiveStartKey"] = exclusive_start_key
+        response = table.scan(**kwargs)
+        rows.extend(response.get("Items") or [])
+        pages += 1
+        exclusive_start_key = response.get("LastEvaluatedKey")
+        if not exclusive_start_key:
+            break
+    rows.sort(key=lambda row: str(row.get("created_at") or ""), reverse=True)
+    return rows, pages, bool(exclusive_start_key)
+
+
 def find_conversation(
     table: Any,
     *,
@@ -197,6 +228,43 @@ def find_conversation(
         raise RuntimeError(f"conversation not found: {requested_id}")
     if len(matches) > 1:
         raise RuntimeError(f"conversation id is not unique: {requested_id}")
+    return matches[0], pages
+
+
+def find_mcp_call(
+    table: Any,
+    *,
+    requested_id: str,
+    max_scan_pages: int,
+) -> tuple[dict[str, Any], int]:
+    matches: list[dict[str, Any]] = []
+    exclusive_start_key = None
+    pages = 0
+    while pages < max(1, max_scan_pages):
+        kwargs: dict[str, Any] = {
+            "FilterExpression": (
+                Attr("pk").begins_with("user#")
+                & Attr("sk").begins_with("mcp#")
+                & Attr("request_id").eq(requested_id)
+            )
+        }
+        if exclusive_start_key:
+            kwargs["ExclusiveStartKey"] = exclusive_start_key
+        response = table.scan(**kwargs)
+        matches.extend(response.get("Items") or [])
+        pages += 1
+        exclusive_start_key = response.get("LastEvaluatedKey")
+        if not exclusive_start_key:
+            break
+    if exclusive_start_key:
+        raise RuntimeError(
+            f"MCP request {requested_id!r} could not be resolved uniquely before the "
+            f"{max_scan_pages}-page scan limit"
+        )
+    if not matches:
+        raise RuntimeError(f"MCP request not found: {requested_id}")
+    if len(matches) > 1:
+        raise RuntimeError(f"MCP request id is not unique: {requested_id}")
     return matches[0], pages
 
 
@@ -446,6 +514,170 @@ def collect_index(
     }
 
 
+def mcp_trace(item: dict[str, Any]) -> dict[str, Any] | None:
+    return parse_json_object(item.get("tool_trace_json"))
+
+
+def mcp_call_from_trace(trace: dict[str, Any] | None) -> dict[str, Any]:
+    calls = trace.get("calls") if trace else None
+    return calls[0] if isinstance(calls, list) and calls and isinstance(calls[0], dict) else {}
+
+
+def mcp_attention(item: dict[str, Any]) -> tuple[str, list[str]]:
+    status = str(item.get("status") or "")
+    duration_ms = int(item.get("duration_ms") or 0)
+    trace = mcp_trace(item)
+    call = mcp_call_from_trace(trace)
+    result = call.get("result") if isinstance(call.get("result"), dict) else {}
+    reasons: list[str] = []
+    if status != "ok" or result.get("error"):
+        reasons.append("tool_error")
+    if not trace or not call:
+        reasons.append("evidence_missing")
+    if duration_ms >= MCP_SLOW_TOOL_MS:
+        reasons.append("slow_tool")
+    if bool(item.get("response_truncated")):
+        reasons.append("client_response_truncated")
+    truncation = result.get("truncation") if isinstance(result.get("truncation"), dict) else {}
+    if truncation.get("sources_dropped") or truncation.get("evidence_dropped"):
+        reasons.append("evidence_truncated")
+    if "tool_error" in reasons or "evidence_missing" in reasons:
+        return "high", reasons
+    if reasons:
+        return "medium", reasons
+    return "routine", reasons
+
+
+def mcp_result_signals(item: dict[str, Any]) -> dict[str, Any]:
+    trace = mcp_trace(item)
+    call = mcp_call_from_trace(trace)
+    result = call.get("result") if isinstance(call.get("result"), dict) else {}
+    sources = result.get("sources") if isinstance(result.get("sources"), list) else []
+    return {
+        "result_counts": json_safe(result.get("counts") or {}),
+        "source_count": len(sources),
+        "has_error": bool(result.get("error")),
+        "trace_schema_version": int(item.get("trace_schema_version") or 0),
+        "result_chars": int(item.get("result_chars") or 0),
+        "client_response_truncated": bool(item.get("response_truncated")),
+    }
+
+
+def mcp_index_record(
+    item: dict[str, Any],
+    *,
+    configured_owner_hash: str,
+) -> dict[str, Any]:
+    priority, reasons = mcp_attention(item)
+    return {
+        "request_id": str(item.get("request_id") or ""),
+        "activity_kind": "mcp_tool_call",
+        "reader_kind": reader_kind(item, configured_owner_hash=configured_owner_hash),
+        "created_at": str(item.get("created_at") or ""),
+        "tool_name": str(item.get("tool_name") or ""),
+        "status": str(item.get("status") or ""),
+        "priority": priority,
+        "attention_reasons": reasons,
+        "runtime": {
+            "duration_ms": int(item.get("duration_ms") or 0),
+            "result_chars": int(item.get("result_chars") or 0),
+            "client_response_truncated": bool(item.get("response_truncated")),
+        },
+        "signals": mcp_result_signals(item),
+        "external_answer_available": False,
+    }
+
+
+def collect_mcp_index(
+    table: Any,
+    *,
+    since_iso: str,
+    limit: int,
+    max_candidates: int,
+    max_scan_pages: int,
+    configured_owner_hash: str,
+    reader_filter: str,
+    sort: str,
+) -> dict[str, Any]:
+    items, pages, scan_truncated = scan_recent_mcp_calls(
+        table,
+        since_iso=since_iso,
+        max_scan_pages=max_scan_pages,
+    )
+    filtered_items = [
+        item
+        for item in items
+        if reader_filter == "all"
+        or reader_kind(item, configured_owner_hash=configured_owner_hash) == reader_filter
+    ]
+    records = [
+        mcp_index_record(item, configured_owner_hash=configured_owner_hash)
+        for item in filtered_items[: max(1, max_candidates)]
+    ]
+    if sort == "attention":
+        priority_order = {"high": 0, "medium": 1, "routine": 2}
+        records.sort(key=lambda record: str(record.get("created_at") or ""), reverse=True)
+        records.sort(key=lambda record: priority_order.get(str(record.get("priority")), 2))
+    bounded = records[: max(1, limit)]
+    return {
+        "privacy": PRIVATE_NOTICE,
+        "source": "direct_dynamodb_read_only",
+        "surface": "mcp",
+        "generated_at": iso_timestamp(utc_now()),
+        "since": since_iso,
+        "scan_pages": pages,
+        "scan_truncated": scan_truncated,
+        "matching_mcp_calls": len(filtered_items),
+        "candidate_mcp_calls": len(records),
+        "candidate_truncated": len(filtered_items) > len(records),
+        "returned_mcp_calls": len(bounded),
+        "mcp_calls": bounded,
+        "limitation": (
+            "Librarian records exact MCP tool arguments and bounded result evidence, not the external "
+            "client's prompt, final synthesis, or feedback."
+        ),
+    }
+
+
+def mcp_detail_record(
+    item: dict[str, Any],
+    *,
+    configured_owner_hash: str,
+) -> dict[str, Any]:
+    return {
+        "privacy": PRIVATE_NOTICE,
+        "source": "direct_dynamodb_read_only",
+        "surface": "mcp",
+        "request": {
+            "request_id": str(item.get("request_id") or ""),
+            "activity_kind": "mcp_tool_call",
+            "reader_kind": reader_kind(item, configured_owner_hash=configured_owner_hash),
+            "created_at": str(item.get("created_at") or ""),
+            "tool_name": str(item.get("tool_name") or ""),
+            "status": str(item.get("status") or ""),
+            "arguments": parse_json_object(item.get("arguments_json")),
+        },
+        "runtime": {
+            "duration_ms": int(item.get("duration_ms") or 0),
+            "result_chars": int(item.get("result_chars") or 0),
+            "client_response_truncated": bool(item.get("response_truncated")),
+        },
+        "versions": {
+            "trace_schema_version": int(item.get("trace_schema_version") or 0),
+            "source_revision": str(item.get("source_revision") or ""),
+        },
+        "tool_trace": mcp_trace(item),
+        "external_client_outcome": {
+            "final_answer_available": False,
+            "feedback_available": False,
+            "note": (
+                "The Librarian MCP server does not receive the external client's prompt, final "
+                "synthesis, or reader feedback; do not infer final-answer quality from this record."
+            ),
+        },
+    }
+
+
 def add_connection_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--stack-name", default=os.environ.get("LIBRARIAN_STACK_NAME", DEFAULT_STACK)
@@ -477,6 +709,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     add_connection_arguments(show_parser)
     show_parser.add_argument("conversation_id")
     show_parser.add_argument("--max-turns", type=int, default=DEFAULT_MAX_TURNS)
+
+    mcp_list_parser = subparsers.add_parser(
+        "mcp-list", help="List a bounded private index of natural MCP tool calls."
+    )
+    add_connection_arguments(mcp_list_parser)
+    mcp_list_parser.add_argument("--days", type=int, default=DEFAULT_DAYS)
+    mcp_list_parser.add_argument("--since", default="", help="ISO lower bound; overrides --days.")
+    mcp_list_parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT)
+    mcp_list_parser.add_argument("--max-candidates", type=int, default=DEFAULT_MAX_CANDIDATES)
+    mcp_list_parser.add_argument("--reader", choices=("all", "reader", "owner"), default="all")
+    mcp_list_parser.add_argument("--sort", choices=("attention", "newest"), default="attention")
+
+    mcp_show_parser = subparsers.add_parser(
+        "mcp-show", help="Show one exact private MCP tool call."
+    )
+    add_connection_arguments(mcp_show_parser)
+    mcp_show_parser.add_argument("request_id")
     return parser.parse_args(argv)
 
 
@@ -487,10 +736,21 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     table = session.resource("dynamodb").Table(table_name)
     configured_owner_hash = owner_hash(args.owner_email)
 
-    if args.command == "list":
+    if args.command in {"list", "mcp-list"}:
         since = (
             parse_iso(args.since) if args.since else utc_now() - timedelta(days=max(1, args.days))
         )
+        if args.command == "mcp-list":
+            return collect_mcp_index(
+                table,
+                since_iso=iso_timestamp(since),
+                limit=args.limit,
+                max_candidates=args.max_candidates,
+                max_scan_pages=args.max_scan_pages,
+                configured_owner_hash=configured_owner_hash,
+                reader_filter=args.reader,
+                sort=args.sort,
+            )
         return collect_index(
             table,
             since_iso=iso_timestamp(since),
@@ -502,6 +762,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             reader_filter=args.reader,
             sort=args.sort,
         )
+
+    if args.command == "mcp-show":
+        item, pages = find_mcp_call(
+            table,
+            requested_id=args.request_id,
+            max_scan_pages=args.max_scan_pages,
+        )
+        detail = mcp_detail_record(item, configured_owner_hash=configured_owner_hash)
+        detail["scan_pages"] = pages
+        return detail
 
     item, pages = find_conversation(
         table,

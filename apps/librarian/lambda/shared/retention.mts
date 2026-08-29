@@ -1,6 +1,7 @@
 const SECONDS_PER_DAY = 24 * 60 * 60;
 
 export const DEFAULT_CONVERSATION_RETENTION_DAYS = 45;
+export const DEFAULT_MCP_AUDIT_RETENTION_DAYS = 14;
 
 type DateInput = Date | string | number;
 
@@ -21,4 +22,8 @@ export function ttlSecondsFrom(value: DateInput, days: number) {
 
 export function conversationTtlSeconds(now: DateInput = new Date()) {
   return ttlSecondsFrom(now, retentionDays('THINGY_CONVERSATION_RETENTION_DAYS', DEFAULT_CONVERSATION_RETENTION_DAYS));
+}
+
+export function mcpAuditTtlSeconds(now: DateInput = new Date()) {
+  return ttlSecondsFrom(now, DEFAULT_MCP_AUDIT_RETENTION_DAYS);
 }

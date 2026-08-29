@@ -49,7 +49,8 @@ import {
 import { errorFields, truthyEnv } from '../shared/logging.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
 import { chatDailyQuota, consumeDailyQuota, mcpDailyQuota, quotaMaxForEntitlements } from '../shared/quota.mjs';
-import { handleMcpMessage } from '../shared/mcp.mjs';
+import { MCP_RESULT_MAX_CHARS, handleMcpMessage } from '../shared/mcp.mjs';
+import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt } from '../shared/prompts.mjs';
@@ -776,7 +777,79 @@ async function handleMcpRoute({
     invokeTool: async (name, input) => {
       const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
       if (!handler) throw new Error(`Unknown tool: ${name}`);
-      return await handler(input, { scope: 'all', subscriberHash: grant.subscriberHash });
+      const toolStart = performance.now();
+      try {
+        const toolResult = await handler(input, { scope: 'all', subscriberHash: grant.subscriberHash });
+        const status = objectValue(toolResult).error ? 'tool_error' : 'ok';
+        const durationMs = Math.round(performance.now() - toolStart);
+        const resultChars = JSON.stringify(toolResult ?? null, null, 1).length;
+        try {
+          await recordMcpToolCall({
+            dynamodb,
+            tableName: process.env.TABLE_NAME,
+            subscriberHash: grant.subscriberHash,
+            requestId: summary.request_id,
+            createdAt: new Date().toISOString(),
+            toolName: name,
+            arguments: input,
+            result: toolResult,
+            status,
+            durationMs,
+            sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
+            resultChars,
+            responseTruncated: resultChars > MCP_RESULT_MAX_CHARS,
+            responseMaxChars: MCP_RESULT_MAX_CHARS
+          });
+        } catch (error) {
+          logEvent('warning', 'mcp_tool_audit_failed', {
+            request_id: summary.request_id,
+            tool_name: name,
+            error_type: errorName(error)
+          });
+        }
+        logEvent('info', 'mcp_tool_call_completed', {
+          request_id: summary.request_id,
+          tool_name: name,
+          status,
+          duration_ms: durationMs,
+          response_truncated: resultChars > MCP_RESULT_MAX_CHARS
+        });
+        return toolResult;
+      } catch (error) {
+        const durationMs = Math.round(performance.now() - toolStart);
+        try {
+          await recordMcpToolCall({
+            dynamodb,
+            tableName: process.env.TABLE_NAME,
+            subscriberHash: grant.subscriberHash,
+            requestId: summary.request_id,
+            createdAt: new Date().toISOString(),
+            toolName: name,
+            arguments: input,
+            result: { error: errorName(error) },
+            status: 'tool_error',
+            durationMs,
+            sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
+            resultChars: 0,
+            responseTruncated: false,
+            responseMaxChars: MCP_RESULT_MAX_CHARS
+          });
+        } catch (auditError) {
+          logEvent('warning', 'mcp_tool_audit_failed', {
+            request_id: summary.request_id,
+            tool_name: name,
+            error_type: errorName(auditError)
+          });
+        }
+        logEvent('warning', 'mcp_tool_call_completed', {
+          request_id: summary.request_id,
+          tool_name: name,
+          status: 'tool_error',
+          duration_ms: durationMs,
+          error_type: errorName(error)
+        });
+        throw error;
+      }
     }
   });
   finish(result.statusCode, result.payload);
