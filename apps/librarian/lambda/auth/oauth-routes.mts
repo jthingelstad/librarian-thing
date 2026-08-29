@@ -58,6 +58,7 @@ export function authorizationServerMetadata() {
     response_types_supported: ['code'],
     grant_types_supported: ['authorization_code', 'refresh_token'],
     code_challenge_methods_supported: ['S256'],
+    authorization_response_iss_parameter_supported: true,
     token_endpoint_auth_methods_supported: ['none'],
     scopes_supported: OAUTH_SCOPES
   };
@@ -394,14 +395,18 @@ async function handleApproveStep(pending: OauthPending, client: OauthClient, bod
     subscriber_hash: pending.subscriberHash,
     scope: pending.scope
   });
-  return redirectWithParams(pending.redirectUri, { code, state: pending.state });
+  return redirectWithParams(pending.redirectUri, { code, state: pending.state, iss: oauthIssuer() });
 }
 
 async function handleAuthorizePost(event: LibrarianHttpEvent, start: number) {
   const body = parseBody(event);
   const pending = await getPending(body.pending);
   if (!pending) {
-    return errorPage(400, 'Sign-in expired', 'This sign-in session expired or is invalid. Start over from the app.');
+    return errorPage(
+      400,
+      'Sign-in already finished or expired',
+      'This sign-in was completed in another window, or it expired. Close this window and check the app - if it still shows an error there, start the connection again and finish every step in this same browser.'
+    );
   }
   // Re-validate the client and the exact redirect_uri on every step: a client
   // deleted or re-registered mid-flow must not receive a code.

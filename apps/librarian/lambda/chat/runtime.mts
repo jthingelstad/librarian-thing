@@ -22,7 +22,12 @@ import {
 } from '../shared/tool-evidence.mjs';
 import { promptFingerprint } from '../shared/prompts.mjs';
 import { generateWelcome } from '../shared/archive-experience.mjs';
-import { ARCHIVE_TOOLS, collectToolCitations, toolSpecs, weeklyIssueCatalog } from '../shared/archive-tools.mjs';
+import {
+  ARCHIVE_TOOLS,
+  availableToolSpecs,
+  collectToolCitations,
+  weeklyIssueCatalog
+} from '../shared/archive-tools.mjs';
 import {
   conversationContext,
   extractPreferredNameFromMessage,
@@ -503,7 +508,7 @@ async function streamBedrockAgentAnswer(
   const turnLimit = maxTurns;
   type ToolHandler = (input?: JsonRecord, context?: JsonRecord) => unknown | Promise<unknown>;
   const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
-  const activeToolSpecs = toolSpecs() as Tool[];
+  const activeToolSpecs = availableToolSpecs() as Tool[];
   // The static system prompt is cached; per-request blocks go after the
   // cachePoint so they don't bust the static prompt's prefix cache.
   const systemBlocks: SystemContentBlock[] = [{ text: AGENT_SYSTEM_PROMPT }, { cachePoint: { type: 'default' } }];

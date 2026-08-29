@@ -265,6 +265,7 @@ def deploy_stack(
     session_secret: str | None,
     librarian_retrieve_secret: str | None,
     fastmail_jmap_token: str | None,
+    brave_search_api_key: str | None,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
     stream_custom_domain_name: str,
@@ -325,6 +326,16 @@ def deploy_stack(
     else:
         fastmail_parameter = {"ParameterKey": "FastmailJmapToken", "ParameterValue": ""}
 
+    if brave_search_api_key:
+        brave_parameter = {
+            "ParameterKey": "BraveSearchApiKey",
+            "ParameterValue": brave_search_api_key,
+        }
+    elif exists and "BraveSearchApiKey" in existing_parameter_keys:
+        brave_parameter = {"ParameterKey": "BraveSearchApiKey", "UsePreviousValue": True}
+    else:
+        brave_parameter = {"ParameterKey": "BraveSearchApiKey", "ParameterValue": ""}
+
     parameters = [
         {"ParameterKey": "AllowedOrigin", "ParameterValue": allowed_origin},
         {"ParameterKey": "CodeBucket", "ParameterValue": bucket},
@@ -339,6 +350,7 @@ def deploy_stack(
         session_parameter,
         retrieve_parameter,
         fastmail_parameter,
+        brave_parameter,
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
         {
@@ -589,6 +601,7 @@ def main() -> int:
         or os.environ.get("THINGY_JMAP_TOKEN")
         or None
     )
+    brave_search_api_key = os.environ.get("BRAVE_SEARCH_API_KEY") or None
     outputs, generated_session_secret = deploy_stack(
         stack_name=args.stack_name,
         bucket=bucket,
@@ -603,6 +616,7 @@ def main() -> int:
         session_secret=session_secret,
         librarian_retrieve_secret=librarian_retrieve_secret,
         fastmail_jmap_token=fastmail_jmap_token,
+        brave_search_api_key=brave_search_api_key,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
         stream_custom_domain_name=args.stream_custom_domain_name,

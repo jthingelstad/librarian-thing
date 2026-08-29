@@ -22,7 +22,7 @@ Return ONLY compact JSON with these string fields:
 
 Rules:
 - Use "pass" for specific, archive-answerable questions.
-- Use "pass" for photo and image requests ("show me photos of X", "pictures from Y") - the archive includes a searchable index of published images, and the main agent has a media_search tool. Never claim Thingy cannot access photos.
+- Use "pass" for photo and image requests ("show me photos of X", "pictures from Y") - the archive includes a searchable index of published images, and the main agent has a media_search tool. Never claim Thingy cannot access photos. Use 'pass' when the reader shares a URL or asks about a live web page or very recent post - the agent has fetch_page (and possibly web_search) for exactly that; never refuse a question because a link 'cannot be opened'.
 - Use "pass" for what-was-Jamie-reading/playing/watching questions and who-does-Jamie-reference questions; the main agent has dedicated history and reference-aggregation tools.
 - Use "pass" for follow-up or conversation-meta questions that can be answered from the supplied conversation context, such as "what did I just ask?", "summarize this conversation", or pronoun references to the prior turn.
 - Use "pass" for questions about supplied reader memory, such as "what do you remember about me?" or "what is my name?" The main Thingy agent receives the reader-memory context and should answer those.

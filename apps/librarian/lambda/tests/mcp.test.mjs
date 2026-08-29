@@ -28,10 +28,13 @@ test('initialize negotiates a supported protocol version', () => {
 });
 
 test('tools/list exposes exactly the launch tools with JSON schemas', async () => {
+  // web_search only appears once a Brave key is configured.
+  delete process.env.BRAVE_SEARCH_API_KEY;
+  const expected = MCP_LAUNCH_TOOLS.filter((name) => name !== 'web_search');
   const declarations = mcpToolDeclarations();
   assert.deepEqual(
     declarations.map((tool) => tool.name).sort(),
-    [...MCP_LAUNCH_TOOLS].sort()
+    [...expected].sort()
   );
   for (const tool of declarations) {
     assert.ok(tool.description.length > 10, tool.name);
@@ -39,7 +42,12 @@ test('tools/list exposes exactly the launch tools with JSON schemas', async () =
   }
   const reply = await handleMcpMessage({ jsonrpc: '2.0', id: 1, method: 'tools/list' }, context());
   assert.equal(reply.statusCode, 200);
-  assert.equal(reply.payload.result.tools.length, MCP_LAUNCH_TOOLS.length);
+  assert.equal(reply.payload.result.tools.length, expected.length);
+
+  process.env.BRAVE_SEARCH_API_KEY = 'test-key';
+  const withKey = mcpToolDeclarations().map((tool) => tool.name);
+  assert.ok(withKey.includes('web_search'));
+  delete process.env.BRAVE_SEARCH_API_KEY;
 });
 
 test('tools/call invokes the registry handler and wraps text content', async () => {

@@ -8,7 +8,7 @@
  * auth, rate limiting, and quota live in the runtime caller; this module is
  * pure protocol given a context and an invoke function.
  */
-import { toolSpecs } from './archive-tools.mjs';
+import { availableToolSpecs, webSearchConfigured } from './archive-tools.mjs';
 
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
@@ -30,7 +30,9 @@ export const MCP_LAUNCH_TOOLS = [
   'claim_check',
   'media_search',
   'currently_history',
-  'top_references'
+  'top_references',
+  'fetch_page',
+  'web_search'
 ];
 
 // Tool results are sized for the Bedrock loop, where 200KB of evidence is
@@ -63,8 +65,8 @@ export interface McpContext {
 }
 
 export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
-  const wanted = new Set(names);
-  return (toolSpecs() as BedrockToolSpec[])
+  const wanted = new Set(names.filter((name) => name !== 'web_search' || webSearchConfigured()));
+  return (availableToolSpecs() as BedrockToolSpec[])
     .map((spec) => spec.toolSpec)
     .filter((spec): spec is NonNullable<BedrockToolSpec['toolSpec']> => Boolean(spec?.name && wanted.has(spec.name)))
     .map((spec) => ({

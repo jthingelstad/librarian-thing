@@ -72,6 +72,11 @@ Parameters:
     NoEcho: true
     Default: ""
     Description: Fastmail JMAP API token used to send Thingy magic-link emails.
+  BraveSearchApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
+    Description: Brave Search API key for the web_search tool. Empty disables web search.
   ThingyMagicLinkFromEmail:
     Type: String
     Default: thingy@thingelstad.com
@@ -295,6 +300,7 @@ Resources:
           # Deployed-revision stamp for recorded turns; the timestamped code
           # key already uniquely names each deployed artifact.
           LIBRARIAN_SOURCE_REVISION: !Ref StreamCodeKey
+          BRAVE_SEARCH_API_KEY: !Ref BraveSearchApiKey
       Handler: chat/handler.handler
       MemorySize: 3008
       ReservedConcurrentExecutions: 5

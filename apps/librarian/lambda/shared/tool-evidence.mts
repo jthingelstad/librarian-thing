@@ -26,7 +26,18 @@ export const EVIDENCE_MAX_CALL_CHARS = 2800;
 export const EVIDENCE_MAX_COUNT_KEYS = 12;
 
 const SOURCE_ID_FIELDS = ['id', 'chunk_id', 'source_id'] as const;
-const EXCERPT_FIELDS = ['text', 'excerpt', 'quote', 'snippet', 'preview', 'context', 'summary', 'alt', 'body'] as const;
+const EXCERPT_FIELDS = [
+  'text',
+  'excerpt',
+  'quote',
+  'snippet',
+  'preview',
+  'context',
+  'summary',
+  'description',
+  'alt',
+  'body'
+] as const;
 // Result keys whose arrays are known to carry source-like records, plus a
 // shape sniff for everything else so new tools inherit evidence for free.
 const SOURCE_SHAPE_FIELDS = [
