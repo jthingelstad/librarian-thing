@@ -369,7 +369,7 @@ async function handleEmailStep(
     return emailStepPage(
       pending.id,
       client.clientName,
-      'That email is not an active Weekly Thing subscription. Subscribe first at thingelstad.com.'
+      'That email is not an active Weekly Thing subscription. Sign in at thingy.thingelstad.com/signin first - Thingy can add you to The Weekly Thing there.'
     );
   }
   const sent = await sendLoginCodeEmail({ email, subscriber, source: 'thingy', event, start });

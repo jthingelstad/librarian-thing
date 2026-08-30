@@ -236,18 +236,27 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
   if (suppliedEmail && emailHash(suppliedEmail) === String(payload.sub) && verificationStale) {
     try {
       const subscriber = await fetchSubscriber(suppliedEmail);
-      if (subscriber) {
-        const status = subscriberStatus(subscriber);
+      const status = subscriberStatus(subscriber);
+      if (status === 'active' || status === 'premium') {
         entitlements = entitlementsForSubscriber({ email: suppliedEmail, subscriber, status });
         verifiedUntil = nowSeconds + 60 * 60 * 24 * 9;
         logEvent('info', 'auth_refresh_reverified', {
           subscriber_hash: payload.sub,
           entitlements
         });
+      } else {
+        // The subscription lapsed or vanished: a sliding session must not
+        // outlive the subscriber gate. Force the full (gated) sign-in.
+        logEvent('info', 'auth_refresh_subscription_lapsed', {
+          subscriber_hash: payload.sub,
+          subscriber_status: status
+        });
+        return jsonResponse(401, { error: 'Your Weekly Thing subscription needs a fresh sign-in.' }, event);
       }
     } catch (error) {
       // Keep the session alive on Buttondown hiccups; entitlements just
-      // stay as they were.
+      // stay as they were. Outage tolerance, not gate bypass - the next
+      // successful re-verification enforces.
       logEvent('warning', 'auth_refresh_reverify_failed', errorFields(error, { subscriber_hash: payload.sub }));
     }
   }
