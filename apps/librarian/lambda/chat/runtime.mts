@@ -918,7 +918,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
           })
         : {
             statusCode: 401,
-            payload: { error: 'Please validate your subscriber email to use the librarian.', request_id: requestId }
+            payload: { error: 'Please validate your subscriber email to use Thingy.', request_id: requestId }
           };
     const stream = jsonResponseStream(responseStream, result.statusCode);
     stream.write(JSON.stringify(result.payload));
@@ -1020,7 +1020,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     const payload = verifyToken(extractBearer(event, body));
     if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
       writeSse(stream, 'error', {
-        error: 'Please validate your subscriber email to use the librarian.',
+        error: 'Please validate your subscriber email to use Thingy.',
         request_id: requestId
       });
       return;

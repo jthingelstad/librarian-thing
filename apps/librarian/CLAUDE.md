@@ -24,7 +24,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
-7. Run the Bedrock Converse agent loop with tool use. Tools include `search_faq`, `search_archive`, `get_source`, `find_links`, `corpus_stats`, `latest_content`, `list_content`, `archive_lens`, `entity_lens`, `source_neighborhood`, `archive_gems`, `claim_check`, `media_search`, `currently_history`, `top_references`.
+7. Run the Bedrock Converse agent loop with tool use against the 23-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 18 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set). Five tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`, `compare_eras`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
 8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
@@ -109,6 +109,10 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
+| `BRAVE_SEARCH_API_KEY` | stream | Optional; enables the `web_search` tool (spec binds only when set) |
+| `LIBRARIAN_SOURCE_REVISION` | stream | Set by CFN to `StreamCodeKey`; stamped onto tool traces |
+| `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `EMAIL_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 5 per reader per day (doubled for supporting members, owner exempt) |
+| `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |
 
 ## Bedrock model gotchas
 
@@ -116,11 +120,11 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 - **Embedding model is Cohere v3** at 1024 dimensions. Bumping to v4 would invalidate the entire embedded corpus — re-embed cost is $1-2 + ~3 minutes. Plan for it; don't drift accidentally.
 - **Thingy models** use cross-region inference profiles. Default is Sonnet 4.6 for main chat/persona work, fast is Haiku 4.5 for structured/background work, and advanced is Opus 4.6 for high-synthesis work. The deploy smoke test checks all three before CloudFormation runs.
 
-## OAuth authorization server (Phase 2 of the MCP plan)
+## OAuth authorization server (for the live MCP surface)
 
 `lambda/auth/oauth-routes.mts` + `lambda/shared/oauth-store.mts` implement an
-OAuth 2.1 authorization server on the auth Lambda for the upcoming MCP surface
-(Phase 3). Public clients only: dynamic registration (`/register`), PKCE S256
+OAuth 2.1 authorization server on the auth Lambda for the MCP server at
+`/mcp` on the stream Lambda. Public clients only: dynamic registration (`/register`), PKCE S256
 enforced, no client secrets. The `/authorize` flow reuses the magic-code login
 machinery (extracted to `lambda/shared/magic-login.mts` so the handler and
 oauth-routes share it without an import cycle) and renders small inline HTML
@@ -130,14 +134,33 @@ secrets stored as sha256 hex and ttl set; refresh tokens rotate and reuse
 revokes the whole family via the family row (no GSI). Token/authorize responses
 deliberately skip CORS and the contract header; metadata endpoints are cached
 five minutes. Issuer comes from `LIBRARIAN_OAUTH_ISSUER` (default
-`https://librarian.thingelstad.com`).
+`https://librarian.thingelstad.com`). The authorization response carries the
+RFC 9207 `iss` parameter; the consent redirect is a 303; the sign-in pages use
+Thingy's design tokens, prefill the verified email from a first-party
+`thingy_email` cookie (CloudFront forwards only that cookie), and the pages'
+CSP `form-action` must keep `https:` - `'self'` alone silently blocks the
+consent redirect in Chromium.
+
+## Evals gate the deploy
+
+Three layers run in `.github/workflows/deploy.yml` and block it on failure:
+`tests/matcher.test.mjs` (matcher fixtures - every shipped matching bug as a
+negative), `scripts/eval-tools.mjs` (response invariants + known answers over
+the real corpora from S3), and the committed recall baseline
+(`lambda/eval/baseline.json`, 10% band; run `node scripts/eval-tools.mjs
+--update-baseline` to accept a REVIEWED recall change, e.g. after corpus
+growth). Locally: `EVAL_CORPUS_DIR=<dir-with-corpus.json>` runs it against
+local corpus files; `EVAL_DIST_DIR` points it at an older build for
+pre/post-change reports. Tool responses carry `server_version`
+(`1.1.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+a stale tools/list.
 
 ## Conventions
 
 - **Prompts live in `prompts/`** as `.md` files. `loadToolSpecs()` reads them. Edits need a redeploy.
 - **All structured logging via `logEvent(level, message, fields)`** — JSON output, CloudWatch-Insights-readable.
 - **Magic-link auth is mandatory.** Public `/auth` always sends a Fastmail/JMAP magic link before minting an email session; there is no direct session fallback after subscriber validation.
-- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Reader sessions last ten days, and a still-valid session can be refreshed by `/auth` `action=refresh_session`.
+- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Reader sessions last nine days and SLIDE: the web app re-mints on every visit via `/auth` `action=refresh_session`, which also re-verifies Buttondown entitlements when they near staleness (a lapsed subscription gets 401; Buttondown outages fail open with unchanged entitlements).
 - **Privacy guarding** lives in `chat/runtime.mts#privacyGuardAnswer`. Don't bypass; readers ask questions that leak their own PII and we don't echo it.
 - **Conversation modes are entitlement-gated.** `thingy` is for all readers, `research_guide` requires `supporting_member`, `thought_partner` requires `owner`, and `trusted_circle` requires `trusted_circle`.
 - **Tool traces are structured evidence (schema v2).** `shared/tool-evidence.mts` summarizes every tool call into allow-listed, bounded evidence refs; `toolTraceDynamoString` degrades per call to fit, never `{omitted: true}` for an oversized trace. Turn rows carry cumulative loop usage and `prompt_fingerprint`/`source_revision` stamps - keep those fields when touching turn persistence.

@@ -1,4 +1,4 @@
-name: Studio — Sync External Content
+name: Librarian — Sync External Content
 
 # Pull publishing-surface content into Studio's canonical data store. This is
 # the ingest side of Thingy's corpus pipeline:

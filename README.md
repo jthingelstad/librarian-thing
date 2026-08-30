@@ -18,6 +18,7 @@ the canonical archives, the corpus builds, and the API that serves them.
 | wt-builder | Authors and publishes each issue; commits issue text into `data/issues/` |
 | weekly.thingelstad.com | Public newsletter site and archive render surface |
 | thingy.thingelstad.com | Query surface backed by the Librarian API |
+| librarian.thingelstad.com | The API's public domain: chat/auth endpoints, OAuth 2.1, and the MCP server at `/mcp` |
 
 ## What's here
 
@@ -47,6 +48,12 @@ the canonical archives, the corpus builds, and the API that serves them.
   `weekly.thingelstad.com` — the one cross-repo push this repo still makes.
 - The Lambda redeploys when its code changes. The `/retrieve` endpoint is a
   versioned contract; Thingy is a live client across a repo boundary.
+- The same tool registry that answers Thingy's chat is published as an
+  **MCP server** (`librarian.thingelstad.com/mcp`, OAuth 2.1 sign-in), so
+  Claude, ChatGPT, and other MCP clients query the archive with identical
+  tools. Matching semantics live in one canonical component
+  (`apps/librarian/MATCHER.md`), enforced by an eval suite that runs on
+  every deploy and blocks it on failure.
 
 ## Working here
 

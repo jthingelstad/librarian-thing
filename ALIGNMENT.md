@@ -34,7 +34,10 @@ is the archive, the corpus, or the retrieval path, it lives here.
    from `another.thingelstad.com` into `data/`.
 3. Any `data/` change rebuilds the affected corpora, embeds them, uploads to
    S3, and hands the topic graph to `weekly.thingelstad.com`.
-4. Thingy answers from the deployed corpus through `/retrieve`.
+4. Thingy chat answers from the deployed corpus through the Librarian's
+   agent loop; WT Builder retrieves through the versioned `/retrieve`
+   contract; MCP clients (Claude, ChatGPT, Codex) use the same tool
+   registry via `librarian.thingelstad.com/mcp`.
 
 ## What was retired
 
