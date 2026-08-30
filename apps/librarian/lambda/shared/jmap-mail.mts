@@ -289,29 +289,29 @@ export function magicLinkEmailHtml({
   const trackingPixel = tinylyticsPixelHtml('/email/thingy/login');
   return `<!doctype html>
 <html>
-  <body style="margin:0;background:#f5f7f4;color:#18221f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f7f4;margin:0;padding:32px 16px;">
+  <body style="margin:0;background:#f6f8f5;color:#17211f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f6f8f5;margin:0;padding:32px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:#ffffff;border:1px solid #dfe8e2;border-radius:22px;overflow:hidden;box-shadow:0 18px 50px rgba(31,47,42,0.10);">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:#ffffff;border:1px solid #dfe7e3;border-radius:22px;overflow:hidden;box-shadow:0 18px 50px rgba(31,47,42,0.10);">
             <tr>
               <td align="center" style="padding:34px 28px 10px;">
                 <img src="${safeImageUrl}" width="132" height="132" alt="Thingy" style="display:block;width:132px;height:132px;border:0;margin:0 auto 14px;">
-                <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#658178;font-weight:700;">Thingy</div>
-                <h1 style="font-size:28px;line-height:1.15;margin:10px 0 0;color:#14211d;font-weight:750;">${greeting}</h1>
+                <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#596a64;font-weight:700;">Thingy</div>
+                <h1 style="font-size:28px;line-height:1.15;margin:10px 0 0;color:#17211f;font-weight:750;">${greeting}</h1>
               </td>
             </tr>
             <tr>
               <td style="padding:12px 34px 8px;text-align:center;">
-                <p style="font-size:16px;line-height:1.55;margin:0;color:#394943;">${intro}</p>
+                <p style="font-size:16px;line-height:1.55;margin:0;color:#3f4f4a;">${intro}</p>
               </td>
             </tr>
             ${
               code
                 ? `<tr>
               <td align="center" style="padding:18px 34px 2px;">
-                <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#658178;margin:0 0 6px;font-weight:700;">Your Thingy sign-in code is</p>
-                <p style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:34px;letter-spacing:0.28em;color:#14211d;margin:0;font-weight:750;">${escapeHtml(code)}</p>
+                <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#596a64;margin:0 0 6px;font-weight:700;">Your Thingy sign-in code is</p>
+                <p style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:34px;letter-spacing:0.28em;color:#17211f;margin:0;font-weight:750;">${escapeHtml(code)}</p>
               </td>
             </tr>`
                 : ''

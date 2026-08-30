@@ -45,11 +45,11 @@ function inlineHtml(escaped: string) {
     })
     .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (match, label, url) => {
       const href = safeUrl(url);
-      return href ? `<a href="${href}" style="color:#0e7a5f;">${label}</a>` : match;
+      return href ? `<a href="${href}" style="color:#14776f;">${label}</a>` : match;
     })
     .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,;:!?]|$)/g, '$1<em>$2</em>')
-    .replace(/`([^`\n]+)`/g, '<code style="background:#eef2ef;border-radius:4px;padding:1px 5px;">$1</code>');
+    .replace(/`([^`\n]+)`/g, '<code style="background:#eef4f1;border-radius:4px;padding:1px 5px;">$1</code>');
 }
 
 export function answerMarkdownToHtml(markdown: unknown) {
@@ -65,7 +65,7 @@ export function answerMarkdownToHtml(markdown: unknown) {
     if (heading && lines.length === 1) {
       const level = Math.min(heading[1].length + 1, 4);
       html.push(
-        `<h${level} style="font-size:${level === 2 ? 20 : 17}px;line-height:1.3;margin:20px 0 8px;color:#14211d;">${inlineHtml(escapeHtml(heading[2]))}</h${level}>`
+        `<h${level} style="font-size:${level === 2 ? 20 : 17}px;line-height:1.3;margin:20px 0 8px;color:#17211f;">${inlineHtml(escapeHtml(heading[2]))}</h${level}>`
       );
       continue;
     }
@@ -76,19 +76,19 @@ export function answerMarkdownToHtml(markdown: unknown) {
         .map((item) => `<li style="margin:4px 0;">${inlineHtml(escapeHtml(item))}</li>`)
         .join('');
       html.push(
-        `<${ordered ? 'ol' : 'ul'} style="margin:10px 0;padding-left:22px;color:#394943;font-size:15px;line-height:1.6;">${items}</${ordered ? 'ol' : 'ul'}>`
+        `<${ordered ? 'ol' : 'ul'} style="margin:10px 0;padding-left:22px;color:#3f4f4a;font-size:15px;line-height:1.6;">${items}</${ordered ? 'ol' : 'ul'}>`
       );
       continue;
     }
     if (/^>/.test(lines[0])) {
       const quote = lines.map((line) => line.replace(/^>\s?/, '')).join(' ');
       html.push(
-        `<blockquote style="margin:12px 0;padding:8px 16px;border-left:3px solid #0e7a5f;color:#394943;font-size:15px;line-height:1.6;">${inlineHtml(escapeHtml(quote))}</blockquote>`
+        `<blockquote style="margin:12px 0;padding:8px 16px;border-left:3px solid #14776f;color:#3f4f4a;font-size:15px;line-height:1.6;">${inlineHtml(escapeHtml(quote))}</blockquote>`
       );
       continue;
     }
     html.push(
-      `<p style="margin:10px 0;color:#394943;font-size:15px;line-height:1.6;">${inlineHtml(escapeHtml(block.replace(/\n/g, ' ')))}</p>`
+      `<p style="margin:10px 0;color:#3f4f4a;font-size:15px;line-height:1.6;">${inlineHtml(escapeHtml(block.replace(/\n/g, ' ')))}</p>`
     );
   }
   return html.join('\n');
@@ -132,37 +132,37 @@ export function answerEmailHtml({ conversationTitle, question, answer, citations
   const answerHtml = answerMarkdownToHtml(answer);
   const links = citations.map(citationLink).filter((entry) => entry.url || entry.label);
   const sources = links.length
-    ? `<div style="margin-top:22px;padding-top:14px;border-top:1px solid #dfe8e2;">
-        <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#658178;font-weight:700;margin-bottom:6px;">Sources</div>
+    ? `<div style="margin-top:22px;padding-top:14px;border-top:1px solid #dfe7e3;">
+        <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#596a64;font-weight:700;margin-bottom:6px;">Sources</div>
         ${links
           .map((entry) => {
             const label = escapeHtml(entry.label);
             return entry.url
-              ? `<div style="margin:3px 0;font-size:14px;"><a href="${entry.url}" style="color:#0e7a5f;">${label}</a></div>`
-              : `<div style="margin:3px 0;font-size:14px;color:#394943;">${label}</div>`;
+              ? `<div style="margin:3px 0;font-size:14px;"><a href="${entry.url}" style="color:#14776f;">${label}</a></div>`
+              : `<div style="margin:3px 0;font-size:14px;color:#3f4f4a;">${label}</div>`;
           })
           .join('\n')}
       </div>`
     : '';
   return `<!doctype html>
 <html>
-  <body style="margin:0;background:#f5f7f4;color:#18221f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f7f4;margin:0;padding:32px 16px;">
+  <body style="margin:0;background:#f6f8f5;color:#17211f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f6f8f5;margin:0;padding:32px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#ffffff;border:1px solid #dfe8e2;border-radius:22px;overflow:hidden;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#ffffff;border:1px solid #dfe7e3;border-radius:22px;overflow:hidden;">
             <tr>
               <td style="padding:30px 34px 6px;">
-                <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#658178;font-weight:700;">Thingy</div>
-                <h1 style="font-size:22px;line-height:1.25;margin:8px 0 4px;color:#14211d;font-weight:750;">${title}</h1>
-                <p style="font-size:14px;margin:0 0 6px;color:#658178;">You asked: ${safeQuestion}</p>
+                <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#596a64;font-weight:700;">Thingy</div>
+                <h1 style="font-size:22px;line-height:1.25;margin:8px 0 4px;color:#17211f;font-weight:750;">${title}</h1>
+                <p style="font-size:14px;margin:0 0 6px;color:#596a64;">You asked: ${safeQuestion}</p>
               </td>
             </tr>
             <tr>
               <td style="padding:8px 34px 26px;">
                 ${answerHtml}
                 ${sources}
-                <p style="font-size:12px;color:#8a988f;margin:26px 0 0;">Sent by Thingy at your request. <a href="https://thingy.thingelstad.com/" style="color:#658178;">thingy.thingelstad.com</a></p>
+                <p style="font-size:12px;color:#596a64;margin:26px 0 0;">Sent by Thingy at your request. <a href="https://thingy.thingelstad.com/" style="color:#596a64;">thingy.thingelstad.com</a></p>
               </td>
             </tr>
           </table>
