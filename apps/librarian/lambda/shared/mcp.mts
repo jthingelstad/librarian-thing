@@ -9,7 +9,7 @@
  * pure protocol given a context and an invoke function.
  */
 import { availableToolSpecs, webSearchConfigured } from './archive-tools.mjs';
-import { promptFingerprint } from './prompts.mjs';
+import { promptFingerprint, toolTitle } from './prompts.mjs';
 
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
@@ -72,6 +72,10 @@ export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
     .filter((spec): spec is NonNullable<BedrockToolSpec['toolSpec']> => Boolean(spec?.name && wanted.has(spec.name)))
     .map((spec) => ({
       name: String(spec.name),
+      // Display name: MCP clients render title when present, so readers
+      // see "Archive statistics" instead of a prettified identifier.
+      title: toolTitle(spec.name),
+      annotations: { title: toolTitle(spec.name) },
       description: String(spec.description || ''),
       inputSchema: spec.inputSchema?.json || { type: 'object' }
     }));

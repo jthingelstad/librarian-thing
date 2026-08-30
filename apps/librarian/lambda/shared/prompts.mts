@@ -46,6 +46,15 @@ export function promptFingerprint(): string {
   return fingerprint;
 }
 
+// Human display titles for tools - shown by MCP clients (Claude renders
+// the title, not the identifier) and in Thingy's own status line. The
+// snake_case names stay stable: they are load-bearing identifiers across
+// prompts, evals, fixtures, and recorded conversation history.
+export function toolTitle(name: unknown): string {
+  const titles = JSON.parse(loadPrompt('tool-titles.json')) as Record<string, string>;
+  return titles[String(name || '')] || String(name || '').replaceAll('_', ' ');
+}
+
 export function loadToolSpecs(): unknown[] {
   return JSON.parse(loadPrompt('tool-specs.json')) as unknown[];
 }

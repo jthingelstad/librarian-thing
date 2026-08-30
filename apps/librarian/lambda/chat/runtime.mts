@@ -53,7 +53,7 @@ import { MCP_RESULT_MAX_CHARS, handleMcpMessage } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
-import { agentSystemPrompt, agentUserPrompt } from '../shared/prompts.mjs';
+import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { getUserMemory, recordUserPreferredName, recordUserTurn } from '../shared/user-memory.mjs';
@@ -574,7 +574,7 @@ async function streamBedrockAgentAnswer(
         writeSse(responseStream, 'status', {
           kind: 'tool',
           tool_name: toolName,
-          message: `Checking ${toolName.replaceAll('_', ' ')}...`,
+          message: `Checking ${toolTitle(toolName)}...`,
           commentary: visibleNote
         });
       }

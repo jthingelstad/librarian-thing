@@ -662,6 +662,41 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
       response = jsonResponse(204, {}, event);
     } else if (method === 'GET' && path.endsWith('/health')) {
       response = healthHandler(event);
+    } else if (method === 'GET' && (path === '/' || path === '')) {
+      // Identity page for the bare domain: MCP clients (and people) that
+      // look here find The Librarian - and Thingy's face, not Jamie's.
+      // Without this, icon fetchers walked up to thingelstad.com and used
+      // its personal-avatar favicon for the connector.
+      response = {
+        statusCode: 200,
+        headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'public, max-age=3600' },
+        body: [
+          '<!doctype html><html lang="en"><head><meta charset="utf-8">',
+          '<title>The Librarian</title>',
+          '<link rel="icon" href="https://thingy.thingelstad.com/img/thingy.png">',
+          '<link rel="apple-touch-icon" href="https://thingy.thingelstad.com/img/thingy.png">',
+          '<meta property="og:image" content="https://thingy.thingelstad.com/img/thingy.png">',
+          '<meta name="description" content="The Librarian - the archive API behind Thingy, Jamie Thingelstad\u2019s archive agent.">',
+          '</head><body style="font-family:sans-serif;text-align:center;padding:3rem;">',
+          '<img src="https://thingy.thingelstad.com/img/thingy.png" alt="Thingy" width="120" height="120">',
+          '<h1>The Librarian</h1>',
+          '<p>The archive API behind <a href="https://thingy.thingelstad.com/">Thingy</a>. ',
+          'Connect an AI via <a href="https://thingy.thingelstad.com/connect/">MCP</a>.</p>',
+          '</body></html>'
+        ].join('')
+      };
+    } else if (
+      method === 'GET' &&
+      (path.endsWith('/favicon.ico') || path.endsWith('/apple-touch-icon.png') || path.endsWith('/favicon.png'))
+    ) {
+      response = {
+        statusCode: 302,
+        headers: {
+          location: 'https://thingy.thingelstad.com/img/thingy.png',
+          'cache-control': 'public, max-age=86400'
+        },
+        body: ''
+      };
     } else if (method === 'POST' && path.endsWith('/auth')) {
       response = await authHandler(event);
     } else if (method === 'POST' && path.endsWith('/memory')) {

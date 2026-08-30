@@ -131,3 +131,15 @@ test('oversized tool results are truncated with an honest note', async () => {
   assert.ok(text.length < 49000);
   assert.match(text, /truncated at 48000 characters/);
 });
+
+test('tool declarations carry human display titles', () => {
+  const declarations = mcpToolDeclarations();
+  const byName = new Map(declarations.map((tool) => [tool.name, tool]));
+  assert.equal(byName.get('corpus_stats').title, 'Archive statistics');
+  assert.equal(byName.get('source_neighborhood').title, 'Related sources');
+  assert.equal(byName.get('currently_history').title, 'Reading, playing & watching');
+  for (const tool of declarations) {
+    assert.ok(tool.title && !tool.title.includes('_'), `${tool.name} has a human title`);
+    assert.equal(tool.annotations.title, tool.title);
+  }
+});
