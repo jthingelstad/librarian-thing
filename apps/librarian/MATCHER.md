@@ -57,8 +57,9 @@ carries no text evidence.
 ## first / latest hardening
 
 `first`, `latest`, and `first_last` results are computed only from
-sources with at least one strict (exact/phrase/literal) hit. A stem hit
-can never determine the headline answer — the round-five failure (first
+sources with at least one strict hit (see Per-hit strictness: a literal
+token match is strict even under a stem request). A genuinely inflected
+stem hit can never determine the headline answer — the round-five failure (first
 "ethereum" source = a 2017 article about Ethernet MAC addresses) is
 structurally impossible. Each lens source exposes `strict_match`.
 
@@ -71,6 +72,54 @@ structurally impossible. Each lens source exposes `strict_match`.
 - `search_archive` is hybrid retrieval (TF-IDF + embeddings + RRF), not
   a filter; its lexical leg is token-based, not substring.
 - `top_references` aggregates link domains; no text matching.
+
+## Case sensitivity
+
+`case_sensitive: true` (archive_lens, entity_lens, list_content,
+find_links) drops case folding for the primary term - topic "Go" matches
+the language, never "to go". Default is case-insensitive. Aliases never
+inherit case sensitivity; per the ETH rule below, a case-sensitive alias
+requires per-alias case flags first.
+
+**Alias design rule:** never add ETH as an Ethereum/ENS alias under
+case-insensitive matching - it would token-match every `.eth` name in
+this corpus. Any future case-sensitive alias needs per-alias case flags.
+
+## Common-word terms
+
+When a term matches more than half of the in-scope sources (and at
+least 10 were scanned), the lens response carries `term_frequency_note`
+telling the agent the ranking is undifferentiated and suggesting a
+phrase, `case_sensitive: true`, or a narrower `year_range`. The matcher
+does not silently special-case common words - the advisory is visible
+and the agent decides.
+
+## Per-hit strictness
+
+Strictness is a property of each HIT, not the requested mode: a
+whole-token literal match is strict even under `match_mode: "stem"`
+(the stem regex captures its suffix group; an empty capture means the
+stemmer did no work). Only genuinely inflected hits are non-strict and
+excluded from first/latest. Matched spans always carry the canonical
+case of the source text; `matched_term` is the input term as provided.
+
+## Tool coverage
+
+| Surface | Canonical matcher | match_mode / case_sensitive params |
+|---|---|---|
+| archive_lens, entity_lens | yes | yes |
+| list_content, find_links | yes | yes |
+| list_issues, media_search | yes (exact per token) | no |
+| quote_search | yes (literal mode) | no |
+| search_archive | exempt - hybrid retrieval (TF-IDF + embeddings + RRF) | - |
+| claim_check, compare_eras | exempt - semantic retrieval | - |
+| search_faq | exempt - lexical scoring, token-based | - |
+| source_neighborhood | exempt - inter-source overlap ranking | - |
+| top_references, corpus_stats | no text matching (domain aggregation via one shared function) | - |
+
+Registry-internal (bound in-process, no published MCP/agent spec):
+`get_issue`, `get_section`, `domain_history`, `list_issues`,
+`compare_eras`. Agent test rounds should not probe them over MCP.
 
 ## Eval enforcement
 

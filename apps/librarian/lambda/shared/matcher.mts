@@ -31,13 +31,22 @@ export interface MatchHit {
   mode: MatchMode;
   span: string;
   offset: number;
+  // Strictness is a property of the HIT, not the requested mode: a
+  // whole-token literal match is strict even under a stem request; only
+  // hits where the stemmer actually did work (an inflection suffix
+  // matched) are non-strict.
+  strict: boolean;
 }
 
 interface CompiledTerm {
   raw: string;
   mode: MatchMode;
   re: RegExp;
-  strict: boolean; // exact/phrase/literal hits may determine first/latest; stem may not
+  strict: boolean; // exact/phrase/literal terms are inherently strict
+  // For stem terms: matches only the literal (uninflected) token, so a
+  // text whose FIRST occurrence is inflected but which contains the
+  // literal token elsewhere still scores strict.
+  strictRe?: RegExp;
 }
 
 export interface CanonicalMatcher {
@@ -53,7 +62,7 @@ export interface CanonicalMatcher {
 
 const BOUNDARY_BEFORE = '(?<![\\p{L}\\p{N}])';
 const BOUNDARY_AFTER = '(?![\\p{L}\\p{N}])';
-const STEM_SUFFIX = "(?:s|es|ed|ing|'s|\\u2019s)?";
+const STEM_SUFFIX = "(s|es|ed|ing|'s|\\u2019s)?";
 export const STEM_MIN_CHARS = 6;
 
 function escapeRegExp(value: string) {
@@ -66,12 +75,21 @@ export function normalizeTerm(value: unknown) {
     .trim();
 }
 
+// Hyphens are token separators, not token characters: "e-mail" compiles
+// as the phrase e+mail (matching "e-mail" and "e mail", never "email").
+// Apostrophes stay inside tokens (O'Reilly is one token).
+export function termTokensPreservingCase(value: unknown): string[] {
+  return (String(value || '').match(/[\p{L}\p{N}][\p{L}\p{N}'\u2019]*/gu) || []).map((token) =>
+    token.replace(/['\u2019]+$/g, '')
+  );
+}
+
 export function termTokens(value: unknown): string[] {
   return (
     String(value || '')
       .toLowerCase()
-      .match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []
-  ).map((token) => token.replace(/['’-]+$/g, ''));
+      .match(/[\p{L}\p{N}][\p{L}\p{N}'’]*/gu) || []
+  ).map((token) => token.replace(/['’]+$/g, ''));
 }
 
 // Default mode is caller-visible policy: exact for single tokens, phrase
@@ -88,8 +106,8 @@ export function normalizeMatchMode(value: unknown): MatchMode | null {
   return raw === 'exact' || raw === 'phrase' || raw === 'stem' ? raw : null;
 }
 
-function compileTerm(term: string, requestedMode: MatchMode | null): CompiledTerm | null {
-  const tokens = termTokens(term);
+function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitive = false): CompiledTerm | null {
+  const tokens = caseSensitive ? termTokensPreservingCase(term) : termTokens(term);
   if (!tokens.length) return null;
   let mode: MatchMode = requestedMode || defaultMatchMode(term);
   // Multi-word terms always match as a phrase - a looser interpretation
@@ -98,25 +116,29 @@ function compileTerm(term: string, requestedMode: MatchMode | null): CompiledTer
   // Stem never applies to short terms; fall back to exact (stricter).
   if (mode === 'stem' && tokens[0].length < STEM_MIN_CHARS) mode = 'exact';
 
+  const flags = caseSensitive ? 'u' : 'iu';
   if (mode === 'literal') {
-    return { raw: term, mode, re: new RegExp(escapeRegExp(term.toLowerCase()), 'iu'), strict: true };
+    return { raw: term, mode, re: new RegExp(escapeRegExp(term), flags), strict: true };
   }
   if (mode === 'phrase') {
     const body = tokens.map(escapeRegExp).join('[^\\p{L}\\p{N}]+');
-    return { raw: term, mode, re: new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, 'iu'), strict: true };
+    return { raw: term, mode, re: new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags), strict: true };
   }
   if (mode === 'stem') {
+    // The suffix group is captured: an empty capture means the hit is the
+    // literal token and therefore strict.
     return {
       raw: term,
       mode,
-      re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${STEM_SUFFIX}${BOUNDARY_AFTER}`, 'iu'),
-      strict: false
+      re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${STEM_SUFFIX}${BOUNDARY_AFTER}`, flags),
+      strict: false,
+      strictRe: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${BOUNDARY_AFTER}`, flags)
     };
   }
   return {
     raw: term,
     mode: 'exact',
-    re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${BOUNDARY_AFTER}`, 'iu'),
+    re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${BOUNDARY_AFTER}`, flags),
     strict: true
   };
 }
@@ -125,17 +147,23 @@ export interface CompileQueryInput {
   term: unknown;
   aliases?: unknown[];
   mode?: unknown;
+  // Opt-in case sensitivity: topic "Go" with caseSensitive matches the
+  // language, not the verb. Regexes drop the i flag; callers must feed
+  // ORIGINAL-case text (they do - haystacks are no longer pre-lowered).
+  caseSensitive?: boolean;
 }
 
-export function compileQuery({ term, aliases = [], mode }: CompileQueryInput): CanonicalMatcher {
+export function compileQuery({ term, aliases = [], mode, caseSensitive = false }: CompileQueryInput): CanonicalMatcher {
   const requested = normalizeMatchMode(mode);
   const primary = normalizeTerm(term);
   const compiled: CompiledTerm[] = [];
-  const primaryTerm = compileTerm(primary, requested);
+  const primaryTerm = compileTerm(primary, requested, caseSensitive);
   if (primaryTerm) compiled.push(primaryTerm);
   for (const alias of aliases) {
     // Aliases are first-class terms with their OWN mode: a multi-word
-    // alias is always a phrase regardless of the requested mode.
+    // alias is always a phrase regardless of the requested mode. Aliases
+    // never inherit case sensitivity (see MATCHER.md: the ETH rule needs
+    // per-alias case flags before any case-sensitive alias exists).
     const compiledAlias = compileTerm(normalizeTerm(alias), requested === 'stem' ? null : requested);
     if (compiledAlias) compiled.push(compiledAlias);
   }
@@ -143,7 +171,14 @@ export function compileQuery({ term, aliases = [], mode }: CompileQueryInput): C
   const hitFor = (entry: CompiledTerm, text: string): MatchHit | null => {
     const match = entry.re.exec(text);
     if (!match) return null;
-    return { term: entry.raw, mode: entry.mode, span: match[0], offset: match.index };
+    const inflected = entry.mode === 'stem' && Boolean(match[1]);
+    return {
+      term: entry.raw,
+      mode: entry.mode,
+      span: match[0],
+      offset: match.index,
+      strict: entry.strict || !inflected
+    };
   };
 
   return {
@@ -157,7 +192,7 @@ export function compileQuery({ term, aliases = [], mode }: CompileQueryInput): C
     },
     matchesStrict(text: string) {
       if (!compiled.length) return true;
-      return compiled.filter((entry) => entry.strict).some((entry) => entry.re.test(text));
+      return compiled.some((entry) => (entry.strict ? entry.re.test(text) : Boolean(entry.strictRe?.test(text))));
     },
     firstHit(text: string) {
       let best: MatchHit | null = null;
@@ -195,7 +230,7 @@ export function compileLiteral(phrase: unknown): CanonicalMatcher {
     firstHit(text: string) {
       if (!entry) return null;
       const match = entry.re.exec(text);
-      return match ? { term: raw, mode: 'literal', span: match[0], offset: match.index } : null;
+      return match ? { term: raw, mode: 'literal', span: match[0], offset: match.index, strict: true } : null;
     },
     hits(text: string) {
       const hit = this.firstHit(text);

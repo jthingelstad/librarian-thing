@@ -130,3 +130,59 @@ test('literal mode serves quotations without token boundaries', () => {
   assert.equal(hit.span, 'blog pensieve');
   assert.equal(hit.mode, 'literal');
 });
+
+// --- Round seven ----------------------------------------------------------
+
+test('strictness is per HIT: literal matches under a stem request stay strict', () => {
+  const stem = m('ethereum', { mode: 'stem' });
+  // literal token present: strict regardless of requested mode
+  assert.ok(stem.matchesStrict('plain ethereum text'));
+  // first occurrence inflected, literal later: still strict
+  assert.ok(stem.matchesStrict('many ethereums and then ethereum itself'));
+  // ONLY inflected occurrences: non-strict
+  assert.equal(stem.matchesStrict('many ethereums exist'), false);
+  const literalHit = stem.firstHit('plain ethereum text');
+  assert.equal(literalHit.strict, true);
+  const inflectedHit = stem.firstHit('many ethereums exist');
+  assert.equal(inflectedHit.strict, false);
+});
+
+test('matched spans carry canonical case from the source text', () => {
+  const exact = m('ethereum');
+  const hit = exact.firstHit('Learning about Ethereum today');
+  assert.equal(hit.span, 'Ethereum', 'span is the actual text, canonical case');
+  const stem = m('ethereum', { mode: 'stem' });
+  const stemHit = stem.firstHit('Learning about Ethereum today');
+  assert.equal(stemHit.span, 'Ethereum');
+  assert.equal(stemHit.term, 'ethereum', 'term is the input as provided');
+});
+
+test('case_sensitive: Go the language, not the verb', () => {
+  const go = m('Go', { caseSensitive: true });
+  assert.ok(go.matches('written in Go last year'));
+  assert.equal(go.matches('a long way to go on reform'), false);
+  assert.equal(go.matches('1 minute to go'), false);
+  const insensitive = m('Go');
+  assert.ok(insensitive.matches('a long way to go on reform'), 'default stays insensitive');
+});
+
+test('unicode and punctuation terms (round-six test debt)', () => {
+  assert.ok(m('micro.blog').matches('posted on micro.blog today'), 'dotted term as phrase across the dot');
+  assert.ok(m("O'Reilly").matches("an O'Reilly book"));
+  assert.ok(m('café').matches('at the café'));
+  assert.equal(m('café').matches('cafeteria'), false);
+  assert.ok(m('e-mail').matches('sent an e-mail'));
+  assert.ok(m('e-mail').matches('sent an e mail'), 'hyphen is a token separator in phrase joins');
+  assert.equal(m('email').matches('sent an e-mail'), false, 'email is one token, e-mail is two');
+});
+
+test('phrases match across newlines in real chunk text', () => {
+  const phrase = m('Ethereum Name Service');
+  assert.ok(phrase.matches('the Ethereum\nName Service launch'));
+  assert.ok(phrase.matches('Ethereum \n  Name\tService'));
+});
+
+test('stem below 6 chars echoes exact; stem on multi-word echoes phrase', () => {
+  assert.equal(m('ens', { mode: 'stem' }).appliedMode, 'exact');
+  assert.equal(m('Ethereum Name Service', { mode: 'stem' }).appliedMode, 'phrase');
+});

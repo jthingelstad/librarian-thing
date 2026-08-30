@@ -145,6 +145,10 @@
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
+            },
+            "case_sensitive": {
+              "type": "boolean",
+              "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           }
         }
@@ -194,6 +198,10 @@
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
+            },
+            "case_sensitive": {
+              "type": "boolean",
+              "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           }
         }
@@ -283,7 +291,7 @@
   {
     "toolSpec": {
       "name": "archive_lens",
-      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". year_range is [start_year, end_year]. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". year_range is [start_year, end_year]. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found. If the response carries term_frequency_note, the term is too common to rank meaningfully - reformulate instead of trusting first/latest.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -315,6 +323,10 @@
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
+            },
+            "case_sensitive": {
+              "type": "boolean",
+              "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           },
           "required": ["topic"]
@@ -325,7 +337,7 @@
   {
     "toolSpec": {
       "name": "entity_lens",
-      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found. If the response carries term_frequency_note, the term is too common to rank meaningfully - reformulate instead of trusting first/latest.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -360,6 +372,10 @@
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
+            },
+            "case_sensitive": {
+              "type": "boolean",
+              "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           }
         }

@@ -43,6 +43,7 @@ interface ToolArgs {
   query?: unknown;
   aliases?: unknown;
   match_mode?: unknown;
+  case_sensitive?: unknown;
   limit?: unknown;
   kind?: unknown;
   include_utility?: unknown;
@@ -545,7 +546,8 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const issueMatches = new Set(topic ? stringArray(entityIndex[topic]) : []);
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
-    aliases: aliasesFor(topic)
+    aliases: aliasesFor(topic),
+    caseSensitive: input.case_sensitive === true
   });
   const results = [];
   const filteredLinks = [];
@@ -560,9 +562,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     if (targetResolved !== null && Boolean(link.target_resolved) !== targetResolved) continue;
     if (startYear && (!year || year < startYear)) continue;
     if (endYear && (!year || year > endYear)) continue;
-    const haystack = [link.text, link.title, link.section, link.heading_context, link.context, link.domain]
-      .join(' ')
-      .toLowerCase();
+    const haystack = [link.text, link.title, link.section, link.heading_context, link.context, link.domain].join(' ');
     if (topic && !topicMatcher.matches(haystack) && !issueMatches.has(issueKey(link.issue_number))) continue;
     filteredLinks.push(link);
     if (results.length < limit) {
@@ -1085,9 +1085,7 @@ function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topi
     (record.topics || []).join(' '),
     (record.domains || []).join(' '),
     ...(chunks || []).slice(0, 12).map((chunk) => chunk.text || '')
-  ]
-    .join(' ')
-    .toLowerCase();
+  ].join(' ');
   return compiled.matches(haystack);
 }
 
@@ -1110,7 +1108,7 @@ function listContentMatchReasons(
 ) {
   const reasons: string[] = [];
   if (!filters.topic.isEmpty) {
-    const hit = filters.topic.firstHit([record.subject, (record.topics || []).join(' ')].join(' ').toLowerCase());
+    const hit = filters.topic.firstHit([record.subject, (record.topics || []).join(' ')].join(' '));
     reasons.push(hit ? `topic: '${hit.span}'` : 'topic: matched in body text');
   }
   if (filters.domain) reasons.push(`domain: ${filters.domain}`);
@@ -1135,7 +1133,10 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
   const alsoInIssue = input.also_in_issue ?? input.issue_number;
   const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
-  const topicMatcher = compileTopicMatcher(topic, { mode: normalizeMatchMode(input.match_mode) });
+  const topicMatcher = compileTopicMatcher(topic, {
+    mode: normalizeMatchMode(input.match_mode),
+    caseSensitive: input.case_sensitive === true
+  });
   const results = [];
   const years = [];
   const sources = [];
@@ -1219,7 +1220,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     for (const issue of corpus.issues || []) {
       let body = String(issue.body || '');
       if (!body) body = (await issueSections(issue)).map((section) => section.text || '').join('\n\n');
-      if (quoteMatcher.matches(body.toLowerCase())) {
+      if (quoteMatcher.matches(body)) {
         // Same shape AND value semantics as the chunk-corpus branch below:
         // section names the issue section containing the phrase, and
         // blog-specific fields are present as null rather than absent.
@@ -1256,7 +1257,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     for (const record of records) {
       const chunks = chunksBySource.get(sourceRecordKey(record)) || [];
       const text = sourceTextFromChunks(chunks);
-      if (!quoteMatcher.matches(text.toLowerCase())) continue;
+      if (!quoteMatcher.matches(text)) continue;
       const compactRecord = compactContentRecord(record) as Record<string, unknown>;
       results.push({
         issue_number: null,
@@ -1301,7 +1302,7 @@ async function toolListIssues(input: ToolArgs = {}) {
       tropeCounts.set(key, (tropeCounts.get(key) || 0) + 1);
     }
     if (input.year && Number(issue.issue_year || 0) !== Number(input.year)) continue;
-    const haystack = [issue.subject, ...(issue.topics || [])].join(' ').toLowerCase();
+    const haystack = [issue.subject, ...(issue.topics || [])].join(' ');
     if (topic && !listIssuesMatcher.matches(haystack) && !issueMatches.has(issueKey(issue.number))) continue;
     if (results.length < limit) {
       results.push({
@@ -1509,6 +1510,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         topic,
         aliases: Array.isArray(input.aliases) ? input.aliases.map(String) : [],
         matchMode: normalizeMatchMode(input.match_mode),
+        caseSensitive: input.case_sensitive === true,
         operation: input.operation,
         records,
         chunks,
@@ -1622,6 +1624,7 @@ async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
       topic: entity,
       aliases,
       match_mode: input.match_mode,
+      case_sensitive: input.case_sensitive,
       operation,
       source_kind: input.source_kind,
       year_range: input.year_range,
@@ -1769,7 +1772,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     const corpus = await loadCorpus(kind);
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
       if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
-      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''}`.toLowerCase();
+      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''}`;
       if (!termMatchers.length) {
         scored.push({ score: 1, item });
         continue;

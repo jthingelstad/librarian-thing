@@ -38,6 +38,7 @@ interface LensSource extends LensItem {
 interface ArchiveLensInput {
   aliases?: string[];
   matchMode?: unknown;
+  caseSensitive?: boolean;
   topic?: unknown;
   operation?: unknown;
   records?: LensItem[];
@@ -127,9 +128,16 @@ function adapt(matcher: CanonicalMatcher): TopicMatcher {
 
 export function compileTopicMatcher(
   topic: unknown,
-  options: { mode?: unknown; aliases?: unknown[] } = {}
+  options: { mode?: unknown; aliases?: unknown[]; caseSensitive?: boolean } = {}
 ): TopicMatcher {
-  return adapt(compileQuery({ term: topic, aliases: options.aliases || [], mode: options.mode }));
+  return adapt(
+    compileQuery({
+      term: topic,
+      aliases: options.aliases || [],
+      mode: options.mode,
+      caseSensitive: options.caseSensitive === true
+    })
+  );
 }
 
 export function compileMultiTopicMatcher(terms: unknown[]): TopicMatcher {
@@ -148,7 +156,7 @@ function lensHaystack(item: LensItem) {
       Array.from(item.topics || []).join(' '),
       Array.from(item.domains || []).join(' ')
     ].join(' ')
-  ).toLowerCase();
+  );
 }
 
 export function matchesLensTopic(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
@@ -173,7 +181,7 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   ];
   const reasons: Array<{ field: string; match: string }> = [];
   for (const [field, value] of fields) {
-    const text = compactWhitespace(value).toLowerCase();
+    const text = compactWhitespace(value);
     if (!text) continue;
     const hit = compiled.firstHit(text);
     if (hit) reasons.push({ field, match: `'${hit.span}'` });
@@ -257,7 +265,10 @@ function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matc
   if (existing.evidence.length < 3) {
     const compiled = matcher || compileTopicMatcher(topic);
     const clean = compactWhitespace(chunk.text || '');
-    const found = clean ? compiled.findMatch(clean.toLowerCase()) : null;
+    // Matching runs on the original-case text: the matched span is the
+    // canonical text at its actual offset (a lowercased haystack once made
+    // every span read as lowercase).
+    const found = clean ? compiled.findMatch(clean) : null;
     if (found) {
       // Front-load the window: at most 60 chars of context BEFORE the match
       // so no downstream text cap can slice the matched span out of its own
@@ -411,6 +422,7 @@ export function buildArchiveLens({
   topic = '',
   aliases = [],
   matchMode = null,
+  caseSensitive = false,
   operation = 'timeline',
   records = [],
   chunks = [],
@@ -421,10 +433,15 @@ export function buildArchiveLens({
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
   const sources = new Map<string, LensSource>();
   // One compiled matcher per scan - the regexes are built once, not per item.
-  const matcher = adapt(compileQuery({ term: topic, aliases: aliases || [], mode: matchMode }));
+  const matcher = adapt(
+    compileQuery({ term: topic, aliases: aliases || [], mode: matchMode, caseSensitive: caseSensitive === true })
+  );
+  let consideredCount = 0;
 
   for (const record of records || []) {
-    if (!inYearRange(record, yearRange) || !matchesLensTopic(record, topic, matcher)) continue;
+    if (!inYearRange(record, yearRange)) continue;
+    consideredCount += 1;
+    if (!matchesLensTopic(record, topic, matcher)) continue;
     const source: LensSource = {
       ...record,
       source_kind: normalizeLensSourceKind(record.source_kind),
@@ -522,6 +539,14 @@ export function buildArchiveLens({
     year_count_summary: yearCountSummary(countsByYear),
     sources_by_id: sourcesById,
     match_mode: matcher.appliedMode,
+    case_sensitive: caseSensitive === true || undefined,
+    // Common-word advisory: when the term hits most in-scope sources the
+    // ranking is undifferentiated - tell the agent to reformulate instead
+    // of trusting first_last (MATCHER.md, common-word-term policy).
+    term_frequency_note:
+      consideredCount >= 10 && matched.length / consideredCount > 0.5
+        ? `'${compactWhitespace(topic)}' matches ${Math.round((matched.length / consideredCount) * 100)}% of in-scope sources; results are likely undifferentiated - consider a more specific phrase, case_sensitive: true, or a narrower year_range`
+        : undefined,
     first: strictMatched[0] ? lensSourceId(strictMatched[0]) : null,
     latest: strictMatched.at(-1) ? lensSourceId(strictMatched.at(-1)!) : null,
     results: resultIds,

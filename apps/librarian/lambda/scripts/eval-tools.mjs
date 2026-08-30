@@ -272,6 +272,58 @@ async function run(tool, args, options = {}) {
   );
 }
 {
+  // Per-hit strictness: first_last under stem, for a term whose corpus
+  // hits are literal, must equal the exact-mode first (round-seven P0).
+  const exact = await run('entity_lens', { entity: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });
+  const stem = await run('archive_lens', {
+    topic: 'ethereum',
+    match_mode: 'stem',
+    source_kind: 'weekly_thing',
+    operation: 'first_last'
+  });
+  const idOf = (value) => (typeof value === 'string' ? value : value?.id);
+  check('KA stem first_last finds literal hits', Boolean(idOf(stem.first)), String(stem.first));
+  check(
+    'KA stem first equals exact first',
+    idOf(stem.first) === idOf(exact.first),
+    `${idOf(stem.first)} vs ${idOf(exact.first)}`
+  );
+  check('KA stem echo honest', stem.match_mode === 'stem', String(stem.match_mode));
+}
+{
+  // Common-word advisory fires for undifferentiated terms.
+  const go = await run('archive_lens', {
+    topic: 'go',
+    source_kind: 'weekly_thing',
+    operation: 'first_last',
+    year_range: [2017, 2017]
+  });
+  check(
+    'KA common-word advisory present for go/2017',
+    /undifferentiated/.test(String(go.term_frequency_note || '')),
+    String(go.term_frequency_note).slice(0, 60)
+  );
+  const goCase = await run('archive_lens', {
+    topic: 'Go',
+    case_sensitive: true,
+    source_kind: 'weekly_thing',
+    year_range: [2017, 2017]
+  });
+  check(
+    'KA case_sensitive Go narrows results',
+    Number(goCase.total_sources) < Number(go.total_sources),
+    `${goCase.total_sources} vs ${go.total_sources}`
+  );
+}
+{
+  // Recall snapshots for heavy topics - precision changes surface as
+  // reviewable baseline diffs.
+  for (const topic of ['POAP', 'RSS', 'OmniFocus']) {
+    const lens = await run('entity_lens', { entity: topic }, { scope: 'all' });
+    counts[`recall_${topic.toLowerCase()}_sources`] = lens.total_sources;
+  }
+}
+{
   const lens = await run('archive_lens', { topic: 'ethereum', limit: 4 }, { scope: 'weekly_thing' });
   const size = JSON.stringify(lens).length;
   check('archive_lens(limit=4) under budget', size <= 26000, `${size} chars`);
