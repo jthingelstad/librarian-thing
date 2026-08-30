@@ -22,7 +22,7 @@
   {
     "toolSpec": {
       "name": "search_archive",
-      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, or section based on what comes back. year_range accepts a [start, end] array, a single \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, or section based on what comes back. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -68,10 +68,12 @@
               "description": "Issue number as a string, e.g. \"348\"."
             },
             "microblog_id": {
-              "type": ["string", "integer"]
+              "type": "string",
+              "description": "microblog id as a string."
             },
             "episode_number": {
-              "type": ["string", "integer"]
+              "type": "string",
+              "description": "episode number as a string."
             },
             "url": {
               "type": "string"
@@ -147,7 +149,7 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -271,7 +273,7 @@
   {
     "toolSpec": {
       "name": "archive_lens",
-      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional year_range accepts a [start, end] array, a \"YYYY\" string, or {\"start\": YYYY, \"end\": YYYY}. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
+      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". year_range is [start_year, end_year]. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -361,10 +363,12 @@
               "description": "Issue number as a string, e.g. \"348\"."
             },
             "microblog_id": {
-              "type": ["string", "integer"]
+              "type": "string",
+              "description": "microblog id as a string."
             },
             "episode_number": {
-              "type": ["string", "integer"]
+              "type": "string",
+              "description": "episode number as a string."
             },
             "url": {
               "type": "string"

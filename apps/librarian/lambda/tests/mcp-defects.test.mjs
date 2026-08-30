@@ -460,3 +460,169 @@ test('list_content and media_search carry match_reasons (Also)', async () => {
   const media = await ARCHIVE_TOOLS.media_search({ query: 'creek' }, { scope: 'weekly_thing' });
   assert.match(media.results[0].match_reasons[0], /creek/);
 });
+
+// --- Round four -----------------------------------------------------------
+
+test('POST-COMPACTION: every text-evidence snippet contains its matched span (round4 P0)', async () => {
+  // Long chunks with the match deep in the text, run through the FULL tool
+  // path including payload compaction - the round-two test asserted only
+  // pre-compaction and the compactor cut snippets off exactly where the
+  // match began.
+  const chunks = Array.from({ length: 60 }, (_v, index) => ({
+    source_kind: 'blog',
+    url: `https://www.thingelstad.com/2023/post-${index}.html`,
+    subject: `POAP notes ${index}`,
+    publish_date: `2021-0${(index % 9) + 1}-11`,
+    section: 'post',
+    text: `${'wallet onboarding context '.repeat(30)}my ENS name resolves here ${'trailing detail '.repeat(30)}`
+  }));
+  primeCorpusCachesForTests({
+    blog: { posts: [], chunks, links: [] },
+    weekly_thing: { issues: [], chunks: [], links: [] }
+  });
+  const out = await ARCHIVE_TOOLS.entity_lens(
+    { entity: 'ENS', source_kind: 'blog', operation: 'first_last' },
+    { scope: 'all' }
+  );
+  let checked = 0;
+  for (const source of Object.values(out.sources_by_id)) {
+    const textReason = (source.match_reasons || []).some((reason) => String(reason).startsWith('text:'));
+    for (const entry of source.evidence || []) {
+      if (!textReason) continue;
+      checked += 1;
+      assert.ok(
+        String(entry.text).toLowerCase().includes(String(entry.matched).toLowerCase()),
+        `snippet must contain "${entry.matched}": ${entry.text}`
+      );
+    }
+  }
+  assert.ok(checked > 0, 'assertion actually exercised evidence entries');
+});
+
+test('entity aliases widen recall and are reported (round4 P2)', async () => {
+  primeCorpusCachesForTests({
+    blog: {
+      posts: [],
+      chunks: [
+        {
+          source_kind: 'blog',
+          url: 'https://www.thingelstad.com/2021/long-form.html',
+          subject: 'Naming things',
+          publish_date: '2021-04-10',
+          section: 'post',
+          text: 'Setting up the Ethereum Name Service was straightforward.'
+        }
+      ],
+      links: []
+    },
+    weekly_thing: { issues: [], chunks: [], links: [] }
+  });
+  const out = await ARCHIVE_TOOLS.entity_lens({ entity: 'ENS', source_kind: 'blog' }, { scope: 'all' });
+  assert.deepEqual(out.aliases_checked, ['ENS', 'Ethereum Name Service']);
+  assert.equal(out.total_sources, 1, 'long-form alias matched without the short token');
+  const source = Object.values(out.sources_by_id)[0];
+  assert.ok(source.evidence.length >= 1);
+  assert.match(source.evidence[0].matched.toLowerCase(), /ethereum name service/);
+});
+
+test('corpus_stats counts share one scope with totals alongside (round4 P1)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issue_count: 30,
+      chunk_count: 90,
+      link_count: 120,
+      issues: Array.from({ length: 30 }, (_v, index) => ({
+        number: index + 1,
+        subject: `WT${index + 1}`,
+        publish_date: `${2015 + (index % 10)}-01-07`,
+        url: `https://weekly.thingelstad.com/archive/${index + 1}/`
+      })),
+      chunks: Array.from({ length: 90 }, (_v, index) => ({
+        source_kind: 'chunk',
+        issue_number: (index % 30) + 1,
+        publish_date: `${2015 + (index % 10)}-01-07`,
+        section: 'Journal',
+        text: `chunk ${index}`
+      })),
+      links: Array.from({ length: 120 }, (_v, index) => ({
+        domain: `d${index % 10}.com`,
+        url: `https://d${index % 10}.com/x`,
+        publish_date: `${2015 + (index % 10)}-01-07`
+      }))
+    }
+  });
+  const stats = await ARCHIVE_TOOLS.corpus_stats({ year_range: [2016, 2017], limit: 4 }, { scope: 'weekly_thing' });
+  const wt = stats.sources[0];
+  assert.equal(wt.item_count, 6, 'item_count is range-scoped');
+  assert.equal(wt.issue_count, 6, 'issue_count matches the same scope');
+  assert.equal(wt.chunk_count, 18, 'chunk_count is range-scoped');
+  assert.equal(wt.link_count, 24, 'link_count is range-scoped');
+  assert.equal(wt.item_count_total, 30, 'corpus-wide total says so in its name');
+  for (const bucket of wt.yearly_signals) {
+    assert.ok(bucket.top_text_terms.filter((row) => !('omitted' in row)).length <= 4, 'limit reaches nested lists');
+    assert.ok(bucket.top_domains.filter((row) => !('omitted' in row)).length <= 4);
+  }
+  assert.ok((wt.oldest.domains || []).length <= 4, 'oldest.domains honors limit');
+});
+
+test('get_source section filter reaches chunk-indexed prose (round4 P1)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [
+        {
+          number: 321,
+          subject: 'WT321',
+          publish_date: '2024-01-07',
+          url: 'https://weekly.thingelstad.com/archive/321/',
+          sections: [{ name: 'Issue', text: 'Intro text only.' }]
+        }
+      ],
+      chunks: [
+        {
+          source_kind: 'chunk',
+          issue_number: 321,
+          publish_date: '2024-01-07',
+          section: 'Notable',
+          text: 'Commentary on the first notable link.'
+        }
+      ],
+      links: [
+        { issue_number: 321, section: 'Notable', domain: 'a.com', url: 'https://a.com/1', text: 'A' },
+        { issue_number: 321, section: 'Briefly', domain: 'b.com', url: 'https://b.com/2', text: 'B' }
+      ]
+    }
+  });
+  const out = await ARCHIVE_TOOLS.get_source({ issue_number: '321', section: 'Notable' }, { scope: 'weekly_thing' });
+  assert.ok(out.source.body.includes('Commentary on the first notable link'), 'chunk prose reachable by section');
+  assert.equal(out.source.links.length, 1);
+  assert.equal(out.source.section, 'Notable', 'section echoes the applied filter');
+  assert.deepEqual(out.source.domains, ['a.com'], 'domains reflect the filtered links');
+});
+
+test('quote_search values are corpus-consistent, not just shape-consistent (round4 P2)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [
+        {
+          number: 300,
+          subject: 'WT300',
+          publish_date: '2023-01-07',
+          url: 'https://weekly.thingelstad.com/archive/300/',
+          sections: [
+            { name: 'Journal', text: 'Nothing here.' },
+            { name: 'Briefly', text: 'The blog pensieve idea lives here.' }
+          ]
+        }
+      ],
+      chunks: [],
+      links: []
+    },
+    blog: { posts: [], chunks: [], links: [] }
+  });
+  const out = await ARCHIVE_TOOLS.quote_search({ phrase: 'blog pensieve' }, { scope: 'all' });
+  const wtRow = out.results.find((row) => row.source_kind === 'weekly_thing');
+  assert.equal(wtRow.section, 'Briefly', 'WT section names where the phrase lives');
+  assert.equal(wtRow.microblog_id, null);
+  assert.equal(wtRow.also_in_issues, null);
+  assert.deepEqual(wtRow.domains, []);
+});

@@ -34,6 +34,7 @@ interface LensSource extends LensItem {
 }
 
 interface ArchiveLensInput {
+  aliases?: string[];
   topic?: unknown;
   operation?: unknown;
   records?: LensItem[];
@@ -129,6 +130,32 @@ export interface TopicMatcher {
   matchedTokens: (text: string) => string[];
   findIndex: (text: string) => number;
   findMatch: (text: string) => { index: number; match: string } | null;
+}
+
+// OR-combination over a topic plus its aliases: matches when any term
+// matches; reasons/spans come from the first term that hits.
+export function compileMultiTopicMatcher(terms: unknown[]): TopicMatcher {
+  const matchers = terms.map((term) => compileTopicMatcher(term)).filter((matcher) => matcher.raw);
+  if (matchers.length <= 1) return matchers[0] || compileTopicMatcher('');
+  const [primary] = matchers;
+  return {
+    raw: primary.raw,
+    tokens: matchers.flatMap((matcher) => matcher.tokens),
+    phraseRe: primary.phraseRe,
+    tokenRes: matchers.flatMap((matcher) => matcher.tokenRes),
+    matches: (text: string) => matchers.some((matcher) => matcher.matches(text)),
+    matchedTokens: (text: string) => matchers.flatMap((matcher) => matcher.matchedTokens(text)),
+    findIndex(text: string) {
+      return this.findMatch(text)?.index ?? -1;
+    },
+    findMatch(text: string) {
+      for (const matcher of matchers) {
+        const found = matcher.findMatch(text);
+        if (found) return found;
+      }
+      return null;
+    }
+  };
 }
 
 export function compileTopicMatcher(topic: unknown): TopicMatcher {
@@ -293,9 +320,13 @@ function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matc
     const clean = compactWhitespace(chunk.text || '');
     const found = clean ? compiled.findMatch(clean.toLowerCase()) : null;
     if (found) {
+      // Front-load the window: at most 60 chars of context BEFORE the match
+      // so no downstream text cap can slice the matched span out of its own
+      // snippet (a 140-char prefix once put the match past a 120-char cap -
+      // snippets that ended exactly where the proof began).
       existing.evidence.push({
         section: chunk.section || '',
-        text: clean.slice(Math.max(0, found.index - 140), Math.min(clean.length, found.index + 260)),
+        text: clean.slice(Math.max(0, found.index - 60), Math.min(clean.length, found.index + 180)),
         matched: found.match
       });
     }
@@ -436,6 +467,7 @@ function readingPath(items: LensSource[], limit: number) {
 
 export function buildArchiveLens({
   topic = '',
+  aliases = [],
   operation = 'timeline',
   records = [],
   chunks = [],
@@ -446,7 +478,7 @@ export function buildArchiveLens({
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
   const sources = new Map<string, LensSource>();
   // One compiled matcher per scan - the regexes are built once, not per item.
-  const matcher = compileTopicMatcher(topic);
+  const matcher = compileMultiTopicMatcher([topic, ...(aliases || [])]);
 
   for (const record of records || []) {
     if (!inYearRange(record, yearRange) || !matchesLensTopic(record, topic, matcher)) continue;

@@ -39,6 +39,7 @@ interface ArchiveRecord extends CorpusChunk {
 
 interface ToolArgs {
   query?: unknown;
+  aliases?: unknown;
   limit?: unknown;
   kind?: unknown;
   include_utility?: unknown;
@@ -432,6 +433,15 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
         word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
         text: String(section.text || '').slice(0, 14000)
       }));
+    // Text sections and links index by different taxonomies on some
+    // issues: stored text sections may only carry "Issue" while links
+    // carry Notable/Briefly. When the requested section has no stored
+    // text, fall back to the chunk index - chunks carry the editorial
+    // section labels - so section="Notable" returns the per-link prose
+    // alongside the Notable links instead of an empty body.
+    if (wanted && !sections.length) {
+      sections = sectionsFromChunks(chunks, wantedSection);
+    }
     // section filter applies to body too - previously section_texts was
     // filtered while body still carried the whole issue.
     body = String(
@@ -458,9 +468,16 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
           .includes(wanted)
       )
     : links;
+  // With a section filter active, the returned source describes THAT
+  // section: the section field echoes the filter and domains reflect the
+  // filtered links, not the whole issue.
+  const sectionDomains = wanted
+    ? Array.from(new Set(sectionLinks.map((link) => normalizedDomain(link.domain || link.url)).filter(Boolean)))
+    : undefined;
   return {
     source: {
       ...compactContentRecord(record),
+      ...(wanted ? { section: wantedSection, domains: sectionDomains } : {}),
       word_count: sectionSummaries.length
         ? sectionSummaries.reduce((sum, section) => sum + section.word_count, 0)
         : tokenize(body).length,
@@ -883,6 +900,15 @@ function summarizeDomains(links: ArchiveRecord[], limit = 12) {
     .map(([domain, count]) => ({ domain, count }));
 }
 
+function boundedStatsRecord(record: ArchiveRecord | undefined, limit: number) {
+  if (!record) return null;
+  return {
+    ...record,
+    domains: (record.domains || []).slice(0, limit),
+    topics: (record.topics || []).slice(0, limit)
+  };
+}
+
 async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const [statsStartYear, statsEndYear] = parseYearRange(input.year_range || input.year);
@@ -909,30 +935,42 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
     }
     const countsByYear = countsByPublishYear(records);
+    const rangeActive = Boolean(statsStartYear || statsEndYear);
+    // Every count in this object describes the SAME scope: the applied
+    // year_range when one is set (a *_total sibling keeps the corpus-wide
+    // number). Mixing range-scoped and corpus-wide counts in one object
+    // made links-per-issue math silently wrong by 2x.
+    const corpusTotal =
+      kind === 'blog'
+        ? Number(corpus.post_count || 0)
+        : kind === 'podcast'
+          ? Number(corpus.episode_count || 0)
+          : Number(corpus.issue_count || 0);
+    const rangeChunks = (corpus.chunks || []).filter((chunk) => inStatsYears(chunk as ArchiveRecord));
     const stats: Record<string, unknown> = {
       source_kind: kind,
       generated_at: corpus.generated_at,
-      item_count:
-        kind === 'blog'
-          ? Number(corpus.post_count || records.length)
-          : kind === 'podcast'
-            ? Number(corpus.episode_count || records.length)
-            : Number(corpus.issue_count || records.length),
-      chunk_count: corpus.chunk_count || (corpus.chunks || []).length,
-      link_count: Number(corpus.link_count || links.length),
-      oldest: records[records.length - 1] || null,
-      newest: records[0] || null,
+      item_count: rangeActive ? records.length : corpusTotal || records.length,
+      chunk_count: rangeActive ? rangeChunks.length : corpus.chunk_count || (corpus.chunks || []).length,
+      link_count: rangeActive ? links.length : Number(corpus.link_count || links.length),
+      ...(rangeActive
+        ? {
+            item_count_total: corpusTotal || undefined,
+            chunk_count_total: corpus.chunk_count || (corpus.chunks || []).length,
+            link_count_total: Number(corpus.link_count || 0) || undefined
+          }
+        : {}),
+      oldest: boundedStatsRecord(records[records.length - 1], listLimit),
+      newest: boundedStatsRecord(records[0], listLimit),
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
-      yearly_signals: yearlyContentSignals(records, {
-        chunks: (corpus.chunks || []).filter((chunk) => inStatsYears(chunk as ArchiveRecord))
-      }),
+      yearly_signals: yearlyContentSignals(records, { chunks: rangeChunks, listLimit }),
       top_domains: summarizeDomains(links, listLimit),
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category')
     };
     if (kind === 'weekly_thing') {
-      stats.issue_count = corpus.issue_count || records.length;
+      stats.issue_count = rangeActive ? records.length : corpus.issue_count || records.length;
       stats.content_item_count = records.length;
     }
     if (kind === 'blog') {
@@ -943,13 +981,13 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           issueCounts.set(String(issue), (issueCounts.get(String(issue)) || 0) + 1);
         }
       }
-      stats.post_count = corpus.post_count || records.length;
+      stats.post_count = rangeActive ? records.length : corpus.post_count || records.length;
       stats.posts_with_also_in_issues_count = withIssueRefs.length;
       stats.newest_also_in_issues = withIssueRefs[0] || null;
       stats.also_in_issue_counts = sortedCountList(issueCounts, 'issue_number');
     }
     if (kind === 'podcast') {
-      stats.episode_count = corpus.episode_count || records.length;
+      stats.episode_count = rangeActive ? records.length : corpus.episode_count || records.length;
     }
     sources.push(stats);
   }
@@ -1137,16 +1175,25 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       let body = String(issue.body || '');
       if (!body) body = (await issueSections(issue)).map((section) => section.text || '').join('\n\n');
       if (body.toLowerCase().includes(needle)) {
-        // Same shape as the chunk-corpus branch below - weekly_thing rows
-        // previously omitted source_kind/year/section/topics.
+        // Same shape AND value semantics as the chunk-corpus branch below:
+        // section names the issue section containing the phrase, and
+        // blog-specific fields are present as null rather than absent.
+        const matchedSection = (await issueSections(issue)).find((section) =>
+          String(section.text || '')
+            .toLowerCase()
+            .includes(needle)
+        );
         results.push({
           issue_number: issue.number,
           source_kind: 'weekly_thing',
           subject: issue.subject,
           publish_date: issue.publish_date,
           year: Number(String(issue.publish_date || '').slice(0, 4)) || null,
-          section: null,
+          section: matchedSection?.name || null,
           topics: issue.topics || [],
+          domains: [],
+          microblog_id: null,
+          also_in_issues: null,
           url: issue.url,
           context: contextAround(body, phrase)
         });
@@ -1276,7 +1323,10 @@ function truncationNote(params: string[] | undefined) {
 }
 
 function compactLensLevel<T>(value: T, depth: number, scale: number, note: string, parentKey = ''): T {
-  const textCap = LENS_TEXT_CAPS[Math.min(depth, LENS_TEXT_CAPS.length - 1)];
+  // Evidence text keeps its full (already bounded) snippet at any depth -
+  // capping it mid-string once cut snippets off exactly where the matched
+  // span began, making the evidence unverifiable.
+  const textCap = parentKey === 'text' ? 260 : LENS_TEXT_CAPS[Math.min(depth, LENS_TEXT_CAPS.length - 1)];
   if (depth > 6 || value === null || typeof value !== 'object') {
     if (typeof value === 'string' && value.length > textCap) {
       return `${value.slice(0, textCap)}…` as unknown as T;
@@ -1292,10 +1342,15 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
     }
     const baseCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
     const arrayCap = Math.max(6, Math.round(baseCap * scale));
-    const capped = value.slice(0, arrayCap).map((item) => compactLensLevel(item, depth + 1, scale, note));
-    if (value.length > arrayCap) {
-      (capped as unknown[]).push({ omitted: value.length - arrayCap, note });
+    // An {omitted: 2} marker costs more bytes than two short entries - when
+    // only a few would be cut, keep the full list instead.
+    if (value.length <= arrayCap + 3) {
+      return value.map((item) => compactLensLevel(item, depth + 1, scale, note)) as unknown as T;
     }
+    const capped = value.slice(0, arrayCap).map((item) => compactLensLevel(item, depth + 1, scale, note));
+    // Tool parameters control top-level lists; a nested record's own list
+    // (a source's domains) is controlled by none of them - say so plainly.
+    (capped as unknown[]).push({ omitted: value.length - arrayCap, note: depth <= 1 ? note : 'truncated for size' });
     return capped as unknown as T;
   }
   const out: Record<string, unknown> = {};
@@ -1360,6 +1415,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
       source_kind: requestedSource || null,
       ...buildArchiveLens({
         topic,
+        aliases: Array.isArray(input.aliases) ? input.aliases.map(String) : [],
         operation: input.operation,
         records,
         chunks,
@@ -1463,13 +1519,29 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   };
 }
 
+// Recurring entities this archive writes out long-form as often as the
+// short name. Checked case-insensitively against the entity term.
+const ENTITY_ALIASES: Record<string, string[]> = {
+  ens: ['Ethereum Name Service'],
+  poap: ['Proof of Attendance Protocol'],
+  'micro.blog': ['microblog', 'micro blog'],
+  omnifocus: ['Omni Focus'],
+  'sps commerce': ['SPS'],
+  minnestar: ['Minnebar', 'Minnedemo'],
+  wt: ['Weekly Thing'],
+  ai: ['artificial intelligence'],
+  ml: ['machine learning']
+};
+
 async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
   const entity = String(input.entity || input.topic || input.query || '').trim();
   if (!entity) return { error: 'entity is required' };
   const operation = input.operation || 'timeline';
+  const aliases = ENTITY_ALIASES[entity.toLowerCase()] || [];
   const lens = await toolArchiveLens(
     {
       topic: entity,
+      aliases,
       operation,
       source_kind: input.source_kind,
       year_range: input.year_range,
@@ -1479,7 +1551,7 @@ async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
   );
   return {
     entity,
-    aliases_checked: [entity],
+    aliases_checked: [entity, ...aliases],
     ...lens
   };
 }

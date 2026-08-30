@@ -28,6 +28,7 @@ interface YearBucket {
 }
 
 interface YearlyContentOptions {
+  listLimit?: number;
   topYearLimit?: number;
   sampleLimit?: number;
   chunks?: CorpusRecord[];
@@ -249,6 +250,9 @@ function bucketFor(buckets: Map<number, YearBucket>, year: number): YearBucket {
 export function yearlyContentSignals(records: CorpusRecord[] = [], options: YearlyContentOptions = {}) {
   const topYearLimit = Math.max(Number(options.topYearLimit || 40), 1);
   const sampleLimit = Math.max(Number(options.sampleLimit || 4), 0);
+  // One limit governs every nested list so the caller's `limit` actually
+  // controls what the truncation note claims it controls.
+  const listLimit = Math.max(Number(options.listLimit || 0), 0);
   const chunks = Array.isArray(options.chunks) ? options.chunks : [];
   const buckets = new Map<number, YearBucket>();
   for (const record of records || []) {
@@ -279,17 +283,39 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
       increment(bucket.textTerms, term);
     }
   }
-  return Array.from(buckets.values())
+  const allBuckets = Array.from(buckets.values());
+  // "Signals" should surface what is DISTINCTIVE about a year, not the
+  // corpus-wide baseline vocabulary (great/good/time/people ranked top for
+  // every single year). Score = year count x idf across year buckets.
+  const yearsWithTerm = new Map<string, number>();
+  for (const bucket of allBuckets) {
+    for (const term of bucket.textTerms.keys()) {
+      yearsWithTerm.set(term, (yearsWithTerm.get(term) || 0) + 1);
+    }
+  }
+  const totalYears = Math.max(allBuckets.length, 1);
+  const distinctiveTerms = (bucket: YearBucket, limit: number) =>
+    Array.from(bucket.textTerms.entries())
+      .map(([term, count]) => ({
+        term,
+        count,
+        score: count * Math.log(1 + totalYears / (yearsWithTerm.get(term) || 1))
+      }))
+      .sort((a, b) => b.score - a.score || b.count - a.count)
+      .slice(0, limit)
+      .map(({ term, count }) => ({ term, count }));
+
+  return allBuckets
     .sort((a, b) => b.year - a.year)
     .slice(0, topYearLimit)
     .map((bucket) => ({
       year: bucket.year,
       count: bucket.count,
       chunk_count: bucket.chunk_count,
-      top_subject_terms: topCounts(bucket.subjectTerms, 'term', 10),
-      top_text_terms: topCounts(bucket.textTerms, 'term', 12),
-      top_domains: topCounts(bucket.domains, 'domain', 8),
-      counts_by_section: topCounts(bucket.sections, 'section', 8),
+      top_subject_terms: topCounts(bucket.subjectTerms, 'term', listLimit || 10),
+      top_text_terms: distinctiveTerms(bucket, listLimit || 12),
+      top_domains: topCounts(bucket.domains, 'domain', listLimit || 8),
+      counts_by_section: topCounts(bucket.sections, 'section', listLimit || 8),
       sample_items: bucket.samples
     }));
 }
