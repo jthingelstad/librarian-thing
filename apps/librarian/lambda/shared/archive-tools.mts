@@ -1,5 +1,7 @@
 import crypto from 'node:crypto';
 import { buildArchiveLens, compileTopicMatcher } from './archive-lens.mjs';
+import { aliasesFor, compileLiteral, normalizeMatchMode } from './matcher.mjs';
+import { promptFingerprint } from './prompts.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
 import { searchFaq } from './faq.mjs';
@@ -40,6 +42,7 @@ interface ArchiveRecord extends CorpusChunk {
 interface ToolArgs {
   query?: unknown;
   aliases?: unknown;
+  match_mode?: unknown;
   limit?: unknown;
   kind?: unknown;
   include_utility?: unknown;
@@ -433,14 +436,41 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
         word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
         text: String(section.text || '').slice(0, 14000)
       }));
-    // Text sections and links index by different taxonomies on some
-    // issues: stored text sections may only carry "Issue" while links
-    // carry Notable/Briefly. When the requested section has no stored
-    // text, fall back to the chunk index - chunks carry the editorial
-    // section labels - so section="Notable" returns the per-link prose
-    // alongside the Notable links instead of an empty body.
+    // Text sections and links index by DIFFERENT taxonomies: text sections
+    // are per-article names ("MCP is the coming of Web 2.0 2.0 - Anil
+    // Dash") while links carry editorial groups (Notable/Briefly). The
+    // join is that a link's title equals its article section's name. For a
+    // group-name request, include every article section whose name matches
+    // one of that group's link titles - so section="Notable" returns the
+    // per-link commentary alongside the Notable links.
     if (wanted && !sections.length) {
       sections = sectionsFromChunks(chunks, wantedSection);
+    }
+    if (wanted && !sections.length) {
+      const normTitle = (value: unknown) =>
+        String(value || '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      const groupTitles = new Set(
+        links
+          .filter((link) =>
+            String(link.section || '')
+              .toLowerCase()
+              .includes(wanted)
+          )
+          .map((link) => normTitle(link.text || link.title))
+          .filter(Boolean)
+      );
+      if (groupTitles.size) {
+        sections = issueSectionRows
+          .filter((section) => groupTitles.has(normTitle(section.name)))
+          .map((section) => ({
+            name: section.name,
+            word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
+            text: String(section.text || '').slice(0, 14000)
+          }));
+      }
     }
     // section filter applies to body too - previously section_texts was
     // filtered while body still carried the whole issue.
@@ -513,6 +543,10 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const graph = topic && kinds.includes('weekly_thing') ? await loadGraph() : {};
   const entityIndex = graphRecord(graph, 'entity_index');
   const issueMatches = new Set(topic ? stringArray(entityIndex[topic]) : []);
+  const topicMatcher = compileTopicMatcher(topic, {
+    mode: normalizeMatchMode(input.match_mode),
+    aliases: aliasesFor(topic)
+  });
   const results = [];
   const filteredLinks = [];
   for (const link of await linkRecords(scope)) {
@@ -529,7 +563,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     const haystack = [link.text, link.title, link.section, link.heading_context, link.context, link.domain]
       .join(' ')
       .toLowerCase();
-    if (topic && !haystack.includes(topic) && !issueMatches.has(issueKey(link.issue_number))) continue;
+    if (topic && !topicMatcher.matches(haystack) && !issueMatches.has(issueKey(link.issue_number))) continue;
     filteredLinks.push(link);
     if (results.length < limit) {
       const sourceUrl =
@@ -781,7 +815,7 @@ function compactLink(link: ArchiveRecord): ArchiveRecord {
     subject: link.subject,
     publish_date: link.publish_date,
     section: link.section,
-    domain: link.domain,
+    domain: normalizedDomain(link.domain || link.url),
     link_text: link.text || link.title || link.heading_context,
     context: link.context || link.heading_context,
     url:
@@ -887,14 +921,24 @@ function issueList(values: unknown) {
     .sort((a, b) => a - b);
 }
 
-function summarizeDomains(links: ArchiveRecord[], limit = 12) {
+// THE domain aggregation - corpus_stats and top_references are two
+// presentations of this one count (two implementations once produced the
+// round-one 173-vs-179 discrepancy).
+export function aggregateLinkDomains(
+  links: ArchiveRecord[],
+  { excludeInternal = true }: { excludeInternal?: boolean } = {}
+) {
   const counts = new Map<string, number>();
   for (const link of links || []) {
-    if ((link.link_kind || inferredLinkKind(link)) === 'internal') continue;
+    if (excludeInternal && (link.link_kind || inferredLinkKind(link)) === 'internal') continue;
     const domain = normalizedDomain(link.domain || link.url || '');
     if (domain) counts.set(domain, (counts.get(domain) || 0) + 1);
   }
-  return Array.from(counts.entries())
+  return counts;
+}
+
+function summarizeDomains(links: ArchiveRecord[], limit = 12) {
+  return Array.from(aggregateLinkDomains(links).entries())
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, limit)
     .map(([domain, count]) => ({ domain, count }));
@@ -995,6 +1039,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
+      server_version: `1.1.0+tools.${promptFingerprint()}`,
       year_range: statsStartYear || statsEndYear ? [statsStartYear, statsEndYear] : null,
       sources
     },
@@ -1064,11 +1109,9 @@ function listContentMatchReasons(
   filters: { topic: TopicMatcher; domain: string; linkKind: string; linkCategory: string }
 ) {
   const reasons: string[] = [];
-  if (filters.topic.raw) {
-    const matched = filters.topic.matchedTokens(
-      [record.subject, (record.topics || []).join(' ')].join(' ').toLowerCase()
-    );
-    reasons.push(matched.length ? `topic: ${matched.slice(0, 4).join(', ')}` : 'topic: matched in body text');
+  if (!filters.topic.isEmpty) {
+    const hit = filters.topic.firstHit([record.subject, (record.topics || []).join(' ')].join(' ').toLowerCase());
+    reasons.push(hit ? `topic: '${hit.span}'` : 'topic: matched in body text');
   }
   if (filters.domain) reasons.push(`domain: ${filters.domain}`);
   if (filters.linkKind) reasons.push(`link_kind: ${filters.linkKind}`);
@@ -1092,7 +1135,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
   const alsoInIssue = input.also_in_issue ?? input.issue_number;
   const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
-  const topicMatcher = compileTopicMatcher(topic);
+  const topicMatcher = compileTopicMatcher(topic, { mode: normalizeMatchMode(input.match_mode) });
   const results = [];
   const years = [];
   const sources = [];
@@ -1144,8 +1187,9 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
   }
   return {
-    scope: normalizeScope(scope),
+    scope: effectiveScope(scope, requestedSource),
     source_kind: requestedSource || null,
+    match_mode: topic ? topicMatcher.appliedMode : null,
     total_count: years.length,
     counts_by_year: countList(years, 'year'),
     counts_by_source: countList(sources, 'source_kind'),
@@ -1167,6 +1211,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   if (phrase.length < 3) return { results: [] };
   const limit = Math.min(Math.max(Number(input.limit || 20), 1), 50);
   const needle = phrase.toLowerCase();
+  const quoteMatcher = compileLiteral(phrase);
   const kinds = scopeKinds(scope);
   const results = [];
   if (kinds.includes('weekly_thing')) {
@@ -1174,7 +1219,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     for (const issue of corpus.issues || []) {
       let body = String(issue.body || '');
       if (!body) body = (await issueSections(issue)).map((section) => section.text || '').join('\n\n');
-      if (body.toLowerCase().includes(needle)) {
+      if (quoteMatcher.matches(body.toLowerCase())) {
         // Same shape AND value semantics as the chunk-corpus branch below:
         // section names the issue section containing the phrase, and
         // blog-specific fields are present as null rather than absent.
@@ -1211,7 +1256,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     for (const record of records) {
       const chunks = chunksBySource.get(sourceRecordKey(record)) || [];
       const text = sourceTextFromChunks(chunks);
-      if (!text.toLowerCase().includes(needle)) continue;
+      if (!quoteMatcher.matches(text.toLowerCase())) continue;
       const compactRecord = compactContentRecord(record) as Record<string, unknown>;
       results.push({
         issue_number: null,
@@ -1237,6 +1282,7 @@ async function toolListIssues(input: ToolArgs = {}) {
   const entityIndex = graphRecord(graph, 'entity_index');
   const graphIssues = graphRecord(graph, 'issues');
   const issueMatches = new Set(topic ? stringArray(entityIndex[topic]) : []);
+  const listIssuesMatcher = compileTopicMatcher(topic, { aliases: aliasesFor(topic) });
   const limit = Math.min(Math.max(Number(input.limit || 60), 1), 120);
   const results = [];
   const topicCounts = new Map<string, number>();
@@ -1256,7 +1302,7 @@ async function toolListIssues(input: ToolArgs = {}) {
     }
     if (input.year && Number(issue.issue_year || 0) !== Number(input.year)) continue;
     const haystack = [issue.subject, ...(issue.topics || [])].join(' ').toLowerCase();
-    if (topic && !haystack.includes(topic) && !issueMatches.has(issueKey(issue.number))) continue;
+    if (topic && !listIssuesMatcher.matches(haystack) && !issueMatches.has(issueKey(issue.number))) continue;
     if (results.length < limit) {
       results.push({
         number: issue.number,
@@ -1375,12 +1421,53 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
   return out as unknown as T;
 }
 
+// After sources_by_id is capped, no section may reference an id that no
+// longer resolves: sample lists drop the id, headline references
+// (first/latest/results/timeline/reading_path) are marked
+// {id, resolved: false} so priority ordering stays visible.
+function reconcileSourceRefs(payload: Record<string, unknown>) {
+  const byId = payload.sources_by_id;
+  if (!byId || typeof byId !== 'object') return payload;
+  const kept = new Set(Object.keys(byId as Record<string, unknown>));
+  const prune = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(prune);
+    if (value && typeof value === 'object') {
+      const record = value as Record<string, unknown>;
+      const out: Record<string, unknown> = {};
+      for (const [key, entry] of Object.entries(record)) {
+        if (key === 'sources_by_id') {
+          out[key] = entry;
+        } else if (key === 'sample_sources' && Array.isArray(entry)) {
+          out[key] = entry.filter((id) => typeof id !== 'string' || kept.has(id));
+        } else if ((key === 'timeline' || key === 'latest_sources' || key === 'results') && Array.isArray(entry)) {
+          out[key] = entry.map((id) => (typeof id === 'string' && !kept.has(id) ? { id, resolved: false } : id));
+        } else if (key === 'reading_path' && Array.isArray(entry)) {
+          out[key] = entry.map((item) => {
+            const ref = item as Record<string, unknown>;
+            return ref && typeof ref.id === 'string' && !kept.has(ref.id) ? { ...ref, resolved: false } : item;
+          });
+        } else if ((key === 'first' || key === 'latest') && typeof entry === 'string' && !kept.has(entry)) {
+          out[key] = { id: entry, resolved: false };
+        } else {
+          out[key] = prune(entry);
+        }
+      }
+      return out;
+    }
+    return value;
+  };
+  return prune(payload) as Record<string, unknown>;
+}
+
 function compactLensPayload<T>(value: T, options: LensPayloadOptions = {}): T {
   const note = truncationNote(options.params);
   const maxChars = options.maxChars || LENS_PAYLOAD_MAX_CHARS;
   let result = value;
   for (const scale of LENS_CAP_SCALES) {
     result = compactLensLevel(value, 0, scale, note);
+    if (result && typeof result === 'object' && 'sources_by_id' in (result as Record<string, unknown>)) {
+      result = reconcileSourceRefs(result as Record<string, unknown>) as T;
+    }
     try {
       if (JSON.stringify(result).length <= maxChars) return result;
     } catch {
@@ -1399,10 +1486,15 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     const corpus = await loadCorpus(kind);
-    records.push(...contentRecords(corpus, kind));
+    const kindRecords = contentRecords(corpus, kind);
+    records.push(...kindRecords);
+    // Chunks carry no domains of their own; borrow the parent record's so a
+    // source matched only at chunk level still contributes to top_domains.
+    const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
     chunks.push(
       ...(corpus.chunks || []).map((chunk) => ({
         ...chunk,
+        domains: chunk.domains?.length ? chunk.domains : domainsByKey.get(sourceKeyFromChunk(chunk, kind)) || [],
         // "chunk" is internal storage typing; the public enum is the corpus
         // kind this loop is reading.
         source_kind: CORPUS_SOURCE_KINDS.has(String(chunk.source_kind || '')) ? chunk.source_kind : kind
@@ -1416,6 +1508,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
       ...buildArchiveLens({
         topic,
         aliases: Array.isArray(input.aliases) ? input.aliases.map(String) : [],
+        matchMode: normalizeMatchMode(input.match_mode),
         operation: input.operation,
         records,
         chunks,
@@ -1423,7 +1516,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         limit: Number(input.limit || 18)
       })
     },
-    { params: ['topic', 'operation', 'source_kind', 'year_range', 'limit'] }
+    { params: ['topic', 'operation', 'match_mode', 'source_kind', 'year_range', 'limit'] }
   );
 }
 
@@ -1519,29 +1612,16 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   };
 }
 
-// Recurring entities this archive writes out long-form as often as the
-// short name. Checked case-insensitively against the entity term.
-const ENTITY_ALIASES: Record<string, string[]> = {
-  ens: ['Ethereum Name Service'],
-  poap: ['Proof of Attendance Protocol'],
-  'micro.blog': ['microblog', 'micro blog'],
-  omnifocus: ['Omni Focus'],
-  'sps commerce': ['SPS'],
-  minnestar: ['Minnebar', 'Minnedemo'],
-  wt: ['Weekly Thing'],
-  ai: ['artificial intelligence'],
-  ml: ['machine learning']
-};
-
 async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
   const entity = String(input.entity || input.topic || input.query || '').trim();
   if (!entity) return { error: 'entity is required' };
   const operation = input.operation || 'timeline';
-  const aliases = ENTITY_ALIASES[entity.toLowerCase()] || [];
+  const aliases = aliasesFor(entity);
   const lens = await toolArchiveLens(
     {
       topic: entity,
       aliases,
+      match_mode: input.match_mode,
       operation,
       source_kind: input.source_kind,
       year_range: input.year_range,
@@ -1679,7 +1759,10 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     .toLowerCase();
   const year = Number(input.year || 0) || null;
   const limit = Math.min(Math.max(Number(input.limit || 8), 1), 12);
-  const terms = query.split(/[^a-z0-9]+/).filter((term) => term.length > 2);
+  const termMatchers = query
+    .split(/[^a-z0-9]+/)
+    .filter((term) => term.length > 2)
+    .map((term) => ({ term, matcher: compileTopicMatcher(term) }));
   const kinds = scopeKinds(scope);
   const scored: Array<{ score: number; item: Record<string, unknown> }> = [];
   for (const kind of kinds) {
@@ -1687,14 +1770,14 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
       if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
       const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''}`.toLowerCase();
-      if (!terms.length) {
+      if (!termMatchers.length) {
         scored.push({ score: 1, item });
         continue;
       }
-      const matchedTerms = terms.filter((term) => haystack.includes(term));
+      const matchedTerms = termMatchers.filter(({ matcher }) => matcher.matches(haystack)).map(({ term }) => term);
       if (matchedTerms.length > 0) {
         scored.push({
-          score: matchedTerms.length / terms.length,
+          score: matchedTerms.length / termMatchers.length,
           item: { ...item, match_reasons: [`matched: ${matchedTerms.join(', ')}`] }
         });
       }

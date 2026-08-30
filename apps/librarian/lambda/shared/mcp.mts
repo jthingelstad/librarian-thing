@@ -90,6 +90,14 @@ function negotiatedProtocolVersion(requested: unknown) {
   return SUPPORTED_PROTOCOL_VERSIONS.includes(value) ? value : MCP_PROTOCOL_VERSION;
 }
 
+// The tool-surface cache key, also stamped onto tool responses
+// (belt-and-braces: listChanged depends on client behavior we don't
+// control; a version on the payload lets an agent detect a stale cached
+// tools/list from any response).
+export function serverVersion() {
+  return `1.1.0+tools.${promptFingerprint()}`;
+}
+
 export function initializeResult(requestedVersion: unknown) {
   return {
     protocolVersion: negotiatedProtocolVersion(requestedVersion),
@@ -105,7 +113,7 @@ export function initializeResult(requestedVersion: unknown) {
     serverInfo: {
       name: 'librarian',
       title: "The Librarian - Jamie Thingelstad's archive",
-      version: `1.1.0+tools.${promptFingerprint()}`
+      version: serverVersion()
     },
     instructions: [
       "Tools for exploring Jamie Thingelstad's public archive: The Weekly Thing newsletter,",
@@ -172,7 +180,11 @@ export async function handleMcpMessage(
     }
     const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
     try {
-      const result = await context.invokeTool(name, args);
+      const invoked = await context.invokeTool(name, args);
+      const result =
+        invoked && typeof invoked === 'object' && !Array.isArray(invoked)
+          ? { ...(invoked as JsonRecord), server_version: serverVersion() }
+          : invoked;
       let text = JSON.stringify(result ?? null, null, 1);
       if (text.length > MCP_RESULT_MAX_CHARS) {
         // Name only parameters THIS tool actually accepts.

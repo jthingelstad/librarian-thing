@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildArchiveLens, lensMatchReasons, matchesLensTopic, normalizeLensOperation } from '../dist/shared/archive-lens.mjs';
+import {
+  buildArchiveLens,
+  lensMatchReasons,
+  matchesLensTopic,
+  normalizeLensOperation
+} from '../dist/shared/archive-lens.mjs';
 
 const records = [
   {
@@ -74,11 +79,19 @@ test('normalizeLensOperation maps common aliases', () => {
   assert.equal(normalizeLensOperation(''), 'timeline');
 });
 
-test('matchesLensTopic accepts phrases and token overlap', () => {
+test('matchesLensTopic uses canonical semantics: phrases are contiguous, no token bags', () => {
   assert.equal(matchesLensTopic(chunks[0], 'open web'), true);
-  assert.equal(matchesLensTopic(chunks[0], 'RSS durability'), true);
+  // "RSS durability" as a phrase requires the contiguous sequence - the
+  // old token-overlap acceptance was the round-five alias bug family.
+  assert.equal(matchesLensTopic(chunks[0], 'RSS durability'), false);
+  assert.equal(matchesLensTopic(chunks[0], 'RSS'), true);
   assert.equal(matchesLensTopic(chunks[0], 'Big Green Egg'), false);
-  assert.deepEqual(lensMatchReasons(chunks[0], 'open web').map((reason) => reason.field), ['text']);
+  const reasons = lensMatchReasons(chunks[0], 'open web');
+  assert.deepEqual(
+    reasons.map((reason) => reason.field),
+    ['text']
+  );
+  assert.match(reasons[0].match, /open web/, 'reason carries the actual span');
 });
 
 test('buildArchiveLens returns first latest year and source structure', () => {
@@ -88,19 +101,27 @@ test('buildArchiveLens returns first latest year and source structure', () => {
   assert.equal(lens.total_sources, 3);
   assert.equal(resolve(lens.first).issue_number, '10');
   assert.equal(resolve(lens.latest).source_kind, 'podcast');
-  assert.deepEqual(lens.counts_by_year.map((row) => row.year), [2026, 2020, 2017]);
+  assert.deepEqual(
+    lens.counts_by_year.map((row) => row.year),
+    [2026, 2020, 2017]
+  );
   assert.equal(lens.years.find((row) => row.year === 2020).source_count, 1);
   assert.equal(lens.sources.find((row) => row.source_kind === 'blog').source_count, 1);
   assert.match(resolve(lens.timeline[0]).evidence[0].text, /open web/);
   assert.ok(
-    resolve(lens.timeline[0]).match_reasons.some(
-      (reason) => reason.startsWith('topics:') || reason.startsWith('text:')
-    )
+    resolve(lens.timeline[0]).match_reasons.some((reason) => reason.startsWith('topics:') || reason.startsWith('text:'))
   );
 });
 
 test('buildArchiveLens filters by year and shapes reading paths', () => {
-  const lens = buildArchiveLens({ topic: 'RSS', operation: 'reading_path', records, chunks, yearRange: [2020, 2026], limit: 4 });
+  const lens = buildArchiveLens({
+    topic: 'RSS',
+    operation: 'reading_path',
+    records,
+    chunks,
+    yearRange: [2020, 2026],
+    limit: 4
+  });
 
   const resolve = (id) => lens.sources_by_id[id];
   assert.equal(resolve(lens.first).source_kind, 'blog');

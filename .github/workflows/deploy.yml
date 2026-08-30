@@ -159,6 +159,12 @@ jobs:
       - name: Run Lambda tests
         run: npm --prefix apps/librarian/lambda run verify
 
+      # Layers 2+3 of the tool-surface eval: response invariants and
+      # known-answer fixtures against the real corpora (from S3), plus the
+      # committed recall baseline. Failures block the deploy.
+      - name: Tool-surface eval (invariants + known answers)
+        run: npm --prefix apps/librarian/lambda run build && node apps/librarian/lambda/scripts/eval-tools.mjs
+
       - name: Build Weekly Thing corpus
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build.py

@@ -23,7 +23,7 @@ test('short topics require exact tokens: ENS never matches sense/Walgreens/citiz
     ['AI', 'thinking about AI agents'],
     ['ML', 'training an ML model'],
     ['RSS', 'my RSS reader habit'],
-    ['publishing', 'publish your own words'] // 5+ chars may stem as a word prefix
+    ['publish', 'publish your own words'] // exact token; stemming is opt-in only
   ]) {
     assert.equal(matchesLensTopic({ text }, topic), true, `${topic} should match "${text}"`);
   }
@@ -31,6 +31,8 @@ test('short topics require exact tokens: ENS never matches sense/Walgreens/citiz
 
 test('matcher never fires mid-word even for stems', () => {
   assert.equal(matchesLensTopic({ text: 'republishing everything' }, 'publish'), false);
+  // default mode never stems: publishing does not silently match publish
+  assert.equal(matchesLensTopic({ text: 'publish your own words' }, 'publishing'), false);
   assert.equal(compileTopicMatcher('data ownership').matches('thoughts on data ownership online'), true);
   assert.equal(compileTopicMatcher('data ownership').matches('metadata ownership'), false);
 });

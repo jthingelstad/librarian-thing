@@ -60,6 +60,9 @@ test('tools/call invokes the registry handler and wraps text content', async () 
   assert.equal(reply.statusCode, 200);
   assert.equal(reply.payload.result.isError, false);
   const body = JSON.parse(reply.payload.result.content[0].text);
+  // Every MCP tool response is stamped with the tool-surface cache key.
+  assert.match(String(body.server_version), /^\d+\.\d+\.\d+\+tools\./);
+  delete body.server_version;
   assert.deepEqual(body, { echoed: 'search_archive', input: { query: 'rss' } });
 });
 

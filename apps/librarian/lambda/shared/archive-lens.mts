@@ -1,6 +1,7 @@
+import { compileQuery } from './matcher.mjs';
+import type { CanonicalMatcher } from './matcher.mjs';
 import { countsByPublishYear, yearCountSummary, yearFromPublishDate } from './corpus-stats.mjs';
 
-const TOKEN_RE = /[a-z0-9][a-z0-9'-]{1,}/gi;
 const DEFAULT_LIMIT = 18;
 
 export interface LensItem {
@@ -26,15 +27,17 @@ export interface LensItem {
 
 interface LensSource extends LensItem {
   match_count: number;
+  strict: boolean;
   sections: Set<string>;
   topics: Set<string>;
   domains: Set<string>;
   match_reasons: Set<string>;
-  evidence: Array<{ section: string; text: string; matched: string }>;
+  evidence: Array<{ section: string; text: string; matched: string; matched_term: string; match_mode: string }>;
 }
 
 interface ArchiveLensInput {
   aliases?: string[];
+  matchMode?: unknown;
   topic?: unknown;
   operation?: unknown;
   records?: LensItem[];
@@ -58,10 +61,6 @@ interface SourceBucket {
   evidence_count: number;
   dates: string[];
   sources: string[];
-}
-
-function tokenize(value: unknown) {
-  return Array.from(String(value || '').matchAll(TOKEN_RE), (match) => match[0].toLowerCase());
 }
 
 function compactWhitespace(value: unknown) {
@@ -106,97 +105,36 @@ function inYearRange(item: LensItem, yearRange: unknown) {
   return true;
 }
 
-function topicTokens(topic: unknown) {
-  return tokenize(topic).filter((token) => token.length > 1);
-}
-
-function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Word-boundary topic matching. Naive substring matching made
-// archive_lens(topic="ENS") match "sense", "Walgreens", and "citizens" -
-// 2,812 phantom evidence matches. Rules:
-// - the whole topic must match on word boundaries (letters/digits end);
-// - tokens shorter than 5 characters require an exact-token match;
-// - tokens of 5+ may also match as a word PREFIX (stemming: "publishing"
-//   matches "publish..."), never mid-word.
-export interface TopicMatcher {
-  raw: string;
-  tokens: string[];
-  phraseRe: RegExp | null;
-  tokenRes: Array<{ token: string; re: RegExp }>;
-  matches: (text: string) => boolean;
-  matchedTokens: (text: string) => string[];
+// The lens matching layer is an adapter over the canonical matcher
+// (shared/matcher.mts). No lens-private comparison semantics remain.
+export interface TopicMatcher extends CanonicalMatcher {
+  findMatch: (text: string) => { index: number; match: string; term: string; mode: string } | null;
   findIndex: (text: string) => number;
-  findMatch: (text: string) => { index: number; match: string } | null;
 }
 
-// OR-combination over a topic plus its aliases: matches when any term
-// matches; reasons/spans come from the first term that hits.
+function adapt(matcher: CanonicalMatcher): TopicMatcher {
+  return {
+    ...matcher,
+    findMatch(text: string) {
+      const hit = matcher.firstHit(text);
+      return hit ? { index: hit.offset, match: hit.span, term: hit.term, mode: hit.mode } : null;
+    },
+    findIndex(text: string) {
+      return matcher.firstHit(text)?.offset ?? -1;
+    }
+  };
+}
+
+export function compileTopicMatcher(
+  topic: unknown,
+  options: { mode?: unknown; aliases?: unknown[] } = {}
+): TopicMatcher {
+  return adapt(compileQuery({ term: topic, aliases: options.aliases || [], mode: options.mode }));
+}
+
 export function compileMultiTopicMatcher(terms: unknown[]): TopicMatcher {
-  const matchers = terms.map((term) => compileTopicMatcher(term)).filter((matcher) => matcher.raw);
-  if (matchers.length <= 1) return matchers[0] || compileTopicMatcher('');
-  const [primary] = matchers;
-  return {
-    raw: primary.raw,
-    tokens: matchers.flatMap((matcher) => matcher.tokens),
-    phraseRe: primary.phraseRe,
-    tokenRes: matchers.flatMap((matcher) => matcher.tokenRes),
-    matches: (text: string) => matchers.some((matcher) => matcher.matches(text)),
-    matchedTokens: (text: string) => matchers.flatMap((matcher) => matcher.matchedTokens(text)),
-    findIndex(text: string) {
-      return this.findMatch(text)?.index ?? -1;
-    },
-    findMatch(text: string) {
-      for (const matcher of matchers) {
-        const found = matcher.findMatch(text);
-        if (found) return found;
-      }
-      return null;
-    }
-  };
-}
-
-export function compileTopicMatcher(topic: unknown): TopicMatcher {
-  const raw = compactWhitespace(topic).toLowerCase();
-  const tokens = topicTokens(topic);
-  const boundary = (body: string, allowPrefix: boolean) =>
-    new RegExp(`(?<![a-z0-9])${body}${allowPrefix ? '[a-z0-9]*' : '(?![a-z0-9])'}`, 'i');
-  const phraseRe = raw ? boundary(escapeRegExp(raw), false) : null;
-  const tokenRes = tokens.map((token) => ({
-    token,
-    re: boundary(escapeRegExp(token.length >= 6 ? token.slice(0, 5) : token), token.length >= 5)
-  }));
-  const matchedTokens = (text: string) => tokenRes.filter(({ re }) => re.test(text)).map(({ token }) => token);
-  return {
-    raw,
-    tokens,
-    phraseRe,
-    tokenRes,
-    matches(text: string) {
-      if (!raw) return true;
-      if (phraseRe && phraseRe.test(text)) return true;
-      if (!tokens.length) return false;
-      const matchCount = matchedTokens(text).length;
-      return tokens.length <= 2 ? matchCount === tokens.length : matchCount >= Math.ceil(tokens.length * 0.7);
-    },
-    matchedTokens,
-    findIndex(text: string) {
-      return this.findMatch(text)?.index ?? -1;
-    },
-    findMatch(text: string) {
-      if (phraseRe) {
-        const match = phraseRe.exec(text);
-        if (match) return { index: match.index, match: match[0] };
-      }
-      for (const { re } of tokenRes) {
-        const match = re.exec(text);
-        if (match) return { index: match.index, match: match[0] };
-      }
-      return null;
-    }
-  };
+  const [primary, ...aliases] = terms.filter((term) => String(term || '').trim());
+  return adapt(compileQuery({ term: primary || '', aliases }));
 }
 
 function lensHaystack(item: LensItem) {
@@ -215,12 +153,15 @@ function lensHaystack(item: LensItem) {
 
 export function matchesLensTopic(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
-  if (!compiled.raw) return true;
+  if (compiled.isEmpty) return true;
   return compiled.matches(lensHaystack(item));
 }
 
+// Reasons attribute the SPECIFIC span that hit - "text: 'ethereum name
+// service'" - never a bag of query tokens.
 export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
+  if (compiled.isEmpty) return [] as Array<{ field: string; match: string }>;
   const fields: Array<[string, unknown]> = [
     ['subject', item.subject],
     ['title', item.title],
@@ -234,12 +175,8 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   for (const [field, value] of fields) {
     const text = compactWhitespace(value).toLowerCase();
     if (!text) continue;
-    if (compiled.phraseRe && compiled.phraseRe.test(text)) {
-      reasons.push({ field, match: compiled.raw });
-      continue;
-    }
-    const matched = compiled.matchedTokens(text);
-    if (matched.length) reasons.push({ field, match: matched.slice(0, 4).join(', ') });
+    const hit = compiled.firstHit(text);
+    if (hit) reasons.push({ field, match: `'${hit.span}'` });
   }
   return reasons;
 }
@@ -305,6 +242,8 @@ function sourceFromChunk(chunk: LensItem): LensItem {
 
 function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matcher?: TopicMatcher) {
   existing.match_count += 1;
+  const compiledForStrict = matcher || compileTopicMatcher(topic);
+  if (!existing.strict && compiledForStrict.matchesStrict(lensHaystack(chunk))) existing.strict = true;
   existing.sections.add(chunk.section || '');
   for (const domain of chunk.domains || []) existing.domains.add(domain);
   for (const sourceTopic of chunk.topics || []) existing.topics.add(sourceTopic);
@@ -327,7 +266,9 @@ function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matc
       existing.evidence.push({
         section: chunk.section || '',
         text: clean.slice(Math.max(0, found.index - 60), Math.min(clean.length, found.index + 180)),
-        matched: found.match
+        matched: found.match,
+        matched_term: found.term,
+        match_mode: found.mode
       });
     }
   }
@@ -353,6 +294,7 @@ function compactLensSource(item: LensSource) {
     audio_url: item.audio_url,
     also_in_issues: item.also_in_issues,
     match_count: item.match_count || 0,
+    strict_match: Boolean(item.strict),
     topics: Array.from(item.topics || [])
       .filter(Boolean)
       .slice(0, 12),
@@ -468,6 +410,7 @@ function readingPath(items: LensSource[], limit: number) {
 export function buildArchiveLens({
   topic = '',
   aliases = [],
+  matchMode = null,
   operation = 'timeline',
   records = [],
   chunks = [],
@@ -478,13 +421,14 @@ export function buildArchiveLens({
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
   const sources = new Map<string, LensSource>();
   // One compiled matcher per scan - the regexes are built once, not per item.
-  const matcher = compileMultiTopicMatcher([topic, ...(aliases || [])]);
+  const matcher = adapt(compileQuery({ term: topic, aliases: aliases || [], mode: matchMode }));
 
   for (const record of records || []) {
     if (!inYearRange(record, yearRange) || !matchesLensTopic(record, topic, matcher)) continue;
     const source: LensSource = {
       ...record,
       source_kind: normalizeLensSourceKind(record.source_kind),
+      strict: matcher.matchesStrict(lensHaystack(record)),
       match_count: 1,
       sections: new Set([record.section || '']),
       topics: new Set(record.topics || []),
@@ -504,6 +448,7 @@ export function buildArchiveLens({
       const source = sourceFromChunk(chunk);
       sources.set(key, {
         ...source,
+        strict: false,
         match_count: 0,
         sections: new Set([source.section || '']),
         topics: new Set(source.topics || []),
@@ -518,6 +463,10 @@ export function buildArchiveLens({
   }
 
   const matched = sortByDateAsc(Array.from(sources.values()).filter((item) => item.publish_date));
+  // first/latest may be determined ONLY by exact/phrase matches - one
+  // spurious stem hit rewriting the headline answer is the round-five
+  // failure this makes structurally impossible.
+  const strictMatched = matched.filter((item) => item.strict);
   const countsByYear = countsByPublishYear(matched);
   const timelineIds = matched.slice(0, maxResults).map(lensSourceId);
   const latestIds = [...matched].reverse().slice(0, maxResults).map(lensSourceId);
@@ -526,7 +475,7 @@ export function buildArchiveLens({
   const path = readingPath(matched, Math.min(maxResults, 8));
   const resultIds =
     normalizedOperation === 'first_last'
-      ? [matched[0], matched.at(-1)].filter((item): item is LensSource => Boolean(item)).map(lensSourceId)
+      ? [strictMatched[0], strictMatched.at(-1)].filter((item): item is LensSource => Boolean(item)).map(lensSourceId)
       : normalizedOperation === 'reading_path'
         ? path.map((entry) => entry.id)
         : normalizedOperation === 'source_compare'
@@ -572,8 +521,9 @@ export function buildArchiveLens({
     counts_by_year: countsByYear,
     year_count_summary: yearCountSummary(countsByYear),
     sources_by_id: sourcesById,
-    first: matched[0] ? lensSourceId(matched[0]) : null,
-    latest: matched.at(-1) ? lensSourceId(matched.at(-1)!) : null,
+    match_mode: matcher.appliedMode,
+    first: strictMatched[0] ? lensSourceId(strictMatched[0]) : null,
+    latest: strictMatched.at(-1) ? lensSourceId(strictMatched.at(-1)!) : null,
     results: resultIds,
     timeline: timelineIds,
     latest_sources: latestIds,

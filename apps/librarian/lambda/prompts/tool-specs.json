@@ -90,7 +90,7 @@
   {
     "toolSpec": {
       "name": "list_content",
-      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year/year_range, topic/entity/query, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, or also_in_issue. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, or which blog posts crossed into Weekly Thing. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year/year_range, topic/entity/query, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, or also_in_issue. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, or which blog posts crossed into Weekly Thing. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -140,6 +140,11 @@
             },
             "limit": {
               "type": "integer"
+            },
+            "match_mode": {
+              "type": "string",
+              "enum": ["exact", "phrase", "stem"],
+              "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             }
           }
         }
@@ -149,7 +154,7 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -184,6 +189,11 @@
             },
             "limit": {
               "type": "integer"
+            },
+            "match_mode": {
+              "type": "string",
+              "enum": ["exact", "phrase", "stem"],
+              "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             }
           }
         }
@@ -273,7 +283,7 @@
   {
     "toolSpec": {
       "name": "archive_lens",
-      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". year_range is [start_year, end_year]. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
+      "description": "Build a deterministic Archive Lens over the active source scope for one topic. Use for genuinely analytical questions: timelines, first/latest mentions, year-by-year topic/theme slices, source comparisons across Weekly Thing/blog/podcast, and reading paths through a theme. It scans corpus metadata and matching chunks, then returns counts_by_year, first/latest sources, year buckets, source buckets, timeline entries, representative evidence snippets, match reasons, and a suggested reading_path. operation can be \"timeline\", \"first_last\", \"by_year\", \"source_compare\", or \"reading_path\". Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". year_range is [start_year, end_year]. Use this before semantic search when the user asks how a topic evolved or how attention changed over time. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -300,6 +310,11 @@
             },
             "limit": {
               "type": "integer"
+            },
+            "match_mode": {
+              "type": "string",
+              "enum": ["exact", "phrase", "stem"],
+              "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             }
           },
           "required": ["topic"]
@@ -310,7 +325,7 @@
   {
     "toolSpec": {
       "name": "entity_lens",
-      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit.",
+      "description": "Build a cross-corpus lens for a named person, project, product, place, organization, or recurring idea. Use when the user asks who/what appears over time, where an entity first or latest appears, or how attention to a named thing changes by source and year. This is stricter and more source-level than broad search, but still grounded in archive metadata and chunks. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Response shape: sources_by_id holds each full source record once, keyed by id (wt-300, blog-987, ep-4); first/latest/results/timeline/latest_sources and sample_sources reference those ids - resolve details by id, and evidence entries carry the matched span that proves the hit. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -340,6 +355,11 @@
             },
             "limit": {
               "type": "integer"
+            },
+            "match_mode": {
+              "type": "string",
+              "enum": ["exact", "phrase", "stem"],
+              "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             }
           }
         }
