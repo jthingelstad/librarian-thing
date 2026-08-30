@@ -9,6 +9,7 @@
  * pure protocol given a context and an invoke function.
  */
 import { availableToolSpecs, webSearchConfigured } from './archive-tools.mjs';
+import { promptFingerprint } from './prompts.mjs';
 
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
@@ -92,18 +93,28 @@ function negotiatedProtocolVersion(requested: unknown) {
 export function initializeResult(requestedVersion: unknown) {
   return {
     protocolVersion: negotiatedProtocolVersion(requestedVersion),
-    capabilities: { tools: { listChanged: false } },
+    // The tool list DOES change across deploys - declaring false told
+    // clients to cache tools/list forever, and one did, reporting shipped
+    // fixes as missing. This server is stateless single-response, so the
+    // list_changed notification itself can never be delivered; the honest
+    // signal is listChanged: true plus a serverInfo.version that changes
+    // exactly when the tool surface does (the prompt fingerprint covers
+    // tool-specs.json). Clients should re-fetch tools/list whenever the
+    // version differs from their cache.
+    capabilities: { tools: { listChanged: true } },
     serverInfo: {
       name: 'librarian',
       title: "The Librarian - Jamie Thingelstad's archive",
-      version: '1.0.0'
+      version: `1.1.0+tools.${promptFingerprint()}`
     },
     instructions: [
       "Tools for exploring Jamie Thingelstad's public archive: The Weekly Thing newsletter,",
       'the thingelstad.com blog, and the Another Thing podcast.',
       'Start broad with search_archive, then deepen with get_source; use archive_lens for',
       'how-things-changed-over-time questions, latest_content for freshness, and corpus_stats',
-      'for what the archive contains. Cite Weekly Thing sources as WT<issue number>.'
+      'for what the archive contains. Cite Weekly Thing sources as WT<issue number>.',
+      'The tool schemas evolve; serverInfo.version changes whenever they do - if it differs from your',
+      'cached value, re-fetch tools/list before relying on cached parameter schemas.'
     ].join(' ')
   };
 }

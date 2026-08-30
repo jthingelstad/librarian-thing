@@ -24,7 +24,12 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult('2025-03-26').protocolVersion, '2025-03-26');
   assert.equal(initializeResult('2099-01-01').protocolVersion, '2025-06-18');
   assert.ok(initializeResult().capabilities.tools);
+  assert.equal(initializeResult().capabilities.tools.listChanged, true);
   assert.equal(initializeResult().serverInfo.name, 'librarian');
+  // The version is the tool-surface cache key: it must change when the
+  // packaged prompt/spec set changes, and be stable within one build.
+  assert.match(initializeResult().serverInfo.version, /^1\.1\.0\+tools\.[0-9a-f]{12}$/);
+  assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
 test('tools/list exposes exactly the launch tools with JSON schemas', async () => {
@@ -32,10 +37,7 @@ test('tools/list exposes exactly the launch tools with JSON schemas', async () =
   delete process.env.BRAVE_SEARCH_API_KEY;
   const expected = MCP_LAUNCH_TOOLS.filter((name) => name !== 'web_search');
   const declarations = mcpToolDeclarations();
-  assert.deepEqual(
-    declarations.map((tool) => tool.name).sort(),
-    [...expected].sort()
-  );
+  assert.deepEqual(declarations.map((tool) => tool.name).sort(), [...expected].sort());
   for (const tool of declarations) {
     assert.ok(tool.description.length > 10, tool.name);
     assert.equal(tool.inputSchema.type, 'object', tool.name);
