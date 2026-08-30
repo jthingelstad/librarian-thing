@@ -224,13 +224,36 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
     logEvent('info', 'auth_refresh_rejected');
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
   }
-  const entitlements = entitlementsForSessionPayload(payload);
+  let entitlements = entitlementsForSessionPayload(payload);
+  let verifiedUntil = Number(payload.entitlements_verified_until || 0);
+  // Sliding sessions must not silently decay entitlements: when the
+  // Buttondown verification is stale (or nearly), re-verify using the
+  // email the client supplies - accepted only when it hashes to the
+  // session subject, the same self-binding rule as email_answer.
+  const suppliedEmail = normalizeEmail(body.email);
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const verificationStale = verifiedUntil < nowSeconds + 60 * 60 * 24 * 2;
+  if (suppliedEmail && emailHash(suppliedEmail) === String(payload.sub) && verificationStale) {
+    try {
+      const subscriber = await fetchSubscriber(suppliedEmail);
+      if (subscriber) {
+        const status = subscriberStatus(subscriber);
+        entitlements = entitlementsForSubscriber({ email: suppliedEmail, subscriber, status });
+        verifiedUntil = nowSeconds + 60 * 60 * 24 * 9;
+        logEvent('info', 'auth_refresh_reverified', {
+          subscriber_hash: payload.sub,
+          entitlements
+        });
+      }
+    } catch (error) {
+      // Keep the session alive on Buttondown hiccups; entitlements just
+      // stay as they were.
+      logEvent('warning', 'auth_refresh_reverify_failed', errorFields(error, { subscriber_hash: payload.sub }));
+    }
+  }
   const modes = availableConversationModes(entitlements);
-  const verifiedUntil = Number(payload.entitlements_verified_until || 0);
   const claims =
-    verifiedUntil > Math.floor(Date.now() / 1000)
-      ? { entitlements, entitlements_verified_until: verifiedUntil }
-      : { entitlements };
+    verifiedUntil > nowSeconds ? { entitlements, entitlements_verified_until: verifiedUntil } : { entitlements };
   const subscriberHash = String(payload.sub);
   const { sessionId, expiresAt, token } = createSessionTokenForSub(subscriberHash, undefined, claims);
   await recordSessionForSub(sessionId, payload.sub, expiresAt);

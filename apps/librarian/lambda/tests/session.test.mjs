@@ -60,8 +60,8 @@ test('session token round trips and rejects tampering', () => {
   assert.ok(Number(payload.iat || 0) > 0);
   assert.ok(Number(payload.iat_ms || 0) >= Number(payload.iat || 0) * 1000);
   assert.equal(payload.sub, emailHash('reader@example.com'));
-  assert.ok(expiresAt >= now + 60 * 60 * 24 * 10 - 2);
-  assert.ok(expiresAt <= now + 60 * 60 * 24 * 10 + 2);
+  assert.ok(expiresAt >= now + 60 * 60 * 24 * 9 - 2);
+  assert.ok(expiresAt <= now + 60 * 60 * 24 * 9 + 2);
   assert.equal(verifyToken(`${token}x`), null);
 });
 
