@@ -151,21 +151,28 @@ function pageHtml(title: string, inner: string) {
 <meta name="color-scheme" content="light dark">
 <title>${escapeHtml(title)}</title>
 <style>
-:root { color-scheme: light dark; }
+/* Thingy's design tokens, mirrored from the site's thingy-base.css so the
+   sign-in flow matches the product it fronts. */
+:root { color-scheme: light dark;
+  --bg: #f6f8f5; --surface: #fff; --text: #17211f; --text-soft: #3f4f4a; --text-muted: #596a64;
+  --accent: #14776f; --border: #dfe7e3; }
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #101716; --surface: #17211f; --text: #eaf0ed; --text-soft: #bcc8c3; --text-muted: #899791;
+  --accent: #65c8bc; --border: #2c3a36; } }
 body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: #f5f2ec; color: #2b2622;
+  background: var(--bg); color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-@media (prefers-color-scheme: dark) { body { background: #191512; color: #efe9df; } .card { background: #241f1b; border-color: #3a332c; } input { background: #191512; color: #efe9df; border-color: #4a4139; } .muted { color: #a89c8e; } }
-.card { width: min(92vw, 24rem); background: #fffdf9; border: 1px solid #e0d8ca; border-radius: 12px; padding: 2rem; box-sizing: border-box; text-align: center; }
+.card { width: min(92vw, 24rem); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; box-sizing: border-box; text-align: center; }
 img.robot { width: 72px; height: 72px; }
 h1 { font-size: 1.2rem; margin: 0.75rem 0 0.5rem; }
-p { font-size: 0.95rem; line-height: 1.45; margin: 0.5rem 0 1rem; }
-.muted { color: #7a6f61; font-size: 0.85rem; }
+p { font-size: 0.95rem; line-height: 1.45; margin: 0.5rem 0 1rem; color: var(--text-soft); }
+.muted { color: var(--text-muted); font-size: 0.85rem; }
 .error { color: #b3402a; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
-input { width: 100%; box-sizing: border-box; font-size: 1rem; padding: 0.6rem 0.7rem; border: 1px solid #cbc1b1; border-radius: 8px; margin-bottom: 1rem; font-family: inherit; }
+input { width: 100%; box-sizing: border-box; font-size: 1rem; padding: 0.6rem 0.7rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; font-family: inherit; background: var(--surface); color: var(--text); }
 input.code { text-align: center; letter-spacing: 0.4em; font-variant-numeric: tabular-nums; }
-button { width: 100%; font-size: 1rem; padding: 0.65rem; border: 0; border-radius: 8px; background: #2f6f4f; color: #fff; cursor: pointer; }
-button.secondary { background: transparent; color: inherit; border: 1px solid #cbc1b1; margin-top: 0.6rem; }
+button { width: 100%; font-size: 1rem; padding: 0.65rem; border: 0; border-radius: 8px; background: var(--accent); color: #fff; cursor: pointer; }
+@media (prefers-color-scheme: dark) { button { color: #0d1513; } }
+button.secondary { background: transparent; color: inherit; border: 1px solid var(--border); margin-top: 0.6rem; }
 form { margin: 0; }
 </style>
 </head>
@@ -187,14 +194,43 @@ function errorPage(statusCode: number, title: string, message: string) {
   return htmlResponse(statusCode, pageHtml(title, `<h1>${escapeHtml(title)}</h1><p>${escapeHtml(message)}</p>`));
 }
 
-function emailStepPage(pendingId: string, clientName: string, errorMessage = '') {
+// Remember the VERIFIED email in a first-party cookie so repeat
+// connector authorizations prefill instead of retyping. HttpOnly (the
+// server renders it into the form; no script access), Secure,
+// SameSite=Lax (sent on the top-level navigation from the client app),
+// path-scoped to /authorize, 180 days. Set only after a code proves
+// ownership; always editable in the form.
+const EMAIL_COOKIE = 'thingy_email';
+const EMAIL_COOKIE_MAX_AGE = 180 * 24 * 60 * 60;
+
+export function rememberedEmailFromEvent(event: LibrarianHttpEvent): string {
+  const jar = Array.isArray((event as { cookies?: string[] }).cookies)
+    ? (event as { cookies?: string[] }).cookies!
+    : String((event.headers || {}).cookie || '').split(';');
+  for (const entry of jar) {
+    const [name, ...rest] = String(entry || '')
+      .trim()
+      .split('=');
+    if (name === EMAIL_COOKIE) {
+      const value = normalizeEmail(decodeURIComponent(rest.join('=')));
+      if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) return value;
+    }
+  }
+  return '';
+}
+
+function emailCookie(email: string): string {
+  return `${EMAIL_COOKIE}=${encodeURIComponent(email)}; Path=/authorize; Max-Age=${EMAIL_COOKIE_MAX_AGE}; Secure; HttpOnly; SameSite=Lax`;
+}
+
+function emailStepPage(pendingId: string, clientName: string, errorMessage = '', rememberedEmail = '') {
   const inner = `<h1>Connect ${escapeHtml(clientName)}</h1>
-<p>Sign in with the email you use for The Weekly Thing. Thingy will email you a six-digit code.</p>
+<p>Sign in with your Weekly Thing subscriber email to unlock Jamie&rsquo;s full archive &mdash; newsletter, blog, and podcast. Thingy will email you a six-digit code.</p>
 ${errorMessage ? `<p class="error">${escapeHtml(errorMessage)}</p>` : ''}
 <form method="post" action="authorize">
 ${hiddenPendingField(pendingId)}
 <input type="hidden" name="step" value="email">
-<input type="email" name="email" placeholder="you@example.com" autocomplete="email" required autofocus>
+<input type="email" name="email" placeholder="you@example.com" autocomplete="email" value="${escapeHtml(rememberedEmail)}" required autofocus>
 <button type="submit">Email me a code</button>
 </form>`;
   return htmlResponse(200, pageHtml('Sign in to Thingy', inner));
@@ -215,7 +251,7 @@ ${hiddenPendingField(pendingId)}
 
 function consentPage(pendingId: string, clientName: string, scope: string) {
   const inner = `<h1>Allow ${escapeHtml(clientName)}?</h1>
-<p><strong>${escapeHtml(clientName)}</strong> wants to search and read The Weekly Thing archive as you.</p>
+<p><strong>${escapeHtml(clientName)}</strong> wants to search and read Jamie Thingelstad&rsquo;s public archive as you &mdash; The Weekly Thing, the blog, and the Another Thing podcast.</p>
 <p class="muted">Scope: ${escapeHtml(scope)}</p>
 <form method="post" action="authorize" onsubmit="setTimeout(()=>{for(const b of this.querySelectorAll('button'))b.disabled=true},0)">
 ${hiddenPendingField(pendingId)}
@@ -303,7 +339,7 @@ async function handleAuthorizeGet(event: LibrarianHttpEvent) {
     codeChallenge
   });
   logEvent('info', 'oauth_authorize_started', { client_id: client.clientId, scope });
-  return emailStepPage(pending.id, client.clientName);
+  return emailStepPage(pending.id, client.clientName, '', rememberedEmailFromEvent(event));
 }
 
 async function handleEmailStep(
@@ -375,11 +411,13 @@ async function handleCodeStep(event: LibrarianHttpEvent, pending: OauthPending, 
     entitlements: entitlements.map(String),
     status: 'verified'
   });
+  const consent = consentPage(pending.id, client.clientName, pending.scope);
+  consent.cookies = [emailCookie(result.email)];
   logEvent('info', 'oauth_authorize_verified', {
     client_id: client.clientId,
     subscriber_hash: emailHash(result.email)
   });
-  return consentPage(pending.id, client.clientName, pending.scope);
+  return consent;
 }
 
 async function handleApproveStep(pending: OauthPending, client: OauthClient, body: JsonRecord) {

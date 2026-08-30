@@ -24,6 +24,8 @@ export interface LibrarianHttpResponse {
   statusCode: number;
   headers: Record<string, string>;
   body: string;
+  // API Gateway HTTP API v2 sets response cookies from this array.
+  cookies?: string[];
 }
 
 export function allowedOrigins() {

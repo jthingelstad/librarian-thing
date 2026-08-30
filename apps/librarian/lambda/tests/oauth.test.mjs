@@ -239,3 +239,18 @@ test('htmlResponse sets a restrictive CSP and no CORS headers', () => {
   assert.equal(response.headers['cache-control'], 'no-store');
   assert.equal('access-control-allow-origin' in response.headers, false);
 });
+
+test('remembered-email cookie: parsed from event, prefilled, escaped', async () => {
+  const { rememberedEmailFromEvent } = await import('../dist/auth/oauth-routes.mjs');
+  assert.equal(
+    rememberedEmailFromEvent({ cookies: ['thingy_email=jamie%40thingelstad.com'], headers: {} }),
+    'jamie@thingelstad.com'
+  );
+  assert.equal(
+    rememberedEmailFromEvent({ headers: { cookie: 'other=1; thingy_email=jamie%40thingelstad.com' } }),
+    'jamie@thingelstad.com'
+  );
+  // invalid values never come back
+  assert.equal(rememberedEmailFromEvent({ cookies: ['thingy_email=%3Cscript%3E'], headers: {} }), '');
+  assert.equal(rememberedEmailFromEvent({ headers: {} }), '');
+});
