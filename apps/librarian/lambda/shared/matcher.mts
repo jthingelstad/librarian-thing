@@ -207,6 +207,15 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
       for (const entry of compiled) {
         const hit = hitFor(entry, text);
         if (hit) found.push(hit);
+        // A stem term whose first hit is inflected may ALSO contain the
+        // literal token - report both variants so match_reasons list the
+        // same spans regardless of which occurrence comes first.
+        if (hit && !hit.strict && entry.strictRe) {
+          const literal = entry.strictRe.exec(text);
+          if (literal) {
+            found.push({ term: entry.raw, mode: entry.mode, span: literal[0], offset: literal.index, strict: true });
+          }
+        }
       }
       return found;
     }

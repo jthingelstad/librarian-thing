@@ -628,3 +628,81 @@ test('quote_search values are corpus-consistent, not just shape-consistent (roun
   assert.equal(wtRow.also_in_issues, null);
   assert.deepEqual(wtRow.domains, []);
 });
+
+// --- Round eight ----------------------------------------------------------
+
+test('stem first_last on an inflection-only term: strict_match=false, first=null (round8 #3)', async () => {
+  // Synthetic corpus: the live archive rarely offers a clean
+  // inflection-only term (goalie/goalies co-occur), so this fixture
+  // manufactures one - every occurrence is inflected.
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [],
+      chunks: [
+        {
+          source_kind: 'chunk',
+          issue_number: 42,
+          subject: 'Hockey notes',
+          publish_date: '2021-01-09',
+          section: 'Journal',
+          text: 'Watching the goalies warm up before the game.'
+        },
+        {
+          source_kind: 'chunk',
+          issue_number: 43,
+          subject: 'More hockey',
+          publish_date: '2021-02-09',
+          section: 'Journal',
+          text: 'Both goalies played well again.'
+        }
+      ],
+      links: []
+    }
+  });
+  const out = await ARCHIVE_TOOLS.archive_lens(
+    { topic: 'goalie', match_mode: 'stem', operation: 'first_last' },
+    { scope: 'weekly_thing' }
+  );
+  assert.equal(out.match_mode, 'stem');
+  assert.ok(out.total_sources >= 2, 'stem recall still finds the inflected sources');
+  for (const source of Object.values(out.sources_by_id)) {
+    assert.equal(source.strict_match, false, 'inflection-only sources are never strict');
+  }
+  assert.equal(out.first, null, 'no strict source, no headline first');
+  assert.equal(out.latest, null);
+  assert.deepEqual(out.results, [], 'first_last yields no headline results without strict hits');
+});
+
+test('stem first_last with one literal source: it is first AND deduped when also latest (round8 #3+#4a)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [],
+      chunks: [
+        {
+          source_kind: 'chunk',
+          issue_number: 15,
+          subject: 'The literal one',
+          publish_date: '2020-06-06',
+          section: 'Journal',
+          text: 'A single goalie stood tall.'
+        },
+        {
+          source_kind: 'chunk',
+          issue_number: 44,
+          subject: 'Inflected only',
+          publish_date: '2021-03-09',
+          section: 'Journal',
+          text: 'The goalies again.'
+        }
+      ],
+      links: []
+    }
+  });
+  const out = await ARCHIVE_TOOLS.archive_lens(
+    { topic: 'goalie', match_mode: 'stem', operation: 'first_last' },
+    { scope: 'weekly_thing' }
+  );
+  assert.equal(out.first, 'wt-15', 'the earliest STRICT source is first');
+  assert.equal(out.latest, 'wt-15', 'inflection-only sources cannot be latest either');
+  assert.deepEqual(out.results, ['wt-15'], 'first==latest is deduped, not [wt-15, wt-15]');
+});

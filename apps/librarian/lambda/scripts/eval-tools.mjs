@@ -176,6 +176,47 @@ async function run(tool, args, options = {}) {
   return response;
 }
 
+// Schema completeness: every parameter the server accepts AND echoes in
+// responses must appear in the published schema. This is the invariant
+// that let a working, advisory-recommended parameter (case_sensitive)
+// stay invisible through a green run - a schema gap is now a failure,
+// not archaeology.
+{
+  const { toolSpecs } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
+  const published = new Map(
+    toolSpecs()
+      .map((spec) => spec.toolSpec)
+      .filter(Boolean)
+      .map((spec) => [spec.name, new Set(Object.keys(spec.inputSchema?.json?.properties || {}))])
+  );
+  const EXPECTED_PARAMS = {
+    archive_lens: ['topic', 'operation', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
+    entity_lens: ['entity', 'operation', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
+    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
+    find_links: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
+    corpus_stats: ['source_kind', 'year_range', 'limit'],
+    top_references: ['source_kind', 'year_start', 'year_end', 'limit', 'include_utility'],
+    quote_search: ['phrase', 'limit'],
+    media_search: ['query', 'year', 'limit'],
+    get_source: ['issue_number', 'section', 'source_kind']
+  };
+  for (const [tool, params] of Object.entries(EXPECTED_PARAMS)) {
+    const schema = published.get(tool);
+    check(`schema exists for ${tool}`, Boolean(schema));
+    for (const param of params) {
+      check(`${tool} publishes ${param}`, Boolean(schema?.has(param)));
+    }
+  }
+  // Echo-side: any input-named key echoed in responses must be published.
+  const ECHO_KEYS = ['match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'];
+  const lens = await ARCHIVE_TOOLS.archive_lens({ topic: 'ethereum', match_mode: 'exact' }, { scope: 'weekly_thing' });
+  for (const key of ECHO_KEYS) {
+    if (key in lens && lens[key] !== undefined && lens[key] !== null) {
+      check(`archive_lens echoes only published params (${key})`, Boolean(published.get('archive_lens')?.has(key)));
+    }
+  }
+}
+
 // Layer 3: known answers - the archive is stable history.
 {
   const lens = await run('entity_lens', { entity: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });

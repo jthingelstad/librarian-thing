@@ -183,8 +183,19 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   for (const [field, value] of fields) {
     const text = compactWhitespace(value);
     if (!text) continue;
-    const hit = compiled.firstHit(text);
-    if (hit) reasons.push({ field, match: `'${hit.span}'` });
+    // Every matched variant, deduped case-insensitively, so two sources
+    // with the same underlying hits report the same reasons regardless of
+    // occurrence order (wt-178 once omitted the literal variant wt-179
+    // reported).
+    const spans = [];
+    const seen = new Set();
+    for (const hit of compiled.hits(text)) {
+      const key = hit.span.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      spans.push(`'${hit.span}'`);
+    }
+    if (spans.length) reasons.push({ field, match: spans.slice(0, 3).join(', ') });
   }
   return reasons;
 }
@@ -492,7 +503,13 @@ export function buildArchiveLens({
   const path = readingPath(matched, Math.min(maxResults, 8));
   const resultIds =
     normalizedOperation === 'first_last'
-      ? [strictMatched[0], strictMatched.at(-1)].filter((item): item is LensSource => Boolean(item)).map(lensSourceId)
+      ? Array.from(
+          new Set(
+            [strictMatched[0], strictMatched.at(-1)]
+              .filter((item): item is LensSource => Boolean(item))
+              .map(lensSourceId)
+          )
+        )
       : normalizedOperation === 'reading_path'
         ? path.map((entry) => entry.id)
         : normalizedOperation === 'source_compare'

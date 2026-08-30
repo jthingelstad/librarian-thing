@@ -186,3 +186,10 @@ test('stem below 6 chars echoes exact; stem on multi-word echoes phrase', () => 
   assert.equal(m('ens', { mode: 'stem' }).appliedMode, 'exact');
   assert.equal(m('Ethereum Name Service', { mode: 'stem' }).appliedMode, 'phrase');
 });
+
+test('hits report all variants: literal span included even when inflected comes first (round8 #4b)', () => {
+  const stem = m('goalie', { mode: 'stem' });
+  const spans = stem.hits('the goalies cheered as the goalie saved it').map((hit) => hit.span);
+  assert.ok(spans.includes('goalies'));
+  assert.ok(spans.includes('goalie'), 'literal variant reported even though inflected occurs first');
+});
