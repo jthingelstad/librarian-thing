@@ -624,6 +624,43 @@ test('magic link email copy reflects reader context', () => {
   assert.doesNotMatch(html, /<bad>/);
 });
 
+test('sign-in code leads the subject and body so Apple Mail detects it', () => {
+  const text = magicLinkEmailText({
+    magicLink: 'https://thingy.example/login?token=abc',
+    expiresMinutes: 15,
+    code: '123456'
+  });
+  assert.ok(text.startsWith('Your Thingy sign-in code is 123456'));
+  assert.match(text, /The code and link expire in 15 minutes/);
+
+  const html = magicLinkEmailHtml({
+    magicLink: 'https://thingy.example/login?token=abc',
+    expiresMinutes: 15,
+    imageUrl: 'https://thingy.example/img/thingy.png',
+    code: '123456'
+  });
+  // The "code is" phrasing and the digits must share one text run — a block
+  // boundary between them defeats Mail's verification-code detector.
+  assert.match(html, /Your Thingy sign-in code is <span[^>]*>123456<\/span>/);
+
+  const calls = buildMagicLinkJmapCalls({
+    context: {
+      mailAccountId: 'mail-account',
+      submissionAccountId: 'submission-account',
+      identityId: 'identity-1',
+      draftMailboxId: 'drafts-1',
+      sentMailboxId: 'sent-1'
+    },
+    fromEmail: 'thingy@example.com',
+    fromName: 'Thingy',
+    to: 'reader@example.com',
+    text: 'hello',
+    html: '<p>hello</p>',
+    code: '123456'
+  });
+  assert.equal(calls[0][1].create.draft.subject, '123456 is your Thingy sign-in code');
+});
+
 test('JMAP method errors are treated as hard send failures', () => {
   assert.throws(
     () => requireMethodResponse([['error', { type: 'accountReadOnly' }, 'email']], 'Email/set', 'email'),

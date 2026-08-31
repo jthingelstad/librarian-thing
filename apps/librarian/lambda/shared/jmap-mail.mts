@@ -249,16 +249,19 @@ function emailMemberLine(context: ReaderEmailContext = {}) {
 
 export function magicLinkEmailText({ magicLink, expiresMinutes, context = {}, code = '' }: MagicLinkEmailInput) {
   return [
+    // Apple Mail's verification-code detector keys on "code is NNNNNN"
+    // phrasing near the top of the message; keep this the first line, above
+    // the greeting and the long login_token URL.
+    ...(code ? [`Your Thingy sign-in code is ${code}`, ''] : []),
     emailGreeting(context),
     '',
     emailIntro(context),
     '',
-    // Leading "code is NNNNNN" phrasing is what Apple Mail's verification-
-    // code detector keys on; keep it before the link.
-    ...(code ? [`Your Thingy sign-in code is ${code}`, ''] : []),
     magicLink,
     '',
-    `This link expires in ${expiresMinutes} minutes and can only be used once. It opens the archive agent in your browser.`,
+    code
+      ? `The code and link expire in ${expiresMinutes} minutes and either one can only be used once. The link opens the archive agent in your browser.`
+      : `This link expires in ${expiresMinutes} minutes and can only be used once. It opens the archive agent in your browser.`,
     emailMemberLine(context),
     '',
     'If you did not request this, you can ignore this email.'
@@ -310,8 +313,7 @@ export function magicLinkEmailHtml({
               code
                 ? `<tr>
               <td align="center" style="padding:18px 34px 2px;">
-                <p style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#596a64;margin:0 0 6px;font-weight:700;">Your Thingy sign-in code is</p>
-                <p style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:34px;letter-spacing:0.28em;color:#17211f;margin:0;font-weight:750;">${escapeHtml(code)}</p>
+                <p style="font-size:15px;line-height:2;color:#3f4f4a;margin:0;">Your Thingy sign-in code is <span style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:30px;letter-spacing:0.22em;color:#17211f;font-weight:750;vertical-align:middle;">${escapeHtml(code)}</span></p>
               </td>
             </tr>`
                 : ''
@@ -340,8 +342,10 @@ export function magicLinkEmailHtml({
 </html>`;
 }
 
-export function magicLinkEmailSubject() {
-  return 'Thingy is ready for you';
+// The subject line is the strongest signal Apple Mail's verification-code
+// detector reads; lead with the code the way Apple's own code emails do.
+export function magicLinkEmailSubject(code = '') {
+  return code ? `${code} is your Thingy sign-in code` : 'Thingy is ready for you';
 }
 
 export function buildMagicLinkJmapCalls({
@@ -350,14 +354,15 @@ export function buildMagicLinkJmapCalls({
   fromName,
   to,
   text,
-  html
-}: Omit<JmapEmailCallInput, 'subject'>) {
+  html,
+  code = ''
+}: Omit<JmapEmailCallInput, 'subject'> & { code?: string }) {
   return buildJmapEmailCalls({
     context,
     fromEmail,
     fromName,
     to,
-    subject: magicLinkEmailSubject(),
+    subject: magicLinkEmailSubject(code),
     text,
     html
   });
@@ -488,7 +493,8 @@ export async function sendMagicLinkEmail({
       fromName: jmapFromName(),
       to,
       text,
-      html
+      html,
+      code
     })
   );
   const emailSet = requireMethodResponse(response.methodResponses, 'Email/set', 'email') as JmapSetResult;
