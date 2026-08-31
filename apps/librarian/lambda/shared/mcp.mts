@@ -117,7 +117,19 @@ export function initializeResult(requestedVersion: unknown) {
     serverInfo: {
       name: 'librarian',
       title: "The Librarian - Jamie Thingelstad's archive",
-      version: serverVersion()
+      version: serverVersion(),
+      // SEP-973 icon metadata (spec 2025-11-25). claude.ai currently ignores
+      // this and derives custom-connector avatars from the registrable
+      // domain's favicon (thingelstad.com - Jamie's photo); declared anyway
+      // so the Thingy robot takes over the moment clients honor it.
+      websiteUrl: 'https://thingy.thingelstad.com/',
+      icons: [
+        {
+          src: 'https://thingy.thingelstad.com/img/thingy.png',
+          mimeType: 'image/png',
+          sizes: ['1022x1022']
+        }
+      ]
     },
     instructions: [
       "Tools for exploring Jamie Thingelstad's public archive: The Weekly Thing newsletter,",
