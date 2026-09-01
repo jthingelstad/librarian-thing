@@ -206,6 +206,7 @@ jobs:
           LIBRARIAN_BUCKET: weekly-thing-librarian
           LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
           LIBRARIAN_SESSION_SECRET: ${{ secrets.LIBRARIAN_SESSION_SECRET }}
+          THINGY_WEB_ORIGIN_TOKEN: ${{ secrets.THINGY_WEB_ORIGIN_TOKEN }}
 
       # The one cross-repo push: the topic graph, to the render surface.
       # Everything else the old site handoff shipped is WT Builder's to send.

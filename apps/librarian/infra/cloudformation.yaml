@@ -48,6 +48,15 @@ Parameters:
   SessionSecret:
     Type: String
     NoEcho: true
+  ThingyWebOriginToken:
+    Type: String
+    NoEcho: true
+    Default: ""
+    Description: >
+      Marker the thingy.thingelstad.com CloudFront distribution stamps as
+      X-Thingy-Origin on its /api/* origin requests. Cookie-based web
+      sessions are honored only when this matches; empty disables cookie
+      auth entirely (Bearer unaffected).
   LibrarianRetrieveSecret:
     Type: String
     NoEcho: true
@@ -254,6 +263,7 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BUTTONDOWN_API_KEY: !Ref ButtondownApiKey
           SESSION_SECRET: !Ref SessionSecret
+          THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
           FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
@@ -289,6 +299,7 @@ Resources:
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           SESSION_SECRET: !Ref SessionSecret
+          THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LIBRARIAN_RETRIEVE_SECRET: !Ref LibrarianRetrieveSecret
           LOG_LEVEL: !Ref LogLevel
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"

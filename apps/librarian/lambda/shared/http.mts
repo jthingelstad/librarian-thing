@@ -2,6 +2,9 @@ import { LIBRARIAN_CONTRACT_VERSION } from './librarian-contract.mjs';
 
 export interface LibrarianHttpEvent {
   headers?: Record<string, unknown> | null;
+  // API Gateway HTTP API v2 and Lambda Function URLs deliver request cookies
+  // here as "name=value" entries, never in the headers map.
+  cookies?: string[];
   body?: string | null;
   isBase64Encoded?: boolean;
   queryStringParameters?: Record<string, string | undefined> | null;

@@ -4,7 +4,8 @@ import type { AttributeValue, QueryCommandOutput, WriteRequest } from '@aws-sdk/
 import { dynamodb } from '../shared/aws-clients.mjs';
 import { jsonResponse } from '../shared/http.mjs';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import { emailHash, extractBearer, normalizeEmail, verifyToken } from '../shared/session.mjs';
+import { emailHash, normalizeEmail, verifyToken } from '../shared/session.mjs';
+import { resolveSessionToken } from '../shared/web-session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { logEvent } from '../shared/logging.mjs';
 import {
@@ -70,7 +71,7 @@ async function batchDeleteKeys(tableName: string, keys: Array<Record<string, Att
 }
 
 async function conversationAuth(event: LibrarianHttpEvent, body: RequestBody) {
-  const payload = verifyToken(extractBearer(event, body));
+  const payload = verifyToken(resolveSessionToken(event, body).token);
   if (!payload || !(await sessionAllowedForThingyProfile(payload))) return null;
   return payload;
 }

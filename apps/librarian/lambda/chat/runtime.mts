@@ -55,6 +55,7 @@ import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
+import { resolveSessionToken } from '../shared/web-session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { getUserMemory, recordUserPreferredName, recordUserTurn } from '../shared/user-memory.mjs';
 import { validConversationId } from '../shared/user-conversations.mjs';
@@ -906,7 +907,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
 
   if (method === 'POST' && path.endsWith('/feedback')) {
     const body = parseBody(event);
-    const payload = verifyToken(extractBearer(event, body));
+    const payload = verifyToken(resolveSessionToken(event, body).token);
     const active = payload ? await sessionAllowedForThingyProfile(payload) : false;
     const result =
       active && payload
@@ -1017,7 +1018,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     }
 
     const body = parseBody(event);
-    const payload = verifyToken(extractBearer(event, body));
+    const payload = verifyToken(resolveSessionToken(event, body).token);
     if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
       writeSse(stream, 'error', {
         error: 'Please validate your subscriber email to use Thingy.',

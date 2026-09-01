@@ -31,10 +31,10 @@ import {
   createSessionToken,
   createSessionTokenForSub,
   emailHash,
-  extractBearer,
   normalizeEmail,
   verifyToken
 } from '../shared/session.mjs';
+import { resolveSessionToken, withClearedSessionCookie, withSessionCookie } from '../shared/web-session.mjs';
 import { authProfile, getUserMemory, recordUserPreferredName } from '../shared/user-memory.mjs';
 import { deleteThingyProfile, sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import {
@@ -200,7 +200,9 @@ async function authSuccessResponse(
       payload.message = 'Thanks for being a Weekly Thing Supporting Member!';
     }
   }
-  return jsonResponse(200, payload, event);
+  // Every sign-in also sets the HttpOnly session cookie; the body token stays
+  // for Bearer clients (qa-real, local dev) and the migration window.
+  return withSessionCookie(jsonResponse(200, payload, event), token, expiresAt);
 }
 
 export function entitlementsForSessionPayload(payload: JsonRecord, nowSeconds = Math.floor(Date.now() / 1000)) {
@@ -217,11 +219,16 @@ export function entitlementsForSessionPayload(payload: JsonRecord, nowSeconds = 
   return Array.from(entitlements);
 }
 
-async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const bearer = extractBearer(event, body);
-  const payload = verifyToken(bearer);
+// Also serves the cookie-era 'session' action (asSession): same verify,
+// re-verify, and re-mint flow, but an absent/invalid credential answers a
+// calm 200 {authenticated:false} instead of a 401 - it is the UI's
+// signed-in probe, not a failure.
+async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start: number, asSession = false) {
+  const credential = resolveSessionToken(event, body);
+  const payload = verifyToken(credential.token);
   if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
-    logEvent('info', 'auth_refresh_rejected');
+    logEvent('info', asSession ? 'auth_session_probe_unauthenticated' : 'auth_refresh_rejected');
+    if (asSession) return jsonResponse(200, { authenticated: false }, event);
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
   }
   let entitlements = entitlementsForSessionPayload(payload);
@@ -272,26 +279,31 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
     entitlements,
     duration_ms: Math.round(performance.now() - start)
   });
-  return jsonResponse(
-    200,
-    {
-      status: 'refreshed',
-      token,
-      expires_at: expiresAt,
-      entitlements,
-      modes,
-      profile: {
-        ...authProfile(memory),
+  return withSessionCookie(
+    jsonResponse(
+      200,
+      {
+        status: 'refreshed',
+        ...(asSession ? { authenticated: true } : {}),
+        token,
+        expires_at: expiresAt,
         entitlements,
-        modes
-      }
-    },
-    event
+        modes,
+        profile: {
+          ...authProfile(memory),
+          entitlements,
+          modes
+        }
+      },
+      event
+    ),
+    token,
+    expiresAt
   );
 }
 
 async function updateProfile(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const payload = verifyToken(extractBearer(event, body));
+  const payload = verifyToken(resolveSessionToken(event, body).token);
   if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
     logEvent('info', 'auth_update_profile_rejected');
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
@@ -405,7 +417,7 @@ async function memoryProfileResponse(
 }
 
 async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: number) {
-  const payload = verifyToken(extractBearer(event, body));
+  const payload = verifyToken(resolveSessionToken(event, body).token);
   if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
     logEvent('info', 'memory_action_rejected');
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
@@ -545,6 +557,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       'complete_magic_link',
       'verify_code',
       'refresh_session',
+      'session',
+      'sign_out',
       'update_profile'
     ].includes(action)
   ) {
@@ -561,6 +575,15 @@ async function authHandler(event: LibrarianHttpEvent) {
 
   if (action === 'refresh_session') {
     return await refreshSession(event, body, start);
+  }
+
+  if (action === 'session') {
+    return await refreshSession(event, body, start, true);
+  }
+
+  if (action === 'sign_out') {
+    logEvent('info', 'auth_signed_out');
+    return withClearedSessionCookie(jsonResponse(200, { status: 'signed_out' }, event));
   }
 
   if (action === 'update_profile') {

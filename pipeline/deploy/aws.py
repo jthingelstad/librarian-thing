@@ -266,6 +266,7 @@ def deploy_stack(
     librarian_retrieve_secret: str | None,
     fastmail_jmap_token: str | None,
     brave_search_api_key: str | None,
+    thingy_web_origin_token: str | None,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
     stream_custom_domain_name: str,
@@ -326,6 +327,17 @@ def deploy_stack(
     else:
         fastmail_parameter = {"ParameterKey": "FastmailJmapToken", "ParameterValue": ""}
 
+    origin_token_parameter: dict[str, str | bool]
+    if thingy_web_origin_token:
+        origin_token_parameter = {
+            "ParameterKey": "ThingyWebOriginToken",
+            "ParameterValue": thingy_web_origin_token,
+        }
+    elif exists and "ThingyWebOriginToken" in existing_parameter_keys:
+        origin_token_parameter = {"ParameterKey": "ThingyWebOriginToken", "UsePreviousValue": True}
+    else:
+        origin_token_parameter = {"ParameterKey": "ThingyWebOriginToken", "ParameterValue": ""}
+
     if brave_search_api_key:
         brave_parameter = {
             "ParameterKey": "BraveSearchApiKey",
@@ -350,6 +362,7 @@ def deploy_stack(
         session_parameter,
         retrieve_parameter,
         fastmail_parameter,
+        origin_token_parameter,
         brave_parameter,
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
@@ -594,6 +607,7 @@ def main() -> int:
         upload_librarian_corpora(args, bucket)
 
     session_secret = os.environ.get("LIBRARIAN_SESSION_SECRET")
+    thingy_web_origin_token = os.environ.get("THINGY_WEB_ORIGIN_TOKEN") or None
     librarian_retrieve_secret = os.environ.get("LIBRARIAN_RETRIEVE_SECRET") or None
     fastmail_jmap_token = (
         os.environ.get("FASTMAIL_JMAP_TOKEN")
@@ -617,6 +631,7 @@ def main() -> int:
         librarian_retrieve_secret=librarian_retrieve_secret,
         fastmail_jmap_token=fastmail_jmap_token,
         brave_search_api_key=brave_search_api_key,
+        thingy_web_origin_token=thingy_web_origin_token,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
         stream_custom_domain_name=args.stream_custom_domain_name,
