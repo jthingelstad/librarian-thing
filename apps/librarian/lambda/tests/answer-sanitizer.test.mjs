@@ -20,6 +20,16 @@ test('replaces raw Weekly Thing archive links with WT citations', () => {
   assert.equal(out, 'See WT350 and WT349 for context.');
 });
 
+test('preserves archive URLs used as Markdown link destinations', () => {
+  const answer =
+    '[![Archive photo](https://cdn.example.com/photo.jpg)](https://www.thingelstad.com/archive/348/)\n\n' +
+    '[WT348](https://weekly.thingelstad.com/archive/348/) and [WT349](/archive/349/)';
+
+  const out = sanitizeAnswerProse(answer);
+
+  assert.equal(out, answer);
+});
+
 test('wraps raw urls as markdown links without touching existing ones', () => {
   const answer = 'Read [Thingy](https://thingy.thingelstad.com/) but not https://example.com/raw.';
 

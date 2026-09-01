@@ -1,5 +1,5 @@
-const WT_ARCHIVE_URL_RE = /https?:\/\/weekly\.thingelstad\.com\/archive\/(\d+)\/?/gi;
-const WT_ARCHIVE_PATH_RE = /`?\/archive\/(\d+)\/`?/gi;
+const WT_ARCHIVE_URL_RE = /(?<!\]\()https?:\/\/weekly\.thingelstad\.com\/archive\/(\d+)\/?/gi;
+const WT_ARCHIVE_PATH_RE = /(?<![A-Za-z0-9(])`?\/archive\/(\d+)\/`?/gi;
 const RAW_URL_RE = /(?<!\]\()https?:\/\/[^\s<>)]+/gi;
 const PROCESS_NARRATION_RE =
   /\b(?:let me\s+(?:pull|look|search|check|find|tell|dig|synthesize|compile|assemble|gather|summarize|write up|put together)|i(?: have|(?:'|’)ve got) (?:everything|what) i need|i have enough(?:\s+to\b)?|i found enough|i can now answer|i (?:now )?have a (?:good|clear|full|complete|solid) (?:picture|sense|view)|i(?:'|’)ll\s+(?:pull|look|search|check|find|dig|compile|assemble))\b/i;
