@@ -430,6 +430,10 @@ Resources:
           Compress: false
           DefaultTTL: 0
           ForwardedValues:
+            # Load-bearing: this third-party door (OAuth/MCP) forwards no
+            # cookies and omits X-Thingy-Origin from the header whitelist, so
+            # cookie-based web sessions are structurally impossible here even
+            # though the same Lambda serves the first-party thingy path.
             Cookies:
               Forward: none
             Headers:

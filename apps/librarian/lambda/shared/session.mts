@@ -4,7 +4,7 @@ import { normalizeHeaders } from './http.mjs';
 // 9 days, sliding: every visit re-mints (refresh_session), so an active
 // reader rarely signs in again; only a 9-day absence expires the session.
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 9;
-const PRIVILEGED_ENTITLEMENTS = new Set(['supporting_member', 'trusted_circle', 'owner']);
+export const PRIVILEGED_ENTITLEMENTS = new Set(['supporting_member', 'trusted_circle', 'owner']);
 
 type Claims = Record<string, unknown>;
 

@@ -81,3 +81,20 @@ test('withClearedSessionCookie expires the cookie', () => {
   const response = withClearedSessionCookie({ statusCode: 200, headers: {}, body: '{}' });
   assert.match(response.cookies[0], new RegExp(`^${SESSION_COOKIE.replace(/[$-]/g, '\\$&')}=; .*Max-Age=0`));
 });
+
+test('an invalid bearer wins and never falls back to the cookie', () => {
+  // Deliberate: an explicit credential must fail loudly, not silently
+  // downgrade to ambient cookie auth.
+  const resolved = resolveSessionToken(event({ bearer: 'not-a-valid-token', cookie: 'c-token', marker: MARKER }), {});
+  assert.deepEqual(resolved, { token: 'not-a-valid-token', source: 'bearer' });
+});
+
+test('empty and duplicate cookie entries resolve safely', () => {
+  assert.equal(sessionCookie({ cookies: [`${SESSION_COOKIE}=`] }), '');
+  assert.equal(sessionCookie({ cookies: [`${SESSION_COOKIE}=first`, `${SESSION_COOKIE}=second`] }), 'first');
+  const resolved = resolveSessionToken(
+    { headers: { 'x-thingy-origin': MARKER, 'x-librarian-contract-version': '3.1.0' }, cookies: [`${SESSION_COOKIE}=`] },
+    {}
+  );
+  assert.equal(resolved.source, 'none');
+});

@@ -72,14 +72,14 @@ changes, and the production workflow then uploads the updated corpus artifacts.
 | Method | Path | Auth | Purpose |
 |---|---|---|---|
 | GET | `/health` | none | Health check (returns model versions) |
-| POST | `/chat` | session token (bearer) | SSE-streamed agent answer with tool use and server-side history |
-| POST | `/welcome` | session token (bearer) | Agentic contextual welcome for authenticated users |
+| POST | `/chat` | session token (bearer or `__Host-thingy_session` cookie) | SSE-streamed agent answer with tool use and server-side history |
+| POST | `/welcome` | session token (bearer or cookie) | Agentic contextual welcome for authenticated users |
 | POST | `/mcp` | OAuth bearer token (`archive:read`) | MCP streamable HTTP endpoint binding the archive tool registry |
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
-| POST | `/feedback` | session token (bearer) | Per-answer reactions plus optional comments |
+| POST | `/feedback` | session token (bearer or cookie) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Sign-in codes, subscriber checks/subscribe, session refresh, profile updates |
-| POST | `/conversations` | session token (bearer) | Conversation list/get/create/rename/delete and email-me-this-answer |
-| POST | `/memory` | session token (bearer) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
+| POST | `/conversations` | session token (bearer or cookie) | Conversation list/get/create/rename/delete and email-me-this-answer |
+| POST | `/memory` | session token (bearer or cookie) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
 | GET | `/.well-known/oauth-authorization-server` | none | OAuth 2.1 authorization-server metadata (RFC 8414) |
 | GET | `/.well-known/oauth-protected-resource` | none | OAuth protected-resource metadata (RFC 9728) |
 | POST | `/register` | none (rate limited) | OAuth dynamic client registration (RFC 7591 subset, public clients only) |

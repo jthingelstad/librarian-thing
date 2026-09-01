@@ -10,11 +10,14 @@ import { extractBearer } from './session.mjs';
 // pins the cookie to exactly thingy.thingelstad.com.
 export const SESSION_COOKIE = '__Host-thingy_session';
 
-// Cookie-authenticated requests are honored only when the request came
-// through the thingy distribution (CloudFront stamps this marker on its API
-// origins) AND carries the contract header no cross-site request can attach
-// without a failing CORS preflight. Bearer requests are exempt: an explicit
-// header is not an ambient credential, so CSRF does not apply.
+// Cookie-authenticated requests are honored only when the request carries
+// the marker CloudFront stamps on the thingy distribution's API origins AND
+// the contract header. The marker's job is blocking direct-to-origin cookie
+// replay and acting as a kill switch - it does NOT stop CSRF (a cross-site
+// POST routed through the distribution gets stamped too); the CSRF controls
+// are SameSite=Lax plus the custom contract header, which no cross-site
+// request can attach without a failing CORS preflight. Bearer requests are
+// exempt: an explicit header is not an ambient credential.
 function markerOk(event: LibrarianHttpEvent | null | undefined) {
   const expected = String(process.env.THINGY_WEB_ORIGIN_TOKEN || '');
   // Unset marker env disables cookie auth entirely (safe default) rather

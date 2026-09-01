@@ -9,7 +9,7 @@ import {
   sendSubscriberReminder,
   subscriberStatus
 } from '../shared/buttondown.mjs';
-import { eventSummary, jsonResponse, methodAndPath, parseBody } from '../shared/http.mjs';
+import { eventSummary, jsonResponse, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import type { LibrarianHttpEvent, LibrarianHttpResponse } from '../shared/http.mjs';
 import { magicTokenHash, validMagicCode, validMagicToken } from '../shared/magic-link.mjs';
 import {
@@ -28,6 +28,7 @@ import {
   utcDayBucket
 } from '../shared/quota.mjs';
 import {
+  PRIVILEGED_ENTITLEMENTS,
   createSessionToken,
   createSessionTokenForSub,
   emailHash,
@@ -227,7 +228,9 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
   const credential = resolveSessionToken(event, body);
   const payload = verifyToken(credential.token);
   if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
-    logEvent('info', asSession ? 'auth_session_probe_unauthenticated' : 'auth_refresh_rejected');
+    logEvent('info', asSession ? 'auth_session_probe_unauthenticated' : 'auth_refresh_rejected', {
+      credential_source: credential.source
+    });
     if (asSession) return jsonResponse(200, { authenticated: false }, event);
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
   }
@@ -258,6 +261,7 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
           subscriber_hash: payload.sub,
           subscriber_status: status
         });
+        if (asSession) return withClearedSessionCookie(jsonResponse(200, { authenticated: false }, event));
         return jsonResponse(401, { error: 'Your Weekly Thing subscription needs a fresh sign-in.' }, event);
       }
     } catch (error) {
@@ -266,6 +270,26 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
       // successful re-verification enforces.
       logEvent('warning', 'auth_refresh_reverify_failed', errorFields(error, { subscriber_hash: payload.sub }));
     }
+  }
+  const claimedPrivileged =
+    Array.isArray(payload.entitlements) &&
+    payload.entitlements.some(
+      (entitlement) => typeof entitlement === 'string' && PRIVILEGED_ENTITLEMENTS.has(entitlement)
+    );
+  const selfBoundEmail = Boolean(suppliedEmail && emailHash(suppliedEmail) === String(payload.sub));
+  if (
+    asSession &&
+    claimedPrivileged &&
+    verifiedUntil < nowSeconds &&
+    !selfBoundEmail &&
+    !isOwnerSubscriberHash(payload.sub)
+  ) {
+    // The HttpOnly cookie outlives localStorage, where the self-bound email
+    // hint lives. Without that email the verification cannot be renewed, and
+    // re-minting here would silently and stickily downgrade a supporting
+    // member to reader. A clean re-sign-in beats a quiet demotion.
+    logEvent('info', 'auth_session_probe_unverifiable_privileges', { subscriber_hash: payload.sub });
+    return withClearedSessionCookie(jsonResponse(200, { authenticated: false }, event));
   }
   const modes = availableConversationModes(entitlements);
   const claims =
@@ -277,6 +301,7 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
   logEvent('info', 'auth_refreshed', {
     subscriber_hash: payload.sub,
     entitlements,
+    credential_source: credential.source,
     duration_ms: Math.round(performance.now() - start)
   });
   return withSessionCookie(
@@ -285,8 +310,10 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
       {
         status: 'refreshed',
         ...(asSession ? { authenticated: true } : {}),
-        token,
-        expires_at: expiresAt,
+        // Bearer callers (qa-real, local dev, the migration shim) get the
+        // token back; a cookie-sourced call must never see it in the body -
+        // that would hand page script the credential HttpOnly exists to hide.
+        ...(credential.source === 'cookie' ? {} : { token, expires_at: expiresAt }),
         entitlements,
         modes,
         profile: {
@@ -582,6 +609,11 @@ async function authHandler(event: LibrarianHttpEvent) {
   }
 
   if (action === 'sign_out') {
+    // A cross-site form can POST here but cannot attach the contract header;
+    // requiring it closes the forced-logout nuisance without a CSRF token.
+    if (!normalizeHeaders(event.headers || {})['x-librarian-contract-version']) {
+      return jsonResponse(400, { error: 'Unsupported subscriber action.' }, event);
+    }
     logEvent('info', 'auth_signed_out');
     return withClearedSessionCookie(jsonResponse(200, { status: 'signed_out' }, event));
   }

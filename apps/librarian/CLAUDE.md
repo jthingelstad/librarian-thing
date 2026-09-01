@@ -18,7 +18,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 
 `lambda/chat/runtime.mts` is the main request loop. On each turn:
 
-1. Verify bearer token (HMAC-signed session JWT — `verifyToken`, `SESSION_SECRET`).
+1. Resolve the session credential (`resolveSessionToken`: explicit Bearer wins, else the `__Host-thingy_session` HttpOnly cookie when the request carries the `X-Thingy-Origin` marker and contract header) and verify it (`verifyToken`, `SESSION_SECRET`).
 2. Rate-limit per subscriber hash (DynamoDB, hourly).
 3. Resolve requested conversation mode from token entitlements and existing conversation metadata.
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
@@ -67,7 +67,7 @@ Deploy steps:
 2. Package the shared auth/eval artifact and the separate streaming chat artifact.
 3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
-5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`).
+5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`, `THINGY_WEB_ORIGIN_TOKEN`).
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
@@ -97,6 +97,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `BUTTONDOWN_API_KEY` | auth | Email subscriber verification |
 | `SESSION_SECRET` | both | HMAC secret for session JWTs |
 | `LIBRARIAN_RETRIEVE_SECRET` | stream | Trusted service auth for `/retrieve` |
+| `THINGY_WEB_ORIGIN_TOKEN` | both | Marker the thingy.thingelstad.com distribution stamps as `X-Thingy-Origin`; cookie-based web sessions require it (empty disables cookie auth - the kill switch; Bearer unaffected) |
 | `FASTMAIL_JMAP_TOKEN` | auth | Fastmail JMAP bearer token for sending magic links; aliases `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` also work locally |
 | `THINGY_MAGIC_LINK_FROM_EMAIL` | auth | Magic-link From address, default `thingy@thingelstad.com` |
 | `THINGY_MAGIC_LINK_BASE_URL` | auth | Public URL used when building `?login_token=` links, default `https://thingy.thingelstad.com/` |
@@ -160,7 +161,7 @@ a stale tools/list.
 - **Prompts live in `prompts/`** as `.md` files. `loadToolSpecs()` reads them. Edits need a redeploy.
 - **All structured logging via `logEvent(level, message, fields)`** — JSON output, CloudWatch-Insights-readable.
 - **Magic-link auth is mandatory.** Public `/auth` always sends a Fastmail/JMAP magic link before minting an email session; there is no direct session fallback after subscriber validation.
-- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Reader sessions last nine days and SLIDE: the web app re-mints on every visit via `/auth` `action=refresh_session`, which also re-verifies Buttondown entitlements when they near staleness (a lapsed subscription gets 401; Buttondown outages fail open with unchanged entitlements).
+- **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Since 2026-09-01 the web app carries the token in the `__Host-thingy_session` HttpOnly cookie (`shared/web-session.mts`); Bearer remains the permanent path for qa-real, local dev, and non-browser clients, and always wins over the cookie. Sessions last nine days and SLIDE server-side: `/auth` `action=session` (the UI's signed-in probe; answers 200 `authenticated:false` when signed out) and `action=refresh_session` re-mint and re-set the cookie, re-verifying Buttondown entitlements near staleness (lapsed = cookie cleared / 401; Buttondown outages fail open). A cookie-sourced response never echoes the token into the JSON body. A privileged session whose verification expired with no self-bound email to re-verify against is signed out rather than silently downgraded to reader (owner exempt). `action=sign_out` clears the cookie and requires the contract header.
 - **Privacy guarding** lives in `chat/runtime.mts#privacyGuardAnswer`. Don't bypass; readers ask questions that leak their own PII and we don't echo it.
 - **Conversation modes are entitlement-gated.** `thingy` is for all readers, `research_guide` requires `supporting_member`, `thought_partner` requires `owner`, and `trusted_circle` requires `trusted_circle`.
 - **Tool traces are structured evidence (schema v2).** `shared/tool-evidence.mts` summarizes every tool call into allow-listed, bounded evidence refs; `toolTraceDynamoString` degrades per call to fit, never `{omitted: true}` for an oversized trace. Turn rows carry cumulative loop usage and `prompt_fingerprint`/`source_revision` stamps - keep those fields when touching turn persistence.
