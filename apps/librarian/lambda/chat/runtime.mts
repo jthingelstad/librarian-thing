@@ -984,6 +984,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     stream.end();
     logEvent('warning', 'contract_version_rejected', {
       ...summary,
+      status_code: 409,
       contract_version: LIBRARIAN_CONTRACT_VERSION
     });
     return;
@@ -1012,7 +1013,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       })
     );
     stream.end();
-    logEvent('info', 'request_completed', { ...summary, duration_ms: Math.round(performance.now() - start) });
+    logEvent('info', 'request_completed', {
+      ...summary,
+      status_code: 200,
+      duration_ms: Math.round(performance.now() - start)
+    });
     return;
   }
 
@@ -1056,14 +1061,14 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       const s503 = jsonResponseStream(responseStream, 503);
       s503.write(JSON.stringify({ error: 'Service retrieval is not enabled.' }));
       s503.end();
-      logEvent('warning', 'retrieve_service_disabled', { ...summary });
+      logEvent('warning', 'retrieve_service_disabled', { ...summary, status_code: 503 });
       return;
     }
     if (!secretState) {
       const s401 = jsonResponseStream(responseStream, 401);
       s401.write(JSON.stringify({ error: 'Retrieval secret rejected.' }));
       s401.end();
-      logEvent('warning', 'retrieve_bad_secret', { ...summary });
+      logEvent('warning', 'retrieve_bad_secret', { ...summary, status_code: 401 });
       return;
     }
     const query = String(body.query || '').trim();
@@ -1071,13 +1076,14 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       const s400 = jsonResponseStream(responseStream, 400);
       s400.write(JSON.stringify({ error: 'query is required.' }));
       s400.end();
+      logEvent('warning', 'retrieve_rejected', { ...summary, status_code: 400, reason: 'empty_query' });
       return;
     }
     if (!(await checkRateLimit('service#retrieve', Number(process.env.RETRIEVE_RATE_LIMIT_MAX || 600)))) {
       const s429 = jsonResponseStream(responseStream, 429);
       s429.write(JSON.stringify({ error: 'Retrieval rate limit exceeded. Try again shortly.' }));
       s429.end();
-      logEvent('warning', 'retrieve_rate_limited', { ...summary });
+      logEvent('warning', 'retrieve_rate_limited', { ...summary, status_code: 429 });
       return;
     }
     const requestedK = Number(body.k || 12);
@@ -1110,7 +1116,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       const s500 = jsonResponseStream(responseStream, 500);
       s500.write(JSON.stringify({ error: 'Retrieval failed.', request_id: requestId }));
       s500.end();
-      logEvent('error', 'retrieve_failed', { ...summary, error_type: errorName(error) });
+      logEvent('error', 'retrieve_failed', { ...summary, status_code: 500, error_type: errorName(error) });
     }
     return;
   }
@@ -1127,19 +1133,33 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
 
   const isStreamRoute = method === 'POST' && (path.endsWith('/chat') || path.endsWith('/welcome'));
   const stream = streamFromResponse(responseStream, event, isStreamRoute ? 200 : 404);
+  // SSE responses are always HTTP 200 on the wire, so the terminal
+  // request_completed line carries the logical outcome instead. Handled
+  // rejections go through rejectStream so each one is countable in
+  // CloudWatch (the chat_request_rejected metric filter matches them).
+  let outcomeStatus = isStreamRoute ? 200 : 404;
+  let outcomeReason = '';
+  const rejectStream = (statusCode: number, reason: string, message: unknown) => {
+    outcomeStatus = statusCode;
+    outcomeReason = reason;
+    logEvent('warning', 'chat_request_rejected', {
+      ...summary,
+      subscriber_hash: subscriberHash || undefined,
+      status_code: statusCode,
+      reason
+    });
+    writeSse(stream, 'error', { error: message, request_id: requestId });
+  };
   try {
     if (!isStreamRoute) {
-      writeSse(stream, 'error', { error: 'Not found.', request_id: requestId });
+      rejectStream(404, 'not_found', 'Not found.');
       return;
     }
 
     const body = parseBody(event);
     const payload = verifyToken(resolveSessionToken(event, body).token);
     if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
-      writeSse(stream, 'error', {
-        error: 'Please validate your subscriber email to use Thingy.',
-        request_id: requestId
-      });
+      rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
       return;
     }
     subscriberHash = String(payload.sub || '');
@@ -1153,7 +1173,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         conversationId: ''
       });
       if (!modeAccess.ok) {
-        writeSse(stream, 'error', { error: modeAccess.error, request_id: requestId });
+        rejectStream(403, 'mode_denied', modeAccess.error);
         return;
       }
       const userProfile = normalizeUserProfile(body.user_profile);
@@ -1175,7 +1195,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       if (
         !(await checkRateLimit(`welcome#${String(payload.sub)}`, Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)))
       ) {
-        writeSse(stream, 'error', { error: 'Thingy is at the hourly limit for this session.', request_id: requestId });
+        rejectStream(429, 'rate_limited', 'Thingy is at the hourly limit for this session.');
         return;
       }
       if (!isOwnerSubscriberHash(subscriberHash)) {
@@ -1185,10 +1205,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         );
         const quota = await consumeDailyQuota('chat', subscriberHash, welcomeMax);
         if (!quota.allowed) {
-          writeSse(stream, 'error', {
-            error: "You've reached today's conversation limit. It resets at midnight UTC.",
-            request_id: requestId
-          });
+          rejectStream(
+            429,
+            'daily_quota_exceeded',
+            "You've reached today's conversation limit. It resets at midnight UTC."
+          );
           return;
         }
       }
@@ -1226,7 +1247,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       conversationId: requestedConversationId
     });
     if (!modeAccess.ok) {
-      writeSse(stream, 'error', { error: modeAccess.error, request_id: requestId });
+      rejectStream(403, 'mode_denied', modeAccess.error);
       return;
     }
     const history = await loadUserConversationHistory({
@@ -1237,18 +1258,15 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       logEvent
     });
     if (!question) {
-      writeSse(stream, 'error', { error: 'Ask a question about the archive.', request_id: requestId });
+      rejectStream(400, 'empty_question', 'Ask a question about the archive.');
       return;
     }
     if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
-      writeSse(stream, 'error', { error: 'Please ask a shorter question.', request_id: requestId });
+      rejectStream(400, 'question_too_long', 'Please ask a shorter question.');
       return;
     }
     if (!(await checkRateLimit(String(payload.sub)))) {
-      writeSse(stream, 'error', {
-        error: 'The librarian is at the hourly limit for this session.',
-        request_id: requestId
-      });
+      rejectStream(429, 'rate_limited', 'The librarian is at the hourly limit for this session.');
       return;
     }
     // Daily per-user budget pool (independent from the MCP pool). Rate
@@ -1260,10 +1278,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       );
       const quota = await consumeDailyQuota('chat', subscriberHash, chatMax);
       if (!quota.allowed) {
-        writeSse(stream, 'error', {
-          error: "You've reached today's conversation limit. It resets at midnight UTC - see you tomorrow!",
-          request_id: requestId
-        });
+        rejectStream(
+          429,
+          'daily_quota_exceeded',
+          "You've reached today's conversation limit. It resets at midnight UTC - see you tomorrow!"
+        );
         return;
       }
     }
@@ -1327,6 +1346,17 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       // Guarded/direct turns still update memory — the question text was
       // recorded above, so let the user-memory row reflect that turn too.
       await updateUserMemoryAfterTurn(subscriberHash, effectiveUserProfile.preferred_name);
+      logEvent('info', 'chat_completed', {
+        subscriber_hash: subscriberHash,
+        request_id: requestId,
+        conversation_id: conversationId,
+        mode: modeAccess.mode,
+        preflight_direct: true,
+        question_chars: question.length,
+        history_count: history.length,
+        citation_count: 0,
+        duration_ms: Math.round(performance.now() - start)
+      });
       return;
     }
 
@@ -1386,6 +1416,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       clearTimeout(deadlineTimer);
     }
     if (deadlineExceeded) {
+      outcomeStatus = 504;
+      outcomeReason = 'deadline_exceeded';
       await recordUserConversationTurn({
         dynamodb,
         tableName: process.env.TABLE_NAME,
@@ -1449,6 +1481,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       duration_ms: Math.round(performance.now() - start)
     });
   } catch (error) {
+    outcomeStatus = 500;
+    outcomeReason = 'unhandled_error';
     logEvent(
       'error',
       'request_failed',
@@ -1462,7 +1496,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       request_id: requestId
     });
   } finally {
-    logEvent('info', 'request_completed', { ...summary, duration_ms: Math.round(performance.now() - start) });
+    logEvent('info', 'request_completed', {
+      ...summary,
+      status_code: outcomeStatus,
+      reason: outcomeReason || undefined,
+      duration_ms: Math.round(performance.now() - start)
+    });
     stream.end();
   }
 });

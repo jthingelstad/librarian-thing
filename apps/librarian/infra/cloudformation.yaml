@@ -705,6 +705,72 @@ Resources:
         - Key: project
           Value: Thingy
 
+  # The stream Lambda handles its own exceptions (the SSE catch answers the
+  # reader and returns normally), so the built-in Lambda Errors metric stays
+  # at zero even when every chat turn is failing. These filters count the
+  # structured terminal events the runtime emits instead: request_failed /
+  # retrieve_failed for server-side failures, and chat_request_rejected for
+  # handled rejections (session_invalid, mode_denied, rate limits, quota).
+  LibrarianStreamFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
+      FilterPattern: '?"request_failed" ?"retrieve_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianStreamHandledFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: '1'
+          DefaultValue: 0
+
+  LibrarianStreamFailuresAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy stream Lambda answered a request with a handled server-side failure.
+      Namespace: WeeklyThingLibrarian
+      MetricName: LibrarianStreamHandledFailures
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  LibrarianChatRejectionsMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
+      FilterPattern: '"chat_request_rejected"'
+      MetricTransformations:
+        - MetricName: LibrarianChatRejections
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: '1'
+          DefaultValue: 0
+
+  LibrarianChatRejectionsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Thingy chat/welcome endpoints are seeing a burst of rejected requests.
+      Namespace: WeeklyThingLibrarian
+      MetricName: LibrarianChatRejections
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
   LibrarianAuthErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
