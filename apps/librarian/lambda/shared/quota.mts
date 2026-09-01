@@ -9,6 +9,9 @@ import { logEvent } from './logging.mjs';
 // pool is wider. Rate limits smooth bursts; these cap total daily spend.
 export const DEFAULT_CHAT_DAILY_QUOTA = 50;
 export const DEFAULT_MCP_DAILY_QUOTA = 500;
+// Browser page agents via /tools (WebMCP). Own pool so a page agent can
+// never starve the reader's real MCP connectors.
+export const DEFAULT_WEB_TOOLS_DAILY_QUOTA = 200;
 export const DEFAULT_EMAIL_DAILY_QUOTA = 5;
 
 const QUOTA_TTL_SECONDS = 2 * 24 * 60 * 60;
@@ -21,6 +24,11 @@ export function chatDailyQuota() {
 export function mcpDailyQuota() {
   const value = Number(process.env.MCP_DAILY_QUOTA || DEFAULT_MCP_DAILY_QUOTA);
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : DEFAULT_MCP_DAILY_QUOTA;
+}
+
+export function webToolsDailyQuota() {
+  const value = Number(process.env.WEB_TOOLS_DAILY_QUOTA || DEFAULT_WEB_TOOLS_DAILY_QUOTA);
+  return Number.isFinite(value) && value > 0 ? Math.floor(value) : DEFAULT_WEB_TOOLS_DAILY_QUOTA;
 }
 
 export function emailDailyQuota() {

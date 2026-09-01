@@ -27,6 +27,9 @@ interface McpAuditItemInput {
   resultChars?: unknown;
   responseTruncated?: boolean;
   responseMaxChars?: unknown;
+  // Which door the call came through: 'mcp' (OAuth connectors) or 'web'
+  // (the page's /tools route). Defaults to 'mcp' for existing callers.
+  surface?: 'mcp' | 'web';
 }
 
 interface RecordMcpToolCallInput extends McpAuditItemInput {
@@ -60,7 +63,8 @@ export function mcpAuditItem({
   sourceRevision,
   resultChars,
   responseTruncated = false,
-  responseMaxChars
+  responseMaxChars,
+  surface = 'mcp'
 }: McpAuditItemInput): Record<string, AttributeValue> {
   const subscriber = String(subscriberHash || '').trim();
   const request = String(requestId || '').trim();
@@ -77,7 +81,7 @@ export function mcpAuditItem({
   const maxResponseLength = Math.max(0, Math.round(Number(responseMaxChars) || 0));
   const trace = {
     schema_version: TOOL_TRACE_SCHEMA_VERSION,
-    surface: 'mcp',
+    surface,
     source_revision: revision,
     external_answer_available: false,
     calls: [

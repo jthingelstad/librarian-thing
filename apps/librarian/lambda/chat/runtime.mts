@@ -48,8 +48,21 @@ import {
 } from '../shared/prompt-preflight.mjs';
 import { errorFields, truthyEnv } from '../shared/logging.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
-import { chatDailyQuota, consumeDailyQuota, mcpDailyQuota, quotaMaxForEntitlements } from '../shared/quota.mjs';
-import { MCP_RESULT_MAX_CHARS, handleMcpMessage } from '../shared/mcp.mjs';
+import {
+  chatDailyQuota,
+  consumeDailyQuota,
+  mcpDailyQuota,
+  quotaMaxForEntitlements,
+  webToolsDailyQuota
+} from '../shared/quota.mjs';
+import {
+  MCP_RESULT_MAX_CHARS,
+  WEB_TOOLS,
+  handleMcpMessage,
+  mcpToolDeclarations,
+  renderToolResultText,
+  serverVersion
+} from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
@@ -704,6 +717,176 @@ function jsonResponseStream(responseStream: ResponseStream, statusCode: number, 
 
 const MCP_RATE_LIMIT_MAX = 300;
 
+// One audited archive-tool invoker for every external tool door (/mcp and
+// /tools). Runs the registry handler, records the bounded audit row with the
+// calling surface, and logs the outcome; audit failures never fail the call.
+function archiveToolInvoker({
+  subscriberHash,
+  requestId,
+  surface
+}: {
+  subscriberHash: string;
+  requestId: string;
+  surface: 'mcp' | 'web';
+}) {
+  return async (name: string, input: JsonRecord) => {
+    const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
+    if (!handler) throw new Error(`Unknown tool: ${name}`);
+    const toolStart = performance.now();
+    const audit = async (result: unknown, status: 'ok' | 'tool_error', resultChars: number, durationMs: number) => {
+      try {
+        await recordMcpToolCall({
+          dynamodb,
+          tableName: process.env.TABLE_NAME,
+          subscriberHash,
+          requestId,
+          createdAt: new Date().toISOString(),
+          toolName: name,
+          arguments: input,
+          result,
+          status,
+          durationMs,
+          sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
+          resultChars,
+          responseTruncated: resultChars > MCP_RESULT_MAX_CHARS,
+          responseMaxChars: MCP_RESULT_MAX_CHARS,
+          surface
+        });
+      } catch (error) {
+        logEvent('warning', 'mcp_tool_audit_failed', {
+          request_id: requestId,
+          tool_name: name,
+          surface,
+          error_type: errorName(error)
+        });
+      }
+    };
+    try {
+      const toolResult = await handler(input, { scope: 'all', subscriberHash });
+      const status = objectValue(toolResult).error ? 'tool_error' : 'ok';
+      const durationMs = Math.round(performance.now() - toolStart);
+      const resultChars = JSON.stringify(toolResult ?? null, null, 1).length;
+      await audit(toolResult, status, resultChars, durationMs);
+      logEvent('info', 'mcp_tool_call_completed', {
+        request_id: requestId,
+        tool_name: name,
+        surface,
+        status,
+        duration_ms: durationMs,
+        response_truncated: resultChars > MCP_RESULT_MAX_CHARS
+      });
+      return toolResult;
+    } catch (error) {
+      const durationMs = Math.round(performance.now() - toolStart);
+      await audit({ error: errorName(error) }, 'tool_error', 0, durationMs);
+      logEvent('warning', 'mcp_tool_call_completed', {
+        request_id: requestId,
+        tool_name: name,
+        surface,
+        status: 'tool_error',
+        duration_ms: durationMs,
+        error_type: errorName(error)
+      });
+      throw error;
+    }
+  };
+}
+
+// Browser-facing tool door for the WebMCP page module: same registry, same
+// truncation, same audit pipeline as /mcp, but house-style JSON actions and
+// web-session auth (cookie via the thingy distribution, or Bearer). Reached
+// as /api/tools through the thingy CloudFront distribution.
+const WEB_TOOLS_RATE_LIMIT_MAX = 120;
+
+async function handleWebToolsRoute({
+  event,
+  responseStream,
+  method,
+  summary,
+  start
+}: {
+  event: LibrarianHttpEvent;
+  responseStream: ResponseStream;
+  method: string;
+  summary: JsonRecord;
+  start: number;
+}) {
+  const finish = (statusCode: number, payload: unknown) => {
+    const stream = jsonResponseStream(responseStream, statusCode, {});
+    stream.write(JSON.stringify(payload));
+    stream.end();
+    logEvent('info', 'web_tools_request_completed', {
+      ...summary,
+      status_code: statusCode,
+      duration_ms: Math.round(performance.now() - start)
+    });
+  };
+  if (method !== 'POST') {
+    finish(405, { error: 'Use POST for tool requests.' });
+    return;
+  }
+  const body = parseBody(event);
+  const payload = verifyToken(resolveSessionToken(event, body).token);
+  if (!payload?.sub || !(await sessionAllowedForThingyProfile(payload))) {
+    finish(401, { error: 'Please sign in at thingy.thingelstad.com to use the archive tools.' });
+    return;
+  }
+  const subscriberHash = String(payload.sub);
+  if (!(await checkRateLimit(`web_tools#${subscriberHash}`, WEB_TOOLS_RATE_LIMIT_MAX))) {
+    finish(429, { error: 'Hourly tool-call limit reached. Please slow down and try again soon.' });
+    return;
+  }
+  const action = String(body.action || 'list')
+    .trim()
+    .toLowerCase();
+  if (action === 'list') {
+    finish(200, { tools: mcpToolDeclarations(WEB_TOOLS), server_version: serverVersion() });
+    return;
+  }
+  if (action !== 'call') {
+    finish(400, { error: 'Unsupported tools action.' });
+    return;
+  }
+  const name = String(body.tool || '');
+  if (!WEB_TOOLS.includes(name)) {
+    finish(400, { error: `Unknown tool: ${name}` });
+    return;
+  }
+  const entitlements = tokenEntitlements(payload);
+  const unlimited = isOwnerSubscriberHash(subscriberHash);
+  const quota = unlimited
+    ? { allowed: true, count: 0, max: 0 }
+    : await consumeDailyQuota('web_tools', subscriberHash, quotaMaxForEntitlements(webToolsDailyQuota(), entitlements));
+  if (!quota.allowed) {
+    finish(429, {
+      error: `Daily tool-call quota reached (${quota.max} per day). It resets at midnight UTC.`
+    });
+    return;
+  }
+  const args = objectValue(body.arguments);
+  const invoke = archiveToolInvoker({
+    subscriberHash,
+    requestId: String(summary.request_id || ''),
+    surface: 'web'
+  });
+  try {
+    const invoked = await invoke(name, args);
+    const { text, truncated } = renderToolResultText(name, invoked);
+    finish(200, {
+      content: [{ type: 'text', text }],
+      is_error: false,
+      truncated,
+      server_version: serverVersion()
+    });
+  } catch (error) {
+    finish(200, {
+      content: [{ type: 'text', text: `Tool ${name} failed: ${errorName(error)}` }],
+      is_error: true,
+      server_version: serverVersion()
+    });
+  }
+}
+
 // MCP streamable HTTP endpoint in stateless single-response mode. Auth is a
 // Librarian OAuth bearer token; the tool surface is the same ARCHIVE_TOOLS
 // registry the /chat agent loop binds in-process.
@@ -775,83 +958,11 @@ async function handleMcpRoute({
         quotaMaxForEntitlements(mcpDailyQuota(), grant.entitlements)
       );
     },
-    invokeTool: async (name, input) => {
-      const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
-      if (!handler) throw new Error(`Unknown tool: ${name}`);
-      const toolStart = performance.now();
-      try {
-        const toolResult = await handler(input, { scope: 'all', subscriberHash: grant.subscriberHash });
-        const status = objectValue(toolResult).error ? 'tool_error' : 'ok';
-        const durationMs = Math.round(performance.now() - toolStart);
-        const resultChars = JSON.stringify(toolResult ?? null, null, 1).length;
-        try {
-          await recordMcpToolCall({
-            dynamodb,
-            tableName: process.env.TABLE_NAME,
-            subscriberHash: grant.subscriberHash,
-            requestId: summary.request_id,
-            createdAt: new Date().toISOString(),
-            toolName: name,
-            arguments: input,
-            result: toolResult,
-            status,
-            durationMs,
-            sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
-            resultChars,
-            responseTruncated: resultChars > MCP_RESULT_MAX_CHARS,
-            responseMaxChars: MCP_RESULT_MAX_CHARS
-          });
-        } catch (error) {
-          logEvent('warning', 'mcp_tool_audit_failed', {
-            request_id: summary.request_id,
-            tool_name: name,
-            error_type: errorName(error)
-          });
-        }
-        logEvent('info', 'mcp_tool_call_completed', {
-          request_id: summary.request_id,
-          tool_name: name,
-          status,
-          duration_ms: durationMs,
-          response_truncated: resultChars > MCP_RESULT_MAX_CHARS
-        });
-        return toolResult;
-      } catch (error) {
-        const durationMs = Math.round(performance.now() - toolStart);
-        try {
-          await recordMcpToolCall({
-            dynamodb,
-            tableName: process.env.TABLE_NAME,
-            subscriberHash: grant.subscriberHash,
-            requestId: summary.request_id,
-            createdAt: new Date().toISOString(),
-            toolName: name,
-            arguments: input,
-            result: { error: errorName(error) },
-            status: 'tool_error',
-            durationMs,
-            sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
-            resultChars: 0,
-            responseTruncated: false,
-            responseMaxChars: MCP_RESULT_MAX_CHARS
-          });
-        } catch (auditError) {
-          logEvent('warning', 'mcp_tool_audit_failed', {
-            request_id: summary.request_id,
-            tool_name: name,
-            error_type: errorName(auditError)
-          });
-        }
-        logEvent('warning', 'mcp_tool_call_completed', {
-          request_id: summary.request_id,
-          tool_name: name,
-          status: 'tool_error',
-          duration_ms: durationMs,
-          error_type: errorName(error)
-        });
-        throw error;
-      }
-    }
+    invokeTool: archiveToolInvoker({
+      subscriberHash: grant.subscriberHash,
+      requestId: String(summary.request_id || ''),
+      surface: 'mcp'
+    })
   });
   finish(result.statusCode, result.payload);
 }
@@ -1001,6 +1112,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       s500.end();
       logEvent('error', 'retrieve_failed', { ...summary, error_type: errorName(error) });
     }
+    return;
+  }
+
+  if (path.endsWith('/tools')) {
+    await handleWebToolsRoute({ event, responseStream, method, summary, start });
     return;
   }
 

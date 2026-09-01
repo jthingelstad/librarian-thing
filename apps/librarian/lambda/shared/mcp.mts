@@ -36,6 +36,12 @@ export const MCP_LAUNCH_TOOLS = [
   'web_search'
 ];
 
+// Browser-facing subset served by the /tools route for the WebMCP page
+// module: everything except the outbound-network tools - a page-hosted agent
+// has its own web access, and asking this Lambda to fetch arbitrary URLs on
+// a page agent's behalf is a different risk posture than reading the archive.
+export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page' && name !== 'web_search');
+
 // Tool results are sized for the Bedrock loop, where 200KB of evidence is
 // cheap context. MCP clients pay tokens for every byte, so cap what a
 // single tools/call returns and say so honestly when trimmed.
@@ -79,6 +85,27 @@ export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
       description: String(spec.description || ''),
       inputSchema: spec.inputSchema?.json || { type: 'object' }
     }));
+}
+
+// Shared by MCP tools/call and the /tools web route so the two surfaces can
+// never drift: stamp server_version, serialize, and truncate with a hint
+// naming only the parameters this tool actually accepts.
+export function renderToolResultText(name: string, invoked: unknown) {
+  const result =
+    invoked && typeof invoked === 'object' && !Array.isArray(invoked)
+      ? { ...(invoked as JsonRecord), server_version: serverVersion() }
+      : invoked;
+  let text = JSON.stringify(result ?? null, null, 1);
+  const truncated = text.length > MCP_RESULT_MAX_CHARS;
+  if (truncated) {
+    const spec = mcpToolDeclarations([name])[0];
+    const paramNames = Object.keys((spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {});
+    const hint = paramNames.length ? `narrow the arguments (${paramNames.join(', ')})` : 'ask a narrower question';
+    text =
+      text.slice(0, MCP_RESULT_MAX_CHARS) +
+      `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; ${hint} for a complete result]`;
+  }
+  return { text, truncated };
 }
 
 function rpcResult(id: unknown, result: unknown) {
@@ -197,22 +224,7 @@ export async function handleMcpMessage(
     const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
     try {
       const invoked = await context.invokeTool(name, args);
-      const result =
-        invoked && typeof invoked === 'object' && !Array.isArray(invoked)
-          ? { ...(invoked as JsonRecord), server_version: serverVersion() }
-          : invoked;
-      let text = JSON.stringify(result ?? null, null, 1);
-      if (text.length > MCP_RESULT_MAX_CHARS) {
-        // Name only parameters THIS tool actually accepts.
-        const spec = mcpToolDeclarations([name])[0];
-        const paramNames = Object.keys(
-          (spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {}
-        );
-        const hint = paramNames.length ? `narrow the arguments (${paramNames.join(', ')})` : 'ask a narrower question';
-        text =
-          text.slice(0, MCP_RESULT_MAX_CHARS) +
-          `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; ${hint} for a complete result]`;
-      }
+      const { text } = renderToolResultText(name, invoked);
       return {
         statusCode: 200,
         payload: rpcResult(id, {
