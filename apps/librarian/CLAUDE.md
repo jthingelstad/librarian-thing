@@ -9,7 +9,7 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 Three Lambdas in `infra/cloudformation.yaml`:
 
 - **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/delete, and profile updates. Memory 1024 MB, timeout 35s.
-- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), and `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools, per-user daily mcp quota pool). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
+- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools, per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
@@ -24,7 +24,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
-7. Run the Bedrock Converse agent loop with tool use against the 23-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 18 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set). Five tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`, `compare_eras`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
+7. Run the Bedrock Converse agent loop with tool use against the 23-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 18 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set) and - minus the two outbound-network tools - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`) and result serializer (`renderToolResultText`), with audit rows stamped `surface: 'mcp' | 'web'`. Five tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`, `compare_eras`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
 8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
@@ -112,7 +112,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
 | `BRAVE_SEARCH_API_KEY` | stream | Optional; enables the `web_search` tool (spec binds only when set) |
 | `LIBRARIAN_SOURCE_REVISION` | stream | Set by CFN to `StreamCodeKey`; stamped onto tool traces |
-| `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `EMAIL_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 5 per reader per day (doubled for supporting members, owner exempt) |
+| `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `WEB_TOOLS_DAILY_QUOTA`, `EMAIL_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 200 / 5 per reader per day (doubled for supporting members, owner exempt) |
 | `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |
 
 ## Bedrock model gotchas

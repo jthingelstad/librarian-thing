@@ -75,6 +75,7 @@ changes, and the production workflow then uploads the updated corpus artifacts.
 | POST | `/chat` | session token (bearer or `__Host-thingy_session` cookie) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer or cookie) | Agentic contextual welcome for authenticated users |
 | POST | `/mcp` | OAuth bearer token (`archive:read`) | MCP streamable HTTP endpoint binding the archive tool registry |
+| POST | `/tools` | session token (bearer or cookie) | WebMCP page-tool door: `list`/`call` over the archive-read tools (no fetch_page/web_search), own `web_tools` quota; reached by the Thingy web app same-origin as `/api/tools` |
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer or cookie) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Sign-in codes, subscriber checks/subscribe, session refresh, profile updates |

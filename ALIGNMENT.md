@@ -21,7 +21,7 @@ from them. It is deliberately not a publishing system anymore.
 | **wt-builder** | Authors and publishes each issue; commits issue text into `data/issues/` after publication |
 | **weekly.thingelstad.com** | Public newsletter render/deploy surface |
 | **another.thingelstad.com** | Podcast publish surface; episodes are ingested here |
-| **thingy.thingelstad.com** | Query surface — live client of the Librarian API |
+| **thingy.thingelstad.com** | Query surface — live client of the Librarian API (S3/CloudFront, same-origin `/api/*`, cookie sessions; registers WebMCP page tools via `/tools`) |
 
 The boundary rule: if it publishes, it is downstream in its own repo. If it
 is the archive, the corpus, or the retrieval path, it lives here.
