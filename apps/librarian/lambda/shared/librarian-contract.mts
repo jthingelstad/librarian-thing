@@ -5,7 +5,9 @@
 // 4.2.0: account overview reports chat_model - the entitlement-routed
 // model answering this reader (additive).
 // 4.3.0: conversation branching - turns carry parent_request_id, /chat
-// accepts it, and stored messages return it (additive).
+// accepts it, and stored messages return it (additive). Sending '' marks
+// a root turn (edit of the first message; stored/returned as 'root');
+// omitting the field keeps the legacy linear history.
 export const LIBRARIAN_CONTRACT_VERSION = '4.3.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before

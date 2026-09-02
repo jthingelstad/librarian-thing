@@ -304,6 +304,17 @@ export function activeChainTurns(turns: ConversationTurn[] = []) {
     const parentId: string = String(cursor.parent_request_id || '');
     cursor = parentId ? byRequestId.get(parentId) : undefined;
   }
+  // When the walk lands on a turn recorded before branching (no parent id,
+  // not the 'root' sentinel), the turns before it were linear: keep them.
+  const oldest = chain[0];
+  if (oldest && !String(oldest.parent_request_id || '')) {
+    const cutoff = String(oldest.created_at || '');
+    const oldestId = String(oldest.request_id || '');
+    const prefix = sorted.filter(
+      (turn) => String(turn.request_id || '') !== oldestId && String(turn.created_at || '') < cutoff
+    );
+    chain.unshift(...prefix);
+  }
   return chain;
 }
 

@@ -170,6 +170,10 @@ export async function loadUserConversationHistory({
   const log = logger(logEvent);
   const validId = validConversationId(conversationId);
   if (!tableReady({ tableName, subscriberHash }) || !validId) return [];
+  // A root turn follows nothing: every stored turn is another branch, not
+  // context. Branching-aware clients mark it explicitly ('' in the request
+  // becomes the 'root' sentinel) so it never falls back to the linear chain.
+  if (String(parentRequestId || '') === 'root') return [];
   try {
     const response = await dynamodb.send(
       new QueryCommand({

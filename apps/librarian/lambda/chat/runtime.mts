@@ -1405,7 +1405,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     // Branch anchor from 4.3 clients: the request_id of the turn this
     // message follows. Context building and the recorded turn both use it
     // so edited/regenerated branches never see abandoned-branch turns.
-    const parentRequestId = String(body.parent_request_id || '').trim();
+    // Presence of the field matters: a branching-aware client sending ''
+    // means "root turn - nothing precedes me" (an edit of the first
+    // message), which becomes the 'root' sentinel so history stays empty.
+    // Clients that omit the field entirely keep the legacy linear chain.
+    const hasParentField = Object.prototype.hasOwnProperty.call(body || {}, 'parent_request_id');
+    const parentRequestId = hasParentField ? String(body.parent_request_id || '').trim() || 'root' : '';
     const modeAccess = await resolveRequestedConversationMode({
       body,
       payload,
