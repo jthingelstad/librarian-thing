@@ -269,9 +269,14 @@ Resources:
           FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
           THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
+          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
+          # TPM quota provisioning (AWS support case; known gate for the newest
+          # generation on low-usage accounts). Flip these two values to
+          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
+          # 403 clears - the code needs no other change.
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
           THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
       Handler: auth/handler.handler
       MemorySize: 1024
       Role: !GetAtt LibrarianFunctionRole.Arn
@@ -302,9 +307,14 @@ Resources:
           THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LIBRARIAN_RETRIEVE_SECRET: !Ref LibrarianRetrieveSecret
           LOG_LEVEL: !Ref LogLevel
+          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
+          # TPM quota provisioning (AWS support case; known gate for the newest
+          # generation on low-usage accounts). Flip these two values to
+          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
+          # 403 clears - the code needs no other change.
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
           THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"
@@ -339,9 +349,14 @@ Resources:
         Variables:
           TABLE_NAME: !Ref LibrarianTable
           LOG_LEVEL: !Ref LogLevel
+          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
+          # TPM quota provisioning (AWS support case; known gate for the newest
+          # generation on low-usage accounts). Flip these two values to
+          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
+          # 403 clears - the code needs no other change.
           THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
           THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_ADVANCED_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
       Handler: eval/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1

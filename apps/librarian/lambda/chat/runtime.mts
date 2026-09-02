@@ -5,11 +5,12 @@ import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import {
   agentModel,
-  advancedModel,
   bedrock,
   dynamodb,
   embeddingModel,
   fastModel,
+  modelAcceptsSamplingParams,
+  premiumModel,
   rerankModel
 } from '../shared/aws-clients.mjs';
 import { readConverseStream } from '../shared/bedrock-stream.mjs';
@@ -85,6 +86,7 @@ import {
 } from '../shared/conversation-store.mjs';
 import {
   canUseConversationMode,
+  chatModelForReader,
   conversationModeDefinition,
   conversationModePrompt,
   normalizeConversationMode,
@@ -116,6 +118,9 @@ interface AgentStreamOptions {
   // Restrict the agent to this tool subset (guest chat runs on WEB_TOOLS -
   // no outbound-network tools). Omitted = the full registry.
   toolNames?: readonly string[];
+  // Model override: supporters and the owner route to the premium model.
+  // Omitted = the fleet default.
+  model?: string;
 }
 
 interface ToolTrace extends JsonRecord {
@@ -352,10 +357,11 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
   }
 }
 
-function commandInferenceConfig() {
+function commandInferenceConfig(modelId: string) {
   return {
     maxTokens: Number(process.env.BEDROCK_MAX_OUTPUT_TOKENS || '2500'),
-    temperature: Number(process.env.BEDROCK_TEMPERATURE || '0.45')
+    // The 5-family rejects sampling params with a ValidationException.
+    ...(modelAcceptsSamplingParams(modelId) ? { temperature: Number(process.env.BEDROCK_TEMPERATURE || '0.45') } : {})
   };
 }
 
@@ -502,6 +508,7 @@ async function streamBedrockAgentAnswer(
   const start = performance.now();
   const scope = normalizeScope(options.scope);
   const mode = normalizeConversationMode(options.mode);
+  const modelId = String(options.model || agentModel());
   const readerContext = String(options.readerContext || '').trim();
   const agentQuestion = agentQuestionForPreflight(question, options.preflight);
   const shouldStopWriting = () => Boolean(options.deadlineExceeded?.());
@@ -558,13 +565,13 @@ async function streamBedrockAgentAnswer(
     );
     const response = await bedrock.send(
       new ConverseStreamCommand({
-        modelId: agentModel(),
+        modelId,
         system: systemBlocks,
         messages: messagesForRequest,
         toolConfig: {
           tools: activeToolSpecs
         },
-        inferenceConfig: commandInferenceConfig()
+        inferenceConfig: commandInferenceConfig(modelId)
       })
     );
     const result = await readConverseStream(response, {
@@ -667,7 +674,7 @@ async function streamBedrockAgentAnswer(
   logEvent('info', 'agent_streamed', {
     request_id: options.requestId,
     conversation_id: options.conversationId,
-    model: agentModel(),
+    model: modelId,
     scope,
     mode,
     tool_turns: toolResults.length,
@@ -688,7 +695,7 @@ async function streamBedrockAgentAnswer(
     citations,
     toolTrace,
     metrics: {
-      model: agentModel(),
+      model: modelId,
       duration_ms: Math.round(performance.now() - start),
       bedrock_calls: usageTotals.bedrock_calls,
       input_tokens: usageTotals.input_tokens,
@@ -1156,7 +1163,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         contract_version: LIBRARIAN_CONTRACT_VERSION,
         model: agentModel(),
         fast_model: fastModel(),
-        advanced_model: advancedModel(),
+        premium_model: premiumModel(),
         embedding_model: embeddingModel(),
         rerank_model: rerankModel()
       })
@@ -1554,6 +1561,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         deadline_ms: deadlineMs
       });
     }, deadlineMs);
+    // Supporters and the owner ride the premium model - same perk shape
+    // as quota doubling: entitlement-routed, no mode machinery involved.
+    const chatModel = chatModelForReader(
+      subscriberHash,
+      Array.isArray(payload.entitlements) ? (payload.entitlements as string[]) : []
+    ).id;
     let result;
     try {
       result = await streamBedrockAgentAnswer(question, history, stream, {
@@ -1564,7 +1577,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         subscriberHash,
         requestId,
         conversationId,
-        deadlineExceeded: () => deadlineExceeded
+        deadlineExceeded: () => deadlineExceeded,
+        model: chatModel
       });
     } finally {
       clearTimeout(slowNoticeTimer);

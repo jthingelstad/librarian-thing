@@ -40,6 +40,7 @@ import { authProfile, getUserMemory, recordUserPreferredName } from '../shared/u
 import { deleteThingyProfile, sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import {
   availableConversationModes,
+  chatModelForReader,
   entitlementsForSubscriber,
   isOwnerSubscriberHash
 } from '../shared/conversation-modes.mjs';
@@ -439,7 +440,10 @@ async function memoryProfileResponse(
     newest_conversation_at: conversationDates.at(-1) || '',
     // Per-user daily budget pools (chat + mcp), surfaced in the account
     // panel. Additive contract fields.
-    quota: await dailyQuotaOverview(sub, entitlements)
+    quota: await dailyQuotaOverview(sub, entitlements),
+    // Which model answers this reader's questions - supporters and the
+    // owner see their premium routing here (contract 4.2.0, additive).
+    chat_model: chatModelForReader(sub, entitlements)
   };
   return jsonResponse(200, { status: 'ok', profile, account, ...extra }, event);
 }

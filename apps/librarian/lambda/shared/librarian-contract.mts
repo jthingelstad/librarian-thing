@@ -2,7 +2,9 @@
 // for callers of that action - the sole client shipped in lockstep).
 // 4.1.0: guest chat - unauthenticated /chat streams carry guest and
 // guest_remaining in meta/done (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.1.0';
+// 4.2.0: account overview reports chat_model - the entitlement-routed
+// model answering this reader (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.2.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -114,6 +116,7 @@ const quotaOverview = object({
   mcp_used: number,
   mcp_max: { anyOf: [number, { type: 'null' }] }
 });
+const chatModel = object({ id: string, label: string, premium: boolean }, ['id', 'label']);
 const accountOverview = object({
   first_seen_at: string,
   last_seen_at: string,
@@ -122,7 +125,8 @@ const accountOverview = object({
   conversation_turn_count: number,
   oldest_conversation_at: string,
   newest_conversation_at: string,
-  quota: ref('quotaOverview')
+  quota: ref('quotaOverview'),
+  chat_model: ref('chatModel')
 });
 
 const apiProperties = {
@@ -184,6 +188,7 @@ export const LIBRARIAN_CONTRACT = {
     archiveItem,
     citation,
     quotaOverview,
+    chatModel,
     accountOverview,
     apiResponse: object(apiProperties),
     apiError: object({ error: string, message: string, errorMessage: string, request_id: string, requestId: string }),

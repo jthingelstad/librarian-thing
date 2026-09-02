@@ -1,6 +1,31 @@
 import crypto from 'node:crypto';
+import { agentModel, premiumModel } from './aws-clients.mjs';
 
 export const DEFAULT_CONVERSATION_MODE = 'thingy';
+
+// Friendly names for the model ids Thingy actually configures; fall back
+// to the raw id so a future model never renders as a blank.
+function friendlyModelLabel(modelId: string) {
+  const table: Array<[RegExp, string]> = [
+    [/opus-5/, 'Claude Opus 5'],
+    [/sonnet-5/, 'Claude Sonnet 5'],
+    [/opus-4-8/, 'Claude Opus 4.8'],
+    [/opus-4-6/, 'Claude Opus 4.6'],
+    [/sonnet-4-6/, 'Claude Sonnet 4.6'],
+    [/haiku-4-5/, 'Claude Haiku 4.5']
+  ];
+  for (const [pattern, label] of table) if (pattern.test(modelId)) return label;
+  return modelId;
+}
+
+// The single source of truth for premium model routing: supporters and the
+// owner get the premium model, everyone else the fleet default. Used by the
+// chat loop (to pick the model) and the account overview (to report it).
+export function chatModelForReader(subscriberHash: unknown, entitlements: readonly unknown[] = []) {
+  const premium = isOwnerSubscriberHash(subscriberHash) || entitlements.includes('supporting_member');
+  const id = premium ? premiumModel() : agentModel();
+  return { id, label: friendlyModelLabel(id), premium };
+}
 
 export type ConversationMode = 'thingy' | 'research_guide' | 'thought_partner' | 'trusted_circle';
 

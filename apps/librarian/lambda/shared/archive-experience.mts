@@ -4,7 +4,7 @@
 // streamline to a pure chat experience (see git history).
 import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
 import type { Message } from '@aws-sdk/client-bedrock-runtime';
-import { agentModel, bedrock } from './aws-clients.mjs';
+import { agentModel, bedrock, modelAcceptsSamplingParams } from './aws-clients.mjs';
 import { sanitizeAnswerProse } from './answer-sanitizer.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
 import { agentSystemPrompt } from './prompts.mjs';
@@ -46,7 +46,10 @@ function bedrockMessageText(message: Message | undefined) {
 function welcomeInferenceConfig() {
   return {
     maxTokens: Number(process.env.BEDROCK_WELCOME_MAX_TOKENS || '320'),
-    temperature: Number(process.env.BEDROCK_WELCOME_TEMPERATURE || '0.7')
+    // The 5-family rejects sampling params with a ValidationException.
+    ...(modelAcceptsSamplingParams(agentModel())
+      ? { temperature: Number(process.env.BEDROCK_WELCOME_TEMPERATURE || '0.7') }
+      : {})
   };
 }
 
