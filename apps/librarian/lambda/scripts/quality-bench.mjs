@@ -9,7 +9,7 @@
 // Usage:
 //   AWS_PROFILE=jamie node scripts/quality-bench.mjs [--questions N] [--opus N]
 // Results: ~/.local/share/thingy-bench/bench-<date>.jsonl
-// Cost: roughly $1.50 per default run (30 Sonnet + 5 Opus answers).
+// Cost: measured ~$0.11-0.15 per default run (35 answers, 2026-09-02).
 
 import fs from 'node:fs';
 import os from 'node:os';
