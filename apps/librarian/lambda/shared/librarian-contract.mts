@@ -17,7 +17,11 @@
 // 4.6.0: /conversations list pages (request offset/limit, response
 // total) and search matches carry title/updated_at, so history beyond
 // the rail's window is reachable (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.6.0';
+// 4.7.0: /chat accepts share_token - a share-link continuation seeds
+// the model's context with the shared conversation's active chain,
+// loaded server-side by token. Guests fork client-side; signed-in
+// readers fork into a new conversation of their own (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.7.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -91,9 +95,18 @@ const conversationShare = object(
   { token: string, url: string, shared_at: string, shared_up_to: string, expires_at: string },
   ['token', 'url']
 );
-const sharedConversation = object({ title: string, created_at: string, shared_at: string, shared_up_to: string }, [
-  'title'
-]);
+const sharedConversation = object(
+  {
+    title: string,
+    created_at: string,
+    shared_at: string,
+    shared_up_to: string,
+    // Present only when the authenticated viewer owns the share.
+    owner: boolean,
+    conversation_id: string
+  },
+  ['title']
+);
 const conversationMessage = object({
   role: string,
   content: string,
@@ -253,6 +266,7 @@ export const LIBRARIAN_CONTRACT = {
           message: string,
           conversation_id: string,
           parent_request_id: string,
+          share_token: string,
           scope: string,
           mode: string,
           client_context: object({})

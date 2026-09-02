@@ -4,6 +4,7 @@ import { dynamodb } from './aws-clients.mjs';
 import { sha256Hex } from './oauth-store.mjs';
 import { magicLinkBaseUrl } from './magic-link.mjs';
 import { dynamoNumber, dynamoString, fromDynamoAttr } from './user-conversations.mjs';
+import { getUserConversation } from './conversation-store.mjs';
 
 // Share links pin content for a year: a link dropped in a newsletter must
 // not rot on the 45-day conversation cadence. The share action re-stamps
@@ -118,4 +119,67 @@ export async function deleteShare(token: string) {
 
 export function shareRowKey(token: string) {
   return { pk: { S: sharePk(shareTokenHash(token)) }, sk: { S: 'share' } };
+}
+
+// The share snapshot both surfaces use: the /share/{token} public view
+// and /chat's share_token continuation seeding. Honors sharedUpTo (turns
+// shared later than the pin stay private) and the active-branch rule.
+export async function loadSharedConversationSnapshot(token: string) {
+  const validToken = validShareToken(token);
+  if (!validToken) return null;
+  const share = await getShare(validToken);
+  if (!share) return null;
+  const result = await getUserConversation({
+    dynamodb,
+    tableName: process.env.TABLE_NAME,
+    subscriberHash: share.subscriberHash,
+    conversationId: share.conversationId,
+    chainOnly: true
+  });
+  if (!result) return null;
+  const messages = (result.messages || [])
+    .filter(
+      (message) =>
+        String(message.content || '').trim() &&
+        String(message.created_at || '') &&
+        String(message.created_at) <= share.sharedUpTo
+    )
+    .map((message) =>
+      message.role === 'assistant'
+        ? {
+            role: 'assistant' as const,
+            content: String(message.content || ''),
+            citations: Array.isArray(message.citations) ? message.citations : [],
+            created_at: String(message.created_at || '')
+          }
+        : {
+            role: 'user' as const,
+            content: String(message.content || ''),
+            created_at: String(message.created_at || '')
+          }
+    );
+  return {
+    share,
+    title: String(result.conversation?.title || 'A Thingy conversation'),
+    createdAt: String(result.conversation?.created_at || ''),
+    messages
+  };
+}
+
+// Bounded chat-context form of a shared snapshot: same trim rules as
+// normal conversation history.
+export function sharedSnapshotHistory(messages: Array<{ role: 'user' | 'assistant'; content: string }>) {
+  let chars = 0;
+  const result: Array<{ role: 'user' | 'assistant'; content: string }> = [];
+  for (const item of messages.slice(-16).reverse()) {
+    const content = String(item.content || '')
+      .trim()
+      .replace(/\s+/g, ' ')
+      .slice(0, 700);
+    if (!content) continue;
+    chars += content.length;
+    if (chars > 9000) break;
+    result.unshift({ role: item.role, content });
+  }
+  return result;
 }

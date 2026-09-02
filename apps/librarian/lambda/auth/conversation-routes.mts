@@ -425,6 +425,16 @@ export async function handleSharedConversationView(
   try {
     const share = await getShare(validToken);
     if (!share) return shareNotFound(event);
+    // The owner viewing their own share link gets a pointer back to the
+    // real conversation (the client offers "open the original" instead of
+    // forking a copy). Anyone else gets the public snapshot only.
+    let owner = false;
+    try {
+      const sessionPayload = verifyToken(resolveSessionToken(event, {}).token);
+      owner = Boolean(sessionPayload && String(sessionPayload.sub || '') === share.subscriberHash);
+    } catch {
+      owner = false;
+    }
     const result = await getUserConversation({
       dynamodb,
       tableName,
@@ -467,7 +477,8 @@ export async function handleSharedConversationView(
           title: String(result.conversation?.title || 'A Thingy conversation'),
           created_at: String(result.conversation?.created_at || ''),
           shared_at: share.createdAt,
-          shared_up_to: share.sharedUpTo
+          shared_up_to: share.sharedUpTo,
+          ...(owner ? { owner: true, conversation_id: share.conversationId } : {})
         },
         messages
       },

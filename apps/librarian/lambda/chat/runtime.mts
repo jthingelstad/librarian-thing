@@ -42,6 +42,7 @@ import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/c
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
 import { compactSource, retrieve } from '../shared/retrieval.mjs';
+import { loadSharedConversationSnapshot, sharedSnapshotHistory } from '../shared/share-store.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../shared/feedback.mjs';
 import {
   PREFLIGHT_SYSTEM_PROMPT,
@@ -1126,7 +1127,21 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }
   const guestRemaining = Math.max(0, perVisitor.max - perVisitor.count);
   const scope = normalizeScope(body.scope);
-  const history = sanitizeHistory(body.history);
+  let history = sanitizeHistory(body.history);
+  // A share link continuation: the shared conversation's active chain is
+  // loaded server-side by token (never client-supplied) and prepended as
+  // context before the guest's own turns.
+  const shareToken = String(body.share_token || '').trim();
+  if (shareToken) {
+    try {
+      const snapshot = await loadSharedConversationSnapshot(shareToken);
+      if (snapshot) {
+        history = [...sharedSnapshotHistory(snapshot.messages), ...history].slice(-24);
+      }
+    } catch (error) {
+      logEvent('warning', 'guest_share_context_failed', { error_type: errorName(error) });
+    }
+  }
   const readerContext =
     'Guest visitor previewing Thingy without an account. Do not reference account features, saved conversations, or personal history.';
   writeSse(stream, 'meta', {
@@ -1524,7 +1539,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       rejectStream(403, 'mode_denied', modeAccess.error);
       return;
     }
-    const history = await loadUserConversationHistory({
+    let history = await loadUserConversationHistory({
       dynamodb,
       tableName: process.env.TABLE_NAME,
       subscriberHash,
@@ -1532,6 +1547,27 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       parentRequestId,
       logEvent
     });
+    // A signed-in reader continuing FROM a share link: their follow-up
+    // starts a conversation of their own, seeded with the shared chain as
+    // context. Applies only to the first turn (no requested conversation,
+    // no history of its own); the fork never writes into the sharer's
+    // conversation.
+    const shareToken = String(body.share_token || '').trim();
+    if (shareToken && !requestedConversationId && history.length === 0) {
+      try {
+        const snapshot = await loadSharedConversationSnapshot(shareToken);
+        if (snapshot) {
+          history = sharedSnapshotHistory(snapshot.messages);
+          logEvent('info', 'share_continuation_started', {
+            subscriber_hash: subscriberHash,
+            shared_conversation_id: snapshot.share.conversationId,
+            context_messages: history.length
+          });
+        }
+      } catch (error) {
+        logEvent('warning', 'share_context_failed', { error_type: errorName(error) });
+      }
+    }
     if (!question) {
       rejectStream(400, 'empty_question', 'Ask a question about the archive.');
       return;
