@@ -735,6 +735,15 @@ async function streamBedrockAgentAnswer(
   };
 }
 
+function preflightReceipt(preflight: unknown, start: number) {
+  const usage = ((preflight as JsonRecord).usage || {}) as JsonRecord;
+  return {
+    duration_ms: Math.round(performance.now() - start),
+    total_tokens: Number(usage.totalTokens || 0),
+    tool_steps: 0
+  };
+}
+
 function turnReceipt(result: { metrics?: Record<string, unknown>; toolTrace?: { calls?: unknown[] } }) {
   const metrics = result.metrics || {};
   return {
@@ -1214,7 +1223,13 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
     writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
     writeSse(stream, 'citations', { citations: [] });
-    writeSse(stream, 'done', { request_id: requestId, mode: 'thingy', guest: true, guest_remaining: guestRemaining });
+    writeSse(stream, 'done', {
+      request_id: requestId,
+      mode: 'thingy',
+      guest: true,
+      guest_remaining: guestRemaining,
+      receipt: preflightReceipt(preflight, start)
+    });
     logEvent('info', 'guest_chat_completed', {
       guest_hash: guestId,
       request_id: requestId,
@@ -1724,7 +1739,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         // Persistence failure returns null; the contract types conversation
         // as an object, so omit it rather than stream an explicit null.
         ...(conversation ? { conversation } : {}),
-        mode: modeAccess.mode
+        mode: modeAccess.mode,
+        receipt: preflightReceipt(preflight, start)
       });
       // Guarded/direct turns still update memory — the question text was
       // recorded above, so let the user-memory row reflect that turn too.

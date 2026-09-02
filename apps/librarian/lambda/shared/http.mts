@@ -133,7 +133,23 @@ export function eventSummary(event?: LibrarianHttpEvent | null, context?: Librar
   };
 }
 
+// The connection sourceIp behind CloudFront is the CloudFront-to-origin
+// egress address, NOT the viewer - every per-IP rate limit and guest
+// quota was keying on whichever POP connection carried the request
+// (QA R2-04: one visitor's allowance read 2 -> 1 -> 2 across three
+// questions). CloudFront appends the true viewer address as the LAST
+// entry of X-Forwarded-For (anything earlier is client-supplied and
+// untrusted), so prefer that; the bare connection address remains the
+// fallback for direct invocations.
+const IPV4_OR_6 = /^[0-9a-fA-F.:]+$/;
+
 export function clientSourceIp(event?: LibrarianHttpEvent | null) {
+  const forwarded = String(normalizeHeaders(event?.headers || {})['x-forwarded-for'] || '');
+  if (forwarded) {
+    const entries = forwarded.split(',').map((entry) => entry.trim());
+    const last = entries[entries.length - 1] || '';
+    if (IPV4_OR_6.test(last)) return last;
+  }
   return event?.requestContext?.http?.sourceIp || event?.requestContext?.identity?.sourceIp || '';
 }
 

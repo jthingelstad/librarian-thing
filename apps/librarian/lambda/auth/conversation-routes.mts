@@ -218,6 +218,24 @@ export async function handleUserConversations(
           };
         })
         .filter((match): match is NonNullable<typeof match> => match !== null);
+      // Titles are searchable too: a reader searching the exact name they
+      // gave a conversation found nothing when the words never appeared in
+      // its turns (QA round 2). Content matches keep their snippets; title
+      // matches ride along with the title itself as the snippet.
+      const needle = query.slice(0, 120).toLowerCase();
+      const matchedIds = new Set(matches.map((match) => match.conversation_id));
+      for (const [conversationId, summary] of allSummaries) {
+        if (matchedIds.has(conversationId)) continue;
+        const title = String(summary.title || '');
+        if (!title.toLowerCase().includes(needle)) continue;
+        matches.push({
+          conversation_id: conversationId,
+          snippet: title,
+          title,
+          updated_at: String(summary.updated_at || '')
+        });
+        if (matches.length >= 30) break;
+      }
       logEvent('info', 'user_conversations_searched', {
         subscriber_hash: subscriberHash,
         match_count: matches.length,
