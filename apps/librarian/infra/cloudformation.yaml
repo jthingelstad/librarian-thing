@@ -2,10 +2,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Weekly Thing Archive Librarian API
 
 Parameters:
-  AlarmEmail:
-    Type: String
-    Default: jamie@thingelstad.com
-    Description: Email address that receives CloudWatch alarm notifications.
   AllowedOrigin:
     Type: CommaDelimitedList
     Default: https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080
@@ -632,13 +628,14 @@ Resources:
 
   # Alarms previously had no AlarmActions - they fired into the void and
   # nobody was notified when Thingy broke. Everything routes here now.
+  # Delivery is the sysadmin AGENT-TEAM's projects-ops-alerts SQS queue
+  # (subscription managed in projects-sysadmin; the Operator drains it
+  # daily). The direct email subscription was removed 2026-09-03 - it
+  # duplicated the queue into Jamie's inbox.
   LibrarianAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
       TopicName: weekly-thing-librarian-alarms
-      Subscription:
-        - Protocol: email
-          Endpoint: !Ref AlarmEmail
       Tags:
         - Key: project
           Value: Thingy
