@@ -217,6 +217,73 @@ export async function loadUserConversationHistory({
   }
 }
 
+// Full-content conversation search: scan the user's turn rows (bounded by
+// USER_CONVERSATION_LIMIT conversations) for a case-insensitive substring
+// in questions or answers. Personal-archive scale - a single-partition
+// query, not an index.
+export async function searchUserConversationTurns({
+  dynamodb,
+  tableName,
+  subscriberHash,
+  query,
+  logEvent
+}: {
+  dynamodb: DynamoDBClient;
+  tableName: string | undefined;
+  subscriberHash: string;
+  query: string;
+  logEvent?: LogEvent;
+}) {
+  const log = logger(logEvent);
+  const needle = String(query || '')
+    .trim()
+    .toLowerCase();
+  if (!tableReady({ tableName, subscriberHash }) || needle.length < 2) return [];
+  const matches = new Map<string, string>();
+  try {
+    let exclusiveStartKey: Record<string, AttributeValue> | undefined;
+    for (let page = 0; page < 10; page += 1) {
+      const response: QueryCommandOutput = await dynamodb.send(
+        new QueryCommand({
+          TableName: tableName,
+          KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
+          ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
+          ExpressionAttributeValues: {
+            ':pk': dynamoString(userConversationPk(subscriberHash)),
+            ':prefix': dynamoString('turn#')
+          },
+          ProjectionExpression: 'sk, question, answer',
+          ExclusiveStartKey: exclusiveStartKey
+        })
+      );
+      for (const item of response.Items || []) {
+        const sk = String(item.sk?.S || '');
+        const conversationId = sk.split('#')[1] || '';
+        if (!conversationId || matches.has(conversationId)) continue;
+        const haystacks = [String(item.question?.S || ''), String(item.answer?.S || '')];
+        for (const text of haystacks) {
+          const index = text.toLowerCase().indexOf(needle);
+          if (index >= 0) {
+            const from = Math.max(0, index - 40);
+            const snippet = `${from > 0 ? '…' : ''}${text.slice(from, index + needle.length + 60).trim()}${index + needle.length + 60 < text.length ? '…' : ''}`;
+            matches.set(conversationId, snippet);
+            break;
+          }
+        }
+        if (matches.size >= 30) break;
+      }
+      exclusiveStartKey = response.LastEvaluatedKey;
+      if (!exclusiveStartKey || matches.size >= 30) break;
+    }
+  } catch (error) {
+    log('warning', 'user_conversation_search_failed', {
+      subscriber_hash: subscriberHash,
+      error_type: errorName(error)
+    });
+  }
+  return Array.from(matches.entries(), ([conversation_id, snippet]) => ({ conversation_id, snippet }));
+}
+
 export async function loadUserConversationSummaries({
   dynamodb,
   tableName,

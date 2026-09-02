@@ -28,7 +28,8 @@ import {
   getUserConversation,
   getUserConversationMetadata,
   loadUserConversationSummaries,
-  renameUserConversation
+  renameUserConversation,
+  searchUserConversationTurns
 } from '../shared/conversation-store.mjs';
 import {
   USER_CONVERSATION_LIMIT,
@@ -180,6 +181,24 @@ export async function handleUserConversations(
         duration_ms: Math.round(performance.now() - start)
       });
       return jsonResponse(200, { conversations, entitlements, modes }, event);
+    }
+
+    if (action === 'search') {
+      const query = String(body.query || '').trim();
+      if (query.length < 2) return jsonResponse(400, { error: 'query must be at least 2 characters.' }, event);
+      const matches = await searchUserConversationTurns({
+        dynamodb,
+        tableName,
+        subscriberHash,
+        query: query.slice(0, 120),
+        logEvent
+      });
+      logEvent('info', 'user_conversations_searched', {
+        subscriber_hash: subscriberHash,
+        match_count: matches.length,
+        duration_ms: Math.round(performance.now() - start)
+      });
+      return jsonResponse(200, { matches }, event);
     }
 
     if (action === 'get') {

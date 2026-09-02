@@ -9,8 +9,12 @@
 // a root turn (edit of the first message; stored/returned as 'root');
 // omitting the field keeps the legacy linear history.
 // 4.4.0: /welcome may emit a suggestions stream event - corpus-grounded
-// follow-up questions for the empty-thread chips (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.4.0';
+// follow-up questions for the empty-thread chips (additive); guests get a
+// daily cached set.
+// 4.5.0: /conversations search action - full-content substring search
+// over the reader's own turns, returning conversation ids + snippets
+// (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.5.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -213,7 +217,10 @@ export const LIBRARIAN_CONTRACT = {
       create: object({ conversation: apiProperties.conversation }, ['conversation']),
       rename: object({ conversation: apiProperties.conversation }, ['conversation']),
       share: object({ share: apiProperties.share }, ['share']),
-      unshare: object({ ok: boolean }, ['ok'])
+      unshare: object({ ok: boolean }, ['ok']),
+      search: object({ matches: arrayOf(object({ conversation_id: string, snippet: string }, ['conversation_id'])) }, [
+        'matches'
+      ])
     }),
     // Public read-only shared-conversation snapshot; the token in the path
     // is the whole credential.
