@@ -118,18 +118,16 @@ Thingy uses mandatory email magic-link authentication. A visitor enters an email
 
 Premium subscribers get a small Bedrock-generated Supporting Member thank-you before entering chat, with a fixed fallback if Bedrock is unavailable. Unknown email addresses can opt in from the sign-in page; those signups are created in Buttondown and must confirm before using Thingy. The logout control clears the browser's stored session token and returns to the sign-in page.
 
-### Conversation modes
+### Conversation modes (retired 2026-09)
 
-Mode availability is encoded in the signed session token as entitlements and enforced on both conversation creation and chat.
-
-| Mode | Entitlement | Grant source |
-|---|---|---|
-| `thingy` | `reader` | Any active subscriber |
-| `research_guide` | `supporting_member` | Premium subscriber or `thingy-supporting-member` tag |
-| `thought_partner` | `owner` | Jamie's owner email/hash or `thingy-owner` tag |
-| `trusted_circle` | `trusted_circle` | `thingy-trusted-circle`, `thingy-family`, or `thingy-close-friends` tag |
-
-Modes change Thingy's posture, not corpus access. Thought Partner is more candid and challenging for Jamie; Research Guide leans into timelines and reading paths; Trusted Circle is warmer and closer; default Thingy is concise, useful, and reader-facing.
+Modes were retired as a user-facing feature: the web mode picker was removed
+in the 2026-08 chat streamline and Jamie confirmed the retirement on
+2026-09-01. Every new conversation is `thingy`. The entitlement gating in
+`conversation-modes.mts` (reader / supporting_member / owner /
+trusted_circle) remains as vestigial enforcement so old conversations keep
+their stored mode; entitlements themselves stay live for quota doubling and
+owner checks. Do not add modes or new mode UI without an explicit product
+decision.
 
 ### Per-user memory
 
