@@ -91,8 +91,12 @@ test('loadSharedConversationSnapshot honors the sharedUpTo privacy pin', async (
     ['2026-09-01T10:00:00.000Z', 'r1', 'first question', 'first answer'],
     ['2026-09-01T11:00:00.000Z', 'r2', 'second question', 'second answer'],
     // Asked AFTER the share was created: must never reach the snapshot.
-    ['2026-09-02T09:00:00.000Z', 'r3', 'private later question', 'private later answer']
-  ].map(([created, rid, question, answer]) => ({
+    ['2026-09-02T09:00:00.000Z', 'r3', 'private later question', 'private later answer'],
+    // A ROOT REGENERATE after the share: the live active chain moves to
+    // this turn, but the snapshot must keep the chain as of the share -
+    // selecting the chain before the cutoff emptied the share (QA F02).
+    ['2026-09-02T10:00:00.000Z', 'r4', 'first question', 'regenerated root answer', 'root']
+  ].map(([created, rid, question, answer, parent]) => ({
     pk: { S: 'user#owner-hash' },
     sk: { S: `conversation#conv-1#turn#${created}#${rid}` },
     conversation_id: { S: 'conv-1' },
@@ -100,7 +104,8 @@ test('loadSharedConversationSnapshot honors the sharedUpTo privacy pin', async (
     created_at: { S: created },
     question: { S: question },
     answer: { S: answer },
-    citations: { L: [] }
+    citations: { L: [] },
+    ...(parent ? { parent_request_id: { S: parent } } : {})
   }));
   const dynamodb = {
     async send(command) {
@@ -125,6 +130,11 @@ test('loadSharedConversationSnapshot honors the sharedUpTo privacy pin', async (
   const contents = snapshot.messages.map((message) => message.content);
   assert.ok(contents.includes('first question') && contents.includes('second answer'));
   assert.ok(!contents.some((content) => content.includes('private later')), 'turns after sharedUpTo stay private');
+  assert.ok(
+    !contents.some((content) => content.includes('regenerated root')),
+    'a root regenerate after the share must not replace (or empty) the shared chain'
+  );
+  assert.ok(contents.includes('first answer'), 'the as-of-share chain keeps its original answers');
   // Only role/content/citations/created_at (+4.8 receipt fields) are
   // projected - request ids and tool traces never reach the snapshot.
   for (const message of snapshot.messages) {

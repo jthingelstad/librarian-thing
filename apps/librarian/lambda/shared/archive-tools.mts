@@ -141,7 +141,7 @@ function citationsFor(chunks: ArchiveRecord[]) {
     // number, so dedupe them by source kind + URL.
     const external = isExternalSource(chunk);
     const key = external
-      ? `${chunk.source_kind || 'external'}\0${chunk.url || ''}`
+      ? `${chunk.source_kind || 'external'}\0${chunk.url || chunk.source_url || ''}`
       : `${chunk.issue_number}\0${chunk.section || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
@@ -153,10 +153,13 @@ function citationsFor(chunks: ArchiveRecord[]) {
     citations.push({
       issue_number: chunk.issue_number ?? null,
       source_kind: chunk.source_kind || (external ? 'external' : 'chunk'),
-      subject: text(chunk.subject),
+      // media_search results name their post via source_url/alt - without
+      // the fallbacks the pictured post never became a citation and the
+      // Sources row cited unrelated results instead (QA F06).
+      subject: text(chunk.subject ?? chunk.alt),
       publish_date: text(chunk.publish_date),
       section: text(chunk.section),
-      url: text(chunk.url),
+      url: text(chunk.url ?? chunk.source_url),
       transcript_url: text(chunk.transcript_url),
       audio_url: text(chunk.audio_url),
       episode_number: chunk.episode_number,

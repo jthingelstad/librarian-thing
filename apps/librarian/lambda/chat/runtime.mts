@@ -1027,7 +1027,7 @@ interface GuestChatContext {
   stream: ResponseStream;
   requestId: string;
   start: number;
-  rejectStream: (statusCode: number, reason: string, message: unknown) => void;
+  rejectStream: (statusCode: number, reason: string, message: unknown, extra?: JsonRecord) => void;
 }
 
 // Guest lane (Jamie's product call, 2026-09-01): a visitor can ask a few
@@ -1092,7 +1092,7 @@ async function handleGuestWelcome({
   event: LibrarianHttpEvent;
   stream: Writable;
   requestId: string;
-  rejectStream: (statusCode: number, reason: string, message: string) => void;
+  rejectStream: (statusCode: number, reason: string, message: string, extra?: JsonRecord) => void;
 }) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
     rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
@@ -1144,7 +1144,8 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     rejectStream(
       429,
       'guest_daily_quota',
-      "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going."
+      "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going.",
+      { guest_remaining: 0 }
     );
     return;
   }
@@ -1154,7 +1155,8 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     rejectStream(
       429,
       'guest_global_quota_exhausted',
-      'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.'
+      'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.',
+      { guest_remaining: 0 }
     );
     return;
   }
@@ -1172,6 +1174,12 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
       if (snapshot) {
         history = [...sharedSnapshotHistory(snapshot.messages), ...history].slice(-24);
         shareSeeded = true;
+        logEvent('info', 'share_continuation_started', {
+          guest: true,
+          request_id: requestId,
+          shared_conversation_id: snapshot.share.conversationId,
+          context_messages: history.length
+        });
       }
     } catch (error) {
       logEvent('warning', 'guest_share_context_failed', { error_type: errorName(error) });
@@ -1436,7 +1444,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   // CloudWatch (the chat_request_rejected metric filter matches them).
   let outcomeStatus = isStreamRoute ? 200 : 404;
   let outcomeReason = '';
-  const rejectStream = (statusCode: number, reason: string, message: unknown) => {
+  const rejectStream = (statusCode: number, reason: string, message: unknown, extra: JsonRecord = {}) => {
     outcomeStatus = statusCode;
     outcomeReason = reason;
     logEvent('warning', 'chat_request_rejected', {
@@ -1445,7 +1453,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       status_code: statusCode,
       reason
     });
-    writeSse(stream, 'error', { error: message, request_id: requestId });
+    writeSse(stream, 'error', { error: message, request_id: requestId, ...extra });
   };
   try {
     if (!isStreamRoute) {

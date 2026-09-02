@@ -140,7 +140,10 @@ export async function loadSharedConversationSnapshot(
     tableName: deps.tableName || process.env.TABLE_NAME,
     subscriberHash: share.subscriberHash,
     conversationId: share.conversationId,
-    chainOnly: true
+    chainOnly: true,
+    // Chain-select among the turns that existed when the share was
+    // (re)stamped - a later root regenerate must not empty the share.
+    createdUpTo: share.sharedUpTo
   });
   if (!result) return null;
   const messages = (result.messages || [])

@@ -59,6 +59,11 @@ interface LoadMessagesInput extends ConversationContext {
   // Restrict to the active branch chain (share/eval views) instead of the
   // full tree (the client rebuilds the tree itself from parent ids).
   chainOnly?: boolean;
+  // Only consider turns created at or before this ISO timestamp BEFORE
+  // chain selection - share snapshots must reconstruct the active chain
+  // AS OF the share, or a later root regenerate replaces the chain and
+  // the timestamp post-filter empties the transcript (QA F02).
+  createdUpTo?: string;
 }
 
 interface CreateConversationInput extends ConversationContext {
@@ -371,7 +376,8 @@ export async function loadUserConversationMessages({
   subscriberHash,
   conversationId,
   limit = 80,
-  chainOnly = false
+  chainOnly = false,
+  createdUpTo = ''
 }: LoadMessagesInput) {
   const validId = validConversationId(conversationId);
   if (!tableReady({ tableName, subscriberHash }) || !validId) return [];
@@ -388,9 +394,12 @@ export async function loadUserConversationMessages({
       Limit: Math.max(1, Math.min(Number(limit) || 80, 80))
     })
   );
-  const turns = (response.Items || [])
+  let turns = (response.Items || [])
     .map(conversationTurnFromItem)
     .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+  if (createdUpTo) {
+    turns = turns.filter((turn) => String(turn.created_at || '') && String(turn.created_at) <= createdUpTo);
+  }
   return messagesFromTurns(chainOnly ? activeChainTurns(turns) : turns);
 }
 
@@ -400,7 +409,8 @@ export async function getUserConversation({
   subscriberHash,
   conversationId,
   limit = 80,
-  chainOnly = false
+  chainOnly = false,
+  createdUpTo = ''
 }: LoadMessagesInput) {
   const conversation = await getUserConversationMetadata({ dynamodb, tableName, subscriberHash, conversationId });
   if (!conversation) return null;
@@ -410,7 +420,8 @@ export async function getUserConversation({
     subscriberHash,
     conversationId,
     limit,
-    chainOnly
+    chainOnly,
+    createdUpTo
   });
   return { conversation, messages };
 }

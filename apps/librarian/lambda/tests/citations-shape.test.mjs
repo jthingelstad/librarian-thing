@@ -68,3 +68,25 @@ test('catalog backfill citations are contract-safe with a null publish_date', ()
   assert.equal(citations.length, 1);
   assertContractSafe(citations[0], 'backfill');
 });
+
+test('media_search results cite the pictured post (source_url/alt fallbacks)', () => {
+  const citations = collectToolCitations([
+    {
+      results: [
+        {
+          image_url: 'https://www.thingelstad.com/uploads/2025/35f2bbcaf4.jpg',
+          alt: 'Minnehaha Falls with the POAP badge',
+          source_kind: 'blog',
+          issue_number: null,
+          subject: null,
+          source_url: 'https://www.thingelstad.com/2025/08/17/out-collecting-612.html',
+          publish_date: '2025-08-17'
+        }
+      ]
+    }
+  ]);
+  assert.equal(citations.length, 1);
+  assert.equal(citations[0].url, 'https://www.thingelstad.com/2025/08/17/out-collecting-612.html');
+  assert.equal(citations[0].subject, 'Minnehaha Falls with the POAP badge');
+  citations.forEach((citation) => assertContractSafe(citation, 'media'));
+});

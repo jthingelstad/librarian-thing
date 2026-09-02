@@ -461,8 +461,11 @@ export async function handleSharedConversationView(
       tableName,
       subscriberHash: share.subscriberHash,
       conversationId: share.conversationId,
-      // Shared pages show one line of conversation - the active branch.
-      chainOnly: true
+      // Shared pages show one line of conversation - the active branch AS
+      // OF the share (createdUpTo), so a later root regenerate in the
+      // original does not empty the public transcript (QA F02).
+      chainOnly: true,
+      createdUpTo: share.sharedUpTo
     });
     if (!result) return shareNotFound(event);
     const messages = (result.messages || [])
