@@ -9,7 +9,7 @@
  * Two-source scopes preserve the selected corpus boundary. `all` retrieves
  * candidates from every corpus and reranks the union once.
  *
- * Default is `weekly_thing` so the operator `/retrieve` path (workshop_bot) is
+ * Default is `weekly_thing` so the service `/retrieve` path (wt-builder) is
  * unaffected when it sends no scope.
  */
 

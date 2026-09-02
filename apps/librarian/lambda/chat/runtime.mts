@@ -542,7 +542,7 @@ async function streamBedrockAgentAnswer(
   const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
   const allowedToolNames = Array.isArray(options.toolNames) ? new Set(options.toolNames.map(String)) : null;
   const activeToolSpecs = (availableToolSpecs() as Tool[]).filter(
-    (tool) => !allowedToolNames || allowedToolNames.has(String(tool.toolSpec?.name || ''))
+    (tool) => !tool.toolSpec || !allowedToolNames || allowedToolNames.has(String(tool.toolSpec.name || ''))
   );
   // The static system prompt is cached; per-request blocks go after the
   // cachePoint so they don't bust the static prompt's prefix cache.
@@ -552,6 +552,11 @@ async function streamBedrockAgentAnswer(
   // busting the static prompt's prefix cache.
   systemBlocks.push({ text: scopePromptLine(scope) });
   systemBlocks.push({ text: conversationModePrompt(mode) });
+  if (allowedToolNames && !allowedToolNames.has('fetch_page')) {
+    systemBlocks.push({
+      text: 'Live-web tools (fetch_page, web_search) are NOT bound in this session. If the reader shares an external URL or asks about the live web, say plainly that you cannot open external pages here and offer the closest archive angle.'
+    });
+  }
   for (let turn = 0; turn <= turnLimit; turn += 1) {
     // The reader disconnected at the client deadline - stop the work, not
     // just the writes, or the loop burns Bedrock turns nobody will see.
@@ -1160,18 +1165,26 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   // loaded server-side by token (never client-supplied) and prepended as
   // context before the guest's own turns.
   const shareToken = String(body.share_token || '').trim();
+  let shareSeeded = false;
   if (shareToken) {
     try {
       const snapshot = await loadSharedConversationSnapshot(shareToken);
       if (snapshot) {
         history = [...sharedSnapshotHistory(snapshot.messages), ...history].slice(-24);
+        shareSeeded = true;
       }
     } catch (error) {
       logEvent('warning', 'guest_share_context_failed', { error_type: errorName(error) });
     }
   }
-  const readerContext =
-    'Guest visitor previewing Thingy without an account. Do not reference account features, saved conversations, or personal history.';
+  const readerContext = [
+    'Guest visitor previewing Thingy without an account. Do not reference account features, saved conversations, or personal history.',
+    shareSeeded
+      ? 'The earlier turns in the conversation context come from a conversation another reader shared a link to; this visitor arrived fresh from that link and did not write them. Never say "as you asked earlier" about the seeded turns.'
+      : ''
+  ]
+    .filter(Boolean)
+    .join(' ');
   writeSse(stream, 'meta', {
     request_id: requestId,
     mode: 'thingy',
@@ -1592,6 +1605,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         const snapshot = await loadSharedConversationSnapshot(shareToken);
         if (snapshot) {
           history = sharedSnapshotHistory(snapshot.messages);
+          readerContext = [
+            readerContext,
+            'The earlier turns in the conversation context come from a conversation another reader shared a link to; this reader arrived fresh from that link and did not write them. Never say "as you asked earlier" about the seeded turns.'
+          ]
+            .filter(Boolean)
+            .join(' ');
           logEvent('info', 'share_continuation_started', {
             subscriber_hash: subscriberHash,
             shared_conversation_id: snapshot.share.conversationId,

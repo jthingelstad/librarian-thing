@@ -226,7 +226,7 @@ export function conversationModePrompt(mode: unknown) {
   }
   return [
     'Conversation mode: Thingy.',
-    'Use the default public archive-agent posture for an authenticated reader.',
+    'Use the default public archive-agent posture; the reader-context block says whether this reader is signed in or a guest.',
     'Be useful and grounded without becoming a research report. If the reader asks for a concise answer or one recommendation, keep the answer compact and avoid extra tool fan-out once the evidence is good enough.'
   ].join('\n');
 }

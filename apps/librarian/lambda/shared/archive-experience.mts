@@ -9,11 +9,7 @@ import { sanitizeAnswerProse } from './answer-sanitizer.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
 import { agentSystemPrompt } from './prompts.mjs';
 import { normalizeScope } from './scope.mjs';
-import {
-  conversationModeDefinition,
-  conversationModePrompt,
-  normalizeConversationMode
-} from './conversation-modes.mjs';
+import { normalizeConversationMode } from './conversation-modes.mjs';
 
 const AGENT_SYSTEM_PROMPT = agentSystemPrompt();
 const SERVICE_NAME = 'weekly-thing-librarian-stream';
@@ -81,9 +77,8 @@ function groundingLines(grounding: GroundingPassage[] = []) {
     .join('\n');
 }
 
-function welcomePrompt({ readerContext, conversations = [], scope, mode, grounding = [] }: WelcomeInput) {
+function welcomePrompt({ readerContext, conversations = [], scope, grounding = [] }: WelcomeInput) {
   const recent = (conversations || []).slice(0, 6);
-  const modeDefinition = conversationModeDefinition(mode);
   const conversationLines = recent.length
     ? recent
         .map(
@@ -104,10 +99,6 @@ function welcomePrompt({ readerContext, conversations = [], scope, mode, groundi
     conversationLines,
     '',
     `Active source scope: ${normalizeScope(scope)}`,
-    `Conversation mode: ${modeDefinition.label}`,
-    '',
-    'Mode guidance:',
-    conversationModePrompt(mode),
     '',
     'Archive material retrieved just now (REAL corpus passages - the only',
     'permitted grounding for suggestions):',
@@ -117,7 +108,6 @@ function welcomePrompt({ readerContext, conversations = [], scope, mode, groundi
     '- Start with a natural greeting that can use the reader local time if supplied.',
     '- If a preferred name is known, use it. If no preferred name is known, ask what Thingy should call the reader, but keep it conversational.',
     '- If this looks like their first time, give a little more orientation. If returning, welcome them back and lightly reference recent conversations when they exist.',
-    '- In Thought Partner mode, welcome Jamie as the author and invite a reflective thread rather than explaining Thingy to a general reader.',
     '- If they are a Weekly Thing Supporting Member, acknowledge that gracefully without making the whole message about it.',
     '- Do not frame Thingy as just search. Prefer agentic verbs like connect, trace, compare, explore, and pick up threads.',
     '- Keep it under 115 words, no heading, no table, no citations.',
@@ -170,7 +160,7 @@ export async function generateWelcome({
       messages: [
         {
           role: 'user',
-          content: [{ text: welcomePrompt({ readerContext, conversations, scope, mode, grounding }) }]
+          content: [{ text: welcomePrompt({ readerContext, conversations, scope, grounding }) }]
         }
       ],
       inferenceConfig: welcomeInferenceConfig()
