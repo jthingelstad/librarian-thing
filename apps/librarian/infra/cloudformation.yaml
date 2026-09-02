@@ -312,6 +312,11 @@ Resources:
           # key already uniquely names each deployed artifact.
           LIBRARIAN_SOURCE_REVISION: !Ref StreamCodeKey
           BRAVE_SEARCH_API_KEY: !Ref BraveSearchApiKey
+          # Guest chat lane (2026-09): per-visitor taste + global fail-closed
+          # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
+          THINGY_GUEST_CHAT: "on"
+          GUEST_DAILY_QUOTA: "3"
+          GUEST_GLOBAL_DAILY_QUOTA: "100"
       Handler: chat/handler.handler
       MemorySize: 3008
       ReservedConcurrentExecutions: 5
@@ -770,6 +775,39 @@ Resources:
       EvaluationPeriods: 1
       DatapointsToAlarm: 1
       Threshold: 10
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
+  # The guest circuit breaker tripping is worth knowing about the day it
+  # happens - either Thingy is having a moment (raise the cap) or someone
+  # is farming the guest lane (leave it, or flip THINGY_GUEST_CHAT off).
+  LibrarianGuestBreakerMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
+      FilterPattern: '"guest_global_quota_exhausted"'
+      MetricTransformations:
+        - MetricName: LibrarianGuestBreakerTrips
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: '1'
+          DefaultValue: 0
+
+  LibrarianGuestBreakerAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: The Thingy guest-chat global daily circuit breaker tripped.
+      Namespace: WeeklyThingLibrarian
+      MetricName: LibrarianGuestBreakerTrips
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
       AlarmActions:

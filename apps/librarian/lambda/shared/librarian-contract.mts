@@ -1,6 +1,8 @@
 // 4.0.0: conversation share links added; email_answer removed (breaking
 // for callers of that action - the sole client shipped in lockstep).
-export const LIBRARIAN_CONTRACT_VERSION = '4.0.0';
+// 4.1.0: guest chat - unauthenticated /chat streams carry guest and
+// guest_remaining in meta/done (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.1.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -161,7 +163,9 @@ const streamProperties = {
   note: string,
   kind: string,
   tool_name: string,
-  toolName: string
+  toolName: string,
+  guest: boolean,
+  guest_remaining: number
 };
 
 export const LIBRARIAN_CONTRACT = {

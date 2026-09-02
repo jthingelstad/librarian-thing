@@ -39,3 +39,33 @@ test('supporting members get double daily pools', () => {
   assert.equal(quotaMaxForEntitlements(50, ['reader', 'supporting_member']), 100);
   assert.equal(quotaMaxForEntitlements(500, []), 500);
 });
+
+test('guest quota envs fall back to the agreed defaults', async () => {
+  const { DEFAULT_GUEST_DAILY_QUOTA, DEFAULT_GUEST_GLOBAL_DAILY_QUOTA, guestDailyQuota, guestGlobalDailyQuota } =
+    await import('../dist/shared/quota.mjs');
+  delete process.env.GUEST_DAILY_QUOTA;
+  delete process.env.GUEST_GLOBAL_DAILY_QUOTA;
+  assert.equal(DEFAULT_GUEST_DAILY_QUOTA, 3);
+  assert.equal(DEFAULT_GUEST_GLOBAL_DAILY_QUOTA, 100);
+  assert.equal(guestDailyQuota(), 3);
+  assert.equal(guestGlobalDailyQuota(), 100);
+  process.env.GUEST_DAILY_QUOTA = '5';
+  assert.equal(guestDailyQuota(), 5);
+  process.env.GUEST_DAILY_QUOTA = '0';
+  assert.equal(guestDailyQuota(), 3);
+  delete process.env.GUEST_DAILY_QUOTA;
+});
+
+test('the strict guest counter fails CLOSED where the reader counter fails open', async () => {
+  const { consumeDailyQuota, consumeDailyQuotaStrict } = await import('../dist/shared/quota.mjs');
+  const savedTable = process.env.TABLE_NAME;
+  delete process.env.TABLE_NAME;
+  try {
+    const readerResult = await consumeDailyQuota('chat', 'abc', 50);
+    assert.equal(readerResult.allowed, true);
+    const guestResult = await consumeDailyQuotaStrict('guest', 'abc', 3);
+    assert.equal(guestResult.allowed, false);
+  } finally {
+    if (savedTable) process.env.TABLE_NAME = savedTable;
+  }
+});

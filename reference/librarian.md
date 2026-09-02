@@ -92,6 +92,7 @@ Local `.env` values used by upload/build scripts:
 - `LIBRARIAN_USER_MEMORY_TTL_DAYS` (optional; defaults to 365 days.)
 - `BRAVE_SEARCH_API_KEY` (optional; enables the `web_search` tool — the tool's schema binds in chat and MCP only when this is set)
 - `CHAT_DAILY_QUOTA` / `MCP_DAILY_QUOTA` (optional; per-reader daily pools, defaults 50 / 500)
+- `THINGY_GUEST_CHAT` / `GUEST_DAILY_QUOTA` / `GUEST_GLOBAL_DAILY_QUOTA` (guest chat lane, 2026-09: kill switch plus per-visitor 3/day and global 100/day fail-closed caps; the global cap is the cost circuit breaker with its own CloudWatch alarm)
 
 Deploy and corpus upload scripts load AWS credentials from `.env` through `python-dotenv` before creating `boto3` clients. They do not intentionally fall back to AWS CLI profile authentication.
 

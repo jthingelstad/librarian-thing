@@ -33,6 +33,7 @@ import {
   extractPreferredNameFromMessage,
   normalizeUserProfile,
   readerContextPrompt,
+  sanitizeHistory,
   tokenEntitlements
 } from '../shared/chat-context.mjs';
 import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/citations.mjs';
@@ -51,6 +52,9 @@ import { checkRateLimit } from '../shared/rate-limit.mjs';
 import {
   chatDailyQuota,
   consumeDailyQuota,
+  consumeDailyQuotaStrict,
+  guestDailyQuota,
+  guestGlobalDailyQuota,
   mcpDailyQuota,
   quotaMaxForEntitlements,
   webToolsDailyQuota
@@ -65,7 +69,7 @@ import {
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
-import { methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
+import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
 import { resolveSessionToken } from '../shared/web-session.mjs';
@@ -109,6 +113,9 @@ interface AgentStreamOptions {
   subscriberHash?: string;
   requestId?: string;
   conversationId?: string;
+  // Restrict the agent to this tool subset (guest chat runs on WEB_TOOLS -
+  // no outbound-network tools). Omitted = the full registry.
+  toolNames?: readonly string[];
 }
 
 interface ToolTrace extends JsonRecord {
@@ -523,7 +530,10 @@ async function streamBedrockAgentAnswer(
   const turnLimit = maxTurns;
   type ToolHandler = (input?: JsonRecord, context?: JsonRecord) => unknown | Promise<unknown>;
   const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
-  const activeToolSpecs = availableToolSpecs() as Tool[];
+  const allowedToolNames = Array.isArray(options.toolNames) ? new Set(options.toolNames.map(String)) : null;
+  const activeToolSpecs = (availableToolSpecs() as Tool[]).filter(
+    (tool) => !allowedToolNames || allowedToolNames.has(String(tool.toolSpec?.name || ''))
+  );
   // The static system prompt is cached; per-request blocks go after the
   // cachePoint so they don't bust the static prompt's prefix cache.
   const systemBlocks: SystemContentBlock[] = [{ text: AGENT_SYSTEM_PROMPT }, { cachePoint: { type: 'default' } }];
@@ -592,7 +602,7 @@ async function streamBedrockAgentAnswer(
           commentary: visibleNote
         });
       }
-      const handler = toolHandlers[toolName];
+      const handler = allowedToolNames && !allowedToolNames.has(toolName) ? undefined : toolHandlers[toolName];
       let result: JsonRecord;
       const toolStart = performance.now();
       let ok = true;
@@ -967,6 +977,145 @@ async function handleMcpRoute({
   finish(result.statusCode, result.payload);
 }
 
+const GUEST_RATE_LIMIT_MAX = 10;
+
+interface GuestChatContext {
+  event: LibrarianHttpEvent;
+  body: JsonRecord;
+  stream: ResponseStream;
+  requestId: string;
+  start: number;
+  rejectStream: (statusCode: number, reason: string, message: unknown) => void;
+}
+
+// Guest lane (Jamie's product call, 2026-09-01): a visitor can ask a few
+// questions without signing in, so the archive links and shared
+// conversations demo the real product. No conversation persistence, no
+// memory, no profile, no email; history is client-supplied and sanitized;
+// tools are WEB_TOOLS (archive-read only, no outbound network). Three
+// stacked guards bound the unauthenticated Bedrock spend: the hourly IP
+// rate limit, a per-visitor strict daily quota, and a global fail-closed
+// circuit breaker. Kill switch: THINGY_GUEST_CHAT=off.
+async function handleGuestChat({ event, body, stream, requestId, start, rejectStream }: GuestChatContext) {
+  if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
+    rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    return;
+  }
+  const question = String(body.message || '').trim();
+  if (!question) {
+    rejectStream(400, 'empty_question', 'Ask a question about the archive.');
+    return;
+  }
+  if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
+    rejectStream(400, 'question_too_long', 'Please ask a shorter question.');
+    return;
+  }
+  const ip = clientSourceIp(event);
+  if (!ip) {
+    rejectStream(401, 'guest_no_ip', 'Please sign in at thingy.thingelstad.com to use Thingy.');
+    return;
+  }
+  const guestId = crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 32);
+  if (!(await checkRateLimit(`guestchat#${guestId}`, GUEST_RATE_LIMIT_MAX))) {
+    rejectStream(429, 'guest_rate_limited', 'Guest questions are moving too fast. Try again in a bit, or sign in.');
+    return;
+  }
+  const perVisitor = await consumeDailyQuotaStrict('guest', guestId, guestDailyQuota());
+  if (!perVisitor.allowed) {
+    rejectStream(
+      429,
+      'guest_daily_quota',
+      "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going."
+    );
+    return;
+  }
+  const globalPool = await consumeDailyQuotaStrict('guest', 'global', guestGlobalDailyQuota());
+  if (!globalPool.allowed) {
+    rejectStream(
+      429,
+      'guest_global_quota_exhausted',
+      'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.'
+    );
+    return;
+  }
+  const guestRemaining = Math.max(0, perVisitor.max - perVisitor.count);
+  const scope = normalizeScope(body.scope);
+  const history = sanitizeHistory(body.history);
+  const readerContext =
+    'Guest visitor previewing Thingy without an account. Do not reference account features, saved conversations, or personal history.';
+  writeSse(stream, 'meta', {
+    request_id: requestId,
+    mode: 'thingy',
+    guest: true,
+    guest_remaining: guestRemaining,
+    contract_version: LIBRARIAN_CONTRACT_VERSION
+  });
+  writeSse(stream, 'status', { message: 'Understanding the request...' });
+  const preflight = await evaluatePromptPreflight(question, scope, history, { readerContext, mode: 'thingy' });
+  if (preflight.action === 'direct') {
+    preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
+    writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
+    writeSse(stream, 'citations', { citations: [] });
+    writeSse(stream, 'done', { request_id: requestId, mode: 'thingy', guest: true, guest_remaining: guestRemaining });
+    logEvent('info', 'guest_chat_completed', {
+      guest_hash: guestId,
+      request_id: requestId,
+      preflight_direct: true,
+      question_chars: question.length,
+      guest_remaining: guestRemaining,
+      duration_ms: Math.round(performance.now() - start)
+    });
+    return;
+  }
+  writeSse(stream, 'status', { message: 'Investigating the archive...' });
+  let deadlineExceeded = false;
+  const deadlineMs = chatDeadlineMs();
+  const deadlineTimer = setTimeout(() => {
+    deadlineExceeded = true;
+    try {
+      writeSse(stream, 'error', {
+        error: 'Thingy spent too long in the archive. Please try again with a narrower angle.',
+        request_id: requestId
+      });
+    } catch {}
+    try {
+      stream.end();
+    } catch {}
+    logEvent('warning', 'guest_chat_deadline_exceeded', {
+      guest_hash: guestId,
+      request_id: requestId,
+      deadline_ms: deadlineMs
+    });
+  }, deadlineMs);
+  let result;
+  try {
+    result = await streamBedrockAgentAnswer(question, history, stream, {
+      readerContext,
+      scope,
+      mode: 'thingy',
+      preflight,
+      subscriberHash: `guest#${guestId}`,
+      requestId,
+      conversationId: '',
+      deadlineExceeded: () => deadlineExceeded,
+      toolNames: WEB_TOOLS
+    });
+  } finally {
+    clearTimeout(deadlineTimer);
+  }
+  if (deadlineExceeded) return;
+  writeSse(stream, 'citations', { citations: result.citations });
+  writeSse(stream, 'done', { request_id: requestId, mode: 'thingy', guest: true, guest_remaining: guestRemaining });
+  logEvent('info', 'guest_chat_completed', {
+    guest_hash: guestId,
+    request_id: requestId,
+    question_chars: question.length,
+    citation_count: result.citations.length,
+    guest_remaining: guestRemaining,
+    duration_ms: Math.round(performance.now() - start)
+  });
+}
+
 export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (event, responseStream, context) => {
   const start = performance.now();
   const requestId = context?.awsRequestId || event.requestContext?.requestId || crypto.randomUUID();
@@ -1159,6 +1308,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     const body = parseBody(event);
     const payload = verifyToken(resolveSessionToken(event, body).token);
     if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
+      // No valid session: /chat falls through to the guest lane; /welcome
+      // stays signed-in only (the client renders its own guest greeting).
+      if (path.endsWith('/chat')) {
+        await handleGuestChat({ event, body, stream, requestId, start, rejectStream });
+        return;
+      }
       rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
       return;
     }
