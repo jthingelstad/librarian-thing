@@ -266,6 +266,7 @@ export function conversationTurnFromItem(item: DynamoItem | undefined): Conversa
     model: o.model || '',
     duration_ms: Number(o.duration_ms || 0),
     output_tokens: Number(o.output_tokens || 0),
+    total_tokens: Number(o.total_tokens || 0),
     stop_reason: o.stop_reason || '',
     tool_count: Number(o.tool_count || 0),
     tool_names: Array.isArray(o.tool_names) ? o.tool_names : [],
@@ -339,7 +340,10 @@ export function messagesFromTurns(turns: ConversationTurn[] = []) {
         created_at: turn.created_at,
         request_id: turn.request_id,
         artifact: turn.artifact || null,
-        tool_names: turn.tool_names || []
+        tool_names: turn.tool_names || [],
+        // 4.8 receipt fields - omitted when the turn predates metrics.
+        ...(Number(turn.duration_ms) > 0 ? { duration_ms: Number(turn.duration_ms) } : {}),
+        ...(Number(turn.total_tokens) > 0 ? { total_tokens: Number(turn.total_tokens) } : {})
       });
     } else if (turn.artifact) {
       messages.push({

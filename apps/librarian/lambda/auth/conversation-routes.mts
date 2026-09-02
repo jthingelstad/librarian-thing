@@ -464,7 +464,9 @@ export async function handleSharedConversationView(
               role: 'assistant',
               content: String(message.content || ''),
               citations: Array.isArray(message.citations) ? message.citations : [],
-              created_at: String(message.created_at || '')
+              created_at: String(message.created_at || ''),
+              ...(Number(message.duration_ms) > 0 ? { duration_ms: Number(message.duration_ms) } : {}),
+              ...(Number(message.total_tokens) > 0 ? { total_tokens: Number(message.total_tokens) } : {})
             }
           : {
               role: 'user',

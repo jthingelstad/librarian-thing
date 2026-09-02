@@ -21,7 +21,11 @@
 // the model's context with the shared conversation's active chain,
 // loaded server-side by token. Guests fork client-side; signed-in
 // readers fork into a new conversation of their own (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.7.0';
+// 4.8.0: durable response receipts - done events carry receipt
+// {duration_ms, total_tokens, tool_steps}, and stored/shared assistant
+// messages carry duration_ms/total_tokens, so the client's response
+// timer survives reload and share pages (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.8.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -117,7 +121,15 @@ const conversationMessage = object({
   request_id: string,
   requestId: string,
   parent_request_id: string,
-  citations: unknownArray
+  citations: unknownArray,
+  // 4.8: the turn's receipt, when recorded (assistant messages only).
+  duration_ms: number,
+  total_tokens: number
+});
+const receipt = object({
+  duration_ms: number,
+  total_tokens: number,
+  tool_steps: number
 });
 const archiveItem = object({
   url: string,
@@ -197,7 +209,8 @@ const streamProperties = {
   toolName: string,
   guest: boolean,
   guest_remaining: number,
-  suggestions: arrayOf(string)
+  suggestions: arrayOf(string),
+  receipt: ref('receipt')
 };
 
 export const LIBRARIAN_CONTRACT = {
@@ -209,6 +222,7 @@ export const LIBRARIAN_CONTRACT = {
   $defs: {
     mode,
     profile,
+    receipt,
     conversation,
     conversationShare,
     sharedConversation,

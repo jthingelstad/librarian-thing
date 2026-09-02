@@ -124,14 +124,17 @@ export function shareRowKey(token: string) {
 // The share snapshot both surfaces use: the /share/{token} public view
 // and /chat's share_token continuation seeding. Honors sharedUpTo (turns
 // shared later than the pin stay private) and the active-branch rule.
-export async function loadSharedConversationSnapshot(token: string) {
+export async function loadSharedConversationSnapshot(
+  token: string,
+  deps: { dynamodb?: typeof dynamodb; tableName?: string; getShare?: typeof getShare } = {}
+) {
   const validToken = validShareToken(token);
   if (!validToken) return null;
-  const share = await getShare(validToken);
+  const share = await (deps.getShare || getShare)(validToken);
   if (!share) return null;
   const result = await getUserConversation({
-    dynamodb,
-    tableName: process.env.TABLE_NAME,
+    dynamodb: deps.dynamodb || dynamodb,
+    tableName: deps.tableName || process.env.TABLE_NAME,
     subscriberHash: share.subscriberHash,
     conversationId: share.conversationId,
     chainOnly: true

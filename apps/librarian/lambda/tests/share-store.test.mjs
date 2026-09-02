@@ -68,3 +68,58 @@ test('sharedSnapshotHistory bounds: 16-message window, 700-char clip, 9000 budge
 
   assert.deepEqual(sharedSnapshotHistory([{ role: 'user', content: '   ' }]), []);
 });
+
+test('loadSharedConversationSnapshot honors the sharedUpTo privacy pin', async () => {
+  const { loadSharedConversationSnapshot } = await import('../dist/shared/share-store.mjs');
+  const conversationItem = {
+    pk: { S: 'user#owner-hash' },
+    sk: { S: 'conversation#conv-1' },
+    conversation_id: { S: 'conv-1' },
+    title: { S: 'Pinned share' },
+    created_at: { S: '2026-09-01T00:00:00.000Z' },
+    turn_count: { N: '3' }
+  };
+  const turnItems = [
+    ['2026-09-01T10:00:00.000Z', 'r1', 'first question', 'first answer'],
+    ['2026-09-01T11:00:00.000Z', 'r2', 'second question', 'second answer'],
+    // Asked AFTER the share was created: must never reach the snapshot.
+    ['2026-09-02T09:00:00.000Z', 'r3', 'private later question', 'private later answer']
+  ].map(([created, rid, question, answer]) => ({
+    pk: { S: 'user#owner-hash' },
+    sk: { S: `conversation#conv-1#turn#${created}#${rid}` },
+    conversation_id: { S: 'conv-1' },
+    request_id: { S: rid },
+    created_at: { S: created },
+    question: { S: question },
+    answer: { S: answer },
+    citations: { L: [] }
+  }));
+  const dynamodb = {
+    async send(command) {
+      if (command.constructor.name === 'GetItemCommand') return { Item: conversationItem };
+      return { Items: turnItems };
+    }
+  };
+  const share = {
+    subscriberHash: 'owner-hash',
+    conversationId: 'conv-1',
+    sharedUpTo: '2026-09-01T23:59:59.999Z',
+    createdAt: '2026-09-01T12:00:00.000Z',
+    expiresAt: 0
+  };
+  const snapshot = await loadSharedConversationSnapshot('shr_' + 'a'.repeat(43), {
+    dynamodb,
+    tableName: 'table-name',
+    getShare: async () => share
+  });
+  assert.ok(snapshot);
+  assert.equal(snapshot.title, 'Pinned share');
+  const contents = snapshot.messages.map((message) => message.content);
+  assert.ok(contents.includes('first question') && contents.includes('second answer'));
+  assert.ok(!contents.some((content) => content.includes('private later')), 'turns after sharedUpTo stay private');
+  // Only role/content/citations/created_at (+4.8 receipt fields) are
+  // projected - request ids and tool traces never reach the snapshot.
+  for (const message of snapshot.messages) {
+    assert.ok(!('request_id' in message) && !('tool_trace' in message));
+  }
+});

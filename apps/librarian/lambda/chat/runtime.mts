@@ -601,7 +601,11 @@ async function streamBedrockAgentAnswer(
     if (streamAnswerDeltas && result.text.trim() && !shouldStopWriting()) {
       writeSse(responseStream, 'answer_delta', { delta: '\n\n' });
     }
-    const commentary = activityCommentaryText(result.text);
+    // When the interstitial prose just streamed into the ANSWER as
+    // deltas, repeating it as activity-row commentary shows the same
+    // sentences twice (observed in production). Commentary only labels
+    // the rows when the text did not reach the answer body.
+    const commentary = streamAnswerDeltas && result.text.trim() ? '' : activityCommentaryText(result.text);
     const resultBlocks: ContentBlock[] = [];
     for (const [index, toolUse] of toolUses.entries()) {
       const toolName = String(toolUse.name || 'unknown_tool');
@@ -725,6 +729,14 @@ async function streamBedrockAgentAnswer(
   };
 }
 
+function turnReceipt(result: { metrics?: Record<string, unknown>; toolTrace?: { calls?: unknown[] } }) {
+  const metrics = result.metrics || {};
+  return {
+    duration_ms: Number(metrics.duration_ms || 0),
+    total_tokens: Number(metrics.total_tokens || 0),
+    tool_steps: Array.isArray(result.toolTrace?.calls) ? result.toolTrace.calls.length : 0
+  };
+}
 function streamFromResponse(responseStream: ResponseStream, _event: LibrarianHttpEvent, statusCode: number) {
   return awslambda.HttpResponseStream.from(responseStream, {
     statusCode,
@@ -1116,21 +1128,24 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     rejectStream(429, 'guest_rate_limited', 'Guest questions are moving too fast. Try again in a bit, or sign in.');
     return;
   }
-  const perVisitor = await consumeDailyQuotaStrict('guest', guestId, guestDailyQuota());
-  if (!perVisitor.allowed) {
-    rejectStream(
-      429,
-      'guest_daily_quota',
-      "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going."
-    );
-    return;
-  }
+  // Consume the GLOBAL pool first: when the daily breaker has tripped,
+  // a rejection must not also burn one of the visitor's own three
+  // questions (previously it did).
   const globalPool = await consumeDailyQuotaStrict('guest', 'global', guestGlobalDailyQuota());
   if (!globalPool.allowed) {
     rejectStream(
       429,
       'guest_global_quota_exhausted',
       'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.'
+    );
+    return;
+  }
+  const perVisitor = await consumeDailyQuotaStrict('guest', guestId, guestDailyQuota());
+  if (!perVisitor.allowed) {
+    rejectStream(
+      429,
+      'guest_daily_quota',
+      "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going."
     );
     return;
   }
@@ -1215,7 +1230,13 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }
   if (deadlineExceeded) return;
   writeSse(stream, 'citations', { citations: result.citations });
-  writeSse(stream, 'done', { request_id: requestId, mode: 'thingy', guest: true, guest_remaining: guestRemaining });
+  writeSse(stream, 'done', {
+    request_id: requestId,
+    mode: 'thingy',
+    guest: true,
+    guest_remaining: guestRemaining,
+    receipt: turnReceipt(result)
+  });
   logEvent('info', 'guest_chat_completed', {
     guest_hash: guestId,
     request_id: requestId,
@@ -1796,7 +1817,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       request_id: requestId,
       conversation_id: conversationId,
       ...(conversation ? { conversation } : {}),
-      mode: modeAccess.mode
+      mode: modeAccess.mode,
+      receipt: turnReceipt(result)
     });
     // Update per-user memory after the answer ships. If the sid has
     // rotated since the prior turn, this also triggers a Bedrock-
