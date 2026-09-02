@@ -45,7 +45,7 @@ import {
 } from '../shared/conversation-modes.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
-import { handleUserConversations } from './conversation-routes.mjs';
+import { handleSharedConversationView, handleUserConversations } from './conversation-routes.mjs';
 import { handleAuthorize, handleOauthMetadata, handleRegister, handleToken } from './oauth-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
 import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
@@ -239,7 +239,8 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
   // Sliding sessions must not silently decay entitlements: when the
   // Buttondown verification is stale (or nearly), re-verify using the
   // email the client supplies - accepted only when it hashes to the
-  // session subject, the same self-binding rule as email_answer.
+  // session subject (self-binding: the client can never act on another
+  // address).
   const suppliedEmail = normalizeEmail(body.email);
   const nowSeconds = Math.floor(Date.now() / 1000);
   const verificationStale = verifiedUntil < nowSeconds + 60 * 60 * 24 * 2;
@@ -793,6 +794,10 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
       response = await handleMemory(event, parseBody(event), start);
     } else if (method === 'POST' && path.endsWith('/conversations')) {
       response = await handleUserConversations(event, parseBody(event), { start, entitlementsForSessionPayload });
+    } else if (method === 'GET' && /\/share\/[^/]+$/.test(path)) {
+      // Public read-only shared-conversation snapshot; auth is the
+      // unguessable token itself (see conversation-routes.mts).
+      response = await handleSharedConversationView(event, path.slice(path.lastIndexOf('/') + 1), start);
     } else if (method === 'GET' && path.endsWith('/.well-known/oauth-authorization-server')) {
       response = handleOauthMetadata(event);
     } else if (method === 'GET' && path.endsWith('/.well-known/oauth-protected-resource')) {

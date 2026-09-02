@@ -25,8 +25,9 @@ test('contract negotiation accepts supported majors and rejects the rest', () =>
   // deployed web client vendors 3.0.0.
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '2.0.0' }), true);
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '3.4.0' }), true);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '4.1.0' }), true);
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '1.0.0' }), false);
-  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '4.0.0' }), false);
+  assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': '5.0.0' }), false);
   assert.equal(contractModule.supportsRequestedContract({ 'x-librarian-contract-version': 'not-semver' }), false);
 });
 
@@ -34,6 +35,9 @@ test('endpoint actions declare response-specific successful contracts', () => {
   assert.deepEqual(artifact.endpoints['/conversations'].actions.list.required, ['conversations']);
   assert.deepEqual(artifact.endpoints['/chat'].request.required, ['message']);
   assert.deepEqual(artifact.endpoints['/retrieve'].request.required, ['query']);
+  assert.deepEqual(artifact.endpoints['/conversations'].actions.share.required, ['share']);
+  assert.deepEqual(artifact.endpoints['/share/{token}'].schema.required, ['conversation', 'messages']);
+  assert.equal('email_answer' in artifact.endpoints['/conversations'].actions, false);
   assert.equal('/dispatch' in artifact.endpoints, false);
   assert.equal('/curiosity-map' in artifact.endpoints, false);
   assert.equal('experience' in artifact.stream_events, false);

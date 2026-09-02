@@ -153,6 +153,7 @@ class Conversation:
     eval_reader: str
     eval_thingy: str
     eval_takeaway: str
+    shared_at: str = ""
     is_owner: bool = False
     turns: list[Turn] = field(default_factory=list)
 
@@ -181,6 +182,7 @@ class Conversation:
             eval_reader=str(row.get("eval_reader") or ""),
             eval_thingy=str(row.get("eval_thingy") or ""),
             eval_takeaway=str(row.get("eval_takeaway") or ""),
+            shared_at=str(row.get("shared_at") or ""),
         )
 
     @property
@@ -446,6 +448,7 @@ def render_conversation_card(c: Conversation, *, open_by_default: bool = False) 
     flags = render_chips(c.eval_flags, limit=10)
     owner = '<span class="chip owner-chip">Jamie</span>' if c.is_owner else ""
     mode_chip = f'<span class="chip mode-chip">{h(c.mode or "thingy")}</span>'
+    shared_chip = '<span class="chip shared-chip">shared</span>' if c.shared_at else ""
     attention = render_chips(c.attention_reasons, limit=6, css_class="chip attention-chip")
     improvements = "".join(f"<li>{h(item)}</li>" for item in c.eval_improvements)
     sources = render_chips(c.source_labels, limit=16)
@@ -465,6 +468,7 @@ def render_conversation_card(c: Conversation, *, open_by_default: bool = False) 
         f'<span class="reader-badge reader-{h(c.reader_kind)}">{h(c.reader_label)}</span>'
         f"<span>mode {h(c.mode or 'thingy')}</span>"
         f"<span>scope {h(c.scope)}</span>"
+        f"{shared_chip}"
         "</div>"
         f"<h2>{h(title)}</h2>"
         f'<p class="conversation-preview">{h(c.summary or "No eval summary yet.")}</p>'

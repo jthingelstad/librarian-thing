@@ -1,8 +1,10 @@
-export const LIBRARIAN_CONTRACT_VERSION = '3.1.0';
+// 4.0.0: conversation share links added; email_answer removed (breaking
+// for callers of that action - the sole client shipped in lockstep).
+export const LIBRARIAN_CONTRACT_VERSION = '4.0.0';
 // Majors the server still answers for. 2.x clients predate the chat
-// streamline (curiosity map + experiences removed); drop '2' once the
-// deployed Thingy web client vendors 3.0.0.
-export const SUPPORTED_CONTRACT_MAJORS = ['2', '3'];
+// streamline (curiosity map + experiences removed); 3.x tabs open before
+// the share release still list/get/chat fine (their mail button 400s).
+export const SUPPORTED_CONTRACT_MAJORS = ['2', '3', '4'];
 
 const string = { type: 'string' } as const;
 const boolean = { type: 'boolean' } as const;
@@ -63,8 +65,18 @@ const conversation = object({
   last_message_at: string,
   preview: string,
   local: boolean,
-  draft: boolean
+  draft: boolean,
+  share_token: string,
+  shared_at: string,
+  shared_up_to: string
 });
+const conversationShare = object(
+  { token: string, url: string, shared_at: string, shared_up_to: string, expires_at: string },
+  ['token', 'url']
+);
+const sharedConversation = object({ title: string, created_at: string, shared_at: string, shared_up_to: string }, [
+  'title'
+]);
 const conversationMessage = object({
   role: string,
   content: string,
@@ -132,7 +144,8 @@ const apiProperties = {
   account: ref('accountOverview'),
   reaction: string,
   ok: boolean,
-  has_comment: boolean
+  has_comment: boolean,
+  share: ref('conversationShare')
 };
 
 const streamProperties = {
@@ -161,6 +174,8 @@ export const LIBRARIAN_CONTRACT = {
     mode,
     profile,
     conversation,
+    conversationShare,
+    sharedConversation,
     conversationMessage,
     archiveItem,
     citation,
@@ -180,8 +195,21 @@ export const LIBRARIAN_CONTRACT = {
       ]),
       create: object({ conversation: apiProperties.conversation }, ['conversation']),
       rename: object({ conversation: apiProperties.conversation }, ['conversation']),
-      email_answer: object({ ok: boolean }, ['ok'])
+      share: object({ share: apiProperties.share }, ['share']),
+      unshare: object({ ok: boolean }, ['ok'])
     }),
+    // Public read-only shared-conversation snapshot; the token in the path
+    // is the whole credential.
+    '/share/{token}': {
+      actions: {},
+      schema: object(
+        {
+          conversation: ref('sharedConversation'),
+          messages: arrayOf(ref('conversationMessage'))
+        },
+        ['conversation', 'messages']
+      )
+    },
     '/feedback': endpoint(),
     '/memory': endpoint(),
     // SSE agent loop. The response body is the stream_events sequence below;

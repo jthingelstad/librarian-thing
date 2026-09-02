@@ -91,7 +91,7 @@ Local `.env` values used by upload/build scripts:
 - `THINGY_MAGIC_LINK_FROM_EMAIL` and `THINGY_MAGIC_LINK_BASE_URL` for login email construction.
 - `LIBRARIAN_USER_MEMORY_TTL_DAYS` (optional; defaults to 365 days.)
 - `BRAVE_SEARCH_API_KEY` (optional; enables the `web_search` tool — the tool's schema binds in chat and MCP only when this is set)
-- `CHAT_DAILY_QUOTA` / `MCP_DAILY_QUOTA` / `EMAIL_DAILY_QUOTA` (optional; per-reader daily pools, defaults 50 / 500 / 5)
+- `CHAT_DAILY_QUOTA` / `MCP_DAILY_QUOTA` (optional; per-reader daily pools, defaults 50 / 500)
 
 Deploy and corpus upload scripts load AWS credentials from `.env` through `python-dotenv` before creating `boto3` clients. They do not intentionally fall back to AWS CLI profile authentication.
 
@@ -272,7 +272,7 @@ curl -sS -i -X OPTIONS https://jcvud66qqpq53frvno5stoqntm0zqntw.lambda-url.us-ea
 The Thingy web app deploys from its own repo (`thingy.thingelstad.com`, GitHub Pages) after frontend changes; nothing in this repo deploys it.
 
 
-The `/mcp` endpoint serves MCP streamable HTTP (stateless, protocol 2025-06-18/2025-03-26) from the stream Lambda. It binds every published tool above (18; `web_search` only when configured) with human display titles; auth is a Librarian OAuth bearer token with the `archive:read` scope; each tools/call spends one unit of the per-user daily mcp quota (`MCP_DAILY_QUOTA`, default 500, doubled for supporting members), independent of the chat pool (`CHAT_DAILY_QUOTA`, default 50) and the answer-email pool (`EMAIL_DAILY_QUOTA`, default 5). Every MCP tool response and `corpus_stats` carry `server_version` (`1.1.0+tools.<prompt fingerprint>`), the cache key clients use to detect a stale tools/list; `initialize` declares `tools.listChanged: true`.
+The `/mcp` endpoint serves MCP streamable HTTP (stateless, protocol 2025-06-18/2025-03-26) from the stream Lambda. It binds every published tool above (18; `web_search` only when configured) with human display titles; auth is a Librarian OAuth bearer token with the `archive:read` scope; each tools/call spends one unit of the per-user daily mcp quota (`MCP_DAILY_QUOTA`, default 500, doubled for supporting members), independent of the chat pool (`CHAT_DAILY_QUOTA`, default 50). Every MCP tool response and `corpus_stats` carry `server_version` (`1.1.0+tools.<prompt fingerprint>`), the cache key clients use to detect a stale tools/list; `initialize` declares `tools.listChanged: true`.
 
 The `/tools` endpoint (2026-09) is the WebMCP page-tool door on the same stream Lambda: house-style JSON actions (`list`, `call`) over `WEB_TOOLS` (the MCP set minus the outbound-network tools), authenticated like the other web surfaces (`resolveSessionToken`: HttpOnly session cookie via the thingy distribution, or Bearer), with its own daily pool (`WEB_TOOLS_DAILY_QUOTA`, default 200) and a 120/hr rate limit. It shares the audited invoker and result serializer with `/mcp` (audit rows carry `surface: 'web'`), and is deliberately unreachable via librarian.thingelstad.com - the web app calls it same-origin as `/api/tools`.
 

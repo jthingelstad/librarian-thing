@@ -1,25 +1,32 @@
 import crypto from 'node:crypto';
-import { BatchWriteItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { BatchWriteItemCommand, QueryCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import type { AttributeValue, QueryCommandOutput, WriteRequest } from '@aws-sdk/client-dynamodb';
 import { dynamodb } from '../shared/aws-clients.mjs';
-import { jsonResponse } from '../shared/http.mjs';
+import { clientSourceIp, jsonResponse } from '../shared/http.mjs';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import { emailHash, normalizeEmail, verifyToken } from '../shared/session.mjs';
+import { verifyToken } from '../shared/session.mjs';
 import { resolveSessionToken } from '../shared/web-session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { logEvent } from '../shared/logging.mjs';
 import {
   availableConversationModes,
   canUseConversationMode,
-  isOwnerSubscriberHash,
   normalizeConversationMode
 } from '../shared/conversation-modes.mjs';
-import { consumeDailyQuota, emailDailyQuota } from '../shared/quota.mjs';
-import { jmapConfigured, sendJmapEmail } from '../shared/jmap-mail.mjs';
-import { answerEmailHtml, answerEmailSubject, answerEmailText } from '../shared/answer-email.mjs';
+import { checkRateLimit } from '../shared/rate-limit.mjs';
+import {
+  deleteShare,
+  generateShareToken,
+  getShare,
+  putShare,
+  shareRowKey,
+  shareUrl,
+  validShareToken
+} from '../shared/share-store.mjs';
 import {
   createUserConversation,
   getUserConversation,
+  getUserConversationMetadata,
   loadUserConversationSummaries,
   renameUserConversation
 } from '../shared/conversation-store.mjs';
@@ -39,6 +46,11 @@ interface ConversationRouteOptions {
   start?: number;
   entitlementsForSessionPayload: (payload: Claims) => readonly unknown[];
 }
+
+// Hourly caps: creation is per subscriber, viewing is per source IP (the
+// viewer is anonymous). Both ride the generic rate#... counter rows.
+const SHARE_CREATE_HOURLY_LIMIT = 20;
+const SHARE_VIEW_HOURLY_LIMIT = 120;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,6 +80,59 @@ async function batchDeleteKeys(tableName: string, keys: Array<Record<string, Att
     }
   }
   return deleted;
+}
+
+async function collectConversationKeys(tableName: string, subscriberHash: string, conversationId: string) {
+  const keys: Array<Record<string, AttributeValue>> = [
+    {
+      pk: conversationDynamoString(userConversationPk(subscriberHash)),
+      sk: conversationDynamoString(conversationSk(conversationId))
+    }
+  ];
+  let exclusiveStartKey: Record<string, AttributeValue> | undefined;
+  do {
+    const response: QueryCommandOutput = await dynamodb.send(
+      new QueryCommand({
+        TableName: tableName,
+        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
+        ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
+        ExpressionAttributeValues: {
+          ':pk': conversationDynamoString(userConversationPk(subscriberHash)),
+          ':prefix': conversationDynamoString(turnSkPrefix(conversationId))
+        },
+        ExclusiveStartKey: exclusiveStartKey,
+        ProjectionExpression: 'pk, sk'
+      })
+    );
+    for (const item of response.Items || []) keys.push({ pk: item.pk, sk: item.sk });
+    exclusiveStartKey = response.LastEvaluatedKey;
+  } while (exclusiveStartKey);
+  return keys;
+}
+
+// Sharing pins the conversation: a link that outlives the 45-day retention
+// cadence must keep its rows alive. Bounded by the turn cap, so a plain
+// per-key update loop is fine.
+async function restampConversationTtl(
+  tableName: string,
+  subscriberHash: string,
+  conversationId: string,
+  ttlSeconds: number
+) {
+  const keys = await collectConversationKeys(tableName, subscriberHash, conversationId);
+  for (const Key of keys) {
+    await dynamodb.send(
+      new UpdateItemCommand({
+        TableName: tableName,
+        Key,
+        UpdateExpression: 'SET #ttl = :ttl',
+        ConditionExpression: 'attribute_exists(pk)',
+        ExpressionAttributeNames: { '#ttl': 'ttl' },
+        ExpressionAttributeValues: { ':ttl': { N: String(ttlSeconds) } }
+      })
+    );
+  }
+  return keys.length;
 }
 
 async function conversationAuth(event: LibrarianHttpEvent, body: RequestBody) {
@@ -163,58 +228,99 @@ export async function handleUserConversations(
       return jsonResponse(200, { conversation }, event);
     }
 
-    if (action === 'email_answer') {
+    if (action === 'share') {
       const conversationId = validConversationId(body.conversation_id || body.id);
       if (!conversationId) return jsonResponse(400, { error: 'conversation_id is required.' }, event);
-      // Self-send only: the address must hash to the signed-in subject, so
-      // Thingy can never be used to mail an answer to someone else and the
-      // server never needs a plaintext address at rest.
-      const email = normalizeEmail(body.email);
-      if (!email || emailHash(email) !== subscriberHash) {
-        return jsonResponse(403, { error: 'Answers can only be emailed to your own signed-in address.' }, event);
+      const metadata = await getUserConversationMetadata({ dynamodb, tableName, subscriberHash, conversationId });
+      if (!metadata) return jsonResponse(404, { error: 'Conversation not found.' }, event);
+      if (!(await checkRateLimit(`sharecreate#${subscriberHash}`, SHARE_CREATE_HOURLY_LIMIT))) {
+        return jsonResponse(429, { error: 'Too many share links created; try again in an hour.' }, event);
       }
-      if (!jmapConfigured()) {
-        return jsonResponse(503, { error: 'Email is not available right now.' }, event);
-      }
-      const result = await getUserConversation({ dynamodb, tableName, subscriberHash, conversationId });
-      if (!result) return jsonResponse(404, { error: 'Conversation not found.' }, event);
-      const requestId = String(body.request_id || '').trim();
-      const answers = (result.messages || []).filter(
-        (message) => message.role === 'assistant' && String(message.content || '').trim()
+      // Re-sharing keeps the URL and advances the cutoff; the plaintext
+      // token lives only on the owner's conversation row for that reason.
+      const existingToken = validShareToken((metadata as Record<string, unknown>).share_token);
+      const token = existingToken || generateShareToken();
+      const now = new Date();
+      const sharedUpTo = now.toISOString();
+      const sharedAt = existingToken
+        ? String((metadata as Record<string, unknown>).shared_at || sharedUpTo)
+        : sharedUpTo;
+      const expiresAt = await putShare({ token, subscriberHash, conversationId, sharedUpTo, now });
+      await dynamodb.send(
+        new UpdateItemCommand({
+          TableName: tableName,
+          Key: {
+            pk: conversationDynamoString(userConversationPk(subscriberHash)),
+            sk: conversationDynamoString(conversationSk(conversationId))
+          },
+          ConditionExpression: 'attribute_exists(pk)',
+          UpdateExpression:
+            'SET #share_token = :share_token, #shared_at = :shared_at, #shared_up_to = :shared_up_to, #ttl_floor = :expires, #ttl = :expires',
+          ExpressionAttributeNames: {
+            '#share_token': 'share_token',
+            '#shared_at': 'shared_at',
+            '#shared_up_to': 'shared_up_to',
+            '#ttl_floor': 'ttl_floor',
+            '#ttl': 'ttl'
+          },
+          ExpressionAttributeValues: {
+            ':share_token': conversationDynamoString(token),
+            ':shared_at': conversationDynamoString(sharedAt),
+            ':shared_up_to': conversationDynamoString(sharedUpTo),
+            ':expires': { N: String(expiresAt) }
+          }
+        })
       );
-      const target = requestId
-        ? answers.find((message) => String(message.request_id || '') === requestId)
-        : answers.at(-1);
-      if (!target) return jsonResponse(404, { error: 'No answer found to email.' }, event);
-      const questionFor = (result.messages || []).find(
-        (message) => message.role === 'user' && String(message.request_id || '') === String(target.request_id || '')
-      );
-      if (!isOwnerSubscriberHash(subscriberHash)) {
-        const quota = await consumeDailyQuota('email', subscriberHash, emailDailyQuota());
-        if (!quota.allowed) {
-          return jsonResponse(
-            429,
-            { error: `Daily email limit reached (${quota.max} per day). It resets at midnight UTC.` },
-            event
-          );
-        }
-      }
-      const emailInput = {
-        conversationTitle: result.conversation?.title,
-        question: questionFor?.content || '',
-        answer: target.content,
-        citations: Array.isArray(target.citations) ? (target.citations as Record<string, unknown>[]) : []
-      };
-      await sendJmapEmail({
-        to: email,
-        subject: answerEmailSubject(result.conversation?.title),
-        text: answerEmailText(emailInput),
-        html: answerEmailHtml(emailInput)
-      });
-      logEvent('info', 'answer_emailed', {
+      await restampConversationTtl(tableName, subscriberHash, conversationId, expiresAt);
+      logEvent('info', 'share_link_created', {
         subscriber_hash: subscriberHash,
         conversation_id: conversationId,
-        request_id: String(target.request_id || ''),
+        refreshed: Boolean(existingToken),
+        duration_ms: Math.round(performance.now() - start)
+      });
+      return jsonResponse(
+        200,
+        {
+          share: {
+            token,
+            url: shareUrl(token),
+            shared_at: sharedAt,
+            shared_up_to: sharedUpTo,
+            expires_at: new Date(expiresAt * 1000).toISOString()
+          }
+        },
+        event
+      );
+    }
+
+    if (action === 'unshare') {
+      const conversationId = validConversationId(body.conversation_id || body.id);
+      if (!conversationId) return jsonResponse(400, { error: 'conversation_id is required.' }, event);
+      const metadata = await getUserConversationMetadata({ dynamodb, tableName, subscriberHash, conversationId });
+      if (!metadata) return jsonResponse(404, { error: 'Conversation not found.' }, event);
+      const token = validShareToken((metadata as Record<string, unknown>).share_token);
+      if (token) await deleteShare(token);
+      await dynamodb.send(
+        new UpdateItemCommand({
+          TableName: tableName,
+          Key: {
+            pk: conversationDynamoString(userConversationPk(subscriberHash)),
+            sk: conversationDynamoString(conversationSk(conversationId))
+          },
+          ConditionExpression: 'attribute_exists(pk)',
+          UpdateExpression: 'REMOVE #share_token, #shared_at, #shared_up_to, #ttl_floor',
+          ExpressionAttributeNames: {
+            '#share_token': 'share_token',
+            '#shared_at': 'shared_at',
+            '#shared_up_to': 'shared_up_to',
+            '#ttl_floor': 'ttl_floor'
+          }
+        })
+      );
+      logEvent('info', 'share_link_revoked', {
+        subscriber_hash: subscriberHash,
+        conversation_id: conversationId,
+        had_share: Boolean(token),
         duration_ms: Math.round(performance.now() - start)
       });
       return jsonResponse(200, { ok: true }, event);
@@ -223,29 +329,11 @@ export async function handleUserConversations(
     if (action === 'delete' || action === 'trash') {
       const conversationId = validConversationId(body.conversation_id || body.id);
       if (!conversationId) return jsonResponse(400, { error: 'conversation_id is required.' }, event);
-      const keys: Array<Record<string, AttributeValue>> = [
-        {
-          pk: conversationDynamoString(userConversationPk(subscriberHash)),
-          sk: conversationDynamoString(conversationSk(conversationId))
-        }
-      ];
-      let exclusiveStartKey: Record<string, AttributeValue> | undefined;
-      do {
-        const response: QueryCommandOutput = await dynamodb.send(
-          new QueryCommand({
-            TableName: tableName,
-            KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
-            ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
-            ExpressionAttributeValues: {
-              ':pk': conversationDynamoString(userConversationPk(subscriberHash)),
-              ':prefix': conversationDynamoString(turnSkPrefix(conversationId))
-            },
-            ExclusiveStartKey: exclusiveStartKey
-          })
-        );
-        for (const item of response.Items || []) keys.push({ pk: item.pk, sk: item.sk });
-        exclusiveStartKey = response.LastEvaluatedKey;
-      } while (exclusiveStartKey);
+      // A deleted conversation must take its share link with it.
+      const metadata = await getUserConversationMetadata({ dynamodb, tableName, subscriberHash, conversationId });
+      const shareToken = validShareToken((metadata as Record<string, unknown> | null)?.share_token);
+      const keys = await collectConversationKeys(tableName, subscriberHash, conversationId);
+      if (shareToken) keys.push(shareRowKey(shareToken));
 
       const deletedItems = await batchDeleteKeys(tableName, keys);
       logEvent('info', 'user_conversation_deleted', {
@@ -269,4 +357,85 @@ export async function handleUserConversations(
   }
 
   return jsonResponse(400, { error: 'Unsupported conversation action.' }, event);
+}
+
+function shareNotFound(event: LibrarianHttpEvent) {
+  return jsonResponse(404, { error: 'This shared conversation is no longer available.' }, event);
+}
+
+// Public, unauthenticated: GET /share/{token}. Returns a read-only snapshot
+// bounded by the share's cutoff, stripped to what the shared page renders.
+// Everything else on the turn (feedback, eval fields, tool traces, request
+// ids) stays private.
+export async function handleSharedConversationView(
+  event: LibrarianHttpEvent,
+  token: string,
+  start = performance.now()
+) {
+  const tableName = process.env.TABLE_NAME;
+  if (!tableName) return conversationTableUnavailable(event);
+  const validToken = validShareToken(token);
+  if (!validToken) return shareNotFound(event);
+  if (!(await checkRateLimit(`shareview#${clientSourceIp(event)}`, SHARE_VIEW_HOURLY_LIMIT))) {
+    return jsonResponse(429, { error: 'Too many requests; try again shortly.' }, event);
+  }
+  try {
+    const share = await getShare(validToken);
+    if (!share) return shareNotFound(event);
+    const result = await getUserConversation({
+      dynamodb,
+      tableName,
+      subscriberHash: share.subscriberHash,
+      conversationId: share.conversationId
+    });
+    if (!result) return shareNotFound(event);
+    const messages = (result.messages || [])
+      .filter(
+        (message) =>
+          String(message.content || '').trim() &&
+          String(message.created_at || '') &&
+          String(message.created_at) <= share.sharedUpTo
+      )
+      .map((message) =>
+        message.role === 'assistant'
+          ? {
+              role: 'assistant',
+              content: String(message.content || ''),
+              citations: Array.isArray(message.citations) ? message.citations : [],
+              created_at: String(message.created_at || '')
+            }
+          : {
+              role: 'user',
+              content: String(message.content || ''),
+              created_at: String(message.created_at || '')
+            }
+      );
+    logEvent('info', 'share_link_viewed', {
+      conversation_id: share.conversationId,
+      message_count: messages.length,
+      duration_ms: Math.round(performance.now() - start)
+    });
+    const response = jsonResponse(
+      200,
+      {
+        conversation: {
+          title: String(result.conversation?.title || 'A Thingy conversation'),
+          created_at: String(result.conversation?.created_at || ''),
+          shared_at: share.createdAt,
+          shared_up_to: share.sharedUpTo
+        },
+        messages
+      },
+      event
+    );
+    // Revocation must be immediate; never let an edge or browser cache
+    // outlive the share row.
+    response.headers = { ...(response.headers || {}), 'cache-control': 'no-store' };
+    return response;
+  } catch (error) {
+    logEvent('error', 'share_link_view_failed', {
+      error_type: error instanceof Error ? error.constructor.name : 'Error'
+    });
+    return jsonResponse(502, { error: 'Thingy could not load this shared conversation right now.' }, event);
+  }
 }

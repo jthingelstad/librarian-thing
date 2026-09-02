@@ -516,6 +516,13 @@ Resources:
       RouteKey: POST /memory
       Target: !Sub integrations/${LibrarianIntegration}
 
+  ShareViewRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref LibrarianApi
+      RouteKey: GET /share/{token}
+      Target: !Sub integrations/${LibrarianIntegration}
+
   HealthRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:

@@ -335,13 +335,15 @@ export async function renameUserConversation({
         pk: dynamoString(userConversationPk(subscriberHash)),
         sk: dynamoString(conversationSk(validId))
       },
-      UpdateExpression: 'SET #title = :title, #title_source = :title_source, #updated_at = :updated_at, #ttl = :ttl',
+      UpdateExpression:
+        'SET #title = :title, #title_source = :title_source, #updated_at = :updated_at, #ttl = if_not_exists(#ttl_floor, :ttl)',
       ConditionExpression: 'attribute_exists(pk)',
       ExpressionAttributeNames: {
         '#title': 'title',
         '#title_source': 'title_source',
         '#updated_at': 'updated_at',
-        '#ttl': 'ttl'
+        '#ttl': 'ttl',
+        '#ttl_floor': 'ttl_floor'
       },
       ExpressionAttributeValues: {
         ':title': dynamoString(conversationTitle(title)),
@@ -460,7 +462,7 @@ async function upsertConversation({
           ? '#last_question = if_not_exists(#last_question, :question)'
           : '#last_question = :question',
         '#turn_count = if_not_exists(#turn_count, :zero) + :turn_increment',
-        '#ttl = :ttl'
+        '#ttl = if_not_exists(#ttl_floor, :ttl)'
       ].join(', '),
       ExpressionAttributeNames: {
         '#item_type': 'item_type',
@@ -476,7 +478,8 @@ async function upsertConversation({
         '#last_request_id': 'last_request_id',
         '#last_question': 'last_question',
         '#turn_count': 'turn_count',
-        '#ttl': 'ttl'
+        '#ttl': 'ttl',
+        '#ttl_floor': 'ttl_floor'
       },
       ExpressionAttributeValues: {
         ':item_type': dynamoString('conversation'),
@@ -679,7 +682,7 @@ export async function updateUserConversationEvaluation({
           '#eval_thingy = :eval_thingy',
           '#eval_takeaway = :eval_takeaway',
           '#updated_at = :updated_at',
-          '#ttl = :ttl'
+          '#ttl = if_not_exists(#ttl_floor, :ttl)'
         ].join(', '),
         ConditionExpression: 'attribute_exists(pk)',
         ExpressionAttributeNames: {
@@ -700,7 +703,8 @@ export async function updateUserConversationEvaluation({
           '#eval_thingy': 'eval_thingy',
           '#eval_takeaway': 'eval_takeaway',
           '#updated_at': 'updated_at',
-          '#ttl': 'ttl'
+          '#ttl': 'ttl',
+          '#ttl_floor': 'ttl_floor'
         },
         ExpressionAttributeValues: {
           ':summary': dynamoString(String(summary.summary || '').slice(0, 1000)),
@@ -742,14 +746,15 @@ export async function updateUserConversationEvaluation({
               sk: dynamoString(conversationSk(validId))
             },
             UpdateExpression:
-              'SET #title = :title, #title_source = :title_source, #updated_at = :updated_at, #ttl = :ttl',
+              'SET #title = :title, #title_source = :title_source, #updated_at = :updated_at, #ttl = if_not_exists(#ttl_floor, :ttl)',
             ConditionExpression:
               'attribute_exists(pk) AND (attribute_not_exists(#title_source) OR #title_source <> :user_title_source)',
             ExpressionAttributeNames: {
               '#title': 'title',
               '#title_source': 'title_source',
               '#updated_at': 'updated_at',
-              '#ttl': 'ttl'
+              '#ttl': 'ttl',
+              '#ttl_floor': 'ttl_floor'
             },
             ExpressionAttributeValues: {
               ':title': dynamoString(evaluatedTitle),
