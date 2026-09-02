@@ -593,6 +593,12 @@ async function streamBedrockAgentAnswer(
       answer = bedrockMessageText(message) || result.text;
       break;
     }
+    // This turn's narration already streamed as answer deltas; without a
+    // break the next turn's text glues straight onto its last sentence
+    // ("...for RSS content.Great - WT48 has..."). Close the paragraph.
+    if (streamAnswerDeltas && result.text.trim() && !shouldStopWriting()) {
+      writeSse(responseStream, 'answer_delta', { delta: '\n\n' });
+    }
     const commentary = activityCommentaryText(result.text);
     const resultBlocks: ContentBlock[] = [];
     for (const [index, toolUse] of toolUses.entries()) {
