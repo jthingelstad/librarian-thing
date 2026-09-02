@@ -30,6 +30,17 @@ function markerOk(event: LibrarianHttpEvent | null | undefined) {
   return crypto.timingSafeEqual(expectedDigest, suppliedDigest);
 }
 
+// Guest-lane gate: guests can only arrive through the thingy
+// distribution, which stamps the origin marker on every /api request -
+// a fleet POSTing the Lambda URL directly never carries it. When the
+// marker env is unset (local dev without the token, or the kill-switch
+// wipe) the gate stands DOWN rather than killing the guest feature:
+// unlike cookies, there is no ambient credential to protect here.
+export function guestOriginOk(event: LibrarianHttpEvent | null | undefined) {
+  if (!String(process.env.THINGY_WEB_ORIGIN_TOKEN || '')) return true;
+  return markerOk(event);
+}
+
 function contractHeaderPresent(event: LibrarianHttpEvent | null | undefined) {
   return Boolean(normalizeHeaders(event?.headers || {})['x-librarian-contract-version']);
 }

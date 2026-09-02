@@ -93,8 +93,26 @@ test('empty and duplicate cookie entries resolve safely', () => {
   assert.equal(sessionCookie({ cookies: [`${SESSION_COOKIE}=`] }), '');
   assert.equal(sessionCookie({ cookies: [`${SESSION_COOKIE}=first`, `${SESSION_COOKIE}=second`] }), 'first');
   const resolved = resolveSessionToken(
-    { headers: { 'x-thingy-origin': MARKER, 'x-librarian-contract-version': '3.1.0' }, cookies: [`${SESSION_COOKIE}=`] },
+    {
+      headers: { 'x-thingy-origin': MARKER, 'x-librarian-contract-version': '3.1.0' },
+      cookies: [`${SESSION_COOKIE}=`]
+    },
     {}
   );
   assert.equal(resolved.source, 'none');
+});
+
+test('guestOriginOk: gate stands down when unset, enforces when configured', async () => {
+  const { guestOriginOk } = await import('../dist/shared/web-session.mjs');
+  const withMarker = (value) => ({ headers: value === undefined ? {} : { 'x-thingy-origin': value } });
+  delete process.env.THINGY_WEB_ORIGIN_TOKEN;
+  assert.equal(guestOriginOk(withMarker(undefined)), true, 'unset token: gate stands down');
+  process.env.THINGY_WEB_ORIGIN_TOKEN = 'marker-secret';
+  try {
+    assert.equal(guestOriginOk(withMarker('marker-secret')), true, 'stamped requests pass');
+    assert.equal(guestOriginOk(withMarker(undefined)), false, 'unstamped direct-to-Lambda traffic fails');
+    assert.equal(guestOriginOk(withMarker('wrong')), false, 'wrong marker fails');
+  } finally {
+    delete process.env.THINGY_WEB_ORIGIN_TOKEN;
+  }
 });

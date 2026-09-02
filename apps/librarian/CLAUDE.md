@@ -113,7 +113,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `BRAVE_SEARCH_API_KEY` | stream | Optional; enables the `web_search` tool (spec binds only when set) |
 | `LIBRARIAN_SOURCE_REVISION` | stream | Set by CFN to `StreamCodeKey`; stamped onto tool traces |
 | `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `WEB_TOOLS_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 200 per reader per day (doubled for supporting members, owner exempt) |
-| `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (100) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm` |
+| `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm`. Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
 | `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |
 
 ## Bedrock model gotchas

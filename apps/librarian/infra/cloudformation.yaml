@@ -322,7 +322,7 @@ Resources:
           # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
           THINGY_GUEST_CHAT: "on"
           GUEST_DAILY_QUOTA: "3"
-          GUEST_GLOBAL_DAILY_QUOTA: "100"
+          GUEST_GLOBAL_DAILY_QUOTA: "25"
       Handler: chat/handler.handler
       MemorySize: 3008
       ReservedConcurrentExecutions: 5
@@ -474,7 +474,11 @@ Resources:
               OriginProtocolPolicy: https-only
               OriginSSLProtocols:
                 - TLSv1.2
-            DomainName: !Select [2, !Split ["/", !GetAtt LibrarianStreamFunctionUrl.FunctionUrl]]
+            DomainName:
+              !Select [
+                2,
+                !Split ["/", !GetAtt LibrarianStreamFunctionUrl.FunctionUrl],
+              ]
             Id: LibrarianStreamFunctionUrlOrigin
         PriceClass: PriceClass_100
         ViewerCertificate:
@@ -707,7 +711,7 @@ Resources:
       MetricTransformations:
         - MetricName: LibrarianOauthAuthFailures
           MetricNamespace: WeeklyThingLibrarian
-          MetricValue: '1'
+          MetricValue: "1"
           DefaultValue: 0
 
   LibrarianOauthFailuresAlarm:
@@ -743,7 +747,7 @@ Resources:
       MetricTransformations:
         - MetricName: LibrarianStreamHandledFailures
           MetricNamespace: WeeklyThingLibrarian
-          MetricValue: '1'
+          MetricValue: "1"
           DefaultValue: 0
 
   LibrarianStreamFailuresAlarm:
@@ -773,7 +777,7 @@ Resources:
       MetricTransformations:
         - MetricName: LibrarianChatRejections
           MetricNamespace: WeeklyThingLibrarian
-          MetricValue: '1'
+          MetricValue: "1"
           DefaultValue: 0
 
   LibrarianChatRejectionsAlarm:
@@ -806,7 +810,7 @@ Resources:
       MetricTransformations:
         - MetricName: LibrarianGuestBreakerTrips
           MetricNamespace: WeeklyThingLibrarian
-          MetricValue: '1'
+          MetricValue: "1"
           DefaultValue: 0
 
   LibrarianGuestBreakerAlarm:

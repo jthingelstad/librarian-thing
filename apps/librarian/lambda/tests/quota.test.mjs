@@ -46,9 +46,9 @@ test('guest quota envs fall back to the agreed defaults', async () => {
   delete process.env.GUEST_DAILY_QUOTA;
   delete process.env.GUEST_GLOBAL_DAILY_QUOTA;
   assert.equal(DEFAULT_GUEST_DAILY_QUOTA, 3);
-  assert.equal(DEFAULT_GUEST_GLOBAL_DAILY_QUOTA, 100);
+  assert.equal(DEFAULT_GUEST_GLOBAL_DAILY_QUOTA, 25);
   assert.equal(guestDailyQuota(), 3);
-  assert.equal(guestGlobalDailyQuota(), 100);
+  assert.equal(guestGlobalDailyQuota(), 25);
   process.env.GUEST_DAILY_QUOTA = '5';
   assert.equal(guestDailyQuota(), 5);
   process.env.GUEST_DAILY_QUOTA = '0';

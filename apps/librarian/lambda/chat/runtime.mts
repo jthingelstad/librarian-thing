@@ -76,7 +76,7 @@ import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
-import { resolveSessionToken } from '../shared/web-session.mjs';
+import { guestOriginOk, resolveSessionToken } from '../shared/web-session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { getUserMemory, recordUserPreferredName, recordUserTurn } from '../shared/user-memory.mjs';
 import { validConversationId } from '../shared/user-conversations.mjs';
@@ -1113,6 +1113,14 @@ async function handleGuestWelcome({
 async function handleGuestChat({ event, body, stream, requestId, start, rejectStream }: GuestChatContext) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
     rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    return;
+  }
+  // Guests only exist inside the web app; every real browser reaches us
+  // through the thingy distribution, which stamps the origin marker.
+  // Direct-to-Lambda scripted traffic (the 2026-09-02 fleet) fails here
+  // before any quota or rate-limit spend.
+  if (!guestOriginOk(event)) {
+    rejectStream(401, 'guest_origin_required', 'Please use thingy.thingelstad.com to ask Thingy as a guest.');
     return;
   }
   const question = String(body.message || '').trim();

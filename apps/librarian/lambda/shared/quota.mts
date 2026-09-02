@@ -17,7 +17,11 @@ export const DEFAULT_WEB_TOOLS_DAILY_QUOTA = 200;
 // unlike the reader pools these caps must hold even when the counter
 // table is unreachable (Jamie's design call, 2026-09-01).
 export const DEFAULT_GUEST_DAILY_QUOTA = 3;
-export const DEFAULT_GUEST_GLOBAL_DAILY_QUOTA = 100;
+// Lowered 100 -> 25 on 2026-09-02: day one of guest traffic was a
+// scripted fleet (~60 rotating IPs) that drained the full pool; with no
+// known real readers yet, 25 still covers a handful of genuine demo
+// sessions while cutting the harvest value.
+export const DEFAULT_GUEST_GLOBAL_DAILY_QUOTA = 25;
 
 const QUOTA_TTL_SECONDS = 2 * 24 * 60 * 60;
 
