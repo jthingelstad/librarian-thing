@@ -145,18 +145,23 @@ function citationsFor(chunks: ArchiveRecord[]) {
       : `${chunk.issue_number}\0${chunk.section || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
+    // The contract types these fields as strings; source records sometimes
+    // carry explicit nulls (e.g. a whole-issue record with section: null),
+    // and a null here fails the web client's stream validation - it drops
+    // the whole citations event as malformed. Omit absent values instead.
+    const text = (value: unknown) => (value == null ? undefined : String(value));
     citations.push({
       issue_number: chunk.issue_number ?? null,
       source_kind: chunk.source_kind || (external ? 'external' : 'chunk'),
-      subject: chunk.subject,
-      publish_date: chunk.publish_date,
-      section: chunk.section,
-      url: chunk.url,
-      transcript_url: chunk.transcript_url,
-      audio_url: chunk.audio_url,
+      subject: text(chunk.subject),
+      publish_date: text(chunk.publish_date),
+      section: text(chunk.section),
+      url: text(chunk.url),
+      transcript_url: text(chunk.transcript_url),
+      audio_url: text(chunk.audio_url),
       episode_number: chunk.episode_number,
-      show: chunk.show,
-      also_in_issues: chunk.also_in_issues
+      show: text(chunk.show),
+      also_in_issues: Array.isArray(chunk.also_in_issues) ? chunk.also_in_issues : undefined
     });
   }
   return citations;
