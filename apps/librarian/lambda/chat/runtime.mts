@@ -637,6 +637,15 @@ async function streamBedrockAgentAnswer(
           })
         );
         result = { error: `${toolName} failed: ${errorName(error)}` };
+        // Surface the failure as its own activity row (the client styles
+        // ✗-prefixed lines in the error tone, like a failed command).
+        if (!shouldStopWriting()) {
+          writeSse(responseStream, 'status', {
+            kind: 'tool',
+            tool_name: toolName,
+            message: `✗ ${toolTitle(toolName)} did not respond - working around it.`
+          });
+        }
       }
       toolTrace.calls.push({
         name: toolName,
