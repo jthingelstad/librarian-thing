@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { ConverseCommand, ConverseStreamCommand } from '@aws-sdk/client-bedrock-runtime';
 import type { ContentBlock, Message, SystemContentBlock, Tool, ToolResultBlock } from '@aws-sdk/client-bedrock-runtime';
 import type { Writable } from 'node:stream';
@@ -1009,6 +1010,78 @@ interface GuestChatContext {
 // stacked guards bound the unauthenticated Bedrock spend: the hourly IP
 // rate limit, a per-visitor strict daily quota, and a global fail-closed
 // circuit breaker. Kill switch: THINGY_GUEST_CHAT=off.
+// Guest suggestion chips: one corpus-grounded set per UTC day, generated
+// on first demand and cached in Dynamo, so guests get the same grounded
+// first-tap moment at ~one model call per day instead of one per visitor.
+const GUEST_SUGGESTIONS_TTL_SECONDS = 60 * 60 * 24 * 7;
+
+async function loadOrGenerateGuestSuggestions(): Promise<string[]> {
+  const day = new Date().toISOString().slice(0, 10);
+  const key = { pk: { S: 'guestsuggestions' }, sk: { S: 'current' } };
+  try {
+    const existing = await dynamodb.send(new GetItemCommand({ TableName: process.env.TABLE_NAME, Key: key }));
+    if (existing.Item?.day?.S === day) {
+      const parsed: unknown = JSON.parse(existing.Item.suggestions?.S || '[]');
+      return Array.isArray(parsed) ? parsed.map((entry) => String(entry || '')).filter(Boolean) : [];
+    }
+  } catch (error) {
+    logEvent('warning', 'guest_suggestions_read_failed', { error_type: errorName(error) });
+  }
+  let suggestions: string[] = [];
+  try {
+    const grounding = await retrieve('memorable stories, ideas, and recurring threads in the archive', 6, {});
+    const generated = await generateWelcome({
+      readerContext: 'A first-time guest visitor with no prior context.',
+      conversations: [],
+      scope: 'all',
+      mode: 'thingy',
+      grounding
+    });
+    suggestions = generated.suggestions;
+    await dynamodb.send(
+      new PutItemCommand({
+        TableName: process.env.TABLE_NAME,
+        Item: {
+          ...key,
+          day: { S: day },
+          suggestions: { S: JSON.stringify(suggestions) },
+          ttl: { N: String(Math.floor(Date.now() / 1000) + GUEST_SUGGESTIONS_TTL_SECONDS) }
+        }
+      })
+    );
+  } catch (error) {
+    logEvent('warning', 'guest_suggestions_generate_failed', { error_type: errorName(error) });
+  }
+  return suggestions;
+}
+
+async function handleGuestWelcome({
+  event,
+  stream,
+  requestId,
+  rejectStream
+}: {
+  event: LibrarianHttpEvent;
+  stream: Writable;
+  requestId: string;
+  rejectStream: (statusCode: number, reason: string, message: string) => void;
+}) {
+  if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
+    rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    return;
+  }
+  const ip = clientSourceIp(event);
+  const guestId = ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 32) : '';
+  if (!guestId || !(await checkRateLimit(`guestwelcome#${guestId}`, GUEST_RATE_LIMIT_MAX))) {
+    rejectStream(429, 'guest_rate_limited', 'Try again in a bit.');
+    return;
+  }
+  const suggestions = await loadOrGenerateGuestSuggestions();
+  writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION, guest: true });
+  if (suggestions.length) writeSse(stream, 'suggestions', { suggestions });
+  writeSse(stream, 'done', { request_id: requestId, guest: true });
+}
+
 async function handleGuestChat({ event, body, stream, requestId, start, rejectStream }: GuestChatContext) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
     rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
@@ -1322,9 +1395,14 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     const payload = verifyToken(resolveSessionToken(event, body).token);
     if (!payload || !(await sessionAllowedForThingyProfile(payload))) {
       // No valid session: /chat falls through to the guest lane; /welcome
-      // stays signed-in only (the client renders its own guest greeting).
+      // serves the daily corpus-grounded guest suggestions (the client
+      // keeps its own static guest greeting text).
       if (path.endsWith('/chat')) {
         await handleGuestChat({ event, body, stream, requestId, start, rejectStream });
+        return;
+      }
+      if (path.endsWith('/welcome')) {
+        await handleGuestWelcome({ event, stream, requestId, rejectStream });
         return;
       }
       rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
