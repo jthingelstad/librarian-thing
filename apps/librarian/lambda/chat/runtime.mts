@@ -1377,8 +1377,27 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       }
       writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
       writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
-      const answer = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode });
-      writeSse(stream, 'answer_delta', { delta: answer });
+      // Ground the suggestion chips in the corpus: retrieve real passages
+      // near the reader's recent threads (recent-highlights for a first
+      // visit) and hand them to the welcome model. Suggestions must cite
+      // this material - never a canned question list.
+      const suggestionQuery =
+        conversations
+          .slice(0, 3)
+          .map((entry) => String(entry.title || '').trim())
+          .filter(Boolean)
+          .join('; ') || 'memorable stories, ideas, and recurring threads in the archive';
+      let grounding: Awaited<ReturnType<typeof retrieve>> = [];
+      try {
+        grounding = await retrieve(suggestionQuery, 6, { scope });
+      } catch (error) {
+        logEvent('warning', 'welcome_grounding_failed', { error_type: errorName(error) });
+      }
+      const welcome = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode, grounding });
+      writeSse(stream, 'answer_delta', { delta: welcome.answer });
+      if (welcome.suggestions.length) {
+        writeSse(stream, 'suggestions', { suggestions: welcome.suggestions });
+      }
       writeSse(stream, 'done', { request_id: requestId, mode: modeAccess.mode });
       logEvent('info', 'welcome_completed', {
         subscriber_hash: subscriberHash,

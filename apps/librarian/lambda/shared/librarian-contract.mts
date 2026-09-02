@@ -8,7 +8,9 @@
 // accepts it, and stored messages return it (additive). Sending '' marks
 // a root turn (edit of the first message; stored/returned as 'root');
 // omitting the field keeps the legacy linear history.
-export const LIBRARIAN_CONTRACT_VERSION = '4.3.0';
+// 4.4.0: /welcome may emit a suggestions stream event - corpus-grounded
+// follow-up questions for the empty-thread chips (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.4.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -174,7 +176,8 @@ const streamProperties = {
   tool_name: string,
   toolName: string,
   guest: boolean,
-  guest_remaining: number
+  guest_remaining: number,
+  suggestions: arrayOf(string)
 };
 
 export const LIBRARIAN_CONTRACT = {
@@ -275,6 +278,7 @@ export const LIBRARIAN_CONTRACT = {
     answer_delta: object(streamProperties, ['delta']),
     answer: object(streamProperties, ['answer']),
     citations: object(streamProperties, ['citations']),
+    suggestions: object(streamProperties, ['suggestions']),
     done: object(streamProperties),
     error: object(streamProperties, ['error'])
   }
