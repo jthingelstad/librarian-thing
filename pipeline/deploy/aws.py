@@ -570,7 +570,9 @@ def main() -> int:
     )
     parser.add_argument(
         "--thingy-magic-link-base-url",
-        default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/"),
+        # /signin/ owns magic-link redemption; landing on the root relied on a
+        # client-side forwarding hop (kept for emails already in flight).
+        default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/signin/"),
     )
     parser.add_argument(
         "--stream-custom-domain-name",
