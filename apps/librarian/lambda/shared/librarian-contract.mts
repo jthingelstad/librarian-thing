@@ -14,7 +14,10 @@
 // 4.5.0: /conversations search action - full-content substring search
 // over the reader's own turns, returning conversation ids + snippets
 // (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.5.0';
+// 4.6.0: /conversations list pages (request offset/limit, response
+// total) and search matches carry title/updated_at, so history beyond
+// the rail's window is reachable (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.6.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -209,7 +212,7 @@ export const LIBRARIAN_CONTRACT = {
   endpoints: {
     '/auth': endpoint(),
     '/conversations': endpoint({
-      list: object({ conversations: apiProperties.conversations }, ['conversations']),
+      list: object({ conversations: apiProperties.conversations, total: number }, ['conversations']),
       get: object({ conversation: apiProperties.conversation, messages: apiProperties.messages }, [
         'conversation',
         'messages'
@@ -218,9 +221,14 @@ export const LIBRARIAN_CONTRACT = {
       rename: object({ conversation: apiProperties.conversation }, ['conversation']),
       share: object({ share: apiProperties.share }, ['share']),
       unshare: object({ ok: boolean }, ['ok']),
-      search: object({ matches: arrayOf(object({ conversation_id: string, snippet: string }, ['conversation_id'])) }, [
-        'matches'
-      ])
+      search: object(
+        {
+          matches: arrayOf(
+            object({ conversation_id: string, snippet: string, title: string, updated_at: string }, ['conversation_id'])
+          )
+        },
+        ['matches']
+      )
     }),
     // Public read-only shared-conversation snapshot; the token in the path
     // is the whole credential.

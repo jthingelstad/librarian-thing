@@ -284,31 +284,39 @@ export async function searchUserConversationTurns({
   return Array.from(matches.entries(), ([conversation_id, snippet]) => ({ conversation_id, snippet }));
 }
 
-export async function loadUserConversationSummaries({
+// Every conversation row for the user, newest first. One partition, tiny
+// rows; the LastEvaluatedKey loop matters only past ~1000 conversations.
+export async function fetchAllConversationSummaries({
   dynamodb,
   tableName,
   subscriberHash,
-  limit = 8,
   logEvent
 }: LoadSummariesInput) {
   const log = logger(logEvent);
   if (!tableReady({ tableName, subscriberHash })) return [];
   try {
-    const response = await dynamodb.send(
-      new QueryCommand({
-        TableName: tableName,
-        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
-        ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
-        ExpressionAttributeValues: {
-          ':pk': dynamoString(userConversationPk(subscriberHash)),
-          ':prefix': dynamoString('conversation#')
-        }
-      })
-    );
-    return (response.Items || [])
+    const items: NonNullable<QueryCommandOutput['Items']> = [];
+    let exclusiveStartKey: Record<string, AttributeValue> | undefined;
+    for (let page = 0; page < 10; page += 1) {
+      const response: QueryCommandOutput = await dynamodb.send(
+        new QueryCommand({
+          TableName: tableName,
+          KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :prefix)',
+          ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
+          ExpressionAttributeValues: {
+            ':pk': dynamoString(userConversationPk(subscriberHash)),
+            ':prefix': dynamoString('conversation#')
+          },
+          ExclusiveStartKey: exclusiveStartKey
+        })
+      );
+      items.push(...(response.Items || []));
+      exclusiveStartKey = response.LastEvaluatedKey;
+      if (!exclusiveStartKey) break;
+    }
+    return items
       .map(conversationSummaryFromItem)
-      .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')))
-      .slice(0, Math.max(1, Math.min(Number(limit) || 8, USER_CONVERSATION_LIMIT)));
+      .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')));
   } catch (error) {
     log('warning', 'user_conversation_summaries_load_failed', {
       subscriber_hash: subscriberHash,
@@ -316,6 +324,20 @@ export async function loadUserConversationSummaries({
     });
     return [];
   }
+}
+
+export async function loadUserConversationSummaries(input: LoadSummariesInput) {
+  const limit = Math.max(1, Math.min(Number(input.limit) || 8, USER_CONVERSATION_LIMIT));
+  return (await fetchAllConversationSummaries(input)).slice(0, limit);
+}
+
+// Paged window over the full history plus the total - the rail keeps its
+// bounded working set while the All-chats browser walks the rest.
+export async function listUserConversationPage(input: LoadSummariesInput & { offset?: number }) {
+  const all = await fetchAllConversationSummaries(input);
+  const limit = Math.max(1, Math.min(Number(input.limit) || USER_CONVERSATION_LIMIT, 100));
+  const offset = Math.max(0, Number(input.offset) || 0);
+  return { conversations: all.slice(offset, offset + limit), total: all.length };
 }
 
 export async function getUserConversationMetadata({

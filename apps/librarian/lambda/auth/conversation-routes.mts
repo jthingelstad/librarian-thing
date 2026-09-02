@@ -27,9 +27,10 @@ import {
   createUserConversation,
   getUserConversation,
   getUserConversationMetadata,
-  loadUserConversationSummaries,
   renameUserConversation,
-  searchUserConversationTurns
+  searchUserConversationTurns,
+  listUserConversationPage,
+  fetchAllConversationSummaries
 } from '../shared/conversation-store.mjs';
 import {
   USER_CONVERSATION_LIMIT,
@@ -168,31 +169,54 @@ export async function handleUserConversations(
     .toLowerCase();
   try {
     if (action === 'list') {
-      const conversations = await loadUserConversationSummaries({
+      const { conversations, total } = await listUserConversationPage({
         dynamodb,
         tableName,
         subscriberHash,
         limit: Number(body.limit || USER_CONVERSATION_LIMIT),
+        offset: Number(body.offset || 0),
         logEvent
       });
       logEvent('info', 'user_conversations_listed', {
         subscriber_hash: subscriberHash,
         count: conversations.length,
+        total,
+        offset: Number(body.offset || 0),
         duration_ms: Math.round(performance.now() - start)
       });
-      return jsonResponse(200, { conversations, entitlements, modes }, event);
+      return jsonResponse(200, { conversations, total, entitlements, modes }, event);
     }
 
     if (action === 'search') {
       const query = String(body.query || '').trim();
       if (query.length < 2) return jsonResponse(400, { error: 'query must be at least 2 characters.' }, event);
-      const matches = await searchUserConversationTurns({
+      const rawMatches = await searchUserConversationTurns({
         dynamodb,
         tableName,
         subscriberHash,
         query: query.slice(0, 120),
         logEvent
       });
+      // Join titles/dates from the conversation rows so matches outside
+      // the rail's loaded window are still presentable (and prune matches
+      // whose conversation has since been deleted).
+      const allSummaries = new Map(
+        (await fetchAllConversationSummaries({ dynamodb, tableName, subscriberHash, logEvent })).map((entry) => [
+          String(entry.conversation_id || entry.id || ''),
+          entry
+        ])
+      );
+      const matches = rawMatches
+        .map((match) => {
+          const summary = allSummaries.get(match.conversation_id);
+          if (!summary) return null;
+          return {
+            ...match,
+            title: String(summary.title || 'Untitled chat'),
+            updated_at: String(summary.updated_at || '')
+          };
+        })
+        .filter((match): match is NonNullable<typeof match> => match !== null);
       logEvent('info', 'user_conversations_searched', {
         subscriber_hash: subscriberHash,
         match_count: matches.length,
