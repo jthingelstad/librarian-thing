@@ -570,9 +570,10 @@ def main() -> int:
     )
     parser.add_argument(
         "--thingy-magic-link-base-url",
-        # /signin/ owns magic-link redemption; landing on the root relied on a
-        # client-side forwarding hop (kept for emails already in flight).
-        default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/signin/"),
+        # This is the SITE ROOT, not the sign-in page: shareUrl() derives
+        # /c/<token> links from it, and magicLinkBaseWithReturnPath()
+        # already forces /signin/ onto emailed links regardless.
+        default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/"),
     )
     parser.add_argument(
         "--stream-custom-domain-name",

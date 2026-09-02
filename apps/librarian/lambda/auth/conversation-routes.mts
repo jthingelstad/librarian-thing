@@ -8,6 +8,7 @@ import { verifyToken } from '../shared/session.mjs';
 import { resolveSessionToken } from '../shared/web-session.mjs';
 import { sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import { logEvent } from '../shared/logging.mjs';
+import { conversationTtlSeconds } from '../shared/retention.mjs';
 import {
   availableConversationModes,
   canUseConversationMode,
@@ -351,14 +352,27 @@ export async function handleUserConversations(
             sk: conversationDynamoString(conversationSk(conversationId))
           },
           ConditionExpression: 'attribute_exists(pk)',
-          UpdateExpression: 'REMOVE #share_token, #shared_at, #shared_up_to, #ttl_floor',
+          UpdateExpression: 'REMOVE #share_token, #shared_at, #shared_up_to, #ttl_floor SET #ttl = :ttl',
           ExpressionAttributeNames: {
             '#share_token': 'share_token',
             '#shared_at': 'shared_at',
             '#shared_up_to': 'shared_up_to',
-            '#ttl_floor': 'ttl_floor'
+            '#ttl_floor': 'ttl_floor',
+            '#ttl': 'ttl'
+          },
+          ExpressionAttributeValues: {
+            ':ttl': { N: String(conversationTtlSeconds(new Date().toISOString())) }
           }
         })
+      );
+      // Sharing pinned every row to a one-year TTL; revocation restores
+      // the normal retention cadence (conversation row above, turn rows
+      // here) instead of leaving unshared content stored for a year.
+      await restampConversationTtl(
+        tableName,
+        subscriberHash,
+        conversationId,
+        conversationTtlSeconds(new Date().toISOString())
       );
       logEvent('info', 'share_link_revoked', {
         subscriber_hash: subscriberHash,

@@ -56,6 +56,7 @@ import {
   chatDailyQuota,
   consumeDailyQuota,
   consumeDailyQuotaStrict,
+  refundDailyQuota,
   guestDailyQuota,
   guestGlobalDailyQuota,
   mcpDailyQuota,
@@ -1128,24 +1129,27 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     rejectStream(429, 'guest_rate_limited', 'Guest questions are moving too fast. Try again in a bit, or sign in.');
     return;
   }
-  // Consume the GLOBAL pool first: when the daily breaker has tripped,
-  // a rejection must not also burn one of the visitor's own three
-  // questions (previously it did).
-  const globalPool = await consumeDailyQuotaStrict('guest', 'global', guestGlobalDailyQuota());
-  if (!globalPool.allowed) {
-    rejectStream(
-      429,
-      'guest_global_quota_exhausted',
-      'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.'
-    );
-    return;
-  }
+  // Per-visitor first so a capped visitor's retries cannot drain the
+  // global pool (it is the dollar breaker; global-first let one scripted
+  // capped visitor deplete it with zero model spend behind it). When only
+  // the GLOBAL pool rejects, refund the visitor's unit so a tripped
+  // breaker doesn't also burn one of their three questions.
   const perVisitor = await consumeDailyQuotaStrict('guest', guestId, guestDailyQuota());
   if (!perVisitor.allowed) {
     rejectStream(
       429,
       'guest_daily_quota',
       "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going."
+    );
+    return;
+  }
+  const globalPool = await consumeDailyQuotaStrict('guest', 'global', guestGlobalDailyQuota());
+  if (!globalPool.allowed) {
+    await refundDailyQuota('guest', guestId);
+    rejectStream(
+      429,
+      'guest_global_quota_exhausted',
+      'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.'
     );
     return;
   }

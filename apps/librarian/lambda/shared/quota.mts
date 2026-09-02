@@ -90,6 +90,33 @@ export async function consumeDailyQuota(surface: string, identity: string, max: 
   }
 }
 
+// Return one unit to a daily counter - used when a later gate rejects a
+// request whose earlier counter already consumed (e.g. the guest global
+// pool says no after the per-visitor count was taken). Best-effort: a
+// failed refund just means one unit of that day's allowance is lost.
+export async function refundDailyQuota(surface: string, identity: string) {
+  const tableName = process.env.TABLE_NAME;
+  if (!tableName) return;
+  try {
+    await dynamodb.send(
+      new UpdateItemCommand({
+        TableName: tableName,
+        Key: { pk: { S: quotaKey(surface, identity) }, sk: { S: 'quota' } },
+        UpdateExpression: 'ADD #count :minusOne',
+        ConditionExpression: '#count > :zero',
+        ExpressionAttributeNames: { '#count': 'count' },
+        ExpressionAttributeValues: { ':minusOne': { N: '-1' }, ':zero': { N: '0' } }
+      })
+    );
+  } catch (error) {
+    logEvent('warning', 'daily_quota_refund_failed', {
+      surface,
+      identity_hash: identity,
+      error_type: error instanceof Error ? error.constructor.name : 'Error'
+    });
+  }
+}
+
 // Fail-CLOSED variant for unauthenticated spend (guest chat). The reader
 // pools fail open because a broken counter must never take chat down for
 // a known subscriber; a guest has no identity we trust, so when the

@@ -41,7 +41,10 @@ function sharePk(tokenHash: string) {
 }
 
 export function shareUrl(token: string) {
-  return new URL(`c/${token}`, magicLinkBaseUrl()).toString();
+  // Origin-absolute: the base env var carries the site origin, and a
+  // relative join would inherit any path on it (a /signin/ default once
+  // minted /signin/c/<token> links in production).
+  return new URL(`/c/${token}`, magicLinkBaseUrl()).toString();
 }
 
 // The plaintext token lives only on the owner's conversation row (so the

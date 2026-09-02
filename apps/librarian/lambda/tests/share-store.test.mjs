@@ -38,6 +38,14 @@ test('the lookup row is keyed by sha256, never the plaintext token', () => {
 test('share URLs land on the Thingy web /c/ route', () => {
   const token = generateShareToken();
   assert.equal(shareUrl(token), `https://thingy.thingelstad.com/c/${token}`);
+  // A base URL carrying a path (e.g. /signin/) must not bend the share
+  // path - production once minted /signin/c/<token> links.
+  process.env.THINGY_MAGIC_LINK_BASE_URL = 'https://thingy.thingelstad.com/signin/';
+  try {
+    assert.equal(shareUrl(token), `https://thingy.thingelstad.com/c/${token}`);
+  } finally {
+    delete process.env.THINGY_MAGIC_LINK_BASE_URL;
+  }
 });
 
 test('shares pin content for a year', () => {
