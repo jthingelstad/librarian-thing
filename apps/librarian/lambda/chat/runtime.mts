@@ -1652,7 +1652,9 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       writeSse(stream, 'done', {
         request_id: requestId,
         conversation_id: conversationId,
-        conversation,
+        // Persistence failure returns null; the contract types conversation
+        // as an object, so omit it rather than stream an explicit null.
+        ...(conversation ? { conversation } : {}),
         mode: modeAccess.mode
       });
       // Guarded/direct turns still update memory — the question text was
@@ -1784,7 +1786,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     writeSse(stream, 'done', {
       request_id: requestId,
       conversation_id: conversationId,
-      conversation,
+      ...(conversation ? { conversation } : {}),
       mode: modeAccess.mode
     });
     // Update per-user memory after the answer ships. If the sid has

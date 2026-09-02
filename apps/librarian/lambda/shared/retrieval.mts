@@ -326,13 +326,17 @@ function sourceAgeLabel(source: CorpusChunk) {
 }
 
 export function compactSource(source: CorpusChunk, textLimit = 2000) {
+  // ~35 live corpus chunks carry explicit nulls in these fields; the
+  // /retrieve contract types them as strings, so omit absent values
+  // (same normalization citationsFor applies on the /chat side).
+  const text = (value: unknown) => (value == null ? undefined : String(value));
   return {
-    issue_number: source.issue_number,
+    issue_number: source.issue_number ?? undefined,
     source_kind: source.source_kind,
-    subject: source.subject,
-    publish_date: source.publish_date,
-    issue_year: source.issue_year,
-    section: source.section,
+    subject: text(source.subject),
+    publish_date: text(source.publish_date),
+    issue_year: source.issue_year ?? undefined,
+    section: text(source.section),
     age: source.age_label || sourceAgeLabel(source),
     score: source._rerank_score || source._retrieval_score,
     reason: source.retrieval_reason || (source.retrieval_modes || []).join(', '),

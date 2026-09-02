@@ -354,7 +354,12 @@ export async function getUserConversationMetadata({
       Key: {
         pk: dynamoString(userConversationPk(subscriberHash)),
         sk: dynamoString(conversationSk(validId))
-      }
+      },
+      // create/rename re-read through here right after their write; an
+      // eventually consistent Get can miss the fresh row and the route
+      // would answer {conversation: null} against a required-object
+      // contract field.
+      ConsistentRead: true
     })
   );
   return response.Item ? conversationSummaryFromItem(response.Item) : null;

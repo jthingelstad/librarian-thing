@@ -43,3 +43,28 @@ test('share URLs land on the Thingy web /c/ route', () => {
 test('shares pin content for a year', () => {
   assert.equal(SHARE_TTL_SECONDS, 365 * 24 * 60 * 60);
 });
+
+test('sharedSnapshotHistory bounds: 16-message window, 700-char clip, 9000 budget', async () => {
+  const { sharedSnapshotHistory } = await import('../dist/shared/share-store.mjs');
+  const long = 'x'.repeat(2000);
+  const many = Array.from({ length: 20 }, (_, i) => ({
+    role: i % 2 ? 'assistant' : 'user',
+    content: `turn ${i}`
+  }));
+  const windowed = sharedSnapshotHistory(many);
+  assert.equal(windowed.length, 16);
+  assert.equal(windowed[0].content, 'turn 4');
+  assert.equal(windowed.at(-1).content, 'turn 19');
+
+  const clipped = sharedSnapshotHistory([{ role: 'user', content: `  a\n\n b  ${long}` }]);
+  assert.equal(clipped.length, 1);
+  assert.equal(clipped[0].content.length, 700);
+  assert.ok(clipped[0].content.startsWith('a b x'));
+
+  const budget = sharedSnapshotHistory(Array.from({ length: 16 }, () => ({ role: 'user', content: long })));
+  const total = budget.reduce((sum, item) => sum + item.content.length, 0);
+  assert.ok(total <= 9000);
+  assert.ok(budget.length < 16, 'oldest messages drop when the budget is exhausted');
+
+  assert.deepEqual(sharedSnapshotHistory([{ role: 'user', content: '   ' }]), []);
+});

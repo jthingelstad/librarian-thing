@@ -431,7 +431,14 @@ export async function handleSharedConversationView(
     let owner = false;
     try {
       const sessionPayload = verifyToken(resolveSessionToken(event, {}).token);
-      owner = Boolean(sessionPayload && String(sessionPayload.sub || '') === share.subscriberHash);
+      owner = Boolean(
+        sessionPayload &&
+        String(sessionPayload.sub || '') === share.subscriberHash &&
+        // Every authenticated route applies the deleted-profile gate; a
+        // session for a deleted profile is signed out everywhere else
+        // and must not resolve as the owner here either.
+        (await sessionAllowedForThingyProfile(sessionPayload))
+      );
     } catch {
       owner = false;
     }

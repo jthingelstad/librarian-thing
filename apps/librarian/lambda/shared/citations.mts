@@ -76,7 +76,8 @@ function citationFromIssue(issueNumber: string | number, issueCatalog: IssueCata
     issue_number: number,
     source_kind: 'chunk',
     subject: issue.subject || `Weekly Thing ${number}`,
-    publish_date: issue.publish_date,
+    // Contract types this as string - omit rather than pass a corpus null.
+    ...(issue.publish_date == null ? {} : { publish_date: String(issue.publish_date) }),
     section: 'Issue',
     url: issue.url || `/archive/${number}/`
   };
