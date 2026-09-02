@@ -1402,6 +1402,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     let readerContext = readerContextPrompt(body.client_context, effectiveUserProfile);
     const requestedConversationId = validConversationId(body.conversation_id || body.conversationId);
     const conversationId = requestedConversationId || crypto.randomUUID();
+    // Branch anchor from 4.3 clients: the request_id of the turn this
+    // message follows. Context building and the recorded turn both use it
+    // so edited/regenerated branches never see abandoned-branch turns.
+    const parentRequestId = String(body.parent_request_id || '').trim();
     const modeAccess = await resolveRequestedConversationMode({
       body,
       payload,
@@ -1417,6 +1421,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       tableName: process.env.TABLE_NAME,
       subscriberHash,
       conversationId,
+      parentRequestId,
       logEvent
     });
     if (!question) {
@@ -1485,6 +1490,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         subscriberHash,
         conversationId,
         question,
+        parentRequestId,
         answer: preflight.direct_answer,
         scope,
         mode: modeAccess.mode,
@@ -1593,6 +1599,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         subscriberHash,
         conversationId,
         question,
+        parentRequestId,
         answer: 'Thingy spent too long in the archive before it could return a reliable answer.',
         scope,
         mode: modeAccess.mode,
@@ -1618,6 +1625,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       subscriberHash,
       conversationId,
       question,
+      parentRequestId,
       answer,
       scope,
       mode: modeAccess.mode,

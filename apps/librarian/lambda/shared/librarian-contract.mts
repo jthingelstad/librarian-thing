@@ -4,7 +4,9 @@
 // guest_remaining in meta/done (additive).
 // 4.2.0: account overview reports chat_model - the entitlement-routed
 // model answering this reader (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.2.0';
+// 4.3.0: conversation branching - turns carry parent_request_id, /chat
+// accepts it, and stored messages return it (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.3.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -90,6 +92,7 @@ const conversationMessage = object({
   toolNames: arrayOf(string),
   request_id: string,
   requestId: string,
+  parent_request_id: string,
   citations: unknownArray
 });
 const archiveItem = object({
@@ -229,6 +232,7 @@ export const LIBRARIAN_CONTRACT = {
         {
           message: string,
           conversation_id: string,
+          parent_request_id: string,
           scope: string,
           mode: string,
           client_context: object({})

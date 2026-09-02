@@ -6,6 +6,7 @@ import { bedrock, dynamodb, fastModel } from '../shared/aws-clients.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { turnForPrompt } from '../shared/eval-transcript.mjs';
 import {
+  activeChainTurns,
   conversationSummaryFromItem,
   conversationTurnFromItem,
   dynamoString,
@@ -212,10 +213,11 @@ async function loadConversationTurns({
       Limit: Number(process.env.EVAL_TURN_LIMIT || DEFAULT_TURN_LIMIT)
     })
   );
-  return (response.Items || [])
-    .map(conversationTurnFromItem)
-    .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
-    .filter((turn) => turn.question || turn.answer) as EvalTurn[];
+  // Evaluate the active branch only: mixed-branch transcripts read as
+  // incoherent conversations and produce false evaluator flags.
+  return activeChainTurns((response.Items || []).map(conversationTurnFromItem)).filter(
+    (turn) => turn.question || turn.answer
+  ) as EvalTurn[];
 }
 
 function conversationIdFromTurnSk(sk: unknown = '') {

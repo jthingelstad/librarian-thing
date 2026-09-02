@@ -1,6 +1,7 @@
 import { GetItemCommand, PutItemCommand, QueryCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import type { AttributeValue, DynamoDBClient, QueryCommandOutput } from '@aws-sdk/client-dynamodb';
 import {
+  activeChainTurns,
   artifactDynamoString,
   citationDynamoItem,
   conversationPreview,
@@ -41,6 +42,10 @@ interface ConversationContext extends StoreContext {
 }
 
 interface LoadHistoryInput extends ConversationContext {
+  // Branch anchor: build context from the chain ENDING at this turn, so a
+  // branched conversation never leaks abandoned-branch turns into the
+  // model's context. Absent = the active (newest) chain.
+  parentRequestId?: unknown;
   logEvent?: LogEvent;
 }
 
@@ -51,6 +56,9 @@ interface LoadSummariesInput extends StoreContext {
 
 interface LoadMessagesInput extends ConversationContext {
   limit?: number;
+  // Restrict to the active branch chain (share/eval views) instead of the
+  // full tree (the client rebuilds the tree itself from parent ids).
+  chainOnly?: boolean;
 }
 
 interface CreateConversationInput extends ConversationContext {
@@ -68,6 +76,7 @@ interface RenameConversationInput extends ConversationContext {
 
 interface PutTurnInput extends ConversationContext {
   requestId?: unknown;
+  parentRequestId?: unknown;
   createdAt: string;
   scope?: unknown;
   mode?: unknown;
@@ -155,6 +164,7 @@ export async function loadUserConversationHistory({
   tableName,
   subscriberHash,
   conversationId,
+  parentRequestId,
   logEvent
 }: LoadHistoryInput) {
   const log = logger(logEvent);
@@ -171,10 +181,28 @@ export async function loadUserConversationHistory({
           ':prefix': dynamoString(turnSkPrefix(validId))
         },
         ScanIndexForward: false,
-        Limit: 8
+        // Enough raw turns to reconstruct a chain even in a branchy
+        // conversation; historyFromTurns re-bounds to the prompt budget.
+        Limit: 48
       })
     );
-    return historyFromTurns((response.Items || []).map(conversationTurnFromItem));
+    const turns = (response.Items || []).map(conversationTurnFromItem);
+    const anchor = String(parentRequestId || '');
+    let chain = activeChainTurns(turns);
+    if (anchor && turns.some((turn) => String(turn.request_id || '') === anchor)) {
+      // Walk from the anchor instead of the newest turn.
+      const upTo = turns.filter(
+        (turn) =>
+          String(turn.created_at || '') <=
+          String(turns.find((t) => String(t.request_id || '') === anchor)?.created_at || '')
+      );
+      const anchored = [...upTo].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+      // activeChainTurns walks from the newest entry; make the anchor
+      // newest by slicing everything after it away.
+      const anchorIndex = anchored.findIndex((turn) => String(turn.request_id || '') === anchor);
+      chain = activeChainTurns(anchored.slice(0, anchorIndex + 1));
+    }
+    return historyFromTurns(chain);
   } catch (error) {
     log('warning', 'user_conversation_history_load_failed', {
       subscriber_hash: subscriberHash,
@@ -244,7 +272,8 @@ export async function loadUserConversationMessages({
   tableName,
   subscriberHash,
   conversationId,
-  limit = 80
+  limit = 80,
+  chainOnly = false
 }: LoadMessagesInput) {
   const validId = validConversationId(conversationId);
   if (!tableReady({ tableName, subscriberHash }) || !validId) return [];
@@ -264,7 +293,7 @@ export async function loadUserConversationMessages({
   const turns = (response.Items || [])
     .map(conversationTurnFromItem)
     .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
-  return messagesFromTurns(turns);
+  return messagesFromTurns(chainOnly ? activeChainTurns(turns) : turns);
 }
 
 export async function getUserConversation({
@@ -272,11 +301,19 @@ export async function getUserConversation({
   tableName,
   subscriberHash,
   conversationId,
-  limit = 80
+  limit = 80,
+  chainOnly = false
 }: LoadMessagesInput) {
   const conversation = await getUserConversationMetadata({ dynamodb, tableName, subscriberHash, conversationId });
   if (!conversation) return null;
-  const messages = await loadUserConversationMessages({ dynamodb, tableName, subscriberHash, conversationId, limit });
+  const messages = await loadUserConversationMessages({
+    dynamodb,
+    tableName,
+    subscriberHash,
+    conversationId,
+    limit,
+    chainOnly
+  });
   return { conversation, messages };
 }
 
@@ -362,6 +399,7 @@ async function putTurn({
   subscriberHash,
   conversationId,
   requestId,
+  parentRequestId,
   createdAt,
   scope,
   mode = 'thingy',
@@ -386,6 +424,9 @@ async function putTurn({
     item_type: dynamoString('turn'),
     conversation_id: dynamoString(conversationId),
     request_id: dynamoString(requestId),
+    // Branch edge: which prior turn this one answers after. Empty for the
+    // first turn of a conversation (and for turns from pre-4.3 clients).
+    parent_request_id: dynamoString(parentRequestId),
     created_at: dynamoString(createdAt),
     scope: dynamoString(scope || 'all'),
     mode: dynamoString(mode || 'thingy'),
@@ -512,6 +553,7 @@ export async function recordUserConversationTurn({
   scope,
   mode = 'thingy',
   requestId,
+  parentRequestId,
   citations,
   preflight,
   toolTrace,
@@ -529,6 +571,7 @@ export async function recordUserConversationTurn({
       subscriberHash,
       conversationId: validId,
       requestId,
+      parentRequestId,
       createdAt: now,
       scope,
       mode,

@@ -386,7 +386,9 @@ export async function handleSharedConversationView(
       dynamodb,
       tableName,
       subscriberHash: share.subscriberHash,
-      conversationId: share.conversationId
+      conversationId: share.conversationId,
+      // Shared pages show one line of conversation - the active branch.
+      chainOnly: true
     });
     if (!result) return shareNotFound(event);
     const messages = (result.messages || [])

@@ -249,6 +249,7 @@ export function conversationTurnFromItem(item: DynamoItem | undefined): Conversa
   return {
     conversation_id: o.conversation_id || '',
     request_id: o.request_id || '',
+    parent_request_id: o.parent_request_id || '',
     created_at: o.created_at || '',
     scope: o.scope || 'all',
     mode: o.mode || 'thingy',
@@ -283,6 +284,29 @@ export function conversationTurnFromItem(item: DynamoItem | undefined): Conversa
   };
 }
 
+// The active chain of a branched conversation: walk parent_request_id
+// edges backward from the NEWEST turn. Turns from pre-branching clients
+// (no parent ids anywhere) fall back to the full linear list, preserving
+// old behavior exactly.
+export function activeChainTurns(turns: ConversationTurn[] = []) {
+  const sorted = [...turns].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+  const anyParent = sorted.some((turn) => String(turn.parent_request_id || ''));
+  if (!anyParent) return sorted;
+  const byRequestId = new Map(sorted.map((turn) => [String(turn.request_id || ''), turn]));
+  const chain: ConversationTurn[] = [];
+  let cursor: ConversationTurn | undefined = sorted[sorted.length - 1];
+  const seen = new Set<string>();
+  while (cursor) {
+    const id = String(cursor.request_id || '');
+    if (!id || seen.has(id)) break;
+    seen.add(id);
+    chain.unshift(cursor);
+    const parentId: string = String(cursor.parent_request_id || '');
+    cursor = parentId ? byRequestId.get(parentId) : undefined;
+  }
+  return chain;
+}
+
 export function messagesFromTurns(turns: ConversationTurn[] = []) {
   const messages: Array<Record<string, unknown>> = [];
   for (const turn of [...turns].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))) {
@@ -292,7 +316,8 @@ export function messagesFromTurns(turns: ConversationTurn[] = []) {
         content: turn.question,
         scope: turn.scope,
         created_at: turn.created_at,
-        request_id: turn.request_id
+        request_id: turn.request_id,
+        parent_request_id: turn.parent_request_id || ''
       });
     }
     if (turn.answer) {
