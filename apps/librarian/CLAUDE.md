@@ -25,7 +25,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
 7. Run the Bedrock Converse agent loop with tool use against the 23-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 18 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set) and - minus the two outbound-network tools - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`) and result serializer (`renderToolResultText`), with audit rows stamped `surface: 'mcp' | 'web'`. Five tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`, `compare_eras`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
-8. Stream answer deltas, archive-work status, final citations, and experience artifacts via SSE; record the turn to DynamoDB; bump the per-user profile counters.
+8. Stream answer deltas, archive-work status, final citations, and the done event's receipt ({duration_ms, total_tokens, tool_steps}, contract 4.8) via SSE; record the turn to DynamoDB; bump the per-user profile counters. A `share_token` in the body (contract 4.7) seeds the context with a shared conversation's active chain - the guest lane and a signed-in first turn both use it, and the reader context marks the seeded turns as another reader's.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
 
@@ -100,7 +100,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 | `THINGY_WEB_ORIGIN_TOKEN` | both | Marker the thingy.thingelstad.com distribution stamps as `X-Thingy-Origin`; cookie-based web sessions require it (empty disables cookie auth - the kill switch; Bearer unaffected) |
 | `FASTMAIL_JMAP_TOKEN` | auth | Fastmail JMAP bearer token for sending magic links; aliases `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` also work locally |
 | `THINGY_MAGIC_LINK_FROM_EMAIL` | auth | Magic-link From address, default `thingy@thingelstad.com` |
-| `THINGY_MAGIC_LINK_BASE_URL` | auth | Public URL used when building `?login_token=` links, default `https://thingy.thingelstad.com/` |
+| `THINGY_MAGIC_LINK_BASE_URL` | auth | The SITE ROOT (default `https://thingy.thingelstad.com/`): `shareUrl()` derives `/c/<token>` links from it, and `magicLinkBaseWithReturnPath()` forces `/signin/` onto emailed magic links regardless - do not point this at a path |
 | `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
@@ -160,14 +160,14 @@ a stale tools/list.
 
 ## Conventions
 
-- **Prompts live in `prompts/`** as `.md` files. `loadToolSpecs()` reads them. Edits need a redeploy.
+- **Prompts live in `prompts/`**: `agent-system.md`, `agent-user.md`, `answer-style.md`, `premium-thank-you.md`, plus `tool-specs.json`/`tool-titles.json`. Loaders are in `shared/prompts.mts`. Edits need a redeploy.
 - **All structured logging via `logEvent(level, message, fields)`** — JSON output, CloudWatch-Insights-readable.
 - **Magic-link auth is mandatory.** Public `/auth` always sends a Fastmail/JMAP magic link before minting an email session; there is no direct session fallback after subscriber validation.
 - **Session tokens are HMAC-signed** (not encrypted). The `sub` claim is the SHA256 hash of the subscriber email (`emailHash()`). Since 2026-09-01 the web app carries the token in the `__Host-thingy_session` HttpOnly cookie (`shared/web-session.mts`); Bearer remains the permanent path for qa-real, local dev, and non-browser clients, and always wins over the cookie. Sessions last nine days and SLIDE server-side: `/auth` `action=session` (the UI's signed-in probe; answers 200 `authenticated:false` when signed out) and `action=refresh_session` re-mint and re-set the cookie, re-verifying Buttondown entitlements near staleness (lapsed = cookie cleared / 401; Buttondown outages fail open). A cookie-sourced response never echoes the token into the JSON body. A privileged session whose verification expired with no self-bound email to re-verify against is signed out rather than silently downgraded to reader (owner exempt). `action=sign_out` clears the cookie and requires the contract header.
 - **Privacy guarding** lives in `chat/runtime.mts#privacyGuardAnswer`. Don't bypass; readers ask questions that leak their own PII and we don't echo it.
 - **Conversation modes are retired as a user-facing feature** (mode picker removed 2026-08; retirement confirmed 2026-09-01). Every new conversation is `thingy`. The entitlement gating in `conversation-modes.mts` stays as vestigial enforcement so old conversations keep their stored mode - do not extend it or add modes without an explicit product decision.
 - **Tool traces are structured evidence (schema v2).** `shared/tool-evidence.mts` summarizes every tool call into allow-listed, bounded evidence refs; `toolTraceDynamoString` degrades per call to fit, never `{omitted: true}` for an oversized trace. Turn rows carry cumulative loop usage and `prompt_fingerprint`/`source_revision` stamps - keep those fields when touching turn persistence.
-- **Citations use `#NNN` for Weekly Thing sources.** Blog and podcast sources should be cited by title/permalink because they do not have issue numbers.
+- **Citations use `WT<N>` for Weekly Thing sources** (never a bare `#N` - the prompt and client autolink agree on this). Blog and podcast sources should be cited by title/permalink because they do not have issue numbers.
 - **Retrieval-secret checks use `crypto.timingSafeEqual`** in `chat/runtime.mts`; preserve constant-time comparison when changing `/retrieve` authentication.
 
 ## Known follow-ups

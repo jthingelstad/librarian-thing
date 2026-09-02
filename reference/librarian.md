@@ -203,7 +203,7 @@ The graph artifact is built offline from the corpus and archive front matter. It
 
 Typical cost is controlled by prompt caching on the stable system prompt and tool definitions, reranking only the top search candidates, limiting tool turns, and clipping tool result text. The target remains under $0.20 for typical questions and under $0.50 for worst-case multi-hop questions.
 
-Thingy answers cite Weekly Thing issue numbers inline when using newsletter sources, and cite blog/podcast sources by title/permalink because they do not have issue numbers. The API returns citation metadata and the web client renders rich markdown, tables, horizontal rules, citations, inline photo thumbnails, copy/share/email actions, and tool-work traces.
+Thingy answers cite Weekly Thing issue numbers inline when using newsletter sources, and cite blog/podcast sources by title/permalink because they do not have issue numbers. The API returns citation metadata and the web client renders rich markdown, tables, horizontal rules, citations, inline photo thumbnails, copy/share actions, and tool-work traces.
 
 Follow-up questions use server-side conversation history. The browser sends the active `conversation_id`; the stream Lambda loads the relevant turns, compacts them when needed, and injects recent context into the model.
 
@@ -268,7 +268,7 @@ curl -sS -i https://k0yklt9vg3.execute-api.us-east-1.amazonaws.com/health
 curl -sS -i -X OPTIONS https://jcvud66qqpq53frvno5stoqntm0zqntw.lambda-url.us-east-1.on.aws/
 ```
 
-The Thingy web app deploys from its own repo (`thingy.thingelstad.com`, GitHub Pages) after frontend changes; nothing in this repo deploys it.
+The Thingy web app deploys from its own repo (`thingy.thingelstad.com`, S3 + CloudFront since 2026-09-01) after frontend changes; nothing in this repo deploys it.
 
 
 The `/mcp` endpoint serves MCP streamable HTTP (stateless, protocol 2025-06-18/2025-03-26) from the stream Lambda. It binds every published tool above (18; `web_search` only when configured) with human display titles; auth is a Librarian OAuth bearer token with the `archive:read` scope; each tools/call spends one unit of the per-user daily mcp quota (`MCP_DAILY_QUOTA`, default 500, doubled for supporting members), independent of the chat pool (`CHAT_DAILY_QUOTA`, default 50). Every MCP tool response and `corpus_stats` carry `server_version` (`1.1.0+tools.<prompt fingerprint>`), the cache key clients use to detect a stale tools/list; `initialize` declares `tools.listChanged: true`.

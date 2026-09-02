@@ -79,7 +79,7 @@ changes, and the production workflow then uploads the updated corpus artifacts.
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer or cookie) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Sign-in codes, subscriber checks/subscribe, session refresh, profile updates |
-| POST | `/conversations` | session token (bearer or cookie) | Conversation list/get/create/rename/delete and email-me-this-answer |
+| POST | `/conversations` | session token (bearer or cookie) | Conversation list/get/create/list/get/create/rename/share/unshare/delete (plus the public `GET /share/{token}` snapshot) |
 | POST | `/memory` | session token (bearer or cookie) | Thingy profile fetch and profile deletion (`get`, `delete_profile`; `refresh_profile` is a legacy no-op) |
 | GET | `/.well-known/oauth-authorization-server` | none | OAuth 2.1 authorization-server metadata (RFC 8414) |
 | GET | `/.well-known/oauth-protected-resource` | none | OAuth protected-resource metadata (RFC 9728) |
@@ -116,7 +116,7 @@ npm --prefix apps/librarian/lambda run contract:generate
 npm --prefix web run contract:sync
 ```
 
-The current contract is `3.1.0`; the server still answers majors `2` and `3`
+The current contract is `4.8.0`; the server still answers majors `2`, `3`, and `4`
 during client transitions. Contract changes are additive within a major; a
 breaking endpoint or SSE event change must introduce a new major artifact
 rather than weakening the existing schema.
@@ -155,7 +155,7 @@ deploy and blocks it on failure. Tool responses carry `server_version`
 (`1.1.0+tools.<fingerprint>`) so clients can detect a stale cached
 tools/list. Live-web reach: `fetch_page` (SSRF-guarded, first-party aware)
 always; `web_search` only when `BRAVE_SEARCH_API_KEY` is configured.
-Per-reader daily quotas: chat 50, MCP tool calls 500, answer emails 5
+Per-reader daily quotas: chat 50, MCP tool calls 500, share links 20/hr
 (doubled for supporting members; owner exempt).
 
 ## Conversation modes
