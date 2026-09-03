@@ -159,6 +159,61 @@ export async function consumeDailyQuotaStrict(surface: string, identity: string,
   }
 }
 
+// Per-user daily usage counters - informational, never enforced. Unlike
+// the quota pools these also count the owner: the quota rows exist to
+// gate spend (the owner is exempt and never touches them), so the
+// account panel's owner row could only say "Unlimited" with no actual
+// usage behind it. Turns and tokens ride one row per surface per day.
+export function usageKey(surface: string, identity: string, day = utcDayBucket()) {
+  return `usage#${surface}#${identity}#${day}`;
+}
+
+export async function recordDailyUsage(surface: string, identity: string, tokens: number) {
+  const tableName = process.env.TABLE_NAME;
+  if (!tableName) return;
+  const now = Math.floor(Date.now() / 1000);
+  try {
+    await dynamodb.send(
+      new UpdateItemCommand({
+        TableName: tableName,
+        Key: { pk: { S: usageKey(surface, identity) }, sk: { S: 'usage' } },
+        UpdateExpression: 'ADD #turns :one, #tokens :tokens SET #ttl = :ttl',
+        ExpressionAttributeNames: { '#turns': 'turns', '#tokens': 'tokens', '#ttl': 'ttl' },
+        ExpressionAttributeValues: {
+          ':one': { N: '1' },
+          ':tokens': { N: String(Math.max(0, Math.round(Number(tokens) || 0))) },
+          ':ttl': { N: String(now + QUOTA_TTL_SECONDS) }
+        }
+      })
+    );
+  } catch (error) {
+    logEvent('warning', 'daily_usage_record_failed', {
+      surface,
+      identity_hash: identity,
+      error_type: error instanceof Error ? error.constructor.name : 'Error'
+    });
+  }
+}
+
+export async function readDailyUsage(surface: string, identity: string) {
+  const tableName = process.env.TABLE_NAME;
+  if (!tableName) return { turns: 0, tokens: 0 };
+  try {
+    const response = await dynamodb.send(
+      new GetItemCommand({
+        TableName: tableName,
+        Key: { pk: { S: usageKey(surface, identity) }, sk: { S: 'usage' } }
+      })
+    );
+    return {
+      turns: Number(response.Item?.turns?.N || '0'),
+      tokens: Number(response.Item?.tokens?.N || '0')
+    };
+  } catch {
+    return { turns: 0, tokens: 0 };
+  }
+}
+
 // Read-only peek for the account panel - never spends a unit.
 export async function readDailyQuota(surface: string, identity: string) {
   const tableName = process.env.TABLE_NAME;

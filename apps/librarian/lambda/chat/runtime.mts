@@ -61,6 +61,7 @@ import {
   guestGlobalDailyQuota,
   mcpDailyQuota,
   quotaMaxForEntitlements,
+  recordDailyUsage,
   webToolsDailyQuota
 } from '../shared/quota.mjs';
 import {
@@ -1832,6 +1833,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       // Guarded/direct turns still update memory — the question text was
       // recorded above, so let the user-memory row reflect that turn too.
       await updateUserMemoryAfterTurn(subscriberHash, effectiveUserProfile.preferred_name);
+      await recordDailyUsage('chat', subscriberHash, preflightReceipt(preflight, start).total_tokens);
       logEvent('info', 'chat_completed', {
         subscriber_hash: subscriberHash,
         request_id: requestId,
@@ -1966,6 +1968,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     // rotated since the prior turn, this also triggers a Bedrock-
     // synthesized summary of the previous session.
     await updateUserMemoryAfterTurn(subscriberHash, effectiveUserProfile.preferred_name);
+    await recordDailyUsage('chat', subscriberHash, turnReceipt(result).total_tokens);
     logEvent('info', 'chat_completed', {
       subscriber_hash: subscriberHash,
       request_id: requestId,

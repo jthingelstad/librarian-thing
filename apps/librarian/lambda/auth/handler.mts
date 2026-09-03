@@ -25,6 +25,7 @@ import {
   mcpDailyQuota,
   quotaMaxForEntitlements,
   readDailyQuota,
+  readDailyUsage,
   utcDayBucket
 } from '../shared/quota.mjs';
 import {
@@ -462,16 +463,22 @@ async function memoryAccountConversations(sub: string) {
 
 async function dailyQuotaOverview(sub: string, entitlements: string[] = []) {
   const unlimited = isOwnerSubscriberHash(sub);
-  const [chat, mcp] = unlimited
-    ? [null, null]
-    : await Promise.all([readDailyQuota('chat', sub), readDailyQuota('mcp', sub)]);
+  // The usage row counts everyone (the owner never touches quota rows),
+  // so the panel can show real turns/tokens even on an unlimited account.
+  const [chat, mcp, usage] = await Promise.all([
+    unlimited ? null : readDailyQuota('chat', sub),
+    unlimited ? null : readDailyQuota('mcp', sub),
+    readDailyUsage('chat', sub)
+  ]);
   return {
     day: utcDayBucket(),
     unlimited,
     chat_used: chat?.count ?? 0,
     chat_max: unlimited ? null : quotaMaxForEntitlements(chatDailyQuota(), entitlements),
     mcp_used: mcp?.count ?? 0,
-    mcp_max: unlimited ? null : quotaMaxForEntitlements(mcpDailyQuota(), entitlements)
+    mcp_max: unlimited ? null : quotaMaxForEntitlements(mcpDailyQuota(), entitlements),
+    turns_today: usage.turns,
+    tokens_today: usage.tokens
   };
 }
 

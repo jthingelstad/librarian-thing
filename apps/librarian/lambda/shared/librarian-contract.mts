@@ -25,7 +25,10 @@
 // {duration_ms, total_tokens, tool_steps}, and stored/shared assistant
 // messages carry duration_ms/total_tokens, so the client's response
 // timer survives reload and share pages (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.8.0';
+// 4.9.0: account overview quota carries turns_today/tokens_today -
+// informational daily usage counted for every reader including the
+// owner, whose row previously reported nothing (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.9.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -153,7 +156,9 @@ const quotaOverview = object({
   chat_used: number,
   chat_max: { anyOf: [number, { type: 'null' }] },
   mcp_used: number,
-  mcp_max: { anyOf: [number, { type: 'null' }] }
+  mcp_max: { anyOf: [number, { type: 'null' }] },
+  turns_today: number,
+  tokens_today: number
 });
 const chatModel = object({ id: string, label: string, premium: boolean }, ['id', 'label']);
 const accountOverview = object({
