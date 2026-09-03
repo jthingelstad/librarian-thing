@@ -1263,6 +1263,7 @@ Resources:
           ]
         }
 
+Outputs:
   LibrarianApiUrl:
     Description: Base URL for the Archive Librarian API.
     Value: !Sub https://${LibrarianApi}.execute-api.${AWS::Region}.amazonaws.com
