@@ -173,8 +173,10 @@ async function authSuccessResponse(
   if (source === 'thingy') {
     // Best-effort: ensure the wt-thingy user tag is on this subscriber. Don't
     // block the auth response — a transient Buttondown error must not break login.
-    ensureThingyTag(subscriber).catch(() => {
-      /* swallowed; ensureThingyTag logs internally */
+    ensureThingyTag(subscriber).catch((error: unknown) => {
+      // buttondown.mts has no logging of its own - a tag failure was
+      // vanishing entirely (observability audit).
+      logEvent('warning', 'buttondown_tag_failed', errorFields(error, {}));
     });
   }
   const memory = await getUserMemory(emailHash(email));

@@ -212,7 +212,7 @@ async function loadSendContext(session: JmapSession, fromEmail: string): Promise
   const sent = pickSentMailbox(mailboxes, sentRoot.id);
   if (!sent?.id) throw new Error('No JMAP sent mailbox available');
   if (sent.id === sentRoot.id) {
-    logEvent('WARN', 'jmap_sent_folder_missing', {
+    logEvent('warning', 'jmap_sent_folder_missing', {
       folder: SENT_FOLDER,
       detail: 'filing into the shared Sent folder'
     });

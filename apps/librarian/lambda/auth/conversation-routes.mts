@@ -334,10 +334,18 @@ export async function handleUserConversations(
         })
       );
       await restampConversationTtl(tableName, subscriberHash, conversationId, expiresAt);
+      // Log the minted BASE (never the token): the /signin/c/<token>
+      // regression shipped invisibly because nothing recorded what URL
+      // shape share responses carried (observability gap 4).
+      const shareBase = shareUrl(token).split('/c/')[0];
+      if (shareBase !== 'https://thingy.thingelstad.com') {
+        logEvent('warning', 'share_url_unexpected_base', { subscriber_hash: subscriberHash, share_base: shareBase });
+      }
       logEvent('info', 'share_link_created', {
         subscriber_hash: subscriberHash,
         conversation_id: conversationId,
         refreshed: Boolean(existingToken),
+        share_base: shareBase,
         duration_ms: Math.round(performance.now() - start)
       });
       return jsonResponse(

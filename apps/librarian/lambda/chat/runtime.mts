@@ -741,6 +741,23 @@ async function streamBedrockAgentAnswer(
   };
 }
 
+// Abuse forensics without raw IPs in logs: the hashed viewer identity
+// plus the forwarding topology (X-Forwarded-For hop count, and whether
+// the connection peer differed - i.e. the request came through the
+// edge). The 2026-09-02 fleet and the CloudFront-identity bug were both
+// diagnosable only by code-reading; this makes them queryable.
+function forwardingShape(event: LibrarianHttpEvent) {
+  const headers = normalizeHeaders(event?.headers || {});
+  const forwarded = String(headers['x-forwarded-for'] || '');
+  const viewer = clientSourceIp(event);
+  const connection = event?.requestContext?.http?.sourceIp || '';
+  return {
+    ip_hash: viewer ? crypto.createHash('sha256').update(viewer).digest('hex').slice(0, 16) : '',
+    xff_depth: forwarded ? forwarded.split(',').length : 0,
+    via_edge: Boolean(connection && viewer && connection !== viewer)
+  };
+}
+
 function preflightReceipt(preflight: unknown, start: number) {
   const usage = ((preflight as JsonRecord).usage || {}) as JsonRecord;
   return {
@@ -1042,7 +1059,13 @@ interface GuestChatContext {
   stream: ResponseStream;
   requestId: string;
   start: number;
-  rejectStream: (statusCode: number, reason: string, message: unknown, extra?: JsonRecord) => void;
+  rejectStream: (
+    statusCode: number,
+    reason: string,
+    message: unknown,
+    extra?: JsonRecord,
+    logFields?: JsonRecord
+  ) => void;
 }
 
 // Guest lane (Jamie's product call, 2026-09-01): a visitor can ask a few
@@ -1107,7 +1130,13 @@ async function handleGuestWelcome({
   event: LibrarianHttpEvent;
   stream: Writable;
   requestId: string;
-  rejectStream: (statusCode: number, reason: string, message: string, extra?: JsonRecord) => void;
+  rejectStream: (
+    statusCode: number,
+    reason: string,
+    message: string,
+    extra?: JsonRecord,
+    logFields?: JsonRecord
+  ) => void;
 }) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
     rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
@@ -1142,7 +1171,13 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   // Direct-to-Lambda scripted traffic (the 2026-09-02 fleet) fails here
   // before any quota or rate-limit spend.
   if (!guestOriginOk(event)) {
-    rejectStream(401, 'guest_origin_required', 'Please use thingy.thingelstad.com to ask Thingy as a guest.');
+    rejectStream(
+      401,
+      'guest_origin_required',
+      'Please use thingy.thingelstad.com to ask Thingy as a guest.',
+      {},
+      forwardingShape(event)
+    );
     return;
   }
   const question = String(body.message || '').trim();
@@ -1161,7 +1196,13 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }
   const guestId = crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 32);
   if (!(await checkRateLimit(`guestchat#${guestId}`, GUEST_RATE_LIMIT_MAX))) {
-    rejectStream(429, 'guest_rate_limited', 'Guest questions are moving too fast. Try again in a bit, or sign in.');
+    rejectStream(
+      429,
+      'guest_rate_limited',
+      'Guest questions are moving too fast. Try again in a bit, or sign in.',
+      {},
+      { guest_hash: guestId, ...forwardingShape(event) }
+    );
     return;
   }
   // Per-visitor first so a capped visitor's retries cannot drain the
@@ -1175,7 +1216,8 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
       429,
       'guest_daily_quota',
       "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going.",
-      { guest_remaining: 0 }
+      { guest_remaining: 0 },
+      { guest_hash: guestId }
     );
     return;
   }
@@ -1186,7 +1228,8 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
       429,
       'guest_global_quota_exhausted',
       'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.',
-      { guest_remaining: 0 }
+      { guest_remaining: 0 },
+      { guest_hash: guestId }
     );
     return;
   }
@@ -1331,7 +1374,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     return;
   }
   let subscriberHash = '';
-  logEvent('info', 'request_started', summary);
+  logEvent('info', 'request_started', { ...summary, ...forwardingShape(event) });
 
   if (method === 'OPTIONS') {
     const stream = streamFromResponse(responseStream, event, 204);
@@ -1462,13 +1505,32 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     return;
   }
 
-  if (path.endsWith('/tools')) {
-    await handleWebToolsRoute({ event, responseStream, method, summary, start });
-    return;
-  }
-
-  if (path.endsWith('/mcp')) {
-    await handleMcpRoute({ event, responseStream, method, summary, start });
+  // Wrapped: these routes used to dispatch outside any try/catch, so an
+  // infra throw (Dynamo throttle in a rate-limit check, etc.) hung the
+  // stream with no request_failed line and no terminal log - invisible
+  // to the handled-failures alarm (observability gap 5).
+  if (path.endsWith('/tools') || path.endsWith('/mcp')) {
+    const routeName = path.endsWith('/tools') ? 'web_tools' : 'mcp';
+    try {
+      if (routeName === 'web_tools') {
+        await handleWebToolsRoute({ event, responseStream, method, summary, start });
+      } else {
+        await handleMcpRoute({ event, responseStream, method, summary, start });
+      }
+    } catch (error) {
+      logEvent('error', 'request_failed', errorFields(error, { ...summary, route: routeName }));
+      try {
+        const s500 = jsonResponseStream(responseStream, 500);
+        s500.write(JSON.stringify({ error: 'Thingy is unavailable right now.' }));
+        s500.end();
+      } catch {
+        try {
+          responseStream.end();
+        } catch {
+          /* stream already gone */
+        }
+      }
+    }
     return;
   }
 
@@ -1480,14 +1542,21 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   // CloudWatch (the chat_request_rejected metric filter matches them).
   let outcomeStatus = isStreamRoute ? 200 : 404;
   let outcomeReason = '';
-  const rejectStream = (statusCode: number, reason: string, message: unknown, extra: JsonRecord = {}) => {
+  const rejectStream = (
+    statusCode: number,
+    reason: string,
+    message: unknown,
+    extra: JsonRecord = {},
+    logFields: JsonRecord = {}
+  ) => {
     outcomeStatus = statusCode;
     outcomeReason = reason;
     logEvent('warning', 'chat_request_rejected', {
       ...summary,
       subscriber_hash: subscriberHash || undefined,
       status_code: statusCode,
-      reason
+      reason,
+      ...logFields
     });
     writeSse(stream, 'error', { error: message, request_id: requestId, ...extra });
   };
@@ -1657,6 +1726,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
             .join(' ');
           logEvent('info', 'share_continuation_started', {
             subscriber_hash: subscriberHash,
+            request_id: requestId,
             shared_conversation_id: snapshot.share.conversationId,
             context_messages: history.length
           });
