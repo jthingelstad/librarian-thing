@@ -32,7 +32,7 @@ test('caps counts and drops empties and over-long entries', () => {
     `GREETINGS: ["a", "", "${'x'.repeat(200)}", "b", "c", "d", "e", "f", "g"]\nSUGGESTIONS: ["a", "", "${'x'.repeat(200)}", "b", "c", "d"]`
   );
   assert.deepEqual(greeting_lines, ['a', 'b', 'c', 'd', 'e', 'f']);
-  assert.deepEqual(suggestions, ['a', 'b', 'c']);
+  assert.deepEqual(suggestions, ['a', 'b', 'c', 'd']);
 });
 
 test('one line present, one absent', () => {

@@ -105,20 +105,22 @@ function welcomeSetPrompt({ conversations = [], scope, grounding = [] }: Welcome
     groundingLines(grounding),
     '',
     'Output EXACTLY two lines:',
-    'GREETINGS: ["...", "...", "...", "...", "..."]',
-    'SUGGESTIONS: ["...", "...", "..."]',
+    'GREETINGS: ["...", "...", "...", "...", "...", "..."]',
+    'SUGGESTIONS: ["...", "...", "...", "...", "..."]',
     '',
-    'GREETINGS rules - 5 one-line conversation openers. The client shows ONE',
-    'at random after its own salutation ("Good evening, Jamie."), so:',
+    'GREETINGS rules - 6 one-line opening teases. Each stands ALONE as the',
+    "only line on Thingy's new-chat screen, like a librarian who was mid-",
+    'thought when the reader walked in:',
     '- No greeting words, no reader name, no questions about their name.',
-    '- Each names something REAL and specific from the passages above - a',
-    '  story, thread, or idea - and invites pulling on it. Warm, concrete,',
-    '  first person as Thingy. Agentic verbs: trace, connect, compare.',
-    '- Under 110 characters each. No emoji, no citations, no exclamation runs.',
-    '- Example shape: "There\'s a thread here about barn restoration that',
-    '  connects three different years - I can trace it."',
+    '- Each holds up something REAL and specific from the passages above -',
+    '  a story, thread, or idea - with light, curious energy. First person',
+    '  as Thingy. Think "I left this open for you", not "I can help you".',
+    '- Under 90 characters each. No emoji, no citations, no exclamation runs.',
+    '- Example shapes: "That barn-restoration thread is still open." /',
+    '  "I found three different years arguing about RSS readers."',
     '',
-    'SUGGESTIONS rules - 2 or 3 tappable questions:',
+    'SUGGESTIONS rules - 5 tappable questions (the client shows 3 and',
+    'shuffles the rest in):',
     '- Each MUST be grounded in one of the archive passages above: name the',
     '  specific subject, story, or thread. Never generic.',
     '- Skip subjects their recent conversations already covered.',
@@ -145,7 +147,7 @@ function parseJsonLine(raw: string, label: string, maxLen: number, maxCount: num
 export function parseWelcomeSetOutput(raw: string) {
   return {
     greeting_lines: parseJsonLine(raw, 'GREETINGS', 140, 6),
-    suggestions: parseJsonLine(raw, 'SUGGESTIONS', 140, 3)
+    suggestions: parseJsonLine(raw, 'SUGGESTIONS', 140, 6)
   };
 }
 
