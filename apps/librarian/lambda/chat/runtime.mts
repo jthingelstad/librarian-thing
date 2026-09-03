@@ -1729,6 +1729,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         metrics: {
           model: fastModel(),
           ...accumulateUsage(emptyUsageTotals(), (preflight as JsonRecord).usage),
+          // The stored receipt (duration + tokens) must survive reload
+          // like a normal answer's - without duration_ms the reloaded
+          // turn rendered no receipt at all (QA R3-01).
+          duration_ms: Math.round(performance.now() - start),
           stop_reason: 'preflight_direct'
         },
         logEvent
