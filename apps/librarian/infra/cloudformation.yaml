@@ -247,6 +247,9 @@ Resources:
     Properties:
       Architectures:
         - arm64
+      # Security audit M3: bound a burst's blast radius like the stream
+      # (5) and eval (1) Lambdas already do.
+      ReservedConcurrentExecutions: 10
       Code:
         S3Bucket: !Ref CodeBucket
         S3Key: !Ref CodeKey
@@ -619,6 +622,13 @@ Resources:
       ApiId: !Ref LibrarianApi
       StageName: $default
       AutoDeploy: true
+      # Security audit M3: without stage throttling a burst invokes the
+      # auth Lambda (and Buttondown/Fastmail) at account-default rps.
+      # Generous for this traffic; the Lambda's own hourly limits sit
+      # underneath.
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 50
+        ThrottlingRateLimit: 20
       Tags:
         project: Thingy
 

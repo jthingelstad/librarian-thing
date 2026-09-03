@@ -2016,15 +2016,29 @@ async function toolFetchPage(input: ToolArgs = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_PAGE_TIMEOUT_MS);
   try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      redirect: 'follow',
-      headers: {
-        accept: 'text/html,text/plain',
-        'user-agent': 'Thingy-Librarian/1.0 (+https://thingy.thingelstad.com/)'
-      }
-    });
-    const finalUrl = allowedPageUrl(response.url || url.href);
+    // Redirects are validated PER HOP before the next request is made -
+    // redirect: 'follow' checked only the final URL after the fetch had
+    // already happened, so a 302 to http://, an IP literal, or an odd
+    // port made the request anyway (blind SSRF; audit F1).
+    let target = url;
+    let response!: Response;
+    for (let hop = 0; ; hop += 1) {
+      response = await fetch(target.href, {
+        signal: controller.signal,
+        redirect: 'manual',
+        headers: {
+          accept: 'text/html,text/plain',
+          'user-agent': 'Thingy-Librarian/1.0 (+https://thingy.thingelstad.com/)'
+        }
+      });
+      if (response.status < 300 || response.status >= 400) break;
+      if (hop >= 3) return { error: 'The page redirected too many times.' };
+      const location = response.headers.get('location') || '';
+      const next = allowedPageUrl(new URL(location, target).href);
+      if (!next) return { error: 'The page redirected somewhere fetch_page does not follow.' };
+      target = next;
+    }
+    const finalUrl = allowedPageUrl(target.href);
     if (!finalUrl) return { error: 'The page redirected somewhere fetch_page does not follow.' };
     if (!response.ok) return { error: `The page answered ${response.status}.` };
     const contentType = String(response.headers.get('content-type') || '');

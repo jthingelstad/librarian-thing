@@ -2,7 +2,7 @@ import nodeCrypto from 'node:crypto';
 import { DeleteItemCommand, GetItemCommand, PutItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { dynamodb } from './aws-clients.mjs';
 import { fetchSubscriber, subscriberStatus } from './buttondown.mjs';
-import { clientSourceIp, userAgent } from './http.mjs';
+import { clientSourceIp } from './http.mjs';
 import type { LibrarianHttpEvent } from './http.mjs';
 import { sendMagicLinkEmail } from './jmap-mail.mjs';
 import { errorFields, logEvent } from './logging.mjs';
@@ -43,12 +43,16 @@ function errorName(error: unknown) {
 }
 
 export function clientIdentityHash(event: LibrarianHttpEvent) {
-  return stableHash(`${clientSourceIp(event) || 'unknown'}\0${userAgent(event) || ''}`);
+  // IP only: including the User-Agent let one IP mint unlimited fresh
+  // rate-limit identities by rotating an attacker-controlled string
+  // (audit A2). The UA added nothing an attacker doesn't control.
+  return stableHash(clientSourceIp(event) || 'unknown');
 }
 
 export function magicLinkBaseWithReturnPath(returnPath = '') {
   const raw = String(returnPath || '').trim();
-  const safeReturnPath = raw && raw.startsWith('/') && !raw.startsWith('//') ? raw.slice(0, 500) : '/chat/';
+  const safeReturnPath =
+    raw && raw.startsWith('/') && !raw.startsWith('//') && !/[\\\s]/.test(raw) ? raw.slice(0, 500) : '/chat/';
   try {
     const base = new URL(process.env.THINGY_MAGIC_LINK_BASE_URL || 'https://thingy.thingelstad.com/');
     base.pathname = '/signin/';

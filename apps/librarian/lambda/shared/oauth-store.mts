@@ -587,6 +587,8 @@ export async function mintTokens(grant: OauthGrant, familyId = generateOpaqueId(
 export type RefreshResult =
   { status: 'invalid' } | { status: 'reuse_revoked' } | { status: 'ok'; tokens: OauthTokens; grant: OauthGrant };
 
+const OAUTH_FAMILY_MAX_SECONDS = 90 * 24 * 60 * 60;
+
 export async function redeemRefreshToken(refreshToken: unknown, clientId: string): Promise<RefreshResult> {
   const raw = String(refreshToken || '').trim();
   if (
@@ -611,6 +613,17 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
     // token. Revoke the whole family (RFC 9700 4.14.2).
     await revokeRefreshFamily(familyId);
     return { status: 'reuse_revoked' };
+  }
+  // Absolute family lifetime (audit A4): rotation must not extend a grant
+  // forever - the web session gate forces re-auth on lapse, and a lapsed
+  // subscriber's MCP grant should decay too. 90 days from first consent,
+  // then a fresh authorization (which re-runs the subscriber check).
+  const family = await getRow(`oauthfamily#${familyId}`, 'family');
+  const familyCreatedAt = family ? itemNumber(family, 'created_at') : 0;
+  if (familyCreatedAt && now - familyCreatedAt > OAUTH_FAMILY_MAX_SECONDS) {
+    logEvent('info', 'oauth_refresh_family_expired', { family_id: familyId });
+    await revokeRefreshFamily(familyId);
+    return { status: 'invalid' };
   }
   const grant: OauthGrant = {
     clientId,

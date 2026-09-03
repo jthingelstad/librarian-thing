@@ -1,5 +1,5 @@
 import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
-import { PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { DeleteItemCommand, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { bedrock, dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
 import {
   createSubscriber,
@@ -225,6 +225,54 @@ export function entitlementsForSessionPayload(payload: JsonRecord, nowSeconds = 
 // re-verify, and re-mint flow, but an absent/invalid credential answers a
 // calm 200 {authenticated:false} instead of a 401 - it is the UI's
 // signed-in probe, not a failure.
+
+// Server-side session state (audit A1): the session#<sid> rows written at
+// every mint were write-only - sign-out cleared the cookie but the token
+// (and the localStorage legacy copy) kept working, and refresh_session
+// would slide it forever. Refresh/probe now require the row; sign-out
+// deletes it. Verification elsewhere stays HMAC-only (per-request Dynamo
+// reads aren't worth it at this scale) - revocation bounds a stolen
+// token to the CURRENT 9-day window instead of forever.
+async function sessionRowActive(sessionId: unknown) {
+  const tableName = process.env.TABLE_NAME;
+  const sid = String(sessionId || '');
+  if (!tableName || !sid) return true;
+  try {
+    const response = await dynamodb.send(
+      new GetItemCommand({
+        TableName: tableName,
+        Key: { pk: dynamoString(`session#${sid}`), sk: dynamoString('session') }
+      })
+    );
+    if (!response.Item) return false;
+    return Number(response.Item.expires_at?.N || 0) > Math.floor(Date.now() / 1000);
+  } catch (error) {
+    // Fail open: a Dynamo hiccup must not sign everyone out.
+    logEvent('warning', 'session_row_check_failed', errorFields(error, {}));
+    return true;
+  }
+}
+
+async function deleteSessionRow(sessionId: unknown) {
+  const tableName = process.env.TABLE_NAME;
+  const sid = String(sessionId || '');
+  if (!tableName || !sid) return;
+  try {
+    await dynamodb.send(
+      new DeleteItemCommand({
+        TableName: tableName,
+        Key: { pk: dynamoString(`session#${sid}`), sk: dynamoString('session') }
+      })
+    );
+  } catch (error) {
+    logEvent('warning', 'session_row_delete_failed', errorFields(error, {}));
+  }
+}
+
+// A sliding session may be re-minted for at most 90 days from the original
+// magic-link sign-in; past that, a clean re-auth is required.
+const SESSION_SLIDE_MAX_SECONDS = 90 * 24 * 60 * 60;
+
 async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start: number, asSession = false) {
   const credential = resolveSessionToken(event, body);
   const payload = verifyToken(credential.token);
@@ -233,6 +281,18 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
       credential_source: credential.source
     });
     if (asSession) return jsonResponse(200, { authenticated: false }, event);
+    return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
+  }
+  if (!(await sessionRowActive(payload.sid))) {
+    logEvent('info', 'auth_refresh_session_revoked', { subscriber_hash: payload.sub });
+    if (asSession) return withClearedSessionCookie(jsonResponse(200, { authenticated: false }, event));
+    return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
+  }
+  const nowForAge = Math.floor(Date.now() / 1000);
+  const authAt = Number(payload.auth_at || payload.iat || nowForAge);
+  if (nowForAge - authAt > SESSION_SLIDE_MAX_SECONDS) {
+    logEvent('info', 'auth_refresh_session_too_old', { subscriber_hash: payload.sub });
+    if (asSession) return withClearedSessionCookie(jsonResponse(200, { authenticated: false }, event));
     return jsonResponse(401, { error: 'Sign in again to continue.' }, event);
   }
   let entitlements = entitlementsForSessionPayload(payload);
@@ -294,8 +354,12 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
     return withClearedSessionCookie(jsonResponse(200, { authenticated: false }, event));
   }
   const modes = availableConversationModes(entitlements);
-  const claims =
-    verifiedUntil > nowSeconds ? { entitlements, entitlements_verified_until: verifiedUntil } : { entitlements };
+  const claims = {
+    ...(verifiedUntil > nowSeconds ? { entitlements, entitlements_verified_until: verifiedUntil } : { entitlements }),
+    // The original sign-in moment rides every re-mint so the sliding
+    // chain has an absolute lifetime.
+    auth_at: authAt
+  };
   const subscriberHash = String(payload.sub);
   const { sessionId, expiresAt, token } = createSessionTokenForSub(subscriberHash, undefined, claims);
   await recordSessionForSub(sessionId, payload.sub, expiresAt);
@@ -619,6 +683,10 @@ async function authHandler(event: LibrarianHttpEvent) {
     if (!normalizeHeaders(event.headers || {})['x-librarian-contract-version']) {
       return jsonResponse(400, { error: 'Unsupported subscriber action.' }, event);
     }
+    // Revoke server-side: the refresh/probe path checks this row, so a
+    // signed-out token can no longer be slid into a fresh one (audit A1).
+    const signOutPayload = verifyToken(resolveSessionToken(event, body).token);
+    if (signOutPayload?.sid) await deleteSessionRow(signOutPayload.sid);
     logEvent('info', 'auth_signed_out');
     return withClearedSessionCookie(jsonResponse(200, { status: 'signed_out' }, event));
   }

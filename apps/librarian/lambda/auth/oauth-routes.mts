@@ -28,6 +28,7 @@ import {
   verifyPkce
 } from '../shared/oauth-store.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
+import { consumeDailyQuotaStrict } from '../shared/quota.mjs';
 import { emailHash, normalizeEmail } from '../shared/session.mjs';
 
 // OAuth 2.1 authorization server for the Librarian MCP surface (Phase 2).
@@ -108,6 +109,11 @@ export async function handleRegister(event: LibrarianHttpEvent) {
   if (!(await checkRateLimit(`oauth#register:${clientIdentityHash(event)}`, REGISTER_RATE_LIMIT_MAX))) {
     logEvent('warning', 'oauth_register_rate_limited', {});
     return oauthJson(429, { error: 'invalid_client_metadata', error_description: 'Too many registrations.' });
+  }
+  const registerPool = await consumeDailyQuotaStrict('oauth_register', 'global', 20);
+  if (!registerPool.allowed) {
+    logEvent('warning', 'oauth_register_global_capped', {});
+    return oauthJson(429, { error: 'invalid_client_metadata', error_description: 'Too many registrations today.' });
   }
   const body = parseBody(event);
   const redirectUris = validateRedirectUris(body.redirect_uris);
@@ -253,7 +259,7 @@ function consentPage(pendingId: string, clientName: string, scope: string) {
   const inner = `<h1>Allow ${escapeHtml(clientName)}?</h1>
 <p><strong>${escapeHtml(clientName)}</strong> wants to search and read Jamie Thingelstad&rsquo;s public archive as you &mdash; The Weekly Thing, the blog, and the Another Thing podcast.</p>
 <p class="muted">Scope: ${escapeHtml(scope)}</p>
-<form method="post" action="authorize" onsubmit="setTimeout(()=>{for(const b of this.querySelectorAll('button'))b.disabled=true},0)">
+<form method="post" action="authorize">
 ${hiddenPendingField(pendingId)}
 <input type="hidden" name="step" value="approve">
 <button type="submit" name="decision" value="approve">Allow</button>

@@ -215,6 +215,12 @@ async function recordFeedback({
     return { statusCode: 400, payload: { error: 'Feedback requires a valid request_id and reaction.' } };
   }
 
+  // Rate-limited like every other authenticated surface: a feedback miss
+  // pages a filtered Query over the caller's whole turn partition, so
+  // unmetered random request_ids were free RCU amplification (audit F3).
+  if (!(await checkRateLimit(`feedback#${subscriberHash}`))) {
+    return { statusCode: 429, payload: { error: 'Feedback is moving too fast; give it a moment.' } };
+  }
   const feedbackAt = new Date().toISOString();
   try {
     const result = await recordUserConversationFeedback({
@@ -1105,6 +1111,13 @@ async function handleGuestWelcome({
 }) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
     rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    return;
+  }
+  // Same origin gate as guest chat: direct Function-URL callers can forge
+  // X-Forwarded-For to mint unlimited fresh rate-limit identities, and on
+  // cache-miss days each call runs a paid retrieval (audit F2).
+  if (!guestOriginOk(event)) {
+    rejectStream(401, 'guest_origin_required', 'Please use thingy.thingelstad.com to ask Thingy as a guest.');
     return;
   }
   const ip = clientSourceIp(event);

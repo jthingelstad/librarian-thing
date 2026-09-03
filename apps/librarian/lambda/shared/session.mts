@@ -45,7 +45,13 @@ export function stableHash(value: unknown) {
 }
 
 export function signPayload(payload: Claims) {
-  const encoded = b64url(JSON.stringify(payload, Object.keys(payload).sort()));
+  // Sort top-level keys via entries, NOT a stringify replacer array - a
+  // replacer array also filters keys of any nested object, which would
+  // silently drop a future nested claim from the signed bytes. Output is
+  // byte-identical to the previous form for all current (flat) payloads,
+  // so existing tokens keep verifying.
+  const canonical = Object.fromEntries(Object.entries(payload).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+  const encoded = b64url(JSON.stringify(canonical));
   const signature = crypto.createHmac('sha256', sessionSecret()).update(encoded).digest('base64url');
   return `${encoded}.${signature}`;
 }
