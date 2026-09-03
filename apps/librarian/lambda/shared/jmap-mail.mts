@@ -244,7 +244,7 @@ function emailIntro(context: ReaderEmailContext = {}) {
 function emailMemberLine(context: ReaderEmailContext = {}) {
   return context.subscriber_status === 'premium'
     ? 'Thanks for being a Weekly Thing Supporting Member.'
-    : 'Thingy will open the archive in your browser.';
+    : 'Thingy will meet you in your browser.';
 }
 
 export function magicLinkEmailText({ magicLink, expiresMinutes, context = {}, code = '' }: MagicLinkEmailInput) {
