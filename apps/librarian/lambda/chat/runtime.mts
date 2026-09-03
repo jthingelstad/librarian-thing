@@ -23,7 +23,8 @@ import {
   summarizeToolEvidence
 } from '../shared/tool-evidence.mjs';
 import { promptFingerprint } from '../shared/prompts.mjs';
-import { generateWelcome } from '../shared/archive-experience.mjs';
+import { generateWelcomeSet } from '../shared/archive-experience.mjs';
+import { readReaderWelcomeSet, refreshReaderWelcomeSet, welcomeSetFresh } from '../shared/welcome-store.mjs';
 import {
   ARCHIVE_TOOLS,
   availableToolSpecs,
@@ -84,7 +85,6 @@ import { validConversationId } from '../shared/user-conversations.mjs';
 import {
   getUserConversationMetadata,
   loadUserConversationHistory,
-  loadUserConversationSummaries,
   recordUserConversationFeedback,
   recordUserConversationTurn
 } from '../shared/conversation-store.mjs';
@@ -191,6 +191,19 @@ export function retrieveSecretOk(body: JsonRecord) {
 
 async function updateUserMemoryAfterTurn(subscriberHash: string, preferredName: unknown) {
   await recordUserTurn(subscriberHash, { preferredName });
+}
+
+// Post-answer welcome refresh (contract 4.10): runs AFTER the done event
+// ships, so the reader never waits on it; the 10-minute throttle inside
+// refreshReaderWelcomeSet keeps long conversations from regenerating every
+// turn. Failures are logged and swallowed - welcome furniture must never
+// mark a successful answer as failed.
+async function refreshWelcomeSetAfterTurn(subscriberHash: string) {
+  try {
+    await refreshReaderWelcomeSet({ subscriberHash });
+  } catch (error) {
+    logEvent('warning', 'welcome_set_refresh_failed', { error_type: errorName(error) });
+  }
 }
 
 async function recordFeedback({
@@ -1082,29 +1095,40 @@ interface GuestChatContext {
 // first-tap moment at ~one model call per day instead of one per visitor.
 const GUEST_SUGGESTIONS_TTL_SECONDS = 60 * 60 * 24 * 7;
 
-async function loadOrGenerateGuestSuggestions(): Promise<string[]> {
+async function loadOrGenerateGuestWelcomeSet(): Promise<{ suggestions: string[]; greeting_lines: string[] }> {
   const day = new Date().toISOString().slice(0, 10);
   const key = { pk: { S: 'guestsuggestions' }, sk: { S: 'current' } };
   try {
     const existing = await dynamodb.send(new GetItemCommand({ TableName: process.env.TABLE_NAME, Key: key }));
-    if (existing.Item?.day?.S === day) {
-      const parsed: unknown = JSON.parse(existing.Item.suggestions?.S || '[]');
-      return Array.isArray(parsed) ? parsed.map((entry) => String(entry || '')).filter(Boolean) : [];
+    // Rows written before 4.10 lack greeting_lines; treat them as a miss
+    // so the day's set regenerates once with both halves.
+    if (existing.Item?.day?.S === day && existing.Item.greeting_lines?.S) {
+      const parse = (raw: string | undefined) => {
+        const parsed: unknown = JSON.parse(raw || '[]');
+        return Array.isArray(parsed) ? parsed.map((entry) => String(entry || '')).filter(Boolean) : [];
+      };
+      return {
+        suggestions: parse(existing.Item.suggestions?.S),
+        greeting_lines: parse(existing.Item.greeting_lines?.S)
+      };
     }
   } catch (error) {
     logEvent('warning', 'guest_suggestions_read_failed', { error_type: errorName(error) });
   }
   let suggestions: string[] = [];
+  let greetingLines: string[] = [];
   try {
-    const grounding = await retrieve('memorable stories, ideas, and recurring threads in the archive', 6, {});
-    const generated = await generateWelcome({
-      readerContext: 'A first-time guest visitor with no prior context.',
-      conversations: [],
-      scope: 'all',
-      mode: 'thingy',
-      grounding
-    });
+    const grounding = await retrieve(
+      'memorable stories, ideas, and recurring threads in the archive',
+      6,
+      {},
+      {
+        rerank: false
+      }
+    );
+    const generated = await generateWelcomeSet({ conversations: [], scope: 'all', grounding });
     suggestions = generated.suggestions;
+    greetingLines = generated.greeting_lines;
     await dynamodb.send(
       new PutItemCommand({
         TableName: process.env.TABLE_NAME,
@@ -1112,6 +1136,7 @@ async function loadOrGenerateGuestSuggestions(): Promise<string[]> {
           ...key,
           day: { S: day },
           suggestions: { S: JSON.stringify(suggestions) },
+          greeting_lines: { S: JSON.stringify(greetingLines) },
           ttl: { N: String(Math.floor(Date.now() / 1000) + GUEST_SUGGESTIONS_TTL_SECONDS) }
         }
       })
@@ -1119,7 +1144,7 @@ async function loadOrGenerateGuestSuggestions(): Promise<string[]> {
   } catch (error) {
     logEvent('warning', 'guest_suggestions_generate_failed', { error_type: errorName(error) });
   }
-  return suggestions;
+  return { suggestions, greeting_lines: greetingLines };
 }
 
 async function handleGuestWelcome({
@@ -1156,9 +1181,14 @@ async function handleGuestWelcome({
     rejectStream(429, 'guest_rate_limited', 'Try again in a bit.');
     return;
   }
-  const suggestions = await loadOrGenerateGuestSuggestions();
+  const welcomeSet = await loadOrGenerateGuestWelcomeSet();
   writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION, guest: true });
-  if (suggestions.length) writeSse(stream, 'suggestions', { suggestions });
+  if (welcomeSet.suggestions.length || welcomeSet.greeting_lines.length) {
+    writeSse(stream, 'suggestions', {
+      suggestions: welcomeSet.suggestions,
+      greeting_lines: welcomeSet.greeting_lines
+    });
+  }
   writeSse(stream, 'done', { request_id: requestId, guest: true });
 }
 
@@ -1587,7 +1617,6 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     subscriberHash = String(payload.sub || '');
 
     if (path.endsWith('/welcome')) {
-      const scope = normalizeScope(body.scope);
       const modeAccess = await resolveRequestedConversationMode({
         body,
         payload,
@@ -1598,73 +1627,44 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         rejectStream(403, 'mode_denied', modeAccess.error);
         return;
       }
-      const userProfile = normalizeUserProfile(body.user_profile);
-      const memory = await getUserMemory(subscriberHash);
-      const effectiveProfile = {
-        ...userProfile,
-        preferred_name: userProfile.preferred_name || memory?.preferred_name || '',
-        returning: userProfile.returning || Number(memory?.turn_count || 0) > 0,
-        turn_count: userProfile.turn_count ?? Number(memory?.turn_count || 0)
-      };
-      const readerContext = readerContextPrompt(body.client_context, effectiveProfile);
-      const conversations = await loadUserConversationSummaries({
-        dynamodb,
-        tableName: process.env.TABLE_NAME,
-        subscriberHash,
-        limit: 8,
-        logEvent
-      });
       if (
         !(await checkRateLimit(`welcome#${String(payload.sub)}`, Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)))
       ) {
         rejectStream(429, 'rate_limited', 'Thingy is at the hourly limit for this session.');
         return;
       }
-      if (!isOwnerSubscriberHash(subscriberHash)) {
-        const welcomeMax = quotaMaxForEntitlements(
-          chatDailyQuota(),
-          Array.isArray(payload.entitlements) ? (payload.entitlements as string[]) : []
-        );
-        const quota = await consumeDailyQuota('chat', subscriberHash, welcomeMax);
-        if (!quota.allowed) {
-          rejectStream(
-            429,
-            'daily_quota_exceeded',
-            "You've reached today's conversation limit. It resets at midnight UTC."
-          );
-          return;
+      // Contract 4.10: the greeting prose is composed client-side (time-
+      // aware salutation + a line from greeting_lines), so /welcome no
+      // longer writes prose, no longer charges the chat quota (there is no
+      // per-call model cost on the hit path), and answers instantly from
+      // the precomputed set. Post-turn refreshes keep the set current; the
+      // inline generation below only runs for a reader with no fresh set.
+      writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
+      let welcomeSet = await readReaderWelcomeSet(subscriberHash);
+      let welcomeSource = 'stored';
+      if (!welcomeSetFresh(welcomeSet)) {
+        writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
+        welcomeSource = 'inline';
+        try {
+          welcomeSet = await refreshReaderWelcomeSet({ subscriberHash, force: true });
+        } catch (error) {
+          logEvent('warning', 'welcome_inline_refresh_failed', { error_type: errorName(error) });
+          welcomeSet = null;
         }
       }
-      writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
-      writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
-      // Ground the suggestion chips in the corpus: retrieve real passages
-      // near the reader's recent threads (recent-highlights for a first
-      // visit) and hand them to the welcome model. Suggestions must cite
-      // this material - never a canned question list.
-      const suggestionQuery =
-        conversations
-          .slice(0, 3)
-          .map((entry) => String(entry.title || '').trim())
-          .filter(Boolean)
-          .join('; ') || 'memorable stories, ideas, and recurring threads in the archive';
-      let grounding: Awaited<ReturnType<typeof retrieve>> = [];
-      try {
-        grounding = await retrieve(suggestionQuery, 6, { scope });
-      } catch (error) {
-        logEvent('warning', 'welcome_grounding_failed', { error_type: errorName(error) });
-      }
-      const welcome = await generateWelcome({ readerContext, conversations, scope, mode: modeAccess.mode, grounding });
-      writeSse(stream, 'answer_delta', { delta: welcome.answer });
-      if (welcome.suggestions.length) {
-        writeSse(stream, 'suggestions', { suggestions: welcome.suggestions });
+      if (welcomeSet && (welcomeSet.suggestions.length || welcomeSet.greeting_lines.length)) {
+        writeSse(stream, 'suggestions', {
+          suggestions: welcomeSet.suggestions,
+          greeting_lines: welcomeSet.greeting_lines
+        });
       }
       writeSse(stream, 'done', { request_id: requestId, mode: modeAccess.mode });
       logEvent('info', 'welcome_completed', {
         subscriber_hash: subscriberHash,
         mode: modeAccess.mode,
-        conversation_count: conversations.length,
-        has_memory: Boolean(memory),
-        has_preferred_name: Boolean(effectiveProfile.preferred_name),
+        source: welcomeSource,
+        greeting_line_count: welcomeSet?.greeting_lines.length ?? 0,
+        suggestion_count: welcomeSet?.suggestions.length ?? 0,
         duration_ms: Math.round(performance.now() - start)
       });
       return;
@@ -1834,6 +1834,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       // recorded above, so let the user-memory row reflect that turn too.
       await updateUserMemoryAfterTurn(subscriberHash, effectiveUserProfile.preferred_name);
       await recordDailyUsage('chat', subscriberHash, preflightReceipt(preflight, start).total_tokens);
+      await refreshWelcomeSetAfterTurn(subscriberHash);
       logEvent('info', 'chat_completed', {
         subscriber_hash: subscriberHash,
         request_id: requestId,
@@ -1969,6 +1970,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     // synthesized summary of the previous session.
     await updateUserMemoryAfterTurn(subscriberHash, effectiveUserProfile.preferred_name);
     await recordDailyUsage('chat', subscriberHash, turnReceipt(result).total_tokens);
+    await refreshWelcomeSetAfterTurn(subscriberHash);
     logEvent('info', 'chat_completed', {
       subscriber_hash: subscriberHash,
       request_id: requestId,

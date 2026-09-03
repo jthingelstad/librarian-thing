@@ -28,7 +28,12 @@
 // 4.9.0: account overview quota carries turns_today/tokens_today -
 // informational daily usage counted for every reader including the
 // owner, whose row previously reported nothing (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.9.0';
+// 4.10.0: instant welcome - /welcome answers from a precomputed per-
+// reader set (refreshed post-turn), emits no greeting prose (clients
+// compose the greeting from a time-aware salutation + a line from the
+// suggestions event's new greeting_lines array), and no longer charges
+// the chat quota (additive; old clients keep their built-in greeting).
+export const LIBRARIAN_CONTRACT_VERSION = '4.10.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -326,7 +331,7 @@ export const LIBRARIAN_CONTRACT = {
     answer_delta: object(streamProperties, ['delta']),
     answer: object(streamProperties, ['answer']),
     citations: object(streamProperties, ['citations']),
-    suggestions: object(streamProperties, ['suggestions']),
+    suggestions: object({ ...streamProperties, greeting_lines: arrayOf(string) }, ['suggestions']),
     done: object(streamProperties),
     error: object(streamProperties, ['error'])
   }

@@ -574,7 +574,12 @@ export function fuseCandidates(semantic: CorpusChunk[], lexical: CorpusChunk[], 
 // in-memory and free, and carries proper nouns dense retrieval misses);
 // semantic is best-effort and the fusion degrades to lexical-only when the
 // embedding call fails.
-export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilters = {}) {
+export async function retrieve(
+  query: unknown,
+  limit = 8,
+  filters: RetrievalFilters = {},
+  opts: { rerank?: boolean } = {}
+) {
   const kinds = scopeKinds(filters.scope);
   const candidateLimit = Math.max(limit * 5, 100);
   const byScore = (a: CorpusChunk, b: CorpusChunk) => (b._retrieval_score || 0) - (a._retrieval_score || 0);
@@ -607,6 +612,10 @@ export async function retrieve(query: unknown, limit = 8, filters: RetrievalFilt
   }
 
   const fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
+  // rerank: false skips the cross-region rerank call - RRF order is good
+  // enough for grounding pools (welcome chips) where latency matters more
+  // than final ordering precision. Answer-path retrieval always reranks.
+  if (opts.rerank === false) return withAgeLabel(fused.slice(0, limit));
   return withAgeLabel((await rerankSources(query, fused, limit)).slice(0, limit));
 }
 

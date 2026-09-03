@@ -4,15 +4,20 @@
 // streamline to a pure chat experience (see git history).
 import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
 import type { Message } from '@aws-sdk/client-bedrock-runtime';
-import { agentModel, bedrock, modelAcceptsSamplingParams } from './aws-clients.mjs';
-import { sanitizeAnswerProse } from './answer-sanitizer.mjs';
+import { bedrock, fastModel, modelAcceptsSamplingParams } from './aws-clients.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
-import { agentSystemPrompt } from './prompts.mjs';
 import { normalizeScope } from './scope.mjs';
-import { normalizeConversationMode } from './conversation-modes.mjs';
 
-const AGENT_SYSTEM_PROMPT = agentSystemPrompt();
 const SERVICE_NAME = 'weekly-thing-librarian-stream';
+
+// Compact, welcome-only system prompt. The full agent system prompt added
+// seconds of input processing to a call whose entire job is chips and
+// one-liners; the fast model with this prompt is the latency budget.
+const WELCOME_SYSTEM_PROMPT = [
+  "You write the opening furniture for Thingy, Jamie Thingelstad's archive agent over The Weekly Thing newsletter, the thingelstad.com blog, and the Another Thing podcast.",
+  'You produce two things: short greeting lines and tappable suggestion questions, both grounded ONLY in archive material supplied in the request.',
+  'Never invent archive content. Never use these phrases or their variants: "I\'m happy to", "I\'m all yours", "Want me to look?".'
+].join('\n');
 
 interface ConversationSummary {
   title?: string;
@@ -54,7 +59,7 @@ function welcomeInferenceConfig() {
   return {
     maxTokens: Number(process.env.BEDROCK_WELCOME_MAX_TOKENS || '450'),
     // The 5-family rejects sampling params with a ValidationException.
-    ...(modelAcceptsSamplingParams(agentModel())
+    ...(modelAcceptsSamplingParams(fastModel())
       ? { temperature: Number(process.env.BEDROCK_WELCOME_TEMPERATURE || '0.7') }
       : {})
   };
@@ -77,7 +82,7 @@ function groundingLines(grounding: GroundingPassage[] = []) {
     .join('\n');
 }
 
-function welcomePrompt({ readerContext, conversations = [], scope, grounding = [] }: WelcomeInput) {
+function welcomeSetPrompt({ conversations = [], scope, grounding = [] }: WelcomeInput) {
   const recent = (conversations || []).slice(0, 6);
   const conversationLines = recent.length
     ? recent
@@ -88,98 +93,86 @@ function welcomePrompt({ readerContext, conversations = [], scope, grounding = [
         .join('\n')
     : 'No prior conversations found.';
   return [
-    "Write Thingy's opening message for a newly loaded chat.",
+    "Produce Thingy's welcome set for a newly loaded chat.",
     '',
-    "Thingy is Jamie Thingelstad's archive agent. It can help the reader connect ideas, compare eras, recall prior threads, and explore The Weekly Thing newsletter, the thingelstad.com blog, and Another Thing podcast.",
-    '',
-    'Reader and session context:',
-    readerContext || 'No reader-local context supplied.',
-    '',
-    'Recent Thingy conversations:',
+    'Recent Thingy conversations (avoid repeating their subjects):',
     conversationLines,
     '',
     `Active source scope: ${normalizeScope(scope)}`,
     '',
     'Archive material retrieved just now (REAL corpus passages - the only',
-    'permitted grounding for suggestions):',
+    'permitted grounding):',
     groundingLines(grounding),
     '',
-    'Requirements:',
-    '- Start with a natural greeting that can use the reader local time if supplied.',
-    '- If a preferred name is known, use it. If no preferred name is known, ask what Thingy should call the reader, but keep it conversational.',
-    '- If this looks like their first time, give a little more orientation. If returning, welcome them back and lightly reference recent conversations when they exist.',
-    '- If they are a Weekly Thing Supporting Member, acknowledge that gracefully without making the whole message about it.',
-    '- Do not frame Thingy as just search. Prefer agentic verbs like connect, trace, compare, explore, and pick up threads.',
-    '- Keep it under 115 words, no heading, no table, no citations.',
-    '',
-    'After the welcome prose, on its own final line, output exactly:',
+    'Output EXACTLY two lines:',
+    'GREETINGS: ["...", "...", "...", "...", "..."]',
     'SUGGESTIONS: ["...", "...", "..."]',
-    '- A JSON array of 2 or 3 tappable follow-up questions for the reader.',
+    '',
+    'GREETINGS rules - 5 one-line conversation openers. The client shows ONE',
+    'at random after its own salutation ("Good evening, Jamie."), so:',
+    '- No greeting words, no reader name, no questions about their name.',
+    '- Each names something REAL and specific from the passages above - a',
+    '  story, thread, or idea - and invites pulling on it. Warm, concrete,',
+    '  first person as Thingy. Agentic verbs: trace, connect, compare.',
+    '- Under 110 characters each. No emoji, no citations, no exclamation runs.',
+    '- Example shape: "There\'s a thread here about barn restoration that',
+    '  connects three different years - I can trace it."',
+    '',
+    'SUGGESTIONS rules - 2 or 3 tappable questions:',
     '- Each MUST be grounded in one of the archive passages above: name the',
-    '  specific subject, story, or thread from that passage. Never invent',
-    '  content and never write a generic question that any archive could',
-    '  answer.',
+    '  specific subject, story, or thread. Never generic.',
     '- Skip subjects their recent conversations already covered.',
-    '- Keep each under 90 characters, phrased as the reader asking Thingy.',
+    '- Under 90 characters, phrased as the reader asking Thingy.',
     '- If no archive material was retrieved, output SUGGESTIONS: []'
   ].join('\n');
 }
 
-export function parseWelcomeOutput(raw: string) {
-  const match = /\n?\s*SUGGESTIONS:\s*(\[[\s\S]*?\])\s*$/.exec(raw);
-  let suggestions: string[] = [];
-  if (match) {
-    try {
-      const parsed: unknown = JSON.parse(match[1]);
-      if (Array.isArray(parsed)) {
-        suggestions = parsed
-          .map((entry) => String(entry || '').trim())
-          .filter((entry) => entry.length > 0 && entry.length <= 140)
-          .slice(0, 3);
-      }
-    } catch {
-      suggestions = [];
-    }
+function parseJsonLine(raw: string, label: string, maxLen: number, maxCount: number): string[] {
+  const match = new RegExp(`${label}:\\s*(\\[[\\s\\S]*?\\])\\s*$`, 'm').exec(raw);
+  if (!match) return [];
+  try {
+    const parsed: unknown = JSON.parse(match[1]);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((entry) => String(entry || '').trim())
+      .filter((entry) => entry.length > 0 && entry.length <= maxLen)
+      .slice(0, maxCount);
+  } catch {
+    return [];
   }
-  const answer = (match ? raw.slice(0, match.index) : raw).trim();
-  return { answer, suggestions };
 }
 
-export async function generateWelcome({
-  readerContext,
-  conversations = [],
-  scope,
-  mode,
-  grounding = []
-}: WelcomeInput) {
+export function parseWelcomeSetOutput(raw: string) {
+  return {
+    greeting_lines: parseJsonLine(raw, 'GREETINGS', 140, 6),
+    suggestions: parseJsonLine(raw, 'SUGGESTIONS', 140, 3)
+  };
+}
+
+export async function generateWelcomeSet({ conversations = [], scope, grounding = [] }: WelcomeInput) {
   const start = performance.now();
   const response = await bedrock.send(
     new ConverseCommand({
-      modelId: agentModel(),
-      system: [{ text: AGENT_SYSTEM_PROMPT }, { cachePoint: { type: 'default' } }],
+      modelId: fastModel(),
+      system: [{ text: WELCOME_SYSTEM_PROMPT }],
       messages: [
         {
           role: 'user',
-          content: [{ text: welcomePrompt({ readerContext, conversations, scope, grounding }) }]
+          content: [{ text: welcomeSetPrompt({ conversations, scope, grounding }) }]
         }
       ],
       inferenceConfig: welcomeInferenceConfig()
     })
   );
-  const { answer: rawAnswer, suggestions } = parseWelcomeOutput(bedrockMessageText(response.output?.message));
-  const answer = sanitizeAnswerProse(rawAnswer).trim();
-  logEvent('info', 'welcome_generated', {
-    model: agentModel(),
-    mode: normalizeConversationMode(mode),
+  const set = parseWelcomeSetOutput(bedrockMessageText(response.output?.message));
+  logEvent('info', 'welcome_set_generated', {
+    model: fastModel(),
     conversation_count: (conversations || []).length,
     grounding_count: grounding.length,
-    suggestion_count: suggestions.length,
+    greeting_line_count: set.greeting_lines.length,
+    suggestion_count: set.suggestions.length,
     duration_ms: Math.round(performance.now() - start),
-    output_tokens: response.usage?.outputTokens,
-    answer_chars: answer.length
+    output_tokens: response.usage?.outputTokens
   });
-  return {
-    answer: answer || "Hi. I'm Thingy. Tell me what you're curious about and I'll help you explore Jamie's archive.",
-    suggestions
-  };
+  return set;
 }
