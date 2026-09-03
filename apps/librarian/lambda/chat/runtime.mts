@@ -162,7 +162,7 @@ function privacyGuardAnswer(question: unknown) {
     /\bjamie'?s\s+(home|house|residence)\s+(address|location)\b/
   ];
   if (!blockedPatterns.some((pattern) => pattern.test(text))) return '';
-  return "I cannot help find or share Jamie's private home address or phone number. For public contact, use the contact links Jamie publishes on thingelstad.com or reply through the newsletter's normal public channels.";
+  return "I can't help find Jamie's private home address or phone number - that stays off the shelves, even when the archive brushes past it. For contact, use the public links Jamie publishes on thingelstad.com or reply to the newsletter.";
 }
 
 function privacyPreflight(question: unknown) {
@@ -346,7 +346,7 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
     case 'get_source':
       return value.url || value.source_id || value.issue_number
         ? 'Opening a promising source for fuller context.'
-        : 'Opening source detail for context.';
+        : 'Opening it up for a closer look.';
     case 'get_issue':
       return value.issue_number
         ? `Opening WT${shortToolValue(value.issue_number, 12)} for issue-level context.`
@@ -354,21 +354,21 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
     case 'get_section':
       return value.issue_number
         ? `Opening a specific section from WT${shortToolValue(value.issue_number, 12)}.`
-        : 'Opening a specific archive section.';
+        : 'Flipping to the right section.';
     case 'find_links':
     case 'domain_history':
       return query ? `Tracing link metadata around ${query}.` : 'Tracing link and domain metadata.';
     case 'corpus_stats':
-      return 'Checking aggregate corpus metadata and counts.';
+      return 'Counting up the archive.';
     case 'latest_content':
       return 'Checking the freshest indexed sources.';
     case 'list_content':
-      return 'Listing matching sources deterministically.';
+      return 'Pulling the exact list.';
     case 'archive_lens':
     case 'compare_eras':
       return query ? `Mapping ${query} across time and source types.` : 'Mapping the theme across the archive.';
     case 'source_neighborhood':
-      return 'Inspecting the links and nearby sources around this item.';
+      return 'Looking at what connects to this.';
     case 'entity_lens':
       return query ? `Checking where ${query} appears across the archive.` : 'Checking where the named entity appears.';
     case 'archive_gems':
@@ -376,7 +376,7 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
     case 'claim_check':
       return query ? `Verifying ${query} against archive evidence.` : 'Verifying the claim against archive evidence.';
     default:
-      return 'Using an archive tool to narrow the answer.';
+      return 'Narrowing it down...';
   }
 }
 
@@ -673,7 +673,7 @@ async function streamBedrockAgentAnswer(
           writeSse(responseStream, 'status', {
             kind: 'tool',
             tool_name: toolName,
-            message: `✗ ${toolTitle(toolName)} did not respond - working around it.`
+            message: `${toolTitle(toolName)} didn't answer - trying another door.`
           });
         }
       }
@@ -696,11 +696,11 @@ async function streamBedrockAgentAnswer(
     if (stopReason === 'tool_use') {
       stopReason = 'tool_use_exhausted';
       answer = [
-        'I found archive material for this, but I ran out of my research loop before I could turn it into a reliable answer.',
-        'Try asking again with a narrower angle, or ask me to pick one specific source or time period.'
+        'I found real material for this, but I ran out of room to turn it into a solid answer.',
+        'Ask again with a narrower angle - or point me at one source or time period and I will start there.'
       ].join(' ');
     } else {
-      answer = 'I could not produce a reliable answer from the archive tools for that question.';
+      answer = "I couldn't get to a reliable answer on that one - the archive tools didn't give me enough to stand on.";
     }
   }
   const sanitizedAnswer = sanitizeAnswerProse(answer);
@@ -1165,7 +1165,7 @@ async function handleGuestWelcome({
   ) => void;
 }) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
-    rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
     return;
   }
   // Same origin gate as guest chat: direct Function-URL callers can forge
@@ -1194,7 +1194,7 @@ async function handleGuestWelcome({
 
 async function handleGuestChat({ event, body, stream, requestId, start, rejectStream }: GuestChatContext) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
-    rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+    rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
     return;
   }
   // Guests only exist inside the web app; every real browser reaches us
@@ -1213,11 +1213,11 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }
   const question = String(body.message || '').trim();
   if (!question) {
-    rejectStream(400, 'empty_question', 'Ask a question about the archive.');
+    rejectStream(400, 'empty_question', 'Ask me something first.');
     return;
   }
   if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
-    rejectStream(400, 'question_too_long', 'Please ask a shorter question.');
+    rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
     return;
   }
   const ip = clientSourceIp(event);
@@ -1304,7 +1304,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     guest_remaining: guestRemaining,
     contract_version: LIBRARIAN_CONTRACT_VERSION
   });
-  writeSse(stream, 'status', { message: 'Understanding the request...' });
+  writeSse(stream, 'status', { message: 'Reading your question...' });
   const preflight = await evaluatePromptPreflight(question, scope, history, { readerContext, mode: 'thingy' });
   if (preflight.action === 'direct') {
     preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
@@ -1334,7 +1334,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     deadlineExceeded = true;
     try {
       writeSse(stream, 'error', {
-        error: 'Thingy spent too long in the archive. Please try again with a narrower angle.',
+        error: 'Thingy got lost in the stacks on that one. Try a narrower angle.',
         request_id: requestId
       });
     } catch {}
@@ -1450,7 +1450,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
           })
         : {
             statusCode: 401,
-            payload: { error: 'Please validate your subscriber email to use Thingy.', request_id: requestId }
+            payload: {
+              error: 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.',
+              request_id: requestId
+            }
           };
     const stream = jsonResponseStream(responseStream, result.statusCode);
     stream.write(JSON.stringify(result.payload));
@@ -1552,7 +1555,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       logEvent('error', 'request_failed', errorFields(error, { ...summary, route: routeName }));
       try {
         const s500 = jsonResponseStream(responseStream, 500);
-        s500.write(JSON.stringify({ error: 'Thingy is unavailable right now.' }));
+        s500.write(JSON.stringify({ error: "Thingy isn't answering right now - try again in a minute." }));
         s500.end();
       } catch {
         try {
@@ -1611,7 +1614,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         await handleGuestWelcome({ event, stream, requestId, rejectStream });
         return;
       }
-      rejectStream(401, 'session_invalid', 'Please validate your subscriber email to use Thingy.');
+      rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
       return;
     }
     subscriberHash = String(payload.sub || '');
@@ -1630,7 +1633,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       if (
         !(await checkRateLimit(`welcome#${String(payload.sub)}`, Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)))
       ) {
-        rejectStream(429, 'rate_limited', 'Thingy is at the hourly limit for this session.');
+        rejectStream(
+          429,
+          'rate_limited',
+          "That's a lot of questions in one hour - give Thingy a few minutes to catch up."
+        );
         return;
       }
       // Contract 4.10: the greeting prose is composed client-side (time-
@@ -1737,15 +1744,19 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       }
     }
     if (!question) {
-      rejectStream(400, 'empty_question', 'Ask a question about the archive.');
+      rejectStream(400, 'empty_question', 'Ask me something first.');
       return;
     }
     if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
-      rejectStream(400, 'question_too_long', 'Please ask a shorter question.');
+      rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
       return;
     }
     if (!(await checkRateLimit(String(payload.sub)))) {
-      rejectStream(429, 'rate_limited', 'The librarian is at the hourly limit for this session.');
+      rejectStream(
+        429,
+        'rate_limited',
+        "That's a lot of questions in one hour - give Thingy a few minutes to catch up."
+      );
       return;
     }
     // Daily per-user budget pool (independent from the MCP pool). Rate
@@ -1786,7 +1797,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       mode: modeAccess.mode,
       contract_version: LIBRARIAN_CONTRACT_VERSION
     });
-    writeSse(stream, 'status', { message: 'Understanding the request...' });
+    writeSse(stream, 'status', { message: 'Reading your question...' });
     const preflight = await evaluatePromptPreflight(question, scope, history, {
       readerContext,
       mode: modeAccess.mode
@@ -1857,7 +1868,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       if (deadlineExceeded) return;
       try {
         writeSse(stream, 'status', {
-          message: 'This is a deeper archive pass. Thingy is still working...'
+          message: 'Still digging - this one goes deep...'
         });
       } catch {}
       logEvent('info', 'chat_slow_notice_sent', {
@@ -1873,7 +1884,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       deadlineExceeded = true;
       try {
         writeSse(stream, 'error', {
-          error: 'Thingy spent too long in the archive. Please try again with a narrower angle.',
+          error: 'Thingy got lost in the stacks on that one. Try a narrower angle.',
           request_id: requestId
         });
       } catch {}
@@ -1921,7 +1932,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         conversationId,
         question,
         parentRequestId,
-        answer: 'Thingy spent too long in the archive before it could return a reliable answer.',
+        answer: 'Thingy got lost in the stacks before finding a reliable answer to this one.',
         scope,
         mode: modeAccess.mode,
         requestId,
@@ -1993,7 +2004,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       })
     );
     writeSse(stream, 'error', {
-      error: 'The librarian could not generate an answer right now.',
+      error: "Thingy couldn't put an answer together just now. Ask again.",
       request_id: requestId
     });
   } finally {

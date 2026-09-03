@@ -155,11 +155,19 @@ export async function handleUserConversations(
 ) {
   const payload = await conversationAuth(event, body);
   if (!payload) {
-    return jsonResponse(401, { error: 'Please validate your subscriber email to use Thingy.' }, event);
+    return jsonResponse(
+      401,
+      { error: 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.' },
+      event
+    );
   }
   const subscriberHash = String(payload.sub || '');
   if (!subscriberHash)
-    return jsonResponse(401, { error: 'Please validate your subscriber email to use Thingy.' }, event);
+    return jsonResponse(
+      401,
+      { error: 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.' },
+      event
+    );
   const entitlements = entitlementsForSessionPayload(payload);
   const modes = availableConversationModes(entitlements);
   const tableName = process.env.TABLE_NAME;
@@ -443,7 +451,7 @@ export async function handleUserConversations(
 }
 
 function shareNotFound(event: LibrarianHttpEvent) {
-  return jsonResponse(404, { error: 'This shared conversation is no longer available.' }, event);
+  return jsonResponse(404, { error: 'This shared conversation has been closed up.' }, event);
 }
 
 // Public, unauthenticated: GET /share/{token}. Returns a read-only snapshot
