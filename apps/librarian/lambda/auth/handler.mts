@@ -5,6 +5,7 @@ import {
   createSubscriber,
   ensureThingyTag,
   fetchSubscriber,
+  resubscribeSubscriber,
   sanitizeAttribution,
   sendSubscriberReminder,
   subscriberStatus
@@ -710,6 +711,99 @@ async function authHandler(event: LibrarianHttpEvent) {
   }
 
   if (action === 'subscribe') {
+    // The address may already exist — a previously-unsubscribed reader
+    // coming back, or someone re-entering a live address. Creating over an
+    // existing record is a Buttondown error, and it was the dead end behind
+    // "Could not add that email right now" (Eric's report, 2026-09-04).
+    let existing;
+    try {
+      existing = await fetchSubscriber(email);
+    } catch (error) {
+      logEvent('error', 'buttondown_lookup_failed', { email_hash: hashedEmail, error_type: errorName(error) });
+      return jsonResponse(502, { error: 'Could not validate subscriber status right now.' }, event);
+    }
+    const existingStatus = subscriberStatus(existing);
+
+    if (existingStatus === 'active' || existingStatus === 'premium') {
+      logEvent('info', 'auth_subscribe_already_subscribed', {
+        email_hash: hashedEmail,
+        subscriber_status: existingStatus
+      });
+      return jsonResponse(
+        200,
+        {
+          status: 'already_subscribed',
+          subscriber_status: existingStatus,
+          message: 'That email is already subscribed to the Weekly Thing.'
+        },
+        event
+      );
+    }
+
+    if (existingStatus === 'unconfirmed') {
+      // They exist but never confirmed: a fresh reminder, not a new record.
+      try {
+        await sendSubscriberReminder(email);
+        logEvent('info', 'auth_subscribe_reminder_resent', { email_hash: hashedEmail });
+        return jsonResponse(
+          200,
+          {
+            status: 'subscribed',
+            subscriber_status: existingStatus,
+            message: 'Check your inbox to confirm your subscription.'
+          },
+          event
+        );
+      } catch (error) {
+        logEvent('error', 'buttondown_subscriber_reminder_failed', {
+          email_hash: hashedEmail,
+          error_type: errorName(error)
+        });
+        return jsonResponse(502, { error: 'Could not send the confirmation email right now.' }, event);
+      }
+    }
+
+    if (existingStatus === 'inactive') {
+      const existingType = String(existing?.type || '').toLowerCase();
+      if (existingType !== 'unsubscribed') {
+        // disabled / undeliverable states cannot be revived over the API.
+        logEvent('info', 'auth_resubscribe_unavailable', { email_hash: hashedEmail, subscriber_type: existingType });
+        return jsonResponse(
+          200,
+          {
+            status: 'resubscribe_unavailable',
+            error: 'That email can’t be re-added automatically — please reach out to Jamie directly.'
+          },
+          event
+        );
+      }
+      try {
+        // Double-opt-in: Buttondown moves them to pending and sends a fresh
+        // confirmation email; nothing resumes until they confirm.
+        const subscriber = await resubscribeSubscriber(email);
+        logEvent('info', 'auth_resubscribe_completed', {
+          email_hash: hashedEmail,
+          subscriber_status: subscriberStatus(subscriber),
+          subscriber_source: source
+        });
+        return jsonResponse(
+          200,
+          {
+            status: 'subscribed',
+            subscriber_status: 'unconfirmed',
+            message: 'Check your inbox to confirm your subscription.'
+          },
+          event
+        );
+      } catch (error) {
+        logEvent('error', 'buttondown_subscriber_resubscribe_failed', {
+          email_hash: hashedEmail,
+          error_type: errorName(error)
+        });
+        return jsonResponse(502, { error: 'Could not re-add that email right now.' }, event);
+      }
+    }
+
     try {
       const subscriber = await createSubscriber(email, event, source, attribution);
       const status = subscriberStatus(subscriber);
