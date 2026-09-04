@@ -746,6 +746,20 @@ test('buttondown subscriber status maps active and inactive states', () => {
   assert.equal(subscriberStatus({ type: 'disabled' }), 'inactive');
 });
 
+test('a churned member is still a reader; a renewed member is premium', () => {
+  // Churned = lapsed PAID membership; the free newsletter continues, so
+  // sign-in stays open in the reader lane (Jamie, 2026-09-04).
+  assert.equal(subscriberStatus({ type: 'churned', churn_date: '2025-12-22' }), 'active');
+  // A historical churn_date must never outrank the current type: this
+  // pinned a renewed member as inactive forever under the old order.
+  assert.equal(subscriberStatus({ type: 'premium', churn_date: '2025-12-22' }), 'premium');
+  // But actually leaving the newsletter still closes the door.
+  assert.equal(
+    subscriberStatus({ type: 'unsubscribed', churn_date: '2025-12-22', unsubscription_date: '2026-02-01' }),
+    'inactive'
+  );
+});
+
 test('prompt template renderer substitutes named placeholders', () => {
   assert.equal(
     renderTemplate('Hello {{ name }} from {{ place }}.', { name: 'Thingy', place: 'the archive' }),
