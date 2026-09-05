@@ -42,6 +42,36 @@ export const MCP_LAUNCH_TOOLS = [
 // a page agent's behalf is a different risk posture than reading the archive.
 export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page' && name !== 'web_search');
 
+// view_photo is MCP-only and lives outside the ARCHIVE_TOOLS registry on
+// purpose: its result is image content blocks, which the Bedrock chat loop
+// and the WebMCP page (which renders archive URLs natively) have no use
+// for, and whose base64 must never land in audit rows or Converse text.
+export const VIEW_PHOTO_TOOL = 'view_photo';
+
+const VIEW_PHOTO_DECLARATION = {
+  name: VIEW_PHOTO_TOOL,
+  title: 'View archive photos',
+  annotations: { title: 'View archive photos' },
+  description:
+    'Fetch up to 3 archive photos as inline images: they render in the ' +
+    'conversation and become visible to you, so you can describe and ' +
+    'compare them. Pass image_url values from media_search or get_source ' +
+    'results. Archive image hosts only; an oversized original is refused ' +
+    'with its URL still usable as a link.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      image_urls: {
+        type: 'array',
+        items: { type: 'string' },
+        maxItems: 3,
+        description: 'image_url values from media_search / get_source results (1-3).'
+      }
+    },
+    required: ['image_urls']
+  }
+};
+
 // Tool results are sized for the Bedrock loop, where 200KB of evidence is
 // cheap context. MCP clients pay tokens for every byte, so cap what a
 // single tools/call returns and say so honestly when trimmed.
@@ -69,6 +99,12 @@ export interface McpContext {
   // Returns true when the caller may spend one tool call; false ends the
   // request with a quota error.
   spendQuota: () => Promise<{ allowed: boolean; count: number; max: number }>;
+  // view_photo capability (photo-view.mts, audited by the runtime). Absent
+  // means the surface does not offer the tool.
+  viewPhoto?: (urls: unknown) => Promise<{
+    photos: { url: string; mimeType: string; dataBase64: string; bytes: number }[];
+    refused: { url: string; reason: string }[];
+  }>;
 }
 
 export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
@@ -126,7 +162,10 @@ function negotiatedProtocolVersion(requested: unknown) {
 // control; a version on the payload lets an agent detect a stale cached
 // tools/list from any response).
 export function serverVersion() {
-  return `1.1.0+tools.${promptFingerprint()}`;
+  // 1.2.0: view_photo joined the surface. The minor is bumped by hand when
+  // the tool list changes outside tool-specs.json (which the fingerprint
+  // covers) - clients cache tools/list on this value.
+  return `1.2.0+tools.${promptFingerprint()}`;
 }
 
 export function initializeResult(requestedVersion: unknown) {
@@ -164,6 +203,7 @@ export function initializeResult(requestedVersion: unknown) {
       'Start broad with search_archive, then deepen with get_source; use archive_lens for',
       'how-things-changed-over-time questions, latest_content for freshness, and corpus_stats',
       'for what the archive contains. Cite Weekly Thing sources as WT<issue number>.',
+      'Photos: media_search finds them; view_photo shows up to 3 inline and gives you vision over them.',
       'The tool schemas evolve; serverInfo.version changes whenever they do - if it differs from your',
       'cached value, re-fetch tools/list before relying on cached parameter schemas.'
     ].join(' ')
@@ -203,10 +243,56 @@ export async function handleMcpMessage(
     return { statusCode: 200, payload: rpcResult(id, {}) };
   }
   if (method === 'tools/list') {
-    return { statusCode: 200, payload: rpcResult(id, { tools: mcpToolDeclarations() }) };
+    const tools = [...mcpToolDeclarations(), ...(context.viewPhoto ? [VIEW_PHOTO_DECLARATION] : [])];
+    return { statusCode: 200, payload: rpcResult(id, { tools }) };
   }
   if (method === 'tools/call') {
     const name = String(params.name || '');
+    if (name === VIEW_PHOTO_TOOL && context.viewPhoto) {
+      const quota = await context.spendQuota();
+      if (!quota.allowed) {
+        return {
+          statusCode: 200,
+          payload: rpcError(
+            id,
+            MCP_QUOTA_ERROR_CODE,
+            `Daily tool-call quota reached (${quota.max} per day). It resets at midnight UTC.`
+          )
+        };
+      }
+      const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
+      try {
+        const { photos, refused } = await context.viewPhoto(args.image_urls);
+        const summary = {
+          shown: photos.map(({ url, bytes, mimeType }) => ({ url, bytes, mime_type: mimeType })),
+          refused,
+          server_version: serverVersion()
+        };
+        return {
+          statusCode: 200,
+          payload: rpcResult(id, {
+            content: [
+              ...photos.map((photo) => ({ type: 'image', data: photo.dataBase64, mimeType: photo.mimeType })),
+              { type: 'text', text: JSON.stringify(summary, null, 1) }
+            ],
+            isError: photos.length === 0
+          })
+        };
+      } catch (error) {
+        return {
+          statusCode: 200,
+          payload: rpcResult(id, {
+            content: [
+              {
+                type: 'text',
+                text: `Tool view_photo failed: ${error instanceof Error ? error.constructor.name : 'error'}`
+              }
+            ],
+            isError: true
+          })
+        };
+      }
+    }
     if (!MCP_LAUNCH_TOOLS.includes(name)) {
       return { statusCode: 200, payload: rpcError(id, -32602, `Unknown tool: ${name}`) };
     }

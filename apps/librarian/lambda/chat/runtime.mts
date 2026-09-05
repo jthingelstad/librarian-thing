@@ -74,6 +74,7 @@ import {
   serverVersion
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
+import { fetchPhotos } from '../shared/photo-view.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
@@ -890,6 +891,61 @@ function archiveToolInvoker({
   };
 }
 
+/**
+ * view_photo for the MCP surface: fetch + allowlist live in photo-view.mts;
+ * this wrapper audits like any other tool call - but the audit row carries
+ * bytes and reasons, never the base64 (DynamoDB items are bounded and the
+ * image itself is not evidence worth keeping).
+ */
+function viewPhotoInvoker({ subscriberHash, requestId }: { subscriberHash: string; requestId: string }) {
+  return async (urls: unknown) => {
+    const toolStart = performance.now();
+    const result = await fetchPhotos(urls);
+    const durationMs = Math.round(performance.now() - toolStart);
+    const auditResult = {
+      shown: result.photos.map(({ url, bytes, mimeType }) => ({ url, bytes, mime_type: mimeType })),
+      refused: result.refused
+    };
+    try {
+      await recordMcpToolCall({
+        dynamodb,
+        tableName: process.env.TABLE_NAME,
+        subscriberHash,
+        requestId,
+        createdAt: new Date().toISOString(),
+        toolName: 'view_photo',
+        arguments: { image_urls: urls },
+        result: auditResult,
+        status: result.photos.length ? 'ok' : 'tool_error',
+        durationMs,
+        sourceRevision: process.env.LIBRARIAN_SOURCE_REVISION,
+        resultChars: JSON.stringify(auditResult).length,
+        responseTruncated: false,
+        responseMaxChars: MCP_RESULT_MAX_CHARS,
+        surface: 'mcp'
+      });
+    } catch (error) {
+      logEvent('warning', 'mcp_tool_audit_failed', {
+        request_id: requestId,
+        tool_name: 'view_photo',
+        surface: 'mcp',
+        error_type: errorName(error)
+      });
+    }
+    logEvent('info', 'mcp_tool_call_completed', {
+      request_id: requestId,
+      tool_name: 'view_photo',
+      surface: 'mcp',
+      status: result.photos.length ? 'ok' : 'tool_error',
+      duration_ms: durationMs,
+      photos_shown: result.photos.length,
+      photos_refused: result.refused.length,
+      bytes_total: result.photos.reduce((n, photo) => n + photo.bytes, 0)
+    });
+    return result;
+  };
+}
+
 // Browser-facing tool door for the WebMCP page module: same registry, same
 // truncation, same audit pipeline as /mcp, but house-style JSON actions and
 // web-session auth (cookie via the thingy distribution, or Bearer). Reached
@@ -1060,6 +1116,10 @@ async function handleMcpRoute({
       subscriberHash: grant.subscriberHash,
       requestId: String(summary.request_id || ''),
       surface: 'mcp'
+    }),
+    viewPhoto: viewPhotoInvoker({
+      subscriberHash: grant.subscriberHash,
+      requestId: String(summary.request_id || '')
     })
   });
   finish(result.statusCode, result.payload);

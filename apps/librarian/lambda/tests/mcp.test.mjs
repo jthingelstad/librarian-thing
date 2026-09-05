@@ -28,7 +28,7 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult().serverInfo.name, 'librarian');
   // The version is the tool-surface cache key: it must change when the
   // packaged prompt/spec set changes, and be stable within one build.
-  assert.match(initializeResult().serverInfo.version, /^1\.1\.0\+tools\.[0-9a-f]{12}$/);
+  assert.match(initializeResult().serverInfo.version, /^1\.2\.0\+tools\.[0-9a-f]{12}$/);
   assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
