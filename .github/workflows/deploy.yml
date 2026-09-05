@@ -112,7 +112,9 @@ jobs:
           weekly_corpus=false
           if has_change \
             '^data/issues/' \
+            '^data/librarian/media-descriptions\.json$' \
             '^pipeline/corpus/build\.py$' \
+            '^pipeline/corpus/describe_media\.py$' \
             '^pipeline/deploy/upload_corpus\.py$' \
             '^librarian-core/' \
             '^pyproject\.toml$' \
@@ -123,6 +125,7 @@ jobs:
           blog_corpus=false
           if has_change \
             '^data/blog/' \
+            '^data/librarian/media-descriptions\.json$' \
             '^pipeline/blog/' \
             '^pipeline/deploy/upload_blog_corpus\.py$' \
             '^librarian-core/'; then
