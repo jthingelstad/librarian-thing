@@ -286,7 +286,7 @@ Overall a positive outlook but cautious one would assume based on the high marke
 
 This morning we made our way to Arlington Heights and met [CJ Chilvers](https://www.cjchilvers.com) for breakfast at [Scratchboard Kitchen](https://scratchboardkitchenah.com). I have followed CJ's blog and newsletter for years and have a ton of respect for how he approaches his craft. It was awesome to finally meet him in person!
 
-![Auto-generated description: Two people are standing on a sidewalk outside, smiling at the camera, with trees and a few parked cars in the background.](https://files.thingelstad.com/weekly-thing/298/journal/2328c37488.jpg)
+![Two people are standing on a sidewalk outside, smiling at the camera, with trees and a few parked cars in the background.](https://files.thingelstad.com/weekly-thing/298/journal/2328c37488.jpg)
 
 ### [Flying a 737](https://www.thingelstad.com/2024/10/18/flying-a.html)
 Oct 18, 2024 at 9:53 PM
@@ -318,19 +318,19 @@ See [list of escape rooms](https://www.thingelstad.com/lists/escape-rooms/).
 
 Browsing the [Ebisu Life](https://www.simon.com/mall/gurnee-mills/stores/ebisu) store at Gurnee Mall. All Japanese products.
 
-![Auto-generated description: A supermarket shelf displays a variety of packaged snacks in colorful bags.](https://files.thingelstad.com/weekly-thing/298/journal/1f0824acb7.jpg)
+![A supermarket shelf displays a variety of packaged snacks in colorful bags.](https://files.thingelstad.com/weekly-thing/298/journal/1f0824acb7.jpg)
 
 [Oct 18, 2024 at 10:09 PM](https://www.thingelstad.com/2024/10/18/our-evening-plans.html)
 
 Our evening plans were a bit in flux and we decided at the last minute, very last minute, to go to the [Wayfarer](https://www.wayfarertheaters.com/home) theatre and see White Bird. Very good movie with a gripping story.
 
-![Auto-generated description: A couple stands in a sunlit forest clearing holding hands, with film credits and the title White Bird prominently displayed.](https://files.thingelstad.com/weekly-thing/298/journal/4eb8e8f932.jpg)
+![A couple stands in a sunlit forest clearing holding hands, with film credits and the title White Bird prominently displayed.](https://files.thingelstad.com/weekly-thing/298/journal/4eb8e8f932.jpg)
 
 [Oct 19, 2024 at 10:15 AM](https://www.thingelstad.com/2024/10/19/the-bean.html)
 
 "The Bean"
 
-![Auto-generated description: A large, reflective bean-shaped sculpture is surrounded by people and set against a backdrop of tall buildings in an urban park.](https://files.thingelstad.com/weekly-thing/298/journal/f3a51689b5.jpg)
+![A large, reflective bean-shaped sculpture is surrounded by people and set against a backdrop of tall buildings in an urban park.](https://files.thingelstad.com/weekly-thing/298/journal/f3a51689b5.jpg)
 
 [Oct 19, 2024 at 11:15 AM](https://www.thingelstad.com/2024/10/19/buckingham-fountain-in.html)
 
@@ -348,11 +348,11 @@ While walking from Buckingham Fountain to the Art Institute of Chicago we took i
 
 We visited the [Art Institute of Chicago](https://www.artic.edu) specifically to see one of the original Great Wave pieces that they have there. The Great Wave is one of Tyler’s favorite pieces of art. We also checked out the contemporary and modern galleries.
 
-![Auto-generated description: A framed artwork depicting Hokusai's famous The Great Wave is displayed on a wall with descriptive text explaining its significance and origins.](https://files.thingelstad.com/weekly-thing/298/journal/ac21e7eefb.jpg)
+![A framed artwork depicting Hokusai's famous The Great Wave is displayed on a wall with descriptive text explaining its significance and origins.](https://files.thingelstad.com/weekly-thing/298/journal/ac21e7eefb.jpg)
 
-![Auto-generated description: A large, framed pointillist painting depicting people relaxing in a park is displayed in a gallery, with two women observing it.](https://files.thingelstad.com/weekly-thing/298/journal/422acbb871.jpg)
+![A large, framed pointillist painting depicting people relaxing in a park is displayed in a gallery, with two women observing it.](https://files.thingelstad.com/weekly-thing/298/journal/422acbb871.jpg)
 
-![Auto-generated description: A cubist painting depicts a reclining nude figure with abstract geometric shapes and muted colors.](https://files.thingelstad.com/weekly-thing/298/journal/c768dd332e.jpg)
+![A cubist painting depicts a reclining nude figure with abstract geometric shapes and muted colors.](https://files.thingelstad.com/weekly-thing/298/journal/c768dd332e.jpg)
 
 [Oct 19, 2024 at 2:15 PM](https://www.thingelstad.com/2024/10/19/while-making-our.html)
 
@@ -406,7 +406,7 @@ Our trip to Chicago for MEA was all electric in the Tesla Model Y. We’ve not d
 
 We saw [Mike Birbiglia](https://www.birbigs.com)'s newest performance _The Good Life_ at the State Theater tonight. He is an incredible performer -- so many laughs.
 
-![Auto-generated description: A comedian performs on a stage with a spotlight, standing near a stool with a cup on it.](https://files.thingelstad.com/weekly-thing/298/journal/86d316294f.jpg)
+![A comedian performs on a stage with a spotlight, standing near a stool with a cup on it.](https://files.thingelstad.com/weekly-thing/298/journal/86d316294f.jpg)
 
 [Oct 21, 2024 at 8:27 PM](https://www.thingelstad.com/2024/10/21/tammy-and-i.html)
 

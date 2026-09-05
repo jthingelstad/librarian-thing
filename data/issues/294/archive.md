@@ -376,7 +376,7 @@ The 40th installment of [Minnedemo](https://minnestar.org/minnedemo/) had me won
 
 [Aneela Idnani](https://www.linkedin.com/in/aneelaidnani/) + [Sameer Kumar](https://www.linkedin.com/in/sameerakumar/)
 
-![Auto-generated description: A smartphone screen displays an ad for HabitAware's Keen2, promoting help for hair pulling, skin picking, and nail biting habits.](https://files.thingelstad.com/weekly-thing/294/journal/img-5969.png)
+![A smartphone screen displays an ad for HabitAware's Keen2, promoting help for hair pulling, skin picking, and nail biting habits.](https://files.thingelstad.com/weekly-thing/294/journal/img-5969.png)
 
 App along with a bracelet that attempts to interrupt someone that is habitually picking on their skin, pulling their hair, or some other [body-focused repetitive behavior](https://en.wikipedia.org/wiki/Body-focused_repetitive_behavior) (BFRB). One of the founders successfully used this to stop a hair pulling habit. They demoed their solution now working as an app on an Apple Watch. They also have a new version of the bracelet on the way.
 
@@ -384,7 +384,7 @@ App along with a bracelet that attempts to interrupt someone that is habitually 
 
 [Dagmawe Mamo](https://www.linkedin.com/in/mamodagmawe/), Mahamud Hussien + Keleabe Mamo
 
-![Auto-generated description: A smartphone displays Omega VR's website, featuring controllerless VR experiences and a Join Beta Trial button, with a VR headset image in the center.](https://files.thingelstad.com/weekly-thing/294/journal/img-5970.png)
+![A smartphone displays Omega VR's website, featuring controllerless VR experiences and a Join Beta Trial button, with a VR headset image in the center.](https://files.thingelstad.com/weekly-thing/294/journal/img-5970.png)
 
 Focused on creating accessible technology specifically to allow VR usage for people that have mobility limitations. Allow user to move around VR space with eye tracking and other assistive methods. Uses EEG to monitor brain activity to allow navigation via thought.
 
@@ -400,17 +400,17 @@ Not a launched app but will be soon. The app uses an established database with u
 
 [Lukas Valine](https://www.linkedin.com/in/lvaline/)
 
-![Auto-generated description: A smartphone displays the Attentio website on a vibrant, rainbow-colored background, featuring a message about simplifying AI model building and a Join Beta button.](https://files.thingelstad.com/weekly-thing/294/journal/img-5968.png)
+![A smartphone displays the Attentio website on a vibrant, rainbow-colored background, featuring a message about simplifying AI model building and a Join Beta button.](https://files.thingelstad.com/weekly-thing/294/journal/img-5968.png)
 
 Platform to allow training and custom weights of an LLM using plain text. You can simply describe facets and data and then tell the LLM to save that and it will respond with that from then on. It was a good demo. It wasn’t clear to me how different it is from a Custom GPT in ChatGPT. It does work on significantly smaller and cheaper models.
 
-![Auto-generated description: A person is standing on a stage next to a large screen displaying a presentation.](https://files.thingelstad.com/weekly-thing/294/journal/img-5948.jpeg)
+![A person is standing on a stage next to a large screen displaying a presentation.](https://files.thingelstad.com/weekly-thing/294/journal/img-5948.jpeg)
 
 ### Abe
 
 [Isaac Kamsin](https://www.linkedin.com/in/isaackamsin/)
 
-![Auto-generated description: A smartphone displays a webpage for Abe, featuring a home service app advertisement encouraging video chats with professionals for DIY project assistance.](https://files.thingelstad.com/weekly-thing/294/journal/img-5967.png)
+![A smartphone displays a webpage for Abe, featuring a home service app advertisement encouraging video chats with professionals for DIY project assistance.](https://files.thingelstad.com/weekly-thing/294/journal/img-5967.png)
 
 Platform that connects DIY home repair people to others to help them solve problems in the home via online video sharing. Buy on demand expertise that can help you navigate projects. Particularly good where YouTube videos just don’t address the specific questions you have. Much cheaper than a handyman or tradesperson visiting, and perhaps a way for a tradesperson to generate additional income? The demo was replacing a flapper in a toilet. 🚽
 

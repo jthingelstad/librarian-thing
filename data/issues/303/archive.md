@@ -299,7 +299,7 @@ I’d been pruning these ghost devices every few days. Happy to not need to look
 
 Tyler's done with school for the week. Mazie's home from college. I'm [making Wassail Tea](https://www.thingelstad.com/2004/11/01/wassail-tea.html) and it smells great. Logs burning in the fireplace. Feels like Thanksgiving. 🥰
 
-![Auto-generated description: A cozy fireplace burns brightly in the background with a basket of firewood placed in the foreground.](https://files.thingelstad.com/weekly-thing/303/journal/b9a8979cee.jpg)
+![A cozy fireplace burns brightly in the background with a basket of firewood placed in the foreground.](https://files.thingelstad.com/weekly-thing/303/journal/b9a8979cee.jpg)
 
 [Nov 26, 2024 at 7:58 PM](https://www.thingelstad.com/2024/11/26/could-the-microblog.html)
 
@@ -311,7 +311,7 @@ How about a sampling technique using a percentage of all posts that are not repl
 
 We saw [Wicked](https://en.wikipedia.org/wiki/Wicked_\(2024_film\)) tonight and thought it was really great. The ending was so powerful. Recommended! 🍿
 
-![Auto-generated description: A witch and a fairy-like character reach toward each other against a backdrop of a mystical landscape with the text Everyone deserves the chance to fly and the title Wicked.](https://files.thingelstad.com/weekly-thing/303/journal/wicked-movie-poster.jpg)
+![A witch and a fairy-like character reach toward each other against a backdrop of a mystical landscape with the text Everyone deserves the chance to fly and the title Wicked.](https://files.thingelstad.com/weekly-thing/303/journal/wicked-movie-poster.jpg)
 
 [Nov 28, 2024 at 11:23 AM](https://www.thingelstad.com/2024/11/28/from-our-family.html)
 

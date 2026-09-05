@@ -344,7 +344,7 @@ Feb 25, 2025 at 8:20 PM
 
 Right before my birthday I decided use the Shortcut I wrote to calculate [my version number](https://www.thingelstad.com/2018/02/24/your-version-number.html) and make it a widget on my phone using [SuperWidget](https://superwidget.app). I have an automation that runs at 5:00 AM each day to update my version number. It sits right next to my [Four Thousand Weeks](https://www.thingelstad.com/2021/11/22/four-thousand-weeks.html) rings. It has been interesting for me to “feel” that the version number has real meaning to me, in a way the rings don’t. Each day is a new version. Jamie 5.3.53 is today, and will never be again. What do I want for 5.3.54? And how is it already over 1/7th of the way to 5.4.0!
 
-![Auto-generated description: A smartphone screen displays various widgets including weather, fitness tracking, and app version information over a gradient background.](https://files.thingelstad.com/weekly-thing/311/journal/b7d27d682c.jpg)
+![A smartphone screen displays various widgets including weather, fitness tracking, and app version information over a gradient background.](https://files.thingelstad.com/weekly-thing/311/journal/b7d27d682c.jpg)
 
 [Feb 25, 2025 at 9:04 PM](https://www.thingelstad.com/2025/02/25/tammy-and-i-finished-watching.html)
 

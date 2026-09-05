@@ -321,15 +321,15 @@ So, yeah, make sure you are using a password manager.
 
 We are visiting my relatives in [Grandin, ND](https://en.wikipedia.org/wiki/Grandin,_North_Dakota) and last night's storm was the worst I've ever been through. Winds in excess of 100 mph. Lasted for hours. Power is out to the entire town. Many trees down. Uncle's house power line from the pole is down.
 
-![Auto-generated description: A sign labeled GRAND stands beside a railway track on a clear day, with a grassy field and a building in the background.](https://files.thingelstad.com/weekly-thing/325/journal/img-3525.jpeg)
+![A sign labeled GRAND stands beside a railway track on a clear day, with a grassy field and a building in the background.](https://files.thingelstad.com/weekly-thing/325/journal/img-3525.jpeg)
 
-![Auto-generated description: A damaged metal grain silo is partially collapsed with its roof caved in and sides buckled.](https://files.thingelstad.com/weekly-thing/325/journal/img-3533.jpeg)
+![A damaged metal grain silo is partially collapsed with its roof caved in and sides buckled.](https://files.thingelstad.com/weekly-thing/325/journal/img-3533.jpeg)
 
-![Auto-generated description: A building with significant roof damage is surrounded by debris against a clear blue sky.](https://files.thingelstad.com/weekly-thing/325/journal/img-3541.jpeg)
+![A building with significant roof damage is surrounded by debris against a clear blue sky.](https://files.thingelstad.com/weekly-thing/325/journal/img-3541.jpeg)
 
-![Auto-generated description: A large tree has fallen and is leaning against a red building near a concrete path.](https://files.thingelstad.com/weekly-thing/325/journal/img-3539.jpeg)
+![A large tree has fallen and is leaning against a red building near a concrete path.](https://files.thingelstad.com/weekly-thing/325/journal/img-3539.jpeg)
 
-![Auto-generated description: A large tree is uprooted and lying on the grass in a residential area, with its roots exposed.](https://files.thingelstad.com/weekly-thing/325/journal/img-3537.jpeg)
+![A large tree is uprooted and lying on the grass in a residential area, with its roots exposed.](https://files.thingelstad.com/weekly-thing/325/journal/img-3537.jpeg)
 
 [Jun 21, 2025 at 2:16 PM](https://www.thingelstad.com/2025/06/21/my-car-was-parked-right.html)
 
@@ -408,7 +408,7 @@ Tyler got [Dayne St. Clair](https://www.mnufc.com/players/dayne-st-clair/)'s sig
 
 We saw [F1: The Movie](https://www.f1themovie.com) tonight and I thought it was awesome. Great summer movie with a predictable story but still thrilling and exciting! I loved the race scenes -- which were plenty. Brad Pitt was great as was the rest of the cast. Recommended!
 
-![Auto-generated description: A person in a racing suit stands beside a Formula 1 car against a vibrant sunset backdrop, with promotional text for an F1 movie.](https://files.thingelstad.com/weekly-thing/325/journal/mv5bowriothkm2ytyzi4ns00owviltk0odmtmjnlndyyzwq3mznjxkeyxkfqcgc.-v1-fmjpg-u.jpg)
+![A person in a racing suit stands beside a Formula 1 car against a vibrant sunset backdrop, with promotional text for an F1 movie.](https://files.thingelstad.com/weekly-thing/325/journal/mv5bowriothkm2ytyzi4ns00owviltk0odmtmjnlndyyzwq3mznjxkeyxkfqcgc.-v1-fmjpg-u.jpg)
 
 ---
 

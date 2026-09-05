@@ -251,19 +251,19 @@ We saw [The Wild Robot](https://www.thewildrobotmovie.com) tonight at [Edina 4](
 
 We had a great time cheering the runners in the [Twin Cities Marathon](https://www.tcmevents.org) this morning! Our friends host a Marathon morning every year with the highlight being a “Repeat 1” playing of [Jump Around](https://www.youtube.com/watch?v=jrL_LzX5wv4) by House of Pain -- a favorite with the runners.
 
-![Auto-generated description: A group of people is running down a tree-lined path in what appears to be a marathon or race event.](https://files.thingelstad.com/weekly-thing/296/journal/bc9822525a.jpg)
+![A group of people is running down a tree-lined path in what appears to be a marathon or race event.](https://files.thingelstad.com/weekly-thing/296/journal/bc9822525a.jpg)
 
 [Oct 6, 2024 at 5:00 PM](https://www.thingelstad.com/2024/10/06/tyler-and-i.html)
 
 Tyler and I were joined by Max and Levi at Orchestra Hall today to see the [Minnesota Orchestra](https://www.minnesotaorchestra.org) perform [Star Wars: A New Hope In Concert](https://www.minnesotaorchestra.org/tickets/calendar/movies-music/star-wars-a-new-hope-in-concert/). Tyler and I [saw The Last Jedi In Concert](https://www.thingelstad.com/2024/05/17/tyler-and-i.html) in May.
 
-![Auto-generated description: Four people are smiling and posing in front of a stage set for a Star Wars: A New Hope concert.](https://files.thingelstad.com/weekly-thing/296/journal/b14251a890.jpg)
+![Four people are smiling and posing in front of a stage set for a Star Wars: A New Hope concert.](https://files.thingelstad.com/weekly-thing/296/journal/b14251a890.jpg)
 
 [Oct 10, 2024 at 10:00 PM](https://www.thingelstad.com/2024/10/10/the-sps-leadership.html)
 
 Many of the [SPS Commerce](https://www.spscommerce.com) leadership team took in the [Minnesota Business Partnership](https://www.mnbp.com) annual event this evening. We were joined by [Megan Tischler](https://www.linkedin.com/in/megantischler/) who was highlighted in the evening for the work she has done as part of our Women in Technology group and [Phil Soran](https://www.linkedin.com/in/phil-soran-a802616a/) who is one of our board members.
 
-![Auto-generated description: A group of people are seated around a table in a large, crowded banquet hall with a formal setting.](https://files.thingelstad.com/weekly-thing/296/journal/0cd63f126e.jpg)
+![A group of people are seated around a table in a large, crowded banquet hall with a formal setting.](https://files.thingelstad.com/weekly-thing/296/journal/0cd63f126e.jpg)
 
 ---
 

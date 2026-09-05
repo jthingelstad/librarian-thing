@@ -335,17 +335,17 @@ Times Square!
 
 Wonderful evening photo walk around Manhattan tonight.
 
-![Auto-generated description: A brightly lit theater marquee for The Late Show is displayed on a city street at night.](https://files.thingelstad.com/weekly-thing/342/journal/73115f9151.jpg)
+![A brightly lit theater marquee for The Late Show is displayed on a city street at night.](https://files.thingelstad.com/weekly-thing/342/journal/73115f9151.jpg)
 
-![Auto-generated description: A shop window displays large, colorful ice cream cone models, lit up and arranged on a grid, with a view inside revealing various products.](https://files.thingelstad.com/weekly-thing/342/journal/c49483d9ec.jpg)
+![A shop window displays large, colorful ice cream cone models, lit up and arranged on a grid, with a view inside revealing various products.](https://files.thingelstad.com/weekly-thing/342/journal/c49483d9ec.jpg)
 
-![Auto-generated description: A modern architectural structure features a series of illuminated vertical beams and a grid-like ceiling, creating a striking and futuristic atmosphere.](https://files.thingelstad.com/weekly-thing/342/journal/a6f1ee8ddf.jpg)
+![A modern architectural structure features a series of illuminated vertical beams and a grid-like ceiling, creating a striking and futuristic atmosphere.](https://files.thingelstad.com/weekly-thing/342/journal/a6f1ee8ddf.jpg)
 
-![Auto-generated description: A grid of circular patterns with varying black and white hexagonal designs is displayed, creating an abstract geometric appearance.](https://files.thingelstad.com/weekly-thing/342/journal/f8555e13c0.jpg)
+![A grid of circular patterns with varying black and white hexagonal designs is displayed, creating an abstract geometric appearance.](https://files.thingelstad.com/weekly-thing/342/journal/f8555e13c0.jpg)
 
-![Auto-generated description: A giant, illuminated Louis Vuitton trunk, adorned with monogram patterns, dominates a city street at night.](https://files.thingelstad.com/weekly-thing/342/journal/17e2854976.jpg)
+![A giant, illuminated Louis Vuitton trunk, adorned with monogram patterns, dominates a city street at night.](https://files.thingelstad.com/weekly-thing/342/journal/17e2854976.jpg)
 
-![Auto-generated description: People are ice skating on a rink at Rockefeller Center, with colorful lights reflecting on the ice and a lit-up building in the background.](https://files.thingelstad.com/weekly-thing/342/journal/f866450fa2.jpg)
+![People are ice skating on a rink at Rockefeller Center, with colorful lights reflecting on the ice and a lit-up building in the background.](https://files.thingelstad.com/weekly-thing/342/journal/f866450fa2.jpg)
 
 [Mar 1, 2026 at 11:54 PM](https://www.thingelstad.com/2026/03/01/i-can-certainly-do-a.html)
 

@@ -266,7 +266,7 @@ _Andrew Dayton addressing the group and sharing progress of Constellation Fund._
 ![](https://files.thingelstad.com/weekly-thing/286/journal/5ca18511-948e-4566-8a71-6d0d430100d2.jpg)
 _Ran into Greg Blasko at the event, one of the founders of SportNgin._
 
-![Auto-generated description: A band performs on stage under a sign that reads BRIGHT NIGHT.](https://files.thingelstad.com/weekly-thing/286/journal/29736cbd-b6b0-4b73-bc64-c80cd01e0038.jpg)
+![A band performs on stage under a sign that reads BRIGHT NIGHT.](https://files.thingelstad.com/weekly-thing/286/journal/29736cbd-b6b0-4b73-bc64-c80cd01e0038.jpg)
 _Tammy and I were both excited to see that Laamar was closing the night out!_
 
 See Bright Night from [2021](https://www.thingelstad.com/2021/05/20/constellation-fund-is.html), [2023](https://www.thingelstad.com/2023/05/04/tammy-and-i.html), and [2024](https://www.thingelstad.com/2024/05/02/constellation-fund-bright.html).

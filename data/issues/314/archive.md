@@ -293,13 +293,13 @@ Mar 15, 2025 at 4:49 PM
 
 We did our **65th escape room** this morning solving [Puzzleworks](https://www.puzzleworksmn.com) “The Hospital” room in **54m 47s**! We all particularly enjoyed this room. The puzzles were well done, hard enough to get you going but not so hard to get frustrated. Tammy thought it was one of her “top 10” rooms. I thought the use of an “elevator” in the room was fun and very well executed. We had to call for one clue and realized we had made one completely ridiculous miss in the room. It was a great time!
 
-![Auto-generated description: Three people standing in front of a couch holding a sign with 54:47 The Hospital printed on it.](https://files.thingelstad.com/weekly-thing/314/journal/b656b9247c.jpg)
+![Three people standing in front of a couch holding a sign with 54:47 The Hospital printed on it.](https://files.thingelstad.com/weekly-thing/314/journal/b656b9247c.jpg)
 
 [Mar 15, 2025 at 4:51 PM](https://www.thingelstad.com/2025/03/15/very-good-affogato-at-mothership.html)
 
 Very good [affogato](https://en.wikipedia.org/wiki/Affogato) at [Mothership Pizza Paradise](https://mothershippizza.com) today. The ice cream from [Minnesota Dairy Lab](https://mndairylab.com) was so smooth and creamy The food here has been incredible on every visit.
 
-![Auto-generated description: A cup of coffee with a scoop of vanilla ice cream in it sits on a saucer with a spoon on the side.](https://files.thingelstad.com/weekly-thing/314/journal/8964b21842.jpg)
+![A cup of coffee with a scoop of vanilla ice cream in it sits on a saucer with a spoon on the side.](https://files.thingelstad.com/weekly-thing/314/journal/8964b21842.jpg)
 
 [Mar 15, 2025 at 4:52 PM](https://www.thingelstad.com/2025/03/15/we-had-a-fun-time.html)
 

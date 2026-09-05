@@ -414,7 +414,7 @@ I’ve been having fun playing [Clash Royale](https://en.wikipedia.org/wiki/Clas
 
 POAP [7550517](https://collectors.poap.xyz/token/7550517) at **[TeamSPS Cyberweek 2025](https://poap.gallery/drops/221430)**.
 
-![Auto-generated description: A cartoon chicken is surrounded by the words CYBER WEEK 2025 on a blue circular background.](https://files.thingelstad.com/weekly-thing/337/journal/cyberweek2025-new.png)
+![A cartoon chicken is surrounded by the words CYBER WEEK 2025 on a blue circular background.](https://files.thingelstad.com/weekly-thing/337/journal/cyberweek2025-new.png)
 
 [Jan 13, 2026 at 6:09 PM](https://www.thingelstad.com/2026/01/13/at-our-very-first-minnesota.html)
 

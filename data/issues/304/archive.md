@@ -446,7 +446,7 @@ Some notes for BlogFlock.
 5. You should be able to manually reorder the blogs in a list.
 6. It could handle posts without titles a bit better.
 
-![Auto-generated description: A website page featuring blog post listings and a sidebar with names under People & Blogs.](https://files.thingelstad.com/weekly-thing/304/journal/blogflock.png)
+![A website page featuring blog post listings and a sidebar with names under People & Blogs.](https://files.thingelstad.com/weekly-thing/304/journal/blogflock.png)
 
 On this list itself it contains all 66 blogs that have been highlighted in People & Blogs thus far, with these exceptions:
 

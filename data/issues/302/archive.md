@@ -324,7 +324,7 @@ So in November 2024, it was time to cut the last vestige of social media I had. 
 
 By way of this post please be aware that any content or information that may appear on X is absolutely not from me.
 
-![Auto-generated description: A gravestone with the Twitter logo and the handle @thingles \(2006-2024\) surrounded by candles and crows, set in a stormy graveyard.](https://files.thingelstad.com/weekly-thing/302/journal/6c4ced55a6.jpg)
+![A gravestone with the Twitter logo and the handle @thingles \(2006-2024\) surrounded by candles and crows, set in a stormy graveyard.](https://files.thingelstad.com/weekly-thing/302/journal/6c4ced55a6.jpg)
 _I had some fun with ChatGPT and the image this conjured up for me._
 
 [Nov 16, 2024 at 4:24 PM](https://www.thingelstad.com/2024/11/16/tammy-and-i.html)

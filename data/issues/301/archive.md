@@ -378,7 +378,7 @@ We completed our annual candle sale **raising $7,010** for the four organization
 
 As in previous years, we asked people which organizations they would like to support. People could pick any or all of the organizations. We even have some folks request specific allocations versus dividing it equally. We also donated **$260.25** for [Mount Olivet](https://mtolivet.org) as a portion of all sales that were made at the Holiday Boutique on Saturday.
 
-![Auto-generated description: A horizontal bar chart displays the amounts raised for four initiatives in the Things 4 Good 2024 Fall Fundraiser.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-giving.png)
+![A horizontal bar chart displays the amounts raised for four initiatives in the Things 4 Good 2024 Fall Fundraiser.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-giving.png)
 
 Tyler and Mazie enjoy a friendly competition trying to get their organization the most. 🤩
 
@@ -407,11 +407,11 @@ We made **252 candles** in preparation for the sale. We had 72 Winter Wonderland
 
 We had 78 candle purchases which is a huge **42% jump** from last year. On average people purchased 3 candles, down from 4 last year. However averages don’t tell the story. Most people got one candle, and there are a smaller number of people that get a large number -- usually as gifts for the holidays. We had 5 transactions for more than 8 candles, accounting for a whopping **76 candles**, 30% of our inventory.
 
-![Auto-generated description: A bar graph displays the distribution of transactions by count, with the highest frequency at the candle count of 1.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-distribution.png)
+![A bar graph displays the distribution of transactions by count, with the highest frequency at the candle count of 1.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-distribution.png)
 
 This year we had eight different scents, the exact same as last year. We renamed Plain Jane to Just Crackle, and it was similarly popular for folks wanting an unscented candle. We did fine tune the scents though and increased the scent load on some of them. Here is a look at rolling inventory as sales were happening.
 
-![Auto-generated description: A line graph depicts the rolling inventory of various candle scents, showing a general decline across multiple transaction counts.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-velocity.png)
+![A line graph depicts the rolling inventory of various candle scents, showing a general decline across multiple transaction counts.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-velocity.png)
 
 Some observations:
 
@@ -425,7 +425,7 @@ Some observations:
 
 We offer folks a number of ways to donate and again Venmo was by far the most popular method, 3.5 times more popular than cash. More people knew what Zelle was this year. I continue to be surprised at how few people have Apple Pay setup. Three checks! I did not offer a method to pay via crypto this year. We’ve only ever had one candle sale in all the years we’ve done it using Bitcoin Lightning.
 
-![Auto-generated description: A bar chart shows the frequency of different payment methods, with Venmo being the most used at 51 instances.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-payment-method.png)
+![A bar chart shows the frequency of different payment methods, with Venmo being the most used at 51 instances.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-2024-payment-method.png)
 
 We are already keeping notes for things we want to do to make next year’s Things 4 Good Fall Fundraiser even better. Send us an email if you have any suggestions!
 
@@ -436,11 +436,11 @@ Nov 10, 2024 at 9:42 PM
 
 We’ve now done our Things 4 Good Fall Fundraiser for four years. With the amazing support of this community we have raised **$22,739** for non-profits! Thank you so much. ❤️
 
-![Auto-generated description: A bar chart shows the annual fundraising totals for Things 4 Good Fall Fundraiser, increasing from $4,757 in 2021 to $7,010 in 2024.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-fall-fundraiser-total-by-year.png)
+![A bar chart shows the annual fundraising totals for Things 4 Good Fall Fundraiser, increasing from $4,757 in 2021 to $7,010 in 2024.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-fall-fundraiser-total-by-year.png)
 
 Opening the sale to the public via the Mt. Olivet Holiday Boutique was a great way to get to a lot of new people with a nearly 50% jump in candle sales this year!
 
-![Auto-generated description: A bar chart displays an increase in fall fundraiser transactions from 2021 to 2024, with the highest being 78 in 2024.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-fall-fundraiser-txn-by-year.png)
+![A bar chart displays an increase in fall fundraiser transactions from 2021 to 2024, with the highest being 78 in 2024.](https://files.thingelstad.com/weekly-thing/301/journal/t4g-fall-fundraiser-txn-by-year.png)
 
 Organizations that we’ve supported over these four years include [Constellation Fund](https://constellationfund.org), [Free Bikes 4 Kidz](https://fb4k.org), [Appetite for Change](https://appetiteforchangemn.org), [Feed My Starving Children](https://www.fmsc.org), [United Help Ukraine](https://unitedhelpukraine.org), [Agate Housing + Services](https://agatemn.org), [Save the Snakes](https://savethesnakes.org), [Free Guitars 4 Kids](https://fg4k.org), [American Prairie](https://americanprairie.org), [Heart to Care Tanzania](https://www.hearttocaretanzania.org/), [Food Recovery Network](https://www.foodrecoverynetwork.org/), [Oceanites](https://www.oceanites.org), [SynGAP Research Fund](https://curesyngap1.org), [Water to Thrive](https://www.watertothrive.org), [Sprint to Cité Soleil](https://www.sprinttocitesoleil.org), and [World Central Kitchen](https://www.worldcentralkitchen.org).
 

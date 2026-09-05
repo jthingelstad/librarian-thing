@@ -199,13 +199,13 @@ Great to have so many #TeamSPS folks here at #Minnebar19! Know more to be more! 
 
 [Garrick van Buren](https://garrickvanburen.com), [Jim Bernard](https://www.jimbernard.net), and I after his **Minimal Viable Polka** session at Minnebar 19. I feel very confident that this is the first accordion experience at Minnebar -- and it was a great time!
 
-![Auto-generated description: Three smiling people stand together, with the middle person holding an accordion, in front of a screen displaying a motivational message.](https://files.thingelstad.com/weekly-thing/318/journal/d50094c5d1.jpg)
+![Three smiling people stand together, with the middle person holding an accordion, in front of a screen displaying a motivational message.](https://files.thingelstad.com/weekly-thing/318/journal/d50094c5d1.jpg)
 
 [May 3, 2025 at 3:00 PM](https://www.thingelstad.com/2025/05/03/i-love-the-passion-and.html)
 
 I love the passion and excitement that people bring to the Mega-Minne-Multi-Indie-Mini Arcade at Minnebar.
 
-![Auto-generated description: People are gathered at a gaming event with multiple computer setups and a colorful balloon banner on the wall.](https://files.thingelstad.com/weekly-thing/318/journal/81253770eb.jpg)
+![People are gathered at a gaming event with multiple computer setups and a colorful balloon banner on the wall.](https://files.thingelstad.com/weekly-thing/318/journal/81253770eb.jpg)
 
 [May 3, 2025 at 5:05 PM](https://www.thingelstad.com/2025/05/03/me-and-my-cousin-quinn.html)
 
@@ -223,7 +223,7 @@ Happy [Star Wars Day](https://en.wikipedia.org/wiki/Star_Wars_Day) -- May the 4t
 
 Finished **2.34 mile walk** in **50 minutes** (21.37 min/mile). Walked around a new lake when visiting [Quinn](https://quinnchrest.com)’s new apartment. Nice apartment and nice lake! 🚶‍♂️
 
-![Auto-generated description: A large lake is surrounded by a forested area with a path marked in various colors, set amidst urban development.](https://files.thingelstad.com/weekly-thing/318/journal/68a11fa682.jpg)
+![A large lake is surrounded by a forested area with a path marked in various colors, set amidst urban development.](https://files.thingelstad.com/weekly-thing/318/journal/68a11fa682.jpg)
 
 [May 4, 2025 at 1:15 PM](https://www.thingelstad.com/2025/05/04/the-tulips-are-blooming-and.html)
 
@@ -242,7 +242,7 @@ When I visited our new Warsaw office I was able to meet several brand new TeamSP
 
 Here is the Growth Cup safely laying in its very rugged case ready as I received instructions on handling and the mechanics of the case.
 
-![Auto-generated description: A large silver trophy is securely placed inside an open black case in an office setting.](https://files.thingelstad.com/weekly-thing/318/journal/7f66b72522.jpg)
+![A large silver trophy is securely placed inside an open black case in an office setting.](https://files.thingelstad.com/weekly-thing/318/journal/7f66b72522.jpg)
 
 [Read the full journey on my blog...](https://www.thingelstad.com/2025/05/04/growth-cup-goes-to-warsaw.html)
 
@@ -250,7 +250,7 @@ Here is the Growth Cup safely laying in its very rugged case ready as I received
 
 Finished **cycling 11.6 miles** in **62.6 minutes**. First time outside on the bike this year. Very nice and lovely ride around the lakes. 🚴‍♂️
 
-![Auto-generated description: A map shows a yellow path traced around three lakes within an urban area, indicating a route, with a green starting point marked.](https://files.thingelstad.com/weekly-thing/318/journal/d075d16cff.jpg)
+![A map shows a yellow path traced around three lakes within an urban area, indicating a route, with a green starting point marked.](https://files.thingelstad.com/weekly-thing/318/journal/d075d16cff.jpg)
 
 ### [Movie: Fighting With My Family](https://www.thingelstad.com/2025/05/04/movie-fighting-with-my-family.html)
 May 4, 2025 at 10:00 PM
@@ -270,7 +270,7 @@ May 6, 2025 at 8:00 PM
 
 _This is an article version of the presentation I gave at Minnebar 19 on [How to Newsletter](https://www.thingelstad.com/2025/04/28/minnebar-how-to-newsletter-session.html)._
 
-![Auto-generated description: A speaker is presenting a session titled How to Newsletter in front of an audience.](https://files.thingelstad.com/weekly-thing/318/journal/98897cefa6.jpg)
+![A speaker is presenting a session titled How to Newsletter in front of an audience.](https://files.thingelstad.com/weekly-thing/318/journal/98897cefa6.jpg)
 
 What I wanted to talk about is “How To Newsletter.” I’ve been sending a newsletter now for eight years, and I’ve learned a lot in that process. I thought it’d be fun to share that knowledge. I actually planned to do this session in 2023–so if you’re thinking, “Didn’t he already do this?”–I had to cancel it that year. Now we’re two years later, and I’ve got two more years of learnings and 50 more issues of my newsletter under my belt.
 
@@ -279,7 +279,7 @@ What I wanted to talk about is “How To Newsletter.” I’ve been sending a ne
 ### [My Minnebar 19 in Sessions](https://www.thingelstad.com/2025/05/06/my-minnebar-in-sessions.html)
 May 6, 2025 at 9:00 PM
 
-![Auto-generated description: A speaker is presenting next to a screen with the text, Play is about process, not about outcome, to an audience seated in a modern conference setting.](https://files.thingelstad.com/weekly-thing/318/journal/0bc1c82201.jpg)
+![A speaker is presenting next to a screen with the text, Play is about process, not about outcome, to an audience seated in a modern conference setting.](https://files.thingelstad.com/weekly-thing/318/journal/0bc1c82201.jpg)
 
 ### Session 0 feat. Dr. AnnMarie Thomas!
 
@@ -380,9 +380,9 @@ May 8, 2025 at 10:59 PM
 
 We had a night full of laughs seeing [Nate Bargatze](https://natebargatze.com) for the first time -- and as it happens it was the very first show of his new Big Dumb Eyes tour here in Duluth! The show was completely sold out. [Julian McCollough](https://en.wikipedia.org/wiki/Julian_McCullough) served as host and there were short bits from [Steven Rogers](http://www.stevenrogerscomedy.com), [Keith Alberstadt](https://keithcomedy.com), and [Aaron Weber](https://aaronwebercomedy.com) before Nate took the stage for the main event. Hilarious stuff! 🤣
 
-![Auto-generated description: A person is speaking into a microphone on a stage, with an audience seated in the background.](https://files.thingelstad.com/weekly-thing/318/journal/97b75bddc6.jpg)
+![A person is speaking into a microphone on a stage, with an audience seated in the background.](https://files.thingelstad.com/weekly-thing/318/journal/97b75bddc6.jpg)
 
-![Auto-generated description: Five people are performing on a lit stage in front of a large audience in an indoor arena.](https://files.thingelstad.com/weekly-thing/318/journal/ef013dea9b.jpg)
+![Five people are performing on a lit stage in front of a large audience in an indoor arena.](https://files.thingelstad.com/weekly-thing/318/journal/ef013dea9b.jpg)
 
 ---
 

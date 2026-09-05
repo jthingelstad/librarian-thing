@@ -289,7 +289,7 @@ Grand Marais Light.
 
 Morning stop at the [Great Lakes Candy Kitchen](https://www.greatlakescandy.com/) -- treats for home!
 
-![Auto-generated description: A cozy candy store called Great Lakes Candy Kitchen is surrounded by greenery with signs for parking, colorful flowers, and flags.](https://files.thingelstad.com/weekly-thing/297/journal/f8c8dd5f30.jpg)
+![A cozy candy store called Great Lakes Candy Kitchen is surrounded by greenery with signs for parking, colorful flowers, and flags.](https://files.thingelstad.com/weekly-thing/297/journal/f8c8dd5f30.jpg)
 
 [Oct 13, 2024 at 3:30 PM](https://www.thingelstad.com/2024/10/13/we-thought-it.html)
 

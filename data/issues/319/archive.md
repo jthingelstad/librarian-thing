@@ -277,7 +277,7 @@ Lunch at [New Scenic Cafe](https://www.newsceniccafe.com) is a mandatory activit
 
 ![](https://files.thingelstad.com/weekly-thing/319/journal/ddf556f001.jpg)
 
-![Auto-generated description: A plate with folded flatbreads and a small bowl of cinnamon sugar next to a spoon.](https://files.thingelstad.com/weekly-thing/319/journal/a411033742.jpg)
+![A plate with folded flatbreads and a small bowl of cinnamon sugar next to a spoon.](https://files.thingelstad.com/weekly-thing/319/journal/a411033742.jpg)
 
 [May 9, 2025 at 5:34 PM](https://www.thingelstad.com/2025/05/09/added-kwh-at-gooseberry-falls.html)
 
