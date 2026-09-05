@@ -37,6 +37,11 @@ export const LIBRARIAN_CONTRACT_VERSION = '4.10.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
+// Known cross-repo consumers - check BOTH before dropping a major:
+//  - thingy web (vendored contract via contract:sync; tracks current major)
+//  - wt-builder src/server/integrations/librarian.ts (/retrieve for Echoes;
+//    pins LIBRARIAN_CONTRACT_MAJOR by hand - a dropped major 409s Echoes
+//    on a send week)
 export const SUPPORTED_CONTRACT_MAJORS = ['2', '3', '4'];
 
 const string = { type: 'string' } as const;
