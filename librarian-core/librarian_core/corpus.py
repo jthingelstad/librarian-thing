@@ -290,6 +290,26 @@ def _media_context(text: str, url: str, max_chars: int = 240) -> str:
     return ""
 
 
+def annotate_media_descriptions(corpus: dict[str, Any], sidecar_path: Path) -> int:
+    """Merge vision descriptions (pipeline/corpus/describe_media.py) into the
+    corpus's media entries by URL. The description is machine metadata kept
+    BESIDE Jamie's authored alt and the caption context, never replacing
+    either - it exists so an image is findable and describable even when the
+    authored text says nothing (92% of Weekly Thing media had empty alt when
+    this landed). Returns how many entries gained a description."""
+    if not sidecar_path.exists():
+        return 0
+    sidecar = json.loads(sidecar_path.read_text())
+    annotated = 0
+    for entry in corpus.get("media", []) or []:
+        record = sidecar.get(str(entry.get("url") or ""))
+        description = (record or {}).get("description")
+        if description:
+            entry["description"] = description
+            annotated += 1
+    return annotated
+
+
 def journal_post_urls(section_text: str) -> list[str]:
     """Canonical blog-post URLs of the journal entries inside a Journal
     section chunk - the day-at-time entry links. Retrieval uses these to

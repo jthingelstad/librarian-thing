@@ -1780,7 +1780,10 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     const corpus = await loadCorpus(kind);
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
       if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
-      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''}`;
+      // description = the vision captioning pass (describe_media.py): the
+      // pixels' own words, so a photo is findable when the authored text
+      // says nothing (92% of WT media had empty alt before it).
+      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''} ${item.description || ''}`;
       if (!termMatchers.length) {
         scored.push({ score: 1, item });
         continue;
@@ -1804,6 +1807,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       image_url: item.url,
       alt: item.alt,
       context: item.context,
+      description: item.description,
       source_kind: item.source_kind,
       issue_number: item.issue_number,
       subject: item.subject,

@@ -14,7 +14,9 @@
               "type": "integer"
             }
           },
-          "required": ["query"]
+          "required": [
+            "query"
+          ]
         }
       }
     }
@@ -46,7 +48,9 @@
               "type": "integer"
             }
           },
-          "required": ["query"]
+          "required": [
+            "query"
+          ]
         }
       }
     }
@@ -61,7 +65,11 @@
           "properties": {
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "issue_number": {
               "type": "string",
@@ -97,10 +105,17 @@
           "properties": {
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "year": {
-              "type": ["integer", "string"]
+              "type": [
+                "integer",
+                "string"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -130,20 +145,30 @@
               "type": "string"
             },
             "target_resolved": {
-              "type": ["boolean", "string"]
+              "type": [
+                "boolean",
+                "string"
+              ]
             },
             "has_also_in_issues": {
               "type": "boolean"
             },
             "also_in_issue": {
-              "type": ["integer", "string"]
+              "type": [
+                "integer",
+                "string"
+              ]
             },
             "limit": {
               "type": "integer"
             },
             "match_mode": {
               "type": "string",
-              "enum": ["exact", "phrase", "stem"],
+              "enum": [
+                "exact",
+                "phrase",
+                "stem"
+              ],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             },
             "case_sensitive": {
@@ -171,7 +196,11 @@
             },
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "link_kind": {
               "type": "string"
@@ -180,7 +209,10 @@
               "type": "string"
             },
             "target_resolved": {
-              "type": ["boolean", "string"]
+              "type": [
+                "boolean",
+                "string"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -196,7 +228,11 @@
             },
             "match_mode": {
               "type": "string",
-              "enum": ["exact", "phrase", "stem"],
+              "enum": [
+                "exact",
+                "phrase",
+                "stem"
+              ],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             },
             "case_sensitive": {
@@ -218,7 +254,11 @@
           "properties": {
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -248,13 +288,20 @@
           "properties": {
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "has_also_in_issues": {
               "type": "boolean"
             },
             "also_in_issue": {
-              "type": ["integer", "string"]
+              "type": [
+                "integer",
+                "string"
+              ]
             },
             "issue_number": {
               "type": "string",
@@ -283,7 +330,9 @@
               "type": "integer"
             }
           },
-          "required": ["phrase"]
+          "required": [
+            "phrase"
+          ]
         }
       }
     }
@@ -301,11 +350,21 @@
             },
             "operation": {
               "type": "string",
-              "enum": ["timeline", "first_last", "by_year", "source_compare", "reading_path"]
+              "enum": [
+                "timeline",
+                "first_last",
+                "by_year",
+                "source_compare",
+                "reading_path"
+              ]
             },
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -321,7 +380,11 @@
             },
             "match_mode": {
               "type": "string",
-              "enum": ["exact", "phrase", "stem"],
+              "enum": [
+                "exact",
+                "phrase",
+                "stem"
+              ],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             },
             "case_sensitive": {
@@ -329,7 +392,9 @@
               "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           },
-          "required": ["topic"]
+          "required": [
+            "topic"
+          ]
         }
       }
     }
@@ -350,11 +415,21 @@
             },
             "operation": {
               "type": "string",
-              "enum": ["timeline", "first_last", "by_year", "source_compare", "reading_path"]
+              "enum": [
+                "timeline",
+                "first_last",
+                "by_year",
+                "source_compare",
+                "reading_path"
+              ]
             },
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -370,7 +445,11 @@
             },
             "match_mode": {
               "type": "string",
-              "enum": ["exact", "phrase", "stem"],
+              "enum": [
+                "exact",
+                "phrase",
+                "stem"
+              ],
               "description": "Matching mode. Default: exact whole-token for single terms, contiguous phrase for multi-word terms. stem is opt-in, requires 6+ chars, and matches inflections only (ethereum never matches ethernet). The response echoes the applied mode as match_mode."
             },
             "case_sensitive": {
@@ -392,7 +471,11 @@
           "properties": {
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "issue_number": {
               "type": "string",
@@ -433,15 +516,27 @@
             },
             "mood": {
               "type": "string",
-              "enum": ["serendipity", "forgotten", "recent"]
+              "enum": [
+                "serendipity",
+                "forgotten",
+                "recent"
+              ]
             },
             "mode": {
               "type": "string",
-              "enum": ["serendipity", "forgotten", "recent"]
+              "enum": [
+                "serendipity",
+                "forgotten",
+                "recent"
+              ]
             },
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"]
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ]
             },
             "year_range": {
               "type": "array",
@@ -496,7 +591,7 @@
   {
     "toolSpec": {
       "name": "media_search",
-      "description": "Search the photo and image index across the archive by what the images show. Matches alt text, captions, and nearby context. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
+      "description": "Search the photo and image index across the archive by what the images show. Matches alt text, captions, nearby context, and a vision-model description of each image's actual content - so visual queries work even when the caption never names what is shown. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -513,7 +608,9 @@
               "description": "Max results, default 8, max 12"
             }
           },
-          "required": ["query"]
+          "required": [
+            "query"
+          ]
         }
       }
     }
@@ -569,7 +666,11 @@
             },
             "source_kind": {
               "type": "string",
-              "enum": ["weekly_thing", "blog", "podcast"],
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
               "description": "Restrict aggregation to one corpus. Weekly Thing questions should pass weekly_thing so pre-2017 blog links do not contaminate counts."
             }
           }
@@ -590,7 +691,9 @@
               "description": "Public https URL to fetch."
             }
           },
-          "required": ["url"]
+          "required": [
+            "url"
+          ]
         }
       }
     }
@@ -612,7 +715,9 @@
               "description": "Max results, 1-10 (default 5)."
             }
           },
-          "required": ["query"]
+          "required": [
+            "query"
+          ]
         }
       }
     }

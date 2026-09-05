@@ -322,3 +322,47 @@ class AuditExtractionTests(unittest.TestCase):
         entries = core.extract_currently_entries(currently)
         self.assertEqual([e["kind"] for e in entries], ["reading", "playing"])
         self.assertEqual(entries[0]["links"][0]["title"], "Some Book")
+
+
+class MediaDescriptionAnnotationTests(unittest.TestCase):
+    """The vision sidecar merges by URL and never touches authored fields."""
+
+    def test_descriptions_merge_by_url(self):
+        from librarian_core.corpus import annotate_media_descriptions
+
+        corpus = {
+            "media": [
+                {"url": "https://files.thingelstad.com/a.jpg", "alt": "", "context": "Boat day."},
+                {"url": "https://files.thingelstad.com/b.jpg", "alt": "authored alt"},
+                {"url": "https://files.thingelstad.com/missing.jpg"},
+            ]
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            sidecar = Path(tmp) / "media-descriptions.json"
+            sidecar.write_text(
+                json.dumps(
+                    {
+                        "https://files.thingelstad.com/a.jpg": {
+                            "description": "A pontoon boat on a calm lake."
+                        },
+                        "https://files.thingelstad.com/b.jpg": {"error": "api_400"},
+                    }
+                )
+            )
+            annotated = annotate_media_descriptions(corpus, sidecar)
+
+        self.assertEqual(annotated, 1)
+        self.assertEqual(corpus["media"][0]["description"], "A pontoon boat on a calm lake.")
+        # Authored fields untouched; failed and missing entries gain nothing.
+        self.assertEqual(corpus["media"][0]["context"], "Boat day.")
+        self.assertNotIn("description", corpus["media"][1])
+        self.assertEqual(corpus["media"][1]["alt"], "authored alt")
+        self.assertNotIn("description", corpus["media"][2])
+
+    def test_missing_sidecar_is_a_clean_noop(self):
+        from librarian_core.corpus import annotate_media_descriptions
+
+        corpus = {"media": [{"url": "https://files.thingelstad.com/a.jpg"}]}
+        self.assertEqual(
+            annotate_media_descriptions(corpus, Path("/nonexistent/sidecar.json")), 0
+        )

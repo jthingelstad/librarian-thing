@@ -18,9 +18,10 @@ from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
     add_bedrock_embeddings,
+    annotate_media_descriptions,
     build_corpus,
 )
-from librarian_core.paths import ARCHIVE_DIR, CORPUS_PATH
+from librarian_core.paths import MEDIA_DESCRIPTIONS_PATH, ARCHIVE_DIR, CORPUS_PATH
 
 OUT_PATH = CORPUS_PATH
 
@@ -53,6 +54,8 @@ def main() -> int:
     args = parser.parse_args()
 
     corpus = build_corpus(include_issue_bodies=args.include_issue_bodies)
+    annotated = annotate_media_descriptions(corpus, MEDIA_DESCRIPTIONS_PATH)
+    print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
     if args.embed:
         add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
     output = Path(args.output)

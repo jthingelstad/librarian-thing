@@ -17,6 +17,9 @@ ARCHIVE_DIR = REPO / "data" / "issues"
 SITE_DIR = REPO / "data" / "site"
 FAQ_PATH = REPO / "apps" / "librarian" / "lambda" / "shared" / "faq.json"
 CORPUS_PATH = REPO / "data" / "librarian" / "corpus.json"
+# Vision descriptions for archive images, keyed by image URL - written by
+# pipeline/corpus/describe_media.py, merged into media entries at build.
+MEDIA_DESCRIPTIONS_PATH = REPO / "data" / "librarian" / "media-descriptions.json"
 GRAPH_PATH = REPO / "data" / "librarian" / "graph.json"
 
 # thingelstad.com blog — Jamie's 20-year personal blog, ingested by

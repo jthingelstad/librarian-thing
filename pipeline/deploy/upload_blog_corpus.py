@@ -23,8 +23,10 @@ from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
     add_bedrock_embeddings,
+    annotate_media_descriptions,
     build_blog_corpus,
 )
+from librarian_core.paths import MEDIA_DESCRIPTIONS_PATH
 
 # Reuse the WT uploader's incremental-cache helpers verbatim — they are
 # corpus-shape agnostic (they key on chunk["id"]/chunk["embedding"]).
@@ -66,7 +68,9 @@ def main() -> int:
         raise RuntimeError("Provide --bucket or LIBRARIAN_BUCKET")
 
     corpus = build_blog_corpus()
+    annotated = annotate_media_descriptions(corpus, MEDIA_DESCRIPTIONS_PATH)
     print(f"Built blog corpus: {corpus['post_count']} posts -> {corpus['chunk_count']} chunks")
+    print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
 
     if not args.full:
         existing = fetch_existing_corpus(args.bucket, args.key)
