@@ -104,3 +104,21 @@ test('view_photo spends quota like any other call', async () => {
 test('the per-call image cap is small on purpose', () => {
   assert.equal(VIEW_PHOTO_MAX_IMAGES, 3);
 });
+
+test('image type is judged by magic bytes, never by headers', async () => {
+  const { sniffImageMime } = await import('../dist/shared/photo-view.mjs');
+  assert.equal(sniffImageMime(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0])), 'image/jpeg');
+  assert.equal(sniffImageMime(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0])), 'image/png');
+  assert.equal(sniffImageMime(Buffer.from('GIF89a______')), 'image/gif');
+  assert.equal(sniffImageMime(Buffer.from('RIFF____WEBP')), 'image/webp');
+  assert.equal(sniffImageMime(Buffer.from('<html><body>')), null);
+  assert.equal(sniffImageMime(Buffer.from([0xff, 0xd8])), null); // too short to judge
+});
+
+test('the resize proxy URL is built from the original, fit-resize form', async () => {
+  const { resizeProxyUrl, RESIZE_WIDTH } = await import('../dist/shared/photo-view.mjs');
+  assert.equal(
+    resizeProxyUrl('https://www.thingelstad.com/uploads/2021/x.jpg'),
+    `https://micro.blog/photos/${RESIZE_WIDTH}/https://www.thingelstad.com/uploads/2021/x.jpg`
+  );
+});

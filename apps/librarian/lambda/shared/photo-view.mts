@@ -31,7 +31,35 @@ const IMAGE_HOSTS = new Set([
   'buttondown-attachments.s3.us-west-2.amazonaws.com'
 ]);
 
-const IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+/**
+ * Type is judged by magic bytes, not the content-type header:
+ * www.thingelstad.com serves some year-folders with no content-type at all
+ * (found live 2026-09-05), and the bytes are the only witness that cannot
+ * be misconfigured.
+ */
+export function sniffImageMime(buffer: Buffer): string | null {
+  if (buffer.length < 12) return null;
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return 'image/jpeg';
+  if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'image/png';
+  if (buffer.subarray(0, 6).toString('latin1') === 'GIF87a' || buffer.subarray(0, 6).toString('latin1') === 'GIF89a')
+    return 'image/gif';
+  if (buffer.subarray(0, 4).toString('latin1') === 'RIFF' && buffer.subarray(8, 12).toString('latin1') === 'WEBP')
+    return 'image/webp';
+  return null;
+}
+
+/**
+ * Micro.blog's public fit-resize proxy. Blog originals run multi-MB
+ * (2.4MB was the first live refusal); the proxy serves the same photo at
+ * a width that fits the byte budget. The proxied URL is constructed here
+ * from an already-allowlisted original — never from caller input — so it
+ * adds no proxy-abuse surface.
+ */
+export const RESIZE_WIDTH = 1024;
+
+export function resizeProxyUrl(originalUrl: string): string {
+  return `https://micro.blog/photos/${RESIZE_WIDTH}/${originalUrl}`;
+}
 
 export function allowedImageUrl(value: unknown): string | null {
   if (typeof value !== 'string' || !value.trim()) return null;
@@ -65,6 +93,18 @@ export interface PhotoViewResult {
   refused: RefusedPhoto[];
 }
 
+async function fetchResized(originalUrl: string): Promise<{ buffer: Buffer<ArrayBuffer>; mimeType: string } | null> {
+  try {
+    const res = await fetch(resizeProxyUrl(originalUrl), { signal: AbortSignal.timeout(15_000), redirect: 'follow' });
+    if (!res.ok) return null;
+    const buffer = Buffer.from(await res.arrayBuffer());
+    const mimeType = sniffImageMime(buffer);
+    return mimeType ? { buffer, mimeType } : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchPhotos(urls: unknown): Promise<PhotoViewResult> {
   const list = (Array.isArray(urls) ? urls : []).map((u) => String(u ?? '').trim()).filter(Boolean);
   const photos: FetchedPhoto[] = [];
@@ -87,21 +127,21 @@ export async function fetchPhotos(urls: unknown): Promise<PhotoViewResult> {
         refused.push({ url, reason: `fetch failed (${res.status})` });
         continue;
       }
-      const mimeType = String(res.headers.get('content-type') || '')
-        .split(';')[0]
-        .trim()
-        .toLowerCase();
-      if (!IMAGE_MIME_TYPES.has(mimeType)) {
-        refused.push({ url, reason: `not an image (${mimeType || 'unknown type'})` });
+      let buffer = Buffer.from(await res.arrayBuffer());
+      let mimeType = sniffImageMime(buffer);
+      if (!mimeType) {
+        refused.push({ url, reason: 'not an image (by content, not just headers)' });
         continue;
       }
-      const buffer = Buffer.from(await res.arrayBuffer());
       if (buffer.length > VIEW_PHOTO_MAX_IMAGE_BYTES || buffer.length > budget) {
-        refused.push({
-          url,
-          reason: 'too large for inline viewing — link to it instead'
-        });
-        continue;
+        // An oversized original gets one more chance at viewing size.
+        const resized = await fetchResized(url);
+        if (!resized || resized.buffer.length > VIEW_PHOTO_MAX_IMAGE_BYTES || resized.buffer.length > budget) {
+          refused.push({ url, reason: 'too large for inline viewing — link to it instead' });
+          continue;
+        }
+        buffer = resized.buffer;
+        mimeType = resized.mimeType;
       }
       budget -= buffer.length;
       photos.push({ url, mimeType, dataBase64: buffer.toString('base64'), bytes: buffer.length });
