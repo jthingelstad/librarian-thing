@@ -189,7 +189,9 @@ def main() -> int:
                 except Exception as error:  # noqa: BLE001 - transient; next pass retries
                     if attempt == 2:
                         with lock:
-                            sidecar.setdefault(futures[future], {"error": type(error).__name__, "model": MODEL})
+                            sidecar.setdefault(
+                                futures[future], {"error": type(error).__name__, "model": MODEL}
+                            )
         flush()
 
     described = sum(1 for v in sidecar.values() if "description" in v)

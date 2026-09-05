@@ -21,7 +21,7 @@ from librarian_core.corpus import (
     annotate_media_descriptions,
     build_corpus,
 )
-from librarian_core.paths import MEDIA_DESCRIPTIONS_PATH, ARCHIVE_DIR, CORPUS_PATH
+from librarian_core.paths import ARCHIVE_DIR, CORPUS_PATH, MEDIA_DESCRIPTIONS_PATH
 
 OUT_PATH = CORPUS_PATH
 
