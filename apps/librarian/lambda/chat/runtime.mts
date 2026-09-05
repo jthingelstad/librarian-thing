@@ -1,7 +1,14 @@
 import crypto from 'node:crypto';
 import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { ConverseCommand, ConverseStreamCommand } from '@aws-sdk/client-bedrock-runtime';
-import type { ContentBlock, Message, SystemContentBlock, Tool, ToolResultBlock } from '@aws-sdk/client-bedrock-runtime';
+import type {
+  ContentBlock,
+  Message,
+  SystemContentBlock,
+  Tool,
+  ToolResultBlock,
+  ToolResultContentBlock
+} from '@aws-sdk/client-bedrock-runtime';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import {
@@ -67,6 +74,7 @@ import {
 } from '../shared/quota.mjs';
 import {
   MCP_RESULT_MAX_CHARS,
+  VIEW_PHOTO_TOOL,
   WEB_TOOLS,
   handleMcpMessage,
   mcpToolDeclarations,
@@ -74,7 +82,7 @@ import {
   serverVersion
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
-import { fetchPhotos } from '../shared/photo-view.mjs';
+import { converseImageFormat, fetchPhotos } from '../shared/photo-view.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
@@ -650,12 +658,29 @@ async function streamBedrockAgentAnswer(
       }
       const handler = allowedToolNames && !allowedToolNames.has(toolName) ? undefined : toolHandlers[toolName];
       let result: JsonRecord;
+      // Thingy's eyes: view_photo hands Converse real image blocks so the
+      // model SEES the photos; the trace, citations, and DynamoDB get the
+      // metadata summary only - base64 never enters evidence.
+      let imageBlocks: ToolResultContentBlock[] = [];
       const toolStart = performance.now();
       let ok = true;
       try {
-        result = handler
-          ? objectValue(await handler(toolInput, { scope, subscriberHash: options.subscriberHash }))
-          : { error: `Unknown tool: ${toolName}` };
+        if (toolName === VIEW_PHOTO_TOOL && (!allowedToolNames || allowedToolNames.has(VIEW_PHOTO_TOOL))) {
+          const { photos, refused } = await fetchPhotos(toolInput.image_urls);
+          result = photos.length
+            ? { shown: photos.map(({ url, bytes, mimeType }) => ({ url, bytes, mime_type: mimeType })), refused }
+            : { error: 'No photos could be viewed.', refused };
+          imageBlocks = photos.map((photo) => ({
+            image: {
+              format: converseImageFormat(photo.mimeType),
+              source: { bytes: Buffer.from(photo.dataBase64, 'base64') }
+            }
+          }));
+        } else {
+          result = handler
+            ? objectValue(await handler(toolInput, { scope, subscriberHash: options.subscriberHash }))
+            : { error: `Unknown tool: ${toolName}` };
+        }
       } catch (error) {
         ok = false;
         logEvent(
@@ -686,7 +711,7 @@ async function streamBedrockAgentAnswer(
         result: summarizeToolEvidence(result)
       });
       toolResults.push(result);
-      resultBlocks.push({ toolResult: { toolUseId, content: [{ json: result as BedrockJson }] } });
+      resultBlocks.push({ toolResult: { toolUseId, content: [...imageBlocks, { json: result as BedrockJson }] } });
     }
     messages.push({
       role: 'user',

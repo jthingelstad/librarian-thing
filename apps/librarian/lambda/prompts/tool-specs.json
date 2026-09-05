@@ -617,6 +617,30 @@
   },
   {
     "toolSpec": {
+      "name": "view_photo",
+      "description": "Actually look at up to 3 archive photos: pass image_url values from media_search or get_source results and the images become visible to you - describe them, compare them, pick the right one - instead of relying on captions. Use it when a question hinges on what a photo actually shows. Archive image hosts only; an oversized original is refused with its URL still usable as a link. Still embed chosen photos in the answer as clickable linked thumbnails: [![alt](image_url)](source_url).",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "image_urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 3,
+              "description": "image_url values from media_search / get_source results (1-3)."
+            }
+          },
+          "required": [
+            "image_urls"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "toolSpec": {
       "name": "currently_history",
       "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {

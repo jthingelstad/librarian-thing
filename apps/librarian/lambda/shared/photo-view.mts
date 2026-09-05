@@ -76,6 +76,12 @@ export function allowedImageUrl(value: unknown): string | null {
   return null;
 }
 
+/** Bedrock Converse image-block format for a sniffed mime type. */
+export function converseImageFormat(mimeType: string): 'jpeg' | 'png' | 'gif' | 'webp' {
+  const subtype = mimeType.split('/')[1];
+  return subtype === 'png' || subtype === 'gif' || subtype === 'webp' ? subtype : 'jpeg';
+}
+
 export interface FetchedPhoto {
   url: string;
   mimeType: string;

@@ -48,29 +48,11 @@ export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page'
 // for, and whose base64 must never land in audit rows or Converse text.
 export const VIEW_PHOTO_TOOL = 'view_photo';
 
-const VIEW_PHOTO_DECLARATION = {
-  name: VIEW_PHOTO_TOOL,
-  title: 'View archive photos',
-  annotations: { title: 'View archive photos' },
-  description:
-    'Fetch up to 3 archive photos as inline images: they render in the ' +
-    'conversation and become visible to you, so you can describe and ' +
-    'compare them. Pass image_url values from media_search or get_source ' +
-    'results. Archive image hosts only; an oversized original is refused ' +
-    'with its URL still usable as a link.',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      image_urls: {
-        type: 'array',
-        items: { type: 'string' },
-        maxItems: 3,
-        description: 'image_url values from media_search / get_source results (1-3).'
-      }
-    },
-    required: ['image_urls']
-  }
-};
+// Declared from the published spec (tool-specs.json) - the same text the
+// chat loop binds, so the two surfaces cannot drift.
+function viewPhotoDeclaration() {
+  return mcpToolDeclarations([VIEW_PHOTO_TOOL])[0];
+}
 
 // Tool results are sized for the Bedrock loop, where 200KB of evidence is
 // cheap context. MCP clients pay tokens for every byte, so cap what a
@@ -243,7 +225,7 @@ export async function handleMcpMessage(
     return { statusCode: 200, payload: rpcResult(id, {}) };
   }
   if (method === 'tools/list') {
-    const tools = [...mcpToolDeclarations(), ...(context.viewPhoto ? [VIEW_PHOTO_DECLARATION] : [])];
+    const tools = [...mcpToolDeclarations(), ...(context.viewPhoto ? [viewPhotoDeclaration()] : [])];
     return { statusCode: 200, payload: rpcResult(id, { tools }) };
   }
   if (method === 'tools/call') {

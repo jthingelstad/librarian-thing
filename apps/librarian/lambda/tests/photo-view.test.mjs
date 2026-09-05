@@ -122,3 +122,32 @@ test('the resize proxy URL is built from the original, fit-resize form', async (
     `https://micro.blog/photos/${RESIZE_WIDTH}/https://www.thingelstad.com/uploads/2021/x.jpg`
   );
 });
+
+test('converse image format maps sniffed mime types', async () => {
+  const { converseImageFormat } = await import('../dist/shared/photo-view.mjs');
+  assert.equal(converseImageFormat('image/jpeg'), 'jpeg');
+  assert.equal(converseImageFormat('image/png'), 'png');
+  assert.equal(converseImageFormat('image/webp'), 'webp');
+  assert.equal(converseImageFormat('image/gif'), 'gif');
+});
+
+test('view_photo is published for the chat loop but stays off MCP/web launch lists', async () => {
+  const { toolSpecs } = await import('../dist/shared/archive-tools.mjs');
+  const names = toolSpecs().map((spec) => spec.toolSpec?.name);
+  assert.ok(names.includes('view_photo'));
+  const { MCP_LAUNCH_TOOLS, WEB_TOOLS } = await import('../dist/shared/mcp.mjs');
+  // MCP offers it via its own capability-gated declaration; the launch list
+  // and the WebMCP page-tool subset never include it.
+  assert.ok(!MCP_LAUNCH_TOOLS.includes('view_photo'));
+  assert.ok(!WEB_TOOLS.includes('view_photo'));
+});
+
+test('the MCP declaration derives from the published spec - no drift', async () => {
+  process.env.BRAVE_SEARCH_API_KEY = '';
+  const { mcpToolDeclarations } = await import('../dist/shared/mcp.mjs');
+  const decl = mcpToolDeclarations(['view_photo'])[0];
+  assert.equal(decl.name, 'view_photo');
+  assert.equal(decl.title, 'View archive photos');
+  assert.ok(decl.description.includes('media_search'));
+  assert.ok(decl.inputSchema.properties.image_urls);
+});
