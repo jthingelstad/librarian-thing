@@ -19,15 +19,15 @@ We went out on the walk and it was incredible to have these hawks pacing along w
 
 An amazing experience made even more incredible with Ashford Castle as the backdrop. Photos don't capture this experience that well but the videos really do. The power and grace when the hawk lands on the glove was inspiring.
 
-<img src="https://www.thingelstad.com/uploads/2024/94d21697-b923-4a1e-883e-434ff83ef947.jpg" width="600" height="800" alt="Auto-generated description: A person with blonde hair is holding a bird of prey on their gloved hand inside a room with a wooden plaque listing names in the background.">
+<img src="https://www.thingelstad.com/uploads/2024/94d21697-b923-4a1e-883e-434ff83ef947.jpg" width="600" height="800" alt="A person with blonde hair is holding a bird of prey on their gloved hand inside a room with a wooden plaque listing names in the background.">
 
-<img src="https://www.thingelstad.com/uploads/2024/5c257880-fed6-4498-bd91-68fe01cb0a44.jpg" width="600" height="800" alt="Auto-generated description: A girl wearing a yellow jacket is holding a bird of prey on her gloved hand in an outdoor setting.">
+<img src="https://www.thingelstad.com/uploads/2024/5c257880-fed6-4498-bd91-68fe01cb0a44.jpg" width="600" height="800" alt="A girl wearing a yellow jacket is holding a bird of prey on her gloved hand in an outdoor setting.">
 
-<img src="https://www.thingelstad.com/uploads/2024/1619ffc6-abb3-4f26-b3a7-e299acf54b57.jpg" width="600" height="450" alt="Auto-generated description: Two people standing outdoors, each holding a bird of prey on their gloved hands.">
+<img src="https://www.thingelstad.com/uploads/2024/1619ffc6-abb3-4f26-b3a7-e299acf54b57.jpg" width="600" height="450" alt="Two people standing outdoors, each holding a bird of prey on their gloved hands.">
 
-<img src="https://www.thingelstad.com/uploads/2024/9f42bebc-ae68-4066-aad2-ff2e9c3433c3.jpg" width="600" height="450" alt="Auto-generated description: People are standing on a path surrounded by trees, interacting with birds of prey while wearing protective gloves.">
+<img src="https://www.thingelstad.com/uploads/2024/9f42bebc-ae68-4066-aad2-ff2e9c3433c3.jpg" width="600" height="450" alt="People are standing on a path surrounded by trees, interacting with birds of prey while wearing protective gloves.">
 
-<img src="https://www.thingelstad.com/uploads/2024/f086cf07-f8f4-4cae-83ca-3479181febc1.jpg" width="600" height="450" alt="Auto-generated description: A group of four people, one child, and three adults are smiling while holding birds of prey at Ireland's School of Falconry.">
+<img src="https://www.thingelstad.com/uploads/2024/f086cf07-f8f4-4cae-83ca-3479181febc1.jpg" width="600" height="450" alt="A group of four people, one child, and three adults are smiling while holding birds of prey at Ireland's School of Falconry.">
 
 
 <video controls="controls" playsinline="playsinline" src="https://www.thingelstad.com/uploads/2024/0180dabfde.mov" width="640" height="360" poster="https://www.thingelstad.com/uploads/2024/5d2333961a.png" preload="none"></video>

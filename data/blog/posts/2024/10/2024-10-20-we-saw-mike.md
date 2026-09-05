@@ -9,4 +9,4 @@ categories: []
 
 We saw [Mike Birbiglia](https://www.birbigs.com)‘s newest performance _The Good Life_ at the State Theater tonight. He is an incredible performer — so many laughs. 
 
-<img src="https://www.thingelstad.com/uploads/2024/86d316294f.jpg" width="600" height="450" alt="Auto-generated description: A comedian performs on a stage with a spotlight, standing near a stool with a cup on it.">
+<img src="https://www.thingelstad.com/uploads/2024/86d316294f.jpg" width="600" height="450" alt="A comedian performs on a stage with a spotlight, standing near a stool with a cup on it.">

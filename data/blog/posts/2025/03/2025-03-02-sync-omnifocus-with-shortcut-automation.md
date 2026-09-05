@@ -19,4 +19,4 @@ This is where less often used devices become an issue. I regularly will go a cou
 
 Now if I could only do a Shortcut Automation like this on my Apple Watch. That is the last device I have that routinely gets very behind, and sync to OmniFocus on the Watch is slow. I'm sure Omni is working on that!
 
-<img src="https://www.thingelstad.com/uploads/2025/af09963d58.jpg" width="600" height="600" alt="Auto-generated description: A smartphone screen displays an automation setup, scheduled to sync OmniFocus daily at 5:15 AM.">
+<img src="https://www.thingelstad.com/uploads/2025/af09963d58.jpg" width="600" height="600" alt="A smartphone screen displays an automation setup, scheduled to sync OmniFocus daily at 5:15 AM.">

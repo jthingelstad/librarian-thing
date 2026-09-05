@@ -9,4 +9,4 @@ categories: []
 
 Morning stop at the [Great Lakes Candy Kitchen](https://www.greatlakescandy.com/) — treats for home! 
 
-<img src="https://www.thingelstad.com/uploads/2024/f8c8dd5f30.jpg" width="600" height="450" alt="Auto-generated description: A cozy candy store called Great Lakes Candy Kitchen is surrounded by greenery with signs for parking, colorful flowers, and flags.">
+<img src="https://www.thingelstad.com/uploads/2024/f8c8dd5f30.jpg" width="600" height="450" alt="A cozy candy store called Great Lakes Candy Kitchen is surrounded by greenery with signs for parking, colorful flowers, and flags.">

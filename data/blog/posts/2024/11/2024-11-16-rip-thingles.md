@@ -25,5 +25,5 @@ So in November 2024, it was time to cut the last vestige of social media I had. 
 
 By way of this post please be aware that any content or information that may appear on X is absolutely not from me.
 
-<img src="https://www.thingelstad.com/uploads/2024/6c4ced55a6.jpg" width="600" height="600" alt="Auto-generated description: A gravestone with the Twitter logo and the handle @thingles (2006-2024) surrounded by candles and crows, set in a stormy graveyard."><br/>
+<img src="https://www.thingelstad.com/uploads/2024/6c4ced55a6.jpg" width="600" height="600" alt="A gravestone with the Twitter logo and the handle @thingles (2006-2024) surrounded by candles and crows, set in a stormy graveyard."><br/>
 <em>I had some fun with ChatGPT and the image this conjured up for me.</em>

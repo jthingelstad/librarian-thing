@@ -8,4 +8,4 @@ categories: ["Crypto", "POAP Claims"]
 ---
 
 <p>POAP <a href="https://collectors.poap.xyz/token/7550517">7550517</a> at <strong><a href="https://poap.gallery/drops/221430">TeamSPS Cyberweek 2025</a></strong>.</p>
-<img src="https://www.thingelstad.com/uploads/2026/cyberweek2025-new.png" width="600" height="600" alt="Auto-generated description: A cartoon chicken is surrounded by the words CYBER WEEK 2025 on a blue circular background.">
+<img src="https://www.thingelstad.com/uploads/2026/cyberweek2025-new.png" width="600" height="600" alt="A cartoon chicken is surrounded by the words CYBER WEEK 2025 on a blue circular background.">

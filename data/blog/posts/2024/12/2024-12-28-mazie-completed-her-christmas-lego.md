@@ -9,4 +9,4 @@ categories: []
 
 Mazie completed her Christmas LEGO of [Macaw Parrots](https://www.lego.com/en-us/product/the-fauna-collection-macaw-parrots-31211) this morning. They are designed to be hung on the wall and look great!
 
-<img src="https://www.thingelstad.com/uploads/2024/a015912894.jpg" width="600" height="600" alt="Auto-generated description: Two colorful LEGO macaws, one perched and another flying, are showcased on a wooden table alongside the building set box.">
+<img src="https://www.thingelstad.com/uploads/2024/a015912894.jpg" width="600" height="600" alt="Two colorful LEGO macaws, one perched and another flying, are showcased on a wooden table alongside the building set box.">

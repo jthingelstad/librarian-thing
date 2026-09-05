@@ -9,6 +9,6 @@ categories: []
 
 Breakfast at [Wildberry](https://wildberrycafe.com) is a tradition for us in Chicago. 
 
-<img src="https://www.thingelstad.com/uploads/2024/efa7509893.jpg" width="600" height="450" alt="Auto-generated description: People are lined up in front of a popular restaurant called Wildberry waiting to get inside, with skyscrapers in the background.">
+<img src="https://www.thingelstad.com/uploads/2024/efa7509893.jpg" width="600" height="450" alt="People are lined up in front of a popular restaurant called Wildberry waiting to get inside, with skyscrapers in the background.">
 
-<img src="https://www.thingelstad.com/uploads/2024/d45cc6a19c.jpg" width="600" height="450" alt="Auto-generated description: A plate of pancakes topped with syrup and powdered sugar sits on a wooden table, with two cups of sauce in the background.">
+<img src="https://www.thingelstad.com/uploads/2024/d45cc6a19c.jpg" width="600" height="450" alt="A plate of pancakes topped with syrup and powdered sugar sits on a wooden table, with two cups of sauce in the background.">

@@ -9,4 +9,4 @@ categories: []
 
 Guinness in the hot tub tonight outside of Ballyshannon. 
 
-<img src="https://www.thingelstad.com/uploads/2024/dceeb52c5c.jpg" width="600" height="450" alt="Auto-generated description: A hand is holding a pint of Guinness Draught near a glowing green hot tub in an outdoor setting.">
+<img src="https://www.thingelstad.com/uploads/2024/dceeb52c5c.jpg" width="600" height="450" alt="A hand is holding a pint of Guinness Draught near a glowing green hot tub in an outdoor setting.">

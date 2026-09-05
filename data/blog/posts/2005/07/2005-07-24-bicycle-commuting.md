@@ -7,7 +7,7 @@ post_kind: post
 categories: ["Family"]
 ---
 
-<img src="https://www.thingelstad.com/uploads/2025/2dae29e854.jpg" width="600" height="600" alt="Auto-generated description: A busy highway features multiple lanes of traffic, including cars and a large truck, surrounded by green areas and trees.">
+<img src="https://www.thingelstad.com/uploads/2025/2dae29e854.jpg" width="600" height="600" alt="A busy highway features multiple lanes of traffic, including cars and a large truck, surrounded by green areas and trees.">
 
 I've been riding into work, bicycle commuting, for about a month now this summer. This is a big part of my plan to get rid of the "sympathy weight" I put on while Tammy was pregnant with Mazie. It's working, I've been able to take off good weight every week without getting completely obsessed about what I'm eating. I'm really lucky when it comes to my commute.
 
@@ -17,4 +17,4 @@ One of the highlights of this commute is when the trail that I take on the way i
 
 The only part I miss about riding into work is the music. I really like listening to tunes in the morning and there just isn't any safe way to do that on a bike. The weather has been great, making it even more enjoyable. I find that when I ride into work I show up with a better outlook on things, and in general a more pleasant disposition. On top of all that I'm saving money on the record high gas prices and not paying for the toll-lane on the way home. All this and I get to help the environment, and my body, all at the same time.
 
-<img src="https://www.thingelstad.com/uploads/2025/41c05881b1.jpg" width="600" height="600" alt="Auto-generated description: A person is biking down a paved path surrounded by lush green trees and grass.">
+<img src="https://www.thingelstad.com/uploads/2025/41c05881b1.jpg" width="600" height="600" alt="A person is biking down a paved path surrounded by lush green trees and grass.">

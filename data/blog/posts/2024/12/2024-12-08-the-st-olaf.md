@@ -11,6 +11,6 @@ The 2024 [St. Olaf Christmas Festival](https://christmas.stolaf.edu) was amazing
 
 <img src="https://www.thingelstad.com/uploads/2024/st-olaf-christmas-2024.jpg" width="600" height="417" alt="Vintage-style graphic with a sunburst and the words Our Hope For Years To Come on a teal textured background.">
 
-<img src="https://www.thingelstad.com/uploads/2024/cedf9c35d0.jpg" width="600" height="600" alt="Auto-generated description: A group of six people, including two individuals wearing red plaid shirts and one in a maroon robe, happily gather indoors for a photo.">
+<img src="https://www.thingelstad.com/uploads/2024/cedf9c35d0.jpg" width="600" height="600" alt="A group of six people, including two individuals wearing red plaid shirts and one in a maroon robe, happily gather indoors for a photo.">
 
 The performance we saw was recorded and will be available online on December 18th.

@@ -7,7 +7,7 @@ post_kind: post
 categories: ["Minnestar"]
 ---
 
-<img src="https://www.thingelstad.com/uploads/2025/0bc1c82201.jpg" width="600" height="450" alt="Auto-generated description: A speaker is presenting next to a screen with the text, Play is about process, not about outcome, to an audience seated in a modern conference setting.">
+<img src="https://www.thingelstad.com/uploads/2025/0bc1c82201.jpg" width="600" height="450" alt="A speaker is presenting next to a screen with the text, Play is about process, not about outcome, to an audience seated in a modern conference setting.">
 
 ### Session 0 feat. Dr. AnnMarie Thomas!
 
@@ -30,7 +30,7 @@ Playful learning rules:
 - Play well with others
 - Clean up your messes
 
-<img src="https://www.thingelstad.com/uploads/2025/15549d44fa.jpg" width="600" height="450" alt="Auto-generated description: A person is giving a presentation to a seated audience in a lecture hall.">
+<img src="https://www.thingelstad.com/uploads/2025/15549d44fa.jpg" width="600" height="450" alt="A person is giving a presentation to a seated audience in a lecture hall.">
 
 ### This Machine ____s Fascists (fill in the blank)
 
@@ -48,7 +48,7 @@ Playful learning rules:
 - Government and companies. What is intersection. 
 - Options: embrace, ignore, rationalize, adjust, refuse, expose, sabotage, and document
 
-<img src="https://www.thingelstad.com/uploads/2025/f9bece7383.jpg" width="600" height="450" alt="Auto-generated description: A group of people is seated in a conference room watching a presentation with images projected on a screen.">
+<img src="https://www.thingelstad.com/uploads/2025/f9bece7383.jpg" width="600" height="450" alt="A group of people is seated in a conference room watching a presentation with images projected on a screen.">
 
 ### 🐝 Honeybees: Click to Save
 
@@ -71,7 +71,7 @@ Joe Meyer
 - Not a dev but using Cursor to create prototype. 
 
 
-<img src="https://www.thingelstad.com/uploads/2025/6bbdea6d7d.jpg" width="600" height="450" alt="Auto-generated description: A group of people is attending a presentation or lecture in a room with a large screen displaying images on the wall.">
+<img src="https://www.thingelstad.com/uploads/2025/6bbdea6d7d.jpg" width="600" height="450" alt="A group of people is attending a presentation or lecture in a room with a large screen displaying images on the wall.">
 
 ### Deepfakes 101: What's Real, What's Not, and What to Do About It
 
@@ -99,7 +99,7 @@ Greg Swan, Jenny Swan
 - Call to action: Create a family password. 
 - [Recap of session](https://thecaveproject.substack.com/p/deepfakes-101-recap-whats-real-whats).
 
-<img src="https://www.thingelstad.com/uploads/2025/3b1131d7bc.jpg" width="600" height="337" alt="Auto-generated description: A group of people are gathered in a conference room attentively listening to a presentation.">
+<img src="https://www.thingelstad.com/uploads/2025/3b1131d7bc.jpg" width="600" height="337" alt="A group of people are gathered in a conference room attentively listening to a presentation.">
 
 ### Minimal Viable Polka: My 100 day plan to win valentines day
 
@@ -120,7 +120,7 @@ Jim Bernard
 	- You are ready enough!
 	- Being a beginner is the best.
 
-<img src="https://www.thingelstad.com/uploads/2025/9339ea987d.jpg" width="600" height="450" alt="Auto-generated description: People are attending a presentation in a classroom setting with slides displayed on a screen.">
+<img src="https://www.thingelstad.com/uploads/2025/9339ea987d.jpg" width="600" height="450" alt="People are attending a presentation in a classroom setting with slides displayed on a screen.">
 
 ### 3D Printing: How to Get Started
 
@@ -143,7 +143,7 @@ Cameron MacDonald
 
 [Materials from talk](https://docs.google.com/presentation/d/1yIennoG7NwK6qwzn9NSX-T56UnMpyY0KARNh8c4TY3U/edit?usp=sharing).
 
-<img src="https://www.thingelstad.com/uploads/2025/e60b7770c1.jpg" width="600" height="450" alt="Auto-generated description: A group of people is attending a presentation in a conference room.">
+<img src="https://www.thingelstad.com/uploads/2025/e60b7770c1.jpg" width="600" height="450" alt="A group of people is attending a presentation in a conference room.">
 
 ### Build game changing products using Product Discovery workshops
 

@@ -13,7 +13,7 @@ In 2024 I published **701 posts** with **51,905 words**. Of those, **529 had pho
 
 June had about triple the normal blogging activity which was from our [trip to Ireland](https://www.thingelstad.com/collections/ireland-2024/). Over the last few years I've done daily travel logs on those trips and usually write a blog post for each activity. It can be a lot, but I value what it creates and know that in future years I will revisit those posts with many fond memories. 
 
-<img src="https://www.thingelstad.com/uploads/2025/posts-published-2024.png" width="600" height="239" alt="Auto-generated description: A line graph shows the number of posts published each month, with a peak in June and a smaller rise in December.">
+<img src="https://www.thingelstad.com/uploads/2025/posts-published-2024.png" width="600" height="239" alt="A line graph shows the number of posts published each month, with a peak in June and a smaller rise in December.">
 
 Zooming out I now have a total of **9,111 posts** containing **574,102 words**! My blog posts have come along many migrations:
 

@@ -15,33 +15,33 @@ Then I had a thought. What could I play with about the "weekly" aspect? A week i
 
 After a few iterations I landed on an image that I like quiet a bit.
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-grey.png" width="600" height="600" alt="Auto-generated description: Blocks arranged in a row above the text Weekly Thing create a monochromatic design.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-grey.png" width="600" height="600" alt="Blocks arranged in a row above the text Weekly Thing create a monochromatic design.">
 
 It is simple but identifiable. The seven blocks represent the seven days of the week. The text is Helvetica with custom kerning to tighten it up. As I played with this I liked the fun options I could imagine with the seven blocks. It reminded me a bit of [Kottke.org's redesign](https://kottke.org/24/03/kottkeorg-redesigns-with-2024-vibes) and how he is using the four circles.
 
 The blocks themselves can be any colors I want. 
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-color.png" width="600" height="600" alt="Auto-generated description: A logo featuring seven colorful rectangular bars in orange, green, purple, pink, blue, white, and gray, with the text Weekly Thing beneath them.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-color.png" width="600" height="600" alt="A logo featuring seven colorful rectangular bars in orange, green, purple, pink, blue, white, and gray, with the text Weekly Thing beneath them.">
 
 How about a very bright set of rainbow colors?
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-rainbow.png" width="600" height="600" alt="Auto-generated description: Seven colorful 3D rectangles in a horizontal row above the text Weekly Thing.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-rainbow.png" width="600" height="600" alt="Seven colorful 3D rectangles in a horizontal row above the text Weekly Thing.">
 
 I could see playing with this even more and generating random color combinations on the fly using a dynamic SVG image. Or how about a Christmas logo?
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-christmas.png" width="600" height="600" alt="Auto-generated description: A logo with a series of vertical red and white rectangles above the text Weekly Thing.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-christmas.png" width="600" height="600" alt="A logo with a series of vertical red and white rectangles above the text Weekly Thing.">
 
 The blocks could be patterned. Something simple done in software, or even colored in by hand. 
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-pattern.png" width="600" height="600" alt="Auto-generated description: Seven vertical, colorful, textured rectangles stand side by side above the text Weekly Thing.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-pattern.png" width="600" height="600" alt="Seven vertical, colorful, textured rectangles stand side by side above the text Weekly Thing.">
 
 But colors aren't the only option. The blocks could also be a window into an image to pull in an entirely different vibe. Let's bring the spirit of adventure.
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-mountains.png" width="600" height="600" alt="Auto-generated description: A series of vertical rectangles filled with snow-capped mountain imagery accompany the text Weekly Thing below.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-mountains.png" width="600" height="600" alt="A series of vertical rectangles filled with snow-capped mountain imagery accompany the text Weekly Thing below.">
 
 Or how about one of my favorite animals.
 
-<img src="https://www.thingelstad.com/uploads/2024/wt-logo-bison.png" width="600" height="600" alt="Auto-generated description: A bison is depicted across multiple book-like segments above the text Weekly Thing.">
+<img src="https://www.thingelstad.com/uploads/2024/wt-logo-bison.png" width="600" height="600" alt="A bison is depicted across multiple book-like segments above the text Weekly Thing.">
 
 The last extension I thought about that seemed like a fun option was animation. The seven blocks don't have to be static. I could have them moving around.
 

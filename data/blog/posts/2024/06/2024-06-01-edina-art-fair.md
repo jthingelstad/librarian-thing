@@ -18,4 +18,4 @@ We made a quick visit to the Edina Art Fair after we finished packing for our tr
 
 Tammy liked this sculpture "Willie Fly" and decided it should find a home with us. Very cool. 
 
-<img src="https://www.thingelstad.com/uploads/2024/img-2412.jpeg" width="600" height="600" alt="Auto-generated description: A wooden figurine of a man with raised arms is displayed on a window seat in front of a window with wooden framing.">
+<img src="https://www.thingelstad.com/uploads/2024/img-2412.jpeg" width="600" height="600" alt="A wooden figurine of a man with raised arms is displayed on a window seat in front of a window with wooden framing.">

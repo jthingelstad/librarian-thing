@@ -30,7 +30,7 @@ Tammy and I had an enjoyable evening at **[Constellation Fund](https://constella
 <img src="https://www.thingelstad.com/uploads/2024/5ca18511-948e-4566-8a71-6d0d430100d2.jpg" width="600" height="450" alt="Two men wearing lanyards and name badges smile together at an indoor event venue with warm golden lighting behind them."><br/>
 <em>Ran into Greg Blasko at the event, one of the founders of SportNgin.</em>
 
-<img src="https://www.thingelstad.com/uploads/2024/29736cbd-b6b0-4b73-bc64-c80cd01e0038.jpg" width="600" height="450" alt="Auto-generated description: A band performs on stage under a sign that reads BRIGHT NIGHT."><br/>
+<img src="https://www.thingelstad.com/uploads/2024/29736cbd-b6b0-4b73-bc64-c80cd01e0038.jpg" width="600" height="450" alt="A band performs on stage under a sign that reads BRIGHT NIGHT."><br/>
 <em>Tammy and I were both excited to see that Laamar was closing the night out!</em>
 
 See Bright Night from 

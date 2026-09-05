@@ -9,4 +9,4 @@ categories: []
 
 This morning we made our way to Arlington Heights and met [CJ Chilvers](https://www.cjchilvers.com) for breakfast at [Scratchboard Kitchen](https://scratchboardkitchenah.com). I have followed CJ’s blog and newsletter for years and have a ton of respect for how he approaches his craft. It was awesome to finally meet him in person!
 
-<img src="https://www.thingelstad.com/uploads/2024/2328c37488.jpg" width="600" height="800" alt="Auto-generated description: Two people are standing on a sidewalk outside, smiling at the camera, with trees and a few parked cars in the background.">
+<img src="https://www.thingelstad.com/uploads/2024/2328c37488.jpg" width="600" height="800" alt="Two people are standing on a sidewalk outside, smiling at the camera, with trees and a few parked cars in the background.">

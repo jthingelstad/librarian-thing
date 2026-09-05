@@ -9,7 +9,7 @@ categories: []
 
 Today, [day 15](https://www.thingelstad.com/2024/06/15/ireland-log-day.html) of our Ireland 2024 trip, we returned the [SEAT Leon](https://www.seat.ie/new-cars/leon/overview) that we rented (hired?) from [New Way](https://www.newway.ie) for our trip. All in over those 15 days I drove the car **1,907 kilometers**, or 1,185 miles. I’m happy to report that I returned the car free of scratches, with all mirrors still on the car, and no worse for the couple weeks.
 
-<img src="https://www.thingelstad.com/uploads/2024/c0aeef339f.jpg" width="600" height="450" alt="Auto-generated description: A black station wagon is parked in a lot adjacent to rental car company offices, with the sky partly cloudy above.">
+<img src="https://www.thingelstad.com/uploads/2024/c0aeef339f.jpg" width="600" height="450" alt="A black station wagon is parked in a lot adjacent to rental car company offices, with the sky partly cloudy above.">
 
 
 We chose to use Google Maps for navigation. And Tammy was my vigilant copilot. She was always looking and helping navigate round abouts and a variety of traffic scenarios!

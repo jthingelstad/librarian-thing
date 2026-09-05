@@ -9,4 +9,4 @@ categories: []
 
 [Prairie Grass Cafe](https://prairiegrass.cafe/) had “Chicago Magazine’s #1 Sirloin Burger” on the menu and Tyler and I couldn’t pass up an award winning burger. It delivered — so good!
 
-<img src="https://www.thingelstad.com/uploads/2024/148cf658ed.jpg" width="600" height="450" alt="Auto-generated description: A burger topped with bacon is served on a plate with fries.">
+<img src="https://www.thingelstad.com/uploads/2024/148cf658ed.jpg" width="600" height="450" alt="A burger topped with bacon is served on a plate with fries.">

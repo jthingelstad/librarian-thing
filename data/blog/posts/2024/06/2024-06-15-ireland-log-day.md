@@ -25,7 +25,7 @@ _Weather: Excellent day. Warmer day today._
 - Jamie, Tammy, and Tyler share a double cheeseburger from [Bunsen](https://bunsen.ie) and are floored at how good it is.
 - Tammy and Mazie go for a walk.
 
-<img src="https://www.thingelstad.com/uploads/2024/134423ce74.jpg" width="600" height="600" alt="Auto-generated description: A smiling man holds a pint of Guinness while standing in front of a pub.">
+<img src="https://www.thingelstad.com/uploads/2024/134423ce74.jpg" width="600" height="600" alt="A smiling man holds a pint of Guinness while standing in front of a pub.">
 
 Jump to day 
 [1](https://www.thingelstad.com/2024/06/01/ireland-log-day.html), 

@@ -24,19 +24,19 @@ With a proofread here is that version of this presentation.
 
 </em>
 
-<img src="https://www.thingelstad.com/uploads/2025/98897cefa6.jpg" width="600" height="449" alt="Auto-generated description: A speaker is presenting a session titled How to Newsletter in front of an audience.">
+<img src="https://www.thingelstad.com/uploads/2025/98897cefa6.jpg" width="600" height="449" alt="A speaker is presenting a session titled How to Newsletter in front of an audience.">
 
 What I wanted to talk about is "How To Newsletter." I've been sending a newsletter now for eight years, and I've learned a lot in that process. I thought it'd be fun to share that knowledge. I actually planned to do this session in 2023--so if you're thinking, "Didn't he already do this?"--I had to cancel it that year. Now we're two years later, and I've got two more years of learnings and 50 more issues of my newsletter under my belt.
 
 As I put this talk together, I realized it's not just about how to newsletter. It could also be about how to run a complex side project, or how to consistently do something for eight years. It's also about how to apply automation to make that kind of work easier. So, depending on what you're looking for, you might take away more than just newsletter tips--this is also about managing a long-term, detailed endeavor.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.002.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A presentation slide introduces Jamie, highlighting a career as a technologist, CTO experience, board membership, a family in Minneapolis, blogging activities, and a photograph of Jamie with a bird on his hat.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.002.png" width="600" height="337" style="border: 3px grey outset;" alt="A presentation slide introduces Jamie, highlighting a career as a technologist, CTO experience, board membership, a family in Minneapolis, blogging activities, and a photograph of Jamie with a bird on his hat.">
 
 First, who am I? I'm Jamie Thingelstad. I'm a passionate technologist. I've been into tech since I was a kid, started programming BASIC on a TRS-80--you can figure out my age from that--and I've always loved building things. I've had a 20+ year career as a Chief Technology Officer, came into the field as the web was being born, built a couple of companies, and eventually started building things with groups to do even bigger work.
 
 I'm on the board of the Minnesota Technology Association and previously served on the board of Minnestar. I live in Minneapolis with my wonderful family. I've also been a blogger for 20+ years--which plays a big role when we talk about newsletters--and I've been publishing _The Weekly Thing_ for eight years now.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.003.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: The image showcases two emails titled Weekly Thing and Weekly Thing 316, highlighting newsletter content along with a logo and contact details.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.003.png" width="600" height="337" style="border: 3px grey outset;" alt="The image showcases two emails titled Weekly Thing and Weekly Thing 316, highlighting newsletter content along with a logo and contact details.">
 
 Why a newsletter? What led me to start _The Weekly Thing_? The image here shows the very first issue from May 13, 2007--it looked totally different from current issues. The one shown here is issue 316 from two weeks ago.
 
@@ -46,7 +46,7 @@ I've always been a voracious consumer of online content. I used bookmarking serv
 
 Importantly, I ignored most of the newsletter "growth hacks." I'm cynical about stuff like that. I just wanted to share good content, without any tricks. I didn't have a specific topic, but I committed to doing it for a year. Now, eight years later, it's still a fun and meaningful project, and I feel like I'm giving back by sharing useful information.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.004.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A slide presents three steps for finding good content: using Feedbin and Safari Reading List, quickly reading and filtering, and curating with Pinboard tags.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.004.png" width="600" height="337" style="border: 3px grey outset;" alt="A slide presents three steps for finding good content: using Feedbin and Safari Reading List, quickly reading and filtering, and curating with Pinboard tags.">
 
 The first thing I had to solve: how do I find content? For me, it's RSS. I'm a huge fan. I don't get content from social media--it's all RSS feeds and readers like Feedbin and Unread. No algorithms. I scan headlines efficiently and ask one question: is this interesting?
 
@@ -54,7 +54,7 @@ If yes, it goes into my Safari Reading List. From there, I narrow it down--maybe
 
 I also blog every week and include a photo I've taken that week--no cheating from the archive! That addition pushes my creative side and makes each issue more personal.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.005.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A workflow presentation outlines a GTD method using OmniFocus TaskPaper templates along with key phases and deadlines.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.005.png" width="600" height="337" style="border: 3px grey outset;" alt="A workflow presentation outlines a GTD method using OmniFocus TaskPaper templates along with key phases and deadlines.">
 
 Now let's talk about workflow. You can't just have one OmniFocus task that says "Send newsletter"--there's way too much involved. I've practiced GTD (Getting Things Done) for over a decade, and I use OmniFocus with TaskPaper templates.
 
@@ -62,17 +62,17 @@ Each issue is a full project, with variables like the issue number and date. I r
 
 There are four main phases: create content, curate content, build it, and finalize it. And I spend very little time on the assembly because almost all of it is automated.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.006.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A layout of various app icons, including an automation app and a series of colorful shortcut icons labeled with tasks, is shown against a white background.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.006.png" width="600" height="337" style="border: 3px grey outset;" alt="A layout of various app icons, including an automation app and a series of colorful shortcut icons labeled with tasks, is shown against a white background.">
 
 The key tool for automation? Shortcuts. You have it on your iPhone and Mac. I've built dozens of Shortcuts to run everything from creating sections to finalizing output. Each section returns Markdown. One Shortcut runs the list, combines them, and boom--newsletter built.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.007.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A diagram illustrates an automation process for generating and managing content using various shortcuts and APIs, with a focus on building issues, setting sections, and hosting images.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.007.png" width="600" height="337" style="border: 3px grey outset;" alt="A diagram illustrates an automation process for generating and managing content using various shortcuts and APIs, with a focus on building issues, setting sections, and hosting images.">
 
 Here's how it works. One main Shortcut runs an array of other Shortcuts. Each returns a Markdown section like intro, quote, featured, currently, etc. They can pull from APIs, my blog (via RSS), Pinboard, and Drafts. I store shared data in Data Jar--a kind of lightweight, shared memory for Shortcuts.
 
 So when I say "build the issue," it runs each section, combines the results, and I've got a finished draft ready to go. All of this is lightweight--no Python, no compiling, just using built-in tools.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.008.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: The image outlines a toolchain consisting of various tools for content curation, building, assembly, sending, running, and orchestration, including apps like Feedbin, Shortcuts, Buttondown, OmniFocus, Safari, Drafts, Stripe, Pinboard, and Data Jar.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.008.png" width="600" height="337" style="border: 3px grey outset;" alt="The image outlines a toolchain consisting of various tools for content curation, building, assembly, sending, running, and orchestration, including apps like Feedbin, Shortcuts, Buttondown, OmniFocus, Safari, Drafts, Stripe, Pinboard, and Data Jar.">
 
 Here's my toolchain and why I use each part:
 
@@ -90,13 +90,13 @@ Here's my toolchain and why I use each part:
 
 Each piece of this toolchain plays a role. They're like instruments in an orchestra, and together, they make this weekly project sustainable and honestly kind of delightful to run.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.009.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A slide titled Genuine Use of AI outlines tasks such as not rewriting styles, generating subject-line options, matching link themes, and supporting a membership program, alongside a screenshot of a tool interface.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.009.png" width="600" height="337" style="border: 3px grey outset;" alt="A slide titled Genuine Use of AI outlines tasks such as not rewriting styles, generating subject-line options, matching link themes, and supporting a membership program, alongside a screenshot of a tool interface.">
 
 Let's talk AI. I don't use it to write for me--I'm protective of my voice. But there are areas where it helps. One is creating the subject line. I give it instructions: avoid publication names, maybe use alliteration, avoid negative terms, and be fun. Then it suggests five options. I pick the one I like--or modify it.
 
 I also use AI to generate a fortune at the end of each issue, based on that week's themes. And the Supporting Membership emails? Those are written in a different voice, and I let AI take more control there. It's actually kind of fun to create a character out of that voice--something that feels separate from me.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.010.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A presentation slide outlines strategies for sustaining a newsletter, highlighting scheduled breaks, cutoff times, and experimental approaches.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.010.png" width="600" height="337" style="border: 3px grey outset;" alt="A presentation slide outlines strategies for sustaining a newsletter, highlighting scheduled breaks, cutoff times, and experimental approaches.">
 
 Sustainability over eight years requires boundaries. I cut off new content Friday night, giving me time to assemble and write. I also build buffers--if I miss Saturday, it goes Sunday.
 
@@ -104,13 +104,13 @@ And I take real breaks: July and August, plus mid-December through mid-January. 
 
 And this is a big one--I don't look at analytics. I don't track opens or clicks. I don't want to be influenced by what gets engagement. I'm doing this to share what I find valuable. I don't want to chase metrics. Every week, some people unsubscribe. Every week, new people join. That's the rhythm. And it's okay.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.011.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A presentation slide details fundraising for Second Harvest, outlines a community initiative called Weekly Thing Forum on Ponder, and highlights an AI use case with 20 members contributing approximately $560.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.011.png" width="600" height="337" style="border: 3px grey outset;" alt="A presentation slide details fundraising for Second Harvest, outlines a community initiative called Weekly Thing Forum on Ponder, and highlights an AI use case with 20 members contributing approximately $560.">
 
 I've also treated the newsletter like a playground. During the pandemic, I raised over $12,000 for Second Harvest in Weekly Thing 141. I've tried launching a forum using Ponder. Community engagement is tough, especially via email. People see a newsletter as a message, not a conversation starter.
 
 And I've started Supporting Memberships. Each year, I pick a nonprofit to support. This year, it's Creative Commons--we're on track to raise around $560. Next year I'm thinking Electronic Frontier Foundation.
 
-<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.012.png" width="600" height="337" style="border: 3px grey outset;" alt="Auto-generated description: A slide lists suggestions such as automating tasks, shipping on a rhythm, and subscribing to weeklything.com, with a small emblem on the top right.">
+<img src="https://www.thingelstad.com/uploads/2025/how-to-newsletter.012.png" width="600" height="337" style="border: 3px grey outset;" alt="A slide lists suggestions such as automating tasks, shipping on a rhythm, and subscribing to weeklything.com, with a small emblem on the top right.">
 
 So, some final thoughts:
 

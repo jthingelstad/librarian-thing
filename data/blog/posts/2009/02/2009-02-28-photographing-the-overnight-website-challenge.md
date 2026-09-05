@@ -22,7 +22,7 @@ For the photographically curious I'm shooting with my Canon 40D body. I thought 
 
 This morning I shot mostly wide. I did a lot with the 10-22mm as well as the Fisheye. I did some work with the 70-200mm as well for close-ups. The room is difficult to shoot. It's just a big open space and what little light there is is rough fluorescent stuff.
 
-<img src="https://www.thingelstad.com/uploads/2025/b218c9db2a.jpg" width="600" height="399" alt="Auto-generated description: A group of people wearing matching 2009 Overnight Website Challenge Team shirts are seated around a table with laptops and computers, engaged in a collaborative work session.">
+<img src="https://www.thingelstad.com/uploads/2025/b218c9db2a.jpg" width="600" height="399" alt="A group of people wearing matching 2009 Overnight Website Challenge Team shirts are seated around a table with laptops and computers, engaged in a collaborative work session.">
 
 Tonight I'm hoping the teams will be a bit punchy and get some more interesting shots with people. We'll see if I can get a team to do a human pyramid.
 

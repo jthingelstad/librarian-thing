@@ -9,4 +9,4 @@ categories: []
 
 Finished **cycling 11.6 miles** in **62.6 minutes**. First time outside on the bike this year. Very nice and lovely ride around the lakes. 🚴‍♂️
 
-<img src="https://www.thingelstad.com/uploads/2025/d075d16cff.jpg" width="600" height="577" alt="Auto-generated description: A map shows a yellow path traced around three lakes within an urban area, indicating a route, with a green starting point marked.">
+<img src="https://www.thingelstad.com/uploads/2025/d075d16cff.jpg" width="600" height="577" alt="A map shows a yellow path traced around three lakes within an urban area, indicating a route, with a green starting point marked.">

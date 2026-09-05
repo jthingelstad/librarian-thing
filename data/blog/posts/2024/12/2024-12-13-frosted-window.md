@@ -9,4 +9,4 @@ categories: []
 
 Frosted window.
 
-<img src="https://www.thingelstad.com/uploads/2024/e5d2ed54ce.jpg" width="600" height="450" alt="Auto-generated description: Delicate frost patterns intricately cover a window with a wintry scene visible in the background.">
+<img src="https://www.thingelstad.com/uploads/2024/e5d2ed54ce.jpg" width="600" height="450" alt="Delicate frost patterns intricately cover a window with a wintry scene visible in the background.">

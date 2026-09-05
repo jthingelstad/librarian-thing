@@ -11,7 +11,7 @@ We completed our annual candle sale **raising $7,010** for the four organization
 
 As in previous years, we asked people which organizations they would like to support. People could pick any or all of the organizations. We even have some folks request specific allocations versus dividing it equally. We also donated **$260.25** for [Mount Olivet](https://mtolivet.org) as a portion of all sales that were made at the Holiday Boutique on Saturday.
 
-<img src="https://www.thingelstad.com/uploads/2024/t4g-2024-giving.png" width="600" height="230" alt="Auto-generated description: A horizontal bar chart displays the amounts raised for four initiatives in the Things 4 Good 2024 Fall Fundraiser.">
+<img src="https://www.thingelstad.com/uploads/2024/t4g-2024-giving.png" width="600" height="230" alt="A horizontal bar chart displays the amounts raised for four initiatives in the Things 4 Good 2024 Fall Fundraiser.">
 
 Tyler and Mazie enjoy a friendly competition trying to get their organization the most. 🤩
 
