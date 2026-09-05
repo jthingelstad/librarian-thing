@@ -363,6 +363,4 @@ class MediaDescriptionAnnotationTests(unittest.TestCase):
         from librarian_core.corpus import annotate_media_descriptions
 
         corpus = {"media": [{"url": "https://files.thingelstad.com/a.jpg"}]}
-        self.assertEqual(
-            annotate_media_descriptions(corpus, Path("/nonexistent/sidecar.json")), 0
-        )
+        self.assertEqual(annotate_media_descriptions(corpus, Path("/nonexistent/sidecar.json")), 0)
