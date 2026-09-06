@@ -94,24 +94,28 @@ Local `.env` values used by upload/build scripts:
 - `CHAT_DAILY_QUOTA` / `MCP_DAILY_QUOTA` (optional; per-reader daily pools, defaults 50 / 500)
 - `THINGY_GUEST_CHAT` / `GUEST_DAILY_QUOTA` / `GUEST_GLOBAL_DAILY_QUOTA` (guest chat lane, 2026-09: kill switch plus per-visitor 3/day and global 100/day fail-closed caps; the global cap is the cost circuit breaker with its own CloudWatch alarm)
 
-Deploy and corpus upload scripts load AWS credentials from `.env` through `python-dotenv` before creating `boto3` clients. They do not intentionally fall back to AWS CLI profile authentication.
+## Deployment authentication
 
-## Permanent IAM Setup
+Production deploys run in GitHub Actions using the `WeeklyThingLibrarianDeployOidc`
+role. They require no active local AWS CLI session. To deploy committed `main`:
 
-Routine deploys run in GitHub Actions (`.github/workflows/deploy.yml`), which assumes the `WeeklyThingLibrarianDeployOidc` OIDC role. Local manual deploys use the AWS credentials loaded from `.env`: the `wt-archive` IAM user with an attached `WeeklyThingLibrarianDeploy` managed policy (these static keys stay so local deploys never require an interactive login). That policy grants enough access to create or harden the private `weekly-thing-librarian` bucket, upload `s3://weekly-thing-librarian/code/*` and `s3://weekly-thing-librarian/artifacts/*`, and update the `weekly-thing-librarian` CloudFormation stack.
+```sh
+gh workflow run deploy.yml --ref main -f scope=code
+```
 
-`files.thingelstad.com` is the public website asset bucket. Thingy code packages, corpus files, and Bedrock invocation logs belong in the private `LIBRARIAN_BUCKET`.
+The OIDC role is limited to Librarian artifacts, model checks/embedding, log setup,
+and the one stack. CloudFormation uses `weekly-thing-librarian-cloudformation`;
+the deployment script passes its ARN explicitly. Separate administrator-managed
+permissions boundaries prevent the application roles from gaining wider access.
+Routine deploys inspect bucket security; `--bootstrap-bucket` is administrator-only.
 
-The long-term cleanup is still a dedicated CloudFormation service role.
+See [deployment IAM](../pipeline/deploy/iam/README.md) for source policies,
+validation, rollback, and the remaining legacy-consumer retirement work.
 
-The stack already creates a Lambda execution role for Thingy. The remaining production cleanup is a dedicated deployment path:
-
-- Create a `weekly-thing-librarian-cloudformation` service role trusted by CloudFormation.
-- Give that service role permissions only for the Librarian stack resources: Lambda, API Gateway HTTP API, DynamoDB table, the Lambda execution role, CloudWatch log groups, CloudWatch alarms/dashboard, and `s3://$LIBRARIAN_BUCKET/*`.
-- (Done) The narrow deploy identity exists: the `WeeklyThingLibrarianDeployOidc` GitHub Actions OIDC role uploads private Librarian S3 artifacts and updates only the `weekly-thing-librarian` CloudFormation stack.
-- Set `LIBRARIAN_CLOUDFORMATION_ROLE_ARN` to the service role ARN before running `make librarian-deploy`.
-
-The deploy script passes `LIBRARIAN_CLOUDFORMATION_ROLE_ARN` to CloudFormation when present, so the caller only needs permission to upload artifacts, update the stack, and pass that one service role.
+Direct local tooling still loads application settings from `.env`. Legacy
+`wt-archive` credentials are transitional for existing local consumers, not a
+requirement for GitHub deployment. Do not retire the IAM keys until those
+consumers have replacement authentication and successful acceptance.
 
 ## Access Model
 

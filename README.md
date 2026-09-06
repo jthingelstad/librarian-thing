@@ -64,6 +64,13 @@ make test-lambda                 # Lambda tests
 make build                       # corpus + graph
 ```
 
+Deploy committed `main` without a local AWS session:
+
+```sh
+gh workflow run deploy.yml --ref main -f scope=code
+```
+
+See `pipeline/deploy/iam/README.md` for deployment permissions and recovery.
 See `AGENTS.md` for constraints and `ALIGNMENT.md` for the cross-repo map.
 
 ## History

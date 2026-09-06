@@ -22,6 +22,11 @@ on:
       - 'uv.lock'
   workflow_dispatch:
     inputs:
+      scope:
+        description: 'Code deploy, or full corpus rebuild and code deploy'
+        type: choice
+        options: [code, full]
+        default: code
       push_graph:
         description: 'Commit data/librarian/graph.json to the website repo'
         type: boolean
@@ -50,6 +55,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
           aws-region: us-east-1
 
       - uses: astral-sh/setup-uv@v10.0.1
@@ -80,10 +87,12 @@ jobs:
           set -euo pipefail
 
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            corpus=false
+            if [[ "${{ inputs.scope }}" == "full" ]]; then corpus=true; fi
             {
-              echo "weekly_corpus=true"
-              echo "blog_corpus=true"
-              echo "podcast_corpus=true"
+              echo "weekly_corpus=$corpus"
+              echo "blog_corpus=$corpus"
+              echo "podcast_corpus=$corpus"
               echo "lambda=true"
             } >> "$GITHUB_OUTPUT"
             exit 0
@@ -145,7 +154,9 @@ jobs:
           lambda=false
           if has_change \
             '^apps/librarian/' \
-            '^pipeline/deploy/aws\.py$'; then
+            '^pipeline/deploy/aws\.py$' \
+            '^pipeline/deploy/iam/' \
+            '^.github/workflows/deploy\.yml$'; then
             lambda=true
           fi
 
@@ -208,6 +219,7 @@ jobs:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
           LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
+          LIBRARIAN_CLOUDFORMATION_ROLE_ARN: arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation
           LIBRARIAN_SESSION_SECRET: ${{ secrets.LIBRARIAN_SESSION_SECRET }}
           THINGY_WEB_ORIGIN_TOKEN: ${{ secrets.THINGY_WEB_ORIGIN_TOKEN }}
 

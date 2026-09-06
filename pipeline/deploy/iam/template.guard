@@ -1,0 +1,10 @@
+let application_roles = Resources.*[ Type == 'AWS::IAM::Role' ]
+rule application_roles_are_bounded {
+    %application_roles.Properties.PermissionsBoundary exists
+}
+rule lambda_boundary_is_fixed {
+    Resources.LibrarianFunctionRole.Properties.PermissionsBoundary.'Fn::Sub' == 'arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianRuntimeBoundary'
+}
+rule evaluation_boundary_is_fixed {
+    Resources.BedrockEvaluationRole.Properties.PermissionsBoundary.'Fn::Sub' == 'arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianEvaluationBoundary'
+}

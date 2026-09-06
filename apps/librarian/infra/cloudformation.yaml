@@ -158,6 +158,7 @@ Resources:
   LibrarianFunctionRole:
     Type: AWS::IAM::Role
     Properties:
+      PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianRuntimeBoundary
       Tags:
         - Key: project
           Value: Thingy
@@ -911,6 +912,7 @@ Resources:
   BedrockEvaluationRole:
     Type: AWS::IAM::Role
     Properties:
+      PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianEvaluationBoundary
       Tags:
         - Key: project
           Value: Thingy

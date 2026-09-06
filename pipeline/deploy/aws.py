@@ -250,6 +250,24 @@ def ensure_private_bucket(bucket: str) -> None:
     )
 
 
+def verify_private_bucket(bucket: str) -> None:
+    """Routine deployment inspects security settings without changing them."""
+    s3 = boto3.client("s3")
+    s3.head_bucket(Bucket=bucket)
+    block = s3.get_public_access_block(Bucket=bucket)["PublicAccessBlockConfiguration"]
+    required = ("BlockPublicAcls", "IgnorePublicAcls", "BlockPublicPolicy", "RestrictPublicBuckets")
+    if not all(block.get(key) is True for key in required):
+        raise RuntimeError("Librarian bucket must block all public access; repair as administrator")
+    if s3.get_bucket_versioning(Bucket=bucket).get("Status") != "Enabled":
+        raise RuntimeError("Librarian bucket versioning must be enabled; repair as administrator")
+    rules = s3.get_bucket_encryption(Bucket=bucket)["ServerSideEncryptionConfiguration"]["Rules"]
+    if not any(
+        rule.get("ApplyServerSideEncryptionByDefault", {}).get("SSEAlgorithm") == "AES256"
+        for rule in rules
+    ):
+        raise RuntimeError("Librarian bucket must use AES256 encryption; repair as administrator")
+
+
 def deploy_stack(
     *,
     stack_name: str,
@@ -558,7 +576,9 @@ def main() -> int:
         default=os.environ.get("LIBRARIAN_PODCAST_CORPUS_KEY", PRIVATE_PODCAST_CORPUS_KEY),
     )
     parser.add_argument(
-        "--cloudformation-role-arn", default=os.environ.get("LIBRARIAN_CLOUDFORMATION_ROLE_ARN")
+        "--cloudformation-role-arn",
+        default=os.environ.get("LIBRARIAN_CLOUDFORMATION_ROLE_ARN")
+        or "arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation",
     )
     parser.add_argument("--log-level", default=os.environ.get("LIBRARIAN_LOG_LEVEL", "INFO"))
     parser.add_argument(
@@ -583,7 +603,12 @@ def main() -> int:
         "--stream-certificate-arn", default=os.environ.get("LIBRARIAN_STREAM_CERTIFICATE_ARN", "")
     )
     parser.add_argument("--skip-corpus-upload", action="store_true")
-    parser.add_argument("--skip-bucket-bootstrap", action="store_true")
+    parser.add_argument("--skip-bucket-bootstrap", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument(
+        "--bootstrap-bucket",
+        action="store_true",
+        help="Administrator only: create/harden the artifact bucket",
+    )
     parser.add_argument("--skip-smoke-test", action="store_true")
     args = parser.parse_args()
 
@@ -594,8 +619,9 @@ def main() -> int:
     if not args.skip_smoke_test:
         smoke_test_thingy_models(thingy_models_from_template())
 
-    if not args.skip_bucket_bootstrap:
+    if args.bootstrap_bucket:
         ensure_private_bucket(bucket)
+    verify_private_bucket(bucket)
 
     package_lambda()
     package_stream_lambda()

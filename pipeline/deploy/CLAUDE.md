@@ -40,7 +40,7 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 ## `aws.py` flow
 
 1. **Smoke-test the Thingy model buckets** via minimal `InvokeModel` calls against `THINGY_DEFAULT_MODEL`, `THINGY_FAST_MODEL`, and `THINGY_ADVANCED_MODEL`. Refuses to deploy if any configured model isn't accessible from this account. Pass `--skip-smoke-test` to override.
-2. **Ensure the private S3 bucket exists** (`ensure_private_bucket(bucket)`). Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
+2. **Verify private bucket security** (`verify_private_bucket(bucket)`). Administrator-only `--bootstrap-bucket` creates or hardens it. Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
 3. **Package both Lambda bundles** (`auth/` + `chat/`) — separate npm install + zip per bundle. Bundles ship independently because the auth Lambda is REST and the chat Lambda is response-streamed Function URL.
 4. **Upload zips** to `s3://{bucket}/code/{auth,chat}-lambda/<unix-ts>.zip`. Timestamp keys so CloudFormation always sees a new version.
 5. **Optional**: all corpus uploaders run — Weekly Thing corpus + graph, blog corpus, podcast corpus.
@@ -66,9 +66,9 @@ Pulled from the repo-root `.env`. Required:
 | `BUTTONDOWN_API_KEY` | account secrets | Auth Lambda's subscriber verification |
 | `LIBRARIAN_SESSION_SECRET` | (auto-generated if missing) | HMAC signing for session JWTs |
 | `LIBRARIAN_RETRIEVE_SECRET` | shared secret | trusted `/retrieve` service auth |
-| `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` | the `wt-archive` IAM user | Deploys + corpus upload |
+| AWS deployment credentials | GitHub OIDC | Temporary per-run credentials; no local AWS session needed |
 
-The CloudFormation stack uses an IAM service role for execution; the local AWS credentials are just for `cloudformation:UpdateStack` + `s3:PutObject`.
+The CloudFormation stack uses the scoped `weekly-thing-librarian-cloudformation` service role. CI also needs scoped corpus reads, Bedrock invocation, bucket-security inspection, and log setup. See `iam/README.md` for source policies and legacy local-consumer retirement.
 
 ## Bedrock regions
 

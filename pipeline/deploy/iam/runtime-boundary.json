@@ -1,0 +1,98 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+      ],
+      "Resource": "arn:aws:dynamodb:us-east-1:999153317627:table/weekly-thing-librarian-LibrarianTable-*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:ListStreams"
+      ],
+      "Resource": "arn:aws:dynamodb:us-east-1:999153317627:table/weekly-thing-librarian-LibrarianTable-*/stream/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "sqs:SendMessage",
+      "Resource": "arn:aws:sqs:us-east-1:999153317627:weekly-thing-librarian-eval-dlq"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/corpus.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/graph.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/blog_corpus.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/podcast_corpus.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/dispatches/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/dispatches/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ],
+      "Resource": [
+        "arn:aws:bedrock:us-east-1:999153317627:inference-profile/us.anthropic.claude-sonnet-4-6",
+        "arn:aws:bedrock:us-east-1:999153317627:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "arn:aws:bedrock:us-east-1:999153317627:inference-profile/us.anthropic.claude-opus-4-6-v1",
+        "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0",
+        "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-sonnet-4-6",
+        "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+        "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-opus-4-6-v1",
+        "arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-sonnet-4-6",
+        "arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+        "arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-opus-4-6-v1",
+        "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-sonnet-4-6",
+        "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+        "arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1",
+        "arn:aws:bedrock:us-east-1::foundation-model/cohere.embed-english-v3",
+        "arn:aws:bedrock:us-east-1::foundation-model/cohere.rerank-v3-5:0",
+        "arn:aws:bedrock:us-west-2::foundation-model/cohere.rerank-v3-5:0",
+        "arn:aws:bedrock:ca-central-1::foundation-model/cohere.rerank-v3-5:0",
+        "arn:aws:bedrock:eu-central-1::foundation-model/cohere.rerank-v3-5:0",
+        "arn:aws:bedrock:ap-northeast-1::foundation-model/cohere.rerank-v3-5:0"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "bedrock:Rerank",
+      "Resource": "*"
+    },
+    {
+      "Sid": "ApplicationLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:999153317627:log-group:/aws/lambda/weekly-thing-librarian-*"
+    }
+  ]
+}
