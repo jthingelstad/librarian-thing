@@ -35,8 +35,12 @@ Cadence: weekly Saturday, and after every deploy, alarm, or reported incident.
    specific `quota#`/`rate#` rows only when investigating a concrete symptom.
 7. Keep Bedrock spend in view: embed, rerank, and the three chat models. A
    lower bill wins only when it preserves answer quality.
-8. Deploy only via `make librarian-deploy ARGS="--skip-corpus-upload"` — never
-   bare `python`. A full corpus upload is slow and paid; it happens only when
+8. Commit and push the verified change, then wait for the automatic GitHub OIDC
+   deployment and inspect its result. For a manual retry of committed `main`,
+   `make librarian-deploy ARGS="--skip-corpus-upload"` launches the same workflow
+   and prints its run URL; wait for that run before reporting acceptance. It
+   does not deploy uncommitted local files or need a local AWS session.
+   A full corpus upload is slow and paid; it happens only when
    an artifact is genuinely stale, and staleness belongs to Keep the Archive
    True.
 

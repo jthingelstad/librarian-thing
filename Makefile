@@ -1,4 +1,4 @@
-.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy test test-lambda
+.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda
 
 PYTHON ?= uv run --locked python
 
@@ -36,7 +36,11 @@ librarian-graph-push:
 	$(PYTHON) pipeline/deploy/push_graph.py
 
 librarian-deploy:
-	$(PYTHON) pipeline/deploy/aws.py $(ARGS)
+	@if [ -n "$(ARGS)" ] && [ "$(ARGS)" != "--skip-corpus-upload" ]; then echo 'Use librarian-deploy-full for corpora, or invoke aws.py directly for local options.' >&2; exit 1; fi
+	gh workflow run deploy.yml --ref main -f scope=code
+
+librarian-deploy-full:
+	gh workflow run deploy.yml --ref main -f scope=full
 
 # Build every generated Librarian artifact.
 build:

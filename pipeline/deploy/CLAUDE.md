@@ -14,7 +14,12 @@ AWS deploy tooling for the Thingy Lambda stack. No README — this directory is 
 
 ## Invocation
 
-Always via `make librarian-deploy` or `uv run --locked python pipeline/deploy/aws.py`.
+Normal deployments run in GitHub Actions after a verified commit/push.
+`make librarian-deploy` queues a code-only deploy of remote `main` and prints its
+run URL; it needs GitHub authentication but no local AWS CLI session. Wait for
+the run before reporting acceptance. Direct
+`uv run --locked python pipeline/deploy/aws.py` is an exceptional local operation
+requiring valid AWS credentials.
 The deploy script must run through the locked uv environment so dependencies such as
 `boto3` and `python-dotenv` are available; do not invoke it with bare system Python.
 
@@ -23,9 +28,9 @@ The deploy script must run through the locked uv environment so dependencies suc
 make librarian-deploy ARGS="--skip-corpus-upload"
 
 # Full deploy (re-embeds + uploads all three corpora)
-make librarian-deploy
+make librarian-deploy-full
 
-# Direct equivalent when bypassing make
+# Exceptional local deployment when bypassing make
 uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
 ```
 

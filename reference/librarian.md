@@ -52,7 +52,7 @@ make librarian-deploy
 uv run --locked python pipeline/deploy/bedrock_logging.py
 ```
 
-After deployment, the deploy script writes the CloudFormation `LibrarianApiUrl` and `LibrarianStreamUrl` outputs to `.env` as `LIBRARIAN_API_URL` and `LIBRARIAN_STREAM_URL`. Production traffic goes through `librarian.thingelstad.com` (CloudFront in front of both origins); the Thingy web app reads its API URLs from repo variables in its own CI.
+During a direct local deployment, the deploy script writes the CloudFormation `LibrarianApiUrl` and `LibrarianStreamUrl` outputs to `.env` as `LIBRARIAN_API_URL` and `LIBRARIAN_STREAM_URL`. Production traffic goes through `librarian.thingelstad.com` (CloudFront in front of both origins); the Thingy web app reads its API URLs from repo variables in its own CI.
 
 ## Required Secrets
 
@@ -246,10 +246,10 @@ make librarian-deploy ARGS="--skip-corpus-upload"
 For a full corpus refresh and deploy:
 
 ```sh
-make librarian-deploy
+make librarian-deploy-full
 ```
 
-`make librarian-deploy` (`uv run --locked python pipeline/deploy/aws.py`) packages both Lambdas, uploads their zip files, builds/uploads all three embedded corpus artifacts, builds/uploads the Weekly Thing graph artifact, and updates the CloudFormation stack. Use `make librarian-corpora-upload` by itself only when the deployed code is unchanged and only API corpus artifacts need to be refreshed.
+`make librarian-deploy` queues a code-only GitHub OIDC deployment of committed remote `main`; `make librarian-deploy-full` also rebuilds and uploads all corpora. Neither needs a local AWS session. Both print a run URL: wait for its result before reporting acceptance. The workflow invokes `pipeline/deploy/aws.py` to package and upload Lambda code and update the stack.
 
 New external publishing content has its own ingest step before corpus upload:
 

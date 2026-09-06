@@ -5,10 +5,17 @@ is required. To deploy the committed production code manually:
 
 ```sh
 gh workflow run deploy.yml --ref main -f scope=code
+# Equivalent shortcut (also accepts legacy ARGS="--skip-corpus-upload"):
+make librarian-deploy
 ```
 
 Use `scope=full` only when all corpora need rebuilding/uploading; embedding can
 incur Bedrock charges. Pushes still rebuild only affected corpora.
+`make librarian-deploy-full` dispatches that full workflow. These commands queue
+a run and print its URL; use `gh run watch <run-id> --exit-status` to wait for
+acceptance. Commit and push first: GitHub deploys remote `main`, never uncommitted
+local files. Direct `uv run --locked python pipeline/deploy/aws.py` remains an
+exceptional local operation requiring valid AWS credentials.
 
 ## Authority
 

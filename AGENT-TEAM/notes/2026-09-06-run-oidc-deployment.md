@@ -64,3 +64,15 @@ policy change allows only reading the service role's own policies, listing the
 two application boundaries' attachments, and listing the artifact bucket's tags.
 It adds no mutation permissions or access to unrelated roles/buckets. The IAM
 verifier also checks the CloudFormation service trust against its source.
+
+The existing `make librarian-deploy` shortcut now dispatches the GitHub code
+workflow (legacy `ARGS="--skip-corpus-upload"` remains accepted), and the Run
+objective waits for the pushed workflow instead of deploying local files.
+`make librarian-deploy-full` is the explicit corpus-refresh option.
+
+The metadata-read correction deployed successfully in run
+https://github.com/jthingelstad/librarian-thing/actions/runs/34035671087
+An initial bounded CloudTrail sample for that operation contained 25 service-role
+events and no AccessDenied errors. Continue checking normal deployment activity
+as CloudTrail delivery completes; absence in this bounded sample is not a claim
+about all account activity.
