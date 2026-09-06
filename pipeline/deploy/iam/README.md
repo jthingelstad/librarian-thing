@@ -101,6 +101,22 @@ variable names. This does not establish that those files hold the same key.
 No key values were inspected or compared. Exact consumer attribution and
 replacement authentication remain prerequisites to IAM-key retirement.
 
-Interactive local deployments may use a temporary AWS session. Unattended local
-work needs its own approved authentication path or migration to GitHub Actions;
-GitHub OIDC does not authenticate processes running on this Mac.
+This checkout's local `.env` now selects `AWS_PROFILE=jamie`, with its AWS key
+settings removed. The example configuration uses the same pattern. Local Python
+tools that load `.env` resolve that profile; for tools that do not load it (such
+as the Node quality benchmark), explicitly prefix the command with
+`AWS_PROFILE=jamie`. Verify the operator session with:
+
+```sh
+aws sts get-caller-identity --profile jamie
+```
+
+Local tools require a valid operator session. Avoid exporting AWS access-key
+variables alongside the profile: those can override profile credentials in the
+[AWS credential chain](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html).
+Do not copy the local profile setting into GitHub Actions, which supplies its
+own temporary OIDC credentials. `make librarian-deploy` continues to work without
+a local AWS session. Unattended local work needs its own approved authentication
+path or migration to GitHub Actions; GitHub OIDC does not authenticate Mac
+processes. Other repositories' credentials and the shared IAM key remain pending
+consumer attribution and retirement.

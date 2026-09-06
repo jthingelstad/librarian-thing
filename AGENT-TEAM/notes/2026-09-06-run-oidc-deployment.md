@@ -76,3 +76,36 @@ An initial bounded CloudTrail sample for that operation contained 25 service-rol
 events and no AccessDenied errors. Continue checking normal deployment activity
 as CloudTrail delivery completes; absence in this bounded sample is not a claim
 about all account activity.
+
+## Local profile migration
+
+Jamie explicitly authorized proceeding with AWS CLI profile `jamie`. The local
+checkout's ignored `.env` now contains `AWS_PROFILE=jamie` instead of AWS access
+key settings. Unrelated settings were checked for equality inside the process,
+without exposing their values, and the file remains mode 0600. The example
+configuration and operator documentation now describe profile-based local access.
+
+Verification loaded `.env` through the same dotenv/default-Boto3 credential path
+used by local admin tools. STS returned `arn:aws:iam::999153317627:user/jamie`,
+with profile `jamie` and provider `shared-credentials-file`, not environment keys.
+CloudFormation stack/resource inspection and metadata reads of all four actual
+`artifacts/*` corpus objects succeeded. An initial probe omitted the `artifacts/`
+prefix and returned 404; the corrected probe derived keys from the source policy.
+The stack remains `UPDATE_COMPLETE`, all 16 alarms are OK, and independent IAM
+verification still matches source. Full repository verification passed again:
+53 Python tests, 264 Lambda tests, lint/format/types/contract, and both audits.
+
+The most recent accepted OIDC deployment is run 34035789354, at commit
+`28bacec34f0c760239bd17996a4b0815b0f51542`. Local profile selection is not supplied
+to GitHub; deployment remains independent of an active Mac AWS session. Local
+admin/model tools do require a valid operator session. Tools that do not load
+`.env`, including the Node quality benchmark, need `AWS_PROFILE=jamie` explicitly.
+
+This change removes the local checkout's stored AWS keys; it does not retire the
+shared `wt-archive` IAM key. Its one active key last reported use on September 5
+at 04:37 UTC (DynamoDB). A bounded metadata-only CloudTrail sample also found local
+Python, CLI, and Node clients. Presence of AWS variable names in other repositories
+still does not prove a shared identity. Their credentials were not changed, and
+no legacy credential values were matched, copied, or used for validation. Retain
+the existing exception for cross-repository consumer attribution/key retirement
+and the next natural corpus-refresh acceptance.

@@ -20,6 +20,10 @@ run URL; it needs GitHub authentication but no local AWS CLI session. Wait for
 the run before reporting acceptance. Direct
 `uv run --locked python pipeline/deploy/aws.py` is an exceptional local operation
 requiring valid AWS credentials.
+Local `.env` selects `AWS_PROFILE=jamie`; keep AWS access-key variables out of
+that file and the calling shell so they cannot override the profile. Verify
+local access with `aws sts get-caller-identity --profile jamie`. This session is
+needed only for local AWS operations, not the GitHub deployment shortcut.
 The deploy script must run through the locked uv environment so dependencies such as
 `boto3` and `python-dotenv` are available; do not invoke it with bare system Python.
 
