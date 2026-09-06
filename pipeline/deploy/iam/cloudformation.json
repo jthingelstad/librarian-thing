@@ -184,7 +184,8 @@
         "s3:GetBucketTagging",
         "s3:GetBucketVersioning",
         "s3:GetBucketWebsite",
-        "s3:GetBucketLocation"
+        "s3:GetBucketLocation",
+        "s3:ListTagsForResource"
       ],
       "Resource": "arn:aws:s3:::weekly-thing-librarian"
     }

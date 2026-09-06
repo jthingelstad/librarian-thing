@@ -24,6 +24,16 @@ BOUNDARIES = {
     "BedrockEvaluationRole": ("WeeklyThingLibrarianEvaluationBoundary", "evaluation-boundary"),
 }
 DEPLOY_POLICY = "WeeklyThingLibrarianDeployScoped"
+CFN_TRUST = {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {"Service": "cloudformation.amazonaws.com"},
+            "Action": "sts:AssumeRole",
+        }
+    ],
+}
 
 
 def document(name: str) -> dict:
@@ -326,26 +336,16 @@ def apply(session: boto3.Session, snapshot_dir: Path) -> None:
         arn = put_managed(iam, name, document(filename))
         iam.put_role_permissions_boundary(RoleName=roles[logical], PermissionsBoundary=arn)
 
-    trust = {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Principal": {"Service": "cloudformation.amazonaws.com"},
-                "Action": "sts:AssumeRole",
-            }
-        ],
-    }
     try:
         iam.get_role(RoleName=CFN_ROLE)
     except iam.exceptions.NoSuchEntityException:
         iam.create_role(
             RoleName=CFN_ROLE,
-            AssumeRolePolicyDocument=json.dumps(trust),
+            AssumeRolePolicyDocument=json.dumps(CFN_TRUST),
             Tags=[{"Key": "project", "Value": "Thingy"}],
         )
     else:
-        iam.update_assume_role_policy(RoleName=CFN_ROLE, PolicyDocument=json.dumps(trust))
+        iam.update_assume_role_policy(RoleName=CFN_ROLE, PolicyDocument=json.dumps(CFN_TRUST))
     for name in ("cloudformation", "cloudformation-iam"):
         iam.put_role_policy(
             RoleName=CFN_ROLE, PolicyName=name, PolicyDocument=json.dumps(document(name))
@@ -376,6 +376,7 @@ def verify(session: boto3.Session) -> None:
     assert not deployed["inline"], "Unexpected deploy inline policy"
     assert deployed["boundary"]["PermissionsBoundaryArn"] == POLICY_PREFIX + DEPLOY_POLICY
     cfn = role_snapshot(iam, CFN_ROLE)
+    assert cfn["trust"] == CFN_TRUST, "CloudFormation trust drift"
     assert not cfn["attached"], "Unexpected CloudFormation managed policy"
     assert cfn["inline"] == {
         name: document(name) for name in ("cloudformation", "cloudformation-iam")

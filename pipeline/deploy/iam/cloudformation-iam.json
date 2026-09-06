@@ -117,6 +117,29 @@
         "arn:aws:iam::999153317627:policy/WeeklyThingLibrarianRuntimeBoundary",
         "arn:aws:iam::999153317627:policy/WeeklyThingLibrarianEvaluationBoundary"
       ]
+    },
+    {
+      "Sid": "InspectOwnServiceRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:ListRolePolicies",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListPoliciesGrantingServiceAccess"
+      ],
+      "Resource": "arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation"
+    },
+    {
+      "Sid": "InspectBoundaryAttachments",
+      "Effect": "Allow",
+      "Action": [
+        "iam:ListEntitiesForPolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::999153317627:policy/WeeklyThingLibrarianRuntimeBoundary",
+        "arn:aws:iam::999153317627:policy/WeeklyThingLibrarianEvaluationBoundary"
+      ]
     }
   ]
 }

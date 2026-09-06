@@ -100,8 +100,9 @@ def test_cloudformation_cannot_change_itself_or_remove_boundaries():
     for statement in statements:
         assert "iam:DeleteRolePermissionsBoundary" not in statement["Action"]
         assert "iam:CreatePolicyVersion" not in statement["Action"]
-        assert "DeployOidc" not in statement["Resource"]
-        assert "-cloudformation" not in statement["Resource"]
+        if not all(action.startswith(("iam:Get", "iam:List")) for action in statement["Action"]):
+            assert "DeployOidc" not in statement["Resource"]
+            assert "-cloudformation" not in statement["Resource"]
         if "iam:CreateRole" in statement["Action"]:
             assert statement["Condition"]["StringEquals"]["iam:PermissionsBoundary"].endswith(
                 "Boundary"

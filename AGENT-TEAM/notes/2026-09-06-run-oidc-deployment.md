@@ -49,3 +49,18 @@ acceptance item of projects-sysadmin#36:
   needs a deliberate replacement. GitHub OIDC does not authenticate Mac processes.
 - No IAM-user access keys were disabled/deleted, and no application secrets or
   reader data were modified. Keep the security exception open for this remainder.
+
+## Follow-up validation
+
+Manual `gh workflow run deploy.yml --ref main -f scope=code` succeeded after both
+GitHub AWS secrets were deleted: run
+https://github.com/jthingelstad/librarian-thing/actions/runs/34035545126
+The corpus upload steps were skipped as intended; authentication and code deploy
+succeeded without any local AWS credentials being supplied to GitHub.
+
+CloudTrail inspection after the first rollout found six denied, optional
+CloudFormation metadata checks despite successful deployment. The follow-up
+policy change allows only reading the service role's own policies, listing the
+two application boundaries' attachments, and listing the artifact bucket's tags.
+It adds no mutation permissions or access to unrelated roles/buckets. The IAM
+verifier also checks the CloudFormation service trust against its source.
