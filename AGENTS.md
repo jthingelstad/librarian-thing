@@ -70,7 +70,7 @@ Do not use bare `python`, `python3`, or pip-managed environments here.
 ## Thingy / Librarian
 
 The Lambda lives in `apps/librarian/`. For Lambda work, read
-`apps/librarian/CLAUDE.md`. Lambda tests are Node tests:
+`apps/librarian/AGENTS.md`. Lambda tests are Node tests:
 
 ```sh
 npm --prefix apps/librarian/lambda test

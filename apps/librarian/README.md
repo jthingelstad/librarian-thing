@@ -2,7 +2,7 @@
 
 The AWS Lambda agent that answers reader questions against Jamie Thingelstad's published archive: The Weekly Thing, thingelstad.com, and Another Thing. "Librarian" is the system name in code; **Thingy** is the product name shown to users.
 
-> Operational memory for editing this stack lives in [`CLAUDE.md`](CLAUDE.md). Full runtime guide — IAM cleanup plan, retrieval architecture, Tinylytics events, deployment checklist — is at [`../../reference/librarian.md`](../../reference/librarian.md).
+> Operational memory for editing this stack lives in [`AGENTS.md`](AGENTS.md). Full runtime guide — IAM cleanup plan, retrieval architecture, Tinylytics events, deployment checklist — is at [`../../reference/librarian.md`](../../reference/librarian.md).
 
 ## What it is
 
@@ -21,7 +21,7 @@ The Q&A intelligence lives entirely here. Retrieval is **hybrid** against a pre-
 ```
 apps/librarian/
 ├── README.md         ← this file
-├── CLAUDE.md         ← operational memory
+├── AGENTS.md         ← operational memory
 ├── contracts/        ← generated, versioned client contract artifacts
 ├── lambda/           ← Node.js Lambda code (runtime: Node 24, arm64)
 │   ├── chat/         ← Stream Lambda — /chat, /welcome, /retrieve
@@ -132,7 +132,7 @@ rather than weakening the existing schema.
 
 ## Environment
 
-Env vars are set in CloudFormation at deploy time from the repo-root `.env`. The full list (with deploy-side handling) is in [`CLAUDE.md`](CLAUDE.md). The headline secrets:
+Env vars are set in CloudFormation at deploy time from the repo-root `.env`. The full list (with deploy-side handling) is in [`AGENTS.md`](AGENTS.md). The headline secrets:
 
 - `SESSION_SECRET` — HMAC signing key for session tokens
 - `LIBRARIAN_RETRIEVE_SECRET` — shared secret for trusted `/retrieve` clients
@@ -173,6 +173,6 @@ The `admin/` directory has its own [`README.md`](admin/README.md) for operator r
 
 ## Related reading
 
-- [`CLAUDE.md`](CLAUDE.md) — operational memory (Bedrock model gotchas, retrieve internals, conventions)
+- [`AGENTS.md`](AGENTS.md) — operational memory (Bedrock model gotchas, retrieve internals, conventions)
 - [`../../reference/librarian.md`](../../reference/librarian.md) — full runtime guide
 - `wt-builder`'s `src/server/integrations/librarian.ts` — WT Builder's client for the `/retrieve` endpoint (workshop_bot's client retired with Studio, 2026-08-28)

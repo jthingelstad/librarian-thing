@@ -6,7 +6,7 @@ audit); they were true when written and are kept for context, but they are *not*
 truth for how things work today.
 
 > When something here conflicts with [`docs/`](../docs/README.md) (the editorial north star) or the
-> per-app `CLAUDE.md` files (current runtime), **those win.** Verify against current code before
+> per-app `AGENTS.md` files (current runtime), **those win.** Verify against current code before
 > trusting a claim in here.
 
 | Path | What it is |

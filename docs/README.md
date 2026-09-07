@@ -30,6 +30,6 @@ newsletter is. Everything else is detail behind it.
   [`../reference/`](../reference/README.md).
 - **Project history** (design briefs, audit snapshots, progress logs, planning sessions) →
   [`../notes/`](../notes/README.md). *True when written, not canonical — this `docs/` wins.*
-- **How it's built** (jobs, schema, runtime conventions) → the per-app `CLAUDE.md` files
-  (`apps/workshop_bot/CLAUDE.md`, etc.). The canonical editorial source for a shipped issue is
+- **How it's built** (jobs, schema, runtime conventions) → the per-app `AGENTS.md` files
+  (`apps/librarian/AGENTS.md`, etc.). The canonical editorial source for a shipped issue is
   `data/issues/{N}/archive.md`; `make build` regenerates the site from those bytes.

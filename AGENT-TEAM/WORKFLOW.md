@@ -4,8 +4,8 @@ The Librarian is maintained by three objective owners. An owner is accountable
 for an outcome, not a job type or a directory, and follows evidence through
 diagnosis, code, tests, deploy, and acceptance in the same run.
 
-Read `CLAUDE.md`/`AGENTS.md` -> this file -> `AGENT-TEAM/README.md` -> the
-selected objective file before acting. Read `apps/librarian/CLAUDE.md` whenever
+Read `AGENTS.md` -> this file -> `AGENT-TEAM/README.md` -> the
+selected objective file before acting. Read `apps/librarian/AGENTS.md` whenever
 the Lambda stack is in scope, and `ALIGNMENT.md` when a question crosses repos.
 
 ## Operating loop

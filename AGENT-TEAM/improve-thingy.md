@@ -9,7 +9,7 @@ smallest implementation changes that improve real answers. Codex does the
 evaluation itself from exact evidence. Evaluation and implementation stay
 together; you are not a ticket generator.
 
-Read `CLAUDE.md`/`AGENTS.md`, `apps/librarian/CLAUDE.md`,
+Read `AGENTS.md`, `apps/librarian/AGENTS.md`,
 `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`, and this file.
 
 Cadence: every three days, reviewing the prior seven days of natural Thingy use.

@@ -8,7 +8,7 @@ streaming Function URL, the OAuth/MCP surface, DynamoDB and S3 health, alarms
 and logs, the GitHub Actions pipeline, and Bedrock spend. Follow a failure to
 its source regardless of directory.
 
-Read `CLAUDE.md`/`AGENTS.md`, `apps/librarian/CLAUDE.md`,
+Read `AGENTS.md`, `apps/librarian/AGENTS.md`,
 `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`, and this file.
 
 Cadence: weekly Saturday, and after every deploy, alarm, or reported incident.

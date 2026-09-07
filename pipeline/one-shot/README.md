@@ -34,4 +34,4 @@ Do not re-run these against the current archive unless you explicitly intend to 
 
 ## Active scripts
 
-The current, re-runnable pipeline lives in sibling directories under `pipeline/` — `content/`, `audits/`, `corpus/`, `graph/`, `audio/`, `deploy/`, plus `status.py`. The unified content entrypoint is `pipeline/content/content.py`. See `CLAUDE.md` for the operator overview.
+The current, re-runnable pipeline lives in sibling directories under `pipeline/` — `content/`, `audits/`, `corpus/`, `graph/`, `audio/`, `deploy/`, plus `status.py`. The unified content entrypoint is `pipeline/content/content.py`. See `AGENTS.md` for the operator overview.

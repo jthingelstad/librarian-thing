@@ -7,7 +7,7 @@ You own `data/issues/`, `data/blog/`, `data/podcast/`, the corpus and graph
 builds under `pipeline/` and `data/librarian/`, ingest workflows, and archive
 repairs (`pipeline/audits/` is the historical-repair lane).
 
-Read `CLAUDE.md`/`AGENTS.md`, `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`,
+Read `AGENTS.md`, `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`,
 and this file.
 
 Cadence: weekly Sunday morning, after the Weekly Thing issue lands, and when
