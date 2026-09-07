@@ -29,6 +29,63 @@ test('archive tool citations are exported for chat runtime', () => {
   assert.equal(citations[1].source_kind, 'blog');
 });
 
+test('corpus_stats contributes bounded citations spread across its timeline', () => {
+  const yearlySignals = Array.from({ length: 26 }, (_value, index) => {
+    const year = 2026 - index;
+    return {
+      year,
+      sample_items: [
+        {
+          source_kind: 'blog',
+          subject: `Representative post ${year}`,
+          publish_date: `${year}-01-01`,
+          url: `https://www.thingelstad.com/${year}/01/01/representative.html`
+        }
+      ]
+    };
+  });
+
+  const citations = collectToolCitations([
+    {
+      sources: [{ source_kind: 'blog', yearly_signals: yearlySignals }]
+    }
+  ]);
+
+  assert.equal(citations.length, 12);
+  assert.equal(citations[0].subject, 'Representative post 2026');
+  assert.equal(citations.at(-1).subject, 'Representative post 2001');
+  assert.equal(new Set(citations.map((citation) => citation.url)).size, citations.length);
+});
+
+test('corpus_stats preserves Weekly Thing identity in representative citations', () => {
+  const citations = collectToolCitations([
+    {
+      sources: [
+        {
+          source_kind: 'weekly_thing',
+          yearly_signals: [
+            {
+              year: 2026,
+              sample_items: [
+                {
+                  issue_number: '350',
+                  subject: 'Weekly Thing 350',
+                  publish_date: '2026-05-30',
+                  url: '/archive/350/'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]);
+
+  assert.equal(citations.length, 1);
+  assert.equal(citations[0].issue_number, '350');
+  assert.equal(citations[0].source_kind, 'weekly_thing');
+});
+
 test('chat runtime imports with the Lambda response-stream shim', async () => {
   globalThis.awslambda = {
     streamifyResponse: (handler) => handler

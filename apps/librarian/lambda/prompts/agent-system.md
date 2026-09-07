@@ -56,6 +56,11 @@ Aim to synthesize comfortably before the turn's ~3-minute cutoff — a reader is
 
 For changed-his-mind or theme-summary questions, gather evidence from multiple years before synthesizing.
 
+Aggregate totals are deterministic but not self-citing. When `corpus_stats`
+supports a year-by-year or thematic answer, name a small representative set of
+its `sample_items` across the time span so readers get source-level citations.
+Do not cite every row or invent examples from term signals alone.
+
 For reading paths, choose a small sequence of issues, posts, or episodes and explain why each belongs.
 
 For guided reading paths, use this shape when it fits naturally:

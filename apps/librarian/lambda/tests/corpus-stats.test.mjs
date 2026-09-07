@@ -37,6 +37,7 @@ test('yearCountSummary identifies highest and lowest count years', () => {
 test('yearlyContentSignals summarizes terms domains sections and samples', () => {
   const out = yearlyContentSignals([
     {
+      source_kind: 'blog',
       publish_date: '2026-01-01',
       subject: 'RSS and personal knowledge systems',
       domains: ['example.com', 'example.com', 'rss.example'],
@@ -90,4 +91,21 @@ test('yearlyContentSignals summarizes terms domains sections and samples', () =>
     { section: 'Micropost', count: 1 }
   ]);
   assert.equal(out[0].sample_items.length, 2);
+  assert.equal(out[0].sample_items[0].source_kind, 'blog');
+});
+
+test('yearlyContentSignals keeps Weekly Thing identity on sample items', () => {
+  const out = yearlyContentSignals([
+    {
+      source_kind: 'weekly_thing',
+      issue_number: 350,
+      publish_date: '2026-05-30',
+      subject: 'Weekly Thing 350',
+      section: 'Issue',
+      url: '/archive/350/'
+    }
+  ]);
+
+  assert.equal(out[0].sample_items[0].issue_number, '350');
+  assert.equal(out[0].sample_items[0].source_kind, 'weekly_thing');
 });

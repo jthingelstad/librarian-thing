@@ -1,4 +1,5 @@
 interface CorpusRecord {
+  issue_number?: unknown;
   publish_date?: unknown;
   subject?: unknown;
   title?: unknown;
@@ -24,7 +25,14 @@ interface YearBucket {
   textTerms: Map<string, number>;
   domains: Map<string, number>;
   sections: Map<string, number>;
-  samples: Array<{ subject: string; publish_date: string; url: string; section: string }>;
+  samples: Array<{
+    issue_number?: string;
+    source_kind?: string;
+    subject: string;
+    publish_date: string;
+    url: string;
+    section: string;
+  }>;
 }
 
 interface YearlyContentOptions {
@@ -266,7 +274,11 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
     for (const domain of record.domains || []) increment(bucket.domains, domain);
     increment(bucket.sections, record.section || record.post_kind || record.source_kind || 'item');
     if (bucket.samples.length < sampleLimit) {
+      const issueNumber = String(record.issue_number || '').trim();
+      const sourceKind = String(record.source_kind || '').trim();
       bucket.samples.push({
+        ...(issueNumber ? { issue_number: issueNumber } : {}),
+        ...(sourceKind ? { source_kind: sourceKind } : {}),
         subject: String(record.subject || ''),
         publish_date: String(record.publish_date || ''),
         url: String(record.url || ''),

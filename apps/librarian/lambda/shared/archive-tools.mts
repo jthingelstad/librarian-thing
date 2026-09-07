@@ -172,6 +172,7 @@ function citationsFor(chunks: ArchiveRecord[]) {
 
 export function collectToolCitations(toolResults: ToolResult[] = []) {
   const sources: ArchiveRecord[] = [];
+  const aggregateSources: ArchiveRecord[] = [];
   for (const result of toolResults || []) {
     if (!result || result.error) continue;
     if (Array.isArray(result.results)) {
@@ -183,6 +184,44 @@ export function collectToolCitations(toolResults: ToolResult[] = []) {
     if (byId && typeof byId === 'object') sources.push(...(Object.values(byId) as ArchiveRecord[]));
     if (result.source) sources.push(result.source);
     if (result.issue) sources.push(result.issue);
+
+    // corpus_stats keeps its source-level examples below
+    // sources[*].yearly_signals[*].sample_items. Those records ground the
+    // themes in an aggregate answer, but the generic envelopes above do not
+    // reach them. Take one example per year here; the final selection is
+    // bounded and spread across the available timeline below.
+    const statsSources = Array.isArray(result.sources)
+      ? result.sources.filter((entry): entry is ArchiveRecord => Boolean(entry) && typeof entry === 'object')
+      : [];
+    for (const statsSource of statsSources) {
+      const yearlySignals = Array.isArray(statsSource.yearly_signals) ? statsSource.yearly_signals : [];
+      for (const rawSignal of yearlySignals) {
+        const signal = objectRecord(rawSignal);
+        const samples = Array.isArray(signal.sample_items)
+          ? signal.sample_items.filter((entry): entry is ArchiveRecord => Boolean(entry) && typeof entry === 'object')
+          : [];
+        const sample = samples.find((entry) => Boolean(entry.url || entry.issue_number));
+        if (!sample) continue;
+        aggregateSources.push({
+          ...sample,
+          source_kind: sample.source_kind || statsSource.source_kind
+        });
+      }
+    }
+  }
+
+  // A decades-long aggregate can carry scores of yearly samples. The
+  // citation footer needs a representative path, not one citation per row.
+  // Select at most twelve deduped sources, evenly across the returned span.
+  const aggregateCitations = citationsFor(aggregateSources);
+  const aggregateLimit = 12;
+  if (aggregateCitations.length <= aggregateLimit) {
+    sources.push(...aggregateCitations);
+  } else {
+    const last = aggregateCitations.length - 1;
+    for (let index = 0; index < aggregateLimit; index += 1) {
+      sources.push(aggregateCitations[Math.round((index * last) / (aggregateLimit - 1))]);
+    }
   }
   return citationsFor(sources);
 }
