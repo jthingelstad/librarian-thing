@@ -1,7 +1,7 @@
-"""Import Another Thing episode metadata + transcripts into Studio data.
+"""Import Another Thing episode metadata + transcripts into Librarian data.
 
-The Another site owns podcast authoring and publishing. Studio owns the
-Librarian corpus, so this importer copies a small normalized JSON record per
+The Another site owns podcast authoring and publishing. Librarian owns the
+corpus, so this importer copies a small normalized JSON record per
 episode into ``data/podcast/another-thing/episodes``. The corpus builder reads
 that stable local data instead of scraping the live site or coupling Thingy to
 Another's Eleventy templates.

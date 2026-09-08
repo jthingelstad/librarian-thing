@@ -1,9 +1,12 @@
 # Phase 2 — Cutover & Weekly Slim-Down (Completed)
 
+> Historical record: Studio and the Workshop bot have since been retired. See
+> `README.md` and `ALIGNMENT.md` for the current Librarian architecture.
+
 Phase 2 turned Studio into the live producer and reduced
 `weekly.thingelstad.com` to a render surface.
 
-## Final Shape
+## Final Shape at Phase 2 Completion
 
 - The authoring bot commits canonical `data/issues/{N}/*` to `studio-thing`.
 - Studio builds archive inputs, corpus, graph, and status artifacts.
@@ -35,8 +38,8 @@ Phase 2 turned Studio into the live producer and reduced
 
 ## Rollback Reference
 
-The pre-split code remains recoverable from Git history and from this Studio
-repo. A practical rollback would repoint the bot's `GITHUB_REPO_NWO`, restore
+The pre-split code remains recoverable from this repository's Git history. A
+practical rollback would repoint the bot's `GITHUB_REPO_NWO`, restore
 Weekly's old deploy workflow from history, and re-add any removed Weekly
 secrets. That should be treated as an emergency path, not normal operation.
 
