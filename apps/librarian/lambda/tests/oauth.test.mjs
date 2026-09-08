@@ -232,10 +232,12 @@ test('parseBody handles application/x-www-form-urlencoded token requests', () =>
 
 test('htmlResponse sets a restrictive CSP and no CORS headers', () => {
   const response = htmlResponse(200, '<p>hi</p>');
+  const csp = response.headers['content-security-policy'];
   assert.equal(response.statusCode, 200);
   assert.equal(response.headers['content-type'], 'text/html; charset=utf-8');
-  assert.match(response.headers['content-security-policy'], /default-src 'none'/);
-  assert.match(response.headers['content-security-policy'], /form-action 'self'/);
+  assert.match(csp, /default-src 'none'/);
+  assert.match(csp, /form-action 'self' https: http:\/\/localhost:\* http:\/\/127\.0\.0\.1:\*;/);
+  assert.doesNotMatch(csp, /(?:^|\s)http:(?:\s|;)/);
   assert.equal(response.headers['cache-control'], 'no-store');
   assert.equal('access-control-allow-origin' in response.headers, false);
 });
