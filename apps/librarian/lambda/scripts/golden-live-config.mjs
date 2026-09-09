@@ -9,3 +9,16 @@ export function goldenRunnerEnvironment(outputs) {
     LIBRARIAN_RETRIEVE_SECRET: `{{resolve:secretsmanager:${goldenSecretArn}:SecretString:value}}`
   };
 }
+
+export function resolveAsmExec({ asmExec, codexHome, home, exists }) {
+  if (asmExec) return asmExec;
+  const candidates = [
+    codexHome && `${codexHome}/skills/aws-secrets-manager/references/asm-exec`,
+    home && `${home}/.codex/skills/aws-secrets-manager/references/asm-exec`
+  ].filter(Boolean);
+  return candidates.find((candidate) => exists(candidate)) || 'asm-exec';
+}
+
+export function asmExecInvocation(asmExec, isExecutable) {
+  return isExecutable ? [asmExec] : ['python3', asmExec];
+}
