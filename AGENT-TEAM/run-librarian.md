@@ -26,7 +26,9 @@ Cadence: weekly Saturday, and after every deploy, alarm, or reported incident.
    days, so evidence expires — group warning/error signatures each run,
    including the `oauth_*` warning family.
 4. Run the live retrieval harness: `npm --prefix apps/librarian/lambda run
-   golden`.
+   golden`. It discovers the deployed stack outputs and resolves its separate
+   generated harness credential only inside `asm-exec`; never source or read a
+   local dotenv retrieval secret for this check.
 5. Probe the public surface read-only:
    `https://librarian.thingelstad.com/.well-known/oauth-authorization-server`
    returns metadata, and an unauthenticated POST to `/mcp` returns 401 with a

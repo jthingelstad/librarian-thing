@@ -102,13 +102,18 @@ test('retrieve auth uses the neutral deployment secret and keeps the request ali
   };
   const runtime = await import('../dist/chat/runtime.mjs');
   const priorSecret = process.env.LIBRARIAN_RETRIEVE_SECRET;
+  const priorGoldenSecret = process.env.LIBRARIAN_GOLDEN_RETRIEVE_SECRET;
   process.env.LIBRARIAN_RETRIEVE_SECRET = 'retrieve-test-secret';
+  process.env.LIBRARIAN_GOLDEN_RETRIEVE_SECRET = 'golden-test-secret';
   try {
     assert.equal(runtime.retrieveSecretOk({ retrieve_secret: 'retrieve-test-secret' }), true);
     assert.equal(runtime.retrieveSecretOk({ bridge_secret: 'retrieve-test-secret' }), true);
+    assert.equal(runtime.retrieveSecretOk({ retrieve_secret: 'golden-test-secret' }), true);
     assert.equal(runtime.retrieveSecretOk({ retrieve_secret: 'wrong' }), false);
   } finally {
     if (priorSecret === undefined) delete process.env.LIBRARIAN_RETRIEVE_SECRET;
     else process.env.LIBRARIAN_RETRIEVE_SECRET = priorSecret;
+    if (priorGoldenSecret === undefined) delete process.env.LIBRARIAN_GOLDEN_RETRIEVE_SECRET;
+    else process.env.LIBRARIAN_GOLDEN_RETRIEVE_SECRET = priorGoldenSecret;
   }
 });

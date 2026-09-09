@@ -189,13 +189,21 @@ function privacyPreflight(question: unknown) {
 }
 
 export function retrieveSecretOk(body: JsonRecord) {
-  const expected = process.env.LIBRARIAN_RETRIEVE_SECRET || '';
-  if (!expected) return null;
-  const expectedBuf = Buffer.from(expected, 'utf8');
+  const expectedSecrets = [
+    process.env.LIBRARIAN_RETRIEVE_SECRET,
+    // A generated, harness-only credential. Keep the long-lived WT Builder
+    // credential stable while allowing the production golden to authenticate
+    // through Secrets Manager without exposing either value to operators.
+    process.env.LIBRARIAN_GOLDEN_RETRIEVE_SECRET
+  ].filter((value): value is string => Boolean(value));
+  if (!expectedSecrets.length) return null;
   // Keep bridge_secret as a request-body alias so existing /retrieve clients
   // remain compatible while the deployment credential gets a neutral name.
   const suppliedBuf = Buffer.from(String(body.retrieve_secret || body.bridge_secret || ''), 'utf8');
-  return expectedBuf.length === suppliedBuf.length && crypto.timingSafeEqual(expectedBuf, suppliedBuf);
+  return expectedSecrets.some((expected) => {
+    const expectedBuf = Buffer.from(expected, 'utf8');
+    return expectedBuf.length === suppliedBuf.length && crypto.timingSafeEqual(expectedBuf, suppliedBuf);
+  });
 }
 
 async function updateUserMemoryAfterTurn(subscriberHash: string, preferredName: unknown) {

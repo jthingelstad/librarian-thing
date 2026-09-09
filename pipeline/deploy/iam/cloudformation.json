@@ -99,6 +99,31 @@
       "Resource": "arn:aws:s3:::weekly-thing-librarian/code/*"
     },
     {
+      "Sid": "GoldenRetrieveSecretCreate",
+      "Effect": "Allow",
+      "Action": "secretsmanager:CreateSecret",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "secretsmanager:Name": "weekly-thing-librarian-LibrarianGoldenRetrieveSecret-*"
+        }
+      }
+    },
+    {
+      "Sid": "GoldenRetrieveSecretReadAndMaintain",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:DeleteSecret",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:ListSecretVersionIds",
+        "secretsmanager:TagResource",
+        "secretsmanager:UntagResource",
+        "secretsmanager:UpdateSecret"
+      ],
+      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-LibrarianGoldenRetrieveSecret-*"
+    },
+    {
       "Sid": "MetricFilters",
       "Effect": "Allow",
       "Action": [
