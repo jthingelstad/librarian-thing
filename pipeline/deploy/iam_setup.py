@@ -153,7 +153,7 @@ def simulate(session: boto3.Session) -> None:
             "secretsmanager:CreateSecret",
             "*",
             True,
-            {"secretsmanager:Name": "weekly-thing-librarian-LibrarianGoldenRetrieveSecret-test"},
+            {"secretsmanager:Name": "weekly-thing-librarian-golden-retrieval"},
         ),
         (
             "cloudformation",
@@ -172,7 +172,7 @@ def simulate(session: boto3.Session) -> None:
         (
             "cloudformation",
             "secretsmanager:GetSecretValue",
-            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-LibrarianGoldenRetrieveSecret-test",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-golden-retrieval-test",
             True,
             {},
         ),

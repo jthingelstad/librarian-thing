@@ -105,7 +105,7 @@
       "Resource": "*",
       "Condition": {
         "StringLike": {
-          "secretsmanager:Name": "weekly-thing-librarian-LibrarianGoldenRetrieveSecret-*"
+          "secretsmanager:Name": "weekly-thing-librarian-golden-retrieval"
         }
       }
     },
@@ -127,7 +127,7 @@
         "secretsmanager:UntagResource",
         "secretsmanager:UpdateSecret"
       ],
-      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-LibrarianGoldenRetrieveSecret-*"
+      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-golden-retrieval-*"
     },
     {
       "Sid": "MetricFilters",

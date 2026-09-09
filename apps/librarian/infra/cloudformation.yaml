@@ -160,6 +160,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
+      Name: weekly-thing-librarian-golden-retrieval
       Description: Generated credential used only by the Librarian live retrieval golden harness.
       GenerateSecretString:
         GenerateStringKey: value
