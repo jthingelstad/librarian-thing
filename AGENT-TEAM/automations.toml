@@ -2,9 +2,12 @@ version = 2
 repo = "."
 timezone = "America/Chicago"
 
-# Calendar cadence only; deploy/alarm/incident follow-ups are manual starts.
-# The prompts are the desired-state copy installed in Codex. There is no bare
-# gpt-5.6 id; only -sol/-terra/-luna exist.
+# Approved September 9, 2026. Calendar starts use local Chicago time.
+# schedule_of entries share the original objective, lease, and automation memory.
+# Interval activities use an initial prompt date check because the installed app
+# miscalculates interval timezones. Preserve that check when reinstalling.
+# launch_cwd records the app launch directory relative to this checkout.
+# Event-driven follow-ups remain explicit starts; these are calendar schedules.
 
 [[automation]]
 id = "run-the-librarian"
@@ -12,11 +15,12 @@ name = "Run the Librarian"
 objective = "run"
 objective_file = "AGENT-TEAM/run-librarian.md"
 status = "ACTIVE"
-rrule = "RRULE:FREQ=WEEKLY;BYHOUR=8;BYMINUTE=20;BYDAY=SA"
+rrule = "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=15"
 model = "gpt-5.6-terra"
 reasoning_effort = "high"
 execution_environment = "local"
-prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/run-librarian.md` completely, then pursue the `run` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, deployment when required, and live acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
+launch_cwd = "../.."
+prompt = "Use `/Users/otto/Projects/thingelstad.com/librarian-thing` as the working directory for this scheduled activity. Before running commands, change to that directory and read its `AGENTS.md` plus any applicable parent instructions. Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/run-librarian.md` completely, then pursue the `run` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, deployment when required, and live acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
 
 [[automation]]
 id = "keep-the-archive-true"
@@ -24,11 +28,12 @@ name = "Keep the Archive True"
 objective = "archive"
 objective_file = "AGENT-TEAM/keep-archive-true.md"
 status = "ACTIVE"
-rrule = "RRULE:FREQ=WEEKLY;BYHOUR=7;BYMINUTE=30;BYDAY=SU"
+rrule = "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=0"
 model = "gpt-5.6-terra"
 reasoning_effort = "high"
 execution_environment = "local"
-prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/keep-archive-true.md` completely, then pursue the `archive` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, artifact publication when required, and acceptance from authoritative archive evidence. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
+launch_cwd = "../.."
+prompt = "Calendar check first: this activity's full objective runs every three days, anchored to 2026-09-10, in America/Chicago. The app wakes this task more often to avoid its interval/timezone bug. Before reading project instructions, automation memory, or other files, run `python3 -c \"from datetime import datetime,date; from zoneinfo import ZoneInfo; n=(datetime.now(ZoneInfo('America/Chicago')).date()-date.fromisoformat('2026-09-10')).days; print('DUE' if n>=0 and n%3==0 else 'NOT_DUE')\"`. If the result is NOT_DUE, finish with \"Not due today; next scheduled objective day will perform the review.\" Do no further tools, file writes, or objective work. If the result is DUE, continue with the full instructions below. An explicit user instruction to run the objective now overrides this date check.\n\nUse `/Users/otto/Projects/thingelstad.com/librarian-thing` as the working directory for this scheduled activity. Before running commands, change to that directory and read its `AGENTS.md` plus any applicable parent instructions. Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/keep-archive-true.md` completely, then pursue the `archive` objective exactly as written. Measure current evidence before changing anything. Own a clear gap through source fix, regression coverage, verification, artifact publication when required, and acceptance from authoritative archive evidence. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
 
 [[automation]]
 id = "improve-thingy"
@@ -36,8 +41,9 @@ name = "Improve Thingy"
 objective = "improve"
 objective_file = "AGENT-TEAM/improve-thingy.md"
 status = "ACTIVE"
-rrule = "RRULE:FREQ=DAILY;INTERVAL=3;BYHOUR=9;BYMINUTE=0"
+rrule = "RRULE:FREQ=DAILY;BYHOUR=6;BYMINUTE=0"
 model = "gpt-5.6-sol"
 reasoning_effort = "xhigh"
 execution_environment = "local"
-prompt = "Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/improve-thingy.md` completely, then pursue the `improve` objective exactly as written. Measure current evidence before changing anything. Review exact natural Thingy conversations through the repository's direct read-only DynamoDB conversation-review tool and make your own evidence-grounded evaluation. Do not call Thingy HTTP endpoints, sign in by email, create synthetic conversations, invoke an external model grader, persist raw reader evidence, or write evaluator state to DynamoDB. Own a clear gap through source fix, regression coverage, verification, deployment when required, and natural reader-visible acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."
+launch_cwd = "../.."
+prompt = "Calendar check first: this activity's full objective runs every three days, anchored to 2026-09-10, in America/Chicago. The app wakes this task more often to avoid its interval/timezone bug. Before reading project instructions, automation memory, or other files, run `python3 -c \"from datetime import datetime,date; from zoneinfo import ZoneInfo; n=(datetime.now(ZoneInfo('America/Chicago')).date()-date.fromisoformat('2026-09-10')).days; print('DUE' if n>=0 and n%3==0 else 'NOT_DUE')\"`. If the result is NOT_DUE, finish with \"Not due today; next scheduled objective day will perform the review.\" Do no further tools, file writes, or objective work. If the result is DUE, continue with the full instructions below. An explicit user instruction to run the objective now overrides this date check.\n\nUse `/Users/otto/Projects/thingelstad.com/librarian-thing` as the working directory for this scheduled activity. Before running commands, change to that directory and read its `AGENTS.md` plus any applicable parent instructions. Follow the project instructions already loaded by Codex. Read `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/WORKFLOW.md`, `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/README.md`, and `/Users/otto/Projects/thingelstad.com/librarian-thing/AGENT-TEAM/improve-thingy.md` completely, then pursue the `improve` objective exactly as written. Measure current evidence before changing anything. Review exact natural Thingy conversations through the repository's direct read-only DynamoDB conversation-review tool and make your own evidence-grounded evaluation. Do not call Thingy HTTP endpoints, sign in by email, create synthetic conversations, invoke an external model grader, persist raw reader evidence, or write evaluator state to DynamoDB. Own a clear gap through source fix, regression coverage, verification, deployment when required, and natural reader-visible acceptance. Use issues only for multi-run work, external blockers, durable audits, or Jamie decisions. Run preflight first; acquire the objective lease only before mutation; never publish pre-existing work; preserve human, secret-safety, and reader-privacy boundaries; and end with a clean repository. Keep automation memory to Current state, Active watches, and one replace-in-place Latest run."

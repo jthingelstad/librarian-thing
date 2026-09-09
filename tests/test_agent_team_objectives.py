@@ -41,9 +41,9 @@ def test_registry_has_three_active_objective_owners():
         "improve-thingy",
     }
     assert {entry["objective"]: entry["rrule"] for entry in entries} == {
-        "run": "RRULE:FREQ=WEEKLY;BYHOUR=8;BYMINUTE=20;BYDAY=SA",
-        "archive": "RRULE:FREQ=WEEKLY;BYHOUR=7;BYMINUTE=30;BYDAY=SU",
-        "improve": "RRULE:FREQ=DAILY;INTERVAL=3;BYHOUR=9;BYMINUTE=0",
+        "run": "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=15",
+        "archive": "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=0",
+        "improve": "RRULE:FREQ=DAILY;BYHOUR=6;BYMINUTE=0",
     }
 
 

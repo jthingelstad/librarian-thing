@@ -11,9 +11,9 @@ outcomes these three already own.
 
 | Objective | File | Cadence | Primary question |
 |---|---|---|---|
-| **Run the Librarian** | `run-librarian.md` | Weekly Saturday, and after deploys, alarms, or incidents | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
-| **Keep the Archive True** | `keep-archive-true.md` | Weekly Sunday morning, and when ingest changes | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
-| **Improve Thingy** | `improve-thingy.md` | Every three days, from exact natural conversations | Are Thingy's answers grounded, cited, honest, and improving? |
+| **Run the Librarian** | `run-librarian.md` | Daily 05:15 | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
+| **Keep the Archive True** | `keep-archive-true.md` | Every three days 05:00, starting September 10, 2026 | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
+| **Improve Thingy** | `improve-thingy.md` | Every three days 06:00, starting September 10, 2026 | Are Thingy's answers grounded, cited, honest, and improving? |
 
 Choose the owner by the primary failed outcome, not by the file being edited:
 
@@ -64,3 +64,15 @@ the objective can continue.
 The Librarian should feel like a faithful archive with a sharp reference desk:
 answers traceable to canonical content, infrastructure quiet and cheap, and a
 healthy no-op counted as success over invented work.
+
+## Calendar implementation
+
+All times above are America/Chicago. Scheduled starts can run a minute or two
+late because the app adds jitter. Autonomous checks can finish outside Jamie's
+project windows; nonurgent decisions wait for early morning or early evening.
+The manifest records the installed schedule and prompt, including the explicit
+repository directory when the app launches from Projects.
+
+The app wakes interval activities more often than their full objective cadence.
+The prompt's first date check skips non-due days without further work. Preserve
+that check and its anchor when reinstalling; the calendar rule alone is incomplete.
