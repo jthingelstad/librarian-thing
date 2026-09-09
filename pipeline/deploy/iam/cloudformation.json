@@ -110,6 +110,12 @@
       }
     },
     {
+      "Sid": "GoldenRetrieveSecretGenerate",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetRandomPassword",
+      "Resource": "*"
+    },
+    {
       "Sid": "GoldenRetrieveSecretReadAndMaintain",
       "Effect": "Allow",
       "Action": [

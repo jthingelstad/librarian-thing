@@ -164,6 +164,13 @@ def simulate(session: boto3.Session) -> None:
         ),
         (
             "cloudformation",
+            "secretsmanager:GetRandomPassword",
+            "*",
+            True,
+            {},
+        ),
+        (
+            "cloudformation",
             "secretsmanager:GetSecretValue",
             f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-LibrarianGoldenRetrieveSecret-test",
             True,
