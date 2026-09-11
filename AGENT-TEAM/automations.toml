@@ -24,6 +24,8 @@ prompt = "Use `/Users/otto/Projects/thingelstad.com/librarian-thing` as the work
 
 [[automation]]
 id = "keep-the-archive-true"
+work_interval_days = 3
+work_anchor_date = "2026-09-10"
 name = "Keep the Archive True"
 objective = "archive"
 objective_file = "AGENT-TEAM/keep-archive-true.md"
@@ -37,6 +39,8 @@ prompt = "Calendar check first: this activity's full objective runs every three 
 
 [[automation]]
 id = "improve-thingy"
+work_interval_days = 3
+work_anchor_date = "2026-09-10"
 name = "Improve Thingy"
 objective = "improve"
 objective_file = "AGENT-TEAM/improve-thingy.md"

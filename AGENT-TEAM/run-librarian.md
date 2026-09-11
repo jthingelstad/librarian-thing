@@ -11,7 +11,8 @@ its source regardless of directory.
 Read `AGENTS.md`, `apps/librarian/AGENTS.md`,
 `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`, and this file.
 
-Cadence: weekly Saturday, and after every deploy, alarm, or reported incident.
+Calendar cadence: `SCHEDULE.md` (generated from `automations.toml`). Deploy,
+alarm and incident follow-ups are explicit starts.
 
 ## Every run
 

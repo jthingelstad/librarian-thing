@@ -76,3 +76,13 @@ Jamie: <one yes/no question, or None>
 ```
 
 Report the measured outcome and remaining risk, not workflow ceremony.
+
+## Calendar and due work
+
+`automations.toml` owns the calendar; `SCHEDULE.md` is its generated view.
+Keep the installed prompt's interval guards and anchors. For weekly, monthly
+or quarterly subtasks, retain last successful evidence and the next due date
+in compact current state. A retry checks that receipt before repeating work;
+a blocked due subtask remains due at the next eligible invocation. Required
+every-run baselines still run. Explicit incident/deploy starts do not invent
+automatic triggers or authorize early member activity.

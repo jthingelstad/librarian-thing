@@ -9,11 +9,13 @@ outcomes these three already own.
 
 ## The team
 
-| Objective | File | Cadence | Primary question |
-|---|---|---|---|
-| **Run the Librarian** | `run-librarian.md` | Daily 05:15 | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
-| **Keep the Archive True** | `keep-archive-true.md` | Every three days 05:00, starting September 10, 2026 | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
-| **Improve Thingy** | `improve-thingy.md` | Every three days 06:00, starting September 10, 2026 | Are Thingy's answers grounded, cited, honest, and improving? |
+| Objective | File | Primary question |
+|---|---|---|
+| **Run the Librarian** | `run-librarian.md` | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
+| **Keep the Archive True** | `keep-archive-true.md` | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
+| **Improve Thingy** | `improve-thingy.md` | Are Thingy's answers grounded, cited, honest, and improving? |
+
+Calendar cadence: [generated schedule](SCHEDULE.md), sourced from `automations.toml`.
 
 Choose the owner by the primary failed outcome, not by the file being edited:
 

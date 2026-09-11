@@ -10,15 +10,19 @@ repairs (`pipeline/audits/` is the historical-repair lane).
 Read `AGENTS.md`, `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`,
 and this file.
 
-Cadence: weekly Sunday morning, after the Weekly Thing issue lands, and when
-ingest changes.
+Calendar cadence: `SCHEDULE.md` (generated from `automations.toml`, including
+its interval guard). Publication and ingest-change follow-ups are explicit starts.
 
 ## Every run
 
-1. Run preflight, then confirm `data/issues/` gained the new issue. WT Builder
-   writes new issues here — never hand-edit them in this repo; a defect in a
-   new issue is fixed in WT Builder and re-sent through its archive leg.
-   Historical (pre-Builder) repairs are this objective's work.
+1. Run preflight, then compare `data/issues/` with the latest successful
+   WT Builder archive-leg receipt and expected publication. No new weekly
+   issue between three-day checks is healthy when none is due; unknown
+   publication evidence is a coverage gap, not proof of a missed issue.
+   Compare source/artifact fingerprints before deciding a rebuild is needed.
+   WT Builder writes new issues here — never hand-edit them in this repo;
+   fix a new-issue defect in WT Builder and re-send its archive leg under
+   that repository's authority. Historical repairs remain this owner's work.
 2. Confirm `sync-external-content.yml` is running and committing `data/blog/**`
    and `data/podcast/**` updates.
 3. Check corpus freshness against the data: the media, currently, and
