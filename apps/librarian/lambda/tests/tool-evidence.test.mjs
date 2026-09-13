@@ -10,6 +10,8 @@ import {
   summarizeToolEvidence
 } from '../dist/shared/tool-evidence.mjs';
 import { MAX_TOOL_TRACE_JSON_CHARS, toolTraceDynamoString } from '../dist/shared/user-conversations.mjs';
+import { buildArchiveLens } from '../dist/shared/archive-lens.mjs';
+import { yearlyContentSignals } from '../dist/shared/corpus-stats.mjs';
 
 function searchResult(count = 3) {
   return {
@@ -122,6 +124,105 @@ test('link and aggregation shapes are harvested without a results key', () => {
   assert.equal(references.sources.length, 2);
   assert.equal(references.sources[1].count, 71);
   assert.equal(references.sources[1].id, 'domain:simonwillison.net');
+});
+
+test('real archive_lens id maps retain source priority and supporting excerpts', () => {
+  const lens = buildArchiveLens({
+    topic: 'data ownership',
+    operation: 'source_compare',
+    chunks: searchResult().results.map((source) => ({ ...source, text: `${source.text} This is data ownership.` }))
+  });
+  assert.equal(lens.results.length, 3);
+  assert.ok(lens.results.every((entry) => typeof entry === 'string'));
+  const summary = summarizeToolEvidence(lens);
+  assert.deepEqual(
+    summary.sources.map((ref) => ref.id),
+    lens.results
+  );
+  assert.equal(summary.sources[0].issue_number, '300');
+  assert.equal(summary.sources[0].source_kind, 'weekly_thing');
+  assert.equal(summary.sources[0].url, 'https://weekly.thingelstad.com/archive/300/');
+  assert.match(summary.sources[0].excerpt, /data ownership/);
+  assert.equal(summary.counts.results, lens.results.length);
+});
+
+test('real corpus_stats yearly samples retain bounded evidence across the full span', () => {
+  const records = Array.from({ length: 26 }, (_value, index) => {
+    const year = 2026 - index;
+    return {
+      source_kind: 'blog',
+      subject: `Representative post ${year}`,
+      publish_date: `${year}-01-01`,
+      url: `https://www.thingelstad.com/${year}/01/01/representative.html`
+    };
+  });
+  const summary = summarizeToolEvidence({
+    scope: 'blog',
+    sources: [{ source_kind: 'blog', yearly_signals: yearlyContentSignals(records) }]
+  });
+  assert.equal(summary.sources.length, EVIDENCE_MAX_SOURCES);
+  assert.equal(summary.sources[0].title, 'Representative post 2026');
+  assert.equal(summary.sources.at(-1).title, 'Representative post 2001');
+  assert.ok(summary.sources.every((ref) => ref.source_kind === 'blog'));
+  assert.equal(new Set(summary.sources.map((ref) => ref.id)).size, summary.sources.length);
+  assert.equal(summary.truncation.sources_seen, 26);
+  assert.equal(summary.truncation.sources_kept, EVIDENCE_MAX_SOURCES);
+  assert.ok(JSON.stringify(summary).length <= EVIDENCE_MAX_CALL_CHARS);
+});
+
+test('nested archive evidence stays allow-listed without opening arbitrary deep envelopes', () => {
+  const source = {
+    issue_number: 300,
+    subject: 'Weekly Thing 300',
+    source_kind: 'weekly_thing',
+    evidence: [{ text: 'A public archive excerpt.', reader_email: 'private@example.com' }],
+    subscriber_hash: 'private-hash',
+    internal_debug: { text: 'private-debug' }
+  };
+  for (const result of [
+    { sources_by_id: { 'wt-300': source } },
+    { sources: [{ source_kind: 'weekly_thing', yearly_signals: [{ sample_items: [source] }] }] }
+  ]) {
+    const summary = summarizeToolEvidence(result);
+    assert.equal(summary.sources[0].issue_number, '300');
+    assert.doesNotMatch(JSON.stringify(summary), /private@example|private-hash|private-debug/);
+  }
+  const arbitrary = summarizeToolEvidence({ internal_debug: { nested: { source } } });
+  assert.equal(arbitrary.sources, undefined);
+});
+
+test('structured archive evidence keeps existing caps and ignores malformed samples', () => {
+  const summary = summarizeToolEvidence({
+    sources_by_id: Object.fromEntries(
+      searchResult(40).results.map((source) => [
+        source.id,
+        {
+          ...source,
+          evidence: [{ text: 'long '.repeat(500) }]
+        }
+      ])
+    )
+  });
+  assert.ok(summary.sources.length <= EVIDENCE_MAX_SOURCES);
+  assert.ok(JSON.stringify(summary).length <= EVIDENCE_MAX_CALL_CHARS);
+  assert.equal(summary.truncation.sources_seen, 40);
+  const aggregate = summarizeToolEvidence({
+    sources: [
+      null,
+      {
+        source_kind: 'weekly_thing',
+        yearly_signals: [
+          null,
+          { sample_items: [null, 'wt-300', { subject: 'Not a citable source' }] },
+          { sample_items: [{ issue_number: 300, subject: 'Weekly Thing 300' }] },
+          { sample_items: [{ issue_number: 300, subject: 'Weekly Thing 300' }] }
+        ]
+      }
+    ]
+  });
+  assert.equal(aggregate.sources.length, 1);
+  assert.equal(aggregate.sources[0].source_kind, 'weekly_thing');
+  assert.equal(aggregate.sources[0].issue_number, '300');
 });
 
 test('media_search refs carry the exact image and its source page', () => {

@@ -124,7 +124,10 @@ export function evidenceRef(value: unknown, rank: number): JsonRecord {
   if (score !== undefined) ref.score = Math.round(score * 10000) / 10000;
   const count = Number(record.count ?? record.mentions ?? record.total);
   if (Number.isFinite(count) && count > 0) ref.count = count;
-  const excerpt = firstExcerpt(record);
+  // Lens sources keep their supporting passage in evidence[0].text,
+  // rather than a flat text field. Do not recursively copy that envelope.
+  const lensEvidence = Array.isArray(record.evidence) ? objectValue(record.evidence[0]) : {};
+  const excerpt = firstExcerpt(record) || compactText(lensEvidence.text, EVIDENCE_EXCERPT_CHARS);
   if (excerpt) ref.excerpt = excerpt;
   return ref;
 }
@@ -151,6 +154,37 @@ function harvest(value: unknown, state: HarvestState, depth: number) {
   for (const entry of Object.values(record)) {
     if (Array.isArray(entry) || (entry && typeof entry === 'object')) harvest(entry, state, depth + 1);
   }
+}
+
+function structuredSources(record: JsonRecord): { sources: JsonRecord[]; spread: boolean } {
+  // Lens arrays contain ids, not records. The map's insertion order is the
+  // tool's citation priority; preserve it without descending into inner links.
+  const lensSources = Object.values(objectValue(record.sources_by_id)).slice(0, 40).filter(looksLikeSource);
+  if (lensSources.length) return { sources: lensSources, spread: false };
+
+  // corpus_stats' canonical samples are beyond the generic harvest depth.
+  // Reach only this named archive shape, taking one source per year just as
+  // collectToolCitations does. Do not widen arbitrary-envelope traversal.
+  const samples = new Map<string, JsonRecord>();
+  const groups = Array.isArray(record.sources) ? record.sources.slice(0, 40) : [];
+  for (const rawGroup of groups) {
+    const group = objectValue(rawGroup);
+    const signals = Array.isArray(group.yearly_signals) ? group.yearly_signals.slice(0, 40) : [];
+    for (const rawSignal of signals) {
+      const signal = objectValue(rawSignal);
+      const items = Array.isArray(signal.sample_items) ? signal.sample_items.slice(0, 40) : [];
+      const sample = items.find((item) => looksLikeSource(item) && Boolean(item.url || item.issue_number));
+      if (!sample) continue;
+      const source = { ...sample, source_kind: sample.source_kind || group.source_kind };
+      samples.set(stableSourceId(source), source);
+    }
+  }
+  return {
+    sources: [...samples.values()].sort((a, b) =>
+      String(b.publish_date || '').localeCompare(String(a.publish_date || ''))
+    ),
+    spread: true
+  };
 }
 
 // Structured, bounded summary of one tool result. Handles list-shaped
@@ -187,12 +221,13 @@ export function summarizeToolEvidence(result: unknown): JsonRecord {
   const topic = compactText(record.topic || record.theme || record.entity || record.query || record.claim, 160);
   if (topic) summary.topic = topic;
 
-  // Evidence refs. Three shapes, in priority order:
+  // Evidence refs, in priority order:
   // - the result itself is source-shaped (get_section);
   // - a top-level envelope key holds one source-shaped object (get_issue's
   //   `issue`, get_source's `source`) - that object is the primary evidence
   //   and its inner arrays (links, section_texts) are NOT harvested as refs,
   //   because they are not what Thingy read;
+  // - known lens maps and aggregate yearly samples;
   // - otherwise harvest source-like records from nested arrays.
   const state: HarvestState = { refs: [], seen: 0 };
   if (looksLikeSource(record)) {
@@ -209,7 +244,20 @@ export function summarizeToolEvidence(result: unknown): JsonRecord {
       state.seen += 1;
       state.refs.push(evidenceRef(envelope, state.seen));
     }
-    if (!envelopes.length) harvest(record, state, 0);
+    if (!envelopes.length) {
+      const structured = structuredSources(record);
+      if (structured.sources.length) {
+        state.seen = structured.sources.length;
+        const count = Math.min(state.seen, EVIDENCE_MAX_SOURCES);
+        for (let index = 0; index < count; index += 1) {
+          const sourceIndex =
+            structured.spread && state.seen > count ? Math.round((index * (state.seen - 1)) / (count - 1)) : index;
+          state.refs.push(evidenceRef(structured.sources[sourceIndex], index + 1));
+        }
+      } else {
+        harvest(record, state, 0);
+      }
+    }
   }
   const sources = state.refs.slice(0, EVIDENCE_MAX_SOURCES);
   if (sources.length) summary.sources = sources;
