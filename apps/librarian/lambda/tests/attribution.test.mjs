@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildSubscriberBody, cleanTagSegment, hasThingyTag, sanitizeAttribution } from '../dist/shared/buttondown.mjs';
+import {
+  buildSubscriberBody,
+  buttondownErrorFields,
+  cleanTagSegment,
+  createSubscriber,
+  hasThingyTag,
+  sanitizeAttribution
+} from '../dist/shared/buttondown.mjs';
 
 test('cleanTagSegment preserves casing and strips unsafe chars', () => {
   assert.equal(cleanTagSegment('DenseDiscovery-388'), 'DenseDiscovery-388');
@@ -64,12 +71,17 @@ test('buildSubscriberBody emits the wt-thingy user tag for chat-surface signups 
 });
 
 test('buildSubscriberBody adds source:<ref> tag and metadata when attribution carries a ref', () => {
-  const body = buildSubscriberBody('reader@example.com', 'hero', {
-    ref: 'DenseDiscovery-388',
-    landing_url: '/?ref=DenseDiscovery-388',
-    referrer_url: 'https://www.densediscovery.com/issues/388',
-    captured_at: '2026-05-08T12:00:00Z'
-  }, null);
+  const body = buildSubscriberBody(
+    'reader@example.com',
+    'hero',
+    {
+      ref: 'DenseDiscovery-388',
+      landing_url: '/?ref=DenseDiscovery-388',
+      referrer_url: 'https://www.densediscovery.com/issues/388',
+      captured_at: '2026-05-08T12:00:00Z'
+    },
+    null
+  );
   assert.deepEqual(body.tags, ['source:DenseDiscovery-388']);
   assert.equal(body.referrer_url, 'https://www.densediscovery.com/issues/388');
   assert.deepEqual(body.metadata, {
@@ -82,9 +94,14 @@ test('buildSubscriberBody adds source:<ref> tag and metadata when attribution ca
 });
 
 test('buildSubscriberBody combines wt-thingy and source:<ref> for chat signups with attribution', () => {
-  const body = buildSubscriberBody('reader@example.com', 'thingy', {
-    ref: 'DenseDiscovery-388'
-  }, null);
+  const body = buildSubscriberBody(
+    'reader@example.com',
+    'thingy',
+    {
+      ref: 'DenseDiscovery-388'
+    },
+    null
+  );
   assert.deepEqual(body.tags, ['wt-thingy', 'source:DenseDiscovery-388']);
 });
 
@@ -111,4 +128,30 @@ test('hasThingyTag detects string and object tag shapes', () => {
   assert.equal(hasThingyTag({ tags: ['source:Foo', 'wt-thingy'] }), true);
   assert.equal(hasThingyTag({ tags: [{ name: 'wt-thingy' }] }), true);
   assert.equal(hasThingyTag({ tags: [{ name: 'source:Foo' }] }), false);
+});
+
+test('Buttondown failures retain only safe diagnostic fields', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.BUTTONDOWN_API_KEY;
+  process.env.BUTTONDOWN_API_KEY = 'test-key';
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify({ code: 'email_invalid', detail: 'reader@example.com is not valid' }), {
+      status: 400,
+      headers: { 'content-type': 'application/json' }
+    });
+
+  try {
+    await assert.rejects(createSubscriber('reader@example.com', { headers: {} }, 'hero', null), (error) => {
+      assert.deepEqual(buttondownErrorFields(error), {
+        buttondown_status_code: 400,
+        buttondown_code: 'email_invalid'
+      });
+      assert.doesNotMatch(JSON.stringify(buttondownErrorFields(error)), /reader@example\.com/);
+      return true;
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalKey === undefined) delete process.env.BUTTONDOWN_API_KEY;
+    else process.env.BUTTONDOWN_API_KEY = originalKey;
+  }
 });

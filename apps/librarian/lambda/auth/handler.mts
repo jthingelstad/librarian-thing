@@ -3,6 +3,7 @@ import { DeleteItemCommand, GetItemCommand, PutItemCommand } from '@aws-sdk/clie
 import { bedrock, dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
 import {
   createSubscriber,
+  buttondownErrorFields,
   ensureThingyTag,
   fetchSubscriber,
   resubscribeSubscriber,
@@ -719,7 +720,11 @@ async function authHandler(event: LibrarianHttpEvent) {
     try {
       existing = await fetchSubscriber(email);
     } catch (error) {
-      logEvent('error', 'buttondown_lookup_failed', { email_hash: hashedEmail, error_type: errorName(error) });
+      logEvent('error', 'buttondown_lookup_failed', {
+        email_hash: hashedEmail,
+        error_type: errorName(error),
+        ...buttondownErrorFields(error)
+      });
       return jsonResponse(502, { error: 'Could not validate subscriber status right now.' }, event);
     }
     const existingStatus = subscriberStatus(existing);
@@ -757,7 +762,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       } catch (error) {
         logEvent('error', 'buttondown_subscriber_reminder_failed', {
           email_hash: hashedEmail,
-          error_type: errorName(error)
+          error_type: errorName(error),
+          ...buttondownErrorFields(error)
         });
         return jsonResponse(502, { error: 'Could not send the confirmation email right now.' }, event);
       }
@@ -798,7 +804,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       } catch (error) {
         logEvent('error', 'buttondown_subscriber_resubscribe_failed', {
           email_hash: hashedEmail,
-          error_type: errorName(error)
+          error_type: errorName(error),
+          ...buttondownErrorFields(error)
         });
         return jsonResponse(502, { error: 'Could not re-add that email right now.' }, event);
       }
@@ -826,7 +833,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       logEvent('error', 'buttondown_subscriber_create_failed', {
         email_hash: hashedEmail,
         subscriber_source: source,
-        error_type: errorName(error)
+        error_type: errorName(error),
+        ...buttondownErrorFields(error)
       });
       return jsonResponse(502, { error: 'Could not add that email right now.' }, event);
     }
@@ -843,7 +851,8 @@ async function authHandler(event: LibrarianHttpEvent) {
     } catch (error) {
       logEvent('error', 'buttondown_subscriber_reminder_failed', {
         email_hash: hashedEmail,
-        error_type: errorName(error)
+        error_type: errorName(error),
+        ...buttondownErrorFields(error)
       });
       return jsonResponse(
         502,
