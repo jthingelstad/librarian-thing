@@ -75,6 +75,15 @@ test('removes have-enough synthesis process narration', () => {
   assert.equal(out, '## The Sharpest Thesis\n\nA real answer.');
 });
 
+test('removes now-have-picture narration with a put-this-together preamble', () => {
+  const answer =
+    'Now I have a rich view of the archive. Let me put this together.\n\n## The Throughline\n\nA real answer.';
+
+  const out = sanitizeAnswerProse(answer);
+
+  assert.equal(out, '## The Throughline\n\nA real answer.');
+});
+
 test('removes let-me-dig process narration', () => {
   const answer = 'Let me dig into the archive to map that out.\n\n## Thingy Trail\n\n1. A real answer.';
 
