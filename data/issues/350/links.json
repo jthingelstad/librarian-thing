@@ -1,0 +1,172 @@
+{
+  "notable_links": [
+    {
+      "text": "What is happening with code reviews? - Gergely Orosz",
+      "url": "https://newsletter.pragmaticengineer.com/p/what-is-happening-with-code-reviews",
+      "domain": "newsletter.pragmaticengineer.com",
+      "heading_context": "[What is happening with code reviews? - Gergely Orosz](https://newsletter.pragmaticengineer.com/p/what-is-happening-with-code-reviews)",
+      "section": "Notable"
+    },
+    {
+      "text": "Introducing the Agents API | OpenAI",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "domain": "openai.com",
+      "heading_context": "[Introducing the Agents API | OpenAI](https://openai.com/index/introducing-the-agents-api/)",
+      "section": "Notable"
+    },
+    {
+      "text": "BrewUI: 📺 Homebrew's official macOS GUI",
+      "url": "https://github.com/Homebrew/BrewUI",
+      "domain": "github.com",
+      "heading_context": "[BrewUI: 📺 Homebrew's official macOS GUI](https://github.com/Homebrew/BrewUI)",
+      "section": "Notable"
+    },
+    {
+      "text": "Your car is selling your data | The Verge",
+      "url": "https://www.theverge.com/column/994172/your-car-is-selling-your-data",
+      "domain": "www.theverge.com",
+      "heading_context": "[Your car is selling your data | The Verge](https://www.theverge.com/column/994172/your-car-is-selling-your-data)",
+      "section": "Notable"
+    },
+    {
+      "text": "An end to fully open networks | Seth's Blog",
+      "url": "https://seths.blog/2026/09/an-end-to-fully-open-networks/",
+      "domain": "seths.blog",
+      "heading_context": "[An end to fully open networks | Seth's Blog](https://seths.blog/2026/09/an-end-to-fully-open-networks/)",
+      "section": "Notable"
+    },
+    {
+      "text": "iOS and iPadOS 27: The MacStories Review - MacStories",
+      "url": "https://www.macstories.net/stories/ios-and-ipados-27-review/",
+      "domain": "www.macstories.net",
+      "heading_context": "[iOS and iPadOS 27: The MacStories Review - MacStories](https://www.macstories.net/stories/ios-and-ipados-27-review/)",
+      "section": "Notable"
+    },
+    {
+      "text": "I Don’t Want to Interact With Stochastic Parrots",
+      "url": "https://ploum.net/2026-09-09-ai_policy.html",
+      "domain": "ploum.net",
+      "heading_context": "[I Don’t Want to Interact With Stochastic Parrots](https://ploum.net/2026-09-09-ai_policy.html)",
+      "section": "Notable"
+    }
+  ],
+  "briefly_links": [
+    {
+      "text": "macOS 27: The MacStories Review - MacStories",
+      "url": "https://www.macstories.net/stories/macos-27-the-macstories-review/",
+      "domain": "www.macstories.net",
+      "heading_context": "[macOS 27: The MacStories Review - MacStories](https://www.macstories.net/stories/macos-27-the-macstories-review/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "watchOS 27: The MacStories Review - MacStories",
+      "url": "https://www.macstories.net/stories/watchos-27-the-macstories-review/",
+      "domain": "www.macstories.net",
+      "heading_context": "[watchOS 27: The MacStories Review - MacStories](https://www.macstories.net/stories/watchos-27-the-macstories-review/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "iPhone 18 Pro: A Photographer's Review - YouTube",
+      "url": "https://www.youtube.com/watch?v=m6cDErtCKAc",
+      "domain": "www.youtube.com",
+      "heading_context": "[iPhone 18 Pro: A Photographer's Review - YouTube](https://www.youtube.com/watch?v=m6cDErtCKAc)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Unread 5.0",
+      "url": "https://www.goldenhillsoftware.com/2026/09/unread-50/",
+      "domain": "www.goldenhillsoftware.com",
+      "heading_context": "[Unread 5.0](https://www.goldenhillsoftware.com/2026/09/unread-50/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "A quote from Boris Cherny",
+      "url": "https://simonwillison.net/2026/Sep/11/boris-cherny/",
+      "domain": "simonwillison.net",
+      "heading_context": "[A quote from Boris Cherny](https://simonwillison.net/2026/Sep/11/boris-cherny/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Claude Cowork and chat are now one Claude | Claude by Anthropic",
+      "url": "https://claude.com/blog/cowork-is-now-claude",
+      "domain": "claude.com",
+      "heading_context": "[Claude Cowork and chat are now one Claude | Claude by Anthropic](https://claude.com/blog/cowork-is-now-claude)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Claude Fable 5.1 Solves the Cyphral Distich",
+      "url": "https://www.vals.ai/blogs/fable-solves-cyphral-distich",
+      "domain": "www.vals.ai",
+      "heading_context": "[Claude Fable 5.1 Solves the Cyphral Distich](https://www.vals.ai/blogs/fable-solves-cyphral-distich)",
+      "section": "Briefly"
+    },
+    {
+      "text": "OpenAI agents carried out an undisclosed cyber-attack on RubyGems",
+      "url": "https://rubyhack.ai/",
+      "domain": "rubyhack.ai",
+      "heading_context": "[OpenAI agents carried out an undisclosed cyber-attack on RubyGems](https://rubyhack.ai/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "OpenAI’s rogue agents were caught communicating via public wikis",
+      "url": "https://simonwillison.net/2026/Sep/4/rogue-agent-wikis/",
+      "domain": "simonwillison.net",
+      "heading_context": "[OpenAI’s rogue agents were caught communicating via public wikis](https://simonwillison.net/2026/Sep/4/rogue-agent-wikis/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "One-on-Ones Aren’t for You - Leadership Freak",
+      "url": "https://leadershipfreak.blog/2026/09/04/one-on-ones-arent-for-you/",
+      "domain": "leadershipfreak.blog",
+      "heading_context": "[One-on-Ones Aren’t for You - Leadership Freak](https://leadershipfreak.blog/2026/09/04/one-on-ones-arent-for-you/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Instagram’s head says engagement falls by half without the algorithm",
+      "url": "https://thenextweb.com/news/mosseri-instagram-algorithm-opt-out-engagement-australia",
+      "domain": "thenextweb.com",
+      "heading_context": "[Instagram’s head says engagement falls by half without the algorithm](https://thenextweb.com/news/mosseri-instagram-algorithm-opt-out-engagement-australia)",
+      "section": "Briefly"
+    }
+  ],
+  "domains": [
+    "a16z.com",
+    "cacm.acm.org",
+    "claude.com",
+    "drop.poapkings.com",
+    "elixir.poapkings.com",
+    "en.wikipedia.org",
+    "first-avenue.com",
+    "friendsalliance.org",
+    "github.com",
+    "leadershipfreak.blog",
+    "newsletter.pragmaticengineer.com",
+    "openai.com",
+    "parkconnection.org",
+    "ploum.net",
+    "rubyhack.ai",
+    "seldo.com",
+    "seths.blog",
+    "simonwillison.net",
+    "spstower.com",
+    "sugarcopperblue.com",
+    "thenextweb.com",
+    "watch.outthere.film",
+    "wildriversconservancy.org",
+    "www.densediscovery.com",
+    "www.dwarkesh.com",
+    "www.goldenhillsoftware.com",
+    "www.iceagetrail.org",
+    "www.macstories.net",
+    "www.npca.org",
+    "www.nplsf.org",
+    "www.outthere.film",
+    "www.pbs.org",
+    "www.theverge.com",
+    "www.vals.ai",
+    "www.voyageurs.org",
+    "www.youtube.com",
+    "yourversionnumber.com"
+  ],
+  "word_count": 4132
+}
