@@ -280,27 +280,49 @@ All in it is an amazing time to be in this craft, and also one of the hardest ti
 
 ### Friday
 
-[8:44 PM](https://www.thingelstad.com/2026/09/11/sugar-at-first-avenue-tonight.html) — [Sugar](https://sugarcopperblue.com) at [First Avenue](https://first-avenue.com) tonight! <img src="https://files.thingelstad.com/weekly-thing/350/images/16caa566dc0f.jpg" width="600" height="450" alt="">
+[8:44 PM](https://www.thingelstad.com/2026/09/11/sugar-at-first-avenue-tonight.html) — [Sugar](https://sugarcopperblue.com) at [First Avenue](https://first-avenue.com) tonight!
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/16caa566dc0f.jpg" width="600" height="450" alt="">
 
 ### Sunday
 
-[1:38 PM](https://www.thingelstad.com/2026/09/13/cool-and-windy-for-a.html) — Cool and windy for a boat ride but the swim parkas made it just fine! <img src="https://files.thingelstad.com/weekly-thing/350/images/3375338d9758.jpg" width="600" height="450" alt="">
+[1:38 PM](https://www.thingelstad.com/2026/09/13/cool-and-windy-for-a.html) — Cool and windy for a boat ride but the swim parkas made it just fine!
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/3375338d9758.jpg" width="600" height="450" alt="">
 
 ### Tuesday
 
-**[Out There: A National Parks Story](https://www.thingelstad.com/2026/09/15/out-there-a-national-parks.html)** — Last night Tammy and I got to go to the Parkway Theatre for a screening of [Out There: A National Parks Story](https://www.outthere.film/). There was a short panel afterward with the filmmaker and representatives from some of the supporting organizations.  I was excited that Tammy got these tickets. I loved watching Ken Burns' [The National Parks](https://www.pbs.org/kenburns/the-national-parks) and I've long pondered the idea that we should visit every national park. Out There lands very different than the Burns' epic work. Brendan Hall and his friend Anthony Blake tell a much more human-scale story that is really about connection and the parks. I loved it and highly recommend [watching it](http://watch.outthere.film/).  Also, a shout out to these organizations that supported the film: [Wild Rivers Conservancy](https://wildriversconservancy.org/), [Voyageurs Conservancy](https://www.voyageurs.org/), [National Parks of Lake Superior Foundation](https://www.nplsf.org/), [National Parks Conservation Association](https://www.npca.org/), [National Park Friends Alliance](https://friendsalliance.org/), [Mississippi Park Connection](https://parkconnection.org/), and [Ice Age Trail Alliance](https://www.iceagetrail.org/). <img src="https://files.thingelstad.com/weekly-thing/350/images/0449064ac367.jpg" alt=""><img src="https://files.thingelstad.com/weekly-thing/350/images/9f333c291857.jpg" alt="">
+**[Out There: A National Parks Story](https://www.thingelstad.com/2026/09/15/out-there-a-national-parks.html)** — Last night Tammy and I got to go to the Parkway Theatre for a screening of [Out There: A National Parks Story](https://www.outthere.film/). There was a short panel afterward with the filmmaker and representatives from some of the supporting organizations.  I was excited that Tammy got these tickets. I loved watching Ken Burns' [The National Parks](https://www.pbs.org/kenburns/the-national-parks) and I've long pondered the idea that we should visit every national park. Out There lands very different than the Burns' epic work. Brendan Hall and his friend Anthony Blake tell a much more human-scale story that is really about connection and the parks. I loved it and highly recommend [watching it](http://watch.outthere.film/).  Also, a shout out to these organizations that supported the film: [Wild Rivers Conservancy](https://wildriversconservancy.org/), [Voyageurs Conservancy](https://www.voyageurs.org/), [National Parks of Lake Superior Foundation](https://www.nplsf.org/), [National Parks Conservation Association](https://www.npca.org/), [National Park Friends Alliance](https://friendsalliance.org/), [Mississippi Park Connection](https://parkconnection.org/), and [Ice Age Trail Alliance](https://www.iceagetrail.org/).
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/0449064ac367.jpg" alt="">
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/9f333c291857.jpg" alt="">
 
 ### Wednesday
 
-[3:00 PM](https://www.thingelstad.com/2026/09/16/kicking-off-the-th-annual.html) — Kicking off the 8th annual Team SPS Kubb Tournament with a quick rules rundown and a 100-person selfie! <img src="https://files.thingelstad.com/weekly-thing/350/images/9c56f5e2f05b.jpg" width="600" height="450" alt="">
+[3:00 PM](https://www.thingelstad.com/2026/09/16/kicking-off-the-th-annual.html) — Kicking off the 8th annual Team SPS Kubb Tournament with a quick rules rundown and a 100-person selfie!
 
-[7:00 PM](https://www.thingelstad.com/2026/09/16/the-four-bracket-winning-teams.html) — The four bracket winning teams from our 8th annual Team SPS Kubb Tournament! <img src="https://files.thingelstad.com/weekly-thing/350/images/b040c6eb3583.jpg" width="600" height="600" alt=""><img src="https://files.thingelstad.com/weekly-thing/350/images/7b3366228896.jpg" width="600" height="600" alt=""><img src="https://files.thingelstad.com/weekly-thing/350/images/398fc674e847.jpg" width="600" height="600" alt=""><img src="https://files.thingelstad.com/weekly-thing/350/images/8b98d1403917.jpg" width="600" height="600" alt="">
+<img src="https://files.thingelstad.com/weekly-thing/350/images/9c56f5e2f05b.jpg" width="600" height="450" alt="">
+
+[7:00 PM](https://www.thingelstad.com/2026/09/16/the-four-bracket-winning-teams.html) — The four bracket winning teams from our 8th annual Team SPS Kubb Tournament!
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/b040c6eb3583.jpg" width="600" height="600" alt="">
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/7b3366228896.jpg" width="600" height="600" alt="">
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/398fc674e847.jpg" width="600" height="600" alt="">
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/8b98d1403917.jpg" width="600" height="600" alt="">
 
 ### Thursday
 
-[12:55 PM](https://www.thingelstad.com/2026/09/17/nice-lunch-for-sps-tower.html) — Nice lunch for [SPS Tower](https://spstower.com) tenants today. <img src="https://files.thingelstad.com/weekly-thing/350/images/b6370b73bd5e.jpg" width="600" height="450" alt="">
+[12:55 PM](https://www.thingelstad.com/2026/09/17/nice-lunch-for-sps-tower.html) — Nice lunch for [SPS Tower](https://spstower.com) tenants today.
 
-[7:00 PM](https://www.thingelstad.com/2026/09/17/delicious-black-krim-tomatoes-from.html) — Delicious Black Krim tomatoes from my friend Eric. 🍅 <img src="https://files.thingelstad.com/weekly-thing/350/images/3745cbc76a36.jpg" width="600" height="600" alt="">
+<img src="https://files.thingelstad.com/weekly-thing/350/images/b6370b73bd5e.jpg" width="600" height="450" alt="">
+
+[7:00 PM](https://www.thingelstad.com/2026/09/17/delicious-black-krim-tomatoes-from.html) — Delicious Black Krim tomatoes from my friend Eric. 🍅
+
+<img src="https://files.thingelstad.com/weekly-thing/350/images/3745cbc76a36.jpg" width="600" height="600" alt="">
 
 ## Briefly
 
