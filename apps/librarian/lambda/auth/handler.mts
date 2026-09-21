@@ -6,12 +6,15 @@ import {
   buttondownErrorFields,
   ensureThingyTag,
   fetchSubscriber,
+  isSuppressedError,
   resubscribeSubscriber,
   sanitizeAttribution,
   sendSubscriberReminder,
   subscriberStatus
 } from '../shared/buttondown.mjs';
 import { eventSummary, jsonResponse, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
+import { recordAttempt, recordOutcome } from '../shared/subscribe-ledger.mjs';
+import { runSubscribeDigest } from '../shared/subscribe-digest.mjs';
 import type { LibrarianHttpEvent, LibrarianHttpResponse } from '../shared/http.mjs';
 import { magicTokenHash, validMagicCode, validMagicToken } from '../shared/magic-link.mjs';
 import {
@@ -712,6 +715,11 @@ async function authHandler(event: LibrarianHttpEvent) {
   }
 
   if (action === 'subscribe') {
+    // The address is in the ledger before Buttondown hears about it, so a
+    // reader who asked to subscribe is never lost to whatever happens next
+    // (shared/subscribe-ledger.mts).
+    const ledger = await recordAttempt({ email, source, campaign_ref: attribution?.ref });
+
     // The address may already exist — a previously-unsubscribed reader
     // coming back, or someone re-entering a live address. Creating over an
     // existing record is a Buttondown error, and it was the dead end behind
@@ -725,6 +733,7 @@ async function authHandler(event: LibrarianHttpEvent) {
         error_type: errorName(error),
         ...buttondownErrorFields(error)
       });
+      await recordOutcome(ledger, 'lookup_failed', buttondownErrorFields(error));
       return jsonResponse(502, { error: 'Could not validate subscriber status right now.' }, event);
     }
     const existingStatus = subscriberStatus(existing);
@@ -734,6 +743,7 @@ async function authHandler(event: LibrarianHttpEvent) {
         email_hash: hashedEmail,
         subscriber_status: existingStatus
       });
+      await recordOutcome(ledger, 'already_subscribed');
       return jsonResponse(
         200,
         {
@@ -750,6 +760,7 @@ async function authHandler(event: LibrarianHttpEvent) {
       try {
         await sendSubscriberReminder(email);
         logEvent('info', 'auth_subscribe_reminder_resent', { email_hash: hashedEmail });
+        await recordOutcome(ledger, 'reminder_resent');
         return jsonResponse(
           200,
           {
@@ -765,6 +776,7 @@ async function authHandler(event: LibrarianHttpEvent) {
           error_type: errorName(error),
           ...buttondownErrorFields(error)
         });
+        await recordOutcome(ledger, 'reminder_failed', buttondownErrorFields(error));
         return jsonResponse(502, { error: 'Could not send the confirmation email right now.' }, event);
       }
     }
@@ -773,7 +785,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       const existingType = String(existing?.type || '').toLowerCase();
       if (existingType !== 'unsubscribed') {
         // disabled / undeliverable states cannot be revived over the API.
-        logEvent('info', 'auth_resubscribe_unavailable', { email_hash: hashedEmail, subscriber_type: existingType });
+        logEvent('warning', 'auth_resubscribe_unavailable', { email_hash: hashedEmail, subscriber_type: existingType });
+        await recordOutcome(ledger, 'resubscribe_unavailable', { detail: `type ${existingType}` });
         return jsonResponse(
           200,
           {
@@ -792,6 +805,7 @@ async function authHandler(event: LibrarianHttpEvent) {
           subscriber_status: subscriberStatus(subscriber),
           subscriber_source: source
         });
+        await recordOutcome(ledger, 'resubscribed');
         return jsonResponse(
           200,
           {
@@ -807,14 +821,14 @@ async function authHandler(event: LibrarianHttpEvent) {
           error_type: errorName(error),
           ...buttondownErrorFields(error)
         });
+        await recordOutcome(ledger, 'create_failed', buttondownErrorFields(error));
         return jsonResponse(502, { error: 'Could not re-add that email right now.' }, event);
       }
     }
 
-    try {
-      const subscriber = await createSubscriber(email, event, source, attribution);
+    const subscribed = (subscriber: Awaited<ReturnType<typeof createSubscriber>>, revived: boolean) => {
       const status = subscriberStatus(subscriber);
-      logEvent('info', 'auth_subscribe_completed', {
+      logEvent('info', revived ? 'auth_subscribe_revived' : 'auth_subscribe_completed', {
         email_hash: hashedEmail,
         subscriber_status: status,
         subscriber_source: source,
@@ -829,14 +843,54 @@ async function authHandler(event: LibrarianHttpEvent) {
         },
         event
       );
+    };
+
+    try {
+      const subscriber = await createSubscriber(email, event, source, attribution);
+      await recordOutcome(ledger, 'subscribed');
+      return subscribed(subscriber, false);
     } catch (error) {
-      logEvent('error', 'buttondown_subscriber_create_failed', {
-        email_hash: hashedEmail,
-        subscriber_source: source,
-        error_type: errorName(error),
-        ...buttondownErrorFields(error)
-      });
-      return jsonResponse(502, { error: 'Could not add that email right now.' }, event);
+      if (!isSuppressedError(error)) {
+        // The machinery's fault — Buttondown down, a timeout — and it may
+        // clear. The reader is told to try again; the ledger has the address.
+        logEvent('error', 'buttondown_subscriber_create_failed', {
+          email_hash: hashedEmail,
+          subscriber_source: source,
+          error_type: errorName(error),
+          ...buttondownErrorFields(error)
+        });
+        await recordOutcome(ledger, 'create_failed', buttondownErrorFields(error));
+        return jsonResponse(502, { error: 'Could not add that email right now. Please try again in a minute.' }, event);
+      }
+
+      // Buttondown refused the address: it was on the list before. The
+      // lookup shows nothing for a suppressed address, so this is the first
+      // we hear of it. A plain unsubscribe revives with the collision header;
+      // a bounce, complaint, or firewall block does not, and that is Jamie's
+      // to sort out by hand — the reader is told so, in words, instead of
+      // being bounced to Buttondown's dead-end page (Patrick, 2026-09-20).
+      try {
+        const subscriber = await createSubscriber(email, event, source, attribution, { revive: true });
+        await recordOutcome(ledger, 'resubscribed', buttondownErrorFields(error));
+        return subscribed(subscriber, true);
+      } catch (retryError) {
+        logEvent('warning', 'auth_subscribe_needs_jamie', {
+          email_hash: hashedEmail,
+          subscriber_source: source,
+          error_type: errorName(retryError),
+          ...buttondownErrorFields(retryError)
+        });
+        await recordOutcome(ledger, 'suppressed', buttondownErrorFields(retryError));
+        return jsonResponse(
+          200,
+          {
+            status: 'needs_jamie',
+            error:
+              'That address was on the list before and can’t be re-added automatically. Email jamie@thingelstad.com and I’ll add you by hand.'
+          },
+          event
+        );
+      }
     }
   }
 
@@ -915,6 +969,11 @@ function healthHandler(event: LibrarianHttpEvent) {
 }
 
 export async function handler(event: LibrarianHttpEvent, context: { awsRequestId?: string } = {}) {
+  // The scheduled task rides the same function: EventBridge invokes it once
+  // a day with `{ task: 'subscribe_digest' }` and no HTTP shape at all.
+  if ((event as { task?: unknown }).task === 'subscribe_digest') {
+    return await runSubscribeDigest();
+  }
   const start = performance.now();
   const summary = eventSummary(event, context);
   logEvent('info', 'request_started', summary, 'weekly-thing-librarian-auth');

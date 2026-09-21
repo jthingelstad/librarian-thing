@@ -658,6 +658,66 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LibrarianApi}/*/*/*
 
+  # The subscribe digest: once a day, 07:00 Central (12:00 UTC in CDT,
+  # 13:00 in CST - the hour drifts with daylight time, and that is fine for
+  # a morning email), the auth Lambda is invoked with {task: subscribe_digest}
+  # and mails Jamie every subscribe attempt of the last day that did not end
+  # with a reader on the list. Nothing is sent on a clean day
+  # (shared/subscribe-digest.mts; Jamie, 2026-09-20).
+  LibrarianSubscribeDigestRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: weekly-thing-librarian-subscribe-digest
+      Description: Daily subscribe digest to Jamie
+      ScheduleExpression: cron(0 12 * * ? *)
+      State: ENABLED
+      Targets:
+        - Id: subscribe-digest
+          Arn: !GetAtt LibrarianFunction.Arn
+          Input: '{"task":"subscribe_digest"}'
+
+  LibrarianSubscribeDigestPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref LibrarianFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt LibrarianSubscribeDigestRule.Arn
+
+  # A subscribe that failed on OUR side - Buttondown down, a lookup or create
+  # that timed out, the ledger unwritable - is infrastructure, and goes to the
+  # ops queue the same hour. A suppressed address is not counted here: that
+  # is a person for Jamie, and the morning digest carries it.
+  LibrarianSubscribeFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
+      FilterPattern: '?"buttondown_subscriber_create_failed" ?"buttondown_lookup_failed" ?"buttondown_subscriber_reminder_failed" ?"buttondown_subscriber_resubscribe_failed" ?"subscribe_ledger_write_failed" ?"subscribe_digest_blocked_list_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianSubscribeFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+          DefaultValue: 0
+
+  LibrarianSubscribeFailuresAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: A Weekly Thing subscribe failed on our side (Buttondown or the ledger). The address is in the subscribe ledger.
+      Namespace: WeeklyThingLibrarian
+      MetricName: LibrarianSubscribeFailures
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LibrarianAlarmTopic
+      Tags:
+        - Key: project
+          Value: Thingy
+
   # Alarms previously had no AlarmActions - they fired into the void and
   # nobody was notified when Thingy broke. Everything routes here now.
   # Delivery is the sysadmin AGENT-TEAM's projects-ops-alerts SQS queue

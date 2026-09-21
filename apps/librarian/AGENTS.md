@@ -42,6 +42,33 @@ Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-on
 
 The `retrieveSecretOk` helper in `chat/runtime.mts` compares against `LIBRARIAN_RETRIEVE_SECRET` via `crypto.timingSafeEqual`. The request body still accepts the historical `bridge_secret` field so existing trusted clients keep the versioned `/retrieve` contract.
 
+### The subscribe path (`/auth`, action `subscribe`)
+
+The site's form calls this before anything reaches Buttondown. Since
+2026-09-20 it is built so a reader who asked to subscribe is never lost:
+
+- **The ledger first.** Every attempt is written to the Librarian table
+  (`pk subscribe#attempt`, real address, 90-day TTL) before Buttondown is
+  asked, and updated with the outcome (`shared/subscribe-ledger.mts`).
+  Twelve addresses failed in the 30 days before this and the only trace was
+  a hash in the log.
+- **Suppressed addresses get the truth.** Buttondown's `GET /subscribers`
+  answers 404 for an address on its suppression list, and the create then
+  fails `subscriber_suppressed` (bare) or `subscriber_blocked` (with a client
+  IP). The handler retries once with `X-Buttondown-Collision-Behavior: add`
+  (revives a plain unsubscribe), and if that is refused too answers **200
+  `needs_jamie`** with a sentence telling the reader to email Jamie — never a
+  502, which made the site re-post the raw form to Buttondown and its
+  dead-end page (Patrick, 2026-09-20).
+- **The morning digest.** `LibrarianSubscribeDigestRule` invokes this Lambda
+  daily at 12:00 UTC with `{task: "subscribe_digest"}`; it mails Jamie every
+  attempt of the last day that did not end on the list, plus subscribers the
+  firewall accepted-as-blocked, or nothing on a clean day
+  (`shared/subscribe-digest.mts`, via JMAP from the magic-link sender).
+- **Our-side failures alarm.** `LibrarianSubscribeFailuresAlarm` counts
+  lookup/create/reminder/ledger failures (not suppressions) and goes to the
+  ops queue within the hour.
+
 ## Deploy
 
 Normal deployments run in GitHub Actions after a verified commit/push.
