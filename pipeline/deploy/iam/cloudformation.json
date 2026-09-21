@@ -130,6 +130,22 @@
       "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-golden-retrieval-*"
     },
     {
+      "Sid": "SubscribeDigestSchedule",
+      "Effect": "Allow",
+      "Action": [
+        "events:DescribeRule",
+        "events:PutRule",
+        "events:DeleteRule",
+        "events:PutTargets",
+        "events:RemoveTargets",
+        "events:ListTargetsByRule",
+        "events:ListTagsForResource",
+        "events:TagResource",
+        "events:UntagResource"
+      ],
+      "Resource": "arn:aws:events:us-east-1:999153317627:rule/weekly-thing-librarian-*"
+    },
+    {
       "Sid": "MetricFilters",
       "Effect": "Allow",
       "Action": [
