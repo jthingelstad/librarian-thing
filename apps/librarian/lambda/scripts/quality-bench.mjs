@@ -7,7 +7,7 @@
 // model generation on usage history; see memory/thingy-model-tiers).
 //
 // Usage:
-//   AWS_PROFILE=jamie node scripts/quality-bench.mjs [--questions N] [--opus N]
+//   AWS_PROFILE=cloud-engineer node scripts/quality-bench.mjs [--questions N] [--opus N]
 // Results: ~/.local/share/thingy-bench/bench-<date>.jsonl
 // Cost: measured ~$0.11-0.15 per default run (35 answers, 2026-09-02).
 

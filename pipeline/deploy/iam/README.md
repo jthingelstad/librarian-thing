@@ -49,9 +49,9 @@ account; they do not introduce an additional infrastructure stack.
 An administrator session is needed for this one-time setup, not for deployment:
 
 ```sh
-bash pipeline/deploy/setup-oidc.sh validate --profile jamie
-bash pipeline/deploy/setup-oidc.sh apply --profile jamie --snapshot-dir /private/tmp/librarian-iam-rollback
-bash pipeline/deploy/setup-oidc.sh verify --profile jamie
+bash pipeline/deploy/setup-oidc.sh validate --profile cloud-engineer
+bash pipeline/deploy/setup-oidc.sh apply --profile cloud-engineer --snapshot-dir /private/tmp/librarian-iam-rollback
+bash pipeline/deploy/setup-oidc.sh verify --profile cloud-engineer
 ```
 
 `apply` validates every permissions document with IAM Access Analyzer and fails
@@ -101,14 +101,14 @@ variable names. This does not establish that those files hold the same key.
 No key values were inspected or compared. Exact consumer attribution and
 replacement authentication remain prerequisites to IAM-key retirement.
 
-This checkout's local `.env` now selects `AWS_PROFILE=jamie`, with its AWS key
+This checkout's local `.env` now selects `AWS_PROFILE=cloud-engineer`, with its AWS key
 settings removed. The example configuration uses the same pattern. Local Python
 tools that load `.env` resolve that profile; for tools that do not load it (such
 as the Node quality benchmark), explicitly prefix the command with
-`AWS_PROFILE=jamie`. Verify the operator session with:
+`AWS_PROFILE=cloud-engineer`. Verify the operator session with:
 
 ```sh
-aws sts get-caller-identity --profile jamie
+aws sts get-caller-identity --profile cloud-engineer
 ```
 
 Local tools require a valid operator session. Avoid exporting AWS access-key
