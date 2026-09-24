@@ -688,6 +688,13 @@ Resources:
   # that timed out, the ledger unwritable - is infrastructure, and goes to the
   # ops queue the same hour. A suppressed address is not counted here: that
   # is a person for Jamie, and the morning digest carries it.
+  #
+  # None of the metric filters in this stack sets DefaultValue (2026-09-24).
+  # A default writes a zero on every log event, which bills the metric for
+  # every hour the function logs anything; without one a metric exists only
+  # in the hours something matched, and the alarms (TreatMissingData
+  # notBreaching) fire exactly as before. A metric here exists to back an
+  # alarm; there is no dashboard, since no one reads CloudWatch by hand.
   LibrarianSubscribeFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
     Properties:
@@ -697,7 +704,6 @@ Resources:
         - MetricName: LibrarianSubscribeFailures
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianSubscribeFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -800,7 +806,6 @@ Resources:
         - MetricName: LibrarianOauthAuthFailures
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianOauthFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -836,7 +841,6 @@ Resources:
         - MetricName: LibrarianStreamHandledFailures
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianStreamFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -866,7 +870,6 @@ Resources:
         - MetricName: LibrarianChatRejections
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianChatRejectionsAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -899,7 +902,6 @@ Resources:
         - MetricName: LibrarianGuestBreakerTrips
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianGuestBreakerAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -1056,7 +1058,6 @@ Resources:
         - MetricName: LibrarianGuestOriginRejections
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianGuestOriginAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -1086,7 +1087,6 @@ Resources:
         - MetricName: LibrarianToolFailures
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianToolFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -1115,7 +1115,6 @@ Resources:
         - MetricName: LibrarianAuthAbuseRejections
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianAuthAbuseAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -1143,7 +1142,6 @@ Resources:
         - MetricName: LibrarianButtondownFailures
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
-          DefaultValue: 0
 
   LibrarianButtondownFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -1223,124 +1221,6 @@ Resources:
       AlarmActions:
         - !Ref LibrarianAlarmTopic
 
-  # Answer volume as metrics, so the dashboard shows product activity.
-  LibrarianAnswersMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"chat_completed"'
-      MetricTransformations:
-        - MetricName: LibrarianAnswers
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-          DefaultValue: 0
-
-  LibrarianGuestAnswersMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"guest_chat_completed"'
-      MetricTransformations:
-        - MetricName: LibrarianGuestAnswers
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-          DefaultValue: 0
-
-  LibrarianShareViewsMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
-      FilterPattern: '"share_link_viewed"'
-      MetricTransformations:
-        - MetricName: LibrarianShareViews
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-          DefaultValue: 0
-
-  LibrarianDashboard:
-    Type: AWS::CloudWatch::Dashboard
-    Properties:
-      DashboardName: weekly-thing-librarian
-      DashboardBody: !Sub |
-        {
-          "widgets": [
-            {
-              "type": "metric", "x": 0, "y": 0, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Answers (signed-in and guest)",
-                "metrics": [
-                  [ "WeeklyThingLibrarian", "LibrarianAnswers", { "label": "signed-in answers" } ],
-                  [ ".", "LibrarianGuestAnswers", { "label": "guest answers" } ],
-                  [ ".", "LibrarianShareViews", { "label": "share views" } ]
-                ],
-                "stat": "Sum", "period": 3600
-              }
-            },
-            {
-              "type": "metric", "x": 12, "y": 0, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Rejections and abuse signals",
-                "metrics": [
-                  [ "WeeklyThingLibrarian", "LibrarianChatRejections", { "label": "chat rejections" } ],
-                  [ ".", "LibrarianGuestOriginRejections", { "label": "origin-gate bounces" } ],
-                  [ ".", "LibrarianGuestBreakerTrips", { "label": "guest breaker" } ],
-                  [ ".", "LibrarianAuthAbuseRejections", { "label": "auth abuse" } ],
-                  [ ".", "LibrarianOauthAuthFailures", { "label": "oauth failures" } ]
-                ],
-                "stat": "Sum", "period": 3600
-              }
-            },
-            {
-              "type": "metric", "x": 0, "y": 6, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Failures (handled, tools, Buttondown)",
-                "metrics": [
-                  [ "WeeklyThingLibrarian", "LibrarianStreamHandledFailures", { "label": "stream failures" } ],
-                  [ ".", "LibrarianToolFailures", { "label": "tool failures" } ],
-                  [ ".", "LibrarianButtondownFailures", { "label": "buttondown failures" } ]
-                ],
-                "stat": "Sum", "period": 3600
-              }
-            },
-            {
-              "type": "metric", "x": 12, "y": 6, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Lambda invocations and errors",
-                "metrics": [
-                  [ "AWS/Lambda", "Invocations", "FunctionName", "${LibrarianFunction}", { "label": "auth invocations" } ],
-                  [ ".", "Errors", ".", ".", { "label": "auth errors" } ],
-                  [ ".", "Invocations", "FunctionName", "${LibrarianStreamFunction}", { "label": "stream invocations" } ],
-                  [ ".", "Errors", ".", ".", { "label": "stream errors" } ]
-                ],
-                "stat": "Sum", "period": 3600
-              }
-            },
-            {
-              "type": "metric", "x": 0, "y": 12, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Stream duration p95 vs deadline",
-                "metrics": [
-                  [ "AWS/Lambda", "Duration", "FunctionName", "${LibrarianStreamFunction}", { "stat": "p95", "label": "stream p95" } ],
-                  [ ".", ".", "FunctionName", "${LibrarianFunction}", { "stat": "p95", "label": "auth p95" } ]
-                ],
-                "period": 3600,
-                "annotations": { "horizontal": [ { "label": "app deadline", "value": 180000 } ] }
-              }
-            },
-            {
-              "type": "metric", "x": 12, "y": 12, "width": 12, "height": 6,
-              "properties": {
-                "region": "${AWS::Region}", "title": "Table throttles and Lambda throttles",
-                "metrics": [
-                  [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${LibrarianTable}", { "label": "table throttles" } ],
-                  [ "AWS/Lambda", "Throttles", "FunctionName", "${LibrarianStreamFunction}", { "label": "stream throttles" } ],
-                  [ ".", ".", "FunctionName", "${LibrarianFunction}", { "label": "auth throttles" } ]
-                ],
-                "stat": "Sum", "period": 3600
-              }
-            }
-          ]
-        }
 
 Outputs:
   LibrarianApiUrl:
