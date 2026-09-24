@@ -6,11 +6,11 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { asmExecInvocation, goldenRunnerEnvironment, resolveAsmExec } from './golden-live-config.mjs';
+import { asmExecInvocation, awsProfileArgs, goldenRunnerEnvironment, resolveAsmExec } from './golden-live-config.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const stackName = process.env.LIBRARIAN_STACK_NAME || 'weekly-thing-librarian';
-const profile = process.env.AWS_PROFILE || 'jamie';
+const profile = process.env.AWS_PROFILE;
 const asmExec = resolveAsmExec({
   asmExec: process.env.ASM_EXEC,
   codexHome: process.env.CODEX_HOME,
@@ -30,8 +30,7 @@ function stackOutputs() {
   const response = execFileSync(
     'aws',
     [
-      '--profile',
-      profile,
+      ...awsProfileArgs(profile),
       'cloudformation',
       'describe-stacks',
       '--stack-name',
@@ -50,7 +49,6 @@ const result = spawnSync(asmCommand, [...asmArgs, process.execPath, join(scriptD
   env: {
     ...process.env,
     ASM_EXEC_SOURCE: asmExec,
-    AWS_PROFILE: profile,
     ...goldenRunnerEnvironment(stackOutputs())
   },
   stdio: 'inherit'

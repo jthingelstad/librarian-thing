@@ -22,3 +22,7 @@ export function resolveAsmExec({ asmExec, codexHome, home, exists }) {
 export function asmExecInvocation(asmExec, isExecutable) {
   return isExecutable ? [asmExec] : ['python3', asmExec];
 }
+
+export function awsProfileArgs(profile) {
+  return profile ? ['--profile', profile] : [];
+}

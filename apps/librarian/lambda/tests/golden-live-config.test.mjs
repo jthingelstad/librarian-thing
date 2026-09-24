@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { asmExecInvocation, goldenRunnerEnvironment, resolveAsmExec } from '../scripts/golden-live-config.mjs';
+import {
+  asmExecInvocation,
+  awsProfileArgs,
+  goldenRunnerEnvironment,
+  resolveAsmExec
+} from '../scripts/golden-live-config.mjs';
 
 test('golden runner resolves only the generated harness secret', () => {
   const environment = goldenRunnerEnvironment({
@@ -35,4 +40,9 @@ test('golden runner finds the bundled resolver without CODEX_HOME', () => {
 test('golden runner invokes non-executable resolver source through Python', () => {
   assert.deepEqual(asmExecInvocation('/tmp/asm-exec', false), ['python3', '/tmp/asm-exec']);
   assert.deepEqual(asmExecInvocation('/usr/local/bin/asm-exec', true), ['/usr/local/bin/asm-exec']);
+});
+
+test('golden runner uses the ambient AWS identity unless a profile is explicitly requested', () => {
+  assert.deepEqual(awsProfileArgs(undefined), []);
+  assert.deepEqual(awsProfileArgs('cloud-engineer'), ['--profile', 'cloud-engineer']);
 });
