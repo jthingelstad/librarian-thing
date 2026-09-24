@@ -151,9 +151,6 @@ Resources:
         StreamViewType: NEW_AND_OLD_IMAGES
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianGoldenRetrieveSecret:
     Type: AWS::SecretsManager::Secret
@@ -167,17 +164,11 @@ Resources:
         SecretStringTemplate: '{}'
         PasswordLength: 48
         ExcludePunctuation: true
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianFunctionRole:
     Type: AWS::IAM::Role
     Properties:
       PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianRuntimeBoundary
-      Tags:
-        - Key: project
-          Value: Thingy
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -298,9 +289,6 @@ Resources:
       Role: !GetAtt LibrarianFunctionRole.Arn
       Runtime: nodejs24.x
       Timeout: 35
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianStreamFunction:
     Type: AWS::Lambda::Function
@@ -350,9 +338,6 @@ Resources:
       Role: !GetAtt LibrarianFunctionRole.Arn
       Runtime: nodejs24.x
       Timeout: 300
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianEvalFunction:
     Type: AWS::Lambda::Function
@@ -380,9 +365,6 @@ Resources:
       Role: !GetAtt LibrarianFunctionRole.Arn
       Runtime: nodejs24.x
       Timeout: 180
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianEvalEventSource:
     Type: AWS::Lambda::EventSourceMapping
@@ -512,8 +494,6 @@ Resources:
     Properties:
       Name: weekly-thing-librarian
       ProtocolType: HTTP
-      Tags:
-        project: Thingy
       CorsConfiguration:
         AllowHeaders:
           - content-type
@@ -647,8 +627,6 @@ Resources:
       DefaultRouteSettings:
         ThrottlingBurstLimit: 50
         ThrottlingRateLimit: 20
-      Tags:
-        project: Thingy
 
   LibrarianInvokePermission:
     Type: AWS::Lambda::Permission
@@ -720,9 +698,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   # Alarms previously had no AlarmActions - they fired into the void and
   # nobody was notified when Thingy broke. Everything routes here now.
@@ -734,9 +709,6 @@ Resources:
     Type: AWS::SNS::Topic
     Properties:
       TopicName: weekly-thing-librarian-alarms
-      Tags:
-        - Key: project
-          Value: Thingy
 
   # Poison records on the eval stream mapping retry a bounded number of
   # times, bisect to isolate the bad record, and land here instead of
@@ -746,9 +718,6 @@ Resources:
     Properties:
       QueueName: weekly-thing-librarian-eval-dlq
       MessageRetentionPeriod: 1209600
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianEvalDlqAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -768,9 +737,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianEvalErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -790,9 +756,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   # OAuth abuse and failure visibility: token/register rejections are 4xx
   # responses, invisible to the Lambda Errors metric. A log metric filter
@@ -822,9 +785,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   # The stream Lambda handles its own exceptions (the SSE catch answers the
   # reader and returns normally), so the built-in Lambda Errors metric stays
@@ -857,9 +817,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianChatRejectionsMetricFilter:
     Type: AWS::Logs::MetricFilter
@@ -886,9 +843,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   # The guest circuit breaker tripping is worth knowing about the day it
   # happens - either Thingy is having a moment (raise the cap) or someone
@@ -918,9 +872,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianAuthErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -940,9 +891,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianStreamErrorsAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -962,9 +910,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   LibrarianStreamThrottlesAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -984,17 +929,11 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-      Tags:
-        - Key: project
-          Value: Thingy
 
   BedrockEvaluationRole:
     Type: AWS::IAM::Role
     Properties:
       PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/WeeklyThingLibrarianEvaluationBoundary
-      Tags:
-        - Key: project
-          Value: Thingy
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:

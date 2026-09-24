@@ -177,3 +177,36 @@ def test_template_runtime_permissions_fit_reviewed_boundaries():
                             )
                             for grant in boundary
                         ), f"Review {name}: {action} {resource} exceeds its boundary"
+
+
+def test_tags_follow_the_account_standard(monkeypatch):
+    standard = {
+        "Application": "Thingelstad",
+        "Project": "librarian",
+        "Environment": "production",
+        "Repository": "jthingelstad/librarian-thing",
+    }
+    assert deploy.STACK_TAGS == {**standard, "ManagedBy": "cloudformation"}
+    assert deploy.REPOSITORY_TAGS == {**standard, "ManagedBy": "repository"}
+    template = yaml.load(
+        (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
+    )
+    # Stack tags propagate to every taggable resource; a per-resource tag would drift.
+    assert [
+        name
+        for name, resource in template["Resources"].items()
+        if "Tags" in resource.get("Properties", {})
+    ] == []
+
+    # Bucket bootstrap retires lowercase `project` and keeps unrelated tags.
+    s3 = secure_bucket(monkeypatch)
+    s3.get_bucket_lifecycle_configuration.return_value = {"Rules": []}
+    s3.get_bucket_tagging.return_value = {
+        "TagSet": [{"Key": "project", "Value": "Thingy"}, {"Key": "Keep", "Value": "yes"}]
+    }
+    deploy.ensure_private_bucket("weekly-thing-librarian")
+    tag_set = s3.put_bucket_tagging.call_args.kwargs["Tagging"]["TagSet"]
+    assert {tag["Key"]: tag["Value"] for tag in tag_set} == {
+        "Keep": "yes",
+        **deploy.REPOSITORY_TAGS,
+    }

@@ -24,6 +24,15 @@ BOUNDARIES = {
     "BedrockEvaluationRole": ("WeeklyThingLibrarianEvaluationBoundary", "evaluation-boundary"),
 }
 DEPLOY_POLICY = "WeeklyThingLibrarianDeployScoped"
+# The account tag standard (projects-sysadmin docs/AWS-TAGS.md) for IAM made here,
+# outside the stack.
+TAGS = [
+    {"Key": "Application", "Value": "Thingelstad"},
+    {"Key": "Project", "Value": "librarian"},
+    {"Key": "Environment", "Value": "production"},
+    {"Key": "ManagedBy", "Value": "repository"},
+    {"Key": "Repository", "Value": "jthingelstad/librarian-thing"},
+]
 CFN_TRUST = {
     "Version": "2012-10-17",
     "Statement": [
@@ -330,9 +339,7 @@ def put_managed(iam, name: str, body: dict) -> str:
     try:
         existing = managed_document(iam, arn)
     except iam.exceptions.NoSuchEntityException:
-        iam.create_policy(
-            PolicyName=name, PolicyDocument=encoded, Tags=[{"Key": "project", "Value": "Thingy"}]
-        )
+        iam.create_policy(PolicyName=name, PolicyDocument=encoded, Tags=TAGS)
     else:
         if existing != body:
             versions = iam.list_policy_versions(PolicyArn=arn)["Versions"]
@@ -377,7 +384,7 @@ def apply(session: boto3.Session, snapshot_dir: Path) -> None:
         iam.create_role(
             RoleName=CFN_ROLE,
             AssumeRolePolicyDocument=json.dumps(CFN_TRUST),
-            Tags=[{"Key": "project", "Value": "Thingy"}],
+            Tags=TAGS,
         )
     else:
         iam.update_assume_role_policy(RoleName=CFN_ROLE, PolicyDocument=json.dumps(CFN_TRUST))

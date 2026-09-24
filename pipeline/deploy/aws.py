@@ -35,8 +35,26 @@ PRIVATE_GRAPH_KEY = "artifacts/graph.json"
 PRIVATE_BLOG_CORPUS_KEY = "artifacts/blog_corpus.json"
 PRIVATE_PODCAST_CORPUS_KEY = "artifacts/podcast_corpus.json"
 DEFAULT_ALLOWED_ORIGINS = "https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4178,http://127.0.0.1:4178"
-PROJECT_TAG_KEY = "project"
-PROJECT_TAG_VALUE = "Thingy"
+
+
+# The account tag standard (projects-sysadmin docs/AWS-TAGS.md). Stack tags
+# propagate to every taggable stack resource, so the template carries none.
+def standard_tags(managed_by: str) -> dict[str, str]:
+    return {
+        "Application": "Thingelstad",
+        "Project": "librarian",
+        "Environment": "production",
+        "ManagedBy": managed_by,
+        "Repository": "jthingelstad/librarian-thing",
+    }
+
+
+STACK_TAGS = standard_tags("cloudformation")
+# The artifact bucket and Lambda log groups are made by this script, outside the stack.
+REPOSITORY_TAGS = standard_tags("repository")
+# AWS treats lowercase `project` as a different key from `Project`.
+RETIRED_TAG_KEYS = frozenset({"project"})
+
 THINGY_MODEL_ENV_NAMES = (
     "THINGY_DEFAULT_MODEL",
     "THINGY_FAST_MODEL",
@@ -202,8 +220,13 @@ def ensure_private_bucket(bucket: str) -> None:
         Bucket=bucket,
         Tagging={
             "TagSet": [
-                *[tag for tag in current_tags if tag.get("Key") != PROJECT_TAG_KEY],
-                {"Key": PROJECT_TAG_KEY, "Value": PROJECT_TAG_VALUE},
+                *[
+                    tag
+                    for tag in current_tags
+                    if tag.get("Key") not in REPOSITORY_TAGS
+                    and tag.get("Key") not in RETIRED_TAG_KEYS
+                ],
+                *[{"Key": key, "Value": value} for key, value in REPOSITORY_TAGS.items()],
             ]
         },
     )
@@ -396,7 +419,8 @@ def deploy_stack(
         "TemplateBody": body,
         "Parameters": parameters,
         "Capabilities": ["CAPABILITY_IAM"],
-        "Tags": [{"Key": PROJECT_TAG_KEY, "Value": PROJECT_TAG_VALUE}],
+        # The full set: UpdateStack replaces the stack's tags, dropping retired keys.
+        "Tags": [{"Key": key, "Value": value} for key, value in STACK_TAGS.items()],
     }
     if cloudformation_role_arn:
         stack_options["RoleARN"] = cloudformation_role_arn
@@ -477,11 +501,9 @@ def configure_log_retention(stack_name: str, days: int = 30) -> None:
         logs.put_retention_policy(logGroupName=log_group_name, retentionInDays=days)
         log_group_arn = f"arn:aws:logs:{region}:{account_id}:log-group:{log_group_name}"
         try:
-            logs.tag_resource(resourceArn=log_group_arn, tags={PROJECT_TAG_KEY: PROJECT_TAG_VALUE})
+            logs.tag_resource(resourceArn=log_group_arn, tags=REPOSITORY_TAGS)
         except ClientError:
-            logs.tag_log_group(
-                logGroupName=log_group_name, tags={PROJECT_TAG_KEY: PROJECT_TAG_VALUE}
-            )
+            logs.tag_log_group(logGroupName=log_group_name, tags=REPOSITORY_TAGS)
 
 
 def update_env_file(values: dict[str, str]) -> None:
