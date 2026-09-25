@@ -210,3 +210,38 @@ def test_tags_follow_the_account_standard(monkeypatch):
         "Keep": "yes",
         **deploy.REPOSITORY_TAGS,
     }
+
+
+def test_bucket_bootstrap_keeps_logs_and_old_builds_one_month(monkeypatch) -> None:
+    s3 = secure_bucket(monkeypatch)
+    s3.get_bucket_tagging.return_value = {"TagSet": []}
+    s3.get_bucket_lifecycle_configuration.return_value = {
+        "Rules": [
+            {"ID": "transition-bedrock-invocation-logs", "Status": "Enabled"},
+            {"ID": "someone-elses-rule", "Status": "Enabled"},
+        ]
+    }
+    deploy.ensure_private_bucket("weekly-thing-librarian")
+    rules = {
+        rule["ID"]: rule
+        for rule in s3.put_bucket_lifecycle_configuration.call_args.kwargs[
+            "LifecycleConfiguration"
+        ]["Rules"]
+    }
+
+    # Bedrock prompts and responses, Thingy chats included, live one month.
+    logs = rules["expire-bedrock-invocation-logs"]
+    assert logs["Filter"] == {"Prefix": "logs/invocations/"}
+    assert logs["Expiration"] == {"Days": 30}
+    assert "Transitions" not in logs
+    # A replaced corpus build lives one month; the current one is untouched.
+    builds = rules["expire-replaced-corpus-builds"]
+    assert builds["Filter"] == {"Prefix": "artifacts/"}
+    assert builds["NoncurrentVersionExpiration"] == {"NoncurrentDays": 30}
+    assert "Expiration" not in builds
+    assert rules["clean-up-uploads-and-delete-markers"]["AbortIncompleteMultipartUpload"] == {
+        "DaysAfterInitiation": 7
+    }
+    # The replaced rule goes; rules this code does not own stay.
+    assert "transition-bedrock-invocation-logs" not in rules
+    assert "someone-elses-rule" in rules

@@ -54,6 +54,8 @@ STACK_TAGS = standard_tags("cloudformation")
 REPOSITORY_TAGS = standard_tags("repository")
 # AWS treats lowercase `project` as a different key from `Project`.
 RETIRED_TAG_KEYS = frozenset({"project"})
+# Replaced lifecycle rules, dropped from the bucket when bootstrap re-applies.
+RETIRED_LIFECYCLE_RULE_IDS = frozenset({"transition-bedrock-invocation-logs"})
 
 THINGY_MODEL_ENV_NAMES = (
     "THINGY_DEFAULT_MODEL",
@@ -238,12 +240,15 @@ def ensure_private_bucket(bucket: str) -> None:
             "Expiration": {"Days": 30},
             "NoncurrentVersionExpiration": {"NoncurrentDays": 30},
         },
+        # Bedrock writes every prompt and response here, Thingy chats included.
+        # A month is enough to debug with; nothing keeps them longer (Jamie,
+        # 2026-09-24).
         {
-            "ID": "transition-bedrock-invocation-logs",
+            "ID": "expire-bedrock-invocation-logs",
             "Status": "Enabled",
             "Filter": {"Prefix": "logs/invocations/"},
-            "Transitions": [{"Days": 90, "StorageClass": "GLACIER_IR"}],
-            "NoncurrentVersionExpiration": {"NoncurrentDays": 90},
+            "Expiration": {"Days": 30},
+            "NoncurrentVersionExpiration": {"NoncurrentDays": 1},
         },
         {
             "ID": "expire-thingy-dispatch-artifacts",
@@ -251,6 +256,22 @@ def ensure_private_bucket(bucket: str) -> None:
             "Filter": {"Prefix": "artifacts/dispatches/"},
             "Expiration": {"Days": 90},
             "NoncurrentVersionExpiration": {"NoncurrentDays": 30},
+        },
+        # Every corpus build replaces corpus.json and blog_corpus.json; the
+        # replaced copies had grown to 32 GB against 2 GB of current files.
+        # Any build can be regenerated from source.
+        {
+            "ID": "expire-replaced-corpus-builds",
+            "Status": "Enabled",
+            "Filter": {"Prefix": "artifacts/"},
+            "NoncurrentVersionExpiration": {"NoncurrentDays": 30},
+        },
+        {
+            "ID": "clean-up-uploads-and-delete-markers",
+            "Status": "Enabled",
+            "Filter": {"Prefix": ""},
+            "Expiration": {"ExpiredObjectDeleteMarker": True},
+            "AbortIncompleteMultipartUpload": {"DaysAfterInitiation": 7},
         },
     ]
     try:
@@ -261,7 +282,7 @@ def ensure_private_bucket(bucket: str) -> None:
         if exc.response.get("Error", {}).get("Code") != "NoSuchLifecycleConfiguration":
             raise
         current_lifecycle_rules = []
-    managed_ids = {rule["ID"] for rule in managed_lifecycle_rules}
+    managed_ids = {rule["ID"] for rule in managed_lifecycle_rules} | RETIRED_LIFECYCLE_RULE_IDS
     s3.put_bucket_lifecycle_configuration(
         Bucket=bucket,
         LifecycleConfiguration={
