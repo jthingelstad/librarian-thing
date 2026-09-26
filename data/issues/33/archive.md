@@ -17,12 +17,16 @@ I have a suggestion for everyone, one that I’m giving myself as well. Disconne
 
 ---
 
+## Photog 📷
+
 [Semisonic](http://semisonic.com) performing Feeling Strangely Fine [in it's entirety at First Ave](http://first-avenue.com) -- awesome! 👏
 
 Dec 16, 2017 at 9:52 PM
 1st Ave, Minneapolis MN
 
 ---
+
+## Links 📌
 
 ### [Dozens of Companies Are Using Facebook to Exclude Older… — ProPublica](https://www.propublica.org/article/facebook-ads-age-discrimination-targeting)
 
@@ -94,11 +98,15 @@ I haven't used Lightroom much in the last couple of years but it’s still my go
 
 ---
 
+## Promotion 🎁
+
 https://archive.org
 
 [Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
+
+## Microblog updates 🎈
 
 - You remove all the social apps from your iPhone and you realize it wont fill all your idle moments. At first this makes you angry — damn you, entertain me! Then you realize idle moments are good. Life [happens in those idle moments too.](https://www.thingelstad.com/2017/12/21/you-remove-all.html)
 - Another super fun R/W Book Club meeting tonight! Good [conversation about Daemon by Daniel Suarez.](https://www.thingelstad.com/2017/12/20/another-super-fun.html)

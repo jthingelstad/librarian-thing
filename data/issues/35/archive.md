@@ -17,12 +17,16 @@ I also kicked off the new year by taking [Shawn Blanc's Focus Course](https://th
 
 ---
 
+## Photog 📷
+
 One of our New Years Eve traditions with the kids is a game of Clue. This year Mrs. Peacock did it with the Wrench in the Hall!
 
 Dec 31, 2017 at 9:03 PM
 Home, Minneapolis MN
 
 ---
+
+## Links 📌
 
 ### [Prometheus Blog Series (Part 1): Metrics and Labels](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-1-metrics-and-labels/?__s=bsgqbmfxusxefqxs6as6)
 
@@ -90,11 +94,15 @@ This is super cool and I might have to try this. I know our house has a wireless
 
 ---
 
+## Promotion 🎁
+
 https://minnestar.org
 
 [Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ---
+
+## Microblog updates 🎈
 
 - Entering the world of sous vide cooking with my new Joule. Love that I even get to update firmware on this! Has WiFi and can [be controlled anywhere from iOS. 😁👍🏻](https://www.thingelstad.com/2018/01/05/entering-the-world.html)
 - Just finished module 1 of The Focus Course. It is a slow start but I see it building some foundational things. Looking forward [to the rest of the modules.](https://www.thingelstad.com/2018/01/01/just-finished-module.html)

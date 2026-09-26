@@ -17,11 +17,15 @@ I’m taking this week off from work and we have been enjoying time at the lake 
 
 ---
 
+## Blog posts 📬
+
 ### [What apps make you better?](https://www.thingelstad.com/2017/what-apps-make-you-better/)
 
 What apps do you have on your phone that are making you a better person?
 
 ---
+
+## Photog 📷
 
 All bundled up for the winter with temperatures well below zero.
 
@@ -29,6 +33,8 @@ Dec 28, 2017 at 8:40 AM
 Warsaw MN
 
 ---
+
+## Links 📌
 
 ### [The Lowertown Line - Twin Cities PBS](http://www.tpt.org/the-lowertown-line/)
 
@@ -116,6 +122,8 @@ This article got me thinking about other ways that your phone could be used to h
 
 ---
 
+## Now Reading 📚
+
 http://www.amazon.com/dp/162672315X/?tag=thingelstad01-20
 
 ### [Tetris: The Games People Play](http://www.amazon.com/dp/162672315X/?tag=thingelstad01-20)
@@ -128,11 +136,15 @@ I had always heard that Tetris had a complicated legal background and this graph
 
 ---
 
+## Promotion 🎁
+
 https://archive.org
 
 [Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
+
+## Microblog updates 🎈
 
 - Watched Hacksaw Ridge tonight. Very well done. Battle scenes were a bit much. Tammy and I have now watched [all the 2017 Best Picture nominees.](https://www.thingelstad.com/2017/12/29/watched-hacksaw-ridgehttpimdbcomtitlett.html)
 - Static site generators are great in so many ways, but the friction [in publishing with them is horrible.](https://www.thingelstad.com/2017/12/29/static-site-generators.html)
