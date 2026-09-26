@@ -59,7 +59,9 @@ jobs:
           allowed-account-ids: '999153317627'
           aws-region: us-east-1
 
-      - uses: astral-sh/setup-uv@v10.0.1
+      # Pinned to a commit: this job holds OIDC deploy credentials and a PAT
+      # that writes to weekly.thingelstad.com.
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           enable-cache: true
           prune-cache: true
@@ -75,8 +77,8 @@ jobs:
       - name: Install Lambda dependencies
         run: npm --prefix apps/librarian/lambda ci
 
-      - name: Audit Lambda dependencies
-        run: npm --prefix apps/librarian/lambda audit --audit-level=high
+      # npm audit runs in tests.yml, not here: a new upstream advisory should
+      # not block an issue's corpus rebuild.
 
       - name: Lint
         run: uv run --locked ruff check .
@@ -168,7 +170,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Run Python tests
-        run: uv run --locked python -m unittest discover -s tests -p 'test_*.py' -t .
+        run: uv run --locked pytest tests/ -q
 
       - name: Run Lambda tests
         run: npm --prefix apps/librarian/lambda run verify
