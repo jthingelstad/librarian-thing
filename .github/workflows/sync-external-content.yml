@@ -1,7 +1,7 @@
 name: Librarian — Sync External Content
 
-# Pull publishing-surface content into Studio's canonical data store. This is
-# the ingest side of Thingy's corpus pipeline:
+# Pull publishing-surface content into librarian-thing's canonical data
+# store. This is the ingest side of Thingy's corpus pipeline:
 #
 #   Micro.blog thingelstad.com posts -> data/blog/posts/
 #   another.thingelstad.com episodes -> data/podcast/another-thing/episodes/
@@ -25,7 +25,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: studio-external-content-sync
+  group: librarian-external-content-sync
   cancel-in-progress: false
 
 jobs:
@@ -33,12 +33,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Check out Studio
+      # The push at the end must trigger deploy.yml, and GITHUB_TOKEN pushes
+      # do not trigger downstream workflows. Falling back to it would commit
+      # content that never reaches the corpus, so fail instead.
+      # STUDIO_PAT_TOKEN keeps its Studio-era name: a secret cannot be renamed
+      # without re-entering its value, which lives only in GitHub.
+      - name: Require the push PAT
+        env:
+          STUDIO_PAT_TOKEN: ${{ secrets.STUDIO_PAT_TOKEN }}
+        run: |
+          if [[ -z "$STUDIO_PAT_TOKEN" ]]; then
+            echo "::error title=STUDIO_PAT_TOKEN missing::The sync push needs STUDIO_PAT_TOKEN so deploy.yml rebuilds the corpus. A GITHUB_TOKEN push would not trigger it."
+            exit 1
+          fi
+
+      - name: Check out librarian-thing
         uses: actions/checkout@v7
         with:
-          # Use a PAT so the resulting push can trigger the production
-          # workflow. GITHUB_TOKEN pushes do not trigger downstream workflows.
-          token: ${{ secrets.STUDIO_PAT_TOKEN || github.token }}
+          token: ${{ secrets.STUDIO_PAT_TOKEN }}
 
       - uses: astral-sh/setup-uv@v10.0.1
         with:
@@ -75,7 +87,7 @@ jobs:
         with:
           repository: jthingelstad/another.thingelstad.com
           path: external/another.thingelstad.com
-          token: ${{ secrets.STUDIO_PAT_TOKEN || github.token }}
+          token: ${{ secrets.STUDIO_PAT_TOKEN }}
 
       - name: Import Another Thing episodes
         run: |
@@ -85,14 +97,17 @@ jobs:
 
       - name: Commit synced content
         run: |
-          git config user.name "studio-bot"
-          git config user.email "studio-bot@users.noreply.github.com"
+          git config user.name "librarian-thing-bot"
+          git config user.email "librarian-thing-bot@users.noreply.github.com"
           git add data/blog data/podcast
           if git diff --cached --quiet; then
             echo "No external content changes to commit."
             exit 0
           fi
           git commit -m "Sync external publishing content"
+          # WT Builder commits issues to main too; replay on top of anything
+          # that landed since checkout instead of failing the push.
+          git pull --rebase
           git push
 
       - name: Fail if any ingest was skipped
