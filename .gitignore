@@ -8,9 +8,11 @@ apps/librarian/lambda/dist/
 # Local cache
 cache/
 
-# Environment variables
+# Environment variables (backups of .env are secrets too)
 .env
 .env-*
+.env.*
+!.env.example
 
 # Python
 .venv/
@@ -34,9 +36,7 @@ playwright-report/
 # Pagefind
 _site/pagefind/
 
-# Workshop bot runtime DB (recreated locally)
-apps/workshop_bot/data/
-apps/workshop_bot/logs/
+# SQLite sidecar files
 *.db-journal
 *.db-wal
 *.db-shm
@@ -57,4 +57,3 @@ apps/site/_data/status.json
 
 # Generated site inputs — built transiently, handed off to the website repo, never committed here
 apps/site/
-.env.retired
