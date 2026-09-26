@@ -1,7 +1,8 @@
 # Phase 2 — Cutover & Weekly Slim-Down (Completed)
 
 > Historical record: Studio and the Workshop bot have since been retired. See
-> `README.md` and `ALIGNMENT.md` for the current Librarian architecture.
+> [`README.md`](../README.md) and [`ALIGNMENT.md`](../ALIGNMENT.md) for the
+> current Librarian architecture.
 
 Phase 2 turned Studio into the live producer and reduced
 `weekly.thingelstad.com` to a render surface.

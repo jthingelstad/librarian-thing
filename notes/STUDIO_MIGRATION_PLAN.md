@@ -1,8 +1,8 @@
 # Studio Migration — Historical Plan
 
 > Status: completed. This document is preserved as the original migration
-> brief. The current architecture record is `ALIGNMENT.md`; completed runbooks
-> are `PHASE_1.md` and `PHASE_2.md`.
+> brief. The current architecture record is [`ALIGNMENT.md`](../ALIGNMENT.md);
+> completed runbooks are [`PHASE_1.md`](PHASE_1.md) and [`PHASE_2.md`](PHASE_2.md).
 
 Splitting the overloaded `weekly.thingelstad.com` monorepo into a **brain** (Studio)
 and a set of **surfaces** (newsletter, blog, podcast, Thingy). This doc is both the
