@@ -87,7 +87,7 @@ The rest of life mostly went on as normal. I had the luck of scheduling my annua
 
 Unfortunately I got taken down with a nasty cold at the end of the week and I've mostly been napping and sniffling 🤧 the last couple of days, along with a headache, sore throat, sneezing – you get the picture. I'm still getting your Saturday links to you though. The Post Office 📭 halted mail delivery on Wednesday, but I won't be so easily deterred!
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Hack the Gap 2019](https://www.thingelstad.com/2019/hack-the-gap-2019)
 

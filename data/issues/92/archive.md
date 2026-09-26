@@ -72,7 +72,7 @@ word_count: 1559
 ---
 It's been a busy week and I’m annoyed that I seem to have caught a new cold, right as I was recovering from the previous one. Let's get right to links and other fun stuff! 👉
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Book: Scale](https://www.thingelstad.com/2019/book-scale)
 

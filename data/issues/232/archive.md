@@ -157,7 +157,7 @@ but their own vision."
 
 ---
 
-### Weekly Thing on Reddit?
+## Weekly Thing on Reddit?
 
 Are you into Reddit? I've been giving it another go lately. I've long thought that it would be really cool to have a place for Weekly Thing readers to comment. I even once played around with using Discord for that but it never felt right. Reddit however could be a great fit.
 

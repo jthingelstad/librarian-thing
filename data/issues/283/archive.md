@@ -267,7 +267,7 @@ Encore:
 ### [Gabe Mollica "Solo" at the Parkway](https://www.thingelstad.com/2024/04/07/gabe-mollica-solo.html)
 Apr 7, 2024 at 9:26 PM
 
-Tonight Tammy and I saw [Gabe Mollica](https://linktr.ee/GabeMollica) perform [**Solo: A Show About Friendship**](https://theparkwaytheater.com/all-events/solo-story-friendship)** at the [Parkway Theater](https://theparkwaytheater.com).
+Tonight Tammy and I saw [Gabe Mollica](https://linktr.ee/GabeMollica) perform [**Solo: A Show About Friendship**](https://theparkwaytheater.com/all-events/solo-story-friendship) at the [Parkway Theater](https://theparkwaytheater.com).
 
 First [Ben Katzner](https://linktr.ee/shaqkatzner) opened things up. Katzner recently moved to Minneapolis from New York. Katzner. He also had dinner at [Creekside Supper Club](https://www.creeksidemn.com) right before the show because we ran into him at the front door as we were going in for dinner. I liked his comedy.
 

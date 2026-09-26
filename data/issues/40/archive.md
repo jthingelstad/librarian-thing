@@ -17,6 +17,8 @@ Now we are ready to transition to the Winter Olympics ⛷⛸🛷 on TV! 📺🇺
 
 ---
 
+## Blog posts 📬
+
 ### [Identify Addictive Application Patterns](https://www.thingelstad.com/2018/identify-addictive-application-patterns/)
 
 Learn to identify patterns in software that create addictive feedback loops.

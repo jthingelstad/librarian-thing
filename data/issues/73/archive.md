@@ -135,7 +135,7 @@ Life feels like it's in overdrive right now. We are trying to finish up a series
 
 Final note for a fun thing coming up — I got [confirmation that my Tesla Model 3](https://www.tesla.com/model3) is ready for me to pickup on Monday! 🙌
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Goodbye Chase](https://www.thingelstad.com/2018/goodbye-chase/)
 

@@ -95,7 +95,7 @@ word_count: 1455
 ---
 Welcome to the final Weekly Thing of 2018! We had a great Christmas. One of my favorite traditions is each family member getting a project that we do over Christmas break. The kids each got [big Lego projects: a Ferris Wheel](https://shop.lego.com/en-US/product/Ferris-Wheel-10247), [an Old Fishing Store](https://shop.lego.com/en-US/product/Old-Fishing-Store-21310). [Tammy got an Earth Puzzle](https://n-e-r-v-o-u-s.com/shop/product.php?code=368) that was much harder than I expected. [I'm assembling a UGears Steam Locomotive](https://ugears.online/collections/ugears_mechanical_models/products/460-steam-locomotive-with-tender-mechanical-model-advanced) ! Each person has their work area and gets plenty of time to get their project done. 🧩
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Book: When Breath Becomes Air](https://www.thingelstad.com/2018/book-when-breath-becomes-air/)
 

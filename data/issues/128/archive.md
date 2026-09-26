@@ -104,7 +104,7 @@ I’m adding a new section to the Weekly Thing! A lot of people send awesome rep
 
 Now let's get to the links!
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Kyiv Photowalk](https://www.thingelstad.com/2019/kyiv-photowalk)
 
