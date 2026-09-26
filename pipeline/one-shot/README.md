@@ -14,6 +14,7 @@ Do not re-run these against the current archive unless you explicitly intend to 
 | `fetch_mailchimp.py` | `777aa70` | Fetched MailChimp campaign HTML to recover 225 orphan image filenames. |
 | `fix_archive_headings.py` | (this cleanup session) | Demoted H1 section titles to H2 (and link H2 → H3) in issues #132–#136. Applied + synced. |
 | `fix_archive_links.py` | (this cleanup session) | Fixed 8 specific malformed markdown links (#40, #82, #126, #132, #136, #161, #221, #291). Applied + synced. |
+| `fix_link_list_anchors.py` | `f7f527cb` | Moved the opening bracket back to the start of 279 MailChimp-era link-list titles across 68 issues (WT53–WT130) that the linkifier had split (`- Title of [the page](url) host`). Bracket moves only. It scans every issue, so do not re-run it against the archive: a newer bullet of the same shape would have its link text rewritten. |
 | `intro_openers.txt` | `2f7224b` | Data file used by `remove_intro_template.py` — list of known intro-template prefixes to match. |
 | `modernize_hr.py` | `9b9c2f4` | Modernized MailChimp-era section dividers to markdown `---`. |
 | `populate_missing_images.py` | `6c2ad3d` | Recovered 103 hero images for MailChimp-era issues from campaign HTML. |

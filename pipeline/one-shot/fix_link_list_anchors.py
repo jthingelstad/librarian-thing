@@ -22,8 +22,8 @@ touched, which confines the repair to those link lists — prose and microblog
 Tracked as jthingelstad/weekly.thingelstad.com#8. Idempotent: a repaired line
 has no text before the bracket, so it no longer matches.
 
-  uv run --locked python pipeline/audits/fix_link_list_anchors.py --dry-run
-  uv run --locked python pipeline/audits/fix_link_list_anchors.py
+  uv run --locked python pipeline/one-shot/fix_link_list_anchors.py --dry-run
+  uv run --locked python pipeline/one-shot/fix_link_list_anchors.py
 """
 
 from __future__ import annotations
