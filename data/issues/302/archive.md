@@ -288,7 +288,7 @@ _To respond to Straw Polls please [subscribe to the Weekly Thing](https://weekly
 
 [Nov 15, 2024 at 9:25 PM](https://www.thingelstad.com/2024/11/15/tammy-and-i.html)
 
-Tammy and I went to [A Real Pain](https://en.wikipedia.org/wiki/A_Real_Pain) tonight. I thought it was fine and a bit boring. The reviews say it is “powerfully funny” which I didn’t get at all. It also seemed odd that [Kieran Culkin](Kieran Culkin)’s character behavior seemed so similar to Roman Roy. 🤷‍♂️
+Tammy and I went to [A Real Pain](https://en.wikipedia.org/wiki/A_Real_Pain) tonight. I thought it was fine and a bit boring. The reviews say it is “powerfully funny” which I didn’t get at all. It also seemed odd that Kieran Culkin’s character behavior seemed so similar to Roman Roy. 🤷‍♂️
 
 ![](https://files.thingelstad.com/weekly-thing/302/journal/866c8857a2.jpg)
 

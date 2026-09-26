@@ -35,7 +35,7 @@ Now, more than ever, there's a strong call-to-action to press forward and progre
 
 👍
 
-Why Are There Few Women in Tech? [Watch a Recruiting Session | WIRED](https://www.wired.com/story/why-are-there-few-women-in-tech-watch-a-recruiting-session/)
+[Why Are There Few Women in Tech? Watch a Recruiting Session | WIRED](https://www.wired.com/story/why-are-there-few-women-in-tech-watch-a-recruiting-session/)
 www.wired.com
 
 I'd like to go back and read the original paper [Puncturing the pipeline: Do technology companies alienate women in recruiting sessions?](http://journals.sagepub.com/doi/abs/10.1177/0306312718756766) but had to due with this Wired writeup for now.
@@ -115,7 +115,7 @@ The researchers argue that the following factors are all important in giving peo
 
 This made [me thing of Fooled by Randomness](https://en.wikipedia.org/wiki/Fooled_by_Randomness) as I read it. I highly recommend that book. It forever changed how I look at track records.
 
-Uber and Lyft drivers' median hourly wage is just $3.37, report [finds | Technology | The Guardian](https://www.theguardian.com/technology/2018/mar/01/uber-lyft-driver-wages-median-report)
+[Uber and Lyft drivers' median hourly wage is just $3.37, report finds | Technology | The Guardian](https://www.theguardian.com/technology/2018/mar/01/uber-lyft-driver-wages-median-report)
 www.theguardian.com
 
 For all of the amazing work in the new digital economy, it’s a bit disheartening to see data like this. I worry that the lever of technology is so big that it’s going to cause fundamental breakdowns in our traditional economic systems.

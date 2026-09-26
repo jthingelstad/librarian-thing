@@ -19,12 +19,16 @@ Sign up for the EFF mailing list so you can stay up-to-date with the work they a
 
 ---
 
+## Photog 📷
+
 Giant Super Mario Bros. found in the Skyways of Downtown Minneapolis.
 
 Dec 14, 2017 at 1:57 PM
 801 Marquette Ave, Minneapolis MN
 
 ---
+
+## Links 📌
 
 ### [Brandi Carlile - The Mother (Live) - YouTube](https://www.youtube.com/watch?v=z865nKpgH0Q)
 
@@ -152,6 +156,8 @@ This is fabulous story about [this song. Thanks to Steve Yaeger](https://twitter
 
 ---
 
+## Now Reading 📚
+
 http://www.amazon.com/dp/0451231899/?tag=thingelstad01-20
 
 ### [Freedom (TM)](http://www.amazon.com/dp/0451231899/?tag=thingelstad01-20)
@@ -164,11 +170,15 @@ After reading Daemon and it’s cliffhanger ending I had to move on to Freedom r
 
 ---
 
+## Promotion 🎁
+
 https://minnestar.org
 
 [Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ---
+
+## Featured App 📱
 
 https://itunes.apple.com/us/app/working-copy-enterprise/id965019520?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
@@ -183,6 +193,8 @@ If you use Git as part of your toolchain and you want to do more on your iOS dev
 $14.99 5/5 stars
 
 ---
+
+## Microblog updates 🎈
 
 - Proud [member of the EFF! Donate now!](http://www.thingelstad.com/2017/12/12/proud-member-of.html)
 - Somebody thought these red sunglasses with flashing [lights were a good idea? 😕](http://www.thingelstad.com/2017/12/12/somebody-thought-these.html)

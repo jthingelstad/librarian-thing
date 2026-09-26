@@ -270,7 +270,7 @@ I've been using Hello Weather for a while now and I really like it. The informat
 
 Great example of an app that was built for one specific thing elegantly expanding to solve a wider area.
 
-### [Target and Elasticsearch: Maintaining an ELK stack over Peak Season](http:////target.github.io)
+### [Target and Elasticsearch: Maintaining an ELK stack over Peak Season](http://target.github.io)
 
 > One of the strongest benefits of launching an application into the cloud is the pure on-demand scalability that it provides. I’ve had the privilege of working with the ELK stack (Elasticsearch, Logstash, Kibana) for purposes of log aggregation for the past two years.
 

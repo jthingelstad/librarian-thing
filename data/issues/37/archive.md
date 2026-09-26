@@ -15,12 +15,16 @@ I’m not a big football 🏈 fan, but you'd have to be a zombie 🧟‍♂️ t
 
 ---
 
+## Photog 📷
+
 There is something magical about a collection of books waiting for you to go on a thousand adventures. Even more so when they are all kids books filled with magic.
 
 Jan 13, 2018 at 12:21 PM
 [Wild Rumpus](http://www.wildrumpusbooks.com) Minneapolis, MN
 
 ---
+
+## Links 📌
 
 ### [James Clear: There are 7 minutes/day you need to master to be productive - RescueTime](http://blog.rescuetime.com/james-clear/)
 
@@ -76,11 +80,15 @@ His argument is an interesting one and I think he's right. There are parts of th
 
 ---
 
+## Promotion 🎁
+
 https://archive.org
 
 [Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
+
+## Featured App 📱
 
 https://itunes.apple.com/us/app/rise-nutrition-weight-loss-coach/id794278760?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
@@ -95,6 +103,8 @@ I've used Rise in the past and I've started using it again. Rise is a pretty ama
 Free 4/5 stars
 
 ---
+
+## Microblog updates 🎈
 
 - Gas pumps with screens blaring advertising should be required by law [to have always present off buttons.](https://www.thingelstad.com/2018/01/19/gas-pumps-with.html)
 - I have been impressed with the Anki Cozmo — its amazing how much [character this little robot has! 🤖](https://www.thingelstad.com/2018/01/14/i-have-been.html)

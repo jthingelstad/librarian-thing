@@ -94,7 +94,7 @@ The web has 50 million more secure HTTPS endpoints now in part thanks to Let's E
 
 ### [New Apps for 2018 – MacStories](https://www.macstories.net/stories/new-apps-for-2018/)
 
-I always am curious to hear what apps Viticci is using and I love that he's highlighting some apps to improve himself, reminds me of my article [on apps that make you better](https://www.thingelstad.com/2017/what-apps-make-you-better/) [. I use Headspace](https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) [and Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) as well, and should look at Workouts++.
+I always am curious to hear what apps Viticci is using and I love that he's highlighting some apps to improve himself, reminds me of my article [on apps that make you better](https://www.thingelstad.com/2017/what-apps-make-you-better/). I use [Headspace](https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) and [Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) as well, and should look at Workouts++.
 
 ## Business
 

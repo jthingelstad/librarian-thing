@@ -182,7 +182,7 @@ I like this and agree with it entirely. I suspect the same is true in any discip
 
 ### [Health Checks and Graceful Degradation in Distributed Systems](https://medium.com/@copyconstruct/health-checks-in-distributed-systems-aa8a0e8c1672)
 
-I have been running health checks [for decades. BigCharts server is happy](http://bigcharts.marketwatch.com/up2.aspx) is [the first. MarketWatch is also happy](https://www.marketwatch.com/up2.aspx) .
+I have been running health checks for decades. [BigCharts server is happy](http://bigcharts.marketwatch.com/up2.aspx) is the first. [MarketWatch is also happy](https://www.marketwatch.com/up2.aspx).
 
 The “health” of a process is a spectrum. What we’re really interested in is the quality-of-service — such as how long it takes for a process to return the result of a given unit of work and the accuracy of the result.
 

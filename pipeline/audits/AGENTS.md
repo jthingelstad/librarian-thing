@@ -17,6 +17,7 @@ These take an audit's output and apply fixes back to `data/issues/{N}/archive.md
 
 - `fix_micropost_photos.py` — restores photos where `mp-photo-alt[]=` markers survived in the body (146 photos across 21 issues at last run).
 - `restore_missing_micropost_photos.py` — restores silently-lost single-photo microposts (407 photos across 60 issues at last run).
+- `fix_link_list_anchors.py` — moves the opening bracket back to the start of MailChimp-era link-list titles the linkifier split (`- Title of [the page](url) host`). Bracket moves only; idempotent (279 items across 68 issues at first run, 2026-09).
 - `apply_audit_fixes.py` — apply LLM-suggested fixes from `tmp/llm-audit.json`. Operator chooses which suggestions to apply.
 - `migrate_images_to_s3.py` — move restored photos from `cdn.uploads.micro.blog` (hot-linked) to `files.thingelstad.com/weekly-thing/<N>/journal/`. Deferred today; not yet run on the ~550 restored photos.
 

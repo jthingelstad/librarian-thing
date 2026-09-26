@@ -178,11 +178,10 @@ So the tinfoil hat people saying that our mobile phones are being used to track 
 
 ## My Weekly Photo 📷
 
-![ToDo: Photo caption here.](https://files.thingelstad.com/weekly-thing/56/cover.jpg)
+![2nd grade baseball requires you to climb up on the fence to cheer on your teammates!](https://files.thingelstad.com/weekly-thing/56/cover.jpg)
 
 2nd grade baseball ⚾️ requires you to climb up on the fence to cheer on your teammates! 🙌
 
-ToDo: Photo caption here.
 May 31, 2018 at 6:56 PM
 Minneapolis MN
 

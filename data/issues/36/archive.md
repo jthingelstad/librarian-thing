@@ -17,12 +17,16 @@ My learning this week took me to Longboat Key, Florida. It was really nice to ge
 
 ---
 
+## Photog 📷
+
 The fog was very thick all day on the Gulf Coast in Florida. I don't think you could see even a hundred feet. The fog, water and sand blended into layers of grey.
 
 Jan 11, 2018 at 4:45 PM
 Longboat Key, FL
 
 ---
+
+## Links 📌
 
 ### [SPS Tower has a nice ring to it | SPS Commerce](https://www.spscommerce.com/blog/sps-tower-minneapolis-spsa/)
 
@@ -114,6 +118,8 @@ Good interview with Snowden. I appreciate reading and hearing his opinions on th
 
 ---
 
+## Now Reading 📚
+
 http://www.amazon.com/dp/0062265423/?tag=thingelstad01-20
 
 ### [10% Happier: How I Tamed the Voice in My Head, Reduced Stress Without Losing My Edge, and Found Self-Help That Actually Works--A True Story](http://www.amazon.com/dp/0062265423/?tag=thingelstad01-20)
@@ -126,11 +132,15 @@ I was recently given this audiobook and enjoyed it a lot. I've been contemplatin
 
 ---
 
+## Promotion 🎁
+
 https://letsencrypt.org
 
 [Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ---
+
+## Featured App 📱
 
 https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
@@ -146,8 +156,10 @@ Free 5/5 stars
 
 ---
 
-- Family movie night [watching Leap! Everyone liked it. 🎬](https://www.thingelstad.com/2018/01/12/family-movie-night.html)
-- A smartphone filled with social apps is the [physical manifestation of Buddhist monkey mind.](https://www.thingelstad.com/2018/01/12/a-smartphone-filled.html)
+## Microblog updates 🎈
+
+- [Family movie night watching Leap! Everyone liked it. 🎬](https://www.thingelstad.com/2018/01/12/family-movie-night.html)
+- [A smartphone filled with social apps is the physical manifestation of Buddhist monkey mind.](https://www.thingelstad.com/2018/01/12/a-smartphone-filled.html)
 - I continue to see more people covering the camera in their laptops. How come nobody covers the [forward facing camera on their mobile phone?](https://www.thingelstad.com/2018/01/12/i-continue-to.html)
 - [Fog.](https://www.thingelstad.com/2018/01/11/fog.html)
 - Enjoying 10% Happier on [audiobook](https://www.thingelstad.com/2018/01/10/014252.html). Approachable introduction to mindfulness. 📚

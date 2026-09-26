@@ -17,6 +17,8 @@ We had a good pounding of snow 🌨 here in Minneapolis on Monday, more than a f
 
 ---
 
+## Blog posts 📬
+
 ### [2017 in Meetings](https://www.thingelstad.com/2018/2017-in-meetings/)
 
 Analaysis of my 2017 calendar.
@@ -27,12 +29,16 @@ Analysis of the 913 links I saved to various websites in 2017.
 
 ---
 
+## Photog 📷
+
 We got right around a foot of snow on Monday night and it covered everything in a pretty blanket of white powder.
 
 Jan 22, 2018 at 7:21 PM
 Minneapolis, MN
 
 ---
+
+## Links 📌
 
 ### [HomePod vs. Amazon Echo vs. Google Home Max vs. Sonos One: Speaker showdown | iMore](https://www.imore.com/homepod-vs-amazon-echo-vs-google-home-max-vs-sonos-one-speaker-showdown)
 
@@ -214,11 +220,15 @@ Learning and fun. 😂🌈
 
 ---
 
+## Promotion 🎁
+
 https://www.wikitribune.com
 
 [WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a backer. I've been impressed with [Wikipedia](https://www.wikipedia.org) and am excited about [Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ---
+
+## Featured App 📱
 
 https://itunes.apple.com/us/app/toggl/id1291898086?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
@@ -233,6 +243,8 @@ My 2017 in Meetings analysis is powered in large part using Toggl. I've created 
 Free 1.5/5 stars
 
 ---
+
+## Microblog updates 🎈
 
 - I have an [irrational enthusiasm for updating firmware. 🤩😎🤞🏻](https://www.thingelstad.com/2018/01/25/i-have-an.html)
 - Trying Dropmix for first time! [Pretty cool — a musical trip!](https://www.thingelstad.com/2018/01/25/trying-dropmixhttpsdropmixhasbrocomenus-for.html)

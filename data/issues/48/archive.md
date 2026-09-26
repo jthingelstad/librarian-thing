@@ -13,7 +13,7 @@ word_count: 2165
 ---
 It was "Spring" Break this week, and I put Spring in parenthesis due to significantly below average temperatures here for the last week. ❄️ We split our week away between the Wisconsin Dells 💦 and Chicago 🎭. We had a great time doing water park things in the Dells and then seeing museums and culture in Chicago.
 
-[We saw Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) , and before you ask, yes it was amazing. 😲 I've never been moved by a musical like that. I instantly wanted to see it again. 🎟 It helped that we had listened to the soundtrack and new most of the songs, 🎶 although seeing the production connected a lot of dots in the story. Everyone liked it a lot. If you get a chance to go, it's worth shelling out some extra cash 💸 to see.
+[We saw Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) , and before you ask, yes it was amazing. 😲 I've never been moved by a musical like that. I instantly wanted to see it again. 🎟 It helped that we had listened to the soundtrack and knew most of the songs, 🎶 although seeing the production connected a lot of dots in the story. Everyone liked it a lot. If you get a chance to go, it's worth shelling out some extra cash 💸 to see.
 
 ## Photo 📷
 
