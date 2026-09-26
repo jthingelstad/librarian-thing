@@ -6,7 +6,7 @@ Repeatable archive audit + repair tooling. No README — this directory is opera
 
 | Script | What it does | Cost |
 |---|---|---|
-| `audit_archive.py` | **Static** regex/DOM audit of rendered HTML. Broken images, header hierarchy, malformed markdown, template-tag leakage. Reads `_site/` — needs a fresh build first (`npx @11ty/eleventy --config apps/site/eleventy.config.js`). | Free |
+| `audit_archive.py` | **Static** regex/DOM audit of rendered HTML. Broken images, header hierarchy, malformed markdown, template-tag leakage. Reads a rendered `_site/` — the Eleventy site now lives in weekly.thingelstad.com, so run it against a build there. | Free |
 | `llm_audit_archive.py` | **LLM** semantic audit of raw markdown via Claude Opus 4.7. Typos, narrative breaks, dropped-URL links, migration artifacts. `--full` runs across all 344+ issues at concurrency 8. | ~$20, ~8 min at concurrency 8 |
 | `audit_missing_micropost_photos.py` | Finds micropost photos silently lost during the MailChimp → Buttondown migration (no `mp-photo-alt[]=` marker). | Free |
 | `build_missing_posts_report.py` | Enriches the "missing micro.blog posts" report with Wayback snapshots, newsletter heading, body paragraph. | Free (uses Wayback API) |
@@ -17,6 +17,7 @@ These take an audit's output and apply fixes back to `data/issues/{N}/archive.md
 
 - `fix_micropost_photos.py` — restores photos where `mp-photo-alt[]=` markers survived in the body (146 photos across 21 issues at last run).
 - `restore_missing_micropost_photos.py` — restores silently-lost single-photo microposts (407 photos across 60 issues at last run).
+- `fix_link_list_anchors.py` — moves the opening bracket back to the start of MailChimp-era link-list titles the linkifier split (`- Title of [the page](url) host`). Bracket moves only; idempotent (279 items across 68 issues at first run, 2026-09).
 - `apply_audit_fixes.py` — apply LLM-suggested fixes from `tmp/llm-audit.json`. Operator chooses which suggestions to apply.
 - `migrate_images_to_s3.py` — move restored photos from `cdn.uploads.micro.blog` (hot-linked) to `files.thingelstad.com/weekly-thing/<N>/journal/`. Deferred today; not yet run on the ~550 restored photos.
 
@@ -40,7 +41,7 @@ The [`notes/audits/README.md`](../../notes/audits/README.md) documents what each
 2. Triage the findings — group by pattern (era-specific cruft? specific template? individual issues?).
 3. If a pattern: write a fix in `pipeline/audits/<descriptive>.py`. Idempotent. Operator-runnable.
 4. If a one-off: hand-edit `data/issues/{N}/archive.md` directly. Commit with a clear message.
-5. Re-run `make build` to regenerate `apps/site/archive/{N}.md`.
+5. Merge to `main`: `deploy.yml` rebuilds and re-embeds the Weekly Thing corpus from `data/issues/`. Nothing here regenerates weekly.thingelstad.com's render copies (`apps/site/archive/{N}.md`) of past issues — the Studio site handoff retired at the 2026-08-28 split — so a repair reaches Thingy and MCP clients, not the public page.
 6. Optionally re-run the audit to confirm the fix.
 7. Snapshot the new audit output into `notes/audits/`.
 
