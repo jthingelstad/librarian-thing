@@ -65,6 +65,8 @@ uv sync --locked
 uv run pytest tests/ -q
 ```
 
+Before committing, `make check` runs lint, format, Python tests, and the Lambda tests.
+
 Do not use bare `python`, `python3`, or pip-managed environments here.
 
 ## Thingy / Librarian

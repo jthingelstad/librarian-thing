@@ -1,4 +1,4 @@
-.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda
+.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
 
 PYTHON ?= uv run --locked python
 
@@ -58,3 +58,10 @@ test:
 
 test-lambda:
 	npm --prefix apps/librarian/lambda run verify
+
+# Everything CI checks locally: lint, format, Python tests, Lambda verify.
+check:
+	uv run --locked ruff check .
+	uv run --locked ruff format --check .
+	uv run --locked pytest tests/ -q
+	$(MAKE) test-lambda
