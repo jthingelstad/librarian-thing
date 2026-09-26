@@ -245,21 +245,21 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Fidget spinners, weighted blankets, and the [rise of anxiety consumerism - Vox](https://www.vox.com/the-goods/2018/9/10/17826856/fidget-spinners-weighted-blankets-anxiety-products) www.vox.com
+- [Fidget spinners, weighted blankets, and the rise of anxiety consumerism - Vox](https://www.vox.com/the-goods/2018/9/10/17826856/fidget-spinners-weighted-blankets-anxiety-products) www.vox.com
 What a huge market. Seems too big. 👀
-- Why Socks [Help You Sleep Better | HowStuffWorks](https://health.howstuffworks.com/mental-health/sleep/basics/why-socks-help-sleep-better.htm) health.howstuffworks.com
+- [Why Socks Help You Sleep Better | HowStuffWorks](https://health.howstuffworks.com/mental-health/sleep/basics/why-socks-help-sleep-better.htm) health.howstuffworks.com
 Seems there is science behind this. 🧦
 - [reminiscence](https://github.com/kanishka-linux/reminiscence/blob/master/README.md) github.com
 Sticking with Pinboard, but nice to see people working on these solutions.
-- Setting an Open Source Strategy [// TODO: Talk openly, develop openly](https://todogroup.org/guides/strategy/) todogroup.org
+- [Setting an Open Source Strategy // TODO: Talk openly, develop openly](https://todogroup.org/guides/strategy/) todogroup.org
 Good direction here.
-- kitty - the fast, featureful, GPU based [terminal emulator — kitty 0.12.1 documentation](https://sw.kovidgoyal.net/kitty/) sw.kovidgoyal.net
+- [kitty - the fast, featureful, GPU based terminal emulator — kitty 0.12.1 documentation](https://sw.kovidgoyal.net/kitty/) sw.kovidgoyal.net
 Terminal applications wouldn't be the first place I would look for GPU acceleration, but cool to see.
 - [pure JS WiFi QR Code Generator](https://qifi.org/) qifi.org
 Easiest way I've seen to put a QR code up to allow visitors to hop on your home WiFi.
 - [Atlassian Incident Management Handbook | Atlassian](https://www.atlassian.com/software/jira/ops/handbook) www.atlassian.com
 Cool to see more people sharing this info.
-- Tesla CEO Elon Musk [smokes weed on Joe Rogan's podcast](https://www.cnbc.com/2018/09/07/elon-musk-smokes-weed-on-joe-rogan-podcast.html) www.cnbc.com
+- [Tesla CEO Elon Musk smokes weed on Joe Rogan's podcast](https://www.cnbc.com/2018/09/07/elon-musk-smokes-weed-on-joe-rogan-podcast.html) www.cnbc.com
 Seriously? 🤦‍♂️
 
 ## Microposts 🎈

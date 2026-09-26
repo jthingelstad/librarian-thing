@@ -262,13 +262,13 @@ Ready for the Timberwolves v Golden State Warriors basketball game! 🏀
 
 ## Yet More Links 🍞
 
-- Sketchviz - Create and publish Graphviz [graphs on the web for free](https://sketchviz.com/new) sketchviz.com
+- [Sketchviz - Create and publish Graphviz graphs on the web for free](https://sketchviz.com/new) sketchviz.com
 This creates some nice looking graphs.
-- The Pac-Man Rule at Conferences — [Eric Holscher - Surfing in Kansas](https://www.ericholscher.com/blog/2017/aug/2/pacman-rule-conferences/) www.ericholscher.com
+- [The Pac-Man Rule at Conferences — Eric Holscher - Surfing in Kansas](https://www.ericholscher.com/blog/2017/aug/2/pacman-rule-conferences/) www.ericholscher.com
 This is a great idea for indicating openness to newcomers in many situations.
-- Portrait of Lotte, [0 to 20 years - YouTube](https://www.youtube.com/watch?v=yfqpqiTMUEg&app=desktop) www.youtube.com
+- [Portrait of Lotte, 0 to 20 years - YouTube](https://www.youtube.com/watch?v=yfqpqiTMUEg&app=desktop) www.youtube.com
 What a cool project. Wow.
-- Airbnb Promises to Verify All 7 Million Listings After [VICE Report Exposes Scam - VICE](https://www.vice.com/en_us/article/vb58jd/airbnb-promises-to-verify-all-7-million-listings-after-vice-report-exposes-scam) www.vice.com
+- [Airbnb Promises to Verify All 7 Million Listings After VICE Report Exposes Scam - VICE](https://www.vice.com/en_us/article/vb58jd/airbnb-promises-to-verify-all-7-million-listings-after-vice-report-exposes-scam) www.vice.com
 This feels like a strong response from a company on an important topic. 👏
 
 ## Fortune 🥠

@@ -309,18 +309,18 @@ I like [this new feature in the Sanebox](https://www.sanebox.com) digest! Great 
 
 - [Shopify's Global Economic Impact Report](https://www.shopify.com/about/economic-impact) www.shopify.com
 Some very impressive numbers here. 😲
-- SLOs Are [the API for Your Engineering Team](https://www.infoq.com/articles/slos-engineering-team-API/) www.infoq.com
+- [SLOs Are the API for Your Engineering Team](https://www.infoq.com/articles/slos-engineering-team-API/) www.infoq.com
 Interesting way to think about this. 🤔
-- An [Elegant Puzzle: Systems of Eng Management.](https://www.lethain.com/elegant-puzzle/) www.lethain.com
+- [An Elegant Puzzle: Systems of Eng Management.](https://www.lethain.com/elegant-puzzle/) www.lethain.com
 This looks like a very good book. I have a few copies on the way to [the office. Thanks to Sam Pierson](https://www.linkedin.com/in/samuelpierson/) for the link.
-- SPS Commerce leads List of Twin Cities-based SaaS companies - [Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/10/25/list-leaders-updated-with-correction-sps-commerce.html) www.bizjournals.com
+- [SPS Commerce leads List of Twin Cities-based SaaS companies - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/10/25/list-leaders-updated-with-correction-sps-commerce.html) www.bizjournals.com
 Great to see SPS at the top of this list. 🙌
-- Foxconn finally admits its empty Wisconsin ‘innovation centers’ [aren’t being developed - The Verge](https://www.theverge.com/2019/10/23/20929453/foxconn-innovation-centers-on-hold-wisconsin-mount-pleasant-trump-deal) www.theverge.com
+- [Foxconn finally admits its empty Wisconsin ‘innovation centers’ aren’t being developed - The Verge](https://www.theverge.com/2019/10/23/20929453/foxconn-innovation-centers-on-hold-wisconsin-mount-pleasant-trump-deal) www.theverge.com
 It seems likely these will never open. 💸
 
 ## Local 📍
 
-- 2019 [Season Recap | Minnesota United FC](https://www.mnufc.com/post/2019/10/30/2019-season-recap) www.mnufc.com
+- [2019 Season Recap | Minnesota United FC](https://www.mnufc.com/post/2019/10/30/2019-season-recap) www.mnufc.com
 Love this, and can’t wait for 2020 Season. 🖤💙⚽️
 
 ## Fortune 🥠

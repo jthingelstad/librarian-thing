@@ -298,13 +298,13 @@ We [went to Piff The Magic Dragon](https://piffthemagicdragon.com) [tonight at T
 
 ## Yet More Links 🍞
 
-- In the last decade board games took off, these [were the most important - Polygon](https://www.polygon.com/2019/11/17/20959387/best-board-games-of-the-decade-2010-2019) www.polygon.com
+- [In the last decade board games took off, these were the most important - Polygon](https://www.polygon.com/2019/11/17/20959387/best-board-games-of-the-decade-2010-2019) www.polygon.com
 Interesting reflection on the evolution of board games.
-- How [containers work: overlayfs - Julia Evans](https://jvns.ca/blog/2019/11/18/how-containers-work--overlayfs/) jvns.ca
+- [How containers work: overlayfs - Julia Evans](https://jvns.ca/blog/2019/11/18/how-containers-work--overlayfs/) jvns.ca
 Simplified and easy-to-understand overview.
-- Apple’s New Map, [Expansion #6: Midwest + Western U.S.](https://www.justinobeirne.com/new-apple-maps-midwest-west) www.justinobeirne.com
+- [Apple’s New Map, Expansion #6: Midwest + Western U.S.](https://www.justinobeirne.com/new-apple-maps-midwest-west) www.justinobeirne.com
 Still waiting for the updated maps for Minnesota, but it’s very interesting to see how Apple and Google are approaching this massive dataset.
-- The Value [in Go's Simplicity | Ben Congdon](https://benjamincongdon.me/blog/2019/11/11/The-Value-in-Gos-Simplicity/) benjamincongdon.me
+- [The Value in Go's Simplicity | Ben Congdon](https://benjamincongdon.me/blog/2019/11/11/The-Value-in-Gos-Simplicity/) benjamincongdon.me
 Elegance. 🤓
 
 ## Fortune 🥠

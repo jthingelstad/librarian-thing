@@ -191,13 +191,13 @@ This [is the followup to another article](https://www.theregister.co.uk/2019/10/
 
 ## Yet More Links 🍞
 
-- Zuck Testified Before the House Financial Services Committee and It Did Not Go [Well for Him — Pixel Envy](https://pxlnv.com/linklog/zuck-testifies-again/) pxlnv.com
+- [Zuck Testified Before the House Financial Services Committee and It Did Not Go Well for Him — Pixel Envy](https://pxlnv.com/linklog/zuck-testifies-again/) pxlnv.com
 At some point people should read stuff like this and ask why they continue to participate in such a broken ecosystem.
-- The Quantum Computing Breakthrough + [Other Nonsense – On my Om](https://om.co/2019/10/23/the-quantum-computing-breakthrough-other-nonsense/) om.co
+- [The Quantum Computing Breakthrough + Other Nonsense – On my Om](https://om.co/2019/10/23/the-quantum-computing-breakthrough-other-nonsense/) om.co
 Om highlighting the silliness of so much tech industry coverage.
-- Without deal, WeWork would have been out [of money next week, sources say](https://www.cnbc.com/2019/10/23/without-deal-wework-would-have-been-out-of-money-next-friday-sources-say.html) www.cnbc.com
+- [Without deal, WeWork would have been out of money next week, sources say](https://www.cnbc.com/2019/10/23/without-deal-wework-would-have-been-out-of-money-next-friday-sources-say.html) www.cnbc.com
 One week of cash flow. Supposedly was worth $47 billion a few weeks ago. 🙄
-- Minecraft becomes a board game, and the results [are faithful, fantastic | Ars Technica](https://arstechnica.com/gaming/2019/10/minecraft-becomes-a-board-game-and-the-results-are-faithful-fantastic/) arstechnica.com
+- [Minecraft becomes a board game, and the results are faithful, fantastic | Ars Technica](https://arstechnica.com/gaming/2019/10/minecraft-becomes-a-board-game-and-the-results-are-faithful-fantastic/) arstechnica.com
 Wait a second? Minecraft as a board game? 🧐
 - [Dapr - portable, event-driven, serverless runtime.](https://dapr.io/) dapr.io
 Interesting runtime. "An event-driven, portable runtime for building microservices on cloud and edge." 🤓

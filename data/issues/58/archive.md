@@ -238,27 +238,27 @@ https://www.eff.org
 
 ## Yet More Links 🍞
 
-- Google Cloud Platform Blog: Introducing [QUIC support for HTTPS load balancing](https://cloudplatform.googleblog.com/2018/06/Introducing-QUIC-support-for-HTTPS-load-balancing.html?m=1) cloudplatform.googleblog.com
+- [Google Cloud Platform Blog: Introducing QUIC support for HTTPS load balancing](https://cloudplatform.googleblog.com/2018/06/Introducing-QUIC-support-for-HTTPS-load-balancing.html?m=1) cloudplatform.googleblog.com
 I applaud the work that Google does in this fundamental layer of the web. 👏
 - [Bash One-Liners](http://www.bashoneliners.com/) www.bashoneliners.com
 This is a gallery of why Unix is awesome. 😍
-- How to Migrate Existing [Microservices to Serverless - Binaris Blog](https://blog.binaris.com/your-guide-to-migrating-existing-microservices-to-serverless/) blog.binaris.com
-- How to GraphQL [- The Fullstack Tutorial for GraphQL](https://www.howtographql.com/) www.howtographql.com
+- [How to Migrate Existing Microservices to Serverless - Binaris Blog](https://blog.binaris.com/your-guide-to-migrating-existing-microservices-to-serverless/) blog.binaris.com
+- [How to GraphQL - The Fullstack Tutorial for GraphQL](https://www.howtographql.com/) www.howtographql.com
 Another GraphQL tutorial, learning guide. Very thorough too. 🎓
-- Rolla Roaster Campfire [Roasting Forks — Tools and Toys](http://toolsandtoys.net/rolla-roaster-campfire-roasting-forks/) toolsandtoys.net
+- [Rolla Roaster Campfire Roasting Forks — Tools and Toys](http://toolsandtoys.net/rolla-roaster-campfire-roasting-forks/) toolsandtoys.net
 I've had six of these for a long time and I love the twirling feature. 🔥
 - [Fathom · simple, trustworthy website analytics](https://usefathom.com/) usefathom.com
 A new entrant into web analytics that is not connected to big tech and mining your privacy.
-- The Most [Honest Out-of-Office Message - The Atlantic](https://www.theatlantic.com/technology/archive/2018/06/out-of-office-message-email/562394/) www.theatlantic.com
+- [The Most Honest Out-of-Office Message - The Atlantic](https://www.theatlantic.com/technology/archive/2018/06/out-of-office-message-email/562394/) www.theatlantic.com
 Twenty years in and we are still figuring out how to deal with email. 😢
 - [Hjson, a user interface for JSON](https://hjson.org/) hjson.org
-- IBM, Department of Energy [Unveil World's Fastest Supercomputer - ExtremeTech](https://www.extremetech.com/extreme/271005-ibm-department-of-energy-unveil-summit-the-worlds-fastest-supercomputer) www.extremetech.com
+- [IBM, Department of Energy Unveil World's Fastest Supercomputer - ExtremeTech](https://www.extremetech.com/extreme/271005-ibm-department-of-energy-unveil-summit-the-worlds-fastest-supercomputer) www.extremetech.com
 200 petaflops per second over 200,000 CPU cores with over [27,648 GPUs. 😳 NY Times article](https://www.nytimes.com/2018/06/08/technology/supercomputer-china-us.html) has a bunch more details.
-- Management books [in review – Built to Run](https://kimmoir.blog/2018/06/05/management-books-in-review/) kimmoir.blog
+- [Management books in review – Built to Run](https://kimmoir.blog/2018/06/05/management-books-in-review/) kimmoir.blog
 📚 Compilation of management books focused for technology leaders.
-- 10 weird and wonderful derailleurs – and how they changed [cycling | Environment | The Guardian](https://www.theguardian.com/environment/bike-blog/2018/jun/07/10-weird-and-wonderful-derailleurs-and-how-they-changed-cycling) www.theguardian.com
+- [10 weird and wonderful derailleurs – and how they changed cycling | Environment | The Guardian](https://www.theguardian.com/environment/bike-blog/2018/jun/07/10-weird-and-wonderful-derailleurs-and-how-they-changed-cycling) www.theguardian.com
 I like bicycles 🚴‍♀️ and these photos of derailleurs and their backstory is fun.
-- Facebook bug set 14 [million users' sharing settings to public](http://money.cnn.com/2018/06/07/technology/facebook-public-post-error/index.html) money.cnn.com
+- [Facebook bug set 14 million users' sharing settings to public](http://money.cnn.com/2018/06/07/technology/facebook-public-post-error/index.html) money.cnn.com
 I don’t get why anybody trusts this company or their platform. 🤷‍♂️
 
 ## Microposts 🎈

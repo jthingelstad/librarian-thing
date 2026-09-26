@@ -201,13 +201,13 @@ This article highlights three common reasons that organizations adopt multiple c
 
 ## Yet More Links 🍞
 
-- JOMO - The Joy [of Missing Out - Feld Thoughts](https://feld.com/archives/2019/10/jomo-the-joy-of-missing-out.html) feld.com
+- [JOMO - The Joy of Missing Out - Feld Thoughts](https://feld.com/archives/2019/10/jomo-the-joy-of-missing-out.html) feld.com
 Opposite of FOMO. I like it! 👍
 - macOS 10.15 Catalina: The [Ars Technica review](https://arstechnica.com/gadgets/2019/10/macos-10-15-catalina-the-ars-technica-review/)
 If you want to know everything you ever wanted to about macOS Catalina, this is the other of the two articles for you. There is more to this release than it looks. 👨‍💻
 - [macOS Catalina: The MacStories Review - MacStories](https://www.macstories.net/news/macos-catalina-the-macstories-review/) www.macstories.net
 If you want to know everything you ever wanted to about macOS Catalina, this is one of the two articles for you. 👩‍💻
-- Different Types of Wine 18" [x 24" Poster - Wine Folly](https://shop.winefolly.com/products/different-types-of-wine) shop.winefolly.com
+- [Different Types of Wine 18" x 24" Poster - Wine Folly](https://shop.winefolly.com/products/different-types-of-wine) shop.winefolly.com
 The relationships in this graph are super easy to follow. Probably the best wine classification/overview I've seen. 🍷
 - TikTok owner ByteDance's [first-half books $7 billion in revenue](https://www.cnbc.com/2019/09/30/tiktok-owner-bytedances-first-half-revenue-better-than-expected-at-over-7-billion-sources.html)
 I have no interest in TikTok, but I know "the kids" seem to dig it. I was blown away by the revenue numbers though. 💰💰💰

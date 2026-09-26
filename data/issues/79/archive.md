@@ -263,13 +263,13 @@ https://wikimediafoundation.org/wiki/Home
 Free, open source password manager. I’ll stick with 1Password for Families.
 - [Sharecuts](https://sharecuts.app/) sharecuts.app
 This site looks like it’s still in development but it promises to be a place to share iOS Shortcuts with other users.
-- The Verge Holiday [Gift Guide 2018 - The Verge](https://www.theverge.com/2018/11/5/18039736/holiday-gift-ideas-2018-christmas-hannukah-guide) www.theverge.com
+- [The Verge Holiday Gift Guide 2018 - The Verge](https://www.theverge.com/2018/11/5/18039736/holiday-gift-ideas-2018-christmas-hannukah-guide) www.theverge.com
 Gift ideas for the geeks in your life.
 - [Event Store](https://eventstore.org/) eventstore.org
 The open-source, functional database with Complex Event Processing in JavaScript.
-- Citi's Mark May: Amazon relies [on robots; less temporary holiday hires](https://www.cnbc.com/2018/11/02/citi-mark-may-amazon-relies-on-robots-less-temporary-holiday-hires.html) www.cnbc.com
+- [Citi's Mark May: Amazon relies on robots; less temporary holiday hires](https://www.cnbc.com/2018/11/02/citi-mark-may-amazon-relies-on-robots-less-temporary-holiday-hires.html) www.cnbc.com
 20,000 fewer jobs because the robots can do more. 🤖
-- Statamic - Make better, easier to manage websites. Enjoy [simplicity like the days of summer.](https://statamic.com/) statamic.com
+- [Statamic - Make better, easier to manage websites. Enjoy simplicity like the days of summer.](https://statamic.com/) statamic.com
 Interesting website CMS. Seems to be a good mix of easy-to-use and static.
 - [What is Tailwind? - Tailwind CSS](https://tailwindcss.com/docs/what-is-tailwind/) tailwindcss.com
 This looks like a CSS framework I could actually use.

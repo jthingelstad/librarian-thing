@@ -264,13 +264,13 @@ I like to use emoji to bring fun to unexpected places on my devices. Command lin
 
 ## Yet More Links 🍞
 
-- Puddle & Pile—the app that predicts when your puppy needs to go—is freaking [amazing – A Whole Lotta Nothing](https://a.wholelottanothing.org/2019/12/12/puddle-pile-the-app-that-predicts-when-your-puppy-needs-to-go-is-freakin-amazing/) a.wholelottanothing.org
+- [Puddle & Pile—the app that predicts when your puppy needs to go—is freaking amazing – A Whole Lotta Nothing](https://a.wholelottanothing.org/2019/12/12/puddle-pile-the-app-that-predicts-when-your-puppy-needs-to-go-is-freakin-amazing/) a.wholelottanothing.org
 Okay, there really is an app for everything! 🐕💩
 - [Git from the inside out](https://codewords.recurse.com/issues/two/git-from-the-inside-out) codewords.recurse.com
 More than you ever wanted to know about how Git works. 🤓
-- Machine [Learning Crash Course  |  Google Developers](https://developers.google.com/machine-learning/crash-course) developers.google.com
+- [Machine Learning Crash Course  |  Google Developers](https://developers.google.com/machine-learning/crash-course) developers.google.com
 It’s amazing how much one can learn through completely open and free resources like this. This might be a cool course to take between Christmas and New Years!
-- Why databases use ordered indexes [but programming uses hash tables (evanjones.ca)](https://www.evanjones.ca/ordered-vs-unordered-indexes.html) www.evanjones.ca
+- [Why databases use ordered indexes but programming uses hash tables (evanjones.ca)](https://www.evanjones.ca/ordered-vs-unordered-indexes.html) www.evanjones.ca
 Overview of two common and different ways to access data, and the tradeoffs between them.
 - [dgsh — directed graph shell](https://www2.dmst.aueb.gr/dds/sw/dgsh/) www2.dmst.aueb.gr
 I can't say that I completely get it, but it looks cool.

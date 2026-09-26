@@ -223,31 +223,31 @@ https://minnestar.org
 
 - [Knative - Built on Kubernetes and Istio  |  Google Cloud](https://cloud.google.com/knative/) cloud.google.com
 Kubernetes-based platform to build, deploy, and manage modern serverless workloads.
-- Streamline 3.0 [– The World's Largest Icon Library](https://streamlineicons.com/) streamlineicons.com
+- [Streamline 3.0 – The World's Largest Icon Library](https://streamlineicons.com/) streamlineicons.com
 Crazy number of icons for a small fee.
-- Target shifts cloud-computing business to Alphabet's Google - [Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2018/07/24/target-shifts-cloud-computing-business-to-google.html) www.bizjournals.com
+- [Target shifts cloud-computing business to Alphabet's Google - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2018/07/24/target-shifts-cloud-computing-business-to-google.html) www.bizjournals.com
 Another top retailer shifting publicly away from AWS.
 - [Venuer](https://github.com/stripe/veneur) github.com
 A distributed, fault-tolerant pipeline for observability data.
-- Tutorial: Getting started [with Quantum Computing (Python) | DataEspresso](http://dataespresso.com/en/2018/07/22/Tutorial-Generating-random-numbers-with-a-quantum-computer-Python/) dataespresso.com
+- [Tutorial: Getting started with Quantum Computing (Python) | DataEspresso](http://dataespresso.com/en/2018/07/22/Tutorial-Generating-random-numbers-with-a-quantum-computer-Python/) dataespresso.com
 A library that allows you to write Python code like a quantum computer would run it. 👀
-- Beyond Regular Expressions: An [Introduction to Parsing Context Free Grammars](https://medium.com/@cdiggins/beyond-regular-expressions-an-introduction-to-parsing-context-free-grammars-ee77bdab5a92) medium.com
+- [Beyond Regular Expressions: An Introduction to Parsing Context Free Grammars](https://medium.com/@cdiggins/beyond-regular-expressions-an-introduction-to-parsing-context-free-grammars-ee77bdab5a92) medium.com
 Most everyone in tech knows about Regular Expressions, but very few consider full blown parsers and grammars.
-- Introducing the Python [Language Server – Python at Microsoft](https://blogs.msdn.microsoft.com/pythonengineering/2018/07/18/introducing-the-python-language-server/) blogs.msdn.microsoft.com
+- [Introducing the Python Language Server – Python at Microsoft](https://blogs.msdn.microsoft.com/pythonengineering/2018/07/18/introducing-the-python-language-server/) blogs.msdn.microsoft.com
 Turns out it’s really complicated to provide programmer hints in the IDE for Python.
-- Google's New Book: The [Site Reliability Workbook - High Scalability](http://highscalability.com/blog/2018/7/25/googles-new-book-the-site-reliability-workbook.html) highscalability.com
+- [Google's New Book: The Site Reliability Workbook - High Scalability](http://highscalability.com/blog/2018/7/25/googles-new-book-the-site-reliability-workbook.html) highscalability.com
 Part two of the Google SRE book. Available for free for a limited time.
 - [YC’s 2018 Summer Reading List](https://blog.ycombinator.com/ycs-2018-summer-reading-list/) blog.ycombinator.com
 I enjoy it when people and groups share their reading lists. I usually find some interesting items in them.
 - [Masonite Documentation](https://docs.masoniteproject.com) docs.masoniteproject.com
 Looks a bit like Rails for Python.
-- The future of WebAssembly - A [look at upcoming features and proposals](https://blog.scottlogic.com/2018/07/20/wasm-future.html) blog.scottlogic.com
+- [The future of WebAssembly - A look at upcoming features and proposals](https://blog.scottlogic.com/2018/07/20/wasm-future.html) blog.scottlogic.com
 I haven't been following WebAssembly but it looks intriguing -- or possibly a terrible idea.
 - [The Emoji Demo](https://www.youtube.com/watch?v=rr_l-KBDHS4) www.youtube.com
 An 8k textmode emoji [macOS intro done in terminal, source](https://github.com/willkirkby/the-emoji-demo) . 😲
 - [Frank's Compulsive Guide To Postal Addresses](http://www.columbia.edu/~fdc/postal/) www.columbia.edu
 More than you ever wanted to know about addresses.
-- Python has brought computer programming to a [vast new audience - Programming languages](https://www.economist.com/science-and-technology/2018/07/21/python-has-brought-computer-programming-to-a-vast-new-audience) www.economist.com
+- [Python has brought computer programming to a vast new audience - Programming languages](https://www.economist.com/science-and-technology/2018/07/21/python-has-brought-computer-programming-to-a-vast-new-audience) www.economist.com
 [Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) [stepping down as BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) of Python even made it to the Economist! Yay for Python making the pages of the Economist.
 
 ## Microposts 🎈

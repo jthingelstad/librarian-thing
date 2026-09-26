@@ -229,23 +229,23 @@ https://www.eff.org
 Is this Technologies #MeToo moment?
 - [Meow Hash](https://mollyrocket.com/meowhash) mollyrocket.com
 This is an interesting hashing algorithm. I've worked with solutions that use cryptographic hashes and they can be challenging to scale. This hash is specifically not cryptographically sound, but is highly performant.
-- Atlassian launches the [new Jira Software Cloud | TechCrunch](https://techcrunch.com/2018/10/18/atlassian-launches-the-new-jira-software-cloud/) techcrunch.com
+- [Atlassian launches the new Jira Software Cloud | TechCrunch](https://techcrunch.com/2018/10/18/atlassian-launches-the-new-jira-software-cloud/) techcrunch.com
 These look like nice improvements to such a widely used application.
-- Trek10 [| The Business Case For Serverless](https://www.trek10.com/blog/business-case-for-serverless/) www.trek10.com
+- [Trek10 | The Business Case For Serverless](https://www.trek10.com/blog/business-case-for-serverless/) www.trek10.com
 Arguments for why serverless architectures are desirable.
-- Redis Graph - [a graph database module for Redis](https://oss.redislabs.com/redisgraph/) oss.redislabs.com
+- [Redis Graph - a graph database module for Redis](https://oss.redislabs.com/redisgraph/) oss.redislabs.com
 Redis now does graphs!
-- WebPerl | Run [Perl in the browser with WebPerl!](https://webperl.zero-g.net/) webperl.zero-g.net
+- [WebPerl | Run Perl in the browser with WebPerl!](https://webperl.zero-g.net/) webperl.zero-g.net
 Perl seems to go everywhere! 👏
-- GM’s data mining is just the beginning of the [in-car advertising blitz - The Verge](https://www.theverge.com/2018/10/17/17990052/gm-radio-listen-tracking-habits-advertising-future) www.theverge.com
+- [GM’s data mining is just the beginning of the in-car advertising blitz - The Verge](https://www.theverge.com/2018/10/17/17990052/gm-radio-listen-tracking-habits-advertising-future) www.theverge.com
 Wait a second, our cars are now invading our privacy and selling the data? 😡
 - [Introduction to Redis Streams – Redis](https://redis.io/topics/streams-intro) redis.io
 Redis is a well written and very reliable service, and scales down well for small solutions. Adding a streaming capability to it will open up some new use cases.
-- Favicon Checker—See how your favicon hold up across popular browsers, [including native dark and light modes.](http://www.colinkeany.com/favicon-checker/) www.colinkeany.com
+- [Favicon Checker—See how your favicon hold up across popular browsers, including native dark and light modes.](http://www.colinkeany.com/favicon-checker/) www.colinkeany.com
 Sweet tool to make sure your favicon works in all the places it may appear.
-- A familiar HTTP [Service Framework — responder 0.1.4 documentation](https://python-responder.org/en/latest/) python-responder.org
+- [A familiar HTTP Service Framework — responder 0.1.4 documentation](https://python-responder.org/en/latest/) python-responder.org
 Yet another powerful Python module from Kenneth Reitz.
-- Tesla quietly drops “full self-driving” option as it adds [$45,000 Model 3 | Ars Technica](https://arstechnica.com/cars/2018/10/tesla-quietly-drops-full-self-driving-option-as-it-adds-45000-model-3/) arstechnica.com
+- [Tesla quietly drops “full self-driving” option as it adds $45,000 Model 3 | Ars Technica](https://arstechnica.com/cars/2018/10/tesla-quietly-drops-full-self-driving-option-as-it-adds-45000-model-3/) arstechnica.com
 I guess I should be happy that I skipped this additional $3,000 add-on.
 - [Fold N Fly ✈](https://www.foldnfly.com/) www.foldnfly.com
 Awesome database of paper airplanes.

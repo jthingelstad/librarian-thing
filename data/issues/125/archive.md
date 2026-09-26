@@ -236,14 +236,14 @@ Simple flank steak on Big Green Egg tonight with fire getting ready for later. �
 
 ## Yet More Links 🍞
 
-- RSS Feed [Generator, Create RSS feeds from URL](https://rss.app/) rss.app
+- [RSS Feed Generator, Create RSS feeds from URL](https://rss.app/) rss.app
 Cool web app that will build an RSS feed for you from a site that doesn't have one. These tools used to be really common, but many of them went away a few years ago. It is exciting to see them come back!
-- The SpaceX Starship is a very [big deal – Casey Handmer's blog](https://caseyhandmer.wordpress.com/2019/10/29/the-spacex-starship-is-a-very-big-deal/) caseyhandmer.wordpress.com
+- [The SpaceX Starship is a very big deal – Casey Handmer's blog](https://caseyhandmer.wordpress.com/2019/10/29/the-spacex-starship-is-a-very-big-deal/) caseyhandmer.wordpress.com
 This is a pretty amazing look at the aims of SpaceX. 🚀
 
 ## Local 📍
 
-- Nice Ride Proposes Master Plan Amendment for 2020 [Riding Season | Nice Ride Minnesota](https://www.niceridemn.com/blog/2020_proposal) www.niceridemn.com
+- [Nice Ride Proposes Master Plan Amendment for 2020 Riding Season | Nice Ride Minnesota](https://www.niceridemn.com/blog/2020_proposal) www.niceridemn.com
 Very cool to see Nice Ride is looking at bringing eBikes to their service!
 
 ## Fortune 🥠

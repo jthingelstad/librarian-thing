@@ -213,7 +213,7 @@ https://www.eff.org
 It’s cool to see such an iconic typeface getting updated.
 - [Domain-Oriented Observability](https://martinfowler.com/articles/domain-oriented-observability.html) martinfowler.com
 A very detailed, code-first look, at building observability into systems.
-- A Magician Explains Why We See What’s Not There [- Issue 70: Variables - Nautilus](http://nautil.us/issue/70/variables/a-magician-explains-why-we-see-whats-not-there) nautil.us
+- [A Magician Explains Why We See What’s Not There - Issue 70: Variables - Nautilus](http://nautil.us/issue/70/variables/a-magician-explains-why-we-see-whats-not-there) nautil.us
 We see what our brains think we should see, even when we don’t see it. The mental perception that your brain is building is stronger than reality.
 - [gitstatus/listdir.md at master](https://github.com/romkatv/gitstatus/blob/master/docs/listdir.md) github.com
 Great example of incremental optimization of code.

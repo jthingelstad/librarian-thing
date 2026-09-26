@@ -262,17 +262,17 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- 20 Rules For Making the Best Salads [of Your Life | Bon Appétit](https://www.bonappetit.com/gallery/salad-ideas) www.bonappetit.com
+- [20 Rules For Making the Best Salads of Your Life | Bon Appétit](https://www.bonappetit.com/gallery/salad-ideas) www.bonappetit.com
 I should eat more salads, and would probably do that if they tasted more interesting. Good tips here.
-- API Platform: REST and GraphQL framework [on top of Symfony and React](https://api-platform.com/) api-platform.com
+- [API Platform: REST and GraphQL framework on top of Symfony and React](https://api-platform.com/) api-platform.com
 Easy framework to build REST and GraphQL API-driven projects
-- ongoing by [Tim Bray · Go Creeping In](https://www.tbray.org/ongoing/When/201x/2019/06/12/Go-Creeping-In) www.tbray.org
+- [ongoing by Tim Bray · Go Creeping In](https://www.tbray.org/ongoing/When/201x/2019/06/12/Go-Creeping-In) www.tbray.org
 I can [echo this observation as well, Go](http://golang.org) seems to be making slow but steady progress and winning over many engineers as they build solutions.
-- Be My Eyes - Bringing [sight to blind and low-vision people](https://www.bemyeyes.com/) www.bemyeyes.com
+- [Be My Eyes - Bringing sight to blind and low-vision people](https://www.bemyeyes.com/) www.bemyeyes.com
 What an amazing idea for a smartphone app!
-- My personal journey from MIT [to GPL | Drew DeVault’s Blog](https://drewdevault.com/2019/06/13/My-journey-from-MIT-to-GPL.html) drewdevault.com
+- [My personal journey from MIT to GPL | Drew DeVault’s Blog](https://drewdevault.com/2019/06/13/My-journey-from-MIT-to-GPL.html) drewdevault.com
 I like the journey described here and it [echos why I use Creative Commons](https://creativecommons.org) [licenses with a similar "Share Alike](https://wiki.creativecommons.org/wiki/Share_Alike) " clause.
-- Introducing support [for U2F security keys | 1Password](https://blog.1password.com/introducing-support-for-u2f-security-keys/) blog.1password.com
+- [Introducing support for U2F security keys | 1Password](https://blog.1password.com/introducing-support-for-u2f-security-keys/) blog.1password.com
 This might give me a reason to get a U2F key. 🔐
 
 ## Microposts 🎈

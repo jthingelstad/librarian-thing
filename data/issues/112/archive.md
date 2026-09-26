@@ -167,11 +167,11 @@ https://creativecommons.org
 
 ## Yet More Links 🍞
 
-- How do you [delegate to a group of people?](https://www.annashipman.co.uk/jfdi/delegating-to-a-team.html) www.annashipman.co.uk
+- [How do you delegate to a group of people?](https://www.annashipman.co.uk/jfdi/delegating-to-a-team.html) www.annashipman.co.uk
 Interesting walkthrough about working across a leadership team.
-- 21wallpaper - [Download curated wallpapers for you screen](https://21wallpaper.design/) 21wallpaper.design
+- [21wallpaper - Download curated wallpapers for you screen](https://21wallpaper.design/) 21wallpaper.design
 Cool website with some creative backgrounds for your devices. Device backgrounds is an interesting way to bring some art into your day [to day. Via Dense Discovery 42](https://www.densediscovery.com/issues/42) .
-- Swedish Couple Builds Greenhouse Around Home to Stay Warm [and Grow Food All Year Long](https://returntonow.net/2019/03/04/swedish-couple-builds-greenhouse-around-home-to-stay-warm-and-grow-food-all-year-long/) returntonow.net
+- [Swedish Couple Builds Greenhouse Around Home to Stay Warm and Grow Food All Year Long](https://returntonow.net/2019/03/04/swedish-couple-builds-greenhouse-around-home-to-stay-warm-and-grow-food-all-year-long/) returntonow.net
 Cool idea for a house where the winters are long. The video is interesting as well and goes through the infrastructure. I wish they would have shown it in the winter though.
 
 ## Microposts 🎈

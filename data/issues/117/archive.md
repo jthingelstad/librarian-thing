@@ -252,15 +252,15 @@ I always assumed Kalanick was unrepentant about the caustic culture that he help
 
 ## Yet More Links 🍞
 
-- Apple [Arcade — Let the games begin](https://www.youtube.com/watch?v=frLeePH8W9Y) www.youtube.com
+- [Apple Arcade — Let the games begin](https://www.youtube.com/watch?v=frLeePH8W9Y) www.youtube.com
 100 second overview of games coming in Apple Arcade. 🎮
-- Official Google Webmaster Central Blog: Evolving “nofollow” – new ways [to identify the nature of links](https://webmasters.googleblog.com/2019/09/evolving-nofollow-new-ways-to-identify.html) webmasters.googleblog.com
+- [Official Google Webmaster Central Blog: Evolving “nofollow” – new ways to identify the nature of links](https://webmasters.googleblog.com/2019/09/evolving-nofollow-new-ways-to-identify.html) webmasters.googleblog.com
 nofollow has been around for a long time. It makes sense to add additional link relationship values. sponsored and ugc make a ton of sense.
-- My Apple [Event Notes – On my Om](https://om.co/2019/09/10/my-apple-event-notes/) om.co
+- [My Apple Event Notes – On my Om](https://om.co/2019/09/10/my-apple-event-notes/) om.co
 I like Om's highlights of the Apple event this week.
-- Replay Apple's September 10, 2019 Keynote [and New Product Videos - MacStories](https://www.macstories.net/news/replay-apples-september-10-2019-keynote-and-new-product-videos/) www.macstories.net
+- [Replay Apple's September 10, 2019 Keynote and New Product Videos - MacStories](https://www.macstories.net/news/replay-apples-september-10-2019-keynote-and-new-product-videos/) www.macstories.net
 The individual video cuts from this weeks Apple announcements. 📺
-- Our journey to type checking 4 million lines [of Python | Dropbox Tech Blog](https://blogs.dropbox.com/tech/2019/09/our-journey-to-type-checking-4-million-lines-of-python/) blogs.dropbox.com
+- [Our journey to type checking 4 million lines of Python | Dropbox Tech Blog](https://blogs.dropbox.com/tech/2019/09/our-journey-to-type-checking-4-million-lines-of-python/) blogs.dropbox.com
 I guess this is the kind of thing you can do when [you hire the creator of Python](https://www.python.org/~guido/) to be on your team.
 
 ## Microposts 🎈

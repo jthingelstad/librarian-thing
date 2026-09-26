@@ -153,17 +153,17 @@ This is very true.
 
 ## Yet More Links 🍞
 
-- Apple Music launches a public [beta on the web | TechCrunch](https://techcrunch.com/2019/09/05/apple-music-launches-a-public-beta-on-the-web/) techcrunch.com
+- [Apple Music launches a public beta on the web | TechCrunch](https://techcrunch.com/2019/09/05/apple-music-launches-a-public-beta-on-the-web/) techcrunch.com
 This works really well, and if you have iTunes Match it even shows your own music.
 - [Continuous Compliance | Dave Farley’s Weblog](http://www.davefarley.net/?p=285) www.davefarley.net
 This is a good set of idea if you need to deal with regulators and compliance as you build software.
-- swissmiss | [How To Write by Elizabeth Gilbert](https://www.swiss-miss.com/2019/09/how-to-write-by-elizabeth-gilbert.html) www.swiss-miss.com
+- [swissmiss | How To Write by Elizabeth Gilbert](https://www.swiss-miss.com/2019/09/how-to-write-by-elizabeth-gilbert.html) www.swiss-miss.com
 Great suggestions for writing. Doesn't matter what you are writing, all of these could be applied.
-- How to plan and write pieces [of any length - without bullshit](https://withoutbullshit.com/blog/how-to-plan-and-write-pieces-of-any-length) withoutbullshit.com
+- [How to plan and write pieces of any length - without bullshit](https://withoutbullshit.com/blog/how-to-plan-and-write-pieces-of-any-length) withoutbullshit.com
 Simple advice for writing things, anything.
-- Enigma [machine / Tom MacWright / Observable](https://observablehq.com/@tmcw/enigma-machine) observablehq.com
+- [Enigma machine / Tom MacWright / Observable](https://observablehq.com/@tmcw/enigma-machine) observablehq.com
 Cool visuals.
-- devopsdays Minneapolis 2019 - Megan Tischler - The [Art of Continuous Improvement - YouTube](https://www.youtube.com/watch?v=xPN0lc3T5pI&feature=youtu.be&app=desktop) www.youtube.com
+- [devopsdays Minneapolis 2019 - Megan Tischler - The Art of Continuous Improvement - YouTube](https://www.youtube.com/watch?v=xPN0lc3T5pI&feature=youtu.be&app=desktop) www.youtube.com
 One of #TeamSPS doing a lightning talk at DevOpsDays Minneapolis 2019! 🙌
 
 ## Microposts 🎈

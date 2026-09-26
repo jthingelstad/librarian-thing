@@ -103,19 +103,19 @@ https://wikimediafoundation.org/wiki/Home
 
 ## Yet More Links 🍞
 
-- 3 Machine Learning Books that Helped [me Level Up | Data Stuff](http://www.datastuff.tech/data-science/3-machine-learning-books-that-helped-me-level-up-as-a-data-scientist/) www.datastuff.tech
+- [3 Machine Learning Books that Helped me Level Up | Data Stuff](http://www.datastuff.tech/data-science/3-machine-learning-books-that-helped-me-level-up-as-a-data-scientist/) www.datastuff.tech
 Good reading list.
-- MacMenuBar.com - A curated directory [of 200+ Mac menu bar apps](https://macmenubar.com/) macmenubar.com
+- [MacMenuBar.com - A curated directory of 200+ Mac menu bar apps](https://macmenubar.com/) macmenubar.com
 I have some handy menu bar apps. It’s cool that there is a directory of them.
-- Darling [| macOS translation layer for Linux](https://www.darlinghq.org/) www.darlinghq.org
+- [Darling | macOS translation layer for Linux](https://www.darlinghq.org/) www.darlinghq.org
 Run macOS applications on Linux. Nifty. Very early, doesn't support GUI apps yet.
 - Report: Tesla to slash solar panel prices to stymie [market-share loss [correction] | Ars Technica](https://arstechnica.com/cars/2019/04/report-tesla-to-slash-solar-panel-prices-by-38-to-stymie-market-share-loss/) arstechnica.com
 I would love to see solar panels get way cheaper.
-- The Good and the Bad of Google [Cloud Run – A Cloud Guru](https://read.acloud.guru/the-good-and-the-bad-of-google-cloud-run-34455e673ef5) read.acloud.guru
+- [The Good and the Bad of Google Cloud Run – A Cloud Guru](https://read.acloud.guru/the-good-and-the-bad-of-google-cloud-run-34455e673ef5) read.acloud.guru
 Interesting critique of Google Cloud Run.
 - [Delta Lake](https://delta.io/) delta.io
 Open-source storage layer that brings ACID transactions to Apache Spark™ and big data workloads.
-- Home [Screens — Hugo Castellanos — MacSparky](https://www.macsparky.com/blog/2019/4/home-screens-hugo-castellanos) www.macsparky.com
+- [Home Screens — Hugo Castellanos — MacSparky](https://www.macsparky.com/blog/2019/4/home-screens-hugo-castellanos) www.macsparky.com
 I like these articles for discovering new apps.
 
 ## Microposts 🎈

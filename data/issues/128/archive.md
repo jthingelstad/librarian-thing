@@ -236,18 +236,18 @@ No fishin’ in the dark, but definitely grillin’ in the dark! Big Green Egg w
 
 - [No App for That](http://www.blogchangemasters.com/2019/11/27/no-app-for-that/) www.blogchangemasters.com
 When you get good capture devices, like a solid to do list on your phone, you can build an impossibly long list. For me, this is where the Weekly Review in GTD, as well as the Someday/Maybe lists can give you a release valve.
-- A guide [to distributed teams – Increment: Teams](https://increment.com/teams/a-guide-to-distributed-teams/) increment.com
+- [A guide to distributed teams – Increment: Teams](https://increment.com/teams/a-guide-to-distributed-teams/) increment.com
 Key points to making distributed teams effective.
-- Apple Releases Annual [Holiday Video 'The Surprise' - MacStories](https://www.macstories.net/news/apple-releases-annual-holiday-video-the-surprise/) www.macstories.net
+- [Apple Releases Annual Holiday Video 'The Surprise' - MacStories](https://www.macstories.net/news/apple-releases-annual-holiday-video-the-surprise/) www.macstories.net
 Great 3-minute video that will bring tears to your eyes by the end.
-- 1.2 billion people exposed in data [leak includes personal info, LinkedIN, Facebook](https://www.dataviper.io/blog/2019/pdl-data-exposure-billion-people/) www.dataviper.io
+- [1.2 billion people exposed in data leak includes personal info, LinkedIN, Facebook](https://www.dataviper.io/blog/2019/pdl-data-exposure-billion-people/) www.dataviper.io
 The scale of these data leaks is hard to even fathom these days. 😟
-- 110 Nursing Homes Cut Off from Health Records in [Ransomware Attack — Krebs on Security](https://krebsonsecurity.com/2019/11/110-nursing-homes-cut-off-from-health-records-in-ransomware-attack/) krebsonsecurity.com
+- [110 Nursing Homes Cut Off from Health Records in Ransomware Attack — Krebs on Security](https://krebsonsecurity.com/2019/11/110-nursing-homes-cut-off-from-health-records-in-ransomware-attack/) krebsonsecurity.com
 This is a horrible example of the very real-world terrible things that can come without a focus on security.
 
 ## Local 📍
 
-- Miguel Ibarra's My Friend: The end of [an era in Minnesota – FiftyFive.One](https://fiftyfive.one/2019/11/miguel-ibarras-my-friend-the-end-of-an-era-in-minnesota/) fiftyfive.one
+- [Miguel Ibarra's My Friend: The end of an era in Minnesota – FiftyFive.One](https://fiftyfive.one/2019/11/miguel-ibarras-my-friend-the-end-of-an-era-in-minnesota/) fiftyfive.one
 Miguel Ibarra has always been one of my favorite Minnesota United players. "The club declined Ibarra’s option in the off-season and unceremoniously the most important player to wear a Minnesota United jersey was shunted off." You will be missed Ibarra! ⚽️
 
 ## Replies 📬

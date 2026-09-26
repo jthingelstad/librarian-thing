@@ -277,7 +277,7 @@ https://archive.org
 
 - [Why sell zines? - Julia Evans](https://jvns.ca/blog/2018/09/23/why-sell-zines/) jvns.ca
 I've enjoyed Julia Evans' zines and this background on why she charges for them is a good read on making a side project sustainable.
-- Hey Siri, Drive My Tesla (How To [Use iPhone's New Shortcuts)! - YouTube](https://www.youtube.com/watch?v=jZc8qMNiONo&app=desktop) www.youtube.com
+- [Hey Siri, Drive My Tesla (How To Use iPhone's New Shortcuts)! - YouTube](https://www.youtube.com/watch?v=jZc8qMNiONo&app=desktop) www.youtube.com
 I’ve been a big fan of Workflow, and now Shortcuts, in iOS for a long time. This video is a easy introduction to automation on your iOS device.
 - [GPG Suite](https://gpgtools.org/open-letter) gpgtools.org
 I've used GPG Suite at times to encrypt mail, and it’s been sad to me to see how much negativity they are getting over starting to charge a small amount.

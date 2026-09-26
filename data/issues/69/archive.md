@@ -233,9 +233,9 @@ https://archive.org
 
 - [Exclusive: Apple Watch Series 4 revealed — massive display, dense watch face, more | 9to5Mac](https://9to5mac.com/2018/08/30/exclusive-apple-watch-series-4/) 9to5mac.com
 Every millimeter matters on a display as small as the Apple Watch. 👍⌚️
-- Exclusive: This is ‘iPhone XS’ — design, larger version, [iPhone XS' — design, larger version, and gold colors confirmed | 9to5Mac](https://9to5mac.com/2018/08/30/2018-iphone-xs-design-larger-version-gold-exclusive/) 9to5mac.com
+- [Exclusive: This is ‘iPhone XS’ — design, larger version, iPhone XS' — design, larger version, and gold colors confirmed | 9to5Mac](https://9to5mac.com/2018/08/30/2018-iphone-xs-design-larger-version-gold-exclusive/) 9to5mac.com
 I know what my next iPhone will be now. 📱
-- dategrep: [print lines matching a time range](https://github.com/mdom/dategrep) github.com
+- [dategrep: print lines matching a time range](https://github.com/mdom/dategrep) github.com
 Super handy for log files. 🤓
 - [Sinkholes: When the Earth Opens Up - The Atlantic](https://www.theatlantic.com/photo/2018/08/sinkholes-when-the-earth-opens-up/568762/)
 The 3rd one looks like something out of a movie. 😳
@@ -243,13 +243,13 @@ The 3rd one looks like something out of a movie. 😳
 Cool early history on the birth of JSON.
 - [Serverless Best Practices – Paul Johnston – Medium](https://medium.com/@PaulDJohnston/serverless-best-practices-b3c97d551535)
 ☑️ Good set of things to consider when designing serverless.
-- Manifesto [for Minimalist Software Engineers | Minifesto.org](http://minifesto.org/) minifesto.org
+- [Manifesto for Minimalist Software Engineers | Minifesto.org](http://minifesto.org/) minifesto.org
 10 principles to guide minimal software.
 - [A Case Against Optimizing Your Life : zen habits](https://zenhabits.net/unoptimizing/) zenhabits.net
 Sometimes you should just do stuff, and stop fussing around about it.
-- The original [demo of Imagine by John Lennon](https://kottke.org/18/08/the-original-demo-of-imagine-by-john-lennon) kottke.org
+- [The original demo of Imagine by John Lennon](https://kottke.org/18/08/the-original-demo-of-imagine-by-john-lennon) kottke.org
 I love the raw sound of this great song. Imagine is such a great song.
-- littleBits: Award-winning electronic building blocks [for creating inventions large and small](https://littlebits.com/) littlebits.com
+- [littleBits: Award-winning electronic building blocks for creating inventions large and small](https://littlebits.com/) littlebits.com
 Very cool maker minded kits!
 - [Picular](https://picular.co/) picular.co
 Google, but for colors. 🎨

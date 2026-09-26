@@ -154,19 +154,19 @@ https://www.eff.org
 I didn’t even know there was an alternative to regular expressions like this.
 - [The Pixel 3: Everything You Need To Know About Google's New Phone](https://www.buzzfeednews.com/article/nicolenguyen/pixel-3-price-google-hands-on)
 Google’s newest incarnation of their flagship phone. Some cool innovations.
-- Latest Revision to ARM Instruction Set Includes Optimizations [Just for JavaScript — Daring Fireball](https://twitter.com/gparker/status/1047246359261106176) twitter.com
+- [Latest Revision to ARM Instruction Set Includes Optimizations Just for JavaScript — Daring Fireball](https://twitter.com/gparker/status/1047246359261106176) twitter.com
 This explains why Javascript is so fast for certain benchmarks on the iPhone XS!
-- The Internet’s keepers? “Some call us hoarders—I like to [say we’re archivists” | Ars Technica](https://arstechnica.com/gaming/2018/10/the-internets-keepers-some-call-us-hoarders-i-like-to-say-were-archivists/) arstechnica.com
+- [The Internet’s keepers? “Some call us hoarders—I like to say we’re archivists” | Ars Technica](https://arstechnica.com/gaming/2018/10/the-internets-keepers-some-call-us-hoarders-i-like-to-say-were-archivists/) arstechnica.com
 I’m a fan of Internet Archive. 🧡
-- Facebook announces Portal, an Echo Show rival focused [on video chat - The Verge](https://www.theverge.com/circuitbreaker/2018/10/8/17928554/facebook-portal-announced-camera-price-video-chat) www.theverge.com
+- [Facebook announces Portal, an Echo Show rival focused on video chat - The Verge](https://www.theverge.com/circuitbreaker/2018/10/8/17928554/facebook-portal-announced-camera-price-video-chat) www.theverge.com
 I’m skeptical of these "Smart Screens". I’m downright cynical of one made by Facebook.
-- Statement from DHS Press Secretary on Recent Media Reports of Potential [Supply Chain Compromise | Homeland Security](https://www.dhs.gov/news/2018/10/06/statement-dhs-press-secretary-recent-media-reports-potential-supply-chain-compromise) www.dhs.gov
+- [Statement from DHS Press Secretary on Recent Media Reports of Potential Supply Chain Compromise | Homeland Security](https://www.dhs.gov/news/2018/10/06/statement-dhs-press-secretary-recent-media-reports-potential-supply-chain-compromise) www.dhs.gov
 This story of Chinese security backdoor on the silicon level just keeps getting more confusing.
 - [DeleteMe - Privacy Protection Services](https://abine.com/deleteme/) abine.com
 Services like this are needed, but I constantly wonder how many of them are just backdoor ways to mine your private data even more.
 - [Scaling Engineering Teams via Writing Things Down and Sharing - aka RFCs](https://blog.pragmaticengineer.com/scaling-engineering-teams-via-writing-things-down-rfcs/) blog.pragmaticengineer.com
 Perhaps the key to scaling isn’t as complicated as we make it — just write things down!
-- A Banksy Painting 'Self-Destructed' After Being [Auctioned for $1.1 Million - VICE](https://www.vice.com/en_us/article/yw9xgy/a-banksy-painting-self-destructed-after-being-auctioned-for-dollar11-million-vgtrn) www.vice.com
+- [A Banksy Painting 'Self-Destructed' After Being Auctioned for $1.1 Million - VICE](https://www.vice.com/en_us/article/yw9xgy/a-banksy-painting-self-destructed-after-being-auctioned-for-dollar11-million-vgtrn) www.vice.com
 🧐
 
 ## Microposts 🎈

@@ -197,9 +197,9 @@ https://letsencrypt.org
 A bonkers list of content about crypto / blockchain stuff. 📚
 - [countdown](https://github.com/antonmedv/countdown/) github.com
 Could be handy. 🔨
-- Dumbass Home 2.0 :: Internet of Things. How to Automate Your [Rented Box Today :: vas3k's blog](https://vas3k.com/blog/dumbass_home/?ref=sn) vas3k.com
+- [Dumbass Home 2.0 :: Internet of Things. How to Automate Your Rented Box Today :: vas3k's blog](https://vas3k.com/blog/dumbass_home/?ref=sn) vas3k.com
 Good (and funny) overview of Smart Home tech. 🤪
-- Create UML diagrams online [in seconds, no special tools needed.](https://yuml.me/diagram/scruffy/class/draw) yuml.me
+- [Create UML diagrams online in seconds, no special tools needed.](https://yuml.me/diagram/scruffy/class/draw) yuml.me
 But why? Why? 😭
 
 ## Microposts 🎈

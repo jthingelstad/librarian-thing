@@ -185,9 +185,9 @@ https://letsencrypt.org
 
 - [What I learned at work this year | Bill Gates](https://www.gatesnotes.com/About-Bill-Gates/Year-in-Review-2018)
 I love what Bill Gates is working on now. 💚
-- The simple hack [to make meetings better | Torchbox](https://torchbox.com/blog/simple-hack-make-meetings-better/) torchbox.com
+- [The simple hack to make meetings better | Torchbox](https://torchbox.com/blog/simple-hack-make-meetings-better/) torchbox.com
 Solid framework for improving meeting quality. This stuff is always much easier said than done.
-- Adding a Task Anywhere in Project [List on iOS — Using OmniFocus](http://www.usingomnifocus.com/2019/01/inbox-to-project-list/) www.usingomnifocus.com
+- [Adding a Task Anywhere in Project List on iOS — Using OmniFocus](http://www.usingomnifocus.com/2019/01/inbox-to-project-list/) www.usingomnifocus.com
 Very cool usability trick in OmniFocus!
 - [Coconut Programming Language](http://coconut-lang.org/) coconut-lang.org
 Functional language implemented in Python so you can mix and match.

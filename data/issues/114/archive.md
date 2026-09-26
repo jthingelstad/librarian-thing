@@ -155,7 +155,7 @@ I've built a very consistent daily meditation practice, and I would concur with 
 
 - [Amazon Forecast – Now Generally Available | AWS News Blog](https://aws.amazon.com/blogs/aws/amazon-forecast-now-generally-available/)
 Interesting new offering that could bring more sophisticated forecasting capabilities to a larger audience.
-- Eivind [Hjertnes | The “I” in Team](https://hjertnes.social/2019/08/21/092057.html) hjertnes.social
+- [Eivind Hjertnes | The “I” in Team](https://hjertnes.social/2019/08/21/092057.html) hjertnes.social
 😂
 - [Chart.xkcd | xkcd styled chart lib](https://timqian.com/chart.xkcd/) timqian.com
 I want to make a website and put charts on it just to play with this!

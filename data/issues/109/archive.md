@@ -188,11 +188,11 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Exercise-Bike Maker Peloton [Files Confidentially for IPO - WSJ](https://www.wsj.com/articles/exercise-bike-maker-peloton-files-confidentially-for-ipo-11559746316) www.wsj.com
+- [Exercise-Bike Maker Peloton Files Confidentially for IPO - WSJ](https://www.wsj.com/articles/exercise-bike-maker-peloton-files-confidentially-for-ipo-11559746316) www.wsj.com
 I’m a huge fan of our Peloton gear and the service. Seems like it would be a good investment!
 - [Xcode - SwiftUI - Apple Developer](https://developer.apple.com/xcode/swiftui/) developer.apple.com
 SwiftUI looks amazing and simple. 🕴
-- SEC.gov | SEC Charges Issuer [With Conducting $100 Million Unregistered ICO](https://www.sec.gov/news/press-release/2019-87) www.sec.gov
+- [SEC.gov | SEC Charges Issuer With Conducting $100 Million Unregistered ICO](https://www.sec.gov/news/press-release/2019-87) www.sec.gov
 This seems significant. 🚨
 
 ## Microposts 🎈

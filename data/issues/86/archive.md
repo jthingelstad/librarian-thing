@@ -177,13 +177,13 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- The Hidden Struggle to [Save the Coffee Industry From Disaster](https://medium.com/s/thenewnew/the-fight-to-save-coffee-c80e4e17cd81) medium.com
+- [The Hidden Struggle to Save the Coffee Industry From Disaster](https://medium.com/s/thenewnew/the-fight-to-save-coffee-c80e4e17cd81) medium.com
 It turns out coffee is a giant monoculture, susceptible to many bad things. 😳
 - Python [gets a new governance model [LWN.net]](https://lwn.net/SubscriberLink/775105/5db16cfe82e78dc3/) lwn.net
 An interesting read to see how the Python language will [be governed now that the BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) has stepped aside.
-- 16 (x4) Books We [Read Winter 2018 – Andreessen Horowitz](https://a16z.com/2018/12/24/what-were-reading-winter-2018/) a16z.com
+- [16 (x4) Books We Read Winter 2018 – Andreessen Horowitz](https://a16z.com/2018/12/24/what-were-reading-winter-2018/) a16z.com
 Expansive book list. I find these fun to browse for inspiration.
-- Minnesota United FC on Twitter: "DING DONG DING [DONG 🔊 SOUND ON 🔊… "](https://twitter.com/MNUFC/status/1076233589480738818) twitter.com
+- [Minnesota United FC on Twitter: "DING DONG DING DONG 🔊 SOUND ON 🔊… "](https://twitter.com/MNUFC/status/1076233589480738818) twitter.com
 I really don't like linking to Twitter, but this video is fun and I can’t find it on the open web. I can’t wait to see [games in 2019 at Allianz Field](https://www.mnufc.com/stadium/) !
 
 ## Microposts 🎈

@@ -285,19 +285,19 @@ This looks like a crazy simple Python library to make API endpoints!
 Not sure I want to make a habit of creating Gantt charts but this tool looks very powerful.
 - [Two malicious Python libraries caught stealing SSH and GPG keys | ZDNet](https://www.zdnet.com/article/two-malicious-python-libraries-removed-from-pypi/) www.zdnet.com
 This is a smart attack vector, and I suspect dangerously unprotected.
-- Django 3.0 release [notes | Django documentation | Django](https://docs.djangoproject.com/en/3.0/releases/3.0/) docs.djangoproject.com
+- [Django 3.0 release notes | Django documentation | Django](https://docs.djangoproject.com/en/3.0/releases/3.0/) docs.djangoproject.com
 Major new release of one of the biggest Python frameworks.
 - [A letter from Larry and Sergey](https://www.blog.google/inside-google/alphabet/letter-from-larry-and-sergey/) www.blog.google
 Definitely a momentous milestone for Google.
-- Abilitech Medical raises $7.4 million, with investment from Sofia Fund - [Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/12/03/abilitech-medical-raises-7-4-million.html) www.bizjournals.com
+- [Abilitech Medical raises $7.4 million, with investment from Sofia Fund - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/12/03/abilitech-medical-raises-7-4-million.html) www.bizjournals.com
 Congratulations to a great local startup and a [former neighbor of mine Angie Conley](https://www.linkedin.com/in/angieconley/) !
 - [Newsletters spam test by mail-tester.com](https://www.mail-tester.com/) www.mail-tester.com
 Really handy tool to test if your mail is likely to be flagged as spam. 💌
-- ChessRoots - Chess opening graph [from over 800 million Chess games](https://www.chessroots.com/) www.chessroots.com
+- [ChessRoots - Chess opening graph from over 800 million Chess games](https://www.chessroots.com/) www.chessroots.com
 Cool graph-based visualization tool to explore chess games. ♟
-- A frame [of mind – On my Om](https://om.co/2019/12/02/frame-of-mind/) om.co
+- [A frame of mind – On my Om](https://om.co/2019/12/02/frame-of-mind/) om.co
 I like Om’s take on photography as, sort of, a kind of therapy.
-- Almond [- The Open, Privacy-Preserving Virtual Assistant](https://almond.stanford.edu/) almond.stanford.edu
+- [Almond - The Open, Privacy-Preserving Virtual Assistant](https://almond.stanford.edu/) almond.stanford.edu
 Not sure how well something like this will work, but glad folks are working on it.
 
 ## Replies 📬

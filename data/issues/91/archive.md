@@ -171,7 +171,7 @@ Seriously, of all the devices I'd like to control with HomeKit my TV would be ri
 At this point nothing should really surprise us from Facebook right? 🤦‍♂️
 - [Maze Design](http://www.cgl.uwaterloo.ca/csk/projects/mazes/) www.cgl.uwaterloo.ca
 Turns out generating mazes is pretty complex.
-- Omni [Roadmap 2019 - The Omni Group](https://www.omnigroup.com/blog/omni-roadmap-2019) www.omnigroup.com
+- [Omni Roadmap 2019 - The Omni Group](https://www.omnigroup.com/blog/omni-roadmap-2019) www.omnigroup.com
 Basically finish up what they were hoping to get done in 2018. I do think the JavaScript automation for OmniFocus will be a big deal.
 - [Custom Mission Patches](https://mission-patch.com/) - design and print NASA-style mission patch stickers for your team.
 These are a lot of fun!

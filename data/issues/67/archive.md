@@ -250,27 +250,27 @@ Agree completely with this, but would also suggest they are different things. Di
 
 ## Yet More Links 🍞
 
-- Best [Practices for Newsletters — CJ Chilvers](https://www.cjchilvers.com/blog/best-practices-for-newsletters) www.cjchilvers.com
+- [Best Practices for Newsletters — CJ Chilvers](https://www.cjchilvers.com/blog/best-practices-for-newsletters) www.cjchilvers.com
 Another experienced newsletter author on important aspects of publishing a newsletter.
-- The Year [of Donuts: A Retrospective | PagerDuty](https://www.pagerduty.com/blog/slackbot-donut-cultural-impact/) www.pagerduty.com
+- [The Year of Donuts: A Retrospective | PagerDuty](https://www.pagerduty.com/blog/slackbot-donut-cultural-impact/) www.pagerduty.com
 What a cool idea for a chatbot! 🤪🍩
-- We Gave You 3 Million Russian Troll Tweets. Here’s What [You’ve Found So Far. | FiveThirtyEight](https://fivethirtyeight.com/features/what-you-found-in-3-million-russian-troll-tweets/) fivethirtyeight.com
+- [We Gave You 3 Million Russian Troll Tweets. Here’s What You’ve Found So Far. | FiveThirtyEight](https://fivethirtyeight.com/features/what-you-found-in-3-million-russian-troll-tweets/) fivethirtyeight.com
 What a mess.
-- Timsort: Fastest sorting algorithm for real [world problems. - DEV Community 👩‍💻👨‍💻](https://dev.to/s_awdesh/timsort-fastest-sorting-algorithm-for-real-world-problems--2jhd) dev.to
+- [Timsort: Fastest sorting algorithm for real world problems. - DEV Community 👩‍💻👨‍💻](https://dev.to/s_awdesh/timsort-fastest-sorting-algorithm-for-real-world-problems--2jhd) dev.to
 I wasn't aware of Timsort and it’s unique approach.
-- SPS Commerce Raises [$31,000 in Ninth Annual Charity Auction](https://www.spscommerce.com/blog/ninth-sps-commerce-charity-auction-spsa/) www.spscommerce.com
+- [SPS Commerce Raises $31,000 in Ninth Annual Charity Auction](https://www.spscommerce.com/blog/ninth-sps-commerce-charity-auction-spsa/) www.spscommerce.com
 This is a fabulous event that we hold each year!
-- Funding not secured: Musk's explanations about taking Tesla private [does not work - Business Insider](https://www.businessinsider.com/funding-not-secured-musks-explanations-about-taking-tesla-private-does-not-work-2018-8) www.businessinsider.com
+- [Funding not secured: Musk's explanations about taking Tesla private does not work - Business Insider](https://www.businessinsider.com/funding-not-secured-musks-explanations-about-taking-tesla-private-does-not-work-2018-8) www.businessinsider.com
 Elon Musk seems to be trending less Steve Jobs and more Howard Hughes.
 - [Regex Dictionary by Lou Hevly](https://visca.com/regexdict/) visca.com
 Cool index of regex patterns to find various things.
 - [Pie Charts —xkcd.com](https://xkcd.com/2031/) xkcd.com
 Pie Charts! 😱
-- Nordic yard game wows ’em in Eau Claire | [NewsCut | Minnesota Public Radio News](https://blogs.mprnews.org/newscut/2018/08/nordic-yard-game-wows-em-in-eau-claire/) blogs.mprnews.org
+- [Nordic yard game wows ’em in Eau Claire | NewsCut | Minnesota Public Radio News](https://blogs.mprnews.org/newscut/2018/08/nordic-yard-game-wows-em-in-eau-claire/) blogs.mprnews.org
 MPR covering the US National Kubb Championship! 🙌🏆
 - [Julia 1.0](https://julialang.org/blog/2018/08/one-point-zero) julialang.org
 Ambitious set of features for a new language.
-- Cloud Native Computing Foundation Announces Prometheus [Graduation - Cloud Native Computing Foundation](https://www.cncf.io/announcement/2018/08/09/prometheus-graduates/) www.cncf.io
+- [Cloud Native Computing Foundation Announces Prometheus Graduation - Cloud Native Computing Foundation](https://www.cncf.io/announcement/2018/08/09/prometheus-graduates/) www.cncf.io
 Big milestone for Prometheus! 👍
 
 ## Microposts 🎈

@@ -249,17 +249,17 @@ I've been using OmniFocus since it came out on macOS. It continues to be my most
 - [Python Application Layouts: A Reference – Real Python](https://realpython.com/python-application-layouts/) realpython.com
 Nice templates for laying out a project smartly.
 - [World wide wrist. — Ethan Marcotte](https://ethanmarcotte.com/wrote/wwwatch/) ethanmarcotte.com
-- Amazon EKS – Now [Generally Available | AWS News Blog](https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/) aws.amazon.com
-- Management and Leadership [Worksheets & Tools | Lara Hogan](https://larahogan.me/resources/) larahogan.me
+- [Amazon EKS – Now Generally Available | AWS News Blog](https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/) aws.amazon.com
+- [Management and Leadership Worksheets & Tools | Lara Hogan](https://larahogan.me/resources/) larahogan.me
 Interesting reference material for managers.
 - [Intro to Graphs](https://aaronlelevier.github.io/intro-to-graphs/) aaronlelevier.github.io
 Introduction to graph vocabulary and types.
-- Apple Redesigns Mac App Store with iOS-like Editorial Focus, New [Product Pages, and More — MacStories](https://www.macstories.net/news/apple-redesigns-mac-app-store-with-ios-like-editorial-focus-new-product-pages-and-more/) www.macstories.net
+- [Apple Redesigns Mac App Store with iOS-like Editorial Focus, New Product Pages, and More — MacStories](https://www.macstories.net/news/apple-redesigns-mac-app-store-with-ios-like-editorial-focus-new-product-pages-and-more/) www.macstories.net
 These are good changes for the Mac App Store, and I’m glad that Apple isn't giving up on this.
-- A [bright future for GitHub — GitHub](https://blog.github.com/2018-06-04-github-microsoft/) blog.github.com
+- [A bright future for GitHub — GitHub](https://blog.github.com/2018-06-04-github-microsoft/) blog.github.com
 GitHub being sold from the GitHub side.
-- An Ambitious Person’s [Brutally Honest Take On Work-Life Balance](https://medium.com/the-mission/an-ambitious-persons-take-on-work-life-balance-i-almost-lost-hope-in-my-marriage-b6f0c0355c2) medium.com
-- Kubernetes won – so [now what? – James Governor's Monkchips](http://redmonk.com/jgovernor/2018/05/25/kubernetes-won-so-now-what/) redmonk.com
+- [An Ambitious Person’s Brutally Honest Take On Work-Life Balance](https://medium.com/the-mission/an-ambitious-persons-take-on-work-life-balance-i-almost-lost-hope-in-my-marriage-b6f0c0355c2) medium.com
+- [Kubernetes won – so now what? – James Governor's Monkchips](http://redmonk.com/jgovernor/2018/05/25/kubernetes-won-so-now-what/) redmonk.com
 Definitely where Kubernetes should be focusing now.
 
 ## Microposts 🎈

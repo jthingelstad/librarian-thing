@@ -253,15 +253,15 @@ https://www.hackthegap.com
 
 - [More PM Problem Areas | Silicon Valley Product Group](https://svpg.com/more-pm-problem-areas/)
 Some areas to look out for development opportunities with product management teams.
-- Why did the PGP Web of Trust [fail? – Henry Story – Medium](https://medium.com/@bblfish/what-are-the-failings-of-pgp-web-of-trust-958e1f62e5b7) medium.com
+- [Why did the PGP Web of Trust fail? – Henry Story – Medium](https://medium.com/@bblfish/what-are-the-failings-of-pgp-web-of-trust-958e1f62e5b7) medium.com
 TL;DR? Just way too hard.
 - [mailtolink.me | markup generator for mailto links](https://mailtolink.me/)
 Cool utility to generate a mailto link. [These are handy](mailto:jamie@thingelstad.com?subject=Mail%20to%20links%20are%20great!&body=What's%20up%3F) and this makes them easy to make.
-- Re-decentralizing the Web, for [good this time | Ruben Verborgh](https://ruben.verborgh.org/articles/redecentralizing-the-web/) ruben.verborgh.org
+- [Re-decentralizing the Web, for good this time | Ruben Verborgh](https://ruben.verborgh.org/articles/redecentralizing-the-web/) ruben.verborgh.org
 This is the [best description of what Tim Berners-Lee's Solid](https://solid.mit.edu) is about.
-- The unlikely resurgence of Dungeons & Dragons makes its way to the Inland [Northwest | The Pacific Northwest Inlander](https://www.inlander.com/spokane/nearly-45-years-after-its-creation-a-fantasy-game-played-with-paper-pencil-and-dice-is-having-its-biggest-year-yet-in-the-inland-northwest-a/Content?oid=15615918) www.inlander.com
+- [The unlikely resurgence of Dungeons & Dragons makes its way to the Inland Northwest | The Pacific Northwest Inlander](https://www.inlander.com/spokane/nearly-45-years-after-its-creation-a-fantasy-game-played-with-paper-pencil-and-dice-is-having-its-biggest-year-yet-in-the-inland-northwest-a/Content?oid=15615918) www.inlander.com
 🎲⚔️🐉🤪
-- The Art of Being [an Instagram Husband - The Atlantic](https://www.theatlantic.com/technology/archive/2019/01/instagram-husbands-are-no-longer-ashamed/580033/) www.theatlantic.com
+- [The Art of Being an Instagram Husband - The Atlantic](https://www.theatlantic.com/technology/archive/2019/01/instagram-husbands-are-no-longer-ashamed/580033/) www.theatlantic.com
 When did "Influencer" become a profession? 🤦‍♀️
 
 ## Microposts 🎈

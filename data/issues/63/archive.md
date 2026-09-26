@@ -246,7 +246,7 @@ Small, curated list of independent content.
 Lessons on architecting using advanced cloud technologies.
 - [Lwan Web Server](https://lwan.ws/) lwan.ws
 New lightweight web server.
-- 📅 [World Emoji Day — July 17, 2018](https://worldemojiday.com/) worldemojiday.com
+- [📅 World Emoji Day — July 17, 2018](https://worldemojiday.com/) worldemojiday.com
 I had no idea there was a World Emoji Day! 😲
 - [Omni Calculator](https://www.omnicalculator.com/) www.omnicalculator.com
 Custom calculators for all sorts of different scenarios. Interesting idea.
