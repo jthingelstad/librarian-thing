@@ -30,7 +30,7 @@ Home, Minneapolis MN
 
 ### [Prometheus Blog Series (Part 1): Metrics and Labels](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-1-metrics-and-labels/?__s=bsgqbmfxusxefqxs6as6)
 
-Interesting series of blog posts with a solid introduction to [Prometheus. Multiple parts Metrics and Labels](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-1-metrics-and-labels/) [, Metric types](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-2-metric-types/) [, Exposing and collecting metrics](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-3-exposing-and-collecting-metrics/) , [Instrumenting code in Go and Java](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-4-instrumenting-code-in-go-and-java/) [and Alerting rules](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-5-alerting-rules/) .
+Interesting series of blog posts with a solid introduction to Prometheus. Multiple parts [Metrics and Labels](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-1-metrics-and-labels/), [Metric types](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-2-metric-types/), [Exposing and collecting metrics](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-3-exposing-and-collecting-metrics/), [Instrumenting code in Go and Java](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-4-instrumenting-code-in-go-and-java/) and [Alerting rules](https://pierrevincent.github.io/2017/12/prometheus-blog-series-part-5-alerting-rules/).
 
 ### [Dan Harris Knows All Your Excuses for Not Meditating - Note to Self - WNYC](https://www.wnyc.org/story/dan-harris-meditation-skeptics/)
 
@@ -62,7 +62,7 @@ Lovely! 👏 I like how they show the transcripts of previous discussions. Spamn
 
 ### [Sense: Track energy use in real time](https://sense.com/product.html)
 
-I [shared my frustration with the reporting](https://www.thingelstad.com/2017/12/29/i-want-to.html) that my [power company provides and Luke Samaha](https://www.linkedin.com/in/lukesamaha/) [pointed me to](https://twitter.com/LukeSamaha/status/947135160323059712) Sense. This looks like a pretty amazing device and some great data. I like the premise of identifying the changes and then having the user annotate what happened. Wish it cost half as much though.
+I [shared my frustration with the reporting](https://www.thingelstad.com/2017/12/29/i-want-to.html) that my power company provides and [Luke Samaha](https://www.linkedin.com/in/lukesamaha/) [pointed me to](https://twitter.com/LukeSamaha/status/947135160323059712) Sense. This looks like a pretty amazing device and some great data. I like the premise of identifying the changes and then having the user annotate what happened. Wish it cost half as much though.
 
 ### [Encryption Lava Lamps – San Francisco, California - Atlas Obscura](https://www.atlasobscura.com/places/encryption-lava-lamps)
 

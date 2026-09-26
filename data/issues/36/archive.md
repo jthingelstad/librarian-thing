@@ -158,8 +158,8 @@ Free 5/5 stars
 
 ## Microblog updates 🎈
 
-- Family movie night [watching Leap! Everyone liked it. 🎬](https://www.thingelstad.com/2018/01/12/family-movie-night.html)
-- A smartphone filled with social apps is the [physical manifestation of Buddhist monkey mind.](https://www.thingelstad.com/2018/01/12/a-smartphone-filled.html)
+- [Family movie night watching Leap! Everyone liked it. 🎬](https://www.thingelstad.com/2018/01/12/family-movie-night.html)
+- [A smartphone filled with social apps is the physical manifestation of Buddhist monkey mind.](https://www.thingelstad.com/2018/01/12/a-smartphone-filled.html)
 - I continue to see more people covering the camera in their laptops. How come nobody covers the [forward facing camera on their mobile phone?](https://www.thingelstad.com/2018/01/12/i-continue-to.html)
 - [Fog.](https://www.thingelstad.com/2018/01/11/fog.html)
 - Enjoying 10% Happier on [audiobook](https://www.thingelstad.com/2018/01/10/014252.html). Approachable introduction to mindfulness. 📚
