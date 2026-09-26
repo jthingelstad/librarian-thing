@@ -278,20 +278,20 @@ https://minnestar.org
 
 - [Microsoft has leapfrogged Alphabet to become the world's third most valuable company — Quartz](https://qz.com/1291819/microsoft-has-leapfrogged-alphabet-to-become-the-worlds-third-most-valuable-company/)
 Under Nadella's leadership Microsoft is doing interesting things. In the last 2 years the market has taken note.
-- PagerDuty + Atlassian: Taking Modern [Incident Response in Stride | PagerDuty](https://www.pagerduty.com/blog/integration-atlassian-stride/) www.pagerduty.com
+- [PagerDuty + Atlassian: Taking Modern Incident Response in Stride | PagerDuty](https://www.pagerduty.com/blog/integration-atlassian-stride/) www.pagerduty.com
 - [Incident Management at Spotify | Labs](https://labs.spotify.com/2013/06/04/incident-management-at-spotify/) labs.spotify.com
-- 9 Common Email Signature Mistakes You [Want To Avoid – SaneBox Blog](http://blog.sanebox.com/2018/05/30/9-common-email-signature-mistakes/) blog.sanebox.com
+- [9 Common Email Signature Mistakes You Want To Avoid – SaneBox Blog](http://blog.sanebox.com/2018/05/30/9-common-email-signature-mistakes/) blog.sanebox.com
 How to make sure the lowly email signature is getting the right attention.
-- Analyst: Apple will launch an iPhone with a triple-lens rear camera [in 2019 — Apple World Today](https://www.appleworld.today/blog/2018/5/29/analyst-apple-will-launch-an-iphone-with-a-triple-lens-rear-camera-in-2019) www.appleworld.today
+- [Analyst: Apple will launch an iPhone with a triple-lens rear camera in 2019 — Apple World Today](https://www.appleworld.today/blog/2018/5/29/analyst-apple-will-launch-an-iphone-with-a-triple-lens-rear-camera-in-2019) www.appleworld.today
 A triple-lens camera system on the iPhone would be a great upgrade.
-- Pokémon: Let's Go for Nintendo Switch: Everything [you need to know | iMore](https://www.imore.com/pokemon-lets-go-nintendo-switch-everything-you-need-know) www.imore.com
-- Anker PowertPort Solar [21-Watt Charger — Tools and Toys](http://toolsandtoys.net/anker-powertport-solar-21-watt-charger/) toolsandtoys.net
+- [Pokémon: Let's Go for Nintendo Switch: Everything you need to know | iMore](https://www.imore.com/pokemon-lets-go-nintendo-switch-everything-you-need-know) www.imore.com
+- [Anker PowertPort Solar 21-Watt Charger — Tools and Toys](http://toolsandtoys.net/anker-powertport-solar-21-watt-charger/) toolsandtoys.net
 I like Anker's products and this would be fun to have just because.
 - [WordPress at 15 | Matt Mullenweg](https://ma.tt/2018/05/wordpress-at-15/) ma.tt
 15 years of making the Internet a better place. 👏
-- Microsoft expands data privacy tools [ahead of GDPR - The Verge](https://www.theverge.com/2018/5/24/17388206/microsoft-expand-data-privacy-tools-gdpr-eu) www.theverge.com
-- Will Kubernetes Collapse Under the Weight of [Its Complexity? | Blog | InfluxData](https://www.influxdata.com/blog/will-kubernetes-collapse-under-the-weight-of-its-complexity/) www.influxdata.com
-- Full Cycle Developers at [Netflix – Netflix TechBlog – Medium](https://medium.com/netflix-techblog/full-cycle-developers-at-netflix-a08c31f83249) medium.com
+- [Microsoft expands data privacy tools ahead of GDPR - The Verge](https://www.theverge.com/2018/5/24/17388206/microsoft-expand-data-privacy-tools-gdpr-eu) www.theverge.com
+- [Will Kubernetes Collapse Under the Weight of Its Complexity? | Blog | InfluxData](https://www.influxdata.com/blog/will-kubernetes-collapse-under-the-weight-of-its-complexity/) www.influxdata.com
+- [Full Cycle Developers at Netflix – Netflix TechBlog – Medium](https://medium.com/netflix-techblog/full-cycle-developers-at-netflix-a08c31f83249) medium.com
 - [Ghostery Email Incident Update - Ghostery](https://www.ghostery.com/blog/ghostery-news/ghostery-email-incident-update/) www.ghostery.com
 A service that works to defend users privacy, leaks users data, while communicating a change to help protect users privacy. 🤦🏼‍♂️
 

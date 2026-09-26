@@ -358,4 +358,4 @@ Cloud technology is making technology teams thing about costs in a different way
 - Very long escalator @ Guthrie Theatre. [→](http://www.thingelstad.com/2017/06/03/very-long-escalator.html)
 ## The end 🎬
 
-Thank your or subscribing. If you know of people that would like the Weekly Thing please forward it to them and spread the word!
+Thank you for subscribing. If you know of people that would like the Weekly Thing please forward it to them and spread the word!

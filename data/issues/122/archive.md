@@ -227,7 +227,7 @@ I wanted this to be a joke with the punchline being to rewrite it in Java or Go.
 
 - [MakePass: Create Your Own Apple Wallet Passes on the Mac - MacStories](https://www.macstories.net/reviews/makepass-create-your-own-apple-wallet-passes-on-the-mac/)
 Neat app. I bought it for $1 to see if I could get rid of some of the cards in my wallet.
-- Cool New Features [in Python 3.8 – Real Python](https://realpython.com/python38-new-features/) realpython.com
+- [Cool New Features in Python 3.8 – Real Python](https://realpython.com/python38-new-features/) realpython.com
 Some great new features in Python! 🐍
 - [(Fish shell) fun: event handlers - BrettTerpstra.com](https://brettterpstra.com/2019/10/15/fish-shell-fun-event-handlers/) brettterpstra.com
 [I switched to fish](https://fishshell.com) shell a while ago, [after over a decade of zsh](https://www.zsh.org) , but I haven't gotten all geeked out on this stuff. Yet. 🤓
@@ -235,7 +235,7 @@ Some great new features in Python! 🐍
 Now this is the kind of game I can dig! 🤓
 - [Disgraced Google Exec Andy Rubin Quietly Left His Venture Firm Earlier This Year](https://www.buzzfeednews.com/article/ryanmac/andy-rubin-playground-global-google-quiet-departure)
 Rubin get's paid $90M to leave Google, then $9M to leave the next company. This guy is toxic.
-- Brainstorming techniques, [ideas & rules for group brainstorming](https://miro.com/blog/brainstorming-techniques-ideas-rules/) miro.com
+- [Brainstorming techniques, ideas & rules for group brainstorming](https://miro.com/blog/brainstorming-techniques-ideas-rules/) miro.com
 Great guidelines for running brainstorming sessions. I love the callout to have a facilitator.
 - [UTF-8 history](https://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt) www.cl.cam.ac.uk
 [Ken Thompson](https://en.wikipedia.org/wiki/Ken_Thompson) created so much foundational tech. 😳

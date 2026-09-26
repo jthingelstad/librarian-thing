@@ -144,21 +144,21 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- bsed: Simple SQL-like syntax [on top of Perl text processing.](https://github.com/andrewbihl/bsed) github.com
+- [bsed: Simple SQL-like syntax on top of Perl text processing.](https://github.com/andrewbihl/bsed) github.com
 Kind of weird. Stream editor that allows SQL-like operations. Huh.
 - [The one-salary experiment, ten years in](https://iwantmyname.com/blog/the-one-salary-experiment-ten-years-in) iwantmyname.com
 I've never heard of a company doing this. Pretty interesting experiment.
-- Leica SL: A [Love Story – On my Om](https://om.co/2019/03/31/om-malik-leica-sl-review/) om.co
+- [Leica SL: A Love Story – On my Om](https://om.co/2019/03/31/om-malik-leica-sl-review/) om.co
 I have a growing desire for a Leica digital. 😬
-- Apple Card Doesn't Need to [Be Revolutionary to Be a Hit](https://www.tomsguide.com/us/why-apple-card-will-be-a-hit,news-29770.html) www.tomsguide.com
+- [Apple Card Doesn't Need to Be Revolutionary to Be a Hit](https://www.tomsguide.com/us/why-apple-card-will-be-a-hit,news-29770.html) www.tomsguide.com
 More thoughts on the new Apple Card.
 - [Editor.js](https://editorjs.io/) editorjs.io
 If you need a web based editor, this looks very solid and extensible.
-- These stunning drone photos really put humanity [in its place - The Verge](https://www.theverge.com/tldr/2019/3/31/18286772/drone-photography-beautiful-nature-skypixel-aerial-storytelling-contest-2018-winners) www.theverge.com
+- [These stunning drone photos really put humanity in its place - The Verge](https://www.theverge.com/tldr/2019/3/31/18286772/drone-photography-beautiful-nature-skypixel-aerial-storytelling-contest-2018-winners) www.theverge.com
 Amazing photography.
-- Facebook: Old posts by Mark [Zuckerberg have disappeared - Business Insider](https://www.businessinsider.com/facebook-old-posts-mark-zuckerberg-disappeared-2019-3) www.businessinsider.com
+- [Facebook: Old posts by Mark Zuckerberg have disappeared - Business Insider](https://www.businessinsider.com/facebook-old-posts-mark-zuckerberg-disappeared-2019-3) www.businessinsider.com
 The really surprising thing here is that Facebook ever deletes anything. I didn’t think they did. Huh. 😯
-- World Map [of World Religions - Big Think](https://bigthink.com/strange-maps/world-map-of-religions) bigthink.com
+- [World Map of World Religions - Big Think](https://bigthink.com/strange-maps/world-map-of-religions) bigthink.com
 Very cool way to look at this data.
 
 ## Microposts 🎈

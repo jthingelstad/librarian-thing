@@ -178,7 +178,7 @@ I 💚 that people are still innovating with shells and lower level geeky stuff.
 
 - [You can heal the internet - Signal v. Noise](https://m.signalvnoise.com/you-can-heal-the-internet/)
 I’m with DHH on this one. Best way I can think of, put your content on your own website.
-- Mario Kart Tour Coming [to iOS September 25 - MacStories](https://www.macstories.net/news/mario-kart-tour-coming-to-ios-september-25/) www.macstories.net
+- [Mario Kart Tour Coming to iOS September 25 - MacStories](https://www.macstories.net/news/mario-kart-tour-coming-to-ios-september-25/) www.macstories.net
 Mario Kart is one of my favorite Nintendo titles on nearly every platform. It will be fun to play this on iOS! 🎮
 - [SPS Commerce Acquires MAPADOC - MarketWatch](https://www.marketwatch.com/press-release/sps-commerce-acquires-mapadoc-2019-08-27-81843237?siteid=nbsh) www.marketwatch.com
 Team SPS gets bigger and [better! Also article on Star Tribune](http://www.startribune.com/minneapolis-based-sps-commerce-buys-longtime-business-partner-for-11-5-million/558485362/) . 🙌

@@ -7,7 +7,7 @@ AWS deploy tooling for the Thingy Lambda stack. No README — this directory is 
 | Script | What it does |
 |---|---|
 | `aws.py` | Packages the two Lambda bundles, optionally uploads all Librarian corpora, uploads code to S3, then runs CloudFormation update-stack with the new code keys + secrets from `.env`. **The canonical deploy entrypoint.** |
-| `upload_corpus.py` | Builds the Weekly Thing corpus + graph from `apps/site/archive/`, embeds via Bedrock Cohere, uploads to S3. Called by `aws.py` during full corpus deploys. |
+| `upload_corpus.py` | Builds the Weekly Thing corpus + graph from `data/issues/*/archive.md`, embeds via Bedrock Cohere, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_blog_corpus.py` | Builds the thingelstad.com blog corpus from `data/blog/posts`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_podcast_corpus.py` | Builds the Another Thing podcast corpus from `data/podcast/another-thing/episodes`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `bedrock_logging.py` | Configures Bedrock model invocation logging (CloudWatch destination + S3 archive). One-time setup. |
@@ -59,7 +59,7 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 
 ## Corpus upload flow
 
-1. Weekly Thing: `upload_corpus.py` builds from `apps/site/archive/*.md`, embeds chunks, builds the graph, uploads `corpus.json` + `graph.json`.
+1. Weekly Thing: `upload_corpus.py` builds from `data/issues/*/archive.md`, embeds chunks, builds the graph, uploads `corpus.json` + `graph.json`.
 2. Blog: `upload_blog_corpus.py` builds from `data/blog/posts/**/*.md`, reuses cached embeddings by chunk id, uploads `blog_corpus.json`.
 3. Podcast: `upload_podcast_corpus.py` builds from `data/podcast/another-thing/episodes/*.json`, reuses cached embeddings by chunk id, uploads `podcast_corpus.json`.
 4. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, and `loadPodcastCorpus()` pick up new files on the next cold start or after `aws.py` triggers a new deployment.

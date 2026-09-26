@@ -226,7 +226,7 @@ Firecracker is an open source virtualization technology that is purpose-built fo
 This looks like.a very well done and comprehensive guide.
 - [Ditching the MacBook Pro for a MacBook Air | Brad Frost](http://bradfrost.com/blog/post/ditching-the-macbook-pro-for-a-macbook-air/) bradfrost.com
 I got one of these new MacBook Airs as well and I’m really liking it!
-- Best EDI Software | 2018 [Reviews of the Most Popular Systems](https://www.capterra.com/edi-software/#infographic) www.capterra.com
+- [Best EDI Software | 2018 Reviews of the Most Popular Systems](https://www.capterra.com/edi-software/#infographic) www.capterra.com
 Nice to see SPS Commerce in the top spot, by a ways!
 
 ## Microposts 🎈

@@ -302,25 +302,25 @@ This app is only for the geeks that want to extend automation on their iOS devic
 
 ## Yet More Links 🍞
 
-- Android 9 [Pie, thoroughly reviewed | Ars Technica](https://arstechnica.com/gadgets/2018/09/android-9-pie-thoroughly-reviewed/) arstechnica.com
+- [Android 9 Pie, thoroughly reviewed | Ars Technica](https://arstechnica.com/gadgets/2018/09/android-9-pie-thoroughly-reviewed/) arstechnica.com
 Deep dive on all things Android 9. 🥧
-- Nvidia Takes On [The Inference Hordes With Turing GPUs](https://www.nextplatform.com/2018/09/12/nvidia-takes-on-the-inference-hordes-with-turing-gpus/) www.nextplatform.com
+- [Nvidia Takes On The Inference Hordes With Turing GPUs](https://www.nextplatform.com/2018/09/12/nvidia-takes-on-the-inference-hordes-with-turing-gpus/) www.nextplatform.com
 The innovation happening in the GPU market is amazing.
 - [Thinking about Attention — CGP Grey](http://www.cgpgrey.com/blog/cyclops) www.cgpgrey.com
 Start of a trend?
-- iOS [12, thoroughly reviewed | Ars Technica](https://arstechnica.com/gadgets/2018/09/ios-12-thoroughly-reviewed/) arstechnica.com
+- [iOS 12, thoroughly reviewed | Ars Technica](https://arstechnica.com/gadgets/2018/09/ios-12-thoroughly-reviewed/) arstechnica.com
 The other very deep review of iOS 12.
 - [Sublime Merge - Git, done Sublime](https://www.sublimemerge.com/) www.sublimemerge.com
 I like Sublime Text and was surprised to see a new Git client!  👍
-- Just Because: How Apple's [Awesome Motion Watch Faces Are Made](https://www.hodinkee.com/articles/apple-motion-watch-faces-behind-the-scenes) www.hodinkee.com
+- [Just Because: How Apple's Awesome Motion Watch Faces Are Made](https://www.hodinkee.com/articles/apple-motion-watch-faces-behind-the-scenes) www.hodinkee.com
 Cool background video on how the new watch faces for the Apple Watch Series 4 were made.
 - [xkcd: Curve-Fitting](https://xkcd.com/2048/) xkcd.com
 😂
-- the [xonsh shell — xonsh 0.7.8 documentation](https://xon.sh/index.html) xon.sh
+- [the xonsh shell — xonsh 0.7.8 documentation](https://xon.sh/index.html) xon.sh
 This is a super weird shell. 🤷‍♂️
-- Daring Fireball: Thoughts and Observations on Apple’s iPhone XS/XR and [Series 4 Apple Watch Introductory Event](https://daringfireball.net/2018/09/iphone_xs_xr_series_4_apple_watch_event) daringfireball.net
+- [Daring Fireball: Thoughts and Observations on Apple’s iPhone XS/XR and Series 4 Apple Watch Introductory Event](https://daringfireball.net/2018/09/iphone_xs_xr_series_4_apple_watch_event) daringfireball.net
 John Gruber's take on Apple's fall announcement of the new iPhones and Apple Watch.
-- Python joins movement to dump 'offensive' [master, slave terms • The Register](https://www.theregister.co.uk/2018/09/11/python_purges_master_and_slave_in_political_pogrom/) www.theregister.co.uk
+- [Python joins movement to dump 'offensive' master, slave terms • The Register](https://www.theregister.co.uk/2018/09/11/python_purges_master_and_slave_in_political_pogrom/) www.theregister.co.uk
 Good.
 
 ## Microposts 🎈

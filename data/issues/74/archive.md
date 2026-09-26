@@ -193,13 +193,13 @@ https://letsencrypt.org
 
 - [DuckDuckGo Traffic](https://duckduckgo.com/traffic) duckduckgo.com
 I use DuckDuckGo for search on all of my devices, and I’m glad to see it continuing to grow!
-- Fibaro HomeKit-enabled Flood Sensor can minimize costly [water damage — Apple World Today](https://www.appleworld.today/blog/2018/9/28/fibaro-homekit-enabled-flood-sensor-can-minimize-costly-water-damage) www.appleworld.today
+- [Fibaro HomeKit-enabled Flood Sensor can minimize costly water damage — Apple World Today](https://www.appleworld.today/blog/2018/9/28/fibaro-homekit-enabled-flood-sensor-can-minimize-costly-water-damage) www.appleworld.today
 I’ve dealt with water issues at our cabin twice now. I think I need a couple of these.
 - [plus+codes: Personal Postcodes](https://plus.codes/) plus.codes
 Sure seems easier to use than addresses, although much less human usable.
 - [FreshRSS, a free, self-hostable aggregator…](https://freshrss.org/) freshrss.org
 It makes me happy to see open source RSS projects. I'll still stick with Feedbin though.
-- The design and implementation of modern column-oriented [The design and implementation of modern column-oriented database systems](https://blog.acolyer.org/2018/09/26/the-design-and-implementation-of-modern-column-oriented-database-systems/) blog.acolyer.org
+- [The design and implementation of modern column-oriented The design and implementation of modern column-oriented database systems](https://blog.acolyer.org/2018/09/26/the-design-and-implementation-of-modern-column-oriented-database-systems/) blog.acolyer.org
 Dive into how modern databases store column data. 🗜
 - [SEC charges Tesla CEO Elon Musk with fraud](https://www.cnbc.com/2018/09/27/tesla-falls-4percent-on-report-elon-musk-sued-by-sec.html) www.cnbc.com
 Yikes! 😬 Don’t mess with the SEC!

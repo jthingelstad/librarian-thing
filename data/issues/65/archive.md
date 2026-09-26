@@ -194,21 +194,21 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Spect - Fast [image browser and organizer for macOS](http://stevenf.com/spect/) stevenf.com
+- [Spect - Fast image browser and organizer for macOS](http://stevenf.com/spect/) stevenf.com
 Super fast image browsing on the file system.
 - [Faust: Python Stream Processing](https://github.com/robinhood/faust) github.com
 Stream and event processing library for Python 3.
 - [ApexCharts – Open-Source HTML5 JavaScript Charts](https://apexcharts.com/) apexcharts.com
 Very nice chart library.
-- Google Cloud Platform Blog: [Istio reaches 1.0: ready for prod](https://cloudplatform.googleblog.com/2018/07/istio-reaches-1-0-ready-for-prod.html) cloudplatform.googleblog.com
+- [Google Cloud Platform Blog: Istio reaches 1.0: ready for prod](https://cloudplatform.googleblog.com/2018/07/istio-reaches-1-0-ready-for-prod.html) cloudplatform.googleblog.com
 Istio is an important part of te Kubernetes ecosystem. Good to see it in release.
-- Add an "On This [Day" feature to a Micro.blog website](https://github.com/cleverdevil/micromemories) github.com
+- [Add an "On This Day" feature to a Micro.blog website](https://github.com/cleverdevil/micromemories) github.com
 Fun JavaScript to power a look back feature on micro.blog. I [created my own On This Day](https://www.thingelstad.com/on-this-day/) page.
 - [HR Software to Motivate, Inspire and Develop Your Workforce | BetterWorks](https://www.betterworks.com/) www.betterworks.com
 OKR platform for teams.
 - [Employee Productivity Management Software](https://www.newsteer.com/okr) www.newsteer.com
 Team software that enables OKR systems.
-- Perdoo. [OKR software for leaders and teams.](https://www.perdoo.com/) www.perdoo.com
+- [Perdoo. OKR software for leaders and teams.](https://www.perdoo.com/) www.perdoo.com
 An OKR platform for teams.
 - [OKR (Objectives and Key results) Software for Teams - Weekdone](https://weekdone.com/okr-software)
 OKR platform along with mobile solution.

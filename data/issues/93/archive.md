@@ -136,9 +136,9 @@ https://letsencrypt.org
 
 - Brandi Carlile - The Joke [LIVE at the 61st GRAMMYs - YouTube](https://www.youtube.com/watch?feature=youtu.be&v=KJqL1yIm9e0&app=desktop)
 We've been fans of Brandi Carlile for a while, and this performance at the Grammy's was amazing! 🎶
-- Letting neural networks be weird — Candy Heart [messages written by a neural network](http://aiweirdness.com/post/170685749687/candy-heart-messages-written-by-a-neural-network) aiweirdness.com
+- [Letting neural networks be weird — Candy Heart messages written by a neural network](http://aiweirdness.com/post/170685749687/candy-heart-messages-written-by-a-neural-network) aiweirdness.com
 Good reminder for everyone preparing for machine learning to take over the world. Let's first figure out Valentine's sayings. 😁
-- Leave Me Alone - [Take back control of your inbox](https://leavemealone.xyz/) leavemealone.xyz
+- [Leave Me Alone - Take back control of your inbox](https://leavemealone.xyz/) leavemealone.xyz
 Neat tool to specifically help you with unsubscribing from bulk mail. Sadly it only seems to work with Gmail at the moment. 😴
 - [Python Itertools: For a faster and memory efficient code – Kanoki](https://kanoki.org/2019/02/08/python-itertools/) kanoki.org
 Slick examples of what you can do with Python's itertools. 🛠

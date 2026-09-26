@@ -167,15 +167,15 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- October 21 [post-incident analysis | The GitHub Blog](https://blog.github.com/2018-10-30-oct21-post-incident-analysis/) blog.github.com
+- [October 21 post-incident analysis | The GitHub Blog](https://blog.github.com/2018-10-30-oct21-post-incident-analysis/) blog.github.com
 Detailed and thorough writeup of GitHub's recent production issue.
 - [turtle.audio](http://turtle.audio/) turtle.audio
 What happens when the turtle 🐢 from logo meets music? 🎶
-- Shortcuts 2.1 Brings New Weather and Clock Actions, iCloud [Sharing Improvements, and More – MacStories](https://www.macstories.net/ios/shortcuts-2-1-brings-new-weather-and-clock-actions-icloud-sharing-improvements-and-more/) www.macstories.net
+- [Shortcuts 2.1 Brings New Weather and Clock Actions, iCloud Sharing Improvements, and More – MacStories](https://www.macstories.net/ios/shortcuts-2-1-brings-new-weather-and-clock-actions-icloud-sharing-improvements-and-more/) www.macstories.net
 The addition of weather data for Shortcuts is surprisingly nice!
-- Red Hat + IBM: [Creating the leading hybrid cloud provider](https://www.redhat.com/en/blog/red-hat-ibm-creating-leading-hybrid-cloud-provider) www.redhat.com
+- [Red Hat + IBM: Creating the leading hybrid cloud provider](https://www.redhat.com/en/blog/red-hat-ibm-creating-leading-hybrid-cloud-provider) www.redhat.com
 Big move from IBM!
-- All of the Apple logos from the October 30th [event invites - Album on Imgur](https://imgur.com/a/ufybGk6?grid) imgur.com
+- [All of the Apple logos from the October 30th event invites - Album on Imgur](https://imgur.com/a/ufybGk6?grid) imgur.com
 What a cool collection of Apple logo art. 🤩
 
 ## Microposts 🎈

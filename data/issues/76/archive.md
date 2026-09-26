@@ -201,9 +201,9 @@ https://www.hackthegap.com
 This new feature from GitHub looks really interesting, but it’s light on details.
 - [How to feel happier](https://www.fastcompany.com/90246427/do-these-8-things-every-day-to-be-happier-and-filled-with-less-regret) www.fastcompany.com
 Eight things to improve happiness.
-- Announcing Camelot, a Python Library to Extract [Tabular Data from PDFs - SocialCops](https://blog.socialcops.com/technology/engineering/camelot-python-library-pdf-data/) blog.socialcops.com
+- [Announcing Camelot, a Python Library to Extract Tabular Data from PDFs - SocialCops](https://blog.socialcops.com/technology/engineering/camelot-python-library-pdf-data/) blog.socialcops.com
 This could be handy if you need to pull data out of PDFs.
-- birdseye: Quick, convenient, expression-centric, [graphical Python debugger using the AST](https://github.com/alexmojaki/birdseye) github.com
+- [birdseye: Quick, convenient, expression-centric, graphical Python debugger using the AST](https://github.com/alexmojaki/birdseye) github.com
 Very cool and powerful Python debugger. I think this could also be a powerful learning tool!
 - [Fake Followers Audit from SparkToro | SparkToro](https://sparktoro.com/tools/fake-followers-audit) sparktoro.com
 Tool to identify how many of your Twitter followers are fake. 23.4% for me.

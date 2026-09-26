@@ -203,11 +203,11 @@ The demos of this library are mesmerizing.
 True! 😬
 - [OmniFocus 3 for Mac Sneak Peek](https://www.rosemaryorchard.com/blog/omnifocus-3-mac-sneak-peek) —Rosemary Orchard "I am once again lucky enough to be in the early preview for OmniFocus 3 - this time on the Mac!" www.rosemaryorchard.com
 First peak of OmniFocus 3 beta for the Mac.
-- Horrors of [using Azure Kubernetes Service in production](https://movingfulcrum.com/horrors-of-using-azure-kubernetes-service-in-production/) movingfulcrum.com
+- [Horrors of using Azure Kubernetes Service in production](https://movingfulcrum.com/horrors-of-using-azure-kubernetes-service-in-production/) movingfulcrum.com
 I surely hope this isn’t the typical experience with Azure Kubernetes Service. 😳🔥
-- tom creates [customers, subscriptions plans & send notifications.](https://tom.js.org/) tom.js.org
+- [tom creates customers, subscriptions plans & send notifications.](https://tom.js.org/) tom.js.org
 Open source backend for subscription service.
-- Evolution [of Infrastructure Monitoring at ThousandEyes Engineering](https://medium.com/thousandeyes-engineering/evolution-of-infrastructure-monitoring-at-thousandeyes-engineering-be1c343881a7) medium.com
+- [Evolution of Infrastructure Monitoring at ThousandEyes Engineering](https://medium.com/thousandeyes-engineering/evolution-of-infrastructure-monitoring-at-thousandeyes-engineering-be1c343881a7) medium.com
 Overview of the tooling used, with Prometheus in the middle, to do full monitoring.
 - [FlightAware MiseryMap](https://flightaware.com/miserymap/all/1533340800) flightaware.com
 See how bad flight delays are across the US. ✈️

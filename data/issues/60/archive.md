@@ -266,19 +266,19 @@ https://minnestar.org
 
 ## Yet More Links 🍞
 
-- A one size fits all database doesn't [fit anyone - All Things Distributed](https://www.allthingsdistributed.com/2018/06/purpose-built-databases-in-aws.html) www.allthingsdistributed.com
+- [A one size fits all database doesn't fit anyone - All Things Distributed](https://www.allthingsdistributed.com/2018/06/purpose-built-databases-in-aws.html) www.allthingsdistributed.com
 Overview of the various database offerings of AWS.
-- macOS Mojave: Back [to the Mac - Six Colors](https://sixcolors.com/post/2018/06/mojave-beta/) sixcolors.com
+- [macOS Mojave: Back to the Mac - Six Colors](https://sixcolors.com/post/2018/06/mojave-beta/) sixcolors.com
 Fantastic overview of both big and small new things in macOS Mojave. I wasn't very intrigued by the news on Mojave, but these improvements look solid.
 - [molten: modern API framework](https://moltenframework.com/) moltenframework.com
 molten is a minimal, extensible, fast and productive framework for building HTTP APIs with Python.
-- America’s Millennials Are Waking Up to [a Grim Financial Future - Bloomberg](https://www.bloomberg.com/news/articles/2018-06-21/america-s-millennials-are-waking-up-to-a-grim-financial-future) www.bloomberg.com
+- [America’s Millennials Are Waking Up to a Grim Financial Future - Bloomberg](https://www.bloomberg.com/news/articles/2018-06-21/america-s-millennials-are-waking-up-to-a-grim-financial-future) www.bloomberg.com
 I wish these graphs looked better.
-- How To Fall Asleep And Why We Need More : [Shots - Health News : NPR](https://www.npr.org/sections/health-shots/2017/10/16/558058812/sleep-scientist-warns-against-walking-through-life-in-an-underslept-state) www.npr.org
+- [How To Fall Asleep And Why We Need More : Shots - Health News : NPR](https://www.npr.org/sections/health-shots/2017/10/16/558058812/sleep-scientist-warns-against-walking-through-life-in-an-underslept-state) www.npr.org
 I read the book, but this article captures some of the key points in snippet form.
-- Self-Hosted Developer [Bliss - Home - Bruno Antunes](https://blog.nootch.net/2018/06/24/self-hosted-developer-bliss/) blog.nootch.net
+- [Self-Hosted Developer Bliss - Home - Bruno Antunes](https://blog.nootch.net/2018/06/24/self-hosted-developer-bliss/) blog.nootch.net
 Great collection of various tools for running your own [infrastructure. I hadn't heard of dokku](http://dokku.viewdocs.io/dokku/) but it looks great.
-- Young people still love Twitter — as [screenshots on Instagram - The Verge](https://www.theverge.com/2018/6/21/17442028/instagram-twitter-meme-accounts-screenshots-text) www.theverge.com
+- [Young people still love Twitter — as screenshots on Instagram - The Verge](https://www.theverge.com/2018/6/21/17442028/instagram-twitter-meme-accounts-screenshots-text) www.theverge.com
 The social web of meaninglessness.
 
 ## Microposts 🎈

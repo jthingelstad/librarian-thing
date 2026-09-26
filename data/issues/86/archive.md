@@ -95,7 +95,7 @@ word_count: 1455
 ---
 Welcome to the final Weekly Thing of 2018! We had a great Christmas. One of my favorite traditions is each family member getting a project that we do over Christmas break. The kids each got [big Lego projects: a Ferris Wheel](https://shop.lego.com/en-US/product/Ferris-Wheel-10247), [an Old Fishing Store](https://shop.lego.com/en-US/product/Old-Fishing-Store-21310). [Tammy got an Earth Puzzle](https://n-e-r-v-o-u-s.com/shop/product.php?code=368) that was much harder than I expected. [I'm assembling a UGears Steam Locomotive](https://ugears.online/collections/ugears_mechanical_models/products/460-steam-locomotive-with-tender-mechanical-model-advanced) ! Each person has their work area and gets plenty of time to get their project done. 🧩
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Book: When Breath Becomes Air](https://www.thingelstad.com/2018/book-when-breath-becomes-air/)
 
@@ -177,13 +177,13 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- The Hidden Struggle to [Save the Coffee Industry From Disaster](https://medium.com/s/thenewnew/the-fight-to-save-coffee-c80e4e17cd81) medium.com
+- [The Hidden Struggle to Save the Coffee Industry From Disaster](https://medium.com/s/thenewnew/the-fight-to-save-coffee-c80e4e17cd81) medium.com
 It turns out coffee is a giant monoculture, susceptible to many bad things. 😳
 - Python [gets a new governance model [LWN.net]](https://lwn.net/SubscriberLink/775105/5db16cfe82e78dc3/) lwn.net
 An interesting read to see how the Python language will [be governed now that the BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) has stepped aside.
-- 16 (x4) Books We [Read Winter 2018 – Andreessen Horowitz](https://a16z.com/2018/12/24/what-were-reading-winter-2018/) a16z.com
+- [16 (x4) Books We Read Winter 2018 – Andreessen Horowitz](https://a16z.com/2018/12/24/what-were-reading-winter-2018/) a16z.com
 Expansive book list. I find these fun to browse for inspiration.
-- Minnesota United FC on Twitter: "DING DONG DING [DONG 🔊 SOUND ON 🔊… "](https://twitter.com/MNUFC/status/1076233589480738818) twitter.com
+- [Minnesota United FC on Twitter: "DING DONG DING DONG 🔊 SOUND ON 🔊… "](https://twitter.com/MNUFC/status/1076233589480738818) twitter.com
 I really don't like linking to Twitter, but this video is fun and I can’t find it on the open web. I can’t wait to see [games in 2019 at Allianz Field](https://www.mnufc.com/stadium/) !
 
 ## Microposts 🎈

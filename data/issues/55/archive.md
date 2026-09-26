@@ -208,10 +208,10 @@ I started getting a ridiculous number of robocalls to my mobile and NoMoRobo has
 
 - [GDPR — xkcd.com](https://xkcd.com/1998/) xkcd.com
 GPDR XKCD FTW! 😁
-- Winds 2.0: It’s Time to [Revive RSS - The Stream Blog](https://getstream.io/blog/winds-2-0-its-time-to-revive-rss/) getstream.io
-- 1Password 7 for Mac: [The Best Ever — AgileBits Blog](https://blog.agilebits.com/2018/05/22/1password-7-for-mac-the-best-ever/) blog.agilebits.com
-- Microsoft reveals Xbox Adaptive Controller [for players with disabilities - Polygon](https://www.polygon.com/2018/5/17/17363528/xbox-adaptive-controller-disability-accessible) www.polygon.com
-- Announcing General Availability [of Amazon EC2 Bare Metal Instances](https://aws.amazon.com/about-aws/whats-new/2018/05/announcing-general-availability-of-amazon-ec2-bare-metal-instances/) aws.amazon.com
+- [Winds 2.0: It’s Time to Revive RSS - The Stream Blog](https://getstream.io/blog/winds-2-0-its-time-to-revive-rss/) getstream.io
+- [1Password 7 for Mac: The Best Ever — AgileBits Blog](https://blog.agilebits.com/2018/05/22/1password-7-for-mac-the-best-ever/) blog.agilebits.com
+- [Microsoft reveals Xbox Adaptive Controller for players with disabilities - Polygon](https://www.polygon.com/2018/5/17/17363528/xbox-adaptive-controller-disability-accessible) www.polygon.com
+- [Announcing General Availability of Amazon EC2 Bare Metal Instances](https://aws.amazon.com/about-aws/whats-new/2018/05/announcing-general-availability-of-amazon-ec2-bare-metal-instances/) aws.amazon.com
 
 ## Microposts 🎈
 

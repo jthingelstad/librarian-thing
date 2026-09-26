@@ -191,7 +191,7 @@ So I’m in the majority on my dislike of this feature. 🤨
 🤦‍♂️✈️
 - [bat: A cat(1) clone with wings.](https://github.com/sharkdp/bat) github.com
 Syntax highlighting and other advanced capabilities.
-- How to Manage Your Mood [by Managing Your Mind —Matt Norman](http://www.mattnorman.com/mood/) www.mattnorman.com
+- [How to Manage Your Mood by Managing Your Mind —Matt Norman](http://www.mattnorman.com/mood/) www.mattnorman.com
 A personal story about what you can do with those negative thoughts in your head.
 - [The Early History Of Smalltalk](http://worrydream.com/EarlyHistoryOfSmalltalk/) worrydream.com
 Smalltalk was an important development in the history of computer science and languages.

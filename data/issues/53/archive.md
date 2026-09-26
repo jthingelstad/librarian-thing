@@ -234,15 +234,15 @@ After reading Why We Sleep I wanted to see if I could get some more information 
 
 ## Yet More Links 🍞
 
-- Nassim Nicholas Taleb's Advice on [Borrowing Money and Getting Financial Freedom](https://www.esquire.com/lifestyle/money/a19181300/nassim-nicholas-taleb-money-advice/) www.esquire.com
+- [Nassim Nicholas Taleb's Advice on Borrowing Money and Getting Financial Freedom](https://www.esquire.com/lifestyle/money/a19181300/nassim-nicholas-taleb-money-advice/) www.esquire.com
 I've enjoyed reading Taleb's books. You can see his personality in this short Q&A.
-- How To Achieve Your 10-Year [Plan In The Next 6 Months](https://medium.com/thrive-global/how-to-achieve-your-10-year-plan-in-the-next-6-months-f8c1cc54888e) medium.com
+- [How To Achieve Your 10-Year Plan In The Next 6 Months](https://medium.com/thrive-global/how-to-achieve-your-10-year-plan-in-the-next-6-months-f8c1cc54888e) medium.com
 Like slam poetry for productivity.
-- One space between each sentence, they said. Science just proved [them wrong. - The Washington Post](https://www.washingtonpost.com/news/speaking-of-science/wp/2018/05/04/one-space-between-each-sentence-they-said-science-just-proved-them-wrong-2/?noredirect=on) www.washingtonpost.com
+- [One space between each sentence, they said. Science just proved them wrong. - The Washington Post](https://www.washingtonpost.com/news/speaking-of-science/wp/2018/05/04/one-space-between-each-sentence-they-said-science-just-proved-them-wrong-2/?noredirect=on) www.washingtonpost.com
 I’m solidly a one space person. ⌨️
-- square/sudo_pair: Plugin for sudo that requires another human to [approve and monitor privileged sudo sessions](https://github.com/square/sudo_pair) github.com
+- [square/sudo_pair: Plugin for sudo that requires another human to approve and monitor privileged sudo sessions](https://github.com/square/sudo_pair) github.com
 Like nuclear launch keys. 🔑
-- Kubernetes on Azure: Industry’s best [end-to-end Kubernetes experience — Microsoft Azure](https://azure.microsoft.com/en-us/blog/kubernetes-on-azure/) azure.microsoft.com
+- [Kubernetes on Azure: Industry’s best end-to-end Kubernetes experience — Microsoft Azure](https://azure.microsoft.com/en-us/blog/kubernetes-on-azure/) azure.microsoft.com
 - [Home - Ballerina.io](https://ballerina.io/) ballerina.io
 A cloud native programming language? 🤷‍♂️
 - [AWS Icons | Jerry Hargrove](https://www.awsgeek.com/posts/aws-icons/) www.awsgeek.com

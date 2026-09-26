@@ -170,11 +170,11 @@ Python running in your browser? Yep.
 Interesting to read the lineage of one of my preferred editors.
 - [Favorite Sayings](http://web.stanford.edu/~ouster/cgi-bin/sayings.php) web.stanford.edu
 Some fun insights here.
-- (An [((Even Better) Lisp) Interpreter (in Python))](https://norvig.com/lispy2.html) norvig.com
+- [(An ((Even Better) Lisp) Interpreter (in Python))](https://norvig.com/lispy2.html) norvig.com
 The title of this says it all. Extremely techie stuff to follow. 👩‍💻
 - [The eno notation language and libraries](https://eno-lang.org/) eno-lang.org
 Another plaintext format for data, an alternative to JSON, YAML, TOML and others.
-- Publii [- Open-Source CMS for Static Website](https://getpublii.com/) getpublii.com
+- [Publii - Open-Source CMS for Static Website](https://getpublii.com/) getpublii.com
 Interesting desktop app to create a static-site to then push to a server somewhere.
 
 ## Microposts 🎈

@@ -206,17 +206,17 @@ https://www.eff.org
 
 - [What's New in Alfred 4](https://www.alfredapp.com/whats-new/) www.alfredapp.com
 I use Launchbar but Alfred tempts me with some of it’s cool capabilities.
-- Photographer Jun Yamamoto Captures The [Magic Of Japan Streets At Night](https://designyoutrust.com/2019/05/photographer-jun-yamamoto-captures-the-magic-of-japan-streets-at-night/) designyoutrust.com
+- [Photographer Jun Yamamoto Captures The Magic Of Japan Streets At Night](https://designyoutrust.com/2019/05/photographer-jun-yamamoto-captures-the-magic-of-japan-streets-at-night/) designyoutrust.com
 Incredible photography. 📷
 - [SR-71 Online - SR-71 Flight Manual](https://www.sr-71.org/blackbird/manual/) www.sr-71.org
 When I was a kid the SR-71 Blackbird was one of those amazing, nearly mythical things. How fun to be able to read the flight manual now!
-- PugSQL [:: SQL is Extremely Good, Actually](https://pugsql.org/) pugsql.org
+- [PugSQL :: SQL is Extremely Good, Actually](https://pugsql.org/) pugsql.org
 [Nice, KISS](https://en.wikipedia.org/wiki/KISS_principle) , approach to keeping your database interfaces simple in Python.
 - [Introducing Mercury OS – UX Collective](https://uxdesign.cc/introducing-mercury-os-f4de45a04289?gi=97b84ed69ea3) uxdesign.cc
 Cool conceptual framework for a different way of thinking about an operating system and the user experience for it.
-- H.264 is magic: a [technical walkthrough of a remarkable technology.](https://sidbala.com/h-264-is-magic/) sidbala.com
+- [H.264 is magic: a technical walkthrough of a remarkable technology.](https://sidbala.com/h-264-is-magic/) sidbala.com
 Deep dive into the video compression method that is likely powering everything you watch.
-- Yes, This Photo from [Everest Is Real | Outside Online](https://www.outsideonline.com/2397164/everest-summit-traffic-jam) www.outsideonline.com
+- [Yes, This Photo from Everest Is Real | Outside Online](https://www.outsideonline.com/2397164/everest-summit-traffic-jam) www.outsideonline.com
 Summiting Everest is perhaps too popular now!
 
 ## Microposts 🎈

@@ -261,15 +261,15 @@ https://www.hackthegap.com
 
 - If you want to understand Silicon Valley, [watch Silicon Valley | Bill Gates](https://www.gatesnotes.com/About-Bill-Gates/Silicon-Valley)
 Bill Gates watches Silicon Valley? Huh! 📺
-- Mini Kubb | Table Top Block [Toppling Game | Scienz Games Co.](https://shop.minibeerpong.com/products/mini-kubb) shop.minibeerpong.com
+- [Mini Kubb | Table Top Block Toppling Game | Scienz Games Co.](https://shop.minibeerpong.com/products/mini-kubb) shop.minibeerpong.com
 None of these table top Kubb games are very playable, but they are still kind of fun.
-- Introducing Chartify: Easier chart [creation in Python for data scientists](https://labs.spotify.com/2018/11/15/introducing-chartify-easier-chart-creation-in-python-for-data-scientists/) labs.spotify.com
+- [Introducing Chartify: Easier chart creation in Python for data scientists](https://labs.spotify.com/2018/11/15/introducing-chartify-easier-chart-creation-in-python-for-data-scientists/) labs.spotify.com
 Nice Python chart library. 😎
 - [Nginx Configuration Generator](https://nginxconfig.io/) nginxconfig.io
 Handy tool to build nginx.conf. 🛠
-- An [Infinite Icosahedral Puzzle of the Earth](https://kottke.org/18/11/an-infinite-icosahedral-puzzle-of-the-earth) kottke.org
+- [An Infinite Icosahedral Puzzle of the Earth](https://kottke.org/18/11/an-infinite-icosahedral-puzzle-of-the-earth) kottke.org
 Fun gift idea.
-- The deadly Camp Fire [in California - The Boston Globe](https://www.bostonglobe.com/news/bigpicture/2018/11/15/the-deadly-camp-fire-california/E8rvsaRtrYxDmnswjXV8RO/story.html) www.bostonglobe.com
+- [The deadly Camp Fire in California - The Boston Globe](https://www.bostonglobe.com/news/bigpicture/2018/11/15/the-deadly-camp-fire-california/E8rvsaRtrYxDmnswjXV8RO/story.html) www.bostonglobe.com
 
 ## Microposts 🎈
 

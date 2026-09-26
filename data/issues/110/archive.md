@@ -145,13 +145,13 @@ https://creativecommons.org
 
 ## Yet More Links 🍞
 
-- Bond [- Mary Meeker's Internet Trends 2019](https://www.bondcap.com/report/itr19/) www.bondcap.com
+- [Bond - Mary Meeker's Internet Trends 2019](https://www.bondcap.com/report/itr19/) www.bondcap.com
 The annual tablet of data from Mary Meeker on the state of the Internet. 333 slides! 😅
-- iOS 13: How to share iCloud Drive folders [from iPhone and iPad - 9to5Mac](https://9to5mac.com/2019/06/11/share-icloud-drive-folders-iphone-ipad/) 9to5mac.com
+- [iOS 13: How to share iCloud Drive folders from iPhone and iPad - 9to5Mac](https://9to5mac.com/2019/06/11/share-icloud-drive-folders-iphone-ipad/) 9to5mac.com
 Finally iCloud will allow you to share folders! 🤨
-- iOS 13 cracks down [on location permission settings - 9to5Mac](https://9to5mac.com/2019/06/08/ios-13-location-permissions/) 9to5mac.com
+- [iOS 13 cracks down on location permission settings - 9to5Mac](https://9to5mac.com/2019/06/08/ios-13-location-permissions/) 9to5mac.com
 This looks like a great way to highlight for the user what they are about to share. 🙌
-- The IA Client – The Swiss Army Knife of [Internet Archive | Internet Archive Blogs](http://blog.archive.org/2019/06/05/the-ia-client-the-swiss-army-knife-of-internet-archive/) blog.archive.org
+- [The IA Client – The Swiss Army Knife of Internet Archive | Internet Archive Blogs](http://blog.archive.org/2019/06/05/the-ia-client-the-swiss-army-knife-of-internet-archive/) blog.archive.org
 Cool to see Internet Archive building a command line tool like this to help people automate collection of data to the archive. 🛠
 
 ## Microposts 🎈

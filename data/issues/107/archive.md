@@ -155,13 +155,13 @@ https://www.eff.org
 
 ## Yet More Links 🍞
 
-- Kickstarter will not voluntarily recognize [its employee union - The Verge](https://www.theverge.com/2019/5/15/18627052/kickstarter-union-nlrb-election) www.theverge.com
+- [Kickstarter will not voluntarily recognize its employee union - The Verge](https://www.theverge.com/2019/5/15/18627052/kickstarter-union-nlrb-election) www.theverge.com
 I didn’t realize that Kickstarter had so much internal turmoil.
-- Focused, [beautiful & free blogging – Proseful](https://proseful.com/) proseful.com
+- [Focused, beautiful & free blogging – Proseful](https://proseful.com/) proseful.com
 Another super simple, nicely designed blogging service. It’s never been easier to create your own website!
-- The best cycling hack [is a pool noodle — Quartz](https://qz.com/1620913/the-best-cycling-hack-is-a-pool-noodle/) qz.com
+- [The best cycling hack is a pool noodle — Quartz](https://qz.com/1620913/the-best-cycling-hack-is-a-pool-noodle/) qz.com
 I've done my share of riding on rural highways and this is a pretty great idea!
-- Google AI Blog: Introducing [Translatotron: An End-to-End Speech-to-Speech Translation Model](https://ai.googleblog.com/2019/05/introducing-translatotron-end-to-end.html?m=1) ai.googleblog.com
+- [Google AI Blog: Introducing Translatotron: An End-to-End Speech-to-Speech Translation Model](https://ai.googleblog.com/2019/05/introducing-translatotron-end-to-end.html?m=1) ai.googleblog.com
 Getting closer to creating [our very own, non-fiction, Babel Fish](https://hitchhikers.fandom.com/wiki/Babel_Fish) !
 
 ## Microposts 🎈

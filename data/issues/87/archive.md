@@ -161,19 +161,19 @@ https://creativecommons.org
 
 - [In 2019, blockchains will start to become boring - MIT Technology Review](https://www.technologyreview.com/s/612687/in-2019-blockchains-will-start-to-become-boring/) www.technologyreview.com
 Blockchain getting boring may be the best thing to ever happen to it.
-- Happy Public Domain day: for real, for the first time [in 20 years! / Boing Boing](https://boingboing.net/2018/12/31/thanks-justin.html) boingboing.net
+- [Happy Public Domain day: for real, for the first time in 20 years! / Boing Boing](https://boingboing.net/2018/12/31/thanks-justin.html) boingboing.net
 Rare day when the public domain gains some new things.
-- I Was A Cable Guy. I Saw [The Worst Of America. | HuffPost](https://www.huffingtonpost.com/entry/cable-tech-dick-cheney-sex-dungeon_us_5c0ea571e4b06484c9fd4c21?ec_carp=4122483040402985992) www.huffingtonpost.com
+- [I Was A Cable Guy. I Saw The Worst Of America. | HuffPost](https://www.huffingtonpost.com/entry/cable-tech-dick-cheney-sex-dungeon_us_5c0ea571e4b06484c9fd4c21?ec_carp=4122483040402985992) www.huffingtonpost.com
 This is a good read. I don't think I'd want to be a "cable guy".
 - [Little Stones for 2019](http://www.macdrifter.com/2018/12/little-stones-for-2019.html) www.macdrifter.com
 I think I could have nearly the exact same set of goals.
 - [Gravitee.io API Platform](https://gravitee.io/) gravitee.io
 Open source API management solution.
-- A tour of elementary OS, perhaps the Linux world’s best hope [for the mainstream | Ars Technica](https://arstechnica.com/gadgets/2018/12/a-tour-of-elementary-os-perhaps-the-linux-worlds-best-hope-for-the-mainstream/) arstechnica.com
+- [A tour of elementary OS, perhaps the Linux world’s best hope for the mainstream | Ars Technica](https://arstechnica.com/gadgets/2018/12/a-tour-of-elementary-os-perhaps-the-linux-worlds-best-hope-for-the-mainstream/) arstechnica.com
 Are we still talking about Linux on the desktop? 👀
-- Release fish 3.0.0 [(released December 28, 2018) · fish-shell/fish-shell](https://github.com/fish-shell/fish-shell/releases/tag/3.0.0) github.com
+- [Release fish 3.0.0 (released December 28, 2018) · fish-shell/fish-shell](https://github.com/fish-shell/fish-shell/releases/tag/3.0.0) github.com
 I've been using fish shell for a while now and it feels modern and nice. It reminds me how zsh felt many, many years ago. These improvements in 3.0 are very good! 👍
-- Trillion Dollar [Coach - Eric Schmidt - Hardcover](https://www.harpercollins.com/9780062839268/trillion-dollar-coach/) www.harpercollins.com
+- [Trillion Dollar Coach - Eric Schmidt - Hardcover](https://www.harpercollins.com/9780062839268/trillion-dollar-coach/) www.harpercollins.com
 Will be looking forward to reading this book. [Via @SamPierson](https://twitter.com/sam_pierson/status/1078476847522988032?s=20) .
 
 ## Microposts 🎈

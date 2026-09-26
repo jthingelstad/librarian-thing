@@ -215,7 +215,7 @@ Only in Minnesota! 🤪
 If this were on April Fool's Day I would be positive it is a joke, but I don't think it is. 😕
 - [Tasksaur](https://www.tasksaur.com/) www.tasksaur.com
 Super simple to do list service. ✅
-- FormSubmit | [A Contact Form to Email Service](https://formsubmit.co/) formsubmit.co
+- [FormSubmit | A Contact Form to Email Service](https://formsubmit.co/) formsubmit.co
 Handy service if you need to collect form data. 📝
 - [Janet Programming Language](https://janet-lang.org/) janet-lang.org
 Interesting Lisp-based functional language.

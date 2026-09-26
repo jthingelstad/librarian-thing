@@ -206,21 +206,21 @@ https://www.eff.org
 
 ## Yet More Links 🍞
 
-- Tinder’s move to [Kubernetes – Tinder Engineering – Medium](https://medium.com/@tinder.engineering/tinders-move-to-kubernetes-cda2a6372f44) medium.com
+- [Tinder’s move to Kubernetes – Tinder Engineering – Medium](https://medium.com/@tinder.engineering/tinders-move-to-kubernetes-cda2a6372f44) medium.com
 Lessons learned moving a very big social platform to Kubernetes.
-- An Intro to [Threading in Python – Real Python](https://realpython.com/intro-to-python-threading/) realpython.com
+- [An Intro to Threading in Python – Real Python](https://realpython.com/intro-to-python-threading/) realpython.com
 Great overview of threading for Python with good code examples.
-- Apple revamping Find My Friends & Find My iPhone in unified app, developing [Tile-like personal item tracking - 9to5Mac](https://9to5mac.com/2019/04/17/find-my-iphone-revamp/) 9to5mac.com
+- [Apple revamping Find My Friends & Find My iPhone in unified app, developing Tile-like personal item tracking - 9to5Mac](https://9to5mac.com/2019/04/17/find-my-iphone-revamp/) 9to5mac.com
 Makes sense. [Sounds like a clone of Tile](https://www.thetileapp.com/en-us/) .
-- ‘Tim Cook: The Genius Who Took Apple to the Next Level’ Is an Insightful Look at the Values that [Guide the Company’s CEO – MacStories](https://www.macstories.net/reviews/tim-cook-the-genius-who-took-apple-to-the-next-level-is-an-insightful-look-at-the-values-that-guide-the-companys-ceo/) www.macstories.net
+- [‘Tim Cook: The Genius Who Took Apple to the Next Level’ Is an Insightful Look at the Values that Guide the Company’s CEO – MacStories](https://www.macstories.net/reviews/tim-cook-the-genius-who-took-apple-to-the-next-level-is-an-insightful-look-at-the-values-that-guide-the-companys-ceo/) www.macstories.net
 Tim Cook impresses me greatly, this book might be a good read.
 - [Desmos | Graphing Calculator](https://www.desmos.com/calculator) www.desmos.com
 Very cool, fast, and easy to use graphing calculator in the browser. 🤓
-- iOS 13: Dark Mode, detachable panels, [Safari and Mail, more - 9to5Mac](https://9to5mac.com/2019/04/15/ios-13-features-dark-mode/) 9to5mac.com
+- [iOS 13: Dark Mode, detachable panels, Safari and Mail, more - 9to5Mac](https://9to5mac.com/2019/04/15/ios-13-features-dark-mode/) 9to5mac.com
 Bunch of leaks of possible new features in iOS 13. 😎
 - [EdgeDB — The next generation database](https://edgedb.com/) edgedb.com
 Interesting new hybrid database.
-- Link [Click Analytics and Privacy | WebKit](https://webkit.org/blog/8821/link-click-analytics-and-privacy/) webkit.org
+- [Link Click Analytics and Privacy | WebKit](https://webkit.org/blog/8821/link-click-analytics-and-privacy/) webkit.org
 Glad to see WebKit continuing to make privacy a core feature.
 
 ## Microposts 🎈

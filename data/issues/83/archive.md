@@ -192,17 +192,17 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Day One Version 3.4: Drawing, Fonts, [and Photo Layout | Day One](http://dayoneapp.com/2018/12/version-3-4/) dayoneapp.com
+- [Day One Version 3.4: Drawing, Fonts, and Photo Layout | Day One](http://dayoneapp.com/2018/12/version-3-4/) dayoneapp.com
 Nice enhancements to the best journal app on iOS.
-- Fujitsu [ScanSnap 64-bit Software Update — macsparky](https://www.macsparky.com/blog/2018/12/fujitsu-scansnap-64-bit-software-update) www.macsparky.com
+- [Fujitsu ScanSnap 64-bit Software Update — macsparky](https://www.macsparky.com/blog/2018/12/fujitsu-scansnap-64-bit-software-update) www.macsparky.com
 I have a ScanSnap scanner and was worried they were not going to make a 64-but release! Whew.
 - [Apple ID Data & Privacy](https://privacy.apple.com/) privacy.apple.com
 I didn’t know Apple had this tool to allow you to get at your data, and even have it deleted if you wish.
-- Show your skills with Pokémon [GO Trainer Battles! - Pokémon GO](https://pokemongolive.com/post/trainerbattles) pokemongolive.com
+- [Show your skills with Pokémon GO Trainer Battles! - Pokémon GO](https://pokemongolive.com/post/trainerbattles) pokemongolive.com
 Trainer Battles in Pokémon Go look like a great addition to the game!
-- Apple presents [the best of 2018 - Apple](https://www.apple.com/newsroom/2018/12/apple-presents-the-best-of-2018/) www.apple.com
+- [Apple presents the best of 2018 - Apple](https://www.apple.com/newsroom/2018/12/apple-presents-the-best-of-2018/) www.apple.com
 Many "Best of…" content lists for 2018.
-- Hackers breach Quora.com and steal password data for [100 million users | Ars Technica](https://arstechnica.com/information-technology/2018/12/quora-says-hackers-stole-password-data-and-other-details-for-100-million-users/) arstechnica.com
+- [Hackers breach Quora.com and steal password data for 100 million users | Ars Technica](https://arstechnica.com/information-technology/2018/12/quora-says-hackers-stole-password-data-and-other-details-for-100-million-users/) arstechnica.com
 Another day another giant breach. This reminds me I don't need a Quora account since I don't use it.
 - [Tesla API](https://www.teslaapi.io/) www.teslaapi.io
 First car I’ve had with an API. 😁

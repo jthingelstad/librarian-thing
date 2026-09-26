@@ -194,23 +194,23 @@ https://minnestar.org
 Maybe I can finally buy a new MacBook Pro? 💻
 - [Road Trip](https://roadtrip.glitch.me/) roadtrip.glitch.me
 Interesting web app that highlights points of interest as you drive around.
-- Perspective Icons [for OmniFocus 3, by Josh Hughes](http://omnifocusicons.josh-hughes.com/) omnifocusicons.josh-hughes.com
+- [Perspective Icons for OmniFocus 3, by Josh Hughes](http://omnifocusicons.josh-hughes.com/) omnifocusicons.josh-hughes.com
 Nice icons for OmniFocus perspectives. Stylistically match with the new OmniFocus 3!
-- Custom Perspectives [for OmniFocus 3 - Learn OmniFocus](https://learnomnifocus.com/perspectives/) learnomnifocus.com
+- [Custom Perspectives for OmniFocus 3 - Learn OmniFocus](https://learnomnifocus.com/perspectives/) learnomnifocus.com
 The revamped perspective editor in OmniFocus 3 is enabling some very nice features. Here are some good examples to start with.
 - [Tones | Katharos Tones](https://www.katharostones.com/) www.katharostones.com
 Cool collection of notification sounds. Nice $10 upgrade for your phone.
-- New Getting Things Done for [Teens book - Getting Things Done®](https://gettingthingsdone.com/2018/07/getting-things-done-for-teens/) gettingthingsdone.com
+- [New Getting Things Done for Teens book - Getting Things Done®](https://gettingthingsdone.com/2018/07/getting-things-done-for-teens/) gettingthingsdone.com
 My copy of this is on the way. I’m curious to see if it’s something my daughter may like.
 - [Betamagic - News Explorer](https://betamagic.nl/products/newsexplorer.html) betamagic.nl
 Brand new RSS Reader for the Mac, uses iCloud to synchronize. I'll be sticking with Feedbin but I like to see innovation in this space.
-- Theater of Your Mind Presents: It’s [2:47 AM! - McSweeney’s Internet Tendency](https://www.mcsweeneys.net/articles/theater-of-your-mind-presents-its-2-47-am) www.mcsweeneys.net
+- [Theater of Your Mind Presents: It’s 2:47 AM! - McSweeney’s Internet Tendency](https://www.mcsweeneys.net/articles/theater-of-your-mind-presents-its-2-47-am) www.mcsweeneys.net
 We've all been here. 😳
-- From data to Viz [| Find the graphic you need](https://www.data-to-viz.com/) www.data-to-viz.com
+- [From data to Viz | Find the graphic you need](https://www.data-to-viz.com/) www.data-to-viz.com
 Cool idea. You describe the data you want to visualize, and it recommends the best methods to use for the visualization.
 - [Browsh](https://www.brow.sh/) www.brow.sh
 Web browsers running in a terminal have always been a thing, but this is a pretty different take on that. This is using Firefox underneath, and then sort of painting the display in text? Weird.
-- Optimize Website Speed With Chrome DevTools  |  Tools [for Web Developers  |  Google Developers](https://developers.google.com/web/tools/chrome-devtools/speed/get-started) developers.google.com
+- [Optimize Website Speed With Chrome DevTools  |  Tools for Web Developers  |  Google Developers](https://developers.google.com/web/tools/chrome-devtools/speed/get-started) developers.google.com
 Very deep overview for optimizing site performance.
 
 ## Microposts 🎈

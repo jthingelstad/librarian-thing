@@ -127,17 +127,17 @@ https://creativecommons.org
 
 ## Yet More Links 🍞
 
-- Stripe [Atlas: Writing copy for landing pages](https://stripe.com/atlas/guides/landing-page-copy) stripe.com
+- [Stripe Atlas: Writing copy for landing pages](https://stripe.com/atlas/guides/landing-page-copy) stripe.com
 Quick primer for non-marketing types to help write better copy to engage.
 - [What Leadership Really Feels Like](https://mailchi.mp/gapingvoid/what-leadership-really-feels-like?e=c0f58dbfb1) mailchi.mp
 A good explainer on why telling stories that connect to the future matters so much!
-- The Gun Violence [Map: Five Years of American Shootings](https://www.thetrace.org/features/gun-violence-interactive-shootings-map/) www.thetrace.org
+- [The Gun Violence Map: Five Years of American Shootings](https://www.thetrace.org/features/gun-violence-interactive-shootings-map/) www.thetrace.org
 Eye opening way to show gun violence.
-- Darkroom [4.0: The MacStories Review – MacStories](https://www.macstories.net/reviews/darkroom-4-0-the-macstories-review/) www.macstories.net
+- [Darkroom 4.0: The MacStories Review – MacStories](https://www.macstories.net/reviews/darkroom-4-0-the-macstories-review/) www.macstories.net
 Darkroom is amazing but it badly needed an iPad version, and now there is one!
-- AutoSleep 6: Effortless Sleep Tracking [More Accessible Than Ever – MacStories](https://www.macstories.net/reviews/autosleep-6-effortless-sleep-tracking-more-accessible-than-ever/) www.macstories.net
+- [AutoSleep 6: Effortless Sleep Tracking More Accessible Than Ever – MacStories](https://www.macstories.net/reviews/autosleep-6-effortless-sleep-tracking-more-accessible-than-ever/) www.macstories.net
 I use this app passively to get approximate data about sleep patterns. You can get reasonably good data by just installing it and letting it go.
-- A random emoji in [your terminal prompt. How and Why!](https://loige.co/random-emoji-in-your-prompt-how-and-why/) loige.co
+- [A random emoji in your terminal prompt. How and Why!](https://loige.co/random-emoji-in-your-prompt-how-and-why/) loige.co
 A nice way to add some fun to your command line! 😍
 
 ## Microposts 🎈

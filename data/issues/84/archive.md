@@ -225,7 +225,7 @@ Nice PDF to walk you through a reflection and planning process for [the new year
 What the… 😳💰
 - [Repl.it - Repl.it Multiplayer](https://repl.it/site/blog/multi) repl.it
 I wasn't aware of repl.it but multi-user (I like the fun nod with multiplayer) is a great idea!
-- 'Gorogoa' [for iOS — Tools and Toys](http://toolsandtoys.net/gorogoa-for-ios/) toolsandtoys.net
+- ['Gorogoa' for iOS — Tools and Toys](http://toolsandtoys.net/gorogoa-for-ios/) toolsandtoys.net
 I love the new, innovative games that have come to the iPad.
 - [Writing Workflows | Title Page](http://processedword.net/writing-workflows/index.html) processedword.net
 Interesting book on writing and the workflows around it.

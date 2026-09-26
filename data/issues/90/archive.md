@@ -165,15 +165,15 @@ https://archive.org
 
 ## Yet More Links 🍞
 
-- The Tech [Revolt — The California Sunday Magazine](https://story.californiasunday.com/tech-revolt) story.californiasunday.com
+- [The Tech Revolt — The California Sunday Magazine](https://story.californiasunday.com/tech-revolt) story.californiasunday.com
 Nice stories of individuals in the tech industry focusing on ethical work.
-- Cloud Native Computing Foundation Announces CoreDNS [Graduation - Cloud Native Computing Foundation](https://www.cncf.io/announcement/2019/01/24/coredns-graduation/) www.cncf.io
+- [Cloud Native Computing Foundation Announces CoreDNS Graduation - Cloud Native Computing Foundation](https://www.cncf.io/announcement/2019/01/24/coredns-graduation/) www.cncf.io
 Cool to see another project "graduate" the CNCF.
-- Windows, [Kubernetes & Azure.pdf - Google Drive](https://drive.google.com/file/d/13fXWIt5Yl7VZTkplc0fL2VcAtYnFvGka/view) drive.google.com
+- [Windows, Kubernetes & Azure.pdf - Google Drive](https://drive.google.com/file/d/13fXWIt5Yl7VZTkplc0fL2VcAtYnFvGka/view) drive.google.com
 Interesting slides with some pretty bad instances of Azure problems.
-- The books I read [in 2018 - Signal v. Noise](https://m.signalvnoise.com/the-books-i-read-in-2018/) m.signalvnoise.com
+- [The books I read in 2018 - Signal v. Noise](https://m.signalvnoise.com/the-books-i-read-in-2018/) m.signalvnoise.com
 I like reading peoples reading lists. It’s good inspiration for my own reading.
-- Techstars New Health Care Partner: Announcing UnitedHealthcare [Accelerator Powered by Techstars - Techstars](https://www.techstars.com/content/accelerators/techstars-new-health-care-partner-announcing-unitedhealthcare-accelerator-powered-techstars/) www.techstars.com
+- [Techstars New Health Care Partner: Announcing UnitedHealthcare Accelerator Powered by Techstars - Techstars](https://www.techstars.com/content/accelerators/techstars-new-health-care-partner-announcing-unitedhealthcare-accelerator-powered-techstars/) www.techstars.com
 Target did an effort like this with Techstars and it lasted one cycle and was then shut down. Hopefully this one will have more longevity.
 
 ## Microposts 🎈

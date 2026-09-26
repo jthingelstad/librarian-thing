@@ -220,7 +220,7 @@ I’m a big fan of Shortcuts. I love what iOS 13 has done for Shortcuts. Cassine
 I grabbed this game via Apple Arcade and it is just awesome. It makes you chuckle, it’s lighthearted, and just a fun time. Give it a try. 🕹
 - [STRML: Projects and Work](https://www.strml.net/) www.strml.net
 Geeky, but fun for folk that know how web technology works.
-- North America Lost a Quarter of Its Birds [in 50 Years - The Atlantic](https://www.theatlantic.com/science/archive/2019/09/america-has-lost-quarter-its-birds-fifty-years/598318/) www.theatlantic.com
+- [North America Lost a Quarter of Its Birds in 50 Years - The Atlantic](https://www.theatlantic.com/science/archive/2019/09/america-has-lost-quarter-its-birds-fifty-years/598318/) www.theatlantic.com
 Yikes. 🐦😬
 
 ## Microposts 🎈

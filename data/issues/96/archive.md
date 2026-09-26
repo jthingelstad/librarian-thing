@@ -202,17 +202,17 @@ https://creativecommons.org
 
 ## Yet More Links 🍞
 
-- Python + [Memcached: Efficient Caching in Distributed Applications](https://julien.danjou.info/python-memcached-efficient-caching-in-distributed-applications/) julien.danjou.info
+- [Python + Memcached: Efficient Caching in Distributed Applications](https://julien.danjou.info/python-memcached-efficient-caching-in-distributed-applications/) julien.danjou.info
 Good primer.
-- Kubernetes Authorization [via Open Policy Agent – ITNEXT](https://itnext.io/kubernetes-authorization-via-open-policy-agent-a9455d9d5ceb) itnext.io
+- [Kubernetes Authorization via Open Policy Agent – ITNEXT](https://itnext.io/kubernetes-authorization-via-open-policy-agent-a9455d9d5ceb) itnext.io
 Authorization is complicated and hard. 🤓
-- How to Apply The [Principles of Long-Term Investing to Everything](https://medium.com/swlh/apply-the-principles-of-long-term-investing-to-everything-6c347101ad99) medium.com
+- [How to Apply The Principles of Long-Term Investing to Everything](https://medium.com/swlh/apply-the-principles-of-long-term-investing-to-everything-6c347101ad99) medium.com
 I like this approach considering small improvements in the same way that we think about long-term investing.
 - [Tech Ecosystem Guide to Ukraine 2019](http://data.unit.city/tech-guide/Tech_Ecosystem_Guide_To_Ukraine_En-1.1.pdf) data.unit.city
 Interesting data on the tech market in Ukraine.
-- This Hilarious Twitter Thread About Peloton [Illuminates the Reality of Riding Indoors](https://www.bicycling.com/culture/a26067688/peloton-twitter-parody/) www.bicycling.com
+- [This Hilarious Twitter Thread About Peloton Illuminates the Reality of Riding Indoors](https://www.bicycling.com/culture/a26067688/peloton-twitter-parody/) www.bicycling.com
 I ordered a Peloton Spin Bike, and this made me laugh out loud. 🤣
-- Bookmarklet: Archive [Page to Wayback Machine // Plasticmind](http://plasticmind.com/0s-and-1s/bookmarklet-archive-to-wayback-machine/) plasticmind.com
+- [Bookmarklet: Archive Page to Wayback Machine // Plasticmind](http://plasticmind.com/0s-and-1s/bookmarklet-archive-to-wayback-machine/) plasticmind.com
 I had no idea that you could trigger Archive.org to save a URL like this. This is a pretty cool capability. 👍
 
 ## Microposts 🎈

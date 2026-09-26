@@ -145,7 +145,7 @@ It is cold and dark out but that is fine with me since I have this delightful cu
 
 I hope your weekend is off to a similar vibes!
 
-### Introducing the Christmas Blogs
+## Introducing the Christmas Blogs
 
 In [Weekly Thing 304](https://weekly.thingelstad.com/archive/304/) I shared that I was gifting a year of blogging to five readers of the Weekly Thing! Folks raised their hands, got some code to [randomly pick](https://www.thingelstad.com/2024/12/21/weekly-thing-christmas.html), and we have our five winners!
 

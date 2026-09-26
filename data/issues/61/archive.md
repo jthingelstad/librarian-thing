@@ -318,25 +318,25 @@ https://creativecommons.org
 
 ## Yet More Links 🍞
 
-- Microsoft Releases 125 million Building Footprints in the US [as Open Data | Maps Blog](https://blogs.bing.com/maps/2018-06/microsoft-releases-125-million-building-footprints-in-the-us-as-open-data?PC=EMMX01) blogs.bing.com
+- [Microsoft Releases 125 million Building Footprints in the US as Open Data | Maps Blog](https://blogs.bing.com/maps/2018-06/microsoft-releases-125-million-building-footprints-in-the-us-as-open-data?PC=EMMX01) blogs.bing.com
 This is very cool and a nice addition to the public map data set. 👏
-- Kubernetes 1.11: a look [from inside Google —Google Cloud Platform](https://cloudplatform.googleblog.com/2018/07/kubernetes-1-11-a-look-from-inside-Google.html) cloudplatform.googleblog.com
+- [Kubernetes 1.11: a look from inside Google —Google Cloud Platform](https://cloudplatform.googleblog.com/2018/07/kubernetes-1-11-a-look-from-inside-Google.html) cloudplatform.googleblog.com
 Kubernetes keeps chugging along.
-- Delivering Amazon Packages to the Top of the [World - The New York Times](https://www.nytimes.com/2018/07/02/technology/delivering-amazon-india.html) www.nytimes.com
+- [Delivering Amazon Packages to the Top of the World - The New York Times](https://www.nytimes.com/2018/07/02/technology/delivering-amazon-india.html) www.nytimes.com
 Seriously? 😳
-- Zivix Just Closed A [Half Million Dollar Crowdfunding Campaign —TechDotMN](http://tech.mn/news/2018/07/02/zivix-just-closed-a-half-million-dollar-crowdfunding-campaign/) tech.mn
+- [Zivix Just Closed A Half Million Dollar Crowdfunding Campaign —TechDotMN](http://tech.mn/news/2018/07/02/zivix-just-closed-a-half-million-dollar-crowdfunding-campaign/) tech.mn
 Congrats to local Minneapolis company on successful funding another product! 💰
-- Agile [project management | Top 15 books](https://www.knowledgetrain.co.uk/resources/practice/top-agile-books) www.knowledgetrain.co.uk
+- [Agile project management | Top 15 books](https://www.knowledgetrain.co.uk/resources/practice/top-agile-books) www.knowledgetrain.co.uk
 Great reading list for Agile.
-- NSA ‘Systematically Moving’ All Its [Data to The Cloud - Nextgov](https://www.nextgov.com/emerging-tech/2018/06/nsa-systematically-moving-all-its-data-cloud/149179/) www.nextgov.com
+- [NSA ‘Systematically Moving’ All Its Data to The Cloud - Nextgov](https://www.nextgov.com/emerging-tech/2018/06/nsa-systematically-moving-all-its-data-cloud/149179/) www.nextgov.com
 Not public cloud. Wonder what software layer they are using underneath.
-- Fortnite generated a record $318 million [in revenue in May - Recode](https://www.recode.net/2018/6/26/17502072/fortnite-revenue-game-growth-318-million) www.recode.net
+- [Fortnite generated a record $318 million in revenue in May - Recode](https://www.recode.net/2018/6/26/17502072/fortnite-revenue-game-growth-318-million) www.recode.net
 $1.2B in total revenue so far. Amazing. All optional in-game upgrades. 😳
-- Sending your First [Webmention from Scratch • Aaron Parecki](https://aaronparecki.com/2018/06/30/11/your-first-webmention) aaronparecki.com
+- [Sending your First Webmention from Scratch • Aaron Parecki](https://aaronparecki.com/2018/06/30/11/your-first-webmention) aaronparecki.com
 Detailed example for implementing webmentuons.
 - [Graph-o-Matic / Observable](https://beta.observablehq.com/@mbostock/graph-o-matic) beta.observablehq.com
 DOT to image right in a web page. Cool!
-- Cool New Features [in Python 3.7 – Real Python](https://realpython.com/python37-new-features/) realpython.com
+- [Cool New Features in Python 3.7 – Real Python](https://realpython.com/python37-new-features/) realpython.com
 Data Classes look very helpful.
 - [Dog API](https://dog.ceo/dog-api/) dog.ceo
 There is an API for dog pictures? 🐕 Yep. 🤩

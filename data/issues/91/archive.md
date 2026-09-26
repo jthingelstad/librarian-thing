@@ -87,7 +87,7 @@ The rest of life mostly went on as normal. I had the luck of scheduling my annua
 
 Unfortunately I got taken down with a nasty cold at the end of the week and I've mostly been napping and sniffling 🤧 the last couple of days, along with a headache, sore throat, sneezing – you get the picture. I'm still getting your Saturday links to you though. The Post Office 📭 halted mail delivery on Wednesday, but I won't be so easily deterred!
 
-My Blog Posts ✍️
+## My Blog Posts ✍️
 
 ### [Hack the Gap 2019](https://www.thingelstad.com/2019/hack-the-gap-2019)
 
@@ -171,7 +171,7 @@ Seriously, of all the devices I'd like to control with HomeKit my TV would be ri
 At this point nothing should really surprise us from Facebook right? 🤦‍♂️
 - [Maze Design](http://www.cgl.uwaterloo.ca/csk/projects/mazes/) www.cgl.uwaterloo.ca
 Turns out generating mazes is pretty complex.
-- Omni [Roadmap 2019 - The Omni Group](https://www.omnigroup.com/blog/omni-roadmap-2019) www.omnigroup.com
+- [Omni Roadmap 2019 - The Omni Group](https://www.omnigroup.com/blog/omni-roadmap-2019) www.omnigroup.com
 Basically finish up what they were hoping to get done in 2018. I do think the JavaScript automation for OmniFocus will be a big deal.
 - [Custom Mission Patches](https://mission-patch.com/) - design and print NASA-style mission patch stickers for your team.
 These are a lot of fun!

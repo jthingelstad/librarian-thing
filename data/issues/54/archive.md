@@ -198,33 +198,33 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Where the Yanny and [Laurel Meme Comes From | WIRED](https://www.wired.com/story/yanny-and-laurel-true-history/) www.wired.com
+- [Where the Yanny and Laurel Meme Comes From | WIRED](https://www.wired.com/story/yanny-and-laurel-true-history/) www.wired.com
 Following the path of this story, my daughter has found this fascinating. 👂
 - [The Original Hacker's Dictionary](http://www.dourish.com/goodies/jargon.html) www.dourish.com
 The original jargon.txt file from around 1998. Many of these terms are still in active use.
 - [Regex Crossword](https://regexcrossword.com/) regexcrossword.com
 This is awesome! 💚 Learn Regex and have geeky fun at the same time.
-- Your [serverless Raspberry Pi cluster with Docker](https://blog.alexellis.io/your-serverless-raspberry-pi-cluster/) blog.alexellis.io
+- [Your serverless Raspberry Pi cluster with Docker](https://blog.alexellis.io/your-serverless-raspberry-pi-cluster/) blog.alexellis.io
 Why not? 🤷‍♂️ [Similar to Raspberry Pi Kubernetes Cluster](https://chrisshort.net/my-raspberry-pi-kubernetes-cluster/) .
-- Meet Surface Hub 2 [- Microsoft Devices BlogMicrosoft Devices Blog](https://blogs.windows.com/devices/2018/05/15/meet-surface-hub-2/) blogs.windows.com
+- [Meet Surface Hub 2 - Microsoft Devices BlogMicrosoft Devices Blog](https://blogs.windows.com/devices/2018/05/15/meet-surface-hub-2/) blogs.windows.com
 The video here is a compelling way to think about teams collaborating with technology.
-- On null | [Structure and Interpretation of Computer Programmers](https://www.sicpers.info/2018/05/on-null/) www.sicpers.info
+- [On null | Structure and Interpretation of Computer Programmers](https://www.sicpers.info/2018/05/on-null/) www.sicpers.info
 A dive into the true meaning of null.
 - [txt.fyi](https://txt.fyi/) txt.fyi
 The "dumbest publishing platform on the web". Markdown in, URL out.
-- Professor Frisby's [Mostly Adequate Guide to Functional Programming](https://mostly-adequate.gitbooks.io/mostly-adequate-guide/) mostly-adequate.gitbooks.io
+- [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://mostly-adequate.gitbooks.io/mostly-adequate-guide/) mostly-adequate.gitbooks.io
 Free online book on functional programming. 📖
 - [Shell Style Guide](https://google.github.io/styleguide/shell.xml) google.github.io
 I like goofing around with bash and this style guide is simple and pragmatic. 🤓
-- Nintendo Switch Online service: Everything [you need to know! | iMore](https://www.imore.com/nintendo-switch-online-everything-you-need-know) www.imore.com
+- [Nintendo Switch Online service: Everything you need to know! | iMore](https://www.imore.com/nintendo-switch-online-everything-you-need-know) www.imore.com
 🎮 Switch Online getting cloud save.
-- Scripting News: The [Internet is going the wrong way](http://scripting.com/2018/05/10/133513.html) scripting.com
+- [Scripting News: The Internet is going the wrong way](http://scripting.com/2018/05/10/133513.html) scripting.com
 [Dave Winer](https://en.wikipedia.org/wiki/Dave_Winer) is a good "North Star" for the open web.
-- Boston Dynamics’ robots are learning how to run outside [and navigate autonomously - The Verge](https://www.theverge.com/circuitbreaker/2018/5/10/17341400/boston-dynamics-atlas-spotmini-robots-videos-autonomous-navigation) www.theverge.com
+- [Boston Dynamics’ robots are learning how to run outside and navigate autonomously - The Verge](https://www.theverge.com/circuitbreaker/2018/5/10/17341400/boston-dynamics-atlas-spotmini-robots-videos-autonomous-navigation) www.theverge.com
 👀
-- Pyre [· A performant typechecker for Python](https://pyre-check.org/) pyre-check.org
+- [Pyre · A performant typechecker for Python](https://pyre-check.org/) pyre-check.org
 Looks like a solid tool. 🔨
-- Social media copies gambling methods 'to create psychological [cravings' | Technology | The Guardian](https://www.theguardian.com/technology/2018/may/08/social-media-copies-gambling-methods-to-create-psychological-cravings) www.theguardian.com
+- [Social media copies gambling methods 'to create psychological cravings' | Technology | The Guardian](https://www.theguardian.com/technology/2018/may/08/social-media-copies-gambling-methods-to-create-psychological-cravings) www.theguardian.com
 Addictive software.
 
 ## Microposts 🎈

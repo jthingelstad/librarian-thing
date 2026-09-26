@@ -216,23 +216,23 @@ https://www.hackthegap.com
 
 ## Yet More Links 🍞
 
-- MindNode 6 [Review: Refined Mind Mapping – MacStories](https://www.macstories.net/reviews/mindnode-6-review-refined-mind-mapping/) www.macstories.net
+- [MindNode 6 Review: Refined Mind Mapping – MacStories](https://www.macstories.net/reviews/mindnode-6-review-refined-mind-mapping/) www.macstories.net
 Nice improvements to my preferred mind mapping software.
-- The Instant Pot was [made to cook Indian butter chicken](https://thetakeout.com/instant-pot-indian-butter-chicken-recipe-1834199355) thetakeout.com
+- [The Instant Pot was made to cook Indian butter chicken](https://thetakeout.com/instant-pot-indian-butter-chicken-recipe-1834199355) thetakeout.com
 I think I may finally get on the Instant Pot bandwagon. 😎
-- Finding a place to charge your [EV is easy with Google Maps](https://www.blog.google/products/maps/finding-place-charge-your-ev-easy-google-maps/) www.blog.google
+- [Finding a place to charge your EV is easy with Google Maps](https://www.blog.google/products/maps/finding-place-charge-your-ev-easy-google-maps/) www.blog.google
 Great new add to Google Maps. 👏
-- Report: 26 States Now Ban [or Restrict Community Broadband - Motherboard](https://motherboard.vice.com/en_us/article/kzmana/report-26-states-now-ban-or-restrict-community-broadband) motherboard.vice.com
+- [Report: 26 States Now Ban or Restrict Community Broadband - Motherboard](https://motherboard.vice.com/en_us/article/kzmana/report-26-states-now-ban-or-restrict-community-broadband) motherboard.vice.com
 Anti-competitive behavior on the part of telecom companies and your easily purchased legislators. 😡
-- California VC Turns $9 Million into Eye-Popping [$6.9 Billion in Uber IPO Jackpot](https://www.ccn.com/san-francisco-vc-turns-9-million-into-eye-popping-6-9-billion-in-uber-ipo-jackpot) www.ccn.com
+- [California VC Turns $9 Million into Eye-Popping $6.9 Billion in Uber IPO Jackpot](https://www.ccn.com/san-francisco-vc-turns-9-million-into-eye-popping-6-9-billion-in-uber-ipo-jackpot) www.ccn.com
 766 times initial investment in 8 years. That is approximately $2 million of appreciation a day, including weekends. 💰
-- SQLGate - [The Most Intelligent IDE for Database](https://www.sqlgate.com/) www.sqlgate.com
+- [SQLGate - The Most Intelligent IDE for Database](https://www.sqlgate.com/) www.sqlgate.com
 Looks like a solid SQL IDE. 👩‍💻
-- Siri Shortcuts and Screen Time [coming to the Mac - 9to5Mac](https://9to5mac.com/2019/04/19/siri-shortcuts-screen-time-mac/) 9to5mac.com
+- [Siri Shortcuts and Screen Time coming to the Mac - 9to5Mac](https://9to5mac.com/2019/04/19/siri-shortcuts-screen-time-mac/) 9to5mac.com
 The Shortcuts app coming to macOS would be a big deal for me. Just a rumor so far though. 🧐
-- Follow-up: I found two identical packs of Skittles, among 468 packs with a total [of 27,740 Skittles | Possibly Wrong](https://possiblywrong.wordpress.com/2019/04/06/follow-up-i-found-two-identical-packs-of-skittles-among-468-packs-with-a-total-of-27740-skittles/) possiblywrong.wordpress.com
+- [Follow-up: I found two identical packs of Skittles, among 468 packs with a total of 27,740 Skittles | Possibly Wrong](https://possiblywrong.wordpress.com/2019/04/06/follow-up-i-found-two-identical-packs-of-skittles-among-468-packs-with-a-total-of-27740-skittles/) possiblywrong.wordpress.com
 Oh my, I so love the internet sometimes. 🤓
-- Explore [U.S. National Parks in Google Earth](https://www.blog.google/products/earth/visit-us-national-parks-google-earth/) www.blog.google
+- [Explore U.S. National Parks in Google Earth](https://www.blog.google/products/earth/visit-us-national-parks-google-earth/) www.blog.google
 Visiting every National Park is something I've thought would be a good retirement activity. Maybe this is an option? 😬
 
 ## Microposts 🎈

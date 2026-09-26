@@ -229,7 +229,7 @@ I liked this just for the graphs and the interactive elements.
 One command to generate REST APIs for any MySql Database.
 - [It Looks Like I'm Gonna Be Super Busy Til I'm Dead - McSweeney's Internet Tendency](https://www.mcsweeneys.net/articles/it-looks-like-im-gonna-be-super-busy-til-im-dead) www.mcsweeneys.net
 🤣
-- Ballerina - A cloud native programming [language for integration - Ballerina Blog](https://blog.ballerina.io/posts/ballerina-a-cloud-native-programming-language/) blog.ballerina.io
+- [Ballerina - A cloud native programming language for integration - Ballerina Blog](https://blog.ballerina.io/posts/ballerina-a-cloud-native-programming-language/) blog.ballerina.io
 
 ## Microposts 🎈
 
