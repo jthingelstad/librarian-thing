@@ -29,7 +29,7 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 - `data/issues/` — canonical issue content. **WT Builder writes new issues here.**
 - `data/blog/`, `data/podcast/` — ingested content.
 - `data/librarian/` — built corpus and graph artifacts.
-- `tests/` — Python tests (corpus / content shape / dashboard).
+- `tests/` — Python tests (corpus / content shape / conversation review / deploy security).
 
 ## Hard constraints
 

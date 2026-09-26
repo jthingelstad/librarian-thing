@@ -35,19 +35,6 @@ issue, note, automation memory, or summary. The background evaluator fields are
 included only as triage hints. Codex makes the final quality judgment from the
 exact conversation, citations, tool trace, runtime metadata, and feedback.
 
-### Studio Thingy Operations
-
-Studio's existing tailnet-only website exposes a read-only **Thingy** section at
-`/thingy/`. It uses this admin package to compare the three deployed S3 corpus
-artifacts with Studio's source mirrors and to group evaluator flags and reader
-downvotes into a prioritized improvement queue.
-
-The page inherits Studio's loopback-only server, `tailscale serve` proxy, and
-explicit `jthingelstad@github` identity allowlist. AWS credentials remain in the
-server process; the browser receives rendered operational summaries only. Live
-reads are cached for five minutes, and an explicit refresh is available on the
-page.
-
 ### `operator_report.py`
 
 Generates a local, static HTML report from the canonical DynamoDB
