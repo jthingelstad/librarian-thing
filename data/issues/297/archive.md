@@ -314,7 +314,7 @@ We’ve driven by [Glensheen Mansion](https://glensheen.org) many times and fina
 ### [North Shore Weekend Log](https://www.thingelstad.com/2024/10/13/north-shore-weekend.html)
 Oct 13, 2024 at 10:00 PM
 
-### Friday
+#### Friday
 
 - Drive to Duluth.
 - Pizza and beer at [Ursa Minor Brewery](https://www.ursaminorbrewing.com).
@@ -323,7 +323,7 @@ Oct 13, 2024 at 10:00 PM
 - Hot tub & homework.
 - Pre-order donuts at [World’s Best Donuts](https://worldsbestdonutsmn.com) in Grand Marais.
 
-### Saturday
+#### Saturday
 
 - Drive to Grand Marais.
 - Stop at [Fika Coffee](https://fikacoffee.com) for delicious coffee.
@@ -336,7 +336,7 @@ Oct 13, 2024 at 10:00 PM
 - Ice cream at [Superior Creamery](https://superiorcreamery.com).
 - Return to Airbnb.
 
-### Sunday
+#### Sunday
 
 - Send [Weekly Thing 296](https://weekly.thingelstad.com/archive/296/).
 - Check out Of Airbnb.

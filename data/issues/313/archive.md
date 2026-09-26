@@ -371,13 +371,13 @@ Right now I'm doing all this with a ChatGPT subscription using the 4o models. It
 
 With that in mind, here is where I'm using LLM capabilities now. You’ll note that in many of these cases I'm asking my “assistant” to generate options and then I'm doing the final selection and modifications. I think this is a good model.
 
-### Subject
+#### Subject
 
 The subject follows a simple structure of “Weekly Thing «Number» / «Word», «Word», «Word»”. These three words are selected from the titles of the links in each issue. I try to select triples that are interesting and engaging. The challenge is avoiding words from the website's name, which appear inconsistently in article titles.
 
 The prompt requests valid JSON output. I extract the JSON and use the “Get Dictionary from Input” method to create a structured data object. This allows me to put the LLM completely behind the scenes.
 
-### Fortune
+#### Fortune
 
 The fortune first showed up in [Weekly Thing 53](https://weekly.thingelstad.com/archive/weekly-thing-53-may-12-2018/) and has been the last thing in the emails for a while. I got the inspiration for this from the `fortune` [command in Unix](https://en.wikipedia.org/wiki/Fortune_\(Unix\)). The text files that serve as the “database” for `fortune` are easy enough to find, and building a Shortcut around them was simple. I randomly select fortunes until I find one I like.
 
@@ -385,7 +385,7 @@ But with an LLM, I thought -- why not make the fortune relevant to each issue's 
 
 This also returns a list of options. They are impressively good and it does a great job pulling in themes from the links in each issue.
 
-### Byline
+#### Byline
 
 The “byline” is the first sentence in the email. Over time, its role has evolved. Initially, it was a reminder of why you’re receiving the email. Then I used a template to mechanically describe what was in the email. I’ve always desired this to be an “intro” to the links in the issue but it is difficult to do that. It is also a rare place in the email where I want it to be a “different voice”. Ideally this is more of a second person voice describing what is included.
 
@@ -393,7 +393,7 @@ To generate a meaningful byline, I provide more than just article titles -- I al
 
 This one still requires a bit more editing from me before I'm ready to use it, and I think that will always be the case. So rather than returning JSON I just get it to put the options in text and then I present it in the Shortcut for editing and refinement to finalize it.
 
-### Supporting Members
+#### Supporting Members
 
 The newest section where I'm using AI, and a new section to the email itself is in the Supporting Members segment. This is a new thing where we raise funds for digital non-profits as a community. This is the section where I rely on AI the most, without requesting multiple versions. I'm okay, and actually kind of prefer, this to be in a different voice than mine.
 
@@ -401,7 +401,7 @@ To generate this section, I pull data from [Buttondown](https://buttondown.com) 
 
 This is a new addition, but early tests look promising. This is also interesting because the LLM knows what [Creative Commons](https://creativecommons.org) is and can infer some additional context for the messaging. It is different with each run which will keep the messaging fresh.
 
-### Overall Editing
+#### Overall Editing
 
 The most recent AI addition to my workflow is final editing. Here I take the draft generated through [my automation](https://www.thingelstad.com/2023/09/24/how-i-build.html) and I send it for review. I do a brief review of each email but honestly I never review it that much. Most of the time, what I send is my first draft -- straight from the keyboard. As a result, typos get through or simple grammar issues that I wish were caught. I've considered [Grammarly](https://www.grammarly.com) before, but it's too thorough and over-edits my work. I want a very specific kind of review.
 
