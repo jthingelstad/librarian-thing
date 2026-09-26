@@ -1,0 +1,125 @@
+{
+  "notable_links": [
+    {
+      "text": "The Incumbents Are Coming | Andreessen Horowitz",
+      "url": "https://a16z.com/the-incumbents-are-coming/",
+      "domain": "a16z.com",
+      "heading_context": "[The Incumbents Are Coming | Andreessen Horowitz](https://a16z.com/the-incumbents-are-coming/)",
+      "section": "Notable"
+    },
+    {
+      "text": "The Overhang - Ethan Mollick",
+      "url": "https://www.oneusefulthing.org/p/the-overhang",
+      "domain": "www.oneusefulthing.org",
+      "heading_context": "[The Overhang - Ethan Mollick](https://www.oneusefulthing.org/p/the-overhang)",
+      "section": "Notable"
+    },
+    {
+      "text": "M5 Ultra Mac Studio Review: The Dream Mac for Local AI Agents - MacStories",
+      "url": "https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/",
+      "domain": "www.macstories.net",
+      "heading_context": "[M5 Ultra Mac Studio Review: The Dream Mac for Local AI Agents - MacStories](https://www.macstories.net/stories/m5-ultra-mac-studio-review-the-dream-mac-for-local-ai-agents/)",
+      "section": "Notable"
+    },
+    {
+      "text": "I am often wrong | Boris Cherny's Blog",
+      "url": "https://borischerny.com/management,/product/2026/09/19/I-am-often-wrong.html",
+      "domain": "borischerny.com",
+      "heading_context": "[I am often wrong | Boris Cherny's Blog](https://borischerny.com/management,/product/2026/09/19/I-am-often-wrong.html)",
+      "section": "Notable"
+    },
+    {
+      "text": "AI is too important to fear, too powerful to use carelessly",
+      "url": "https://www.startribune.com/artificial-intelligence-anthropic-open-ai-jacob-coxon/601890526",
+      "domain": "www.startribune.com",
+      "heading_context": "[AI is too important to fear, too powerful to use carelessly](https://www.startribune.com/artificial-intelligence-anthropic-open-ai-jacob-coxon/601890526)",
+      "section": "Notable"
+    },
+    {
+      "text": "Attention is all you have",
+      "url": "https://alicegg.tech/2026/09/21/attention",
+      "domain": "alicegg.tech",
+      "heading_context": "[Attention is all you have](https://alicegg.tech/2026/09/21/attention)",
+      "section": "Notable"
+    }
+  ],
+  "briefly_links": [
+    {
+      "text": "Anthropic decides to support OpenAI's markdown instructions spec",
+      "url": "https://www.theregister.com/ai-and-ml/2026/09/18/anthropic-decides-to-support-openais-markdown-instructions-spec/5297588",
+      "domain": "www.theregister.com",
+      "heading_context": "[Anthropic decides to support OpenAI's markdown instructions spec](https://www.theregister.com/ai-and-ml/2026/09/18/anthropic-decides-to-support-openais-markdown-instructions-spec/5297588)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Orchestrating Claude Code Agents: The Chief of Staff Pattern",
+      "url": "https://asyncdot.com/blog/chief-of-staff-pattern-orchestrating-claude-code-sessions/",
+      "domain": "asyncdot.com",
+      "heading_context": "[Orchestrating Claude Code Agents: The Chief of Staff Pattern](https://asyncdot.com/blog/chief-of-staff-pattern-orchestrating-claude-code-sessions/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "What a task costs on Opus 5.5 | Claude by Anthropic",
+      "url": "https://claude.com/blog/what-a-task-costs-on-opus-5-5",
+      "domain": "claude.com",
+      "heading_context": "[What a task costs on Opus 5.5 | Claude by Anthropic](https://claude.com/blog/what-a-task-costs-on-opus-5-5)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Thorsten Ball - What I believe about the future of software development",
+      "url": "https://thorstenball.com/blog/2026/09/19/what-i-believe-about-the-future-of-software-development/",
+      "domain": "thorstenball.com",
+      "heading_context": "[Thorsten Ball - What I believe about the future of software development](https://thorstenball.com/blog/2026/09/19/what-i-believe-about-the-future-of-software-development/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "What is LinkedIn",
+      "url": "https://willd10.substack.com/p/what-is-linkedin",
+      "domain": "willd10.substack.com",
+      "heading_context": "[What is LinkedIn](https://willd10.substack.com/p/what-is-linkedin)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Announcing the Presenters of Minnedemo42 – Minnestar",
+      "url": "https://minnestar.org/announcing-the-presenters-of-minnedemo42/",
+      "domain": "minnestar.org",
+      "heading_context": "[Announcing the Presenters of Minnedemo42 – Minnestar](https://minnestar.org/announcing-the-presenters-of-minnedemo42/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "What Sun got wrong | The Observation Deck",
+      "url": "https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/",
+      "domain": "bcantrill.dtrace.org",
+      "heading_context": "[What Sun got wrong | The Observation Deck](https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Apple Copland D11E4 Emulator in Your Browser – pagetable.com",
+      "url": "https://www.pagetable.com/300",
+      "domain": "www.pagetable.com",
+      "heading_context": "[Apple Copland D11E4 Emulator in Your Browser – pagetable.com](https://www.pagetable.com/300)",
+      "section": "Briefly"
+    }
+  ],
+  "domains": [
+    "a16z.com",
+    "alicegg.tech",
+    "arenamag.com",
+    "asyncdot.com",
+    "bcantrill.dtrace.org",
+    "borischerny.com",
+    "claude.com",
+    "en.wikipedia.org",
+    "github.com",
+    "minnestar.org",
+    "thorstenball.com",
+    "willd10.substack.com",
+    "www.densediscovery.com",
+    "www.macstories.net",
+    "www.oneusefulthing.org",
+    "www.pagetable.com",
+    "www.startribune.com",
+    "www.theregister.com"
+  ],
+  "word_count": 2140
+}
