@@ -1,9 +1,16 @@
 import crypto from 'node:crypto';
 import { normalizeHeaders } from './http.mjs';
 
-// 9 days, sliding: every visit re-mints (refresh_session), so an active
-// reader rarely signs in again; only a 9-day absence expires the session.
-const SESSION_TTL_SECONDS = 60 * 60 * 24 * 9;
+// 30 days, sliding: every visit re-mints (refresh_session), so an active
+// reader rarely signs in again; only a 30-day absence expires the session.
+// (Was 9 days until 2026-09-29: a weekly reader missing one issue landed
+// just past expiry and had to sign in again.) The 90-day absolute cap
+// lives with refresh_session in auth/handler.mts.
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30;
+// How long a Buttondown entitlement check stays trusted. Deliberately NOT
+// the session TTL: a longer session must not let a lapsed Supporting
+// Member keep privileges longer. refresh_session re-verifies near expiry.
+export const ENTITLEMENT_VERIFICATION_SECONDS = 60 * 60 * 24 * 9;
 export const PRIVILEGED_ENTITLEMENTS = new Set(['supporting_member', 'trusted_circle', 'owner']);
 
 type Claims = Record<string, unknown>;
@@ -71,7 +78,7 @@ export function createSessionToken(
     entitlements.some((entitlement) => typeof entitlement === 'string' && PRIVILEGED_ENTITLEMENTS.has(entitlement)) &&
     !Number(payloadClaims.entitlements_verified_until || 0)
   ) {
-    payloadClaims.entitlements_verified_until = expiresAt;
+    payloadClaims.entitlements_verified_until = issuedAt + ENTITLEMENT_VERIFICATION_SECONDS;
   }
   return {
     sessionId,
@@ -106,7 +113,7 @@ export function createSessionTokenForSub(
     entitlements.some((entitlement) => typeof entitlement === 'string' && PRIVILEGED_ENTITLEMENTS.has(entitlement)) &&
     !Number(payloadClaims.entitlements_verified_until || 0)
   ) {
-    payloadClaims.entitlements_verified_until = expiresAt;
+    payloadClaims.entitlements_verified_until = issuedAt + ENTITLEMENT_VERIFICATION_SECONDS;
   }
   return {
     sessionId,

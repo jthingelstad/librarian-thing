@@ -140,7 +140,7 @@ Env vars are set in CloudFormation at deploy time from the repo-root `.env`. The
 - `FASTMAIL_JMAP_TOKEN` — optional Fastmail JMAP token used to send Thingy magic-link login emails from `thingy@thingelstad.com`
 - `THINGY_TINYLYTICS_EMAIL_SITE_UID` — optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID
 
-Public Thingy email sessions always require possession-based magic-link authentication before minting a token. There is no direct-session deploy flag. Session tokens last nine days and slide: every visit re-mints via `refresh_session`, which also re-verifies Buttondown entitlements when they near staleness (a lapsed subscription gets 401 and must sign in again).
+Public Thingy email sessions always require possession-based magic-link authentication before minting a token. There is no direct-session deploy flag. Session tokens last 30 days and slide (capped at 90 days from the original sign-in): every visit re-mints via `refresh_session`, which also re-verifies Buttondown entitlements when they near staleness (entitlements are trusted for nine days, independent of the session length) (a lapsed subscription gets 401 and must sign in again).
 
 ## Tools, matching, and evals
 

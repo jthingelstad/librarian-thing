@@ -34,6 +34,7 @@ import {
   utcDayBucket
 } from '../shared/quota.mjs';
 import {
+  ENTITLEMENT_VERIFICATION_SECONDS,
   PRIVILEGED_ENTITLEMENTS,
   createSessionToken,
   createSessionTokenForSub,
@@ -240,7 +241,7 @@ export function entitlementsForSessionPayload(payload: JsonRecord, nowSeconds = 
 // would slide it forever. Refresh/probe now require the row; sign-out
 // deletes it. Verification elsewhere stays HMAC-only (per-request Dynamo
 // reads aren't worth it at this scale) - revocation bounds a stolen
-// token to the CURRENT 9-day window instead of forever.
+// token to the CURRENT 30-day window instead of forever.
 async function sessionRowActive(sessionId: unknown) {
   const tableName = process.env.TABLE_NAME;
   const sid = String(sessionId || '');
@@ -319,7 +320,7 @@ async function refreshSession(event: LibrarianHttpEvent, body: JsonRecord, start
       const status = subscriberStatus(subscriber);
       if (status === 'active' || status === 'premium') {
         entitlements = entitlementsForSubscriber({ email: suppliedEmail, subscriber, status });
-        verifiedUntil = nowSeconds + 60 * 60 * 24 * 9;
+        verifiedUntil = nowSeconds + ENTITLEMENT_VERIFICATION_SECONDS;
         logEvent('info', 'auth_refresh_reverified', {
           subscriber_hash: payload.sub,
           entitlements

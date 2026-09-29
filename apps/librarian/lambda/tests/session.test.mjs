@@ -11,6 +11,7 @@ import {
   requireMethodResponse
 } from '../dist/shared/jmap-mail.mjs';
 import {
+  ENTITLEMENT_VERIFICATION_SECONDS,
   createSessionToken,
   createSessionTokenForSub,
   emailHash,
@@ -60,8 +61,8 @@ test('session token round trips and rejects tampering', () => {
   assert.ok(Number(payload.iat || 0) > 0);
   assert.ok(Number(payload.iat_ms || 0) >= Number(payload.iat || 0) * 1000);
   assert.equal(payload.sub, emailHash('reader@example.com'));
-  assert.ok(expiresAt >= now + 60 * 60 * 24 * 9 - 2);
-  assert.ok(expiresAt <= now + 60 * 60 * 24 * 9 + 2);
+  assert.ok(expiresAt >= now + 60 * 60 * 24 * 30 - 2);
+  assert.ok(expiresAt <= now + 60 * 60 * 24 * 30 + 2);
   assert.equal(verifyToken(`${token}x`), null);
 });
 
@@ -76,6 +77,19 @@ test('session token can carry safe entitlement claims', () => {
   assert.deepEqual(payload.entitlements, ['reader', 'owner']);
   assert.ok(Number(payload.iat || 0) > 0);
   assert.ok(Number(payload.entitlements_verified_until || 0) >= Math.floor(Date.now() / 1000));
+});
+
+test('privileged entitlements verify for 9 days even though the session lasts 30', () => {
+  process.env.SESSION_SECRET = 'test-secret';
+  const now = Math.floor(Date.now() / 1000);
+  const { token, expiresAt } = createSessionToken('Reader@Example.com', 'session-verify', {
+    entitlements: ['reader', 'supporting_member']
+  });
+  const verifiedUntil = Number(verifyToken(token).entitlements_verified_until || 0);
+  assert.equal(ENTITLEMENT_VERIFICATION_SECONDS, 60 * 60 * 24 * 9);
+  assert.ok(verifiedUntil >= now + ENTITLEMENT_VERIFICATION_SECONDS - 2);
+  assert.ok(verifiedUntil <= now + ENTITLEMENT_VERIFICATION_SECONDS + 2);
+  assert.ok(expiresAt - verifiedUntil >= 60 * 60 * 24 * 21 - 2);
 });
 
 test('profile deletion marker rejects tokens issued before deletion', () => {
