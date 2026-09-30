@@ -327,6 +327,16 @@ Non-breaking. Everything here lands in LT, plus one local batch.
    - One Haiku 4.5 batch over the 2,380 titled posts, through
      `pipeline/blog/anthropic_client.py`. Estimated cost is about $3 at that
      file's rates: roughly 1.3M tokens in and 0.3M out.
+   - **Changed 2026-09-29:** the Haiku run ($1.54) gave Jamie "he/his" in 718
+     abstracts, guessed from the name, and invented relations. Jamie approved
+     "regenerate all 2,380 blog abstracts with Sonnet 5 and no pronouns for
+     Jamie, about $4.21 more". The prompt forbids a pronoun for Jamie, and a
+     repair pass with the post attached catches any that slip through.
+   - **Done 2026-09-30:** Jamie approved "regenerate all 2,380 blog abstracts
+     with Sonnet 5 at about $6 through the batch API". Batch
+     `msgbatch_011x5SF45pwnXTc9pirVFJ56` wrote all 2,380 with 0 failures, at
+     3.14M tokens in and 0.26M out, for $6.69. The repair pass rewrote 1. The
+     audit found no pronoun for Jamie, and none over 350 characters.
    - Stored in a sidecar, `data/librarian/blog-abstracts.json`, keyed
      `microblog_id → {body_hash, abstract, model, generated_at}`. The hash
      means an edited post is redone.

@@ -54,7 +54,10 @@ alarm and incident follow-ups are explicit starts.
    `--dry-run` first) writes abstracts for new or edited titled blog posts
    into `data/librarian/blog-abstracts.json`; a normal week is a handful and
    costs cents, so a count in the hundreds means stop and find out why.
-   Commit that sidecar too; it rebuilds the blog corpus the same way.
+   The same run rewrites any pronoun the model gave Jamie ("his wife Tammy")
+   out of new abstracts; it prints how many it checked and how many are left
+   for the next run. Commit that sidecar too; it rebuilds the blog corpus the
+   same way.
 9. Commit and push the verified change, then wait for the automatic GitHub OIDC
    deployment and inspect its result. For a manual retry of committed `main`,
    `make librarian-deploy ARGS="--skip-corpus-upload"` launches the same workflow

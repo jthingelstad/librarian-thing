@@ -4,11 +4,11 @@ Blog abstracts: one to three plain sentences per titled post, for skimming.
 
 Search results and listings show a blog post's title and a clipped first
 chunk. This job gives each titled post (``post_kind: post``) a short neutral
-abstract written by Claude Haiku and stores it in a sidecar keyed by
+abstract written by Claude Sonnet and stores it in a sidecar keyed by
 ``microblog_id``:
 
     data/librarian/blog-abstracts.json
-    {microblog_id: {body_hash, abstract, model, generated_at}}
+    {microblog_id: {body_hash, abstract, model, generated_at, pronouns_checked?}}
 
 The blog corpus build merges it onto the post records as ``abstract`` with
 ``abstract_source: "generated"`` (``librarian_core/abstracts.py``). It is
@@ -19,6 +19,15 @@ Idempotent and resumable: an entry whose ``body_hash`` matches the post is
 skipped, so a re-run pays only for new or edited posts, and the sidecar is
 flushed as results arrive. A post that fails permanently is recorded with an
 ``error`` and is not retried until the post changes or its entry is deleted.
+
+The posts are first person, so any pronoun for Jamie is the model guessing
+from the name. The prompt forbids one, and as a guard an abstract that still
+has he/him/his/himself gets one more short call, with the post attached so
+the model can tell whose pronoun it is, that replaces only the pronouns
+referring to Jamie; it is then marked ``pronouns_checked`` and not sent
+again. Sonnet, not Haiku (2026-09-29): Haiku wrote "his wife Tammy" through
+an explicit counter-example, misread whose "his" was whose in the repair,
+and invented relations ("Jamie's grandson Tyler").
 More than a handful of posts go through the Message Batches API (half
 price); the batch id is kept in ``tmp/blog-abstracts-batch.json`` so an
 interrupted run picks the same batch back up.
@@ -43,7 +52,7 @@ from typing import Any
 
 import anthropic
 from dotenv import load_dotenv
-from librarian_core.abstracts import ABSTRACT_MAX_CHARS, clip_abstract
+from librarian_core.abstracts import ABSTRACT_MAX_CHARS, GENERATED_MAX_CHARS, clip_abstract
 from librarian_core.corpus import body_hash, read_issue
 from librarian_core.paths import BLOG_ABSTRACTS_PATH, BLOG_DIR
 
@@ -53,10 +62,8 @@ import anthropic_client  # noqa: E402
 ROOT = Path(__file__).resolve().parents[2]
 BATCH_STATE = ROOT / "tmp" / "blog-abstracts-batch.json"
 
-MODEL = "claude-haiku-4-5"
-# anthropic_client prices Haiku 4.5 under its dated snapshot id, which is
-# what the alias resolves to.
-RATE_MODEL = anthropic_client.MODELS["haiku"]
+MODEL = anthropic_client.MODELS["sonnet"]
+RATE_MODEL = MODEL
 BATCH_DISCOUNT = 0.5
 MAX_TOKENS = 300
 # More pending posts than this go through the Batches API; a normal week's
@@ -69,15 +76,15 @@ MAX_BODY_CHARS = 100_000
 CHARS_PER_TOKEN = 3.5
 EST_OUTPUT_TOKENS = 90
 
-SYSTEM_PROMPT = f"""\
+SYSTEM_PROMPT = """\
 You write the abstract for one post from Jamie Thingelstad's personal blog, \
 thingelstad.com. The abstract is display metadata: it appears under the \
 post's title in search results and archive listings so a reader, or an AI \
 agent, can tell what the post contains without opening it.
 
-Write one to three sentences of plain text, 25 to 50 words in all. It \
-must stay under {ABSTRACT_MAX_CHARS} characters, so choose what matters \
-most rather than listing everything.
+Write one to three sentences of plain text, 20 to 45 words in all and \
+never more than 300 characters, so choose what matters most rather than \
+listing everything.
 
 - Say what the post says: its subject, the specific things it covers \
 (people, places, products, books, companies and events it names) and its \
@@ -86,16 +93,24 @@ recommendations, name the main ones briefly.
 - Neutral third person, present tense. Refer to the author as "Jamie" \
 ("Jamie describes...", "Jamie argues...", "Jamie links to..."). Do not write \
 in Jamie's voice.
+- Never use a pronoun for Jamie (no he, she, they, his, her, their or \
+himself). Write "Jamie's wife Tammy", never "his wife Tammy"; repeat the name \
+or rephrase so the sentence needs no pronoun. Other people keep the pronouns \
+the post uses for them.
 - Use only what the post itself states. Do not add background, dates, \
 outcomes or opinions from outside knowledge, and do not guess at motives or \
 feelings the post does not express. Keep each claim as certain or as \
 hedged as the post makes it.
-- No evaluative or promotional language: no "insightful", "thoughtful", \
-"fascinating", "must-read", no hype and no calls to action.
+- No evaluative or promotional language of your own: no "insightful", \
+"thoughtful", "fascinating", "must-read", no hype and no calls to action. \
+Jamie's own opinions are fine when attributed ("Jamie finds...").
 - If the post mainly points to or quotes someone else's work, name the \
 source and what it says, then what Jamie adds, if anything.
 - If the post is mostly photos, say what the text and photo descriptions \
-show.
+show. If it has almost no text (only a title and an embedded photo \
+collection, say), write one short sentence from what is there, such as \
+"Jamie shares photos from...". Always write an abstract; never reply about \
+the request itself.
 - Do not begin with "This post", "In this post" or the title.
 
 Output only the abstract: no heading, label, quotation marks, markdown or \
@@ -109,6 +124,28 @@ _SHORTCODE_RE = re.compile(r"\{\{<\s*([\w-]+)\s*(.*?)\s*/?>\}\}", re.S)
 _BLOCKQUOTE_RE = re.compile(r"<(/?)blockquote\b[^>]*>", re.I)
 _OTHER_TAG_RE = re.compile(r"<(?!/?blockquote>)[^>]+>")
 _LABEL_RE = re.compile(r"^(?:abstract|summary)\s*:\s*", re.I)
+_EMPHASIS_RE = re.compile(r"(?<![\w*])\*([^*\n]+)\*(?![\w*])|(?<!\w)_([^_\n]+)_(?!\w)")
+# The model talking about the task instead of doing it ("I don't have access
+# to...", "Could you provide..."). An abstract is third person about Jamie.
+_NOT_AN_ABSTRACT_RE = re.compile(
+    r"^(?:I|I'm|I’m|Sorry|Unfortunately)\b|\b(?:[Cc]ould you (?:provide|share)|I would need)\b"
+)
+_MASCULINE_PRONOUN_RE = re.compile(r"\b(?:he|him|his|himself)\b", re.I)
+PRONOUN_PASSES = 3
+
+PRONOUN_PROMPT = """\
+You edit one short abstract of a blog post by Jamie Thingelstad. The post is \
+given for reference: Jamie wrote it in the first person, so "I", "me" and \
+"my" in the post are Jamie. Use it only to tell who each pronoun in the \
+abstract refers to.
+
+Replace every pronoun in the abstract that refers to Jamie (he, him, his, \
+himself) with "Jamie" or "Jamie's", or rephrase that phrase minimally so no \
+pronoun refers to Jamie. Where the name would repeat within a few words, \
+rephrase instead ("Jamie and his wife Tammy" becomes "Jamie and wife Tammy"). \
+A pronoun that refers to anyone else stays exactly as it is; do not replace \
+it with a name. Change nothing else, even where the abstract and the post \
+disagree. Output only the edited abstract."""
 
 
 def _photo(alt: str) -> str:
@@ -186,16 +223,17 @@ def request_params(post: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def clean_abstract(text: str) -> str:
+def clean_abstract(text: str, max_chars: int = ABSTRACT_MAX_CHARS) -> str:
     """Plain, single-paragraph, clipped. Strips a heading line, an
     ``Abstract:`` label, markdown emphasis and wrapping quotes the model
     might slip in despite the prompt."""
     text = re.sub(r"^#+\s*[^\n]*\n+", "", (text or "").strip())
-    text = " ".join(text.replace("**", "").replace("__", "").split())
+    text = " ".join(text.replace("**", "").replace("__", "").replace("`", "").split())
+    text = _EMPHASIS_RE.sub(lambda m: m.group(1) or m.group(2), text)
     text = _LABEL_RE.sub("", text)
     if len(text) >= 2 and text[0] in '"“' and text[-1] in '"”':
         text = text[1:-1].strip()
-    return clip_abstract(text)
+    return clip_abstract(text, max_chars)
 
 
 def _now() -> str:
@@ -213,12 +251,85 @@ def entry_from_message(message: Any, post: dict[str, Any]) -> dict[str, Any]:
     abstract = clean_abstract(text)
     if not abstract:
         return error_entry(post, "empty")
+    if _NOT_AN_ABSTRACT_RE.search(abstract):
+        return error_entry(post, "not_an_abstract")
     return {
         "body_hash": post["body_hash"],
         "abstract": abstract,
         "model": MODEL,
         "generated_at": _now(),
     }
+
+
+def needs_pronoun_repair(entry: dict[str, Any]) -> bool:
+    abstract = entry.get("abstract") or ""
+    return bool(_MASCULINE_PRONOUN_RE.search(abstract)) and not entry.get("pronouns_checked")
+
+
+def repair_pronouns(
+    client: anthropic.Anthropic,
+    entries: dict[str, dict[str, Any]],
+    usage: Usage,
+    sidecar_path: Path | None = None,
+    posts: dict[str, dict[str, Any]] | None = None,
+) -> int:
+    """Rewrite pronouns for Jamie out of every abstract that has one, in
+    place. An edit that still has he/him/his is sent again (the model can
+    miss one of several) until it stops changing: what is left then refers
+    to someone else. An edit that comes back empty, as a reply about the
+    task, or much shorter than the original is not stored and is retried on
+    the next run. Returns the number of abstracts marked checked."""
+    keys = [key for key, entry in entries.items() if needs_pronoun_repair(entry)]
+    lock = threading.Lock()
+    checked = 0
+
+    def edit(key: str, text: str) -> str | None:
+        post = (posts or {}).get(key)
+        content = f"<abstract>\n{text}\n</abstract>"
+        if post:
+            content = f"<post>\n{post['text']}\n</post>\n\n{content}"
+        try:
+            message = client.messages.create(
+                model=MODEL,
+                max_tokens=MAX_TOKENS,
+                system=PRONOUN_PROMPT,
+                messages=[{"role": "user", "content": content}],
+            )
+        except anthropic.RateLimitError, anthropic.APIStatusError, anthropic.APIConnectionError:
+            print(f"  pronoun repair failed: {key} (next run retries)")
+            return None
+        usage.add(message.usage, batch=False)
+        edited = clean_abstract(
+            " ".join(b.text for b in message.content if b.type == "text"), GENERATED_MAX_CHARS
+        )
+        if not edited or _NOT_AN_ABSTRACT_RE.search(edited) or len(edited) < 0.8 * len(text):
+            print(f"  pronoun repair rejected: {key} (next run retries)")
+            return None
+        return edited
+
+    def work(key: str) -> None:
+        nonlocal checked
+        edited = entries[key]["abstract"]
+        for _ in range(PRONOUN_PASSES):
+            previous = edited
+            edited = edit(key, previous)
+            if edited is None:
+                return
+            if edited == previous or not _MASCULINE_PRONOUN_RE.search(edited):
+                break
+        with lock:
+            entries[key]["abstract"] = edited
+            entries[key]["pronouns_checked"] = True
+            checked += 1
+            if sidecar_path is not None and checked % 25 == 0:
+                write_json(sidecar_path, entries)
+
+    with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool:
+        for future in as_completed([pool.submit(work, key) for key in keys]):
+            future.result()
+    if sidecar_path is not None and keys:
+        write_json(sidecar_path, entries)
+    return checked
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -430,6 +541,9 @@ def main(argv: list[str] | None = None) -> int:
         f"projected: ~{tokens_in:,} tokens in, ~{tokens_out:,} out; "
         f"${direct_cost:.2f} direct, ${batch_cost:.2f} batch"
     )
+    repairs = sum(1 for entry in sidecar.values() if needs_pronoun_repair(entry))
+    if repairs:
+        print(f"pronoun repair pending: {repairs} abstracts (one short call each)")
     if args.dry_run:
         return 0
 
@@ -437,6 +551,7 @@ def main(argv: list[str] | None = None) -> int:
         client = client or anthropic_client.client("general")
         chosen = evenly_spaced(pending or posts, args.sample)
         results = run_direct(client, chosen, None, usage)
+        repair_pronouns(client, results, usage, posts={p["microblog_id"]: p for p in chosen})
         for post in chosen:
             entry = results.get(post["microblog_id"], {"error": "transient"})
             text = entry.get("abstract") or f"ERROR {entry.get('error')}"
@@ -453,6 +568,14 @@ def main(argv: list[str] | None = None) -> int:
             collect_batch(client, state, sidecar, usage, args.poll_seconds)
         else:
             run_direct(client, pending, sidecar, usage)
+
+    to_repair = sum(1 for entry in sidecar.values() if needs_pronoun_repair(entry))
+    if to_repair:
+        client = client or anthropic_client.client("general")
+        print(f"pronoun repair: {to_repair} abstracts")
+        by_id = {post["microblog_id"]: post for post in posts}
+        fixed = repair_pronouns(client, sidecar, usage, BLOG_ABSTRACTS_PATH, by_id)
+        print(f"pronoun repair: {fixed} checked, {to_repair - fixed} left for the next run")
 
     done = sum(1 for entry in sidecar.values() if entry.get("abstract"))
     failed = sum(1 for entry in sidecar.values() if entry.get("error"))

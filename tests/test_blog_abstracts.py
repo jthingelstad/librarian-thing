@@ -1,6 +1,6 @@
 """Blog abstracts: generated display metadata on blog post records.
 
-Titled posts take a Haiku abstract from data/librarian/blog-abstracts.json
+Titled posts take a generated abstract from data/librarian/blog-abstracts.json
 (pipeline/blog/abstracts.py); microposts are their own abstract. A generated
 abstract is a model's paraphrase, so it must never reach chunk text or the
 embedding input, the same principle that keeps Thingy's words out of the
@@ -272,6 +272,10 @@ class AbstractsScriptTests(unittest.TestCase):
         self.assertEqual(
             script.clean_abstract("# Heading\nJamie links to a post."), ("Jamie links to a post.")
         )
+        self.assertEqual(
+            script.clean_abstract("Jamie reads *Scale* and `grep`, keeps snake_case."),
+            "Jamie reads Scale and grep, keeps snake_case.",
+        )
         self.assertEqual(script.clean_abstract("   "), "")
 
     def test_refusal_and_empty_output_are_recorded_as_errors(self):
@@ -284,6 +288,107 @@ class AbstractsScriptTests(unittest.TestCase):
         entry = script.entry_from_message(empty, post)
         self.assertEqual(entry["error"], "empty")
         self.assertEqual(entry["body_hash"], "aaa")
+
+    def test_prompt_never_gives_jamie_a_pronoun(self):
+        # The posts are first person, so any pronoun for Jamie would be the
+        # model's guess from the name.
+        self.assertIn("Never use a pronoun for Jamie", script.SYSTEM_PROMPT)
+
+    def test_pronoun_repair_edits_only_flagged_abstracts_and_marks_them(self):
+        sent = []
+        replies = {
+            "Jamie celebrates his wife Tammy's birthday with a haiku.": (
+                "Jamie celebrates Jamie's wife Tammy's birthday with a haiku."
+            ),
+            "Jamie reads a memoir that follows his path to surgery.": (
+                "Jamie reads a memoir that follows his path to surgery."
+            ),
+            "Jamie removed analytics from his sites.": "Sorry, I can't.",
+            # One of two missed on the first pass, caught on the second.
+            "Jamie replaced his Mazda, and his Model 3 went to Tammy.": (
+                "Jamie replaced Jamie's Mazda, and his Model 3 went to Tammy."
+            ),
+            "Jamie replaced Jamie's Mazda, and his Model 3 went to Tammy.": (
+                "Jamie replaced Jamie's Mazda, and Jamie's Model 3 went to Tammy."
+            ),
+        }
+
+        def create(**params):
+            sent.append(params)
+            content = params["messages"][0]["content"]
+            text = replies[content.split("<abstract>\n")[1].split("\n</abstract>")[0]]
+            return SimpleNamespace(
+                stop_reason="end_turn",
+                content=[SimpleNamespace(type="text", text=text)],
+                usage=SimpleNamespace(input_tokens=120, output_tokens=30),
+            )
+
+        client = SimpleNamespace(messages=SimpleNamespace(create=create))
+        entries = {
+            "1": {"abstract": "Jamie celebrates his wife Tammy's birthday with a haiku."},
+            "2": {"abstract": "Jamie reads a memoir that follows his path to surgery."},
+            "3": {"abstract": "Jamie removed analytics from his sites."},
+            "4": {"abstract": "Jamie shares photos from a paddle on the lake."},
+            "5": {"abstract": "Jamie on his bike.", "pronouns_checked": True},
+            "6": {"body_hash": "aaa", "error": "refusal"},
+            "7": {"abstract": "Jamie replaced his Mazda, and his Model 3 went to Tammy."},
+        }
+        posts = {"1": {"text": "It's Tammy's birthday, so I wrote her a haiku."}}
+        checked = script.repair_pronouns(client, entries, script.Usage(), posts=posts)
+        first = next(p for p in sent if "Tammy's birthday with" in p["messages"][0]["content"])
+        self.assertTrue(first["messages"][0]["content"].startswith("<post>\nIt's Tammy's"))
+
+        self.assertEqual(
+            sorted(p["messages"][0]["content"].split("<abstract>\n")[1][:14] for p in sent),
+            [
+                "Jamie celebrat",
+                "Jamie reads a ",
+                "Jamie removed ",
+                "Jamie replaced",
+                "Jamie replaced",
+            ],
+        )
+        self.assertEqual(sent[0]["system"], script.PRONOUN_PROMPT)
+        self.assertEqual(checked, 3)
+        self.assertEqual(
+            entries["7"]["abstract"],
+            "Jamie replaced Jamie's Mazda, and Jamie's Model 3 went to Tammy.",
+        )
+        self.assertEqual(
+            entries["1"],
+            {
+                "abstract": "Jamie celebrates Jamie's wife Tammy's birthday with a haiku.",
+                "pronouns_checked": True,
+            },
+        )
+        # Someone else's "his" survives the edit, and the entry is still checked.
+        self.assertTrue(entries["2"]["pronouns_checked"])
+        # A reply about the task is not stored and is retried next run.
+        self.assertEqual(entries["3"], {"abstract": "Jamie removed analytics from his sites."})
+        self.assertTrue(script.needs_pronoun_repair(entries["3"]))
+        self.assertFalse(script.needs_pronoun_repair(entries["4"]))
+        self.assertFalse(script.needs_pronoun_repair(entries["5"]))
+        self.assertFalse(script.needs_pronoun_repair(entries["6"]))
+
+    def test_a_reply_about_the_task_is_not_stored_as_an_abstract(self):
+        post = {"microblog_id": "1", "body_hash": "aaa"}
+        meta = SimpleNamespace(
+            stop_reason="end_turn",
+            content=[
+                SimpleNamespace(
+                    type="text",
+                    text="I don't have access to the embedded collection. Could you provide it?",
+                )
+            ],
+        )
+        self.assertEqual(script.entry_from_message(meta, post)["error"], "not_an_abstract")
+        titled = SimpleNamespace(
+            stop_reason="end_turn",
+            content=[SimpleNamespace(type="text", text="Jamie reviews I Heart Huckabees.")],
+        )
+        self.assertEqual(
+            script.entry_from_message(titled, post)["abstract"], "Jamie reviews I Heart Huckabees."
+        )
 
     def test_direct_run_writes_sidecar_incrementally_without_network(self):
         posts = script.collect_posts(self.blog)
@@ -309,7 +414,7 @@ class AbstractsScriptTests(unittest.TestCase):
         entry = written[str(ESSAY_ID)]
         self.assertEqual(entry["abstract"], ABSTRACT)
         self.assertEqual(entry["body_hash"], posts[0]["body_hash"])
-        self.assertEqual(entry["model"], "claude-haiku-4-5")
+        self.assertEqual(entry["model"], script.MODEL)
         self.assertEqual(script.select_pending(posts, written), [])
         self.assertGreater(usage.cost(), 0)
 

@@ -1,6 +1,6 @@
 """Post abstracts on the blog corpus: display metadata, never retrieval text.
 
-Titled blog posts get a short generated abstract (Claude Haiku, written by
+Titled blog posts get a short generated abstract (Claude Sonnet, written by
 ``pipeline/blog/abstracts.py`` into ``data/librarian/blog-abstracts.json``,
 keyed by ``microblog_id``). Microposts are short enough to be their own
 abstract, so they get their own text, clipped. Both land on the corpus's post
@@ -24,6 +24,9 @@ from typing import Any
 from librarian_core.corpus import plain_text
 
 ABSTRACT_MAX_CHARS = 350
+# A generated abstract may run a little past that once the pronoun repair
+# (pipeline/blog/abstracts.py) has swapped "his" for "Jamie's".
+GENERATED_MAX_CHARS = 400
 
 # A markdown link whose URL may hold one level of parentheses
 # (``[Elf](https://en.wikipedia.org/wiki/Elf_(film))``), which the corpus's
@@ -114,7 +117,7 @@ def annotate_blog_abstracts(corpus: dict[str, Any], sidecar_path: Path) -> int:
                 post["abstract_source"] = "text"
             continue
         record = sidecar.get(microblog_id) or {}
-        abstract = clip_abstract(record.get("abstract") or "")
+        abstract = clip_abstract(record.get("abstract") or "", GENERATED_MAX_CHARS)
         if abstract and record.get("body_hash") == post.get("body_hash"):
             post["abstract"] = abstract
             post["abstract_source"] = "generated"
