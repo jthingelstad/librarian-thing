@@ -146,7 +146,18 @@ test('find_links sorts before the limit, newest first, and says what it left out
   );
   assert.equal(newest.total_count, 3);
   assert.equal(newest.truncated.omitted.results, 1);
-  assert.match(newest.truncated.hint, /3 links matched; the 2 newest are shown/);
+  assert.match(newest.truncated.hint, /newest links 1-2 of 3; call again with offset 2/);
+  assert.equal(newest.truncated.next_offset, 2);
+  const second = await ARCHIVE_TOOLS.find_links(
+    { domain: 'example.org', limit: 2, offset: 2 },
+    { scope: 'weekly_thing' }
+  );
+  assert.deepEqual(
+    second.results.map((row) => row.issue_number),
+    [10],
+    'offset reads on where the first page stopped'
+  );
+  assert.equal(second.truncated.next_offset, undefined, 'the last page names no next one');
   assert.equal(newest.results[0].id, 'wt-12', 'each link names its source for get_source');
   assert.equal(newest.results[0].destination_url, undefined, 'link_url already says it');
   assert.equal(newest.applied.sort, 'newest');

@@ -244,7 +244,7 @@
             },
             "target_resolved": {
               "type": "boolean",
-              "description": "Internal blog links: true keeps those that resolved to a known post, false those that did not."
+              "description": "Links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not. External links match neither."
             },
             "has_also_in_issues": {
               "type": "boolean",
@@ -320,7 +320,7 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash and tracking parameters ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by headline picks. year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); when more links match than limit, truncated says how many were left out. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Query link metadata in the active source scope by domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved applies to links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not; an external link matches neither. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash, fragment and tracking parameters such as utm_*, ref, fbclid and smid ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by headline picks (the 20 most linked; truncated.omitted.top_domains counts the rest, and top_references pages through them all). year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); page with offset, and truncated.next_offset names the next page. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -368,7 +368,7 @@
             },
             "target_resolved": {
               "type": "boolean",
-              "description": "Internal blog links: true keeps those that resolved to a known post, false those that did not."
+              "description": "Links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not. External links match neither."
             },
             "year_range": {
               "type": "array",
@@ -438,7 +438,7 @@
           },
           "top_domains": {
             "type": "array",
-            "description": "[{<key>, count}]"
+            "description": "[{domain, count}]: the 20 most linked headline domains of the matched links; truncated.omitted.top_domains counts the rest."
           },
           "counts_by_source": {
             "type": "array",
@@ -1359,7 +1359,7 @@
   {
     "toolSpec": {
       "name": "top_references",
-      "description": "Who and what Jamie links to most: the link graph aggregated by domain with total counts, per-year counts, first/last seen, and sample titles. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then optionally deepen specific names with archive_lens. Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Who and what Jamie links to most: Weekly Thing headline picks and blog links to other sites, aggregated by exact host (www merged; subdomains are their own rows), with total counts, per-year counts, first/last seen, and sample titles. Left out, and counted in the same window: Jamie's own sites (excluded_internal_links), links in Weekly Thing commentary or the Journal (excluded_non_headline_links), and utility sites unless include_utility (excluded_utility_links: wikipedia.org, linkedin.com, twitter.com, x.com, instagram.com, facebook.com, poap.gallery, poap.xyz, poap.delivery, amazon.com, micro.blog, with their subdomains). Ranked by count, ties by domain; page with offset. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then find_links with domain for every link to one of them (subdomains and non-headline links included, so its count can be higher). Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1396,7 +1396,7 @@
             },
             "include_utility": {
               "type": "boolean",
-              "description": "Count utility and social domains too (Wikipedia, LinkedIn, POAP, social profiles); left out by default."
+              "description": "Count utility and social sites too (wikipedia.org, linkedin.com, twitter.com, x.com, instagram.com, facebook.com, poap.gallery, poap.xyz, poap.delivery, amazon.com, micro.blog, with their subdomains); left out by default."
             },
             "source_kind": {
               "type": "string",
@@ -1408,7 +1408,7 @@
       }
     },
     "mcp": {
-      "description": "The domains Jamie links to most, with counts by year, first and last seen, and sample titles. Utility and social domains are left out unless include_utility. A domain often stands for a person (daringfireball.net is John Gruber).",
+      "description": "The domains Jamie links to most (Weekly Thing headline picks and blog links, by host), with counts by year, first and last seen, and sample titles. Every link left out in the window is counted: Jamie's own sites, commentary and Journal links, and utility sites unless include_utility. Ranked by count; page with offset. A domain often stands for a person (daringfireball.net is John Gruber).",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -1422,11 +1422,36 @@
             "type": "integer",
             "description": "Domains linked."
           },
+          "counted_links": {
+            "type": "integer",
+            "description": "Links counted in top across every page."
+          },
+          "excluded_internal_links": {
+            "type": "integer",
+            "description": "Links in the window to Jamie's own sites."
+          },
+          "excluded_non_headline_links": {
+            "type": "integer",
+            "description": "Weekly Thing links in the window in commentary or the Journal."
+          },
           "excluded_utility_links": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Links in the window to utility sites; 0 with include_utility."
+          },
+          "excluded_malformed_links": {
+            "type": "integer",
+            "description": "Links in the window whose stored host is not a host."
+          },
+          "utility_domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The utility sites left out."
           },
           "top": {
-            "type": "array"
+            "type": "array",
+            "description": "Most linked first, ties by domain."
           }
         },
         "required": ["top"]
@@ -1436,7 +1461,7 @@
   {
     "toolSpec": {
       "name": "on_this_day",
-      "description": "What Jamie published on this calendar day in past years, across the Weekly Thing, the blog and the podcast: the archive's \"on this day\". Defaults to today in America/Chicago. Returns years newest first, each with years_ago and items {id, label, source_kind, title, date, url, excerpt, photo?}; read one with get_source(id), show a photo with view_photo. Use for anniversaries, \"what was Jamie writing a year ago\", and daily look-backs. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "What Jamie published on this calendar day in past years, across the Weekly Thing, the blog and the podcast: the archive's \"on this day\". Defaults to today in America/Chicago. A source's day is the date in its publish_date (a Weekly Thing issue's UTC date, as the site shows it; a blog post's permalink date); Feb 29 folds into Feb 28 in a year without one and is its own day in a year with one. Returns years newest first, each with years_ago and items {id, label, source_kind, title, date, url, excerpt, photo?}; read one with get_source(id), show a photo with view_photo. Use for anniversaries, \"what was Jamie writing a year ago\", and daily look-backs. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1461,11 +1486,11 @@
               },
               "minItems": 2,
               "maxItems": 2,
-              "description": "[start_year, end_year]; the same year twice for one year."
+              "description": "[start_year, end_year] of publication; the same year twice for one year. With window_days, a source keeps its own publish year even when it sits under the next year's anniversary."
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year].",
+              "description": "One publish year: shorthand for year_range [year, year].",
               "minimum": 1990,
               "maximum": 2100
             },
@@ -1484,7 +1509,7 @@
               "minimum": 1,
               "maximum": 20,
               "default": 5,
-              "description": "Maximum items per year, 1 to 20 (default 5, or 2 when window_days is set); a year with more reports the count as more."
+              "description": "Maximum items per year, 1 to 20 (default 5, or 2 when window_days is set). Each year's total_count holds its full number; truncated.omitted['years[].items'] counts what was cut and next_offset pages on."
             },
             "offset": {
               "type": "integer",

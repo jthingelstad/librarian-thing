@@ -120,10 +120,15 @@ test('onThisDayYear matches the month-day, folds Feb 29, and spans a year bounda
   assert.equal(onThisDayYear('2020-02-29', 2, 28, 0, 2026), 2020);
   assert.equal(onThisDayYear('2020-02-29', 2, 28, 0, 2028), null);
   assert.equal(onThisDayYear('2020-02-29', 2, 29, 0, 2028), 2020);
-  // 02-29 anchors on Feb 28 in a year without one, never on March 1.
-  assert.equal(onThisDayYear('2021-02-28', 2, 29, 0, 2028), 2021);
+  // In a leap target year 02-29 is its own day: Feb 28 of a year without
+  // one stays on 02-28, so no source is listed on two days (QA F13).
+  assert.equal(onThisDayYear('2021-02-28', 2, 29, 0, 2028), null);
+  assert.equal(onThisDayYear('2021-02-28', 2, 28, 0, 2028), 2021);
   assert.equal(onThisDayYear('2021-03-01', 2, 29, 0, 2028), null);
   assert.equal(onThisDayYear('2020-02-28', 2, 29, 0, 2028), null);
+  // With a window, 02-29 still anchors on Feb 28 in a year without one,
+  // never on March 1.
+  assert.equal(onThisDayYear('2021-02-27', 2, 29, 1, 2028), 2021);
   // A window around Dec 31 reaches into January of the next year.
   assert.equal(onThisDayYear('2020-01-02', 12, 31, 2, 2026), 2019);
   assert.equal(onThisDayYear('not a date', 9, 29, 0, 2026), null);
@@ -282,8 +287,93 @@ test('currently_history folds "installing more" into its kind', async () => {
   assert.deepEqual(
     out.entries.map((entry) => [entry.kind, entry.label]),
     [
-      ['installing', undefined],
-      ['installing', 'installing more']
-    ]
+      ['installing', 'installing more'],
+      ['installing', undefined]
+    ],
+    'newest first (2.1.0)'
   );
+});
+
+test('currently_history: newest first, whole-word query over text and link titles, cut text marked', async () => {
+  const long = `${'Reading slowly. '.repeat(24)}The Rag and Bone Shop of the Heart`;
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [],
+      chunks: [],
+      links: [],
+      currently: [
+        { kind: 'reading', text: 'I tried again and waited.', issue_number: 1, publish_date: '2021-01-02' },
+        { kind: 'reading', text: long, issue_number: 2, publish_date: '2022-01-01' },
+        {
+          kind: 'watching',
+          text: 'A show.',
+          links: [{ title: '101 Famous Poems', url: 'https://example.com' }],
+          issue_number: 3,
+          publish_date: '2023-01-07'
+        },
+        { kind: 'using', text: 'I’m on AI tools now.', issue_number: 4, publish_date: '2024-01-06' }
+      ]
+    }
+  });
+  const all = await ARCHIVE_TOOLS.currently_history({ limit: 2 });
+  assert.deepEqual(
+    all.entries.map((entry) => entry.issue_number),
+    [4, 3],
+    'the newest page first; the cap drops the oldest'
+  );
+  assert.equal(all.truncated.next_offset, 2);
+  assert.equal((await ARCHIVE_TOOLS.currently_history({ query: 'ai' })).total_count, 1, 'ai is not again');
+  assert.equal((await ARCHIVE_TOOLS.currently_history({ query: "I'm" })).total_count, 1, 'straight finds curly');
+  assert.equal((await ARCHIVE_TOOLS.currently_history({ query: '101 Famous Poems' })).total_count, 1, 'link titles');
+  const cut = await ARCHIVE_TOOLS.currently_history({ query: 'Rag and Bone' });
+  assert.equal(cut.total_count, 1, 'the query reads past the displayed text');
+  assert.ok(cut.entries[0].text.endsWith('…'));
+  assert.deepEqual(cut.truncated.clipped, ['entries[].text']);
+});
+
+test('on_this_day: year is the publish year under a window, and offset pages every year', async () => {
+  const post = (id, date) => ({
+    microblog_id: id,
+    subject: `Post ${id}`,
+    publish_date: date,
+    url: `https://www.thingelstad.com/${date.slice(0, 4)}/${date.slice(5, 7)}/${date.slice(8, 10)}/p${id}.html`,
+    abstract: `Post ${id}.`
+  });
+  primeCorpusCachesForTests({
+    weekly_thing: { issues: [], chunks: [] },
+    blog: {
+      posts: [
+        post(1, '2018-12-30'),
+        post(2, '2019-01-01'),
+        post(3, '2019-12-30'),
+        post(4, '2019-12-31'),
+        post(5, '2020-01-02'),
+        post(6, '2021-01-01'),
+        post(7, '2021-01-01'),
+        post(8, '2021-01-01')
+      ],
+      chunks: []
+    }
+  });
+  const y2019 = await ARCHIVE_TOOLS.on_this_day(
+    { date: '2028-01-01', window_days: 3, year: 2019, limit_per_year: 20 },
+    { scope: 'blog' }
+  );
+  const dates = y2019.years.flatMap((row) => row.items.map((item) => item.date));
+  assert.deepEqual(dates.sort(), ['2019-01-01', '2019-12-30', '2019-12-31'], 'published in 2019, not the 2019 bucket');
+  assert.equal(y2019.applied.day_basis.includes('publish year'), true);
+
+  const first = await ARCHIVE_TOOLS.on_this_day({ date: '2028-01-01', limit_per_year: 2 }, { scope: 'blog' });
+  const y2021 = first.years.find((row) => row.year === 2021);
+  assert.equal(y2021.total_count, 3);
+  assert.equal(y2021.items.length, 2);
+  assert.equal(first.truncated.next_offset, 2);
+  const second = await ARCHIVE_TOOLS.on_this_day(
+    { date: '2028-01-01', limit_per_year: 2, offset: 2 },
+    { scope: 'blog' }
+  );
+  const rest = second.years.find((row) => row.year === 2021);
+  assert.equal(rest.items.length, 1);
+  assert.ok(!y2021.items.some((item) => item.id === rest.items[0].id), 'the next page holds the rest');
+  assert.equal(second.truncated.next_offset, undefined);
 });

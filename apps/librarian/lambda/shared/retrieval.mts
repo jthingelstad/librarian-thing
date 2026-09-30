@@ -650,11 +650,15 @@ function anchorIn(year: number, month: number, day: number) {
 
 // The past year whose anchor this date falls within `window` days of, or
 // null. A Feb 29 source counts as Feb 28 when the target year has no Feb 29.
+// When it has one, Feb 29 is its own day: a Feb 28 from a year without one
+// stays on Feb 28, or it would be listed on two days.
 export function onThisDayYear(published: string, month: number, day: number, window: number, targetYear: number) {
   const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(published);
   if (!match) return null;
   const year = Number(match[1]);
-  const leapDay = match[2] === '02' && match[3] === '29' && !isLeapYear(targetYear);
+  const sourceLeapDay = match[2] === '02' && match[3] === '29';
+  if (!window && month === 2 && day === 29 && isLeapYear(targetYear) && !sourceLeapDay) return null;
+  const leapDay = sourceLeapDay && !isLeapYear(targetYear);
   const time = Date.UTC(year, Number(match[2]) - 1, leapDay ? 28 : Number(match[3]));
   for (const candidate of [year, year - 1, year + 1]) {
     if (Math.abs(time - anchorIn(candidate, month, day)) <= window * DAY_MS) return candidate;

@@ -434,13 +434,26 @@ export function normalizedDomain(value: unknown) {
   return String(value || '')
     .trim()
     .toLowerCase()
-    .replace(/^[a-z][a-z0-9+.-]*:\/\//, '')
+    .replace(/^(?:[a-z][a-z0-9+.-]*:\/\/)+/, '')
     .replace(/^\/\//, '')
     .split(/[/?#]/)[0]
     .replace(/^[^@]*@/, '')
     .replace(/:\d+$/, '')
     .replace(/\.+$/, '')
     .replace(/^www\./, '');
+}
+
+// The host a link points at. A stored domain that is not a host gives way
+// to the url's: 29 blog links saved as https://https://www.thingelstad.com/
+// carried domain "https" and ranked as an external site; one without a dot
+// ("carcassonne") names nothing and is left out of every count.
+const HOST_SHAPE = /^[a-z0-9-]+(\.[a-z0-9-]+)+$/;
+
+export function linkDomain(link: ArchiveRecord) {
+  const stored = normalizedDomain(link.domain);
+  if (HOST_SHAPE.test(stored)) return stored;
+  const fromUrl = normalizedDomain(link.url || link.link_url || '');
+  return HOST_SHAPE.test(fromUrl) ? fromUrl : '';
 }
 
 // A domain filter matches the domain itself or a subdomain of it:
@@ -452,19 +465,41 @@ export function domainMatches(value: unknown, wanted: string) {
 }
 
 // One URL, however an issue spelled it: no scheme, www, trailing slash,
-// fragment, or tracking parameters (utm_*, ref). Other query keys stay; they
-// can name a different page.
+// fragment, or tracking parameters (utm_*, ref, fbclid, smid and the rest
+// below; s only on twitter.com and x.com). Other query keys stay; they can
+// name a different page.
+const TRACKING_PARAMS = new Set([
+  'ref',
+  'ref_src',
+  'ref_url',
+  'fbclid',
+  'gclid',
+  'mc_cid',
+  'mc_eid',
+  'smid',
+  'si',
+  'guccounter',
+  'mkt_tok',
+  'cmpid',
+  'igshid'
+]);
 export function linkUrlKey(value: unknown) {
   const raw = String(value || '').trim();
   if (!raw) return '';
+  // https://https://host/ is the host's own URL typed twice.
+  const once = raw.replace(/^(?:[a-z][a-z0-9+.-]*:\/\/)+(?=[a-z][a-z0-9+.-]*:\/\/)/i, '');
   let parsed: URL;
   try {
-    parsed = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    parsed = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(once) ? once : `https://${once}`);
   } catch {
     return raw.toLowerCase();
   }
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
   for (const key of [...parsed.searchParams.keys()]) {
-    if (/^utm_/i.test(key) || key.toLowerCase() === 'ref') parsed.searchParams.delete(key);
+    const name = key.toLowerCase();
+    if (/^utm_/.test(name) || TRACKING_PARAMS.has(name) || (name === 's' && /^(?:twitter|x)\.com$/.test(host))) {
+      parsed.searchParams.delete(key);
+    }
   }
   const query = parsed.searchParams.toString();
   const path = parsed.pathname.replace(/\/+$/, '');
@@ -517,16 +552,17 @@ function boolFilter(value: unknown) {
 }
 
 function inferredLinkKind(link: ArchiveRecord) {
-  if (link.link_kind) return link.link_kind;
-  const domain = normalizedDomain(link.domain || link.url || '');
-  return domain.endsWith('thingelstad.com') ? 'internal' : 'external';
+  const internal = linkDomain(link).endsWith('thingelstad.com');
+  // A stored "external" on Jamie's own host is the double-scheme typo.
+  if (link.link_kind && !(link.link_kind === 'external' && internal)) return link.link_kind;
+  return internal ? 'internal' : 'external';
 }
 
 function inferredTargetSourceKind(link: ArchiveRecord, sourceKind: string, targetResolved: boolean) {
   const explicit = normalizeSourceKind(link.target_source_kind || '');
   if (explicit) return explicit;
   if (targetResolved) return 'blog';
-  const domain = normalizedDomain(link.domain || link.url || '');
+  const domain = linkDomain(link);
   const target = CORPUS_BY_DOMAIN[domain] || (domain.endsWith('.thingelstad.com') ? 'site' : '');
   return target && target !== sourceKind ? target : undefined;
 }
@@ -541,7 +577,7 @@ function normalizeLinkRecord(link: ArchiveRecord, kind: unknown): ArchiveRecord 
     targetSourceKind && CORPUS_SOURCE_KINDS.has(targetSourceKind) && targetSourceKind !== corpusKind
   );
   const isInternalSite = targetSourceKind === 'site';
-  const linkKind = isCrossSource || isInternalSite ? 'internal' : link.link_kind || inferredLinkKind(link);
+  const linkKind = isCrossSource || isInternalSite ? 'internal' : inferredLinkKind(link);
   const linkCategory = isCrossSource
     ? 'cross_source'
     : isInternalSite
@@ -887,7 +923,7 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   // section: the section field echoes the filter and domains reflect the
   // filtered links, not the whole issue.
   const sectionDomains = wanted
-    ? Array.from(new Set(sectionLinks.map((link) => normalizedDomain(link.domain || link.url)).filter(Boolean)))
+    ? Array.from(new Set(sectionLinks.map((link) => linkDomain(link)).filter(Boolean)))
     : undefined;
   const source: Record<string, unknown> = {
     ...compactContentRecord(record),
@@ -994,10 +1030,10 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     const linkSourceKind = linkCorpusKind(link);
     const year = Number(link.issue_year || link.post_year || 0);
     if (sourceKind && linkSourceKind !== sourceKind) continue;
-    if (domain && !domainMatches(link.domain || link.url || '', domain)) continue;
-    if (linkKind && link.link_kind !== linkKind) continue;
+    if (domain && !domainMatches(linkDomain(link), domain)) continue;
+    if (linkKind && inferredLinkKind(link) !== linkKind) continue;
     if (linkCategory && String(link.link_category || '').toLowerCase() !== linkCategory) continue;
-    if (targetResolved !== null && Boolean(link.target_resolved) !== targetResolved) continue;
+    if (targetResolved !== null && !resolvedAs(link, targetResolved)) continue;
     if (role && linkRole(link) !== role) continue;
     if (urlKey && linkUrlKey(link.url) !== urlKey) continue;
     if (startYear && (!year || year < startYear)) continue;
@@ -1015,7 +1051,8 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       ? String(a.publish_date || '').localeCompare(String(b.publish_date || ''))
       : String(b.publish_date || '').localeCompare(String(a.publish_date || ''))
   );
-  const results = ordered.slice(0, limit).map((link) => {
+  const page = pageOf('find_links', ordered, input, `${sort} links`);
+  const results = page.shown.map((link) => {
     const sourceUrl =
       link.source_url || (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.url);
     const id = linkSourceId(link);
@@ -1029,12 +1066,12 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       section: link.section,
       ...(link.section_family ? { section_family: link.section_family } : {}),
       ...(linkRole(link) ? { link_role: linkRole(link) } : {}),
-      domain: link.domain,
+      domain: linkDomain(link) || null,
       link_text: link.text || link.title || link.heading_context,
       context: link.context || link.heading_context,
       url: sourceUrl,
       link_url: link.link_url || link.url,
-      link_kind: link.link_kind,
+      link_kind: inferredLinkKind(link),
       link_category: link.link_category,
       target_resolved: Boolean(link.target_resolved),
       microblog_id: link.microblog_id,
@@ -1060,22 +1097,24 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     if (linkRole(link)) countsByRole.set(linkRole(link), (countsByRole.get(linkRole(link)) || 0) + 1);
     const linkSourceKind = linkCorpusKind(link) || 'unknown';
     countsBySource.set(linkSourceKind, (countsBySource.get(linkSourceKind) || 0) + 1);
-    countsByKind.set(link.link_kind || 'unknown', (countsByKind.get(link.link_kind || 'unknown') || 0) + 1);
+    const kind = inferredLinkKind(link);
+    countsByKind.set(kind, (countsByKind.get(kind) || 0) + 1);
     countsByCategory.set(
       link.link_category || 'unknown',
       (countsByCategory.get(link.link_category || 'unknown') || 0) + 1
     );
-    if (!domain && !linkKind && link.link_kind === 'internal') continue;
+    if (!domain && !linkKind && kind === 'internal') continue;
     // The ranking is of Jamie's picks: a Wikipedia link in his commentary
     // is a reference, not a recommendation. link_role widens it.
     if (!role && !isHeadlineLink(link)) continue;
-    const linkDomain = normalizedDomain(link.domain || link.url || '');
-    if (linkDomain) counts.set(linkDomain, (counts.get(linkDomain) || 0) + 1);
+    const host = linkDomain(link);
+    if (host) counts.set(host, (counts.get(host) || 0) + 1);
   }
-  const top_domains = Array.from(counts.entries())
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, 20)
+  const rankedDomains = Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const top_domains = rankedDomains
+    .slice(0, FIND_LINKS_TOP_DOMAINS)
     .map(([domainName, count]) => ({ domain: domainName, count }));
+  const otherSort = sort === 'newest' ? 'oldest' : 'newest';
   return markTruncated(
     {
       applied: { sort },
@@ -1089,10 +1128,26 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       ...(countsByRole.size ? { counts_by_link_role: sortedCountList(countsByRole, 'link_role') } : {})
     },
     {
-      omitted: { results: filteredLinks.length - results.length },
-      hint: `${filteredLinks.length} links matched; the ${results.length} ${sort} are shown. Raise limit (max 50), pass sort: '${sort === 'newest' ? 'oldest' : 'newest'}', or narrow with year_range.`
+      omitted: { results: page.omitted, top_domains: rankedDomains.length - top_domains.length },
+      next_offset: page.nextOffset,
+      hint: [
+        page.hint ? `${page.hint} Or pass sort: '${otherSort}', or narrow with year_range.` : '',
+        rankedDomains.length > top_domains.length
+          ? `top_domains is the ${FIND_LINKS_TOP_DOMAINS} most linked of ${rankedDomains.length}; top_references ranks them all with offset.`
+          : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
     }
   );
+}
+
+const FIND_LINKS_TOP_DOMAINS = 20;
+
+// target_resolved speaks only of links to Jamie's own sites: an external
+// link never resolves, so false had matched all 27,021 of them.
+function resolvedAs(link: ArchiveRecord, wanted: boolean) {
+  return inferredLinkKind(link) === 'internal' && Boolean(link.target_resolved) === wanted;
 }
 
 // The id of the source a link sits in (wt-351, blog-<id>, ep-<n>), for
@@ -1378,14 +1433,14 @@ function compactLink(link: ArchiveRecord): ArchiveRecord {
     section: link.section,
     section_family: link.section_family,
     link_role: linkRole(link) || undefined,
-    domain: normalizedDomain(link.domain || link.url),
+    domain: linkDomain(link),
     link_text: link.text || link.title || link.heading_context,
     context: link.context || link.heading_context,
     url:
       link.source_url ||
       (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.episode_url || link.url),
     destination_url: link.link_url || link.url,
-    link_kind: link.link_kind,
+    link_kind: inferredLinkKind(link),
     link_category: link.link_category,
     target_resolved: Boolean(link.target_resolved),
     target_source_kind: link.target_source_kind,
@@ -1642,9 +1697,9 @@ export function aggregateLinkDomains(
 ) {
   const counts = new Map<string, number>();
   for (const link of links || []) {
-    if (excludeInternal && (link.link_kind || inferredLinkKind(link)) === 'internal') continue;
+    if (excludeInternal && inferredLinkKind(link) === 'internal') continue;
     if (headlineOnly && !isHeadlineLink(link)) continue;
-    const domain = normalizedDomain(link.domain || link.url || '');
+    const domain = linkDomain(link);
     if (domain) counts.set(domain, (counts.get(domain) || 0) + 1);
   }
   return counts;
@@ -1689,7 +1744,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     const roleCounts = new Map<string, number>();
     for (const link of links) {
       if (linkRole(link)) roleCounts.set(linkRole(link), (roleCounts.get(linkRole(link)) || 0) + 1);
-      const linkKind = link.link_kind || inferredLinkKind(link);
+      const linkKind = inferredLinkKind(link);
       linkKindCounts.set(linkKind, (linkKindCounts.get(linkKind) || 0) + 1);
       const category = link.link_category || (linkKind === 'external' ? 'external' : 'internal_unresolved');
       categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
@@ -1922,15 +1977,15 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       if (topic && !sourceMatchesTopic(record, chunks, topic, topicMatcher)) continue;
       if (
         domain &&
-        ![...(record.domains || []), ...links.map((link) => link.domain || link.url)].some((value) =>
+        ![...(record.domains || []), ...links.map((link) => linkDomain(link))].some((value) =>
           domainMatches(value, domain)
         )
       )
         continue;
-      if (linkKind && !links.some((link) => link.link_kind === linkKind)) continue;
+      if (linkKind && !links.some((link) => inferredLinkKind(link) === linkKind)) continue;
       if (linkCategory && !links.some((link) => String(link.link_category || '').toLowerCase() === linkCategory))
         continue;
-      if (targetResolved !== null && !links.some((link) => Boolean(link.target_resolved) === targetResolved)) continue;
+      if (targetResolved !== null && !links.some((link) => resolvedAs(link, targetResolved))) continue;
       matched.push({ record, chunks, links });
     }
   }
@@ -2448,13 +2503,13 @@ function scoreRelatedSource(
   const baseDomains = new Set(
     [
       ...(base.record.domains || []),
-      ...(base.links || []).filter(isHeadlineLink).map((link) => normalizedDomain(link.domain || link.url))
+      ...(base.links || []).filter(isHeadlineLink).map((link) => linkDomain(link))
     ].filter(Boolean)
   );
   const candidateDomains = new Set(
     [
       ...(candidate.domains || []),
-      ...(candidateLinks || []).filter(isHeadlineLink).map((link) => normalizedDomain(link.domain || link.url))
+      ...(candidateLinks || []).filter(isHeadlineLink).map((link) => linkDomain(link))
     ].filter(Boolean)
   );
   let score = 0;
@@ -2779,7 +2834,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       const links = linksBySource.get(sourceRecordKey(record)) || [];
       const cross = links.filter((link) => link.link_category === 'cross_source').length;
       const domains = new Set(
-        [...(record.domains || []), ...links.map((link) => normalizedDomain(link.domain || link.url))].filter(Boolean)
+        [...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean)
       );
       const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
       let score = domains.size + cross * 5 + links.length * 0.2;
@@ -3018,9 +3073,11 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
 // ── on_this_day ─────────────────────────────────────────────────────────
 // What Jamie published on this calendar day in past years - one of the
 // favourite things his blog has. Matches the month-day of publish_date[:10]:
-// blog dates come from the permalink (local), Weekly Thing timestamps are
-// UTC noon (the same calendar day), podcast dates are plain dates. February
-// 29 folds into February 28 in years without one.
+// blog dates come from the permalink, Weekly Thing timestamps are UTC (an
+// issue sent after 7pm Central sits on the next day, as the site shows it),
+// podcast dates are plain dates. Only "today" is Chicago's. February 29
+// folds into February 28 when the target year has none, and is its own day
+// when it does, so every source is on exactly one day of any year.
 
 const ON_THIS_DAY_TIMEZONE = 'America/Chicago';
 const ON_THIS_DAY_WINDOWED_PER_YEAR = 2;
@@ -3066,6 +3123,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const perYear = toolLimit('on_this_day', {
     limit: input.limit_per_year ?? (window > 0 ? ON_THIS_DAY_WINDOWED_PER_YEAR : undefined)
   });
+  const offset = toolOffset(input);
   const [startYear, endYear] = parseYearRange(input.year_range);
   const requestedSource = normalizeSourceKind(input.source_kind || '');
   const microposts = input.include_microposts !== false && input.include_microposts !== 'false';
@@ -3091,8 +3149,11 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       if (kind === 'blog' && !microposts && record.section === 'Micropost') continue;
       const year = onThisDayYear(String(record.publish_date || '').slice(0, 10), month, day, window, targetYear);
       if (year === null || year >= targetYear) continue;
-      if (startYear && year < startYear) continue;
-      if (endYear && year > endYear) continue;
+      // year_range is the publish year, as in every tool: with a window,
+      // Dec 30, 2019 is under the 2020 anniversary of Jan 1 but is 2019's.
+      const published = Number(String(record.publish_date || '').slice(0, 4));
+      if (startYear && published < startYear) continue;
+      if (endYear && published > endYear) continue;
       // The skim first: an issue's dek, a post's abstract (a generated one
       // is labelled), else the opening of the source itself.
       let excerpt = clipText(record.description || record.abstract, 280);
@@ -3137,11 +3198,18 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
           Number(Boolean(a.micropost)) - Number(Boolean(b.micropost)) ||
           String(a.date).localeCompare(String(b.date))
       );
-      return { year, years_ago: targetYear - year, total_count: items.length, items: items.slice(0, perYear) };
+      return {
+        year,
+        years_ago: targetYear - year,
+        total_count: items.length,
+        items: items.slice(offset, offset + perYear)
+      };
     });
   const monthDay = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   const totalCount = [...byYear.values()].reduce((sum, items) => sum + items.length, 0);
   const shownCount = years.reduce((sum, row) => sum + row.items.length, 0);
+  const fullest = Math.max(0, ...years.map((row) => row.total_count));
+  const nextOffset = offset + perYear < fullest ? offset + perYear : null;
   return markTruncated(
     {
       applied: {
@@ -3149,6 +3217,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         month_day: monthDay,
         window_days: window,
         timezone: ON_THIS_DAY_TIMEZONE,
+        day_basis: ON_THIS_DAY_BASIS,
         limit_per_year: perYear,
         include_microposts: microposts,
         years: years.map((row) => row.year)
@@ -3158,33 +3227,49 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     },
     {
       omitted: { 'years[].items': totalCount - shownCount },
-      hint: `A year's total_count says how many it holds; raise limit_per_year (max 20) for more of each year.`
+      next_offset: nextOffset,
+      hint:
+        nextOffset !== null
+          ? `A year's total_count says how many it holds (the fullest has ${fullest}); call again with offset ${nextOffset} for the next ${perYear} of each year, or raise limit_per_year (max 20).`
+          : `A year's total_count says how many it holds; items before offset ${offset} were skipped.`
     }
   );
 }
 
+const ON_THIS_DAY_BASIS =
+  "the date part of each source's publish_date: a Weekly Thing issue's UTC date, a blog post's permalink date; year and year_range are the publish year";
+
 // What Jamie was reading / playing / watching / listening to, from the
 // Currently sections, typed at corpus build.
+const CURRENTLY_TEXT_CHARS = 400;
+
+// Every Currently entry, newest first (2.1.0), so a page or the size cap
+// drops the oldest: oldest-first had let the cap cut every 2025 and 2026
+// entry while the hint said the newest were shown. query goes through the
+// canonical matcher over the whole entry and its link titles; it had been a
+// raw substring of the 400-character display text ("ai" found "again").
 async function toolCurrentlyHistory(input: ToolArgs = {}) {
   const kind = String(input.kind || '')
     .trim()
     .toLowerCase();
   const [startYear, endYear] = parseYearRange(input.year_range);
-  const query = String(input.query || '')
-    .trim()
-    .toLowerCase();
-  const limit = toolLimit('currently_history', input);
+  const query = String(input.query || '').trim();
+  const matcher = compileTopicMatcher(query);
   const corpus = await loadCorpus('weekly_thing');
   // "installing more" / "listening even more" are variants of their kind.
   const baseKind = (entry: Record<string, unknown>) => String(entry.kind || '').split(' ')[0];
-  const entries = ((corpus.currently as Array<Record<string, unknown>> | undefined) || []).filter((entry) => {
-    if (kind && baseKind(entry) !== kind.split(' ')[0]) return false;
-    const entryYear = Number(String(entry.publish_date || '').slice(0, 4)) || 0;
-    if (startYear && (!entryYear || entryYear < startYear)) return false;
-    if (endYear && (!entryYear || entryYear > endYear)) return false;
-    if (query && !`${entry.text || ''}`.toLowerCase().includes(query)) return false;
-    return true;
-  });
+  const linkTitles = (entry: Record<string, unknown>) =>
+    (Array.isArray(entry.links) ? entry.links : []).map((link) => String(objectRecord(link).title || ''));
+  const entries = ((corpus.currently as Array<Record<string, unknown>> | undefined) || [])
+    .filter((entry) => {
+      if (kind && baseKind(entry) !== kind.split(' ')[0]) return false;
+      const entryYear = Number(String(entry.publish_date || '').slice(0, 4)) || 0;
+      if (startYear && (!entryYear || entryYear < startYear)) return false;
+      if (endYear && (!entryYear || entryYear > endYear)) return false;
+      if (query && !matcher.matches([entry.text, ...linkTitles(entry)].join('\n'))) return false;
+      return true;
+    })
+    .sort((a, b) => String(b.publish_date || '').localeCompare(String(a.publish_date || '')));
   const byKind = new Map<string, number>();
   const byYear = new Map<number, number>();
   for (const entry of entries) {
@@ -3192,26 +3277,44 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
     const entryYear = Number(String(entry.publish_date || '').slice(0, 4));
     if (entryYear) byYear.set(entryYear, (byYear.get(entryYear) || 0) + 1);
   }
-  const shown = entries.slice(-limit);
+  const page = pageOf('currently_history', entries, input, 'entries');
+  // A corpus built before the full-text fix stored 400 characters exactly.
+  const clippedText = (text: string) => text.length >= CURRENTLY_TEXT_CHARS && !text.endsWith('…');
+  let clipped = false;
+  const shown = page.shown.map((entry) => {
+    const text = String(entry.text || '');
+    const cut = clippedText(text);
+    if (cut) clipped = true;
+    return {
+      kind: baseKind(entry),
+      ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
+      text: cut ? `${text.slice(0, CURRENTLY_TEXT_CHARS).trimEnd()}…` : text,
+      links: entry.links,
+      source_id: `wt-${entry.issue_number}`,
+      issue_number: entry.issue_number,
+      publish_date: String(entry.publish_date || '').slice(0, 10),
+      issue_url: entry.issue_url
+    };
+  });
+  const narrowers = [...(kind ? [] : ['kind']), ...(input.year_range ? [] : ['year_range']), ...(query ? [] : ['query'])];
   return markTruncated(
     {
       total_count: entries.length,
       counts_by_kind: sortedCountList(byKind, 'kind'),
       counts_by_year: yearCountList(byYear),
-      entries: shown.map((entry) => ({
-        kind: baseKind(entry),
-        ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
-        text: entry.text,
-        links: entry.links,
-        source_id: `wt-${entry.issue_number}`,
-        issue_number: entry.issue_number,
-        publish_date: String(entry.publish_date || '').slice(0, 10),
-        issue_url: entry.issue_url
-      }))
+      entries: shown
     },
     {
-      omitted: { entries: entries.length - shown.length },
-      hint: `${entries.length} entries matched; the ${shown.length} newest are shown. Raise limit (max 120) or narrow with kind, year_range or query.`
+      omitted: { entries: page.omitted },
+      clipped: clipped ? ['entries[].text'] : [],
+      next_offset: page.nextOffset,
+      hint: [
+        page.hint,
+        page.omitted && narrowers.length ? `Or narrow with ${narrowers.join(', ')}.` : '',
+        clipped ? 'A text ending in … is cut; get_source(source_id) reads the whole issue.' : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
     }
   );
 }
@@ -3222,32 +3325,34 @@ function yearCountList(byYear: Map<number, number>) {
   return [...byYear.entries()].sort(([a], [b]) => a - b).map(([year, count]) => ({ year, count }));
 }
 
-const UTILITY_REFERENCE_DOMAINS = new Set([
-  'en.wikipedia.org',
+// Reference sites rather than writing Jamie follows. A host matches itself
+// and its subdomains (en.m.wikipedia.org, mobile.twitter.com,
+// blog.linkedin.com); www is stripped before the test, so no www entries.
+export const UTILITY_REFERENCE_DOMAINS = [
   'wikipedia.org',
   'linkedin.com',
-  'www.linkedin.com',
   'twitter.com',
   'x.com',
   'instagram.com',
-  'www.instagram.com',
   'facebook.com',
-  'www.facebook.com',
   'poap.gallery',
   'poap.xyz',
-  'app.poap.xyz',
-  'collectors.poap.xyz',
   'poap.delivery',
   'amazon.com',
-  'www.amazon.com',
   'micro.blog'
-]);
+];
+
+function utilityDomain(domain: string) {
+  return UTILITY_REFERENCE_DOMAINS.some((utility) => domainMatches(domain, utility));
+}
 
 // Aggregate the link graph: which domains Jamie links to most, with per-year
 // counts, first/last seen, and sample titles. One deterministic call for
 // "who/what does Jamie reference most" instead of guess-then-verify.
+// Counted: Weekly Thing headline picks and blog links to other sites, by
+// exact host (www merged). Everything left out is counted in the window:
+// Jamie's own sites, links in commentary or the Journal, utility sites.
 async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = {}) {
-  const limit = toolLimit('top_references', input);
   const [yearStart, yearEnd] = parseYearRange(input.year_range);
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
@@ -3263,26 +3368,34 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
   // LinkedIn profiles, POAP infrastructure) without saying anything about
   // whose WRITING Jamie follows. Excluded by default, reported honestly.
   const includeUtility = input.include_utility === true;
-  let excludedUtilityLinks = 0;
+  const excluded = { internal: 0, nonHeadline: 0, utility: 0, noHost: 0 };
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
-    for (const link of (corpus.links as Array<Record<string, unknown>> | undefined) || []) {
-      // Shared normalization (strip www., lowercase) - corpus_stats and
-      // top_references previously counted www.macstories.net and
-      // macstories.net as different domains.
-      const domain = normalizedDomain(link.domain || link.url);
-      if (!domain || domain.endsWith('thingelstad.com')) continue;
-      // Headline picks only, like corpus_stats top_domains: a link in the
-      // commentary or the Journal is a reference, not a pick.
-      if (!isHeadlineLink(link as ArchiveRecord)) continue;
-      if (!includeUtility && UTILITY_REFERENCE_DOMAINS.has(domain)) {
-        excludedUtilityLinks += 1;
-        continue;
-      }
+    for (const link of (corpus.links as ArchiveRecord[] | undefined) || []) {
+      // The window first: every excluded count below is of links in range.
       const date = String(link.publish_date || '');
       const year = Number(date.slice(0, 4)) || null;
       if (yearStart && (!year || year < yearStart)) continue;
       if (yearEnd && (!year || year > yearEnd)) continue;
+      const domain = linkDomain(link);
+      if (!domain) {
+        excluded.noHost += 1;
+        continue;
+      }
+      if (domain.endsWith('thingelstad.com')) {
+        excluded.internal += 1;
+        continue;
+      }
+      // Headline picks only, like corpus_stats top_domains: a link in the
+      // commentary or the Journal is a reference, not a pick.
+      if (!isHeadlineLink(link)) {
+        excluded.nonHeadline += 1;
+        continue;
+      }
+      if (!includeUtility && utilityDomain(domain)) {
+        excluded.utility += 1;
+        continue;
+      }
       const agg: DomainAgg = domains.get(domain) || {
         count: 0,
         byYear: new Map(),
@@ -3299,15 +3412,21 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
       domains.set(domain, agg);
     }
   }
-  const ranked = [...domains.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, limit);
+  const ordered = [...domains.entries()].sort((a, b) => b[1].count - a[1].count || a[0].localeCompare(b[0]));
+  const page = pageOf('top_references', ordered, input, 'domains');
   return markTruncated(
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
-      // Every domain linked in range; top holds the limit most linked.
+      // Every domain linked in range; top holds this page of the ranking.
       total_count: domains.size,
-      excluded_utility_links: excludedUtilityLinks,
-      top: ranked.map(([domain, agg]) => ({
+      counted_links: ordered.reduce((sum, [, agg]) => sum + agg.count, 0),
+      excluded_internal_links: excluded.internal,
+      excluded_non_headline_links: excluded.nonHeadline,
+      excluded_utility_links: excluded.utility,
+      ...(excluded.noHost ? { excluded_malformed_links: excluded.noHost } : {}),
+      ...(includeUtility ? {} : { utility_domains: UTILITY_REFERENCE_DOMAINS }),
+      top: page.shown.map(([domain, agg]) => ({
         domain,
         count: agg.count,
         first_seen: agg.first.slice(0, 10),
@@ -3317,8 +3436,9 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
       }))
     },
     {
-      omitted: { top: domains.size - ranked.length },
-      hint: `${domains.size} domains were linked; raise limit (max 40) for more of the ranking.`
+      omitted: { top: page.omitted },
+      next_offset: page.nextOffset,
+      hint: page.hint ? `${page.hint} Narrow with year_range or source_kind.` : ''
     }
   );
 }
