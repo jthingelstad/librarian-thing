@@ -273,6 +273,8 @@ test('corpus_stats: limit years, one sample a year with its id, three domains', 
       url: `/archive/${number}/`,
       domains
     });
+    // A year's domains are its links, the measure top_domains uses.
+    corpus.weekly_thing.links.push(...domains.map((domain) => link(number, D12, domain)));
   }
   primeCorpusCachesForTests(corpus);
   const out = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'weekly_thing' }, { scope: 'weekly_thing' });
@@ -285,7 +287,13 @@ test('corpus_stats: limit years, one sample a year with its id, three domains', 
   }
   assert.equal(year.top_domains.length, 3);
   assert.equal(out.sources[0].yearly_signals.length, 3, 'every year when there are fewer than limit');
-  assert.equal(out.truncated, undefined);
+  // 13 headline domains at limit 12: the one left out is counted.
+  assert.equal(out.sources[0].domain_count, 13);
+  assert.equal(out.sources[0].top_domains.length, 12);
+  assert.deepEqual(out.truncated.omitted, { 'sources[].top_domains': 1 });
+  const wide = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'weekly_thing', limit: 40 }, { scope: 'weekly_thing' });
+  assert.equal(wide.sources[0].top_domains.length, 13, 'a higher limit never shows fewer');
+  assert.equal(wide.truncated?.omitted?.['sources[].top_domains'], undefined);
   corpus.weekly_thing.issues.push({
     number: 5,
     subject: 'WT5',

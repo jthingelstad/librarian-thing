@@ -464,7 +464,7 @@
   {
     "toolSpec": {
       "name": "corpus_stats",
-      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals for the newest limit years, each with its top five subject/title terms, five distinctive chunk-text terms, three domains, section counts and one sample source id, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically. Pass year_range for earlier years (truncated says when there are more), or limit for more domains.",
+      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts (dated passages; undated_chunk_count holds FAQ answers and site pages), link counts, newest/oldest item, generated_at, counts_by_year (oldest first), year_count_summary, yearly_signals for the newest limit years, each with its top five subject/title terms, five distinctive chunk-text terms, three most linked domains (the same link measure as top_domains), section counts and one sample source id, the limit most linked external domains (domain_count says of how many; headline picks and blog links, www merged), link kind/category counts, and blog also_in_issues cross-reference counts (the limit issues most carried; issues_referenced_count says of how many). Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically. Pass year_range for earlier years, or a higher limit for more years, domains and issues; truncated counts every list it cut, and top_references pages through every domain.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -496,7 +496,7 @@
               "minimum": 3,
               "maximum": 40,
               "default": 12,
-              "description": "Years of yearly_signals (newest first) and top domains, 3 to 40 (default 12)."
+              "description": "Years of yearly_signals (newest first), top domains and also_in_issue_counts, 3 to 40 (default 12)."
             }
           }
         }
@@ -518,7 +518,7 @@
           },
           "sources": {
             "type": "array",
-            "description": "One entry per source kind."
+            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, issues_referenced_count and also_in_issue_counts."
           }
         },
         "required": ["sources"]

@@ -187,8 +187,8 @@ the real corpora from S3), and the committed recall baseline
 growth). Locally: `EVAL_CORPUS_DIR=<dir-with-corpus.json>` runs it against
 local corpus files; `EVAL_DIST_DIR` points it at an older build for
 pre/post-change reports. Tool responses carry `server_version`
-(`2.0.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
-a stale tools/list. 2.0.0 is the breaking consistency pass (id-only
+(`2.1.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+a stale tools/list. 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
 `get_source`, grouped `search_archive`, `find_evidence`, one `truncated`
 block, `outputSchema` and `structuredContent`); `reference/librarian.md` lists
 it, and `tests/mcp-conventions.test.mjs` enforces it. Readers connect with the

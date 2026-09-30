@@ -75,7 +75,7 @@ test('view_photo returns image blocks plus an honest text summary', async () => 
   const summary = JSON.parse(content.at(-1).text);
   assert.equal(summary.shown.length, 1);
   assert.equal(summary.refused.length, 1);
-  assert.match(summary.server_version, /^2\.0\.0\+tools\./);
+  assert.match(summary.server_version, /^2\.1\.0\+tools\./);
 });
 
 test('view_photo with nothing viewable is an error result, not a silent success', async () => {

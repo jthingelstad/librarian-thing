@@ -103,7 +103,8 @@ test('buildArchiveLens returns first latest year and source structure', () => {
   assert.equal(resolve(lens.latest).source_kind, 'podcast');
   assert.deepEqual(
     lens.counts_by_year.map((row) => row.year),
-    [2026, 2020, 2017]
+    [2017, 2020, 2026],
+    'oldest first, as in every tool'
   );
   assert.equal(lens.years.find((row) => row.year === 2020).source_count, 1);
   assert.equal(lens.sources.find((row) => row.source_kind === 'blog').source_count, 1);

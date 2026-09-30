@@ -41,6 +41,10 @@ interface YearlyContentOptions {
   termLimit?: number;
   // Domains per year; defaults to listLimit.
   domainLimit?: number;
+  // Link counts per year and host, the measure top_domains uses beside it
+  // (headline picks, www merged, Jamie's own sites out). Without it a year
+  // counts each record's domains list: documents, not links, www split.
+  domainCounts?: Map<number, Map<string, number>>;
   // The shape of one sample item; defaults to the full sample below.
   sample?: (record: CorpusRecord) => Record<string, unknown>;
 }
@@ -84,8 +88,9 @@ export function countsByPublishYear(records: Array<{ publish_date?: unknown }> =
     if (!year) continue;
     counts.set(year, (counts.get(year) || 0) + 1);
   }
+  // Oldest first, the one order every tool's counts_by_year uses.
   return Array.from(counts.entries())
-    .sort((a, b) => b[0] - a[0])
+    .sort((a, b) => a[0] - b[0])
     .map(([year, count]) => ({ year, count }));
 }
 
@@ -320,7 +325,7 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
     for (const term of subjectTerms([record.subject, record.title].join(' '))) {
       increment(bucket.subjectTerms, term);
     }
-    for (const domain of record.domains || []) increment(bucket.domains, domain);
+    if (!options.domainCounts) for (const domain of record.domains || []) increment(bucket.domains, domain);
     increment(bucket.sections, record.section || record.post_kind || record.source_kind || 'item');
     if (bucket.samples.length < sampleLimit && options.sample) {
       bucket.samples.push(options.sample(record));
@@ -345,6 +350,9 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
     for (const term of textTerms([chunk.subject, chunk.section, chunk.summary, chunk.text].join(' '))) {
       increment(bucket.textTerms, term);
     }
+  }
+  for (const [year, counts] of options.domainCounts || []) {
+    if (buckets.has(year)) buckets.get(year)!.domains = counts;
   }
   const allBuckets = Array.from(buckets.values());
   // "Signals" should surface what is DISTINCTIVE about a year, not the

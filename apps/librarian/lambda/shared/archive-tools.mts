@@ -1014,7 +1014,6 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     .trim();
   const urlKey = linkUrlKey(input.url);
   const [startYear, endYear] = parseYearRange(input.year_range);
-  const limit = toolLimit('find_links', input);
   const sort = findLinksSort(input.sort);
   // A topic matches in the link's own fields. The graph's entity_index is
   // issue-level: admitting every link of a listed issue gave "ethereum"
@@ -1705,20 +1704,40 @@ export function aggregateLinkDomains(
   return counts;
 }
 
-function summarizeDomains(links: ArchiveRecord[], limit = 12) {
+function rankedDomains(links: ArchiveRecord[]) {
   return Array.from(aggregateLinkDomains(links).entries())
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, limit)
     .map(([domain, count]) => ({ domain, count }));
 }
 
-function boundedStatsRecord(record: ArchiveRecord | undefined, limit: number) {
+// Per year, the same link measure as top_domains, for yearly_signals.
+function domainCountsByYear(links: ArchiveRecord[]) {
+  const byYear = new Map<number, ArchiveRecord[]>();
+  for (const link of links) {
+    const year = recordYear(link);
+    if (year) byYear.set(year, [...(byYear.get(year) || []), link]);
+  }
+  return new Map([...byYear.entries()].map(([year, yearLinks]) => [year, aggregateLinkDomains(yearLinks)]));
+}
+
+function boundedStatsRecord(
+  record: ArchiveRecord | undefined,
+  limit: number,
+  omitted: Record<string, number>,
+  at: string
+) {
   if (!record) return null;
-  return {
-    ...record,
-    domains: (record.domains || []).slice(0, limit),
-    topics: (record.topics || []).slice(0, limit)
-  };
+  const domains = record.domains || [];
+  const topics = record.topics || [];
+  omitted[`sources[].${at}.domains`] = (omitted[`sources[].${at}.domains`] || 0) + Math.max(0, domains.length - limit);
+  omitted[`sources[].${at}.topics`] = (omitted[`sources[].${at}.topics`] || 0) + Math.max(0, topics.length - limit);
+  return { ...record, domains: domains.slice(0, limit), topics: topics.slice(0, limit) };
+}
+
+// A source's chunk with a date; FAQ answers and site pages have none and
+// are counted apart, so an all-years range and no range agree.
+function datedChunk(chunk: ArchiveRecord) {
+  return Boolean(recordYear(chunk));
 }
 
 async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -1735,6 +1754,8 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   const sources = [];
   let yearsOmitted = 0;
+  const omitted: Record<string, number> = {};
+  const hints: string[] = [];
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     const records = latestByDate(contentRecords(corpus, kind)).filter(inStatsYears);
@@ -1761,22 +1782,32 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
         : kind === 'podcast'
           ? Number(corpus.episode_count || 0)
           : Number(corpus.issue_count || 0);
-    const rangeChunks = (corpus.chunks || []).filter((chunk) => inStatsYears(chunk as ArchiveRecord));
+    const allChunks = (corpus.chunks || []) as ArchiveRecord[];
+    const datedChunks = allChunks.filter(datedChunk);
+    const rangeChunks = datedChunks.filter((chunk) => inStatsYears(chunk));
+    const undatedChunks = allChunks.length - datedChunks.length;
+    const domains = rankedDomains(links);
+    const shownDomains = domains.slice(0, listLimit);
+    if (domains.length > shownDomains.length) {
+      omitted['sources[].top_domains'] = (omitted['sources[].top_domains'] || 0) + domains.length - shownDomains.length;
+    }
     const stats: Record<string, unknown> = {
       source_kind: kind,
       generated_at: corpus.generated_at,
       item_count: rangeActive ? records.length : corpusTotal || records.length,
-      chunk_count: rangeActive ? rangeChunks.length : corpus.chunk_count || (corpus.chunks || []).length,
+      chunk_count: rangeChunks.length,
+      // FAQ answers and site pages: in the corpus, in no year.
+      ...(undatedChunks ? { undated_chunk_count: undatedChunks } : {}),
       link_count: rangeActive ? links.length : Number(corpus.link_count || links.length),
       ...(rangeActive
         ? {
             item_count_total: corpusTotal || undefined,
-            chunk_count_total: corpus.chunk_count || (corpus.chunks || []).length,
+            chunk_count_total: datedChunks.length,
             link_count_total: Number(corpus.link_count || 0) || undefined
           }
         : {}),
-      oldest: boundedStatsRecord(records[records.length - 1], listLimit),
-      newest: boundedStatsRecord(records[0], listLimit),
+      oldest: boundedStatsRecord(records[records.length - 1], listLimit, omitted, 'oldest'),
+      newest: boundedStatsRecord(records[0], listLimit, omitted, 'newest'),
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
       yearly_signals: yearlyContentSignals(records, {
@@ -1790,6 +1821,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
         // showed only the 6 newest years whatever limit said.
         termLimit: Math.min(listLimit, 5),
         domainLimit: Math.min(listLimit, 3),
+        domainCounts: domainCountsByYear(links),
         sampleLimit: 1,
         sample: (record) => ({
           id: lensSourceId(record as ArchiveRecord),
@@ -1799,7 +1831,9 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           url: record.url
         })
       }),
-      top_domains: summarizeDomains(links, listLimit),
+      // Distinct external hosts of headline picks (and blog links) in range.
+      domain_count: domains.length,
+      top_domains: shownDomains,
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category'),
       ...(roleCounts.size ? { counts_by_link_role: sortedCountList(roleCounts, 'link_role') } : {})
@@ -1817,10 +1851,18 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           issueCounts.set(String(issue), (issueCounts.get(String(issue)) || 0) + 1);
         }
       }
+      const issueRows = sortedCountList(issueCounts, 'issue_number');
       stats.post_count = rangeActive ? records.length : corpus.post_count || records.length;
       stats.posts_with_also_in_issues_count = withIssueRefs.length;
       stats.newest_also_in_issues = withIssueRefs[0] || null;
-      stats.also_in_issue_counts = sortedCountList(issueCounts, 'issue_number');
+      stats.issues_referenced_count = issueRows.length;
+      stats.also_in_issue_counts = issueRows.slice(0, listLimit);
+      if (issueRows.length > listLimit) {
+        omitted['sources[].also_in_issue_counts'] = issueRows.length - listLimit;
+        hints.push(
+          `also_in_issue_counts holds the ${listLimit} issues most carried of ${issueRows.length}; latest_content with also_in_issue lists one issue's posts.`
+        );
+      }
     }
     if (kind === 'podcast') {
       stats.episode_count = rangeActive ? records.length : corpus.episode_count || records.length;
@@ -1837,8 +1879,18 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
         sources
       },
       {
-        omitted: { 'sources[].yearly_signals': yearsOmitted },
-        hint: `yearly_signals shows the ${listLimit} newest years; pass year_range (or a higher limit) for the others.`
+        omitted: { 'sources[].yearly_signals': yearsOmitted, ...omitted },
+        hint: [
+          yearsOmitted
+            ? `yearly_signals shows the ${listLimit} newest years; pass year_range (or a higher limit) for the others.`
+            : '',
+          omitted['sources[].top_domains']
+            ? `top_domains holds the ${listLimit} most linked (domain_count says of how many); raise limit (max 40), or page through them all with top_references.`
+            : '',
+          ...hints
+        ]
+          .filter(Boolean)
+          .join(' ')
       }
     ),
     { params: ['source_kind', 'year_range', 'limit'] }
@@ -2248,7 +2300,17 @@ const LENS_CAP_SCALES = [1, 0.55, 0.3, 0.15];
 // Small count tables ARE the point of their tools - never cap them
 // (counts_by_year was being cut to 3 of 10 integers).
 // corpus_stats' yearly_signals are bounded by limit (newest years first).
-const UNCAPPED_LIST_KEYS = new Set(['counts_by_year', 'year_count_summary', 'counts_by_source', 'yearly_signals']);
+// top_domains and also_in_issue_counts are bounded by limit, which
+// counts what they leave out; a second cut to 6 made limit 10 show fewer
+// than limit 9.
+const UNCAPPED_LIST_KEYS = new Set([
+  'counts_by_year',
+  'year_count_summary',
+  'counts_by_source',
+  'yearly_signals',
+  'top_domains',
+  'also_in_issue_counts'
+]);
 // Id lists are a few bytes an entry and bounded by limit; an {omitted}
 // marker inside one broke "every entry is an id".
 const ID_LIST_KEYS = new Set(['results', 'timeline', 'latest_sources', 'sample_sources']);
@@ -2833,9 +2895,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       if (endYear && (!year || year > endYear)) continue;
       const links = linksBySource.get(sourceRecordKey(record)) || [];
       const cross = links.filter((link) => link.link_category === 'cross_source').length;
-      const domains = new Set(
-        [...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean)
-      );
+      const domains = new Set([...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean));
       const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
       let score = domains.size + cross * 5 + links.length * 0.2;
       let reason = cross
@@ -3296,7 +3356,11 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
       issue_url: entry.issue_url
     };
   });
-  const narrowers = [...(kind ? [] : ['kind']), ...(input.year_range ? [] : ['year_range']), ...(query ? [] : ['query'])];
+  const narrowers = [
+    ...(kind ? [] : ['kind']),
+    ...(input.year_range ? [] : ['year_range']),
+    ...(query ? [] : ['query'])
+  ];
   return markTruncated(
     {
       total_count: entries.length,

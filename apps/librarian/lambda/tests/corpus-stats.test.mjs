@@ -8,7 +8,7 @@ test('yearFromPublishDate extracts a publication year', () => {
   assert.equal(yearFromPublishDate(''), 0);
 });
 
-test('countsByPublishYear counts records newest year first', () => {
+test('countsByPublishYear counts records oldest year first', () => {
   const out = countsByPublishYear([
     { publish_date: '2024-01-01' },
     { publish_date: '2026-06-05' },
@@ -17,8 +17,8 @@ test('countsByPublishYear counts records newest year first', () => {
     {}
   ]);
   assert.deepEqual(out, [
-    { year: 2026, count: 1 },
-    { year: 2024, count: 2 }
+    { year: 2024, count: 2 },
+    { year: 2026, count: 1 }
   ]);
 });
 
