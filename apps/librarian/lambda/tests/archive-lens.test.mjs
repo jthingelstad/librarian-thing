@@ -129,3 +129,52 @@ test('buildArchiveLens filters by year and shapes reading paths', () => {
   assert.ok(lens.reading_path.length >= 2);
   assert.ok(lens.results.every((id) => ['blog', 'podcast'].includes(resolve(id).source_kind)));
 });
+
+// --- Review 2026-09-29 defect 7: lens results that resolve ----------------
+
+function manyIssues(count) {
+  return Array.from({ length: count }, (_value, index) => ({
+    source_kind: 'weekly_thing',
+    issue_number: String(100 + index),
+    subject: `Mastodon notes ${index}`,
+    publish_date: `${2010 + Math.floor(index / 3)}-0${(index % 3) + 1}-07`,
+    url: `/archive/${100 + index}/`,
+    section: 'Issue',
+    topics: [],
+    domains: []
+  }));
+}
+
+test('limit bounds sources_by_id, and first/latest/results always resolve', () => {
+  const lens = buildArchiveLens({ topic: 'Mastodon', records: manyIssues(30), limit: 5 });
+  const kept = new Set(Object.keys(lens.sources_by_id));
+  assert.ok(kept.size <= 7, `limit 5 kept ${kept.size} records`);
+  assert.equal(lens.total_sources, 30, 'counts stay whole');
+  assert.equal(lens.sources_omitted, 30 - kept.size);
+  assert.match(lens.sources_note, /raise limit/);
+  for (const id of [lens.first, lens.latest, ...lens.results]) assert.ok(kept.has(id), `${id} resolves`);
+  for (const id of [
+    ...lens.timeline,
+    ...lens.latest_sources,
+    ...lens.years.flatMap((bucket) => bucket.sample_sources),
+    ...lens.sources.flatMap((bucket) => bucket.sample_sources),
+    ...lens.reading_path.map((entry) => entry.id)
+  ]) {
+    assert.equal(typeof id, 'string');
+    assert.ok(kept.has(id), `${id} referenced but not in sources_by_id`);
+  }
+});
+
+test('a reading-path anchor keeps its reason; a double anchor names both', () => {
+  const lens = buildArchiveLens({ topic: 'Mastodon', records: manyIssues(9), operation: 'reading_path', limit: 8 });
+  const byId = Object.fromEntries(lens.reading_path.map((entry) => [entry.id, entry.reason]));
+  assert.match(byId['wt-100'], /^earliest matched source/);
+  assert.match(byId['wt-108'], /latest matched source/);
+  assert.ok(
+    lens.reading_path.some((entry) => entry.reason === 'additional representative source'),
+    'fill entries are labelled as fill'
+  );
+  const single = buildArchiveLens({ topic: 'Mastodon', records: manyIssues(1), operation: 'reading_path' });
+  assert.equal(single.reading_path.length, 1);
+  assert.match(single.reading_path[0].reason, /earliest matched source; densest year.*latest matched source/);
+});

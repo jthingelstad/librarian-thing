@@ -280,6 +280,74 @@ test('archive_gems serendipity actually samples (P2.14)', async () => {
   assert.ok(draws.size > 1, 'six serendipity draws must not all be identical');
 });
 
+function gemIssues() {
+  // Old issues are link-rich; recent ones are quiet - richness must not
+  // outrank age for "recent".
+  const issues = Array.from({ length: 80 }, (_v, index) => ({
+    number: index + 1,
+    subject: `WT${index + 1}`,
+    publish_date: `${2010 + Math.floor(index / 5)}-01-07`,
+    url: `https://weekly.thingelstad.com/archive/${index + 1}/`,
+    domains: index < 20 ? Array.from({ length: 30 }, (_d, d) => `site${d}.com`) : []
+  }));
+  return { issues, chunks: [], links: [] };
+}
+
+test('archive_gems: explicit serendipity still samples; recent means recent (review defect 8)', async () => {
+  primeCorpusCachesForTests({ weekly_thing: gemIssues() });
+  const draws = new Set();
+  for (let round = 0; round < 6; round += 1) {
+    const out = await ARCHIVE_TOOLS.archive_gems({ mood: 'serendipity', limit: 3 }, { scope: 'weekly_thing' });
+    draws.add(out.results.map((item) => item.issue_number).join(','));
+  }
+  assert.ok(draws.size > 1, 'mood "serendipity" said out loud must still draw at random');
+
+  const recent = await ARCHIVE_TOOLS.archive_gems({ mood: 'recent', limit: 4 }, { scope: 'weekly_thing' });
+  assert.ok(
+    recent.results.every((item) => Number(String(item.publish_date).slice(0, 4)) >= 2022),
+    recent.results.map((item) => item.publish_date).join(', ')
+  );
+  const forgotten = await ARCHIVE_TOOLS.archive_gems({ mood: 'forgotten', limit: 4 }, { scope: 'weekly_thing' });
+  assert.ok(forgotten.results.every((item) => Number(String(item.publish_date).slice(0, 4)) < 2018));
+});
+
+test('archive_gems reports a mode/mood conflict instead of silently choosing', async () => {
+  primeCorpusCachesForTests({ weekly_thing: gemIssues() });
+  const out = await ARCHIVE_TOOLS.archive_gems(
+    { mode: 'forgotten', mood: 'recent', limit: 2 },
+    { scope: 'weekly_thing' }
+  );
+  assert.equal(out.applied.mood, 'recent');
+  assert.deepEqual(out.applied.ignored, { mode: 'forgotten' });
+  assert.match(out.applied.note, /disagree/);
+  const agreed = await ARCHIVE_TOOLS.archive_gems({ mode: 'recent', limit: 2 }, { scope: 'weekly_thing' });
+  assert.equal(agreed.applied.mood, 'recent');
+  assert.equal(agreed.applied.ignored, undefined);
+});
+
+test('archive_gems theme mode returns ids that resolve (review defect 8)', async () => {
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: Array.from({ length: 6 }, (_v, index) => ({
+        number: 200 + index,
+        subject: `Tidepools ${index}`,
+        publish_date: `${2018 + index}-05-05`,
+        url: `/archive/${200 + index}/`
+      })),
+      chunks: [],
+      links: []
+    }
+  });
+  const out = await ARCHIVE_TOOLS.archive_gems({ theme: 'tidepools', limit: 4 }, { scope: 'weekly_thing' });
+  assert.equal(out.mode, 'theme_reading_path');
+  assert.ok(out.results.length > 0);
+  for (const entry of out.results) {
+    assert.ok(out.sources_by_id[entry.id], `${entry.id} resolves in sources_by_id`);
+    const source = await ARCHIVE_TOOLS.get_source({ id: entry.id }, { scope: 'weekly_thing' });
+    assert.equal(source.source.id, entry.id);
+  }
+});
+
 test('get_source hoists repeated link fields and section filters body (P1.8)', async () => {
   primeCorpusCachesForTests({
     weekly_thing: {
@@ -705,4 +773,45 @@ test('stem first_last with one literal source: it is first AND deduped when also
   assert.equal(out.first, 'wt-15', 'the earliest STRICT source is first');
   assert.equal(out.latest, 'wt-15', 'inflection-only sources cannot be latest either');
   assert.deepEqual(out.results, ['wt-15'], 'first==latest is deduped, not [wt-15, wt-15]');
+});
+
+test('find_links matches in the link itself, honours case_sensitive, and says why (review defect 9)', async () => {
+  const link = (issue, text, context = '') => ({
+    issue_number: issue,
+    subject: `WT${issue}`,
+    publish_date: '2021-05-01',
+    issue_year: 2021,
+    section: 'Notable',
+    url: `https://example.com/${issue}-${text.length}`,
+    domain: 'example.com',
+    text,
+    context
+  });
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [],
+      chunks: [],
+      links: [
+        link(100, 'Ethereum names explained'),
+        link(100, 'A recipe for bread'),
+        link(101, 'Gardening', 'Jamie on why ENS and ethereum matter'),
+        link(102, 'APPLE earnings')
+      ]
+    },
+    // WT100 is listed under ethereum at issue level; that must not admit its bread link.
+    graph: { entity_index: { ethereum: ['100', '101'] } }
+  });
+  const out = await ARCHIVE_TOOLS.find_links({ topic: 'ethereum' }, { scope: 'weekly_thing' });
+  assert.deepEqual(
+    out.results.map((result) => result.link_text),
+    ['Ethereum names explained', 'Gardening']
+  );
+  assert.equal(out.match_mode, 'exact');
+  assert.deepEqual(out.results[0].match_reasons, ["text: 'Ethereum'"]);
+  assert.deepEqual(out.results[1].match_reasons, ["context: 'ethereum'"]);
+
+  const strict = await ARCHIVE_TOOLS.find_links({ topic: 'Apple', case_sensitive: true }, { scope: 'weekly_thing' });
+  assert.equal(strict.total_count, 0, 'case_sensitive Apple does not match APPLE');
+  const loose = await ARCHIVE_TOOLS.find_links({ topic: 'Apple' }, { scope: 'weekly_thing' });
+  assert.equal(loose.total_count, 1);
 });

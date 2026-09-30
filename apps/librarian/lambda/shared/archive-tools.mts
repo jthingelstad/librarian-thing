@@ -1,13 +1,12 @@
 import crypto from 'node:crypto';
-import { buildArchiveLens, compileTopicMatcher } from './archive-lens.mjs';
+import { buildArchiveLens, compileTopicMatcher, lensSourceId } from './archive-lens.mjs';
 import { aliasesFor, compileLiteral, normalizeMatchMode } from './matcher.mjs';
-import { promptFingerprint } from './prompts.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
 import { searchFaq } from './faq.mjs';
-import { loadToolSpecs } from './prompts.mjs';
+import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import { compactSource, loadCorpus, loadGraph, parseYearRange, retrieve, tokenize } from './retrieval.mjs';
-import { WEEKLY_BASE_URL } from './source-identity.mjs';
+import { WEEKLY_BASE_URL, absoluteSourceUrl, sourceLabel } from './source-identity.mjs';
 import type { Corpus, CorpusChunk } from './retrieval.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
 
@@ -40,7 +39,42 @@ interface ArchiveRecord extends CorpusChunk {
   [key: string]: unknown;
 }
 
+// Every tool's limit in one table: the handlers clamp to it, and
+// tool-specs.json declares the same minimum, maximum and default (a test
+// holds the two together). The doors refuse a limit outside it; the chat
+// loop, which calls handlers in-process, is clamped.
+export const TOOL_LIMITS: Record<string, { min: number; max: number; default: number }> = {
+  search_faq: { min: 1, max: 10, default: 5 },
+  search_archive: { min: 1, max: 12, default: 8 },
+  list_content: { min: 1, max: 120, default: 40 },
+  find_links: { min: 1, max: 50, default: 20 },
+  corpus_stats: { min: 3, max: 40, default: 12 },
+  latest_content: { min: 1, max: 30, default: 10 },
+  quote_search: { min: 1, max: 50, default: 20 },
+  archive_lens: { min: 1, max: 40, default: 18 },
+  entity_lens: { min: 1, max: 40, default: 18 },
+  source_neighborhood: { min: 1, max: 20, default: 8 },
+  archive_gems: { min: 1, max: 12, default: 6 },
+  media_search: { min: 1, max: 12, default: 8 },
+  currently_history: { min: 1, max: 120, default: 40 },
+  top_references: { min: 1, max: 40, default: 20 },
+  web_search: { min: 1, max: 10, default: 5 },
+  // on_this_day's limit is per year: limit_per_year.
+  on_this_day: { min: 1, max: 20, default: 5 }
+};
+
+export function toolLimit(name: string, input: { limit?: unknown } = {}) {
+  const { min, max, default: fallback } = TOOL_LIMITS[name];
+  const requested = Number(input.limit || fallback);
+  return Math.min(Math.max(Number.isFinite(requested) ? Math.floor(requested) : fallback, min), max);
+}
+
 interface ToolArgs {
+  id?: unknown;
+  date?: unknown;
+  window_days?: unknown;
+  include_microposts?: unknown;
+  limit_per_year?: unknown;
   query?: unknown;
   aliases?: unknown;
   match_mode?: unknown;
@@ -401,7 +435,7 @@ async function faqReplacements() {
 async function toolSearchFaq(input: ToolArgs = {}) {
   const query = String(input.query || '').trim();
   if (!query) return { results: [] };
-  const limit = Math.min(Math.max(Number(input.limit || 5), 1), 10);
+  const limit = toolLimit('search_faq', input);
   return {
     query,
     results: searchFaq(query, {
@@ -414,7 +448,7 @@ async function toolSearchFaq(input: ToolArgs = {}) {
 async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const query = String(input.query || '').trim();
   if (!query) return { results: [] };
-  const limit = Math.min(Math.max(Number(input.limit || 8), 1), 12);
+  const limit = toolLimit('search_archive', input);
   const results = await retrieve(query, limit, { yearRange: input.year_range, section: input.section, scope });
   return { query, results: results.map((source) => compactSource(source)) };
 }
@@ -573,11 +607,23 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   };
 }
 
+// Where a find_links topic matched, field by field (the link's own text,
+// title, heading, surrounding context, or domain).
+const FIND_LINK_FIELDS = ['text', 'title', 'heading_context', 'context', 'domain'] as const;
+
+function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher) {
+  const reasons: string[] = [];
+  for (const field of FIND_LINK_FIELDS) {
+    const hit = matcher.firstHit(String(link[field] || ''));
+    if (hit) reasons.push(`${field}: '${hit.span}'`);
+  }
+  return reasons;
+}
+
 async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const domain = normalizedDomain(input.domain || '');
-  const topic = String(input.topic || '')
-    .toLowerCase()
-    .trim();
+  // Case is the matcher's business: lowercasing here made case_sensitive a no-op.
+  const topic = String(input.topic || '').trim();
   const linkKind = String(input.link_kind || '')
     .toLowerCase()
     .trim();
@@ -587,11 +633,10 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     .trim();
   const targetResolved = boolFilter(input.target_resolved);
   const [startYear, endYear] = parseYearRange(input.year_range);
-  const limit = Math.min(Math.max(Number(input.limit || 20), 1), 50);
-  const kinds = scopeKinds(scope);
-  const graph = topic && kinds.includes('weekly_thing') ? await loadGraph() : {};
-  const entityIndex = graphRecord(graph, 'entity_index');
-  const issueMatches = new Set(topic ? stringArray(entityIndex[topic]) : []);
+  const limit = toolLimit('find_links', input);
+  // A topic matches in the link's own fields. The graph's entity_index is
+  // issue-level: admitting every link of a listed issue gave "ethereum"
+  // 770 links of which 1 in 50 mentioned it.
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
     aliases: aliasesFor(topic),
@@ -610,8 +655,8 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     if (targetResolved !== null && Boolean(link.target_resolved) !== targetResolved) continue;
     if (startYear && (!year || year < startYear)) continue;
     if (endYear && (!year || year > endYear)) continue;
-    const haystack = [link.text, link.title, link.section, link.heading_context, link.context, link.domain].join(' ');
-    if (topic && !topicMatcher.matches(haystack) && !issueMatches.has(issueKey(link.issue_number))) continue;
+    const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher) : [];
+    if (topic && !matchReasons.length) continue;
     filteredLinks.push(link);
     if (results.length < limit) {
       const sourceUrl =
@@ -640,7 +685,8 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         target_subject: link.target_subject,
         target_publish_date: link.target_publish_date,
         episode_number: link.episode_number,
-        show: link.show
+        show: link.show,
+        ...(topic ? { match_reasons: matchReasons } : {})
       });
     }
   }
@@ -665,6 +711,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     .slice(0, 20)
     .map(([domainName, count]) => ({ domain: domainName, count }));
   return {
+    ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
     results,
     total_count: filteredLinks.length,
     top_domains,
@@ -809,6 +856,8 @@ function recordYear(record: ArchiveRecord) {
 
 function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
   return {
+    // The id get_source and source_neighborhood take back (wt-351, blog-987, ep-3).
+    id: lensSourceId(record),
     source_kind: record.source_kind,
     issue_number: record.issue_number ?? null,
     microblog_id: record.microblog_id,
@@ -818,7 +867,7 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     publish_date: record.publish_date,
     year: recordYear(record) || null,
     section: record.section,
-    url: record.url,
+    url: absoluteSourceUrl(record.url),
     transcript_url: record.transcript_url,
     audio_url: record.audio_url,
     topics: record.topics || [],
@@ -884,49 +933,76 @@ function compactLink(link: ArchiveRecord): ArchiveRecord {
   };
 }
 
+// A continuation chunk opens with the tail of the chunk before it (the
+// corpus build's overlap, copied verbatim - librarian_core _overlap_tail).
+// Reassembled text drops that lead-in so a passage is not read twice: the
+// longest run of whole paragraphs the previous chunk already ends with.
+function withoutLeadIn(previous: string, text: string) {
+  if (!previous) return text;
+  let cut = 0;
+  for (let at = text.indexOf('\n\n'); at > 0; at = text.indexOf('\n\n', at + 2)) {
+    if (previous.endsWith(text.slice(0, at).trim())) cut = at;
+  }
+  if (!cut && previous.endsWith(text)) return '';
+  return cut ? text.slice(cut).trim() : text;
+}
+
+function chunkTexts(chunks: ArchiveRecord[]) {
+  const texts: string[] = [];
+  let previous: ArchiveRecord | null = null;
+  for (const chunk of chunks || []) {
+    const text = String(chunk.text || '').trim();
+    const sameSection = previous && String(previous.section || '') === String(chunk.section || '');
+    const kept = sameSection ? withoutLeadIn(String(previous!.text || '').trim(), text) : text;
+    if (kept) texts.push(kept);
+    previous = chunk;
+  }
+  return texts;
+}
+
+function matchesSection(chunk: ArchiveRecord, wanted: string) {
+  return (
+    !wanted ||
+    String(chunk.section || '')
+      .toLowerCase()
+      .includes(wanted)
+  );
+}
+
 function sourceTextFromChunks(chunks: ArchiveRecord[], section = '') {
   const wanted = String(section || '')
     .toLowerCase()
     .trim();
-  return (chunks || [])
-    .filter(
-      (chunk) =>
-        !wanted ||
-        String(chunk.section || '')
-          .toLowerCase()
-          .includes(wanted)
-    )
-    .map((chunk) => String(chunk.text || '').trim())
-    .filter(Boolean)
-    .join('\n\n');
+  return chunkTexts((chunks || []).filter((chunk) => matchesSection(chunk, wanted))).join('\n\n');
 }
 
 function sectionsFromChunks(chunks: ArchiveRecord[], section = '') {
   const wanted = String(section || '')
     .toLowerCase()
     .trim();
-  const grouped = new Map();
+  const grouped = new Map<string, ArchiveRecord[]>();
   for (const chunk of chunks || []) {
-    if (
-      wanted &&
-      !String(chunk.section || '')
-        .toLowerCase()
-        .includes(wanted)
-    )
-      continue;
-    const name = chunk.section || 'Source';
-    grouped.set(name, [...(grouped.get(name) || []), String(chunk.text || '').trim()].filter(Boolean));
+    if (!matchesSection(chunk, wanted)) continue;
+    const name = String(chunk.section || 'Source');
+    grouped.set(name, [...(grouped.get(name) || []), chunk]);
   }
-  return Array.from(grouped.entries(), ([name, parts]) => ({
-    name,
-    word_count: tokenize(parts.join(' ')).length,
-    text: parts.join('\n\n').slice(0, 14000)
-  }));
+  return Array.from(grouped.entries(), ([name, sectionChunks]) => {
+    const parts = chunkTexts(sectionChunks);
+    return {
+      name,
+      word_count: tokenize(parts.join(' ')).length,
+      text: parts.join('\n\n').slice(0, 14000)
+    };
+  });
 }
 
 function inferSourceKindFromInput(input: ToolArgs = {}) {
   const explicit = normalizeSourceKind(input.source_kind || input.source || '');
   if (explicit) return explicit;
+  const id = String(input.id || '');
+  if (id.startsWith('wt-')) return 'weekly_thing';
+  if (id.startsWith('blog-')) return 'blog';
+  if (id.startsWith('ep-')) return 'podcast';
   if (input.issue_number || input.number || input.issue) return 'weekly_thing';
   if (input.microblog_id || input.post_id) return 'blog';
   if (input.episode_number || input.episode) return 'podcast';
@@ -939,6 +1015,8 @@ function recordMatchesIdentifier(record: ArchiveRecord, input: ToolArgs = {}) {
   const microblogId = input.microblog_id ?? input.post_id;
   const episode = input.episode_number ?? input.episode ?? input.number;
   const url = input.url || input.permalink;
+  // The id every tool emits for a source (lensSourceId: wt-351, ep-3, blog-987).
+  if (input.id !== undefined && input.id !== null && input.id !== '') return lensSourceId(record) === String(input.id);
   if (record.source_kind === 'weekly_thing' && issue !== undefined && issueKey(record.issue_number) === issueKey(issue))
     return true;
   if (record.source_kind === 'blog' && microblogId !== undefined && String(record.microblog_id) === String(microblogId))
@@ -1007,7 +1085,7 @@ function boundedStatsRecord(record: ArchiveRecord | undefined, limit: number) {
 async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const [statsStartYear, statsEndYear] = parseYearRange(input.year_range || input.year);
-  const listLimit = Math.min(Math.max(Number(input.limit || 12), 3), 40);
+  const listLimit = toolLimit('corpus_stats', input);
   const inStatsYears = (record: ArchiveRecord) => {
     if (!statsStartYear && !statsEndYear) return true;
     const year = recordYear(record);
@@ -1090,7 +1168,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
-      server_version: `1.1.0+tools.${promptFingerprint()}`,
+      server_version: serverVersion(),
       year_range: statsStartYear || statsEndYear ? [statsStartYear, statsEndYear] : null,
       sources
     },
@@ -1100,7 +1178,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
 
 async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
-  const limit = Math.min(Math.max(Number(input.limit || 10), 1), 30);
+  const limit = toolLimit('latest_content', input);
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
   const alsoInIssue = input.also_in_issue ?? input.issue_number;
   const items = [];
@@ -1183,7 +1261,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const targetResolved = boolFilter(input.target_resolved);
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
   const alsoInIssue = input.also_in_issue ?? input.issue_number;
-  const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
+  const limit = toolLimit('list_content', input);
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
     caseSensitive: input.case_sensitive === true
@@ -1261,7 +1339,7 @@ function contextAround(text: unknown, phrase: unknown, radius = 240) {
 async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const phrase = String(input.phrase || '').trim();
   if (phrase.length < 3) return { results: [] };
-  const limit = Math.min(Math.max(Number(input.limit || 20), 1), 50);
+  const limit = toolLimit('quote_search', input);
   const needle = phrase.toLowerCase();
   const quoteMatcher = compileLiteral(phrase);
   const kinds = scopeKinds(scope);
@@ -1409,6 +1487,9 @@ const LENS_CAP_SCALES = [1, 0.55, 0.3, 0.15];
 // Small count tables ARE the point of their tools - never cap them
 // (counts_by_year was being cut to 3 of 10 integers).
 const UNCAPPED_LIST_KEYS = new Set(['counts_by_year', 'year_count_summary', 'counts_by_source']);
+// Id lists are a few bytes an entry and bounded by limit; an {omitted}
+// marker inside one broke "every entry is an id".
+const ID_LIST_KEYS = new Set(['results', 'timeline', 'latest_sources', 'sample_sources']);
 
 interface LensPayloadOptions {
   params?: string[];
@@ -1433,6 +1514,7 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
   }
   if (Array.isArray(value)) {
     if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
+    if (ID_LIST_KEYS.has(parentKey) && value.every((item) => typeof item === 'string')) return value;
     // Never truncate short arrays: cutting 3 match_reasons or 5 domains
     // saves nothing while the budget belongs on repeated large objects.
     if (value.length <= 6) {
@@ -1459,13 +1541,16 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
       // under pressure. Insertion order is citation priority, so the least
       // important records drop first and dangling ids stay resolvable via a
       // narrower follow-up call.
+      // first and latest are the lens's headline answer: always kept.
       const entries = Object.entries(entry as Record<string, unknown>);
       const mapCap = Math.max(10, Math.round(60 * scale));
+      const record = value as Record<string, unknown>;
+      const pinned = new Set([record.first, record.latest].filter((id) => typeof id === 'string'));
       const kept = entries
-        .slice(0, mapCap)
-        .map(([id, record]) => [id, compactLensLevel(record, depth + 1, scale, note, key)]);
+        .filter(([id], index) => index < mapCap || pinned.has(id))
+        .map(([id, source]) => [id, compactLensLevel(source, depth + 1, scale, note, key)]);
       out[key] = Object.fromEntries(kept);
-      if (entries.length > mapCap) out.sources_omitted_for_size = entries.length - mapCap;
+      if (entries.length > kept.length) out.sources_omitted_for_size = entries.length - kept.length;
       continue;
     }
     out[key] = compactLensLevel(entry, depth + 1, scale, note, key);
@@ -1566,7 +1651,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         records,
         chunks,
         yearRange: input.year_range,
-        limit: Number(input.limit || 18)
+        limit: toolLimit('archive_lens', input)
       })
     },
     { params: ['topic', 'operation', 'match_mode', 'source_kind', 'year_range', 'limit'] }
@@ -1657,7 +1742,7 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       .filter((link) => link.link_category === 'cross_source')
       .slice(0, 30)
       .map(compactLink),
-    related_sources: related.slice(0, Math.min(Math.max(Number(input.limit || 8), 1), 20)).map((item) => ({
+    related_sources: related.slice(0, toolLimit('source_neighborhood', input)).map((item) => ({
       ...compactContentRecord(item.record),
       score: item.score,
       link_count: item.link_count
@@ -1679,7 +1764,7 @@ async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
       operation,
       source_kind: input.source_kind,
       year_range: input.year_range,
-      limit: input.limit || 18
+      limit: toolLimit('entity_lens', input)
     },
     context
   );
@@ -1693,10 +1778,17 @@ async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
 async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const theme = String(input.theme || input.topic || input.query || '').trim();
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
-  const mood = String(input.mood || input.mode || '')
-    .toLowerCase()
-    .trim();
-  const limit = Math.min(Math.max(Number(input.limit || 6), 1), 12);
+  const lower = (value: unknown) =>
+    String(value || '')
+      .toLowerCase()
+      .trim();
+  // mood and mode are the same argument; mood wins a conflict, and says so.
+  const mood = lower(input.mood) || lower(input.mode);
+  const conflict =
+    lower(input.mood) && lower(input.mode) && lower(input.mood) !== lower(input.mode)
+      ? { ignored: { mode: lower(input.mode) }, note: `mood and mode disagree; mood "${mood}" applied` }
+      : {};
+  const limit = toolLimit('archive_gems', input);
   if (theme) {
     const lens = (await toolArchiveLens(
       {
@@ -1707,14 +1799,21 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
         limit
       },
       { scope }
-    )) as { reading_path?: ArchiveRecord[] };
+    )) as { reading_path?: ArchiveRecord[]; sources_by_id?: Record<string, unknown> };
+    const path = (lens.reading_path || []).slice(0, limit);
+    // The path names ids; sources_by_id resolves them (and get_source takes them).
+    const byId = lens.sources_by_id || {};
     return {
+      applied: { theme, ...(mood ? { ignored: { mood } } : {}) },
       theme,
       mode: 'theme_reading_path',
-      results: (lens.reading_path || []).slice(0, limit).map((source) => ({
+      results: path.map((source) => ({
         ...source,
         reason: source.reason || `representative source for ${theme}`
-      }))
+      })),
+      sources_by_id: Object.fromEntries(
+        path.map((source) => String(source.id)).flatMap((id) => (byId[id] ? [[id, byId[id]]] : []))
+      )
     };
   }
   const candidates = [];
@@ -1749,17 +1848,31 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       candidates.push({ score, reason, record, link_count: links.length, cross_source_link_count: cross });
     }
   }
-  candidates.sort(
+  // recent and forgotten are about age first: link richness only ranks
+  // within the newest tenth (at least 4x limit) or the older half of the
+  // pool. Scored on richness alone, "recent" returned a 2012 post.
+  const byDate = [...candidates].sort((a, b) =>
+    String(b.record.publish_date || '').localeCompare(String(a.record.publish_date || ''))
+  );
+  let pool = candidates;
+  if (mood.includes('recent') || mood.includes('new')) {
+    pool = byDate.slice(0, Math.max(limit * 4, Math.ceil(byDate.length / 10)));
+  } else if (mood.includes('forgotten') || mood.includes('old')) {
+    pool = byDate.slice(Math.floor(byDate.length / 2));
+  }
+  pool.sort(
     (a, b) =>
       b.score - a.score || String(b.record.publish_date || '').localeCompare(String(a.record.publish_date || ''))
   );
   // Serendipity must actually vary: the ranking is deterministic, so the
   // same 3-4 link-dense issues won the top slots forever and "pick a random
-  // issue" always returned the same handful. With no mood, sample randomly
-  // from the qualifying band (top quarter, at least 40) instead of taking
-  // the head of the fixed ranking. Moods keep their deterministic ranking.
-  let picked = candidates.slice(0, limit);
-  if (!mood && candidates.length > limit) {
+  // issue" always returned the same handful. With no mood (or mood
+  // "serendipity" said out loud), sample randomly from the qualifying band
+  // (top quarter, at least 40) instead of taking the head of the fixed
+  // ranking. recent and forgotten keep their deterministic ranking.
+  let picked = pool.slice(0, limit);
+  const serendipity = !mood || mood === 'serendipity';
+  if (serendipity && candidates.length > limit) {
     const band = candidates.slice(0, Math.max(40, Math.ceil(candidates.length / 4)));
     const sampled = [];
     while (sampled.length < limit && band.length) {
@@ -1771,6 +1884,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       item.reason = `${item.reason} (randomly drawn from ${candidates.length} qualifying sources)`;
   }
   return {
+    applied: { mood: mood || 'serendipity', ...conflict },
     theme: null,
     mode: mood || 'serendipity',
     results: picked.map((item) => ({
@@ -1812,7 +1926,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     .trim()
     .toLowerCase();
   const year = Number(input.year || 0) || null;
-  const limit = Math.min(Math.max(Number(input.limit || 8), 1), 12);
+  const limit = toolLimit('media_search', input);
   const termMatchers = query
     .split(/[^a-z0-9]+/)
     .filter((term) => term.length > 2)
@@ -1861,6 +1975,165 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   };
 }
 
+// ── on_this_day ─────────────────────────────────────────────────────────
+// What Jamie published on this calendar day in past years - one of the
+// favourite things his blog has. Matches the month-day of publish_date[:10]:
+// blog dates come from the permalink (local), Weekly Thing timestamps are
+// UTC noon (the same calendar day), podcast dates are plain dates. February
+// 29 folds into February 28 in years without one.
+
+const ON_THIS_DAY_TIMEZONE = 'America/Chicago';
+const DAY_MS = 86_400_000;
+const KIND_ORDER: Record<string, number> = { weekly_thing: 0, blog: 1, podcast: 2 };
+
+export function chicagoToday(now = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: ON_THIS_DAY_TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(now);
+}
+
+function isLeapYear(year: number) {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+// The anchor day in a given year, clamped to the month's last day (02-29
+// is Feb 28 in a year without one, never March 1).
+function anchorIn(year: number, month: number, day: number) {
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return Date.UTC(year, month - 1, Math.min(day, lastDay));
+}
+
+// The past year whose anchor this date falls within `window` days of, or
+// null. A Feb 29 source counts as Feb 28 when the target year has no Feb 29.
+export function onThisDayYear(published: string, month: number, day: number, window: number, targetYear: number) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(published);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const leapDay = match[2] === '02' && match[3] === '29' && !isLeapYear(targetYear);
+  const time = Date.UTC(year, Number(match[2]) - 1, leapDay ? 28 : Number(match[3]));
+  for (const candidate of [year, year - 1, year + 1]) {
+    if (Math.abs(time - anchorIn(candidate, month, day)) <= window * DAY_MS) return candidate;
+  }
+  return null;
+}
+
+function clipText(value: unknown, max: number) {
+  const text = String(value || '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+}
+
+async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const today = chicagoToday();
+  const raw = String(input.date || '').trim() || today;
+  const full = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+  const short = /^(\d{2})-(\d{2})$/.exec(raw);
+  if (!full && !short) return { error: 'date must be YYYY-MM-DD or MM-DD.', code: 'bad_request' };
+  const targetYear = full ? Number(full[1]) : Number(today.slice(0, 4));
+  const month = Number(full ? full[2] : short![1]);
+  let day = Number(full ? full[3] : short![2]);
+  const lastDay = month >= 1 && month <= 12 ? new Date(Date.UTC(targetYear, month, 0)).getUTCDate() : 0;
+  // 02-29 in a year without one is that year's Feb 28 (leap-day sources fold in).
+  if (month === 2 && day === 29 && lastDay === 28) day = 28;
+  if (day < 1 || day > lastDay) {
+    return { error: 'date is not a calendar day.', code: 'bad_request' };
+  }
+  const window = Math.min(Math.max(Math.floor(Number(input.window_days || 0)) || 0, 0), 7);
+  const perYear = toolLimit('on_this_day', { limit: input.limit_per_year });
+  const [startYear, endYear] = parseYearRange(input.year_range);
+  const requestedSource = normalizeSourceKind(input.source_kind || '');
+  const microposts = input.include_microposts !== false && input.include_microposts !== 'false';
+
+  const byYear = new Map<number, Array<Record<string, unknown>>>();
+  for (const kind of scopeKinds(scope)) {
+    if (requestedSource && kind !== requestedSource) continue;
+    const corpus = await loadCorpus(kind);
+    const records = contentRecords(corpus, kind);
+    let chunksBySource: Map<string, ArchiveRecord[]> | null = null;
+    const rawIssues = new Map(
+      ((corpus.issues || []) as ArchiveRecord[]).map((issue) => [issueKey(issue.number), issue])
+    );
+    const rawEpisodes = new Map(
+      ((corpus.episodes || []) as ArchiveRecord[]).map((episode) => [String(episode.number), episode])
+    );
+    const mediaBySource = new Map<string, ArchiveRecord>();
+    for (const item of (corpus.media || []) as ArchiveRecord[]) {
+      const key = kind === 'weekly_thing' ? `wt:${issueKey(item.issue_number)}` : `url:${urlKey(item.source_url)}`;
+      if (!mediaBySource.has(key)) mediaBySource.set(key, item);
+    }
+    for (const record of records) {
+      if (kind === 'blog' && !microposts && record.section === 'Micropost') continue;
+      const year = onThisDayYear(String(record.publish_date || '').slice(0, 10), month, day, window, targetYear);
+      if (year === null || year >= targetYear) continue;
+      if (startYear && year < startYear) continue;
+      if (endYear && year > endYear) continue;
+      let excerpt = '';
+      if (kind === 'weekly_thing') {
+        const summary = rawIssues.get(issueKey(record.issue_number))?.summary as ArchiveRecord | undefined;
+        excerpt = clipText(summary?.abstract, 280);
+      } else if (kind === 'podcast') {
+        excerpt = clipText(rawEpisodes.get(String(record.episode_number))?.summary, 280);
+      } else {
+        chunksBySource ||= groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
+        excerpt = clipText((chunksBySource.get(sourceRecordKey(record)) || [])[0]?.text, 280);
+      }
+      const photo =
+        mediaBySource.get(
+          kind === 'weekly_thing' ? `wt:${issueKey(record.issue_number)}` : `url:${urlKey(record.url)}`
+        ) || null;
+      const item: Record<string, unknown> = {
+        id: lensSourceId(record),
+        label: sourceLabel(record),
+        source_kind: kind,
+        title: record.subject || null,
+        date: String(record.publish_date || '').slice(0, 10),
+        url: absoluteSourceUrl(record.url),
+        excerpt
+      };
+      if (kind === 'blog' && record.section === 'Micropost') item.micropost = true;
+      if (photo) item.photo = { url: photo.url, alt: photo.alt || null, description: photo.description || null };
+      byYear.set(year, [...(byYear.get(year) || []), item]);
+    }
+  }
+  const years = [...byYear.entries()]
+    .sort(([a], [b]) => b - a)
+    .map(([year, items]) => {
+      items.sort(
+        (a, b) =>
+          (KIND_ORDER[String(a.source_kind)] ?? 9) - (KIND_ORDER[String(b.source_kind)] ?? 9) ||
+          Number(Boolean(a.micropost)) - Number(Boolean(b.micropost)) ||
+          String(a.date).localeCompare(String(b.date))
+      );
+      return {
+        year,
+        years_ago: targetYear - year,
+        items: items.slice(0, perYear),
+        ...(items.length > perYear ? { more: items.length - perYear } : {})
+      };
+    });
+  const monthDay = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  return {
+    applied: {
+      date: `${targetYear}-${monthDay}`,
+      month_day: monthDay,
+      window_days: window,
+      timezone: ON_THIS_DAY_TIMEZONE,
+      limit_per_year: perYear,
+      include_microposts: microposts,
+      years: years.map((row) => row.year)
+    },
+    total_count: [...byYear.values()].reduce((sum, items) => sum + items.length, 0),
+    years
+  };
+}
+
 // What Jamie was reading / playing / watching / listening to, from the
 // Currently sections, typed at corpus build.
 async function toolCurrentlyHistory(input: ToolArgs = {}) {
@@ -1871,10 +2144,12 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   const query = String(input.query || '')
     .trim()
     .toLowerCase();
-  const limit = Math.min(Math.max(Number(input.limit || 40), 1), 120);
+  const limit = toolLimit('currently_history', input);
   const corpus = await loadCorpus('weekly_thing');
+  // "installing more" / "listening even more" are variants of their kind.
+  const baseKind = (entry: Record<string, unknown>) => String(entry.kind || '').split(' ')[0];
   const entries = ((corpus.currently as Array<Record<string, unknown>> | undefined) || []).filter((entry) => {
-    if (kind && String(entry.kind) !== kind) return false;
+    if (kind && baseKind(entry) !== kind.split(' ')[0]) return false;
     if (year && Number(String(entry.publish_date || '').slice(0, 4)) !== year) return false;
     if (query && !`${entry.text || ''}`.toLowerCase().includes(query)) return false;
     return true;
@@ -1882,7 +2157,7 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   const byKind: Record<string, number> = {};
   const byYear: Record<string, number> = {};
   for (const entry of entries) {
-    byKind[String(entry.kind)] = (byKind[String(entry.kind)] || 0) + 1;
+    byKind[baseKind(entry)] = (byKind[baseKind(entry)] || 0) + 1;
     const entryYear = String(entry.publish_date || '').slice(0, 4) || 'unknown';
     byYear[entryYear] = (byYear[entryYear] || 0) + 1;
   }
@@ -1891,7 +2166,8 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
     counts_by_kind: byKind,
     counts_by_year: byYear,
     entries: entries.slice(-limit).map((entry) => ({
-      kind: entry.kind,
+      kind: baseKind(entry),
+      ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
       text: entry.text,
       links: entry.links,
       issue_number: entry.issue_number,
@@ -1926,7 +2202,7 @@ const UTILITY_REFERENCE_DOMAINS = new Set([
 // counts, first/last seen, and sample titles. One deterministic call for
 // "who/what does Jamie reference most" instead of guess-then-verify.
 async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = {}) {
-  const limit = Math.min(Math.max(Number(input.limit || 20), 1), 40);
+  const limit = toolLimit('top_references', input);
   const yearStart = Number(input.year_start || 0) || null;
   const yearEnd = Number(input.year_end || 0) || null;
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
@@ -2128,7 +2404,7 @@ async function toolWebSearch(input: ToolArgs = {}) {
   if (!key) {
     return { error: 'Web search is not configured on this deployment.' };
   }
-  const limit = Math.min(Math.max(Number(input.limit || 5), 1), 10);
+  const limit = toolLimit('web_search', input);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), WEB_SEARCH_TIMEOUT_MS);
   try {
@@ -2162,7 +2438,53 @@ async function toolWebSearch(input: ToolArgs = {}) {
   }
 }
 
-export const ARCHIVE_TOOLS = {
+// What a call actually ran with, echoed on every result as `applied`: the
+// effective limit (defaults and clamps included), the year range, and any
+// mode-like argument the caller set. A handler that resolves something
+// itself (archive_gems' mode, find_links' match_mode) returns its own
+// `applied`, which wins key by key. Errors carry no echo.
+const APPLIED_ECHO_KEYS = [
+  'source_kind',
+  'section',
+  'year',
+  'kind',
+  'mode',
+  'mood',
+  'operation',
+  'match_mode',
+  'case_sensitive'
+];
+
+export function appliedArguments(name: string, input: ToolArgs = {}) {
+  const applied: Record<string, unknown> = {};
+  // on_this_day's limit is per year and echoed by the tool as limit_per_year.
+  if (TOOL_LIMITS[name] && name !== 'on_this_day') applied.limit = toolLimit(name, input);
+  if (input.year_range !== undefined && input.year_range !== null && input.year_range !== '') {
+    const [start, end] = parseYearRange(input.year_range);
+    applied.year_range = [start, end];
+  }
+  for (const key of APPLIED_ECHO_KEYS) {
+    const value = (input as Record<string, unknown>)[key];
+    if (value !== undefined && value !== null && value !== '') applied[key] = value;
+  }
+  return applied;
+}
+
+type ToolHandler = (input?: ToolArgs, context?: ToolContext) => unknown;
+
+function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
+  return async (input: ToolArgs = {}, context: ToolContext = {}) => {
+    const result = await handler(input, context);
+    if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
+    const record = result as Record<string, unknown>;
+    if (record.error) return result;
+    const own = record.applied && typeof record.applied === 'object' ? (record.applied as Record<string, unknown>) : {};
+    // applied leads the result; the handler's own keys win over the echo.
+    return Object.assign({ applied: null }, record, { applied: { ...appliedArguments(name, input), ...own } });
+  };
+}
+
+const TOOL_HANDLERS = {
   fetch_page: toolFetchPage,
   web_search: toolWebSearch,
   search_faq: toolSearchFaq,
@@ -2185,8 +2507,13 @@ export const ARCHIVE_TOOLS = {
   claim_check: toolClaimCheck,
   media_search: toolMediaSearch,
   currently_history: toolCurrentlyHistory,
-  top_references: toolTopReferences
+  top_references: toolTopReferences,
+  on_this_day: toolOnThisDay
 };
+
+export const ARCHIVE_TOOLS = Object.fromEntries(
+  Object.entries(TOOL_HANDLERS).map(([name, handler]) => [name, withAppliedEcho(name, handler as ToolHandler)])
+) as { [K in keyof typeof TOOL_HANDLERS]: ToolHandler };
 
 export function toolSpecs() {
   return loadToolSpecs();

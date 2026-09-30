@@ -1,4 +1,4 @@
-import { PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import type { AttributeValue, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { TOOL_TRACE_SCHEMA_VERSION, summarizeToolEvidence } from './tool-evidence.mjs';
 import {
@@ -30,6 +30,11 @@ interface McpAuditItemInput {
   // Which door the call came through: 'mcp' (OAuth connectors) or 'web'
   // (the page's /tools route). Defaults to 'mcp' for existing callers.
   surface?: 'mcp' | 'web';
+  // The OAuth client behind an 'mcp' call and its registered name. 'web'
+  // calls have no OAuth client, so their rows carry neither.
+  clientId?: unknown;
+  clientName?: unknown;
+  serverVersion?: unknown;
 }
 
 interface RecordMcpToolCallInput extends McpAuditItemInput {
@@ -64,7 +69,10 @@ export function mcpAuditItem({
   resultChars,
   responseTruncated = false,
   responseMaxChars,
-  surface = 'mcp'
+  surface = 'mcp',
+  clientId,
+  clientName,
+  serverVersion
 }: McpAuditItemInput): Record<string, AttributeValue> {
   const subscriber = String(subscriberHash || '').trim();
   const request = String(requestId || '').trim();
@@ -79,6 +87,15 @@ export function mcpAuditItem({
   const duration = Math.max(0, Math.round(Number(durationMs) || 0));
   const resultLength = Math.max(0, Math.round(Number(resultChars) || 0));
   const maxResponseLength = Math.max(0, Math.round(Number(responseMaxChars) || 0));
+  const client = String(clientId || '')
+    .trim()
+    .slice(0, 80);
+  const clientLabel = String(clientName || '')
+    .trim()
+    .slice(0, 100);
+  const version = String(serverVersion || '')
+    .trim()
+    .slice(0, 120);
   const trace = {
     schema_version: TOOL_TRACE_SCHEMA_VERSION,
     surface,
@@ -115,11 +132,55 @@ export function mcpAuditItem({
     source_revision: dynamoString(revision),
     tool_trace_json: toolTraceDynamoString(trace),
     external_answer_available: { BOOL: false },
+    surface: dynamoString(surface),
+    ...(client ? { client_id: dynamoString(client) } : {}),
+    ...(clientLabel ? { client_name: dynamoString(clientLabel) } : {}),
+    ...(version ? { server_version: dynamoString(version) } : {}),
     ttl: dynamoNumber(mcpAuditTtlSeconds(createdAt))
   };
 }
 
+// Registered OAuth client names (the oauthclient#<id> rows oauth-store's
+// createClient writes), memoized per warm container: an audited call costs
+// at most one extra read per client per container, not one per call. A
+// failed read is not cached and never blocks the audit row.
+const CLIENT_NAME_CACHE_MAX = 200;
+const clientNameCache = new Map<string, string>();
+
+export async function registeredClientName({
+  dynamodb,
+  tableName,
+  clientId
+}: {
+  dynamodb: DynamoDBClient;
+  tableName?: string;
+  clientId?: unknown;
+}): Promise<string> {
+  const id = String(clientId || '').trim();
+  if (!id || !tableName) return '';
+  const cached = clientNameCache.get(id);
+  if (cached !== undefined) return cached;
+  let name = '';
+  try {
+    const loaded = await dynamodb.send(
+      new GetItemCommand({
+        TableName: tableName,
+        Key: { pk: dynamoString(`oauthclient#${id}`), sk: dynamoString('client') },
+        ProjectionExpression: 'client_name'
+      })
+    );
+    name = String(loaded.Item?.client_name?.S || '');
+  } catch {
+    return '';
+  }
+  if (clientNameCache.size >= CLIENT_NAME_CACHE_MAX) clientNameCache.clear();
+  clientNameCache.set(id, name);
+  return name;
+}
+
 export async function recordMcpToolCall({ dynamodb, tableName, ...input }: RecordMcpToolCallInput): Promise<void> {
   if (!tableName) throw new Error('TABLE_NAME is required');
-  await dynamodb.send(new PutItemCommand({ TableName: tableName, Item: mcpAuditItem(input) }));
+  const clientName =
+    input.clientName ?? (await registeredClientName({ dynamodb, tableName, clientId: input.clientId }));
+  await dynamodb.send(new PutItemCommand({ TableName: tableName, Item: mcpAuditItem({ ...input, clientName }) }));
 }

@@ -409,9 +409,15 @@ function readingPath(items: LensSource[], limit: number) {
   const chronological = sortByDateAsc(items);
   if (!chronological.length) return [];
   const chosen = new Map<string, { id: string; reason: string }>();
+  // A source chosen twice keeps both reasons ("earliest matched source;
+  // densest year"); the fill loop never overwrites an anchor's reason.
   const add = (item: LensSource | undefined, reason: string) => {
     if (!item) return;
-    chosen.set(sourceKey(item), { id: lensSourceId(item), reason });
+    const key = sourceKey(item);
+    const existing = chosen.get(key);
+    if (!existing) chosen.set(key, { id: lensSourceId(item), reason });
+    else if (reason !== 'additional representative source' && !existing.reason.includes(reason))
+      existing.reason = `${existing.reason}; ${reason}`;
   };
   add(chronological[0], 'earliest matched source');
   const buckets = yearBuckets(items).sort((a, b) => b.evidence_count - a.evidence_count);
@@ -521,31 +527,32 @@ export function buildArchiveLens({
   // Every full source record appears exactly once, keyed by id; every
   // other section references ids. (Previously the identical record - with
   // evidence and domains - could be serialized six times per response.)
-  const referenced = new Set<string>([
-    ...timelineIds,
-    ...latestIds,
-    ...resultIds,
+  // `limit` bounds the map: the headline ids (results - which ARE the
+  // reading path for that operation - then first and latest) always resolve, then
+  // the rest fill in priority order up to `limit`. Id lists and the
+  // reading path keep only ids the map holds; the counts (total_sources,
+  // counts_by_year, years[].source_count) stay whole.
+  const firstId = strictMatched[0] ? lensSourceId(strictMatched[0]) : null;
+  const latestId = strictMatched.at(-1) ? lensSourceId(strictMatched.at(-1)!) : null;
+  const headline = [...resultIds, firstId, latestId].filter((id): id is string => Boolean(id));
+  const fill = [
     ...path.map((entry) => entry.id),
-    ...years.flatMap((bucket) => bucket.sample_sources),
-    ...bySource.flatMap((bucket) => bucket.sample_sources)
-  ]);
-  // Insertion order = citation priority (results, then timeline/latest,
-  // then bucket samples) so a downstream size cap drops the least
-  // important records first.
-  const byId = new Map(matched.map((item) => [lensSourceId(item), item]));
-  const priorityOrder = [
-    ...resultIds,
-    ...timelineIds,
     ...latestIds,
-    ...path.map((entry) => entry.id),
+    ...timelineIds,
     ...years.flatMap((bucket) => bucket.sample_sources),
     ...bySource.flatMap((bucket) => bucket.sample_sources)
   ];
-  const sourcesById: Record<string, ReturnType<typeof compactLensSource>> = {};
-  for (const id of priorityOrder) {
-    const item = byId.get(id);
-    if (item && referenced.has(id) && !sourcesById[id]) sourcesById[id] = compactLensSource(item);
+  // Insertion order = citation priority, so a downstream size cap drops
+  // the least important records first.
+  const byId = new Map(matched.map((item) => [lensSourceId(item), item]));
+  const kept = new Set<string>(headline.filter((id) => byId.has(id)));
+  for (const id of fill) {
+    if (kept.size >= maxResults) break;
+    if (byId.has(id)) kept.add(id);
   }
+  const sourcesById: Record<string, ReturnType<typeof compactLensSource>> = {};
+  for (const id of kept) sourcesById[id] = compactLensSource(byId.get(id)!);
+  const keptOnly = (ids: string[]) => ids.filter((id) => kept.has(id));
 
   return {
     operation: normalizedOperation,
@@ -555,6 +562,12 @@ export function buildArchiveLens({
     counts_by_year: countsByYear,
     year_count_summary: yearCountSummary(countsByYear),
     sources_by_id: sourcesById,
+    ...(matched.length > kept.size
+      ? {
+          sources_omitted: matched.length - kept.size,
+          sources_note: `sources_by_id holds ${kept.size} of ${matched.length} matched sources; raise limit (max 40) or narrow year_range for more`
+        }
+      : {}),
     match_mode: matcher.appliedMode,
     case_sensitive: caseSensitive === true || undefined,
     // Common-word advisory: when the term hits most in-scope sources the
@@ -564,13 +577,13 @@ export function buildArchiveLens({
       consideredCount >= 10 && matched.length / consideredCount > 0.5
         ? `'${compactWhitespace(topic)}' matches ${Math.round((matched.length / consideredCount) * 100)}% of in-scope sources; results are likely undifferentiated - consider a more specific phrase, case_sensitive: true, or a narrower year_range`
         : undefined,
-    first: strictMatched[0] ? lensSourceId(strictMatched[0]) : null,
-    latest: strictMatched.at(-1) ? lensSourceId(strictMatched.at(-1)!) : null,
+    first: firstId,
+    latest: latestId,
     results: resultIds,
-    timeline: timelineIds,
-    latest_sources: latestIds,
-    years,
-    sources: bySource,
-    reading_path: path
+    timeline: keptOnly(timelineIds),
+    latest_sources: keptOnly(latestIds),
+    years: years.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
+    sources: bySource.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
+    reading_path: path.filter((entry) => kept.has(entry.id))
   };
 }

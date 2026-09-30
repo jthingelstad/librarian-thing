@@ -1,7 +1,10 @@
 const SECONDS_PER_DAY = 24 * 60 * 60;
 
 export const DEFAULT_CONVERSATION_RETENTION_DAYS = 45;
-export const DEFAULT_MCP_AUDIT_RETENTION_DAYS = 14;
+// MCP audit rows match conversations (14 days until 2026-09-29: too short
+// for a weekly-cadence corpus). The TTL is written at insert, so rows
+// already stored keep the window they were written with.
+export const DEFAULT_MCP_AUDIT_RETENTION_DAYS = 45;
 
 type DateInput = Date | string | number;
 

@@ -28,7 +28,7 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult().serverInfo.name, 'librarian');
   // The version is the tool-surface cache key: it must change when the
   // packaged prompt/spec set changes, and be stable within one build.
-  assert.match(initializeResult().serverInfo.version, /^1\.2\.0\+tools\.[0-9a-f]{12}$/);
+  assert.match(initializeResult().serverInfo.version, /^1\.3\.0\+tools\.[0-9a-f]{12}$/);
   assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
@@ -122,14 +122,95 @@ test('ping answers an empty result', async () => {
   assert.deepEqual(reply.payload.result, {});
 });
 
-test('oversized tool results are truncated with an honest note', async () => {
+test('oversized tool results are cut to valid JSON with an honest note', async () => {
   const reply = await handleMcpMessage(
     { jsonrpc: '2.0', id: 11, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
     context({ invokeTool: async () => ({ blob: 'x'.repeat(120000) }) })
   );
   const text = reply.payload.result.content[0].text;
-  assert.ok(text.length < 49000);
-  assert.match(text, /truncated at 48000 characters/);
+  assert.ok(text.length <= 48000);
+  const parsed = JSON.parse(text);
+  assert.equal(parsed.truncated.max_chars, 48000);
+  assert.deepEqual(parsed.truncated.clipped, ['blob']);
+  assert.equal(reply.payload.result.isError, false);
+});
+
+test('a long list loses whole items off its end, counted, and still parses', async () => {
+  const results = Array.from({ length: 300 }, (_v, index) => ({ id: `wt-${index}`, text: 'y'.repeat(400) }));
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 12, method: 'tools/call', params: { name: 'list_content', arguments: { limit: 120 } } },
+    context({ invokeTool: async () => ({ results, total: 300 }) })
+  );
+  const parsed = JSON.parse(reply.payload.result.content[0].text);
+  assert.ok(parsed.results.length > 1 && parsed.results.length < 300);
+  assert.equal(parsed.results[0].id, 'wt-0', 'the ranked head survives');
+  assert.equal(parsed.results.length + parsed.truncated.omitted.results, 300);
+  assert.deepEqual(parsed.truncated.clipped, []);
+  assert.match(parsed.truncated.hint, /narrow the arguments \(/);
+});
+
+test('an {error} result goes out as isError with a code and a next step', async () => {
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 13, method: 'tools/call', params: { name: 'get_source', arguments: { issue_number: '9999' } } },
+    context({ invokeTool: async () => ({ error: 'Source not found.' }) })
+  );
+  assert.equal(reply.payload.result.isError, true);
+  const parsed = JSON.parse(reply.payload.result.content[0].text);
+  assert.equal(parsed.code, 'not_found');
+  assert.ok(parsed.next.length > 10);
+  const declared = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 14, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    context({ invokeTool: async () => ({ error: 'Nope.', code: 'not_configured', next: 'Ask later.' }) })
+  );
+  const own = JSON.parse(declared.payload.result.content[0].text);
+  assert.deepEqual([own.code, own.next], ['not_configured', 'Ask later.']);
+});
+
+test('bad arguments are refused before any quota is spent', async () => {
+  let spent = 0;
+  const ctx = context({
+    spendQuota: async () => {
+      spent += 1;
+      return { allowed: true, count: 1, max: 500 };
+    }
+  });
+  const call = async (name, args) =>
+    handleMcpMessage({ jsonrpc: '2.0', id: 20, method: 'tools/call', params: { name, arguments: args } }, ctx);
+  for (const [name, args, pattern] of [
+    ['search_archive', { query: 'rss', limit: 50 }, /limit must be from 1 to 12/],
+    ['search_archive', { query: 'rss', lmit: 5 }, /unknown argument "lmit"/],
+    ['search_archive', {}, /query is required/],
+    ['list_content', { source_kind: 'podcast', year_range: [2026, 2020] }, /year_range runs backwards/],
+    ['get_source', { source_kind: 'newsletter' }, /source_kind must be one of/]
+  ]) {
+    const reply = await call(name, args);
+    assert.equal(reply.payload.result.isError, true, name);
+    const parsed = JSON.parse(reply.payload.result.content[0].text);
+    assert.equal(parsed.code, 'bad_request');
+    assert.match(parsed.error, pattern);
+    assert.ok(parsed.accepted_arguments.length > 0);
+  }
+  assert.equal(spent, 0);
+  // Either spelling of a scalar passes.
+  const ok = await call('search_archive', { query: 'rss', limit: '5', year_range: ['2020', 2021] });
+  assert.equal(ok.payload.result.isError, false);
+  assert.equal(spent, 1);
+});
+
+test('web_search without its key is neither listed nor callable', async () => {
+  delete process.env.BRAVE_SEARCH_API_KEY;
+  let spent = 0;
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 21, method: 'tools/call', params: { name: 'web_search', arguments: { query: 'x' } } },
+    context({
+      spendQuota: async () => {
+        spent += 1;
+        return { allowed: true, count: 1, max: 500 };
+      }
+    })
+  );
+  assert.equal(reply.payload.error.code, -32602);
+  assert.equal(spent, 0);
 });
 
 test('tool declarations carry human display titles', () => {

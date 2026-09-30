@@ -41,6 +41,11 @@ Cadence: every three days, reviewing the prior seven days of natural Thingy use.
    tool, its arguments, bounded result evidence, runtime, and failure state. It
    does NOT receive the external client's original prompt, final synthesis, or
    feedback, so never infer final-answer quality from an MCP record.
+
+   For the shape of use rather than single calls, `mcp-census --days 7` gives
+   aggregates per tool, per client and per surface: calls, distinct readers,
+   errors, truncation, latency and argument KEYS (never values). Report its
+   numbers as aggregates only.
 3. Use both index signal sets to select every high-signal item plus a small natural
    sample of routine behavior. Retrieve exact details one conversation at a
    time:

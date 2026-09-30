@@ -21,12 +21,13 @@ test('tool results stamp server_version and pass through untruncated when small'
   assert.equal(parsed.server_version, serverVersion());
 });
 
-test('oversized results truncate with a parameter hint', () => {
+test('oversized results are cut to valid JSON with a parameter hint', () => {
   const { text, truncated } = renderToolResultText('search_archive', { blob: 'x'.repeat(MCP_RESULT_MAX_CHARS + 100) });
   assert.equal(truncated, true);
-  assert.ok(text.length < MCP_RESULT_MAX_CHARS + 200);
-  assert.match(text, /truncated at 48000 characters/);
-  assert.match(text, /narrow the arguments \(/);
+  assert.ok(text.length <= MCP_RESULT_MAX_CHARS);
+  const parsed = JSON.parse(text);
+  assert.equal(parsed.truncated.max_chars, 48000);
+  assert.match(parsed.truncated.hint, /narrow the arguments \(/);
 });
 
 test('web tools daily quota defaults to its own pool and honors the env override', () => {

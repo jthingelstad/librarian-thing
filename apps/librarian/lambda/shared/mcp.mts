@@ -9,7 +9,7 @@
  * pure protocol given a context and an invoke function.
  */
 import { availableToolSpecs, webSearchConfigured } from './archive-tools.mjs';
-import { promptFingerprint, toolTitle } from './prompts.mjs';
+import { serverVersion, toolTitle } from './prompts.mjs';
 
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
@@ -32,6 +32,7 @@ export const MCP_LAUNCH_TOOLS = [
   'media_search',
   'currently_history',
   'top_references',
+  'on_this_day',
   'fetch_page',
   'web_search'
 ];
@@ -54,9 +55,7 @@ function viewPhotoDeclaration() {
   return mcpToolDeclarations([VIEW_PHOTO_TOOL])[0];
 }
 
-// Tool results are sized for the Bedrock loop, where 200KB of evidence is
-// cheap context. MCP clients pay tokens for every byte, so cap what a
-// single tools/call returns and say so honestly when trimmed.
+// The most a single tools/call returns (see fitToCap).
 export const MCP_RESULT_MAX_CHARS = 48000;
 
 export const MCP_QUOTA_ERROR_CODE = -32029;
@@ -105,24 +104,260 @@ export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
     }));
 }
 
-// Shared by MCP tools/call and the /tools web route so the two surfaces can
-// never drift: stamp server_version, serialize, and truncate with a hint
-// naming only the parameters this tool actually accepts.
-export function renderToolResultText(name: string, invoked: unknown) {
-  const result =
-    invoked && typeof invoked === 'object' && !Array.isArray(invoked)
-      ? { ...(invoked as JsonRecord), server_version: serverVersion() }
-      : invoked;
-  let text = JSON.stringify(result ?? null, null, 1);
-  const truncated = text.length > MCP_RESULT_MAX_CHARS;
-  if (truncated) {
-    const spec = mcpToolDeclarations([name])[0];
-    const paramNames = Object.keys((spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {});
-    const hint = paramNames.length ? `narrow the arguments (${paramNames.join(', ')})` : 'ask a narrower question';
-    text =
-      text.slice(0, MCP_RESULT_MAX_CHARS) +
-      `\n... [truncated at ${MCP_RESULT_MAX_CHARS} characters; ${hint} for a complete result]`;
+// ── Tool errors ─────────────────────────────────────────────────────────
+// A tool that cannot answer says so: the result goes out with isError: true
+// and one code from this closed set, plus one next step. Handlers may set
+// `code` and `next` themselves; otherwise the message decides.
+export const TOOL_ERROR_CODES = [
+  'bad_request',
+  'not_found',
+  'not_configured',
+  'upstream_error',
+  'too_large',
+  'internal_error'
+] as const;
+export type ToolErrorCode = (typeof TOOL_ERROR_CODES)[number];
+
+const NEXT_STEP: Record<ToolErrorCode, string> = {
+  bad_request: "Check the arguments against this tool's input schema and call it again.",
+  not_found: 'Find a valid id with search_archive, list_content or latest_content, then call again.',
+  not_configured: 'This deployment does not offer that; use the archive tools instead.',
+  upstream_error: 'The outside service failed; try again later or answer from the archive.',
+  too_large: 'Narrow the arguments and call again.',
+  internal_error: 'Try again; if it keeps failing, answer from another tool.'
+};
+
+function errorCodeFor(message: string): ToolErrorCode {
+  if (/not found/i.test(message)) return 'not_found';
+  if (/not configured/i.test(message)) return 'not_configured';
+  if (/is required|needs a|must be|unknown argument/i.test(message)) return 'bad_request';
+  return 'upstream_error';
+}
+
+function toolErrorRecord(result: JsonRecord): JsonRecord {
+  const message = String(result.error);
+  const declared = String(result.code || '');
+  const code = (TOOL_ERROR_CODES as readonly string[]).includes(declared)
+    ? (declared as ToolErrorCode)
+    : errorCodeFor(message);
+  const next = typeof result.next === 'string' && result.next ? result.next : NEXT_STEP[code];
+  return { ...result, error: message, code, next };
+}
+
+// ── Argument validation ────────────────────────────────────────────────
+// Arguments are checked against the declared schema BEFORE any quota is
+// spent, so a malformed call costs nothing and says what was wrong. Scalars
+// are accepted in either spelling a client might send ("12" for 12); an
+// unknown argument, a bad enum, an out-of-range number or an inverted
+// year_range is refused.
+interface ArgSchema {
+  type?: string | string[];
+  enum?: unknown[];
+  minimum?: number;
+  maximum?: number;
+  minItems?: number;
+  maxItems?: number;
+  items?: ArgSchema;
+  properties?: Record<string, ArgSchema>;
+  required?: string[];
+}
+
+function matchesType(value: unknown, type: string) {
+  if (type === 'string') return typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value));
+  if (type === 'integer') return Number.isInteger(value) || (typeof value === 'string' && /^\s*-?\d+\s*$/.test(value));
+  if (type === 'number')
+    return (
+      (typeof value === 'number' && Number.isFinite(value)) ||
+      (typeof value === 'string' && value.trim() !== '' && Number.isFinite(Number(value)))
+    );
+  if (type === 'boolean') return typeof value === 'boolean' || value === 'true' || value === 'false';
+  if (type === 'array') return Array.isArray(value);
+  if (type === 'object') return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+  return true;
+}
+
+function checkValue(path: string, value: unknown, schema: ArgSchema, problems: string[]) {
+  if (value === null || value === undefined) return;
+  const types = schema.type ? (Array.isArray(schema.type) ? schema.type : [schema.type]) : [];
+  if (types.length && !types.some((type) => matchesType(value, type))) {
+    problems.push(`${path} must be ${types.join(' or ')}`);
+    return;
   }
+  if (schema.enum && !schema.enum.includes(value)) {
+    problems.push(`${path} must be one of ${schema.enum.map((option) => JSON.stringify(option)).join(', ')}`);
+  }
+  if (typeof schema.minimum === 'number' || typeof schema.maximum === 'number') {
+    const number = Number(value);
+    if (
+      Number.isFinite(number) &&
+      ((typeof schema.minimum === 'number' && number < schema.minimum) ||
+        (typeof schema.maximum === 'number' && number > schema.maximum))
+    ) {
+      problems.push(`${path} must be from ${schema.minimum ?? '-'} to ${schema.maximum ?? '-'}`);
+    }
+  }
+  if (Array.isArray(value)) {
+    if (typeof schema.minItems === 'number' && value.length < schema.minItems)
+      problems.push(`${path} needs at least ${schema.minItems} items`);
+    if (typeof schema.maxItems === 'number' && value.length > schema.maxItems)
+      problems.push(`${path} takes at most ${schema.maxItems} items`);
+    if (schema.items) value.forEach((item, index) => checkValue(`${path}[${index}]`, item, schema.items!, problems));
+  }
+}
+
+export function validateToolArguments(name: string, args: unknown): string[] {
+  if (args !== undefined && (args === null || typeof args !== 'object' || Array.isArray(args))) {
+    return ['arguments must be an object'];
+  }
+  const record = (args || {}) as JsonRecord;
+  const schema = (mcpToolDeclarations([name])[0]?.inputSchema || {}) as ArgSchema;
+  const properties = schema.properties || {};
+  const problems: string[] = [];
+  for (const key of Object.keys(record)) {
+    if (!(key in properties)) problems.push(`unknown argument "${key}"`);
+  }
+  for (const key of schema.required || []) {
+    if (record[key] === undefined || record[key] === null || record[key] === '') problems.push(`${key} is required`);
+  }
+  for (const [key, value] of Object.entries(record)) {
+    if (key in properties) checkValue(key, value, properties[key], problems);
+  }
+  const range = record.year_range;
+  if (Array.isArray(range) && range.length === 2 && Number(range[0]) > Number(range[1])) {
+    problems.push(`year_range runs backwards: [${range[0]}, ${range[1]}] should be [${range[1]}, ${range[0]}]`);
+  }
+  return problems;
+}
+
+/** The isError result for arguments that fail validation. */
+export function invalidArgumentsResult(name: string, problems: string[]) {
+  const spec = mcpToolDeclarations([name])[0];
+  const accepted = Object.keys((spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {});
+  return renderToolCallResult(name, {
+    error: `Invalid arguments for ${name}: ${problems.join('; ')}.`,
+    code: 'bad_request',
+    accepted_arguments: accepted
+  });
+}
+
+// ── Rendering under the cap ────────────────────────────────────────────
+// Tool results are sized for the Bedrock loop, where 200KB of evidence is
+// cheap context. MCP clients pay for every byte, so a result is cut to fit
+// MCP_RESULT_MAX_CHARS - structurally, so it always parses: whole items
+// come off the end of the largest list first (results are ranked), then the
+// longest text is clipped, and a `truncated` block says what went where.
+
+interface Found {
+  path: string;
+  size: number;
+  array?: unknown[];
+  parent?: JsonRecord | unknown[];
+  key?: string | number;
+  text?: string;
+}
+
+function survey(
+  value: unknown,
+  path: string,
+  arrays: Found[],
+  strings: Found[],
+  parent?: JsonRecord | unknown[],
+  key?: string | number
+) {
+  if (typeof value === 'string') {
+    strings.push({ path, size: value.length, parent, key, text: value });
+    return;
+  }
+  if (Array.isArray(value)) {
+    arrays.push({ path, size: JSON.stringify(value).length, array: value });
+    value.forEach((item, index) => survey(item, `${path}[]`, arrays, strings, value, index));
+    return;
+  }
+  if (value && typeof value === 'object') {
+    for (const [childKey, child] of Object.entries(value as JsonRecord)) {
+      if (!path && childKey === 'truncated') continue;
+      survey(child, path ? `${path}.${childKey}` : childKey, arrays, strings, value as JsonRecord, childKey);
+    }
+  }
+}
+
+function fitToCap(result: JsonRecord, max: number, hint: string) {
+  let text = JSON.stringify(result);
+  if (text.length <= max) return { text, truncated: false };
+  const working = JSON.parse(text) as JsonRecord;
+  const omitted: Record<string, number> = {};
+  const clipped: string[] = [];
+  for (let round = 0; round < 400; round++) {
+    working.truncated = { max_chars: max, omitted, clipped, hint };
+    text = JSON.stringify(working);
+    const over = text.length - max;
+    if (over <= 0) return { text, truncated: true };
+    const arrays: Found[] = [];
+    const strings: Found[] = [];
+    survey(working, '', arrays, strings);
+    const list = arrays.filter((found) => found.array!.length > 1).sort((a, b) => b.size - a.size)[0];
+    const longest = strings.sort((a, b) => b.size - a.size)[0];
+    if (list && (!longest || list.size >= longest.size)) {
+      const items = list.array!;
+      const perItem = list.size / items.length;
+      const drop = Math.min(items.length - 1, Math.max(1, Math.ceil(over / perItem)));
+      items.splice(items.length - drop, drop);
+      omitted[list.path] = (omitted[list.path] || 0) + drop;
+      continue;
+    }
+    if (longest && longest.size > 240) {
+      const keep = Math.max(200, longest.size - over - 80);
+      (longest.parent as Record<string | number, unknown>)[longest.key!] = `${longest.text!.slice(0, keep)}…`;
+      if (!clipped.includes(longest.path)) clipped.push(longest.path);
+      continue;
+    }
+    break;
+  }
+  return {
+    text: JSON.stringify({
+      ...toolErrorRecord({ error: 'The result was too large to return.', code: 'too_large', next: hint }),
+      server_version: serverVersion()
+    }),
+    truncated: true
+  };
+}
+
+function narrowingHint(name: string) {
+  const spec = mcpToolDeclarations([name])[0];
+  const paramNames = Object.keys((spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {});
+  return paramNames.length
+    ? `narrow the arguments (${paramNames.join(', ')}) for a complete result`
+    : 'ask a narrower question for a complete result';
+}
+
+// Shared by MCP tools/call and the /tools web route so the two surfaces can
+// never drift: an {error} result becomes an isError result with a code and a
+// next step; anything else is stamped with server_version and fitted under
+// the cap.
+export function renderToolCallResult(name: string, invoked: unknown) {
+  const record =
+    invoked && typeof invoked === 'object' && !Array.isArray(invoked)
+      ? (invoked as JsonRecord)
+      : { result: invoked ?? null };
+  if (typeof record.error === 'string' && record.error) {
+    const text = JSON.stringify({ ...toolErrorRecord(record), server_version: serverVersion() });
+    return { text, truncated: false, isError: true };
+  }
+  const fitted = fitToCap({ ...record, server_version: serverVersion() }, MCP_RESULT_MAX_CHARS, narrowingHint(name));
+  return { ...fitted, isError: false };
+}
+
+/** A tool that threw: the isError result, naming only the error class. */
+export function toolFailureResult(name: string, error: unknown) {
+  return renderToolCallResult(name, {
+    error: `Tool ${name} failed: ${error instanceof Error ? error.constructor.name : 'error'}`,
+    code: 'internal_error'
+  });
+}
+
+// Kept for callers that only want the text.
+export function renderToolResultText(name: string, invoked: unknown) {
+  const { text, truncated } = renderToolCallResult(name, invoked);
   return { text, truncated };
 }
 
@@ -139,16 +374,8 @@ function negotiatedProtocolVersion(requested: unknown) {
   return SUPPORTED_PROTOCOL_VERSIONS.includes(value) ? value : MCP_PROTOCOL_VERSION;
 }
 
-// The tool-surface cache key, also stamped onto tool responses
-// (belt-and-braces: listChanged depends on client behavior we don't
-// control; a version on the payload lets an agent detect a stale cached
-// tools/list from any response).
-export function serverVersion() {
-  // 1.2.0: view_photo joined the surface. The minor is bumped by hand when
-  // the tool list changes outside tool-specs.json (which the fingerprint
-  // covers) - clients cache tools/list on this value.
-  return `1.2.0+tools.${promptFingerprint()}`;
-}
+// Defined beside the prompt fingerprint so archive tools can stamp it too.
+export { serverVersion };
 
 export function initializeResult(requestedVersion: unknown) {
   return {
@@ -230,7 +457,13 @@ export async function handleMcpMessage(
   }
   if (method === 'tools/call') {
     const name = String(params.name || '');
+    const rawArgs = params.arguments === undefined ? {} : params.arguments;
     if (name === VIEW_PHOTO_TOOL && context.viewPhoto) {
+      const problems = validateToolArguments(name, rawArgs);
+      if (problems.length) {
+        const { text } = invalidArgumentsResult(name, problems);
+        return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
+      }
       const quota = await context.spendQuota();
       if (!quota.allowed) {
         return {
@@ -255,28 +488,25 @@ export async function handleMcpMessage(
           payload: rpcResult(id, {
             content: [
               ...photos.map((photo) => ({ type: 'image', data: photo.dataBase64, mimeType: photo.mimeType })),
-              { type: 'text', text: JSON.stringify(summary, null, 1) }
+              { type: 'text', text: JSON.stringify(summary) }
             ],
             isError: photos.length === 0
           })
         };
       } catch (error) {
-        return {
-          statusCode: 200,
-          payload: rpcResult(id, {
-            content: [
-              {
-                type: 'text',
-                text: `Tool view_photo failed: ${error instanceof Error ? error.constructor.name : 'error'}`
-              }
-            ],
-            isError: true
-          })
-        };
+        const { text } = toolFailureResult(name, error);
+        return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
       }
     }
-    if (!MCP_LAUNCH_TOOLS.includes(name)) {
+    // Only what tools/list declares is callable: web_search without its key
+    // is neither listed nor callable.
+    if (!mcpToolDeclarations().some((tool) => tool.name === name)) {
       return { statusCode: 200, payload: rpcError(id, -32602, `Unknown tool: ${name}`) };
+    }
+    const problems = validateToolArguments(name, rawArgs);
+    if (problems.length) {
+      const { text } = invalidArgumentsResult(name, problems);
+      return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
     }
     const quota = await context.spendQuota();
     if (!quota.allowed) {
@@ -289,30 +519,14 @@ export async function handleMcpMessage(
         )
       };
     }
-    const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
+    const args = (rawArgs && typeof rawArgs === 'object' ? rawArgs : {}) as JsonRecord;
     try {
       const invoked = await context.invokeTool(name, args);
-      const { text } = renderToolResultText(name, invoked);
-      return {
-        statusCode: 200,
-        payload: rpcResult(id, {
-          content: [{ type: 'text', text }],
-          isError: false
-        })
-      };
+      const { text, isError } = renderToolCallResult(name, invoked);
+      return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError }) };
     } catch (error) {
-      return {
-        statusCode: 200,
-        payload: rpcResult(id, {
-          content: [
-            {
-              type: 'text',
-              text: `Tool ${name} failed: ${error instanceof Error ? error.constructor.name : 'error'}`
-            }
-          ],
-          isError: true
-        })
-      };
+      const { text } = toolFailureResult(name, error);
+      return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
     }
   }
   return { statusCode: 200, payload: rpcError(id, -32601, `Method not found: ${method}`) };

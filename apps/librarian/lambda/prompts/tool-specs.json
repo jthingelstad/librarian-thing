@@ -11,7 +11,11 @@
               "type": "string"
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 5,
+              "description": "Maximum results, 1 to 10 (default 5)."
             }
           },
           "required": [
@@ -45,7 +49,11 @@
               "type": "string"
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "default": 8,
+              "description": "Maximum results, 1 to 12 (default 8)."
             }
           },
           "required": [
@@ -58,11 +66,15 @@
   {
     "toolSpec": {
       "name": "get_source",
-      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source with source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source by id (wt-351, blog-<microblog id>, ep-<n>, as on_this_day, archive_lens and archive_gems emit them), or by source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "description": "A source id as other tools emit it: wt-351 (Weekly Thing issue), blog-<microblog id>, ep-<episode number>."
+            },
             "source_kind": {
               "type": "string",
               "enum": [
@@ -88,7 +100,7 @@
             },
             "section": {
               "type": "string",
-              "description": "Section name filter (case-insensitive substring). Common Weekly Thing sections: Journal, Briefly, Fine Print, Photo, Featured, Tools, Reading."
+              "description": "Section filter (case-insensitive substring of the issue's headings). Weekly Thing: Issue (the opening note), Currently, Briefly, Fortune; Notable returns its linked articles, each a section named by its headline; recent Journals are split by day (Sunday, Monday...)."
             }
           }
         }
@@ -160,7 +172,11 @@
               ]
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 120,
+              "default": 40,
+              "description": "Maximum results, 1 to 120 (default 40)."
             },
             "match_mode": {
               "type": "string",
@@ -224,7 +240,11 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "description": "Maximum results, 1 to 50 (default 20)."
             },
             "match_mode": {
               "type": "string",
@@ -270,8 +290,11 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "limit": {
-              "type": "number",
-              "description": "Max entries for top_domains and similar lists (3-40, default 12)."
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 40,
+              "default": 12,
+              "description": "Maximum entries in top_domains and similar lists, 3 to 40 (default 12)."
             }
           }
         }
@@ -305,10 +328,14 @@
             },
             "issue_number": {
               "type": "string",
-              "description": "Issue number as a string, e.g. \"348\"."
+              "description": "Alias for also_in_issue: blog posts that were also featured in this Weekly Thing issue."
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30,
+              "default": 10,
+              "description": "Maximum results, 1 to 30 (default 10)."
             }
           }
         }
@@ -327,7 +354,11 @@
               "type": "string"
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "description": "Maximum results, 1 to 50 (default 20)."
             }
           },
           "required": [
@@ -376,7 +407,11 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 40,
+              "default": 18,
+              "description": "Maximum results, 1 to 40 (default 18)."
             },
             "match_mode": {
               "type": "string",
@@ -441,7 +476,11 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 40,
+              "default": 18,
+              "description": "Maximum results, 1 to 40 (default 18)."
             },
             "match_mode": {
               "type": "string",
@@ -464,11 +503,15 @@
   {
     "toolSpec": {
       "name": "source_neighborhood",
-      "description": "Explore what connects to one known archive source. Given a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known, cross-source links, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>) or a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known, cross-source links, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "description": "A source id as other tools emit it: wt-351 (Weekly Thing issue), blog-<microblog id>, ep-<episode number>."
+            },
             "source_kind": {
               "type": "string",
               "enum": [
@@ -493,7 +536,11 @@
               "type": "string"
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 8,
+              "description": "Maximum results, 1 to 20 (default 8)."
             }
           }
         }
@@ -503,7 +550,7 @@
   {
     "toolSpec": {
       "name": "archive_gems",
-      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme/topic builds a reading path for that theme; otherwise mood/mode can bias toward forgotten, older, recent, or generally link-rich/cross-source sources. Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme/topic builds a reading path for that theme (ids resolve in sources_by_id and in get_source); otherwise mood/mode can bias toward forgotten, older, recent, or generally link-rich/cross-source sources. Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -520,7 +567,8 @@
                 "serendipity",
                 "forgotten",
                 "recent"
-              ]
+              ],
+              "description": "serendipity (default) draws at random from link-rich sources; forgotten ranks the older half of the archive; recent ranks the newest tenth."
             },
             "mode": {
               "type": "string",
@@ -528,7 +576,8 @@
                 "serendipity",
                 "forgotten",
                 "recent"
-              ]
+              ],
+              "description": "Alias of mood. If both are given and differ, mood applies and applied.ignored says so."
             },
             "source_kind": {
               "type": "string",
@@ -548,7 +597,11 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "default": 6,
+              "description": "Maximum results, 1 to 12 (default 6)."
             }
           }
         }
@@ -605,7 +658,10 @@
             },
             "limit": {
               "type": "integer",
-              "description": "Max results, default 8, max 12"
+              "minimum": 1,
+              "maximum": 12,
+              "default": 8,
+              "description": "Maximum results, 1 to 12 (default 8)."
             }
           },
           "required": [
@@ -642,14 +698,14 @@
   {
     "toolSpec": {
       "name": "currently_history",
-      "description": "What Jamie was reading, playing, watching, listening to, installing, or drinking over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "What Jamie was watching, listening to, installing, reading, playing, drinking, buying or eating over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "kind": {
               "type": "string",
-              "description": "Filter: reading, playing, watching, listening, installing, drinking, eating, buying"
+              "description": "Filter by kind: watching, listening, installing, reading, playing, drinking, buying, eating, deleting, using, building, dining, flying, giving, walking, wearing. Variants such as \"installing more\" count as their kind."
             },
             "year": {
               "type": "integer"
@@ -659,7 +715,11 @@
               "description": "Substring filter on the entry text"
             },
             "limit": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 120,
+              "default": 40,
+              "description": "Maximum results, 1 to 120 (default 40)."
             }
           }
         }
@@ -682,7 +742,10 @@
             },
             "limit": {
               "type": "integer",
-              "description": "Max domains, default 20, max 40"
+              "minimum": 1,
+              "maximum": 40,
+              "default": 20,
+              "description": "Maximum results, 1 to 40 (default 20)."
             },
             "include_utility": {
               "type": "boolean",
@@ -696,6 +759,60 @@
                 "podcast"
               ],
               "description": "Restrict aggregation to one corpus. Weekly Thing questions should pass weekly_thing so pre-2017 blog links do not contaminate counts."
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "toolSpec": {
+      "name": "on_this_day",
+      "description": "What Jamie published on this calendar day in past years, across the Weekly Thing, the blog and the podcast: the archive's \"on this day\". Defaults to today in America/Chicago. Returns years newest first, each with years_ago and items {id, label, source_kind, title, date, url, excerpt, photo?}; read one with get_source(id), show a photo with view_photo. Use for anniversaries, \"what was Jamie writing a year ago\", and daily look-backs. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "YYYY-MM-DD or MM-DD (default today in America/Chicago). Only years before the date's year are returned."
+            },
+            "window_days": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 7,
+              "default": 0,
+              "description": "Days either side of the date to include, 0 to 7 (default 0)."
+            },
+            "year_range": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "Restrict to one corpus (default all in scope)."
+            },
+            "include_microposts": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include blog microposts (default true)."
+            },
+            "limit_per_year": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 5,
+              "description": "Maximum items per year, 1 to 20 (default 5); a year with more reports the count as more."
             }
           }
         }
@@ -735,8 +852,11 @@
               "description": "Web search query."
             },
             "limit": {
-              "type": "number",
-              "description": "Max results, 1-10 (default 5)."
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 5,
+              "description": "Maximum results, 1 to 10 (default 5)."
             }
           },
           "required": [

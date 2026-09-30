@@ -11,5 +11,5 @@ test('Thingy retention windows default to the agreed shorter durations', () => {
   const day = 24 * 60 * 60;
 
   assert.equal(conversationTtlSeconds(now), epoch + (45 * day));
-  assert.equal(mcpAuditTtlSeconds(now), epoch + (14 * day));
+  assert.equal(mcpAuditTtlSeconds(now), epoch + (45 * day));
 });

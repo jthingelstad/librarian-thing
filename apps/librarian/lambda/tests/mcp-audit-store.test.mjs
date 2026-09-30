@@ -123,3 +123,96 @@ test('recordMcpToolCall sends one PutItem to the configured table', async () => 
   assert.equal(calls[0].TableName, 'table-1');
   assert.equal(fromDynamoAttr(calls[0].Item.request_id), 'request-3');
 });
+
+test('MCP audit rows carry surface, OAuth client and server version; web rows carry no client', () => {
+  const mcpRow = decoded(
+    mcpAuditItem({
+      subscriberHash: 'reader-hash',
+      requestId: 'request-4',
+      createdAt: '2026-09-29T22:30:00.000Z',
+      toolName: 'find_links',
+      surface: 'mcp',
+      clientId: 'client-abcdefghijklmnopqrstuv',
+      clientName: 'Claude',
+      serverVersion: '1.3.0+tools.abc123'
+    })
+  );
+  assert.equal(mcpRow.surface, 'mcp');
+  assert.equal(mcpRow.client_id, 'client-abcdefghijklmnopqrstuv');
+  assert.equal(mcpRow.client_name, 'Claude');
+  assert.equal(mcpRow.server_version, '1.3.0+tools.abc123');
+  assert.equal(mcpRow.ttl, Math.floor(Date.parse('2026-09-29T22:30:00.000Z') / 1000) + 45 * 24 * 60 * 60);
+
+  const webRow = decoded(
+    mcpAuditItem({
+      subscriberHash: 'reader-hash',
+      requestId: 'request-5',
+      createdAt: '2026-09-29T22:31:00.000Z',
+      toolName: 'find_links',
+      surface: 'web',
+      serverVersion: '1.3.0+tools.abc123'
+    })
+  );
+  assert.equal(webRow.surface, 'web');
+  assert.equal(JSON.parse(webRow.tool_trace_json).surface, 'web');
+  assert.equal('client_id' in webRow, false);
+  assert.equal('client_name' in webRow, false);
+  assert.equal(webRow.server_version, '1.3.0+tools.abc123');
+});
+
+test('recordMcpToolCall looks up the registered client name once per warm container', async () => {
+  const calls = [];
+  const dynamodb = {
+    send: async (command) => {
+      calls.push(command.input);
+      return command.input.Key ? { Item: { client_name: { S: 'Claude Code' } } } : {};
+    }
+  };
+  const call = (requestId) =>
+    recordMcpToolCall({
+      dynamodb,
+      tableName: 'table-1',
+      subscriberHash: 'reader-hash',
+      requestId,
+      createdAt: '2026-09-29T22:32:00.000Z',
+      toolName: 'corpus_stats',
+      surface: 'mcp',
+      clientId: 'client-lookup-once-0000000000'
+    });
+  await call('request-6');
+  await call('request-7');
+  const reads = calls.filter((input) => input.Key);
+  const puts = calls.filter((input) => input.Item);
+  assert.equal(reads.length, 1);
+  assert.equal(fromDynamoAttr(reads[0].Key.pk), 'oauthclient#client-lookup-once-0000000000');
+  assert.equal(reads[0].ProjectionExpression, 'client_name');
+  assert.equal(puts.length, 2);
+  for (const put of puts) {
+    assert.equal(fromDynamoAttr(put.Item.client_id), 'client-lookup-once-0000000000');
+    assert.equal(fromDynamoAttr(put.Item.client_name), 'Claude Code');
+  }
+});
+
+test('a failed client-name read never blocks the audit row', async () => {
+  const puts = [];
+  const dynamodb = {
+    send: async (command) => {
+      if (command.input.Key) throw new Error('throttled');
+      puts.push(command.input);
+      return {};
+    }
+  };
+  await recordMcpToolCall({
+    dynamodb,
+    tableName: 'table-1',
+    subscriberHash: 'reader-hash',
+    requestId: 'request-8',
+    createdAt: '2026-09-29T22:33:00.000Z',
+    toolName: 'corpus_stats',
+    surface: 'mcp',
+    clientId: 'client-read-fails-00000000000'
+  });
+  assert.equal(puts.length, 1);
+  assert.equal(fromDynamoAttr(puts[0].Item.client_id), 'client-read-fails-00000000000');
+  assert.equal('client_name' in puts[0].Item, false);
+});

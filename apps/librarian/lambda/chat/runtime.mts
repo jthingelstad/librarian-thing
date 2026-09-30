@@ -78,7 +78,10 @@ import {
   WEB_TOOLS,
   handleMcpMessage,
   mcpToolDeclarations,
-  renderToolResultText,
+  invalidArgumentsResult,
+  renderToolCallResult,
+  toolFailureResult,
+  validateToolArguments,
   serverVersion
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
@@ -851,15 +854,18 @@ const MCP_RATE_LIMIT_MAX = 300;
 
 // One audited archive-tool invoker for every external tool door (/mcp and
 // /tools). Runs the registry handler, records the bounded audit row with the
-// calling surface, and logs the outcome; audit failures never fail the call.
+// calling surface (and, for /mcp, the OAuth client), and logs the outcome;
+// audit failures never fail the call.
 function archiveToolInvoker({
   subscriberHash,
   requestId,
-  surface
+  surface,
+  clientId
 }: {
   subscriberHash: string;
   requestId: string;
   surface: 'mcp' | 'web';
+  clientId?: string;
 }) {
   return async (name: string, input: JsonRecord) => {
     const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
@@ -882,7 +888,9 @@ function archiveToolInvoker({
           resultChars,
           responseTruncated: resultChars > MCP_RESULT_MAX_CHARS,
           responseMaxChars: MCP_RESULT_MAX_CHARS,
-          surface
+          surface,
+          clientId,
+          serverVersion: serverVersion()
         });
       } catch (error) {
         logEvent('warning', 'mcp_tool_audit_failed', {
@@ -897,7 +905,8 @@ function archiveToolInvoker({
       const toolResult = await handler(input, { scope: 'all', subscriberHash });
       const status = objectValue(toolResult).error ? 'tool_error' : 'ok';
       const durationMs = Math.round(performance.now() - toolStart);
-      const resultChars = JSON.stringify(toolResult ?? null, null, 1).length;
+      // Compact, as the doors serialise it.
+      const resultChars = JSON.stringify(toolResult ?? null).length;
       await audit(toolResult, status, resultChars, durationMs);
       logEvent('info', 'mcp_tool_call_completed', {
         request_id: requestId,
@@ -930,7 +939,15 @@ function archiveToolInvoker({
  * bytes and reasons, never the base64 (DynamoDB items are bounded and the
  * image itself is not evidence worth keeping).
  */
-function viewPhotoInvoker({ subscriberHash, requestId }: { subscriberHash: string; requestId: string }) {
+function viewPhotoInvoker({
+  subscriberHash,
+  requestId,
+  clientId
+}: {
+  subscriberHash: string;
+  requestId: string;
+  clientId: string;
+}) {
   return async (urls: unknown) => {
     const toolStart = performance.now();
     const result = await fetchPhotos(urls);
@@ -955,7 +972,9 @@ function viewPhotoInvoker({ subscriberHash, requestId }: { subscriberHash: strin
         resultChars: JSON.stringify(auditResult).length,
         responseTruncated: false,
         responseMaxChars: MCP_RESULT_MAX_CHARS,
-        surface: 'mcp'
+        surface: 'mcp',
+        clientId,
+        serverVersion: serverVersion()
       });
     } catch (error) {
       logEvent('warning', 'mcp_tool_audit_failed', {
@@ -1039,6 +1058,20 @@ async function handleWebToolsRoute({
     finish(400, { error: `Unknown tool: ${name}` });
     return;
   }
+  // Same door rules as /mcp: malformed arguments are refused before any
+  // quota is spent, and say what was wrong.
+  const args = body.arguments === undefined ? {} : body.arguments;
+  const problems = validateToolArguments(name, args);
+  if (problems.length) {
+    const refused = invalidArgumentsResult(name, problems);
+    finish(200, {
+      content: [{ type: 'text', text: refused.text }],
+      is_error: true,
+      truncated: false,
+      server_version: serverVersion()
+    });
+    return;
+  }
   const entitlements = tokenEntitlements(payload);
   const unlimited = isOwnerSubscriberHash(subscriberHash);
   const quota = unlimited
@@ -1050,25 +1083,25 @@ async function handleWebToolsRoute({
     });
     return;
   }
-  const args = objectValue(body.arguments);
   const invoke = archiveToolInvoker({
     subscriberHash,
     requestId: String(summary.request_id || ''),
     surface: 'web'
   });
   try {
-    const invoked = await invoke(name, args);
-    const { text, truncated } = renderToolResultText(name, invoked);
+    const invoked = await invoke(name, objectValue(args));
+    const { text, truncated, isError } = renderToolCallResult(name, invoked);
     finish(200, {
       content: [{ type: 'text', text }],
-      is_error: false,
+      is_error: isError,
       truncated,
       server_version: serverVersion()
     });
   } catch (error) {
     finish(200, {
-      content: [{ type: 'text', text: `Tool ${name} failed: ${errorName(error)}` }],
+      content: [{ type: 'text', text: toolFailureResult(name, error).text }],
       is_error: true,
+      truncated: false,
       server_version: serverVersion()
     });
   }
@@ -1148,11 +1181,13 @@ async function handleMcpRoute({
     invokeTool: archiveToolInvoker({
       subscriberHash: grant.subscriberHash,
       requestId: String(summary.request_id || ''),
-      surface: 'mcp'
+      surface: 'mcp',
+      clientId: grant.clientId
     }),
     viewPhoto: viewPhotoInvoker({
       subscriberHash: grant.subscriberHash,
-      requestId: String(summary.request_id || '')
+      requestId: String(summary.request_id || ''),
+      clientId: grant.clientId
     })
   });
   finish(result.statusCode, result.payload);

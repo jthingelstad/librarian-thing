@@ -269,10 +269,11 @@ def test_mcp_index_is_bounded_private_and_surfaces_runtime_attention():
     )
 
     assert payload["source"] == "direct_dynamodb_read_only"
-    assert payload["surface"] == "mcp"
+    assert payload["surfaces"] == {"mcp": 1}
     assert payload["returned_mcp_calls"] == 1
     record = payload["mcp_calls"][0]
     assert record["request_id"] == "request-mcp-1"
+    assert record["surface"] == "mcp"
     assert record["reader_kind"] == "reader"
     assert record["priority"] == "high"
     assert record["attention_reasons"] == ["tool_error", "slow_tool"]
@@ -306,6 +307,201 @@ def test_mcp_client_response_truncation_is_an_attention_signal():
 
     assert priority == "medium"
     assert reasons == ["client_response_truncated"]
+
+
+def test_mcp_surface_comes_from_the_row_and_old_rows_default_sensibly():
+    web_row = mcp_metadata(
+        surface="web",
+        tool_trace_json='{"schema_version":2,"surface":"web","calls":[]}',
+    )
+    old_web_row = mcp_metadata(tool_trace_json='{"schema_version":2,"surface":"web","calls":[]}')
+    pre_tools_row = mcp_metadata(tool_trace_json='{"schema_version":2,"calls":[]}')
+    new_mcp_row = mcp_metadata(
+        surface="mcp",
+        client_id="client-abcdefghijklmnopqrstuv",
+        client_name="Claude",
+        server_version="1.3.0+tools.abc",
+    )
+
+    assert conversation_review.mcp_surface(web_row) == "web"
+    assert conversation_review.mcp_surface(old_web_row) == "web"
+    assert conversation_review.mcp_surface(pre_tools_row) == "mcp"
+    detail = conversation_review.mcp_detail_record(web_row, configured_owner_hash="owner-hash")
+    assert detail["surface"] == "web"
+    assert detail["request"]["client"] == {"client_id": "", "client_name": ""}
+    record = conversation_review.mcp_index_record(new_mcp_row, configured_owner_hash="owner-hash")
+    assert record["surface"] == "mcp"
+    assert record["client"] == {
+        "client_id": "client-abcdefghijklmnopqrstuv",
+        "client_name": "Claude",
+    }
+    assert record["server_version"] == "1.3.0+tools.abc"
+
+    table = FakeTable(scan_pages=[{"Items": [web_row, new_mcp_row]}])
+    payload = conversation_review.collect_mcp_index(
+        table,
+        since_iso="2026-08-22T00:00:00Z",
+        limit=10,
+        max_candidates=20,
+        max_scan_pages=3,
+        configured_owner_hash="owner-hash",
+        reader_filter="all",
+        sort="newest",
+    )
+    assert payload["surfaces"] == {"web": 1, "mcp": 1}
+
+
+def census_row(number, **overrides):
+    row = mcp_metadata(
+        request_id=f"request-census-{number}",
+        sk=f"mcp#2026-09-2{number % 9}T12:00:00.000Z#request-census-{number}",
+        created_at=f"2026-09-2{number % 9}T12:00:00.000Z",
+    )
+    row.update(overrides)
+    return row
+
+
+def test_mcp_census_aggregates_without_values_hashes_or_emails():
+    owner_email = "owner-address@example.com"
+    configured_owner_hash = conversation_review.owner_hash(owner_email)
+    claude = {
+        "surface": "mcp",
+        "client_id": "client-claude-0000000000000",
+        "client_name": "Claude",
+        "server_version": "1.3.0+tools.abc",
+    }
+    rows = [
+        census_row(
+            1,
+            pk=f"user#{configured_owner_hash}",
+            tool_name="find_links",
+            duration_ms=Decimal("100"),
+            result_chars=Decimal("1000"),
+            arguments_json='{"url":"https://secret-link.example/","limit":5}',
+            **claude,
+        ),
+        census_row(
+            2,
+            pk="user#reader-hash-a",
+            tool_name="find_links",
+            duration_ms=Decimal("300"),
+            result_chars=Decimal("3000"),
+            response_truncated=True,
+            arguments_json='{"url":"https://another-secret.example/"}',
+            **claude,
+        ),
+        census_row(
+            3,
+            pk="user#reader-hash-a",
+            tool_name="get_source",
+            status="tool_error",
+            duration_ms=Decimal("50"),
+            result_chars=Decimal("0"),
+            arguments_json='{"id":"private-lookup-value","Weird Key: jane@example.com":1}',
+            **claude,
+        ),
+        census_row(
+            4,
+            pk="user#reader-hash-b",
+            tool_name="find_links",
+            duration_ms=Decimal("200"),
+            result_chars=Decimal("2000"),
+            surface="web",
+            server_version="1.3.0+tools.abc",
+            arguments_json='{"compacted":true,"omitted":true,"original_chars":9000}',
+            tool_trace_json='{"schema_version":2,"surface":"web","calls":[]}',
+        ),
+        census_row(
+            5,
+            pk="user#reader-hash-b",
+            tool_name="search_archive",
+            duration_ms=Decimal("400"),
+            result_chars=Decimal("4000"),
+            arguments_json='{"query":"exact private MCP query"}',
+        ),
+    ]
+    table = FakeTable(scan_pages=[{"Items": rows}])
+
+    payload = conversation_review.collect_mcp_census(
+        table,
+        since_iso="2026-09-01T00:00:00Z",
+        max_scan_pages=3,
+        configured_owner_hash=configured_owner_hash,
+        reader_filter="all",
+    )
+
+    totals = payload["totals"]
+    assert totals["calls"] == 5
+    assert totals["owner_calls"] == 1
+    assert totals["reader_calls"] == 4
+    assert totals["distinct_readers"] == 2
+    assert totals["tool_errors"] == 1
+    assert totals["truncated"] == 1
+    assert totals["duration_ms"] == {"avg": 210, "p95": 400, "max": 400}
+    assert totals["result_chars"] == {"avg": 2000, "max": 4000}
+
+    find_links = payload["by_tool"]["find_links"]
+    assert list(payload["by_tool"]) == ["find_links", "get_source", "search_archive"]
+    assert find_links["calls"] == 3
+    assert find_links["distinct_readers"] == 2
+    assert find_links["argument_keys_by_outcome"] == {
+        "ok": {"url": 2, "limit": 1, "(oversized)": 1}
+    }
+    assert payload["by_tool"]["get_source"]["argument_keys_by_outcome"] == {
+        "tool_error": {"id": 1, "(nonstandard_key)": 1}
+    }
+
+    clients = payload["by_client"]
+    assert list(clients) == ["client-claude-0000000000000", "(unrecorded)", "(web)"]
+    assert clients["client-claude-0000000000000"]["client_name"] == "Claude"
+    assert clients["client-claude-0000000000000"]["calls"] == 3
+    assert clients["client-claude-0000000000000"]["tools"] == {"find_links": 2, "get_source": 1}
+    assert clients["(web)"]["calls"] == 1
+    assert clients["(unrecorded)"]["tools"] == {"search_archive": 1}
+
+    assert payload["by_surface"]["mcp"]["totals"]["calls"] == 4
+    assert payload["by_surface"]["web"]["totals"]["calls"] == 1
+    assert list(payload["by_surface"]["web"]["by_tool"]) == ["find_links"]
+    assert payload["server_versions"] == {"1.3.0+tools.abc": 4, "(unrecorded)": 1}
+
+    rendered = str(payload)
+    for private in (
+        "secret-link",
+        "another-secret",
+        "private-lookup-value",
+        "jane@example.com",
+        "exact private MCP query",
+        "reader-hash",
+        configured_owner_hash,
+        owner_email,
+        "/archive/300/",
+    ):
+        assert private not in rendered
+
+
+def test_mcp_census_reader_filter_and_empty_window():
+    table = FakeTable(scan_pages=[{"Items": [mcp_metadata(pk="user#owner-hash")]}])
+
+    payload = conversation_review.collect_mcp_census(
+        table,
+        since_iso="2026-09-01T00:00:00Z",
+        max_scan_pages=3,
+        configured_owner_hash="owner-hash",
+        reader_filter="reader",
+    )
+
+    assert payload["totals"]["calls"] == 0
+    assert payload["totals"]["duration_ms"] == {"avg": None, "p95": None, "max": None}
+    assert payload["by_tool"] == {}
+    assert payload["by_client"] == {}
+
+
+def test_mcp_census_is_a_cli_command():
+    args = conversation_review.parse_args(["mcp-census", "--days", "45", "--reader", "reader"])
+
+    assert args.command == "mcp-census"
+    assert args.days == 45
+    assert args.reader == "reader"
 
 
 def test_find_mcp_call_fails_closed_when_scan_limit_cannot_prove_absence():

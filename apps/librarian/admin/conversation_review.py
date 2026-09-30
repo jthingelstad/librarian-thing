@@ -6,6 +6,8 @@ Thingy HTTP endpoint, create a synthetic conversation, invoke a model grader,
 or write production state. ``list`` / ``show`` review native conversations;
 ``mcp-list`` / ``mcp-show`` review real MCP tool calls without pretending the
 external client's prompt, final synthesis, or feedback is available.
+``mcp-census`` aggregates the same MCP rows per tool, client and surface and
+prints argument keys, never values.
 
 Raw output is private reader evidence. Keep it in the active Codex run only;
 never paste it into commits, issues, automation memory, or run summaries.
@@ -16,7 +18,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
+import re
 import sys
 from collections import Counter
 from datetime import UTC, datetime, timedelta
@@ -43,6 +47,11 @@ PRIVATE_NOTICE = (
     "Private reader evidence for the active Codex evaluation only. "
     "Do not persist or quote raw content in commits, issues, automation memory, or summaries."
 )
+MCP_CENSUS_NOTICE = (
+    "Aggregate MCP census: counts, timings, sizes and argument keys only. It never carries "
+    "argument values, result bodies, subscriber hashes or emails."
+)
+MCP_ARGUMENT_KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]{0,63}$")
 RUNTIME_ATTENTION_REASONS = {
     "app_deadline_exceeded",
     "error",
@@ -565,6 +574,25 @@ def mcp_result_signals(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def mcp_surface(item: dict[str, Any]) -> str:
+    # Rows since 2026-09-29 store the door at the top level; older rows carry
+    # it only in the trace, and rows older than the /tools door are all MCP.
+    surface = str(item.get("surface") or "")
+    if not surface:
+        trace = mcp_trace(item)
+        surface = str(trace.get("surface") or "") if trace else ""
+    return surface or "mcp"
+
+
+def mcp_client(item: dict[str, Any]) -> dict[str, str]:
+    # The OAuth client behind an MCP call. Web (/tools) rows have no OAuth
+    # client, and rows written before 2026-09-29 did not record one.
+    return {
+        "client_id": str(item.get("client_id") or ""),
+        "client_name": str(item.get("client_name") or ""),
+    }
+
+
 def mcp_index_record(
     item: dict[str, Any],
     *,
@@ -574,6 +602,9 @@ def mcp_index_record(
     return {
         "request_id": str(item.get("request_id") or ""),
         "activity_kind": "mcp_tool_call",
+        "surface": mcp_surface(item),
+        "client": mcp_client(item),
+        "server_version": str(item.get("server_version") or ""),
         "reader_kind": reader_kind(item, configured_owner_hash=configured_owner_hash),
         "created_at": str(item.get("created_at") or ""),
         "tool_name": str(item.get("tool_name") or ""),
@@ -624,7 +655,7 @@ def collect_mcp_index(
     return {
         "privacy": PRIVATE_NOTICE,
         "source": "direct_dynamodb_read_only",
-        "surface": "mcp",
+        "surfaces": dict(Counter(mcp_surface(item) for item in filtered_items)),
         "generated_at": iso_timestamp(utc_now()),
         "since": since_iso,
         "scan_pages": pages,
@@ -649,10 +680,11 @@ def mcp_detail_record(
     return {
         "privacy": PRIVATE_NOTICE,
         "source": "direct_dynamodb_read_only",
-        "surface": "mcp",
+        "surface": mcp_surface(item),
         "request": {
             "request_id": str(item.get("request_id") or ""),
             "activity_kind": "mcp_tool_call",
+            "client": mcp_client(item),
             "reader_kind": reader_kind(item, configured_owner_hash=configured_owner_hash),
             "created_at": str(item.get("created_at") or ""),
             "tool_name": str(item.get("tool_name") or ""),
@@ -667,6 +699,7 @@ def mcp_detail_record(
         "versions": {
             "trace_schema_version": int(item.get("trace_schema_version") or 0),
             "source_revision": str(item.get("source_revision") or ""),
+            "server_version": str(item.get("server_version") or ""),
         },
         "tool_trace": mcp_trace(item),
         "external_client_outcome": {
@@ -677,6 +710,155 @@ def mcp_detail_record(
                 "synthesis, or reader feedback; do not infer final-answer quality from this record."
             ),
         },
+    }
+
+
+def mcp_census_client_key(item: dict[str, Any]) -> str:
+    client_id = mcp_client(item)["client_id"]
+    if client_id:
+        return client_id
+    return "(web)" if mcp_surface(item) == "web" else "(unrecorded)"
+
+
+def mcp_argument_keys(item: dict[str, Any]) -> list[str]:
+    # Top-level argument KEYS only; values never leave this function. Keys
+    # are client-supplied, so anything not shaped like an identifier is
+    # counted under one placeholder instead of being printed.
+    arguments = parse_json_object(item.get("arguments_json"))
+    if arguments is None:
+        return ["(unrecorded)"]
+    if arguments.get("compacted") is True and arguments.get("omitted") is True:
+        return ["(oversized)"]
+    return [key if MCP_ARGUMENT_KEY_RE.match(key) else "(nonstandard_key)" for key in arguments]
+
+
+def nearest_rank(values: list[int], percentile: float) -> int | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    return ordered[max(0, math.ceil(percentile * len(ordered)) - 1)]
+
+
+def mcp_census_stats(items: list[dict[str, Any]], *, configured_owner_hash: str) -> dict[str, Any]:
+    durations = [int(item.get("duration_ms") or 0) for item in items]
+    sizes = [int(item.get("result_chars") or 0) for item in items]
+    kinds = Counter(
+        reader_kind(item, configured_owner_hash=configured_owner_hash) for item in items
+    )
+    readers = {
+        subscriber_hash(item)
+        for item in items
+        if reader_kind(item, configured_owner_hash=configured_owner_hash) == "reader"
+    }
+    argument_keys: dict[str, Counter[str]] = {}
+    for item in items:
+        outcome = "ok" if str(item.get("status") or "") == "ok" else "tool_error"
+        argument_keys.setdefault(outcome, Counter()).update(mcp_argument_keys(item))
+    return {
+        "calls": len(items),
+        "owner_calls": kinds["owner"],
+        "reader_calls": kinds["reader"],
+        "distinct_readers": len(readers - {""}),
+        "tool_errors": sum(1 for item in items if str(item.get("status") or "") != "ok"),
+        "duration_ms": {
+            "avg": round(sum(durations) / len(durations)) if durations else None,
+            "p95": nearest_rank(durations, 0.95),
+            "max": max(durations, default=None),
+        },
+        "result_chars": {
+            "avg": round(sum(sizes) / len(sizes)) if sizes else None,
+            "max": max(sizes, default=None),
+        },
+        "truncated": sum(1 for item in items if bool(item.get("response_truncated"))),
+        "argument_keys_by_outcome": {
+            outcome: dict(counter.most_common())
+            for outcome, counter in sorted(argument_keys.items())
+        },
+    }
+
+
+def group_by(items: list[dict[str, Any]], key: Any) -> dict[str, list[dict[str, Any]]]:
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for item in items:
+        groups.setdefault(key(item), []).append(item)
+    return dict(sorted(groups.items(), key=lambda entry: (-len(entry[1]), entry[0])))
+
+
+def mcp_census_by_tool(
+    items: list[dict[str, Any]], *, configured_owner_hash: str
+) -> dict[str, Any]:
+    return {
+        tool: mcp_census_stats(rows, configured_owner_hash=configured_owner_hash)
+        for tool, rows in group_by(items, lambda item: str(item.get("tool_name") or "")).items()
+    }
+
+
+def mcp_census_record(
+    items: list[dict[str, Any]],
+    *,
+    configured_owner_hash: str,
+) -> dict[str, Any]:
+    by_client: dict[str, Any] = {}
+    for client_key, rows in group_by(items, mcp_census_client_key).items():
+        names = [mcp_client(row)["client_name"] for row in rows if mcp_client(row)["client_name"]]
+        by_client[client_key] = {
+            "client_name": names[0] if names else "",
+            **mcp_census_stats(rows, configured_owner_hash=configured_owner_hash),
+            "tools": dict(Counter(str(row.get("tool_name") or "") for row in rows).most_common()),
+        }
+    return {
+        "totals": mcp_census_stats(items, configured_owner_hash=configured_owner_hash),
+        "server_versions": dict(
+            Counter(
+                str(item.get("server_version") or "(unrecorded)") for item in items
+            ).most_common()
+        ),
+        "by_tool": mcp_census_by_tool(items, configured_owner_hash=configured_owner_hash),
+        "by_client": by_client,
+        "by_surface": {
+            surface: {
+                "totals": mcp_census_stats(rows, configured_owner_hash=configured_owner_hash),
+                "by_tool": mcp_census_by_tool(rows, configured_owner_hash=configured_owner_hash),
+            }
+            for surface, rows in group_by(items, mcp_surface).items()
+        },
+    }
+
+
+def collect_mcp_census(
+    table: Any,
+    *,
+    since_iso: str,
+    max_scan_pages: int,
+    configured_owner_hash: str,
+    reader_filter: str,
+) -> dict[str, Any]:
+    items, pages, scan_truncated = scan_recent_mcp_calls(
+        table,
+        since_iso=since_iso,
+        max_scan_pages=max_scan_pages,
+    )
+    filtered_items = [
+        item
+        for item in items
+        if reader_filter == "all"
+        or reader_kind(item, configured_owner_hash=configured_owner_hash) == reader_filter
+    ]
+    return {
+        "privacy": MCP_CENSUS_NOTICE,
+        "source": "direct_dynamodb_read_only",
+        "generated_at": iso_timestamp(utc_now()),
+        "since": since_iso,
+        "reader_filter": reader_filter,
+        "scan_pages": pages,
+        "scan_truncated": scan_truncated,
+        "notes": [
+            "distinct_readers excludes the owner; owner_calls and reader_calls split every count.",
+            "(web) groups /tools calls, which have no OAuth client; (unrecorded) groups MCP calls "
+            "written before client_id was recorded (2026-09-29).",
+            "p95 is nearest-rank; with few calls it equals the max.",
+        ],
+        **mcp_census_record(filtered_items, configured_owner_hash=configured_owner_hash),
     }
 
 
@@ -728,6 +910,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     add_connection_arguments(mcp_show_parser)
     mcp_show_parser.add_argument("request_id")
+
+    mcp_census_parser = subparsers.add_parser(
+        "mcp-census",
+        help="Aggregate MCP tool calls per tool, client and surface; argument keys, never values.",
+    )
+    add_connection_arguments(mcp_census_parser)
+    mcp_census_parser.add_argument("--days", type=int, default=DEFAULT_DAYS)
+    mcp_census_parser.add_argument("--since", default="", help="ISO lower bound; overrides --days.")
+    mcp_census_parser.add_argument("--reader", choices=("all", "reader", "owner"), default="all")
     return parser.parse_args(argv)
 
 
@@ -738,10 +929,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     table = session.resource("dynamodb").Table(table_name)
     configured_owner_hash = owner_hash(args.owner_email)
 
-    if args.command in {"list", "mcp-list"}:
+    if args.command in {"list", "mcp-list", "mcp-census"}:
         since = (
             parse_iso(args.since) if args.since else utc_now() - timedelta(days=max(1, args.days))
         )
+        if args.command == "mcp-census":
+            return collect_mcp_census(
+                table,
+                since_iso=iso_timestamp(since),
+                max_scan_pages=args.max_scan_pages,
+                configured_owner_hash=configured_owner_hash,
+                reader_filter=args.reader,
+            )
         if args.command == "mcp-list":
             return collect_mcp_index(
                 table,

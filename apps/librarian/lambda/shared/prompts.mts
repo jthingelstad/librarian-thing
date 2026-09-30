@@ -46,6 +46,21 @@ export function promptFingerprint(): string {
   return fingerprint;
 }
 
+// The tool-surface cache key, also stamped onto tool responses
+// (belt-and-braces: listChanged depends on client behavior we don't
+// control; a version on the payload lets an agent detect a stale cached
+// tools/list from any response). The minor is bumped by hand when tool
+// behaviour or the tool list changes outside tool-specs.json (which the
+// fingerprint covers) - clients cache tools/list on this value.
+// 1.2.0: view_photo joined the surface.
+// 1.3.0: on_this_day; errors carry isError + code; arguments validated
+//        before quota; results fit the cap as valid JSON; lens ids resolve.
+export const MCP_SERVER_VERSION = '1.3.0';
+
+export function serverVersion() {
+  return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;
+}
+
 // Human display titles for tools - shown by MCP clients (Claude renders
 // the title, not the identifier) and in Thingy's own status line. The
 // snake_case names stay stable: they are load-bearing identifiers across

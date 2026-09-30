@@ -198,7 +198,8 @@ async function run(tool, args, options = {}) {
     top_references: ['source_kind', 'year_start', 'year_end', 'limit', 'include_utility'],
     quote_search: ['phrase', 'limit'],
     media_search: ['query', 'year', 'limit'],
-    get_source: ['issue_number', 'section', 'source_kind']
+    get_source: ['id', 'issue_number', 'section', 'source_kind'],
+    on_this_day: ['date', 'window_days', 'year_range', 'source_kind', 'include_microposts', 'limit_per_year']
   };
   for (const [tool, params] of Object.entries(EXPECTED_PARAMS)) {
     const schema = published.get(tool);
@@ -401,6 +402,25 @@ await run('source_neighborhood', { issue_number: '182', limit: 3 });
 await run('claim_check', { claim: 'Jamie registered thingelstad.eth in 2021' });
 await run('media_search', { query: 'minnehaha creek', limit: 4 });
 await run('currently_history', { kind: 'reading', limit: 5 });
+{
+  // on_this_day: WT1 went out 2017-05-13; past years only; every id resolves.
+  const day = await run('on_this_day', { date: '2026-05-13' });
+  const items = (day?.years || []).flatMap((row) => row.items);
+  check(
+    'KA on_this_day 05-13 includes WT1',
+    items.some((item) => item.id === 'wt-1'),
+    JSON.stringify(items.map((item) => item.id).slice(0, 8))
+  );
+  check(
+    'KA on_this_day returns past years only, newest first',
+    (day?.years || []).every((row, index, rows) => row.year < 2026 && (!index || rows[index - 1].year > row.year))
+  );
+  for (const item of items.slice(0, 12)) {
+    const source = await ARCHIVE_TOOLS.get_source({ id: item.id }, { scope: 'all' });
+    check(`KA get_source resolves on_this_day id ${item.id}`, source?.source?.id === item.id, source?.error || '');
+  }
+  counts.on_this_day_0513 = items.length;
+}
 await run('search_faq', { query: 'what is the weekly thing' });
 if (allowNetwork) {
   await run('fetch_page', { url: 'https://www.thingelstad.com/' });
