@@ -59,7 +59,12 @@ export function promptFingerprint(): string {
 //        search_archive voice / section_family / content_kind / source_kind,
 //        find_links url and link_role over commentary and Journal links;
 //        link rankings and counts are headline picks.
-export const MCP_SERVER_VERSION = '1.4.0';
+// 1.5.0: list_topics and compare_eras published; the skim (description,
+//        abstract, key_points) on source records and search results;
+//        similar_issues; topic and category filters; voice on quote_search,
+//        claim_check and the lenses; media_search issue_number; yearly terms
+//        scored against the whole corpus.
+export const MCP_SERVER_VERSION = '1.5.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

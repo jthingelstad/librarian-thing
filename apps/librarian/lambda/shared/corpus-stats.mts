@@ -40,6 +40,37 @@ interface YearlyContentOptions {
   topYearLimit?: number;
   sampleLimit?: number;
   chunks?: CorpusRecord[];
+  // Every chunk of the corpus, so a narrowed year_range is still scored for
+  // what is distinctive against ALL years (a one-year request otherwise
+  // had nothing to compare against and ranked raw counts).
+  baselineChunks?: CorpusRecord[];
+}
+
+interface TermBaseline {
+  yearsWithTerm: Map<string, number>;
+  totalYears: number;
+}
+
+const TERM_BASELINES = new WeakMap<object, TermBaseline>();
+
+function termBaseline(chunks: CorpusRecord[]): TermBaseline {
+  const cached = TERM_BASELINES.get(chunks);
+  if (cached) return cached;
+  const termsByYear = new Map<number, Set<string>>();
+  for (const chunk of chunks) {
+    const year = yearFromPublishDate(chunk?.publish_date);
+    if (!year) continue;
+    const seen = termsByYear.get(year) || new Set<string>();
+    for (const term of textTerms([chunk.subject, chunk.section, chunk.summary, chunk.text].join(' '))) seen.add(term);
+    termsByYear.set(year, seen);
+  }
+  const yearsWithTerm = new Map<string, number>();
+  for (const seen of termsByYear.values()) {
+    for (const term of seen) yearsWithTerm.set(term, (yearsWithTerm.get(term) || 0) + 1);
+  }
+  const baseline = { yearsWithTerm, totalYears: Math.max(termsByYear.size, 1) };
+  TERM_BASELINES.set(chunks, baseline);
+  return baseline;
 }
 
 export function yearFromPublishDate(value: unknown) {
@@ -298,14 +329,19 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
   const allBuckets = Array.from(buckets.values());
   // "Signals" should surface what is DISTINCTIVE about a year, not the
   // corpus-wide baseline vocabulary (great/good/time/people ranked top for
-  // every single year). Score = year count x idf across year buckets.
-  const yearsWithTerm = new Map<string, number>();
-  for (const bucket of allBuckets) {
-    for (const term of bucket.textTerms.keys()) {
-      yearsWithTerm.set(term, (yearsWithTerm.get(term) || 0) + 1);
+  // every single year). Score = year count x idf across year buckets - of
+  // the whole corpus when the caller passes it.
+  let yearsWithTerm = new Map<string, number>();
+  let totalYears = Math.max(allBuckets.length, 1);
+  if (Array.isArray(options.baselineChunks) && options.baselineChunks.length) {
+    ({ yearsWithTerm, totalYears } = termBaseline(options.baselineChunks));
+  } else {
+    for (const bucket of allBuckets) {
+      for (const term of bucket.textTerms.keys()) {
+        yearsWithTerm.set(term, (yearsWithTerm.get(term) || 0) + 1);
+      }
     }
   }
-  const totalYears = Math.max(allBuckets.length, 1);
   const distinctiveTerms = (bucket: YearBucket, limit: number) =>
     Array.from(bucket.textTerms.entries())
       .map(([term, count]) => ({

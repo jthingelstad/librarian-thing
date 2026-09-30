@@ -28,7 +28,7 @@
   {
     "toolSpec": {
       "name": "search_archive",
-      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, section, section_family, content_kind or voice based on what comes back. year_range is [start_year, end_year]. voice=jamie keeps only Jamie's own words (quotations and link titles are cut from each passage). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, section, section_family, content_kind, voice, topic or category based on what comes back. Each result carries a skim of its whole source (the issue's description, the post's abstract; a generated abstract says so). year_range is [start_year, end_year]. voice=jamie keeps only Jamie's own words (quotations and link titles are cut from each passage). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -84,6 +84,14 @@
                 "podcast"
               ],
               "description": "One source within the active scope."
+            },
+            "topic": {
+              "type": "string",
+              "description": "A topic cluster from list_topics (e.g. \"AI and agents\"); Weekly Thing sources only."
+            },
+            "category": {
+              "type": "string",
+              "description": "A blog category (e.g. \"Coffee\", \"Kubb\", \"Family\"); blog posts only."
             },
             "limit": {
               "type": "integer",
@@ -353,6 +361,30 @@
   },
   {
     "toolSpec": {
+      "name": "list_topics",
+      "description": "The archive's card catalogue. Returns the nine topic clusters every Weekly Thing issue is filed under (description, first and last seen, representative issues, related clusters; pass one to search_archive as topic) and the Weekly Thing site's topic pages: names mentioned in 3 or more issues, with issue counts, first and last issue, related topics and the public page URL. query narrows both by name. Use to see what the archive covers before searching, or to find the right name for entity_lens.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Substring of a cluster or topic name, e.g. \"coffee\"."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 40,
+              "description": "Site topics returned, 1 to 100 (default 40), most-mentioned first. The clusters always come back whole."
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "toolSpec": {
       "name": "latest_content",
       "description": "Return the newest indexed issues/posts/episodes deterministically by publish_date. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
@@ -395,13 +427,31 @@
   {
     "toolSpec": {
       "name": "quote_search",
-      "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. voice=jamie finds only phrases in Jamie's own words, never ones he quoted.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "phrase": {
               "type": "string"
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "One source within the active scope."
+            },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words: jamie (his own), quoted (blockquotes of others), link (headline link titles). Matching and evidence use only that voice's spans."
             },
             "limit": {
               "type": "integer",
@@ -446,6 +496,15 @@
                 "blog",
                 "podcast"
               ]
+            },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words: jamie (his own), quoted (blockquotes of others), link (headline link titles). Matching and evidence use only that voice's spans."
             },
             "year_range": {
               "type": "array",
@@ -516,6 +575,15 @@
                 "podcast"
               ]
             },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words: jamie (his own), quoted (blockquotes of others), link (headline link titles). Matching and evidence use only that voice's spans."
+            },
             "year_range": {
               "type": "array",
               "items": {
@@ -546,6 +614,70 @@
               "description": "Opt-in case-sensitive matching. Use for programming-language names that are common English words: topic=\"Go\" with case_sensitive=true matches the language, never \"to go\". Default false."
             }
           }
+        }
+      }
+    }
+  },
+  {
+    "toolSpec": {
+      "name": "compare_eras",
+      "description": "Compare how a topic shows up in two eras of the archive: the best passages for the same topic from year_a and from year_b, side by side. Use for \"how did Jamie's view of X change between 2018 and 2025\". year_a and year_b are each [start_year, end_year]. voice=jamie keeps only his own words. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "inputSchema": {
+        "json": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string"
+            },
+            "year_a": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "The first era: [start_year, end_year]."
+            },
+            "year_b": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "The second era: [start_year, end_year]."
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "One source within the active scope."
+            },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words: jamie (his own), quoted (blockquotes of others), link (headline link titles). Matching and evidence use only that voice's spans."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 6,
+              "description": "Passages per era, 1 to 10 (default 6)."
+            }
+          },
+          "required": [
+            "topic",
+            "year_a",
+            "year_b"
+          ]
         }
       }
     }
@@ -680,6 +812,24 @@
             },
             "text": {
               "type": "string"
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "One source within the active scope."
+            },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words count as evidence: jamie checks the claim against what Jamie himself wrote, never what he quoted."
             }
           }
         }
@@ -705,6 +855,19 @@
             },
             "year": {
               "type": "integer"
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "One source within the active scope."
+            },
+            "issue_number": {
+              "type": "string",
+              "description": "One Weekly Thing issue's photos, e.g. \"351\"."
             },
             "limit": {
               "type": "integer",

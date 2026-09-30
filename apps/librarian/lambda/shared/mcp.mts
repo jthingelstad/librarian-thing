@@ -21,6 +21,8 @@ export const MCP_LAUNCH_TOOLS = [
   'archive_lens',
   'latest_content',
   'corpus_stats',
+  'list_topics',
+  'compare_eras',
   'search_faq',
   'quote_search',
   'find_links',
@@ -222,9 +224,11 @@ export function validateToolArguments(name: string, args: unknown): string[] {
   for (const [key, value] of Object.entries(record)) {
     if (key in properties) checkValue(key, value, properties[key], problems);
   }
-  const range = record.year_range;
-  if (Array.isArray(range) && range.length === 2 && Number(range[0]) > Number(range[1])) {
-    problems.push(`year_range runs backwards: [${range[0]}, ${range[1]}] should be [${range[1]}, ${range[0]}]`);
+  for (const key of ['year_range', 'year_a', 'year_b']) {
+    const range = record[key];
+    if (Array.isArray(range) && range.length === 2 && Number(range[0]) > Number(range[1])) {
+      problems.push(`${key} runs backwards: [${range[0]}, ${range[1]}] should be [${range[1]}, ${range[0]}]`);
+    }
   }
   return problems;
 }

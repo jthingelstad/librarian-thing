@@ -12,7 +12,10 @@ import {
   onThisDayYear,
   parseYearRange,
   retrieve,
-  tokenize
+  tokenize,
+  VOICE_MIN_CHARS,
+  voicedText,
+  voiceList
 } from './retrieval.mjs';
 import { WEEKLY_BASE_URL, absoluteSourceUrl, sourceLabel } from './source-identity.mjs';
 import type { Corpus, CorpusChunk } from './retrieval.mjs';
@@ -68,7 +71,10 @@ export const TOOL_LIMITS: Record<string, { min: number; max: number; default: nu
   top_references: { min: 1, max: 40, default: 20 },
   web_search: { min: 1, max: 10, default: 5 },
   // on_this_day's limit is per year: limit_per_year.
-  on_this_day: { min: 1, max: 20, default: 5 }
+  on_this_day: { min: 1, max: 20, default: 5 },
+  compare_eras: { min: 1, max: 10, default: 6 },
+  // Site topics returned; the nine clusters always come back whole.
+  list_topics: { min: 1, max: 100, default: 40 }
 };
 
 export function toolLimit(name: string, input: { limit?: unknown } = {}) {
@@ -102,6 +108,7 @@ interface ToolArgs {
   content_kind?: unknown;
   voice?: unknown;
   link_role?: unknown;
+  category?: unknown;
   number?: unknown;
   issue_number?: unknown;
   issue?: unknown;
@@ -502,10 +509,48 @@ async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = 
     sectionFamily: input.section_family,
     contentKind: input.content_kind,
     voice: input.voice,
+    topic: input.topic,
+    category: input.category,
     sourceKinds: normalizeSourceKind(input.source_kind || '') || undefined,
     scope
   });
-  return { query, results: results.map((source) => compactSource(source)) };
+  const records = await recordsByKey(scopeKinds(scope));
+  return {
+    query,
+    results: results.map((source) => {
+      const passage = compactSource(source);
+      const skim = sourceSkim(records.get(sourceKeyFromChunk(source)));
+      return skim ? { ...passage, skim } : passage;
+    })
+  };
+}
+
+// Each corpus's source records by key, built once per loaded corpus.
+const RECORDS_BY_KEY = new WeakMap<Corpus, Map<string, ArchiveRecord>>();
+
+async function recordsByKey(kinds: string[]) {
+  const merged = new Map<string, ArchiveRecord>();
+  for (const kind of kinds) {
+    const corpus = await loadCorpus(kind);
+    let index = RECORDS_BY_KEY.get(corpus);
+    if (!index) {
+      index = new Map(contentRecords(corpus, kind).map((record) => [sourceRecordKey(record), record]));
+      RECORDS_BY_KEY.set(corpus, index);
+    }
+    for (const [key, record] of index) merged.set(key, record);
+  }
+  return merged;
+}
+
+// What a passage's whole source is about, so a result list can be skimmed
+// without a get_source per hit.
+function sourceSkim(record: ArchiveRecord | undefined) {
+  if (!record) return null;
+  const skim: Record<string, unknown> = {};
+  if (record.description) skim.description = record.description;
+  if (record.abstract) skim.abstract = clipText(record.abstract, SKIM_ABSTRACT_CHARS);
+  if (record.abstract_source) skim.abstract_source = record.abstract_source;
+  return Object.keys(skim).length ? skim : null;
 }
 
 async function toolGetIssue(input: ToolArgs = {}) {
@@ -628,13 +673,7 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     word_count: tokenize(section.text || '').length
   }));
   const wanted = wantedSection.toLowerCase();
-  const sectionLinks = wanted
-    ? links.filter((link) =>
-        String(link.section || '')
-          .toLowerCase()
-          .includes(wanted)
-      )
-    : links;
+  const sectionLinks = wanted ? links.filter((link) => matchesSection(link, wanted)) : links;
   // With a section filter active, the returned source describes THAT
   // section: the section field echoes the filter and domains reflect the
   // filtered links, not the whole issue.
@@ -644,6 +683,10 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   return {
     source: {
       ...compactContentRecord(record),
+      // The whole skim on the one source asked for.
+      abstract: record.abstract,
+      key_points: Array.isArray(record.key_points) ? record.key_points.slice(0, 12) : undefined,
+      audio_chapters: record.audio_chapters,
       ...(wanted ? { section: wantedSection, domains: sectionDomains } : {}),
       word_count: sectionSummaries.length
         ? sectionSummaries.reduce((sum, section) => sum + section.word_count, 0)
@@ -826,6 +869,38 @@ function latestByDate<T extends ArchiveRecord>(items: T[]) {
     .sort((a, b) => String(b.publish_date || '').localeCompare(String(a.publish_date || '')));
 }
 
+// The skim layer: what a source is about, before anyone calls get_source.
+// A Weekly Thing issue's description is Jamie's dek and its abstract his
+// opening lines; key_points are its sections' lead sentences. A blog post's
+// abstract is either its own text (microposts) or GENERATED (abstract_source
+// says which) - display metadata, never matched as Jamie's words, which is
+// why no matcher reads the abstract field. A podcast's is the episode summary.
+function skimFields(kind: string, raw: ArchiveRecord): ArchiveRecord {
+  const text = (value: unknown) => (value == null || value === '' ? undefined : String(value));
+  if (kind === 'weekly_thing') {
+    const summary = (raw.summary || {}) as ArchiveRecord;
+    const audio = (raw.audio || null) as ArchiveRecord | null;
+    return {
+      description: text(raw.description),
+      abstract: text(summary.abstract),
+      key_points: Array.isArray(summary.key_points) ? summary.key_points.map(String) : undefined,
+      audio_url: text(audio?.url),
+      audio_duration_seconds: audio?.duration_seconds ?? undefined,
+      audio_chapters: Array.isArray(audio?.chapters) ? audio.chapters : undefined
+    };
+  }
+  if (kind === 'blog') {
+    return {
+      abstract: text(raw.abstract),
+      abstract_source: text(raw.abstract_source),
+      categories: Array.isArray(raw.categories) && raw.categories.length ? raw.categories.map(String) : undefined,
+      published: text(raw.published)
+    };
+  }
+  if (kind === 'podcast') return { abstract: text(raw.summary) };
+  return {};
+}
+
 function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
   if (kind === 'blog') {
     const posts = Array.isArray(corpus.posts) ? (corpus.posts as ArchiveRecord[]) : [];
@@ -837,7 +912,8 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
       url: post.url,
       section: post.post_kind === 'micropost' ? 'Micropost' : 'Blog post',
       also_in_issues: post.also_in_issues,
-      domains: post.domains || []
+      domains: post.domains || [],
+      ...skimFields(kind, post)
     }));
   }
   if (kind === 'podcast') {
@@ -852,7 +928,8 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
       transcript_url: episode.transcript_url,
       audio_url: episode.audio_url,
       section: 'Episode',
-      domains: episode.domains || []
+      domains: episode.domains || [],
+      ...skimFields(kind, episode)
     }));
   }
   return (corpus.issues || []).map((rawIssue) => {
@@ -865,7 +942,8 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
       url: issue.url,
       section: 'Issue',
       topics: issue.topics || [],
-      domains: issue.domains || []
+      domains: issue.domains || [],
+      ...skimFields('weekly_thing', issue)
     };
   });
 }
@@ -955,9 +1033,18 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     audio_url: record.audio_url,
     topics: record.topics || [],
     domains: record.domains || [],
-    also_in_issues: record.also_in_issues
+    also_in_issues: record.also_in_issues,
+    // Skim: enough to decide whether to open the source. key_points and the
+    // audio chapters ride get_source only.
+    description: record.description,
+    abstract: record.abstract ? clipText(record.abstract, SKIM_ABSTRACT_CHARS) : undefined,
+    abstract_source: record.abstract_source,
+    categories: record.categories,
+    audio_duration_seconds: record.audio_duration_seconds
   };
 }
+
+const SKIM_ABSTRACT_CHARS = 280;
 
 // A link listed INSIDE its own source: drop every field that just repeats
 // the parent record's identity.
@@ -1231,7 +1318,11 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       newest: boundedStatsRecord(records[0], listLimit),
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
-      yearly_signals: yearlyContentSignals(records, { chunks: rangeChunks, listLimit }),
+      yearly_signals: yearlyContentSignals(records, {
+        chunks: rangeChunks,
+        baselineChunks: (corpus.chunks || []) as ArchiveRecord[],
+        listLimit
+      }),
       top_domains: summarizeDomains(links, listLimit),
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category'),
@@ -1439,9 +1530,14 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   const limit = toolLimit('quote_search', input);
   const needle = phrase.toLowerCase();
   const quoteMatcher = compileLiteral(phrase);
-  const kinds = scopeKinds(scope);
+  const requestedSource = normalizeSourceKind(input.source_kind || '');
+  const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
+  // A voice matches within that voice's spans only: voice=jamie never finds
+  // a phrase Jamie quoted. Spans live on chunks, so a voiced search reads
+  // every corpus (the Weekly Thing too) chunk by chunk.
+  const voices = voiceList(input.voice);
   const results = [];
-  if (kinds.includes('weekly_thing')) {
+  if (kinds.includes('weekly_thing') && !voices.length) {
     const corpus = await loadCorpus('weekly_thing');
     for (const issue of corpus.issues || []) {
       let body = String(issue.body || '');
@@ -1475,23 +1571,26 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   }
   // Non-WT corpora have no issue-shaped records, so exact-phrase search runs
   // over reconstructed source text grouped from chunks.
-  for (const kind of kinds.filter((item) => item !== 'weekly_thing')) {
+  for (const kind of kinds.filter((item) => voices.length || item !== 'weekly_thing')) {
     if (results.length >= limit) break;
     const corpus = await loadCorpus(kind);
     const records = contentRecords(corpus, kind);
     const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
     for (const record of records) {
       const chunks = chunksBySource.get(sourceRecordKey(record)) || [];
-      const text = sourceTextFromChunks(chunks);
-      if (!quoteMatcher.matches(text)) continue;
+      const hit = voices.length ? chunks.find((chunk) => quoteMatcher.matches(voicedText(chunk, voices))) : null;
+      if (voices.length && !hit) continue;
+      const text = hit ? voicedText(hit, voices) : sourceTextFromChunks(chunks);
+      if (!hit && !quoteMatcher.matches(text)) continue;
       const compactRecord = compactContentRecord(record) as Record<string, unknown>;
       results.push({
         issue_number: null,
         ...compactRecord,
         source_kind: compactRecord.source_kind || kind,
         year: Number(String(compactRecord.publish_date || '').slice(0, 4)) || null,
-        section: compactRecord.section ?? null,
+        section: (hit ? hit.section : compactRecord.section) ?? null,
         topics: compactRecord.topics || [],
+        ...(voices.length ? { voice: voices } : {}),
         context: contextAround(text, phrase)
       });
       if (results.length >= limit) break;
@@ -1554,9 +1653,10 @@ async function toolListIssues(input: ToolArgs = {}) {
 async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const topic = String(input.topic || '').trim();
   if (!topic) return { error: 'topic is required' };
-  const limit = Math.min(Math.max(Number(input.limit || 6), 1), 10);
-  const first = await retrieve(topic, limit, { yearRange: input.year_a, scope });
-  const second = await retrieve(topic, limit, { yearRange: input.year_b, scope });
+  const limit = toolLimit('compare_eras', input);
+  const filters = { scope, sourceKinds: normalizeSourceKind(input.source_kind || '') || undefined, voice: input.voice };
+  const first = await retrieve(topic, limit, { ...filters, yearRange: input.year_a });
+  const second = await retrieve(topic, limit, { ...filters, yearRange: input.year_b });
   return {
     topic,
     year_a: input.year_a,
@@ -1715,6 +1815,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   const topic = String(input.topic || input.query || '').trim();
   if (!topic) return { error: 'topic is required' };
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
+  const voices = voiceList(input.voice);
   const records = [];
   const chunks = [];
   for (const kind of scopeKinds(scope)) {
@@ -1726,13 +1827,22 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     // source matched only at chunk level still contributes to top_domains.
     const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
     chunks.push(
-      ...(corpus.chunks || []).map((chunk) => ({
-        ...chunk,
-        domains: chunk.domains?.length ? chunk.domains : domainsByKey.get(sourceKeyFromChunk(chunk, kind)) || [],
-        // "chunk" is internal storage typing; the public enum is the corpus
-        // kind this loop is reading.
-        source_kind: CORPUS_SOURCE_KINDS.has(String(chunk.source_kind || '')) ? chunk.source_kind : kind
-      }))
+      ...(corpus.chunks || []).flatMap((chunk) => {
+        // voice=jamie reads only Jamie's spans: a topic he quoted is not a
+        // topic he wrote about, and the evidence never shows the quote.
+        const text = voices.length ? voicedText(chunk, voices) : chunk.text;
+        if (voices.length && String(text).length < VOICE_MIN_CHARS) return [];
+        return [
+          {
+            ...chunk,
+            text,
+            domains: chunk.domains?.length ? chunk.domains : domainsByKey.get(sourceKeyFromChunk(chunk, kind)) || [],
+            // "chunk" is internal storage typing; the public enum is the corpus
+            // kind this loop is reading.
+            source_kind: CORPUS_SOURCE_KINDS.has(String(chunk.source_kind || '')) ? chunk.source_kind : kind
+          }
+        ];
+      })
     );
   }
   return compactLensPayload(
@@ -1837,8 +1947,13 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
     (a, b) =>
       b.score - a.score || String(b.record.publish_date || '').localeCompare(String(a.record.publish_date || ''))
   );
+  const similar = await similarIssues(bundle.record, toolLimit('source_neighborhood', input));
   return {
     source: compactContentRecord(bundle.record),
+    // More like this, by embedding: the graph's nearest issues. Shared
+    // domains (related_sources) say what an issue LINKED; this says what it
+    // was ABOUT.
+    ...(similar.length ? { similar_issues: similar } : {}),
     outgoing_links: [...bundle.links]
       .sort((a, b) => Number(!isHeadlineLink(a)) - Number(!isHeadlineLink(b)))
       .slice(0, 30)
@@ -1856,6 +1971,189 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   };
 }
 
+// ── list_topics ─────────────────────────────────────────────────────────
+// The card catalogue. Two layers: the nine topic clusters every Weekly
+// Thing chunk is filed under (corpus.topics; search_archive topic= takes
+// one), and the site's topic pages - graph entities named in 3 or more
+// issues. The page rule, display names and slugs are the site's own
+// (weekly.thingelstad.com apps/site/_data/topics.js), so every url resolves;
+// change them together.
+const SITE_TOPIC_MIN_ISSUES = 3;
+const SITE_TOPIC_RELATED = 5;
+
+interface SiteTopic {
+  name: string;
+  slug: string;
+  issues: Set<string>;
+  count: number;
+  related: string[];
+}
+
+export function siteTopicSlug(name: string) {
+  return String(name)
+    .toLowerCase()
+    .replace(/['‘’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+const SITE_TOPICS = new WeakMap<object, SiteTopic[]>();
+
+export function siteTopics(graph: Record<string, unknown>): SiteTopic[] {
+  const cached = SITE_TOPICS.get(graph);
+  if (cached) return cached;
+  const issues = (graph.issues || {}) as Record<string, { entities?: unknown[] }>;
+  const index = (graph.entity_index || {}) as Record<string, unknown>;
+  // The most frequent original spelling names the topic.
+  const spellings = new Map<string, Map<string, number>>();
+  for (const issue of Object.values(issues)) {
+    for (const entity of issue.entities || []) {
+      const lower = String(entity).toLowerCase();
+      const bucket = spellings.get(lower) || new Map<string, number>();
+      bucket.set(String(entity), (bucket.get(String(entity)) || 0) + 1);
+      spellings.set(lower, bucket);
+    }
+  }
+  const displayName = (lower: string) => {
+    const bucket = spellings.get(lower);
+    if (!bucket) return lower;
+    return [...bucket.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  };
+  const bySlug = new Map<string, SiteTopic>();
+  for (const [lower, list] of Object.entries(index)) {
+    if (!Array.isArray(list) || list.length < SITE_TOPIC_MIN_ISSUES) continue;
+    const name = displayName(lower);
+    const slug = siteTopicSlug(name);
+    if (!slug) continue;
+    const existing = bySlug.get(slug);
+    if (existing) {
+      for (const number of list) existing.issues.add(String(number));
+      if (list.length > existing.count) existing.name = name;
+      existing.count = existing.issues.size;
+      continue;
+    }
+    bySlug.set(slug, { name, slug, issues: new Set(list.map(String)), count: list.length, related: [] });
+  }
+  // Related topics: co-mentioned in the same issues.
+  const lowerToSlug = new Map<string, string>();
+  for (const lower of Object.keys(index)) {
+    const slug = siteTopicSlug(displayName(lower));
+    if (slug && bySlug.has(slug)) lowerToSlug.set(lower, slug);
+  }
+  const coCount = new Map<string, Map<string, number>>();
+  for (const issue of Object.values(issues)) {
+    const slugs = [
+      ...new Set((issue.entities || []).map((entity) => lowerToSlug.get(String(entity).toLowerCase())).filter(Boolean))
+    ] as string[];
+    for (let i = 0; i < slugs.length; i += 1) {
+      for (let j = i + 1; j < slugs.length; j += 1) {
+        for (const [a, b] of [
+          [slugs[i], slugs[j]],
+          [slugs[j], slugs[i]]
+        ]) {
+          const row = coCount.get(a) || new Map<string, number>();
+          row.set(b, (row.get(b) || 0) + 1);
+          coCount.set(a, row);
+        }
+      }
+    }
+  }
+  for (const topic of bySlug.values()) {
+    topic.related = [...(coCount.get(topic.slug) || new Map<string, number>()).entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, SITE_TOPIC_RELATED)
+      .map(([slug]) => bySlug.get(slug)!.name);
+  }
+  const all = [...bySlug.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  SITE_TOPICS.set(graph, all);
+  return all;
+}
+
+function issueIdRange(numbers: Iterable<string>) {
+  const sorted = [...numbers].sort((a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b));
+  return { first: sorted.length ? `wt-${sorted[0]}` : null, last: sorted.length ? `wt-${sorted.at(-1)}` : null };
+}
+
+async function toolListTopics(input: ToolArgs = {}) {
+  const query = String(input.query || '')
+    .trim()
+    .toLowerCase();
+  const limit = toolLimit('list_topics', input);
+  const corpus = await loadCorpus('weekly_thing');
+  const clusters = ((corpus.topics || []) as ArchiveRecord[])
+    .filter(
+      (cluster) =>
+        !query ||
+        String(cluster.name || '')
+          .toLowerCase()
+          .includes(query)
+    )
+    .map((cluster) => ({
+      name: cluster.name,
+      description: cluster.description,
+      issue_count: Array.isArray(cluster.issue_numbers) ? cluster.issue_numbers.length : null,
+      first_seen: String(cluster.first_seen || '').slice(0, 10) || null,
+      last_seen: String(cluster.last_seen || '').slice(0, 10) || null,
+      representative_issues: (Array.isArray(cluster.representative_issues) ? cluster.representative_issues : []).map(
+        (number) => `wt-${number}`
+      ),
+      related_clusters: cluster.related_topics || []
+    }));
+  const topics = siteTopics(await loadGraph());
+  const matched = query ? topics.filter((topic) => topic.name.toLowerCase().includes(query)) : topics;
+  return {
+    clusters,
+    topic_count: topics.length,
+    ...(query ? { matched_topics: matched.length } : {}),
+    topics: matched.slice(0, limit).map((topic) => {
+      const range = issueIdRange(topic.issues);
+      return {
+        name: topic.name,
+        issue_count: topic.count,
+        first_issue: range.first,
+        last_issue: range.last,
+        url: `${WEEKLY_BASE_URL}/topics/${topic.slug}/`,
+        related: topic.related
+      };
+    }),
+    ...(topics.length ? {} : { note: 'The topic graph is not loaded, so only the clusters are listed.' })
+  };
+}
+
+// A Weekly Thing issue's nearest issues by embedding, from the graph the
+// corpus upload builds (graph.issues[n].similar_issues: {number, score}).
+async function similarIssues(record: ArchiveRecord, limit: number) {
+  if (normalizeSourceKind(record.source_kind || '') !== 'weekly_thing') return [];
+  const graph = await loadGraph();
+  const issues = (graph.issues || {}) as Record<string, ArchiveRecord>;
+  const entry = issues[issueKey(record.issue_number)];
+  const similar = Array.isArray(entry?.similar_issues) ? (entry.similar_issues as ArchiveRecord[]) : [];
+  if (!similar.length) return [];
+  const catalog = await weeklyIssueCatalog();
+  return similar.slice(0, limit).flatMap((item) => {
+    const issue = catalog.get(issueKey(item.number));
+    if (!issue) return [];
+    const target: ArchiveRecord = {
+      source_kind: 'weekly_thing',
+      issue_number: issue.number,
+      subject: issue.subject,
+      publish_date: issue.publish_date,
+      url: issue.url
+    };
+    return [
+      {
+        id: lensSourceId(target),
+        label: sourceLabel(target),
+        subject: issue.subject,
+        publish_date: issue.publish_date,
+        url: absoluteSourceUrl(issue.url),
+        ...(issue.description ? { description: issue.description } : {}),
+        ...(typeof item.score === 'number' ? { score: Math.round(item.score * 1000) / 1000 } : {})
+      }
+    ];
+  });
+}
+
 async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
   const entity = String(input.entity || input.topic || input.query || '').trim();
   if (!entity) return { error: 'entity is required' };
@@ -1870,6 +2168,7 @@ async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
       operation,
       source_kind: input.source_kind,
       year_range: input.year_range,
+      voice: input.voice,
       limit: toolLimit('entity_lens', input)
     },
     context
@@ -2012,8 +2311,13 @@ async function toolClaimCheck(input: ToolArgs = {}, { scope }: ToolContext = {})
     .filter(Boolean)
     .slice(0, 4);
   const results = [];
+  const filters = {
+    scope,
+    sourceKinds: normalizeSourceKind(input.source_kind || '') || undefined,
+    voice: input.voice
+  };
   for (const claim of claims) {
-    const hits = await retrieve(claim, 3, { scope });
+    const hits = await retrieve(claim, 3, filters);
     results.push({
       claim,
       status: hits.length ? 'evidence_found' : 'needs_caution',
@@ -2037,12 +2341,18 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     .split(/[^a-z0-9]+/)
     .filter((term) => term.length > 2)
     .map((term) => ({ term, matcher: compileTopicMatcher(term) }));
-  const kinds = scopeKinds(scope);
+  const requestedSource = normalizeSourceKind(input.source_kind || '');
+  // One issue's photos: implies the Weekly Thing.
+  const issue = input.issue_number == null || input.issue_number === '' ? '' : issueKey(input.issue_number);
+  const kinds = scopeKinds(scope).filter(
+    (kind) => (!requestedSource || kind === requestedSource) && (!issue || kind === 'weekly_thing')
+  );
   const scored: Array<{ score: number; item: Record<string, unknown> }> = [];
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
       if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
+      if (issue && issueKey(item.issue_number) !== issue) continue;
       // description = the vision captioning pass (describe_media.py): the
       // pixels' own words, so a photo is findable when the authored text
       // says nothing (92% of WT media had empty alt before it).
@@ -2154,13 +2464,15 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       if (year === null || year >= targetYear) continue;
       if (startYear && year < startYear) continue;
       if (endYear && year > endYear) continue;
-      let excerpt = '';
-      if (kind === 'weekly_thing') {
+      // The skim first: an issue's dek, a post's abstract (a generated one
+      // is labelled), else the opening of the source itself.
+      let excerpt = clipText(record.description || record.abstract, 280);
+      if (!excerpt && kind === 'weekly_thing') {
         const summary = rawIssues.get(issueKey(record.issue_number))?.summary as ArchiveRecord | undefined;
         excerpt = clipText(summary?.abstract, 280);
-      } else if (kind === 'podcast') {
+      } else if (!excerpt && kind === 'podcast') {
         excerpt = clipText(rawEpisodes.get(String(record.episode_number))?.summary, 280);
-      } else {
+      } else if (!excerpt) {
         chunksBySource ||= groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
         excerpt = clipText((chunksBySource.get(sourceRecordKey(record)) || [])[0]?.text, 280);
       }
@@ -2178,6 +2490,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         excerpt
       };
       if (kind === 'blog' && record.section === 'Micropost') item.micropost = true;
+      if (record.abstract_source === 'generated' && !record.description && excerpt) item.excerpt_generated = true;
       if (photo) item.photo = { url: photo.url, alt: photo.alt || null, description: photo.description || null };
       byYear.set(year, [...(byYear.get(year) || []), item]);
     }
@@ -2583,6 +2896,7 @@ const TOOL_HANDLERS = {
   list_content: toolListContent,
   list_issues: toolListIssues,
   compare_eras: toolCompareEras,
+  list_topics: toolListTopics,
   archive_lens: toolArchiveLens,
   source_neighborhood: toolSourceNeighborhood,
   entity_lens: toolEntityLens,

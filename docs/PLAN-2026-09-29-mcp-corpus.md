@@ -23,7 +23,7 @@ edits to thingy.thingelstad.com. Approved 2026-09-29; work starts with Phase 1.
 |---|---|---|---|
 | 1 | Thingy out of the corpus; Echoes reaches the blog and podcast; `/retrieve` 4.11 | contract 4.11.0 | Wed 09-30 to Thu 10-01, live before WT352's window |
 | 2 | Trust fixes, `on_this_day`, photo descriptions, observability | MCP 1.3.0 | From Fri 10-02 (MCP-only), the rest after WT352 is sent |
-| 3 | Structure and voice in the corpus; filters, skim layer, `list_topics`, `compare_eras`, link history; Echoes "this week in past years" | MCP 1.4.0, contract 4.12.0 | Week of 10-05 |
+| 3 | Structure and voice in the corpus; filters, skim layer, `list_topics`, `compare_eras`, link history; Echoes "this week in past years" | MCP 1.4.0 and 1.5.0, contract 4.12.0 | Week of 10-05 |
 | 4 | MCP-native and breaking cleanup: resources, prompts, schemas, one name per concept | MCP 2.0.0 | Week of 10-12, before readers are invited |
 | 5 | Readers: `/connect/` rewrite, docs, the invitation | | After Phase 4 |
 
@@ -289,7 +289,7 @@ Non-breaking. Everything here lands in LT, plus one local batch.
 
 ---
 
-## Phase 3: structure and voice (MCP 1.4.0, contract 4.12.0)
+## Phase 3: structure and voice (MCP 1.4.0 and 1.5.0, contract 4.12.0)
 
 ### LT corpus
 1. **`section_family`.**
@@ -361,7 +361,9 @@ Non-breaking. Everything here lands in LT, plus one local batch.
    - Evidence entries carry `voice`.
 9. **Skim layer:**
    - `description`, `abstract` and `key_points` on every source record.
-   - `search_archive` groups by source by default.
+   - `search_archive` groups by source by default. **Moved to Phase 4**
+     (2026-09-29): grouping changes the result shape, so it ships with the
+     2.0.0 breaking batch. Phase 3 adds a per-result `skim` instead.
    - `on_this_day` excerpts upgrade automatically.
 10. **Structure tools:**
     - `list_topics`, a new tool: the 9 clusters and the 752 site topics, with

@@ -84,6 +84,12 @@ export interface RetrievalFilters {
   contentKind?: unknown;
   voice?: unknown;
   calendar?: unknown;
+  // MCP 1.4: a topic cluster (the nine in corpus.topics, stamped on
+  // Weekly Thing chunks) and a blog category (on post records; retrieve()
+  // resolves it to post ids before scoring).
+  topic?: unknown;
+  category?: unknown;
+  categoryPostIds?: Set<string>;
 }
 
 // Whose words a stretch of chunk text is. Corpus chunks carry
@@ -93,7 +99,7 @@ export interface RetrievalFilters {
 export const VOICES = ['jamie', 'quoted', 'link'] as const;
 // A voice-filtered chunk with less than this much of the voice left is a
 // quote with a line of framing, not a passage in that voice.
-const VOICE_MIN_CHARS = 40;
+export const VOICE_MIN_CHARS = 40;
 const CALENDAR_MAX_WINDOW_DAYS = 7;
 const DAY_MS = 86_400_000;
 
@@ -652,7 +658,9 @@ export function matchesFilters(
     sectionFamily,
     contentKind,
     voice,
-    calendar
+    calendar,
+    topic,
+    categoryPostIds
   }: RetrievalFilters = {}
 ) {
   const include = stringList(sourceKinds);
@@ -697,9 +705,36 @@ export function matchesFilters(
     const year = onThisDayYear(published, window.month, window.day, window.window, window.targetYear);
     if (year === null || year >= window.targetYear) return false;
   }
+  const clusters = lowerList(topic);
+  if (clusters.length) {
+    const topics = Array.isArray(source.topics) ? source.topics.map((item) => String(item).toLowerCase()) : [];
+    if (!clusters.some((cluster) => topics.includes(cluster))) return false;
+  }
+  // A Set only: /retrieve passes request filters through, and a JSON body
+  // cannot make one.
+  if (categoryPostIds instanceof Set && !categoryPostIds.has(blogPostId(source))) return false;
   const voices = voiceList(voice);
   if (voices.length && voicedText(source, voices).length < VOICE_MIN_CHARS) return false;
   return true;
+}
+
+// The microblog id a blog chunk belongs to (ids are blog:{id}:{index}:{hash}).
+function blogPostId(source: CorpusChunk) {
+  const match = /^blog:([^:]+):/.exec(String(source.id || ''));
+  return match ? match[1] : '';
+}
+
+// The blog posts filed under any of these categories (case-insensitive).
+export async function blogCategoryPostIds(category: unknown) {
+  const wanted = lowerList(category);
+  const ids = new Set<string>();
+  if (!wanted.length) return ids;
+  const corpus = await loadCorpus('blog');
+  for (const post of (corpus.posts as Array<Record<string, unknown>> | undefined) || []) {
+    const categories = Array.isArray(post.categories) ? post.categories.map((item) => String(item).toLowerCase()) : [];
+    if (wanted.some((item) => categories.includes(item))) ids.add(String(post.microblog_id));
+  }
+  return ids;
 }
 
 function withAgeLabel(sources: CorpusChunk[]) {
@@ -757,6 +792,9 @@ export async function retrieve(
   filters: RetrievalFilters = {},
   opts: { rerank?: boolean } = {}
 ) {
+  if (filters.category && !(filters.categoryPostIds instanceof Set)) {
+    filters = { ...filters, categoryPostIds: await blogCategoryPostIds(filters.category) };
+  }
   const kinds = scopeKinds(filters.scope);
   const candidateLimit = Math.max(limit * 5, 100);
   const byScore = (a: CorpusChunk, b: CorpusChunk) => (b._retrieval_score || 0) - (a._retrieval_score || 0);

@@ -26,6 +26,16 @@ process.env.BRAVE_SEARCH_API_KEY = 'test-key-for-declarations';
 const declarations = mcpToolDeclarations();
 delete process.env.BRAVE_SEARCH_API_KEY;
 
+// A type-correct value for each required argument (compare_eras requires
+// two year ranges).
+const requiredArguments = (tool) =>
+  Object.fromEntries(
+    (tool.inputSchema.required || []).map((name) => [
+      name,
+      tool.inputSchema.properties?.[name]?.type === 'array' ? [2018, 2019] : 'x'
+    ])
+  );
+
 const limitProperties = (tool) =>
   Object.entries(tool.inputSchema.properties || {}).filter(([key]) => key === 'limit' || key.startsWith('limit_'));
 
@@ -62,7 +72,7 @@ test('a limit above its maximum is refused before quota, for every tool', (t) =>
   t.after(() => delete process.env.BRAVE_SEARCH_API_KEY);
   for (const tool of declarations) {
     for (const [key, schema] of limitProperties(tool)) {
-      const required = Object.fromEntries((tool.inputSchema.required || []).map((name) => [name, 'x']));
+      const required = requiredArguments(tool);
       assert.deepEqual(validateToolArguments(tool.name, { ...required, [key]: schema.maximum }), []);
       const problems = validateToolArguments(tool.name, { ...required, [key]: schema.maximum + 1 });
       assert.equal(problems.length, 1, `${tool.name}.${key} over max`);
