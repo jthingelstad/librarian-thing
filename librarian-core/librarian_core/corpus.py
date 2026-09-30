@@ -1660,6 +1660,9 @@ def build_blog_corpus(
                     "alt": image["alt"],
                     "context": _media_context(body, image["url"]) or plain_text(embed_text)[:240],
                     "source_kind": "blog",
+                    # The post's own key: six permalinks are shared by
+                    # fourteen posts, so source_url alone names the wrong one.
+                    "microblog_id": microblog_id,
                     "subject": subject,
                     "source_url": url,
                     "publish_date": publish_date,
@@ -1674,6 +1677,7 @@ def build_blog_corpus(
             # debugging. Mirrors the issue corpus's content-hashed `chunk_id`.
             chunk = {
                 "id": f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}",
+                "microblog_id": microblog_id,
                 "issue_number": None,
                 "subject": subject,
                 "publish_date": publish_date,
