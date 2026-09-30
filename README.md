@@ -46,12 +46,18 @@ the canonical archives, the corpus builds, and the API that serves them.
 - Any change under `data/` triggers the production workflow: rebuild the
   affected corpora, embed, upload to S3, and hand the topic graph to
   `weekly.thingelstad.com` — the one cross-repo push this repo still makes.
-- The Lambda redeploys when its code changes. The `/retrieve` endpoint is a
+- The Lambda redeploys when its code changes or any corpus rebuilds (it
+  caches each corpus for a container's life). The `/retrieve` endpoint is a
   versioned contract; Thingy is a live client across a repo boundary.
 - The same tool registry that answers Thingy's chat is published as an
   **MCP server** (`librarian.thingelstad.com/mcp`, OAuth 2.1 sign-in), so
   Claude, ChatGPT, and other MCP clients query the archive with identical
-  tools. Matching semantics live in one canonical component
+  tools, plus resources and prompts. It is for Jamie and for readers:
+  Weekly Thing subscribers connect with the steps on
+  [thingy.thingelstad.com/connect/](https://thingy.thingelstad.com/connect/),
+  at 500 tool calls a day (1,000 for Supporting Members) and 300 an hour.
+  The contract is MCP 2.0.0 (`reference/librarian.md`). Matching semantics
+  live in one canonical component
   (`apps/librarian/MATCHER.md`), enforced by an eval suite that runs on
   every deploy and blocks it on failure.
 

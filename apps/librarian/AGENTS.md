@@ -191,7 +191,9 @@ pre/post-change reports. Tool responses carry `server_version`
 a stale tools/list. 2.0.0 is the breaking consistency pass (id-only
 `get_source`, grouped `search_archive`, `find_evidence`, one `truncated`
 block, `outputSchema` and `structuredContent`); `reference/librarian.md` lists
-it, and `tests/mcp-conventions.test.mjs` enforces it. Since 1.6.0 the MCP door also serves resources
+it, and `tests/mcp-conventions.test.mjs` enforces it. Readers connect with the
+steps on thingy web `web/connect/index.html`; keep that page's limits and tool
+claims in step with the server. Since 1.6.0 the MCP door also serves resources
 (`shared/mcp-resources.mts`: `librarian://wt/{n}`, `blog/{id}`, `topic/{slug}`,
 `year/{yyyy}`, `on-this-day/{mm-dd}`, read through the registry tools, one quota
 unit each, audited as `resource:<kind>`) and five prompts
