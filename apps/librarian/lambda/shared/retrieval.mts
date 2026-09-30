@@ -6,6 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import { bedrock, bedrockAgentRuntime, embeddingModel, rerankModel, s3 } from './aws-clients.mjs';
 import { errorFields, logEvent as sharedLogEvent, truthyEnv } from './logging.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
+import { absoluteSourceUrl, publicSourceKind, sourceLabel } from './source-identity.mjs';
 
 const DEFAULT_EMBEDDING_DIMENSIONS = 1024;
 const TOKEN_RE = /[a-z0-9][a-z0-9'-]{1,}/gi;
@@ -66,6 +67,15 @@ export interface RetrievalFilters {
   scope?: unknown;
   yearRange?: unknown;
   section?: unknown;
+  // Contract 4.11 (additive): narrow by public source kind, drop issues the
+  // caller already has (Echoes: this issue and the two before it), keep only
+  // sources published before a date, or ask for one issue exactly (WT
+  // Builder's "is it indexed yet" probe).
+  sourceKinds?: unknown;
+  excludeSourceKinds?: unknown;
+  excludeIssues?: unknown;
+  before?: unknown;
+  issueNumber?: unknown;
 }
 
 let corpusCache: Corpus | undefined;
@@ -322,7 +332,8 @@ function sourceAgeLabel(source: CorpusChunk) {
   const days = Math.max(0, (Date.now() - published.getTime()) / 86400000);
   if (days < 45) return 'recent';
   if (days < 365) return `about ${Math.max(Math.round(days / 30), 1)} months old`;
-  return `about ${Math.max(Math.round(days / 365), 1)} years old`;
+  const years = Math.max(Math.round(days / 365), 1);
+  return `about ${years} ${years === 1 ? 'year' : 'years'} old`;
 }
 
 export function compactSource(source: CorpusChunk, textLimit = 2000) {
@@ -330,17 +341,20 @@ export function compactSource(source: CorpusChunk, textLimit = 2000) {
   // /retrieve contract types them as strings, so omit absent values
   // (same normalization citationsFor applies on the /chat side).
   const text = (value: unknown) => (value == null ? undefined : String(value));
+  const kind = publicSourceKind(source);
   return {
+    id: text(source.id),
     issue_number: source.issue_number ?? undefined,
-    source_kind: source.source_kind,
+    source_kind: kind,
+    label: sourceLabel(source),
     subject: text(source.subject),
     publish_date: text(source.publish_date),
-    issue_year: source.issue_year ?? undefined,
+    issue_year: kind === 'weekly_thing' ? (source.issue_year ?? undefined) : undefined,
     section: text(source.section),
     age: source.age_label || sourceAgeLabel(source),
     score: source._rerank_score || source._retrieval_score,
     reason: source.retrieval_reason || (source.retrieval_modes || []).join(', '),
-    url: source.url,
+    url: absoluteSourceUrl(source.url),
     transcript_url: source.transcript_url,
     audio_url: source.audio_url,
     episode_number: source.episode_number,
@@ -510,7 +524,30 @@ export function parseYearRange(value: unknown): [number | null, number | null] {
   return [null, null];
 }
 
-export function matchesFilters(source: CorpusChunk, { yearRange, section }: RetrievalFilters = {}) {
+function stringList(value: unknown): string[] {
+  if (value == null || value === '') return [];
+  return (Array.isArray(value) ? value : [value]).map((item) => String(item).trim()).filter(Boolean);
+}
+
+export function matchesFilters(
+  source: CorpusChunk,
+  { yearRange, section, sourceKinds, excludeSourceKinds, excludeIssues, before, issueNumber }: RetrievalFilters = {}
+) {
+  const include = stringList(sourceKinds);
+  const exclude = stringList(excludeSourceKinds);
+  if (include.length || exclude.length) {
+    const kind = publicSourceKind(source);
+    if (include.length && !include.includes(kind)) return false;
+    if (exclude.includes(kind)) return false;
+  }
+  const issue = source.issue_number == null ? '' : String(source.issue_number);
+  if (issueNumber != null && issueNumber !== '' && issue !== String(issueNumber)) return false;
+  if (issue && stringList(excludeIssues).includes(issue)) return false;
+  if (before != null && before !== '') {
+    // Undated sources (site pages, FAQ) cannot be placed before anything.
+    const published = String(source.publish_date || '').slice(0, 10);
+    if (!published || published >= String(before).slice(0, 10)) return false;
+  }
   const [startYear, endYear] = parseYearRange(yearRange);
   const year = Number(source.issue_year || 0);
   if (startYear && (!year || year < startYear)) return false;

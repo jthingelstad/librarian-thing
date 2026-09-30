@@ -7,6 +7,7 @@ import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './c
 import { searchFaq } from './faq.mjs';
 import { loadToolSpecs } from './prompts.mjs';
 import { compactSource, loadCorpus, loadGraph, parseYearRange, retrieve, tokenize } from './retrieval.mjs';
+import { WEEKLY_BASE_URL } from './source-identity.mjs';
 import type { Corpus, CorpusChunk } from './retrieval.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
 
@@ -756,7 +757,10 @@ function urlKey(value: unknown) {
   const raw = String(value || '').trim();
   if (!raw) return '';
   try {
-    const url = new URL(raw, 'https://thingelstad.com');
+    // Relative corpus URLs are Weekly Thing site paths (/archive/351/), so
+    // they resolve against the weekly host: the absolute URL /retrieve and
+    // MCP hand out then keys the same as the stored path.
+    const url = new URL(raw, WEEKLY_BASE_URL);
     let host = url.hostname.toLowerCase().replace(/^www\./, '');
     if (host === 'micro.thingelstad.com') host = 'thingelstad.com';
     return `${host}${url.pathname.replace(/\/$/, '')}`.toLowerCase();

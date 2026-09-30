@@ -1562,10 +1562,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   if (method === 'POST' && path.endsWith('/retrieve')) {
     // Service retrieval. Same Bedrock embed → vector search → Cohere
     // rerank pipeline /chat uses, exposed as a passages-only JSON response
-    // (no Sonnet call). Auth via LIBRARIAN_RETRIEVE_SECRET, not per-user token —
-    // the caller is workshop_bot, not a reader. Used by compose-closer to
-    // ground "From the Archive" picks on actual archive content rather
-    // than vocabulary-only BM25 matches.
+    // (no model call). Auth via LIBRARIAN_RETRIEVE_SECRET, not a per-user
+    // token: the callers are services - WT Builder (Echoes, the link wand,
+    // the archive-leg verify), AT Builder (hooks, prospecting), and the
+    // golden retrieval harness.
     const body = parseBody(event);
     const secretState = retrieveSecretOk(body);
     if (secretState === null) {
@@ -1600,9 +1600,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     const requestedK = Number(body.k || 12);
     const limit = Math.max(1, Math.min(Number.isFinite(requestedK) ? requestedK : 12, 40));
     const filters = objectValue(body.filters);
-    // Optional scope (default weekly_thing). workshop_bot sends no scope, so
-    // it keeps getting WT-only passages — unaffected by the blog corpus.
+    // Optional scope, default weekly_thing, so a caller that sends none keeps
+    // WT-only passages. WT Builder's Echoes sends 'all' (4.11).
     filters.scope = normalizeScope(body.scope ?? filters.scope);
+    // Who is asking (wt-builder, at-builder, golden...), for the log only.
+    const caller = typeof body.caller === 'string' ? body.caller.slice(0, 40) : '';
     try {
       const passages = await retrieve(query, limit, filters);
       const compact = passages.map((p) => compactSource(p, 2000));
@@ -1618,6 +1620,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       s200.end();
       logEvent('info', 'retrieve_completed', {
         ...summary,
+        caller,
+        scope: filters.scope,
+        filter_keys: Object.keys(filters)
+          .filter((key) => key !== 'scope')
+          .sort(),
         query_chars: query.length,
         k: limit,
         passage_count: compact.length,
@@ -1627,7 +1634,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       const s500 = jsonResponseStream(responseStream, 500);
       s500.write(JSON.stringify({ error: 'Retrieval failed.', request_id: requestId }));
       s500.end();
-      logEvent('error', 'retrieve_failed', { ...summary, status_code: 500, error_type: errorName(error) });
+      logEvent('error', 'retrieve_failed', { ...summary, caller, status_code: 500, error_type: errorName(error) });
     }
     return;
   }

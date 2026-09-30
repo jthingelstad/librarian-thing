@@ -33,7 +33,14 @@
 // compose the greeting from a time-aware salutation + a line from the
 // suggestions event's new greeting_lines array), and no longer charges
 // the chat quota (additive; old clients keep their built-in greeting).
-export const LIBRARIAN_CONTRACT_VERSION = '4.10.0';
+// 4.11.0: /retrieve passages are typed (retrievePassage) and carry id,
+// label (WT351 / AT3 / post title) and an absolute url; source_kind is the
+// public vocabulary (weekly_thing, not the corpus-build "chunk"); issue_year
+// rides Weekly Thing passages only. Requests take filters.sourceKinds,
+// excludeSourceKinds, excludeIssues, before and issueNumber, and a caller
+// name for the log. Thingy-bylined blocks are no longer in the corpus
+// (additive; relative WT urls became absolute, which both builders accept).
+export const LIBRARIAN_CONTRACT_VERSION = '4.11.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -42,6 +49,8 @@ export const LIBRARIAN_CONTRACT_VERSION = '4.10.0';
 //  - wt-builder src/server/integrations/librarian.ts (/retrieve for Echoes;
 //    pins LIBRARIAN_CONTRACT_MAJOR by hand - a dropped major 409s Echoes
 //    on a send week)
+//  - at-builder src/server/librarian.ts (/retrieve for hooks and the
+//    prospecting tool loop; pins the version by hand)
 export const SUPPORTED_CONTRACT_MAJORS = ['2', '3', '4'];
 
 const string = { type: 'string' } as const;
@@ -153,6 +162,33 @@ const archiveItem = object({
   reason: string,
   source_kind: string
 });
+// A /retrieve passage (compactSource). Everything but text is optional:
+// Weekly Thing passages carry issue_number, blog passages the post url,
+// podcast passages episode_number/show/audio_url/transcript_url.
+const retrievePassage = object(
+  {
+    id: string,
+    issue_number: { anyOf: [string, number] },
+    source_kind: string,
+    label: string,
+    subject: string,
+    publish_date: string,
+    issue_year: { anyOf: [string, number] },
+    section: string,
+    age: string,
+    score: number,
+    reason: string,
+    url: string,
+    transcript_url: string,
+    audio_url: string,
+    episode_number: { anyOf: [string, number] },
+    show: string,
+    topics: unknownArray,
+    also_in_issues: unknownArray,
+    text: string
+  },
+  ['source_kind', 'label', 'text']
+);
 const citation = object({
   issue_number: { anyOf: [string, number, { type: 'null' }] },
   url: string,
@@ -243,6 +279,7 @@ export const LIBRARIAN_CONTRACT = {
     sharedConversation,
     conversationMessage,
     archiveItem,
+    retrievePassage,
     citation,
     quotaOverview,
     chatModel,
@@ -304,7 +341,7 @@ export const LIBRARIAN_CONTRACT = {
       ),
       schema: ref('streamBase')
     },
-    // Service retrieval for trusted internal clients (wt-builder). JSON-only.
+    // Service retrieval for trusted internal clients (wt-builder, at-builder). JSON-only.
     '/retrieve': {
       actions: {},
       request: object(
@@ -312,7 +349,16 @@ export const LIBRARIAN_CONTRACT = {
           query: string,
           k: number,
           scope: string,
-          filters: object({ yearRange: unknownArray, section: string }),
+          filters: object({
+            yearRange: unknownArray,
+            section: string,
+            sourceKinds: unknownArray,
+            excludeSourceKinds: unknownArray,
+            excludeIssues: unknownArray,
+            before: string,
+            issueNumber: { anyOf: [string, number] }
+          }),
+          caller: string,
           retrieve_secret: string,
           bridge_secret: string
         },
@@ -320,7 +366,7 @@ export const LIBRARIAN_CONTRACT = {
       ),
       schema: object(
         {
-          passages: arrayOf(ref('archiveItem')),
+          passages: arrayOf(ref('retrievePassage')),
           embedding_model: string,
           rerank_model: string,
           request_id: string

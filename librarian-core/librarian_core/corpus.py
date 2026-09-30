@@ -154,6 +154,20 @@ def read_issue(path: Path) -> tuple[dict[str, Any], str]:
     return metadata, body
 
 
+# Thingy's bylined blocks (Echoes, Membership) are framed by WT Builder as
+# <div class="from-thingy"> + label <p> + markdown + </div> on its own line
+# (wt-builder src/shared/render/website.ts). They are Thingy's words, not
+# Jamie's, so the corpus never sees them: no chunk, count, topic, link or
+# summary is built from them. The frame is a cross-repo contract, pinned by
+# tests here and in wt-builder tests/echoes.test.ts.
+THINGY_BLOCK_RE = re.compile(r'<div class="from-thingy">.*?\n</div>[ \t]*\n?', re.S)
+
+
+def strip_thingy_blocks(body: str) -> str:
+    stripped = THINGY_BLOCK_RE.sub("", body)
+    return re.sub(r"\n{3,}", "\n\n", stripped) if stripped != body else body
+
+
 def clean_heading(value: str) -> str:
     value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
     value = re.sub(r"[*_`#]+", "", value)
@@ -702,6 +716,7 @@ def build_corpus(
         archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
     ):
         metadata, body = read_issue(path)
+        body = strip_thingy_blocks(body)
         number = metadata.get("number") or path.parent.name
         subject = metadata.get("subject") or f"Weekly Thing {number}"
         publish_date = metadata.get("publish_date") or ""
@@ -947,6 +962,7 @@ def journal_blog_xref(archive_dir: Path = ARCHIVE_DIR) -> dict[str, list[Any]]:
         archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
     ):
         metadata, body = read_issue(path)
+        body = strip_thingy_blocks(body)
         number = metadata.get("number") or path.parent.name
         for match in _BLOG_PERMALINK_RE.finditer(body):
             xref.setdefault(_normalize_blog_path(match.group(1)), set()).add(number)

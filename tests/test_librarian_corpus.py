@@ -4,6 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from librarian_core import corpus as core
+
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = REPO / "pipeline" / "corpus" / "build.py"
 
@@ -55,6 +57,62 @@ class LibrarianCorpusTests(unittest.TestCase):
         self.assertEqual(result["chunks"][0]["url"], "/archive/1/")
         self.assertEqual(result["chunks"][0]["source_kind"], "chunk")
         self.assertIn("content_kind", result["chunks"][0])
+
+    def test_thingy_blocks_never_reach_the_corpus(self):
+        # The frame wt-builder renders (src/shared/render/website.ts thingyFrame):
+        # div, label <p>, markdown blocks, closing div - each its own block.
+        frame_open = (
+            '<div class="from-thingy">\n\n'
+            '<p class="from-thingy-label"><a href="https://thingy.thingelstad.com">'
+            "From Thingy</a>, my agentic librarian</p>\n\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            archive = Path(tmp) / "archive"
+            (archive / "351").mkdir(parents=True)
+            (archive / "351" / "archive.md").write_text(
+                "---\nnumber: 351\nsubject: Weekly Thing 351\n"
+                "publish_date: 2026-09-26T12:00:00Z\n---\n"
+                "Jamie's intro about tidepools.\n\n"
+                "## Briefly\n\n"
+                "Jamie's commentary on a link.\n\n"
+                + frame_open
+                + "Supporting Membership is a giving program run by Thingy.\n\n"
+                "</div>\n\n"
+                "Have a great weekend!\n\n"
+                "## Echoes\n\n"
+                + frame_open
+                + "Thingy echo about [WT328](https://weekly.thingelstad.com/archive/328/) "
+                "and [a post](https://www.thingelstad.com/2025/01/02/echoed-post.html).\n\n"
+                "_Ask Thingy:_ [A question?](https://thingy.thingelstad.com/chat/?prompt=q)\n\n"
+                "</div>\n",
+                encoding="utf-8",
+            )
+
+            result = corpus.build_corpus(
+                archive,
+                include_issue_bodies=True,
+                site_dir=_empty_site(Path(tmp)),
+                faq_path=Path(tmp) / "missing-faq.json",
+            )
+            xref = core.journal_blog_xref(archive)
+
+        dump = json.dumps(result, default=str)
+        for thingy_text in (
+            "from-thingy",
+            "giving program run by Thingy",
+            "Thingy echo",
+            "Ask Thingy",
+        ):
+            self.assertNotIn(thingy_text, dump)
+        issue = result["issues"][0]
+        self.assertIn("Have a great weekend!", issue["body"])
+        self.assertNotIn("Echoes", [section["name"] for section in issue["sections"]])
+        self.assertEqual(issue["word_count"], len(core.words(issue["body"])))
+        self.assertEqual(xref, {})
+
+    def test_strip_thingy_blocks_leaves_other_issues_untouched(self):
+        body = 'Intro.\n\n<div class="callout">\n\nNot Thingy.\n\n</div>\n\nOutro.\n'
+        self.assertEqual(core.strip_thingy_blocks(body), body)
 
     def test_rejects_template_leaks(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -364,3 +422,20 @@ class MediaDescriptionAnnotationTests(unittest.TestCase):
 
         corpus = {"media": [{"url": "https://files.thingelstad.com/a.jpg"}]}
         self.assertEqual(annotate_media_descriptions(corpus, Path("/nonexistent/sidecar.json")), 0)
+
+
+class SimilarIssueTests(unittest.TestCase):
+    def test_issueless_chunks_never_become_a_similar_issue(self):
+        from librarian_core.graph import similarity_edges
+
+        corpus = {
+            "chunks": [
+                {"issue_number": 1, "embedding": [1.0, 0.0]},
+                {"issue_number": 2, "embedding": [0.9, 0.1]},
+                {"issue_number": None, "embedding": [1.0, 0.0]},
+                {"issue_number": "", "embedding": [1.0, 0.0]},
+            ]
+        }
+        edges = similarity_edges(corpus)
+        self.assertEqual(set(edges), {"1", "2"})
+        self.assertEqual([edge["number"] for edge in edges["1"]], ["2"])

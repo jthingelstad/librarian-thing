@@ -33,9 +33,14 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 
 ## Hard constraints
 
-- **The Librarian API `/retrieve` is a versioned contract.** Thingy is a live
-  client across a repo boundary — casual changes break it. Version before
-  changing.
+- **The Librarian API `/retrieve` is a versioned contract.** WT Builder and AT
+  Builder are live clients across repo boundaries (Thingy web uses `/chat`,
+  not `/retrieve`) — casual changes break them. Version before changing.
+- **Thingy's words never enter the corpus.** Blocks WT Builder frames as
+  `<div class="from-thingy">` (Echoes, Membership) are stripped before any
+  chunk, count, topic, link or summary is built (`strip_thingy_blocks` in
+  `librarian-core`). The frame is a cross-repo contract, pinned by tests here
+  and in wt-builder `tests/echoes.test.ts`.
 - **`data/issues/` is written by WT Builder.** Do not hand-edit new issues
   here; fix them in WT Builder and re-send the archive leg. Historical
   repairs (pre-Builder issues) are fine and are what `pipeline/audits/` is

@@ -329,7 +329,9 @@ def issue_vectors(corpus: dict[str, Any]) -> dict[str, list[float]]:
     counts: dict[str, int] = {}
     for chunk in corpus.get("chunks", []):
         embedding = chunk.get("embedding")
-        if not embedding:
+        # Site-page and FAQ chunks carry no issue number; bucketing them under
+        # "None" made a phantom issue that could surface as a similar issue.
+        if not embedding or chunk.get("issue_number") in (None, ""):
             continue
         issue = str(chunk.get("issue_number"))
         if issue not in sums:

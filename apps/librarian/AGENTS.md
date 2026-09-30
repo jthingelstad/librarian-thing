@@ -38,7 +38,7 @@ The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
 
 ### The `/retrieve` endpoint
 
-Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with service-retrieval auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `wt-builder` (`src/server/integrations/librarian.ts`) — e.g. the Echoes retrieval in the compose flow. workshop_bot, the original client, was retired with Studio on 2026-08-28.
+Added in May 2026. Same `retrieve()` function `/chat` uses, exposed as a JSON-only POST with service-retrieval auth (no per-user session token). Returns `{passages, embedding_model, rerank_model, request_id}`. Called by `wt-builder` (`src/server/integrations/librarian.ts`: Echoes, the link wand, the archive-leg verify) and `at-builder` (`src/server/librarian.ts`: hooks, prospecting). workshop_bot, the original client, was retired with Studio on 2026-08-28. Since contract 4.11 each passage carries `id`, `label` (WT351 / AT3 / post title), an absolute `url` and a public `source_kind` (`shared/source-identity.mts`); requests take `filters.sourceKinds` / `excludeSourceKinds` / `excludeIssues` / `before` / `issueNumber` and a `caller` name that `retrieve_completed` logs with the scope and filter keys.
 
 The `retrieveSecretOk` helper in `chat/runtime.mts` compares against `LIBRARIAN_RETRIEVE_SECRET` via `crypto.timingSafeEqual`. The request body still accepts the historical `bridge_secret` field so existing trusted clients keep the versioned `/retrieve` contract.
 
