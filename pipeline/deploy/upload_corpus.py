@@ -22,9 +22,26 @@ from librarian_core.corpus import (
     DEFAULT_EMBEDDING_MODEL,
     EMBED_RECIPE_VERSION,
     add_bedrock_embeddings,
+    annotate_media_descriptions,
     build_corpus,
 )
 from librarian_core.graph import build_graph
+from librarian_core.paths import ARCHIVE_DIR, MEDIA_DESCRIPTIONS_PATH
+
+
+def build_wt_corpus(
+    archive_dir: Path | None = None,
+    sidecar_path: Path | None = None,
+    **build_kwargs,
+) -> dict:
+    """The Weekly Thing corpus as production ships it: issue bodies included
+    and the vision descriptions (pipeline/corpus/describe_media.py) merged
+    into its media entries, exactly as the blog upload and the local build
+    do. Before this, CI shipped WT photos without `description`."""
+    corpus = build_corpus(archive_dir or ARCHIVE_DIR, include_issue_bodies=True, **build_kwargs)
+    annotated = annotate_media_descriptions(corpus, sidecar_path or MEDIA_DESCRIPTIONS_PATH)
+    print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
+    return corpus
 
 
 def upload_json_gzip(bucket: str, key: str, path) -> None:
@@ -157,7 +174,7 @@ def main() -> int:
     if not args.bucket:
         raise RuntimeError("Provide --bucket or LIBRARIAN_BUCKET")
 
-    corpus = build_corpus(include_issue_bodies=True)
+    corpus = build_wt_corpus()
 
     if not args.full:
         existing = fetch_existing_corpus(args.bucket, args.key)

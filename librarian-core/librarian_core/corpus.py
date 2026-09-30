@@ -165,7 +165,27 @@ THINGY_BLOCK_RE = re.compile(r'<div class="from-thingy">.*?\n</div>[ \t]*\n?', r
 
 def strip_thingy_blocks(body: str) -> str:
     stripped = THINGY_BLOCK_RE.sub("", body)
-    return re.sub(r"\n{3,}", "\n\n", stripped) if stripped != body else body
+    if stripped == body:
+        return body
+    return re.sub(r"\n{3,}", "\n\n", _drop_emptied_headings(stripped))
+
+
+def _drop_emptied_headings(body: str) -> str:
+    """Drop a heading the Thingy strip left with nothing under it (WB frames
+    Echoes as "## Echoes" plus the block), so get_source bodies don't end on
+    a bare heading. A heading followed by a deeper one is not empty."""
+    matches = list(HEADING_RE.finditer(body))
+    spans = []
+    for index, match in enumerate(matches):
+        following = matches[index + 1] if index + 1 < len(matches) else None
+        end = following.start() if following else len(body)
+        if body[match.end() : end].strip():
+            continue
+        if following is None or len(following.group(1)) <= len(match.group(1)):
+            spans.append((match.start(), end))
+    for start, end in reversed(spans):
+        body = body[:start] + body[end:]
+    return body.rstrip() + "\n" if spans else body
 
 
 def clean_heading(value: str) -> str:
@@ -383,6 +403,46 @@ def key_points_for_sections(sections: list[tuple[str, str]], limit: int = 5) -> 
     return points
 
 
+# Where a chunk's overlap lead-in may start: after a line break, or after a
+# sentence's closing punctuation (and any closing quote, bracket or emphasis).
+_OVERLAP_BOUNDARY_RE = re.compile(r"\n+|[.!?][\"'’”)\]*_]*[ \t]+")
+# Spans an overlap must never start inside: markdown links/images, HTML tags.
+_OVERLAP_ATOMIC_RE = re.compile(r"!?\[[^\]]*\]\([^)]*\)|<[^>]*>")
+
+
+def _overlap_tail(text: str, overlap_words: int) -> str:
+    """The lead-in the next chunk repeats: the whole sentences (or lines) that
+    fall inside ``text``'s last ``overlap_words`` words, copied VERBATIM, so
+    it is always an exact suffix of ``text``. With no sentence boundary in
+    that window it starts at the cut word, moved past any link or tag the
+    cut lands inside.
+
+    This used to be ``" ".join(words(text)[-overlap_words:])``: a
+    de-punctuated token soup (URLs became "https weekly thingelstad com")
+    stored as the first paragraph of the next chunk, which search results
+    and lenses then showed as passage text (review 2026-09-29, defect 15).
+    """
+    tokens = list(WORD_RE.finditer(text))
+    if not tokens or overlap_words <= 0:
+        return ""
+    cut = tokens[max(len(tokens) - overlap_words, 0)].start()
+    if cut == tokens[0].start():
+        return text.strip()
+    atomic = [match.span() for match in _OVERLAP_ATOMIC_RE.finditer(text)]
+
+    def inside_atomic(position: int) -> bool:
+        return any(start < position < end for start, end in atomic)
+
+    for boundary in _OVERLAP_BOUNDARY_RE.finditer(text):
+        start = boundary.end()
+        if start >= cut and not inside_atomic(start) and WORD_RE.search(text, start):
+            return text[start:].strip()
+    for start, end in atomic:
+        if start < cut < end:
+            cut = end
+    return text[cut:].strip()
+
+
 def chunk_section(text: str, max_words: int = 400, overlap_words: int = 60) -> list[str]:
     tokens = words(text)
     if len(tokens) <= max_words:
@@ -397,7 +457,7 @@ def chunk_section(text: str, max_words: int = 400, overlap_words: int = 60) -> l
         count = len(words(paragraph))
         if current and current_words + count > max_words:
             chunks.append("\n\n".join(current).strip())
-            overlap = " ".join(words(chunks[-1])[-overlap_words:])
+            overlap = _overlap_tail(chunks[-1], overlap_words)
             current = [overlap, paragraph] if overlap else [paragraph]
             current_words = len(words(overlap)) + count
         else:

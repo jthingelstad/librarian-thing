@@ -107,8 +107,22 @@ class LibrarianCorpusTests(unittest.TestCase):
         issue = result["issues"][0]
         self.assertIn("Have a great weekend!", issue["body"])
         self.assertNotIn("Echoes", [section["name"] for section in issue["sections"]])
+        # The emptied "## Echoes" heading goes with its block.
+        self.assertNotIn("## Echoes", issue["body"])
+        self.assertTrue(issue["body"].rstrip().endswith("Have a great weekend!"))
         self.assertEqual(issue["word_count"], len(core.words(issue["body"])))
         self.assertEqual(xref, {})
+
+    def test_strip_keeps_headings_that_still_own_content(self):
+        frame = '<div class="from-thingy">\n\nThingy.\n\n</div>\n'
+        body = (
+            "## Notable\n\n### [A link](https://example.com)\n\nJamie on it.\n\n"
+            "## Echoes\n\n" + frame + "\n## Also\n\nJamie again.\n\n## Echoes\n\n" + frame
+        )
+        self.assertEqual(
+            core.strip_thingy_blocks(body),
+            "## Notable\n\n### [A link](https://example.com)\n\nJamie on it.\n\n## Also\n\nJamie again.\n",
+        )
 
     def test_strip_thingy_blocks_leaves_other_issues_untouched(self):
         body = 'Intro.\n\n<div class="callout">\n\nNot Thingy.\n\n</div>\n\nOutro.\n'

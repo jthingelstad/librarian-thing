@@ -38,10 +38,10 @@ from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
+from librarian_core.corpus import build_corpus
 
 ROOT = Path(__file__).resolve().parents[2]
 SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
-CORPUS = ROOT / "data" / "librarian" / "corpus.json"
 BLOG_POSTS = ROOT / "data" / "blog" / "posts"
 
 MODEL = "claude-haiku-4-5"
@@ -77,8 +77,11 @@ def allowed(url: str) -> bool:
 
 def collect_urls() -> list[str]:
     urls: dict[str, None] = {}
-    corpus = json.loads(CORPUS.read_text())
-    for media in corpus.get("media", []):
+    # Weekly Thing media from a fresh build of data/issues, not the
+    # gitignored data/librarian/corpus.json: that local artifact is only as
+    # new as the last local build, and a stale one silently skipped every
+    # issue since (WT350-351 went undescribed that way).
+    for media in build_corpus().get("media", []):
         url = str(media.get("url") or "")
         if allowed(url):
             urls.setdefault(url)

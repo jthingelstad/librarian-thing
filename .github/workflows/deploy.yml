@@ -14,6 +14,9 @@ on:
       - 'data/issues/**'
       - 'data/blog/**'
       - 'data/podcast/**'
+      # The vision-description sidecar rebuilds both corpora (change
+      # detection below); without it here a sidecar-only commit ran nothing.
+      - 'data/librarian/media-descriptions.json'
       - 'pipeline/**'
       - 'librarian-core/**'
       - 'apps/librarian/**'
