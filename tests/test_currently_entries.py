@@ -47,6 +47,32 @@ class CurrentlyLabelTests(unittest.TestCase):
         self.assertGreaterEqual(len(dining), 8)
 
 
+class CurrentlyFullTextTests(unittest.TestCase):
+    """QA 2026-09-30 (time F4): entry text was cut at 400 characters, so 20
+    long entries lost their later titles ("Rag and Bone" and "101 Famous
+    Poems" in WT132, the second MrBeast entry in WT247/248) and
+    currently_history could not find them. The Lambda clips the display."""
+
+    def test_an_entry_over_400_characters_keeps_its_whole_text(self):
+        line = "**Reading:** " + "A long thought about poems. " * 20 + "Finally Rag and Bone."
+        [entry] = core.extract_currently_entries(line)
+        self.assertGreater(len(entry["text"]), 400)
+        self.assertTrue(entry["text"].endswith("Finally Rag and Bone."))
+        blurb = "A blurb sentence about the book. " * 20 + "The last line."
+        [book] = core.extract_now_reading_entries(f"## Now Reading 📚\n\n### Book\n\n{blurb}\n")
+        self.assertTrue(book["text"].endswith("The last line."))
+
+    def test_real_long_entries_are_whole(self):
+        corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
+        texts = {}
+        for entry in corpus["currently"]:
+            texts.setdefault(str(entry["issue_number"]), []).append(entry["text"])
+        self.assertTrue(any("Rag and Bone" in text for text in texts["132"]))
+        self.assertTrue(any("101 Famous Poems" in text for text in texts["132"]))
+        self.assertTrue(any("MrBeast" in text for text in texts["248"]))
+        self.assertGreaterEqual(sum(len(text) > 400 for t in texts.values() for text in t), 20)
+
+
 NOW_READING = """## Notable
 
 ### [A link](https://example.com/a)

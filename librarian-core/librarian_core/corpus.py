@@ -541,13 +541,16 @@ def extract_now_reading_entries(body: str) -> list[dict[str, Any]]:
             prose = plain_text(f"{clean_heading(title)}\n\n{text}")
             prose = " ".join(re.sub(r"<?https?://\S+", " ", prose).split())
             if prose or links:
-                entries.append({"kind": "reading", "text": prose[:400], "links": [*links.values()]})
+                entries.append({"kind": "reading", "text": prose, "links": [*links.values()]})
     return entries
 
 
 def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
     """Typed entries from a Currently section: **Reading:** / **Playing:** /
-    **Watching:** / **Listening:** lines with their links and prose."""
+    **Watching:** / **Listening:** lines (or **Dining**:) with their links and
+    their whole prose. The text was cut at 400 characters until QA
+    2026-09-30 (time F4), which hid the later titles of long lines from
+    currently_history; the Lambda clips what it displays."""
     entries = []
     for label, rest in _CURRENTLY_LINE_RE.findall(section_text or ""):
         links = [
@@ -558,7 +561,7 @@ def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
         entries.append(
             {
                 "kind": label.strip().lower(),
-                "text": plain_text(rest)[:400],
+                "text": plain_text(rest),
                 "links": links,
             }
         )
