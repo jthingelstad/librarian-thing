@@ -299,12 +299,17 @@ def clean_entity(value: str) -> str:
     return value
 
 
+# Entities, tropes and the Bedrock extraction read the whole issue and all
+# its links. Until QA 2026-09-30 (ingest F14) they read the first 14,000,
+# 20,000 and 18,000 characters and 24 links, which left 28.8% of Weekly
+# Thing text unread: 1,675 names that occur twice or more only past the cut
+# in 225 issues (Big Green Egg in WT9, MNUFC in WT19) were in no entity.
 def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
     text = " ".join(
         [
             str(issue.get("subject") or ""),
-            " ".join(str(link.get("text") or "") for link in issue.get("links", [])[:24]),
-            entity_text(str(issue.get("body") or "")[:14000]),
+            " ".join(str(link.get("text") or "") for link in issue.get("links", [])),
+            entity_text(str(issue.get("body") or "")),
         ]
     )
     counts: dict[str, int] = {}
@@ -329,7 +334,7 @@ def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
 
 
 def heuristic_tropes(issue: dict[str, Any]) -> list[str]:
-    text = f"{issue.get('subject', '')} {issue.get('body', '')[:20000]}".lower()
+    text = f"{issue.get('subject', '')} {entity_text(issue.get('body', ''))}".lower()
     result = []
     for trope, keywords in TROPE_KEYWORDS.items():
         score = sum(1 for keyword in keywords if keyword in text)
@@ -383,7 +388,7 @@ def similarity_edges(corpus: dict[str, Any], top_k: int = 6) -> dict[str, list[d
 
 
 def extract_with_bedrock(issue: dict[str, Any], model: str) -> dict[str, list[str]]:
-    body = str(issue.get("body") or "")[:18000]
+    body = str(issue.get("body") or "")
     prompt = (
         "Extract archive metadata from this Weekly Thing issue. Return only JSON with keys "
         "entities and tropes. entities should include people, companies, products, places, and projects. "

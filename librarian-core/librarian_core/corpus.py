@@ -300,7 +300,9 @@ def summarize_text(text: str, max_chars: int = 420) -> str:
 
 
 def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
-    tokens = [token.lower() for token in words(f"{subject} {body[:12000]}")]
+    # The whole text: an issue's clusters used to come from its first 12,000
+    # characters, which left most of 301 issues unread (QA 2026-09-30, F14).
+    tokens = [token.lower() for token in words(f"{subject} {body}")]
     counts = {}
     token_set = set(tokens)
     for topic, keywords in TOPIC_KEYWORDS.items():
@@ -319,6 +321,13 @@ _TOPIC_NOISE_RE = re.compile(r"\]\([^)]*\)|<[^>]+>|https?://\S+|www\.\S+", re.I)
 _MICRO_BLOG_RE = re.compile(r"\bmicro\.blog\b", re.I)
 
 
+def topic_prose(text: str) -> str:
+    """``text`` as the words the topic detector reads: link targets and
+    tags removed, "micro.blog" as the ``microblog`` keyword that the word
+    split would otherwise break in two."""
+    return _MICRO_BLOG_RE.sub("microblog", _TOPIC_NOISE_RE.sub(" ", text))
+
+
 def chunk_topics(heading: str, text: str) -> list[str]:
     """The clusters one passage is about, from its own heading and text.
 
@@ -329,8 +338,7 @@ def chunk_topics(heading: str, text: str) -> list[str]:
     nine clusters as ``detect_topics``, read over the passage's prose (link
     targets and tags removed), with "micro.blog" read as the ``microblog``
     keyword that the word split would otherwise break in two."""
-    prose = _MICRO_BLOG_RE.sub("microblog", _TOPIC_NOISE_RE.sub(" ", f"{heading}\n{text}"))
-    return detect_topics("", prose)
+    return detect_topics("", topic_prose(f"{heading}\n{text}"))
 
 
 # --- media / currently / journal extraction (2026-08 tool audit) ----------
@@ -1104,7 +1112,9 @@ def build_corpus(
         issue_word_count = len(words(body))
         split = split_issue_sections(body)
         sections = [(section.heading, section.text) for section in split]
-        topics = detect_topics(subject, body)
+        # The issue's clusters read the whole issue's words, as its
+        # chunks' do (``chunk_topics``).
+        topics = detect_topics(subject, topic_prose(body))
         issue_summary = {
             "abstract": summarize_text(body),
             "key_points": key_points_for_sections(sections),
