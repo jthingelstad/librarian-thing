@@ -581,29 +581,119 @@ def _overlap_tail(text: str, overlap_words: int) -> str:
     return text[cut:].strip()
 
 
-def chunk_section(text: str, max_words: int = 400, overlap_words: int = 60) -> list[str]:
+def _cut_points(text: str, pattern: re.Pattern[str], atomic: list[tuple[int, int]]) -> list:
+    """``(start, end)`` of the whitespace after each ``pattern`` boundary in
+    ``text`` (a sentence end, a line break, a space), skipping any that falls
+    inside an ``atomic`` span (a markdown link or HTML tag)."""
+    points = []
+    for match in pattern.finditer(text):
+        raw = match.group(0)
+        start = match.start() + len(raw.rstrip())
+        if start <= 0 or match.end() >= len(text) or start == match.end():
+            continue
+        if any(left < start < right for left, right in atomic):
+            continue
+        points.append((start, match.end()))
+    return points
+
+
+_SPACE_CUT_RE = re.compile(r"[ \t]+")
+
+
+def _fitting_units(paragraph: str, max_chars: int) -> list[tuple[str, str]]:
+    """``paragraph`` as ``[(separator, piece)]`` pieces of at most
+    ``max_chars``. A paragraph that fits is one piece. One that does not is
+    cut at its sentence ends and line breaks, then a piece still too long at
+    its spaces (outside links and tags first), then, as a last resort, every
+    ``max_chars``. Each separator is the whitespace the cut removed, so the
+    pieces rejoin to the paragraph verbatim."""
+    units: list[tuple[str, str]] = [("\n\n", paragraph)]
+    for pattern, keep_atomic in (
+        (_OVERLAP_BOUNDARY_RE, True),
+        (_SPACE_CUT_RE, True),
+        (_SPACE_CUT_RE, False),
+    ):
+        refined: list[tuple[str, str]] = []
+        for separator, piece in units:
+            if len(piece) <= max_chars:
+                refined.append((separator, piece))
+                continue
+            atomic = (
+                [match.span() for match in _OVERLAP_ATOMIC_RE.finditer(piece)]
+                if keep_atomic
+                else []
+            )
+            cursor = 0
+            for start, end in _cut_points(piece, pattern, atomic):
+                if start == cursor:  # back-to-back boundaries: one wider separator
+                    separator, cursor = separator + piece[start:end], end
+                    continue
+                refined.append((separator, piece[cursor:start]))
+                separator, cursor = piece[start:end], end
+            refined.append((separator, piece[cursor:]))
+        units = refined
+    fitted: list[tuple[str, str]] = []
+    for separator, piece in units:
+        for offset in range(0, len(piece), max_chars):
+            fitted.append((separator if offset == 0 else "", piece[offset : offset + max_chars]))
+    return fitted
+
+
+def _fitting_overlap(previous: str, overlap_words: int, room: int) -> str:
+    """The longest overlap lead-in of at most ``overlap_words`` words that
+    fits in ``room`` characters, or "" when none does."""
+    for count in range(overlap_words, 0, -10):
+        overlap = _overlap_tail(previous, count)
+        if len(overlap) <= room:
+            return overlap
+    return ""
+
+
+def chunk_section(
+    text: str,
+    max_words: int = 400,
+    overlap_words: int = 60,
+    max_chars: int | None = None,
+) -> list[str]:
+    """Split ``text`` into chunks of at most ``max_words`` words, each after
+    the first opening with a verbatim overlap lead-in from the one before.
+
+    ``max_chars`` caps a chunk's length in characters too: it is the room
+    the chunk's text has inside one embedding input, which Bedrock cuts at
+    2,048 characters (``embed_text_budget``). Before the cap, 8.7% of Weekly
+    Thing words sat past that cut in no embedding at all (QA 2026-09-30,
+    ingest F1). The cap only changes a section that produced an overlong
+    chunk: a chunk that fits is built exactly as before, so its id stays."""
     tokens = words(text)
-    if len(tokens) <= max_words:
+    if len(tokens) <= max_words and (max_chars is None or len(text.strip()) <= max_chars):
         return [text.strip()] if text.strip() else []
 
     paragraphs = [p.strip() for p in re.split(r"\n{2,}", text) if p.strip()]
+    units = (
+        [unit for paragraph in paragraphs for unit in _fitting_units(paragraph, max_chars)]
+        if max_chars
+        else [("\n\n", paragraph) for paragraph in paragraphs]
+    )
     chunks: list[str] = []
-    current: list[str] = []
+    current = ""
     current_words = 0
 
-    for paragraph in paragraphs:
-        count = len(words(paragraph))
-        if current and current_words + count > max_words:
-            chunks.append("\n\n".join(current).strip())
+    for separator, unit in units:
+        count = len(words(unit))
+        too_long = max_chars is not None and len(current) + len(separator) + len(unit) > max_chars
+        if current and (current_words + count > max_words or too_long):
+            chunks.append(current.strip())
             overlap = _overlap_tail(chunks[-1], overlap_words)
-            current = [overlap, paragraph] if overlap else [paragraph]
+            if max_chars is not None and len(overlap) + 2 + len(unit) > max_chars:
+                overlap = _fitting_overlap(chunks[-1], overlap_words, max_chars - 2 - len(unit))
+            current = f"{overlap}\n\n{unit}" if overlap else unit
             current_words = len(words(overlap)) + count
         else:
-            current.append(paragraph)
+            current = f"{current}{separator}{unit}" if current else unit
             current_words += count
 
     if current:
-        chunks.append("\n\n".join(current).strip())
+        chunks.append(current.strip())
     return chunks
 
 
@@ -726,7 +816,10 @@ def _site_page_chunks(
     about_path = site_dir / "about.njk"
     if about_path.exists():
         prose = _strip_njk_page(about_path.read_text(encoding="utf-8"), replacements=replacements)
-        for index, chunk_text in enumerate(chunk_section(prose)):
+        budget = embed_text_budget(
+            {"issue_number": None, "subject": "About the Weekly Thing", "section": "About"}
+        )
+        for index, chunk_text in enumerate(chunk_section(prose, max_chars=budget)):
             out.append(
                 {
                     "id": f"site:about:{index}",
@@ -757,7 +850,14 @@ def _site_page_chunks(
     members_path = site_dir / "support.njk"
     if members_path.exists():
         prose = _strip_njk_page(members_path.read_text(encoding="utf-8"), replacements=replacements)
-        for index, chunk_text in enumerate(chunk_section(prose)):
+        budget = embed_text_budget(
+            {
+                "issue_number": None,
+                "subject": "Supporting Membership",
+                "section": "Supporting Membership",
+            }
+        )
+        for index, chunk_text in enumerate(chunk_section(prose, max_chars=budget)):
             out.append(
                 {
                     "id": f"site:members:{index}",
@@ -1047,7 +1147,16 @@ def build_corpus(
                             "issue_url": url,
                         }
                     )
-            for index, chunk_text in enumerate(chunk_section(section_body)):
+            budget = embed_text_budget(
+                {
+                    "issue_number": number,
+                    "subject": subject,
+                    "publish_date": publish_date,
+                    "issue_abstract": issue_summary["abstract"],
+                    "section": section,
+                }
+            )
+            for index, chunk_text in enumerate(chunk_section(section_body, max_chars=budget)):
                 if TEMPLATE_LEAK_RE.search(chunk_text):
                     raise RuntimeError(
                         f"Template/generated content leaked into corpus for issue {number}"
@@ -1668,7 +1777,15 @@ def build_blog_corpus(
                     "publish_date": publish_date,
                 }
             )
-        for index, chunk_text in enumerate(chunk_section(embed_text)):
+        budget = embed_text_budget(
+            {
+                "source_kind": "blog",
+                "publish_date": publish_date,
+                "subject": subject,
+                "section": section,
+            }
+        )
+        for index, chunk_text in enumerate(chunk_section(embed_text, max_chars=budget)):
             # Content-deterministic id (text hash suffix): when a post's body is
             # edited in place (alt-text inlined, de-wrap, typo fix) without
             # changing its chunk count, the id still changes — so the
@@ -1876,8 +1993,9 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
         if notes:
             sections.append(("Show notes", "podcast_notes", notes))
         for section, content_kind, text in sections:
+            budget = embed_text_budget({**base, "section": section})
             for index, chunk_text in enumerate(
-                chunk_section(text, max_words=320, overlap_words=55)
+                chunk_section(text, max_words=320, overlap_words=55, max_chars=budget)
             ):
                 chunks.append(
                     {
@@ -1919,18 +2037,14 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
 EMBED_RECIPE_VERSION = 2
 
 
-def _embed_input(chunk: dict[str, Any]) -> str:
-    """The text handed to the embedding model for one chunk. Blog chunks get a
-    blog-shaped header; everything else keeps the original Weekly-Thing header
-    verbatim so existing corpus.json embed inputs stay byte-identical (cache
-    stays warm)."""
+def _embed_header(chunk: dict[str, Any]) -> list[str]:
+    """The header lines ``_embed_input`` puts above a chunk's text."""
     if chunk.get("source_kind") == "blog":
         lines = [f"thingelstad.com blog — {chunk.get('publish_date') or ''}".rstrip(" —")]
         if chunk.get("subject"):
             lines.append(f"Post: {chunk['subject']}")
         lines.append(f"Section: {chunk['section']}")
-        lines.append(chunk["text"])
-        return "\n".join(lines)
+        return lines
     if chunk.get("source_kind") == "podcast":
         episode = chunk.get("episode_number")
         label = f"Episode {episode}" if episode is not None else "Episode"
@@ -1940,8 +2054,7 @@ def _embed_input(chunk: dict[str, Any]) -> str:
         lines.append(f"Section: {chunk['section']}")
         if chunk.get("summary"):
             lines.append(f"Summary: {chunk['summary']}")
-        lines.append(chunk["text"])
-        return "\n".join(lines)
+        return lines
     lines = [f"Weekly Thing #{chunk['issue_number']}: {chunk['subject']}"]
     if chunk.get("publish_date"):
         lines.append(f"Published: {chunk['publish_date']}")
@@ -1952,13 +2065,44 @@ def _embed_input(chunk: dict[str, Any]) -> str:
     if chunk.get("issue_abstract"):
         lines.append(f"Issue summary: {chunk['issue_abstract']}")
     lines.append(f"Section: {chunk['section']}")
-    lines.append(chunk["text"])
-    return "\n".join(lines)
+    return lines
+
+
+def _embed_input(chunk: dict[str, Any]) -> str:
+    """The text handed to the embedding model for one chunk. Blog chunks get a
+    blog-shaped header; everything else keeps the original Weekly-Thing header
+    verbatim so existing corpus.json embed inputs stay byte-identical (cache
+    stays warm)."""
+    return "\n".join([*_embed_header(chunk), chunk["text"]])
+
+
+# The fewest characters a chunk's text is ever given, so a freak header
+# cannot reduce chunking to slivers. No real header comes close: the longest
+# Weekly Thing one, issue summary and all, is under 700 characters.
+MIN_EMBED_TEXT_CHARS = 1000
+
+
+def embed_text_budget(chunk: dict[str, Any]) -> int:
+    """How many characters of text fit in ``chunk``'s embedding input below
+    the header ``_embed_input`` puts above it. Bedrock's Cohere embed takes
+    at most 2,048 characters a text, and text past that is in no embedding.
+    ``chunk`` needs only the header fields, not the text."""
+    header = "\n".join(_embed_header(chunk))
+    return max(COHERE_EMBED_MAX_TEXT_CHARS - len(header) - 1, MIN_EMBED_TEXT_CHARS)
 
 
 def fetch_bedrock_embeddings(
     inputs: list[str], model: str, input_type: str = "search_document"
 ) -> list[list[float]]:
+    # The builders size every chunk to fit (embed_text_budget), so this cut
+    # is a backstop that should never bite. Say so when it does: text past
+    # it is in no embedding.
+    over = sum(1 for text in inputs if len(text) > COHERE_EMBED_MAX_TEXT_CHARS)
+    if over:
+        print(
+            f"embed_input_truncated: {over} of {len(inputs)} inputs over "
+            f"{COHERE_EMBED_MAX_TEXT_CHARS} chars; their tails are in no embedding"
+        )
     inputs = [text[:COHERE_EMBED_MAX_TEXT_CHARS] for text in inputs]
     response = boto3.client("bedrock-runtime").invoke_model(
         modelId=model,
