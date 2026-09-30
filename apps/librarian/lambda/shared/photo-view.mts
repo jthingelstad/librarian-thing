@@ -61,19 +61,38 @@ export function resizeProxyUrl(originalUrl: string): string {
   return `https://micro.blog/photos/${RESIZE_WIDTH}/${originalUrl}`;
 }
 
+function archiveHost(host: string) {
+  return host === 'thingelstad.com' || host.endsWith('.thingelstad.com') || IMAGE_HOSTS.has(host);
+}
+
+// The https URL view_photo fetches for value, or null. A thingelstad.com
+// photo recorded as http:// is read over https (the hosts serve both; six
+// WT297-300 charts were refused as "not an archive image host").
 export function allowedImageUrl(value: unknown): string | null {
   if (typeof value !== 'string' || !value.trim()) return null;
   try {
     const url = new URL(value.trim());
-    if (url.protocol !== 'https:') return null;
     const host = url.hostname.toLowerCase();
-    if (host === 'thingelstad.com' || host.endsWith('.thingelstad.com') || IMAGE_HOSTS.has(host)) {
-      return url.href;
+    if (url.protocol === 'http:' && (host === 'thingelstad.com' || host.endsWith('.thingelstad.com'))) {
+      url.protocol = 'https:';
     }
+    if (url.protocol === 'https:' && archiveHost(host)) return url.href;
   } catch {
     /* not a URL */
   }
   return null;
+}
+
+// Why view_photo will not show value, in the words a caller can act on.
+export function imageUrlRefusal(value: unknown): string | null {
+  if (allowedImageUrl(value)) return null;
+  try {
+    const url = new URL(String(value || '').trim());
+    if (url.protocol !== 'https:' && archiveHost(url.hostname.toLowerCase())) return 'not served over https';
+  } catch {
+    return 'not a URL';
+  }
+  return 'not an archive image host';
 }
 
 /** Bedrock Converse image-block format for a sniffed mime type. */
@@ -124,7 +143,7 @@ export async function fetchPhotos(urls: unknown): Promise<PhotoViewResult> {
     }
     const url = allowedImageUrl(raw);
     if (!url) {
-      refused.push({ url: raw, reason: 'not an archive image host' });
+      refused.push({ url: raw, reason: imageUrlRefusal(raw) || 'not an archive image host' });
       continue;
     }
     try {

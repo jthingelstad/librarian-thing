@@ -54,7 +54,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -62,7 +64,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "section": {
               "type": "string",
@@ -189,7 +193,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -197,11 +203,21 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "topic": {
               "type": "string",
               "description": "A word or phrase matched whole in subjects, text and linked domains; a list_topics cluster name matches only when named whole."
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 8,
+              "description": "Other names for the same thing, e.g. [\"Ethereum Name Service\"] for ENS. Known aliases are added for you."
             },
             "domain": {
               "type": "string",
@@ -245,10 +261,16 @@
               "default": 40,
               "description": "Most results, 1 to 120 (default 40)."
             },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
+            },
             "match_mode": {
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
-              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (6+ letters; ethereum never matches ethernet)."
+              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (plurals only under 6 letters; ethereum never matches ethernet)."
             },
             "case_sensitive": {
               "type": "boolean",
@@ -271,6 +293,9 @@
           },
           "match_mode": {
             "type": ["string", "null"]
+          },
+          "aliases_checked": {
+            "type": "array"
           },
           "total_count": {
             "type": "integer"
@@ -348,7 +373,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -356,7 +383,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "limit": {
               "type": "integer",
@@ -364,6 +393,12 @@
               "maximum": 50,
               "default": 20,
               "description": "Most results, 1 to 50 (default 20)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             },
             "sort": {
               "type": "string",
@@ -374,7 +409,7 @@
             "match_mode": {
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
-              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (6+ letters; ethereum never matches ethernet)."
+              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (plurals only under 6 letters; ethereum never matches ethernet)."
             },
             "case_sensitive": {
               "type": "boolean",
@@ -442,7 +477,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -450,7 +487,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "limit": {
               "type": "integer",
@@ -503,7 +542,13 @@
               "minimum": 1,
               "maximum": 100,
               "default": 40,
-              "description": "Most site topics, most-mentioned first; the clusters always come back whole,, 1 to 100 (default 40)."
+              "description": "Most site topics, most-mentioned first; the clusters always come back whole, 1 to 100 (default 40)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           }
         }
@@ -523,14 +568,19 @@
           "matched_topics": {
             "type": "integer"
           },
+          "total_count": {
+            "type": "integer",
+            "description": "Site topics that match query (all of them without one)."
+          },
           "topics": {
-            "type": "array"
+            "type": "array",
+            "description": "Most issues first. issue_count is the issues whose topic extraction named it, not every mention: archive_lens counts mentions."
           },
           "note": {
             "type": "string"
           }
         },
-        "required": ["clusters", "topics"]
+        "required": ["clusters", "topics", "total_count"]
       }
     }
   },
@@ -561,6 +611,12 @@
               "maximum": 30,
               "default": 10,
               "description": "Most results, 1 to 30 (default 10)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           }
         }
@@ -577,11 +633,16 @@
           "source_kind": {
             "type": ["string", "null"]
           },
+          "total_count": {
+            "type": "integer",
+            "description": "Sources that pass the filters."
+          },
           "results": {
-            "type": "array"
+            "type": "array",
+            "description": "Newest first by moment of publication."
           }
         },
-        "required": ["results"]
+        "required": ["results", "total_count"]
       }
     }
   },
@@ -602,6 +663,23 @@
               "enum": ["weekly_thing", "blog", "podcast"],
               "description": "Only this source."
             },
+            "year_range": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "[start_year, end_year]; the same year twice for one year."
+            },
+            "year": {
+              "type": "integer",
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
+            },
             "voice": {
               "type": "string",
               "enum": ["jamie", "quoted", "link"],
@@ -613,6 +691,12 @@
               "maximum": 50,
               "default": 20,
               "description": "Most results, 1 to 50 (default 20)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           },
           "required": ["phrase"]
@@ -627,11 +711,20 @@
           "phrase": {
             "type": "string"
           },
+          "total_count": {
+            "type": "integer",
+            "description": "Sources that hold the phrase."
+          },
+          "counts_by_source": {
+            "type": "array",
+            "description": "[{<key>, count}]"
+          },
           "results": {
-            "type": "array"
+            "type": "array",
+            "description": "Newest first."
           }
         },
-        "required": ["results"]
+        "required": ["results", "total_count"]
       }
     }
   },
@@ -674,7 +767,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -682,7 +777,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "limit": {
               "type": "integer",
@@ -691,10 +788,16 @@
               "default": 18,
               "description": "Most sources, 1 to 40 (default 18)."
             },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
+            },
             "match_mode": {
               "type": "string",
               "enum": ["exact", "phrase", "stem"],
-              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (6+ letters; ethereum never matches ethernet)."
+              "description": "exact (default): whole words, a contiguous phrase for several; stem: inflections too (plurals only under 6 letters; ethereum never matches ethernet)."
             },
             "case_sensitive": {
               "type": "boolean",
@@ -797,7 +900,9 @@
             "year_a": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -806,7 +911,9 @@
             "year_b": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -940,7 +1047,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -948,7 +1057,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "limit": {
               "type": "integer",
@@ -1044,19 +1155,26 @@
   {
     "toolSpec": {
       "name": "media_search",
-      "description": "Search the photo and image index across the archive by what the images show. Matches alt text, captions, nearby context, and a vision-model description of each image's actual content - so visual queries work even when the caption never names what is shown. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
+      "description": "Search the photo and image index across the archive by what the images show. Every word of query must appear in the photo's alt text, caption, nearby context, vision-model description of its actual content, or a blog post's title - so visual queries work even when the caption never names what is shown. Words match whole, accents either way, and plurals by default (dog finds dogs). Omit query to list photos newest first, e.g. one issue's with issue_number. Results are newest first; page with offset. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "query": {
               "type": "string",
-              "description": "What the image should show, e.g. \"bike ride creek\" or \"cabin winter\"."
+              "description": "What the image should show, e.g. \"bike ride creek\" or \"cabin winter\"; every word must match. Omit to list."
+            },
+            "match_mode": {
+              "type": "string",
+              "enum": ["exact", "phrase", "stem"],
+              "description": "stem (default): plurals and inflections too, so dog finds dogs; exact: whole words only."
             },
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -1064,7 +1182,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "source_kind": {
               "type": "string",
@@ -1072,8 +1192,9 @@
               "description": "Only this source."
             },
             "issue_number": {
-              "type": "integer",
-              "description": "One Weekly Thing issue's photos, e.g. 351."
+              "type": ["integer", "string"],
+              "minimum": 1,
+              "description": "One Weekly Thing issue's photos, e.g. 351 or \"140-special\". Weekly Thing only."
             },
             "limit": {
               "type": "integer",
@@ -1081,25 +1202,40 @@
               "maximum": 12,
               "default": 8,
               "description": "Most results, 1 to 12 (default 8)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
-          },
-          "required": ["query"]
+          }
         }
       }
     },
     "mcp": {
-      "description": "Find photos by what they show: alt text, captions, context and a vision description of each image. Returns image_url and the source each appeared in; view_photo shows them to you. Embed one as [![alt](image_url)](source_url).",
+      "description": "Find photos by what they show: every word of query in the alt text, caption, context, a vision description of the image, or a blog post's title (plurals match; dog finds dogs). Omit query to list, e.g. one issue's photos. Newest first; page with offset. Returns image_url and the source each appeared in; view_photo shows them to you (viewable: false says it cannot). Embed one as [![alt](image_url)](source_url).",
       "outputSchema": {
         "type": "object",
         "properties": {
           "query": {
             "type": "string"
           },
+          "match_mode": {
+            "type": ["string", "null"],
+            "description": "null when listing."
+          },
+          "listed": {
+            "type": "string",
+            "description": "Present when no query was given."
+          },
           "total_count": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Distinct photos (one per image per source)."
           },
           "results": {
-            "type": "array"
+            "type": "array",
+            "description": "Newest first. viewable: false and described: false flag a photo view_photo cannot show and one with no vision description."
           }
         },
         "required": ["total_count", "results"]
@@ -1109,7 +1245,7 @@
   {
     "toolSpec": {
       "name": "view_photo",
-      "description": "Actually look at up to 3 archive photos: pass image_url values from media_search or get_source results and the images become visible to you - describe them, compare them, pick the right one - instead of relying on captions. Use it when a question hinges on what a photo actually shows. Archive image hosts only; an oversized original is refused with its URL still usable as a link. Still embed chosen photos in the answer as clickable linked thumbnails: [![alt](image_url)](source_url).",
+      "description": "Actually look at up to 3 archive photos: pass image_url values from media_search results and the images become visible to you - describe them, compare them, pick the right one - instead of relying on captions. Use it when a question hinges on what a photo actually shows. Archive image hosts only; an oversized original is refused with its URL still usable as a link. Still embed chosen photos in the answer as clickable linked thumbnails: [![alt](image_url)](source_url).",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1120,7 +1256,7 @@
                 "type": "string"
               },
               "maxItems": 3,
-              "description": "image_url values from media_search / get_source results (1-3)."
+              "description": "image_url values from media_search results (1-3)."
             }
           },
           "required": ["image_urls"]
@@ -1128,7 +1264,7 @@
       }
     },
     "mcp": {
-      "description": "Look at up to 3 archive photos (image_url values from media_search or get_source): the images come back to you, so describe what they show rather than their captions. Archive hosts only; an oversized original is refused and its URL still works as a link.",
+      "description": "Look at up to 3 archive photos (image_url values from media_search): the images come back to you, so describe what they show rather than their captions. Archive hosts only; an oversized original is refused and its URL still works as a link.",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -1161,7 +1297,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -1169,7 +1307,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "query": {
               "type": "string",
@@ -1181,6 +1321,12 @@
               "maximum": 120,
               "default": 40,
               "description": "Most entries, newest, 1 to 120 (default 40)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           }
         }
@@ -1221,7 +1367,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -1229,7 +1377,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "limit": {
               "type": "integer",
@@ -1237,6 +1387,12 @@
               "maximum": 40,
               "default": 20,
               "description": "Most domains, 1 to 40 (default 20)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             },
             "include_utility": {
               "type": "boolean",
@@ -1299,7 +1455,9 @@
             "year_range": {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1990,
+                "maximum": 2100
               },
               "minItems": 2,
               "maxItems": 2,
@@ -1307,7 +1465,9 @@
             },
             "year": {
               "type": "integer",
-              "description": "One year: shorthand for year_range [year, year]."
+              "description": "One year: shorthand for year_range [year, year].",
+              "minimum": 1990,
+              "maximum": 2100
             },
             "source_kind": {
               "type": "string",
@@ -1325,6 +1485,12 @@
               "maximum": 20,
               "default": 5,
               "description": "Maximum items per year, 1 to 20 (default 5, or 2 when window_days is set); a year with more reports the count as more."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many items in every year before the first one returned (default 0). A cut list's truncated.next_offset is the value for the next page."
             }
           }
         }

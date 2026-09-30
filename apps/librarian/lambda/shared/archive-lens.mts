@@ -45,6 +45,7 @@ interface ArchiveLensInput {
   chunks?: LensItem[];
   yearRange?: unknown;
   limit?: number;
+  offset?: number;
 }
 
 interface YearBucket {
@@ -163,24 +164,51 @@ export function compileMultiTopicMatcher(terms: unknown[]): TopicMatcher {
   return adapt(compileQuery({ term: primary || '', aliases }));
 }
 
-// Topic labels are NOT in the haystack - see namesLabel.
+// Section names the corpus build or the tools made up, not headings Jamie
+// wrote: every micropost "mentioned" micropost (8,059 lens hits, 0 in
+// text) until they left the haystack (QA 2026-09-30 L8).
+export const SYNTHETIC_SECTIONS = new Set(
+  ['Issue', 'Blog post', 'Micropost', 'Episode', 'Transcript', 'Show notes', 'Page', 'Source', 'post'].map((name) =>
+    name.toLowerCase()
+  )
+);
+
+// The fields a topic is matched in, with their names for match_reasons -
+// the one haystack archive_lens and list_content share. Topic labels are
+// NOT in it (see namesLabel). A voiced passage (voice=quoted) matches in its
+// voiced text only: a heading or a domain is nobody's voice (L2).
+export function matchFields(item: LensItem): Array<[string, string]> {
+  const section = String(item.section || '');
+  const fields: Array<[string, unknown]> = item.voiced
+    ? [['text', item.text]]
+    : [
+        ['subject', item.subject],
+        ['title', item.title],
+        ['section', SYNTHETIC_SECTIONS.has(section.toLowerCase()) ? '' : section],
+        ['summary', item.summary],
+        ['text', item.text],
+        ['domains', Array.from(item.domains || []).join(' ')]
+      ];
+  return fields
+    .map(([field, value]) => [field, compactWhitespace(value)] as [string, string])
+    .filter(([, value]) => value);
+}
+
 function lensHaystack(item: LensItem) {
-  return compactWhitespace(
-    [item.subject, item.title, item.section, item.summary, item.text, Array.from(item.domains || []).join(' ')].join(
-      ' '
-    )
-  );
+  return matchFields(item)
+    .map(([, value]) => value)
+    .join(' ');
 }
 
 export function matchesLensTopic(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
   if (compiled.isEmpty) return true;
-  return compiled.matches(lensHaystack(item)) || Boolean(compiled.namesLabel(item.topics));
+  return compiled.matches(lensHaystack(item)) || (!item.voiced && Boolean(compiled.namesLabel(item.topics)));
 }
 
 // A whole-label hit is exact by construction, so it counts as strict.
 function matchesLensStrict(item: LensItem, matcher: TopicMatcher) {
-  return matcher.matchesStrict(lensHaystack(item)) || Boolean(matcher.namesLabel(item.topics));
+  return matcher.matchesStrict(lensHaystack(item)) || (!item.voiced && Boolean(matcher.namesLabel(item.topics)));
 }
 
 // Reasons attribute the SPECIFIC span that hit - "text: 'ethereum name
@@ -188,18 +216,8 @@ function matchesLensStrict(item: LensItem, matcher: TopicMatcher) {
 export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
   if (compiled.isEmpty) return [] as Array<{ field: string; match: string }>;
-  const fields: Array<[string, unknown]> = [
-    ['subject', item.subject],
-    ['title', item.title],
-    ['section', item.section],
-    ['summary', item.summary],
-    ['text', item.text],
-    ['domains', Array.from(item.domains || []).join(' ')]
-  ];
   const reasons: Array<{ field: string; match: string }> = [];
-  for (const [field, value] of fields) {
-    const text = compactWhitespace(value);
-    if (!text) continue;
+  for (const [field, text] of matchFields(item)) {
     // Every matched variant, deduped case-insensitively, so two sources
     // with the same underlying hits report the same reasons regardless of
     // occurrence order (wt-178 once omitted the literal variant wt-179
@@ -214,7 +232,7 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
     }
     if (spans.length) reasons.push({ field, match: spans.slice(0, 3).join(', ') });
   }
-  const label = compiled.namesLabel(item.topics);
+  const label = item.voiced ? '' : compiled.namesLabel(item.topics);
   if (label) reasons.push({ field: 'topics', match: `'${label}'` });
   return reasons;
 }
@@ -498,10 +516,12 @@ export function buildArchiveLens({
   records = [],
   chunks = [],
   yearRange = null,
-  limit = DEFAULT_LIMIT
+  limit = DEFAULT_LIMIT,
+  offset = 0
 }: ArchiveLensInput = {}) {
   const normalizedOperation = normalizeLensOperation(operation);
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
+  const start = Math.max(0, Math.floor(Number(offset) || 0));
   const sources = new Map<string, LensSource>();
   // One compiled matcher per scan - the regexes are built once, not per item.
   const matcher = adapt(
@@ -558,7 +578,8 @@ export function buildArchiveLens({
   // failure this makes structurally impossible.
   const strictMatched = matched.filter((item) => item.strict);
   const countsByYear = countsByPublishYear(matched);
-  const timelineIds = matched.slice(0, maxResults).map(lensSourceId);
+  // offset pages the timeline (2.1.0): oldest first, [offset, offset + limit).
+  const timelineIds = matched.slice(start, start + maxResults).map(lensSourceId);
   const latestIds = [...matched].reverse().slice(0, maxResults).map(lensSourceId);
   const years = yearBuckets(matched);
   const bySource = sourceBuckets(matched);
@@ -610,7 +631,7 @@ export function buildArchiveLens({
   for (const id of kept) sourcesById[id] = compactLensSource(byId.get(id)!);
   const keptOnly = (ids: string[]) => ids.filter((id) => kept.has(id));
 
-  return {
+  const payload = {
     operation: normalizedOperation,
     topic: compactWhitespace(topic),
     total_count: matched.length,
@@ -618,14 +639,6 @@ export function buildArchiveLens({
     counts_by_year: countsByYear,
     year_count_summary: yearCountSummary(countsByYear),
     sources_by_id: sourcesById,
-    ...(matched.length > kept.size
-      ? {
-          truncated: {
-            omitted: { sources_by_id: matched.length - kept.size },
-            hint: `sources_by_id holds ${kept.size} of ${matched.length} matched sources; raise limit (max 40) or narrow year_range for more.`
-          }
-        }
-      : {}),
     match_mode: matcher.appliedMode,
     case_sensitive: caseSensitive === true || undefined,
     // Common-word advisory: when the term hits most in-scope sources the
@@ -646,4 +659,48 @@ export function buildArchiveLens({
     sources: bySource.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
     reading_path: path.filter((entry) => kept.has(entry.id))
   };
+  return settleLensTruncation(payload, { offset: start, limit: maxResults });
+}
+
+// What a lens left out and how to read it, counted from the payload as it
+// stands: archive_lens settles it again after compaction cuts
+// sources_by_id, so the hint names what was sent (QA L11: it said 41 held
+// when 19 were). offset pages the timeline (results, under operation
+// timeline); first and latest always answer for the whole match.
+export function settleLensTruncation<T extends object>(value: T, { offset = 0, limit = DEFAULT_LIMIT } = {}): T {
+  const payload = value as Record<string, unknown>;
+  const total = Number(payload.total_count) || 0;
+  const held = Object.keys((payload.sources_by_id as object) || {}).length;
+  const prior = (payload.truncated || {}) as { omitted?: Record<string, number>; clipped?: string[] };
+  const omitted: Record<string, number> = { ...(prior.omitted || {}) };
+  delete omitted.sources_by_id;
+  delete omitted.results;
+  if (total > held) omitted.sources_by_id = total - held;
+  const pageEnd = Math.min(offset + limit, total);
+  const pageLength = Math.max(0, pageEnd - offset);
+  if (payload.operation === 'timeline' && total > pageLength) omitted.results = total - pageLength;
+  const nextOffset = pageEnd < total ? pageEnd : null;
+  const hints: string[] = [];
+  if (total > held) hints.push(`sources_by_id holds ${held} of ${total} matched sources.`);
+  if (offset >= total && offset && total) {
+    hints.push(`offset ${offset} is past the last of ${total} matched sources.`);
+  } else if (nextOffset !== null) {
+    hints.push(
+      `The timeline shows ${offset + 1}-${pageEnd} of ${total}; call again with offset ${nextOffset} for the next ${Math.min(limit, total - pageEnd)}.`
+    );
+  } else if (offset && total) {
+    hints.push(`The timeline shows ${offset + 1}-${pageEnd} of ${total}; this is the last page.`);
+  }
+  if (Object.keys(omitted).some((path) => path !== 'sources_by_id' && path !== 'results')) {
+    hints.push('Narrow with year_range or source_kind for the rest.');
+  }
+  delete payload.truncated;
+  if (!Object.keys(omitted).length && !prior.clipped?.length && !hints.length) return value;
+  payload.truncated = {
+    ...(Object.keys(omitted).length ? { omitted } : {}),
+    ...(prior.clipped?.length ? { clipped: prior.clipped } : {}),
+    ...(nextOffset !== null ? { next_offset: nextOffset } : {}),
+    hint: hints.join(' ')
+  };
+  return value;
 }

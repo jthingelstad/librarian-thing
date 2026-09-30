@@ -153,7 +153,15 @@ test('limit bounds sources_by_id, and first/latest/results always resolve', () =
   assert.ok(kept.size <= 7, `limit 5 kept ${kept.size} records`);
   assert.equal(lens.total_count, 30, 'counts stay whole');
   assert.equal(lens.truncated.omitted.sources_by_id, 30 - kept.size);
-  assert.match(lens.truncated.hint, /raise limit/);
+  assert.match(lens.truncated.hint, /sources_by_id holds \d+ of 30/);
+  assert.match(lens.truncated.hint, /call again with offset 5 for the next 5/);
+  assert.equal(lens.truncated.next_offset, 5);
+  assert.equal(lens.truncated.omitted.results, 25);
+  const page = buildArchiveLens({ topic: 'Mastodon', records: manyIssues(30), limit: 5, offset: 5 });
+  assert.deepEqual(lens.results, ['wt-100', 'wt-101', 'wt-102', 'wt-103', 'wt-104']);
+  assert.deepEqual(page.results, ['wt-105', 'wt-106', 'wt-107', 'wt-108', 'wt-109'], 'offset pages the timeline');
+  assert.equal(page.first, lens.first, 'first and latest answer for the whole match');
+  assert.equal(page.truncated.next_offset, 10);
   for (const id of [lens.first, lens.latest, ...lens.results]) assert.ok(kept.has(id), `${id} resolves`);
   for (const id of [
     ...(lens.timeline || []),

@@ -132,12 +132,35 @@ test('list_topics returns the clusters and the site pages with urls, and narrows
   assert.equal(claude.url, 'https://weekly.thingelstad.com/topics/claude/');
   assert.equal(claude.first_issue, 'wt-1');
   assert.equal(claude.last_issue, 'wt-3');
-  const coffee = await ARCHIVE_TOOLS.list_topics({ query: 'coff' });
+  const coffee = await ARCHIVE_TOOLS.list_topics({ query: 'coffee' });
   assert.deepEqual(
     coffee.topics.map((topic) => topic.name),
     ['Coffee']
   );
+  assert.equal(coffee.total_count, 1);
   assert.equal(coffee.clusters.length, 0);
+  // The canonical matcher (2.1.0): a word fragment names nothing, and a
+  // punctuation query is not its slug ("C++" was slug "c", 289 topics).
+  assert.equal((await ARCHIVE_TOOLS.list_topics({ query: 'coff' })).total_count, 0);
+  assert.equal((await ARCHIVE_TOOLS.list_topics({ query: 'C++' })).total_count, 0);
+  // An exact page slug still names its topic.
+  assert.deepEqual(
+    (await ARCHIVE_TOOLS.list_topics({ query: 'claude' })).topics.map((topic) => topic.name),
+    ['Claude']
+  );
+  // Paging: every topic is reachable, and the pages add up.
+  const first = await ARCHIVE_TOOLS.list_topics({ limit: 2 });
+  assert.equal(first.total_count, 3);
+  assert.equal(first.truncated.omitted.topics, 1);
+  assert.equal(first.truncated.next_offset, 2);
+  const second = await ARCHIVE_TOOLS.list_topics({ limit: 2, offset: first.truncated.next_offset });
+  assert.deepEqual(
+    [...first.topics, ...second.topics].map((topic) => topic.name),
+    out.topics.map((topic) => topic.name)
+  );
+  assert.equal(second.truncated.omitted.topics, 2);
+  assert.equal(second.truncated.next_offset, undefined);
+  assert.match(second.truncated.hint, /last page/);
   primeCorpusCachesForTests({ ...fixtures(), graph: {} });
   const noGraph = await ARCHIVE_TOOLS.list_topics({});
   assert.equal(noGraph.clusters.length, 1);

@@ -22,6 +22,18 @@
  * Every hit carries provenance: the ACTUAL span found (never an echo of
  * the query term), its offset, the term that hit, and the mode that
  * matched it.
+ *
+ * Typography (2.1.0): the archive is typed in every era's typography -
+ * curly and straight apostrophes (350 of 352 issues use U+2019), non-
+ * breaking spaces, &amp; left in bodies, accents, markdown emphasis. Each
+ * character of a compiled query accepts its variants (typedChar), so the
+ * text is never rewritten and every span is the text's own at its own
+ * offset. A term whose punctuation carries meaning (C++, C#, .NET, AT&T,
+ * A.I.) matches as that string between word boundaries instead of losing
+ * the punctuation; a term with no letter or digit compiles to nothing
+ * (isEmpty), which callers refuse rather than read as "no filter". A hit
+ * inside a URL (a markdown link target, a bare link, an image src) is not
+ * a mention.
  */
 
 export type MatchMode = 'exact' | 'phrase' | 'stem' | 'literal';
@@ -64,6 +76,11 @@ const BOUNDARY_BEFORE = '(?<![\\p{L}\\p{N}])';
 const BOUNDARY_AFTER = '(?![\\p{L}\\p{N}])';
 const STEM_SUFFIX = "(s|es|ed|ing|'s|\\u2019s)?";
 export const STEM_MIN_CHARS = 6;
+// A token under STEM_MIN_CHARS stems to its plural and possessive only
+// (2.1.0): dog finds dogs and dog's, car finds cars, never cared, dogged or
+// caring; -es only after s, x, z, ch or sh (bus, buses).
+const PLURAL_SUFFIX = "(s|'s|\\u2019s)?";
+const SIBILANT_PLURAL_SUFFIX = "(es|'s|\\u2019s)?";
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -106,41 +123,168 @@ export function normalizeMatchMode(value: unknown): MatchMode | null {
   return raw === 'exact' || raw === 'phrase' || raw === 'stem' ? raw : null;
 }
 
+// Letters that read as their base letter: every Latin letter whose
+// decomposition starts with it (é, ü, å, ǎ, ṡ), plus the few that do not
+// decompose (ø, đ, ł, ħ). "cafe" finds café and "café" finds cafe.
+const LETTER_VARIANTS = (() => {
+  const variants = new Map<string, string[]>();
+  const add = (base: string, letter: string) => variants.set(base, [...(variants.get(base) || []), letter]);
+  for (const [start, end] of [
+    [0xc0, 0x24f],
+    [0x1e00, 0x1eff]
+  ]) {
+    for (let code = start; code <= end; code++) {
+      const letter = String.fromCodePoint(code);
+      const base = letter.normalize('NFD')[0];
+      if (base !== letter && /^[A-Za-z]$/.test(base)) add(base, letter);
+    }
+  }
+  for (const [base, letter] of [
+    ['o', 'ø'],
+    ['O', 'Ø'],
+    ['d', 'đ'],
+    ['D', 'Đ'],
+    ['l', 'ł'],
+    ['L', 'Ł'],
+    ['h', 'ħ'],
+    ['H', 'Ħ']
+  ]) {
+    add(base, letter);
+  }
+  return variants;
+})();
+
+const APOSTROPHE = "(?:['\\u2018\\u2019\\u02BC\\u2032]|&#0?39;|&apos;|&[lr]squo;)";
+const QUOTE = '(?:["\\u201C\\u201D\\u201E\\u2033]|&quot;|&[lr]dquo;)';
+const DASH = '(?:[-\\u2010-\\u2015\\u2212]|&[mn]dash;)';
+const AMPERSAND = '(?:&amp;|&)';
+// Whitespace in a literal phrase: any run of spaces, nbsp, line breaks and
+// the markdown emphasis between words ("simply **great**").
+const LITERAL_GAP = '(?:[\\s\\u00A0*_]|&nbsp;)+';
+// Between the tokens of a phrase: anything that is not a letter or digit,
+// an entity counting as one character (Product &amp; Partner Fair).
+const PHRASE_GAP = '(?:&(?:amp|nbsp|quot|apos|#\\d+);|[^\\p{L}\\p{N}])+';
+
+// The query side of the fold: accents off, curly quotes and dashes to
+// their plain forms. typedChar then accepts every form on the text side.
+export function foldQuery(value: unknown) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/\p{M}+/gu, '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&nbsp;| /gi, ' ')
+    .replace(/[‘’ʼ′]/g, "'")
+    .replace(/[“”„″]/g, '"')
+    .replace(/[‐-―−]/g, '-');
+}
+
+function typedChar(char: string) {
+  if (/^[A-Za-z]$/.test(char)) {
+    const variants = LETTER_VARIANTS.get(char);
+    return variants ? `[${char}${variants.join('')}]` : char;
+  }
+  if (char === "'") return APOSTROPHE;
+  if (char === '"') return QUOTE;
+  if (char === '-') return DASH;
+  if (char === '&') return AMPERSAND;
+  return escapeRegExp(char);
+}
+
+// One token or literal string as a pattern, every character typedChar.
+function typedPattern(value: string, gap: string) {
+  return value
+    .trim()
+    .split(/\s+/)
+    .map((word) => Array.from(word, typedChar).join(''))
+    .join(gap);
+}
+
+// Punctuation that makes a term a different word: C++, C#, .NET, AT&T,
+// A.I., $5, 100%. A dot followed by a space (St. Paul) or a hyphen
+// (e-mail) is a separator, as it always was.
+function significantPunctuation(term: string) {
+  return /[+#&/@$%=~^|\\<>*]|\.(?=[\p{L}\p{N}])/u.test(term);
+}
+
+// Edges a person types around a term without meaning them: quotes,
+// brackets, a closing question mark or full stop ("RSS?", "Mastodon.").
+export function trimTerm(value: unknown) {
+  let term = normalizeTerm(foldQuery(value));
+  for (let previous = ''; previous !== term;) {
+    previous = term;
+    term = term.replace(/^[\s"'([{<,;:!?]+/, '').replace(/[\s"')\]}>,;:!?]+$/, '');
+    if (term.endsWith('.') && !/\.[\p{L}\p{N}]/u.test(term)) term = term.slice(0, -1);
+  }
+  return term;
+}
+
 function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitive = false): CompiledTerm | null {
-  const tokens = caseSensitive ? termTokensPreservingCase(term) : termTokens(term);
+  const folded = trimTerm(term);
+  const tokens = caseSensitive ? termTokensPreservingCase(folded) : termTokens(folded);
   if (!tokens.length) return null;
-  let mode: MatchMode = requestedMode || defaultMatchMode(term);
+  let mode: MatchMode = requestedMode || defaultMatchMode(folded);
   // Multi-word terms always match as a phrase - a looser interpretation
   // (token bag) is exactly the round-five alias bug.
   if (tokens.length > 1) mode = 'phrase';
-  // Stem never applies to short terms; fall back to exact (stricter).
-  if (mode === 'stem' && tokens[0].length < STEM_MIN_CHARS) mode = 'exact';
 
   const flags = caseSensitive ? 'u' : 'iu';
   if (mode === 'literal') {
-    return { raw: term, mode, re: new RegExp(escapeRegExp(term), flags), strict: true };
+    return { raw: term, mode, re: new RegExp(typedPattern(folded, LITERAL_GAP), flags), strict: true };
+  }
+  if (significantPunctuation(folded)) {
+    // The string itself between word boundaries: C++ is C++, never "c'mon".
+    const body = typedPattern(folded, '(?:[\\s\\u00A0]|&nbsp;)+');
+    const re = new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
+    return { raw: term, mode: tokens.length > 1 || /\s/.test(folded) ? 'phrase' : 'exact', re, strict: true };
   }
   if (mode === 'phrase') {
-    const body = tokens.map(escapeRegExp).join('[^\\p{L}\\p{N}]+');
+    const body = tokens.map((token) => typedPattern(token, '')).join(PHRASE_GAP);
     return { raw: term, mode, re: new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags), strict: true };
   }
+  const token = typedPattern(tokens[0], '');
   if (mode === 'stem') {
     // The suffix group is captured: an empty capture means the hit is the
     // literal token and therefore strict.
+    const suffix =
+      tokens[0].length >= STEM_MIN_CHARS
+        ? STEM_SUFFIX
+        : /(?:s|x|z|ch|sh)$/.test(tokens[0])
+          ? SIBILANT_PLURAL_SUFFIX
+          : PLURAL_SUFFIX;
     return {
       raw: term,
       mode,
-      re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${STEM_SUFFIX}${BOUNDARY_AFTER}`, flags),
+      re: new RegExp(`${BOUNDARY_BEFORE}${token}${suffix}${BOUNDARY_AFTER}`, flags),
       strict: false,
-      strictRe: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${BOUNDARY_AFTER}`, flags)
+      strictRe: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags)
     };
   }
   return {
     raw: term,
     mode: 'exact',
-    re: new RegExp(`${BOUNDARY_BEFORE}${escapeRegExp(tokens[0])}${BOUNDARY_AFTER}`, flags),
+    re: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags),
     strict: true
   };
+}
+
+// A hit inside a URL is not a mention: a markdown link target (](...)),
+// an image or anchor attribute, a bare link, or an <autolink>. The word the
+// hit sits in is read back to the last space.
+function insideUrl(text: string, offset: number) {
+  const start = Math.max(text.lastIndexOf(' ', offset - 1), text.lastIndexOf('\n', offset - 1)) + 1;
+  const lead = text.slice(start, offset);
+  return /\]\(|:\/\/|^<?www\.|(?:src|href)=/i.test(lead);
+}
+
+// The first match of re in text that is not inside a URL.
+function mentionIn(re: RegExp, text: string): RegExpExecArray | null {
+  if (!re.test(text)) return null;
+  const scan = new RegExp(re.source, `${re.flags}g`);
+  for (let match = scan.exec(text); match; match = scan.exec(text)) {
+    if (!insideUrl(text, match.index)) return match;
+    if (match[0] === '') scan.lastIndex += 1;
+  }
+  return null;
 }
 
 export interface CompileQueryInput {
@@ -169,7 +313,7 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
   }
 
   const hitFor = (entry: CompiledTerm, text: string): MatchHit | null => {
-    const match = entry.re.exec(text);
+    const match = mentionIn(entry.re, text);
     if (!match) return null;
     const inflected = entry.mode === 'stem' && Boolean(match[1]);
     return {
@@ -188,11 +332,11 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
     isEmpty: compiled.length === 0,
     matches(text: string) {
       if (!compiled.length) return true;
-      return compiled.some((entry) => entry.re.test(text));
+      return compiled.some((entry) => Boolean(mentionIn(entry.re, text)));
     },
     matchesStrict(text: string) {
       if (!compiled.length) return true;
-      return compiled.some((entry) => (entry.strict ? entry.re.test(text) : Boolean(entry.strictRe?.test(text))));
+      return compiled.some((entry) => Boolean(mentionIn(entry.strict ? entry.re : entry.strictRe!, text)));
     },
     firstHit(text: string) {
       let best: MatchHit | null = null;
@@ -211,7 +355,7 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
         // literal token - report both variants so match_reasons list the
         // same spans regardless of which occurrence comes first.
         if (hit && !hit.strict && entry.strictRe) {
-          const literal = entry.strictRe.exec(text);
+          const literal = mentionIn(entry.strictRe, text);
           if (literal) {
             found.push({ term: entry.raw, mode: entry.mode, span: literal[0], offset: literal.index, strict: true });
           }
@@ -226,8 +370,9 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
 // prose, not an entity, so token boundaries must not apply.
 export function compileLiteral(phrase: unknown): CanonicalMatcher {
   const raw = normalizeTerm(phrase);
-  const entry: CompiledTerm | null = raw
-    ? { raw, mode: 'literal', re: new RegExp(escapeRegExp(raw.toLowerCase()), 'iu'), strict: true }
+  const folded = normalizeTerm(foldQuery(raw));
+  const entry: CompiledTerm | null = folded
+    ? { raw, mode: 'literal', re: new RegExp(typedPattern(folded, LITERAL_GAP), 'iu'), strict: true }
     : null;
   return {
     raw: raw.toLowerCase(),
@@ -261,6 +406,16 @@ export const ENTITY_ALIASES: Record<string, string[]> = {
   wt: ['Weekly Thing']
 };
 
+// Aliases work both ways (2.1.0): Minnebar finds minnestar and Minnedemo,
+// as minnestar finds Minnebar. The term itself is never its own alias.
 export function aliasesFor(term: unknown): string[] {
-  return ENTITY_ALIASES[normalizeTerm(term).toLowerCase()] || [];
+  const key = normalizeTerm(term).toLowerCase();
+  if (!key) return [];
+  for (const [entity, aliases] of Object.entries(ENTITY_ALIASES)) {
+    const family = [entity, ...aliases];
+    if (family.some((name) => name.toLowerCase() === key)) {
+      return family.filter((name) => name.toLowerCase() !== key);
+    }
+  }
+  return [];
 }

@@ -138,7 +138,7 @@ test('oversized tool results are cut to valid JSON with an honest note', async (
 test('a long list loses whole items off its end, counted, and still parses', async () => {
   const results = Array.from({ length: 300 }, (_v, index) => ({ id: `wt-${index}`, text: 'y'.repeat(400) }));
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 12, method: 'tools/call', params: { name: 'list_content', arguments: { limit: 120 } } },
+    { jsonrpc: '2.0', id: 12, method: 'tools/call', params: { name: 'search_archive', arguments: { query: 'x' } } },
     context({ invokeTool: async () => ({ results, total: 300 }) })
   );
   const parsed = JSON.parse(reply.payload.result.content[0].text);
@@ -220,7 +220,7 @@ test('a successful call carries structuredContent that parses to its text', asyn
 test('the cap adds to a truncated block the tool already set', async () => {
   const results = Array.from({ length: 300 }, (_v, index) => ({ id: `wt-${index}`, text: 'y'.repeat(400) }));
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 32, method: 'tools/call', params: { name: 'list_content', arguments: {} } },
+    { jsonrpc: '2.0', id: 32, method: 'tools/call', params: { name: 'search_archive', arguments: { query: 'x' } } },
     context({
       invokeTool: async () => ({
         results,
@@ -233,6 +233,36 @@ test('the cap adds to a truncated block the tool already set', async () => {
   assert.equal(parsed.results.length + parsed.truncated.omitted.results, 900);
   assert.match(parsed.truncated.hint, /^Raise limit \(max 120\) for more\. Or narrow the arguments/);
   assert.equal(parsed.truncated.max_chars, 48000);
+});
+
+test('cutting a paged list moves next_offset to the first item cut (2.1.0)', async () => {
+  const results = Array.from({ length: 120 }, (_v, index) => ({ id: `wt-${index}`, text: 'y'.repeat(400) }));
+  const reply = await handleMcpMessage(
+    {
+      jsonrpc: '2.0',
+      id: 34,
+      method: 'tools/call',
+      params: { name: 'list_content', arguments: { limit: 120, offset: 40 } }
+    },
+    context({
+      invokeTool: async () => ({
+        applied: { limit: 120, offset: 40 },
+        total_count: 500,
+        results,
+        truncated: {
+          omitted: { results: 380 },
+          next_offset: 160,
+          hint: 'results 41-160 of 500; call again with offset 160.'
+        }
+      })
+    })
+  );
+  const parsed = JSON.parse(reply.payload.result.content[0].text);
+  assert.ok(parsed.results.length < 120);
+  assert.equal(parsed.results.length + parsed.truncated.omitted.results, 500);
+  assert.equal(parsed.truncated.next_offset, 40 + parsed.results.length, 'the next page starts at the first item cut');
+  assert.match(parsed.truncated.hint, new RegExp(`offset ${40 + parsed.results.length}`));
+  assert.doesNotMatch(parsed.truncated.hint, /offset 160/, "the tool's stale page is not promised");
 });
 
 test('a result that cannot be cut to fit is an error', async () => {

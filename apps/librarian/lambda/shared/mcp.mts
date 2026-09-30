@@ -8,7 +8,7 @@
  * auth, rate limiting, and quota live in the runtime caller; this module is
  * pure protocol given a context and an invoke function.
  */
-import { mcpToolSpecs, webSearchConfigured } from './archive-tools.mjs';
+import { PAGED_LISTS, mcpToolSpecs, webSearchConfigured } from './archive-tools.mjs';
 import { PromptArgumentError, getPrompt, promptList } from './mcp-prompts.mjs';
 import {
   RESOURCE_TEMPLATES,
@@ -103,6 +103,22 @@ interface OutputSchema {
   required?: string[];
 }
 
+// What a result left out (archive-tools markTruncated, then fitToCap):
+// counts by list path, clipped texts, the cap that cut it, and for a paged
+// list (2.1.0) the offset the next page starts at.
+const TRUNCATED_SCHEMA = {
+  type: 'object',
+  properties: {
+    omitted: { type: 'object', additionalProperties: { type: 'integer' } },
+    clipped: { type: 'array', items: { type: 'string' } },
+    max_chars: { type: 'integer' },
+    next_offset: { type: 'integer', minimum: 1 },
+    hint: { type: 'string' }
+  },
+  required: ['hint'],
+  additionalProperties: false
+};
+
 // Every registry tool's result carries these (withAppliedEcho, then
 // renderToolCallResult); the spec declares only each tool's own keys.
 // view_photo is not a registry tool and declares its whole shape.
@@ -114,7 +130,7 @@ function withEnvelope(name: string, schema: OutputSchema | undefined): OutputSch
     properties: {
       applied: { type: 'object' },
       ...(own.properties || {}),
-      truncated: { type: 'object' },
+      truncated: TRUNCATED_SCHEMA,
       server_version: { type: 'string' }
     },
     required: ['applied', ...(own.required || []), 'server_version']
@@ -357,19 +373,31 @@ function priorTruncation(result: JsonRecord) {
     ...((prior.omitted && typeof prior.omitted === 'object' ? prior.omitted : {}) as Record<string, number>)
   };
   const clipped = Array.isArray(prior.clipped) ? prior.clipped.map(String) : [];
-  return { omitted, clipped, hint: typeof prior.hint === 'string' ? prior.hint : '' };
+  const nextOffset = typeof prior.next_offset === 'number' ? prior.next_offset : null;
+  return { omitted, clipped, hint: typeof prior.hint === 'string' ? prior.hint : '', nextOffset };
 }
 
-function fitToCap(result: JsonRecord, max: number, hint: string) {
+// paged names the list the tool pages by offset (PAGED_LISTS): cutting it
+// moves next_offset back to the first item cut, and the hint says so - the
+// tool's own hint named a page the caller never received (currently_history
+// once said "the 120 newest are shown" over 64).
+function fitToCap(result: JsonRecord, max: number, hint: string, paged = '') {
   let text = JSON.stringify(result);
   if (text.length <= max) return { text, truncated: Boolean(result.truncated), tooLarge: false };
   const working = JSON.parse(text) as JsonRecord;
   const prior = priorTruncation(working);
   const { omitted, clipped } = prior;
-  const hints =
+  let nextOffset = prior.nextOffset;
+  let hints =
     prior.hint && prior.hint !== hint ? `${prior.hint} Or ${hint}.` : `${hint[0].toUpperCase()}${hint.slice(1)}.`;
   for (let round = 0; round < 400; round++) {
-    working.truncated = { max_chars: max, omitted, clipped, hint: hints };
+    working.truncated = {
+      max_chars: max,
+      omitted,
+      clipped,
+      ...(nextOffset !== null ? { next_offset: nextOffset } : {}),
+      hint: hints
+    };
     text = JSON.stringify(working);
     const over = text.length - max;
     if (over <= 0) return { text, truncated: true, tooLarge: false };
@@ -384,6 +412,11 @@ function fitToCap(result: JsonRecord, max: number, hint: string) {
       const drop = Math.min(items.length - 1, Math.max(1, Math.ceil(over / perItem)));
       items.splice(items.length - drop, drop);
       omitted[list.path] = (omitted[list.path] || 0) + drop;
+      if (paged && list.path === paged) {
+        const applied = (working.applied || {}) as JsonRecord;
+        nextOffset = (Number(applied.offset) || 0) + items.length;
+        hints = `Cut to fit ${max} characters at ${items.length} ${paged}; call again with offset ${nextOffset} for the rest.`;
+      }
       continue;
     }
     if (longest && longest.size > 240) {
@@ -448,7 +481,8 @@ export function renderToolCallResult(
   const { text, truncated, tooLarge } = fitToCap(
     { ...record, server_version: serverVersion() },
     MCP_RESULT_MAX_CHARS,
-    narrowingHint(name)
+    narrowingHint(name),
+    PAGED_LISTS[name]
   );
   if (tooLarge) return { text, truncated, isError: true };
   return { text, truncated, isError: false, structured: JSON.parse(text) as JsonRecord };

@@ -18,7 +18,7 @@
 //   - MCP text names Jamie (no pronouns) and never mentions "the app"
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ARCHIVE_TOOLS, TOOL_LIMITS } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, PAGED_LISTS, TOOL_LIMITS } from '../dist/shared/archive-tools.mjs';
 import {
   MCP_LAUNCH_TOOLS,
   MCP_RESULT_MAX_CHARS,
@@ -275,8 +275,16 @@ function shapeProblems(name, value, path = '', problems = []) {
         if (!ok) problems.push(`${name}: ${at} is not a [{<key>, count}] list`);
       }
       if (key === 'truncated' && path === '') {
-        const extra = Object.keys(entry).filter((part) => !['max_chars', 'omitted', 'clipped', 'hint'].includes(part));
+        const extra = Object.keys(entry).filter(
+          (part) => !['max_chars', 'omitted', 'clipped', 'next_offset', 'hint'].includes(part)
+        );
         if (extra.length) problems.push(`${name}: truncated carries ${extra.join(', ')}`);
+        if ('next_offset' in entry) {
+          if (!PAGED_LISTS[name]) problems.push(`${name}: next_offset on a tool that does not page`);
+          if (!(Number.isInteger(entry.next_offset) && entry.next_offset > 0)) {
+            problems.push(`${name}: truncated.next_offset is ${entry.next_offset}`);
+          }
+        }
         for (const count of Object.values(entry.omitted || {})) {
           if (!(Number.isInteger(count) && count > 0)) problems.push(`${name}: truncated.omitted holds ${count}`);
         }
@@ -353,7 +361,38 @@ test('what a tool leaves out is counted in truncated, with a hint', async () => 
   assert.equal(listed.results.length + listed.truncated.omitted.results, listed.total_count);
   const lens = await ARCHIVE_TOOLS.archive_lens({ topic: 'tidepools', limit: 1 }, { scope: 'all' });
   assert.ok(lens.truncated.omitted.sources_by_id > 0);
-  assert.match(lens.truncated.hint, /limit/);
+  assert.equal(Object.keys(lens.sources_by_id).length + lens.truncated.omitted.sources_by_id, lens.total_count);
+  assert.match(lens.truncated.hint, new RegExp(`holds ${Object.keys(lens.sources_by_id).length} of`));
+  assert.equal(lens.truncated.next_offset, 1);
+  assert.match(lens.truncated.hint, /offset 1/);
+});
+
+test('every paged tool pages: offset reaches the next items and next_offset is where they start', async () => {
+  primeCorpusCachesForTests(fixtures());
+  const calls = {
+    latest_content: {},
+    list_content: {},
+    quote_search: { phrase: 'tidepools' }
+  };
+  // list_topics pages the graph, which these fixtures lack: structure-tools.test.mjs.
+  for (const [name, args] of Object.entries(calls)) {
+    const whole = await ARCHIVE_TOOLS[name]({ ...args, limit: TOOL_LIMITS[name].max }, { scope: 'all' });
+    const list = PAGED_LISTS[name];
+    const all = whole[list].map((item) => JSON.stringify(item));
+    assert.equal(all.length, whole.total_count, `${name} holds its whole fixture list`);
+    assert.ok(all.length >= 2, `${name} fixture list has at least two items to page (${all.length})`);
+    const first = await ARCHIVE_TOOLS[name]({ ...args, limit: 1 }, { scope: 'all' });
+    assert.equal(first.truncated.next_offset, 1, `${name} names the next page`);
+    assert.equal(first.applied.limit, 1);
+    const second = await ARCHIVE_TOOLS[name]({ ...args, limit: 1, offset: 1 }, { scope: 'all' });
+    assert.equal(second.applied.offset, 1, `${name} echoes offset`);
+    assert.deepEqual(
+      [...first[list], ...second[list]].map((item) => JSON.stringify(item)),
+      all.slice(0, 2),
+      `${name} pages in one order`
+    );
+    assert.equal(second[list].length + second.truncated.omitted[list], second.total_count);
+  }
 });
 
 test('year is shorthand for year_range [year, year] wherever year_range is taken', async () => {

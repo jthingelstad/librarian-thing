@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { allowedImageUrl, VIEW_PHOTO_MAX_IMAGES } from '../dist/shared/photo-view.mjs';
+import { allowedImageUrl, imageUrlRefusal, VIEW_PHOTO_MAX_IMAGES } from '../dist/shared/photo-view.mjs';
 import { handleMcpMessage } from '../dist/shared/mcp.mjs';
 
 function context(overrides = {}) {
@@ -33,7 +33,13 @@ test('the image allowlist admits archive hosts and nothing else', () => {
   // The rest of the internet is not an image proxy.
   assert.equal(allowedImageUrl('https://evil.example.com/x.jpg'), null);
   assert.equal(allowedImageUrl('https://thingelstad.com.evil.example/x.jpg'), null);
-  assert.equal(allowedImageUrl('http://files.thingelstad.com/x.jpg'), null); // https only
+  // Fetched over https only: a thingelstad.com photo recorded as http is
+  // read over https; any other http host is refused, and says why.
+  assert.equal(allowedImageUrl('http://files.thingelstad.com/x.jpg'), 'https://files.thingelstad.com/x.jpg');
+  assert.equal(allowedImageUrl('http://assets.buttondown.email/x.png'), null);
+  assert.equal(imageUrlRefusal('http://assets.buttondown.email/x.png'), 'not served over https');
+  assert.equal(imageUrlRefusal('https://pbs.twimg.com/x.jpg'), 'not an archive image host');
+  assert.equal(imageUrlRefusal('http://files.thingelstad.com/x.jpg'), null);
   assert.equal(allowedImageUrl('data:image/png;base64,AAAA'), null);
   assert.equal(allowedImageUrl(''), null);
   assert.equal(allowedImageUrl(undefined), null);

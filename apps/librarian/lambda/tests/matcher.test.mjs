@@ -78,8 +78,24 @@ test('stem: opt-in, suffix whitelist only, never crossing lexeme boundaries', ()
   assert.equal(stem.matches('ethernet cables'), false, 'stem must not cross into ethernet');
   assert.equal(stem.matches('etherscan links'), false, 'stem must not cross into etherscan');
   const shortStem = m('ens', { mode: 'stem' });
-  assert.equal(shortStem.appliedMode, 'exact');
+  assert.equal(shortStem.appliedMode, 'stem');
   assert.equal(shortStem.matches('a sense of it'), false);
+});
+
+test('stem under six characters is the plural and possessive only (2.1.0)', () => {
+  const dog = m('dog', { mode: 'stem' });
+  assert.ok(dog.matches('two dogs on the dock'));
+  assert.ok(dog.matches('the dog’s bowl'));
+  assert.ok(dog.matches('a dog'));
+  for (const text of ['dogged pursuit', 'dogging it', 'dogma']) assert.equal(dog.matches(text), false, text);
+  const car = m('car', { mode: 'stem' });
+  assert.ok(car.matches('electric cars'));
+  for (const text of ['she cared', 'caring', 'cares', 'career']) assert.equal(car.matches(text), false, text);
+  const bus = m('bus', { mode: 'stem' });
+  assert.ok(bus.matches('school buses'));
+  assert.equal(bus.matches('busing'), false);
+  assert.equal(dog.firstHit('two dogs').strict, false, 'an inflected hit is not strict');
+  assert.equal(dog.firstHit('a dog').strict, true);
 });
 
 test('defaults: exact for single tokens, phrase for multi-word; never looser than requested', () => {
@@ -182,8 +198,8 @@ test('phrases match across newlines in real chunk text', () => {
   assert.ok(phrase.matches('Ethereum \n  Name\tService'));
 });
 
-test('stem below 6 chars echoes exact; stem on multi-word echoes phrase', () => {
-  assert.equal(m('ens', { mode: 'stem' }).appliedMode, 'exact');
+test('stem below 6 chars echoes stem (plural only); stem on multi-word echoes phrase', () => {
+  assert.equal(m('ens', { mode: 'stem' }).appliedMode, 'stem');
   assert.equal(m('Ethereum Name Service', { mode: 'stem' }).appliedMode, 'phrase');
 });
 

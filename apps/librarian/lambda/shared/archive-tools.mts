@@ -1,7 +1,17 @@
 import crypto from 'node:crypto';
-import { buildArchiveLens, compileTopicMatcher, isSitePage, lensSourceId } from './archive-lens.mjs';
-import { aliasesFor, compileLiteral, normalizeMatchMode } from './matcher.mjs';
+import {
+  buildArchiveLens,
+  compileTopicMatcher,
+  isSitePage,
+  lensMatchReasons,
+  lensSourceId,
+  matchesLensTopic,
+  settleLensTruncation
+} from './archive-lens.mjs';
+import { aliasesFor, compileLiteral, compileQuery, normalizeMatchMode, trimTerm } from './matcher.mjs';
+import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
+import type { CanonicalMatcher } from './matcher.mjs';
 import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
 import { searchFaq } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
@@ -84,8 +94,54 @@ export function toolLimit(name: string, input: { limit?: unknown } = {}) {
   return Math.min(Math.max(Number.isFinite(requested) ? Math.floor(requested) : fallback, min), max);
 }
 
+// Paging (MCP 2.1.0). Every tool that enumerates takes offset beside limit
+// and returns items [offset, offset + limit) of one fixed order, the order
+// named in its description; total_count is always the whole list, and
+// truncated.next_offset is where the next page starts. Before 2.1.0 a list
+// past its maximum limit could not be read at all (quote_search held 50 of
+// 130 Minnebar sources; media_search 12 of WT66's 38 photos). The list each
+// tool pages, by result key; the doors' size cap keeps next_offset true
+// when it cuts one (mcp.mts fitToCap). on_this_day pages every year's items.
+export const PAGED_LISTS: Record<string, string> = {
+  archive_lens: 'results',
+  currently_history: 'entries',
+  find_links: 'results',
+  latest_content: 'results',
+  list_content: 'results',
+  list_topics: 'topics',
+  media_search: 'results',
+  on_this_day: 'years[].items',
+  quote_search: 'results',
+  top_references: 'top'
+};
+
+export function toolOffset(input: { offset?: unknown } = {}) {
+  const value = Math.floor(Number(input.offset || 0));
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+// One page of an ordered list, and what to say about the rest: omitted is
+// everything not on this page (before and after it), so a page and its
+// omitted count always add up to total_count.
+export function pageOf<T>(name: string, items: T[], input: ToolArgs, noun = 'results') {
+  const limit = toolLimit(name, input);
+  const offset = toolOffset(input);
+  const shown = items.slice(offset, offset + limit);
+  const end = offset + shown.length;
+  const nextOffset = end < items.length ? end : null;
+  const range = shown.length ? `${offset + 1}-${end} of ${items.length}` : `none of ${items.length}`;
+  const hint =
+    nextOffset !== null
+      ? `${noun} ${range}; call again with offset ${nextOffset} for the next ${Math.min(limit, items.length - end)}.`
+      : offset && items.length
+        ? `${noun} ${range}; this is the last page.`
+        : '';
+  return { limit, offset, shown, nextOffset, omitted: items.length - shown.length, hint };
+}
+
 interface ToolArgs {
   id?: unknown;
+  offset?: unknown;
   date?: unknown;
   window_days?: unknown;
   include_microposts?: unknown;
@@ -193,7 +249,12 @@ function stringArray(value: unknown): string[] {
 // mcp.mts) adds to the same block. Returns the result it was given.
 export function markTruncated(
   result: Record<string, unknown>,
-  { omitted = {}, clipped = [], hint = '' }: { omitted?: Record<string, number>; clipped?: string[]; hint?: string }
+  {
+    omitted = {},
+    clipped = [],
+    hint = '',
+    next_offset = null
+  }: { omitted?: Record<string, number>; clipped?: string[]; hint?: string; next_offset?: number | null }
 ) {
   const counts = Object.entries(omitted).filter(([, count]) => Number(count) > 0);
   if (!counts.length && !clipped.length) return result;
@@ -206,6 +267,7 @@ export function markTruncated(
     ...prior,
     ...(Object.keys(merged).length ? { omitted: merged } : {}),
     ...(priorClipped.length || clipped.length ? { clipped: [...new Set([...priorClipped, ...clipped])] } : {}),
+    ...(next_offset !== null && next_offset !== undefined ? { next_offset } : {}),
     hint: [...new Set(hints)].join(' ')
   };
   return result;
@@ -365,11 +427,19 @@ export function effectiveScope(scope: unknown, requestedSource: string) {
   return requestedSource || normalizeScope(scope);
 }
 
+// The host a domain filter or a link names: no scheme, www, port, path,
+// query, fragment, trailing dot or surrounding space ("github.com:443/x?y"
+// and " GitHub.com. " are github.com; each once returned 0 silently).
 export function normalizedDomain(value: unknown) {
   return String(value || '')
+    .trim()
     .toLowerCase()
-    .replace(/^https?:\/\//, '')
-    .split('/')[0]
+    .replace(/^[a-z][a-z0-9+.-]*:\/\//, '')
+    .replace(/^\/\//, '')
+    .split(/[/?#]/)[0]
+    .replace(/^[^@]*@/, '')
+    .replace(/:\d+$/, '')
+    .replace(/\.+$/, '')
     .replace(/^www\./, '');
 }
 
@@ -1051,10 +1121,22 @@ async function toolDomainHistory(input: ToolArgs = {}, context: ToolContext = {}
   );
 }
 
+// Newest first by the moment of publication (2.1.0): a blog post's
+// published timestamp, else its date. Comparing publish_date strings put a
+// Weekly Thing issue ("2026-09-26T12:00:00Z") above every date-only post of
+// its day and left same-day posts in corpus order, so the newest N was not
+// the newest N. Equal instants fall back to the id, newest id first.
+function sourceInstant(item: ArchiveRecord) {
+  const stamp = Date.parse(String(item.published || item.publish_date || ''));
+  return Number.isFinite(stamp) ? stamp : 0;
+}
+
 function latestByDate<T extends ArchiveRecord>(items: T[]) {
-  return [...items]
+  return items
     .filter((item) => item.publish_date)
-    .sort((a, b) => String(b.publish_date || '').localeCompare(String(a.publish_date || '')));
+    .map((item) => ({ item, at: sourceInstant(item), id: lensSourceId(item) }))
+    .sort((a, b) => b.at - a.at || b.id.localeCompare(a.id, 'en', { numeric: true }))
+    .map((entry) => entry.item);
 }
 
 // The skim layer: what a source is about, before anyone calls get_source.
@@ -1708,49 +1790,59 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
   );
 }
 
+// A filter on also_in_issues is a question about blog posts (the only
+// kind a Weekly Thing issue carries): has_also_in_issues false had
+// returned every issue and episode too, since they have no also_in_issues.
+function alsoInFilter(input: ToolArgs) {
+  const has = boolFilter(input.has_also_in_issues);
+  const raw = input.also_in_issue;
+  const wanted = raw !== undefined && raw !== null && String(raw).trim() ? Number(issueKey(raw)) : null;
+  const active = has !== null || wanted !== null;
+  return {
+    active,
+    keeps(record: ArchiveRecord) {
+      if (!active) return true;
+      if (record.source_kind !== 'blog') return false;
+      const refs = issueList(record.also_in_issues);
+      if (has !== null && Boolean(refs.length) !== has) return false;
+      return wanted === null || (Number.isFinite(wanted) && refs.includes(wanted));
+    }
+  };
+}
+
 async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
-  const limit = toolLimit('latest_content', input);
-  const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
-  const alsoInIssue = input.also_in_issue;
+  const alsoIn = alsoInFilter(input);
   const items = [];
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
+    if (alsoIn.active && kind !== 'blog') continue;
     const corpus = await loadCorpus(kind);
     items.push(...contentRecords(corpus, kind));
   }
-  const filtered = items.filter((item) => {
-    const refs = issueList(item.also_in_issues);
-    if (hasAlsoInIssues !== null && Boolean(refs.length) !== hasAlsoInIssues) return false;
-    if (alsoInIssue !== undefined && alsoInIssue !== null && String(alsoInIssue).trim()) {
-      const wanted = Number(issueKey(alsoInIssue));
-      if (!Number.isFinite(wanted) || !refs.includes(wanted)) return false;
-    }
-    return true;
-  });
-  const alsoIn = alsoInIssue !== undefined && alsoInIssue !== null && String(alsoInIssue).trim();
-  return {
-    applied: {
-      ...(hasAlsoInIssues !== null ? { has_also_in_issues: hasAlsoInIssues } : {}),
-      ...(alsoIn ? { also_in_issue: Number(issueKey(alsoInIssue)) } : {})
+  const ordered = latestByDate(items.filter((item) => alsoIn.keeps(item)));
+  const page = pageOf('latest_content', ordered, input);
+  return markTruncated(
+    {
+      scope: effectiveScope(scope, requestedSource || (alsoIn.active ? 'blog' : '')),
+      source_kind: requestedSource || null,
+      total_count: ordered.length,
+      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record }))
     },
-    scope: normalizeScope(scope),
-    source_kind: requestedSource || null,
-    results: latestByDate(filtered)
-      .slice(0, limit)
-      .map((record) => ({ id: lensSourceId(record), ...record }))
-  };
+    { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
+  );
 }
 
 // Every chunk counts: 344 of 353 issues run past 12 chunks, and reading
 // only the first 12 found Mastodon in 7 of the 12 issues that mention it.
-// Topic labels match whole or not at all (TopicMatcher.namesLabel).
+// The haystack is archive_lens's (matchFields): a record matches on its
+// subject, a real section name or its domains, a chunk on its text or an
+// episode summary, and a topic label only when named whole.
 function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
-  if (!compiled.raw) return true;
-  if (compiled.namesLabel(record.topics)) return true;
-  if (compiled.matches([record.subject, record.section, (record.domains || []).join(' ')].join(' '))) return true;
-  return (chunks || []).some((chunk) => compiled.matches([chunk.section, chunk.text].join(' ')));
+  if (compiled.isEmpty) return true;
+  if (matchesLensTopic(record, topic, compiled)) return true;
+  return (chunks || []).some((chunk) => matchesLensTopic(chunk, topic, compiled));
 }
 
 function countList(values: unknown[], key: string) {
@@ -1764,17 +1856,21 @@ function countList(values: unknown[], key: string) {
     .map(([name, count]) => ({ [key]: name, count }));
 }
 
-// The basis for each list_content result - the field that made the lens
-// substring bug diagnosable, applied to every filtering tool.
+// The basis for each list_content result: the field and the words that
+// matched ("topic text: 'Mastodon'"), never just "matched in body text".
 function listContentMatchReasons(
   record: ArchiveRecord,
+  chunks: ArchiveRecord[],
   filters: { topic: TopicMatcher; domain: string; linkKind: string; linkCategory: string }
 ) {
   const reasons: string[] = [];
   if (!filters.topic.isEmpty) {
-    const hit = filters.topic.firstHit(String(record.subject || ''));
-    const label = filters.topic.namesLabel(record.topics);
-    reasons.push(hit ? `topic: '${hit.span}'` : label ? `topic label: '${label}'` : 'topic: matched in body text');
+    const found = lensMatchReasons(record, '', filters.topic);
+    const chunk = found.length ? null : chunks.find((item) => matchesLensTopic(item, '', filters.topic));
+    if (chunk) found.push(...lensMatchReasons(chunk, '', filters.topic));
+    reasons.push(
+      ...found.map(({ field, match }) => (field === 'topics' ? `topic label: ${match}` : `topic ${field}: ${match}`))
+    );
   }
   if (filters.domain) reasons.push(`domain: ${filters.domain}`);
   if (filters.linkKind) reasons.push(`link_kind: ${filters.linkKind}`);
@@ -1783,6 +1879,11 @@ function listContentMatchReasons(
   return reasons;
 }
 
+const LIST_MATCHING_SECTIONS = 6;
+
+// Every source that passes the filters, newest first across the three
+// corpora (2.1.0; it had filled Weekly Thing first, so newer blog posts
+// never showed), paged with offset.
 async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const [startYear, endYear] = parseYearRange(input.year_range || input.year);
@@ -1795,26 +1896,26 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
     .toLowerCase()
     .trim();
   const targetResolved = boolFilter(input.target_resolved);
-  const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
-  const alsoInIssue = input.also_in_issue;
-  const limit = toolLimit('list_content', input);
+  const alsoIn = alsoInFilter(input);
+  const aliases = topic ? lensAliases(topic, input.aliases) : [];
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
+    aliases,
     caseSensitive: input.case_sensitive === true
   });
-  const results = [];
-  const years = [];
-  const sources = [];
+  const matched: Array<{ record: ArchiveRecord; chunks: ArchiveRecord[]; links: ArchiveRecord[] }> = [];
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
+    if (alsoIn.active && kind !== 'blog') continue;
     const corpus = await loadCorpus(kind);
-    const records = latestByDate(contentRecords(corpus, kind));
     const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
     const linksBySource = groupBySourceKey(await linkRecords(kind), sourceKeyFromLink);
-    for (const record of records) {
+    for (const record of contentRecords(corpus, kind)) {
+      if (!record.publish_date) continue;
       const year = recordYear(record);
       if (startYear && (!year || year < startYear)) continue;
       if (endYear && (!year || year > endYear)) continue;
+      if (!alsoIn.keeps(record)) continue;
       const key = sourceRecordKey(record);
       const chunks = chunksBySource.get(key) || [];
       const links = linksBySource.get(key) || [];
@@ -1830,130 +1931,172 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       if (linkCategory && !links.some((link) => String(link.link_category || '').toLowerCase() === linkCategory))
         continue;
       if (targetResolved !== null && !links.some((link) => Boolean(link.target_resolved) === targetResolved)) continue;
-      const refs = issueList(record.also_in_issues);
-      if (hasAlsoInIssues !== null && Boolean(refs.length) !== hasAlsoInIssues) continue;
-      if (alsoInIssue !== undefined && alsoInIssue !== null && String(alsoInIssue).trim()) {
-        const wanted = Number(issueKey(alsoInIssue));
-        if (!Number.isFinite(wanted) || !refs.includes(wanted)) continue;
-      }
-      years.push(year);
-      sources.push(kind);
-      if (results.length < limit) {
-        const headlineLinks = links.filter(isHeadlineLink).length;
-        results.push({
-          ...compactContentRecord(record),
-          link_count: headlineLinks,
-          ...(links.length > headlineLinks ? { other_link_count: links.length - headlineLinks } : {}),
-          match_reasons: listContentMatchReasons(record, { topic: topicMatcher, domain, linkKind, linkCategory }),
-          matching_sections: chunks
-            .filter((chunk) => !topic || topicMatcher.matches([chunk.section, chunk.text].join(' ')))
-            .map((chunk) => chunk.section)
-            .filter(Boolean)
-            .slice(0, 6)
-        });
-      }
+      matched.push({ record, chunks, links });
     }
   }
+  const byRecord = new Map(matched.map((entry) => [entry.record, entry]));
+  const ordered = latestByDate(matched.map((entry) => entry.record));
+  const page = pageOf('list_content', ordered, input);
+  let sectionsOmitted = 0;
+  const results = page.shown.map((record) => {
+    const { chunks, links } = byRecord.get(record)!;
+    const headlineLinks = links.filter(isHeadlineLink).length;
+    const sections = [
+      ...new Set(
+        chunks
+          .filter((chunk) => !topic || matchesLensTopic(chunk, topic, topicMatcher))
+          .map((chunk) => String(chunk.section || ''))
+          .filter(Boolean)
+      )
+    ];
+    sectionsOmitted += Math.max(0, sections.length - LIST_MATCHING_SECTIONS);
+    return {
+      ...compactContentRecord(record),
+      link_count: headlineLinks,
+      ...(links.length > headlineLinks ? { other_link_count: links.length - headlineLinks } : {}),
+      match_reasons: listContentMatchReasons(record, chunks, { topic: topicMatcher, domain, linkKind, linkCategory }),
+      matching_sections: sections.slice(0, LIST_MATCHING_SECTIONS)
+    };
+  });
   return markTruncated(
     {
-      scope: effectiveScope(scope, requestedSource),
+      scope: effectiveScope(scope, requestedSource || (alsoIn.active ? 'blog' : '')),
       source_kind: requestedSource || null,
       match_mode: topic ? topicMatcher.appliedMode : null,
-      total_count: years.length,
-      counts_by_year: countList(years, 'year').sort((a, b) => Number(a.year) - Number(b.year)),
-      counts_by_source: countList(sources, 'source_kind'),
+      ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
+      total_count: ordered.length,
+      counts_by_year: countList(ordered.map(recordYear), 'year').sort((a, b) => Number(a.year) - Number(b.year)),
+      counts_by_source: countList(
+        ordered.map((record) => record.source_kind),
+        'source_kind'
+      ),
       results
     },
     {
-      omitted: { results: years.length - results.length },
-      hint: `${years.length} sources matched; the ${results.length} newest are shown. Raise limit (max 120) or narrow with year_range.`
+      omitted: { results: page.omitted, 'results[].matching_sections': sectionsOmitted },
+      next_offset: page.nextOffset,
+      hint: [
+        page.hint,
+        sectionsOmitted
+          ? `matching_sections names ${LIST_MATCHING_SECTIONS} per source; get_source(id) reads them all.`
+          : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
     }
   );
 }
 
-function contextAround(text: unknown, phrase: unknown, radius = 240) {
+// The words around the first hit, found by the matcher that found it, so a
+// phrase typed with a straight apostrophe or two spaces still shows where
+// it sits.
+function contextAround(text: unknown, matcher: CanonicalMatcher, radius = 240) {
   const value = String(text || '');
-  const index = value.toLowerCase().indexOf(String(phrase).toLowerCase());
-  if (index < 0) return '';
+  const hit = matcher.firstHit(value);
+  if (!hit) return '';
   return value
-    .slice(Math.max(0, index - radius), Math.min(value.length, index + String(phrase).length + radius))
+    .slice(Math.max(0, hit.offset - radius), Math.min(value.length, hit.offset + hit.span.length + radius))
     .trim();
 }
 
+// Every source that holds the phrase (2.1.0). The scan runs to the end:
+// before 2.1.0 it stopped at limit, Weekly Thing first, so "Minnebar" showed
+// 50 of 130 sources and 80 blog posts were unreachable by any call. Results
+// are newest first across the three corpora and page with offset.
 async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const phrase = String(input.phrase || '').trim();
-  if (phrase.length < 3) return { results: [] };
-  const limit = toolLimit('quote_search', input);
-  const needle = phrase.toLowerCase();
   const quoteMatcher = compileLiteral(phrase);
   const requestedSource = normalizeSourceKind(input.source_kind || '');
+  const [startYear, endYear] = parseYearRange(input.year_range || input.year);
+  const inYears = (record: ArchiveRecord) => {
+    const year = recordYear(record);
+    return !(startYear && (!year || year < startYear)) && !(endYear && (!year || year > endYear));
+  };
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   // A voice matches within that voice's spans only: voice=jamie never finds
   // a phrase Jamie quoted. Spans live on chunks, so a voiced search reads
   // every corpus (the Weekly Thing too) chunk by chunk.
   const voices = voiceList(input.voice);
-  const results = [];
+  const found: Array<Record<string, unknown>> = [];
   if (kinds.includes('weekly_thing') && !voices.length) {
     const corpus = await loadCorpus('weekly_thing');
     for (const issue of corpus.issues || []) {
+      const record = { ...issue, source_kind: 'weekly_thing', issue_number: issue.number } as ArchiveRecord;
+      if (!inYears(record)) continue;
       let body = String(issue.body || '');
       if (!body) body = (await issueSections(issue)).map((section) => section.text || '').join('\n\n');
-      if (quoteMatcher.matches(body)) {
-        // Same shape AND value semantics as the chunk-corpus branch below:
-        // section names the issue section containing the phrase, and
-        // blog-specific fields are present as null rather than absent.
-        const matchedSection = (await issueSections(issue)).find((section) =>
-          String(section.text || '')
-            .toLowerCase()
-            .includes(needle)
-        );
-        results.push({
-          id: `wt-${issue.number}`,
-          issue_number: issue.number,
-          source_kind: 'weekly_thing',
-          subject: issue.subject,
-          publish_date: issue.publish_date,
-          year: Number(String(issue.publish_date || '').slice(0, 4)) || null,
-          section: matchedSection?.name || null,
-          topics: issue.topics || [],
-          domains: [],
-          microblog_id: null,
-          also_in_issues: null,
-          url: issue.url,
-          context: contextAround(body, phrase)
-        });
-        if (results.length >= limit) break;
-      }
+      if (!quoteMatcher.matches(body)) continue;
+      // The section that holds the phrase, by its heading or its text: a
+      // phrase that is itself a heading ("Links 📌") names that section.
+      const matchedSection = (await issueSections(issue)).find((section) =>
+        quoteMatcher.matches(`${section.name || ''}\n${section.text || ''}`)
+      );
+      // Same shape AND value semantics as the chunk-corpus branch below:
+      // blog-specific fields are present as null rather than absent.
+      found.push({
+        id: `wt-${issue.number}`,
+        issue_number: issue.number,
+        source_kind: 'weekly_thing',
+        subject: issue.subject,
+        publish_date: issue.publish_date,
+        year: recordYear(record) || null,
+        section: matchedSection?.name || null,
+        topics: issue.topics || [],
+        domains: [],
+        microblog_id: null,
+        also_in_issues: null,
+        url: issue.url,
+        context: contextAround(body, quoteMatcher)
+      });
     }
   }
   // Non-WT corpora have no issue-shaped records, so exact-phrase search runs
   // over reconstructed source text grouped from chunks.
   for (const kind of kinds.filter((item) => voices.length || item !== 'weekly_thing')) {
-    if (results.length >= limit) break;
     const corpus = await loadCorpus(kind);
     const records = contentRecords(corpus, kind);
     const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
     for (const record of records) {
+      if (!inYears(record)) continue;
       const chunks = chunksBySource.get(sourceRecordKey(record)) || [];
       const hit = voices.length ? chunks.find((chunk) => quoteMatcher.matches(voicedText(chunk, voices))) : null;
       if (voices.length && !hit) continue;
       const text = hit ? voicedText(hit, voices) : sourceTextFromChunks(chunks);
       if (!hit && !quoteMatcher.matches(text)) continue;
       const compactRecord = compactContentRecord(record) as Record<string, unknown>;
-      results.push({
+      const hitChunk = hit || chunks.find((chunk) => quoteMatcher.matches(String(chunk.text || '')));
+      const section = hitChunk?.section ?? compactRecord.section;
+      found.push({
         issue_number: null,
         ...compactRecord,
+        published: record.published,
         source_kind: compactRecord.source_kind || kind,
         year: Number(String(compactRecord.publish_date || '').slice(0, 4)) || null,
-        section: (hit ? hit.section : compactRecord.section) ?? null,
+        section: section ?? null,
         topics: compactRecord.topics || [],
         ...(voices.length ? { voice: voices } : {}),
-        context: contextAround(text, phrase)
+        context: contextAround(text, quoteMatcher)
       });
-      if (results.length >= limit) break;
     }
   }
-  return { phrase, results };
+  const ordered = latestByDate(found as ArchiveRecord[]) as Array<Record<string, unknown>>;
+  const page = pageOf('quote_search', ordered, input);
+  return markTruncated(
+    {
+      phrase,
+      total_count: ordered.length,
+      counts_by_source: countList(
+        ordered.map((item) => item.source_kind),
+        'source_kind'
+      ),
+      results: page.shown.map(({ published: _published, ...item }) => item)
+    },
+    {
+      omitted: { results: page.omitted },
+      next_offset: page.nextOffset,
+      hint: page.hint || (page.omitted ? 'Narrow with source_kind, year_range or a longer phrase.' : '')
+    }
+  );
 }
 
 async function toolListIssues(input: ToolArgs = {}) {
@@ -2204,7 +2347,10 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     if (requestedSource && kind !== requestedSource) continue;
     const corpus = await loadCorpus(kind);
     const kindRecords = contentRecords(corpus, kind);
-    records.push(...kindRecords);
+    // A voice is a property of spans, and records have none: with a voice
+    // only the voiced passages can match (a subject or domain is nobody's
+    // voice - coffee as quoted was 186 sources, 20 of them quoted).
+    if (!voices.length) records.push(...kindRecords);
     // Chunks carry no domains of their own; borrow the parent record's so a
     // source matched only at chunk level still contributes to top_domains.
     const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
@@ -2218,6 +2364,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
           {
             ...chunk,
             text,
+            ...(voices.length ? { voiced: true } : {}),
             domains: chunk.domains?.length ? chunk.domains : domainsByKey.get(sourceKeyFromChunk(chunk, kind)) || [],
             // "chunk" is internal storage typing; the public enum is the corpus
             // kind this loop is reading.
@@ -2231,7 +2378,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   // (matcher.mts ENTITY_ALIASES: ENS is Ethereum Name Service); the
   // separate entity lens did this until 2.0 folded it in.
   const aliases = lensAliases(topic, input.aliases);
-  return compactLensPayload(
+  const payload = compactLensPayload(
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
@@ -2245,11 +2392,13 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         records,
         chunks,
         yearRange: input.year_range,
-        limit: toolLimit('archive_lens', input)
+        limit: toolLimit('archive_lens', input),
+        offset: toolOffset(input)
       })
     },
-    { params: ['topic', 'operation', 'match_mode', 'source_kind', 'year_range', 'limit'] }
+    { params: ['year_range', 'source_kind'] }
   );
+  return settleLensTruncation(payload, { offset: toolOffset(input), limit: toolLimit('archive_lens', input) });
 }
 
 export const LENS_MAX_ALIASES = 8;
@@ -2489,20 +2638,18 @@ function issueIdRange(numbers: Iterable<string>) {
   return { first: sorted.length ? `wt-${sorted[0]}` : null, last: sorted.length ? `wt-${sorted.at(-1)}` : null };
 }
 
+// query goes through the canonical matcher on names (2.1.0): the private
+// substring-and-slug match made "C++" (slug "c") find 289 topics and "AI"
+// find Ukraine. An exact page or resource slug ("ai-and-agents") still
+// names its topic. The whole list pages with offset, most issues first.
 async function toolListTopics(input: ToolArgs = {}) {
-  const query = String(input.query || '')
-    .trim()
-    .toLowerCase();
-  const limit = toolLimit('list_topics', input);
-  // A name matches by substring, spelled either way: "macstories net" and
-  // "ai-and-agents" (a page or resource slug) find their topics too.
+  const query = String(input.query || '').trim();
+  const matcher = compileTopicMatcher(query, { mode: 'exact' });
   const querySlug = siteTopicSlug(query);
   const named = (name: unknown) =>
     !query ||
-    String(name || '')
-      .toLowerCase()
-      .includes(query) ||
-    Boolean(querySlug && siteTopicSlug(String(name || '')).includes(querySlug));
+    matcher.matches(String(name || '')) ||
+    Boolean(querySlug && siteTopicSlug(String(name || '')) === querySlug);
   const corpus = await loadCorpus('weekly_thing');
   const clusters = ((corpus.topics || []) as ArchiveRecord[])
     .filter((cluster) => named(cluster.name))
@@ -2518,24 +2665,33 @@ async function toolListTopics(input: ToolArgs = {}) {
       related_clusters: cluster.related_topics || []
     }));
   const topics = siteTopics(await loadGraph());
-  const matched = query ? topics.filter((topic) => named(topic.name) || topic.slug.includes(querySlug)) : topics;
-  return {
-    clusters,
-    topic_count: topics.length,
-    ...(query ? { matched_topics: matched.length } : {}),
-    topics: matched.slice(0, limit).map((topic) => {
-      const range = issueIdRange(topic.issues);
-      return {
-        name: topic.name,
-        issue_count: topic.count,
-        first_issue: range.first,
-        last_issue: range.last,
-        url: `${WEEKLY_BASE_URL}/topics/${topic.slug}/`,
-        related: topic.related
-      };
-    }),
-    ...(topics.length ? {} : { note: 'The topic graph is not loaded, so only the clusters are listed.' })
-  };
+  const matched = query ? topics.filter((topic) => named(topic.name) || topic.slug === querySlug) : topics;
+  const page = pageOf('list_topics', matched, input, 'topics');
+  return markTruncated(
+    {
+      clusters,
+      topic_count: topics.length,
+      ...(query ? { matched_topics: matched.length } : {}),
+      total_count: matched.length,
+      topics: page.shown.map((topic) => {
+        const range = issueIdRange(topic.issues);
+        return {
+          name: topic.name,
+          issue_count: topic.count,
+          first_issue: range.first,
+          last_issue: range.last,
+          url: `${WEEKLY_BASE_URL}/topics/${topic.slug}/`,
+          related: topic.related
+        };
+      }),
+      ...(topics.length ? {} : { note: 'The topic graph is not loaded, so only the clusters are listed.' })
+    },
+    {
+      omitted: { topics: page.omitted },
+      next_offset: page.nextOffset,
+      hint: page.hint || (page.omitted ? 'Narrow with query.' : '')
+    }
+  );
 }
 
 // A Weekly Thing issue's nearest issues by embedding, from the graph the
@@ -2741,23 +2897,48 @@ async function toolFindEvidence(input: ToolArgs = {}, { scope }: ToolContext = {
 
 // Lexical search over the media index the corpus build extracts from every
 // <img> and markdown image: alt text, nearby caption/context, and subject.
+// The words a photo is found by, with their field names for match_reasons:
+// what the photo shows (alt text, caption, the words around it, the vision
+// description) and a blog post's title. A Weekly Thing issue title is not a
+// caption: it made every photo in WT344 "Artemis" (QA M4).
+function mediaFields(item: Record<string, unknown>, kind: string): Array<[string, string]> {
+  const fields: Array<[string, unknown]> = [
+    ['alt', item.alt],
+    ['context', item.context],
+    ['description', item.description],
+    ...(kind === 'weekly_thing' ? [] : ([['title', item.subject]] as Array<[string, unknown]>))
+  ];
+  return fields.map(([field, value]) => [field, String(value || '')] as [string, string]).filter(([, value]) => value);
+}
+
+// Photos by what they show (2.1.0). Every word of query must appear, each
+// in any field: "Stone Arch Bridge" had counted 589 photos that matched any
+// one word, where 33 match all three. Words go through the canonical
+// matcher (café is cafe; AI and TV count; "crêpe" had listed the whole
+// archive), stem by default so dog finds dogs. The same image twice in one
+// source is one result. Without a query, photos are listed newest first.
 async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
-  const query = String(input.query || '')
-    .trim()
-    .toLowerCase();
+  const query = String(input.query || '').trim();
+  const mode = normalizeMatchMode(input.match_mode) || 'stem';
+  const words = [
+    ...new Map(
+      query
+        .split(/\s+/)
+        .map((word) => trimTerm(word))
+        .filter(Boolean)
+        .map((word) => [word.toLowerCase(), compileTopicMatcher(word, { mode })] as const)
+    ).entries()
+  ].filter(([, matcher]) => !matcher.isEmpty);
   const [startYear, endYear] = parseYearRange(input.year_range);
-  const limit = toolLimit('media_search', input);
-  const termMatchers = query
-    .split(/[^a-z0-9]+/)
-    .filter((term) => term.length > 2)
-    .map((term) => ({ term, matcher: compileTopicMatcher(term) }));
   const requestedSource = normalizeSourceKind(input.source_kind || '');
-  // One issue's photos: implies the Weekly Thing.
+  // One issue's photos: implies the Weekly Thing (the doors refuse it with
+  // another source_kind).
   const issue = input.issue_number == null || input.issue_number === '' ? '' : issueKey(input.issue_number);
   const kinds = scopeKinds(scope).filter(
     (kind) => (!requestedSource || kind === requestedSource) && (!issue || kind === 'weekly_thing')
   );
-  const scored: Array<{ score: number; item: Record<string, unknown> }> = [];
+  const found: Array<Record<string, unknown>> = [];
+  const seen = new Set<string>();
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
@@ -2768,47 +2949,68 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // description = the vision captioning pass (describe_media.py): the
       // pixels' own words, so a photo is findable when the authored text
       // says nothing (92% of WT media had empty alt before it).
-      const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''} ${item.description || ''}`;
+      const fields = mediaFields(item, kind);
+      const reasons: string[] = [];
+      for (const [, matcher] of words) {
+        const hit = fields.map(([field, text]) => ({ field, hit: matcher.firstHit(text) })).find((entry) => entry.hit);
+        if (!hit) break;
+        reasons.push(`${hit.field}: '${hit.hit!.span}'`);
+      }
+      if (reasons.length < words.length) continue;
       const sourceId = mediaSourceId(item as ArchiveRecord, kind);
-      if (!termMatchers.length) {
-        scored.push({ score: 1, item: { ...item, source_id: sourceId } });
-        continue;
-      }
-      const matchedTerms = termMatchers.filter(({ matcher }) => matcher.matches(haystack)).map(({ term }) => term);
-      if (matchedTerms.length > 0) {
-        scored.push({
-          score: matchedTerms.length / termMatchers.length,
-          item: { ...item, source_id: sourceId, match_reasons: [`matched: ${matchedTerms.join(', ')}`] }
-        });
-      }
+      const key = `${sourceId || sourceKeyFromMedia(item as ArchiveRecord, kind)}\0${item.url}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      found.push({ ...item, source_id: sourceId, ...(words.length ? { match_reasons: reasons } : {}) });
     }
   }
-  scored.sort(
-    (a, b) => b.score - a.score || String(b.item.publish_date || '').localeCompare(String(a.item.publish_date || ''))
-  );
-  const shown = scored.slice(0, limit);
+  const ordered = found
+    .map((item) => ({ item, at: sourceInstant(item as ArchiveRecord) }))
+    .sort(
+      (a, b) =>
+        b.at - a.at ||
+        String(b.item.source_id || '').localeCompare(String(a.item.source_id || ''), 'en', { numeric: true }) ||
+        String(a.item.url || '').localeCompare(String(b.item.url || ''))
+    )
+    .map((entry) => entry.item);
+  const page = pageOf('media_search', ordered, input, 'photos');
+  const narrowers = [
+    ...(input.year_range ? [] : ['year_range']),
+    ...(issue || (requestedSource && requestedSource !== 'weekly_thing') ? [] : ['issue_number']),
+    ...(requestedSource ? [] : ['source_kind'])
+  ];
   return markTruncated(
     {
-      query: String(input.query || ''),
-      total_count: scored.length,
-      results: shown.map(({ item }) => ({
-        // The id get_source opens for the photo's issue, post or episode.
-        source_id: item.source_id,
-        image_url: item.url,
-        alt: item.alt,
-        context: item.context,
-        description: item.description,
-        source_kind: item.source_kind,
-        issue_number: item.issue_number,
-        subject: item.subject,
-        source_url: item.source_url,
-        publish_date: item.publish_date,
-        match_reasons: item.match_reasons || ['no query terms - listed by recency']
-      }))
+      query,
+      match_mode: words.length ? mode : null,
+      ...(words.length ? {} : { listed: 'newest first; no query' }),
+      total_count: ordered.length,
+      results: page.shown.map((item) => {
+        const refusal = imageUrlRefusal(item.url);
+        return {
+          // The id get_source opens for the photo's issue, post or episode.
+          source_id: item.source_id,
+          image_url: allowedImageUrl(item.url) || item.url,
+          ...(refusal ? { viewable: false, not_viewable_because: refusal } : {}),
+          alt: item.alt,
+          context: item.context,
+          description: item.description,
+          ...(item.description ? {} : { described: false }),
+          source_kind: item.source_kind,
+          issue_number: item.issue_number,
+          subject: item.subject,
+          source_url: item.source_url,
+          publish_date: item.publish_date,
+          ...(item.match_reasons ? { match_reasons: item.match_reasons } : {})
+        };
+      })
     },
     {
-      omitted: { results: scored.length - shown.length },
-      hint: `${scored.length} images matched; raise limit (max 12) or narrow with year_range or issue_number.`
+      omitted: { results: page.omitted },
+      next_offset: page.nextOffset,
+      hint: [page.hint, page.omitted && narrowers.length ? `Or narrow with ${narrowers.join(', ')}.` : '']
+        .filter(Boolean)
+        .join(' ')
     }
   );
 }
@@ -3299,7 +3501,32 @@ async function toolWebSearch(input: ToolArgs = {}) {
 // mode-like argument the caller set. A handler that resolves something
 // itself (archive_gems' mode, find_links' match_mode) returns its own
 // `applied`, which wins key by key. Errors carry no echo.
-const APPLIED_ECHO_KEYS = ['source_kind', 'section', 'kind', 'mode', 'operation', 'match_mode', 'case_sensitive'];
+// applied says what ran (2.1.0): every argument the caller gave, in the
+// form the tool read it - a domain as the host it matched, a year as the
+// range, an issue as its number, a boolean as a boolean. Before 2.1.0 it
+// echoed seven keys, so a domain that normalized away, or a filter the
+// tool never saw, could not be told from one that ran (QA L14, F18, M12).
+// Not echoed: find_evidence's claims, which come back one per result.
+const NOT_ECHOED = new Set(['claims']);
+const BOOLEAN_ARGS = new Set([
+  'case_sensitive',
+  'has_also_in_issues',
+  'include_microposts',
+  'include_utility',
+  'target_resolved'
+]);
+
+function echoValue(name: string, key: string, value: unknown) {
+  if (key === 'offset' && PAGED_LISTS[name]) return toolOffset({ offset: value });
+  if (key === 'year_range') return parseYearRange(value);
+  if (key === 'domain') return normalizedDomain(value);
+  if (key === 'issue_number' || key === 'also_in_issue') {
+    const issue = issueKey(value);
+    return /^\d+$/.test(issue) ? Number(issue) : issue;
+  }
+  if (BOOLEAN_ARGS.has(key)) return boolFilter(value) ?? value;
+  return typeof value === 'string' ? value.trim() : value;
+}
 
 // Every window is year_range [start, end]; year is its one-year shorthand
 // (MCP 2.0: media_search, currently_history and top_references each had
@@ -3318,29 +3545,127 @@ export function appliedArguments(name: string, input: ToolArgs = {}) {
   const applied: Record<string, unknown> = {};
   // on_this_day's limit is per year and echoed by the tool as limit_per_year.
   if (TOOL_LIMITS[name] && name !== 'on_this_day') applied.limit = toolLimit(name, input);
-  if (input.year_range !== undefined && input.year_range !== null && input.year_range !== '') {
-    const [start, end] = parseYearRange(input.year_range);
-    applied.year_range = [start, end];
-  }
-  for (const key of APPLIED_ECHO_KEYS) {
-    const value = (input as Record<string, unknown>)[key];
-    if (value !== undefined && value !== null && value !== '') applied[key] = value;
+  for (const [key, value] of Object.entries(input)) {
+    if (key === 'limit' || NOT_ECHOED.has(key)) continue;
+    if (value === undefined || value === null || (typeof value === 'string' && !value.trim())) continue;
+    applied[key] = echoValue(name, key, value);
   }
   return applied;
 }
 
 type ToolHandler = (input?: ToolArgs, context?: ToolContext) => unknown;
 
+// A filter the caller set that means nothing is refused, never read as "no
+// filter" (QA 2026-09-30, class 3: topic "☕" listed all 10,795 sources,
+// year 0 read as every year, domain "https://" as every link, issue_number
+// 0 as every photo). Runs on every door - MCP, /tools, the chat loop and
+// the eval - because it wraps the registry. Blank optional strings are
+// absent, as before; a required one is refused.
+export const YEAR_BOUNDS = [1990, 2100] as const;
+const REQUIRED_TEXT: Record<string, string[]> = {
+  archive_lens: ['topic'],
+  compare_eras: ['topic'],
+  quote_search: ['phrase'],
+  search_archive: ['query'],
+  search_faq: ['query']
+};
+// Arguments matched as words: one with no letter or digit matches nothing.
+const WORD_FILTERS: Record<string, string[]> = {
+  archive_gems: ['theme'],
+  archive_lens: ['topic'],
+  compare_eras: ['topic'],
+  currently_history: ['query'],
+  find_links: ['topic'],
+  list_content: ['topic'],
+  list_topics: ['query'],
+  media_search: ['query']
+};
+
+function present(value: unknown) {
+  return value !== undefined && value !== null && String(value).trim() !== '';
+}
+
+function yearProblem(key: string, value: unknown): string | null {
+  const [low, high] = YEAR_BOUNDS;
+  const bad = (year: unknown) => {
+    if (year === null || year === undefined || year === '') return false;
+    const number = Number(year);
+    return !Number.isInteger(number) || number < low || number > high;
+  };
+  if (Array.isArray(value)) {
+    if (value.some(bad)) return `${key} years must be whole years from ${low} to ${high}`;
+    if (!value.some(present)) return `${key} names no year`;
+    return null;
+  }
+  if (typeof value === 'object') return null;
+  if (key === 'year' || typeof value === 'number')
+    return bad(value) ? `${key} must be a year from ${low} to ${high}` : null;
+  const [start, end] = parseYearRange(value);
+  return start === null && end === null ? `${key} names no year from ${low} to ${high}` : null;
+}
+
+export function argumentProblems(name: string, input: ToolArgs = {}): string | null {
+  const args = input as Record<string, unknown>;
+  for (const key of REQUIRED_TEXT[name] || []) {
+    if (!present(args[key])) return `${key} is required`;
+  }
+  if (name === 'quote_search' && String(args.phrase).trim().length < 3) {
+    return 'phrase must be at least 3 characters';
+  }
+  if (name === 'find_evidence') {
+    const claims = Array.isArray(args.claims) ? args.claims : [args.claims ?? args.claim];
+    const blank = claims.findIndex((claim) => !present(claim));
+    if (blank >= 0) return claims.length > 1 ? `claims[${blank}] is blank` : 'claims is required';
+  }
+  for (const key of WORD_FILTERS[name] || []) {
+    if (present(args[key]) && compileQuery({ term: args[key] }).isEmpty) {
+      return `${key} "${String(args[key]).trim()}" has no letter or digit to match; quote_search finds exact characters`;
+    }
+  }
+  for (const key of ['year', 'year_range', 'year_a', 'year_b']) {
+    if (!present(args[key]) && !Array.isArray(args[key])) continue;
+    const problem = yearProblem(key, args[key]);
+    if (problem) return problem;
+  }
+  for (const key of ['issue_number', 'also_in_issue']) {
+    if (!present(args[key])) continue;
+    const match = /^#?(\d{1,4})(-[a-z]+)?$/i.exec(String(args[key]).trim());
+    if (!match || Number(match[1]) < 1) return `${key} must be an issue number such as 351`;
+  }
+  if (present(args.domain)) {
+    const host = normalizedDomain(args.domain);
+    if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(host)) {
+      return `domain "${String(args.domain).trim()}" is not a host; pass one such as github.com`;
+    }
+  }
+  if (present(args.url) && !linkUrlKey(args.url)) return `url "${String(args.url).trim()}" names no page`;
+  if (
+    name === 'media_search' &&
+    present(args.issue_number) &&
+    present(args.source_kind) &&
+    normalizeSourceKind(args.source_kind) !== 'weekly_thing'
+  ) {
+    return 'issue_number names a Weekly Thing issue; it cannot be combined with source_kind blog or podcast';
+  }
+  return null;
+}
+
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
   return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
+    const problem = argumentProblems(name, rawInput);
+    if (problem) return { error: problem, code: 'bad_request' };
     const input = withYearRange(rawInput);
     const result = await handler(input, context);
     if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
     const record = result as Record<string, unknown>;
     if (record.error) return result;
     const own = record.applied && typeof record.applied === 'object' ? (record.applied as Record<string, unknown>) : {};
+    const applied = { ...appliedArguments(name, input), ...own };
+    // The mode that ran, not the one asked for: stem on "Tesla" runs exact.
+    if (applied.match_mode !== undefined && typeof record.match_mode === 'string')
+      applied.match_mode = record.match_mode;
     // applied leads the result; the handler's own keys win over the echo.
-    return Object.assign({ applied: null }, record, { applied: { ...appliedArguments(name, input), ...own } });
+    return Object.assign({ applied: null }, record, { applied });
   };
 }
 
