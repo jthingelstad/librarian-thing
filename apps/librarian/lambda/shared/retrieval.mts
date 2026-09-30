@@ -114,6 +114,57 @@ let blogCorpusCache: Corpus | undefined;
 let podcastCorpusCache: Corpus | undefined;
 let graphCache: Record<string, unknown> | undefined;
 
+// A blog post's identity is its microblog_id, never its url: micro.blog gave
+// several posts one permalink (6 urls, 14 posts, mostly 000000.html imports),
+// and keying by url merged them (QA 2026-09-30). Corpora built before
+// 2026-09-30 carry the id on posts and links but not on chunks or media, so
+// it is filled in once at load: a chunk's from its id (blog:<id>:<n>:<hash>),
+// a photo's from the one post at its source url (none when the url is
+// shared - better unattached than on the wrong post).
+export function withBlogIdentity(corpus: Corpus | undefined) {
+  if (!corpus) return corpus;
+  type Row = Record<string, unknown>;
+  const layer = (name: string) => ((corpus as Record<string, unknown>)[name] || []) as Row[];
+  const idsByUrl = new Map<string, unknown[]>();
+  for (const post of layer('posts')) {
+    const key = postUrlKey(post.url);
+    if (key) idsByUrl.set(key, [...(idsByUrl.get(key) || []), post.microblog_id]);
+  }
+  const uniqueId = (url: unknown) => {
+    const ids = idsByUrl.get(postUrlKey(url)) || [];
+    return ids.length === 1 && ids[0] ? ids[0] : undefined;
+  };
+  for (const chunk of layer('chunks')) {
+    if (chunk.microblog_id) continue;
+    const match = /^blog:(\d+):/.exec(String(chunk.id || ''));
+    const id = match ? Number(match[1]) : uniqueId(chunk.url);
+    if (id) chunk.microblog_id = id;
+  }
+  for (const link of layer('links')) {
+    if (link.microblog_id) continue;
+    const id = uniqueId(link.post_url || link.source_url);
+    if (id) link.microblog_id = id;
+  }
+  for (const item of layer('media')) {
+    if (item.microblog_id) continue;
+    const id = uniqueId(item.source_url);
+    if (id) item.microblog_id = id;
+  }
+  return corpus;
+}
+
+// Host and path only: www., micro.thingelstad.com and a trailing slash name
+// the same post (archive-tools urlKey, which cannot be imported here).
+function postUrlKey(value: unknown) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .replace(/^(?:www\.|micro\.(?=thingelstad\.com))/, '')
+    .replace(/[?#].*$/, '')
+    .replace(/\/$/, '');
+}
+
 // Test seam: prime the module caches with fixture corpora so tool handlers
 // can be exercised without S3. Production never calls this.
 export function primeCorpusCachesForTests(fixtures: {
@@ -123,7 +174,7 @@ export function primeCorpusCachesForTests(fixtures: {
   graph?: Record<string, unknown>;
 }) {
   corpusCache = fixtures.weekly_thing;
-  blogCorpusCache = fixtures.blog;
+  blogCorpusCache = withBlogIdentity(fixtures.blog);
   podcastCorpusCache = fixtures.podcast;
   graphCache = fixtures.graph;
   indexedCache = undefined;
@@ -199,7 +250,7 @@ async function loadOptionalCorpus({
     const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     if (!response.Body) throw new Error(`${kind} corpus object body is empty`);
     const loaded = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
-    setCache(loaded);
+    setCache(kind === 'blog' ? withBlogIdentity(loaded)! : loaded);
     logEvent('info', 'corpus_loaded', {
       source: 's3',
       scope: kind,

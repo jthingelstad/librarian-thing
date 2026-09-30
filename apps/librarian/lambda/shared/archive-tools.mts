@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { buildArchiveLens, compileTopicMatcher, lensSourceId } from './archive-lens.mjs';
+import { buildArchiveLens, compileTopicMatcher, isSitePage, lensSourceId } from './archive-lens.mjs';
 import { aliasesFor, compileLiteral, normalizeMatchMode } from './matcher.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import { countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
@@ -155,10 +155,12 @@ interface ToolResult {
 }
 
 interface SourceBundle {
+  kind: string;
+  corpus: Corpus;
   record: ArchiveRecord;
+  key: string;
   chunks: ArchiveRecord[];
   links: ArchiveRecord[];
-  [key: string]: unknown;
 }
 
 const CORPUS_BY_DOMAIN: Record<string, string> = {
@@ -493,31 +495,45 @@ function normalizeLinkRecord(link: ArchiveRecord, kind: unknown): ArchiveRecord 
   };
 }
 
+// Normalised once per loaded corpus (the records are shared: callers filter
+// and copy them, never mutate).
+const LINK_RECORDS = new WeakMap<Corpus, ArchiveRecord[]>();
+
 async function linkRecords(scope: unknown = 'weekly_thing') {
   const links: ArchiveRecord[] = [];
   for (const kind of scopeKinds(scope)) {
     const corpus = await loadCorpus(kind);
-    if (Array.isArray(corpus.links) && corpus.links.length) {
-      links.push(...corpus.links.map((link) => normalizeLinkRecord(link as ArchiveRecord, kind)));
-      continue;
+    let normalized = LINK_RECORDS.get(corpus);
+    if (!normalized) {
+      normalized = corpusLinkRecords(corpus, kind);
+      LINK_RECORDS.set(corpus, normalized);
     }
-    for (const rawIssue of corpus.issues || []) {
-      const issue = rawIssue as ArchiveRecord;
-      for (const link of issue.links || []) {
-        links.push(
-          normalizeLinkRecord(
-            {
-              ...link,
-              issue_number: issue.number,
-              subject: issue.subject,
-              publish_date: issue.publish_date,
-              issue_year: issue.issue_year,
-              issue_url: issue.url
-            },
-            kind
-          )
-        );
-      }
+    for (const link of normalized) links.push(link);
+  }
+  return links;
+}
+
+function corpusLinkRecords(corpus: Corpus, kind: string) {
+  if (Array.isArray(corpus.links) && corpus.links.length) {
+    return corpus.links.map((link) => normalizeLinkRecord(link as ArchiveRecord, kind));
+  }
+  const links: ArchiveRecord[] = [];
+  for (const rawIssue of corpus.issues || []) {
+    const issue = rawIssue as ArchiveRecord;
+    for (const link of issue.links || []) {
+      links.push(
+        normalizeLinkRecord(
+          {
+            ...link,
+            issue_number: issue.number,
+            subject: issue.subject,
+            publish_date: issue.publish_date,
+            issue_year: issue.issue_year,
+            issue_url: issue.url
+          },
+          kind
+        )
+      );
     }
   }
   return links;
@@ -541,10 +557,11 @@ async function toolSearchFaq(input: ToolArgs = {}) {
   const limit = toolLimit('search_faq', input);
   return {
     query,
+    // Each answer opens whole as get_source site-faq.
     results: searchFaq(query, {
       limit,
       replacements: await faqReplacements()
-    })
+    }).map((result) => ({ source_id: 'site-faq', ...result }))
   };
 }
 
@@ -718,6 +735,7 @@ function getSourceFormat(value: unknown): GetSourceFormat {
 async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const bundle = await findSourceBundle(input, context);
   if (!bundle) return { error: 'Source not found.' };
+  if ('ambiguous' in bundle) return ambiguousSource(bundle);
   const format = getSourceFormat(input.format);
   const { kind, record, chunks, links } = bundle;
   const wantedSection = String(input.section || '').trim();
@@ -1126,10 +1144,11 @@ export function sourceRecordKey(record: ArchiveRecord) {
     normalizeSourceKind(record?.source_kind || '') ||
     (record?.episode_number ? 'podcast' : record?.microblog_id ? 'blog' : record?.issue_number ? 'weekly_thing' : '');
   if (kind === 'weekly_thing') return `weekly_thing\0${issueKey(record.issue_number || record.number)}`;
-  // Blog and podcast corpus layers do not all carry the provider identifier.
-  // The canonical URL is present on records, chunks, and links, so prefer it
-  // whenever available and use provider identifiers only as a legacy fallback.
-  if (kind === 'blog') return `blog\0${urlKey(record.url) || record.microblog_id || ''}`;
+  // A blog post is its microblog_id: micro.blog gave several posts one
+  // permalink, and a url key merged them (withBlogIdentity fills the id into
+  // every corpus layer at load). The url is the fallback for a row with no id.
+  // Podcast layers do not all carry the episode number, so the url leads.
+  if (kind === 'blog') return `blog\0${record.microblog_id || urlKey(record.url)}`;
   if (kind === 'podcast') return `podcast\0${urlKey(record.url) || record.episode_number || record.number || ''}`;
   return `${kind || 'unknown'}\0${urlKey(record?.url)}`;
 }
@@ -1157,7 +1176,7 @@ function urlKey(value: unknown) {
 export function sourceKeyFromChunk(chunk: ArchiveRecord, fallbackKind = '') {
   const kind = normalizeSourceKind(chunk?.source_kind || fallbackKind) || fallbackKind;
   if (kind === 'weekly_thing' || chunk?.issue_number) return `weekly_thing\0${issueKey(chunk.issue_number)}`;
-  if (kind === 'blog') return `blog\0${urlKey(chunk.url) || chunk.microblog_id || ''}`;
+  if (kind === 'blog') return `blog\0${chunk.microblog_id || urlKey(chunk.url)}`;
   if (kind === 'podcast') return `podcast\0${urlKey(chunk.url) || chunk.episode_number || ''}`;
   return `${kind || 'unknown'}\0${urlKey(chunk?.url)}`;
 }
@@ -1166,10 +1185,27 @@ export function sourceKeyFromLink(link: ArchiveRecord) {
   const kind = linkCorpusKind(link);
   if (kind === 'weekly_thing' || link.issue_number) return `weekly_thing\0${issueKey(link.issue_number)}`;
   if (kind === 'blog')
-    return `blog\0${urlKey(link.post_url || link.source_url) || link.microblog_id || urlKey(link.url)}`;
+    return `blog\0${link.microblog_id || urlKey(link.post_url || link.source_url) || urlKey(link.url)}`;
   if (kind === 'podcast')
     return `podcast\0${urlKey(link.episode_url || link.source_url) || link.episode_number || urlKey(link.url)}`;
   return `${kind || 'unknown'}\0${urlKey(link.source_url)}`;
+}
+
+// A photo's source: its issue, its post (by microblog_id - a url shared by
+// several posts names none of them), or its episode page.
+export function sourceKeyFromMedia(item: ArchiveRecord, kind: string) {
+  if (kind === 'weekly_thing' || item.issue_number) return `weekly_thing\0${issueKey(item.issue_number)}`;
+  if (kind === 'blog') return `blog\0${item.microblog_id || urlKey(item.source_url)}`;
+  return `${kind}\0${urlKey(item.source_url) || item.episode_number || ''}`;
+}
+
+function mediaSourceId(item: ArchiveRecord, kind: string) {
+  if (kind === 'weekly_thing' && item.issue_number != null && item.issue_number !== '')
+    return `wt-${item.issue_number}`;
+  if (kind === 'blog' && item.microblog_id) return `blog-${item.microblog_id}`;
+  if (kind === 'podcast' && item.episode_number != null && item.episode_number !== '')
+    return `ep-${item.episode_number}`;
+  return undefined;
 }
 
 function groupBySourceKey(items: ArchiveRecord[], keyFn: (item: ArchiveRecord) => string) {
@@ -1352,6 +1388,7 @@ function inferSourceKindFromInput(input: ToolArgs = {}) {
   if (id.startsWith('wt-')) return 'weekly_thing';
   if (id.startsWith('blog-')) return 'blog';
   if (id.startsWith('ep-')) return 'podcast';
+  if (id.startsWith('site-')) return 'weekly_thing';
   if (input.issue_number || input.number || input.issue) return 'weekly_thing';
   if (input.microblog_id || input.post_id) return 'blog';
   if (input.episode_number || input.episode) return 'podcast';
@@ -1377,16 +1414,17 @@ function recordMatchesIdentifier(record: ArchiveRecord, input: ToolArgs = {}) {
 }
 
 // The id as a person or another tool might write it: wt-351, WT351 and a
-// bare issue number are one issue; blog-<id> and ep-<n> as emitted; a
-// source's url (absolute or /archive/351/) is matched as a url. Anything
-// else is compared with the ids tools emit (lensSourceId) as given.
+// bare issue number are one issue (so are wt-140-special, WT140-special and
+// 140-special, the one issue with a suffix); blog-<id>, ep-<n> and site-<page>
+// as emitted; a source's url (absolute or /archive/351/) is matched as a url.
+// Anything else is compared with the ids tools emit (lensSourceId) as given.
 export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   const raw = String(input.id ?? '').trim();
   if (!raw) return input;
   const rest = { ...input };
   delete rest.id;
-  const issue = raw.match(/^(?:wt[-\s]?|#)?(\d{1,4})$/i);
-  if (issue) return { ...rest, id: `wt-${Number(issue[1])}` };
+  const issue = raw.match(/^(?:wt[-\s]?|#)?(\d{1,4})(-[a-z]+)?$/i);
+  if (issue) return { ...rest, id: `wt-${Number(issue[1])}${(issue[2] || '').toLowerCase()}` };
   const blog = raw.match(/^blog-(\d+)$/i);
   if (blog) return { ...rest, id: `blog-${blog[1]}` };
   const episode = raw.match(/^ep-(\d+)$/i);
@@ -1395,21 +1433,113 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   return { ...rest, id: raw };
 }
 
-async function findSourceBundle(rawInput: ToolArgs = {}, { scope }: ToolContext = {}) {
+// Chunks and links by source key, built once per loaded corpus: a
+// get_source had regrouped every chunk and renormalised every link per call
+// (O(corpus), which kept a full reachability check out of CI).
+const SOURCE_INDEX = new WeakMap<
+  Corpus,
+  { chunks: Map<string, ArchiveRecord[]>; links: Map<string, ArchiveRecord[]> }
+>();
+
+async function sourceIndex(corpus: Corpus, kind: string) {
+  let index = SOURCE_INDEX.get(corpus);
+  if (!index) {
+    index = {
+      chunks: groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind)),
+      links: groupBySourceKey(await linkRecords(kind), sourceKeyFromLink)
+    };
+    SOURCE_INDEX.set(corpus, index);
+  }
+  return index;
+}
+
+// The Weekly Thing's own pages (about, members, FAQ) as one source each:
+// every chunk at that url, read whole like a blog post.
+function sitePageBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
+  const id = String(input.id || '');
+  const url = input.url || input.permalink;
+  if (!id.startsWith('site-') && !url) return null;
+  const pages = ((corpus.chunks || []) as ArchiveRecord[]).filter((chunk) => isSitePage(chunk));
+  const first = pages.find((chunk) => (id ? lensSourceId(chunk) === id : urlKey(chunk.url) === urlKey(url)));
+  if (!first) return null;
+  const chunks = pages.filter((chunk) => urlKey(chunk.url) === urlKey(first.url));
+  const record: ArchiveRecord = {
+    source_kind: first.source_kind,
+    subject: first.source_kind === 'faq' ? 'Weekly Thing FAQ' : first.subject,
+    url: first.url,
+    section: 'Page'
+  };
+  return { kind: 'site', corpus, record, key: `site\0${urlKey(first.url)}`, chunks, links: [] };
+}
+
+// A corpus's source records once, by the id tools emit (get_source had
+// rebuilt all 10,442 blog records per call).
+const RECORD_LOOKUP = new WeakMap<
+  Corpus,
+  { records: ArchiveRecord[]; byId: Map<string, ArchiveRecord[]>; byUrl: Map<string, ArchiveRecord[]> }
+>();
+
+function recordLookup(corpus: Corpus, kind: string) {
+  let lookup = RECORD_LOOKUP.get(corpus);
+  if (!lookup) {
+    const records = contentRecords(corpus, kind);
+    lookup = {
+      records,
+      byId: groupBySourceKey(records, (record) => lensSourceId(record)),
+      byUrl: groupBySourceKey(records, (record) => urlKey(record.url))
+    };
+    RECORD_LOOKUP.set(corpus, lookup);
+  }
+  return lookup;
+}
+
+async function findSourceBundle(
+  rawInput: ToolArgs = {},
+  { scope }: ToolContext = {}
+): Promise<SourceBundle | { ambiguous: ArchiveRecord[] } | null> {
   const input = canonicalSourceInput(rawInput);
   const requestedKind = inferSourceKindFromInput(input);
   const kinds = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
-    const records = contentRecords(corpus, kind);
-    const record = records.find((item) => recordMatchesIdentifier(item, input));
-    if (!record) continue;
+    const lookup = recordLookup(corpus, kind);
+    const id = input.id === undefined || input.id === null ? '' : String(input.id);
+    const url = input.url || input.permalink;
+    const byNumber = ['issue_number', 'issue', 'number', 'microblog_id', 'post_id', 'episode_number', 'episode'].some(
+      (field) => (input as Record<string, unknown>)[field] !== undefined
+    );
+    const matches = id
+      ? lookup.byId.get(id) || []
+      : url && !byNumber
+        ? lookup.byUrl.get(urlKey(url)) || []
+        : lookup.records.filter((item) => recordMatchesIdentifier(item, input));
+    // A url several blog posts share names none of them: say which ids it
+    // could mean rather than open the first (or all of them merged).
+    if (matches.length > 1) return { ambiguous: matches };
+    const record = matches[0];
+    if (!record) {
+      const page = kind === 'weekly_thing' ? sitePageBundle(corpus, input) : null;
+      if (page) return page;
+      continue;
+    }
     const key = sourceRecordKey(record);
-    const chunks = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind)).get(key) || [];
-    const links = (await linkRecords(kind)).filter((link) => sourceKeyFromLink(link) === key);
-    return { kind, corpus, record, key, chunks, links };
+    const index = await sourceIndex(corpus, kind);
+    return { kind, corpus, record, key, chunks: index.chunks.get(key) || [], links: index.links.get(key) || [] };
   }
   return null;
+}
+
+function ambiguousSource(found: { ambiguous: ArchiveRecord[] }) {
+  const candidates = found.ambiguous.map((record) => ({
+    id: lensSourceId(record),
+    subject: record.subject,
+    publish_date: record.publish_date
+  }));
+  return {
+    error: `That url is shared by ${candidates.length} posts; pass one id: ${candidates.map((c) => c.id).join(', ')}.`,
+    code: 'bad_request',
+    candidates
+  };
 }
 
 function issueList(values: unknown) {
@@ -1606,7 +1736,9 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
     },
     scope: normalizeScope(scope),
     source_kind: requestedSource || null,
-    results: latestByDate(filtered).slice(0, limit)
+    results: latestByDate(filtered)
+      .slice(0, limit)
+      .map((record) => ({ id: lensSourceId(record), ...record }))
   };
 }
 
@@ -1776,6 +1908,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
             .includes(needle)
         );
         results.push({
+          id: `wt-${issue.number}`,
           issue_number: issue.number,
           source_kind: 'weekly_thing',
           subject: issue.subject,
@@ -1893,8 +2026,9 @@ async function toolCompareEras(input: ToolArgs = {}, { scope }: ToolContext = {}
     topic,
     year_a: input.year_a,
     year_b: input.year_b,
-    results_a: first.map((item) => compactSource(item, 700)),
-    results_b: second.map((item) => compactSource(item, 700))
+    // id is the source's (get_source opens it), not the passage's chunk hash.
+    results_a: first.map((item) => ({ ...compactSource(item, 700), id: lensSourceId(item) })),
+    results_b: second.map((item) => ({ ...compactSource(item, 700), id: lensSourceId(item) }))
   };
 }
 
@@ -2194,6 +2328,7 @@ function scoreRelatedSource(
 async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const bundle = await findSourceBundle(input, { scope });
   if (!bundle) return { error: 'Source not found in the active source scope.' };
+  if ('ambiguous' in bundle) return ambiguousSource(bundle);
   const allLinks = await linkRecords(scope);
   const incoming = allLinks.filter(
     (link) => sourceKeyFromLink(link) !== bundle.key && targetMatchesSource(link, bundle.record)
@@ -2634,15 +2769,16 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // pixels' own words, so a photo is findable when the authored text
       // says nothing (92% of WT media had empty alt before it).
       const haystack = `${item.alt || ''} ${item.context || ''} ${item.subject || ''} ${item.description || ''}`;
+      const sourceId = mediaSourceId(item as ArchiveRecord, kind);
       if (!termMatchers.length) {
-        scored.push({ score: 1, item });
+        scored.push({ score: 1, item: { ...item, source_id: sourceId } });
         continue;
       }
       const matchedTerms = termMatchers.filter(({ matcher }) => matcher.matches(haystack)).map(({ term }) => term);
       if (matchedTerms.length > 0) {
         scored.push({
           score: matchedTerms.length / termMatchers.length,
-          item: { ...item, match_reasons: [`matched: ${matchedTerms.join(', ')}`] }
+          item: { ...item, source_id: sourceId, match_reasons: [`matched: ${matchedTerms.join(', ')}`] }
         });
       }
     }
@@ -2656,6 +2792,8 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       query: String(input.query || ''),
       total_count: scored.length,
       results: shown.map(({ item }) => ({
+        // The id get_source opens for the photo's issue, post or episode.
+        source_id: item.source_id,
         image_url: item.url,
         alt: item.alt,
         context: item.context,
@@ -2744,7 +2882,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     );
     const mediaBySource = new Map<string, ArchiveRecord>();
     for (const item of (corpus.media || []) as ArchiveRecord[]) {
-      const key = kind === 'weekly_thing' ? `wt:${issueKey(item.issue_number)}` : `url:${urlKey(item.source_url)}`;
+      const key = sourceKeyFromMedia(item, kind);
       if (!mediaBySource.has(key)) mediaBySource.set(key, item);
     }
     for (const record of records) {
@@ -2765,10 +2903,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         chunksBySource ||= groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
         excerpt = clipText((chunksBySource.get(sourceRecordKey(record)) || [])[0]?.text, 280);
       }
-      const photo =
-        mediaBySource.get(
-          kind === 'weekly_thing' ? `wt:${issueKey(record.issue_number)}` : `url:${urlKey(record.url)}`
-        ) || null;
+      const photo = mediaBySource.get(sourceRecordKey(record)) || null;
       const label = sourceLabel(record);
       const item: Record<string, unknown> = {
         id: lensSourceId(record),
@@ -2866,6 +3001,7 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
         ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
         text: entry.text,
         links: entry.links,
+        source_id: `wt-${entry.issue_number}`,
         issue_number: entry.issue_number,
         publish_date: String(entry.publish_date || '').slice(0, 10),
         issue_url: entry.issue_url

@@ -219,8 +219,10 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   return reasons;
 }
 
-// Readable stable id for the sources_by_id map: wt-300, blog-987,
-// ep-4, or the url tail.
+// Readable stable id for the sources_by_id map: wt-300, blog-987, ep-4,
+// site-about / site-members / site-faq for the Weekly Thing's own pages
+// (they had come out as weekly_thing-about, which nothing opened), or the
+// url tail.
 export function lensSourceId(item: LensItem) {
   if (item.issue_number !== undefined && item.issue_number !== null && String(item.issue_number) !== '') {
     return `wt-${item.issue_number}`;
@@ -235,7 +237,38 @@ export function lensSourceId(item: LensItem) {
     .replace(/\/+$/, '')
     .split('/')
     .at(-1);
+  if (isSitePage(item)) return `site-${tail || 'unknown'}`;
   return `${normalizeLensSourceKind(item.source_kind)}-${tail || 'unknown'}`;
+}
+
+// The about, members and FAQ pages ride the Weekly Thing corpus with no
+// issue number (source_kind site_page / faq, a site-relative url).
+export function isSitePage(item: LensItem) {
+  const kind = String(item.source_kind || '');
+  if (kind === 'site_page' || kind === 'faq') return true;
+  const hasId = [item.issue_number, item.episode_number, item.microblog_id].some(
+    (value) => value !== undefined && value !== null && String(value) !== ''
+  );
+  return !hasId && /^\/(?!archive\/)[^/]/.test(String(item.url || ''));
+}
+
+// A blog chunk with a url but no microblog_id (a corpus built before
+// 2026-09-30, or a fixture) joins the one post at that url, as a record or
+// another chunk names it; a url several posts share leaves it keyed by url,
+// never merged into one of them.
+function postIdFiller(records: LensItem[]) {
+  const ids = new Map<string, Set<string>>();
+  for (const record of records) {
+    if (normalizeLensSourceKind(record.source_kind) !== 'blog' || !record.url) continue;
+    if (record.microblog_id === undefined || record.microblog_id === null || record.microblog_id === '') continue;
+    const url = String(record.url).replace(/\/+$/, '');
+    ids.set(url, (ids.get(url) || new Set()).add(String(record.microblog_id)));
+  }
+  return (item: LensItem): LensItem => {
+    if (item.microblog_id || normalizeLensSourceKind(item.source_kind) !== 'blog') return item;
+    const found = ids.get(String(item.url || '').replace(/\/+$/, ''));
+    return found?.size === 1 ? { ...item, microblog_id: [...found][0] } : item;
+  };
 }
 
 function sourceKey(item: LensItem) {
@@ -243,11 +276,13 @@ function sourceKey(item: LensItem) {
   // that carries the same url plus a microblog_id must collapse into one
   // entry (they previously produced duplicate results with different
   // match_reasons).
+  // A blog post is its microblog_id before its url: several posts share
+  // one permalink.
   const identity =
     String(item.issue_number ?? '') ||
     String(item.episode_number ?? '') ||
-    String(item.url || '').replace(/\/+$/, '') ||
-    String(item.microblog_id ?? '');
+    String(item.microblog_id ?? '') ||
+    String(item.url || '').replace(/\/+$/, '');
   return [normalizeLensSourceKind(item.source_kind), identity].join('\0');
 }
 
@@ -473,6 +508,7 @@ export function buildArchiveLens({
     compileQuery({ term: topic, aliases: aliases || [], mode: matchMode, caseSensitive: caseSensitive === true })
   );
   let consideredCount = 0;
+  const withPostId = postIdFiller([...(records || []), ...(chunks || [])]);
 
   for (const record of records || []) {
     if (!inYearRange(record, yearRange)) continue;
@@ -494,8 +530,9 @@ export function buildArchiveLens({
     sources.set(sourceKey(source), source);
   }
 
-  for (const chunk of chunks || []) {
-    if (!inYearRange(chunk, yearRange) || !matchesLensTopic(chunk, topic, matcher)) continue;
+  for (const rawChunk of chunks || []) {
+    if (!inYearRange(rawChunk, yearRange) || !matchesLensTopic(rawChunk, topic, matcher)) continue;
+    const chunk = withPostId(rawChunk);
     const key = sourceKey(chunk);
     if (!sources.has(key)) {
       const source = sourceFromChunk(chunk);

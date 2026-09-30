@@ -68,7 +68,7 @@ export interface ParsedResource {
 }
 
 const PATTERNS: Array<[ResourceKind, RegExp]> = [
-  ['wt', /^(\d{1,4})$/],
+  ['wt', /^(\d{1,4}(?:-[a-z]+)?)$/],
   ['blog', /^(\d{1,12})$/],
   ['topic', /^([a-z0-9]+(?:-[a-z0-9]+)*)$/],
   ['year', /^((?:19|20)\d{2})$/],
@@ -80,7 +80,14 @@ export function parseResourceUri(uri: unknown): ParsedResource | null {
   const match = String(uri || '').match(/^librarian:\/\/([a-z-]+)\/([^/?#]+)\/?$/);
   if (!match) return null;
   const pattern = PATTERNS.find(([kind]) => kind === match[1]);
-  const value = pattern && decodeURIComponent(match[2]).toLowerCase().match(pattern[1]);
+  let decoded = '';
+  try {
+    decoded = decodeURIComponent(match[2]).toLowerCase();
+  } catch {
+    // Malformed percent-encoding (librarian://wt/%E0) names nothing.
+    return null;
+  }
+  const value = pattern && decoded.match(pattern[1]);
   return pattern && value ? { uri: String(uri), kind: pattern[0], value: value[1] } : null;
 }
 
@@ -135,7 +142,7 @@ async function readTool(resource: ParsedResource, name: string, input: JsonRecor
 /** resources/read for one parsed URI: the contents entry. */
 export async function readResource(resource: ParsedResource, reader: ResourceReader) {
   const auditAs = `resource:${resource.kind}`;
-  if (resource.kind === 'wt') return readSource(resource, `wt-${Number(resource.value)}`, reader);
+  if (resource.kind === 'wt') return readSource(resource, `wt-${resource.value.replace(/^0+(?=\d)/, '')}`, reader);
   if (resource.kind === 'blog') return readSource(resource, `blog-${resource.value}`, reader);
   if (resource.kind === 'year') {
     const year = Number(resource.value);

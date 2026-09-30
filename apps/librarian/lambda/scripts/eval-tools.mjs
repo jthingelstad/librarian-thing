@@ -30,6 +30,7 @@ const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
 const { primeCorpusCachesForTests } = await import(path.join(distDir, 'shared/retrieval.mjs'));
 const { mcpToolDeclarations, renderToolCallResult } = await import(path.join(distDir, 'shared/mcp.mjs'));
+const { runCompletenessChecks } = await import('./eval-completeness.mjs');
 
 // --- corpus loading -------------------------------------------------------
 async function loadCorpora() {
@@ -45,7 +46,8 @@ async function loadCorpora() {
     return {
       weekly_thing: fromFile('corpus.json'),
       blog: fromFile('blog_corpus.json'),
-      podcast: fromFile('podcast_corpus.json')
+      podcast: fromFile('podcast_corpus.json'),
+      graph: fromFile('graph.json')
     };
   }
   const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
@@ -65,7 +67,10 @@ async function loadCorpora() {
   return {
     weekly_thing: await fetchKey('artifacts/corpus.json'),
     blog: await fetchKey('artifacts/blog_corpus.json'),
-    podcast: await fetchKey('artifacts/podcast_corpus.json')
+    podcast: await fetchKey('artifacts/podcast_corpus.json'),
+    // The topic graph feeds list_topics, archive_lens topic cards and
+    // similar issues; without it those tools ran degraded in CI.
+    graph: await fetchKey('artifacts/graph.json')
   };
 }
 
@@ -179,6 +184,73 @@ function checkInvariants(tool, args, response) {
     check(label('outputSchema required keys present'), missing.length === 0, missing.join(', '));
     const undeclared = Object.keys(body).filter((key) => !(key in (schema.properties || {})));
     check(label('outputSchema declares every key'), undeclared.length === 0, undeclared.join(', '));
+    checkAccounting(tool, body, label);
+  }
+}
+
+// --- completeness accounting -----------------------------------------------
+// Jamie, 2026-09-30: "It is super important that this MCP not silently
+// exclude or miss things." An enumerating tool states how many things
+// matched (total_count); its page plus what `truncated` says it omitted is
+// that total; and every count list partitions it. Checked on the rendered
+// result, so the 48K cap's cuts must be accounted for too.
+const ENUMERATED_LISTS = {
+  find_links: 'results',
+  list_content: 'results',
+  archive_lens: 'sources_by_id',
+  media_search: 'results',
+  currently_history: 'entries',
+  top_references: 'top',
+  quote_search: 'results',
+  list_topics: 'topics'
+};
+const PARTITIONS = [
+  'counts_by_year',
+  'counts_by_source',
+  'counts_by_kind',
+  'counts_by_link_kind',
+  'counts_by_link_category'
+];
+
+function listedCount(value) {
+  if (Array.isArray(value)) return value.length;
+  if (value && typeof value === 'object') return Object.keys(value).length;
+  return 0;
+}
+
+function checkAccounting(tool, body, label) {
+  const omitted = body.truncated?.omitted || {};
+  const listKey = ENUMERATED_LISTS[tool];
+  if (listKey) {
+    check(label('states total_count'), Number.isInteger(body.total_count), `keys: ${Object.keys(body).join(', ')}`);
+    if (Number.isInteger(body.total_count)) {
+      const shown = listedCount(body[listKey]) + (omitted[listKey] || 0);
+      check(
+        label(`${listKey} shown + omitted = total_count`),
+        shown === body.total_count,
+        `${shown} vs ${body.total_count}`
+      );
+    }
+  }
+  if (tool === 'on_this_day' && Array.isArray(body.years)) {
+    const listed = body.years.reduce((sum, row) => sum + (row.items || []).length, 0);
+    const perYear = body.years.reduce((sum, row) => sum + (row.total_count || 0), 0);
+    check(
+      label('years[].total_count sum to total_count'),
+      perYear === body.total_count,
+      `${perYear} vs ${body.total_count}`
+    );
+    check(
+      label('years[].items shown + omitted = total_count'),
+      listed + (omitted['years[].items'] || 0) === body.total_count,
+      `${listed} + ${omitted['years[].items'] || 0} vs ${body.total_count}`
+    );
+  }
+  if (!Number.isInteger(body.total_count)) return;
+  for (const key of PARTITIONS) {
+    if (!Array.isArray(body[key]) || omitted[key]) continue;
+    const sum = body[key].reduce((total, row) => total + (Number(row.count) || 0), 0);
+    check(label(`${key} sums to total_count`), sum === body.total_count, `${sum} vs ${body.total_count}`);
   }
 }
 
@@ -501,6 +573,17 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   counts.on_this_day_0513 = items.length;
 }
 await run('search_faq', { query: 'what is the weekly thing' });
+// Every enumerating tool at a small limit, so checkAccounting sees a cut.
+await run('list_topics', { limit: 5 });
+await run('list_topics', { query: 'coffee' });
+await run('quote_search', { phrase: 'open web', limit: 3 });
+await run('media_search', { query: 'snow', limit: 3 });
+await run('top_references', { limit: 3 });
+await run('currently_history', { limit: 3 });
+await run('find_links', { domain: 'github.com', limit: 3 });
+await run('list_content', { topic: 'Mastodon', limit: 3 });
+await run('archive_lens', { topic: 'Mastodon', limit: 3 });
+await run('on_this_day', { date: '05-13', limit_per_year: 1 });
 if (allowNetwork) {
   await run('fetch_page', { url: 'https://www.thingelstad.com/' });
 } else {
@@ -516,6 +599,19 @@ if (allowNetwork) {
     String(stats.server_version)
   );
 }
+
+// Layer 4: completeness against oracles computed from the raw corpora.
+check('graph corpus loaded', Boolean(corpora.graph), 'artifacts/graph.json unavailable');
+await runCompletenessChecks({
+  corpora,
+  check,
+  counts,
+  call: async (tool, args) => {
+    const response = await ARCHIVE_TOOLS[tool](args, { scope: 'all' });
+    const rendered = renderToolCallResult(tool, response);
+    return rendered.structured || JSON.parse(rendered.text);
+  }
+});
 
 // --- baseline comparison --------------------------------------------------
 if (updateBaseline) {
