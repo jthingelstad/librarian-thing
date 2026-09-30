@@ -373,6 +373,22 @@ def _img_attr(tag: str, name: str) -> str:
     return " ".join((match.group(2) if match else "").split())
 
 
+_VIDEO_TAG_RE = re.compile(r"<video\b[^>]*>", re.I | re.S)
+VIDEO_POSTER_CONTEXT = "Video poster, the still shown before the video plays"
+
+
+def extract_video_posters(text: str) -> list[dict[str, str]]:
+    """The still of each ``<video poster=...>`` as ``{url, alt, video_url}``.
+    115 blog videos carry one (QA 2026-09-30, media Q3); the still is the
+    only image of the video, so it is media like a photo."""
+    out = []
+    for tag in _VIDEO_TAG_RE.findall(text or ""):
+        poster = _img_attr(tag, "poster")
+        if poster:
+            out.append({"url": poster, "alt": "", "video_url": _img_attr(tag, "src")})
+    return out
+
+
 def extract_images(text: str) -> list[dict[str, str]]:
     """Every image in a markdown/html body as {url, alt}, attribute-order
     agnostic, covering both <img> tags and markdown image syntax."""
@@ -1837,7 +1853,7 @@ def build_blog_corpus(
         # A photo posted with no words and no alt text is still a post, and
         # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
         # dropped with its photo). It has nothing to embed, so no chunk.
-        if not embed_text and not extract_images(body):
+        if not embed_text and not extract_images(body) and not extract_video_posters(body):
             continue
         subject = title or _short_label(embed_text) or "Photo"
         post_input = {
@@ -1918,6 +1934,24 @@ def build_blog_corpus(
                     "subject": subject,
                     "source_url": url,
                     "publish_date": publish_date,
+                }
+            )
+        image_urls = {image["url"] for image in extract_images(body)}
+        for poster in extract_video_posters(body):
+            if poster["url"] in image_urls:
+                continue
+            nearby = plain_text(embed_text)[:180]
+            media.append(
+                {
+                    "url": poster["url"],
+                    "alt": poster["alt"],
+                    "context": f"{VIDEO_POSTER_CONTEXT}. {nearby}".strip(),
+                    "source_kind": "blog",
+                    "microblog_id": microblog_id,
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                    "video_url": poster["video_url"],
                 }
             )
         budget = embed_text_budget(
