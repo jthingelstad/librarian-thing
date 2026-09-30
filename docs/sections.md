@@ -36,10 +36,18 @@ The trailer after Haiku is Echoes → "discuss on Reddit" line → `👨‍💻`
 
 ## A note on eras
 
-Section names aren't uniform across the back catalog and will evolve over time:
+Section names aren't uniform across the back catalog, but the structure is: 351 of the 352 issues in
+`data/issues/` have H2 sections (the exception is the 140-special edition).
 
 | Issues | Platform | Section traits |
 |---|---|---|
-| #1–41 | Tinyletter | plain markdown, inline links, no structured sections |
-| #42–~130 | MailChimp | emoji-suffixed headings (`## Featured Links 🏅`, `## Notable Links 📌`) |
-| #~131+ | Buttondown | canonical `## Notable` / `## Featured` / `## Briefly` / `## Must Read`; H3-under-H2 links |
+| #1–~52 | Tinyletter | emoji H2s (`## Links 📌`, `## Photog 📷`, `## Microblog updates 🎈`); #39–49 file links under topic H2s (`## Tech`, `## Business`) |
+| #~52–130 | MailChimp | emoji-suffixed headings (`## Featured Links 🏅`, `## Notable Links 📌`, `## Yet More Links 🍞`, `## Microposts 🎈`) |
+| #131–187 | Buttondown | `## Must Read` / `## Recommended Links` / `## FYI`; the Journal is `Status Updates`, then `Stream`, then `Journal` |
+| #188+ | Buttondown | canonical `## Featured` / `## Notable` / `## Journal` / `## Briefly`; H3-under-H2 links |
+
+The corpus maps every era's name onto one **section family** (`SECTION_FAMILIES` in
+`librarian_core/links.py`): Featured, Notable, Briefly, FYI, Journal, Currently, Photo, Fortune,
+Reply All, Straw Poll, Give Back, Support, App, Yearly Thing, plus Intro for the prose before the
+first heading. A heading no era used as a section is its own family. Chunks, section records and
+link records carry `section_family`; an H3 item keeps its own title as `section`.

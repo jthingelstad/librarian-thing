@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -20,7 +21,7 @@ import boto3
 import yaml
 from dotenv import load_dotenv
 
-from .links import extract_domains
+from .links import extract_domains, section_family
 from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
@@ -194,24 +195,63 @@ def clean_heading(value: str) -> str:
     return " ".join(value.split())
 
 
-def split_sections(body: str) -> list[tuple[str, str]]:
+@dataclass(frozen=True)
+class IssueSection:
+    """One split section of an issue body. ``heading`` is the section's own
+    heading (a Notable item's H3 title, or the H2 itself); ``parent`` is the
+    enclosing H1/H2 heading and ``family`` that H2's era-independent family
+    (``links.section_family``), so "Microposts 🎈" and "Journal" are both
+    Journal. ``raw_heading`` keeps the heading's markdown, links and all."""
+
+    heading: str
+    family: str
+    parent: str
+    text: str
+    raw_heading: str = ""
+
+
+def split_issue_sections(body: str) -> list[IssueSection]:
+    """Split on H1-H4 like ``split_sections``, carrying each section's H2 and
+    family. Text before the first heading is the "Issue" intro, family Intro.
+    An H2 missing from the family map is its own family, except after a
+    group header: a known H2 with no text of its own followed straight by
+    another H2 (the 2018 "Links 📌" over "Tech", "Business", ...), whose
+    family the unlisted H2s under it share."""
     matches = list(HEADING_RE.finditer(body))
     if not matches:
-        return [("Issue", body.strip())]
+        return [IssueSection("Issue", "Intro", "Issue", body.strip())]
 
-    sections: list[tuple[str, str]] = []
+    sections: list[IssueSection] = []
     if matches[0].start() > 0:
         intro = body[: matches[0].start()].strip()
         if intro:
-            sections.append(("Issue", intro))
+            sections.append(IssueSection("Issue", "Intro", "Issue", intro))
 
+    parent, family, group = "Issue", "Intro", None
     for index, match in enumerate(matches):
-        start = match.end()
-        end = matches[index + 1].start() if index + 1 < len(matches) else len(body)
-        section_body = body[start:end].strip()
+        following = matches[index + 1] if index + 1 < len(matches) else None
+        end = following.start() if following else len(body)
+        section_body = body[match.end() : end].strip()
+        heading = clean_heading(match.group(2))
+        if len(match.group(1)) <= 2:
+            parent = heading
+            known = section_family(heading)
+            if known:
+                family = known
+                opens_group = following is not None and len(following.group(1)) <= 2
+                if not section_body and opens_group:
+                    group = known
+                elif known != group:
+                    group = None
+            else:
+                family = group or heading
         if section_body:
-            sections.append((clean_heading(match.group(2)), section_body))
+            sections.append(IssueSection(heading, family, parent, section_body, match.group(2)))
     return sections
+
+
+def split_sections(body: str) -> list[tuple[str, str]]:
+    return [(section.heading, section.text) for section in split_issue_sections(body)]
 
 
 def words(text: str) -> list[str]:
@@ -273,7 +313,15 @@ def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
 
 _MEDIA_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I | re.S)
 _MEDIA_MD_IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
-_JOURNAL_ENTRY_LINK_RE = re.compile(r"\[[^\]]*@[^\]]*\]\((https://www\.thingelstad\.com/[^)]+)\)")
+# A Journal entry's own permalink, in every era's style: "Thursday @ 9:28 PM",
+# "Sep 24, 2023 at 3:40 PM" (with a narrow no-break space), "2018-05-04 4:47
+# PM", "5:25 PM", and the 2017 "→". Links with any other text are Jamie
+# pointing at an older post, not an entry.
+_JOURNAL_ENTRY_LINK_RE = re.compile(
+    r"\[(?:[^\]]*\d{1,2}:\d{2}[\s\u202f]*[AP]M[^\]]*|\s*→\s*)\]"
+    r"\((https?://(?:www\.|micro\.)?thingelstad\.com/\d{4}/\d{2}/\d{2}/[^)\s]+)\)",
+    re.I,
+)
 _CURRENTLY_LINE_RE = re.compile(r"^\*\*([A-Za-z][A-Za-z ]{2,20}):\*\*\s*(.+)$", re.M)
 _MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)[^)]*\)")
 
@@ -348,7 +396,20 @@ def journal_post_urls(section_text: str) -> list[str]:
     """Canonical blog-post URLs of the journal entries inside a Journal
     section chunk - the day-at-time entry links. Retrieval uses these to
     dedupe a journal chunk against the standalone blog posts it reprints."""
-    return list(dict.fromkeys(_JOURNAL_ENTRY_LINK_RE.findall(section_text or "")))
+    return list(
+        dict.fromkeys(
+            _canonical_blog_url(url) for url in _JOURNAL_ENTRY_LINK_RE.findall(section_text or "")
+        )
+    )
+
+
+def _canonical_blog_url(url: str) -> str:
+    """A thingelstad.com post URL as the blog corpus spells it: https, www,
+    no query or fragment (``?ref=weekly-thing``)."""
+    match = _BLOG_PERMALINK_RE.search(url)
+    if not match:
+        return url
+    return "https://www.thingelstad.com/" + re.split(r"[?#]", match.group(1), maxsplit=1)[0]
 
 
 def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
@@ -367,7 +428,30 @@ def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
     return entries
 
 
-def content_kind(section: str) -> str:
+# What a family's text is, whatever the era called its heading. A family
+# missing here (Intro, and the one-off H2s that are their own family) falls
+# back to reading the heading.
+FAMILY_CONTENT_KINDS = {
+    "Featured": "links",
+    "Notable": "links",
+    "Briefly": "links",
+    "FYI": "links",
+    "App": "links",
+    "Journal": "personal",
+    "Currently": "personal",
+    "Photo": "personal",
+    "Fortune": "meta",
+    "Reply All": "meta",
+    "Straw Poll": "meta",
+    "Give Back": "meta",
+    "Support": "meta",
+    "Yearly Thing": "essay",
+}
+
+
+def content_kind(section: str, family: str | None = None) -> str:
+    if family in FAMILY_CONTENT_KINDS:
+        return FAMILY_CONTENT_KINDS[family]
     name = section.lower()
     if any(part in name for part in ("journal", "photo", "currently")):
         return "personal"
@@ -376,6 +460,60 @@ def content_kind(section: str) -> str:
     if any(part in name for part in ("give back", "promotion", "sponsor")):
         return "meta"
     return "essay" if name in EVERGREEN_SECTIONS or len(name.split()) <= 4 else "reference"
+
+
+# Voice provenance: whose words each part of a chunk is. Everything is
+# Jamie's except blockquoted lines (someone else's words, quoted), the
+# headline link of a link item (a page's own title), and a Fortune (a
+# fortune-cookie line). Spans partition the chunk text; the embed input is
+# untouched, so no chunk re-embeds.
+LINK_FAMILIES = {"Featured", "Notable", "Briefly", "FYI", "App"}
+QUOTED_FAMILIES = {"Fortune"}
+_BLOCKQUOTE_LINE_RE = re.compile(r"^[ \t]*>.*$", re.M)
+# A line that is only a link: "- [Title](url) domain.com", "[Title](url)".
+_LINK_LINE_RE = re.compile(
+    r"^[ \t]*(?:[-*+][ \t]+)?(?:\*\*)?\[[^\]\n]*\]\([^)\s]+\)(?:\*\*)?(?:[ \t]+[\w.-]+\.\w+)?[ \t]*$",
+    re.M,
+)
+# A Briefly headline: "{commentary} → **[Title](url)**".
+_BOLD_LINK_RE = re.compile(r"\*\*\[[^\]\n]*\]\([^)\s]+\)\*\*")
+
+
+def voice_spans(text: str, family: str | None = None) -> list[dict[str, Any]]:
+    """``[{voice, start, end}]`` covering ``text`` end to end: ``jamie``,
+    ``quoted`` or ``link``. A run of whitespace between two marks joins the
+    span before it, so consecutive quoted lines are one span."""
+    if not text:
+        return []
+    if family in QUOTED_FAMILIES:
+        return [{"voice": "quoted", "start": 0, "end": len(text)}]
+    marks = [(m.start(), m.end(), "quoted") for m in _BLOCKQUOTE_LINE_RE.finditer(text)]
+    if family in LINK_FAMILIES:
+        marks += [(m.start(), m.end(), "link") for m in _LINK_LINE_RE.finditer(text)]
+        marks += [(m.start(), m.end(), "link") for m in _BOLD_LINK_RE.finditer(text)]
+    spans: list[dict[str, Any]] = []
+
+    def push(start: int, end: int, voice: str) -> None:
+        if end <= start:
+            return
+        if spans and spans[-1]["voice"] == voice and spans[-1]["end"] == start:
+            spans[-1]["end"] = end
+        else:
+            spans.append({"voice": voice, "start": start, "end": end})
+
+    cursor = 0
+    for start, end, voice in sorted(marks):
+        if start < cursor:
+            continue
+        gap = text[cursor:start]
+        if spans and not gap.strip():
+            push(cursor, start, spans[-1]["voice"])
+        else:
+            push(cursor, start, "jamie")
+        push(start, end, voice)
+        cursor = end
+    push(cursor, len(text), "jamie")
+    return spans
 
 
 def time_sensitivity(subject: str, body: str) -> str:
@@ -765,6 +903,8 @@ def build_corpus(
     include_issue_bodies: bool = False,
     site_dir: Path | None = None,
     faq_path: Path | None = None,
+    blog_dir: Path | None = None,
+    podcast_dir: Path | None = None,
 ) -> dict[str, Any]:
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
@@ -772,6 +912,11 @@ def build_corpus(
     issues = []
     links: list[dict[str, Any]] = []
     topic_index: dict[str, dict[str, Any]] = {}
+    targets: dict[str, Any] = {
+        "weekly": weekly_issue_lookup(archive_dir),
+        "blog": blog_post_lookup(blog_dir or BLOG_DIR),
+        "podcast": podcast_episode_lookup(podcast_dir or PODCAST_DIR),
+    }
     for path in sorted(
         archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
     ):
@@ -782,7 +927,8 @@ def build_corpus(
         publish_date = metadata.get("publish_date") or ""
         url = f"/archive/{number}/"
         issue_word_count = len(words(body))
-        sections = split_sections(body)
+        split = split_issue_sections(body)
+        sections = [(section.heading, section.text) for section in split]
         topics = detect_topics(subject, body)
         issue_summary = {
             "abstract": summarize_text(body),
@@ -791,29 +937,48 @@ def build_corpus(
             "time_sensitivity": time_sensitivity(subject, body),
         }
         issue_sections = [
-            {"name": section, "text": section_body, "word_count": len(words(section_body))}
-            for section, section_body in sections
+            {
+                "name": section.heading,
+                "section_family": section.family,
+                "text": section.text,
+                "word_count": len(words(section.text)),
+            }
+            for section in split
         ]
         issue_links = []
+        link_fields = {
+            "issue_number": number,
+            "subject": subject,
+            "publish_date": publish_date,
+            "issue_year": parse_year(publish_date),
+            "issue_url": url,
+        }
         for link in metadata.get("links") or []:
             if not isinstance(link, dict):
                 continue
             record = {
-                "issue_number": number,
-                "subject": subject,
-                "publish_date": publish_date,
-                "issue_year": parse_year(publish_date),
-                "issue_url": url,
+                **link_fields,
                 "section": link.get("section"),
+                "section_family": section_family(link.get("section")) or link.get("section"),
                 "url": link.get("url"),
                 "domain": link.get("domain"),
                 "text": link.get("text") or link.get("title") or link.get("heading_context"),
                 "heading_context": link.get("heading_context"),
                 "context": link.get("context") or link.get("heading_context"),
+                "link_role": "headline",
             }
             if include_issue_bodies:
+                record.update(resolve_link_target(str(link.get("url") or ""), **targets))
                 issue_links.append(record)
                 links.append(record)
+        if include_issue_bodies:
+            seen_urls = {str(link.get("url") or "") for link in issue_links}
+            for section in split:
+                for record in issue_body_links(section, skip_urls=seen_urls):
+                    record = {**link_fields, **record}
+                    record.update(resolve_link_target(record["url"], **targets))
+                    issue_links.append(record)
+                    links.append(record)
         issues.append(
             {
                 "number": number,
@@ -821,6 +986,7 @@ def build_corpus(
                 "publish_date": publish_date,
                 "issue_year": parse_year(publish_date),
                 "url": url,
+                **({"description": metadata["description"]} if metadata.get("description") else {}),
                 "word_count": issue_word_count,
                 "body_hash": body_hash(body),
                 "summary": issue_summary,
@@ -864,7 +1030,12 @@ def build_corpus(
                     "publish_date": publish_date,
                 }
             )
-        for section, section_body in sections:
+        for issue_section in split:
+            section, family, section_body = (
+                issue_section.heading,
+                issue_section.family,
+                issue_section.text,
+            )
             if section.strip().lower() == "currently":
                 for entry in extract_currently_entries(section_body):
                     currently.append(
@@ -876,18 +1047,18 @@ def build_corpus(
                             "issue_url": url,
                         }
                     )
-            section_journal_urls = (
-                journal_post_urls(section_body) if section.strip().lower() == "journal" else []
-            )
             for index, chunk_text in enumerate(chunk_section(section_body)):
                 if TEMPLATE_LEAK_RE.search(chunk_text):
                     raise RuntimeError(
                         f"Template/generated content leaked into corpus for issue {number}"
                     )
-                chunk_journal_urls = [u for u in journal_post_urls(chunk_text)] or (
-                    section_journal_urls
-                    if len(section_journal_urls) and index == 0 and False
-                    else []
+                # The blog post's own URL where the corpus has it, so the
+                # retrieval dedupe joins even when that URL is on another host.
+                chunk_journal_urls = list(
+                    dict.fromkeys(
+                        targets["blog"].get(_blog_target_path(u) or "", {}).get("url") or u
+                        for u in journal_post_urls(chunk_text)
+                    )
                 )
                 chunks.append(
                     {
@@ -898,9 +1069,11 @@ def build_corpus(
                         "issue_year": parse_year(publish_date),
                         "url": url,
                         "section": section,
+                        "section_family": family,
                         "text": chunk_text,
+                        "spans": voice_spans(chunk_text, family),
                         "word_count": len(words(chunk_text)),
-                        "content_kind": content_kind(section),
+                        "content_kind": content_kind(section, family),
                         "topics": topics,
                         "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
@@ -1005,8 +1178,8 @@ def _is_thingelstad_domain(domain: str) -> bool:
 def _normalize_blog_path(path_part: str) -> str:
     """``2026/05/23/slug.html`` → ``2026/05/23/slug`` — the cross-corpus key
     shared by an issue's Journal back-reference and the blog post itself
-    (host/scheme/``.html`` dropped)."""
-    p = path_part.strip().rstrip("/")
+    (host/scheme/``.html`` and any ``?ref=weekly-thing`` query dropped)."""
+    p = re.split(r"[?#]", path_part.strip(), maxsplit=1)[0].rstrip("/")
     return re.sub(r"\.html?$", "", p, flags=re.I)
 
 
@@ -1027,6 +1200,187 @@ def journal_blog_xref(archive_dir: Path = ARCHIVE_DIR) -> dict[str, list[Any]]:
         for match in _BLOG_PERMALINK_RE.finditer(body):
             xref.setdefault(_normalize_blog_path(match.group(1)), set()).add(number)
     return {key: sorted(nums, key=issue_sort_key) for key, nums in xref.items()}
+
+
+# --- cross-source link targets ------------------------------------------
+#
+# A link to one of Jamie's own sources resolves to its archive id, so a link
+# record can say "this is WT186" or "this is blog post 6034145" rather than
+# only a URL. Weekly issues are linked by number (/archive/351/) or by their
+# old slug (/archive/weekly-thing-186-blockchain-pairing-sharding/).
+
+_WEEKLY_ARCHIVE_PATH_RE = re.compile(r"^/archive/([^/?#]+)/?$", re.I)
+_WEEKLY_SLUG_NUMBER_RE = re.compile(r"^weekly-thing-(\d+)(?:-|$)", re.I)
+_BLOG_PERMALINK_PATH_RE = re.compile(r"^/\d{4}/\d{2}/\d{2}/[^/]+")
+
+
+def weekly_issue_lookup(archive_dir: Path = ARCHIVE_DIR) -> dict[str, Any]:
+    """``{slug or number (lower-case): issue number}`` for every issue."""
+    lookup: dict[str, Any] = {}
+    for path in archive_dir.glob("*/archive.md"):
+        metadata, _body = read_issue(path)
+        number = metadata.get("number") or path.parent.name
+        lookup[str(number).lower()] = number
+        if metadata.get("slug"):
+            lookup[str(metadata["slug"]).lower()] = number
+    return lookup
+
+
+def blog_post_lookup(blog_dir: Path = BLOG_DIR) -> dict[str, dict[str, Any]]:
+    """``{normalised blog path: {microblog_id, url, subject}}`` from the post
+    front matter alone. Keyed on the date path whatever the host, since the
+    2017 posts' canonical URLs are on jthingelstad.micro.blog."""
+    lookup: dict[str, dict[str, Any]] = {}
+    for path in blog_dir.rglob("*.md"):
+        match = FRONTMATTER_RE.match(path.read_text(encoding="utf-8"))
+        metadata = (yaml.safe_load(match.group(1)) if match else None) or {}
+        post_path = urlparse(str(metadata.get("url") or "")).path
+        target = (
+            _normalize_blog_path(post_path.lstrip("/"))
+            if _BLOG_PERMALINK_PATH_RE.match(post_path)
+            else None
+        )
+        if target and metadata.get("microblog_id") is not None:
+            lookup[target] = {
+                "microblog_id": metadata["microblog_id"],
+                "url": metadata.get("url"),
+                "subject": str(metadata.get("title") or "").strip(),
+            }
+    return lookup
+
+
+def podcast_episode_lookup(podcast_dir: Path = PODCAST_DIR) -> dict[str, dict[str, Any]]:
+    """``{normalised episode path: {episode_number, url, subject}}``."""
+    lookup: dict[str, dict[str, Any]] = {}
+    for path in podcast_dir.glob("*.json"):
+        episode = json.loads(path.read_text(encoding="utf-8"))
+        url = str(episode.get("url") or "")
+        key = _normalize_blog_path(urlparse(url).path.lstrip("/")) if url else ""
+        if key:
+            lookup[key] = {
+                "episode_number": episode.get("number"),
+                "url": url,
+                "subject": str(episode.get("title") or "").strip(),
+            }
+    return lookup
+
+
+def resolve_link_target(
+    url: str,
+    *,
+    weekly: dict[str, Any] | None = None,
+    blog: dict[str, dict[str, Any]] | None = None,
+    podcast: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Target fields for a link to one of Jamie's sources: ``target_source_kind``,
+    ``target_resolved`` and the target's number or id. Empty for a link
+    anywhere else, including a source's home page (weekly.thingelstad.com/)."""
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return {}
+    host = (parsed.hostname or "").lower()
+    if host == "weekly.thingelstad.com":
+        match = _WEEKLY_ARCHIVE_PATH_RE.match(parsed.path or "")
+        if not match:
+            return {}
+        slug = match.group(1).lower()
+        number = (weekly or {}).get(slug)
+        if number is None and (numbered := _WEEKLY_SLUG_NUMBER_RE.match(slug)):
+            number = (weekly or {}).get(numbered.group(1))
+        record: dict[str, Any] = {
+            "target_source_kind": "weekly_thing",
+            "target_resolved": number is not None,
+        }
+        if number is not None:
+            record["target_issue_number"] = number
+        return record
+    if host == "another.thingelstad.com":
+        if not _BLOG_PERMALINK_PATH_RE.match(parsed.path or ""):
+            return {}
+        episode = (podcast or {}).get(_normalize_blog_path((parsed.path or "").lstrip("/")))
+        record = {"target_source_kind": "podcast", "target_resolved": episode is not None}
+        if episode:
+            record["target_episode_number"] = episode["episode_number"]
+            record["target_subject"] = episode["subject"]
+        return record
+    if host in _BLOG_INTERNAL_DOMAINS:
+        target_path = _blog_target_path(url)
+        if not target_path:
+            return {}
+        post = (blog or {}).get(target_path)
+        record = {
+            "target_source_kind": "blog",
+            "target_resolved": post is not None,
+            "target_blog_path": target_path,
+        }
+        if post:
+            record["target_microblog_id"] = post["microblog_id"]
+            record["target_post_url"] = post["url"]
+            if post["subject"]:
+                record["target_subject"] = post["subject"]
+        return record
+    return {}
+
+
+# Link roles on an issue's link records. ``headline`` is the item a link
+# section is built from (the front-matter links, plus a heading link the
+# front matter missed); ``journal`` is any link inside a Journal; everything
+# else is ``commentary``: the links Jamie drops into what he writes.
+_HEADING_LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+
+
+def _link_paragraph(text: str, position: int, max_chars: int = 240) -> str:
+    start = text.rfind("\n\n", 0, position)
+    end = text.find("\n\n", position)
+    paragraph = text[start + 2 if start >= 0 else 0 : end if end >= 0 else len(text)]
+    return plain_text(paragraph).strip()[:max_chars]
+
+
+def issue_body_links(
+    section: IssueSection,
+    *,
+    skip_urls: set[str],
+) -> list[dict[str, Any]]:
+    """Link records for one split section, minus ``skip_urls`` (the issue's
+    front-matter links and anything an earlier section already gave), which
+    it extends. Records carry ``link_role`` and the section's family; the
+    caller adds the issue fields and targets."""
+    records: list[dict[str, Any]] = []
+
+    def add(text: str, url: str, role: str, context: str) -> None:
+        url = url.strip()
+        if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
+            return
+        try:
+            domain = (urlparse(url).hostname or "").lower()
+        except ValueError:
+            return
+        if not domain:
+            return
+        skip_urls.add(url)
+        records.append(
+            {
+                "section": section.parent,
+                "section_family": section.family,
+                "heading_context": section.heading if section.heading != section.parent else None,
+                "url": url,
+                "domain": domain,
+                "text": plain_text(text).strip() or domain,
+                "context": context,
+                "link_role": role,
+            }
+        )
+
+    body_role = "journal" if section.family == "Journal" else "commentary"
+    for match in _HEADING_LINK_RE.finditer(section.raw_heading or ""):
+        role = "headline" if section.family in LINK_FAMILIES else body_role
+        add(match.group(1), match.group(2), role, section.heading)
+    for match in _BLOG_MARKDOWN_LINK_RE.finditer(section.text):
+        add(match.group(1), match.group(2), body_role, _link_paragraph(section.text, match.start()))
+    for match in _BLOG_HTML_LINK_RE.finditer(section.text):
+        add(match.group(2), match.group(1), body_role, _link_paragraph(section.text, match.start()))
+    return records
 
 
 def _blog_embed_text(body: str) -> str:
@@ -1103,6 +1457,8 @@ def _blog_outbound_links(
     post_kind: str,
     post_url: str,
     post_lookup: dict[str, dict[str, Any]],
+    weekly_lookup: dict[str, Any] | None = None,
+    podcast_lookup: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Extract post-level outbound links from native blog markdown/HTML.
 
@@ -1172,6 +1528,10 @@ def _blog_outbound_links(
             record["target_post_url"] = target_post.get("url")
             record["target_subject"] = target_post.get("subject")
             record["target_publish_date"] = target_post.get("publish_date")
+        elif target_source_kind in {"weekly_thing", "podcast"}:
+            record.update(
+                resolve_link_target(resolved_url, weekly=weekly_lookup, podcast=podcast_lookup)
+            )
         records.append(record)
 
     for text, link_url in _markdown_html_links(body):
@@ -1183,6 +1543,7 @@ def build_blog_corpus(
     blog_dir: Path = BLOG_DIR,
     archive_dir: Path = ARCHIVE_DIR,
     include_xref: bool = True,
+    podcast_dir: Path = PODCAST_DIR,
 ) -> dict[str, Any]:
     """Build the blog corpus from ``data/blog/posts/**/*.md``. One chunk per
     ``chunk_section`` piece, ``source_kind: "blog"``, content-deterministic id
@@ -1192,6 +1553,8 @@ def build_blog_corpus(
     same way it can over Weekly Thing. Posts that also appear in a Weekly Thing
     Journal get an ``also_in_issues`` cross-reference."""
     xref = journal_blog_xref(archive_dir) if include_xref else {}
+    weekly_lookup = weekly_issue_lookup(archive_dir) if include_xref else {}
+    podcast_lookup = podcast_episode_lookup(podcast_dir)
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
     posts: list[dict[str, Any]] = []
@@ -1235,6 +1598,8 @@ def build_blog_corpus(
             "section": section,
             "also_in_issues": also_in_issues,
             "embed_text": embed_text,
+            "published": str(metadata.get("published") or "") or None,
+            "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
         }
         target_path = _blog_target_path(url)
         if target_path:
@@ -1265,6 +1630,8 @@ def build_blog_corpus(
             post_kind=post_kind,
             post_url=url,
             post_lookup=post_lookup,
+            weekly_lookup=weekly_lookup,
+            podcast_lookup=podcast_lookup,
         )
         post_domains = extract_domains(post_links)
         links.extend(post_links)
@@ -1279,6 +1646,10 @@ def build_blog_corpus(
             "domains": post_domains,
             "links": post_links,
         }
+        if post_input["published"]:
+            post_record["published"] = post_input["published"]
+        if post_input["categories"]:
+            post_record["categories"] = post_input["categories"]
         if also_in_issues:
             post_record["also_in_issues"] = also_in_issues
         posts.append(post_record)
@@ -1310,6 +1681,7 @@ def build_blog_corpus(
                 "url": url,
                 "section": section,
                 "text": chunk_text,
+                "spans": voice_spans(chunk_text),
                 "word_count": len(words(chunk_text)),
                 "content_kind": "blog",
                 "topics": [],

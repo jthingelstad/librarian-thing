@@ -17,6 +17,9 @@ on:
       # The vision-description sidecar rebuilds both corpora (change
       # detection below); without it here a sidecar-only commit ran nothing.
       - 'data/librarian/media-descriptions.json'
+      # Blog abstracts (display metadata on blog post records) rebuild the
+      # blog corpus, like the description sidecar.
+      - 'data/librarian/blog-abstracts.json'
       - 'pipeline/**'
       - 'librarian-core/**'
       - 'apps/librarian/**'
@@ -140,6 +143,7 @@ jobs:
           if has_change \
             '^data/blog/' \
             '^data/librarian/media-descriptions\.json$' \
+            '^data/librarian/blog-abstracts\.json$' \
             '^pipeline/blog/' \
             '^pipeline/deploy/upload_blog_corpus\.py$' \
             '^librarian-core/'; then
@@ -184,26 +188,42 @@ jobs:
       - name: Tool-surface eval (invariants + known answers)
         run: npm --prefix apps/librarian/lambda run build && node apps/librarian/lambda/scripts/eval-tools.mjs
 
+      # Audio pointers on issue records (librarian_core.audio): the audio
+      # edition's record lives only in the site's archive page frontmatter.
+      # A read of a sibling repo, not a push: the site repo is public, so no
+      # PAT, and only the archive pages are checked out. Never a blocker -
+      # without it the issues ship without audio.
+      - name: Check out weekly site archive pages (read-only)
+        if: steps.changes.outputs.weekly_corpus == 'true'
+        continue-on-error: true
+        uses: actions/checkout@v7
+        with:
+          repository: jthingelstad/weekly.thingelstad.com
+          persist-credentials: false
+          path: .weekly-site
+          sparse-checkout: apps/site/archive
+
       - name: Build Weekly Thing corpus
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build.py
+        env:
+          WEEKLY_SITE_ARCHIVE_DIR: .weekly-site/apps/site/archive
 
       - name: Build podcast corpus
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build_podcast.py
 
-      # data/librarian/graph.json powers the website's topic pages.
-      - name: Build graph for site topics
-        if: steps.changes.outputs.weekly_corpus == 'true' || inputs.push_graph == true
-        run: uv run --locked python pipeline/graph/build.py
-
       # Embed every corpus the Librarian API can load. Each upload reuses
       # cached embeddings from the previous S3 artifact when chunk ids match.
+      # The WT upload also builds the graph from the embedded corpus (real
+      # similar_issues) and uploads it beside the corpus; the site handoff
+      # below pushes that graph.
       - name: Upload embedded Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_corpus.py
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
+          WEEKLY_SITE_ARCHIVE_DIR: .weekly-site/apps/site/archive
 
       - name: Upload embedded blog corpus to S3
         if: steps.changes.outputs.blog_corpus == 'true'
@@ -230,14 +250,18 @@ jobs:
 
       # The one cross-repo push: the topic graph, to the render surface.
       # Everything else the old site handoff shipped is WT Builder's to send.
+      # --from-s3 pushes the graph the WT upload built from the embedded
+      # corpus (the one the Librarian serves), so the site gets real
+      # similar_issues; a graph built here, before embedding, had none.
       - name: Hand off graph.json to the website repo
         if: steps.changes.outputs.weekly_corpus == 'true' || inputs.push_graph == true
         run: |
           if [[ "${{ github.event_name }}" == "push" || "${{ inputs.push_graph }}" == "true" ]]; then
-            uv run --locked python pipeline/deploy/push_graph.py --push
+            uv run --locked python pipeline/deploy/push_graph.py --from-s3 --push
           else
-            uv run --locked python pipeline/deploy/push_graph.py
+            uv run --locked python pipeline/deploy/push_graph.py --from-s3
           fi
         env:
           GITHUB_PAT_TOKEN: ${{ secrets.STUDIO_PAT_TOKEN }}
           GITHUB_REPO_NWO: jthingelstad/weekly.thingelstad.com
+          LIBRARIAN_BUCKET: weekly-thing-librarian

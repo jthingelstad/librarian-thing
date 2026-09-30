@@ -17,6 +17,7 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
 from dotenv import load_dotenv
+from librarian_core.audio import annotate_issue_audio
 from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
@@ -32,15 +33,23 @@ from librarian_core.paths import ARCHIVE_DIR, MEDIA_DESCRIPTIONS_PATH
 def build_wt_corpus(
     archive_dir: Path | None = None,
     sidecar_path: Path | None = None,
+    site_archive_dir: Path | None = None,
     **build_kwargs,
 ) -> dict:
     """The Weekly Thing corpus as production ships it: issue bodies included
     and the vision descriptions (pipeline/corpus/describe_media.py) merged
     into its media entries, exactly as the blog upload and the local build
-    do. Before this, CI shipped WT photos without `description`."""
+    do. Before this, CI shipped WT photos without `description`.
+
+    Issue records also get their audio pointers from the weekly site's
+    archive pages (librarian_core.audio); `site_archive_dir` defaults to the
+    sibling checkout or WEEKLY_SITE_ARCHIVE_DIR, and a missing one merges
+    nothing."""
     corpus = build_corpus(archive_dir or ARCHIVE_DIR, include_issue_bodies=True, **build_kwargs)
     annotated = annotate_media_descriptions(corpus, sidecar_path or MEDIA_DESCRIPTIONS_PATH)
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
+    with_audio = annotate_issue_audio(corpus, site_archive_dir)
+    print(f"audio pointers merged: {with_audio}/{len(corpus.get('issues', []))}")
     return corpus
 
 

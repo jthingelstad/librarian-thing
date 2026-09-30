@@ -49,6 +49,12 @@ alarm and incident follow-ups are explicit starts.
    which rebuilds both the WT and blog corpora with the new descriptions. A URL that
    fails is recorded with an `error` and never retried; delete its entry to
    retry. This is not a CI step because it would need a new GitHub secret.
+
+   In the same pass, `uv run --locked python pipeline/blog/abstracts.py` (try
+   `--dry-run` first) writes abstracts for new or edited titled blog posts
+   into `data/librarian/blog-abstracts.json`; a normal week is a handful and
+   costs cents, so a count in the hundreds means stop and find out why.
+   Commit that sidecar too; it rebuilds the blog corpus the same way.
 9. Commit and push the verified change, then wait for the automatic GitHub OIDC
    deployment and inspect its result. For a manual retry of committed `main`,
    `make librarian-deploy ARGS="--skip-corpus-upload"` launches the same workflow

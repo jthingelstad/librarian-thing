@@ -28,6 +28,10 @@ GRAPH_PATH = REPO / "data" / "librarian" / "graph.json"
 # Weekly-Thing retrieval. See build_blog_corpus in corpus.py.
 BLOG_DIR = REPO / "data" / "blog" / "posts"
 BLOG_CORPUS_PATH = REPO / "data" / "librarian" / "blog_corpus.json"
+# Generated abstracts for titled blog posts, keyed by microblog_id - written
+# by pipeline/blog/abstracts.py, merged onto post records only (display
+# metadata, never chunk text or embedding input; see librarian_core/abstracts.py).
+BLOG_ABSTRACTS_PATH = REPO / "data" / "librarian" / "blog-abstracts.json"
 
 # Another Thing podcast episodes are authored/published by the sibling
 # another.thingelstad.com repo, then normalized into Studio-owned data so

@@ -38,6 +38,84 @@ BRIEFLY_SECTIONS = {
     "Yet More Links 🍞",
 }
 
+# The family each era's H2 belongs to, so one filter finds a part of the issue
+# across nine years of renames. Keys are normalised (emoji and punctuation
+# dropped, lower-cased): "Microposts 🎈", "Status Updates", "Stream" and
+# "Journal" are all Journal. The lead link section of each era is Featured
+# ("Featured Links 🏅", then "Must Read", then "Featured"); the second is
+# Notable. An H2 not listed here is its own family.
+SECTION_FAMILIES = {
+    "featured": "Featured",
+    "featured links": "Featured",
+    "must read": "Featured",
+    "must watch": "Featured",
+    "notable": "Notable",
+    "notable links": "Notable",
+    "links": "Notable",
+    "recommended links": "Notable",
+    "recommended": "Notable",
+    "briefly": "Briefly",
+    "yet more links": "Briefly",
+    "breadcrumbs": "Briefly",
+    "fyi": "FYI",
+    "journal": "Journal",
+    "stream": "Journal",
+    "status updates": "Journal",
+    "status": "Journal",
+    "microposts": "Journal",
+    "microblog updates": "Journal",
+    "blog posts": "Journal",
+    "my blog posts": "Journal",
+    "blog": "Journal",
+    "currently": "Currently",
+    "now reading": "Currently",
+    "reading": "Currently",
+    "photo": "Photo",
+    "photog": "Photo",
+    "photograph": "Photo",
+    "photograph not mine": "Photo",
+    "my weekly photo": "Photo",
+    "fortune": "Fortune",
+    "reply all": "Reply All",
+    "replies": "Reply All",
+    "straw poll": "Straw Poll",
+    "give back": "Give Back",
+    "promotion": "Give Back",
+    "want to support the weekly thing": "Support",
+    "supporting membership": "Support",
+    "highlighted ios app": "App",
+    "featured app": "App",
+    "app": "App",
+}
+# Issues 39-49 (2018) filed their links under topic H2s instead of one link
+# section. Each is Notable. "Photography" is left out: in 145 and 166 it is
+# Jamie's photo, not links.
+SECTION_FAMILIES.update(
+    dict.fromkeys(
+        (
+            "apps business coffee culture ethics font food funny games health indieweb"
+            " interview kubb management media meditation music people privacy product"
+            " productivity programming research science security software sports tech"
+            " transportation visualization web"
+        ).split()
+        + ["social media", "self improvement"],
+        "Notable",
+    )
+)
+
+
+def _family_key(name: str) -> str:
+    return " ".join(re.sub(r"[^\w\s]", " ", name.lower()).split())
+
+
+def section_family(name: str | None) -> str | None:
+    """The family of an H2 heading, or None for a heading no era used as a
+    section (the H2 is then its own family)."""
+    key = _family_key(name or "")
+    if key.startswith("yearly thing"):
+        return "Yearly Thing"
+    return SECTION_FAMILIES.get(key)
+
 
 def _parse_sections(markdown_body: str) -> list[tuple[str | None, str]]:
     """Split markdown into (section_name, section_text) pairs by H2 heading.

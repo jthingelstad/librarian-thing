@@ -14,6 +14,7 @@ import argparse
 import json
 from pathlib import Path
 
+from librarian_core.audio import annotate_issue_audio
 from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
@@ -56,6 +57,8 @@ def main() -> int:
     corpus = build_corpus(include_issue_bodies=args.include_issue_bodies)
     annotated = annotate_media_descriptions(corpus, MEDIA_DESCRIPTIONS_PATH)
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
+    with_audio = annotate_issue_audio(corpus)
+    print(f"audio pointers merged: {with_audio}/{len(corpus.get('issues', []))}")
     if args.embed:
         add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
     output = Path(args.output)

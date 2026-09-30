@@ -19,6 +19,7 @@ import tempfile
 from pathlib import Path
 
 from dotenv import load_dotenv
+from librarian_core.abstracts import annotate_blog_abstracts
 from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
@@ -26,7 +27,7 @@ from librarian_core.corpus import (
     annotate_media_descriptions,
     build_blog_corpus,
 )
-from librarian_core.paths import MEDIA_DESCRIPTIONS_PATH
+from librarian_core.paths import BLOG_ABSTRACTS_PATH, MEDIA_DESCRIPTIONS_PATH
 
 # Reuse the WT uploader's incremental-cache helpers verbatim — they are
 # corpus-shape agnostic (they key on chunk["id"]/chunk["embedding"]).
@@ -69,8 +70,12 @@ def main() -> int:
 
     corpus = build_blog_corpus()
     annotated = annotate_media_descriptions(corpus, MEDIA_DESCRIPTIONS_PATH)
+    # Post-record display metadata only; chunks and embed inputs are untouched.
+    abstracts = annotate_blog_abstracts(corpus, BLOG_ABSTRACTS_PATH)
+    titled = sum(1 for post in corpus["posts"] if post.get("post_kind") != "micropost")
     print(f"Built blog corpus: {corpus['post_count']} posts -> {corpus['chunk_count']} chunks")
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
+    print(f"blog abstracts merged: {abstracts}/{titled} titled posts")
 
     if not args.full:
         existing = fetch_existing_corpus(args.bucket, args.key)
