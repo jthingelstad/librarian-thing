@@ -49,7 +49,7 @@ import {
 import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/citations.mjs';
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
-import { compactSource, retrieve } from '../shared/retrieval.mjs';
+import { compactSource, retrievalFilterError, retrieve } from '../shared/retrieval.mjs';
 import { loadSharedConversationSnapshot, sharedSnapshotHistory } from '../shared/share-store.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../shared/feedback.mjs';
 import {
@@ -1625,6 +1625,15 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       logEvent('warning', 'retrieve_rejected', { ...summary, status_code: 400, reason: 'empty_query' });
       return;
     }
+    const filters = objectValue(body.filters);
+    const filterError = retrievalFilterError(filters);
+    if (filterError) {
+      const s400 = jsonResponseStream(responseStream, 400);
+      s400.write(JSON.stringify({ error: filterError }));
+      s400.end();
+      logEvent('warning', 'retrieve_rejected', { ...summary, status_code: 400, reason: 'bad_filter' });
+      return;
+    }
     if (!(await checkRateLimit('service#retrieve', Number(process.env.RETRIEVE_RATE_LIMIT_MAX || 600)))) {
       const s429 = jsonResponseStream(responseStream, 429);
       s429.write(JSON.stringify({ error: 'Retrieval rate limit exceeded. Try again shortly.' }));
@@ -1634,7 +1643,6 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     }
     const requestedK = Number(body.k || 12);
     const limit = Math.max(1, Math.min(Number.isFinite(requestedK) ? requestedK : 12, 40));
-    const filters = objectValue(body.filters);
     // Optional scope, default weekly_thing, so a caller that sends none keeps
     // WT-only passages. WT Builder's Echoes sends 'all' (4.11).
     filters.scope = normalizeScope(body.scope ?? filters.scope);

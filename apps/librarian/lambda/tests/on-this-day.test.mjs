@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ARCHIVE_TOOLS, chicagoToday, onThisDayYear } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, chicagoToday } from '../dist/shared/archive-tools.mjs';
+import { onThisDayYear } from '../dist/shared/retrieval.mjs';
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 function fixtures() {

@@ -76,6 +76,31 @@ export interface RetrievalFilters {
   excludeIssues?: unknown;
   before?: unknown;
   issueNumber?: unknown;
+  // Contract 4.12 (additive): a section family ("Journal" across every
+  // era's rename and WT351's day headings), a content kind (links,
+  // personal, essay, meta...), whose words (voice), and a calendar window
+  // (this week in every past year).
+  sectionFamily?: unknown;
+  contentKind?: unknown;
+  voice?: unknown;
+  calendar?: unknown;
+}
+
+// Whose words a stretch of chunk text is. Corpus chunks carry
+// spans [{voice, start, end}] partitioning their text: blockquotes are
+// quoted, headline link titles are link, the rest is Jamie. A chunk from a
+// corpus built before spans existed is all Jamie.
+export const VOICES = ['jamie', 'quoted', 'link'] as const;
+// A voice-filtered chunk with less than this much of the voice left is a
+// quote with a line of framing, not a passage in that voice.
+const VOICE_MIN_CHARS = 40;
+const CALENDAR_MAX_WINDOW_DAYS = 7;
+const DAY_MS = 86_400_000;
+
+interface ChunkSpan {
+  voice?: string;
+  start?: number;
+  end?: number;
 }
 
 let corpusCache: Corpus | undefined;
@@ -363,6 +388,10 @@ export function compactSource(source: CorpusChunk, textLimit = 2000) {
     // Present only on blog chunks that a WT issue Journal linked back to -
     // lets the agent cross-reference ("Jamie also featured this in WT###").
     also_in_issues: source.also_in_issues,
+    section_family: text(source.section_family),
+    content_kind: text(source.content_kind),
+    // Present only when a voice filter rewrote the text to those spans.
+    voice: Array.isArray(source.voice) ? source.voice : undefined,
     text: String(source.text || '').slice(0, textLimit)
   };
 }
@@ -529,9 +558,102 @@ function stringList(value: unknown): string[] {
   return (Array.isArray(value) ? value : [value]).map((item) => String(item).trim()).filter(Boolean);
 }
 
+function lowerList(value: unknown) {
+  return stringList(value).map((item) => item.toLowerCase());
+}
+
+export function voiceList(value: unknown) {
+  return lowerList(value);
+}
+
+// The chunk's text in the wanted voices only, in reading order. No spans
+// means the whole chunk is Jamie's.
+export function voicedText(chunk: CorpusChunk, voices: string[]) {
+  const text = String(chunk.text || '');
+  if (!voices.length) return text;
+  const spans = Array.isArray(chunk.spans) ? (chunk.spans as ChunkSpan[]) : null;
+  if (!spans) return voices.includes('jamie') ? text : '';
+  return spans
+    .filter((span) => voices.includes(String(span.voice || '')))
+    .map((span) => text.slice(Number(span.start) || 0, Number(span.end) || 0).trim())
+    .filter(Boolean)
+    .join('\n\n');
+}
+
+function isLeapYear(year: number) {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+// The anchor day in a given year, clamped to the month's last day (02-29
+// is Feb 28 in a year without one, never March 1).
+function anchorIn(year: number, month: number, day: number) {
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return Date.UTC(year, month - 1, Math.min(day, lastDay));
+}
+
+// The past year whose anchor this date falls within `window` days of, or
+// null. A Feb 29 source counts as Feb 28 when the target year has no Feb 29.
+export function onThisDayYear(published: string, month: number, day: number, window: number, targetYear: number) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(published);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const leapDay = match[2] === '02' && match[3] === '29' && !isLeapYear(targetYear);
+  const time = Date.UTC(year, Number(match[2]) - 1, leapDay ? 28 : Number(match[3]));
+  for (const candidate of [year, year - 1, year + 1]) {
+    if (Math.abs(time - anchorIn(candidate, month, day)) <= window * DAY_MS) return candidate;
+  }
+  return null;
+}
+
+interface CalendarWindow {
+  month: number;
+  day: number;
+  window: number;
+  targetYear: number;
+}
+
+// filters.calendar {date: YYYY-MM-DD, window_days}: sources published within
+// window_days of that month-day in an EARLIER year - this week in past years.
+// Returns a string for a malformed value so /retrieve can 400 it.
+export function parseCalendar(value: unknown): CalendarWindow | string | null {
+  if (value == null || value === '') return null;
+  if (typeof value !== 'object' || Array.isArray(value)) return 'calendar must be {date, window_days}.';
+  const record = value as Record<string, unknown>;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(record.date || '').trim());
+  if (!match) return 'calendar.date must be YYYY-MM-DD.';
+  const [targetYear, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  if (month < 1 || month > 12 || day < 1 || day > new Date(Date.UTC(targetYear, month, 0)).getUTCDate()) {
+    return 'calendar.date is not a calendar day.';
+  }
+  const requested = record.window_days == null ? 0 : Number(record.window_days);
+  if (!Number.isFinite(requested) || requested < 0) return 'calendar.window_days must be a number from 0 to 7.';
+  return { month, day, window: Math.min(Math.floor(requested), CALENDAR_MAX_WINDOW_DAYS), targetYear };
+}
+
+// The 4.12 filters a caller can get wrong in a way that would otherwise
+// quietly widen the result: an unknown voice or a malformed calendar.
+export function retrievalFilterError(filters: RetrievalFilters = {}) {
+  const unknownVoice = voiceList(filters.voice).find((voice) => !(VOICES as readonly string[]).includes(voice));
+  if (unknownVoice) return `voice must be one of ${VOICES.join(', ')}.`;
+  const calendar = parseCalendar(filters.calendar);
+  return typeof calendar === 'string' ? calendar : null;
+}
+
 export function matchesFilters(
   source: CorpusChunk,
-  { yearRange, section, sourceKinds, excludeSourceKinds, excludeIssues, before, issueNumber }: RetrievalFilters = {}
+  {
+    yearRange,
+    section,
+    sourceKinds,
+    excludeSourceKinds,
+    excludeIssues,
+    before,
+    issueNumber,
+    sectionFamily,
+    contentKind,
+    voice,
+    calendar
+  }: RetrievalFilters = {}
 ) {
   const include = stringList(sourceKinds);
   const exclude = stringList(excludeSourceKinds);
@@ -552,13 +674,31 @@ export function matchesFilters(
   const year = Number(source.issue_year || 0);
   if (startYear && (!year || year < startYear)) return false;
   if (endYear && (!year || year > endYear)) return false;
-  if (
-    section &&
-    !String(source.section || '')
-      .toLowerCase()
-      .includes(String(section).toLowerCase())
-  )
-    return false;
+  const family = String(source.section_family || '').toLowerCase();
+  if (section) {
+    // The heading (substring, as always) or the family exactly, so
+    // section "Journal" also finds WT351's day-headed Journal.
+    const wanted = String(section).toLowerCase();
+    if (
+      !String(source.section || '')
+        .toLowerCase()
+        .includes(wanted) &&
+      family !== wanted
+    )
+      return false;
+  }
+  const families = lowerList(sectionFamily);
+  if (families.length && !families.includes(family)) return false;
+  const kinds = lowerList(contentKind);
+  if (kinds.length && !kinds.includes(String(source.content_kind || '').toLowerCase())) return false;
+  const window = parseCalendar(calendar);
+  if (window && typeof window === 'object') {
+    const published = String(source.publish_date || '').slice(0, 10);
+    const year = onThisDayYear(published, window.month, window.day, window.window, window.targetYear);
+    if (year === null || year >= window.targetYear) return false;
+  }
+  const voices = voiceList(voice);
+  if (voices.length && voicedText(source, voices).length < VOICE_MIN_CHARS) return false;
   return true;
 }
 
@@ -648,7 +788,12 @@ export async function retrieve(
     );
   }
 
-  const fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
+  const voices = voiceList(filters.voice);
+  let fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
+  // A voice filter rewrites each passage to that voice's spans BEFORE the
+  // rerank, so a chunk that matched on a quotation ranks on Jamie's framing
+  // alone, and the caller never receives the quoted words as Jamie's.
+  if (voices.length) fused = fused.map((chunk) => ({ ...chunk, text: voicedText(chunk, voices), voice: voices }));
   // rerank: false skips the cross-region rerank call - RRF order is good
   // enough for grounding pools (welcome chips) where latency matters more
   // than final ordering precision. Answer-path retrieval always reranks.

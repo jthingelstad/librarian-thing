@@ -40,7 +40,14 @@
 // excludeSourceKinds, excludeIssues, before and issueNumber, and a caller
 // name for the log. Thingy-bylined blocks are no longer in the corpus
 // (additive; relative WT urls became absolute, which both builders accept).
-export const LIBRARIAN_CONTRACT_VERSION = '4.11.0';
+// 4.12.0: /retrieve filters take sectionFamily (Journal across every era's
+// rename), contentKind, voice (jamie / quoted / link: the passage text is
+// cut to that voice's spans before the rerank, and a passage with too
+// little of it is dropped) and calendar {date, window_days} (this week in
+// every earlier year). An unknown voice or malformed calendar is a 400.
+// Passages carry section_family, content_kind, and voice when filtered.
+// The section filter also matches the family (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.12.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -185,6 +192,9 @@ const retrievePassage = object(
     show: string,
     topics: unknownArray,
     also_in_issues: unknownArray,
+    section_family: string,
+    content_kind: string,
+    voice: unknownArray,
     text: string
   },
   ['source_kind', 'label', 'text']
@@ -356,7 +366,11 @@ export const LIBRARIAN_CONTRACT = {
             excludeSourceKinds: unknownArray,
             excludeIssues: unknownArray,
             before: string,
-            issueNumber: { anyOf: [string, number] }
+            issueNumber: { anyOf: [string, number] },
+            sectionFamily: { anyOf: [string, unknownArray] },
+            contentKind: { anyOf: [string, unknownArray] },
+            voice: { anyOf: [string, unknownArray] },
+            calendar: object({ date: string, window_days: number }, ['date'])
           }),
           caller: string,
           retrieve_secret: string,

@@ -55,7 +55,11 @@ export function promptFingerprint(): string {
 // 1.2.0: view_photo joined the surface.
 // 1.3.0: on_this_day; errors carry isError + code; arguments validated
 //        before quota; results fit the cap as valid JSON; lens ids resolve.
-export const MCP_SERVER_VERSION = '1.3.0';
+// 1.4.0: section families (section "Journal" finds every era's Journal),
+//        search_archive voice / section_family / content_kind / source_kind,
+//        find_links url and link_role over commentary and Journal links;
+//        link rankings and counts are headline picks.
+export const MCP_SERVER_VERSION = '1.4.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

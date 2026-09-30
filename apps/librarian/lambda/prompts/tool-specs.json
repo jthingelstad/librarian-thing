@@ -28,7 +28,7 @@
   {
     "toolSpec": {
       "name": "search_archive",
-      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, or section based on what comes back. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, section, section_family, content_kind or voice based on what comes back. year_range is [start_year, end_year]. voice=jamie keeps only Jamie's own words (quotations and link titles are cut from each passage). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -46,7 +46,44 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "section": {
-              "type": "string"
+              "type": "string",
+              "description": "A Weekly Thing section heading (substring) or section family, e.g. \"Journal\"."
+            },
+            "section_family": {
+              "type": "string",
+              "description": "A Weekly Thing section family, matched exactly across every era's renames: Featured, Notable, Briefly, FYI, Journal, Currently, Photo, Fortune, Reply All, Straw Poll, Give Back, App, Yearly Thing."
+            },
+            "content_kind": {
+              "type": "string",
+              "enum": [
+                "links",
+                "personal",
+                "essay",
+                "meta",
+                "reference",
+                "blog",
+                "podcast_transcript",
+                "podcast_notes"
+              ],
+              "description": "What kind of writing: links (link sections), personal (Journal, Currently, Photo), essay, meta (Fortune, Reply All, polls), reference, blog, podcast_transcript, podcast_notes."
+            },
+            "voice": {
+              "type": "string",
+              "enum": [
+                "jamie",
+                "quoted",
+                "link"
+              ],
+              "description": "Whose words: jamie (his own), quoted (blockquotes of others), link (headline link titles). Each passage is cut to that voice's spans."
+            },
+            "source_kind": {
+              "type": "string",
+              "enum": [
+                "weekly_thing",
+                "blog",
+                "podcast"
+              ],
+              "description": "One source within the active scope."
             },
             "limit": {
               "type": "integer",
@@ -199,13 +236,17 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with domain for domain history; call without filters for top external domains. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with url to ask \"have I linked this before\" (matched however the link was spelled: scheme, www, trailing slash and tracking parameters ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history; call without filters for top external domains, ranked by headline picks. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "domain": {
               "type": "string"
+            },
+            "url": {
+              "type": "string",
+              "description": "One page, however an issue spelled its URL. Returns every time it was linked."
             },
             "topic": {
               "type": "string"
@@ -217,6 +258,15 @@
                 "blog",
                 "podcast"
               ]
+            },
+            "link_role": {
+              "type": "string",
+              "enum": [
+                "headline",
+                "commentary",
+                "journal"
+              ],
+              "description": "Weekly Thing links only: headline, commentary or journal."
             },
             "link_kind": {
               "type": "string"
