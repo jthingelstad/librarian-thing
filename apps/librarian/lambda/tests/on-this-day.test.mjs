@@ -173,6 +173,16 @@ test('on_this_day honours window, microposts, source_kind, year_range and limit_
   primeCorpusCachesForTests(fixtures());
   const windowed = await ARCHIVE_TOOLS.on_this_day({ date: '09-29', window_days: 2 }, { scope: 'all' });
   assert.ok(windowed.years.some((row) => row.items.some((item) => item.id === 'wt-250')));
+  assert.equal(windowed.applied.limit_per_year, 2, 'a windowed call defaults to 2 a year');
+  const windowedFive = await ARCHIVE_TOOLS.on_this_day(
+    { date: '09-29', window_days: 2, limit_per_year: 5 },
+    { scope: 'all' }
+  );
+  assert.equal(windowedFive.applied.limit_per_year, 5, 'an explicit limit_per_year still wins');
+  for (const item of windowed.years.flatMap((row) => row.items)) {
+    assert.notEqual(item.title, item.label, 'a title that repeats the label is not sent');
+    if (item.photo) assert.ok(!Object.values(item.photo).includes(null), 'no null photo fields');
+  }
 
   const noMicro = await ARCHIVE_TOOLS.on_this_day(
     { date: '2026-09-29', include_microposts: false, source_kind: 'blog' },

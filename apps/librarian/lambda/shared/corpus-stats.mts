@@ -44,6 +44,8 @@ interface YearlyContentOptions {
   // what is distinctive against ALL years (a one-year request otherwise
   // had nothing to compare against and ranked raw counts).
   baselineChunks?: CorpusRecord[];
+  // Terms per year (subject and text); defaults to listLimit.
+  termLimit?: number;
 }
 
 interface TermBaseline {
@@ -248,8 +250,23 @@ const EXTRA_STOPWORDS = new Set([
   'html',
   'href',
   'amp',
-  'utm'
+  'utm',
+  // Words that ranked as a year's "signal" without saying anything about
+  // it: the blog's own section name ("micropost" 304 in 2026) and the
+  // plainest subject words ("day" 42, "great" 24, "time", "first").
+  'micropost',
+  'microposts',
+  'day',
+  'great',
+  'time',
+  'first',
+  'good',
+  'really',
+  'today'
 ]);
+
+// Issue references ("wt350") are citations, not topics.
+const ISSUE_REF = /^wt\d+$/;
 
 function terms(value: unknown, { maxChars = 0 }: { maxChars?: number } = {}): string[] {
   const text = String(value || '').replace(/https?:\/\/\S+/g, ' ');
@@ -258,7 +275,9 @@ function terms(value: unknown, { maxChars = 0 }: { maxChars?: number } = {}): st
     input
       .toLowerCase()
       .match(/[a-z][a-z0-9'-]{2,}/g)
-      ?.filter((term) => !STOPWORDS.has(term) && !EXTRA_STOPWORDS.has(term) && !/^\d+$/.test(term)) || []
+      ?.filter(
+        (term) => !STOPWORDS.has(term) && !EXTRA_STOPWORDS.has(term) && !/^\d+$/.test(term) && !ISSUE_REF.test(term)
+      ) || []
   );
 }
 
@@ -292,6 +311,7 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
   // One limit governs every nested list so the caller's `limit` actually
   // controls what the truncation note claims it controls.
   const listLimit = Math.max(Number(options.listLimit || 0), 0);
+  const termLimit = Math.max(Number(options.termLimit || 0), 0);
   const chunks = Array.isArray(options.chunks) ? options.chunks : [];
   const buckets = new Map<number, YearBucket>();
   for (const record of records || []) {
@@ -360,8 +380,8 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
       year: bucket.year,
       count: bucket.count,
       chunk_count: bucket.chunk_count,
-      top_subject_terms: topCounts(bucket.subjectTerms, 'term', listLimit || 10),
-      top_text_terms: distinctiveTerms(bucket, listLimit || 12),
+      top_subject_terms: topCounts(bucket.subjectTerms, 'term', termLimit || listLimit || 10),
+      top_text_terms: distinctiveTerms(bucket, termLimit || listLimit || 12),
       top_domains: topCounts(bucket.domains, 'domain', listLimit || 8),
       counts_by_section: topCounts(bucket.sections, 'section', listLimit || 8),
       sample_items: bucket.samples

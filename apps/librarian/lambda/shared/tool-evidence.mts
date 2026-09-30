@@ -225,7 +225,7 @@ export function summarizeToolEvidence(result: unknown): JsonRecord {
   // - the result itself is source-shaped (get_section);
   // - a top-level envelope key holds one source-shaped object (get_issue's
   //   `issue`, get_source's `source`) - that object is the primary evidence
-  //   and its inner arrays (links, section_texts) are NOT harvested as refs,
+  //   and its inner arrays (links) are NOT harvested as refs,
   //   because they are not what Thingy read;
   // - known lens maps and aggregate yearly samples;
   // - otherwise harvest source-like records from nested arrays.

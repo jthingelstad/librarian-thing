@@ -115,6 +115,7 @@ interface ToolArgs {
   source_kind?: unknown;
   source?: unknown;
   domain?: unknown;
+  sort?: unknown;
   topic?: unknown;
   entity?: unknown;
   phrase?: unknown;
@@ -328,6 +329,14 @@ export function normalizedDomain(value: unknown) {
     .replace(/^https?:\/\//, '')
     .split('/')[0]
     .replace(/^www\./, '');
+}
+
+// A domain filter matches the domain itself or a subdomain of it:
+// netflix.com finds media.netflix.com. A substring test made x.com return
+// 154 links, none of them x.com (netflix.com, vox.com, dropbox.com).
+export function domainMatches(value: unknown, wanted: string) {
+  const domain = normalizedDomain(value);
+  return Boolean(wanted) && (domain === wanted || domain.endsWith(`.${wanted}`));
 }
 
 // One URL, however an issue spelled it: no scheme, www, trailing slash,
@@ -595,6 +604,23 @@ async function toolGetSection(input: ToolArgs = {}) {
   };
 }
 
+// The body gets the room the rest of the record leaves under the result
+// cap, up to 30K: wt-274's 80 links (24K) plus a flat 30K body overflowed
+// and was cut structurally. GET_SOURCE_RESULT_CHARS is MCP_RESULT_MAX_CHARS
+// (48,000, shared/mcp.mts) less the applied echo, server_version and
+// body_note. 96 issues run longer than 30K and say so (body_truncated).
+export const GET_SOURCE_RESULT_CHARS = 46000;
+const GET_SOURCE_BODY_MAX_CHARS = 30000;
+const GET_SOURCE_BODY_MIN_CHARS = 4000;
+
+function fitBody(text: string, budget: number) {
+  let shown = text.slice(0, budget);
+  // JSON escapes (newlines, quotes) count against the budget too.
+  const over = JSON.stringify(shown).length - 2 - budget;
+  if (over > 0) shown = shown.slice(0, budget - over);
+  return shown;
+}
+
 async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const bundle = await findSourceBundle(input, context);
   if (!bundle) return { error: 'Source not found in the active source scope.' };
@@ -660,10 +686,10 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
       wanted || !issue?.body
         ? sections.map((section) => `## ${section.name}\n${section.text || ''}`).join('\n\n')
         : issue.body
-    ).slice(0, 22000);
+    );
   } else {
     sections = sectionsFromChunks(chunks, wantedSection);
-    body = sourceTextFromChunks(chunks, wantedSection).slice(0, 22000);
+    body = sourceTextFromChunks(chunks, wantedSection);
   }
   // word_count everywhere from the same tokenizer over the same included
   // text - the top-level count and per-section counts previously disagreed
@@ -680,41 +706,47 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const sectionDomains = wanted
     ? Array.from(new Set(sectionLinks.map((link) => normalizedDomain(link.domain || link.url)).filter(Boolean)))
     : undefined;
-  return {
-    source: {
-      ...compactContentRecord(record),
-      // The whole skim on the one source asked for.
-      abstract: record.abstract,
-      key_points: Array.isArray(record.key_points) ? record.key_points.slice(0, 12) : undefined,
-      audio_chapters: record.audio_chapters,
-      ...(wanted ? { section: wantedSection, domains: sectionDomains } : {}),
-      word_count: sectionSummaries.length
-        ? sectionSummaries.reduce((sum, section) => sum + section.word_count, 0)
-        : tokenize(body).length,
-      section_filter: wantedSection || null,
-      sections: sectionSummaries,
-      // Links inside a single source all share the parent's identity;
-      // repeating source_kind/issue_number/subject/publish_date/url on
-      // every entry was 6 redundant fields x 40 links. A section filter
-      // applies to links too.
-      // links are the headline picks; the links inside Jamie's commentary
-      // and Journal ride separately so a section's picks stay readable.
-      links: sectionLinks
-        .filter(isHeadlineLink)
-        .slice(0, 40)
-        .map((link) => compactChildLink(link, record)),
-      ...(sectionLinks.some((link) => !isHeadlineLink(link))
-        ? {
-            commentary_links: sectionLinks
-              .filter((link) => !isHeadlineLink(link))
-              .slice(0, 40)
-              .map((link) => compactChildLink(link, record))
-          }
-        : {}),
-      body,
-      section_texts: sections.map((section) => ({ ...section, word_count: tokenize(section.text || '').length }))
-    }
+  const source: Record<string, unknown> = {
+    ...compactContentRecord(record),
+    // The whole skim on the one source asked for.
+    abstract: record.abstract,
+    key_points: Array.isArray(record.key_points) ? record.key_points.slice(0, 12) : undefined,
+    audio_chapters: record.audio_chapters,
+    ...(wanted ? { section: wantedSection, domains: sectionDomains } : {}),
+    word_count: sectionSummaries.reduce((sum, section) => sum + section.word_count, 0),
+    section_filter: wantedSection || null,
+    sections: sectionSummaries,
+    // Links inside a single source all share the parent's identity;
+    // repeating source_kind/issue_number/subject/publish_date/url on
+    // every entry was 6 redundant fields x 40 links. A section filter
+    // applies to links too.
+    // links are the headline picks; the links inside Jamie's commentary
+    // and Journal ride separately so a section's picks stay readable.
+    links: sectionLinks
+      .filter(isHeadlineLink)
+      .slice(0, 40)
+      .map((link) => compactChildLink(link, record)),
+    ...(sectionLinks.some((link) => !isHeadlineLink(link))
+      ? {
+          commentary_links: sectionLinks
+            .filter((link) => !isHeadlineLink(link))
+            .slice(0, 40)
+            .map((link) => compactChildLink(link, record))
+        }
+      : {})
   };
+  // body is the one full text. section_texts repeated it section by
+  // section (wt-351: 13,880 + 13,772 chars of the same words); sections
+  // carries the names and word counts.
+  const room = GET_SOURCE_RESULT_CHARS - JSON.stringify(source).length;
+  const shown = fitBody(body, Math.max(Math.min(GET_SOURCE_BODY_MAX_CHARS, room), GET_SOURCE_BODY_MIN_CHARS));
+  if (!sectionSummaries.length) source.word_count = tokenize(shown).length;
+  source.body = shown;
+  if (body.length > shown.length) {
+    source.body_truncated = true;
+    source.body_note = `body shows ${shown.length} of ${body.length} characters; pass section (a name from sections) to read one whole`;
+  }
+  return { source };
 }
 
 // Where a find_links topic matched, field by field (the link's own text,
@@ -728,6 +760,14 @@ function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher) {
     if (hit) reasons.push(`${field}: '${hit.span}'`);
   }
   return reasons;
+}
+
+function findLinksSort(value: unknown): 'newest' | 'oldest' {
+  return String(value || '')
+    .toLowerCase()
+    .trim() === 'oldest'
+    ? 'oldest'
+    : 'newest';
 }
 
 async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -748,6 +788,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const urlKey = linkUrlKey(input.url);
   const [startYear, endYear] = parseYearRange(input.year_range);
   const limit = toolLimit('find_links', input);
+  const sort = findLinksSort(input.sort);
   // A topic matches in the link's own fields. The graph's entity_index is
   // issue-level: admitting every link of a listed issue gave "ethereum"
   // 770 links of which 1 in 50 mentioned it.
@@ -756,14 +797,13 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     aliases: aliasesFor(topic),
     caseSensitive: input.case_sensitive === true
   });
-  const results = [];
   const filteredLinks = [];
+  const matchReasonsByLink = new Map<ArchiveRecord, string[]>();
   for (const link of await linkRecords(scope)) {
-    const linkDomain = normalizedDomain(link.domain || link.url || '');
     const linkSourceKind = linkCorpusKind(link);
     const year = Number(link.issue_year || link.post_year || 0);
     if (sourceKind && linkSourceKind !== sourceKind) continue;
-    if (domain && !linkDomain.includes(domain)) continue;
+    if (domain && !domainMatches(link.domain || link.url || '', domain)) continue;
     if (linkKind && link.link_kind !== linkKind) continue;
     if (linkCategory && String(link.link_category || '').toLowerCase() !== linkCategory) continue;
     if (targetResolved !== null && Boolean(link.target_resolved) !== targetResolved) continue;
@@ -774,42 +814,51 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher) : [];
     if (topic && !matchReasons.length) continue;
     filteredLinks.push(link);
-    if (results.length < limit) {
-      const sourceUrl =
-        link.source_url || (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.url);
-      results.push({
-        issue_number: link.issue_number ?? null,
-        source_kind: link.source_kind,
-        corpus_kind: linkSourceKind,
-        subject: link.subject,
-        publish_date: link.publish_date,
-        section: link.section,
-        ...(link.section_family ? { section_family: link.section_family } : {}),
-        ...(linkRole(link) ? { link_role: linkRole(link) } : {}),
-        domain: link.domain,
-        link_text: link.text || link.title || link.heading_context,
-        context: link.context || link.heading_context,
-        url: sourceUrl,
-        link_url: link.link_url || link.url,
-        destination_url: link.link_url || link.url,
-        link_kind: link.link_kind,
-        link_category: link.link_category,
-        target_resolved: Boolean(link.target_resolved),
-        microblog_id: link.microblog_id,
-        target_blog_path: link.target_blog_path,
-        target_source_kind: link.target_source_kind,
-        target_microblog_id: link.target_microblog_id,
-        target_post_url: link.target_post_url,
-        target_subject: link.target_subject,
-        target_publish_date: link.target_publish_date,
-        target_issue_number: link.target_issue_number,
-        target_episode_number: link.target_episode_number,
-        episode_number: link.episode_number,
-        show: link.show,
-        ...(topic ? { match_reasons: matchReasons } : {})
-      });
-    }
+    if (topic) matchReasonsByLink.set(link, matchReasons);
   }
+  // Sort BEFORE the cut: corpus order is oldest first, so a limit of 20
+  // on simonwillison.net's 69 links showed 2017-2023 and never said the
+  // 49 newest (all of 2024-26) existed.
+  const ordered = [...filteredLinks].sort((a, b) =>
+    sort === 'oldest'
+      ? String(a.publish_date || '').localeCompare(String(b.publish_date || ''))
+      : String(b.publish_date || '').localeCompare(String(a.publish_date || ''))
+  );
+  const results = ordered.slice(0, limit).map((link) => {
+    const sourceUrl =
+      link.source_url || (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.url);
+    return {
+      issue_number: link.issue_number ?? null,
+      source_kind: link.source_kind,
+      corpus_kind: linkCorpusKind(link),
+      subject: link.subject,
+      publish_date: link.publish_date,
+      section: link.section,
+      ...(link.section_family ? { section_family: link.section_family } : {}),
+      ...(linkRole(link) ? { link_role: linkRole(link) } : {}),
+      domain: link.domain,
+      link_text: link.text || link.title || link.heading_context,
+      context: link.context || link.heading_context,
+      url: sourceUrl,
+      link_url: link.link_url || link.url,
+      destination_url: link.link_url || link.url,
+      link_kind: link.link_kind,
+      link_category: link.link_category,
+      target_resolved: Boolean(link.target_resolved),
+      microblog_id: link.microblog_id,
+      target_blog_path: link.target_blog_path,
+      target_source_kind: link.target_source_kind,
+      target_microblog_id: link.target_microblog_id,
+      target_post_url: link.target_post_url,
+      target_subject: link.target_subject,
+      target_publish_date: link.target_publish_date,
+      target_issue_number: link.target_issue_number,
+      target_episode_number: link.target_episode_number,
+      episode_number: link.episode_number,
+      show: link.show,
+      ...(topic ? { match_reasons: matchReasonsByLink.get(link) || [] } : {})
+    };
+  });
   const counts = new Map<string, number>();
   const countsBySource = new Map<string, number>();
   const countsByKind = new Map<string, number>();
@@ -835,10 +884,18 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 20)
     .map(([domainName, count]) => ({ domain: domainName, count }));
+  const omitted = filteredLinks.length - results.length;
   return {
+    applied: { sort },
     ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
     results,
     total_count: filteredLinks.length,
+    ...(omitted > 0
+      ? {
+          results_omitted: omitted,
+          results_note: `${filteredLinks.length} links matched; the ${results.length} ${sort} are shown. Raise limit (max 50), pass sort: '${sort === 'newest' ? 'oldest' : 'newest'}', or narrow with year_range.`
+        }
+      : {}),
     top_domains,
     counts_by_source: sortedCountList(countsBySource, 'source_kind'),
     counts_by_link_kind: sortedCountList(countsByKind, 'link_kind'),
@@ -870,8 +927,9 @@ function latestByDate<T extends ArchiveRecord>(items: T[]) {
 }
 
 // The skim layer: what a source is about, before anyone calls get_source.
-// A Weekly Thing issue's description is Jamie's dek and its abstract his
-// opening lines; key_points are its sections' lead sentences. A blog post's
+// A Weekly Thing issue's description is Jamie's dek (its opening lines are
+// a greeting, so they are not sent); key_points are its sections' lead
+// sentences. A blog post's
 // abstract is either its own text (microposts) or GENERATED (abstract_source
 // says which) - display metadata, never matched as Jamie's words, which is
 // why no matcher reads the abstract field. A podcast's is the episode summary.
@@ -880,9 +938,11 @@ function skimFields(kind: string, raw: ArchiveRecord): ArchiveRecord {
   if (kind === 'weekly_thing') {
     const summary = (raw.summary || {}) as ArchiveRecord;
     const audio = (raw.audio || null) as ArchiveRecord | null;
+    // No abstract: an issue's summary.abstract is its opening paragraph
+    // ("Good morning! ☕️ I hope your weekend…"), a greeting rather than a
+    // summary. The description is the dek; get_source's body has the rest.
     return {
       description: text(raw.description),
-      abstract: text(summary.abstract),
       key_points: Array.isArray(summary.key_points) ? summary.key_points.map(String) : undefined,
       audio_url: text(audio?.url),
       audio_duration_seconds: audio?.duration_seconds ?? undefined,
@@ -1321,7 +1381,9 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       yearly_signals: yearlyContentSignals(records, {
         chunks: rangeChunks,
         baselineChunks: (corpus.chunks || []) as ArchiveRecord[],
-        listLimit
+        listLimit,
+        // Five terms a year: yearly_signals was 21K of a 30K result.
+        termLimit: Math.min(listLimit, 5)
       }),
       top_domains: summarizeDomains(links, listLimit),
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
@@ -1391,17 +1453,15 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
   };
 }
 
+// Every chunk counts: 344 of 353 issues run past 12 chunks, and reading
+// only the first 12 found Mastodon in 7 of the 12 issues that mention it.
+// Topic labels match whole or not at all (TopicMatcher.namesLabel).
 function sourceMatchesTopic(record: ArchiveRecord, chunks: ArchiveRecord[], topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
   if (!compiled.raw) return true;
-  const haystack = [
-    record.subject,
-    record.section,
-    (record.topics || []).join(' '),
-    (record.domains || []).join(' '),
-    ...(chunks || []).slice(0, 12).map((chunk) => chunk.text || '')
-  ].join(' ');
-  return compiled.matches(haystack);
+  if (compiled.namesLabel(record.topics)) return true;
+  if (compiled.matches([record.subject, record.section, (record.domains || []).join(' ')].join(' '))) return true;
+  return (chunks || []).some((chunk) => compiled.matches([chunk.section, chunk.text].join(' ')));
 }
 
 function countList(values: unknown[], key: string) {
@@ -1423,8 +1483,9 @@ function listContentMatchReasons(
 ) {
   const reasons: string[] = [];
   if (!filters.topic.isEmpty) {
-    const hit = filters.topic.firstHit([record.subject, (record.topics || []).join(' ')].join(' '));
-    reasons.push(hit ? `topic: '${hit.span}'` : 'topic: matched in body text');
+    const hit = filters.topic.firstHit(String(record.subject || ''));
+    const label = filters.topic.namesLabel(record.topics);
+    reasons.push(hit ? `topic: '${hit.span}'` : label ? `topic label: '${label}'` : 'topic: matched in body text');
   }
   if (filters.domain) reasons.push(`domain: ${filters.domain}`);
   if (filters.linkKind) reasons.push(`link_kind: ${filters.linkKind}`);
@@ -1472,7 +1533,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       if (
         domain &&
         ![...(record.domains || []), ...links.map((link) => link.domain || link.url)].some((value) =>
-          normalizedDomain(value).includes(domain)
+          domainMatches(value, domain)
         )
       )
         continue;
@@ -1496,7 +1557,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
           ...(links.length > headlineLinks ? { other_link_count: links.length - headlineLinks } : {}),
           match_reasons: listContentMatchReasons(record, { topic: topicMatcher, domain, linkKind, linkCategory }),
           matching_sections: chunks
-            .filter((chunk) => !topic || sourceMatchesTopic(record, [chunk], topic, topicMatcher))
+            .filter((chunk) => !topic || topicMatcher.matches([chunk.section, chunk.text].join(' ')))
             .map((chunk) => chunk.section)
             .filter(Boolean)
             .slice(0, 6)
@@ -1627,8 +1688,13 @@ async function toolListIssues(input: ToolArgs = {}) {
       tropeCounts.set(key, (tropeCounts.get(key) || 0) + 1);
     }
     if (input.year && Number(issue.issue_year || 0) !== Number(input.year)) continue;
-    const haystack = [issue.subject, ...(issue.topics || [])].join(' ');
-    if (topic && !listIssuesMatcher.matches(haystack) && !issueMatches.has(issueKey(issue.number))) continue;
+    if (
+      topic &&
+      !listIssuesMatcher.matches(String(issue.subject || '')) &&
+      !listIssuesMatcher.namesLabel(issue.topics) &&
+      !issueMatches.has(issueKey(issue.number))
+    )
+      continue;
     if (results.length < limit) {
       results.push({
         number: issue.number,
@@ -1948,26 +2014,39 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       b.score - a.score || String(b.record.publish_date || '').localeCompare(String(a.record.publish_date || ''))
   );
   const similar = await similarIssues(bundle.record, toolLimit('source_neighborhood', input));
+  const outgoing = [...bundle.links]
+    .sort((a, b) => Number(!isHeadlineLink(a)) - Number(!isHeadlineLink(b)))
+    .slice(0, 30);
+  const incomingShown = incoming.slice(0, 30);
+  // Every outgoing and incoming entry already says link_category:
+  // 'cross_source'. The separate list repeated them verbatim (5 of 5 on
+  // wt-351); it now holds only the cross-source links the caps left out.
+  const shown = new Set([...outgoing, ...incomingShown]);
+  const crossSource = [...bundle.links, ...incoming].filter((link) => link.link_category === 'cross_source');
+  const crossUnshown = crossSource.filter((link) => !shown.has(link));
   return {
     source: compactContentRecord(bundle.record),
     // More like this, by embedding: the graph's nearest issues. Shared
     // domains (related_sources) say what an issue LINKED; this says what it
     // was ABOUT.
     ...(similar.length ? { similar_issues: similar } : {}),
-    outgoing_links: [...bundle.links]
-      .sort((a, b) => Number(!isHeadlineLink(a)) - Number(!isHeadlineLink(b)))
-      .slice(0, 30)
-      .map(compactLink),
-    incoming_links: incoming.slice(0, 30).map(compactLink),
-    cross_source_links: [...bundle.links, ...incoming]
-      .filter((link) => link.link_category === 'cross_source')
-      .slice(0, 30)
-      .map(compactLink),
-    related_sources: related.slice(0, toolLimit('source_neighborhood', input)).map((item) => ({
-      ...compactContentRecord(item.record),
-      score: item.score,
-      link_count: item.link_count
-    }))
+    outgoing_links: outgoing.map(compactLink),
+    incoming_links: incomingShown.map(compactLink),
+    ...(crossSource.length ? { cross_source_count: crossSource.length } : {}),
+    ...(crossUnshown.length ? { cross_source_links: crossUnshown.slice(0, 30).map(compactLink) } : {}),
+    // Five domains say what a related source linked; the full list ran
+    // to 700 chars an entry (archive_gems caps the same way).
+    related_sources: related.slice(0, toolLimit('source_neighborhood', input)).map((item) => {
+      const record = compactContentRecord(item.record);
+      const domains = (record.domains || []) as unknown[];
+      return {
+        ...record,
+        domains: domains.slice(0, 5),
+        ...(domains.length > 5 ? { domain_count: domains.length } : {}),
+        score: item.score,
+        link_count: item.link_count
+      };
+    })
   };
 }
 
@@ -2399,6 +2478,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
 // 29 folds into February 28 in years without one.
 
 const ON_THIS_DAY_TIMEZONE = 'America/Chicago';
+const ON_THIS_DAY_WINDOWED_PER_YEAR = 2;
 const KIND_ORDER: Record<string, number> = { weekly_thing: 0, blog: 1, podcast: 2 };
 
 export function chicagoToday(now = new Date()) {
@@ -2436,7 +2516,11 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     return { error: 'date is not a calendar day.', code: 'bad_request' };
   }
   const window = Math.min(Math.max(Math.floor(Number(input.window_days || 0)) || 0, 0), 7);
-  const perYear = toolLimit('on_this_day', { limit: input.limit_per_year });
+  // A window multiplies the matches: window_days 3 at 5 a year was 95
+  // items and 47K chars, past the result cap. Windowed calls default to 2.
+  const perYear = toolLimit('on_this_day', {
+    limit: input.limit_per_year ?? (window > 0 ? ON_THIS_DAY_WINDOWED_PER_YEAR : undefined)
+  });
   const [startYear, endYear] = parseYearRange(input.year_range);
   const requestedSource = normalizeSourceKind(input.source_kind || '');
   const microposts = input.include_microposts !== false && input.include_microposts !== 'false';
@@ -2480,18 +2564,25 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         mediaBySource.get(
           kind === 'weekly_thing' ? `wt:${issueKey(record.issue_number)}` : `url:${urlKey(record.url)}`
         ) || null;
+      const label = sourceLabel(record);
       const item: Record<string, unknown> = {
         id: lensSourceId(record),
-        label: sourceLabel(record),
+        label,
         source_kind: kind,
-        title: record.subject || null,
+        // A micropost's label IS its title; send it once.
+        ...(record.subject && record.subject !== label ? { title: record.subject } : {}),
         date: String(record.publish_date || '').slice(0, 10),
         url: absoluteSourceUrl(record.url),
         excerpt
       };
       if (kind === 'blog' && record.section === 'Micropost') item.micropost = true;
       if (record.abstract_source === 'generated' && !record.description && excerpt) item.excerpt_generated = true;
-      if (photo) item.photo = { url: photo.url, alt: photo.alt || null, description: photo.description || null };
+      if (photo)
+        item.photo = {
+          url: photo.url,
+          ...(photo.alt ? { alt: photo.alt } : {}),
+          ...(photo.description ? { description: photo.description } : {})
+        };
       byYear.set(year, [...(byYear.get(year) || []), item]);
     }
   }

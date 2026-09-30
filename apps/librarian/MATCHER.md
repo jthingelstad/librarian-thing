@@ -54,6 +54,14 @@ because the payload compactor once cut snippets off exactly where the
 proof began. A source whose only matches are subject/topic/domain
 carries no text evidence.
 
+**Topic labels match only whole (1.5.1).** The coarse `detect_topics`
+labels ("Open web and RSS" is on 8,856 of 8,930 weekly chunks) are not in
+any matching haystack. A label counts only when the query names it whole
+(case and spacing aside), and that hit is strict. Before 1.5.1, "RSS"
+matched every issue through the label. **Domains match exactly or as a
+parent:** `x.com` is `x.com` or `*.x.com`, never `netflix.com`
+(`domainMatches` in `shared/archive-tools.mts`).
+
 ## first / latest hardening
 
 `first`, `latest`, and `first_last` results are computed only from

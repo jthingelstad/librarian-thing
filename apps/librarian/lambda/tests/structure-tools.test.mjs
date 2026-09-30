@@ -164,7 +164,7 @@ test('source records carry the skim; get_source adds key_points and audio chapte
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.get_source({ id: 'wt-1' }, { scope: 'weekly_thing' });
   assert.equal(out.source.description, 'The dek Jamie wrote for issue one.');
-  assert.equal(out.source.abstract, 'Opening lines of issue one.');
+  assert.equal(out.source.abstract, undefined, "an issue's opening lines are a greeting, not sent (1.5.1)");
   assert.deepEqual(out.source.key_points, ['Notable: a pick']);
   assert.equal(out.source.audio_url, 'https://cdn.example/1.mp3');
   assert.deepEqual(out.source.audio_chapters, [{ start: 0, title: 'Intro' }]);

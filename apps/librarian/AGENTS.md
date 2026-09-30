@@ -187,7 +187,7 @@ the real corpora from S3), and the committed recall baseline
 growth). Locally: `EVAL_CORPUS_DIR=<dir-with-corpus.json>` runs it against
 local corpus files; `EVAL_DIST_DIR` points it at an older build for
 pre/post-change reports. Tool responses carry `server_version`
-(`1.5.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+(`1.5.1+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
 a stale tools/list.
 
 ## Conventions

@@ -111,11 +111,29 @@ function inYearRange(item: LensItem, yearRange: unknown) {
 export interface TopicMatcher extends CanonicalMatcher {
   findMatch: (text: string) => { index: number; match: string; term: string; mode: string } | null;
   findIndex: (text: string) => number;
+  namesLabel: (labels: unknown) => string | null;
+}
+
+function labelKey(value: unknown) {
+  return compactWhitespace(value).toLowerCase();
 }
 
 function adapt(matcher: CanonicalMatcher): TopicMatcher {
+  const termKeys = new Set(matcher.terms.map((entry) => labelKey(entry.term)).filter(Boolean));
   return {
     ...matcher,
+    // Topic labels ("Open web and RSS") are issue-level keyword counts
+    // (librarian-core detect_topics), not evidence: the RSS label sits on
+    // 8,856 of 8,930 Weekly Thing chunks. Matched as text they made "RSS"
+    // hit 349 issues when 89 say it. A label matches only when the query
+    // names the WHOLE label, so a lens over a list_topics cluster works.
+    namesLabel(labels: unknown) {
+      if (!termKeys.size) return null;
+      for (const label of Array.from((labels as Iterable<unknown>) || [])) {
+        if (termKeys.has(labelKey(label))) return String(label);
+      }
+      return null;
+    },
     findMatch(text: string) {
       const hit = matcher.firstHit(text);
       return hit ? { index: hit.offset, match: hit.span, term: hit.term, mode: hit.mode } : null;
@@ -145,24 +163,24 @@ export function compileMultiTopicMatcher(terms: unknown[]): TopicMatcher {
   return adapt(compileQuery({ term: primary || '', aliases }));
 }
 
+// Topic labels are NOT in the haystack - see namesLabel.
 function lensHaystack(item: LensItem) {
   return compactWhitespace(
-    [
-      item.subject,
-      item.title,
-      item.section,
-      item.summary,
-      item.text,
-      Array.from(item.topics || []).join(' '),
-      Array.from(item.domains || []).join(' ')
-    ].join(' ')
+    [item.subject, item.title, item.section, item.summary, item.text, Array.from(item.domains || []).join(' ')].join(
+      ' '
+    )
   );
 }
 
 export function matchesLensTopic(item: LensItem, topic: unknown, matcher?: TopicMatcher) {
   const compiled = matcher || compileTopicMatcher(topic);
   if (compiled.isEmpty) return true;
-  return compiled.matches(lensHaystack(item));
+  return compiled.matches(lensHaystack(item)) || Boolean(compiled.namesLabel(item.topics));
+}
+
+// A whole-label hit is exact by construction, so it counts as strict.
+function matchesLensStrict(item: LensItem, matcher: TopicMatcher) {
+  return matcher.matchesStrict(lensHaystack(item)) || Boolean(matcher.namesLabel(item.topics));
 }
 
 // Reasons attribute the SPECIFIC span that hit - "text: 'ethereum name
@@ -176,7 +194,6 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
     ['section', item.section],
     ['summary', item.summary],
     ['text', item.text],
-    ['topics', Array.from(item.topics || []).join(' ')],
     ['domains', Array.from(item.domains || []).join(' ')]
   ];
   const reasons: Array<{ field: string; match: string }> = [];
@@ -197,6 +214,8 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
     }
     if (spans.length) reasons.push({ field, match: spans.slice(0, 3).join(', ') });
   }
+  const label = compiled.namesLabel(item.topics);
+  if (label) reasons.push({ field: 'topics', match: `'${label}'` });
   return reasons;
 }
 
@@ -262,7 +281,7 @@ function sourceFromChunk(chunk: LensItem): LensItem {
 function mergeSource(existing: LensSource, chunk: LensItem, topic: unknown, matcher?: TopicMatcher) {
   existing.match_count += 1;
   const compiledForStrict = matcher || compileTopicMatcher(topic);
-  if (!existing.strict && compiledForStrict.matchesStrict(lensHaystack(chunk))) existing.strict = true;
+  if (!existing.strict && matchesLensStrict(chunk, compiledForStrict)) existing.strict = true;
   existing.sections.add(chunk.section || '');
   for (const domain of chunk.domains || []) existing.domains.add(domain);
   for (const sourceTopic of chunk.topics || []) existing.topics.add(sourceTopic);
@@ -462,7 +481,7 @@ export function buildArchiveLens({
     const source: LensSource = {
       ...record,
       source_kind: normalizeLensSourceKind(record.source_kind),
-      strict: matcher.matchesStrict(lensHaystack(record)),
+      strict: matchesLensStrict(record, matcher),
       match_count: 1,
       sections: new Set([record.section || '']),
       topics: new Set(record.topics || []),

@@ -8,7 +8,8 @@
           "type": "object",
           "properties": {
             "query": {
-              "type": "string"
+              "type": "string",
+              "description": "The reader's question, in plain words."
             },
             "limit": {
               "type": "integer",
@@ -34,7 +35,8 @@
           "type": "object",
           "properties": {
             "query": {
-              "type": "string"
+              "type": "string",
+              "description": "What to find, in natural language or keywords; ranked by meaning and by exact terms."
             },
             "year_range": {
               "type": "array",
@@ -111,7 +113,7 @@
   {
     "toolSpec": {
       "name": "get_source",
-      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source by id (wt-351, blog-<microblog id>, ep-<n>, as on_this_day, archive_lens and archive_gems emit them), or by source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search, list_content, archive_lens, entity_lens, archive_gems, or source_neighborhood identifies a specific source worth reading more deeply. Identify the source by id (wt-351, blog-<microblog id>, ep-<n>, as on_this_day, archive_lens and archive_gems emit them), or by source_kind plus issue_number, microblog_id, episode_number, or url. Optional section narrows the returned text. body is the source's full text and sections lists its section names and word counts; a body longer than the result allows says body_truncated, and section reads one section whole. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -141,7 +143,8 @@
               "description": "episode number as a string."
             },
             "url": {
-              "type": "string"
+              "type": "string",
+              "description": "The source's URL (Weekly Thing archive page, blog permalink or episode page), as another tool returned it."
             },
             "section": {
               "type": "string",
@@ -172,7 +175,8 @@
               "type": [
                 "integer",
                 "string"
-              ]
+              ],
+              "description": "A single year, the same as year_range [year, year]; year_range wins when both are given."
             },
             "year_range": {
               "type": "array",
@@ -184,37 +188,46 @@
               "description": "Two integers: [start_year, end_year]. Same year twice for a single year."
             },
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "A word or phrase. Matched in subjects, text and linked domains; a list_topics cluster name (\"Open web and RSS\") matches only when named whole."
             },
             "entity": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of topic."
             },
             "query": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of topic."
             },
             "domain": {
-              "type": "string"
+              "type": "string",
+              "description": "A linked domain; its subdomains count too (netflix.com includes media.netflix.com)."
             },
             "link_kind": {
-              "type": "string"
+              "type": "string",
+              "description": "external or internal."
             },
             "link_category": {
-              "type": "string"
+              "type": "string",
+              "description": "One of external, cross_source, resolved_post, collection_page, upload_asset, malformed_internal, internal_unresolved, internal_site."
             },
             "target_resolved": {
               "type": [
                 "boolean",
                 "string"
-              ]
+              ],
+              "description": "true keeps internal blog links that resolved to a known post; false keeps those that did not."
             },
             "has_also_in_issues": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Blog posts only: true keeps posts a Weekly Thing issue also carried; false keeps posts none did."
             },
             "also_in_issue": {
               "type": [
                 "integer",
                 "string"
-              ]
+              ],
+              "description": "Blog posts only: posts carried in this Weekly Thing issue number."
             },
             "limit": {
               "type": "integer",
@@ -244,20 +257,22 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with url to ask \"have I linked this before\" (matched however the link was spelled: scheme, www, trailing slash and tracking parameters ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history; call without filters for top external domains, ranked by headline picks. year_range is [start_year, end_year]. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Query link metadata in the active source scope by domain, topic/entity, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved true means an internal blog link resolved to a known target post. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash and tracking parameters ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by headline picks. year_range is [start_year, end_year]. Results are newest first (sort: \"oldest\" reverses); when more links match than limit, results_omitted and results_note say how many were left out. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "domain": {
-              "type": "string"
+              "type": "string",
+              "description": "A linked domain; its subdomains count too (netflix.com includes media.netflix.com)."
             },
             "url": {
               "type": "string",
               "description": "One page, however an issue spelled its URL. Returns every time it was linked."
             },
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "A word or phrase matched in each link's own text, title, heading, context or domain."
             },
             "source_kind": {
               "type": "string",
@@ -277,16 +292,19 @@
               "description": "Weekly Thing links only: headline, commentary or journal."
             },
             "link_kind": {
-              "type": "string"
+              "type": "string",
+              "description": "external or internal."
             },
             "link_category": {
-              "type": "string"
+              "type": "string",
+              "description": "One of external, cross_source, resolved_post, collection_page, upload_asset, malformed_internal, internal_unresolved, internal_site."
             },
             "target_resolved": {
               "type": [
                 "boolean",
                 "string"
-              ]
+              ],
+              "description": "true keeps internal blog links that resolved to a known post; false keeps those that did not."
             },
             "year_range": {
               "type": "array",
@@ -303,6 +321,15 @@
               "maximum": 50,
               "default": 20,
               "description": "Maximum results, 1 to 50 (default 20)."
+            },
+            "sort": {
+              "type": "string",
+              "enum": [
+                "newest",
+                "oldest"
+              ],
+              "default": "newest",
+              "description": "Order before limit applies: newest first (default) or oldest first."
             },
             "match_mode": {
               "type": "string",
@@ -325,7 +352,7 @@
   {
     "toolSpec": {
       "name": "corpus_stats",
-      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with top subject/title terms, top chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically. Accepts year_range and limit to retrieve years or domains a truncated response omitted.",
+      "description": "Return deterministic inventory statistics for the active source scope: item counts, chunk counts, link counts, newest/oldest item, generated_at, counts_by_year, year_count_summary, yearly_signals with each year's top five subject/title terms and five distinctive chunk-text terms, domains, section counts, sample items, top external domains, link kind/category counts, and blog also_in_issues cross-reference counts. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Use for corpus inventory, freshness, latest indexed date, per-year content breakdowns, year-by-year theme signals, cross-source coverage, and aggregate-domain questions before searching semantically. Accepts year_range and limit to retrieve years or domains a truncated response omitted.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -400,13 +427,15 @@
               ]
             },
             "has_also_in_issues": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Blog posts only: true keeps posts a Weekly Thing issue also carried; false keeps posts none did."
             },
             "also_in_issue": {
               "type": [
                 "integer",
                 "string"
-              ]
+              ],
+              "description": "Blog posts only: posts carried in this Weekly Thing issue number."
             },
             "issue_number": {
               "type": "string",
@@ -427,13 +456,14 @@
   {
     "toolSpec": {
       "name": "quote_search",
-      "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. voice=jamie finds only phrases in Jamie's own words, never ones he quoted.",
+      "description": "Exact substring search across reconstructed source text in the active archive scope. Use to verify whether a specific phrase, name, or product actually appears in Weekly Thing, blog posts, or podcast episodes. Do not infer exact coverage from related search_archive hits. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. voice=jamie finds only phrases in Jamie's own words, never words Jamie quoted.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "phrase": {
-              "type": "string"
+              "type": "string",
+              "description": "The exact phrase to find, at least 3 characters; case does not matter."
             },
             "source_kind": {
               "type": "string",
@@ -477,7 +507,8 @@
           "type": "object",
           "properties": {
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "The word or phrase to trace. Matched in subjects, text and linked domains; a list_topics cluster name (\"Open web and RSS\") matches only when named whole."
             },
             "operation": {
               "type": "string",
@@ -552,10 +583,12 @@
           "type": "object",
           "properties": {
             "entity": {
-              "type": "string"
+              "type": "string",
+              "description": "The person, company, product or project to trace, matched like archive_lens topic."
             },
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of entity."
             },
             "operation": {
               "type": "string",
@@ -621,13 +654,14 @@
   {
     "toolSpec": {
       "name": "compare_eras",
-      "description": "Compare how a topic shows up in two eras of the archive: the best passages for the same topic from year_a and from year_b, side by side. Use for \"how did Jamie's view of X change between 2018 and 2025\". year_a and year_b are each [start_year, end_year]. voice=jamie keeps only his own words. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Compare how a topic shows up in two eras of the archive: the best passages for the same topic from year_a and from year_b, side by side. Use for \"how did Jamie's view of X change between 2018 and 2025\". year_a and year_b are each [start_year, end_year]. voice=jamie keeps only Jamie's own words. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "The topic to compare, searched by meaning within each era."
             },
             "year_a": {
               "type": "array",
@@ -685,7 +719,7 @@
   {
     "toolSpec": {
       "name": "source_neighborhood",
-      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>) or a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known, cross-source links, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>) or a source_kind plus issue_number, microblog_id, episode_number, or url, return outgoing links, incoming links when known (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -715,7 +749,8 @@
               "description": "episode number as a string."
             },
             "url": {
-              "type": "string"
+              "type": "string",
+              "description": "The source's URL (Weekly Thing archive page, blog permalink or episode page), as another tool returned it."
             },
             "limit": {
               "type": "integer",
@@ -738,10 +773,12 @@
           "type": "object",
           "properties": {
             "theme": {
-              "type": "string"
+              "type": "string",
+              "description": "Draw gems about this theme (traced like archive_lens topic); omit for any."
             },
             "topic": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of theme."
             },
             "mood": {
               "type": "string",
@@ -799,19 +836,23 @@
           "type": "object",
           "properties": {
             "claim": {
-              "type": "string"
+              "type": "string",
+              "description": "The statement to check against the archive."
             },
             "claims": {
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "description": "Up to four statements to check in one call."
             },
             "query": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of claim."
             },
             "text": {
-              "type": "string"
+              "type": "string",
+              "description": "Alias of claim."
             },
             "source_kind": {
               "type": "string",
@@ -829,7 +870,7 @@
                 "quoted",
                 "link"
               ],
-              "description": "Whose words count as evidence: jamie checks the claim against what Jamie himself wrote, never what he quoted."
+              "description": "Whose words count as evidence: jamie checks the claim against Jamie's own words, never words Jamie quoted."
             }
           }
         }
@@ -854,7 +895,8 @@
               "description": "What the image should show, e.g. 'bike ride creek' or 'cabin winter'"
             },
             "year": {
-              "type": "integer"
+              "type": "integer",
+              "description": "Only photos from this year."
             },
             "source_kind": {
               "type": "string",
@@ -911,7 +953,7 @@
   {
     "toolSpec": {
       "name": "currently_history",
-      "description": "What Jamie was watching, listening to, installing, reading, playing, drinking, buying or eating over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has he played', 'what was he watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "What Jamie was watching, listening to, installing, reading, playing, drinking, buying or eating over time, extracted from every issue's Currently section. Use for 'what books did Jamie read in YEAR', 'what games has Jamie played', 'what was Jamie watching'. Returns typed entries with issue numbers and dates plus counts by kind and year. If a kind/year filter returns nothing, that label may not exist for that period - fall back to ONE search_archive pass over prose mentions rather than repeated searching. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -921,7 +963,8 @@
               "description": "Filter by kind: watching, listening, installing, reading, playing, drinking, buying, eating, deleting, using, building, dining, flying, giving, walking, wearing. Variants such as \"installing more\" count as their kind."
             },
             "year": {
-              "type": "integer"
+              "type": "integer",
+              "description": "Only entries from this year."
             },
             "query": {
               "type": "string",
@@ -948,10 +991,12 @@
           "type": "object",
           "properties": {
             "year_start": {
-              "type": "integer"
+              "type": "integer",
+              "description": "First year to count."
             },
             "year_end": {
-              "type": "integer"
+              "type": "integer",
+              "description": "Last year to count."
             },
             "limit": {
               "type": "integer",
@@ -1025,7 +1070,7 @@
               "minimum": 1,
               "maximum": 20,
               "default": 5,
-              "description": "Maximum items per year, 1 to 20 (default 5); a year with more reports the count as more."
+              "description": "Maximum items per year, 1 to 20 (default 5, or 2 when window_days is set); a year with more reports the count as more."
             }
           }
         }

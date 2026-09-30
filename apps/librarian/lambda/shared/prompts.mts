@@ -64,7 +64,15 @@ export function promptFingerprint(): string {
 //        similar_issues; topic and category filters; voice on quote_search,
 //        claim_check and the lenses; media_search issue_number; yearly terms
 //        scored against the whole corpus.
-export const MCP_SERVER_VERSION = '1.5.0';
+// 1.5.1: topic labels match only when named whole (archive_lens, list_content,
+//        gems); list_content reads every chunk; domain filters match the
+//        domain and its subdomains; find_links sorts newest first (sort) and
+//        says what it left out; get_source sends the body once
+//        (section_texts retired, body_truncated); on_this_day windowed
+//        default of 2 a year; source_neighborhood cross_source_count;
+//        five yearly terms; weekly skims carry the description, not the
+//        greeting; argument descriptions; no pronouns for Jamie.
+export const MCP_SERVER_VERSION = '1.5.1';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;
