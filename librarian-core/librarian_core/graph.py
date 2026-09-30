@@ -18,6 +18,7 @@ from typing import Any
 import boto3
 
 from .corpus import build_corpus
+from .links import unlink
 
 DEFAULT_MODEL = "us.anthropic.claude-sonnet-4-6"
 ENTITY_RE = re.compile(r"\b(?:[A-Z][A-Za-z0-9&'.-]+(?:\s+[A-Z][A-Za-z0-9&'.-]+){0,4})\b")
@@ -280,6 +281,19 @@ def load_corpus(path: Path) -> dict[str, Any]:
     return build_corpus(include_issue_bodies=True)
 
 
+# What is not the issue's words: HTML tags, bare and autolinked URLs. Link
+# and image markup becomes its label first (``unlink``). Until QA 2026-09-30
+# (ingest F13) the entity regex read URLs too, so a signed image URL's
+# "AWSAccessKeyId", "Expires" and "AKIA...&Signature" were entities of
+# WT3-21, and "following&tab" of WT193.
+_NOT_WORDS_RE = re.compile(r"<[^>]*>|<?https?://\S+|\bwww\.\S+", re.I)
+
+
+def entity_text(markdown: str) -> str:
+    """``markdown`` as its words, for entity and trope extraction."""
+    return _NOT_WORDS_RE.sub(" ", unlink(markdown))
+
+
 def clean_entity(value: str) -> str:
     value = " ".join(value.strip(" .,:;!?()[]{}").split())
     return value
@@ -290,7 +304,7 @@ def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
         [
             str(issue.get("subject") or ""),
             " ".join(str(link.get("text") or "") for link in issue.get("links", [])[:24]),
-            str(issue.get("body") or "")[:14000],
+            entity_text(str(issue.get("body") or "")[:14000]),
         ]
     )
     counts: dict[str, int] = {}
@@ -425,10 +439,12 @@ def build_graph(
             "tropes": extracted["tropes"],
             "similar_issues": similarities.get(number, []),
         }
-        for entity in extracted["entities"]:
-            entity_index.setdefault(entity.lower(), []).append(number)
-        for trope in extracted["tropes"]:
-            trope_index.setdefault(trope.lower(), []).append(number)
+        # Once per issue: "Micro.blog" the name and micro.blog the domain
+        # are one key, which listed WT255 twice (QA 2026-09-30, ingest F13).
+        for key in dict.fromkeys(entity.lower() for entity in extracted["entities"]):
+            entity_index.setdefault(key, []).append(number)
+        for key in dict.fromkeys(trope.lower() for trope in extracted["tropes"]):
+            trope_index.setdefault(key, []).append(number)
     return {
         "version": 1,
         "source": "data/librarian/corpus.json",
