@@ -343,7 +343,13 @@ _JOURNAL_ENTRY_LINK_RE = re.compile(
     r"\((https?://(?:www\.|micro\.)?thingelstad\.com/\d{4}/\d{2}/\d{2}/[^)\s]+)\)",
     re.I,
 )
-_CURRENTLY_LINE_RE = re.compile(r"^\*\*([A-Za-z][A-Za-z ]{2,20}):\*\*\s*(.+)$", re.M)
+# The colon sits inside the bold ("**Reading:**") in most issues and outside
+# it ("**Dining**:") in ten lines from 2022-2025, which were dropped until
+# QA 2026-09-30 (ingest F12).
+_CURRENTLY_LINE_RE = re.compile(
+    r"^\*\*([A-Za-z][A-Za-z ]{2,20})(?::\*\*|\*\*\s*:)\s*(.+)$",
+    re.M,
+)
 
 
 def _img_attr(tag: str, name: str) -> str:
