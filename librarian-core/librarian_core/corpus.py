@@ -1775,9 +1775,12 @@ def build_blog_corpus(
         if not also_in_issues and match:
             also_in_issues = xref.get(_normalize_blog_path(match.group(1)))
         embed_text = _blog_embed_text(body)
-        if not embed_text:
+        # A photo posted with no words and no alt text is still a post, and
+        # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
+        # dropped with its photo). It has nothing to embed, so no chunk.
+        if not embed_text and not extract_images(body):
             continue
-        subject = title or _short_label(embed_text)
+        subject = title or _short_label(embed_text) or "Photo"
         post_input = {
             "body": body,
             "microblog_id": microblog_id,
