@@ -103,7 +103,7 @@ Deploy steps:
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
-CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step (`.github/workflows/deploy.yml`). New blog/podcast content enters through `.github/workflows/sync-external-content.yml`, which commits `data/blog/**` / `data/podcast/**` updates so the production workflow can rebuild and upload corpora. Manual deploys are for local validation before commit.
+CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step (`.github/workflows/deploy.yml`). It also redeploys after any corpus upload: a container loads each corpus once and keeps it, so a new corpus is only served by fresh containers. New blog/podcast content enters through `.github/workflows/sync-external-content.yml`, which commits `data/blog/**` / `data/podcast/**` updates so the production workflow can rebuild and upload corpora. Manual deploys are for local validation before commit.
 
 ## Tests
 
@@ -187,7 +187,7 @@ the real corpora from S3), and the committed recall baseline
 growth). Locally: `EVAL_CORPUS_DIR=<dir-with-corpus.json>` runs it against
 local corpus files; `EVAL_DIST_DIR` points it at an older build for
 pre/post-change reports. Tool responses carry `server_version`
-(`1.5.1+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+(`1.5.2+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
 a stale tools/list.
 
 ## Conventions

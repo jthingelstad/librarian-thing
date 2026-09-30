@@ -169,6 +169,15 @@ jobs:
             lambda=true
           fi
 
+          # A container loads each corpus once and keeps it (retrieval.mts),
+          # so a new corpus is served only after a redeploy. aws.py writes a
+          # fresh code key every time, which restarts the containers even
+          # when the code is unchanged. 2026-09-30: the blog abstracts sat in
+          # S3 unserved until a manual redeploy.
+          if [[ "$weekly_corpus" == true || "$blog_corpus" == true || "$podcast_corpus" == true ]]; then
+            lambda=true
+          fi
+
           {
             echo "weekly_corpus=$weekly_corpus"
             echo "blog_corpus=$blog_corpus"

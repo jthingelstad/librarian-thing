@@ -3,7 +3,8 @@
 // chunk is read; a domain filter matches the domain and its subdomains;
 // find_links sorts before it cuts and says what it left out; get_source
 // sends the body once; source_neighborhood stops repeating cross-source
-// links; yearly terms are five a year without the noise words.
+// links; yearly terms are five a year without the noise words. 1.5.2:
+// corpus_stats sends limit years, one sample and three domains a year.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ARCHIVE_TOOLS, GET_SOURCE_RESULT_CHARS } from '../dist/shared/archive-tools.mjs';
@@ -233,5 +234,53 @@ test('yearly terms: five a year, without section names, issue refs or plain word
   assert.deepEqual(
     year.top_subject_terms.map((row) => row.term),
     ['kubernetes']
+  );
+});
+
+test('corpus_stats: limit years, one sample a year with its id, three domains', async () => {
+  const corpus = fixtures();
+  for (let index = 0; index < 4; index += 1) {
+    const number = 20 + index;
+    const domains = Array.from({ length: 8 }, (_, site) => `d${site}.example`);
+    corpus.weekly_thing.issues.push({
+      number,
+      subject: `WT${number}`,
+      publish_date: D12,
+      url: `/archive/${number}/`,
+      domains
+    });
+  }
+  primeCorpusCachesForTests(corpus);
+  const out = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'weekly_thing' }, { scope: 'weekly_thing' });
+  const year = out.sources[0].yearly_signals.find((row) => row.year === 2026);
+  assert.equal(year.sample_items.length, 1, 'the citation readers take one a year');
+  for (const sample of year.sample_items) {
+    assert.match(sample.id, /^wt-\d+$/);
+    assert.equal(sample.section, undefined, 'the section repeated on every sample');
+    assert.equal(sample.source_kind, undefined, 'the group already says it');
+  }
+  assert.equal(year.top_domains.length, 3);
+  assert.equal(out.sources[0].yearly_signals.length, 3, 'every year when there are fewer than limit');
+  assert.equal(out.sources[0].yearly_signals_note, undefined);
+  corpus.weekly_thing.issues.push({
+    number: 5,
+    subject: 'WT5',
+    publish_date: '2019-01-05T12:00:00Z',
+    url: '/archive/5/'
+  });
+  primeCorpusCachesForTests(corpus);
+  const narrow = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'weekly_thing', limit: 3 }, { scope: 'weekly_thing' });
+  assert.deepEqual(
+    narrow.sources[0].yearly_signals.map((row) => row.year),
+    [2026, 2025, 2024]
+  );
+  assert.match(narrow.sources[0].yearly_signals_note, /3 newest of 4 years; pass year_range/);
+  const two = await ARCHIVE_TOOLS.corpus_stats(
+    { source_kind: 'weekly_thing', year_range: [2025, 2026] },
+    { scope: 'weekly_thing' }
+  );
+  assert.deepEqual(
+    two.sources[0].yearly_signals.map((row) => row.year),
+    [2026, 2025]
   );
 });

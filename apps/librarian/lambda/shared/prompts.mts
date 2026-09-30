@@ -72,7 +72,10 @@ export function promptFingerprint(): string {
 //        default of 2 a year; source_neighborhood cross_source_count;
 //        five yearly terms; weekly skims carry the description, not the
 //        greeting; argument descriptions; no pronouns for Jamie.
-export const MCP_SERVER_VERSION = '1.5.1';
+// 1.5.2: corpus_stats yearly_signals: limit years (newest first, with a
+//        note), three domains and one sample a year, the sample naming its
+//        source id.
+export const MCP_SERVER_VERSION = '1.5.2';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

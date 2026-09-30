@@ -1379,17 +1379,33 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
       yearly_signals: yearlyContentSignals(records, {
+        topYearLimit: listLimit,
         chunks: rangeChunks,
         baselineChunks: (corpus.chunks || []) as ArchiveRecord[],
         listLimit,
-        // Five terms a year: yearly_signals was 21K of a 30K result.
-        termLimit: Math.min(listLimit, 5)
+        // Five terms, three domains and one sample a year (the one the
+        // citation readers take), naming the id get_source takes. Four full
+        // samples a year were 10K of a 28.5K result, and the lens compactor
+        // showed only the 6 newest years whatever limit said.
+        termLimit: Math.min(listLimit, 5),
+        domainLimit: Math.min(listLimit, 3),
+        sampleLimit: 1,
+        sample: (record) => ({
+          id: lensSourceId(record as ArchiveRecord),
+          ...(record.issue_number ? { issue_number: record.issue_number } : {}),
+          subject: record.subject,
+          publish_date: record.publish_date,
+          url: record.url
+        })
       }),
       top_domains: summarizeDomains(links, listLimit),
       counts_by_link_kind: sortedCountList(linkKindCounts, 'link_kind'),
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category'),
       ...(roleCounts.size ? { counts_by_link_role: sortedCountList(roleCounts, 'link_role') } : {})
     };
+    if (countsByYear.length > listLimit) {
+      stats.yearly_signals_note = `yearly_signals shows the ${listLimit} newest of ${countsByYear.length} years; pass year_range (or a higher limit) for the others`;
+    }
     if (kind === 'weekly_thing') {
       stats.issue_count = rangeActive ? records.length : corpus.issue_count || records.length;
       stats.content_item_count = records.length;
@@ -1749,7 +1765,8 @@ export const LENS_PAYLOAD_MAX_CHARS = 24000;
 const LENS_CAP_SCALES = [1, 0.55, 0.3, 0.15];
 // Small count tables ARE the point of their tools - never cap them
 // (counts_by_year was being cut to 3 of 10 integers).
-const UNCAPPED_LIST_KEYS = new Set(['counts_by_year', 'year_count_summary', 'counts_by_source']);
+// corpus_stats' yearly_signals are bounded by limit (newest years first).
+const UNCAPPED_LIST_KEYS = new Set(['counts_by_year', 'year_count_summary', 'counts_by_source', 'yearly_signals']);
 // Id lists are a few bytes an entry and bounded by limit; an {omitted}
 // marker inside one broke "every entry is an id".
 const ID_LIST_KEYS = new Set(['results', 'timeline', 'latest_sources', 'sample_sources']);

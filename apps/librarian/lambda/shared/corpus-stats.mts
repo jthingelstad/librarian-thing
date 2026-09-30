@@ -25,14 +25,7 @@ interface YearBucket {
   textTerms: Map<string, number>;
   domains: Map<string, number>;
   sections: Map<string, number>;
-  samples: Array<{
-    issue_number?: string;
-    source_kind?: string;
-    subject: string;
-    publish_date: string;
-    url: string;
-    section: string;
-  }>;
+  samples: Array<Record<string, unknown>>;
 }
 
 interface YearlyContentOptions {
@@ -46,6 +39,10 @@ interface YearlyContentOptions {
   baselineChunks?: CorpusRecord[];
   // Terms per year (subject and text); defaults to listLimit.
   termLimit?: number;
+  // Domains per year; defaults to listLimit.
+  domainLimit?: number;
+  // The shape of one sample item; defaults to the full sample below.
+  sample?: (record: CorpusRecord) => Record<string, unknown>;
 }
 
 interface TermBaseline {
@@ -312,6 +309,7 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
   // controls what the truncation note claims it controls.
   const listLimit = Math.max(Number(options.listLimit || 0), 0);
   const termLimit = Math.max(Number(options.termLimit || 0), 0);
+  const domainLimit = Math.max(Number(options.domainLimit || 0), 0);
   const chunks = Array.isArray(options.chunks) ? options.chunks : [];
   const buckets = new Map<number, YearBucket>();
   for (const record of records || []) {
@@ -324,7 +322,9 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
     }
     for (const domain of record.domains || []) increment(bucket.domains, domain);
     increment(bucket.sections, record.section || record.post_kind || record.source_kind || 'item');
-    if (bucket.samples.length < sampleLimit) {
+    if (bucket.samples.length < sampleLimit && options.sample) {
+      bucket.samples.push(options.sample(record));
+    } else if (bucket.samples.length < sampleLimit) {
       const issueNumber = String(record.issue_number || '').trim();
       const sourceKind = String(record.source_kind || '').trim();
       bucket.samples.push({
@@ -382,7 +382,7 @@ export function yearlyContentSignals(records: CorpusRecord[] = [], options: Year
       chunk_count: bucket.chunk_count,
       top_subject_terms: topCounts(bucket.subjectTerms, 'term', termLimit || listLimit || 10),
       top_text_terms: distinctiveTerms(bucket, termLimit || listLimit || 12),
-      top_domains: topCounts(bucket.domains, 'domain', listLimit || 8),
+      top_domains: topCounts(bucket.domains, 'domain', domainLimit || listLimit || 8),
       counts_by_section: topCounts(bucket.sections, 'section', listLimit || 8),
       sample_items: bucket.samples
     }));
