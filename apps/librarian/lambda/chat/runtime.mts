@@ -867,9 +867,12 @@ function archiveToolInvoker({
   surface: 'mcp' | 'web';
   clientId?: string;
 }) {
-  return async (name: string, input: JsonRecord) => {
+  // auditAs names the row when a tool serves something other than a
+  // tools/call: a resources/read is audited as resource:<kind>.
+  return async (name: string, input: JsonRecord, auditAs?: string) => {
     const handler = (ARCHIVE_TOOLS as Record<string, (input?: JsonRecord, context?: JsonRecord) => unknown>)[name];
     if (!handler) throw new Error(`Unknown tool: ${name}`);
+    const auditName = auditAs || name;
     const toolStart = performance.now();
     const audit = async (result: unknown, status: 'ok' | 'tool_error', resultChars: number, durationMs: number) => {
       try {
@@ -879,7 +882,7 @@ function archiveToolInvoker({
           subscriberHash,
           requestId,
           createdAt: new Date().toISOString(),
-          toolName: name,
+          toolName: auditName,
           arguments: input,
           result,
           status,
@@ -895,7 +898,7 @@ function archiveToolInvoker({
       } catch (error) {
         logEvent('warning', 'mcp_tool_audit_failed', {
           request_id: requestId,
-          tool_name: name,
+          tool_name: auditName,
           surface,
           error_type: errorName(error)
         });
@@ -910,7 +913,7 @@ function archiveToolInvoker({
       await audit(toolResult, status, resultChars, durationMs);
       logEvent('info', 'mcp_tool_call_completed', {
         request_id: requestId,
-        tool_name: name,
+        tool_name: auditName,
         surface,
         status,
         duration_ms: durationMs,
@@ -922,7 +925,7 @@ function archiveToolInvoker({
       await audit({ error: errorName(error) }, 'tool_error', 0, durationMs);
       logEvent('warning', 'mcp_tool_call_completed', {
         request_id: requestId,
-        tool_name: name,
+        tool_name: auditName,
         surface,
         status: 'tool_error',
         duration_ms: durationMs,

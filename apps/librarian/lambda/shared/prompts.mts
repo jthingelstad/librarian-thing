@@ -75,7 +75,11 @@ export function promptFingerprint(): string {
 // 1.5.2: corpus_stats yearly_signals: limit years (newest first, with a
 //        note), three domains and one sample a year, the sample naming its
 //        source id.
-export const MCP_SERVER_VERSION = '1.5.2';
+// 1.6.0: resources (librarian://wt, blog, topic, year, on-this-day) and five
+//        prompts; readOnlyHint/openWorldHint on every tool; schemas declare
+//        additionalProperties false; urls go out absolute; list_topics
+//        matches a name spelled as a slug.
+export const MCP_SERVER_VERSION = '1.6.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

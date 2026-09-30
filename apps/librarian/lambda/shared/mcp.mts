@@ -8,8 +8,17 @@
  * auth, rate limiting, and quota live in the runtime caller; this module is
  * pure protocol given a context and an invoke function.
  */
-import { availableToolSpecs, webSearchConfigured } from './archive-tools.mjs';
+import { mcpToolSpecs, webSearchConfigured } from './archive-tools.mjs';
+import { PromptArgumentError, getPrompt, promptList } from './mcp-prompts.mjs';
+import {
+  RESOURCE_TEMPLATES,
+  ResourceNotFound,
+  listResources,
+  parseResourceUri,
+  readResource
+} from './mcp-resources.mjs';
 import { serverVersion, toolTitle } from './prompts.mjs';
+import { absoluteSourceUrl } from './source-identity.mjs';
 
 export const MCP_PROTOCOL_VERSION = '2025-06-18';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
@@ -39,6 +48,11 @@ export const MCP_LAUNCH_TOOLS = [
   'web_search'
 ];
 
+// The tools that reach past the archive to the live web. Every tool reads
+// and nothing writes (readOnlyHint), and the MCP default for openWorldHint
+// is true, so the closed-archive tools say false out loud.
+const LIVE_WEB_TOOLS = new Set(['fetch_page', 'web_search']);
+
 // Browser-facing subset served by the /tools route for the WebMCP page
 // module: everything except the outbound-network tools - a page-hosted agent
 // has its own web access, and asking this Lambda to fetch arbitrary URLs on
@@ -64,21 +78,25 @@ export const MCP_QUOTA_ERROR_CODE = -32029;
 
 type JsonRecord = Record<string, unknown>;
 
-interface BedrockToolSpec {
+interface ToolSpecEntry {
   toolSpec?: {
     name?: string;
     description?: string;
     inputSchema?: { json?: JsonRecord };
   };
+  // The MCP surface's own wording, where the chat's does not fit a client
+  // with no app around it.
+  mcp?: { description?: string };
 }
 
 export interface McpContext {
   subscriberHash: string;
   entitlements: string[];
   scope: string;
-  // Called for tools/call after the runtime has spent quota. Receives the
-  // registry handler's context shape.
-  invokeTool: (name: string, input: JsonRecord) => Promise<unknown>;
+  // Called for tools/call after the runtime has spent quota, and for
+  // resources, which read through the same tools (auditAs names the audit
+  // row: resource:<kind>).
+  invokeTool: (name: string, input: JsonRecord, auditAs?: string) => Promise<unknown>;
   // Returns true when the caller may spend one tool call; false ends the
   // request with a quota error.
   spendQuota: () => Promise<{ allowed: boolean; count: number; max: number }>;
@@ -92,18 +110,22 @@ export interface McpContext {
 
 export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
   const wanted = new Set(names.filter((name) => name !== 'web_search' || webSearchConfigured()));
-  return (availableToolSpecs() as BedrockToolSpec[])
-    .map((spec) => spec.toolSpec)
-    .filter((spec): spec is NonNullable<BedrockToolSpec['toolSpec']> => Boolean(spec?.name && wanted.has(spec.name)))
-    .map((spec) => ({
-      name: String(spec.name),
-      // Display name: MCP clients render title when present, so readers
-      // see "Archive statistics" instead of a prettified identifier.
-      title: toolTitle(spec.name),
-      annotations: { title: toolTitle(spec.name) },
-      description: String(spec.description || ''),
-      inputSchema: spec.inputSchema?.json || { type: 'object' }
-    }));
+  return (mcpToolSpecs() as ToolSpecEntry[])
+    .filter((entry) => Boolean(entry.toolSpec?.name && wanted.has(entry.toolSpec.name)))
+    .map(({ toolSpec, mcp }) => {
+      const name = String(toolSpec!.name);
+      return {
+        name,
+        // Display name: MCP clients render title when present, so readers
+        // see "Archive statistics" instead of a prettified identifier.
+        title: toolTitle(name),
+        annotations: { title: toolTitle(name), readOnlyHint: true, openWorldHint: LIVE_WEB_TOOLS.has(name) },
+        description: String(mcp?.description || toolSpec!.description || ''),
+        // validateToolArguments refuses an undeclared argument; the schema
+        // says so.
+        inputSchema: { ...(toolSpec!.inputSchema?.json || { type: 'object' }), additionalProperties: false }
+      };
+    });
 }
 
 // ── Tool errors ─────────────────────────────────────────────────────────
@@ -334,14 +356,30 @@ function narrowingHint(name: string) {
     : 'ask a narrower question for a complete result';
 }
 
+// The corpus keeps Weekly Thing URLs site-relative (/archive/351/) because
+// the weekly site renders them; a client outside that site cannot resolve
+// them, so the doors send every url absolute. Only *url keys are touched.
+function absoluteUrls(value: unknown, key = ''): unknown {
+  if (typeof value === 'string') {
+    return /(^|_)url$/.test(key) && value.startsWith('/') && !value.startsWith('//') ? absoluteSourceUrl(value) : value;
+  }
+  if (Array.isArray(value)) return value.map((item) => absoluteUrls(item, key));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as JsonRecord).map(([childKey, child]) => [childKey, absoluteUrls(child, childKey)])
+    );
+  }
+  return value;
+}
+
 // Shared by MCP tools/call and the /tools web route so the two surfaces can
 // never drift: an {error} result becomes an isError result with a code and a
-// next step; anything else is stamped with server_version and fitted under
-// the cap.
+// next step; anything else is stamped with server_version, its urls made
+// absolute, and fitted under the cap.
 export function renderToolCallResult(name: string, invoked: unknown) {
   const record =
     invoked && typeof invoked === 'object' && !Array.isArray(invoked)
-      ? (invoked as JsonRecord)
+      ? (absoluteUrls(invoked) as JsonRecord)
       : { result: invoked ?? null };
   if (typeof record.error === 'string' && record.error) {
     const text = JSON.stringify({ ...toolErrorRecord(record), server_version: serverVersion() });
@@ -373,6 +411,25 @@ function rpcError(id: unknown, code: number, message: string, data?: unknown) {
   return { jsonrpc: '2.0', id: id ?? null, error: { code, message, ...(data === undefined ? {} : { data }) } };
 }
 
+function quotaError(id: unknown, max: number) {
+  return rpcError(
+    id,
+    MCP_QUOTA_ERROR_CODE,
+    `Daily tool-call quota reached (${max} per day). It resets at midnight UTC.`
+  );
+}
+
+// Resources read through the same tools as tools/call, rendered the same way.
+function resourceReader(context: McpContext) {
+  return {
+    invoke: (name: string, input: JsonRecord, auditAs: string) => context.invokeTool(name, input, auditAs),
+    render: (name: string, result: unknown) => renderToolCallResult(name, result)
+  };
+}
+
+// JSON-RPC's "resource not found" (MCP spec, resources).
+const RESOURCE_NOT_FOUND = -32002;
+
 function negotiatedProtocolVersion(requested: unknown) {
   const value = String(requested || '');
   return SUPPORTED_PROTOCOL_VERSIONS.includes(value) ? value : MCP_PROTOCOL_VERSION;
@@ -392,7 +449,9 @@ export function initializeResult(requestedVersion: unknown) {
     // exactly when the tool surface does (the prompt fingerprint covers
     // tool-specs.json). Clients should re-fetch tools/list whenever the
     // version differs from their cache.
-    capabilities: { tools: { listChanged: true } },
+    // Resources and prompts are fixed catalogues served statelessly: no
+    // subscriptions, and no list_changed to promise.
+    capabilities: { tools: { listChanged: true }, resources: {}, prompts: {} },
     serverInfo: {
       name: 'librarian',
       title: "The Librarian - Jamie Thingelstad's archive",
@@ -419,8 +478,12 @@ export function initializeResult(requestedVersion: unknown) {
       'and corpus_stats for what the archive contains. voice: "jamie" (search_archive, quote_search,',
       "claim_check, compare_eras and the lenses) keeps only Jamie's own words, never passages Jamie quoted.",
       'Sources have one id everywhere (wt-351, blog-<microblog id>, ep-<n>); pass it back to get_source',
-      'or source_neighborhood. Cite Weekly Thing sources as WT<issue number>.',
+      'or source_neighborhood. Cite each source as a markdown link to its url: [WT351](url) for a Weekly Thing',
+      'issue, the title for a blog post or episode.',
       'Photos: media_search finds them; view_photo shows up to 3 inline and gives you vision over them.',
+      'Resources: librarian://wt/{n} and librarian://blog/{id} attach one source as markdown; topic, year and',
+      'on-this-day templates too. Prompts (thinking_over_time, year_in_review, reading_path,',
+      'this_week_in_past_years, research_brief) set out the call sequence for the big asks.',
       'The tool schemas evolve; serverInfo.version changes whenever they do - if it differs from your',
       'cached value, re-fetch tools/list before relying on cached parameter schemas.'
     ].join(' ')
@@ -463,6 +526,51 @@ export async function handleMcpMessage(
     const tools = [...mcpToolDeclarations(), ...(context.viewPhoto ? [viewPhotoDeclaration()] : [])];
     return { statusCode: 200, payload: rpcResult(id, { tools }) };
   }
+  if (method === 'prompts/list') {
+    return { statusCode: 200, payload: rpcResult(id, { prompts: promptList() }) };
+  }
+  if (method === 'prompts/get') {
+    const name = String(params.name || '');
+    try {
+      const prompt = getPrompt(name, params.arguments);
+      if (!prompt) return { statusCode: 200, payload: rpcError(id, -32602, `Unknown prompt: ${name}`) };
+      return { statusCode: 200, payload: rpcResult(id, prompt) };
+    } catch (error) {
+      if (!(error instanceof PromptArgumentError)) throw error;
+      return { statusCode: 200, payload: rpcError(id, -32602, `Invalid arguments for ${name}: ${error.message}.`) };
+    }
+  }
+  if (method === 'resources/templates/list') {
+    return { statusCode: 200, payload: rpcResult(id, { resourceTemplates: RESOURCE_TEMPLATES }) };
+  }
+  if (method === 'resources/list') {
+    try {
+      return { statusCode: 200, payload: rpcResult(id, { resources: await listResources(resourceReader(context)) }) };
+    } catch {
+      return { statusCode: 200, payload: rpcError(id, -32603, 'The resource list could not be read; try again.') };
+    }
+  }
+  if (method === 'resources/read') {
+    const resource = parseResourceUri(params.uri);
+    if (!resource) {
+      const templates = RESOURCE_TEMPLATES.map((template) => template.uriTemplate).join(', ');
+      return {
+        statusCode: 200,
+        payload: rpcError(id, -32602, `Unknown resource URI; this server serves ${templates}.`, { uri: params.uri })
+      };
+    }
+    const quota = await context.spendQuota();
+    if (!quota.allowed) return { statusCode: 200, payload: quotaError(id, quota.max) };
+    try {
+      const contents = await readResource(resource, resourceReader(context));
+      return { statusCode: 200, payload: rpcResult(id, { contents: [contents] }) };
+    } catch (error) {
+      if (error instanceof ResourceNotFound) {
+        return { statusCode: 200, payload: rpcError(id, RESOURCE_NOT_FOUND, error.message, { uri: resource.uri }) };
+      }
+      return { statusCode: 200, payload: rpcError(id, -32603, 'The resource could not be read; try again.') };
+    }
+  }
   if (method === 'tools/call') {
     const name = String(params.name || '');
     const rawArgs = params.arguments === undefined ? {} : params.arguments;
@@ -473,16 +581,7 @@ export async function handleMcpMessage(
         return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
       }
       const quota = await context.spendQuota();
-      if (!quota.allowed) {
-        return {
-          statusCode: 200,
-          payload: rpcError(
-            id,
-            MCP_QUOTA_ERROR_CODE,
-            `Daily tool-call quota reached (${quota.max} per day). It resets at midnight UTC.`
-          )
-        };
-      }
+      if (!quota.allowed) return { statusCode: 200, payload: quotaError(id, quota.max) };
       const args = (params.arguments && typeof params.arguments === 'object' ? params.arguments : {}) as JsonRecord;
       try {
         const { photos, refused } = await context.viewPhoto(args.image_urls);
@@ -517,16 +616,7 @@ export async function handleMcpMessage(
       return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
     }
     const quota = await context.spendQuota();
-    if (!quota.allowed) {
-      return {
-        statusCode: 200,
-        payload: rpcError(
-          id,
-          MCP_QUOTA_ERROR_CODE,
-          `Daily tool-call quota reached (${quota.max} per day). It resets at midnight UTC.`
-        )
-      };
-    }
+    if (!quota.allowed) return { statusCode: 200, payload: quotaError(id, quota.max) };
     const args = (rawArgs && typeof rawArgs === 'object' ? rawArgs : {}) as JsonRecord;
     try {
       const invoked = await context.invokeTool(name, args);

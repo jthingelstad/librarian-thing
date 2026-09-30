@@ -28,7 +28,7 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult().serverInfo.name, 'librarian');
   // The version is the tool-surface cache key: it must change when the
   // packaged prompt/spec set changes, and be stable within one build.
-  assert.match(initializeResult().serverInfo.version, /^1\.5\.2\+tools\.[0-9a-f]{12}$/);
+  assert.match(initializeResult().serverInfo.version, /^1\.6\.0\+tools\.[0-9a-f]{12}$/);
   assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
@@ -113,7 +113,7 @@ test('notifications are accepted with 202 and no body', async () => {
 test('framing errors: batches, non-JSON-RPC, unknown methods', async () => {
   assert.equal((await handleMcpMessage([{}], context())).payload.error.code, -32600);
   assert.equal((await handleMcpMessage({ hello: true }, context())).payload.error.code, -32600);
-  const unknown = await handleMcpMessage({ jsonrpc: '2.0', id: 2, method: 'resources/list' }, context());
+  const unknown = await handleMcpMessage({ jsonrpc: '2.0', id: 2, method: 'completion/complete' }, context());
   assert.equal(unknown.payload.error.code, -32601);
 });
 

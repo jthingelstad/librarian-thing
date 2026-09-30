@@ -2175,15 +2175,18 @@ async function toolListTopics(input: ToolArgs = {}) {
     .trim()
     .toLowerCase();
   const limit = toolLimit('list_topics', input);
+  // A name matches by substring, spelled either way: "macstories net" and
+  // "ai-and-agents" (a page or resource slug) find their topics too.
+  const querySlug = siteTopicSlug(query);
+  const named = (name: unknown) =>
+    !query ||
+    String(name || '')
+      .toLowerCase()
+      .includes(query) ||
+    Boolean(querySlug && siteTopicSlug(String(name || '')).includes(querySlug));
   const corpus = await loadCorpus('weekly_thing');
   const clusters = ((corpus.topics || []) as ArchiveRecord[])
-    .filter(
-      (cluster) =>
-        !query ||
-        String(cluster.name || '')
-          .toLowerCase()
-          .includes(query)
-    )
+    .filter((cluster) => named(cluster.name))
     .map((cluster) => ({
       name: cluster.name,
       description: cluster.description,
@@ -2196,7 +2199,7 @@ async function toolListTopics(input: ToolArgs = {}) {
       related_clusters: cluster.related_topics || []
     }));
   const topics = siteTopics(await loadGraph());
-  const matched = query ? topics.filter((topic) => topic.name.toLowerCase().includes(query)) : topics;
+  const matched = query ? topics.filter((topic) => named(topic.name) || topic.slug.includes(querySlug)) : topics;
   return {
     clusters,
     topic_count: topics.length,
@@ -3024,11 +3027,27 @@ export function toolSpecs() {
   return loadToolSpecs();
 }
 
-// The specs actually bound to the agent and MCP: web_search only appears
-// once a Brave key is configured, so an unconfigured deployment never
-// offers a tool that can only fail.
-export function availableToolSpecs() {
-  const specs = loadToolSpecs() as Array<{ toolSpec?: { name?: string } }>;
+// The spec entries on offer: web_search only appears once a Brave key is
+// configured, so an unconfigured deployment never offers a tool that can
+// only fail. An entry may carry an `mcp` block beside toolSpec - the MCP
+// surface's own description - which the chat never sees.
+function offeredToolSpecs() {
+  const specs = loadToolSpecs() as Array<{ toolSpec?: { name?: string }; mcp?: unknown }>;
   if (webSearchConfigured()) return specs;
   return specs.filter((spec) => spec.toolSpec?.name !== 'web_search');
+}
+
+// What the chat binds: Bedrock's Converse takes toolSpec and cachePoint
+// entries and nothing else, so the mcp block comes off.
+export function availableToolSpecs() {
+  return offeredToolSpecs().map((entry) => {
+    const bound = { ...entry };
+    delete bound.mcp;
+    return bound;
+  });
+}
+
+// What the MCP and WebMCP doors declare from: the entries whole.
+export function mcpToolSpecs() {
+  return offeredToolSpecs();
 }
