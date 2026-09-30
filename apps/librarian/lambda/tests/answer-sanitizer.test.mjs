@@ -110,7 +110,7 @@ test('removes tool-name narration blocks (the 2026-08-29 leak class)', () => {
 });
 
 test('removes let-me-compile narration before an inline answer marker', () => {
-  const raw = 'entity_lens shows the full run. Let me compile the timeline. Here is the story:\n\nIt starts in 2018.';
+  const raw = 'archive_lens shows the full run. Let me compile the timeline. Here is the story:\n\nIt starts in 2018.';
   assert.equal(sanitizeAnswerProse(raw), 'Here is the story:\n\nIt starts in 2018.');
 });
 

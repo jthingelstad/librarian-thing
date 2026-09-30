@@ -28,7 +28,7 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult().serverInfo.name, 'librarian');
   // The version is the tool-surface cache key: it must change when the
   // packaged prompt/spec set changes, and be stable within one build.
-  assert.match(initializeResult().serverInfo.version, /^1\.6\.0\+tools\.[0-9a-f]{12}$/);
+  assert.match(initializeResult().serverInfo.version, /^2\.0\.0\+tools\.[0-9a-f]{12}$/);
   assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
@@ -77,7 +77,7 @@ test('tools/call rejects tools outside the launch surface', async () => {
 test('quota exhaustion returns the dedicated error without invoking the tool', async () => {
   let invoked = false;
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 9, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    { jsonrpc: '2.0', id: 9, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
     context({
       spendQuota: async () => ({ allowed: false, count: 501, max: 500 }),
       invokeTool: async () => {
@@ -93,7 +93,7 @@ test('quota exhaustion returns the dedicated error without invoking the tool', a
 
 test('tool handler failures come back as isError content, not protocol errors', async () => {
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 10, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    { jsonrpc: '2.0', id: 10, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
     context({
       invokeTool: async () => {
         throw new Error('boom');
@@ -124,7 +124,7 @@ test('ping answers an empty result', async () => {
 
 test('oversized tool results are cut to valid JSON with an honest note', async () => {
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 11, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    { jsonrpc: '2.0', id: 11, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
     context({ invokeTool: async () => ({ blob: 'x'.repeat(120000) }) })
   );
   const text = reply.payload.result.content[0].text;
@@ -146,12 +146,12 @@ test('a long list loses whole items off its end, counted, and still parses', asy
   assert.equal(parsed.results[0].id, 'wt-0', 'the ranked head survives');
   assert.equal(parsed.results.length + parsed.truncated.omitted.results, 300);
   assert.deepEqual(parsed.truncated.clipped, []);
-  assert.match(parsed.truncated.hint, /narrow the arguments \(/);
+  assert.match(parsed.truncated.hint, /Narrow the arguments \(/);
 });
 
 test('an {error} result goes out as isError with a code and a next step', async () => {
   const reply = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 13, method: 'tools/call', params: { name: 'get_source', arguments: { issue_number: '9999' } } },
+    { jsonrpc: '2.0', id: 13, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-9999' } } },
     context({ invokeTool: async () => ({ error: 'Source not found.' }) })
   );
   assert.equal(reply.payload.result.isError, true);
@@ -159,7 +159,7 @@ test('an {error} result goes out as isError with a code and a next step', async 
   assert.equal(parsed.code, 'not_found');
   assert.ok(parsed.next.length > 10);
   const declared = await handleMcpMessage(
-    { jsonrpc: '2.0', id: 14, method: 'tools/call', params: { name: 'get_source', arguments: {} } },
+    { jsonrpc: '2.0', id: 14, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
     context({ invokeTool: async () => ({ error: 'Nope.', code: 'not_configured', next: 'Ask later.' }) })
   );
   const own = JSON.parse(declared.payload.result.content[0].text);
@@ -181,7 +181,11 @@ test('bad arguments are refused before any quota is spent', async () => {
     ['search_archive', { query: 'rss', lmit: 5 }, /unknown argument "lmit"/],
     ['search_archive', {}, /query is required/],
     ['list_content', { source_kind: 'podcast', year_range: [2026, 2020] }, /year_range runs backwards/],
-    ['get_source', { source_kind: 'newsletter' }, /source_kind must be one of/]
+    ['get_source', { id: 'wt-1', format: 'html' }, /format must be one of/],
+    ['get_source', { issue_number: 351 }, /unknown argument "issue_number"; id is required/],
+    ['list_content', { year: 2020, year_range: [2019, 2020] }, /pass year or year_range, not both/],
+    ['find_evidence', { claims: ['a', 'b', 'c', 'd', 'e'] }, /claims takes at most 4 items/],
+    ['archive_gems', { mood: 'forgotten' }, /unknown argument "mood"/]
   ]) {
     const reply = await call(name, args);
     assert.equal(reply.payload.result.isError, true, name);
@@ -195,6 +199,65 @@ test('bad arguments are refused before any quota is spent', async () => {
   const ok = await call('search_archive', { query: 'rss', limit: '5', year_range: ['2020', 2021] });
   assert.equal(ok.payload.result.isError, false);
   assert.equal(spent, 1);
+});
+
+test('a successful call carries structuredContent that parses to its text', async () => {
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 30, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
+    context({ invokeTool: async () => ({ applied: { format: 'full' }, source: { id: 'wt-1', url: '/archive/1/' } }) })
+  );
+  const { content, structuredContent, isError } = reply.payload.result;
+  assert.equal(isError, false);
+  assert.deepEqual(structuredContent, JSON.parse(content[0].text));
+  assert.equal(structuredContent.source.url, 'https://weekly.thingelstad.com/archive/1/');
+  const failed = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 31, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
+    context({ invokeTool: async () => ({ error: 'Source not found.' }) })
+  );
+  assert.equal(failed.payload.result.structuredContent, undefined);
+});
+
+test('the cap adds to a truncated block the tool already set', async () => {
+  const results = Array.from({ length: 300 }, (_v, index) => ({ id: `wt-${index}`, text: 'y'.repeat(400) }));
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 32, method: 'tools/call', params: { name: 'list_content', arguments: {} } },
+    context({
+      invokeTool: async () => ({
+        results,
+        total_count: 900,
+        truncated: { omitted: { results: 600 }, hint: 'Raise limit (max 120) for more.' }
+      })
+    })
+  );
+  const parsed = JSON.parse(reply.payload.result.content[0].text);
+  assert.equal(parsed.results.length + parsed.truncated.omitted.results, 900);
+  assert.match(parsed.truncated.hint, /^Raise limit \(max 120\) for more\. Or narrow the arguments/);
+  assert.equal(parsed.truncated.max_chars, 48000);
+});
+
+test('a result that cannot be cut to fit is an error', async () => {
+  const wide = Object.fromEntries(Array.from({ length: 400 }, (_v, index) => [`k${index}`, 'z'.repeat(230)]));
+  const reply = await handleMcpMessage(
+    { jsonrpc: '2.0', id: 33, method: 'tools/call', params: { name: 'get_source', arguments: { id: 'wt-1' } } },
+    context({ invokeTool: async () => wide })
+  );
+  assert.equal(reply.payload.result.isError, true);
+  assert.equal(JSON.parse(reply.payload.result.content[0].text).code, 'too_large');
+  assert.equal(reply.payload.result.structuredContent, undefined);
+});
+
+test('a retired tool names its replacement instead of "Unknown tool"', async () => {
+  for (const [name, replacement] of [
+    ['entity_lens', /archive_lens/],
+    ['claim_check', /find_evidence/]
+  ]) {
+    const reply = await handleMcpMessage(
+      { jsonrpc: '2.0', id: 34, method: 'tools/call', params: { name, arguments: { topic: 'ENS' } } },
+      context()
+    );
+    assert.equal(reply.payload.result.isError, true, name);
+    assert.match(JSON.parse(reply.payload.result.content[0].text).error, replacement);
+  }
 });
 
 test('web_search without its key is neither listed nor callable', async () => {

@@ -230,7 +230,7 @@ test('media_search refs carry the exact image and its source page', () => {
   // page it appeared on; there is no plain url field.
   const summary = summarizeToolEvidence({
     query: 'minnehaha creek',
-    total_matches: 4,
+    total_count: 4,
     results: [
       {
         image_url: 'https://cdn.thingelstad.com/img/creek-ride.jpg',
@@ -259,11 +259,58 @@ test('an image-only media ref still gets a stable id', () => {
   assert.equal(ref.image_url, 'https://cdn.thingelstad.com/img/only.jpg');
 });
 
-test('claim_check topic echo and error results survive', () => {
-  const summary = summarizeToolEvidence({ claim: 'Jamie ran a marathon in 2019', results: [] });
-  assert.equal(summary.topic, 'Jamie ran a marathon in 2019');
+test('error results survive', () => {
   const failed = summarizeToolEvidence({ error: 'quote_search failed: TimeoutError' });
   assert.match(failed.error, /TimeoutError/);
+});
+
+test('grouped search results: the best passage is the excerpt and the section', () => {
+  const summary = summarizeToolEvidence({
+    query: 'rss',
+    results: [
+      {
+        id: 'wt-300',
+        issue_number: 300,
+        source_kind: 'weekly_thing',
+        label: 'WT300',
+        url: 'https://weekly.thingelstad.com/archive/300/',
+        skim: 'The issue about feeds.',
+        score: 0.9,
+        passages: [
+          { section: 'Journal', text: 'RSS is still how I read the web.' },
+          { section: 'Notable', text: 'A second passage.' }
+        ]
+      }
+    ]
+  });
+  const ref = summary.sources[0];
+  assert.equal(ref.id, 'wt-300');
+  assert.equal(ref.section, 'Journal');
+  assert.match(ref.excerpt, /^RSS is still/);
+});
+
+test("find_evidence: each claim's passages are the evidence refs", () => {
+  const summary = summarizeToolEvidence({
+    results: [
+      {
+        claim: 'Jamie ran a marathon in 2019',
+        evidence: [
+          {
+            id: 'wt-120',
+            issue_number: 120,
+            label: 'WT120',
+            section: 'Journal',
+            text: 'Finished the marathon.',
+            voices: ['jamie']
+          }
+        ]
+      },
+      { claim: 'A second claim', evidence: [] }
+    ]
+  });
+  assert.equal(summary.sources.length, 1);
+  assert.equal(summary.sources[0].id, 'wt-120');
+  assert.match(summary.sources[0].excerpt, /marathon/);
 });
 
 test('arbitrary and private fields never reach evidence refs', () => {

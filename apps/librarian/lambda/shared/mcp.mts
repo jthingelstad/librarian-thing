@@ -36,10 +36,9 @@ export const MCP_LAUNCH_TOOLS = [
   'quote_search',
   'find_links',
   'list_content',
-  'entity_lens',
   'source_neighborhood',
   'archive_gems',
-  'claim_check',
+  'find_evidence',
   'media_search',
   'currently_history',
   'top_references',
@@ -58,6 +57,15 @@ const LIVE_WEB_TOOLS = new Set(['fetch_page', 'web_search']);
 // has its own web access, and asking this Lambda to fetch arbitrary URLs on
 // a page agent's behalf is a different risk posture than reading the archive.
 export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page' && name !== 'web_search');
+
+// Tools 2.0.0 folded into others. A client with a cached tools/list still
+// calls them; the answer names the replacement instead of "Unknown tool".
+export const RETIRED_TOOLS: Record<string, string> = {
+  entity_lens:
+    'entity_lens was folded into archive_lens in 2.0.0: call archive_lens with topic, and aliases for other names (known aliases are added for you). Re-fetch tools/list.',
+  claim_check:
+    'claim_check became find_evidence in 2.0.0: pass claims (one to four statements); it returns the passages for each, and the verdict is yours. Re-fetch tools/list.'
+};
 
 // view_photo is MCP-only and lives outside the ARCHIVE_TOOLS registry on
 // purpose: its result is image content blocks, which the Bedrock chat loop
@@ -85,8 +93,32 @@ interface ToolSpecEntry {
     inputSchema?: { json?: JsonRecord };
   };
   // The MCP surface's own wording, where the chat's does not fit a client
-  // with no app around it.
-  mcp?: { description?: string };
+  // with no app around it, and the shape of a successful result.
+  mcp?: { description?: string; outputSchema?: OutputSchema };
+}
+
+interface OutputSchema {
+  type: 'object';
+  properties?: Record<string, unknown>;
+  required?: string[];
+}
+
+// Every registry tool's result carries these (withAppliedEcho, then
+// renderToolCallResult); the spec declares only each tool's own keys.
+// view_photo is not a registry tool and declares its whole shape.
+function withEnvelope(name: string, schema: OutputSchema | undefined): OutputSchema {
+  const own = schema || { type: 'object' };
+  if (name === VIEW_PHOTO_TOOL) return own;
+  return {
+    type: 'object',
+    properties: {
+      applied: { type: 'object' },
+      ...(own.properties || {}),
+      truncated: { type: 'object' },
+      server_version: { type: 'string' }
+    },
+    required: ['applied', ...(own.required || []), 'server_version']
+  };
 }
 
 export interface McpContext {
@@ -123,7 +155,9 @@ export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
         description: String(mcp?.description || toolSpec!.description || ''),
         // validateToolArguments refuses an undeclared argument; the schema
         // says so.
-        inputSchema: { ...(toolSpec!.inputSchema?.json || { type: 'object' }), additionalProperties: false }
+        inputSchema: { ...(toolSpec!.inputSchema?.json || { type: 'object' }), additionalProperties: false },
+        // A successful call's structuredContent conforms to this.
+        outputSchema: withEnvelope(name, mcp?.outputSchema)
       };
     });
 }
@@ -172,8 +206,8 @@ function toolErrorRecord(result: JsonRecord): JsonRecord {
 // Arguments are checked against the declared schema BEFORE any quota is
 // spent, so a malformed call costs nothing and says what was wrong. Scalars
 // are accepted in either spelling a client might send ("12" for 12); an
-// unknown argument, a bad enum, an out-of-range number or an inverted
-// year_range is refused.
+// unknown argument, a bad enum, an out-of-range number, an inverted
+// year_range, or year and year_range together is refused.
 interface ArgSchema {
   type?: string | string[];
   enum?: unknown[];
@@ -252,6 +286,14 @@ export function validateToolArguments(name: string, args: unknown): string[] {
       problems.push(`${key} runs backwards: [${range[0]}, ${range[1]}] should be [${range[1]}, ${range[0]}]`);
     }
   }
+  if (
+    record.year !== undefined &&
+    record.year !== null &&
+    record.year_range !== undefined &&
+    record.year_range !== null
+  ) {
+    problems.push('pass year or year_range, not both');
+  }
   return problems;
 }
 
@@ -271,7 +313,9 @@ export function invalidArgumentsResult(name: string, problems: string[]) {
 // cheap context. MCP clients pay for every byte, so a result is cut to fit
 // MCP_RESULT_MAX_CHARS - structurally, so it always parses: whole items
 // come off the end of the largest list first (results are ranked), then the
-// longest text is clipped, and a `truncated` block says what went where.
+// longest text is clipped, and a `truncated` block says what went where. A
+// handler that already cut something (a limit, a long body) set `truncated`
+// itself; the cap adds to it rather than replacing it.
 
 interface Found {
   path: string;
@@ -307,17 +351,28 @@ function survey(
   }
 }
 
+function priorTruncation(result: JsonRecord) {
+  const prior = (result.truncated && typeof result.truncated === 'object' ? result.truncated : {}) as JsonRecord;
+  const omitted = {
+    ...((prior.omitted && typeof prior.omitted === 'object' ? prior.omitted : {}) as Record<string, number>)
+  };
+  const clipped = Array.isArray(prior.clipped) ? prior.clipped.map(String) : [];
+  return { omitted, clipped, hint: typeof prior.hint === 'string' ? prior.hint : '' };
+}
+
 function fitToCap(result: JsonRecord, max: number, hint: string) {
   let text = JSON.stringify(result);
-  if (text.length <= max) return { text, truncated: false };
+  if (text.length <= max) return { text, truncated: Boolean(result.truncated), tooLarge: false };
   const working = JSON.parse(text) as JsonRecord;
-  const omitted: Record<string, number> = {};
-  const clipped: string[] = [];
+  const prior = priorTruncation(working);
+  const { omitted, clipped } = prior;
+  const hints =
+    prior.hint && prior.hint !== hint ? `${prior.hint} Or ${hint}.` : `${hint[0].toUpperCase()}${hint.slice(1)}.`;
   for (let round = 0; round < 400; round++) {
-    working.truncated = { max_chars: max, omitted, clipped, hint };
+    working.truncated = { max_chars: max, omitted, clipped, hint: hints };
     text = JSON.stringify(working);
     const over = text.length - max;
-    if (over <= 0) return { text, truncated: true };
+    if (over <= 0) return { text, truncated: true, tooLarge: false };
     const arrays: Found[] = [];
     const strings: Found[] = [];
     survey(working, '', arrays, strings);
@@ -344,7 +399,8 @@ function fitToCap(result: JsonRecord, max: number, hint: string) {
       ...toolErrorRecord({ error: 'The result was too large to return.', code: 'too_large', next: hint }),
       server_version: serverVersion()
     }),
-    truncated: true
+    truncated: true,
+    tooLarge: true
   };
 }
 
@@ -375,8 +431,12 @@ function absoluteUrls(value: unknown, key = ''): unknown {
 // Shared by MCP tools/call and the /tools web route so the two surfaces can
 // never drift: an {error} result becomes an isError result with a code and a
 // next step; anything else is stamped with server_version, its urls made
-// absolute, and fitted under the cap.
-export function renderToolCallResult(name: string, invoked: unknown) {
+// absolute, and fitted under the cap. structured is the same result as an
+// object, for MCP's structuredContent; error results carry none.
+export function renderToolCallResult(
+  name: string,
+  invoked: unknown
+): { text: string; truncated: boolean; isError: boolean; structured?: JsonRecord } {
   const record =
     invoked && typeof invoked === 'object' && !Array.isArray(invoked)
       ? (absoluteUrls(invoked) as JsonRecord)
@@ -385,8 +445,13 @@ export function renderToolCallResult(name: string, invoked: unknown) {
     const text = JSON.stringify({ ...toolErrorRecord(record), server_version: serverVersion() });
     return { text, truncated: false, isError: true };
   }
-  const fitted = fitToCap({ ...record, server_version: serverVersion() }, MCP_RESULT_MAX_CHARS, narrowingHint(name));
-  return { ...fitted, isError: false };
+  const { text, truncated, tooLarge } = fitToCap(
+    { ...record, server_version: serverVersion() },
+    MCP_RESULT_MAX_CHARS,
+    narrowingHint(name)
+  );
+  if (tooLarge) return { text, truncated, isError: true };
+  return { text, truncated, isError: false, structured: JSON.parse(text) as JsonRecord };
 }
 
 /** A tool that threw: the isError result, naming only the error class. */
@@ -476,7 +541,9 @@ export function initializeResult(requestedVersion: unknown) {
       'how-things-changed-over-time questions, compare_eras for then-versus-now, on_this_day for',
       'this date in past years, list_topics for the topic catalogue, latest_content for freshness,',
       'and corpus_stats for what the archive contains. voice: "jamie" (search_archive, quote_search,',
-      "claim_check, compare_eras and the lenses) keeps only Jamie's own words, never passages Jamie quoted.",
+      "find_evidence, compare_eras and archive_lens) keeps only Jamie's own words, never passages Jamie quoted.",
+      'year is shorthand for year_range [year, year]. When a result is cut, its truncated block says what',
+      'was left out and how to get the rest.',
       'Sources have one id everywhere (wt-351, blog-<microblog id>, ep-<n>); pass it back to get_source',
       'or source_neighborhood. Cite each source as a markdown link to its url: [WT351](url) for a Weekly Thing',
       'issue, the title for a blog post or episode.',
@@ -597,6 +664,7 @@ export async function handleMcpMessage(
               ...photos.map((photo) => ({ type: 'image', data: photo.dataBase64, mimeType: photo.mimeType })),
               { type: 'text', text: JSON.stringify(summary) }
             ],
+            ...(photos.length ? { structuredContent: summary } : {}),
             isError: photos.length === 0
           })
         };
@@ -608,6 +676,15 @@ export async function handleMcpMessage(
     // Only what tools/list declares is callable: web_search without its key
     // is neither listed nor callable.
     if (!mcpToolDeclarations().some((tool) => tool.name === name)) {
+      if (RETIRED_TOOLS[name]) {
+        const text = JSON.stringify({
+          error: RETIRED_TOOLS[name],
+          code: 'not_found',
+          next: 'Re-fetch tools/list and call the named tool.',
+          server_version: serverVersion()
+        });
+        return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
+      }
       return { statusCode: 200, payload: rpcError(id, -32602, `Unknown tool: ${name}`) };
     }
     const problems = validateToolArguments(name, rawArgs);
@@ -620,8 +697,15 @@ export async function handleMcpMessage(
     const args = (rawArgs && typeof rawArgs === 'object' ? rawArgs : {}) as JsonRecord;
     try {
       const invoked = await context.invokeTool(name, args);
-      const { text, isError } = renderToolCallResult(name, invoked);
-      return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError }) };
+      const { text, isError, structured } = renderToolCallResult(name, invoked);
+      return {
+        statusCode: 200,
+        payload: rpcResult(id, {
+          content: [{ type: 'text', text }],
+          ...(structured ? { structuredContent: structured } : {}),
+          isError
+        })
+      };
     } catch (error) {
       const { text } = toolFailureResult(name, error);
       return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };

@@ -62,7 +62,7 @@ export function promptFingerprint(): string {
 // 1.5.0: list_topics and compare_eras published; the skim (description,
 //        abstract, key_points) on source records and search results;
 //        similar_issues; topic and category filters; voice on quote_search,
-//        claim_check and the lenses; media_search issue_number; yearly terms
+//        the claim check and the lenses; media_search issue_number; yearly terms
 //        scored against the whole corpus.
 // 1.5.1: topic labels match only when named whole (archive_lens, list_content,
 //        gems); list_content reads every chunk; domain filters match the
@@ -79,7 +79,18 @@ export function promptFingerprint(): string {
 //        prompts; readOnlyHint/openWorldHint on every tool; schemas declare
 //        additionalProperties false; urls go out absolute; list_topics
 //        matches a name spelled as a slug.
-export const MCP_SERVER_VERSION = '1.6.0';
+// 2.0.0 (breaking): get_source and source_neighborhood take id only, and
+//        get_source a format (outline, text, full); search_archive groups
+//        passages under their source; entity_lens folded into archive_lens
+//        (aliases, aliases_checked); claim_check became find_evidence
+//        (claims, evidence only, no verdict); year is shorthand for
+//        year_range everywhere, and year_range replaces year_start/year_end;
+//        what a result leaves out is in one truncated block
+//        ({omitted, clipped, hint}), never inline markers or *_omitted and
+//        *_note keys; counts are [{key, count}] lists and totals total_count;
+//        every tool declares an outputSchema and a successful call carries
+//        structuredContent; a result too large to fit is an error.
+export const MCP_SERVER_VERSION = '2.0.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

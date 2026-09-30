@@ -1,4 +1,4 @@
-// MCP-native surface (MCP 1.6.0): resources and templates, prompts, tool
+// MCP-native surface (MCP 1.6.0; 2.0.0 truncation): resources and templates, prompts, tool
 // annotations and strict schemas, and absolute urls at the door.
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -10,7 +10,7 @@ import {
   mcpToolDeclarations,
   renderToolCallResult
 } from '../dist/shared/mcp.mjs';
-import { parseResourceUri } from '../dist/shared/mcp-resources.mjs';
+import { parseResourceUri, sourceMarkdown } from '../dist/shared/mcp-resources.mjs';
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 function fixtures() {
@@ -313,4 +313,12 @@ test('list_topics finds a name spelled as its slug', async () => {
     slug.topics.map((entry) => entry.name),
     ['MacStories']
   );
+});
+
+test('a source resource says when its body was cut, from the truncated block (2.0)', () => {
+  const source = { id: 'wt-351', subject: 'WT351', body: 'The first part.' };
+  const whole = sourceMarkdown(source);
+  assert.doesNotMatch(whole, /cut to fit/);
+  const cut = sourceMarkdown(source, { clipped: ['source.body'], hint: 'Pass section.' });
+  assert.match(cut, /_The body was cut to fit; get_source with id wt-351 and a section reads one section whole._$/);
 });

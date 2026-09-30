@@ -98,7 +98,7 @@ test('buildArchiveLens returns first latest year and source structure', () => {
   const lens = buildArchiveLens({ topic: 'RSS', operation: 'timeline', records, chunks });
 
   const resolve = (id) => lens.sources_by_id[id];
-  assert.equal(lens.total_sources, 3);
+  assert.equal(lens.total_count, 3);
   assert.equal(resolve(lens.first).issue_number, '10');
   assert.equal(resolve(lens.latest).source_kind, 'podcast');
   assert.deepEqual(
@@ -107,9 +107,11 @@ test('buildArchiveLens returns first latest year and source structure', () => {
   );
   assert.equal(lens.years.find((row) => row.year === 2020).source_count, 1);
   assert.equal(lens.sources.find((row) => row.source_kind === 'blog').source_count, 1);
-  assert.match(resolve(lens.timeline[0]).evidence[0].text, /open web/);
+  // With operation timeline, results IS the timeline; it is not sent twice.
+  assert.equal(lens.timeline, undefined);
+  assert.match(resolve(lens.results[0]).evidence[0].text, /open web/);
   assert.ok(
-    resolve(lens.timeline[0]).match_reasons.some((reason) => reason.startsWith('topics:') || reason.startsWith('text:'))
+    resolve(lens.results[0]).match_reasons.some((reason) => reason.startsWith('topics:') || reason.startsWith('text:'))
   );
 });
 
@@ -149,12 +151,12 @@ test('limit bounds sources_by_id, and first/latest/results always resolve', () =
   const lens = buildArchiveLens({ topic: 'Mastodon', records: manyIssues(30), limit: 5 });
   const kept = new Set(Object.keys(lens.sources_by_id));
   assert.ok(kept.size <= 7, `limit 5 kept ${kept.size} records`);
-  assert.equal(lens.total_sources, 30, 'counts stay whole');
-  assert.equal(lens.sources_omitted, 30 - kept.size);
-  assert.match(lens.sources_note, /raise limit/);
+  assert.equal(lens.total_count, 30, 'counts stay whole');
+  assert.equal(lens.truncated.omitted.sources_by_id, 30 - kept.size);
+  assert.match(lens.truncated.hint, /raise limit/);
   for (const id of [lens.first, lens.latest, ...lens.results]) assert.ok(kept.has(id), `${id} resolves`);
   for (const id of [
-    ...lens.timeline,
+    ...(lens.timeline || []),
     ...lens.latest_sources,
     ...lens.years.flatMap((bucket) => bucket.sample_sources),
     ...lens.sources.flatMap((bucket) => bucket.sample_sources),

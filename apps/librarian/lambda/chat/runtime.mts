@@ -353,9 +353,7 @@ function quotedToolValue(value: unknown) {
 
 function toolActivityCommentary(name: string, input: unknown = {}) {
   const value = objectValue(input);
-  const query = quotedToolValue(
-    value.query || value.topic || value.theme || value.entity || value.domain || value.claim
-  );
+  const query = quotedToolValue(value.query || value.topic || value.theme || value.domain);
   switch (name) {
     case 'search_faq':
       return query ? `Checking the FAQ for ${query}.` : 'Checking the public FAQ first.';
@@ -389,12 +387,10 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
       return query ? `Mapping ${query} across time and source types.` : 'Mapping the theme across the archive.';
     case 'source_neighborhood':
       return 'Looking at what connects to this.';
-    case 'entity_lens':
-      return query ? `Checking where ${query} appears across the archive.` : 'Checking where the named entity appears.';
     case 'archive_gems':
       return query ? `Looking for a surprising archive gem around ${query}.` : 'Looking for a surprising archive gem.';
-    case 'claim_check':
-      return query ? `Verifying ${query} against archive evidence.` : 'Verifying the claim against archive evidence.';
+    case 'find_evidence':
+      return 'Checking the draft against archive evidence.';
     default:
       return 'Narrowing it down...';
   }

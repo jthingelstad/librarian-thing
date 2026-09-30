@@ -94,12 +94,12 @@ function fixtures() {
 test('a topic label matches only when named whole (archive_lens)', async () => {
   primeCorpusCachesForTests(fixtures());
   const rss = await ARCHIVE_TOOLS.archive_lens({ topic: 'RSS' }, { scope: 'weekly_thing' });
-  assert.equal(rss.total_sources, 1, 'only WT11 says RSS; the label on all three is not evidence');
+  assert.equal(rss.total_count, 1, 'only WT11 says RSS; the label on all three is not evidence');
   assert.equal(rss.latest, 'wt-11');
   assert.ok(!JSON.stringify(rss.sources_by_id).includes('topics: '), 'no label match reason');
 
   const cluster = await ARCHIVE_TOOLS.archive_lens({ topic: LABEL }, { scope: 'weekly_thing' });
-  assert.equal(cluster.total_sources, 3, 'the whole label still finds its cluster');
+  assert.equal(cluster.total_count, 3, 'the whole label still finds its cluster');
   assert.equal(cluster.latest, 'wt-12', 'a whole-label hit is strict');
   assert.ok(cluster.sources_by_id['wt-12'].match_reasons.includes(`topics: '${LABEL}'`));
 });
@@ -145,8 +145,10 @@ test('find_links sorts before the limit, newest first, and says what it left out
     [12, 11]
   );
   assert.equal(newest.total_count, 3);
-  assert.equal(newest.results_omitted, 1);
-  assert.match(newest.results_note, /3 links matched; the 2 newest are shown/);
+  assert.equal(newest.truncated.omitted.results, 1);
+  assert.match(newest.truncated.hint, /3 links matched; the 2 newest are shown/);
+  assert.equal(newest.results[0].id, 'wt-12', 'each link names its source for get_source');
+  assert.equal(newest.results[0].destination_url, undefined, 'link_url already says it');
   assert.equal(newest.applied.sort, 'newest');
   assert.equal(newest.results[0].corpus_kind, 'weekly_thing');
 
@@ -159,7 +161,7 @@ test('find_links sorts before the limit, newest first, and says what it left out
     [10, 11]
   );
   const all = await ARCHIVE_TOOLS.find_links({ domain: 'example.org' }, { scope: 'weekly_thing' });
-  assert.equal(all.results_omitted, undefined, 'nothing left out, nothing said');
+  assert.equal(all.truncated, undefined, 'nothing left out, nothing said');
 
   assert.deepEqual(validateToolArguments('find_links', { sort: 'oldest' }), []);
   assert.match(validateToolArguments('find_links', { sort: 'sideways' }).join(' '), /sort/);
@@ -171,13 +173,23 @@ test('get_source sends the body once and says when it is cut', async () => {
   assert.equal(out.source.section_texts, undefined, 'section_texts repeated the body');
   // 30K of body as JSON: the greeting's two newlines escape to four.
   assert.equal(JSON.stringify(out.source.body).length - 2, 30000);
-  assert.equal(out.source.body_truncated, true);
-  assert.match(out.source.body_note, /pass section/);
+  assert.deepEqual(out.truncated.clipped, ['source.body']);
+  assert.match(out.truncated.hint, /[Pp]ass section/);
   assert.equal(out.source.description, 'Dek ten.');
   assert.equal(out.source.abstract, undefined, "a Weekly Thing issue's opening greeting is not an abstract");
 
   const short = await ARCHIVE_TOOLS.get_source({ id: 'wt-11' }, { scope: 'weekly_thing' });
-  assert.equal(short.source.body_truncated, undefined);
+  assert.equal(short.truncated, undefined);
+  const outline = await ARCHIVE_TOOLS.get_source({ id: 'WT11', format: 'outline' }, { scope: 'weekly_thing' });
+  assert.equal(outline.source.id, 'wt-11', 'WT11 is wt-11');
+  assert.equal(outline.source.body, undefined, 'outline has no body');
+  assert.equal(outline.source.links, undefined, 'outline has no links');
+  assert.ok(outline.source.sections.length > 0);
+  assert.equal(outline.applied.format, 'outline');
+  const text = await ARCHIVE_TOOLS.get_source({ id: '11', format: 'text' }, { scope: 'weekly_thing' });
+  assert.ok(text.source.body.length > 0);
+  assert.equal(text.source.links, undefined, 'text has no links');
+  assert.equal(typeof text.source.link_count, 'number', 'the count says what full would add');
 });
 
 test('get_source gives the body only the room its links leave (wt-274)', async () => {
@@ -199,11 +211,12 @@ test('get_source gives the body only the room its links leave (wt-274)', async (
   assert.equal(out.source.links.length, 40);
   assert.equal(out.source.commentary_links.length, 40);
   assert.ok(out.source.body.length < 30000, 'the links took their share');
-  assert.equal(out.source.body_truncated, true);
+  assert.deepEqual(out.truncated.clipped, ['source.body']);
   const rendered = renderToolResultText('get_source', out);
-  assert.equal(rendered.truncated, false, 'the record fits whole');
   assert.ok(rendered.text.length <= MCP_RESULT_MAX_CHARS);
-  assert.match(JSON.parse(rendered.text).source.body_note, /pass section/);
+  const parsed = JSON.parse(rendered.text);
+  assert.equal(parsed.truncated.max_chars, undefined, 'the record fits whole: the cap cut nothing');
+  assert.match(parsed.truncated.hint, /[Pp]ass section/);
 });
 
 test('source_neighborhood counts cross-source links without repeating them', async () => {
@@ -261,7 +274,7 @@ test('corpus_stats: limit years, one sample a year with its id, three domains', 
   }
   assert.equal(year.top_domains.length, 3);
   assert.equal(out.sources[0].yearly_signals.length, 3, 'every year when there are fewer than limit');
-  assert.equal(out.sources[0].yearly_signals_note, undefined);
+  assert.equal(out.truncated, undefined);
   corpus.weekly_thing.issues.push({
     number: 5,
     subject: 'WT5',
@@ -274,7 +287,8 @@ test('corpus_stats: limit years, one sample a year with its id, three domains', 
     narrow.sources[0].yearly_signals.map((row) => row.year),
     [2026, 2025, 2024]
   );
-  assert.match(narrow.sources[0].yearly_signals_note, /3 newest of 4 years; pass year_range/);
+  assert.equal(narrow.truncated.omitted['sources[].yearly_signals'], 1);
+  assert.match(narrow.truncated.hint, /pass year_range/);
   const two = await ARCHIVE_TOOLS.corpus_stats(
     { source_kind: 'weekly_thing', year_range: [2025, 2026] },
     { scope: 'weekly_thing' }

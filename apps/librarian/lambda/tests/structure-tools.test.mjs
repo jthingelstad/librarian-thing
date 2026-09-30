@@ -211,8 +211,8 @@ test('quote_search with voice=jamie never finds a phrase Jamie quoted', async ()
 test('media_search narrows to one issue', async () => {
   primeCorpusCachesForTests(fixtures());
   const all = await ARCHIVE_TOOLS.media_search({ query: 'lake' }, { scope: 'all' });
-  assert.equal(all.total_matches, 2);
-  const one = await ARCHIVE_TOOLS.media_search({ query: 'lake', issue_number: '2' }, { scope: 'all' });
+  assert.equal(all.total_count, 2);
+  const one = await ARCHIVE_TOOLS.media_search({ query: 'lake', issue_number: 2 }, { scope: 'all' });
   assert.deepEqual(
     one.results.map((item) => item.issue_number),
     [2]

@@ -196,7 +196,9 @@ test('on_this_day honours window, microposts, source_kind, year_range and limit_
   const capped = await ARCHIVE_TOOLS.on_this_day({ date: '2026-09-29', limit_per_year: 1 }, { scope: 'all' });
   const y2019 = capped.years.find((row) => row.year === 2019);
   assert.equal(y2019.items.length, 1);
-  assert.equal(y2019.more, 1);
+  assert.equal(y2019.total_count, 2);
+  assert.ok(capped.truncated.omitted['years[].items'] >= 1);
+  assert.match(capped.truncated.hint, /limit_per_year/);
 
   const ranged = await ARCHIVE_TOOLS.on_this_day({ date: '2026-09-29', year_range: [2024, 2025] }, { scope: 'all' });
   assert.deepEqual(
@@ -271,8 +273,12 @@ test('currently_history folds "installing more" into its kind', async () => {
     }
   });
   const out = await ARCHIVE_TOOLS.currently_history({ kind: 'installing' });
-  assert.equal(out.total, 2);
-  assert.deepEqual(out.counts_by_kind, { installing: 2 });
+  assert.equal(out.total_count, 2);
+  assert.deepEqual(out.counts_by_kind, [{ kind: 'installing', count: 2 }]);
+  assert.deepEqual(out.counts_by_year, [{ year: 2024, count: 2 }]);
+  const year = await ARCHIVE_TOOLS.currently_history({ year: 2024 });
+  assert.equal(year.total_count, 3, 'year is year_range [2024, 2024]');
+  assert.deepEqual(year.applied.year_range, [2024, 2024]);
   assert.deepEqual(
     out.entries.map((entry) => [entry.kind, entry.label]),
     [

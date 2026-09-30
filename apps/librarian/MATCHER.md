@@ -21,9 +21,9 @@ Rules:
 - Multi-word terms always compile as `phrase`, even when `stem` is
   requested — a token-bag interpretation is the round-five alias bug.
 - The server never silently applies a looser mode than requested.
-- `match_mode` is an input parameter on `archive_lens`, `entity_lens`,
-  `list_content`, `find_links`, and the applied mode is echoed in the
-  response as `match_mode`.
+- `match_mode` is an input parameter on `archive_lens`, `list_content`,
+  `find_links`, and the applied mode is echoed in the response as
+  `match_mode`.
 
 ## Aliases
 
@@ -40,7 +40,10 @@ One table (`ENTITY_ALIASES` in `matcher.mts`), seeded:
 | wt | Weekly Thing |
 
 Each alias compiles under its own mode (multi-word alias = phrase).
-`entity_lens` reports the full set as `aliases_checked`. Match reasons
+`archive_lens` adds the table's aliases for its topic to any the caller
+passes in `aliases` (at most 8, deduped case-insensitively) and reports
+the full set as `aliases_checked`. (MCP 2.0 folded `entity_lens`, which
+did this alone, into `archive_lens`.) Match reasons
 attribute the specific alias span that hit (`text: 'ethereum name
 service'`), never a bag of tokens.
 
@@ -73,7 +76,7 @@ structurally impossible. Each lens source exposes `strict_match`.
 
 ## Exemptions (documented, not accidental)
 
-- `claim_check` and `compare_eras` filter by semantic retrieval
+- `find_evidence` and `compare_eras` filter by semantic retrieval
   (embeddings + rerank), not lexical matching.
 - `source_neighborhood` ranks by token-overlap scoring between two
   sources; it does not match a user query against text.
@@ -83,8 +86,7 @@ structurally impossible. Each lens source exposes `strict_match`.
 
 ## Case sensitivity
 
-`case_sensitive: true` (archive_lens, entity_lens, list_content,
-find_links) drops case folding for the primary term - topic "Go" matches
+`case_sensitive: true` (archive_lens, list_content, find_links) drops case folding for the primary term - topic "Go" matches
 the language, never "to go". Default is case-insensitive. Aliases never
 inherit case sensitivity; per the ETH rule below, a case-sensitive alias
 requires per-alias case flags first.
@@ -115,12 +117,12 @@ case of the source text; `matched_term` is the input term as provided.
 
 | Surface | Canonical matcher | match_mode / case_sensitive params |
 |---|---|---|
-| archive_lens, entity_lens | yes | yes |
+| archive_lens | yes | yes |
 | list_content, find_links | yes | yes |
 | list_issues, media_search | yes (exact per token) | no |
 | quote_search | yes (literal mode) | no |
 | search_archive | exempt - hybrid retrieval (TF-IDF + embeddings + RRF) | - |
-| claim_check, compare_eras | exempt - semantic retrieval | - |
+| find_evidence, compare_eras | exempt - semantic retrieval | - |
 | search_faq | exempt - lexical scoring, token-based | - |
 | source_neighborhood | exempt - inter-source overlap ranking | - |
 | top_references, corpus_stats | no text matching (domain aggregation via one shared function) | - |

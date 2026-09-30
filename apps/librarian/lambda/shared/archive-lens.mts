@@ -549,7 +549,7 @@ export function buildArchiveLens({
   // `limit` bounds the map: the headline ids (results - which ARE the
   // reading path for that operation - then first and latest) always resolve, then
   // the rest fill in priority order up to `limit`. Id lists and the
-  // reading path keep only ids the map holds; the counts (total_sources,
+  // reading path keep only ids the map holds; the counts (total_count,
   // counts_by_year, years[].source_count) stay whole.
   const firstId = strictMatched[0] ? lensSourceId(strictMatched[0]) : null;
   const latestId = strictMatched.at(-1) ? lensSourceId(strictMatched.at(-1)!) : null;
@@ -576,15 +576,17 @@ export function buildArchiveLens({
   return {
     operation: normalizedOperation,
     topic: compactWhitespace(topic),
-    total_sources: matched.length,
+    total_count: matched.length,
     total_evidence_matches: matched.reduce((sum, item) => sum + (item.match_count || 0), 0),
     counts_by_year: countsByYear,
     year_count_summary: yearCountSummary(countsByYear),
     sources_by_id: sourcesById,
     ...(matched.length > kept.size
       ? {
-          sources_omitted: matched.length - kept.size,
-          sources_note: `sources_by_id holds ${kept.size} of ${matched.length} matched sources; raise limit (max 40) or narrow year_range for more`
+          truncated: {
+            omitted: { sources_by_id: matched.length - kept.size },
+            hint: `sources_by_id holds ${kept.size} of ${matched.length} matched sources; raise limit (max 40) or narrow year_range for more.`
+          }
         }
       : {}),
     match_mode: matcher.appliedMode,
@@ -599,7 +601,9 @@ export function buildArchiveLens({
     first: firstId,
     latest: latestId,
     results: resultIds,
-    timeline: keptOnly(timelineIds),
+    // With operation timeline, results IS the timeline; sending both read
+    // as two answers.
+    ...(normalizedOperation === 'timeline' ? {} : { timeline: keptOnly(timelineIds) }),
     latest_sources: keptOnly(latestIds),
     years: years.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
     sources: bySource.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),

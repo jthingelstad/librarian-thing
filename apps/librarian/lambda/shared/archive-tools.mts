@@ -63,7 +63,6 @@ export const TOOL_LIMITS: Record<string, { min: number; max: number; default: nu
   latest_content: { min: 1, max: 30, default: 10 },
   quote_search: { min: 1, max: 50, default: 20 },
   archive_lens: { min: 1, max: 40, default: 18 },
-  entity_lens: { min: 1, max: 40, default: 18 },
   source_neighborhood: { min: 1, max: 20, default: 8 },
   archive_gems: { min: 1, max: 12, default: 6 },
   media_search: { min: 1, max: 12, default: 8 },
@@ -74,7 +73,9 @@ export const TOOL_LIMITS: Record<string, { min: number; max: number; default: nu
   on_this_day: { min: 1, max: 20, default: 5 },
   compare_eras: { min: 1, max: 10, default: 6 },
   // Site topics returned; the nine clusters always come back whole.
-  list_topics: { min: 1, max: 100, default: 40 }
+  list_topics: { min: 1, max: 100, default: 40 },
+  // Passages per claim.
+  find_evidence: { min: 1, max: 8, default: 3 }
 };
 
 export function toolLimit(name: string, input: { limit?: unknown } = {}) {
@@ -91,6 +92,7 @@ interface ToolArgs {
   limit_per_year?: unknown;
   query?: unknown;
   aliases?: unknown;
+  format?: unknown;
   match_mode?: unknown;
   case_sensitive?: unknown;
   limit?: unknown;
@@ -135,7 +137,7 @@ interface ToolArgs {
   mood?: unknown;
   mode?: unknown;
   era?: unknown;
-  claims?: unknown[];
+  claims?: unknown;
   claim?: unknown;
   text?: unknown;
 }
@@ -180,6 +182,31 @@ function graphRecord(graph: Record<string, unknown>, key: string) {
 
 function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.map(String) : [];
+}
+
+// One shape for "there is more than this" (MCP 2.0): a list cut by limit or
+// by size is counted under truncated.omitted by its path (results,
+// sources[].yearly_signals), a clipped text is named in truncated.clipped,
+// and hint says how to get the rest. The doors' size cap (fitToCap in
+// mcp.mts) adds to the same block. Returns the result it was given.
+export function markTruncated(
+  result: Record<string, unknown>,
+  { omitted = {}, clipped = [], hint = '' }: { omitted?: Record<string, number>; clipped?: string[]; hint?: string }
+) {
+  const counts = Object.entries(omitted).filter(([, count]) => Number(count) > 0);
+  if (!counts.length && !clipped.length) return result;
+  const prior = objectRecord(result.truncated);
+  const merged = { ...(objectRecord(prior.omitted) as Record<string, number>) };
+  for (const [path, count] of counts) merged[path] = (merged[path] || 0) + Number(count);
+  const priorClipped = Array.isArray(prior.clipped) ? prior.clipped.map(String) : [];
+  const hints = [String(prior.hint || ''), hint].filter(Boolean);
+  result.truncated = {
+    ...prior,
+    ...(Object.keys(merged).length ? { omitted: merged } : {}),
+    ...(priorClipped.length || clipped.length ? { clipped: [...new Set([...priorClipped, ...clipped])] } : {}),
+    hint: [...new Set(hints)].join(' ')
+  };
+  return result;
 }
 
 function sortedCountList(map: Map<string, number>, key: string) {
@@ -230,8 +257,21 @@ export function collectToolCitations(toolResults: ToolResult[] = []) {
   const aggregateSources: ArchiveRecord[] = [];
   for (const result of toolResults || []) {
     if (!result || result.error) continue;
-    if (Array.isArray(result.results)) {
-      sources.push(...result.results.filter((entry): entry is ArchiveRecord => typeof entry === 'object'));
+    for (const entry of Array.isArray(result.results) ? result.results : []) {
+      if (!entry || typeof entry !== 'object') continue;
+      const { passages, evidence, claim, ...group } = entry as ArchiveRecord & Record<string, unknown>;
+      if (Array.isArray(passages)) {
+        // search_archive groups passages under their source; each passage
+        // is its own section-level citation.
+        for (const passage of passages) {
+          if (passage && typeof passage === 'object') sources.push({ ...group, ...passage } as ArchiveRecord);
+        }
+      } else if (typeof claim === 'string' && Array.isArray(evidence)) {
+        // find_evidence: one entry per claim, its passages under evidence.
+        sources.push(...evidence.filter((item): item is ArchiveRecord => Boolean(item) && typeof item === 'object'));
+      } else {
+        sources.push(entry as ArchiveRecord);
+      }
     }
     // Lens payloads reference sources by id; the full records live once in
     // sources_by_id.
@@ -508,6 +548,54 @@ async function toolSearchFaq(input: ToolArgs = {}) {
   };
 }
 
+// Passage fields that describe the whole source: they ride once on the
+// source group, never on each passage.
+const SOURCE_LEVEL_FIELDS = [
+  'issue_number',
+  'source_kind',
+  'label',
+  'subject',
+  'publish_date',
+  'issue_year',
+  'age',
+  'url',
+  'transcript_url',
+  'audio_url',
+  'episode_number',
+  'show',
+  'topics',
+  'also_in_issues'
+] as const;
+
+// Ranked passages grouped by their source, in the order each source first
+// ranks: the source's facts and skim once, its passages beneath. MCP 2.0;
+// before it every passage repeated its source and a 450-char skim.
+function groupPassagesBySource(chunks: ArchiveRecord[], records: Map<string, ArchiveRecord>) {
+  const groups = new Map<string, Record<string, unknown> & { passages: Record<string, unknown>[] }>();
+  for (const chunk of chunks) {
+    const key = sourceKeyFromChunk(chunk);
+    const record = records.get(key);
+    const passage = compactSource(chunk) as Record<string, unknown>;
+    let group = groups.get(key);
+    if (!group) {
+      group = { id: lensSourceId(record || chunk), passages: [] };
+      for (const field of SOURCE_LEVEL_FIELDS) if (passage[field] !== undefined) group[field] = passage[field];
+      const skim = sourceSkim(record);
+      if (skim) group.skim = skim;
+      group.score = passage.score;
+      groups.set(key, group);
+    }
+    const own: Record<string, unknown> = {};
+    for (const [field, value] of Object.entries(passage)) {
+      if (field === 'id' || (SOURCE_LEVEL_FIELDS as readonly string[]).includes(field)) continue;
+      if (value !== undefined) own[field] = value;
+    }
+    group.passages.push(own);
+  }
+  // The source's facts read first, then what matched in it.
+  return [...groups.values()].map(({ passages, ...source }) => ({ ...source, passages }));
+}
+
 async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const query = String(input.query || '').trim();
   if (!query) return { results: [] };
@@ -524,14 +612,7 @@ async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = 
     scope
   });
   const records = await recordsByKey(scopeKinds(scope));
-  return {
-    query,
-    results: results.map((source) => {
-      const passage = compactSource(source);
-      const skim = sourceSkim(records.get(sourceKeyFromChunk(source)));
-      return skim ? { ...passage, skim } : passage;
-    })
-  };
+  return { query, results: groupPassagesBySource(results as ArchiveRecord[], records) };
 }
 
 // Each corpus's source records by key, built once per loaded corpus.
@@ -621,9 +702,23 @@ function fitBody(text: string, budget: number) {
   return shown;
 }
 
+// How much of a source get_source sends: outline (facts, skim, section
+// names and word counts, link counts), text (outline plus the body) or full
+// (text plus the links; the default).
+const GET_SOURCE_FORMATS = ['outline', 'text', 'full'] as const;
+type GetSourceFormat = (typeof GET_SOURCE_FORMATS)[number];
+
+function getSourceFormat(value: unknown): GetSourceFormat {
+  const wanted = String(value || '')
+    .trim()
+    .toLowerCase();
+  return (GET_SOURCE_FORMATS as readonly string[]).includes(wanted) ? (wanted as GetSourceFormat) : 'full';
+}
+
 async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const bundle = await findSourceBundle(input, context);
-  if (!bundle) return { error: 'Source not found in the active source scope.' };
+  if (!bundle) return { error: 'Source not found.' };
+  const format = getSourceFormat(input.format);
   const { kind, record, chunks, links } = bundle;
   const wantedSection = String(input.section || '').trim();
   let sections = [];
@@ -720,21 +815,24 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     // repeating source_kind/issue_number/subject/publish_date/url on
     // every entry was 6 redundant fields x 40 links. A section filter
     // applies to links too.
-    // links are the headline picks; the links inside Jamie's commentary
-    // and Journal ride separately so a section's picks stay readable.
-    links: sectionLinks
-      .filter(isHeadlineLink)
-      .slice(0, 40)
-      .map((link) => compactChildLink(link, record)),
-    ...(sectionLinks.some((link) => !isHeadlineLink(link))
-      ? {
-          commentary_links: sectionLinks
-            .filter((link) => !isHeadlineLink(link))
-            .slice(0, 40)
-            .map((link) => compactChildLink(link, record))
-        }
-      : {})
+    link_count: sectionLinks.filter(isHeadlineLink).length,
+    commentary_link_count: sectionLinks.filter((link) => !isHeadlineLink(link)).length
   };
+  // links are the headline picks; the links inside Jamie's commentary
+  // and Journal ride separately so a section's picks stay readable.
+  const headlineLinks = sectionLinks.filter(isHeadlineLink);
+  const commentaryLinks = sectionLinks.filter((link) => !isHeadlineLink(link));
+  const omitted: Record<string, number> = {};
+  if (format === 'full') {
+    source.links = headlineLinks.slice(0, 40).map((link) => compactChildLink(link, record));
+    if (commentaryLinks.length) {
+      source.commentary_links = commentaryLinks.slice(0, 40).map((link) => compactChildLink(link, record));
+    }
+    omitted['source.links'] = Math.max(0, headlineLinks.length - 40);
+    omitted['source.commentary_links'] = Math.max(0, commentaryLinks.length - 40);
+  }
+  const result: Record<string, unknown> = { applied: { format }, source };
+  if (format === 'outline') return result;
   // body is the one full text. section_texts repeated it section by
   // section (wt-351: 13,880 + 13,772 chars of the same words); sections
   // carries the names and word counts.
@@ -742,11 +840,16 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const shown = fitBody(body, Math.max(Math.min(GET_SOURCE_BODY_MAX_CHARS, room), GET_SOURCE_BODY_MIN_CHARS));
   if (!sectionSummaries.length) source.word_count = tokenize(shown).length;
   source.body = shown;
-  if (body.length > shown.length) {
-    source.body_truncated = true;
-    source.body_note = `body shows ${shown.length} of ${body.length} characters; pass section (a name from sections) to read one whole`;
-  }
-  return { source };
+  const cutBody = body.length > shown.length;
+  return markTruncated(result, {
+    omitted,
+    clipped: cutBody ? ['source.body'] : [],
+    hint: cutBody
+      ? `Body shows ${shown.length} of ${body.length} characters; pass section (a name from sections) to read one whole.`
+      : Object.values(omitted).some(Boolean)
+        ? "Pass section to see one section's links."
+        : ''
+  });
 }
 
 // Where a find_links topic matched, field by field (the link's own text,
@@ -827,7 +930,9 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const results = ordered.slice(0, limit).map((link) => {
     const sourceUrl =
       link.source_url || (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.url);
+    const id = linkSourceId(link);
     return {
+      ...(id ? { id } : {}),
       issue_number: link.issue_number ?? null,
       source_kind: link.source_kind,
       corpus_kind: linkCorpusKind(link),
@@ -841,7 +946,6 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       context: link.context || link.heading_context,
       url: sourceUrl,
       link_url: link.link_url || link.url,
-      destination_url: link.link_url || link.url,
       link_kind: link.link_kind,
       link_category: link.link_category,
       target_resolved: Boolean(link.target_resolved),
@@ -884,24 +988,33 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 20)
     .map(([domainName, count]) => ({ domain: domainName, count }));
-  const omitted = filteredLinks.length - results.length;
-  return {
-    applied: { sort },
-    ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
-    results,
-    total_count: filteredLinks.length,
-    ...(omitted > 0
-      ? {
-          results_omitted: omitted,
-          results_note: `${filteredLinks.length} links matched; the ${results.length} ${sort} are shown. Raise limit (max 50), pass sort: '${sort === 'newest' ? 'oldest' : 'newest'}', or narrow with year_range.`
-        }
-      : {}),
-    top_domains,
-    counts_by_source: sortedCountList(countsBySource, 'source_kind'),
-    counts_by_link_kind: sortedCountList(countsByKind, 'link_kind'),
-    counts_by_link_category: sortedCountList(countsByCategory, 'link_category'),
-    ...(countsByRole.size ? { counts_by_link_role: sortedCountList(countsByRole, 'link_role') } : {})
-  };
+  return markTruncated(
+    {
+      applied: { sort },
+      ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
+      results,
+      total_count: filteredLinks.length,
+      top_domains,
+      counts_by_source: sortedCountList(countsBySource, 'source_kind'),
+      counts_by_link_kind: sortedCountList(countsByKind, 'link_kind'),
+      counts_by_link_category: sortedCountList(countsByCategory, 'link_category'),
+      ...(countsByRole.size ? { counts_by_link_role: sortedCountList(countsByRole, 'link_role') } : {})
+    },
+    {
+      omitted: { results: filteredLinks.length - results.length },
+      hint: `${filteredLinks.length} links matched; the ${results.length} ${sort} are shown. Raise limit (max 50), pass sort: '${sort === 'newest' ? 'oldest' : 'newest'}', or narrow with year_range.`
+    }
+  );
+}
+
+// The id of the source a link sits in (wt-351, blog-<id>, ep-<n>), for
+// get_source; '' when the link record does not name its source.
+function linkSourceId(link: ArchiveRecord) {
+  const present = (value: unknown) => value !== undefined && value !== null && String(value) !== '';
+  if (present(link.issue_number)) return `wt-${link.issue_number}`;
+  if (present(link.episode_number)) return `ep-${link.episode_number}`;
+  if (present(link.microblog_id)) return `blog-${link.microblog_id}`;
+  return '';
 }
 
 async function toolDomainHistory(input: ToolArgs = {}, context: ToolContext = {}) {
@@ -1263,7 +1376,27 @@ function recordMatchesIdentifier(record: ArchiveRecord, input: ToolArgs = {}) {
   return false;
 }
 
-async function findSourceBundle(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+// The id as a person or another tool might write it: wt-351, WT351 and a
+// bare issue number are one issue; blog-<id> and ep-<n> as emitted; a
+// source's url (absolute or /archive/351/) is matched as a url. Anything
+// else is compared with the ids tools emit (lensSourceId) as given.
+export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
+  const raw = String(input.id ?? '').trim();
+  if (!raw) return input;
+  const rest = { ...input };
+  delete rest.id;
+  const issue = raw.match(/^(?:wt[-\s]?|#)?(\d{1,4})$/i);
+  if (issue) return { ...rest, id: `wt-${Number(issue[1])}` };
+  const blog = raw.match(/^blog-(\d+)$/i);
+  if (blog) return { ...rest, id: `blog-${blog[1]}` };
+  const episode = raw.match(/^ep-(\d+)$/i);
+  if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
+  if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
+  return { ...rest, id: raw };
+}
+
+async function findSourceBundle(rawInput: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const input = canonicalSourceInput(rawInput);
   const requestedKind = inferSourceKindFromInput(input);
   const kinds = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
   for (const kind of kinds) {
@@ -1334,6 +1467,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
   };
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   const sources = [];
+  let yearsOmitted = 0;
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     const records = latestByDate(contentRecords(corpus, kind)).filter(inStatsYears);
@@ -1403,9 +1537,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       counts_by_link_category: sortedCountList(categoryCounts, 'link_category'),
       ...(roleCounts.size ? { counts_by_link_role: sortedCountList(roleCounts, 'link_role') } : {})
     };
-    if (countsByYear.length > listLimit) {
-      stats.yearly_signals_note = `yearly_signals shows the ${listLimit} newest of ${countsByYear.length} years; pass year_range (or a higher limit) for the others`;
-    }
+    yearsOmitted += Math.max(0, countsByYear.length - listLimit);
     if (kind === 'weekly_thing') {
       stats.issue_count = rangeActive ? records.length : corpus.issue_count || records.length;
       stats.content_item_count = records.length;
@@ -1429,13 +1561,19 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     sources.push(stats);
   }
   return compactLensPayload(
-    {
-      scope: effectiveScope(scope, requestedSource),
-      source_kind: requestedSource || null,
-      server_version: serverVersion(),
-      year_range: statsStartYear || statsEndYear ? [statsStartYear, statsEndYear] : null,
-      sources
-    },
+    markTruncated(
+      {
+        scope: effectiveScope(scope, requestedSource),
+        source_kind: requestedSource || null,
+        server_version: serverVersion(),
+        year_range: statsStartYear || statsEndYear ? [statsStartYear, statsEndYear] : null,
+        sources
+      },
+      {
+        omitted: { 'sources[].yearly_signals': yearsOmitted },
+        hint: `yearly_signals shows the ${listLimit} newest years; pass year_range (or a higher limit) for the others.`
+      }
+    ),
     { params: ['source_kind', 'year_range', 'limit'] }
   );
 }
@@ -1444,7 +1582,7 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const limit = toolLimit('latest_content', input);
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
-  const alsoInIssue = input.also_in_issue ?? input.issue_number;
+  const alsoInIssue = input.also_in_issue;
   const items = [];
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
@@ -1460,11 +1598,14 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
     }
     return true;
   });
+  const alsoIn = alsoInIssue !== undefined && alsoInIssue !== null && String(alsoInIssue).trim();
   return {
+    applied: {
+      ...(hasAlsoInIssues !== null ? { has_also_in_issues: hasAlsoInIssues } : {}),
+      ...(alsoIn ? { also_in_issue: Number(issueKey(alsoInIssue)) } : {})
+    },
     scope: normalizeScope(scope),
     source_kind: requestedSource || null,
-    has_also_in_issues: hasAlsoInIssues,
-    also_in_issue: alsoInIssue ?? null,
     results: latestByDate(filtered).slice(0, limit)
   };
 }
@@ -1523,7 +1664,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
     .trim();
   const targetResolved = boolFilter(input.target_resolved);
   const hasAlsoInIssues = boolFilter(input.has_also_in_issues);
-  const alsoInIssue = input.also_in_issue ?? input.issue_number;
+  const alsoInIssue = input.also_in_issue;
   const limit = toolLimit('list_content', input);
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
@@ -1581,15 +1722,21 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       }
     }
   }
-  return {
-    scope: effectiveScope(scope, requestedSource),
-    source_kind: requestedSource || null,
-    match_mode: topic ? topicMatcher.appliedMode : null,
-    total_count: years.length,
-    counts_by_year: countList(years, 'year'),
-    counts_by_source: countList(sources, 'source_kind'),
-    results
-  };
+  return markTruncated(
+    {
+      scope: effectiveScope(scope, requestedSource),
+      source_kind: requestedSource || null,
+      match_mode: topic ? topicMatcher.appliedMode : null,
+      total_count: years.length,
+      counts_by_year: countList(years, 'year').sort((a, b) => Number(a.year) - Number(b.year)),
+      counts_by_source: countList(sources, 'source_kind'),
+      results
+    },
+    {
+      omitted: { results: years.length - results.length },
+      hint: `${years.length} sources matched; the ${results.length} newest are shown. Raise limit (max 120) or narrow with year_range.`
+    }
+  );
 }
 
 function contextAround(text: unknown, phrase: unknown, radius = 240) {
@@ -1677,6 +1824,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
 }
 
 async function toolListIssues(input: ToolArgs = {}) {
+  const [listStart, listEnd] = parseYearRange(input.year_range);
   const corpus = await loadCorpus();
   const graph = await loadGraph();
   const topic = String(input.topic || input.entity || '')
@@ -1703,7 +1851,9 @@ async function toolListIssues(input: ToolArgs = {}) {
       const key = String(trope).toLowerCase();
       tropeCounts.set(key, (tropeCounts.get(key) || 0) + 1);
     }
-    if (input.year && Number(issue.issue_year || 0) !== Number(input.year)) continue;
+    const issueYear = Number(issue.issue_year || 0);
+    if (listStart && (!issueYear || issueYear < listStart)) continue;
+    if (listEnd && (!issueYear || issueYear > listEnd)) continue;
     if (
       topic &&
       !listIssuesMatcher.matches(String(issue.subject || '')) &&
@@ -1777,11 +1927,22 @@ interface LensPayloadOptions {
 }
 
 function truncationNote(params: string[] | undefined) {
-  // The note must only name parameters the calling tool actually accepts.
-  return params?.length ? `narrow with ${params.join(', ')} for the rest` : 'ask a narrower question for the rest';
+  // The hint must only name parameters the calling tool actually accepts.
+  return params?.length ? `Narrow with ${params.join(', ')} for the rest.` : 'Ask a narrower question for the rest.';
 }
 
-function compactLensLevel<T>(value: T, depth: number, scale: number, note: string, parentKey = ''): T {
+// What compaction cut, by path (results, years[].sample_sources); it
+// becomes the payload's truncated block.
+type OmittedByPath = Record<string, number>;
+
+function compactLensLevel<T>(
+  value: T,
+  depth: number,
+  scale: number,
+  omitted: OmittedByPath,
+  parentKey = '',
+  path = ''
+): T {
   // Evidence text keeps its full (already bounded) snippet at any depth -
   // capping it mid-string once cut snippets off exactly where the matched
   // span began, making the evidence unverifiable.
@@ -1793,29 +1954,29 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
     return value;
   }
   if (Array.isArray(value)) {
+    const itemPath = `${path}[]`;
+    const each = (item: unknown) => compactLensLevel(item, depth + 1, scale, omitted, '', itemPath);
     if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
     if (ID_LIST_KEYS.has(parentKey) && value.every((item) => typeof item === 'string')) return value;
     // Never truncate short arrays: cutting 3 match_reasons or 5 domains
     // saves nothing while the budget belongs on repeated large objects.
-    if (value.length <= 6) {
-      return value.map((item) => compactLensLevel(item, depth + 1, scale, note)) as unknown as T;
-    }
+    if (value.length <= 6) return value.map(each) as unknown as T;
     const baseCap = LENS_ARRAY_CAPS[Math.min(depth, LENS_ARRAY_CAPS.length - 1)];
     const arrayCap = Math.max(6, Math.round(baseCap * scale));
-    // An {omitted: 2} marker costs more bytes than two short entries - when
-    // only a few would be cut, keep the full list instead.
-    if (value.length <= arrayCap + 3) {
-      return value.map((item) => compactLensLevel(item, depth + 1, scale, note)) as unknown as T;
-    }
-    const capped = value.slice(0, arrayCap).map((item) => compactLensLevel(item, depth + 1, scale, note));
-    // Tool parameters control top-level lists; a nested record's own list
-    // (a source's domains) is controlled by none of them - say so plainly.
-    (capped as unknown[]).push({ omitted: value.length - arrayCap, note: depth <= 1 ? note : 'truncated for size' });
-    return capped as unknown as T;
+    // Cutting only a few entries saves little and costs a count; keep them.
+    if (value.length <= arrayCap + 3) return value.map(each) as unknown as T;
+    omitted[path] = (omitted[path] || 0) + value.length - arrayCap;
+    return value.slice(0, arrayCap).map(each) as unknown as T;
   }
   const out: Record<string, unknown> = {};
   for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    const childPath = path ? `${path}.${key}` : key;
     if (key === 'topics' && depth > 0) continue; // issue-level topic tags repeat on every source
+    // The payload's own truncated block is carried over whole.
+    if (key === 'truncated' && depth === 0) {
+      out[key] = entry;
+      continue;
+    }
     if (key === 'sources_by_id' && entry && typeof entry === 'object' && !Array.isArray(entry)) {
       // The id-keyed record map is the payload's bulk; cap its ENTRY count
       // under pressure. Insertion order is citation priority, so the least
@@ -1828,12 +1989,12 @@ function compactLensLevel<T>(value: T, depth: number, scale: number, note: strin
       const pinned = new Set([record.first, record.latest].filter((id) => typeof id === 'string'));
       const kept = entries
         .filter(([id], index) => index < mapCap || pinned.has(id))
-        .map(([id, source]) => [id, compactLensLevel(source, depth + 1, scale, note, key)]);
+        .map(([id, source]) => [id, compactLensLevel(source, depth + 1, scale, omitted, key, `${childPath}.*`)]);
       out[key] = Object.fromEntries(kept);
-      if (entries.length > kept.length) out.sources_omitted_for_size = entries.length - kept.length;
+      if (entries.length > kept.length) omitted[childPath] = (omitted[childPath] || 0) + entries.length - kept.length;
       continue;
     }
-    out[key] = compactLensLevel(entry, depth + 1, scale, note, key);
+    out[key] = compactLensLevel(entry, depth + 1, scale, omitted, key, childPath);
   }
   return out as unknown as T;
 }
@@ -1877,13 +2038,17 @@ function reconcileSourceRefs(payload: Record<string, unknown>) {
 }
 
 function compactLensPayload<T>(value: T, options: LensPayloadOptions = {}): T {
-  const note = truncationNote(options.params);
+  const hint = truncationNote(options.params);
   const maxChars = options.maxChars || LENS_PAYLOAD_MAX_CHARS;
   let result = value;
   for (const scale of LENS_CAP_SCALES) {
-    result = compactLensLevel(value, 0, scale, note);
+    const omitted: OmittedByPath = {};
+    result = compactLensLevel(value, 0, scale, omitted);
     if (result && typeof result === 'object' && 'sources_by_id' in (result as Record<string, unknown>)) {
       result = reconcileSourceRefs(result as Record<string, unknown>) as T;
+    }
+    if (result && typeof result === 'object' && !Array.isArray(result)) {
+      result = markTruncated({ ...(result as Record<string, unknown>) }, { omitted, hint }) as T;
     }
     try {
       if (JSON.stringify(result).length <= maxChars) return result;
@@ -1928,13 +2093,18 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
       })
     );
   }
+  // Other names for the same thing: the caller's, and the known ones
+  // (matcher.mts ENTITY_ALIASES: ENS is Ethereum Name Service); the
+  // separate entity lens did this until 2.0 folded it in.
+  const aliases = lensAliases(topic, input.aliases);
   return compactLensPayload(
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
+      ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
       ...buildArchiveLens({
         topic,
-        aliases: Array.isArray(input.aliases) ? input.aliases.map(String) : [],
+        aliases,
         matchMode: normalizeMatchMode(input.match_mode),
         caseSensitive: input.case_sensitive === true,
         operation: input.operation,
@@ -1946,6 +2116,20 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     },
     { params: ['topic', 'operation', 'match_mode', 'source_kind', 'year_range', 'limit'] }
   );
+}
+
+export const LENS_MAX_ALIASES = 8;
+
+function lensAliases(topic: string, given: unknown) {
+  const seen = new Set([topic.toLowerCase()]);
+  const aliases: string[] = [];
+  const offered = [...(Array.isArray(given) ? given : given ? [given] : []), ...aliasesFor(topic)];
+  for (const alias of offered.map((value) => String(value || '').trim()).filter(Boolean)) {
+    if (seen.has(alias.toLowerCase()) || aliases.length >= LENS_MAX_ALIASES) continue;
+    seen.add(alias.toLowerCase());
+    aliases.push(alias);
+  }
+  return aliases;
 }
 
 function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
@@ -2253,32 +2437,6 @@ async function similarIssues(record: ArchiveRecord, limit: number) {
   });
 }
 
-async function toolEntityLens(input: ToolArgs = {}, context: ToolContext = {}) {
-  const entity = String(input.entity || input.topic || input.query || '').trim();
-  if (!entity) return { error: 'entity is required' };
-  const operation = input.operation || 'timeline';
-  const aliases = aliasesFor(entity);
-  const lens = await toolArchiveLens(
-    {
-      topic: entity,
-      aliases,
-      match_mode: input.match_mode,
-      case_sensitive: input.case_sensitive,
-      operation,
-      source_kind: input.source_kind,
-      year_range: input.year_range,
-      voice: input.voice,
-      limit: toolLimit('entity_lens', input)
-    },
-    context
-  );
-  return {
-    entity,
-    aliases_checked: [entity, ...aliases],
-    ...lens
-  };
-}
-
 async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const theme = String(input.theme || input.topic || input.query || '').trim();
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
@@ -2286,12 +2444,9 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
     String(value || '')
       .toLowerCase()
       .trim();
-  // mood and mode are the same argument; mood wins a conflict, and says so.
-  const mood = lower(input.mood) || lower(input.mode);
-  const conflict =
-    lower(input.mood) && lower(input.mode) && lower(input.mood) !== lower(input.mode)
-      ? { ignored: { mode: lower(input.mode) }, note: `mood and mode disagree; mood "${mood}" applied` }
-      : {};
+  // mode is the declared name since MCP 2.0; mood, its old name, still
+  // works in-process.
+  const mood = lower(input.mode) || lower(input.mood);
   const limit = toolLimit('archive_gems', input);
   if (theme) {
     const lens = (await toolArchiveLens(
@@ -2308,7 +2463,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
     // The path names ids; sources_by_id resolves them (and get_source takes them).
     const byId = lens.sources_by_id || {};
     return {
-      applied: { theme, ...(mood ? { ignored: { mood } } : {}) },
+      applied: { theme, ...(mood ? { ignored: { mode: mood } } : {}) },
       theme,
       mode: 'theme_reading_path',
       results: path.map((source) => ({
@@ -2321,7 +2476,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
     };
   }
   const candidates = [];
-  const [startYear, endYear] = parseYearRange(input.year_range || input.era);
+  const [startYear, endYear] = parseYearRange(input.year_range);
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     const corpus = await loadCorpus(kind);
@@ -2388,7 +2543,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       item.reason = `${item.reason} (randomly drawn from ${candidates.length} qualifying sources)`;
   }
   return {
-    applied: { mood: mood || 'serendipity', ...conflict },
+    applied: { mode: mood || 'serendipity' },
     theme: null,
     mode: mood || 'serendipity',
     results: picked.map((item) => ({
@@ -2403,24 +2558,45 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
   };
 }
 
-async function toolClaimCheck(input: ToolArgs = {}, { scope }: ToolContext = {}) {
-  const rawClaims = Array.isArray(input.claims) ? input.claims : [input.claim || input.query || input.text];
+export const FIND_EVIDENCE_MAX_CLAIMS = 4;
+
+// Whose words a passage holds, from its chunk's voice spans (no spans: all
+// Jamie's). A voice-filtered passage already is that voice.
+function passageVoices(chunk: ArchiveRecord): string[] {
+  if (Array.isArray(chunk.voice)) return chunk.voice.map(String);
+  const spans = Array.isArray(chunk.spans) ? (chunk.spans as Array<{ voice?: unknown }>) : [];
+  if (!spans.length) return ['jamie'];
+  return [...new Set(spans.map((span) => String(span.voice || '')).filter(Boolean))];
+}
+
+// The passages that bear on each claim, with whose words they are, and no
+// verdict: the caller reads them and judges (MCP 2.0; claim_check's
+// evidence_found / needs_caution only ever said whether search returned
+// anything).
+async function toolFindEvidence(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const rawClaims = Array.isArray(input.claims) ? input.claims : [input.claims ?? input.claim];
   const claims = rawClaims
-    .map((claim) => String(claim || '').trim())
+    .map((claim) => String(claim ?? '').trim())
     .filter(Boolean)
-    .slice(0, 4);
-  const results = [];
+    .slice(0, FIND_EVIDENCE_MAX_CLAIMS);
+  if (!claims.length) return { error: 'claims is required: one to four statements to find evidence for' };
+  const limit = toolLimit('find_evidence', input);
   const filters = {
     scope,
     sourceKinds: normalizeSourceKind(input.source_kind || '') || undefined,
     voice: input.voice
   };
+  const results = [];
   for (const claim of claims) {
-    const hits = await retrieve(claim, 3, filters);
+    const hits = (await retrieve(claim, limit, filters)) as ArchiveRecord[];
     results.push({
       claim,
-      status: hits.length ? 'evidence_found' : 'needs_caution',
-      evidence: hits.map((source) => compactSource(source, 450))
+      evidence: hits.map((chunk) => {
+        const passage = compactSource(chunk, 450) as Record<string, unknown>;
+        const record = objectRecord(passage);
+        delete record.topics;
+        return { ...record, id: lensSourceId(chunk), voices: passageVoices(chunk) };
+      })
     });
   }
   return { results };
@@ -2434,7 +2610,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   const query = String(input.query || '')
     .trim()
     .toLowerCase();
-  const year = Number(input.year || 0) || null;
+  const [startYear, endYear] = parseYearRange(input.year_range);
   const limit = toolLimit('media_search', input);
   const termMatchers = query
     .split(/[^a-z0-9]+/)
@@ -2450,7 +2626,9 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     for (const item of (corpus.media as Array<Record<string, unknown>> | undefined) || []) {
-      if (year && Number(String(item.publish_date || '').slice(0, 4)) !== year) continue;
+      const itemYear = Number(String(item.publish_date || '').slice(0, 4)) || 0;
+      if (startYear && (!itemYear || itemYear < startYear)) continue;
+      if (endYear && (!itemYear || itemYear > endYear)) continue;
       if (issue && issueKey(item.issue_number) !== issue) continue;
       // description = the vision captioning pass (describe_media.py): the
       // pixels' own words, so a photo is findable when the authored text
@@ -2472,22 +2650,29 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
   scored.sort(
     (a, b) => b.score - a.score || String(b.item.publish_date || '').localeCompare(String(a.item.publish_date || ''))
   );
-  return {
-    query: String(input.query || ''),
-    total_matches: scored.length,
-    results: scored.slice(0, limit).map(({ item }) => ({
-      image_url: item.url,
-      alt: item.alt,
-      context: item.context,
-      description: item.description,
-      source_kind: item.source_kind,
-      issue_number: item.issue_number,
-      subject: item.subject,
-      source_url: item.source_url,
-      publish_date: item.publish_date,
-      match_reasons: item.match_reasons || ['no query terms - listed by recency']
-    }))
-  };
+  const shown = scored.slice(0, limit);
+  return markTruncated(
+    {
+      query: String(input.query || ''),
+      total_count: scored.length,
+      results: shown.map(({ item }) => ({
+        image_url: item.url,
+        alt: item.alt,
+        context: item.context,
+        description: item.description,
+        source_kind: item.source_kind,
+        issue_number: item.issue_number,
+        subject: item.subject,
+        source_url: item.source_url,
+        publish_date: item.publish_date,
+        match_reasons: item.match_reasons || ['no query terms - listed by recency']
+      }))
+    },
+    {
+      omitted: { results: scored.length - shown.length },
+      hint: `${scored.length} images matched; raise limit (max 12) or narrow with year_range or issue_number.`
+    }
+  );
 }
 
 // ── on_this_day ─────────────────────────────────────────────────────────
@@ -2615,27 +2800,30 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
           Number(Boolean(a.micropost)) - Number(Boolean(b.micropost)) ||
           String(a.date).localeCompare(String(b.date))
       );
-      return {
-        year,
-        years_ago: targetYear - year,
-        items: items.slice(0, perYear),
-        ...(items.length > perYear ? { more: items.length - perYear } : {})
-      };
+      return { year, years_ago: targetYear - year, total_count: items.length, items: items.slice(0, perYear) };
     });
   const monthDay = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  return {
-    applied: {
-      date: `${targetYear}-${monthDay}`,
-      month_day: monthDay,
-      window_days: window,
-      timezone: ON_THIS_DAY_TIMEZONE,
-      limit_per_year: perYear,
-      include_microposts: microposts,
-      years: years.map((row) => row.year)
+  const totalCount = [...byYear.values()].reduce((sum, items) => sum + items.length, 0);
+  const shownCount = years.reduce((sum, row) => sum + row.items.length, 0);
+  return markTruncated(
+    {
+      applied: {
+        date: `${targetYear}-${monthDay}`,
+        month_day: monthDay,
+        window_days: window,
+        timezone: ON_THIS_DAY_TIMEZONE,
+        limit_per_year: perYear,
+        include_microposts: microposts,
+        years: years.map((row) => row.year)
+      },
+      total_count: totalCount,
+      years
     },
-    total_count: [...byYear.values()].reduce((sum, items) => sum + items.length, 0),
-    years
-  };
+    {
+      omitted: { 'years[].items': totalCount - shownCount },
+      hint: `A year's total_count says how many it holds; raise limit_per_year (max 20) for more of each year.`
+    }
+  );
 }
 
 // What Jamie was reading / playing / watching / listening to, from the
@@ -2644,7 +2832,7 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   const kind = String(input.kind || '')
     .trim()
     .toLowerCase();
-  const year = Number(input.year || 0) || null;
+  const [startYear, endYear] = parseYearRange(input.year_range);
   const query = String(input.query || '')
     .trim()
     .toLowerCase();
@@ -2654,31 +2842,46 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   const baseKind = (entry: Record<string, unknown>) => String(entry.kind || '').split(' ')[0];
   const entries = ((corpus.currently as Array<Record<string, unknown>> | undefined) || []).filter((entry) => {
     if (kind && baseKind(entry) !== kind.split(' ')[0]) return false;
-    if (year && Number(String(entry.publish_date || '').slice(0, 4)) !== year) return false;
+    const entryYear = Number(String(entry.publish_date || '').slice(0, 4)) || 0;
+    if (startYear && (!entryYear || entryYear < startYear)) return false;
+    if (endYear && (!entryYear || entryYear > endYear)) return false;
     if (query && !`${entry.text || ''}`.toLowerCase().includes(query)) return false;
     return true;
   });
-  const byKind: Record<string, number> = {};
-  const byYear: Record<string, number> = {};
+  const byKind = new Map<string, number>();
+  const byYear = new Map<number, number>();
   for (const entry of entries) {
-    byKind[baseKind(entry)] = (byKind[baseKind(entry)] || 0) + 1;
-    const entryYear = String(entry.publish_date || '').slice(0, 4) || 'unknown';
-    byYear[entryYear] = (byYear[entryYear] || 0) + 1;
+    byKind.set(baseKind(entry), (byKind.get(baseKind(entry)) || 0) + 1);
+    const entryYear = Number(String(entry.publish_date || '').slice(0, 4));
+    if (entryYear) byYear.set(entryYear, (byYear.get(entryYear) || 0) + 1);
   }
-  return {
-    total: entries.length,
-    counts_by_kind: byKind,
-    counts_by_year: byYear,
-    entries: entries.slice(-limit).map((entry) => ({
-      kind: baseKind(entry),
-      ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
-      text: entry.text,
-      links: entry.links,
-      issue_number: entry.issue_number,
-      publish_date: String(entry.publish_date || '').slice(0, 10),
-      issue_url: entry.issue_url
-    }))
-  };
+  const shown = entries.slice(-limit);
+  return markTruncated(
+    {
+      total_count: entries.length,
+      counts_by_kind: sortedCountList(byKind, 'kind'),
+      counts_by_year: yearCountList(byYear),
+      entries: shown.map((entry) => ({
+        kind: baseKind(entry),
+        ...(entry.kind !== baseKind(entry) ? { label: entry.kind } : {}),
+        text: entry.text,
+        links: entry.links,
+        issue_number: entry.issue_number,
+        publish_date: String(entry.publish_date || '').slice(0, 10),
+        issue_url: entry.issue_url
+      }))
+    },
+    {
+      omitted: { entries: entries.length - shown.length },
+      hint: `${entries.length} entries matched; the ${shown.length} newest are shown. Raise limit (max 120) or narrow with kind, year_range or query.`
+    }
+  );
+}
+
+// counts_by_year in the one shape every tool uses: [{year, count}], oldest
+// first.
+function yearCountList(byYear: Map<number, number>) {
+  return [...byYear.entries()].sort(([a], [b]) => a - b).map(([year, count]) => ({ year, count }));
 }
 
 const UTILITY_REFERENCE_DOMAINS = new Set([
@@ -2707,13 +2910,12 @@ const UTILITY_REFERENCE_DOMAINS = new Set([
 // "who/what does Jamie reference most" instead of guess-then-verify.
 async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const limit = toolLimit('top_references', input);
-  const yearStart = Number(input.year_start || 0) || null;
-  const yearEnd = Number(input.year_end || 0) || null;
+  const [yearStart, yearEnd] = parseYearRange(input.year_range);
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
   interface DomainAgg {
     count: number;
-    byYear: Record<string, number>;
+    byYear: Map<number, number>;
     first: string;
     last: string;
     samples: string[];
@@ -2743,9 +2945,15 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
       const year = Number(date.slice(0, 4)) || null;
       if (yearStart && (!year || year < yearStart)) continue;
       if (yearEnd && (!year || year > yearEnd)) continue;
-      const agg = domains.get(domain) || { count: 0, byYear: {}, first: date, last: date, samples: [] };
+      const agg: DomainAgg = domains.get(domain) || {
+        count: 0,
+        byYear: new Map(),
+        first: date,
+        last: date,
+        samples: []
+      };
       agg.count += 1;
-      if (year) agg.byYear[String(year)] = (agg.byYear[String(year)] || 0) + 1;
+      if (year) agg.byYear.set(year, (agg.byYear.get(year) || 0) + 1);
       if (date && (!agg.first || date < agg.first)) agg.first = date;
       if (date && date > agg.last) agg.last = date;
       const title = String(link.text || '').slice(0, 90);
@@ -2754,22 +2962,27 @@ async function toolTopReferences(input: ToolArgs = {}, { scope }: ToolContext = 
     }
   }
   const ranked = [...domains.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, limit);
-  return {
-    scope: effectiveScope(scope, requestedSource),
-    source_kind: requestedSource || null,
-    year_start: yearStart,
-    year_end: yearEnd,
-    total_domains: domains.size,
-    excluded_utility_links: excludedUtilityLinks,
-    top: ranked.map(([domain, agg]) => ({
-      domain,
-      count: agg.count,
-      first_seen: agg.first.slice(0, 10),
-      last_seen: agg.last.slice(0, 10),
-      counts_by_year: agg.byYear,
-      sample_titles: agg.samples
-    }))
-  };
+  return markTruncated(
+    {
+      scope: effectiveScope(scope, requestedSource),
+      source_kind: requestedSource || null,
+      // Every domain linked in range; top holds the limit most linked.
+      total_count: domains.size,
+      excluded_utility_links: excludedUtilityLinks,
+      top: ranked.map(([domain, agg]) => ({
+        domain,
+        count: agg.count,
+        first_seen: agg.first.slice(0, 10),
+        last_seen: agg.last.slice(0, 10),
+        counts_by_year: yearCountList(agg.byYear),
+        sample_titles: agg.samples
+      }))
+    },
+    {
+      omitted: { top: domains.size - ranked.length },
+      hint: `${domains.size} domains were linked; raise limit (max 40) for more of the ranking.`
+    }
+  );
 }
 
 // --- Live web tools -------------------------------------------------------
@@ -2950,17 +3163,20 @@ async function toolWebSearch(input: ToolArgs = {}) {
 // mode-like argument the caller set. A handler that resolves something
 // itself (archive_gems' mode, find_links' match_mode) returns its own
 // `applied`, which wins key by key. Errors carry no echo.
-const APPLIED_ECHO_KEYS = [
-  'source_kind',
-  'section',
-  'year',
-  'kind',
-  'mode',
-  'mood',
-  'operation',
-  'match_mode',
-  'case_sensitive'
-];
+const APPLIED_ECHO_KEYS = ['source_kind', 'section', 'kind', 'mode', 'operation', 'match_mode', 'case_sensitive'];
+
+// Every window is year_range [start, end]; year is its one-year shorthand
+// (MCP 2.0: media_search, currently_history and top_references each had
+// their own). year_range wins when both are given; the doors refuse both.
+export function withYearRange<T extends ToolArgs>(input: T): T {
+  const year = input.year;
+  if (year === undefined || year === null || year === '') return input;
+  const rest = { ...input };
+  delete rest.year;
+  if (rest.year_range !== undefined && rest.year_range !== null && rest.year_range !== '') return rest;
+  const value = Number(year);
+  return Number.isInteger(value) ? { ...rest, year_range: [value, value] } : rest;
+}
 
 export function appliedArguments(name: string, input: ToolArgs = {}) {
   const applied: Record<string, unknown> = {};
@@ -2980,7 +3196,8 @@ export function appliedArguments(name: string, input: ToolArgs = {}) {
 type ToolHandler = (input?: ToolArgs, context?: ToolContext) => unknown;
 
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
-  return async (input: ToolArgs = {}, context: ToolContext = {}) => {
+  return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
+    const input = withYearRange(rawInput);
     const result = await handler(input, context);
     if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
     const record = result as Record<string, unknown>;
@@ -3010,9 +3227,8 @@ const TOOL_HANDLERS = {
   list_topics: toolListTopics,
   archive_lens: toolArchiveLens,
   source_neighborhood: toolSourceNeighborhood,
-  entity_lens: toolEntityLens,
   archive_gems: toolArchiveGems,
-  claim_check: toolClaimCheck,
+  find_evidence: toolFindEvidence,
   media_search: toolMediaSearch,
   currently_history: toolCurrentlyHistory,
   top_references: toolTopReferences,

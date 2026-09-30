@@ -85,7 +85,7 @@ export function parseResourceUri(uri: unknown): ParsedResource | null {
 }
 
 /** One source (a get_source result) as a markdown document. */
-export function sourceMarkdown(source: JsonRecord) {
+export function sourceMarkdown(source: JsonRecord, truncated: JsonRecord = {}) {
   const title = String(source.subject || source.title || source.id || 'Untitled');
   const url = absoluteSourceUrl(source.url);
   const facts = [
@@ -95,7 +95,10 @@ export function sourceMarkdown(source: JsonRecord) {
   ].filter(Boolean);
   const skim = String(source.description || source.abstract || '').trim();
   const body = String(source.body || '').trim();
-  const note = source.body_truncated ? `\n\n_${String(source.body_note || 'The body was cut to fit.')}_` : '';
+  const cut = Array.isArray(truncated.clipped) && truncated.clipped.includes('source.body');
+  const note = cut
+    ? `\n\n_The body was cut to fit; get_source with id ${String(source.id)} and a section reads one section whole._`
+    : '';
   return [`# ${title}`, facts.join('\n'), skim ? `> ${skim}` : '', `${body}${note}`].filter(Boolean).join('\n\n');
 }
 
@@ -115,7 +118,11 @@ function record(value: unknown): JsonRecord {
 async function readSource(resource: ParsedResource, id: string, reader: ResourceReader) {
   const result = record(await reader.invoke('get_source', { id }, `resource:${resource.kind}`));
   if (result.error || !result.source) throw new ResourceNotFound(`No source at ${resource.uri}`);
-  return { uri: resource.uri, mimeType: 'text/markdown', text: sourceMarkdown(record(result.source)) };
+  return {
+    uri: resource.uri,
+    mimeType: 'text/markdown',
+    text: sourceMarkdown(record(result.source), record(result.truncated))
+  };
 }
 
 async function readTool(resource: ParsedResource, name: string, input: JsonRecord, reader: ResourceReader) {

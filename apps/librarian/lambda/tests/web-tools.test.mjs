@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-const { MCP_LAUNCH_TOOLS, MCP_RESULT_MAX_CHARS, WEB_TOOLS, renderToolResultText, serverVersion } = await import(
-  '../dist/shared/mcp.mjs'
-);
+const { MCP_LAUNCH_TOOLS, MCP_RESULT_MAX_CHARS, WEB_TOOLS, renderToolResultText, serverVersion } =
+  await import('../dist/shared/mcp.mjs');
 const { DEFAULT_WEB_TOOLS_DAILY_QUOTA, webToolsDailyQuota } = await import('../dist/shared/quota.mjs');
 
 test('the web tool surface is the MCP surface minus the outbound-network tools', () => {
@@ -27,7 +26,7 @@ test('oversized results are cut to valid JSON with a parameter hint', () => {
   assert.ok(text.length <= MCP_RESULT_MAX_CHARS);
   const parsed = JSON.parse(text);
   assert.equal(parsed.truncated.max_chars, 48000);
-  assert.match(parsed.truncated.hint, /narrow the arguments \(/);
+  assert.match(parsed.truncated.hint, /Narrow the arguments \(/);
 });
 
 test('web tools daily quota defaults to its own pool and honors the env override', () => {

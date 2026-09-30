@@ -118,7 +118,10 @@ export function evidenceRef(value: unknown, rank: number): JsonRecord {
   if (imageUrl) ref.image_url = imageUrl;
   const date = compactText(record.publish_date || record.date || record.issue_year || record.year, 40);
   if (date) ref.publish_date = date;
-  const section = compactText(record.section, 60);
+  // search_archive groups passages under their source; the first passage is
+  // the best, and its section and text are what the source was found by.
+  const passage = Array.isArray(record.passages) ? objectValue(record.passages[0]) : {};
+  const section = compactText(record.section || passage.section, 60);
   if (section) ref.section = section;
   const score = scoreOf(record);
   if (score !== undefined) ref.score = Math.round(score * 10000) / 10000;
@@ -127,7 +130,8 @@ export function evidenceRef(value: unknown, rank: number): JsonRecord {
   // Lens sources keep their supporting passage in evidence[0].text,
   // rather than a flat text field. Do not recursively copy that envelope.
   const lensEvidence = Array.isArray(record.evidence) ? objectValue(record.evidence[0]) : {};
-  const excerpt = firstExcerpt(record) || compactText(lensEvidence.text, EVIDENCE_EXCERPT_CHARS);
+  const excerpt =
+    firstExcerpt(passage) || firstExcerpt(record) || compactText(lensEvidence.text, EVIDENCE_EXCERPT_CHARS);
   if (excerpt) ref.excerpt = excerpt;
   return ref;
 }
@@ -161,6 +165,14 @@ function structuredSources(record: JsonRecord): { sources: JsonRecord[]; spread:
   // tool's citation priority; preserve it without descending into inner links.
   const lensSources = Object.values(objectValue(record.sources_by_id)).slice(0, 40).filter(looksLikeSource);
   if (lensSources.length) return { sources: lensSources, spread: false };
+
+  // find_evidence keeps each claim's passages under results[*].evidence,
+  // beyond the generic harvest depth.
+  const claimEvidence = (Array.isArray(record.results) ? record.results.slice(0, 40) : [])
+    .map(objectValue)
+    .filter((entry) => typeof entry.claim === 'string' && Array.isArray(entry.evidence))
+    .flatMap((entry) => (entry.evidence as unknown[]).slice(0, 40).filter(looksLikeSource));
+  if (claimEvidence.length) return { sources: claimEvidence, spread: false };
 
   // corpus_stats' canonical samples are beyond the generic harvest depth.
   // Reach only this named archive shape, taking one source per year just as

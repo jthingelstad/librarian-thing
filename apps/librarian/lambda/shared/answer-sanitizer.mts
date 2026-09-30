@@ -4,7 +4,7 @@ const RAW_URL_RE = /(?<!\]\()https?:\/\/[^\s<>)]+/gi;
 const PROCESS_NARRATION_RE =
   /\b(?:let me\s+(?:pull|look|search|check|find|tell|dig|synthesize|compile|assemble|gather|summarize|write up|put(?:\s+this)?\s+together)|i(?: have|(?:'|’)ve got) (?:everything|what) i need|i have enough(?:\s+to\b)?|i found enough|i can now answer|(?:now\s+)?i (?:now )?have a (?:good|clear|full|complete|solid|rich) (?:picture|sense|view)|i(?:'|’)ll\s+(?:pull|look|search|check|find|dig|compile|assemble))\b/i;
 // Internal tool names (snake_case) narrated as subjects - "The quote_search
-// for X returned...", "entity_lens shows..." - never belong in reader prose;
+// for X returned...", "archive_lens shows..." - never belong in reader prose;
 // the status stream already tells the reader what Thingy is doing.
 const TOOL_NARRATION_RE =
   /\b(?:the\s+)?[a-z][a-z0-9]*_[a-z0-9_]+\s+(?:tool\s+|call\s+)?(?:for\s+[^.\n]{0,80}\s+)?(?:returned|came back|shows?|found|gave|confirms?)\b/i;

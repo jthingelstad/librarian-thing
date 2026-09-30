@@ -90,3 +90,44 @@ test('media_search results cite the pictured post (source_url/alt fallbacks)', (
   assert.equal(citations[0].subject, 'Minnehaha Falls with the POAP badge');
   citations.forEach((citation) => assertContractSafe(citation, 'media'));
 });
+
+test('grouped search results cite each passage by its section (MCP 2.0)', () => {
+  const citations = collectToolCitations([
+    {
+      results: [
+        {
+          id: 'wt-300',
+          issue_number: 300,
+          source_kind: 'weekly_thing',
+          label: 'WT300',
+          subject: 'Feeds',
+          publish_date: '2024-09-29',
+          url: '/archive/300/',
+          passages: [
+            { section: 'Journal', text: 'RSS is still how I read the web.' },
+            { section: 'Notable', text: 'A link about feeds.' }
+          ]
+        }
+      ]
+    },
+    {
+      results: [
+        {
+          claim: 'Jamie wrote about RSS in 2024',
+          evidence: [
+            { id: 'wt-301', issue_number: 301, subject: 'More feeds', section: 'Briefly', url: '/archive/301/' }
+          ]
+        }
+      ]
+    }
+  ]);
+  assert.deepEqual(
+    citations.map((citation) => [citation.issue_number, citation.section]).sort(),
+    [
+      [300, 'Journal'],
+      [300, 'Notable'],
+      [301, 'Briefly']
+    ].sort()
+  );
+  citations.forEach((citation, index) => assertContractSafe(citation, `grouped[${index}]`));
+});

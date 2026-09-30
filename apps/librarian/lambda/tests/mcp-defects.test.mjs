@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildArchiveLens, compileTopicMatcher, matchesLensTopic } from '../dist/shared/archive-lens.mjs';
 import { ARCHIVE_TOOLS, effectiveScope, normalizedDomain } from '../dist/shared/archive-tools.mjs';
+import { validateToolArguments } from '../dist/shared/mcp.mjs';
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 // --- P0.1: word-boundary topic matching -----------------------------------
@@ -93,7 +94,7 @@ function resolve(lens, id) {
 test('lens: phantom substring sources are gone; first is a real ENS source', () => {
   const lens = buildArchiveLens({ topic: 'ENS', operation: 'first_last', ...lensFixture() });
   assert.equal(resolve(lens, lens.first).subject, 'ENS on Ethereum');
-  assert.ok(lens.total_sources <= 2);
+  assert.ok(lens.total_count <= 2);
   for (const id of lens.timeline) {
     assert.ok(resolve(lens, id).match_reasons.length > 0, 'match_reasons stay visible');
   }
@@ -101,7 +102,7 @@ test('lens: phantom substring sources are gone; first is a real ENS source', () 
 
 test('lens: same source with and without microblog_id merges into one (P2.9)', () => {
   const lens = buildArchiveLens({ topic: 'ENS', ...lensFixture() });
-  const blogEntries = lens.timeline.map((id) => resolve(lens, id)).filter((item) => item.source_kind === 'blog');
+  const blogEntries = lens.results.map((id) => resolve(lens, id)).filter((item) => item.source_kind === 'blog');
   assert.equal(blogEntries.length, 1);
   assert.ok(blogEntries[0].match_count >= 2, 'match_reasons/evidence merged');
 });
@@ -307,22 +308,17 @@ test('archive_gems: explicit serendipity still samples; recent means recent (rev
     recent.results.every((item) => Number(String(item.publish_date).slice(0, 4)) >= 2022),
     recent.results.map((item) => item.publish_date).join(', ')
   );
-  const forgotten = await ARCHIVE_TOOLS.archive_gems({ mood: 'forgotten', limit: 4 }, { scope: 'weekly_thing' });
+  const forgotten = await ARCHIVE_TOOLS.archive_gems({ mode: 'forgotten', limit: 4 }, { scope: 'weekly_thing' });
   assert.ok(forgotten.results.every((item) => Number(String(item.publish_date).slice(0, 4)) < 2018));
 });
 
-test('archive_gems reports a mode/mood conflict instead of silently choosing', async () => {
+test('archive_gems takes one mode (2.0 retired mood) and says when a theme overrides it', async () => {
   primeCorpusCachesForTests({ weekly_thing: gemIssues() });
-  const out = await ARCHIVE_TOOLS.archive_gems(
-    { mode: 'forgotten', mood: 'recent', limit: 2 },
-    { scope: 'weekly_thing' }
-  );
-  assert.equal(out.applied.mood, 'recent');
-  assert.deepEqual(out.applied.ignored, { mode: 'forgotten' });
-  assert.match(out.applied.note, /disagree/);
-  const agreed = await ARCHIVE_TOOLS.archive_gems({ mode: 'recent', limit: 2 }, { scope: 'weekly_thing' });
-  assert.equal(agreed.applied.mood, 'recent');
-  assert.equal(agreed.applied.ignored, undefined);
+  const recent = await ARCHIVE_TOOLS.archive_gems({ mode: 'recent', limit: 2 }, { scope: 'weekly_thing' });
+  assert.equal(recent.applied.mode, 'recent');
+  assert.equal(recent.applied.mood, undefined);
+  assert.equal(recent.applied.ignored, undefined);
+  assert.match(validateToolArguments('archive_gems', { mood: 'recent' }).join(' '), /unknown argument "mood"/);
 });
 
 test('archive_gems theme mode returns ids that resolve (review defect 8)', async () => {
@@ -377,7 +373,7 @@ test('get_source hoists repeated link fields and section filters body (P1.8)', a
       ]
     }
   });
-  const out = await ARCHIVE_TOOLS.get_source({ issue_number: '300', section: 'Journal' }, { scope: 'weekly_thing' });
+  const out = await ARCHIVE_TOOLS.get_source({ id: 'wt-300', section: 'Journal' }, { scope: 'weekly_thing' });
   assert.ok(out.source.body.includes('Journal words'));
   assert.ok(!out.source.body.includes('Briefly words'), 'section filter applies to body');
   for (const link of out.source.links) {
@@ -490,7 +486,7 @@ test('get_source: consistent word counts, section-filtered links, no context dup
       ]
     }
   });
-  const out = await ARCHIVE_TOOLS.get_source({ issue_number: '321', section: 'Journal' }, { scope: 'weekly_thing' });
+  const out = await ARCHIVE_TOOLS.get_source({ id: 'wt-321', section: 'Journal' }, { scope: 'weekly_thing' });
   assert.equal(out.source.sections.length, 1);
   assert.equal(out.source.word_count, out.source.sections[0].word_count, 'one tokenizer, one count');
   assert.equal(out.source.links.length, 1, 'links honor the section filter');
@@ -550,8 +546,8 @@ test('POST-COMPACTION: every text-evidence snippet contains its matched span (ro
     blog: { posts: [], chunks, links: [] },
     weekly_thing: { issues: [], chunks: [], links: [] }
   });
-  const out = await ARCHIVE_TOOLS.entity_lens(
-    { entity: 'ENS', source_kind: 'blog', operation: 'first_last' },
+  const out = await ARCHIVE_TOOLS.archive_lens(
+    { topic: 'ENS', source_kind: 'blog', operation: 'first_last' },
     { scope: 'all' }
   );
   let checked = 0;
@@ -569,7 +565,7 @@ test('POST-COMPACTION: every text-evidence snippet contains its matched span (ro
   assert.ok(checked > 0, 'assertion actually exercised evidence entries');
 });
 
-test('entity aliases widen recall and are reported (round4 P2)', async () => {
+test('known aliases widen archive_lens recall and are reported (round4 P2)', async () => {
   primeCorpusCachesForTests({
     blog: {
       posts: [],
@@ -587,9 +583,9 @@ test('entity aliases widen recall and are reported (round4 P2)', async () => {
     },
     weekly_thing: { issues: [], chunks: [], links: [] }
   });
-  const out = await ARCHIVE_TOOLS.entity_lens({ entity: 'ENS', source_kind: 'blog' }, { scope: 'all' });
+  const out = await ARCHIVE_TOOLS.archive_lens({ topic: 'ENS', source_kind: 'blog' }, { scope: 'all' });
   assert.deepEqual(out.aliases_checked, ['ENS', 'Ethereum Name Service']);
-  assert.equal(out.total_sources, 1, 'long-form alias matched without the short token');
+  assert.equal(out.total_count, 1, 'long-form alias matched without the short token');
   const source = Object.values(out.sources_by_id)[0];
   assert.ok(source.evidence.length >= 1);
   assert.match(source.evidence[0].matched.toLowerCase(), /ethereum name service/);
@@ -662,7 +658,7 @@ test('get_source section filter reaches chunk-indexed prose (round4 P1)', async 
       ]
     }
   });
-  const out = await ARCHIVE_TOOLS.get_source({ issue_number: '321', section: 'Notable' }, { scope: 'weekly_thing' });
+  const out = await ARCHIVE_TOOLS.get_source({ id: 'wt-321', section: 'Notable' }, { scope: 'weekly_thing' });
   assert.ok(out.source.body.includes('Commentary on the first notable link'), 'chunk prose reachable by section');
   assert.equal(out.source.links.length, 1);
   assert.equal(out.source.section, 'Notable', 'section echoes the applied filter');
@@ -732,7 +728,7 @@ test('stem first_last on an inflection-only term: strict_match=false, first=null
     { scope: 'weekly_thing' }
   );
   assert.equal(out.match_mode, 'stem');
-  assert.ok(out.total_sources >= 2, 'stem recall still finds the inflected sources');
+  assert.ok(out.total_count >= 2, 'stem recall still finds the inflected sources');
   for (const source of Object.values(out.sources_by_id)) {
     assert.equal(source.strict_match, false, 'inflection-only sources are never strict');
   }

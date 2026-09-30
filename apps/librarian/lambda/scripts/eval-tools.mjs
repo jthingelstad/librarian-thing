@@ -29,6 +29,7 @@ const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
 const { primeCorpusCachesForTests } = await import(path.join(distDir, 'shared/retrieval.mjs'));
+const { mcpToolDeclarations, renderToolCallResult } = await import(path.join(distDir, 'shared/mcp.mjs'));
 
 // --- corpus loading -------------------------------------------------------
 async function loadCorpora() {
@@ -143,13 +144,42 @@ function checkInvariants(tool, args, response) {
     }
   }
 
-  // Truncation markers: only where more than 3 entries were cut, and
-  // top-level notes name only real parameters.
-  walk(response, (value) => {
-    if (value && typeof value === 'object' && !Array.isArray(value) && 'omitted' in value && 'note' in value) {
-      check(label('marker economics'), Number(value.omitted) > 3, `omitted=${value.omitted}`);
+  // 2.0: what was left out is in one top-level truncated block; no inline
+  // {omitted, note} markers and no *_omitted / truncation-note keys.
+  walk(response, (value, keyPath) => {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if ('omitted' in value && 'note' in value) failures.push(label(`inline truncation marker at ${keyPath}`));
+      for (const key of Object.keys(value)) {
+        if (/_omitted$|^(results|sources|yearly_signals|body)_note$|^body_truncated$/.test(key)) {
+          failures.push(label(`retired key ${keyPath ? `${keyPath}.` : ''}${key}`));
+        }
+      }
     }
   });
+  if (response.truncated) {
+    const { omitted = {}, clipped = [], hint } = response.truncated;
+    check(label('truncated has a hint'), typeof hint === 'string' && hint.length > 0);
+    check(
+      label('truncated counts are positive'),
+      Object.values(omitted).every((count) => Number.isInteger(count) && count > 0),
+      JSON.stringify(omitted)
+    );
+    check(label('truncated clipped is a list'), Array.isArray(clipped));
+  }
+
+  // The MCP door's view: the rendered result conforms to the tool's
+  // declared outputSchema (required keys present, every key declared).
+  const declaration = mcpToolDeclarations([tool])[0];
+  if (declaration?.outputSchema && !response.error) {
+    const rendered = renderToolCallResult(tool, response);
+    const schema = declaration.outputSchema;
+    const body = rendered.structured || {};
+    check(label('renders without error'), !rendered.isError, rendered.text.slice(0, 120));
+    const missing = (schema.required || []).filter((key) => !(key in body));
+    check(label('outputSchema required keys present'), missing.length === 0, missing.join(', '));
+    const undeclared = Object.keys(body).filter((key) => !(key in (schema.properties || {})));
+    check(label('outputSchema declares every key'), undeclared.length === 0, undeclared.join(', '));
+  }
 }
 
 // --- run ------------------------------------------------------------------
@@ -190,16 +220,27 @@ async function run(tool, args, options = {}) {
       .map((spec) => [spec.name, new Set(Object.keys(spec.inputSchema?.json?.properties || {}))])
   );
   const EXPECTED_PARAMS = {
-    archive_lens: ['topic', 'operation', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
-    entity_lens: ['entity', 'operation', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
-    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
-    find_links: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'limit'],
-    corpus_stats: ['source_kind', 'year_range', 'limit'],
-    top_references: ['source_kind', 'year_start', 'year_end', 'limit', 'include_utility'],
+    archive_lens: [
+      'topic',
+      'aliases',
+      'operation',
+      'match_mode',
+      'case_sensitive',
+      'source_kind',
+      'year_range',
+      'year',
+      'limit'
+    ],
+    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit'],
+    find_links: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit'],
+    corpus_stats: ['source_kind', 'year_range', 'year', 'limit'],
+    top_references: ['source_kind', 'year_range', 'year', 'limit', 'include_utility'],
     quote_search: ['phrase', 'limit'],
-    media_search: ['query', 'year', 'limit'],
-    get_source: ['id', 'issue_number', 'section', 'source_kind'],
-    on_this_day: ['date', 'window_days', 'year_range', 'source_kind', 'include_microposts', 'limit_per_year']
+    media_search: ['query', 'year_range', 'year', 'issue_number', 'limit'],
+    get_source: ['id', 'section', 'format'],
+    source_neighborhood: ['id', 'limit'],
+    find_evidence: ['claims', 'source_kind', 'voice', 'limit'],
+    on_this_day: ['date', 'window_days', 'year_range', 'year', 'source_kind', 'include_microposts', 'limit_per_year']
   };
   for (const [tool, params] of Object.entries(EXPECTED_PARAMS)) {
     const schema = published.get(tool);
@@ -220,15 +261,15 @@ async function run(tool, args, options = {}) {
 
 // Layer 3: known answers - the archive is stable history.
 {
-  const lens = await run('entity_lens', { entity: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });
+  const lens = await run('archive_lens', { topic: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });
   const firstId = typeof lens.first === 'string' ? lens.first : lens.first?.id;
   check('KA first Ethereum WT mention is issue 17 (Sept 2017)', firstId === 'wt-17', String(firstId));
   check('KA first Ethereum is NOT issue 5', firstId !== 'wt-5');
-  counts.ethereum_wt_sources = lens.total_sources;
+  counts.ethereum_wt_sources = lens.total_count;
   counts.ethereum_wt_evidence = lens.total_evidence_matches;
 }
 {
-  const lens = await run('entity_lens', { entity: 'ENS', source_kind: 'blog', operation: 'first_last' });
+  const lens = await run('archive_lens', { topic: 'ENS', source_kind: 'blog', operation: 'first_last' });
   const firstId = typeof lens.first === 'string' ? lens.first : lens.first?.id;
   const first = lens.sources_by_id[firstId];
   check(
@@ -240,14 +281,26 @@ async function run(tool, args, options = {}) {
     'KA ENS aliases reported',
     Array.isArray(lens.aliases_checked) && lens.aliases_checked.includes('Ethereum Name Service')
   );
-  counts.ens_blog_sources = lens.total_sources;
+  counts.ens_blog_sources = lens.total_count;
   counts.ens_blog_evidence = lens.total_evidence_matches;
 }
 {
-  const lens = await run('entity_lens', { entity: 'ENS', source_kind: 'weekly_thing', operation: 'first_last' });
+  const lens = await run('archive_lens', { topic: 'ENS', source_kind: 'weekly_thing', operation: 'first_last' });
   const firstId = typeof lens.first === 'string' ? lens.first : lens.first?.id;
   check('KA first ENS WT mention is issue 182', firstId === 'wt-182', String(firstId));
-  counts.ens_wt_sources = lens.total_sources;
+  counts.ens_wt_sources = lens.total_count;
+  // A caller's alias widens the same lens (2.0 folded entity_lens in).
+  const widened = await run('archive_lens', {
+    topic: 'ENS',
+    aliases: ['thingelstad.eth'],
+    source_kind: 'weekly_thing',
+    operation: 'first_last'
+  });
+  check(
+    'KA archive_lens aliases reported and never narrow',
+    widened.aliases_checked?.includes('thingelstad.eth') && widened.total_count >= lens.total_count,
+    `${widened.total_count} vs ${lens.total_count}`
+  );
 }
 {
   const quotes = await run('quote_search', { phrase: 'blog pensieve' });
@@ -316,7 +369,7 @@ async function run(tool, args, options = {}) {
 {
   // Per-hit strictness: first_last under stem, for a term whose corpus
   // hits are literal, must equal the exact-mode first (round-seven P0).
-  const exact = await run('entity_lens', { entity: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });
+  const exact = await run('archive_lens', { topic: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });
   const stem = await run('archive_lens', {
     topic: 'ethereum',
     match_mode: 'stem',
@@ -353,16 +406,16 @@ async function run(tool, args, options = {}) {
   });
   check(
     'KA case_sensitive Go narrows results',
-    Number(goCase.total_sources) < Number(go.total_sources),
-    `${goCase.total_sources} vs ${go.total_sources}`
+    Number(goCase.total_count) < Number(go.total_count),
+    `${goCase.total_count} vs ${go.total_count}`
   );
 }
 {
   // Recall snapshots for heavy topics - precision changes surface as
   // reviewable baseline diffs.
   for (const topic of ['POAP', 'RSS', 'OmniFocus']) {
-    const lens = await run('entity_lens', { entity: topic }, { scope: 'all' });
-    counts[`recall_${topic.toLowerCase()}_sources`] = lens.total_sources;
+    const lens = await run('archive_lens', { topic }, { scope: 'all' });
+    counts[`recall_${topic.toLowerCase()}_sources`] = lens.total_count;
   }
 }
 {
@@ -373,12 +426,24 @@ async function run(tool, args, options = {}) {
     'archive_lens full counts_by_year',
     (lens.counts_by_year || []).every((row) => !('omitted' in row))
   );
-  counts.ethereum_lens_sources = lens.total_sources;
+  counts.ethereum_lens_sources = lens.total_count;
 }
 
 // Layer 2 breadth: every registry tool exercised at least once.
-await run('search_archive', { query: 'data ownership', limit: 4 });
-await run('get_source', { issue_number: '321', section: 'Notable', source_kind: 'weekly_thing' }).then((out) => {
+await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) => {
+  const groups = out?.results || [];
+  check(
+    'KA search_archive groups passages under their source',
+    groups.length > 0 && groups.every((group) => group.id && Array.isArray(group.passages) && group.passages.length),
+    JSON.stringify(groups.map((group) => [group.id, group.passages?.length]))
+  );
+  check('KA search_archive sends each source once', new Set(groups.map((group) => group.id)).size === groups.length);
+});
+await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
+  check('KA get_source outline has no body', out?.source && out.source.body === undefined);
+  check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);
+});
+await run('get_source', { id: 'WT321', section: 'Notable' }).then((out) => {
   check(
     'KA get_source Notable prose present',
     String(out?.source?.body || '').length > 200,
@@ -398,8 +463,22 @@ await run('latest_content', { limit: 3 });
 await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });
 await run('compare_eras', { topic: 'ethereum', year_a: [2021, 2021], year_b: [2024, 2024], limit: 2 });
-await run('source_neighborhood', { issue_number: '182', limit: 3 });
-await run('claim_check', { claim: 'Jamie registered thingelstad.eth in 2021' });
+await run('source_neighborhood', { id: 'wt-182', limit: 3 });
+await run('find_evidence', {
+  claims: ['Jamie registered thingelstad.eth in 2021', 'Jamie started The Weekly Thing in 2017']
+}).then((out) => {
+  const results = out?.results || [];
+  check('KA find_evidence answers each claim', results.length === 2, String(results.length));
+  check(
+    'KA find_evidence passages carry id and voices',
+    results.every((row) => row.evidence.length && row.evidence.every((item) => item.id && item.voices?.length)),
+    JSON.stringify(results.map((row) => row.evidence.map((item) => item.id)))
+  );
+  check(
+    'KA find_evidence gives no verdict',
+    results.every((row) => !('verdict' in row) && !('supported' in row) && !('status' in row))
+  );
+});
 await run('media_search', { query: 'minnehaha creek', limit: 4 });
 await run('currently_history', { kind: 'reading', limit: 5 });
 {
