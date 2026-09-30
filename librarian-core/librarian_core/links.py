@@ -10,6 +10,8 @@ Surface:
   extract_links(markdown_body) -> {"notable": [...], "briefly": [...], "all_curated": [...]}
   extract_domains(links) -> sorted list of unique non-excluded FQDNs
   count_words(markdown_body) -> int
+  markdown_links(text) -> every inline link, image, autolink and bare URL
+  unlink(text) / link_label_text(label) -> link markdown as its words
 
 The hand-curated excluded-domain list lives beside this module in
 ``domain_exclusions.py`` — promoted into librarian_core when its previous
@@ -18,7 +20,9 @@ home, ``pipeline/content/``, retired.
 
 from __future__ import annotations
 
+import bisect
 import re
+from dataclasses import dataclass
 from urllib.parse import urlparse
 
 from .domain_exclusions import is_excluded
@@ -255,6 +259,238 @@ def extract_links(markdown_body: str) -> dict[str, list[dict]]:
         "briefly": briefly_links,
         "all_curated": notable_links + briefly_links,
     }
+
+
+# --- markdown link scanning ------------------------------------------------
+#
+# One scanner for every link the corpus records (QA 2026-09-30, ingest F6-F8,
+# links L3 and L7). The regexes it replaced stopped a label at its first "]"
+# and a URL at its first ")", so a linked image recorded the image URL and
+# dropped the target, "Elf_(film)" was stored as "Elf_(film",
+# "[Python post-Guido [LWN.net]](...)" and "[x]( https://...)" were never
+# links, and <autolinks> and bare URLs were not links at all. The scanner
+# follows CommonMark where the archive needs it: nested brackets in a label,
+# balanced and backslash-escaped parentheses in a destination, whitespace
+# after "(", <angle> destinations, titles, and GFM's trailing-punctuation
+# rule for bare URLs.
+
+
+@dataclass(frozen=True)
+class MarkdownLink:
+    """A link (or image) in markdown text. ``label`` is the raw markdown
+    between the brackets ("" for an autolink or a bare URL); ``kind`` is
+    ``inline``, ``image``, ``autolink`` or ``bare``."""
+
+    label: str
+    url: str
+    start: int
+    end: int
+    kind: str
+
+
+_BLANK_LINE_RE = re.compile(r"\n[ \t]*\n")
+_MD_ESCAPE_RE = re.compile(r"\\([!-/:-@\[-`{-~])")
+_AUTOLINK_RE = re.compile(r"<(https?://[^\s<>]+)>", re.I)
+_BARE_URL_RE = re.compile(r"https?://[^\s<>\"`]+", re.I)
+# Where a bare URL is not a link of its own: inside an HTML comment, an <a>
+# element, any tag's attributes, a fenced code block or a code span.
+_NOT_BARE_RE = re.compile(
+    r"<!--.*?-->|<a\b[^>]*>.*?</a\s*>|<[^>]*>|^[ \t]*(```|~~~).*?^[ \t]*\1|`[^`\n]+`",
+    re.I | re.S | re.M,
+)
+_BARE_TRAILING = ".,:;!?*_~'"
+
+
+def _label_end(text: str, start: int) -> int | None:
+    """Index of the "]" closing the "[" at ``start``: brackets nest,
+    backslash escapes do not count, and a label never spans a blank line."""
+    depth = 0
+    index = start
+    while index < len(text):
+        char = text[index]
+        if char == "\\":
+            index += 2
+            continue
+        if char == "[":
+            depth += 1
+        elif char == "]":
+            depth -= 1
+            if depth == 0:
+                return index
+        elif char == "\n" and _BLANK_LINE_RE.match(text, index):
+            return None
+        index += 1
+    return None
+
+
+def _skip_space(text: str, index: int) -> int:
+    """Past spaces and tabs and at most one line break."""
+    while index < len(text) and text[index] in " \t":
+        index += 1
+    if index < len(text) and text[index] == "\n":
+        index += 1
+        while index < len(text) and text[index] in " \t":
+            index += 1
+    return index
+
+
+def _destination(text: str, paren: int) -> tuple[str, int] | None:
+    """``(url, end)`` for the inline-link destination opening at ``paren``
+    (a "("), or None. Parentheses in the URL balance, escaped ones do not
+    count, and a title after the URL is skipped. As before, anything else up
+    to a ")" on the same line is tolerated after the URL."""
+    index = _skip_space(text, paren + 1)
+    if index < len(text) and text[index] == "<":
+        close = text.find(">", index + 1)
+        if close == -1 or "\n" in text[index + 1 : close]:
+            return None
+        url, index = text[index + 1 : close], close + 1
+    else:
+        begin, depth = index, 0
+        while index < len(text):
+            char = text[index]
+            if char == "\\" and index + 1 < len(text) and not text[index + 1].isspace():
+                index += 2
+                continue
+            if char == "(":
+                depth += 1
+            elif char == ")":
+                if depth == 0:
+                    break
+                depth -= 1
+            elif char.isspace() or ord(char) < 0x20:
+                break
+            index += 1
+        url = text[begin:index]
+        if url.startswith("["):
+            # "[x]([y](url))": a label pasted where the URL goes; the inner
+            # link is the link.
+            return None
+    after = _skip_space(text, index)
+    if after < len(text) and text[after] == ")":
+        return url, after + 1
+    if after < len(text) and text[after] in "\"'(":
+        closer = ")" if text[after] == "(" else text[after]
+        close = text.find(closer, after + 1)
+        if close != -1:
+            end = _skip_space(text, close + 1)
+            if end < len(text) and text[end] == ")":
+                return url, end + 1
+    line_end = text.find("\n", index)
+    close = text.find(")", index)
+    if close != -1 and (line_end == -1 or close < line_end) and "[" not in text[index:close]:
+        return url, close + 1
+    return None
+
+
+def _clean_destination(url: str) -> str:
+    url = _MD_ESCAPE_RE.sub(r"\1", url.strip()).replace("&amp;", "&")
+    # "[x]((https://...))": the doubled parentheses are not the URL's.
+    while url.startswith("(") and url.endswith(")"):
+        url = url[1:-1].strip()
+    return url
+
+
+def _trim_bare_url(url: str) -> str:
+    """GFM's rule: trailing punctuation is not part of a bare URL, nor is a
+    closing parenthesis or bracket that has no opener inside it."""
+    while url:
+        last = url[-1]
+        if last in _BARE_TRAILING:
+            url = url[:-1]
+        elif last == ")" and url.count(")") > url.count("("):
+            url = url[:-1]
+        elif last == "]" and url.count("]") > url.count("["):
+            url = url[:-1]
+        else:
+            break
+    return url
+
+
+def markdown_links(text: str) -> list[MarkdownLink]:
+    """Every inline link, image, autolink and bare URL in ``text``, in
+    order. A linked image ``[![alt](img)](target)`` is an ``inline`` link to
+    the target whose label holds an ``image`` of img. A bare URL inside a
+    link, an image, a tag, an <a> element, a comment or code is not a link
+    of its own."""
+    found: list[MarkdownLink] = []
+    index = 0
+    while (index := text.find("[", index)) != -1:
+        if index and text[index - 1] == "\\":
+            index += 1
+            continue
+        close = _label_end(text, index)
+        if close is None or not text.startswith("(", close + 1):
+            index += 1
+            continue
+        destination = _destination(text, close + 1)
+        url = _clean_destination(destination[0]) if destination else ""
+        if not url:
+            index += 1
+            continue
+        image = bool(index) and text[index - 1] == "!"
+        label = text[index + 1 : close]
+        start = index - 1 if image else index
+        found.append(
+            MarkdownLink(label, url, start, destination[1], "image" if image else "inline")
+        )
+        # The image inside a linked image's label is media, and a bare URL
+        # inside any label is part of the link.
+        for inner in markdown_links(label):
+            if inner.kind == "image":
+                offset = index + 1
+                found.append(
+                    MarkdownLink(
+                        inner.label, inner.url, inner.start + offset, inner.end + offset, "image"
+                    )
+                )
+        index = destination[1]
+    covered = [(link.start, link.end) for link in found]
+    for match in _AUTOLINK_RE.finditer(text):
+        if not any(left <= match.start() < right for left, right in covered):
+            found.append(MarkdownLink("", match.group(1), *match.span(), "autolink"))
+    covered = [(link.start, link.end) for link in found]
+    covered += [match.span() for match in _NOT_BARE_RE.finditer(text)]
+    covered.sort()
+    starts = [left for left, _ in covered]
+    for match in _BARE_URL_RE.finditer(text):
+        position = bisect.bisect_right(starts, match.start()) - 1
+        if any(
+            left <= match.start() < right
+            for left, right in covered[max(position - 50, 0) : position + 1]
+        ):
+            continue
+        if match.start() and text[match.start() - 1] in "=\"'":
+            continue
+        url = _trim_bare_url(match.group(0))
+        if "://" in url and url.split("://", 1)[1]:
+            found.append(MarkdownLink("", url, match.start(), match.start() + len(url), "bare"))
+    found.sort(key=lambda link: link.start)
+    return found
+
+
+def unlink(text: str) -> str:
+    """``text`` with each markdown link and image replaced by its label (an
+    image's label is its alt text), nested ones too; nothing else changes."""
+    out, cursor = [], 0
+    for link in markdown_links(text):
+        if link.kind not in {"inline", "image"} or link.start < cursor:
+            continue
+        out.append(text[cursor : link.start])
+        out.append(unlink(link.label))
+        cursor = link.end
+    out.append(text[cursor:])
+    return "".join(out)
+
+
+def link_label_text(label: str) -> str:
+    """A link label as plain words: images become their alt text and nested
+    links their own label, so "[![Banff](big.jpg)](large.jpg)" reads "Banff".
+    Emphasis and code marks go, as ``corpus.plain_text`` drops them."""
+    text = unlink(label)
+    text = re.sub(r"`([^`]+)`", r"\1", text)
+    text = re.sub(r"[*_>~]+", "", text)
+    return " ".join(text.split())
 
 
 def extract_domains(links: list[dict]) -> list[str]:

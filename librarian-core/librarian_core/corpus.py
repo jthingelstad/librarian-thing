@@ -21,7 +21,7 @@ import boto3
 import yaml
 from dotenv import load_dotenv
 
-from .links import extract_domains, section_family
+from .links import extract_domains, link_label_text, markdown_links, section_family, unlink
 from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
@@ -190,7 +190,9 @@ def _drop_emptied_headings(body: str) -> str:
 
 
 def clean_heading(value: str) -> str:
-    value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
+    # The scanner, not a "[^\]]" regex, so "[Python post-Guido [LWN.net]](url)"
+    # is the title and not the raw markdown (QA 2026-09-30, links L7).
+    value = unlink(value)
     value = re.sub(r"[*_`#]+", "", value)
     return " ".join(value.split())
 
@@ -332,7 +334,6 @@ def chunk_topics(heading: str, text: str) -> list[str]:
 # id-keyed embed cache stays warm.
 
 _MEDIA_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I | re.S)
-_MEDIA_MD_IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
 # A Journal entry's own permalink, in every era's style: "Thursday @ 9:28 PM",
 # "Sep 24, 2023 at 3:40 PM" (with a narrow no-break space), "2018-05-04 4:47
 # PM", "5:25 PM", and the 2017 "→". Links with any other text are Jamie
@@ -343,7 +344,6 @@ _JOURNAL_ENTRY_LINK_RE = re.compile(
     re.I,
 )
 _CURRENTLY_LINE_RE = re.compile(r"^\*\*([A-Za-z][A-Za-z ]{2,20}):\*\*\s*(.+)$", re.M)
-_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)[^)]*\)")
 
 
 def _img_attr(tag: str, name: str) -> str:
@@ -359,8 +359,9 @@ def extract_images(text: str) -> list[dict[str, str]]:
         url = _img_attr(tag, "src")
         if url:
             out.append({"url": url, "alt": _img_attr(tag, "alt")})
-    for alt, url in _MEDIA_MD_IMG_RE.findall(text or ""):
-        out.append({"url": url, "alt": " ".join(alt.split())})
+    for link in markdown_links(text or ""):
+        if link.kind == "image":
+            out.append({"url": link.url, "alt": " ".join(link.label.split())})
     return out
 
 
@@ -437,7 +438,11 @@ def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
     **Watching:** / **Listening:** lines with their links and prose."""
     entries = []
     for label, rest in _CURRENTLY_LINE_RE.findall(section_text or ""):
-        links = [{"title": " ".join(t.split()), "url": u} for t, u in _MD_LINK_RE.findall(rest)]
+        links = [
+            {"title": link_label_text(link.label) or link.url, "url": link.url}
+            for link in markdown_links(rest)
+            if link.kind != "image"
+        ]
         entries.append(
             {
                 "kind": label.strip().lower(),
@@ -1289,7 +1294,6 @@ _BLOG_PERMALINK_RE = re.compile(
 # descriptions are searchable (the canonical store keeps the full tag).
 _BLOG_IMG_ALT_RE = re.compile(r'<img\b[^>]*?\balt\s*=\s*(["\'])(.*?)\1[^>]*?>', re.I | re.S)
 _BLOG_IMG_BARE_RE = re.compile(r"<img\b[^>]*?>", re.I | re.S)
-_BLOG_MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)(?:\s+['\"][^)]*['\"])?\)")
 _BLOG_HTML_LINK_RE = re.compile(
     r'<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
     re.I | re.S,
@@ -1458,7 +1462,6 @@ def resolve_link_target(
 # section is built from (the front-matter links, plus a heading link the
 # front matter missed); ``journal`` is any link inside a Journal; everything
 # else is ``commentary``: the links Jamie drops into what he writes.
-_HEADING_LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
 
 
 def _link_paragraph(text: str, position: int, max_chars: int = 240) -> str:
@@ -1480,7 +1483,6 @@ def issue_body_links(
     records: list[dict[str, Any]] = []
 
     def add(text: str, url: str, role: str, context: str) -> None:
-        url = url.strip()
         if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
             return
         try:
@@ -1497,20 +1499,18 @@ def issue_body_links(
                 "heading_context": section.heading if section.heading != section.parent else None,
                 "url": url,
                 "domain": domain,
-                "text": plain_text(text).strip() or domain,
+                "text": text or domain,
                 "context": context,
                 "link_role": role,
             }
         )
 
     body_role = "journal" if section.family == "Journal" else "commentary"
-    for match in _HEADING_LINK_RE.finditer(section.raw_heading or ""):
-        role = "headline" if section.family in LINK_FAMILIES else body_role
-        add(match.group(1), match.group(2), role, section.heading)
-    for match in _BLOG_MARKDOWN_LINK_RE.finditer(section.text):
-        add(match.group(1), match.group(2), body_role, _link_paragraph(section.text, match.start()))
-    for match in _BLOG_HTML_LINK_RE.finditer(section.text):
-        add(match.group(2), match.group(1), body_role, _link_paragraph(section.text, match.start()))
+    heading_role = "headline" if section.family in LINK_FAMILIES else body_role
+    for text, url, _ in _body_links(section.raw_heading or ""):
+        add(text, url, heading_role, section.heading)
+    for text, url, position in _body_links(section.text):
+        add(text, url, body_role, _link_paragraph(section.text, position))
     return records
 
 
@@ -1535,13 +1535,30 @@ def _short_label(text: str, max_words: int = 12) -> str:
     return label + ("…" if len(tokens) > max_words else "")
 
 
-def _markdown_html_links(body: str) -> list[tuple[str, str]]:
-    links: list[tuple[str, str]] = []
-    for match in _BLOG_MARKDOWN_LINK_RE.finditer(body or ""):
-        links.append((match.group(1), match.group(2).strip()))
-    for match in _BLOG_HTML_LINK_RE.finditer(body or ""):
-        links.append((match.group(2), match.group(1).strip()))
+def _body_links(body: str) -> list[tuple[str, str, int]]:
+    """``(text, url, position)`` for every link in a markdown/HTML body, text
+    already plain: markdown links first (a linked image ``[![alt](img)](target)``
+    is a link to its target, text the alt), then ``<a>`` anchors, then
+    ``<autolinks>`` and bare URLs, whose text is the URL. Images are media,
+    not links (``extract_images``)."""
+    scanned = markdown_links(body or "")
+    links = [
+        (link_label_text(link.label), link.url, link.start)
+        for link in scanned
+        if link.kind == "inline"
+    ]
+    links += [
+        (plain_text(_HTML_TAG_RE.sub(" ", match.group(2))), match.group(1).strip(), match.start())
+        for match in _BLOG_HTML_LINK_RE.finditer(body or "")
+    ]
+    links += [
+        (link.url, link.url, link.start) for link in scanned if link.kind in {"autolink", "bare"}
+    ]
     return links
+
+
+def _markdown_html_links(body: str) -> list[tuple[str, str]]:
+    return [(text, url) for text, url, _ in _body_links(body)]
 
 
 def _blog_target_path(url: str) -> str | None:
@@ -1643,8 +1660,8 @@ def _blog_outbound_links(
             "section": "Micropost" if post_kind == "micropost" else "Blog post",
             "url": resolved_url,
             "domain": domain,
-            "text": plain_text(text).strip(),
-            "context": plain_text(text).strip(),
+            "text": text,
+            "context": text,
             "link_kind": link_kind,
             "link_category": link_category,
             "target_resolved": bool(target_post),
@@ -1916,8 +1933,8 @@ def _podcast_show_note_links(
                 "section": "Show notes",
                 "url": resolved_url,
                 "domain": domain,
-                "text": plain_text(text).strip(),
-                "context": plain_text(text).strip(),
+                "text": text,
+                "context": text,
                 "link_kind": link_kind,
                 "link_category": "cross_source"
                 if target_source_kind in {"blog", "weekly_thing", "podcast"}
