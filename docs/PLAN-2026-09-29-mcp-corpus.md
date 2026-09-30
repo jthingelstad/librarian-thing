@@ -498,8 +498,8 @@ the new tool list.
    - fair-use limits (500 a day, 300 an hour)
 2. **Update the docs:** `reference/librarian.md`, `apps/librarian/AGENTS.md`,
    `README.md`, and the MCP instructions string.
-3. **The invitation.** Jamie writes the mention in an issue, in his own words.
-   Thingy never writes as Jamie. WB is ready whenever he is.
+3. **The invitation.** Jamie writes the mention in an issue, in Jamie's own
+   words. Thingy never writes as Jamie. WB is ready whenever Jamie is.
 4. **Two weeks after the invitation:** read `mcp-census`, with Jamie's
    approval at that time, to see reader uptake and which tools readers
    actually reach for.
@@ -547,3 +547,25 @@ the new tool list.
 3. MCP 2.0 before readers: "Yes."
 
 Approved to implement phases 1 to 5, including the blog-abstract batch.
+
+## Outcome (2026-09-30)
+
+Jamie, 2026-09-30: "I don't want to wait for WT352." Phases 1 to 5 ran ahead
+of the table above, and every corpus and `retrieval.mts` change landed before
+the freeze.
+
+| Phase | Shipped | LT commits |
+|---|---|---|
+| 1 | Thingy blocks stripped; `/retrieve` 4.11 | de2dbb76 |
+| 2 | MCP 1.3.0, WT photo descriptions in production | d017bd17, 48294e76 |
+| 3 | Structure and voice; MCP 1.4.0 to 1.5.2; `/retrieve` 4.12; Sonnet blog abstracts | 0bc95d79 to 5523ea59 |
+| 4 | MCP 1.6.0 (resources, prompts, annotations), then 2.0.0 (the breaking batch) | ea544cd8, f250e876 |
+| 5 | `/connect/` rewrite and About counts (thingy web ccc1153); docs | 60810c78 |
+
+WB and AB took `/retrieve` 4.12 and review items 13 to 15 before the freeze.
+2.0.0 was verified live (`2.0.0+tools.e7e5c5d6b1aa`: grouped search results,
+the retired-tool error); tools/list is 32.5 KB, of which 7.4 KB is
+`outputSchema`. Eval 715/0 with the recall baseline unchanged.
+
+Still Jamie's: refreshing the claude.ai connector, the invitation, and the
+go-ahead for the census two weeks after it.
