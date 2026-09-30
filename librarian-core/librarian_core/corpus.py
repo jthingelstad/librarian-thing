@@ -387,6 +387,44 @@ def extract_images(text: str) -> list[dict[str, str]]:
     return out
 
 
+# The front-matter ``image`` is the issue's cover: the image email clients
+# and link previews show. 57 issues' covers appear nowhere in their bodies,
+# so until QA 2026-09-30 (media Q4) they were in no media record, WT350 and
+# WT351 among them. One Buttondown attachment is the cover of WT3-22 (each
+# with its own signed query string): a placeholder, not a cover.
+COVER_CONTEXT = "Cover image"
+
+
+def _image_key(url: str) -> str:
+    return re.split(r"[?#]", url.strip(), maxsplit=1)[0]
+
+
+def _shared_cover_images(issue_metadata: list[dict[str, Any]]) -> set[str]:
+    """Front-matter cover images (query strings aside) that more than one
+    issue uses: placeholders rather than any one issue's cover."""
+    uses: dict[str, int] = {}
+    for metadata in issue_metadata:
+        image = str(metadata.get("image") or "")
+        if image:
+            uses[_image_key(image)] = uses.get(_image_key(image), 0) + 1
+    return {key for key, count in uses.items() if count > 1}
+
+
+def issue_cover_image(
+    metadata: dict[str, Any], body_image_urls: set[str], shared: set[str]
+) -> dict[str, str] | None:
+    """The issue's front-matter cover as an image entry ``{url, alt,
+    context}``, or None: no cover, not a web URL (WT236's "IMG_8973"), a
+    placeholder shared with other issues, or already an image in the body."""
+    image = str(metadata.get("image") or "").strip()
+    if not image.lower().startswith(("http://", "https://")):
+        return None
+    if _image_key(image) in shared or image in body_image_urls:
+        return None
+    alt = " ".join(str(metadata.get("image_alt") or "").split())
+    return {"url": image, "alt": alt, "context": COVER_CONTEXT}
+
+
 def _media_context(text: str, url: str, max_chars: int = 240) -> str:
     """The prose nearest an image: the first non-empty, non-image line after
     the tag (issue captions follow images), falling back to the line before."""
@@ -1100,10 +1138,14 @@ def build_corpus(
         "blog": blog_post_lookup(blog_dir or BLOG_DIR),
         "podcast": podcast_episode_lookup(podcast_dir or PODCAST_DIR),
     }
-    for path in sorted(
-        archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
-    ):
-        metadata, body = read_issue(path)
+    issue_files = [
+        (path, *read_issue(path))
+        for path in sorted(
+            archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
+        )
+    ]
+    shared_covers = _shared_cover_images([metadata for _, metadata, _ in issue_files])
+    for path, metadata, body in issue_files:
         body = strip_thingy_blocks(body)
         number = metadata.get("number") or path.parent.name
         subject = metadata.get("subject") or f"Weekly Thing {number}"
@@ -1202,12 +1244,14 @@ def build_corpus(
             if publish_date and publish_date > entry["last_seen"]:
                 entry["last_seen"] = publish_date
 
-        for image in extract_images(body):
+        body_images = extract_images(body)
+        cover = issue_cover_image(metadata, {image["url"] for image in body_images}, shared_covers)
+        for image in ([cover] if cover else []) + body_images:
             media.append(
                 {
                     "url": image["url"],
                     "alt": image["alt"],
-                    "context": _media_context(body, image["url"]),
+                    "context": image.get("context") or _media_context(body, image["url"]),
                     "source_kind": "weekly_thing",
                     "issue_number": number,
                     "subject": subject,
