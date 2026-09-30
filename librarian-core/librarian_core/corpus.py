@@ -439,6 +439,42 @@ def _canonical_blog_url(url: str) -> str:
     return "https://www.thingelstad.com/" + re.split(r"[?#]", match.group(1), maxsplit=1)[0]
 
 
+_H1_H2_RE = re.compile(r"^(#{1,2}\s+.+?)\s*$", re.M)
+_H3_RE = re.compile(r"^###\s+(.+?)\s*$", re.M)
+_READING_ERA_RE = re.compile(r"^(?:now\s+)?reading\b", re.I)
+
+
+def extract_now_reading_entries(body: str) -> list[dict[str, Any]]:
+    """Reading entries from the 2017-2018 "Now Reading 📚" sections (WT8-77),
+    the era before "**Reading:**" lines in a Currently section: one per H3
+    book (the H2's own lines, a cover image or a bare link, belong to the
+    first), or the section itself when it has no H3. Same shape as
+    ``extract_currently_entries``, kind "reading"."""
+    entries: list[dict[str, Any]] = []
+    parts = _H1_H2_RE.split(body or "")
+    for heading, block in zip(parts[1::2], parts[2::2], strict=True):
+        if not heading.startswith("## "):
+            continue
+        name = clean_heading(heading[3:])
+        if section_family(name) != "Currently" or not _READING_ERA_RE.match(name):
+            continue
+        books = _H3_RE.split(block)
+        lead, pairs = books[0], list(zip(books[1::2], books[2::2], strict=True))
+        if not pairs:
+            lead, pairs = "", [("", books[0])]
+        for index, (title, text) in enumerate(pairs):
+            source = f"{lead if index == 0 else ''}\n\n{title}\n\n{text}"
+            links: dict[str, dict[str, str]] = {}
+            for text_, url, _ in _body_links(source):
+                links.setdefault(url, {"title": text_ or url, "url": url})
+            # A bare store link above the blurb is a link, not the entry's words.
+            prose = plain_text(f"{clean_heading(title)}\n\n{text}")
+            prose = " ".join(re.sub(r"<?https?://\S+", " ", prose).split())
+            if prose or links:
+                entries.append({"kind": "reading", "text": prose[:400], "links": [*links.values()]})
+    return entries
+
+
 def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
     """Typed entries from a Currently section: **Reading:** / **Playing:** /
     **Watching:** / **Listening:** lines with their links and prose."""
@@ -1161,6 +1197,14 @@ def build_corpus(
                     "publish_date": publish_date,
                 }
             )
+        issue_fields = {
+            "issue_number": number,
+            "subject": subject,
+            "publish_date": publish_date,
+            "issue_url": url,
+        }
+        for entry in extract_now_reading_entries(body):
+            currently.append({**entry, **issue_fields})
         for issue_section in split:
             section, family, section_body = (
                 issue_section.heading,
@@ -1169,15 +1213,7 @@ def build_corpus(
             )
             if section.strip().lower() == "currently":
                 for entry in extract_currently_entries(section_body):
-                    currently.append(
-                        {
-                            **entry,
-                            "issue_number": number,
-                            "subject": subject,
-                            "publish_date": publish_date,
-                            "issue_url": url,
-                        }
-                    )
+                    currently.append({**entry, **issue_fields})
             budget = embed_text_budget(
                 {
                     "issue_number": number,

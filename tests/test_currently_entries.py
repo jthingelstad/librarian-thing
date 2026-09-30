@@ -6,6 +6,7 @@ with the colon inside the bold, so ten "**Dining**: ..." / "**Making**:" /
 sections gave no entries at all.
 """
 
+import re
 import unittest
 
 from librarian_core import corpus as core
@@ -44,6 +45,70 @@ class CurrentlyLabelTests(unittest.TestCase):
         self.assertEqual(empty, [])
         dining = [e for e in corpus["currently"] if e["kind"] == "dining"]
         self.assertGreaterEqual(len(dining), 8)
+
+
+NOW_READING = """## Notable
+
+### [A link](https://example.com/a)
+
+Commentary.
+
+## Now Reading 📚
+
+[![image](https://assets.example/cover.jpg)](http://www.amazon.com/dp/1631490168/)
+
+### [American Eclipse](http://www.amazon.com/dp/1631490168/)
+
+by David Baron
+
+*A blurb.* We are going to St. Louis to see [the eclipse](https://eclipse.example/).
+
+## Now Reading 📚
+
+https://www.amazon.com/Collapse/dp/0143117009/
+
+Collapse ()
+by Jared Diamond
+
+My book club is going back to Jared Diamond.
+
+## Currently
+
+**Reading:** [Some Book](https://example.com/book)
+"""
+
+
+class NowReadingEraTests(unittest.TestCase):
+    """QA 2026-09-30 (ingest F12, approved by Jamie): the 2017-2018 "Now
+    Reading 📚" sections (WT8-77) were in no Currently entry, so
+    currently_history started reading in 2018."""
+
+    def test_now_reading_books_are_reading_entries(self):
+        entries = core.extract_now_reading_entries(NOW_READING)
+        self.assertEqual([e["kind"] for e in entries], ["reading", "reading"])
+        self.assertTrue(entries[0]["text"].startswith("American Eclipse by David Baron"))
+        self.assertEqual(
+            [link["url"] for link in entries[0]["links"]],
+            ["http://www.amazon.com/dp/1631490168/", "https://eclipse.example/"],
+        )
+        self.assertTrue(entries[1]["text"].startswith("Collapse () by Jared Diamond"))
+        self.assertEqual(
+            [link["url"] for link in entries[1]["links"]],
+            ["https://www.amazon.com/Collapse/dp/0143117009/"],
+        )
+
+    def test_every_now_reading_issue_has_an_entry(self):
+        corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
+        reading_era = {
+            issue["number"]
+            for issue in corpus["issues"]
+            if re.search(r"^## (Now Reading|Reading 📚)", issue["body"], re.M)
+        }
+        with_entries = {
+            entry["issue_number"] for entry in corpus["currently"] if entry["kind"] == "reading"
+        }
+        self.assertEqual(len(reading_era), 17)
+        self.assertLessEqual(reading_era, with_entries)
 
 
 if __name__ == "__main__":
