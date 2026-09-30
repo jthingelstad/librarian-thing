@@ -23,7 +23,7 @@ from __future__ import annotations
 import bisect
 import re
 from dataclasses import dataclass
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from .domain_exclusions import is_excluded
 
@@ -491,6 +491,47 @@ def link_label_text(label: str) -> str:
     text = re.sub(r"`([^`]+)`", r"\1", text)
     text = re.sub(r"[*_>~]+", "", text)
     return " ".join(text.split())
+
+
+# --- malformed URLs --------------------------------------------------------
+#
+# Typos in the source that gave links a wrong host (QA 2026-09-30, links L6):
+# 29 blog links "https://https://www.thingelstad.com/candles/" (domain
+# "https"), "ttps://blog.coinbase.com/...", "https://www.hwardmiles.com."
+# (a host of its own, "www.hwardmiles.com."), and "http://carcassonne:///f/..."
+# (the Carcassonne app's friend link typed after "http://").
+
+_DOUBLED_SCHEME_RE = re.compile(r"^(?:https?:/+)+(?=https?:/)", re.I)
+_CLIPPED_SCHEME_RE = re.compile(r"^(ttps?)://", re.I)
+_HOST_TRAILING_DOT_RE = re.compile(r"\.+(?=(?::\d*)?$)")
+
+
+def repair_url(url: str) -> str:
+    """``url`` with the typos that give it a wrong host fixed: a doubled
+    scheme, a scheme missing its "h", dots after the host name. Any other
+    URL comes back as it was (stripped)."""
+    url = _DOUBLED_SCHEME_RE.sub("", url.strip())
+    url = _CLIPPED_SCHEME_RE.sub(lambda match: f"h{match.group(1)}://", url)
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname or ""
+    except ValueError:
+        return url
+    if host.endswith("."):
+        url = urlunsplit(parts._replace(netloc=_HOST_TRAILING_DOT_RE.sub("", parts.netloc)))
+    return url
+
+
+def web_domain(url: str) -> str:
+    """The link's domain, or "" when it has no web host: no host at all, or
+    a host with no dot that is not localhost ("http://carcassonne:///f/1")."""
+    try:
+        host = (urlsplit(url).hostname or "").lower()
+    except ValueError:
+        return ""
+    if "." not in host and ":" not in host and host != "localhost":
+        return ""
+    return host
 
 
 def extract_domains(links: list[dict]) -> list[str]:

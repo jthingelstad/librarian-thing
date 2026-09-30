@@ -21,7 +21,15 @@ import boto3
 import yaml
 from dotenv import load_dotenv
 
-from .links import extract_domains, link_label_text, markdown_links, section_family, unlink
+from .links import (
+    extract_domains,
+    link_label_text,
+    markdown_links,
+    repair_url,
+    section_family,
+    unlink,
+    web_domain,
+)
 from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
@@ -1527,10 +1535,7 @@ def issue_body_links(
     def add(text: str, url: str, role: str, context: str) -> None:
         if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
             return
-        try:
-            domain = (urlparse(url).hostname or "").lower()
-        except ValueError:
-            return
+        domain = web_domain(url)
         if not domain:
             return
         skip_urls.add(url)
@@ -1582,7 +1587,7 @@ def _body_links(body: str) -> list[tuple[str, str, int]]:
     already plain: markdown links first (a linked image ``[![alt](img)](target)``
     is a link to its target, text the alt), then ``<a>`` anchors, then
     ``<autolinks>`` and bare URLs, whose text is the URL. Images are media,
-    not links (``extract_images``)."""
+    not links (``extract_images``). URLs come through ``repair_url``."""
     scanned = markdown_links(body or "")
     links = [
         (link_label_text(link.label), link.url, link.start)
@@ -1596,7 +1601,7 @@ def _body_links(body: str) -> list[tuple[str, str, int]]:
     links += [
         (link.url, link.url, link.start) for link in scanned if link.kind in {"autolink", "bare"}
     ]
-    return links
+    return [(text, repair_url(url), position) for text, url, position in links]
 
 
 def _markdown_html_links(body: str) -> list[tuple[str, str]]:
@@ -1669,7 +1674,7 @@ def _blog_outbound_links(
             parsed = urlparse(resolved_url)
         except Exception:
             return
-        domain = (parsed.hostname or "").lower()
+        domain = web_domain(resolved_url)
         if not domain or resolved_url in seen_urls:
             return
         seen_urls.add(resolved_url)
@@ -1947,11 +1952,7 @@ def _podcast_show_note_links(
         if not link_url or link_url.startswith("#") or link_url.startswith("mailto:"):
             continue
         resolved_url = urljoin(episode_url, link_url)
-        try:
-            parsed = urlparse(resolved_url)
-        except Exception:
-            continue
-        domain = (parsed.hostname or "").lower()
+        domain = web_domain(resolved_url)
         if not domain or resolved_url in seen_urls:
             continue
         seen_urls.add(resolved_url)
