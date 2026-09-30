@@ -303,6 +303,26 @@ def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
     ]
 
 
+# Link targets, tags and bare URLs: not the passage's words. A micro.blog or
+# feedburner URL is not the passage talking about blogs or feeds.
+_TOPIC_NOISE_RE = re.compile(r"\]\([^)]*\)|<[^>]+>|https?://\S+|www\.\S+", re.I)
+_MICRO_BLOG_RE = re.compile(r"\bmicro\.blog\b", re.I)
+
+
+def chunk_topics(heading: str, text: str) -> list[str]:
+    """The clusters one passage is about, from its own heading and text.
+
+    Chunks used to inherit their issue's clusters, and since every issue
+    links a micro.blog or blog URL, "Open web and RSS" sat on 8,856 of 8,895
+    Weekly Thing chunks, so search_archive's topic filter barely narrowed
+    (QA 2026-09-30, retrieval Q1). This is the same detector and the same
+    nine clusters as ``detect_topics``, read over the passage's prose (link
+    targets and tags removed), with "micro.blog" read as the ``microblog``
+    keyword that the word split would otherwise break in two."""
+    prose = _MICRO_BLOG_RE.sub("microblog", _TOPIC_NOISE_RE.sub(" ", f"{heading}\n{text}"))
+    return detect_topics("", prose)
+
+
 # --- media / currently / journal extraction (2026-08 tool audit) ----------
 #
 # The audit exercise showed three brute-force patterns in the agent: photo
@@ -1183,7 +1203,9 @@ def build_corpus(
                         "spans": voice_spans(chunk_text, family),
                         "word_count": len(words(chunk_text)),
                         "content_kind": content_kind(section, family),
-                        "topics": topics,
+                        # The passage's own clusters; the issue's stay on
+                        # the issue record (list_content filters on those).
+                        "topics": chunk_topics(section, chunk_text),
                         "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
                         **({"journal_post_urls": chunk_journal_urls} if chunk_journal_urls else {}),
@@ -1805,7 +1827,7 @@ def build_blog_corpus(
                 "spans": voice_spans(chunk_text),
                 "word_count": len(words(chunk_text)),
                 "content_kind": "blog",
-                "topics": [],
+                "topics": chunk_topics(subject, chunk_text),
                 "source_kind": "blog",
                 "domains": post_domains,
             }
@@ -2005,6 +2027,7 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
                         "section": section,
                         "content_kind": content_kind,
                         "text": chunk_text,
+                        "topics": chunk_topics(subject, chunk_text),
                         "word_count": len(words(chunk_text)),
                     }
                 )
