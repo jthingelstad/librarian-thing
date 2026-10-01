@@ -123,6 +123,11 @@ test('scope, state, and PKCE parameter validators', () => {
   assert.equal(normalizeScope('archive:read'), 'archive:read');
   assert.equal(normalizeScope('archive:read archive:read'), 'archive:read');
   assert.equal(normalizeScope('archive:write'), '');
+  // offline_access is accepted and dropped: every grant gets a refresh token
+  // anyway, and AWS DevOps Agent always asks for it.
+  assert.equal(normalizeScope('offline_access'), 'archive:read');
+  assert.equal(normalizeScope('archive:read offline_access'), 'archive:read');
+  assert.equal(normalizeScope('offline_access archive:write'), '');
   assert.equal(validState('x'.repeat(512)), 'x'.repeat(512));
   assert.equal(validState('x'.repeat(513)), '');
   assert.equal(validState(undefined), '');
@@ -162,8 +167,9 @@ test('auth-code rows snapshot the verified pending authorization', () => {
   assert.deepEqual(JSON.parse(item.entitlements.S), ['reader', 'supporting_member']);
   assert.equal(Number(item.expires_at.N), 5000 + AUTH_CODE_TTL_SECONDS);
   assert.equal(Number(item.ttl.N), 5000 + AUTH_CODE_TTL_SECONDS);
-  // The email itself must not be snapshotted onto the code row.
-  assert.equal('email' in item, false);
+  // The verified email rides the five-minute code to the connection's family
+  // row, where the nine-day membership re-check reads it (4.14.0).
+  assert.equal(item.email.S, 'reader@example.com');
 });
 
 test('authorization server metadata follows RFC 8414 with the configurable issuer', () => {

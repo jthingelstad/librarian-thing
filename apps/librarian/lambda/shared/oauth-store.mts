@@ -3,6 +3,7 @@ import { DeleteItemCommand, GetItemCommand, PutItemCommand, UpdateItemCommand } 
 import type { AttributeValue } from '@aws-sdk/client-dynamodb';
 import { dynamodb } from './aws-clients.mjs';
 import { errorFields, logEvent } from './logging.mjs';
+import { ENTITLEMENT_VERIFICATION_SECONDS } from './session.mjs';
 import { dynamoNumber, dynamoString } from './user-conversations.mjs';
 
 // OAuth 2.1 authorization-server storage for the Librarian MCP surface.
@@ -162,12 +163,19 @@ export function validCodeVerifier(value: unknown) {
   return CODE_VERIFIER_RE.test(raw) ? raw : '';
 }
 
+// offline_access (OpenID Connect) asks for a refresh token. Every grant here
+// gets one, so it is accepted and dropped rather than refused: AWS DevOps
+// Agent always sends it alongside the configured scope.
+const IGNORED_SCOPES = new Set(['offline_access']);
+
 // The requested scope must be a subset of what we support. Empty request
 // defaults to the full supported scope.
 export function normalizeScope(value: unknown) {
-  const raw = String(value || '').trim();
-  if (!raw) return OAUTH_SCOPES.join(' ');
-  const requested = raw.split(/\s+/);
+  const requested = String(value || '')
+    .trim()
+    .split(/\s+/)
+    .filter((scope) => scope && !IGNORED_SCOPES.has(scope));
+  if (!requested.length) return OAUTH_SCOPES.join(' ');
   const unique = Array.from(new Set(requested));
   if (unique.some((scope) => !OAUTH_SCOPES.includes(scope))) return '';
   return unique.join(' ');
@@ -418,6 +426,9 @@ export async function deletePending(id: string) {
 // --- Authorization codes ---------------------------------------------------
 
 // Snapshot the verified pending authorization into a single-use code row.
+// The verified email rides along for the five minutes the code lives: the
+// code exchange stores it on the connection's family row, where the
+// membership re-check at refresh reads it (contract 4.14.0).
 export function buildAuthCodeItem(pending: OauthPending, codeHash: string, createdAt = nowSeconds()): Item {
   const expiresAt = createdAt + AUTH_CODE_TTL_SECONDS;
   return {
@@ -429,6 +440,7 @@ export function buildAuthCodeItem(pending: OauthPending, codeHash: string, creat
     code_challenge: dynamoString(pending.codeChallenge),
     code_challenge_method: dynamoString('S256'),
     subscriber_hash: dynamoString(pending.subscriberHash),
+    email: dynamoString(pending.email),
     entitlements: dynamoString(JSON.stringify(pending.entitlements)),
     created_at: dynamoNumber(createdAt),
     expires_at: dynamoNumber(expiresAt),
@@ -454,7 +466,10 @@ export interface RedeemedAuthCode {
   scope: string;
   codeChallenge: string;
   subscriberHash: string;
+  email: string;
   entitlements: string[];
+  // When the code's entitlements came from Buttondown (the code step).
+  verifiedAt: number;
 }
 
 // Single-use redemption: the conditional used_at update mirrors the
@@ -472,11 +487,13 @@ export async function redeemAuthCode(code: unknown): Promise<RedeemedAuthCode | 
       new UpdateItemCommand({
         TableName: tableName(),
         Key: key,
-        UpdateExpression: 'SET #used_at = :used_at',
+        // The spent code drops the email at once rather than keeping it
+        // until DynamoDB gets round to the ttl; ALL_OLD still returns it.
+        UpdateExpression: 'SET #used_at = :used_at REMOVE #email',
         ConditionExpression: 'attribute_exists(pk) AND attribute_not_exists(#used_at) AND #expires_at >= :now',
-        ExpressionAttributeNames: { '#used_at': 'used_at', '#expires_at': 'expires_at' },
+        ExpressionAttributeNames: { '#used_at': 'used_at', '#expires_at': 'expires_at', '#email': 'email' },
         ExpressionAttributeValues: { ':used_at': dynamoNumber(now), ':now': dynamoNumber(now) },
-        ReturnValues: 'ALL_NEW'
+        ReturnValues: 'ALL_OLD'
       })
     );
     const item = updated.Attributes || null;
@@ -487,7 +504,9 @@ export async function redeemAuthCode(code: unknown): Promise<RedeemedAuthCode | 
       scope: itemString(item, 'scope'),
       codeChallenge: itemString(item, 'code_challenge'),
       subscriberHash: itemString(item, 'subscriber_hash'),
-      entitlements: itemJsonList(item, 'entitlements')
+      email: itemString(item, 'email'),
+      entitlements: itemJsonList(item, 'entitlements'),
+      verifiedAt: itemNumber(item, 'created_at')
     };
   } catch {
     logEvent('info', 'oauth_code_redeem_rejected', { code_hash_prefix: codeHash.slice(0, 10) });
@@ -543,22 +562,112 @@ async function putRefreshToken(refreshToken: string, grant: OauthGrant, familyId
   );
 }
 
-// No GSI exists, so family membership lives on a family row: every refresh
-// hash ever minted for the family is appended here, and reuse detection
-// deletes them all.
-async function appendFamilyMember(familyId: string, refreshHash: string, now: number) {
+// --- Refresh families (MCP connections) ------------------------------------
+
+// A connection lives while it is used. Every refresh slides the family row's
+// ttl a full refresh-token lifetime ahead, so a client that refreshes at
+// least once in 30 days stays connected, and 30 days idle ends it. There is
+// no absolute cap (contract 4.14.0): the membership re-check below keeps a
+// lapsed reader from riding a long-lived connection, which is what the old
+// 90-day cap (audit A4) stood in for.
+export const OAUTH_FAMILY_IDLE_SECONDS = REFRESH_TOKEN_TTL_SECONDS;
+
+// How long Buttondown's word on a membership is trusted before a refresh
+// asks again: the web session's window.
+export const MEMBERSHIP_RECHECK_SECONDS = ENTITLEMENT_VERIFICATION_SECONDS;
+
+// Families granted before 2026-10-01 carry no email to re-check membership
+// with, so they keep the 90-day cap from first consent; the next sign-in
+// makes a family that slides.
+export const LEGACY_FAMILY_MAX_SECONDS = 90 * 24 * 60 * 60;
+
+// The family row keeps only the newest refresh hashes. Rotation is strictly
+// serial (a token has one successor, won by a conditional write), so the
+// live token is always among them. An older rotated token dropped from the
+// list still trips reuse detection if replayed - its own row says
+// rotated_to - and its row expires on its own ttl. Without the trim, an
+// hourly-refreshing client grows the row about 1.7KB a day toward
+// DynamoDB's 400KB item limit.
+export const OAUTH_FAMILY_MEMBERS_KEPT = 16;
+
+export interface FamilyMembership {
+  subscriberHash: string;
+  email: string;
+  entitlements: string[];
+  // When Buttondown last confirmed the membership (epoch seconds).
+  verifiedAt: number;
+}
+
+export type MembershipCheckResult =
+  | { status: 'verified'; entitlements: string[] }
+  | { status: 'lapsed'; subscriberStatus: string }
+  // Buttondown could not answer: keep the entitlements, ask again next time.
+  | { status: 'unavailable' };
+
+export type MembershipCheck = (membership: FamilyMembership) => Promise<MembershipCheckResult>;
+
+export function familyMembersAfterRotation(members: string[], refreshHash: string) {
+  return [...members.filter((member) => member !== refreshHash), refreshHash].slice(-OAUTH_FAMILY_MEMBERS_KEPT);
+}
+
+// When a family ends if nobody refreshes it: the idle window from the last
+// refresh, and for a legacy family also its 90-day cap.
+export function familyExpiresAt(family: { createdAt: number; email: string }, now: number) {
+  const idle = now + OAUTH_FAMILY_IDLE_SECONDS;
+  if (family.email || !family.createdAt) return idle;
+  return Math.min(idle, family.createdAt + LEGACY_FAMILY_MAX_SECONDS);
+}
+
+// No GSI covers token rows, so family membership lives on a family row:
+// the newest refresh hashes, and reuse detection deletes them all. The row
+// also holds the reader's verified email for the membership re-check, and
+// carries subscriber_hash so profile deletion's SubscriberHashIndex sweep
+// finds it even if the connection row was never written.
+async function createFamily(
+  familyId: string,
+  grant: OauthGrant,
+  refreshHash: string,
+  now: number,
+  membership: { email: string; verifiedAt: number }
+) {
+  await dynamodb.send(
+    new PutItemCommand({
+      TableName: tableName(),
+      Item: {
+        pk: dynamoString(`oauthfamily#${familyId}`),
+        sk: dynamoString('family'),
+        item_type: dynamoString('oauth_family'),
+        client_id: dynamoString(grant.clientId),
+        subscriber_hash: dynamoString(grant.subscriberHash),
+        ...(membership.email ? { email: dynamoString(membership.email) } : {}),
+        entitlements_verified_at: dynamoNumber(membership.verifiedAt || now),
+        member_hashes: { L: [dynamoString(refreshHash)] },
+        created_at: dynamoNumber(now),
+        last_refreshed_at: dynamoNumber(now),
+        ttl: dynamoNumber(now + OAUTH_FAMILY_IDLE_SECONDS)
+      },
+      ConditionExpression: 'attribute_not_exists(pk)'
+    })
+  );
+}
+
+// The conditional write keeps a refresh that races a disconnect from
+// bringing the revoked family row back.
+async function rotateFamily(familyId: string, members: string[], expiresAt: number, now: number, verifiedAt: number) {
   await dynamodb.send(
     new UpdateItemCommand({
       TableName: tableName(),
       Key: { pk: dynamoString(`oauthfamily#${familyId}`), sk: dynamoString('family') },
-      UpdateExpression:
-        'SET member_hashes = list_append(if_not_exists(member_hashes, :empty), :member), #ttl = :ttl, created_at = if_not_exists(created_at, :now)',
+      UpdateExpression: `SET member_hashes = :members, #ttl = :ttl, last_refreshed_at = :now${
+        verifiedAt ? ', entitlements_verified_at = :verified' : ''
+      }`,
+      ConditionExpression: 'attribute_exists(pk)',
       ExpressionAttributeNames: { '#ttl': 'ttl' },
       ExpressionAttributeValues: {
-        ':empty': { L: [] },
-        ':member': { L: [dynamoString(refreshHash)] },
-        ':ttl': dynamoNumber(now + REFRESH_TOKEN_TTL_SECONDS),
-        ':now': dynamoNumber(now)
+        ':members': { L: members.map((member) => dynamoString(member)) },
+        ':ttl': dynamoNumber(expiresAt),
+        ':now': dynamoNumber(now),
+        ...(verifiedAt ? { ':verified': dynamoNumber(verifiedAt) } : {})
       }
     })
   );
@@ -577,6 +686,8 @@ export async function revokeRefreshFamily(familyId: string) {
       })
     );
   }
+  // The family row holds the reader's email; deleting it is what removes
+  // the email on disconnect, reuse, lapse and profile deletion.
   await dynamodb.send(new DeleteItemCommand({ TableName: table, Key: familyKey }));
   logEvent('warning', 'oauth_refresh_family_revoked', { family_id: familyId, member_count: members.length });
 }
@@ -586,25 +697,41 @@ export async function refreshFamilyActive(familyId: string) {
   return Boolean(await getRow(`oauthfamily#${familyId}`, 'family'));
 }
 
-export async function mintTokens(grant: OauthGrant, familyId = generateOpaqueId()): Promise<OauthTokens> {
+export async function mintTokens(
+  grant: OauthGrant,
+  membership: { email: string; verifiedAt: number },
+  familyId = generateOpaqueId()
+): Promise<OauthTokens & { expiresAt: number }> {
   const now = nowSeconds();
   const accessToken = generateAccessToken();
   const refreshToken = generateRefreshToken();
   await putAccessToken(accessToken, grant, familyId, now);
   await putRefreshToken(refreshToken, grant, familyId, now);
-  await appendFamilyMember(familyId, sha256Hex(refreshToken), now);
-  return { accessToken, refreshToken, expiresIn: ACCESS_TOKEN_TTL_SECONDS, scope: grant.scope, familyId };
+  await createFamily(familyId, grant, sha256Hex(refreshToken), now, membership);
+  return {
+    accessToken,
+    refreshToken,
+    expiresIn: ACCESS_TOKEN_TTL_SECONDS,
+    scope: grant.scope,
+    familyId,
+    expiresAt: now + OAUTH_FAMILY_IDLE_SECONDS
+  };
 }
 
 export type RefreshResult =
   | { status: 'invalid' }
   | { status: 'reuse_revoked' }
-  // connectedAt: when the family's first consent happened (epoch seconds).
-  | { status: 'ok'; tokens: OauthTokens; grant: OauthGrant; connectedAt: number };
+  // Buttondown says the membership ended: the family is revoked.
+  | { status: 'lapsed' }
+  // connectedAt: when the family's first consent happened; expiresAt: when
+  // it ends if not refreshed again (epoch seconds).
+  | { status: 'ok'; tokens: OauthTokens; grant: OauthGrant; connectedAt: number; expiresAt: number };
 
-export const OAUTH_FAMILY_MAX_SECONDS = 90 * 24 * 60 * 60;
-
-export async function redeemRefreshToken(refreshToken: unknown, clientId: string): Promise<RefreshResult> {
+export async function redeemRefreshToken(
+  refreshToken: unknown,
+  clientId: string,
+  checkMembership?: MembershipCheck
+): Promise<RefreshResult> {
   const raw = String(refreshToken || '').trim();
   if (
     !raw.startsWith(REFRESH_TOKEN_PREFIX) ||
@@ -629,13 +756,15 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
     await revokeRefreshFamily(familyId);
     return { status: 'reuse_revoked' };
   }
-  // Absolute family lifetime (audit A4): rotation must not extend a grant
-  // forever - the web session gate forces re-auth on lapse, and a lapsed
-  // subscriber's MCP grant should decay too. 90 days from first consent,
-  // then a fresh authorization (which re-runs the subscriber check).
-  const family = await getRow(`oauthfamily#${familyId}`, 'family');
-  const familyCreatedAt = family ? itemNumber(family, 'created_at') : 0;
-  if (familyCreatedAt && now - familyCreatedAt > OAUTH_FAMILY_MAX_SECONDS) {
+  // A revoked or idle-expired connection has no family row; its access
+  // tokens are already refused, so its refresh token is too.
+  const family = familyId ? await getRow(`oauthfamily#${familyId}`, 'family') : null;
+  // DynamoDB deletes expired rows lazily, so the ttl is checked here too.
+  const familyTtl = itemNumber(family, 'ttl');
+  if (!family || (familyTtl && familyTtl < now)) return { status: 'invalid' };
+  const familyCreatedAt = itemNumber(family, 'created_at');
+  const email = itemString(family, 'email');
+  if (!email && familyCreatedAt && now - familyCreatedAt > LEGACY_FAMILY_MAX_SECONDS) {
     logEvent('info', 'oauth_refresh_family_expired', { family_id: familyId });
     await revokeRefreshFamily(familyId);
     return { status: 'invalid' };
@@ -646,6 +775,32 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
     entitlements: itemJsonList(item, 'entitlements'),
     scope: itemString(item, 'scope')
   };
+  // Membership re-check, the MCP twin of the web session's: entitlements
+  // stay trusted for MEMBERSHIP_RECHECK_SECONDS, then Buttondown is
+  // asked again with the email stored at consent.
+  let verifiedAt = 0;
+  const lastVerifiedAt = itemNumber(family, 'entitlements_verified_at') || familyCreatedAt;
+  if (email && checkMembership && now - lastVerifiedAt > MEMBERSHIP_RECHECK_SECONDS) {
+    const checked = await checkMembership({
+      subscriberHash: grant.subscriberHash,
+      email,
+      entitlements: grant.entitlements,
+      verifiedAt: lastVerifiedAt
+    });
+    if (checked.status === 'lapsed') {
+      logEvent('info', 'oauth_refresh_subscription_lapsed', {
+        family_id: familyId,
+        subscriber_hash: grant.subscriberHash,
+        subscriber_status: checked.subscriberStatus
+      });
+      await revokeRefreshFamily(familyId);
+      return { status: 'lapsed' };
+    }
+    if (checked.status === 'verified') {
+      grant.entitlements = checked.entitlements;
+      verifiedAt = now;
+    }
+  }
   const newRefreshToken = generateRefreshToken();
   try {
     // Mark the old token rotated before the successor exists anywhere. A
@@ -667,10 +822,26 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
     await revokeRefreshFamily(familyId);
     return { status: 'reuse_revoked' };
   }
+  const newRefreshHash = sha256Hex(newRefreshToken);
+  const members = (family.member_hashes?.L || []).map((entry) => String(entry.S || '')).filter(Boolean);
+  const expiresAt = familyExpiresAt({ createdAt: familyCreatedAt, email }, now);
   const accessToken = generateAccessToken();
   await putAccessToken(accessToken, grant, familyId, now);
   await putRefreshToken(newRefreshToken, grant, familyId, now);
-  await appendFamilyMember(familyId, sha256Hex(newRefreshToken), now);
+  try {
+    await rotateFamily(familyId, familyMembersAfterRotation(members, newRefreshHash), expiresAt, now, verifiedAt);
+  } catch (error) {
+    // The family was revoked mid-refresh (a disconnect): the new access
+    // token is already refused without its family; drop the refresh row.
+    logEvent('info', 'oauth_refresh_family_gone', errorFields(error, { family_id: familyId }));
+    await dynamodb.send(
+      new DeleteItemCommand({
+        TableName: tableName(),
+        Key: { pk: dynamoString(`oauthrefresh#${newRefreshHash}`), sk: dynamoString('refresh') }
+      })
+    );
+    return { status: 'invalid' };
+  }
   return {
     status: 'ok',
     tokens: {
@@ -681,7 +852,8 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
       familyId
     },
     grant,
-    connectedAt: familyCreatedAt || now
+    connectedAt: familyCreatedAt || now,
+    expiresAt
   };
 }
 
@@ -707,8 +879,9 @@ export async function validateAccessToken(token: unknown): Promise<AccessTokenCo
   const item = await getRow(`oauthaccess#${sha256Hex(raw)}`, 'access');
   if (!item) return null;
   if (itemNumber(item, 'expires_at') < nowSeconds()) return null;
-  // A revoked connection (disconnect, refresh reuse, family expiry) deletes
-  // its family row; the access token dies with it.
+  // A revoked connection (disconnect, refresh reuse, lapsed membership)
+  // deletes its family row and an idle one expires it; the access token
+  // dies with it.
   const familyId = itemString(item, 'family_id');
   if (familyId && !(await getRow(`oauthfamily#${familyId}`, 'family'))) return null;
   return {

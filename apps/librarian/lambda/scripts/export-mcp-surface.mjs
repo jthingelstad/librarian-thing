@@ -71,13 +71,6 @@ function constantFrom(file, pattern, label) {
   return match[1];
 }
 
-function product(expression) {
-  return expression
-    .split('*')
-    .map((part) => Number(part.trim()))
-    .reduce((total, value) => total * value, 1);
-}
-
 const intConstant = (file, name) => Number(constantFrom(file, new RegExp(`const ${name} = (\\d+);`), name));
 
 // ── Tools ───────────────────────────────────────────────────────────────
@@ -351,19 +344,16 @@ const surface = {
     lifetimes_seconds: {
       access_token: oauthStore.ACCESS_TOKEN_TTL_SECONDS,
       refresh_token: oauthStore.REFRESH_TOKEN_TTL_SECONDS,
-      refresh_family_max: product(
-        constantFrom(
-          'shared/oauth-store.mjs',
-          /const OAUTH_FAMILY_MAX_SECONDS = ([\d\s*]+);/,
-          'OAUTH_FAMILY_MAX_SECONDS'
-        )
-      ),
+      connection_idle: oauthStore.OAUTH_FAMILY_IDLE_SECONDS,
+      membership_recheck: oauthStore.MEMBERSHIP_RECHECK_SECONDS,
       authorization_code: oauthStore.AUTH_CODE_TTL_SECONDS,
       pending_authorization: oauthStore.PENDING_TTL_SECONDS,
       registered_client: oauthStore.CLIENT_TTL_SECONDS
     },
     refresh_rotation:
-      'Refresh tokens rotate on every use; replaying a rotated token revokes the whole token family. A family lives at most refresh_family_max from first consent, then the client authorizes again.',
+      'Refresh tokens rotate on every use; replaying a rotated token revokes the whole token family. A connection lasts as long as the client keeps refreshing: connection_idle without a refresh ends it. There is no fixed maximum. Every membership_recheck the refresh asks Buttondown again about the email the reader signed in with; a lapsed subscription ends the connection, and if Buttondown cannot answer, the refresh goes ahead and asks again next time.',
+    client_authentication:
+      'Clients are public, so there is no client secret. The token endpoint takes client_id in the form body, or as HTTP Basic with an empty secret. The offline_access scope is accepted and ignored, because every grant gets a refresh token anyway.',
     token_prefixes: {
       access_token: oauthStore.ACCESS_TOKEN_PREFIX,
       refresh_token: oauthStore.REFRESH_TOKEN_PREFIX,

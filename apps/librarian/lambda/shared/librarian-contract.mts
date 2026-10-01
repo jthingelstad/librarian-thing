@@ -54,7 +54,14 @@
 // {cursor?, limit?, connection_id?, surface?} pages the reader's MCP and
 // WebMCP tool calls newest first within retention_days. delete_profile
 // now also revokes every MCP connection (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.13.0';
+// 4.14.0: MCP connections slide. A connection lasts while the client
+// refreshes at least once in 30 days, with no 90-day cap; every nine days a
+// refresh re-checks the membership with Buttondown, using the email stored
+// on the connection, and a lapsed membership ends it. Connection
+// expires_at moves forward with each refresh. The token endpoint also
+// takes client_id as HTTP Basic with an empty secret, and accepts and
+// ignores the offline_access scope (AWS DevOps Agent 3LO; additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.14.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).

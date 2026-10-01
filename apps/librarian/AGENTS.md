@@ -179,8 +179,8 @@ consent redirect in Chromium.
 **Connections (contract 4.13.0, 2026-10-01).** A reader's "MCP connection" is
 one refresh family. Every code exchange and refresh upserts a
 `user#<hash>` / `mcpconn#<family id>` row (`shared/mcp-connections.mts`:
-client id and registered name, connected/last authorized; ttl = the family's
-90-day cap), and each audited `/mcp` call stamps `connection_id` on its
+client id and registered name, connected/last authorized; ttl and
+`expires_at` slide with the family's), and each audited `/mcp` call stamps `connection_id` on its
 audit row and bumps the row's `last_used_at`/`call_count`. Access tokens carry
 their `family_id`, and `validateAccessToken` refuses one whose family row is
 gone - so disconnecting (`revokeRefreshFamily`) cuts the client off at once,
@@ -194,6 +194,43 @@ the retention window, newest first, filter by `connection_id` or `surface`,
 opaque base64url `next_cursor` that must decode to an `mcp#` sort key).
 `delete_profile` revokes every connection before deleting the profile. Thingy
 renders these in Profile > MCP connections and its request log.
+
+**Sliding connections (contract 4.14.0, 2026-10-01).** A family has no absolute
+cap any more. It lives while it is refreshed within `OAUTH_FAMILY_IDLE_SECONDS`
+(= the 30-day refresh-token TTL); every refresh slides the family row's ttl and
+the connection row's `expires_at`. The 90-day cap (audit A4) existed so a lapsed
+reader's grant would decay. Its replacement is the web session's re-check:
+- **Membership re-check.** The verified email travels pending → auth code (five
+  minutes) → the family row, next to `entitlements_verified_at`. When that is
+  older than `MEMBERSHIP_RECHECK_SECONDS` (`ENTITLEMENT_VERIFICATION_SECONDS`,
+  nine days), `redeemRefreshToken` calls the route's `checkConnectionMembership`.
+  `active` or `premium` re-derives the entitlements and restarts the clock;
+  anything else revokes the family, and the client gets `invalid_grant` and must
+  re-authorize. A Buttondown error keeps the entitlements and asks again on the
+  next refresh. The owner (`isOwnerSubscriberHash`) is never sent to Buttondown.
+- **Where the email lives.** Only on the family row, never on token rows and
+  never in logs (hashes only). It goes when the family row goes: disconnect,
+  reuse, lapse, idle ttl, and `delete_profile`. The family row also carries
+  `subscriber_hash`, so profile deletion's `SubscriberHashIndex` sweep finds it
+  even without a connection row.
+- **Member list.** `member_hashes` keeps only the newest
+  `OAUTH_FAMILY_MEMBERS_KEPT` (16). Rotation is serial, so the live token is
+  always kept, and a dropped rotated token still trips reuse detection through
+  its own `rotated_to`. Untrimmed, an hourly refresher would grow the row
+  toward the 400KB item limit.
+- **Refusals.** A refresh is refused when its family row is gone or past its
+  ttl. The family write is conditional, so a refresh racing a disconnect cannot
+  bring the row back.
+- **Legacy families.** A family minted before this change has no email, so it
+  keeps `LEGACY_FAMILY_MAX_SECONDS` (90 days from consent). The reader's next
+  sign-in makes a family that slides.
+- **AWS DevOps Agent 3LO.** `/token` also takes `client_id` as HTTP Basic with
+  an empty secret (`tokenRequestClientId`; a non-empty secret, or a Basic id
+  that disagrees with the body, is a 401 `invalid_client`). The
+  `offline_access` scope that DevOps Agent always sends is accepted and dropped
+  (`normalizeScope`). DevOps Agent does no dynamic registration. Register its
+  callback URL with `/register` and give it the client id. Leave the client
+  secret blank and PKCE on.
 
 ## Evals gate the deploy
 

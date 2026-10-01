@@ -31,8 +31,14 @@ MCP server (`/mcp` on the stream Lambda). Endpoints: `/.well-known/oauth-authori
 `/.well-known/oauth-protected-resource`, `/register`, `/authorize` (HTML
 email/code/consent flow reusing the Thingy sign-in code email), and `/token`
 (authorization_code + PKCE S256 and rotating refresh tokens with family
-revocation on reuse). OAuth records share the DynamoDB table with sha256-hashed
-secrets and ttl. Issuer defaults to `https://librarian.thingelstad.com`; set
+revocation on reuse). A connection (refresh family) slides: it lasts while the
+client refreshes within 30 days, with no absolute cap, and every nine days a
+refresh re-checks the membership with Buttondown using the email stored on the
+family row (lapsed revokes; a Buttondown error keeps going; the owner is
+exempt). Families from before 2026-10-01 have no email and keep the 90-day cap.
+`/token` takes `client_id` in the body or as HTTP Basic with an empty secret,
+and `offline_access` is accepted and ignored (AWS DevOps Agent 3LO). OAuth
+records share the DynamoDB table with sha256-hashed secrets and ttl. Issuer defaults to `https://librarian.thingelstad.com`; set
 `LIBRARIAN_OAUTH_ISSUER` to override. The auth Lambda also serves the domain
 identity: `GET /` is a small Librarian page and `/favicon.ico` /
 `/apple-touch-icon.png` redirect to Thingy's image (MCP clients fetch these

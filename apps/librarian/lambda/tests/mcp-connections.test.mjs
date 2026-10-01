@@ -58,9 +58,7 @@ function fakeTable(seed = []) {
     if (name === 'QueryCommand') {
       const pk = input.ExpressionAttributeValues[':pk'].S;
       const prefix = input.ExpressionAttributeValues[':prefix']?.S;
-      const items = [...rows.values()].filter(
-        (item) => item.pk.S === pk && (!prefix || item.sk.S.startsWith(prefix))
-      );
+      const items = [...rows.values()].filter((item) => item.pk.S === pk && (!prefix || item.sk.S.startsWith(prefix)));
       return { Items: items };
     }
     throw new Error(`unexpected ${name}`);
@@ -158,7 +156,12 @@ test('the list hides revoked families and puts the most recently used first', as
 });
 
 test('revokeAll (profile deletion) revokes every family the reader has', async () => {
-  const table = fakeTable([connectionRow(SUB, FAMILY), connectionRow(SUB, FAMILY_2), familyRow(FAMILY), familyRow(FAMILY_2)]);
+  const table = fakeTable([
+    connectionRow(SUB, FAMILY),
+    connectionRow(SUB, FAMILY_2),
+    familyRow(FAMILY),
+    familyRow(FAMILY_2)
+  ]);
   try {
     assert.equal(await revokeAllMcpConnections(SUB), 2);
     assert.equal(table.rows.has(`oauthfamily#${FAMILY}|family`), false);
@@ -168,15 +171,23 @@ test('revokeAll (profile deletion) revokes every family the reader has', async (
   }
 });
 
-test('recording keeps the first connected_at and touching never creates a row', async () => {
-  const table = fakeTable([
-    { pk: S(`oauthclient#${CLIENT}`), sk: S('client'), client_name: S('Claude') }
-  ]);
+test('recording keeps the first connected_at, slides the expiry, and touching never creates a row', async () => {
+  const table = fakeTable([{ pk: S(`oauthclient#${CLIENT}`), sk: S('client'), client_name: S('Claude') }]);
   try {
-    await recordMcpConnection({ subscriberHash: SUB, clientId: CLIENT, familyId: FAMILY, connectedAt: 1_790_000_000 });
+    await recordMcpConnection({
+      subscriberHash: SUB,
+      clientId: CLIENT,
+      familyId: FAMILY,
+      connectedAt: 1_790_000_000,
+      expiresAt: 1_792_592_000
+    });
     const update = table.calls.find((call) => call.name === 'UpdateItemCommand').input;
     assert.equal(update.Key.sk.S, `mcpconn#${FAMILY}`);
     assert.match(update.UpdateExpression, /connected_at = if_not_exists\(connected_at, :connected\)/);
+    // The expiry and ttl move with every refresh (4.14.0), never pinned to
+    // the first one.
+    assert.match(update.UpdateExpression, /expires_at = :expires, #ttl = :expires/);
+    assert.equal(update.ExpressionAttributeValues[':expires'].N, '1792592000');
     assert.equal(update.ExpressionAttributeValues[':name'].S, 'Claude');
     await touchMcpConnection(SUB, FAMILY, '2026-10-01T12:00:00.000Z');
     const touch = table.calls.filter((call) => call.name === 'UpdateItemCommand')[1].input;
@@ -269,8 +280,8 @@ test('pure helpers: ids, page sizes and row shapes', () => {
   );
 });
 
-test('contract 4.13.0 declares the three /memory actions', () => {
-  assert.equal(LIBRARIAN_CONTRACT.version, '4.13.0');
+test('the contract (4.13.0, now 4.14.0) declares the three /memory actions', () => {
+  assert.equal(LIBRARIAN_CONTRACT.version, '4.14.0');
   const actions = LIBRARIAN_CONTRACT.endpoints['/memory'].actions;
   assert.deepEqual(Object.keys(actions).sort(), ['mcp_connections', 'mcp_disconnect', 'mcp_log']);
   assert.ok(LIBRARIAN_CONTRACT.$defs.mcpConnection);

@@ -3,12 +3,7 @@ import type { AttributeValue } from '@aws-sdk/client-dynamodb';
 import { dynamodb } from './aws-clients.mjs';
 import { errorFields, logEvent } from './logging.mjs';
 import { registeredClientName } from './mcp-audit-store.mjs';
-import {
-  OAUTH_FAMILY_ID_RE,
-  OAUTH_FAMILY_MAX_SECONDS,
-  refreshFamilyActive,
-  revokeRefreshFamily
-} from './oauth-store.mjs';
+import { OAUTH_FAMILY_ID_RE, refreshFamilyActive, revokeRefreshFamily } from './oauth-store.mjs';
 import { DEFAULT_MCP_AUDIT_RETENTION_DAYS } from './retention.mjs';
 import { dynamoNumber, dynamoString, userConversationPk } from './user-conversations.mjs';
 
@@ -21,9 +16,9 @@ import { dynamoNumber, dynamoString, userConversationPk } from './user-conversat
 // per-reader index, so each family also gets a row in the reader's own
 // partition (user#<sub>, mcpconn#<family id>), written at consent and
 // upserted on every refresh - a family granted before this row existed
-// appears at its next refresh. The row lives as long as the family can
-// (OAUTH_FAMILY_MAX_SECONDS), and a family revoked by any path is hidden
-// from the list because its family row is gone.
+// appears at its next refresh. The row's ttl slides with the family's
+// (30 days from the last refresh, contract 4.14.0), and a family revoked by
+// any path is hidden from the list because its family row is gone.
 
 type Item = Record<string, AttributeValue>;
 type JsonRecord = Record<string, unknown>;
@@ -102,24 +97,26 @@ export async function recordMcpConnection({
   clientId,
   familyId,
   connectedAt,
+  expiresAt,
   now = Math.floor(Date.now() / 1000)
 }: {
   subscriberHash: string;
   clientId: string;
   familyId: string;
   connectedAt: number;
+  // When the family ends if not refreshed again.
+  expiresAt: number;
   now?: number;
 }) {
   if (!subscriberHash || !validConnectionId(familyId)) return;
   try {
     const clientName = await registeredClientName({ dynamodb, tableName: tableName(), clientId });
-    const expiresAt = connectedAt + OAUTH_FAMILY_MAX_SECONDS;
     await dynamodb.send(
       new UpdateItemCommand({
         TableName: tableName(),
         Key: connectionKey(subscriberHash, familyId),
         UpdateExpression:
-          'SET item_type = :type, client_id = :client, client_name = :name, family_id = :family, connected_at = if_not_exists(connected_at, :connected), last_authorized_at = :now, expires_at = if_not_exists(expires_at, :expires), #ttl = if_not_exists(#ttl, :expires)',
+          'SET item_type = :type, client_id = :client, client_name = :name, family_id = :family, connected_at = if_not_exists(connected_at, :connected), last_authorized_at = :now, expires_at = :expires, #ttl = :expires',
         ExpressionAttributeNames: { '#ttl': 'ttl' },
         ExpressionAttributeValues: {
           ':type': dynamoString('mcp_connection'),

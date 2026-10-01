@@ -1,12 +1,12 @@
 import { fetchSubscriber, subscriberStatus } from '../shared/buttondown.mjs';
-import { entitlementsForSubscriber } from '../shared/conversation-modes.mjs';
-import { htmlResponse, methodAndPath, parseBody } from '../shared/http.mjs';
+import { entitlementsForSubscriber, isOwnerSubscriberHash } from '../shared/conversation-modes.mjs';
+import { htmlResponse, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import type { LibrarianHttpEvent, LibrarianHttpResponse } from '../shared/http.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { validMagicCode } from '../shared/magic-link.mjs';
 import { recordMcpConnection } from '../shared/mcp-connections.mjs';
 import { clientIdentityHash, sendLoginCodeEmail, verifyPendingCode } from '../shared/magic-login.mjs';
-import type { OauthClient, OauthPending } from '../shared/oauth-store.mjs';
+import type { MembershipCheck, OauthClient, OauthPending } from '../shared/oauth-store.mjs';
 import {
   ACCESS_TOKEN_TTL_SECONDS,
   createAuthCode,
@@ -95,6 +95,70 @@ function oauthJson(statusCode: number, payload: unknown, headers: Record<string,
 function tokenError(error: string, description?: string) {
   return oauthJson(400, { error, ...(description ? { error_description: description } : {}) });
 }
+
+/**
+ * The client id of a token request: the body's client_id, or HTTP Basic
+ * (RFC 6749 2.3.1, both halves form-encoded). Clients here are public, so a
+ * Basic secret must be empty - AWS DevOps Agent's 3LO sends `client_id:`
+ * this way when its client secret is left blank. Null means the header was
+ * malformed, carried a secret, or disagreed with the body.
+ */
+export function tokenRequestClientId(event: LibrarianHttpEvent, body: JsonRecord): string | null {
+  const bodyClientId = String(body.client_id || '');
+  const authorization = normalizeHeaders(event.headers || {}).authorization || '';
+  const basic = /^Basic\s+([A-Za-z0-9+/]+={0,2})\s*$/i.exec(authorization);
+  if (!basic) return bodyClientId;
+  const decoded = Buffer.from(basic[1], 'base64').toString('utf8');
+  const colon = decoded.indexOf(':');
+  if (colon < 0) return null;
+  let clientId;
+  let secret;
+  try {
+    const formDecode = (value: string) => decodeURIComponent(value.replace(/\+/g, ' '));
+    clientId = formDecode(decoded.slice(0, colon));
+    secret = formDecode(decoded.slice(colon + 1));
+  } catch {
+    return null;
+  }
+  if (!clientId || secret || (bodyClientId && bodyClientId !== clientId)) return null;
+  return clientId;
+}
+
+function invalidClient() {
+  return oauthJson(
+    401,
+    {
+      error: 'invalid_client',
+      error_description: 'Clients are public: send client_id with an empty secret, or in the body.'
+    },
+    { 'www-authenticate': 'Basic realm="librarian"' }
+  );
+}
+
+// The membership re-check a refresh runs once entitlements are nine days
+// old: Buttondown is asked about the email stored on the connection, as the
+// web session's refresh does. The owner is never re-checked.
+export const checkConnectionMembership: MembershipCheck = async (membership) => {
+  if (isOwnerSubscriberHash(membership.subscriberHash)) {
+    return { status: 'verified', entitlements: membership.entitlements };
+  }
+  try {
+    const subscriber = await fetchSubscriber(membership.email);
+    const status = subscriberStatus(subscriber);
+    if (status !== 'active' && status !== 'premium') return { status: 'lapsed', subscriberStatus: status };
+    const entitlements = entitlementsForSubscriber({ email: membership.email, subscriber, status });
+    logEvent('info', 'oauth_refresh_reverified', { subscriber_hash: membership.subscriberHash, entitlements });
+    return { status: 'verified', entitlements };
+  } catch (error) {
+    // Outage tolerance, not a gate bypass: the next refresh asks again.
+    logEvent(
+      'warning',
+      'oauth_refresh_reverify_failed',
+      errorFields(error, { subscriber_hash: membership.subscriberHash })
+    );
+    return { status: 'unavailable' };
+  }
+};
 
 export function handleOauthMetadata(event: LibrarianHttpEvent) {
   const { path } = methodAndPath(event);
@@ -481,10 +545,9 @@ export async function handleAuthorize(event: LibrarianHttpEvent, start = perform
 
 // --- Token endpoint --------------------------------------------------------
 
-async function handleAuthorizationCodeGrant(body: JsonRecord) {
+async function handleAuthorizationCodeGrant(body: JsonRecord, clientId: string) {
   const code = String(body.code || '');
   const redirectUri = String(body.redirect_uri || '');
-  const clientId = String(body.client_id || '');
   const codeVerifier = validCodeVerifier(body.code_verifier);
   if (!code || !redirectUri || !clientId || !codeVerifier) {
     return tokenError('invalid_request', 'code, redirect_uri, client_id, and code_verifier are required');
@@ -502,18 +565,22 @@ async function handleAuthorizationCodeGrant(body: JsonRecord) {
     logEvent('warning', 'oauth_token_pkce_failed', { client_id: clientId });
     return tokenError('invalid_grant');
   }
-  const tokens = await mintTokens({
-    clientId,
-    subscriberHash: redeemed.subscriberHash,
-    entitlements: redeemed.entitlements,
-    scope: redeemed.scope
-  });
+  const tokens = await mintTokens(
+    {
+      clientId,
+      subscriberHash: redeemed.subscriberHash,
+      entitlements: redeemed.entitlements,
+      scope: redeemed.scope
+    },
+    { email: redeemed.email, verifiedAt: redeemed.verifiedAt }
+  );
   // The reader's account panel lists this consent as a connection.
   await recordMcpConnection({
     subscriberHash: redeemed.subscriberHash,
     clientId,
     familyId: tokens.familyId,
-    connectedAt: Math.floor(Date.now() / 1000)
+    connectedAt: Math.floor(Date.now() / 1000),
+    expiresAt: tokens.expiresAt
   });
   logEvent('info', 'oauth_token_issued', {
     client_id: clientId,
@@ -529,16 +596,18 @@ async function handleAuthorizationCodeGrant(body: JsonRecord) {
   });
 }
 
-async function handleRefreshTokenGrant(body: JsonRecord) {
+async function handleRefreshTokenGrant(body: JsonRecord, clientId: string) {
   const refreshToken = String(body.refresh_token || '');
-  const clientId = String(body.client_id || '');
   if (!refreshToken || !clientId) {
     return tokenError('invalid_request', 'refresh_token and client_id are required');
   }
-  const result = await redeemRefreshToken(refreshToken, clientId);
+  const result = await redeemRefreshToken(refreshToken, clientId, checkConnectionMembership);
   if (result.status === 'reuse_revoked') {
     logEvent('warning', 'oauth_refresh_reuse_detected', { client_id: clientId });
     return tokenError('invalid_grant');
+  }
+  if (result.status === 'lapsed') {
+    return tokenError('invalid_grant', 'The Weekly Thing subscription needs a fresh sign-in.');
   }
   if (result.status !== 'ok') {
     return tokenError('invalid_grant');
@@ -548,7 +617,8 @@ async function handleRefreshTokenGrant(body: JsonRecord) {
     subscriberHash: result.grant.subscriberHash,
     clientId,
     familyId: result.tokens.familyId,
-    connectedAt: result.connectedAt
+    connectedAt: result.connectedAt,
+    expiresAt: result.expiresAt
   });
   logEvent('info', 'oauth_token_issued', {
     client_id: clientId,
@@ -570,8 +640,13 @@ export async function handleToken(event: LibrarianHttpEvent) {
     return oauthJson(429, { error: 'invalid_request', error_description: 'Too many token requests.' });
   }
   const body = parseBody(event);
+  const clientId = tokenRequestClientId(event, body);
+  if (clientId === null) {
+    logEvent('warning', 'oauth_token_client_auth_rejected', {});
+    return invalidClient();
+  }
   const grantType = String(body.grant_type || '');
-  if (grantType === 'authorization_code') return handleAuthorizationCodeGrant(body);
-  if (grantType === 'refresh_token') return handleRefreshTokenGrant(body);
+  if (grantType === 'authorization_code') return handleAuthorizationCodeGrant(body, clientId);
+  if (grantType === 'refresh_token') return handleRefreshTokenGrant(body, clientId);
   return tokenError('unsupported_grant_type');
 }
