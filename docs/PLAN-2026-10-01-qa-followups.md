@@ -22,8 +22,8 @@ side of that line its steps fall on.
 | 1 | Weekly site dates in Chicago time (answer 5) | weekly.thingelstad.com | small | **done** |
 | 2 | Journal permalinks repaired at the source (answer 2) | librarian-thing, weekly.thingelstad.com | medium | **done** |
 | 3 | WT Builder canonical link checks (answer 14) | wt-builder | medium | **done** (Lambda half in MCP 2.3.0) |
-| 4 | Captions for the photos the vision pass missed (answer 17) | librarian-thing | small | steps 2-4 **done**; step 1 open (QA, MCP) |
-| 5 | The Weekly Thing audio editions in the corpus (item A) | librarian-thing | small to medium | steps 1, 5 **done**; steps 2-4 open (QA, MCP) |
+| 4 | Captions for the photos the vision pass missed (answer 17) | librarian-thing | small | **done** (step 1 in MCP 2.3.0) |
+| 5 | The Weekly Thing audio editions in the corpus (item A) | librarian-thing | small to medium | **done** (steps 2-4 in MCP 2.3.0) |
 
 ---
 
@@ -164,9 +164,10 @@ check and "Links checked" unit, `canonical_url` on the rendered link only, a
 click-only *Move bookmark…*, and an automatic check on the website and email
 legs that refuses a dead link unless `?force=1` (warn, don't block). See
 wt-builder `docs/status.md`, *Link check*. The Lambda half went to the QA
-session: `linkUrlKey` matches the fixture's 22 cases and 3 pairs, which are
-copied into `apps/librarian/lambda/tests/fixtures/canonical-urls.json`
-(dfb2e4f0, ships in MCP 2.3.0).
+session: `linkUrlKey` matches all 26 cases and 3 pairs of the fixture, which is
+copied byte for byte into `apps/librarian/lambda/tests/fixtures/canonical-urls.json`
+(dfb2e4f0, 4a26be9a; MCP 2.3.0, matching wt-builder 52e13dc). Over the archive,
+53 of 36,523 links rekeyed and five URL groups merged.
 
 **What exists.** WT Builder has a URL *matching* key and no URL *checks*.
 - `linkKey` (`src/server/linked-before.ts:33-45`) drops the scheme, `www.`,
@@ -233,7 +234,7 @@ its URL, and the issue renders the canonical one.
 
 ## 4. Captions for the photos the vision pass missed
 
-**Status: steps 2-4 done 2026-10-01; step 1 open (QA session, Lambda).**
+**Status: done 2026-10-01.** Step 1 shipped in MCP 2.3.0 (ff2eaaa0): media_search matches the words in a photo's file name, with match reason `filename`.
 Jamie: no API key in CI; captions stay a manual run (step 4). Step 2:
 `describe_media.py --retry-errors` described 237 more images (e89d9aef); 68
 can't be fetched at all (48 files.thingelstad.com 404s, 13 expired Buttondown
@@ -300,8 +301,9 @@ their own (step 4), or keep the manual run.
 
 ## 5. The Weekly Thing audio editions in the corpus
 
-**Status: steps 1 and 5 done 2026-10-01; steps 2-4 open (QA session,
-Lambda).** Jamie: Thingy mentions audio only when asked (step 4). Step 1:
+**Status: done 2026-10-01.** Steps 2-4 shipped in MCP 2.3.0 (a0837dec):
+`has_audio`, the audio fields and chapter starts on passages, and Thingy offers
+the audio edition only when asked. Jamie: Thingy mentions audio only when asked (step 4). Step 1:
 `deploy.yml` runs Sunday-Thursday at 07:30 CT, rebuilding the WT corpus only
 when a site page's `audio_url` differs from the live corpus
 (`corpus_gate.py freshness`). Step 5: the corpus gate's archive checks fail

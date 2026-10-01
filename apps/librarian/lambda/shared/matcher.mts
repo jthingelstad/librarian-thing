@@ -97,10 +97,16 @@ export class MatchInputError extends Error {
   }
 }
 
+// Past this a term is refused before any compile: how long a pattern V8 can
+// take differs by Node version (Node 24 compiles a 5,000-character term that
+// Node 26 overflows on), and the door's longest maxLength is 1,000.
+const MATCH_TERM_MAX_CHARS = 2000;
+
 // V8 compiles a pattern on its first match, once for one-byte and once for
 // two-byte text, and a pattern too deep for the compiler throws there, not
 // in the constructor; both widths run here, inside the guard.
 function compilePattern(term: string, source: string, flags: string) {
+  if (Array.from(term).length > MATCH_TERM_MAX_CHARS) throw new MatchInputError(term);
   try {
     const re = new RegExp(source, flags);
     re.test('');
