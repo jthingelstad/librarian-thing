@@ -650,8 +650,14 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
 // QA2 R2-3: the Journal dedupe works on the returned page. WT147's "mini
 // minnebar" copy ranks 8th; its post ranks about 28th, below the cut, so
 // the copy stays (the pool-wide dedupe dropped it and neither showed). And
-// no page carries a copy beside every post it copies.
+// no page carries a copy beside every post it copies, when each of those
+// posts is one passage (QA3 Q7: a longer post's other passage keeps it).
 {
+  const passagesOf = new Map();
+  for (const chunk of corpora.blog?.chunks || []) {
+    const id = `blog-${chunk.microblog_id}`;
+    passagesOf.set(id, (passagesOf.get(id) || 0) + 1);
+  }
   const page = await run('search_archive', { query: 'Minnebar session I attended', limit: 8 });
   const ids = (page?.results || []).map((group) => group.id);
   check(
@@ -664,11 +670,38 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     const shown = new Set((out?.results || []).map((group) => group.id));
     const twins = (out?.results || []).flatMap((group) =>
       group.passages
-        .filter((passage) => passage.copy_of?.length && passage.copy_of.every((copy) => shown.has(copy.id)))
+        .filter(
+          (passage) =>
+            passage.copy_of?.length &&
+            passage.copy_of.every((copy) => shown.has(copy.id) && (passagesOf.get(copy.id) || 1) === 1)
+        )
         .map(() => group.id)
     );
     check(`KA search_archive "${query}" shows no copy beside all its posts`, twins.length === 0, twins.join(', '));
   }
+}
+// QA3 Q7: Journal twins are judged per passage. WT147's "mini minnebar"
+// copy reprints the event paragraphs of blog-1088967; the post's opening
+// passage (remote work) never drops it, the passage holding the event
+// paragraph does. Chunks are found by content: ids move on a rebuild.
+{
+  const copy = (corpora.weekly_thing?.chunks || []).find(
+    (chunk) => chunk.issue_number === 147 && /person from Turkey/.test(chunk.text || '')
+  );
+  const passages = (corpora.blog?.chunks || []).filter((chunk) => String(chunk.microblog_id) === '1088967');
+  const opening = passages.find((chunk) => /^We have all shifted quickly/.test(chunk.text || ''));
+  const event = passages.find((chunk) => /^The event had a single track/.test(chunk.text || ''));
+  const kept = (post) => Boolean(copy && post && retrieval.dedupeJournalTwins([copy, post]).includes(copy));
+  check(
+    "KA wt-147 copy stays beside blog-1088967's opening passage",
+    Boolean(copy && opening) && kept(opening),
+    `copy ${Boolean(copy)}, passage ${Boolean(opening)}`
+  );
+  check(
+    'KA wt-147 copy drops beside the blog-1088967 passage it reprints',
+    Boolean(copy && event) && !kept(event),
+    `copy ${Boolean(copy)}, passage ${Boolean(event)}`
+  );
 }
 // QA2 R2-2: search_archive section takes the H2 group headings a caller
 // sees in a body. For every ## heading with text under it, the filter
