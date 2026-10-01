@@ -123,6 +123,11 @@ def ingest_failures(
         # F18: Thingy's words never enter the corpus.
         if "from-thingy" in json.dumps(corpus, ensure_ascii=False):
             failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
+        if commentary := headline_shaped_commentary(corpus):
+            failures.append(
+                f"{len(commentary)} headline-shaped links in link families are labelled "
+                f"commentary (F10), e.g. {commentary[:3]}"
+            )
         if untied := untied_journal_photos(corpus, blog_source_dir):
             failures.append(
                 f"{len(untied)} Weekly Thing photos are a blog photo but not tied to it "
@@ -159,6 +164,38 @@ _GATE_IFRAME_SRC_RE = re.compile(r"""<iframe\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']
 _GATE_STYLE_RE = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
 _GATE_VIDEO_RE = re.compile(r"<video\b[^>]*>", re.I)
 _GATE_ATTR_RE = r"""\b{}\s*=\s*["']([^"']*)["']"""
+
+
+_LINK_FAMILIES = {"Featured", "Notable", "Briefly", "FYI", "App"}
+_GATE_LINK_LINE_RE = re.compile(
+    r"^[ \t]*(?:[-*+][ \t]+)?(?:\*\*)?\[[^\]\n]*\]\(([^)\s]+)\)(?:\*\*)?(?:[ \t]+\S+\.\w+)?[ \t]*$",
+    re.M,
+)
+_GATE_BOLD_LINK_RE = re.compile(r"\*\*\[[^\]\n]*\]\(([^)\s]+)\)\*\*")
+_GATE_LIST_LINK_RE = re.compile(
+    r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+[^\n]*?(?<!!)\[[^\]\n]*\]\(([^)\s]+)\)", re.M
+)
+
+
+def headline_shaped_commentary(corpus: dict[str, Any]) -> list[str]:
+    """QA3 F10: in a link family, a link that is a whole line, a bold lead or
+    the first link of a list item is the item's headline; labelled commentary, link_role "headline" drops
+    it (688 did). Each issue's section texts are the oracle."""
+    found = []
+    for issue in corpus.get("issues") or []:
+        shaped = {
+            match.group(1)
+            for section in issue.get("sections") or []
+            if section.get("section_family") in _LINK_FAMILIES
+            for pattern in (_GATE_LINK_LINE_RE, _GATE_BOLD_LINK_RE, _GATE_LIST_LINK_RE)
+            for match in pattern.finditer(section.get("text") or "")
+        }
+        found += [
+            f"WT{issue.get('number')}: {link.get('url')}"
+            for link in issue.get("links") or []
+            if link.get("link_role") == "commentary" and link.get("url") in shaped
+        ]
+    return found
 
 
 _GATE_IMAGE_RES = (

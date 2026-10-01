@@ -767,6 +767,8 @@ _LINK_LINE_RE = re.compile(
 )
 # A Briefly headline: "{commentary} → **[Title](url)**".
 _BOLD_LINK_RE = re.compile(r"\*\*\[[^\]\n]*\]\([^)\s]+\)\*\*")
+# A list item's line: its first link is the item's own (QA3 F10).
+_LIST_ITEM_RE = re.compile(r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+.*$", re.M)
 
 
 def voice_spans(text: str, family: str | None = None) -> list[dict[str, Any]]:
@@ -1373,10 +1375,12 @@ def build_corpus(
                 links.append(record)
         if include_issue_bodies:
             seen_urls = {str(link.get("url") or "") for link in issue_links}
+            earlier: dict[str, dict[str, Any]] = {}
             for section in split:
-                for record in issue_body_links(section, skip_urls=seen_urls):
+                for record in issue_body_links(section, skip_urls=seen_urls, earlier=earlier):
                     record = {**link_fields, **record}
                     record.update(resolve_link_target(record["url"], **targets))
+                    earlier[record["url"]] = record
                     issue_links.append(record)
                     links.append(record)
         issues.append(
@@ -2361,14 +2365,25 @@ def issue_body_links(
     section: IssueSection,
     *,
     skip_urls: set[str],
+    earlier: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Link records for one split section, minus ``skip_urls`` (the issue's
     front-matter links and anything an earlier section already gave), which
     it extends. Records carry ``link_role`` and the section's family; the
-    caller adds the issue fields and targets."""
+    caller adds the issue fields and targets. ``earlier`` maps a URL to the
+    issue's record for it, so a later headline occurrence can promote it."""
     records: list[dict[str, Any]] = []
 
     def add(text: str, url: str, role: str, context: str) -> None:
+        if url in skip_urls and role == "headline" and earlier and url in earlier:
+            # One row per (issue, url) (QA3 F10): an App pick's linked icon
+            # or a commentary mention can come before the item's own
+            # headline (WT10-WT41's App H3s); the row takes the headline.
+            first = earlier[url]
+            if first.get("link_role") == "commentary":
+                first["link_role"] = "headline"
+                first["text"] = text or first.get("text")
+            return
         if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
             return
         domain = web_domain(url)
@@ -2390,10 +2405,32 @@ def issue_body_links(
 
     body_role = "journal" if section.family == "Journal" else "commentary"
     heading_role = "headline" if section.family in LINK_FAMILIES else body_role
+    # QA3 F10: in a link family, a link that is a whole line ("- [Title](url)
+    # domain.com"), a bold lead ("... → **[Title](url)**") or the first link
+    # of a list item ("- Python 3.7: [Introducing Data Classes](url)") is the
+    # item's headline; the Briefly and Breadcrumbs eras have no H3 for it.
+    # Before, 688 of these were commentary.
+    body_links = _body_links(section.text)
+    headline_spans: list[tuple[int, int]] = []
+    if section.family in LINK_FAMILIES:
+        headline_spans = [
+            match.span()
+            for pattern in (_LINK_LINE_RE, _BOLD_LINK_RE)
+            for match in pattern.finditer(section.text)
+        ]
+        for item in _LIST_ITEM_RE.finditer(section.text):
+            starts = [p for _, _, p in body_links if item.start() <= p < item.end()]
+            if starts:
+                headline_spans.append((min(starts), min(starts) + 1))
     for text, url, _ in _body_links(section.raw_heading or ""):
         add(text, url, heading_role, section.heading)
-    for text, url, position in _body_links(section.text):
-        add(text, url, body_role, _link_paragraph(section.text, position))
+    for text, url, position in body_links:
+        role = (
+            "headline"
+            if any(start <= position < end for start, end in headline_spans)
+            else body_role
+        )
+        add(text, url, role, _link_paragraph(section.text, position))
     return records
 
 
