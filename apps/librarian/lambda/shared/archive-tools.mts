@@ -132,12 +132,17 @@ export function pageOf<T>(name: string, items: T[], input: ToolArgs, noun = 'res
   const end = offset + shown.length;
   const nextOffset = end < items.length ? end : null;
   const range = shown.length ? `${offset + 1}-${end} of ${items.length}` : `none of ${items.length}`;
+  // An offset past the end says so and where the last page starts; "none
+  // of 148; this is the last page" read as an empty list (QA2 L2-9, L2-10).
+  const lastPage = items.length ? Math.floor((items.length - 1) / limit) * limit : 0;
   const hint =
     nextOffset !== null
       ? `${noun} ${range}; call again with offset ${nextOffset} for the next ${Math.min(limit, items.length - end)}.`
-      : offset && items.length
-        ? `${noun} ${range}; this is the last page.`
-        : '';
+      : offset >= items.length && items.length
+        ? `offset ${offset} is past the last of ${items.length} ${noun}; the last page starts at offset ${lastPage}${lastPage ? '' : ' (no offset)'}.`
+        : offset && items.length
+          ? `${noun} ${range}; this is the last page.`
+          : '';
   return { limit, offset, shown, nextOffset, omitted: items.length - shown.length, hint };
 }
 
@@ -4444,6 +4449,13 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     if (!present(args[key]) && !Array.isArray(args[key])) continue;
     const problem = yearProblem(key, args[key]);
     if (problem) return problem;
+    // [2024, 2019] matched nothing in-process while the door refused it (QA2 L2-9).
+    if (Array.isArray(args[key])) {
+      const [start, end] = args[key] as unknown[];
+      if (present(start) && present(end) && Number(start) > Number(end)) {
+        return `${key} runs backwards: [${String(start)}, ${String(end)}] should be [${String(end)}, ${String(start)}]`;
+      }
+    }
   }
   for (const key of ['issue_number', 'also_in_issue']) {
     if (!present(args[key])) continue;

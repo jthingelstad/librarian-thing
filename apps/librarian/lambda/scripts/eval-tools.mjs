@@ -693,6 +693,40 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     .filter((problem) => / to -|from - to/.test(problem));
   check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
 }
+// QA2 L2-9 / L2-10: an offset past the end says so for every pageOf tool,
+// and a reversed year_range is refused in-process as at the door.
+for (const [tool, args] of [
+  ['list_content', { topic: 'RSS' }],
+  ['quote_search', { phrase: 'RSS reader' }],
+  ['list_topics', {}],
+  ['currently_history', {}],
+  ['find_links', { domain: 'github.com' }],
+  ['top_references', {}],
+  ['latest_content', {}],
+  ['media_search', { query: 'snow' }],
+  ['search_faq', { query: 'newsletter' }]
+]) {
+  const past = await run(tool, { ...args, offset: 99999 });
+  check(
+    `KA ${tool} offset past the end says so`,
+    /^offset 99999 is past the last of \d+/.test(String(past?.truncated?.hint || '')),
+    String(past?.truncated?.hint)
+  );
+}
+for (const [tool, args] of [
+  ['list_content', { topic: 'RSS' }],
+  ['archive_lens', { topic: 'RSS' }],
+  ['find_links', { domain: 'github.com' }],
+  ['corpus_stats', {}],
+  ['on_this_day', { date: '05-13' }]
+]) {
+  const reversed = await run(tool, { ...args, year_range: [2024, 2019] }, { expectError: true });
+  check(
+    `KA ${tool} reversed year_range refused in-process`,
+    reversed?.code === 'bad_request' && /backwards/.test(String(reversed?.error)),
+    JSON.stringify(reversed).slice(0, 80)
+  );
+}
 // File names are searchable (plan 4 step 1): the Straw Poll charts are
 // found by the word only their file names hold, and say so.
 await run('media_search', { query: 'strawpoll', limit: 12 }).then((out) => {
