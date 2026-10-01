@@ -8,11 +8,13 @@ the graph builder.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import re
 from dataclasses import dataclass, replace
-from datetime import datetime, timezone
+from datetime import date as _date
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlparse
@@ -1221,6 +1223,10 @@ def build_corpus(
         )
     ]
     shared_covers = _shared_cover_images([metadata for _, metadata, _ in issue_files])
+    post_index = journal_post_index(blog_dir or BLOG_DIR)
+    journal_unmatched: list[dict[str, Any]] = []
+    all_entries: list[dict[str, Any]] = []
+    previous_date = None
     for path, metadata, body in issue_files:
         body = strip_thingy_blocks(body)
         number = metadata.get("number") or path.parent.name
@@ -1343,7 +1349,29 @@ def build_corpus(
         }
         for entry in extract_now_reading_entries(body):
             currently.append({**entry, **issue_fields})
-        for issue_section in split:
+        # Journal entries are copies of blog posts; the post is canonical.
+        journal_at = [i for i, section in enumerate(split) if section.family == "Journal"]
+        first_day, last_day = _journal_window(publish_date, previous_date)
+        previous_date = publish_date or previous_date
+        section_copies: dict[int, list[JournalMatch]] = {}
+        journal_entries: list[dict[str, Any]] = []
+        if journal_at and first_day:
+            per_section, journal_entries, _references = match_issue_journal(
+                [split[i] for i in journal_at], post_index, first_day=first_day, last_day=last_day
+            )
+            section_copies = dict(zip(journal_at, per_section))
+        if journal_entries:
+            issues[-1]["journal_entries"] = journal_entries
+        all_entries.extend(journal_entries)
+        journal_unmatched.extend(
+            {"issue_number": number, "title": entry["title"], "url": entry["url"]}
+            for entry in journal_entries
+            if entry["matched_by"] is None
+        )
+        entry_by_path: dict[str, dict[str, Any]] = {}
+        for entry in journal_entries:
+            entry_by_path.setdefault(_blog_target_path(entry["url"] or "") or "", entry)
+        for section_index, issue_section in enumerate(split):
             section, family, section_body = (
                 issue_section.heading,
                 issue_section.family,
@@ -1361,7 +1389,9 @@ def build_corpus(
                     "section": section,
                 }
             )
-            for index, chunk_text in enumerate(chunk_section(section_body, max_chars=budget)):
+            chunk_texts = chunk_section(section_body, max_chars=budget)
+            copies_by_chunk = chunk_copies(chunk_texts, section_copies.get(section_index, []))
+            for index, chunk_text in enumerate(chunk_texts):
                 if TEMPLATE_LEAK_RE.search(chunk_text):
                     raise RuntimeError(
                         f"Template/generated content leaked into corpus for issue {number}"
@@ -1394,6 +1424,9 @@ def build_corpus(
                         "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
                         **({"journal_post_urls": chunk_journal_urls} if chunk_journal_urls else {}),
+                        **_chunk_journal_posts(
+                            chunk_text, copies_by_chunk[index], entry_by_path, targets["blog"]
+                        ),
                     }
                 )
 
@@ -1449,6 +1482,18 @@ def build_corpus(
         "chunks": chunks,
         "media": media,
         "currently": currently,
+        "journal_copy_stats": {
+            "entries": len(all_entries),
+            "matched": sum(1 for entry in all_entries if entry["matched_by"]),
+            "matched_by_permalink": sum(
+                1 for entry in all_entries if entry["matched_by"] == "permalink"
+            ),
+            "matched_by_date_text": sum(
+                1 for entry in all_entries if entry["matched_by"] == "date_text"
+            ),
+            "unmatched": len(journal_unmatched),
+        },
+        "journal_unmatched": journal_unmatched,
     }
 
 
@@ -1515,6 +1560,427 @@ def journal_blog_xref(archive_dir: Path = ARCHIVE_DIR) -> dict[str, list[Any]]:
         for match in _BLOG_PERMALINK_RE.finditer(body):
             xref.setdefault(_normalize_blog_path(match.group(1)), set()).add(number)
     return {key: sorted(nums, key=issue_sort_key) for key, nums in xref.items()}
+
+
+# --- Journal copies ------------------------------------------------------
+#
+# A Weekly Thing Journal entry is a copy of a blog post, and the blog post is
+# canonical (Jamie, 2026-09-30). Each entry is tied to its post by permalink
+# first. Hundreds of those permalinks went dead when micro.blog moved or
+# merged posts after the fact (WT1's TechJam microposts are one post now),
+# so a dead permalink falls back to a post from the same day (+/- 1) whose
+# text holds the entry's text. A Journal section with no permalink at all
+# (the 2020 "Stream" titles, the 2021 road-trip posts) falls back to a post
+# from the issue's week whose text it shares. Entries that match nothing are
+# counted in the WT corpus's ``journal_copies``, never dropped silently.
+
+_COPY_IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
+_COPY_TAG_RE = re.compile(r"<[^>]+>")
+_COPY_URL_RE = re.compile(r"https?://\S+")
+_COPY_WORD_RE = re.compile(r"[^\W_]+")
+# An entry's own link: a time ("Thursday @ 7:17 PM", "10:15 PM") or an arrow.
+_ENTRY_TIME_LABEL_RE = re.compile(r"\b\d{1,2}:\d{2}[\s ]*[ap]m\b", re.I)
+_COPY_SHINGLE = 4
+# An entry's words found in a post: the share that makes it a copy.
+_ENTRY_IN_POST = 0.6
+# A section's or post's shingles found in the other: the share for a copy.
+_TEXT_IN_TEXT = 0.5
+
+
+def _copy_words(text: str) -> list[str]:
+    """Lower-case words of markdown or HTML, without images, tags or URLs."""
+    text = _COPY_TAG_RE.sub(" ", _COPY_IMAGE_RE.sub(" ", text or ""))
+    return _COPY_WORD_RE.findall(_COPY_URL_RE.sub(" ", unlink(text)).lower())
+
+
+def _shingles(tokens: list[str] | tuple[str, ...]) -> frozenset[tuple[str, ...]]:
+    if len(tokens) < _COPY_SHINGLE:
+        return frozenset([tuple(tokens)]) if tokens else frozenset()
+    return frozenset(
+        tuple(tokens[i : i + _COPY_SHINGLE]) for i in range(len(tokens) - _COPY_SHINGLE + 1)
+    )
+
+
+@dataclass(frozen=True)
+class JournalPost:
+    """A blog post as the Journal matcher sees it. ``day`` is the permalink's
+    date (Jamie's local day), else the ``published`` date."""
+
+    microblog_id: Any
+    url: str
+    day: str
+    words: tuple[str, ...]
+    word_set: frozenset[str]
+    shingles: frozenset[tuple[str, ...]]
+    label: str = ""  # the title, or the first words of an untitled post
+
+
+class JournalPostIndex:
+    """Blog posts by permalink path and by day."""
+
+    def __init__(self, posts: list[JournalPost]):
+        self.by_path: dict[str, list[JournalPost]] = {}
+        self.by_day: dict[str, list[JournalPost]] = {}
+        for post in posts:
+            path = _blog_target_path(post.url)
+            if path:
+                self.by_path.setdefault(path, []).append(post)
+            self.by_day.setdefault(post.day, []).append(post)
+
+    def between(self, first: str, last: str) -> list[JournalPost]:
+        """Posts from ``first`` to ``last`` (YYYY-MM-DD), both included."""
+        try:
+            day, end = _date.fromisoformat(first), _date.fromisoformat(last)
+        except ValueError:
+            return []
+        posts: list[JournalPost] = []
+        while day <= end:
+            posts.extend(self.by_day.get(day.isoformat(), []))
+            day += timedelta(days=1)
+        return posts
+
+
+def _shift_day(day: str, days: int) -> str:
+    return (_date.fromisoformat(day) + timedelta(days=days)).isoformat()
+
+
+@functools.lru_cache(maxsize=2)
+def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostIndex:
+    posts = []
+    for path in sorted(Path(blog_dir).rglob("*.md")):
+        metadata, body = read_issue(path)
+        if metadata.get("microblog_id") is None:
+            continue
+        url = str(metadata.get("url") or "").strip()
+        match = _BLOG_PERMALINK_RE.search(url)
+        day = (
+            "-".join(match.group(1).split("/")[:3])
+            if match
+            else str(metadata.get("published") or "")[:10]
+        )
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+            continue
+        tokens = _copy_words(body)
+        posts.append(
+            JournalPost(
+                metadata["microblog_id"],
+                url,
+                day,
+                tuple(tokens),
+                frozenset(tokens),
+                _shingles(tokens),
+                str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
+            )
+        )
+    return JournalPostIndex(posts)
+
+
+def journal_post_index(blog_dir: Path = BLOG_DIR) -> JournalPostIndex:
+    """Every blog post with its words, cached until a post file changes."""
+    files = list(blog_dir.rglob("*.md"))
+    stamp = (len(files), max((path.stat().st_mtime_ns for path in files), default=0))
+    return _cached_post_index(str(blog_dir.resolve()), stamp)
+
+
+@dataclass(frozen=True)
+class _JournalEntry:
+    url: str
+    text: str
+    own_link: bool  # a heading, time or arrow link: the entry's own permalink
+    section: int
+
+
+def _journal_entries(sections: list[IssueSection]) -> list[_JournalEntry]:
+    """The blog-permalink links of an issue's Journal sections, each with the
+    text it stands for: a heading link the whole section, a time link the
+    text up to the next time link, any other link its own line. A time link
+    with nothing after it (WT160 puts it just above the entry's H3) stands
+    for the next section."""
+    entries: list[_JournalEntry] = []
+    carried: list[str] = []
+    for position, section in enumerate(sections):
+        for url in carried:
+            entries.append(_JournalEntry(url, section.text, True, position))
+        carried = []
+        for link in markdown_links(section.raw_heading or ""):
+            if link.kind == "inline" and _BLOG_PERMALINK_RE.match(link.url):
+                entries.append(_JournalEntry(link.url, section.text, True, position))
+        text = section.text
+        links = [
+            link
+            for link in markdown_links(text)
+            if link.kind != "image" and _BLOG_PERMALINK_RE.match(link.url)
+        ]
+        timed = [link.start for link in links if _ENTRY_TIME_LABEL_RE.search(link.label)]
+        for link in links:
+            if _ENTRY_TIME_LABEL_RE.search(link.label):
+                end = next((start for start in timed if start > link.start), len(text))
+                if _copy_words(text[link.end : end]):
+                    entries.append(_JournalEntry(link.url, text[link.end : end], True, position))
+                else:
+                    carried.append(link.url)
+                continue
+            line_start = text.rfind("\n", 0, link.start) + 1
+            line_end = text.find("\n", link.end)
+            line = text[line_start : line_end if line_end >= 0 else len(text)]
+            own = link_label_text(link.label) == "→"
+            entries.append(_JournalEntry(link.url, line, own, position))
+    entries.extend(_JournalEntry(url, "", True, len(sections) - 1) for url in carried)
+    seen: set[str] = set()
+    unique = []
+    for entry in entries:
+        key = _blog_target_path(entry.url) or entry.url
+        if key not in seen:
+            seen.add(key)
+            unique.append(entry)
+    return unique
+
+
+def _entry_score(tokens: list[str], post: JournalPost) -> float:
+    distinct = set(tokens)
+    if not distinct:
+        return 0.0
+    if len(distinct) < 3:
+        # Too few words to count: the entry must be a phrase of the post.
+        return 1.0 if f" {' '.join(tokens)} " in f" {' '.join(post.words)} " else 0.0
+    return len(distinct & post.word_set) / len(distinct)
+
+
+def _best_post(tokens: list[str], candidates: list[JournalPost]) -> JournalPost | None:
+    scored = [
+        (_entry_score(tokens, post), len(_shingles(tokens) & post.shingles), post)
+        for post in candidates
+    ]
+    scored = [item for item in scored if item[0] >= _ENTRY_IN_POST]
+    if not scored:
+        return None
+    return max(scored, key=lambda item: (item[0], item[1]))[2]
+
+
+def _shares_text(section_shingles: frozenset, post: JournalPost) -> bool:
+    shared = len(section_shingles & post.shingles)
+    if shared < 3:
+        return False
+    return (
+        shared / len(post.shingles) >= _TEXT_IN_TEXT
+        or shared / len(section_shingles) >= _TEXT_IN_TEXT
+    )
+
+
+@dataclass
+class JournalMatch:
+    post: JournalPost
+    match: str  # permalink | date_text | week_text
+    anchor: str | None
+
+
+def match_issue_journal(
+    sections: list[IssueSection],
+    index: JournalPostIndex,
+    *,
+    first_day: str,
+    last_day: str,
+) -> tuple[list[list[JournalMatch]], list[dict[str, Any]], int]:
+    """The blog posts each Journal section copies, the issue's Journal
+    entries (each with ``copy_of_microblog_id`` and ``canonical_url`` when
+    it matched a post), and how many links went to other posts.
+
+    ``first_day``/``last_day`` bound the issue's week: from a few days before
+    the previous issue to the day after this one."""
+    per_section: list[list[JournalMatch]] = [[] for _ in sections]
+    entries: list[dict[str, Any]] = []
+    matched: set[Any] = set()
+    references = 0
+
+    def record(position: int, title: str, url: str | None, post, kind: str) -> None:
+        entries.append(
+            {
+                "title": title or sections[position].heading,
+                "section": sections[position].heading,
+                "url": url,
+                "copy_of_microblog_id": str(post.microblog_id) if post else None,
+                "canonical_url": post.url if post else None,
+                # A Journal section matched in the issue's week has no link:
+                # it too is a date-and-text match.
+                "matched_by": ("permalink" if kind == "permalink" else "date_text")
+                if post
+                else None,
+            }
+        )
+        if post is not None and post.microblog_id not in matched:
+            matched.add(post.microblog_id)
+            per_section[position].append(JournalMatch(post, kind, url))
+
+    for entry in _journal_entries(sections):
+        path = _blog_target_path(entry.url) or ""
+        tokens = _copy_words(entry.text)
+        title = (
+            sections[entry.section].heading
+            if entry.text == sections[entry.section].text
+            else _short_label(unlink(entry.text).replace("→", " ").strip().lstrip("—–-* "))
+        )
+        live = index.by_path.get(path, [])
+        if live:
+            post = _best_post(tokens, live)
+            if post is None and entry.own_link:
+                post = live[0]
+            if post is None:
+                # A link to another post, not this entry's own.
+                references += 1
+                continue
+            record(entry.section, title, entry.url, post, "permalink")
+            continue
+        day = "-".join(path.split("/")[:3])
+        if not entry.own_link and not first_day <= day <= last_day:
+            references += 1
+            continue
+        try:
+            candidates = index.between(_shift_day(day, -1), _shift_day(day, 1))
+        except ValueError:
+            candidates = []
+        post = _best_post(tokens, candidates) if tokens else None
+        record(entry.section, title, entry.url, post, "date_text")
+
+    week = [post for post in index.between(first_day, last_day) if len(post.words) >= 6]
+    for position, section in enumerate(sections):
+        section_shingles = _shingles(_copy_words(section.text))
+        if len(section_shingles) < 3:
+            continue
+        for post in week:
+            if post.microblog_id not in matched and _shares_text(section_shingles, post):
+                record(position, post.label, None, post, "week_text")
+    # A long post's own H3s split it over several sections (WT283's
+    # "Semisonic"): a section that is mostly a matched post's text is that
+    # post too, with no entry of its own.
+    found = [item for matches in per_section for item in matches]
+    for position, section in enumerate(sections):
+        if per_section[position]:
+            continue
+        section_shingles = _shingles(_copy_words(section.text))
+        if len(section_shingles) < 3:
+            continue
+        for item in found:
+            shared = len(section_shingles & item.post.shingles)
+            if shared >= 3 and shared / len(section_shingles) >= _TEXT_IN_TEXT:
+                per_section[position].append(JournalMatch(item.post, item.match, None))
+    return per_section, entries, references
+
+
+def _chunk_journal_posts(
+    chunk_text: str,
+    copies: list[JournalMatch],
+    entry_by_path: dict[str, dict[str, Any]],
+    blog_lookup: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """``journal_posts`` for a chunk: one object per ``journal_post_urls``
+    entry, in its order (``url`` as the issue wrote it), then the chunk's
+    other copies, whose entry link is the section heading or that matched
+    by text alone (no ``journal_post_urls`` entry to pair with)."""
+    items: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for raw in _JOURNAL_ENTRY_LINK_RE.findall(chunk_text or ""):
+        path = _blog_target_path(raw) or ""
+        final = blog_lookup.get(path, {}).get("url") or _canonical_blog_url(raw)
+        if final in seen:
+            continue
+        seen.add(final)
+        entry = entry_by_path.get(path)
+        live = blog_lookup.get(path)
+        if entry is None and live:
+            entry = {
+                "copy_of_microblog_id": str(live["microblog_id"]),
+                "canonical_url": live["url"],
+                "matched_by": "permalink",
+            }
+        items.append(
+            {
+                "url": raw,
+                "copy_of_microblog_id": (entry or {}).get("copy_of_microblog_id"),
+                "canonical_url": (entry or {}).get("canonical_url"),
+                "matched_by": (entry or {}).get("matched_by"),
+            }
+        )
+    paired = {item["copy_of_microblog_id"] for item in items}
+    for copy in copies:
+        if str(copy.post.microblog_id) in paired:
+            continue
+        paired.add(str(copy.post.microblog_id))
+        items.append(
+            {
+                "url": copy.anchor,
+                "copy_of_microblog_id": str(copy.post.microblog_id),
+                "canonical_url": copy.post.url,
+                "matched_by": "permalink" if copy.match == "permalink" else "date_text",
+            }
+        )
+    return {"journal_posts": items} if items else {}
+
+
+def _journal_window(publish_date: str, previous_date: str | None) -> tuple[str, str]:
+    last = str(publish_date or "")[:10]
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", last):
+        return "", ""
+    start = str(previous_date or "")[:10]
+    first = (
+        _shift_day(start, -3)
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", start)
+        else _shift_day(last, -14)
+    )
+    return first, _shift_day(last, 1)
+
+
+def chunk_copies(chunk_texts: list[str], matches: list[JournalMatch]) -> list[list[JournalMatch]]:
+    """Share a section's matched posts out to its chunks: the chunk holding
+    the entry's link, and any chunk whose text is mostly the post's."""
+    per_chunk: list[list[JournalMatch]] = [[] for _ in chunk_texts]
+    if not chunk_texts:
+        return per_chunk
+    shingles = [_shingles(_copy_words(text)) for text in chunk_texts]
+    for item in matches:
+        hits = {i for i, text in enumerate(chunk_texts) if item.anchor and item.anchor in text}
+        for i, chunk_shingles in enumerate(shingles):
+            shared = len(chunk_shingles & item.post.shingles)
+            if chunk_shingles and shared >= 3 and shared / len(chunk_shingles) >= _TEXT_IN_TEXT:
+                hits.add(i)
+        if not hits:
+            hits.add(
+                max(range(len(chunk_texts)), key=lambda i: len(shingles[i] & item.post.shingles))
+            )
+        for i in sorted(hits):
+            per_chunk[i].append(item)
+    return per_chunk
+
+
+def journal_copy_issues(
+    archive_dir: Path = ARCHIVE_DIR, blog_dir: Path = BLOG_DIR
+) -> dict[Any, list[Any]]:
+    """``{microblog_id: [issue numbers]}``: the issues whose Journal holds a
+    copy of the post. The WT build stamps the same matches on its chunks."""
+    index = journal_post_index(blog_dir)
+    issues: dict[Any, set] = {}
+    previous = None
+    for path in sorted(
+        archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
+    ):
+        metadata, body = read_issue(path)
+        number = metadata.get("number") or path.parent.name
+        publish_date = metadata.get("publish_date") or ""
+        journal = [
+            section
+            for section in split_issue_sections(strip_thingy_blocks(body))
+            if section.family == "Journal"
+        ]
+        first_day, last_day = _journal_window(publish_date, previous)
+        previous = publish_date or previous
+        if not journal or not first_day:
+            continue
+        per_section, _entries, _references = match_issue_journal(
+            journal, index, first_day=first_day, last_day=last_day
+        )
+        for matches in per_section:
+            for item in matches:
+                issues.setdefault(item.post.microblog_id, set()).add(number)
+    return {key: sorted(value, key=issue_sort_key) for key, value in issues.items()}
 
 
 # --- cross-source link targets ------------------------------------------
@@ -1878,6 +2344,7 @@ def build_blog_corpus(
     same way it can over Weekly Thing. Posts that also appear in a Weekly Thing
     Journal get an ``also_in_issues`` cross-reference."""
     xref = journal_blog_xref(archive_dir) if include_xref else {}
+    copied_in = journal_copy_issues(archive_dir, blog_dir) if include_xref else {}
     weekly_lookup = weekly_issue_lookup(archive_dir) if include_xref else {}
     podcast_lookup = podcast_episode_lookup(podcast_dir)
     chunks: list[dict[str, Any]] = []
@@ -1909,6 +2376,10 @@ def build_blog_corpus(
         )
         if not also_in_issues and match:
             also_in_issues = xref.get(_normalize_blog_path(match.group(1)))
+        if copied_in.get(microblog_id):
+            also_in_issues = sorted(
+                {*(also_in_issues or []), *copied_in[microblog_id]}, key=issue_sort_key
+            )
         embed_text = _blog_embed_text(body)
         # A photo posted with no words and no alt text is still a post, and
         # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was

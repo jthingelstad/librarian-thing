@@ -59,6 +59,12 @@ def main() -> int:
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
     with_audio = annotate_issue_audio(corpus)
     print(f"audio pointers merged: {with_audio}/{len(corpus.get('issues', []))}")
+    stats = corpus["journal_copy_stats"]
+    print(
+        f"journal entries matched to blog posts: {stats['matched']}/{stats['entries']} "
+        f"({stats['matched_by_permalink']} by permalink, {stats['matched_by_date_text']} by "
+        f"date and text), {stats['unmatched']} unmatched (journal_unmatched)"
+    )
     if args.embed:
         add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
     output = Path(args.output)
