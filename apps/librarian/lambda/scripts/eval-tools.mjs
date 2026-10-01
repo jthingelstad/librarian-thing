@@ -669,6 +669,24 @@ await run('search_archive', {
 // invariant above checks them as rendered.
 await run('source_neighborhood', { id: 'wt-1' });
 await run('source_neighborhood', { id: 'blog-1075885' });
+// QA2 F15: a phrase that is a group heading no section row holds still
+// names its section (old: "Links 📌" gave section null on 127 of 127).
+{
+  const rows = [];
+  for (let offset = 0, page = 0; page < 10; page += 1) {
+    const out = await run('quote_search', { phrase: 'Links 📌', limit: 50, ...(offset ? { offset } : {}) });
+    rows.push(...(out?.results || []));
+    offset = out?.truncated?.next_offset || 0;
+    if (!offset) break;
+  }
+  const wt = rows.filter((row) => row.source_kind === 'weekly_thing');
+  const unnamed = wt.filter((row) => !row.section).map((row) => row.id);
+  check(
+    'KA quote_search "Links 📌" names a section on every Weekly Thing row',
+    wt.length > 100 && unnamed.length === 0,
+    `${unnamed.length} of ${wt.length}: ${unnamed.slice(0, 5).join(', ')}`
+  );
+}
 // QA2 R2-8: the passage window folds like the matcher, so a folded query
 // ("Molkky", a straight apostrophe) still centres the window on the word
 // (old: 64 of 90 accented and 708 of 717 curly-apostrophe windows missed).

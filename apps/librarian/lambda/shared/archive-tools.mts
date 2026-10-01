@@ -2546,6 +2546,18 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
 // The words around the first hit, found by the matcher that found it, so a
 // phrase typed with a straight apostrophe or two spaces still shows where
 // it sits.
+// The body heading a character sits under: the nearest heading at or
+// before its line, link markup stripped. A phrase that is a group heading
+// ("Links 📌") no section row holds still names its section (QA2 F15).
+function bodyHeadingAt(body: string, offset: number | undefined) {
+  if (offset === undefined || offset < 0) return null;
+  const line = body.slice(0, offset).split('\n').length - 1;
+  const heading = markdownHeadings(body)
+    .filter((head) => head.index <= line)
+    .pop();
+  return heading ? heading.name.replace(LINK_MARKUP, '$1').trim() || null : null;
+}
+
 function contextAround(text: unknown, matcher: CanonicalMatcher, radius = 240) {
   const value = String(text || '');
   const hit = matcher.firstHit(value);
@@ -2586,7 +2598,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // phrase that is itself a heading ("Links 📌") names that section.
       const matchedSection = (await issueSections(issue)).find((section) =>
         quoteMatcher.matches(`${section.name || ''}\n${section.text || ''}`)
-      );
+      ) || { name: bodyHeadingAt(body, quoteMatcher.firstHit(body)?.offset) };
       // Same shape AND value semantics as the chunk-corpus branch below:
       // blog-specific fields are present as null rather than absent.
       found.push({
