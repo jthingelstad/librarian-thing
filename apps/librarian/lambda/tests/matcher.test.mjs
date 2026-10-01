@@ -245,6 +245,8 @@ test('a schemeless url keeps its slashes; case_sensitive holds for slash sides (
   assert.deepEqual(aliasesFor('Twitter/X'), ['Twitter', 'X']);
   assert.deepEqual(aliasesFor('ASP.NET/PHP'), ['ASP.NET', 'PHP'], 'a name with a dot is not a host');
   assert.deepEqual(aliasesFor('micro.blog / Mastodon'), ['micro.blog', 'Mastodon', 'microblog']);
+  assert.deepEqual(aliasesFor('micro.blog/Mastodon'), ['micro.blog', 'Mastodon', 'microblog']);
+  assert.deepEqual(aliasesFor('github.com/jthingelstad'), []);
   const url = m('github.com/jthingelstad', { aliases: aliasesFor('github.com/jthingelstad') });
   const linked = 'my code is [on GitHub](https://github.com/jthingelstad/repo) now';
   assert.ok(url.matches(linked), 'a url-shaped term is a mention inside a link target');

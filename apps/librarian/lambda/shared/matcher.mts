@@ -478,11 +478,15 @@ export function slashSides(term: unknown): string[] {
   return sides.length > 1 ? sides : [];
 }
 
-// A url with a scheme, or a host with a path and no space.
+// A url with a scheme, or a host with a path and no space. A lone
+// capitalised word after the host is a name, not a path: "micro.blog/Mastodon"
+// means either, as "micro.blog / Mastodon" does.
 export function urlShaped(value: string) {
   if (/:\/\//.test(value)) return true;
   if (/\s/.test(value) || !value.includes('/')) return false;
-  const host = /^(?:[\p{L}\p{N}-]+\.)+([a-z]{2,})$/u.exec(value.split('/')[0]);
+  const [hostPart, ...path] = value.split('/');
+  if (path.length === 1 && /^\p{Lu}\p{L}*$/u.test(path[0])) return false;
+  const host = /^(?:[\p{L}\p{N}-]+\.)+([a-z]{2,})$/u.exec(hostPart);
   return Boolean(host && URL_TLDS.has(host[1]));
 }
 
