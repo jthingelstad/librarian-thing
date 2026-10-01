@@ -477,11 +477,31 @@ const URL_TLDS = new Set(
 // (https://x.com/a), a path (/archive/) or a schemeless url whose left side
 // is a host (github.com/jthingelstad, weekly.thingelstad.com/archive/351,
 // QA2 L2-4) keeps its slashes and has no sides.
+//
+// A slash whose sides are not names keeps the term whole (Jamie,
+// 2026-10-01, QA3 Q10): a side that is a number (9/11, 24/7, OS/2, 1/2)
+// or a stopword (and/or, he/she), a lowercase single letter (w/o, w/
+// coffee), or sides that are all single characters (I/O, A/B). "9/11"
+// matched 758 sources as "9" or "11" against 12 that say 9/11. A capital
+// letter beside a name is a name: Twitter/X and X/Twitter still split.
+const SLASH_STOPWORDS = new Set(
+  'a an and or nor not but the of to in on at by for from with without vs versus via per if is it he she him her his hers they them their we us you your i me my'.split(
+    ' '
+  )
+);
+
+function slashKeepsWhole(sides: string[]) {
+  if (sides.every((side) => Array.from(side).length === 1)) return true;
+  return sides.some(
+    (side) => /^\p{N}+(?:[.,]\p{N}+)*$/u.test(side) || SLASH_STOPWORDS.has(side.toLowerCase()) || /^\p{Ll}$/u.test(side)
+  );
+}
+
 export function slashSides(term: unknown): string[] {
   const value = normalizeTerm(term);
   if (!value.includes('/') || /:\/\/|^\/|\/$/.test(value) || urlShaped(value)) return [];
   const sides = value.split(/\s*\/\s*/).filter(Boolean);
-  return sides.length > 1 ? sides : [];
+  return sides.length > 1 && !slashKeepsWhole(sides) ? sides : [];
 }
 
 // A url with a scheme, or a host with a path and no space. A lone

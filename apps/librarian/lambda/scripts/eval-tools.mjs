@@ -1258,6 +1258,41 @@ await run('currently_history', { kind: 'reading', limit: 5 });
     `${goRust?.total_count} vs ${goRustCi?.total_count}`
   );
 }
+// QA3 Q10: a slash whose sides are not names keeps the term whole. 9/11
+// matched 758 sources as "9" or "11"; now list_content lists exactly the
+// sources whose words (link targets aside) say 9/11 (13 on the 2026-10-01
+// corpora). Twitter/X still names either.
+{
+  const strip = (text) =>
+    String(text || '')
+      .replace(/\]\([^)]*\)/g, ']')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/\bwww\.\S+/g, ' ');
+  const says = (text) => /(?<![\p{L}\p{N}/])9\s*\/\s*11(?![\p{L}\p{N}/])/u.test(strip(text));
+  const oracle = new Set();
+  for (const issue of corpora.weekly_thing?.issues || []) if (says(issue.body)) oracle.add(`wt-${issue.number}`);
+  for (const chunk of corpora.blog?.chunks || []) {
+    if (says(chunk.text)) oracle.add(chunk.page_id != null ? `page-${chunk.page_id}` : `blog-${chunk.microblog_id}`);
+  }
+  for (const chunk of corpora.podcast?.chunks || []) if (says(chunk.text)) oracle.add(`ep-${chunk.episode_number}`);
+  const nine = await run('list_content', { topic: '9/11', limit: 40 });
+  const listed = (nine?.results || []).map((row) => row.id).sort();
+  check(
+    'KA 9/11 lists exactly the sources that say 9/11',
+    oracle.size > 0 && JSON.stringify(listed) === JSON.stringify([...oracle].sort()) && !nine?.aliases_checked,
+    `${listed.length} listed vs ${oracle.size}: ${JSON.stringify(nine?.aliases_checked)}`
+  );
+  for (const term of ['24/7', 'I/O', 'and/or', 'w/o']) {
+    const out = await run('list_content', { topic: term, limit: 1 });
+    check(`KA ${term} keeps its slash`, !out?.aliases_checked && out?.total_count < 20, `${out?.total_count}`);
+  }
+  const tx = await run('list_content', { topic: 'Twitter/X', limit: 1 });
+  check(
+    'KA Twitter/X still names either',
+    JSON.stringify(tx?.aliases_checked) === JSON.stringify(['Twitter/X', 'Twitter', 'X']) && tx?.total_count > 300,
+    `${JSON.stringify(tx?.aliases_checked)} ${tx?.total_count}`
+  );
+}
 // QA2 L2-5: list_topics and currently_history use the alias table and the
 // slash rule like every other filter ("Twitter/X" and "microblog" gave 0).
 {

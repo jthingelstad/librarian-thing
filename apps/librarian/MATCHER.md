@@ -67,9 +67,12 @@ a lowercase common top-level domain, no space) keeps its slashes (QA2
 L2-4). So `micro.blog/Mastodon` is a url; `micro.blog / Mastodon`, with
 spaces, names either. `ASP.NET/PHP` and `Node.js/Deno` still split. Under
 `case_sensitive` the sides are the caller's own words and keep the case
-flag; their table aliases do not. Whether a side that is a number, a
-single letter or a stopword (`9/11`, `I/O`, `and/or`) should split is an
-open question for Jamie; today it does.
+flag; their table aliases do not. A slash whose sides are not names
+keeps the term whole (Jamie, 2026-10-01, QA3 Q10): a side that is a
+number (`9/11`, `24/7`, `OS/2`) or a stopword (`and/or`, `he/she`), a
+lowercase single letter (`w/o`), or sides that are all single characters
+(`I/O`, `A/B`). A capital letter beside a name is a name, so `Twitter/X`
+still names either.
 
 **A hit inside a URL is not a mention** (a markdown link target, an
 `src`/`href`, a bare link), except for a url-shaped term: its mention is
