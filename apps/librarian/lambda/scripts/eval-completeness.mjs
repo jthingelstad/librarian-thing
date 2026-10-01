@@ -107,6 +107,39 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     );
   }
 
+  // 1b. Within a year, corpus_stats' oldest and newest are the first and
+  //     last days the year filter keeps (QA2 T2-3: 2020's oldest blog post
+  //     was an April Blot import published in 2018).
+  {
+    const wrong = [];
+    for (const kind of ['weekly_thing', 'blog', 'podcast']) {
+      const yearField = kind === 'blog' ? 'post_year' : 'issue_year';
+      const byYear = new Map();
+      for (const item of bySource[kind].items) {
+        const year = Number(item[yearField]) || yearOf(item);
+        const day = String(item.publish_date || '').slice(0, 10);
+        if (!year || !day) continue;
+        if (!byYear.has(year)) byYear.set(year, []);
+        byYear.get(year).push(day);
+      }
+      for (const [year, days] of byYear) {
+        days.sort();
+        const stats = await call('corpus_stats', { source_kind: kind, year, limit: 1 });
+        const source = stats.sources?.[0] || {};
+        const oldest = String(source.oldest?.publish_date || '').slice(0, 10);
+        const newest = String(source.newest?.publish_date || '').slice(0, 10);
+        if (oldest !== days[0] || newest !== days.at(-1)) {
+          wrong.push(`${kind} ${year}: ${oldest}..${newest} vs ${days[0]}..${days.at(-1)}`);
+        }
+      }
+    }
+    check(
+      'completeness corpus_stats oldest and newest bound each year',
+      wrong.length === 0,
+      wrong.slice(0, 4).join('; ')
+    );
+  }
+
   // 2. on_this_day files every dated source, this year's included (Jamie,
   //    2026-09-30), on exactly one day of the target year: the days' totals
   //    sum to those sources, no listed id repeats, and every item sits on

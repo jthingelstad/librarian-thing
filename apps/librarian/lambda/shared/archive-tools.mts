@@ -2081,6 +2081,18 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
     const countsByYear = countsByPublishYear(records);
     const rangeActive = Boolean(statsStartYear || statsEndYear);
+    // Within a year filter, oldest and newest are by the day the filter
+    // reads (the publish_date the year comes from), the moment breaking
+    // ties: a Blot import filed in 2020 but published 2018-12-30 was 2020's
+    // oldest blog post (QA2 T2-3; interim until the corpus files it by its
+    // Chicago day).
+    const byFilterDay = rangeActive
+      ? [...records].sort((a, b) =>
+          String(b.publish_date || '')
+            .slice(0, 10)
+            .localeCompare(String(a.publish_date || '').slice(0, 10))
+        )
+      : records;
     // Every count in this object describes the SAME scope: the applied
     // year_range when one is set (a *_total sibling keeps the corpus-wide
     // number). Mixing range-scoped and corpus-wide counts in one object
@@ -2115,8 +2127,8 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
             link_count_total: Number(corpus.link_count || 0) || undefined
           }
         : {}),
-      oldest: boundedStatsRecord(records[records.length - 1], listLimit, omitted, 'oldest'),
-      newest: boundedStatsRecord(records[0], listLimit, omitted, 'newest'),
+      oldest: boundedStatsRecord(byFilterDay[byFilterDay.length - 1], listLimit, omitted, 'oldest'),
+      newest: boundedStatsRecord(byFilterDay[0], listLimit, omitted, 'newest'),
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
       yearly_signals: yearlyContentSignals(records, {
