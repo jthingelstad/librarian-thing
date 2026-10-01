@@ -716,6 +716,9 @@ await run('find_links', { domain: 'github.com', limit: 3 });
 await run('list_content', { topic: 'Mastodon', limit: 3 });
 await run('archive_lens', { topic: 'Mastodon', limit: 3 });
 await run('on_this_day', { date: '05-13', limit_per_year: 1 });
+// QA2 T2-1: a windowed call at the top limit passes the 48K cap; the cut
+// must keep every year and its counts (checkAccounting on the render).
+await run('on_this_day', { date: '01-01', window_days: 7, limit_per_year: 20 });
 if (allowNetwork) {
   await run('fetch_page', { url: 'https://www.thingelstad.com/' });
 } else {

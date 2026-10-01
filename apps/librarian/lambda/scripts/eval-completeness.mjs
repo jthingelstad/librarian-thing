@@ -142,6 +142,38 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     counts.on_this_day_partition = sum;
   }
 
+  // 2b. A capped on_this_day page (QA2 T2-1): following next_offset to the
+  //     end shows every item exactly once. The cap once dropped whole years
+  //     while next_offset skipped past their items.
+  for (const args of [
+    { date: '01-01', window_days: 7, limit_per_year: 20 },
+    { date: '01-01', window_days: 3, limit_per_year: 20 }
+  ]) {
+    const seen = new Set();
+    let repeats = 0;
+    let total = null;
+    let offset = 0;
+    let capped = false;
+    for (let page = 0; page < 40; page += 1) {
+      const result = await call('on_this_day', { ...args, ...(offset ? { offset } : {}) });
+      total = result.total_count;
+      if (result.truncated?.max_chars) capped = true;
+      for (const row of result.years || []) {
+        for (const item of row.items || []) {
+          const key = `${row.year}|${item.id}|${item.date}|${item.url || ''}|${item.title || ''}`;
+          if (seen.has(key)) repeats += 1;
+          seen.add(key);
+        }
+      }
+      offset = result.truncated?.next_offset;
+      if (!offset) break;
+    }
+    const label = `completeness on_this_day ${args.date} window ${args.window_days} walk`;
+    check(`${label} was capped`, capped, 'raise the window if the cap no longer bites');
+    check(`${label} reaches total_count`, seen.size === total, `${seen.size} vs ${total}`);
+    check(`${label} repeats nothing`, repeats === 0, `${repeats} repeats`);
+  }
+
   // 3. currently_history reaches every Currently entry.
   {
     const result = await call('currently_history', { limit: 120 });

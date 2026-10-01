@@ -388,6 +388,15 @@ function priorTruncation(result: JsonRecord) {
 // moves next_offset back to the first item cut, and the hint says so - the
 // tool's own hint named a page the caller never received (currently_history
 // once said "the 120 newest are shown" over 64).
+function nestedLength(value: unknown, path: string): number {
+  const [head, ...rest] = path.split('[].');
+  const child = value && typeof value === 'object' ? (value as JsonRecord)[head] : undefined;
+  if (!Array.isArray(child)) return 0;
+  return rest.length
+    ? child.reduce<number>((sum, item) => sum + nestedLength(item, rest.join('[].')), 0)
+    : child.length;
+}
+
 function fitToCap(result: JsonRecord, max: number, hint: string, paged = '') {
   let text = JSON.stringify(result);
   if (text.length <= max) return { text, truncated: Boolean(result.truncated), tooLarge: false };
@@ -413,6 +422,43 @@ function fitToCap(result: JsonRecord, max: number, hint: string, paged = '') {
     survey(working, '', arrays, strings);
     const list = arrays.filter((found) => found.array!.length > 1).sort((a, b) => b.size - a.size)[0];
     const longest = strings.sort((a, b) => b.size - a.size)[0];
+    const nested = paged.includes('[]') && list && paged.startsWith(`${list.path}[].`);
+    if (nested) {
+      // A per-group paged list (on_this_day years[].items): cut every group
+      // to the same depth so one next_offset pages them all; dropping whole
+      // groups would hide their items from every page (QA2 T2-1).
+      const groups = arrays.filter((found) => found.path === paged);
+      const depth = Math.max(0, ...groups.map((found) => found.array!.length));
+      if (depth > 1) {
+        const cap = depth - 1;
+        let dropped = 0;
+        for (const found of groups) {
+          const extra = found.array!.length - cap;
+          if (extra > 0) {
+            found.array!.splice(cap, extra);
+            dropped += extra;
+          }
+        }
+        omitted[paged] = (omitted[paged] || 0) + dropped;
+        const applied = (working.applied || {}) as JsonRecord;
+        nextOffset = (Number(applied.offset) || 0) + cap;
+        hints = `Cut to fit ${max} characters at ${cap} ${paged} in each group; call again with offset ${nextOffset} for the rest.`;
+        continue;
+      }
+    }
+    if (list && paged.startsWith(`${list.path}[].`)) {
+      // Dropping whole groups: their items are omitted too, and no offset
+      // reaches them, so the hint names the groups instead of a next page.
+      const items = list.array!;
+      const drop = Math.min(items.length - 1, Math.max(1, Math.ceil(over / (list.size / items.length))));
+      const gone = items.splice(items.length - drop, drop);
+      const leaf = paged.slice(list.path.length + 3);
+      omitted[list.path] = (omitted[list.path] || 0) + drop;
+      omitted[paged] = (omitted[paged] || 0) + gone.reduce<number>((sum, group) => sum + nestedLength(group, leaf), 0);
+      nextOffset = null;
+      hints = `Cut to fit ${max} characters at ${items.length} of the ${list.path}; ${hint}.`;
+      continue;
+    }
     if (list && (!longest || list.size >= longest.size)) {
       const items = list.array!;
       const perItem = list.size / items.length;
