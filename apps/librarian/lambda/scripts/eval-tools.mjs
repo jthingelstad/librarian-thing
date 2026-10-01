@@ -727,6 +727,19 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   }
   counts.on_this_day_0513 = items.length;
 }
+// QA2 T2-7: an issue is on its Chicago day, across DST and midnight UTC
+// (pins checked against the corpus send times: WT35 01:28Z Jan 7, WT22
+// 00:00Z Oct 7, WT251 01:14Z Apr 24, WT299 01:45Z Nov 4).
+for (const [id, date] of [
+  ['wt-35', '2018-01-06'],
+  ['wt-22', '2017-10-06'],
+  ['wt-251', '2023-04-23'],
+  ['wt-299', '2024-11-03']
+]) {
+  const day = await run('on_this_day', { date, source_kind: 'weekly_thing' });
+  const item = (day?.years || []).flatMap((row) => row.items).find((entry) => entry.id === id);
+  check(`KA on_this_day files ${id} on ${date}`, item?.date === date, JSON.stringify(item?.date));
+}
 await run('search_faq', { query: 'what is the weekly thing' });
 // QA2 T2-6: a resource takes no offset or limit, so a cut resource's hint
 // names the tool call for the rest, never "call again with offset".

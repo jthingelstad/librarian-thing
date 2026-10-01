@@ -108,38 +108,77 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
   }
 
   // 2. on_this_day files every dated source, this year's included (Jamie,
-  //    2026-09-30), on exactly one day of this year: the days' totals sum to
-  //    those sources, and no listed id repeats. (In a year without Feb 29, 02-29 is Feb 28 and
-  //    Feb 29 sources fold into it, so 02-29 is only asked in a leap year.)
+  //    2026-09-30), on exactly one day of the target year: the days' totals
+  //    sum to those sources, no listed id repeats, and every item sits on
+  //    its own Chicago day (QA2 T2-7: a revert to UTC days, or a lost Feb 29
+  //    rule, still summed right). Run for this year and for 2028, a leap
+  //    year where Feb 29 is its own day. (In a year without Feb 29, 02-29 is
+  //    Feb 28 and Feb 29 sources fold into it, so 02-29 is only asked in a
+  //    leap year.)
   {
-    const thisYear = Number(
-      new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric' }).format(new Date())
-    );
-    const pastItems = Object.values(bySource).reduce(
-      (sum, source) => sum + source.items.filter((item) => yearOf(item) <= thisYear).length,
-      0
-    );
-    let sum = 0;
-    const seen = new Map();
-    for (let month = 1; month <= 12; month += 1) {
-      const days = new Date(Date.UTC(thisYear, month, 0)).getUTCDate();
-      for (let day = 1; day <= days; day += 1) {
-        const date = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const result = await call('on_this_day', { date, include_microposts: true, limit_per_year: 20 });
-        sum += Number(result.total_count) || 0;
-        for (const row of result.years || []) {
-          for (const item of row.items || []) seen.set(item.id, (seen.get(item.id) || 0) + 1);
+    const chicago = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    // The oracle day: a timestamp's Chicago date; a bare date is already local.
+    const dayOf = (record) => {
+      const stamp = String(record.published || record.publish_date || '').trim();
+      return /^\d{4}-\d{2}-\d{2}T/.test(stamp) ? chicago.format(Date.parse(stamp)) : stamp.slice(0, 10);
+    };
+    const oracleDay = new Map([
+      ...bySource.weekly_thing.items.map((issue) => [`wt-${issue.number}`, dayOf(issue)]),
+      ...bySource.blog.items.map((post) => [`blog-${post.microblog_id}`, dayOf(post)]),
+      ...bySource.podcast.items.map((episode) => [`ep-${episode.number}`, dayOf(episode)])
+    ]);
+    const thisYear = Number(chicago.format(new Date()).slice(0, 4));
+    for (const target of [...new Set([thisYear, 2028])]) {
+      const leap = new Date(Date.UTC(target, 1, 29)).getUTCMonth() === 1;
+      const pastItems = [...oracleDay.values()].filter((day) => Number(day.slice(0, 4)) <= target).length;
+      let sum = 0;
+      const seen = new Map();
+      const misdated = [];
+      for (let month = 1; month <= 12; month += 1) {
+        const days = new Date(Date.UTC(target, month, 0)).getUTCDate();
+        for (let day = 1; day <= days; day += 1) {
+          const monthDay = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const result = await call('on_this_day', {
+            date: `${target}-${monthDay}`,
+            include_microposts: true,
+            limit_per_year: 20
+          });
+          sum += Number(result.total_count) || 0;
+          for (const row of result.years || []) {
+            for (const item of row.items || []) {
+              seen.set(item.id, (seen.get(item.id) || 0) + 1);
+              const onDay =
+                item.date.slice(5) === monthDay || (!leap && monthDay === '02-28' && item.date.slice(5) === '02-29');
+              if (item.date !== oracleDay.get(item.id) || !onDay || Number(item.date.slice(0, 4)) !== row.year) {
+                misdated.push(`${item.id} ${item.date} on ${monthDay} (oracle ${oracleDay.get(item.id)})`);
+              }
+            }
+          }
         }
       }
+      check(
+        `completeness on_this_day ${target} days sum to every dated source`,
+        sum === pastItems,
+        `${sum} vs ${pastItems}`
+      );
+      const repeats = [...seen].filter(([, n]) => n > 1).map(([id]) => id);
+      check(
+        `completeness on_this_day ${target} files each source on one day`,
+        repeats.length === 0,
+        repeats.slice(0, 5).join(', ')
+      );
+      check(
+        `completeness on_this_day ${target} files each item on its Chicago day`,
+        seen.size > 0 && misdated.length === 0,
+        `${misdated.length}: ${misdated.slice(0, 4).join('; ')}`
+      );
+      if (target === thisYear) counts.on_this_day_partition = sum;
     }
-    check('completeness on_this_day days sum to every dated source', sum === pastItems, `${sum} vs ${pastItems}`);
-    const repeats = [...seen].filter(([, n]) => n > 1).map(([id]) => id);
-    check(
-      'completeness on_this_day files each source on one day',
-      repeats.length === 0,
-      repeats.slice(0, 5).join(', ')
-    );
-    counts.on_this_day_partition = sum;
   }
 
   // 2b. A capped on_this_day page (QA2 T2-1): following next_offset to the
