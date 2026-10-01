@@ -36,7 +36,7 @@ const skipBaseline = process.env.EVAL_SKIP_BASELINE === '1';
 const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
-const { primeCorpusCachesForTests } = await import(path.join(distDir, 'shared/retrieval.mjs'));
+const { primeCorpusCachesForTests, ...retrieval } = await import(path.join(distDir, 'shared/retrieval.mjs'));
 const { mcpToolDeclarations, renderToolCallResult, validateToolArguments } = await import(
   path.join(distDir, 'shared/mcp.mjs')
 );
@@ -200,6 +200,14 @@ function checkInvariants(tool, args, response) {
     check(label('outputSchema required keys present'), missing.length === 0, missing.join(', '));
     const undeclared = Object.keys(body).filter((key) => !(key in (schema.properties || {})));
     check(label('outputSchema declares every key'), undeclared.length === 0, undeclared.join(', '));
+    // A hint that counts a list ("outgoing_links shows 30 of 48") counts
+    // what was rendered, after the cap's own cuts (QA2 R2-11: wt-1 said 30
+    // and rendered 26).
+    const hintText = String(body.truncated?.hint || '');
+    const miscounted = [...hintText.matchAll(/\b([a-z_]+) shows (?:the \w+ )?(\d+) of (\d+)/g)]
+      .filter((match) => Array.isArray(body[match[1]]) && body[match[1]].length !== Number(match[2]))
+      .map((match) => `${match[0]} (rendered ${body[match[1]].length})`);
+    check(label('hint counts the rendered list'), miscounted.length === 0, miscounted.join('; '));
     checkAccounting(tool, body, label);
   }
 }
@@ -559,6 +567,193 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
   );
   check('KA search_archive passage audio starts at its chapter', badAudio.length === 0, badAudio.join(', '));
 });
+// QA2 I2-1: WT212's Journal links back to a 2021 post; that is a reference,
+// not a copy, so the post surfacing never drops the passage, and the
+// passage never names the post as its original.
+{
+  const query = 'NFTs are a truly new thing that cannot be copied';
+  const all = await run('search_archive', { query, limit: 12 });
+  const ids = (all?.results || []).map((group) => group.id);
+  check('KA search_archive keeps wt-212 under scope all', ids.includes('wt-212'), ids.join(', '));
+  const wt = await run('search_archive', { query, limit: 12, source_kind: 'weekly_thing' });
+  const named = (wt?.results || [])
+    .filter((group) => group.id === 'wt-212')
+    .flatMap((group) => group.passages.flatMap((passage) => (passage.copy_of || []).map((copy) => copy.id)));
+  check('KA wt-212 is not a copy of blog-1464172', !named.includes('blog-1464172'), named.join(', '));
+}
+// QA2 R2-3: the Journal dedupe works on the returned page. WT147's "mini
+// minnebar" copy ranks 8th; its post ranks about 28th, below the cut, so
+// the copy stays (the pool-wide dedupe dropped it and neither showed). And
+// no page carries a copy beside every post it copies.
+{
+  const page = await run('search_archive', { query: 'Minnebar session I attended', limit: 8 });
+  const ids = (page?.results || []).map((group) => group.id);
+  check(
+    'KA search_archive keeps the wt-147 copy or its post blog-1088967',
+    ids.includes('wt-147') || ids.includes('blog-1088967'),
+    ids.join(', ')
+  );
+  for (const query of ['Minnebar session I attended', 'Tesla software update applied', 'mini Minnebar']) {
+    const out = await run('search_archive', { query, limit: 12 });
+    const shown = new Set((out?.results || []).map((group) => group.id));
+    const twins = (out?.results || []).flatMap((group) =>
+      group.passages
+        .filter((passage) => passage.copy_of?.length && passage.copy_of.every((copy) => shown.has(copy.id)))
+        .map(() => group.id)
+    );
+    check(`KA search_archive "${query}" shows no copy beside all its posts`, twins.length === 0, twins.join(', '));
+  }
+}
+// QA2 R2-2: search_archive section takes the H2 group headings a caller
+// sees in a body. For every ## heading with text under it, the filter
+// keeps at least one chunk of that issue (452 of 2,207 kept none: Notable
+// Links 📌 none in 78 issues); WT146's Stream keeps all 8 chunks, 9,099
+// chars, under it (the oracle's count), not only its 85-char header.
+{
+  const chunksOf = new Map();
+  for (const chunk of corpora.weekly_thing.chunks || []) {
+    const key = String(chunk.issue_number);
+    if (!chunksOf.has(key)) chunksOf.set(key, []);
+    chunksOf.get(key).push(chunk);
+  }
+  const missed = [];
+  let groups = 0;
+  for (const issue of corpora.weekly_thing.issues || []) {
+    const lines = String(issue.body || '').split('\n');
+    lines.forEach((line, index) => {
+      const heading = /^##\s+(.*?)\s*$/.exec(line);
+      if (!heading) return;
+      const next = lines.findIndex((other, at) => at > index && /^#{1,2}\s/.test(other));
+      if (!lines.slice(index + 1, next < 0 ? lines.length : next).some((other) => other.trim())) return;
+      groups += 1;
+      const kept = (chunksOf.get(String(issue.number)) || []).filter((chunk) =>
+        retrieval.matchesFilters(chunk, { section: heading[1] })
+      );
+      if (!kept.length) missed.push(`wt-${issue.number} "${heading[1]}"`);
+    });
+  }
+  check(
+    'KA search_archive section keeps a passage under every H2 group heading',
+    groups > 2000 && missed.length === 0,
+    `${missed.length} of ${groups}: ${missed.slice(0, 5).join(', ')}`
+  );
+  const stream = (chunksOf.get('146') || []).filter((chunk) => retrieval.matchesFilters(chunk, { section: 'Stream' }));
+  const chars = stream.reduce((sum, chunk) => sum + String(chunk.text || '').length, 0);
+  check(
+    'KA section Stream keeps all of wt-146 under it',
+    stream.length === 8 && chars === 9099,
+    `${stream.length}, ${chars}`
+  );
+  const notable = await run('search_archive', { query: 'privacy', section: 'Notable Links 📌', limit: 12 });
+  check(
+    'KA search_archive privacy in Notable Links 📌 finds passages',
+    (notable?.results || []).length > 0,
+    JSON.stringify(notable).slice(0, 120)
+  );
+  for (const section of ['No Such Heading Anywhere', '##']) {
+    const out = await run('search_archive', { query: 'privacy', section }, { expectError: true });
+    check(`KA search_archive section "${section}" is bad_request`, out?.code === 'bad_request', String(out?.error));
+  }
+}
+// QA2 L2-7: WT1 is filed under Media and culture at issue level only; the
+// topic filter reaches it.
+await run('search_archive', {
+  query: 'Minnesota Original Layne Kennedy photographer',
+  topic: 'Media and culture',
+  limit: 5
+}).then((out) => {
+  const ids = (out?.results || []).map((group) => group.id);
+  check('KA search_archive topic reaches an issue filed only at issue level', ids.includes('wt-1'), ids.join(', '));
+});
+// QA2 R2-11: the neighbourhoods the finding saw miscounted; the hint
+// invariant above checks them as rendered.
+await run('source_neighborhood', { id: 'wt-1' });
+await run('source_neighborhood', { id: 'blog-1075885' });
+// QA2 F15: a phrase that is a group heading no section row holds still
+// names its section (old: "Links 📌" gave section null on 127 of 127).
+{
+  const rows = [];
+  for (let offset = 0, page = 0; page < 10; page += 1) {
+    const out = await run('quote_search', { phrase: 'Links 📌', limit: 50, ...(offset ? { offset } : {}) });
+    rows.push(...(out?.results || []));
+    offset = out?.truncated?.next_offset || 0;
+    if (!offset) break;
+  }
+  const wt = rows.filter((row) => row.source_kind === 'weekly_thing');
+  const unnamed = wt.filter((row) => !row.section).map((row) => row.id);
+  check(
+    'KA quote_search "Links 📌" names a section on every Weekly Thing row',
+    wt.length > 100 && unnamed.length === 0,
+    `${unnamed.length} of ${wt.length}: ${unnamed.slice(0, 5).join(', ')}`
+  );
+}
+// QA2 R2-8: the passage window folds like the matcher, so a folded query
+// ("Molkky", a straight apostrophe) still centres the window on the word
+// (old: 64 of 90 accented and 708 of 717 curly-apostrophe windows missed).
+{
+  const { passageWindow } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
+  const chunkById = new Map((corpora.weekly_thing.chunks || []).map((chunk) => [String(chunk.id), chunk]));
+  for (const [id, query, word] of [
+    ['f9d23796519bfa14', 'Molkky', 'Mölkky'],
+    ['3c45b1a403d50ad0', "Tribune's", 'Tribune’s']
+  ]) {
+    const chunk = chunkById.get(id);
+    const window = chunk ? passageWindow(chunk, query, 450) : { text: '' };
+    check(
+      `KA passage window for "${query}" shows "${word}"`,
+      String(chunk?.text || '').length > 450 && window.text.includes(word),
+      `${String(chunk?.text || '').length} chars, window at ${window.clipped?.start}`
+    );
+  }
+}
+// QA2 R2-1 / R2-5: an H2 heading reads its whole extent, not the exact
+// row that shares its name (WT146 Stream gave 95 of 9,099 chars); a "#"
+// comment in fenced code does not end a blog section.
+for (const [id, section, phrase] of [
+  ['wt-146', 'Stream', 'Ms. PAC-MAN'],
+  ['wt-8', 'Now Reading 📚', 'American Eclipse'],
+  ['blog-4180550', 'Posting to Micro.blog', 'curl']
+]) {
+  const out = await run('get_source', { id, section, format: 'text' });
+  const body = String(out?.source?.body || '');
+  check(`KA get_source ${id} "${section}" reads "${phrase}"`, body.includes(phrase), `${body.length} chars`);
+}
+// QA2 R2-7: a miss lists the body headings too, and each one it lists reads.
+for (const [id, heading] of [
+  ['blog-1076058', 'Transcript'],
+  ['wt-4', null]
+]) {
+  const miss = await run('get_source', { id, section: 'zz no such section' }, { expectError: true });
+  const names = miss?.available_sections || [];
+  check(
+    `KA get_source ${id} miss lists its sections`,
+    names.length > 0 && (!heading || names.includes(heading)),
+    names.join(' | ')
+  );
+  const unread = [];
+  for (const name of names) {
+    const out = await run('get_source', { id, section: name, format: 'outline' }, { expectError: true });
+    if (out?.error) unread.push(name);
+  }
+  check(`KA get_source ${id} every available section reads`, unread.length === 0, unread.join(' | '));
+}
+// QA2 R2-9 / R2-10: a section of only heading marks, and an offset the read
+// cannot honour, are refused rather than read as something else.
+for (const [label, args] of [
+  ['section "##"', { id: 'wt-351', section: '##' }],
+  ['offset with outline', { id: 'wt-351', format: 'outline', offset: 100 }],
+  ['offset past the end', { id: 'wt-351', format: 'text', offset: 999999 }]
+]) {
+  const out = await run('get_source', args, { expectError: true });
+  check(
+    `KA get_source ${label} is bad_request`,
+    out?.code === 'bad_request',
+    String(out?.error || out?.source?.section)
+  );
+}
+await run('get_source', { id: 'wt-351', format: 'text', offset: '100' }).then((out) => {
+  check('KA get_source string offset echoes as a number', out?.applied?.offset === 100, JSON.stringify(out?.applied));
+});
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);
@@ -812,6 +1007,7 @@ await runCompletenessChecks({
   corpora,
   check,
   counts,
+  retrieval,
   call: async (tool, args) => {
     const response = await ARCHIVE_TOOLS[tool](args, { scope: 'all' });
     const rendered = renderToolCallResult(tool, response);

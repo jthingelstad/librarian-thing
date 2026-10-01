@@ -62,7 +62,7 @@ function yearOf(record) {
   return Number.isFinite(year) ? year : null;
 }
 
-export async function runCompletenessChecks({ corpora, call, check, counts }) {
+export async function runCompletenessChecks({ corpora, call, check, counts, retrieval = {} }) {
   const wt = corpora.weekly_thing || {};
   const blog = corpora.blog || {};
   const podcast = corpora.podcast || {};
@@ -381,21 +381,103 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     }
     check('completeness every issue body reads whole with offset', short.length === 0, short.slice(0, 4).join(', '));
 
-    const empty = [];
+    // Every paragraph under a heading is in that section's read, page by
+    // page (QA2 R2-1: 107 headings read partial, an exact row winning over
+    // the H2's extent; wt-146 Stream returned 95 of 9,099 chars).
+    const fold = (text) =>
+      String(text || '')
+        .replace(/\u00a0/g, ' ')
+        .replace(/[*_`]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    const readSection = async (id, section, folded = true) => {
+      let offset = 0;
+      let text = '';
+      for (let page = 0; page < 20; page += 1) {
+        const result = await call('get_source', {
+          id,
+          format: 'text',
+          ...(section === undefined ? {} : { section }),
+          ...(offset ? { offset } : {})
+        });
+        if (result.error) return null;
+        text += String(result.source?.body || '');
+        offset = result.truncated?.next_offset || 0;
+        if (!offset) break;
+      }
+      return folded ? fold(text) : text;
+    };
+    const underHeadings = (body, pattern) => {
+      const lines = String(body || '').split('\n');
+      const heads = [];
+      let fenced = false;
+      lines.forEach((line, index) => {
+        if (/^\s*(?:```|~~~)/.test(line)) fenced = !fenced;
+        const heading = !fenced && /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+        if (heading) heads.push({ index, level: heading[1].length, name: heading[2] });
+      });
+      return heads
+        .filter((head) => pattern.test('#'.repeat(head.level)))
+        .map((head) => {
+          const next = heads.find((other) => other.index > head.index && other.level <= head.level);
+          const paragraphs = lines
+            .slice(head.index + 1, next ? next.index : lines.length)
+            .join('\n')
+            .split(/\n\s*\n/)
+            .map(fold)
+            .filter((paragraph) => paragraph.length >= 30 && !/^#{1,6}\s/.test(paragraph));
+          return { name: head.name, paragraphs };
+        });
+    };
+    const partial = [];
     let headings = 0;
+    let missingParagraphs = 0;
     for (const issue of bySource.weekly_thing.items) {
-      for (const line of String(issue.body || '').split('\n')) {
-        const heading = /^#{2,3}\s+(.*?)\s*$/.exec(line);
-        if (!heading) continue;
+      for (const { name, paragraphs } of underHeadings(issue.body, /^#{2,3}$/)) {
         headings += 1;
-        const result = await call('get_source', { id: `wt-${issue.number}`, section: heading[1], format: 'text' });
-        if (result.error || !String(result.source?.body || '').trim()) empty.push(`wt-${issue.number} "${heading[1]}"`);
+        const text = await readSection(`wt-${issue.number}`, name);
+        const missing = text === null ? paragraphs.length || 1 : paragraphs.filter((p) => !text.includes(p)).length;
+        if (missing || !text) {
+          missingParagraphs += missing;
+          partial.push(`wt-${issue.number} "${name}" ${missing}`);
+        }
       }
     }
     check(
-      'completeness every body heading reads as a section',
-      headings > 0 && empty.length === 0,
-      `${empty.length} of ${headings}: ${empty.slice(0, 4).join(', ')}`
+      'completeness every body heading reads whole as a section',
+      headings > 0 && partial.length === 0,
+      `${partial.length} of ${headings} (${missingParagraphs} paragraphs): ${partial.slice(0, 4).join(', ')}`
+    );
+    // The same for every heading in a blog post, outside fenced code (QA2
+    // R2-5: a "#" comment in a code fence ended the read). The post's own
+    // whole read is the oracle body: its chunks overlap, so joining them
+    // would repeat text.
+    const blogPartial = [];
+    let blogHeadings = 0;
+    const chunksOfPost = new Map();
+    for (const chunk of blog.chunks || []) {
+      const key = String(chunk.microblog_id ?? /^blog:(\d+):/.exec(String(chunk.id || ''))?.[1] ?? '');
+      if (!chunksOfPost.has(key)) chunksOfPost.set(key, []);
+      chunksOfPost.get(key).push(chunk);
+    }
+    for (const [id, chunks] of chunksOfPost) {
+      if (!chunks.some((chunk) => /^#{1,6}\s/m.test(String(chunk.text || '')))) continue;
+      const text = await readSection(`blog-${id}`, undefined, false);
+      if (text === null) {
+        blogPartial.push(`blog-${id} unreadable`);
+        continue;
+      }
+      for (const { name, paragraphs } of underHeadings(text, /^#{1,6}$/)) {
+        blogHeadings += 1;
+        const read = await readSection(`blog-${id}`, name);
+        const missing = read === null ? paragraphs.length || 1 : paragraphs.filter((p) => !read.includes(p)).length;
+        if (missing) blogPartial.push(`blog-${id} "${name}" ${missing}`);
+      }
+    }
+    check(
+      'completeness every blog heading reads whole as a section',
+      blogHeadings > 0 && blogPartial.length === 0,
+      `${blogPartial.length} of ${blogHeadings}: ${blogPartial.slice(0, 4).join(', ')}`
     );
 
     const perIssue = new Map();
@@ -512,6 +594,92 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
       'completeness quote_search crosses emoji variation selectors',
       asked === 25 && missed.length === 0,
       `${missed.length} of ${asked} missed: ${missed.slice(0, 4).join(' | ')}`
+    );
+  }
+
+  // 8g. A Journal copy is a post from the issue's own week, never an older
+  //     post Jamie linked to in Journal prose (QA2 I2-1: five passages of new
+  //     writing were dropped as "copies" of 2016-2023 posts). The oracle
+  //     finds every pairing whose post's day (Chicago or permalink) falls
+  //     outside [previous issue - 3 days, issue + 1 day]; with those posts in
+  //     the pool the passage stays, and copy_of never names them.
+  {
+    const chicago = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' });
+    const dayOf = (stamp) => {
+      const value = String(stamp || '');
+      return /T/.test(value) && Number.isFinite(Date.parse(value))
+        ? chicago.format(Date.parse(value))
+        : value.slice(0, 10);
+    };
+    const shift = (day, days) => new Date(Date.parse(`${day}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+    const postDays = new Map(
+      (blog.posts || []).map((post) => [
+        String(post.microblog_id),
+        [dayOf(post.published), String(post.publish_date || '').slice(0, 10)].filter(Boolean)
+      ])
+    );
+    const issueDays = (wt.issues || [])
+      .map((issue) => [String(issue.number), dayOf(issue.publish_date)])
+      .sort((a, b) => a[1].localeCompare(b[1]));
+    const weeks = new Map(
+      issueDays.map(([number, day], index) => [
+        number,
+        [index ? shift(issueDays[index - 1][1], -3) : '0000-00-00', shift(day, 1)]
+      ])
+    );
+    let stalePairs = 0;
+    const wrong = [];
+    for (const chunk of wt.chunks || []) {
+      const week = weeks.get(String(chunk.issue_number));
+      const stale = (chunk.journal_posts || []).filter((copy) => {
+        const days = postDays.get(String(copy?.copy_of_microblog_id));
+        return week && days?.length && days.every((day) => day < week[0] || day > week[1]);
+      });
+      if (!stale.length) continue;
+      stalePairs += stale.length;
+      const posts = stale.map((copy) => ({
+        id: `blog:${copy.copy_of_microblog_id}:0:x`,
+        source_kind: 'blog',
+        microblog_id: copy.copy_of_microblog_id,
+        url: copy.canonical_url || copy.url
+      }));
+      const kept = retrieval.dedupeJournalTwins?.([chunk, ...posts]).includes(chunk);
+      const named = (retrieval.journalCopyPosts?.(chunk) || chunk.journal_posts).filter((copy) => stale.includes(copy));
+      if (!kept || named.length) wrong.push(`wt-${chunk.issue_number} "${chunk.section}"${kept ? '' : ' dropped'}`);
+    }
+    check(
+      'completeness a Journal copy is from the issue week',
+      wrong.length === 0,
+      `${wrong.length} of ${stalePairs} out-of-week pairings honoured: ${wrong.slice(0, 5).join(', ')}`
+    );
+  }
+
+  // 8h. Every issue a topic cluster files is reachable by search_archive's
+  //     topic filter: at least one of its passages passes the filter (QA2
+  //     L2-7: the filter read only per-passage labels, and 250 issue
+  //     filings across seven clusters had no labelled passage).
+  {
+    const passagesOf = new Map();
+    for (const chunk of wt.chunks || []) {
+      const key = String(chunk.issue_number);
+      if (!passagesOf.has(key)) passagesOf.set(key, []);
+      passagesOf.get(key).push(chunk);
+    }
+    const unreachable = [];
+    let filings = 0;
+    for (const cluster of wt.topics || []) {
+      for (const number of cluster.issue_numbers || []) {
+        filings += 1;
+        const passages = passagesOf.get(String(number)) || [];
+        if (!passages.some((chunk) => retrieval.matchesFilters?.(chunk, { topic: cluster.name }))) {
+          unreachable.push(`${cluster.name} wt-${number}`);
+        }
+      }
+    }
+    check(
+      'completeness every issue a topic cluster files is reachable by the topic filter',
+      filings > 0 && unreachable.length === 0,
+      `${unreachable.length} of ${filings}: ${unreachable.slice(0, 4).join(', ')}`
     );
   }
 

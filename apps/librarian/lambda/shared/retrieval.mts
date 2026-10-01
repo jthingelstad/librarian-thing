@@ -474,8 +474,12 @@ function sourceHeader(source: CorpusChunk) {
   return `Weekly Thing #${source.issue_number}: ${source.subject || ''}`;
 }
 
-async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8): Promise<CorpusChunk[]> {
-  if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, limit);
+// The whole pool comes back in rerank order (depth), not only the page:
+// retrieve() cuts the page itself, and a Journal copy dropped from it is
+// refilled from below the cut (QA2 R2-3). Rerank cost is per document sent,
+// not per result returned.
+async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8, depth = limit): Promise<CorpusChunk[]> {
+  if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, depth);
   const start = performance.now();
   const top = sources.slice(0, Math.max(limit * 5, 100));
   const rerankInputs: RerankSource[] = top.map((source) => {
@@ -511,7 +515,7 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
         rerankingConfiguration: {
           type: 'BEDROCK_RERANKING_MODEL',
           bedrockRerankingConfiguration: {
-            numberOfResults: Math.min(rerankInputs.length, Math.max(limit, 8)),
+            numberOfResults: Math.min(rerankInputs.length, Math.max(depth, limit, 8)),
             modelConfiguration: { modelArn: rerankModelArn() }
           }
         }
@@ -539,7 +543,7 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
       error_type: error instanceof Error ? error.constructor.name : 'Error'
     });
   }
-  return sources.slice(0, limit);
+  return sources.slice(0, depth);
 }
 
 async function embedForCorpus(query: unknown, corpus: Corpus) {
@@ -675,22 +679,119 @@ export function localDay(source: { published?: unknown; publish_date?: unknown }
   return stamp.slice(0, 10);
 }
 
-// Every section heading and family the loaded corpora hold, lowercased. A
-// section filter that names one exactly matches it exactly: "journal" had
-// also taken any heading containing the word (6 to 13 sections an issue).
+// A section name as a heading reads it, so the name a caller copies from
+// the body finds its section: no-break spaces, markdown marks (#MNTech,
+// *Not*, `yes`) and doubled spaces do not count (QA F6).
+export function headingKey(value: unknown) {
+  return String(value ?? '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/[*_`#]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+// Every section heading, family and H2 group the loaded corpora hold, as
+// heading keys. A section filter that names one exactly matches it
+// exactly: "journal" had also taken any heading containing the word (6 to
+// 13 sections an issue).
 let sectionNamesCache: Set<string> | undefined;
 
-function knownSectionNames() {
+export function knownSectionNames() {
   if (sectionNamesCache) return sectionNamesCache;
   const names = new Set<string>();
   for (const corpus of [corpusCache, blogCorpusCache, podcastCorpusCache]) {
     for (const chunk of corpus?.chunks || []) {
-      if (chunk.section) names.add(String(chunk.section).toLowerCase());
-      if (chunk.section_family) names.add(String(chunk.section_family).toLowerCase());
+      if (chunk.section) names.add(headingKey(chunk.section));
+      if (chunk.section_family) names.add(headingKey(chunk.section_family));
     }
   }
+  if (corpusCache) for (const placed of sectionGroups(corpusCache).values()) for (const key of placed) names.add(key);
+  names.delete('');
   sectionNamesCache = names;
   return names;
+}
+
+// The H2 groups each Weekly Thing chunk sits under in its issue's body
+// ("Notable Links 📌", "Stream", "Now Reading 📚"), by chunk id, as heading
+// keys. Chunk sections are the article or H3 names, so a section filter
+// naming the group heading a caller sees in the body (and that get_source
+// reads) matched 0 chunks or only the group's lead-in (QA2 R2-2: Notable
+// Links 📌 in 78 issues, 0 chunks). A chunk is placed by finding its text
+// in the body, after the chunk before it, and by its own heading: a chunk
+// that starts under a stray H2 ("Oh my…" in WT85) still belongs to the
+// group its article heading sits in. One found neither way (11 of 10,016)
+// stays under the groups of the chunk before it.
+const SECTION_GROUPS = new WeakMap<Corpus, Map<string, string[]>>();
+
+function bodyHeadings(body: string) {
+  const heads: Array<{ at: number; level: number; key: string }> = [];
+  let fenced = false;
+  let at = 0;
+  for (const line of body.split('\n')) {
+    if (/^\s*(?:```|~~~)/.test(line)) fenced = !fenced;
+    const match = fenced ? null : /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+    if (match) {
+      const name = match[2].replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1');
+      heads.push({ at, level: match[1].length, key: headingKey(name) });
+    }
+    at += line.length + 1;
+  }
+  return heads;
+}
+
+function sectionGroups(corpus: Corpus) {
+  let groups = SECTION_GROUPS.get(corpus);
+  if (groups) return groups;
+  groups = new Map();
+  const byIssue = new Map<string, CorpusChunk[]>();
+  for (const chunk of corpus.chunks || []) {
+    if (chunk.issue_number == null || chunk.id == null) continue;
+    const key = String(chunk.issue_number);
+    if (!byIssue.has(key)) byIssue.set(key, []);
+    byIssue.get(key)!.push(chunk);
+  }
+  for (const issue of corpus.issues || []) {
+    const body = String(issue.body || '');
+    const chunks = byIssue.get(String(issue.number)) || [];
+    if (!body || !chunks.length) continue;
+    const heads = bodyHeadings(body);
+    // The H2 a body position falls under ('' above the first, or under an H1).
+    const groupAt = (position: number) => {
+      let group = '';
+      for (const head of heads) {
+        if (head.at > position) break;
+        if (head.level <= 2) group = head.level === 2 ? head.key : '';
+      }
+      return group;
+    };
+    let from = 0;
+    let placed: string[] = [];
+    for (const chunk of chunks) {
+      const probe = String(chunk.text || '').slice(0, 60);
+      let at = probe ? body.indexOf(probe, from) : -1;
+      if (at < 0 && probe) at = body.indexOf(probe);
+      const own = headingKey(chunk.section);
+      const heading =
+        at >= 0
+          ? heads.filter((head) => head.key === own && head.at <= at).pop()
+          : heads.find((head) => head.key === own && head.at >= from);
+      const found = [at, heading ? heading.at : -1].filter((position) => position >= 0);
+      if (found.length) {
+        from = Math.max(...found);
+        placed = [...new Set(found.map(groupAt))].filter(Boolean);
+      }
+      if (placed.length) groups.set(String(chunk.id), placed);
+    }
+  }
+  SECTION_GROUPS.set(corpus, groups);
+  return groups;
+}
+
+// The H2 groups a chunk sits under, as heading keys (none outside a group).
+export function sectionGroupsOf(chunk: CorpusChunk): string[] {
+  if (!corpusCache || chunk.id == null || chunk.issue_number == null) return [];
+  return sectionGroups(corpusCache).get(String(chunk.id)) || [];
 }
 
 function isLeapYear(year: number) {
@@ -795,14 +896,16 @@ export function matchesFilters(
   if (endYear && (!year || year > endYear)) return false;
   const family = String(source.section_family || '').toLowerCase();
   if (section) {
-    // A name some section or family has exactly matches exactly, so
-    // section "Journal" finds the Journal family (WT351's day-headed one
-    // included) and not every heading with the word in it; any other
-    // name matches inside the heading, as always.
-    const wanted = String(section).trim().toLowerCase();
-    const heading = String(source.section || '').toLowerCase();
+    // A name some section, family or H2 group has exactly matches exactly,
+    // so section "Journal" finds the Journal family (WT351's day-headed
+    // one included) and not every heading with the word in it, and
+    // "Notable Links 📌" finds every article under that heading (QA2
+    // R2-2); any other name matches inside the heading, as always.
+    const wanted = headingKey(section) || String(section).trim().toLowerCase();
+    const heading = headingKey(source.section);
     const exact = knownSectionNames().has(wanted);
-    if (exact ? heading !== wanted && family !== wanted : !heading.includes(wanted) && family !== wanted) return false;
+    const named = heading === wanted || headingKey(family) === wanted || sectionGroupsOf(source).includes(wanted);
+    if (!named && (exact || !heading.includes(wanted))) return false;
   }
   const families = lowerList(sectionFamily);
   if (families.length && !families.includes(family)) return false;
@@ -817,7 +920,8 @@ export function matchesFilters(
   const clusters = lowerList(topic);
   if (clusters.length) {
     const topics = Array.isArray(source.topics) ? source.topics.map((item) => String(item).toLowerCase()) : [];
-    if (!clusters.some((cluster) => topics.includes(cluster))) return false;
+    const filed = issueClusters(source);
+    if (!clusters.some((cluster) => topics.includes(cluster) || filed.has(cluster))) return false;
   }
   // A Set only: /retrieve passes request filters through, and a JSON body
   // cannot make one.
@@ -825,6 +929,37 @@ export function matchesFilters(
   const voices = voiceList(voice);
   if (voices.length && voicedText(source, voices).length < VOICE_MIN_CHARS) return false;
   return true;
+}
+
+// The clusters a Weekly Thing chunk's issue is filed under. Passages carry
+// their own cluster labels (chunk.topics), but the cards, list_topics and
+// archive_lens count the issue-level filing (cluster.issue_numbers,
+// issue.topics), a different labelling pass: an issue filed only at issue
+// level was unreachable by the topic filter (QA2 L2-7: Media and culture
+// 67 issues, Software development 56, Privacy and security 50). Either
+// filing now admits the chunk.
+const ISSUE_CLUSTERS = new WeakMap<Corpus, Map<string, Set<string>>>();
+const NO_CLUSTERS = new Set<string>();
+
+function issueClusters(source: CorpusChunk) {
+  if (!corpusCache || source.issue_number == null || publicSourceKind(source) !== 'weekly_thing') return NO_CLUSTERS;
+  let filed = ISSUE_CLUSTERS.get(corpusCache);
+  if (!filed) {
+    filed = new Map();
+    const file = (issue: unknown, cluster: unknown) => {
+      const key = String(issue);
+      if (!filed!.has(key)) filed!.set(key, new Set());
+      filed!.get(key)!.add(String(cluster).toLowerCase());
+    };
+    for (const cluster of (corpusCache.topics || []) as Array<Record<string, unknown>>) {
+      for (const issue of Array.isArray(cluster?.issue_numbers) ? cluster.issue_numbers : []) file(issue, cluster.name);
+    }
+    for (const issue of corpusCache.issues || []) {
+      for (const cluster of Array.isArray(issue.topics) ? issue.topics : []) file(issue.number, cluster);
+    }
+    ISSUE_CLUSTERS.set(corpusCache, filed);
+  }
+  return filed.get(String(source.issue_number)) || NO_CLUSTERS;
 }
 
 // The microblog id a blog chunk belongs to (ids are blog:{id}:{index}:{hash}).
@@ -936,7 +1071,7 @@ export async function retrieve(
   }
 
   const voices = voiceList(filters.voice);
-  let fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
+  let fused = fuseCandidates(semantic, lexical, candidateLimit);
   // A voice filter rewrites each passage to that voice's spans BEFORE the
   // rerank, so a chunk that matched on a quotation ranks on Jamie's framing
   // alone, and the caller never receives the quoted words as Jamie's.
@@ -944,8 +1079,28 @@ export async function retrieve(
   // rerank: false skips the cross-region rerank call - RRF order is good
   // enough for grounding pools (welcome chips) where latency matters more
   // than final ordering precision. Answer-path retrieval always reranks.
-  if (opts.rerank === false) return withAgeLabel(fused.slice(0, limit));
-  return withAgeLabel((await rerankSources(query, fused, limit)).slice(0, limit));
+  if (opts.rerank === false) return withAgeLabel(pageWithoutTwins(fused, limit));
+  return withAgeLabel(pageWithoutTwins(await rerankSources(query, fused, limit, fused.length), limit));
+}
+
+// The page: the ranked list cut at limit, less each Journal copy whose
+// posts are all on that page, refilled from below the cut until the page
+// is full or the list runs out. The dedupe once ran on the whole pool
+// before ranking, so a copy inside the limit vanished when its post sat
+// at rank 28, and neither showed (QA2 R2-3); and a dedupe after the cut
+// would shrink the page below limit with more candidates waiting.
+export function pageWithoutTwins(ranked: CorpusChunk[], limit: number): CorpusChunk[] {
+  const dropped = new Set<CorpusChunk>();
+  for (;;) {
+    const page: CorpusChunk[] = [];
+    for (const chunk of ranked) {
+      if (page.length >= limit) break;
+      if (!dropped.has(chunk)) page.push(chunk);
+    }
+    const kept = new Set(dedupeJournalTwins(page));
+    if (kept.size === page.length) return page;
+    for (const chunk of page) if (!kept.has(chunk)) dropped.add(chunk);
+  }
 }
 
 // A Weekly Thing Journal chunk reprints blog posts; when both the journal
@@ -956,8 +1111,9 @@ export async function retrieve(
 // the copy to its post, the post's microblog_id (journal_posts), which
 // survives micro.blog changing a permalink after the issue went out. A
 // journal chunk drops only when EVERY post it copies has its twin in the
-// pool: a chunk that reprints two posts, one of which surfaced on its own,
-// still carries the other one's words (corpus QA, 2026-10-01).
+// candidates it is checked against (the returned page, pageWithoutTwins):
+// a chunk that reprints two posts, one of which surfaced on its own, still
+// carries the other one's words (corpus QA, 2026-10-01).
 export function journalPostKeys(chunk: CorpusChunk): string[] {
   return [...new Set(journalPostKeySets(chunk).flat())];
 }
@@ -973,6 +1129,8 @@ function journalPostKeySets(chunk: CorpusChunk): string[][] {
   const sets: string[][] = [];
   for (let index = 0; index < count; index += 1) {
     const post = posts[index] || {};
+    // An older post Jamie linked to is a reference, not a copy (QA2 I2-1).
+    if (!journalCopyInWeek(chunk, post)) continue;
     const keys = new Set<string>();
     if (urls[index]) keys.add(`url:${urls[index]}`);
     if (post.url) keys.add(`url:${String(post.url)}`);
@@ -981,6 +1139,70 @@ function journalPostKeySets(chunk: CorpusChunk): string[][] {
     sets.push([...keys]);
   }
   return sets;
+}
+
+// A Journal copy reprints a post from the issue's own week. The corpus
+// build also paired permalinks in Journal prose ("Also see 2021 and
+// 2015.", WT337's escape-room list) with the old posts they link to, and
+// the dedupe then dropped new writing as a "copy" whenever that old post
+// surfaced (QA2 I2-1: wt-212, wt-264, wt-267, wt-274, wt-333). Until the
+// build applies its own issue window, a post counts as copied only when
+// its Chicago day (or its permalink day) falls in [previous issue - 3
+// days, this issue + 1 day]. A chunk, issue or post the loaded corpora do
+// not know keeps its pairing.
+const JOURNAL_WEEK_BEFORE_DAYS = 3;
+const JOURNAL_WEEK_AFTER_DAYS = 1;
+const ISSUE_WEEKS = new WeakMap<Corpus, Map<string, [string, string]>>();
+const POST_DAYS = new WeakMap<Corpus, Map<string, string[]>>();
+const DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+
+function shiftDay(day: string, days: number) {
+  const time = Date.parse(`${day}T00:00:00Z`);
+  return Number.isFinite(time) ? new Date(time + days * DAY_MS).toISOString().slice(0, 10) : day;
+}
+
+function issueWeeks(corpus: Corpus) {
+  let weeks = ISSUE_WEEKS.get(corpus);
+  if (weeks) return weeks;
+  const dated = (corpus.issues || [])
+    .map((issue) => [String(issue.number), localDay(issue)] as const)
+    .filter(([, day]) => DAY_SHAPE.test(day))
+    .sort((a, b) => a[1].localeCompare(b[1]));
+  weeks = new Map();
+  dated.forEach(([number, day], index) => {
+    const from = index ? shiftDay(dated[index - 1][1], -JOURNAL_WEEK_BEFORE_DAYS) : '0000-00-00';
+    weeks!.set(number, [from, shiftDay(day, JOURNAL_WEEK_AFTER_DAYS)]);
+  });
+  ISSUE_WEEKS.set(corpus, weeks);
+  return weeks;
+}
+
+function postDays(corpus: Corpus) {
+  let days = POST_DAYS.get(corpus);
+  if (days) return days;
+  days = new Map();
+  for (const post of (corpus.posts as Array<Record<string, unknown>> | undefined) || []) {
+    const both = [localDay(post), String(post.publish_date || '').slice(0, 10)].filter((day) => DAY_SHAPE.test(day));
+    if (both.length) days.set(String(post.microblog_id), [...new Set(both)]);
+  }
+  POST_DAYS.set(corpus, days);
+  return days;
+}
+
+function journalCopyInWeek(chunk: CorpusChunk, post: Record<string, unknown>) {
+  if (post?.copy_of_microblog_id == null || !corpusCache || !blogCorpusCache) return true;
+  const week = issueWeeks(corpusCache).get(String(chunk.issue_number ?? ''));
+  const days = postDays(blogCorpusCache).get(String(post.copy_of_microblog_id));
+  if (!week || !days) return true;
+  return days.some((day) => day >= week[0] && day <= week[1]);
+}
+
+// The journal_posts entries that are copies: the ones from the issue's own
+// week (copy_of names only these).
+export function journalCopyPosts(chunk: CorpusChunk): Array<Record<string, unknown>> {
+  return ((chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []).filter(
+    (post) => post && journalCopyInWeek(chunk, post)
+  );
 }
 
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {

@@ -12,6 +12,7 @@ import {
   aliasesFor,
   compileLiteral,
   compileQuery,
+  foldQuery,
   MatchInputError,
   normalizeMatchMode,
   trimTerm,
@@ -25,6 +26,9 @@ import { searchFaq } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
+  headingKey,
+  journalCopyPosts,
+  knownSectionNames,
   loadCorpus,
   loadGraph,
   onThisDayYear,
@@ -756,11 +760,29 @@ const SOURCE_LEVEL_FIELDS = [
 const SEARCH_PASSAGE_CHARS = 2000;
 const EVIDENCE_PASSAGE_CHARS = 450;
 
+// The matcher's folds, one character at a time so every offset still
+// points into the passage: accents off, curly apostrophes and dashes to
+// plain, nbsp to a space, lower case (QA2 R2-8).
+const WINDOW_FOLDS: Record<string, string> = { ø: 'o', đ: 'd', ł: 'l', ħ: 'h' };
+function foldForWindow(text: string) {
+  let folded = '';
+  for (const char of text.split('')) {
+    const lower = char.toLowerCase();
+    const plain =
+      WINDOW_FOLDS[lower] ??
+      foldQuery(lower)
+        .replace(/\u00a0/g, ' ')
+        .toLowerCase();
+    folded += plain.length === 1 ? plain : lower.length === 1 ? lower : char;
+  }
+  return folded;
+}
+
 export function passageWindow(chunk: ArchiveRecord, query: string, room: number) {
   const text = String(chunk.text || '');
   if (text.length <= room) return { text };
-  const lower = text.toLowerCase();
-  const terms = [...new Set(tokenize(query))].filter((term) => term.length > 2 && !STOPWORDS.has(term));
+  const lower = foldForWindow(text);
+  const terms = [...new Set(tokenize(foldQuery(query)))].filter((term) => term.length > 2 && !STOPWORDS.has(term));
   const hits: Array<{ at: number; term: string }> = [];
   for (const term of terms) {
     for (let at = lower.indexOf(term); at >= 0; at = lower.indexOf(term, at + term.length)) hits.push({ at, term });
@@ -791,9 +813,10 @@ export function passageWindow(chunk: ArchiveRecord, query: string, room: number)
 
 // A Weekly Thing Journal passage reprints blog posts, and the blog post is
 // the canonical item (Jamie, 2026-09-30): copy_of names each post the
-// corpus build tied it to, so the agent opens and cites the post.
+// corpus build tied it to, so the agent opens and cites the post. An older
+// post the Journal only linked to is not one (QA2 I2-1).
 function journalCopies(chunk: ArchiveRecord) {
-  return ((chunk.journal_posts as Array<Record<string, unknown>> | undefined) || [])
+  return journalCopyPosts(chunk)
     .filter((post) => post?.copy_of_microblog_id != null)
     .map((post) => ({
       id: `blog-${String(post.copy_of_microblog_id)}`,
@@ -885,6 +908,9 @@ function groupPassagesBySource(chunks: ArchiveRecord[], records: Map<string, Arc
 // topic and category name values the corpus has; anything else matched
 // nothing and read as "nothing in the archive" (QA F13). A topic may be
 // given by its cluster name or the slug librarian://topic/{slug} uses.
+const SEARCH_SECTION_FAMILIES =
+  'Featured, Notable, Briefly, FYI, Journal, Currently, Photo, Fortune, Reply All, Straw Poll, Give Back, App, Yearly Thing';
+
 async function searchFilterProblem(input: ToolArgs) {
   const wanted = (value: unknown) =>
     (Array.isArray(value) ? value : value == null || value === '' ? [] : [value])
@@ -908,6 +934,19 @@ async function searchFilterProblem(input: ToolArgs) {
         };
       }
       resolvedTopics.push(name);
+    }
+  }
+  // A section that names no heading, family or H2 group anywhere matched
+  // nothing and read as "nothing in the archive" (QA2 R2-2).
+  if (input.section != null && String(input.section).trim()) {
+    const section = headingKey(input.section);
+    await Promise.all(scopeKinds('all').map((kind) => loadCorpus(kind)));
+    const names = knownSectionNames();
+    if (!section || (!names.has(section) && ![...names].some((name) => name.includes(section)))) {
+      return {
+        error: `section "${String(input.section)}" names no section heading in the archive. Pass a heading from a Weekly Thing body or a section_family: ${SEARCH_SECTION_FAMILIES}.`,
+        code: 'bad_request'
+      };
     }
   }
   const categories = wanted(input.category);
@@ -1064,20 +1103,47 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   const format = getSourceFormat(input.format);
   const { kind, record, chunks, links } = bundle;
   const wantedSection = String(input.section || '').trim();
+  // A section of markdown marks alone ("##", "*") has no name to match and
+  // matched every section (QA2 R2-9).
+  if (wantedSection && !headingKey(wantedSection)) {
+    return {
+      error: `section "${wantedSection}" names no heading; pass a section name (format outline lists them).`,
+      code: 'bad_request'
+    };
+  }
+  // offset pages the body; an outline has none, and an offset there was
+  // ignored, past the end or not (QA2 R2-10).
+  const start = toolOffset(input);
+  if (start && format === 'outline') {
+    return {
+      error: `offset pages the body, and format outline sends none; pass format text or full with offset ${start}.`,
+      code: 'bad_request'
+    };
+  }
   let sections = [];
   let body = '';
   if (kind === 'weekly_thing') {
     const issue = await issueByNumber(record.issue_number);
     const issueSectionRows = await issueSections(issue || record);
     const wanted = wantedSection.toLowerCase();
-    sections = pickBySection(issueSectionRows, wanted, (section) => ({
-      name: section.name,
-      section_family: 'section_family' in section ? section.section_family : ''
-    })).map((section) => ({
-      name: section.name,
-      word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
-      text: String(section.text || '')
-    }));
+    // A heading the body carries reads whole, to the next heading of its
+    // level or above: the body is complete by construction. The row named
+    // "Stream" held only the H2's lead-in, so the entries under it were
+    // dropped, and a link-title join missed articles whose title differs
+    // (QA2 R2-1: 107 headings read partial, wt-146 Stream 95 of 9,099
+    // chars). Family names ("Journal", "Notable") that no heading carries
+    // still read by rows.
+    const whole = wanted && issue?.body ? headingSlice(String(issue.body), wantedSection, true) : [];
+    sections = whole.length
+      ? whole
+      : pickBySection(issueSectionRows, wanted, (section) => ({
+          name: section.name,
+          section_family: 'section_family' in section ? section.section_family : ''
+        })).map((section) => ({
+          name: section.name,
+          word_count: ('word_count' in section ? section.word_count : 0) || tokenize(section.text || '').length,
+          text: String(section.text || '')
+        }));
     // Text sections and links index by DIFFERENT taxonomies: text sections
     // are per-article names ("MCP is the coming of Web 2.0 2.0 - Anil
     // Dash") while links carry editorial groups (Notable/Briefly). The
@@ -1115,7 +1181,9 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
       }
     }
     if (wanted && !sections.length && issue?.body) sections = headingSlice(String(issue.body), wantedSection);
-    if (wanted && !sections.length) return noSuchSection(wantedSection, record, issueSectionRows);
+    if (wanted && !sections.length) {
+      return noSuchSection(wantedSection, record, issueSectionRows, String(issue?.body || ''));
+    }
     // section filter applies to body too - previously section_texts was
     // filtered while body still carried the whole issue.
     body = String(
@@ -1128,8 +1196,9 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     body = sourceTextFromChunks(chunks, wantedSection);
     if (wantedSection && !sections.length) {
       // A heading inside a post ("Transcript" in a long blog post).
-      sections = headingSlice(sourceTextFromChunks(chunks), wantedSection);
-      if (!sections.length) return noSuchSection(wantedSection, record, sectionsFromChunks(chunks));
+      const text = sourceTextFromChunks(chunks);
+      sections = headingSlice(text, wantedSection);
+      if (!sections.length) return noSuchSection(wantedSection, record, sectionsFromChunks(chunks), text);
       body = sections.map((section) => `## ${section.name}\n${section.text}`).join('\n\n');
     }
   }
@@ -1197,7 +1266,6 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   // offset pages through a body longer than one result (QA F5: the second
   // half of a 50K blog post was unreachable, and the hint promised a section
   // read that returned the same cut).
-  const start = Number(input.offset) || 0;
   if (start && start >= body.length) {
     return { error: `offset ${start} must be less than the body's ${body.length} characters.`, code: 'bad_request' };
   }
@@ -1232,17 +1300,8 @@ function bodyPage(text: string, budget: number) {
   return paragraph > shown.length * 0.8 ? shown.slice(0, paragraph + 2) : shown;
 }
 
-// A section name as a heading reads it, so the name a caller copies from
-// the body finds its section: no-break spaces, markdown marks (#MNTech,
-// *Not*, `yes`) and doubled spaces do not count (QA F6).
-export function headingKey(value: unknown) {
-  return String(value ?? '')
-    .replace(/\u00a0/g, ' ')
-    .replace(/[*_`#]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-}
+// headingKey lives with the section filter in retrieval.mts (QA2 R2-2).
+export { headingKey };
 
 // Rows whose heading or family IS the wanted name win; otherwise every row
 // whose heading contains it (Jamie, 2026-09-30: an exact match wins).
@@ -1258,31 +1317,73 @@ function pickBySection<T>(rows: T[], wanted: string, read: (row: T) => ArchiveRe
   return exact.length ? exact : rows.filter((row) => matchesSection(read(row), wanted));
 }
 
-// A heading the body carries but the section list does not: an H2 group
-// ("Links 📌", "The end 🎬") over its articles, or an H3 inside one. Its
-// text runs to the next heading of its level or above.
-function headingSlice(body: string, wanted: string) {
-  const lines = body.split('\n');
-  const want = headingKey(wanted);
-  const heads = lines.flatMap((line, index) => {
-    const match = /^(#{1,6})\s+(.*?)\s*$/.exec(line);
-    return match ? [{ index, level: match[1].length, name: match[2], key: headingKey(match[2]) }] : [];
+// The headings a body carries, outside fenced code: a "# comment" line in
+// a ```bash block is code, and it ended a section read (QA2 R2-5:
+// blog-4180550 "Posting to Micro.blog" stopped at "#!/bin/bash"). key reads
+// the heading as written; linkKey reads a linked heading by its link text.
+const LINK_MARKUP = /!?\[([^\]]*)\]\([^)]*\)/g;
+
+function markdownHeadings(body: string) {
+  const heads: Array<{ index: number; level: number; name: string; key: string; linkKey: string }> = [];
+  let fenced = false;
+  body.split('\n').forEach((line, index) => {
+    if (/^\s*(?:```|~~~)/.test(line)) fenced = !fenced;
+    const match = fenced ? null : /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+    if (!match) return;
+    const name = match[2];
+    heads.push({
+      index,
+      level: match[1].length,
+      name,
+      key: headingKey(name),
+      linkKey: headingKey(name.replace(LINK_MARKUP, '$1'))
+    });
   });
-  const hit = heads.find((head) => head.key === want) || heads.find((head) => want && head.key.includes(want));
-  if (!hit) return [];
-  const next = heads.find((head) => head.index > hit.index && head.level <= hit.level);
-  const text = lines
-    .slice(hit.index + 1, next ? next.index : lines.length)
-    .join('\n')
-    .trim();
-  return [{ name: hit.name, word_count: tokenize(text).length, text }];
+  return heads;
 }
 
-function noSuchSection(wanted: string, record: ArchiveRecord, rows: Array<{ name?: unknown }>) {
+// The text under a heading the body carries: an H2 group ("Links 📌",
+// "Stream") over its articles, or an H3 inside one. It runs to the next
+// heading of its level or above. Every heading with the wanted name reads
+// (an issue can hold two "Tech"); with none, the first heading containing
+// it, unless exactOnly.
+function headingSlice(body: string, wanted: string, exactOnly = false) {
+  const want = headingKey(wanted);
+  if (!want) return [];
+  const lines = body.split('\n');
+  const heads = markdownHeadings(body);
+  const exact = heads.filter((head) => head.key === want || head.linkKey === want);
+  const hits = exact.length ? exact : exactOnly ? [] : heads.filter((head) => head.key.includes(want)).slice(0, 1);
+  const slices: Array<{ name: string; word_count: number; text: string }> = [];
+  let covered = -1;
+  for (const hit of hits) {
+    if (hit.index < covered) continue;
+    const next = heads.find((head) => head.index > hit.index && head.level <= hit.level);
+    covered = next ? next.index : lines.length;
+    const text = lines
+      .slice(hit.index + 1, covered)
+      .join('\n')
+      .trim();
+    slices.push({ name: hit.name.replace(LINK_MARKUP, '$1').trim(), word_count: tokenize(text).length, text });
+  }
+  return slices;
+}
+
+// A miss lists every name section accepts: the rows and the headings the
+// body carries (QA2 R2-7: blog-1076058 listed "Blog post" while
+// "Transcript" read 47,365 chars), each once by its heading key.
+function noSuchSection(wanted: string, record: ArchiveRecord, rows: Array<{ name?: unknown }>, body = '') {
+  const names = new Map<string, string>();
+  for (const name of [
+    ...rows.map((row) => String(row.name || '')),
+    ...markdownHeadings(body).map((head) => head.name.replace(LINK_MARKUP, '$1').trim())
+  ]) {
+    if (headingKey(name) && !names.has(headingKey(name))) names.set(headingKey(name), name);
+  }
   return {
     error: `No section of ${lensSourceId(record)} matches "${wanted}"; available_sections lists them.`,
     code: 'bad_request',
-    available_sections: rows.map((row) => String(row.name || '')).filter(Boolean)
+    available_sections: [...names.values()]
   };
 }
 
@@ -2475,6 +2576,18 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
 // The words around the first hit, found by the matcher that found it, so a
 // phrase typed with a straight apostrophe or two spaces still shows where
 // it sits.
+// The body heading a character sits under: the nearest heading at or
+// before its line, link markup stripped. A phrase that is a group heading
+// ("Links 📌") no section row holds still names its section (QA2 F15).
+function bodyHeadingAt(body: string, offset: number | undefined) {
+  if (offset === undefined || offset < 0) return null;
+  const line = body.slice(0, offset).split('\n').length - 1;
+  const heading = markdownHeadings(body)
+    .filter((head) => head.index <= line)
+    .pop();
+  return heading ? heading.name.replace(LINK_MARKUP, '$1').trim() || null : null;
+}
+
 function contextAround(text: unknown, matcher: CanonicalMatcher, radius = 240) {
   const value = String(text || '');
   const hit = matcher.firstHit(value);
@@ -2515,7 +2628,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // phrase that is itself a heading ("Links 📌") names that section.
       const matchedSection = (await issueSections(issue)).find((section) =>
         quoteMatcher.matches(`${section.name || ''}\n${section.text || ''}`)
-      );
+      ) || { name: bodyHeadingAt(body, quoteMatcher.firstHit(body)?.offset) };
       // Same shape AND value semantics as the chunk-corpus branch below:
       // blog-specific fields are present as null rather than absent.
       found.push({
@@ -3061,13 +3174,15 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   const crossShown = crossUnshown.slice(0, NEIGHBORHOOD_LINKS);
   const id = lensSourceId(bundle.record);
   // Each list says how much of it is here (QA F7: the 30-link caps were
-  // silent; wt-274 links 151 times and showed 30).
+  // silent; wt-274 links 151 times and showed 30). The hint names the
+  // total, not the count shown: the size cap can cut a list further after
+  // this, and omitted counts what it cut (QA2 R2-11).
   const hints = [
     outgoingAll.length > outgoing.length
-      ? `outgoing_links shows ${outgoing.length} of ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
+      ? `outgoing_links is part of all ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
       : '',
     incomingAll.length > incomingShown.length
-      ? `incoming_links shows the newest ${incomingShown.length} of ${incomingAll.length}.`
+      ? `incoming_links is the newest part of all ${incomingAll.length}; truncated.omitted counts the rest.`
       : ''
   ].filter(Boolean);
   return markTruncated(
@@ -4354,7 +4469,8 @@ const BOOLEAN_ARGS = new Set([
 ]);
 
 function echoValue(name: string, key: string, value: unknown) {
-  if (key === 'offset' && PAGED_LISTS[name]) return toolOffset({ offset: value });
+  // A string offset ("100") pages like the number, and echoes as one (QA2 R2-10).
+  if (key === 'offset') return toolOffset({ offset: value });
   if (key === 'year_range') return parseYearRange(value);
   if (key === 'domain') return normalizedDomain(value);
   if (key === 'issue_number' || key === 'also_in_issue') {
