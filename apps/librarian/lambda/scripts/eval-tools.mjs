@@ -704,6 +704,36 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   }
   counts.on_this_day_0513 = items.length;
 }
+// QA2 L2-4: a schemeless url is one term, not "github.com" or
+// "jthingelstad"; it is found where it is written, in links (27 sources and
+// 51 links on the 2026-10-01 corpora). case_sensitive holds for each side of
+// a slash term (Go/Rust ran case-insensitive: 1,060 either way).
+{
+  const url = await run('list_content', { topic: 'github.com/jthingelstad', limit: 1 });
+  check(
+    'KA slash keeps a schemeless url whole',
+    !(url?.aliases_checked || []).includes('jthingelstad') && url?.total_count > 0,
+    `${JSON.stringify(url?.aliases_checked)} ${url?.total_count}`
+  );
+  const links = await run('find_links', { topic: 'github.com/jthingelstad', limit: 1 });
+  const linkOracle = ['weekly_thing', 'blog', 'podcast']
+    .flatMap((kind) => corpora[kind]?.links || [])
+    .filter((link) =>
+      /(?<![\p{L}\p{N}])github\.com\/jthingelstad(?![\p{L}\p{N}])/iu.test(String(link.url || ''))
+    ).length;
+  check(
+    'KA find_links finds a url-shaped topic in each link url',
+    linkOracle > 0 && links?.total_count === linkOracle,
+    `${links?.total_count} vs ${linkOracle}`
+  );
+  const goRust = await run('list_content', { topic: 'Go/Rust', case_sensitive: true, limit: 1 });
+  const goRustCi = await run('list_content', { topic: 'Go/Rust', limit: 1 });
+  check(
+    'KA case_sensitive holds for slash sides',
+    goRust?.total_count < goRustCi?.total_count && goRust?.applied?.case_sensitive === true,
+    `${goRust?.total_count} vs ${goRustCi?.total_count}`
+  );
+}
 // QA2 L2-6: a topic or phrase past what the regex compiler takes was an
 // internal_error ("SyntaxError", "try again") that every retry repeated.
 for (const [tool, args] of [

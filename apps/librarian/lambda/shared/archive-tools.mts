@@ -8,7 +8,15 @@ import {
   matchesLensTopic,
   settleLensTruncation
 } from './archive-lens.mjs';
-import { aliasesFor, compileLiteral, compileQuery, MatchInputError, normalizeMatchMode, trimTerm } from './matcher.mjs';
+import {
+  aliasesFor,
+  compileLiteral,
+  compileQuery,
+  MatchInputError,
+  normalizeMatchMode,
+  trimTerm,
+  urlShaped
+} from './matcher.mjs';
 import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
@@ -1282,9 +1290,11 @@ function noSuchSection(wanted: string, record: ArchiveRecord, rows: Array<{ name
 // title, heading, surrounding context, or domain).
 const FIND_LINK_FIELDS = ['text', 'title', 'heading_context', 'context', 'domain'] as const;
 
-function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher) {
+// A url-shaped topic (github.com/jthingelstad) is also looked for in the
+// link's own url, where it is written (QA2 L2-4).
+function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher, withUrl = false) {
   const reasons: string[] = [];
-  for (const field of FIND_LINK_FIELDS) {
+  for (const field of withUrl ? [...FIND_LINK_FIELDS, 'url' as const] : FIND_LINK_FIELDS) {
     const hit = matcher.firstHit(String(link[field] || ''));
     if (hit) reasons.push(`${field}: '${hit.span}'`);
   }
@@ -1331,6 +1341,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     aliases: aliasesFor(topic),
     caseSensitive: input.case_sensitive === true
   });
+  const urlTopic = urlShaped(trimTerm(topic));
   const filteredLinks = [];
   const matchReasonsByLink = new Map<ArchiveRecord, string[]>();
   for (const link of await linkRecords(scope)) {
@@ -1346,7 +1357,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     if (urlKey && linkUrlKey(link.url) !== urlKey) continue;
     if (startYear && (!year || year < startYear)) continue;
     if (endYear && (!year || year > endYear)) continue;
-    const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher) : [];
+    const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher, urlTopic) : [];
     if (topic && !matchReasons.length) continue;
     filteredLinks.push(link);
     if (topic) matchReasonsByLink.set(link, matchReasons);

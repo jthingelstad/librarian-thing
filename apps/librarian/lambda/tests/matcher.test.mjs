@@ -238,3 +238,24 @@ test('a term the regex compiler cannot take throws MatchInputError, not SyntaxEr
   assert.ok(compileLiteral('the '.repeat(250)).matches('the '.repeat(300)), 'a 1000-character quotation compiles');
   assert.ok(m('a'.repeat(200)).matches('a'.repeat(200)), 'a 200-character term compiles');
 });
+
+test('a schemeless url keeps its slashes; case_sensitive holds for slash sides (QA2 L2-4)', () => {
+  assert.deepEqual(aliasesFor('github.com/jthingelstad'), []);
+  assert.deepEqual(aliasesFor('weekly.thingelstad.com/archive/351'), []);
+  assert.deepEqual(aliasesFor('Twitter/X'), ['Twitter', 'X']);
+  assert.deepEqual(aliasesFor('ASP.NET/PHP'), ['ASP.NET', 'PHP'], 'a name with a dot is not a host');
+  assert.deepEqual(aliasesFor('micro.blog / Mastodon'), ['micro.blog', 'Mastodon', 'microblog']);
+  const url = m('github.com/jthingelstad', { aliases: aliasesFor('github.com/jthingelstad') });
+  const linked = 'my code is [on GitHub](https://github.com/jthingelstad/repo) now';
+  assert.ok(url.matches(linked), 'a url-shaped term is a mention inside a link target');
+  assert.equal(url.firstHit(linked).span, 'github.com/jthingelstad');
+  assert.equal(url.matches('see github.com and jthingelstad elsewhere'), false, 'never its parts');
+  assert.equal(m('rss').matches('[feed](https://example.com/rss)'), false, 'other terms still skip urls');
+  const goRust = m('Go/Rust', { aliases: aliasesFor('Go/Rust'), caseSensitive: true });
+  assert.ok(goRust.matches('written in Go'));
+  assert.ok(goRust.matches('a Rust rewrite'));
+  assert.equal(goRust.matches('a long way to go'), false, 'the Go side keeps the case flag');
+  assert.equal(goRust.matches('rust on the car'), false, 'the Rust side keeps the case flag');
+  const ens = m('ENS/POAP', { aliases: aliasesFor('ENS/POAP'), caseSensitive: true });
+  assert.ok(ens.matches('the ethereum name service'), 'table aliases stay case-insensitive');
+});
