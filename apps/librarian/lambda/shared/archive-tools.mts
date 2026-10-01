@@ -23,7 +23,6 @@ import {
   parseYearRange,
   retrieve,
   tokenize,
-  VOICE_MIN_CHARS,
   voicedText,
   localDay,
   voiceList
@@ -2862,10 +2861,13 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
     chunks.push(
       ...(corpus.chunks || []).flatMap((chunk) => {
-        // voice=jamie reads only Jamie's spans: a topic he quoted is not a
-        // topic he wrote about, and the evidence never shows the quote.
+        // voice=jamie reads only Jamie's spans: a topic Jamie quoted is not
+        // a topic Jamie wrote about, and the evidence never shows the quote.
+        // The lens is a filter, not a ranker, so it keeps every voiced
+        // passage however short: a 40-character floor hid 235 sources,
+        // "Just landed in Minneapolis!" among them (QA2 lexical L2-3).
         const text = voices.length ? voicedText(chunk, voices) : chunk.text;
-        if (voices.length && String(text).length < VOICE_MIN_CHARS) return [];
+        if (voices.length && !String(text).trim()) return [];
         return [
           {
             ...chunk,

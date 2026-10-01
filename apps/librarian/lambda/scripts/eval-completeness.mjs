@@ -492,6 +492,61 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     }
   }
 
+  // 8f. voice=jamie in archive_lens keeps every blog post whose own words
+  //     name the topic, however short (QA2 lexical L2-3: a 40-character
+  //     floor hid "Just landed in Minneapolis!", blog-805918). The oracle
+  //     reads Jamie's spans (the whole text when a chunk has none) with
+  //     images and link targets removed, and matches the whole word.
+  {
+    const ownWords = (chunk) => {
+      const text = String(chunk.text || '');
+      const parts = Array.isArray(chunk.spans)
+        ? chunk.spans.filter((span) => span.voice === 'jamie').map((span) => text.slice(span.start, span.end))
+        : [text];
+      return parts
+        .join('\n\n')
+        .replace(/!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>/gi, ' ')
+        .replace(/\]\([^)]*\)/g, '] ')
+        .replace(/https?:\/\/\S+/g, ' ');
+    };
+    for (const topic of ['Minneapolis', 'iPhone', 'Tesla']) {
+      const pattern = new RegExp(`\\b${topic}\\b`, 'i');
+      const oracle = new Set(
+        (blog.chunks || [])
+          .filter((chunk) => chunk.publish_date && pattern.test(ownWords(chunk)))
+          .map((chunk) => String(chunk.microblog_id))
+      );
+      const lens = await call('archive_lens', { topic, voice: 'jamie', source_kind: 'blog', limit: 1 });
+      check(
+        `completeness archive_lens voice=jamie ${topic} counts every post in Jamie's words`,
+        lens.total_count === oracle.size,
+        `${lens.total_count} vs ${oracle.size}`
+      );
+    }
+    const year = await call('archive_lens', {
+      topic: 'Minneapolis',
+      voice: 'jamie',
+      source_kind: 'blog',
+      year: 2008,
+      limit: 40
+    });
+    const ids = [];
+    for (let offset = 0, page = year; ;) {
+      ids.push(...(page.results || []).map((ref) => (typeof ref === 'string' ? ref : ref.id)));
+      offset = page.truncated?.next_offset || 0;
+      if (!offset) break;
+      page = await call('archive_lens', {
+        topic: 'Minneapolis',
+        voice: 'jamie',
+        source_kind: 'blog',
+        year: 2008,
+        limit: 40,
+        offset
+      });
+    }
+    check('completeness archive_lens voice=jamie keeps a short post (blog-805918)', ids.includes('blog-805918'));
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;
