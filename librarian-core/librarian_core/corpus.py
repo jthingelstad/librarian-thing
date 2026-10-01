@@ -172,30 +172,63 @@ def read_issue(path: Path) -> tuple[dict[str, Any], str]:
 # Jamie's, so the corpus never sees them: no chunk, count, topic, link or
 # summary is built from them. The frame is a cross-repo contract, pinned by
 # tests here and in wt-builder tests/echoes.test.ts.
-THINGY_BLOCK_RE = re.compile(r'<div class="from-thingy">.*?\n</div>[ \t]*\n?', re.S)
+# QA3 F18: the frame is found by its class, not by one exact spelling (quotes,
+# extra classes, other attributes and case may vary), and it ends at the
+# </div> that balances it, counting nested divs. A close on the same line as
+# text or indented still ends it; an unclosed frame raises instead of eating
+# Jamie's text or leaking Thingy's.
+THINGY_OPEN_RE = re.compile(
+    r"""<div\b[^>]*?\bclass\s*=\s*["']?[^"'>]*?\bfrom-thingy\b(?![\w-])[^>]*>""", re.I
+)
+_DIV_TAG_RE = re.compile(r"<(/?)div\b[^>]*>", re.I)
+_TRAILING_LINE_RE = re.compile(r"[ \t]*(?:\r?\n)?")
+_HEADING_BEFORE_RE = re.compile(r"(?:^|\n)(#{1,4})\s+[^\n]*\S[^\n]*\n\s*\Z")
+
+
+def _thingy_block_end(body: str, start: int) -> int:
+    depth = 0
+    for tag in _DIV_TAG_RE.finditer(body, start):
+        depth += -1 if tag.group(1) else 1
+        if depth == 0:
+            return _TRAILING_LINE_RE.match(body, tag.end()).end()
+    line = body.count("\n", 0, start) + 1
+    raise ValueError(f'unclosed Thingy block (<div class="from-thingy">) at line {line}')
 
 
 def strip_thingy_blocks(body: str) -> str:
-    stripped = THINGY_BLOCK_RE.sub("", body)
-    if stripped == body:
+    pieces: list[str] = []
+    cuts: list[int] = []
+    position = 0
+    while match := THINGY_OPEN_RE.search(body, position):
+        pieces.append(body[position : match.start()])
+        cuts.append(sum(len(piece) for piece in pieces))
+        position = _thingy_block_end(body, match.start())
+    if not cuts:
         return body
-    return re.sub(r"\n{3,}", "\n\n", _drop_emptied_headings(stripped))
+    pieces.append(body[position:])
+    return re.sub(r"\n{3,}", "\n\n", _drop_emptied_headings("".join(pieces), cuts))
 
 
-def _drop_emptied_headings(body: str) -> str:
+def _drop_emptied_headings(body: str, cuts: list[int]) -> str:
     """Drop a heading the Thingy strip left with nothing under it (WB frames
     Echoes as "## Echoes" plus the block), so get_source bodies don't end on
-    a bare heading. A heading followed by a deeper one is not empty."""
-    matches = list(HEADING_RE.finditer(body))
+    a bare heading. Only the heading directly before a removed block is a
+    candidate (QA3 F18): an empty "## Links" group header elsewhere in the
+    issue is Jamie's and stays. A heading followed by a deeper one is not
+    empty."""
     spans = []
-    for index, match in enumerate(matches):
-        following = matches[index + 1] if index + 1 < len(matches) else None
-        end = following.start() if following else len(body)
-        if body[match.end() : end].strip():
+    for cut in cuts:
+        before = _HEADING_BEFORE_RE.search(body, 0, cut)
+        if not before:
             continue
-        if following is None or len(following.group(1)) <= len(match.group(1)):
-            spans.append((match.start(), end))
-    for start, end in reversed(spans):
+        following = HEADING_RE.search(body, cut)
+        end = following.start() if following else len(body)
+        if body[cut:end].strip():
+            continue
+        if following is None or len(following.group(1)) <= len(before.group(1)):
+            start = before.start() + (1 if body[before.start()] == "\n" else 0)
+            spans.append((start, end))
+    for start, end in sorted(set(spans), reverse=True):
         body = body[:start] + body[end:]
     return body.rstrip() + "\n" if spans else body
 

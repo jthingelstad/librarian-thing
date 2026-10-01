@@ -13,7 +13,11 @@ anything reaches S3. It fails the deploy when:
 - an issue page on the weekly site carries an audio edition the candidate
   does not (or carries a different one). The audio record lives only in the
   site's render copy (librarian_core.audio); a site checkout that failed
-  would otherwise ship a corpus with every pointer gone.
+  would otherwise ship a corpus with every pointer gone; or
+- an ingest check fails (``ingest_failures``, QA 2026-10-01 round 3): a
+  regression in the build's strips or media ties that would otherwise ship
+  without a sound. The blog checks run on the blog candidate when one is
+  staged.
 
 ``freshness`` runs on a schedule: it compares the site's audio records with
 the live corpus in S3 and sets ``stale=true`` in $GITHUB_OUTPUT when they
@@ -102,6 +106,19 @@ def gate_failures(corpus: dict[str, Any], site_archive_dir: Path | None) -> list
     return failures
 
 
+# Ingest checks (QA 2026-10-01 round 3). Each pins a fix the corpus build
+# carries, so a later change that undoes it fails the gate instead of shipping.
+
+
+def ingest_failures(corpus: dict[str, Any] | None, blog: dict[str, Any] | None) -> list[str]:
+    failures = []
+    if corpus is not None:
+        # F18: Thingy's words never enter the corpus.
+        if "from-thingy" in json.dumps(corpus, ensure_ascii=False):
+            failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
+    return failures
+
+
 def load_json(path: Path) -> dict[str, Any]:
     data = path.read_bytes()
     if data[:2] == b"\x1f\x8b":
@@ -142,10 +159,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "gate":
         candidate = args.candidate / "corpus.json"
-        if not candidate.is_file():
+        blog_candidate = args.candidate / "blog_corpus.json"
+        corpus = load_json(candidate) if candidate.is_file() else None
+        blog = load_json(blog_candidate) if blog_candidate.is_file() else None
+        if corpus is None and blog is None:
             print(f"corpus gate: no Weekly Thing candidate at {candidate}; nothing to check")
             return 0
-        failures = gate_failures(load_json(candidate), args.site_archive)
+        failures = gate_failures(corpus, args.site_archive) if corpus is not None else []
+        failures.extend(ingest_failures(corpus, blog))
         for failure in failures:
             print(f"FAIL {failure}")
         print(f"corpus gate (archive checks): {len(failures)} failed")
