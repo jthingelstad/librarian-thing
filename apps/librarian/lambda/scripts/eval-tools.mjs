@@ -852,6 +852,18 @@ await run('search_faq', { query: 'what is the weekly thing' });
   const common = await run('search_faq', { query: 'the and of' });
   check('KA search_faq common words match nothing', common?.total_count === 0, String(common?.total_count));
 }
+// QA2 I2-3: a name that is no site topic says where every mention is
+// counted (Mastodon is in 11 issues and is no topic).
+{
+  const none = await run('list_topics', { query: 'Mastodon' });
+  const listed = await run('list_content', { topic: 'Mastodon', limit: 1 });
+  check(
+    'KA list_topics with no match points to list_content and archive_lens',
+    none?.total_count === 0 && /list_content/.test(none?.note || '') && /archive_lens/.test(none?.note || ''),
+    String(none?.note)
+  );
+  check('KA Mastodon is counted by list_content', listed?.total_count > 0, String(listed?.total_count));
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });
