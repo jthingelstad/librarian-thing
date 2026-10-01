@@ -328,6 +328,35 @@ test('the blog post wins over its Weekly Thing Journal copy, by microblog id whe
   assert.deepEqual(dedupeJournalTwins([copy]), [copy], 'a copy alone stays');
 });
 
+test('a Journal chunk that copies two posts stays until both posts are in the pool', () => {
+  const one = 'https://www.thingelstad.com/2018/01/10/one.html';
+  const two = 'https://www.thingelstad.com/2018/01/10/two.html';
+  const copy = {
+    id: 'wt-36-journal',
+    source_kind: 'chunk',
+    journal_post_urls: [one],
+    // The second entry is a heading with no link: matched by date and text.
+    journal_posts: [
+      { url: one, copy_of_microblog_id: '601', canonical_url: one, matched_by: 'permalink' },
+      { url: null, copy_of_microblog_id: '602', canonical_url: two, matched_by: 'date_text' }
+    ]
+  };
+  const postOne = { id: 'blog-601', source_kind: 'blog', url: one, microblog_id: '601' };
+  const postTwo = { id: 'blog-602', source_kind: 'blog', url: two, microblog_id: 602 };
+  assert.deepEqual(
+    dedupeJournalTwins([copy, postOne]).map((chunk) => chunk.id),
+    ['wt-36-journal', 'blog-601'],
+    'post two is only in the copy'
+  );
+  assert.deepEqual(dedupeJournalTwins([copy, postOne, postTwo]).map((chunk) => chunk.id), ['blog-601', 'blog-602']);
+  const unmatched = { ...copy, journal_posts: [copy.journal_posts[0], { url: null, matched_by: null }] };
+  assert.deepEqual(
+    dedupeJournalTwins([unmatched, postOne, postTwo]).map((chunk) => chunk.id),
+    ['wt-36-journal', 'blog-601', 'blog-602'],
+    'an entry tied to no post keeps its copy'
+  );
+});
+
 test('search_archive names the canonical post on a Journal copy', async () => {
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.search_archive({ query: 'copy espresso', source_kind: 'weekly_thing' }, CTX);

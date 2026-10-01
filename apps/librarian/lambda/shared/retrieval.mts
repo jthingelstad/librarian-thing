@@ -955,30 +955,46 @@ export async function retrieve(
 // join is the post URL (journal_post_urls) and, where the corpus build tied
 // the copy to its post, the post's microblog_id (journal_posts), which
 // survives micro.blog changing a permalink after the issue went out. A
-// journal chunk with no blog twin in the pool stays.
+// journal chunk drops only when EVERY post it copies has its twin in the
+// pool: a chunk that reprints two posts, one of which surfaced on its own,
+// still carries the other one's words (corpus QA, 2026-10-01).
 export function journalPostKeys(chunk: CorpusChunk): string[] {
-  const keys = new Set<string>();
-  for (const url of (chunk.journal_post_urls as string[] | undefined) || []) keys.add(`url:${String(url)}`);
-  for (const post of (chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []) {
-    if (post?.copy_of_microblog_id != null) keys.add(`id:${String(post.copy_of_microblog_id)}`);
-    if (post?.canonical_url) keys.add(`url:${String(post.canonical_url)}`);
+  return [...new Set(journalPostKeySets(chunk).flat())];
+}
+
+// One key list per post the chunk copies. journal_posts pairs one to one,
+// in order, with journal_post_urls and then lists the chunk's other copies
+// (heading entries, Journal sections with no link); a post with no url and
+// no microblog id has no keys and can never be twinned.
+function journalPostKeySets(chunk: CorpusChunk): string[][] {
+  const urls = ((chunk.journal_post_urls as unknown[] | undefined) || []).map(String);
+  const posts = (chunk.journal_posts as Array<Record<string, unknown>> | undefined) || [];
+  const count = Math.max(urls.length, posts.length);
+  const sets: string[][] = [];
+  for (let index = 0; index < count; index += 1) {
+    const post = posts[index] || {};
+    const keys = new Set<string>();
+    if (urls[index]) keys.add(`url:${urls[index]}`);
+    if (post.url) keys.add(`url:${String(post.url)}`);
+    if (post.canonical_url) keys.add(`url:${String(post.canonical_url)}`);
+    if (post.copy_of_microblog_id != null) keys.add(`id:${String(post.copy_of_microblog_id)}`);
+    sets.push([...keys]);
   }
-  return [...keys];
+  return sets;
 }
 
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
-  const journalOwners = new Map<string, CorpusChunk>();
-  for (const candidate of candidates) {
-    for (const key of journalPostKeys(candidate)) journalOwners.set(key, candidate);
-  }
-  if (!journalOwners.size) return candidates;
-  const dropped = new Set<CorpusChunk>();
+  const blogKeys = new Set<string>();
   for (const candidate of candidates) {
     if (candidate.source_kind !== 'blog') continue;
-    const twin =
-      (candidate.url && journalOwners.get(`url:${String(candidate.url)}`)) ||
-      (candidate.microblog_id != null && journalOwners.get(`id:${String(candidate.microblog_id)}`));
-    if (twin) dropped.add(twin);
+    if (candidate.url) blogKeys.add(`url:${String(candidate.url)}`);
+    if (candidate.microblog_id != null) blogKeys.add(`id:${String(candidate.microblog_id)}`);
   }
-  return candidates.filter((candidate) => !dropped.has(candidate));
+  if (!blogKeys.size) return candidates;
+  return candidates.filter((candidate) => {
+    if (candidate.source_kind === 'blog') return true;
+    const posts = journalPostKeySets(candidate);
+    if (!posts.length) return true;
+    return !posts.every((keys) => keys.some((key) => blogKeys.has(key)));
+  });
 }
