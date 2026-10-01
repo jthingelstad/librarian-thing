@@ -35,7 +35,10 @@ exceptional local operation requiring valid AWS credentials.
 - `runtime-boundary.json` and `evaluation-boundary.json`: cap the application
   roles at their existing runtime permissions. These policies are managed by
   an administrator, outside the application stack. New model permissions must
-  be reflected here before a model rollout.
+  be reflected here before a model rollout. The runtime boundary allows
+  `secretsmanager:GetSecretValue` on `weekly-thing-librarian-runtime` only
+  (the Lambdas' credentials); the CloudFormation service role may create and
+  update that secret and the golden-retrieval one, never read other secrets.
 - `github-trust.json`: exact repository/main subjects, including GitHub's
   immutable-ID form, and audience `sts.amazonaws.com`.
 

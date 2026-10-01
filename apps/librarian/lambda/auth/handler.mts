@@ -64,6 +64,7 @@ import { handleSharedConversationView, handleUserConversations } from './convers
 import { handleAuthorize, handleOauthMetadata, handleRegister, handleToken } from './oauth-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
 import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
+import { loadRuntimeSecrets } from '../shared/runtime-secrets.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
 
 const AUTH_RATE_LIMIT_MAX = 30;
@@ -1006,7 +1007,14 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
   // The scheduled task rides the same function: EventBridge invokes it once
   // a day with `{ task: 'subscribe_digest' }` and no HTTP shape at all.
   if ((event as { task?: unknown }).task === 'subscribe_digest') {
+    await loadRuntimeSecrets();
     return await runSubscribeDigest();
+  }
+  try {
+    await loadRuntimeSecrets();
+  } catch {
+    // Logged by the loader; nothing here may run without its keys.
+    return jsonResponse(503, { error: 'The Librarian is temporarily unavailable. Try again shortly.' }, event);
   }
   const start = performance.now();
   const summary = eventSummary(event, context);

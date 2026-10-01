@@ -99,7 +99,7 @@ Deploy steps:
 2. Package the shared auth/eval artifact and the separate streaming chat artifact.
 3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
-5. CloudFormation `update-stack` with the new code keys + secrets from `.env` (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`, `THINGY_WEB_ORIGIN_TOKEN`).
+5. CloudFormation `update-stack` with the new code keys + credential parameters (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`, `THINGY_WEB_ORIGIN_TOKEN`, ...), which the stack writes into the `weekly-thing-librarian-runtime` secret.
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
@@ -119,6 +119,24 @@ Python tests don't cover this directory — the Lambda is pure Node.
 ## Env vars set in CloudFormation
 
 These are set at deploy time from `.env`, written into the Lambda environment by CloudFormation. Don't try to read them from `process.env` outside the Lambda.
+
+**Credentials are the exception (2026-10-01).** `BUTTONDOWN_API_KEY`,
+`SESSION_SECRET`, `THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`,
+`LIBRARIAN_RETRIEVE_SECRET`, `BRAVE_SEARCH_API_KEY` and
+`LIBRARIAN_GOLDEN_RETRIEVE_SECRET` live in one Secrets Manager secret,
+`weekly-thing-librarian-runtime` (a JSON object of those names). The stack
+writes it from its NoEcho parameters (the golden value by dynamic reference),
+and the functions get only `LIBRARIAN_RUNTIME_SECRET_ARN`. `loadRuntimeSecrets()`
+(`shared/runtime-secrets.mts`) reads it once per cold start into `process.env`
+before the handler runs, so the readers below are unchanged. It logs
+`runtime_secrets_loaded` with key names only and fails closed: no secret and no
+value already present is a 503, never an unkeyed run (an empty
+`THINGY_WEB_ORIGIN_TOKEN` would switch the origin check off). Do not put a
+`{{resolve:secretsmanager}}` reference in a function's `Environment`: it is
+resolved into plaintext configuration. A new credential goes into the secret's
+`!Sub` JSON, `RUNTIME_SECRET_KEYS`, and an `AllowedPattern` that keeps `"` and
+`\` out. The runtime boundary allows reading this secret only
+(`pipeline/deploy/iam/runtime-boundary.json`, applied with `setup-oidc.sh`).
 
 | Var | Used by | Notes |
 |---|---|---|

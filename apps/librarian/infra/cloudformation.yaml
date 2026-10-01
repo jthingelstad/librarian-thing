@@ -41,12 +41,18 @@ Parameters:
   ButtondownApiKey:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
   SessionSecret:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
   ThingyWebOriginToken:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
     Default: ""
     Description: >
       Marker the thingy.thingelstad.com CloudFront distribution stamps as
@@ -56,6 +62,8 @@ Parameters:
   LibrarianRetrieveSecret:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
     Description: >
       Shared secret for trusted service-to-service calls to the critical
       Librarian retrieval endpoint.
@@ -75,11 +83,15 @@ Parameters:
   FastmailJmapToken:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
     Default: ""
     Description: Fastmail JMAP API token used to send Thingy magic-link emails.
   BraveSearchApiKey:
     Type: String
     NoEcho: true
+    AllowedPattern: '^[^"\\]*$'
+    ConstraintDescription: must not contain a double quote or a backslash.
     Default: ""
     Description: Brave Search API key for the web_search tool. Empty disables web search.
   ThingyMagicLinkFromEmail:
@@ -166,6 +178,28 @@ Resources:
         PasswordLength: 48
         ExcludePunctuation: true
 
+  # The Lambdas' credentials, read once per cold start
+  # (shared/runtime-secrets.mts) so none of them sits in a function's
+  # configuration as plaintext. The stack writes it from the deploy
+  # parameters (their AllowedPattern keeps the JSON well formed); the golden
+  # credential comes from its own generated secret by dynamic reference,
+  # secret to secret.
+  LibrarianRuntimeSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: weekly-thing-librarian-runtime
+      Description: Runtime credentials for the Librarian Lambdas, written by the stack from its deploy parameters.
+      SecretString: !Sub >-
+        {"BUTTONDOWN_API_KEY":"${ButtondownApiKey}",
+        "SESSION_SECRET":"${SessionSecret}",
+        "THINGY_WEB_ORIGIN_TOKEN":"${ThingyWebOriginToken}",
+        "FASTMAIL_JMAP_TOKEN":"${FastmailJmapToken}",
+        "LIBRARIAN_RETRIEVE_SECRET":"${LibrarianRetrieveSecret}",
+        "BRAVE_SEARCH_API_KEY":"${BraveSearchApiKey}",
+        "LIBRARIAN_GOLDEN_RETRIEVE_SECRET":"{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}"}
+
   LibrarianFunctionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -250,6 +284,9 @@ Resources:
               - Effect: Allow
                 Action: bedrock:Rerank
                 Resource: "*"
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref LibrarianRuntimeSecret
 
   LibrarianFunction:
     Type: AWS::Lambda::Function
@@ -271,6 +308,7 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BUTTONDOWN_API_KEY: !Ref ButtondownApiKey
           SESSION_SECRET: !Ref SessionSecret
+          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
           THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
@@ -309,6 +347,7 @@ Resources:
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           SESSION_SECRET: !Ref SessionSecret
+          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
           THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LIBRARIAN_RETRIEVE_SECRET: !Ref LibrarianRetrieveSecret
           LIBRARIAN_GOLDEN_RETRIEVE_SECRET: !Sub '{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}'

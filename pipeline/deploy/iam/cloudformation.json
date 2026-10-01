@@ -99,35 +99,42 @@
       "Resource": "arn:aws:s3:::weekly-thing-librarian/code/*"
     },
     {
-      "Sid": "GoldenRetrieveSecretCreate",
+      "Sid": "LibrarianSecretsCreate",
       "Effect": "Allow",
       "Action": "secretsmanager:CreateSecret",
       "Resource": "*",
       "Condition": {
         "StringLike": {
-          "secretsmanager:Name": "weekly-thing-librarian-golden-retrieval"
+          "secretsmanager:Name": [
+            "weekly-thing-librarian-golden-retrieval",
+            "weekly-thing-librarian-runtime"
+          ]
         }
       }
     },
     {
-      "Sid": "GoldenRetrieveSecretGenerate",
+      "Sid": "LibrarianSecretsGenerate",
       "Effect": "Allow",
       "Action": "secretsmanager:GetRandomPassword",
       "Resource": "*"
     },
     {
-      "Sid": "GoldenRetrieveSecretReadAndMaintain",
+      "Sid": "LibrarianSecretsReadAndMaintain",
       "Effect": "Allow",
       "Action": [
         "secretsmanager:DeleteSecret",
         "secretsmanager:DescribeSecret",
         "secretsmanager:GetSecretValue",
         "secretsmanager:ListSecretVersionIds",
+        "secretsmanager:PutSecretValue",
         "secretsmanager:TagResource",
         "secretsmanager:UntagResource",
         "secretsmanager:UpdateSecret"
       ],
-      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-golden-retrieval-*"
+      "Resource": [
+        "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-golden-retrieval-*",
+        "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-runtime-*"
+      ]
     },
     {
       "Sid": "SubscribeDigestSchedule",

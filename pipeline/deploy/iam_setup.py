@@ -168,6 +168,13 @@ def simulate(session: boto3.Session) -> None:
             "cloudformation",
             "secretsmanager:CreateSecret",
             "*",
+            True,
+            {"secretsmanager:Name": "weekly-thing-librarian-runtime"},
+        ),
+        (
+            "cloudformation",
+            "secretsmanager:CreateSecret",
+            "*",
             False,
             {"secretsmanager:Name": "unrelated-secret-test"},
         ),
@@ -229,6 +236,42 @@ def simulate(session: boto3.Session) -> None:
             {},
         ),
         ("runtime-boundary", "iam:CreateUser", base + "user/unrelated", False, {}),
+        (
+            "cloudformation",
+            "secretsmanager:UpdateSecret",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-runtime-test",
+            True,
+            {},
+        ),
+        # The Lambdas read their one runtime secret and nothing else.
+        (
+            "runtime-boundary",
+            "secretsmanager:GetSecretValue",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-runtime-test",
+            True,
+            {},
+        ),
+        (
+            "runtime-boundary",
+            "secretsmanager:GetSecretValue",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-golden-retrieval-test",
+            False,
+            {},
+        ),
+        (
+            "runtime-boundary",
+            "secretsmanager:GetSecretValue",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:unrelated-secret-test",
+            False,
+            {},
+        ),
+        (
+            "runtime-boundary",
+            "secretsmanager:PutSecretValue",
+            f"arn:aws:secretsmanager:us-east-1:{ACCOUNT}:secret:weekly-thing-librarian-runtime-test",
+            False,
+            {},
+        ),
     ]
     for name, action, resource, allowed, context in cases:
         result = iam.simulate_custom_policy(

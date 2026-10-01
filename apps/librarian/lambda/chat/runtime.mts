@@ -112,6 +112,7 @@ import {
   isOwnerSubscriberHash
 } from '../shared/conversation-modes.mjs';
 import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared/librarian-contract.mjs';
+import { loadRuntimeSecrets } from '../shared/runtime-secrets.mjs';
 
 const DEFAULT_MAX_TOOL_TURNS = 7;
 const DEFAULT_CHAT_SLOW_NOTICE_MS = 75000;
@@ -1543,6 +1544,15 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   const requestId = context?.awsRequestId || event.requestContext?.requestId || crypto.randomUUID();
   const { method, path } = methodAndPath(event);
   const summary = { request_id: requestId, method, path, origin: normalizeHeaders(event.headers || {}).origin };
+  try {
+    await loadRuntimeSecrets();
+  } catch {
+    // Logged by the loader; nothing here may run without its keys.
+    const stream = jsonResponseStream(responseStream, 503);
+    stream.write(JSON.stringify({ error: 'The Librarian is temporarily unavailable. Try again shortly.' }));
+    stream.end();
+    return;
+  }
   if (!supportsRequestedContract(event.headers || {})) {
     const stream = jsonResponseStream(responseStream, 409);
     stream.write(

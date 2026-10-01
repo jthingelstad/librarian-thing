@@ -68,6 +68,14 @@ CloudFormation parameters:
 - `SessionSecret`
 - `CorpusBucket`
 
+The credential parameters (`ButtondownApiKey`, `SessionSecret`,
+`ThingyWebOriginToken`, `LibrarianRetrieveSecret`, `FastmailJmapToken`,
+`BraveSearchApiKey`) come from this repo's GitHub Actions secrets. The stack
+writes them, with the golden-retrieval secret, into one JSON secret,
+`weekly-thing-librarian-runtime`, and the Lambdas read it at cold start
+(`shared/runtime-secrets.mts`); they are not in the function configuration.
+The parameters may not contain `"` or `\`, which would break the JSON.
+
 Local `.env` values used by upload/build scripts:
 
 - `BUTTONDOWN_API_KEY`

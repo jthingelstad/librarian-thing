@@ -93,6 +93,12 @@
         "logs:PutLogEvents"
       ],
       "Resource": "arn:aws:logs:us-east-1:999153317627:log-group:/aws/lambda/weekly-thing-librarian-*"
+    },
+    {
+      "Sid": "RuntimeSecretRead",
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-runtime-*"
     }
   ]
 }
