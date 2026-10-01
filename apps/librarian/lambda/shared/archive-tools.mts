@@ -516,25 +516,61 @@ export function domainMatches(value: unknown, wanted: string) {
   return Boolean(wanted) && (domain === wanted || domain.endsWith(`.${wanted}`));
 }
 
-// One URL, however an issue spelled it: no scheme, www, trailing slash,
-// fragment, or tracking parameters (utm_*, ref, fbclid, smid and the rest
-// below; s only on twitter.com and x.com). Other query keys stay; they can
-// name a different page.
+// One URL, however an issue spelled it: no scheme, www/m/mobile/amp host
+// prefix, trailing slash, fragment, AMP wrapper or switch, or tracking
+// parameters (utm_*, ref, fbclid, smid and the rest below; s only on
+// twitter.com and x.com). Other query keys stay; they can name a different
+// page. WT Builder's linkKey (wt-builder src/shared/links.ts) must give the
+// same key: tests/fixtures/canonical-urls.json is its contract, copied from
+// wt-builder fixtures/; change both copies together.
 const TRACKING_PARAMS = new Set([
   'ref',
   'ref_src',
   'ref_url',
   'fbclid',
   'gclid',
+  'gclsrc',
+  'dclid',
+  'gbraid',
+  'wbraid',
+  'msclkid',
+  'yclid',
+  'twclid',
   'mc_cid',
   'mc_eid',
+  'mkt_tok',
+  '_hsenc',
+  '_hsmi',
+  'oly_anon_id',
+  'oly_enc_id',
+  's_cid',
   'smid',
   'si',
   'guccounter',
-  'mkt_tok',
   'cmpid',
-  'igshid'
+  'igshid',
+  'vero_id',
+  'wickedid'
 ]);
+const AMP_PARAMS = new Set(['amp', '_amp', 'amp_js_v', 'usqp']);
+// m.example.com is example.com in another dress; amp.dev and m.me are sites
+// of their own, so a prefix only goes when a dotted host is left.
+const HOST_PREFIX = /^(?:www\d*|m|mobile|amp)\.(?=[^.]+\.)/;
+
+// The page an AMP cache or viewer URL wraps, or the URL itself.
+function unwrapAmpCache(parsed: URL) {
+  const host = parsed.hostname.toLowerCase();
+  let inner: RegExpExecArray | null = null;
+  if (host.endsWith('.cdn.ampproject.org')) inner = /^\/[a-z](?:\/s)?\/(.+)$/i.exec(parsed.pathname);
+  else if (/^(?:www\.)?google\.[a-z.]+$/.test(host)) inner = /^\/amp\/(?:s\/)?(.+)$/i.exec(parsed.pathname);
+  if (!inner) return parsed;
+  try {
+    return new URL(`https://${inner[1]}${parsed.search}`);
+  } catch {
+    return parsed;
+  }
+}
+
 // One spelling per path: each segment decoded, then encoded one way, so
 // Elf_(film) and Elf_%28film%29, Dunbar's and Dunbar%27s, M%c3%b6lkky and
 // Mölkky are one page (QA2 links L2-1: a lookup in one spelling missed the
@@ -563,16 +599,22 @@ export function linkUrlKey(value: unknown) {
   } catch {
     return raw.toLowerCase();
   }
-  const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
-  for (const key of [...parsed.searchParams.keys()]) {
+  parsed = unwrapAmpCache(parsed);
+  const host = parsed.hostname.toLowerCase().replace(HOST_PREFIX, '');
+  const kept = [...parsed.searchParams].filter(([key, value]) => {
     const name = key.toLowerCase();
-    if (/^utm_/.test(name) || TRACKING_PARAMS.has(name) || (name === 's' && /^(?:twitter|x)\.com$/.test(host))) {
-      parsed.searchParams.delete(key);
-    }
-  }
-  const query = parsed.searchParams.toString();
-  const path = canonicalPath(parsed.pathname.replace(/\/+$/, ''));
-  return `${parsed.hostname.toLowerCase().replace(/^www\./, '')}${path}${query ? `?${query}` : ''}`;
+    if (/^utm_/.test(name) || TRACKING_PARAMS.has(name) || (name === 's' && /^(?:twitter|x)\.com$/.test(host)))
+      return false;
+    return !AMP_PARAMS.has(name) && !(key === 'outputType' && value === 'amp');
+  });
+  const query = kept.length ? new URLSearchParams(kept).toString() : '';
+  const path = canonicalPath(
+    parsed.pathname
+      .replace(/\/amp(?=\/|$)/gi, '')
+      .replace(/\.amp(?=\.html?$)/i, '')
+      .replace(/\/+$/, '')
+  );
+  return `${host}${parsed.port ? `:${parsed.port}` : ''}${path}${query ? `?${query}` : ''}`;
 }
 
 // A Weekly Thing link is a headline (the item a link section is built from),

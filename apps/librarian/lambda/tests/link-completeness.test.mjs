@@ -6,6 +6,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ARCHIVE_TOOLS, linkDomain, linkUrlKey } from '../dist/shared/archive-tools.mjs';
+import canonicalUrls from './fixtures/canonical-urls.json' with { type: 'json' };
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 const D23 = '2023-05-06T12:00:00Z';
@@ -227,4 +228,13 @@ test('find_links: top_domains says how many domains it left out', async () => {
   assert.equal(out.top_domains.length, 20);
   assert.equal(out.truncated.omitted.top_domains, 5);
   assert.match(out.truncated.hint, /top_domains is the 20 most linked of 25/);
+});
+
+// Plan 2026-10-01 section 3: WT Builder's "linked before" check and this
+// index key a link one way. The fixture is WT Builder's contract, copied.
+test('linkUrlKey agrees with WT Builder on every canonical-urls case', () => {
+  for (const { url, key } of canonicalUrls.cases) assert.equal(linkUrlKey(url), key, url);
+  for (const [a, b] of canonicalUrls.different) assert.notEqual(linkUrlKey(a), linkUrlKey(b), `${a} vs ${b}`);
+  assert.equal(linkUrlKey('https://amp.dev/documentation'), 'amp.dev/documentation', 'amp.dev is its own site');
+  assert.equal(linkUrlKey('https://m.me/someone'), 'm.me/someone', 'm.me is its own site');
 });
