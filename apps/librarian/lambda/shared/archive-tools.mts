@@ -35,7 +35,6 @@ import {
   parseYearRange,
   retrieve,
   tokenize,
-  VOICE_MIN_CHARS,
   voicedText,
   localDay,
   voiceList
@@ -463,8 +462,10 @@ export function effectiveScope(scope: unknown, requestedSource: string) {
 // The host a domain filter or a link names: no scheme, www, port, path,
 // query, fragment, trailing dot or surrounding space ("github.com:443/x?y"
 // and " GitHub.com. " are github.com; each once returned 0 silently).
+// An internationalized host becomes its punycode (QA2 links L2-6:
+// 🕸💍.ws was refused as "not a host" while xn--ls8h3d.ws was taken).
 export function normalizedDomain(value: unknown) {
-  return String(value || '')
+  const host = String(value || '')
     .trim()
     .toLowerCase()
     .replace(/^(?:[a-z][a-z0-9+.-]*:\/\/)+/, '')
@@ -474,6 +475,12 @@ export function normalizedDomain(value: unknown) {
     .replace(/:\d+$/, '')
     .replace(/\.+$/, '')
     .replace(/^www\./, '');
+  if (!/[^\p{ASCII}]/u.test(host)) return host;
+  try {
+    return new URL(`https://${host}`).hostname.replace(/\.+$/, '').replace(/^www\./, '');
+  } catch {
+    return host;
+  }
 }
 
 // The host a link points at. A stored domain that is not a host gives way
@@ -522,6 +529,23 @@ const TRACKING_PARAMS = new Set([
   'cmpid',
   'igshid'
 ]);
+// One spelling per path: each segment decoded, then encoded one way, so
+// Elf_(film) and Elf_%28film%29, Dunbar's and Dunbar%27s, M%c3%b6lkky and
+// Mölkky are one page (QA2 links L2-1: a lookup in one spelling missed the
+// links stored in the other). A segment that does not decode stays as is.
+function canonicalPath(pathname: string) {
+  return pathname
+    .split('/')
+    .map((segment) => {
+      try {
+        return encodeURIComponent(decodeURIComponent(segment));
+      } catch {
+        return segment;
+      }
+    })
+    .join('/');
+}
+
 export function linkUrlKey(value: unknown) {
   const raw = String(value || '').trim();
   if (!raw) return '';
@@ -541,7 +565,7 @@ export function linkUrlKey(value: unknown) {
     }
   }
   const query = parsed.searchParams.toString();
-  const path = parsed.pathname.replace(/\/+$/, '');
+  const path = canonicalPath(parsed.pathname.replace(/\/+$/, ''));
   return `${parsed.hostname.toLowerCase().replace(/^www\./, '')}${path}${query ? `?${query}` : ''}`;
 }
 
@@ -1434,6 +1458,14 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const inSource = hasId ? await findSourceBundle({ id: input.id }, { scope }) : null;
   if (hasId && !inSource) return { error: 'Source not found in the active source scope.' };
   if (inSource && 'ambiguous' in inSource) return ambiguousSource(inSource);
+  // An id and a source_kind that disagree can only answer 0 (QA2 links
+  // L2-4: wt-351 with source_kind blog said 0 links, silently).
+  if (inSource && sourceKind && inSource.kind !== sourceKind) {
+    return {
+      error: `id ${lensSourceId(inSource.record)} is a ${inSource.kind} source; drop source_kind or pass source_kind ${inSource.kind}.`,
+      code: 'bad_request'
+    };
+  }
   // A topic matches in the link's own fields. The graph's entity_index is
   // issue-level: admitting every link of a listed issue gave "ethereum"
   // 770 links of which 1 in 50 mentioned it.
@@ -1545,7 +1577,9 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const otherSort = sort === 'newest' ? 'oldest' : 'newest';
   return markTruncated(
     {
-      applied: { sort },
+      // A source's links come in its own order; sort does not apply (QA2
+      // links L2-5: it echoed "oldest" over source order).
+      applied: { sort: inSource ? 'source_order' : sort },
       ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
       results,
       total_count: filteredLinks.length,
@@ -1730,7 +1764,7 @@ function urlKey(value: unknown) {
     let host = url.hostname.toLowerCase().replace(/^www\./, '');
     // micro.blog serves the same posts on its own host (111 resolve only there).
     if (host === 'micro.thingelstad.com' || host === 'jthingelstad.micro.blog') host = 'thingelstad.com';
-    return `${host}${url.pathname.replace(/\/$/, '')}`.toLowerCase();
+    return `${host}${canonicalPath(url.pathname.replace(/\/$/, ''))}`.toLowerCase();
   } catch {
     return raw
       .toLowerCase()
@@ -1830,6 +1864,8 @@ function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRe
   // pure duplication of two fields already present, and inconsistently
   // populated across sections. Dropped.
   delete (full as Record<string, unknown>).context;
+  // Its source is the parent.
+  delete (full as Record<string, unknown>).id;
   const child: Record<string, unknown> = {};
   const parentUrl = String(parent.url || (parent.issue_number ? `/archive/${parent.issue_number}/` : '') || '');
   for (const [key, value] of Object.entries(full)) {
@@ -1852,6 +1888,8 @@ function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRe
 
 function compactLink(link: ArchiveRecord): ArchiveRecord {
   return {
+    // The source the link sits in, for get_source (QA2 links L2-8).
+    id: linkSourceId(link) || undefined,
     source_kind: link.source_kind,
     corpus_kind: linkCorpusKind(link),
     issue_number: link.issue_number ?? null,
@@ -1998,6 +2036,11 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   const episode = raw.match(/^ep-(\d+)$/i);
   if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
   if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
+  // An archive url pasted without its scheme (QA2 links L2-7:
+  // thingelstad.com/2004/07/06/learn-to-row.html was not_found).
+  if (/^(www\.)?(jthingelstad\.micro\.blog|([a-z0-9-]+\.)*thingelstad\.com)\//i.test(raw)) {
+    return { ...rest, url: `https://${raw}` };
+  }
   return { ...rest, id: raw };
 }
 
@@ -3004,10 +3047,13 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
     chunks.push(
       ...(corpus.chunks || []).flatMap((chunk) => {
-        // voice=jamie reads only Jamie's spans: a topic he quoted is not a
-        // topic he wrote about, and the evidence never shows the quote.
+        // voice=jamie reads only Jamie's spans: a topic Jamie quoted is not
+        // a topic Jamie wrote about, and the evidence never shows the quote.
+        // The lens is a filter, not a ranker, so it keeps every voiced
+        // passage however short: a 40-character floor hid 235 sources,
+        // "Just landed in Minneapolis!" among them (QA2 lexical L2-3).
         const text = voices.length ? voicedText(chunk, voices) : chunk.text;
-        if (voices.length && String(text).length < VOICE_MIN_CHARS) return [];
+        if (voices.length && !String(text).trim()) return [];
         return [
           {
             ...chunk,
@@ -3026,11 +3072,26 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   // (matcher.mts ENTITY_ALIASES: ENS is Ethereum Name Service); the
   // separate entity lens did this until 2.0 folded it in.
   const aliases = lensAliases(topic, input.aliases);
+  // years[].top_domains counts links, by find_links' measure: editorial
+  // picks (source_kind blog or podcast: that source's links) to other
+  // sites, by host with www merged (QA2 links L9, L10).
+  const linkDomains = new Map<string, Map<string, number>>();
+  for (const link of await linkRecords(scope)) {
+    if (requestedSource && linkCorpusKind(link) !== requestedSource) continue;
+    if (inferredLinkKind(link) === 'internal' || !rankedLink(link, requestedSource)) continue;
+    const domain = linkDomain(link);
+    const id = linkSourceId(link);
+    if (!domain || !id) continue;
+    const counts = linkDomains.get(id) || new Map<string, number>();
+    counts.set(domain, (counts.get(domain) || 0) + 1);
+    linkDomains.set(id, counts);
+  }
   const payload = compactLensPayload(
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
       ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
+      top_domains_measure: linkMeasure(requestedSource),
       ...buildArchiveLens({
         topic,
         aliases,
@@ -3041,7 +3102,8 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         chunks,
         yearRange: input.year_range,
         limit: toolLimit('archive_lens', input),
-        offset: toolOffset(input)
+        offset: toolOffset(input),
+        linkDomains
       })
     },
     { params: ['year_range', 'source_kind'] }
@@ -3087,6 +3149,13 @@ function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
       return true;
     const targetUrl = link.target_url || link.url || link.link_url || '';
     if (urlKey(targetUrl) === urlKey(record.url)) return true;
+  }
+  // A site page (about, members, FAQ) has no id a link could carry: a link
+  // to its url is a link to it (QA2 links L2-2: site-members said 0 of 2).
+  // Blog posts stay with their ids, since several share one permalink.
+  if (!['blog', 'weekly_thing', 'podcast'].includes(String(record.source_kind || '')) && record.url) {
+    const targetUrl = link.target_url || link.url || link.link_url || '';
+    if (targetUrl && urlKey(targetUrl) === urlKey(record.url)) return true;
   }
   return false;
 }
@@ -3181,8 +3250,14 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
     outgoingAll.length > outgoing.length
       ? `outgoing_links is part of all ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
       : '',
+    // No shown count here: the 48K cap can cut the list after this, and
+    // id and limit never reach the rest; find_links url does (QA2 links
+    // L2-3: "shows the newest 30 of 31" over 24, with no route to 7).
     incomingAll.length > incomingShown.length
-      ? `incoming_links is the newest part of all ${incomingAll.length}; truncated.omitted counts the rest.`
+      ? `incoming_links holds the newest links to this source, not all ${incomingAll.length}; find_links with url ${absoluteSourceUrl(bundle.record.url)} lists every one.`
+      : '',
+    related.length > limit
+      ? `related_sources is the ${limit} most related of ${related.length} sources that share a domain or words with this one${limit < TOOL_LIMITS.source_neighborhood.max ? `; raise limit (up to ${TOOL_LIMITS.source_neighborhood.max}) for more` : ''}.`
       : ''
   ].filter(Boolean);
   return markTruncated(
@@ -3198,6 +3273,9 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       incoming_links: incomingShown.map(compactLink),
       ...(crossSource.length ? { cross_source_count: crossSource.length } : {}),
       ...(crossShown.length ? { cross_source_links: crossShown.map(compactLink) } : {}),
+      // Every candidate that shares a domain or words, of which
+      // related_sources holds the top limit (QA2 links L2-9).
+      related_count: related.length,
       // Five domains say what a related source linked; the full list ran
       // to 700 chars an entry (archive_gems caps the same way).
       related_sources: related.slice(0, limit).map((item) => {
@@ -3216,7 +3294,8 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       omitted: {
         outgoing_links: outgoingAll.length - outgoing.length,
         incoming_links: incomingAll.length - incomingShown.length,
-        cross_source_links: crossUnshown.length - crossShown.length
+        cross_source_links: crossUnshown.length - crossShown.length,
+        related_sources: Math.max(0, related.length - limit)
       },
       hint: hints.join(' ')
     }

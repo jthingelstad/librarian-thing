@@ -425,7 +425,7 @@
               "type": "string",
               "enum": ["newest", "oldest"],
               "default": "newest",
-              "description": "newest first (default) or oldest first, before limit applies."
+              "description": "newest first (default) or oldest first, before limit applies. With id the links keep the source's own order and applied.sort says source_order."
             },
             "match_mode": {
               "type": "string",
@@ -829,7 +829,7 @@
               "type": "integer",
               "minimum": 0,
               "default": 0,
-              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
+              "description": "Pages operation timeline only: skip this many sources, oldest first (default 0); truncated.next_offset is the value for the next page. The other operations answer for every matched source and do not page; use operation timeline to read them all."
             },
             "match_mode": {
               "type": "string",
@@ -909,7 +909,12 @@
             "type": "array"
           },
           "years": {
-            "type": "array"
+            "type": "array",
+            "description": "Per year, newest first: source_count, evidence_count, top_sections, top_domains (the 6 most linked by top_domains_measure; domain_count says of how many) and sample_sources."
+          },
+          "top_domains_measure": {
+            "type": "string",
+            "description": "What years[].top_domains counts."
           },
           "sources": {
             "type": "array"
@@ -1015,7 +1020,7 @@
   {
     "toolSpec": {
       "name": "source_neighborhood",
-      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed, and find_links with id pages through every link of a source) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1056,7 +1061,7 @@
           },
           "incoming_count": {
             "type": "integer",
-            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows up to the newest 30, and truncated.omitted counts the rest."
+            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows up to the newest 30, truncated.omitted counts the rest, and find_links with the source url lists them all."
           },
           "incoming_links": {
             "type": "array"
@@ -1066,6 +1071,10 @@
           },
           "cross_source_links": {
             "type": "array"
+          },
+          "related_count": {
+            "type": "integer",
+            "description": "Sources that share a domain or words with this one; related_sources holds the top limit."
           },
           "related_sources": {
             "type": "array"

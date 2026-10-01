@@ -683,6 +683,211 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     );
   }
 
+  // 8i. voice=jamie in archive_lens keeps every blog post whose own words
+  //     name the topic, however short (QA2 lexical L2-3: a 40-character
+  //     floor hid "Just landed in Minneapolis!", blog-805918). The oracle
+  //     reads Jamie's spans (the whole text when a chunk has none) with
+  //     images and link targets removed, and matches the whole word.
+  {
+    const ownWords = (chunk) => {
+      const text = String(chunk.text || '');
+      const parts = Array.isArray(chunk.spans)
+        ? chunk.spans.filter((span) => span.voice === 'jamie').map((span) => text.slice(span.start, span.end))
+        : [text];
+      return parts
+        .join('\n\n')
+        .replace(/!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>/gi, ' ')
+        .replace(/\]\([^)]*\)/g, '] ')
+        .replace(/https?:\/\/\S+/g, ' ');
+    };
+    for (const topic of ['Minneapolis', 'iPhone', 'Tesla']) {
+      const pattern = new RegExp(`\\b${topic}\\b`, 'i');
+      const oracle = new Set(
+        (blog.chunks || [])
+          .filter((chunk) => chunk.publish_date && pattern.test(ownWords(chunk)))
+          .map((chunk) => String(chunk.microblog_id))
+      );
+      const lens = await call('archive_lens', { topic, voice: 'jamie', source_kind: 'blog', limit: 1 });
+      check(
+        `completeness archive_lens voice=jamie ${topic} counts every post in Jamie's words`,
+        lens.total_count === oracle.size,
+        `${lens.total_count} vs ${oracle.size}`
+      );
+    }
+    const year = await call('archive_lens', {
+      topic: 'Minneapolis',
+      voice: 'jamie',
+      source_kind: 'blog',
+      year: 2008,
+      limit: 40
+    });
+    const ids = [];
+    for (let offset = 0, page = year; ;) {
+      ids.push(...(page.results || []).map((ref) => (typeof ref === 'string' ? ref : ref.id)));
+      offset = page.truncated?.next_offset || 0;
+      if (!offset) break;
+      page = await call('archive_lens', {
+        topic: 'Minneapolis',
+        voice: 'jamie',
+        source_kind: 'blog',
+        year: 2008,
+        limit: 40,
+        offset
+      });
+    }
+    check('completeness archive_lens voice=jamie keeps a short post (blog-805918)', ids.includes('blog-805918'));
+  }
+
+  // 8j. archive_lens years[].top_domains counts links, not documents: each
+  //     year's Weekly Thing headline links to other sites from the matched
+  //     issues, by host with www merged, and domain_count says how many
+  //     hosts the six are of (QA2 links L9, L10: Mastodon 2023 showed 6 of
+  //     81 with no count, and www.macstories.net apart from macstories.net).
+  {
+    const chicagoYear = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric' });
+    const issueYear = new Map(
+      bySource.weekly_thing.items.map((issue) => [
+        `wt-${issue.number}`,
+        Number(chicagoYear.format(new Date(issue.publish_date)))
+      ])
+    );
+    for (const topic of ['Mastodon', 'RSS']) {
+      const matched = new Set();
+      let first;
+      for (let offset = 0; ;) {
+        const page = await call('archive_lens', {
+          topic,
+          source_kind: 'weekly_thing',
+          limit: 40,
+          ...(offset ? { offset } : {})
+        });
+        first = first || page;
+        for (const ref of page.results || []) matched.add(typeof ref === 'string' ? ref : ref.id);
+        offset = page.truncated?.next_offset || 0;
+        if (!offset) break;
+      }
+      const oracle = new Map();
+      for (const link of bySource.weekly_thing.links) {
+        const id = `wt-${link.issue_number}`;
+        if (!matched.has(id) || (link.link_role && link.link_role !== 'headline')) continue;
+        const host = hostOf(link.url).replace(/^www\./, '');
+        if (!host || host === 'thingelstad.com' || host.endsWith('.thingelstad.com')) continue;
+        const year = issueYear.get(id);
+        if (!oracle.has(year)) oracle.set(year, new Map());
+        oracle.get(year).set(host, (oracle.get(year).get(host) || 0) + 1);
+      }
+      const wrong = [];
+      // Every year's cut, the years compaction dropped included.
+      const omitted = [...oracle.values()].reduce((sum, hosts) => sum + Math.max(0, hosts.size - 6), 0);
+      for (const row of first.years || []) {
+        const hosts = oracle.get(row.year) || new Map();
+        const want = [...hosts]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .slice(0, row.top_domains.length || 6)
+          .map(([domain, count]) => `${domain}:${count}`)
+          .join(',');
+        const got = row.top_domains.map((entry) => `${entry.domain}:${entry.count}`).join(',');
+        if (row.domain_count !== hosts.size || got !== want) {
+          wrong.push(`${row.year} ${row.domain_count}/${hosts.size} ${got} vs ${want}`);
+        }
+      }
+      check(
+        `completeness archive_lens ${topic} years[].top_domains count links by host`,
+        (first.years || []).length > 0 && wrong.length === 0,
+        wrong.slice(0, 3).join('; ')
+      );
+      check(
+        `completeness archive_lens ${topic} omitted years[].top_domains is what the years leave out`,
+        (first.truncated?.omitted?.['years[].top_domains'] || 0) === omitted,
+        `${first.truncated?.omitted?.['years[].top_domains']} vs ${omitted}`
+      );
+    }
+  }
+
+  // 8k. A url finds every link to that page however its path was
+  //     percent-encoded (QA2 links L2-1: Elf_%28film%29 found 0 of 8). Each
+  //     spelling in a group of corpus links whose paths differ only in
+  //     encoding finds the whole group.
+  {
+    const groups = new Map();
+    for (const link of allLinks) {
+      let parsed;
+      let path;
+      try {
+        parsed = new URL(String(link.url));
+        path = decodeURIComponent(parsed.pathname).replace(/\/+$/, '');
+      } catch {
+        continue;
+      }
+      const key = `${parsed.hostname.toLowerCase().replace(/^www\./, '')}${path}${parsed.search}`;
+      const group = groups.get(key) || { size: 0, spellings: new Map() };
+      group.size += 1;
+      const spelling = parsed.pathname.replace(/\/+$/, '');
+      if (!group.spellings.has(spelling)) group.spellings.set(spelling, link.url);
+      groups.set(key, group);
+    }
+    const split = [...groups].filter(([, group]) => group.spellings.size > 1);
+    const short = [];
+    for (const [key, group] of split) {
+      for (const url of group.spellings.values()) {
+        const found = await call('find_links', { url, limit: 1 });
+        if (found.total_count !== group.size) short.push(`${key} ${url} ${found.total_count}/${group.size}`);
+      }
+    }
+    check(
+      'completeness find_links url finds every encoding of a path',
+      split.length > 0 && short.length === 0,
+      `${short.length} spellings short across ${split.length} groups: ${short.slice(0, 3).join('; ')}`
+    );
+    const pins = [
+      ['https://en.wikipedia.org/wiki/Elf_%28film%29', 8],
+      ['https://en.wikipedia.org/wiki/Elf_(film)', 8],
+      ['https://en.wikipedia.org/wiki/The_Replacements_(band)', 7],
+      ['https://en.wikipedia.org/wiki/The_Replacements_%28band%29', 7],
+      ["https://en.wikipedia.org/wiki/Dunbar's_number", 4],
+      ['https://en.wikipedia.org/wiki/Dunbar%27s_number', 4],
+      ['https://en.wikipedia.org/wiki/M%c3%b6lkky', 4]
+    ];
+    const off = [];
+    for (const [url, want] of pins) {
+      const found = await call('find_links', { url, limit: 1 });
+      if (found.total_count !== want) off.push(`${url} ${found.total_count}/${want}`);
+    }
+    check('completeness find_links url encoding pins', off.length === 0, off.join('; '));
+  }
+
+  // 8l. A site page's incoming_count is every corpus link to its url (QA2
+  //     links L2-2: site-members said 0; wt-347 and wt-348 link it).
+  {
+    const pages = new Set(
+      (wt.chunks || [])
+        .filter((chunk) => ['site_page', 'faq'].includes(chunk.source_kind) && /^\//.test(String(chunk.url || '')))
+        .map((chunk) => String(chunk.url).replace(/\/+$/, ''))
+    );
+    const wrong = [];
+    for (const page of pages) {
+      const want = allLinks.filter((link) => {
+        const host = hostOf(link.url).replace(/^www\./, '');
+        let path = '';
+        try {
+          path = new URL(String(link.url)).pathname.replace(/\/+$/, '');
+        } catch {
+          return false;
+        }
+        return host === 'weekly.thingelstad.com' && path === page;
+      }).length;
+      const near = await call('source_neighborhood', { id: `site-${page.split('/').at(-1)}` });
+      if (near.incoming_count !== want) wrong.push(`site-${page.split('/').at(-1)} ${near.incoming_count}/${want}`);
+    }
+    check(
+      'completeness site pages count every link to them',
+      pages.size > 0 && wrong.length === 0,
+      `${pages.size} pages: ${wrong.join(', ')}`
+    );
+    const members = await call('source_neighborhood', { id: 'site-members' });
+    check('completeness site-members incoming_count 2', members.incoming_count === 2, String(members.incoming_count));
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

@@ -271,6 +271,18 @@ function checkAccounting(tool, body, label) {
       `${listed} + ${omitted['years[].items'] || 0} vs ${body.total_count}`
     );
   }
+  if (tool === 'source_neighborhood') {
+    // Each list and its count (QA2 links L2-9: related_sources was cut to
+    // limit with no count).
+    for (const [list, count] of [
+      ['outgoing_links', 'outgoing_count'],
+      ['incoming_links', 'incoming_count'],
+      ['related_sources', 'related_count']
+    ]) {
+      const shown = (body[list] || []).length + (omitted[list] || 0);
+      check(label(`${list} shown + omitted = ${count}`), shown === body[count], `${shown} vs ${body[count]}`);
+    }
+  }
   if (!Number.isInteger(body.total_count)) return;
   for (const key of PARTITIONS) {
     if (!Array.isArray(body[key]) || omitted[key]) continue;
@@ -797,11 +809,87 @@ await run('get_issue', { number: '182' });
 await run('get_section', { number: '321', section: 'Journal' });
 await run('find_links', { topic: 'ethereum', limit: 5 });
 await run('domain_history', { domain: 'macstories.net' });
+// QA2 links L2-6: an internationalized domain is a host, taken as its
+// punycode, at the door and in the tool.
+{
+  const idn = '\u{1F578}\u{1F48D}.ws';
+  const problems = validateToolArguments('find_links', { domain: idn });
+  const out = await run('find_links', { domain: idn, limit: 1 });
+  check(
+    'KA find_links takes an IDN domain as its punycode',
+    !problems.length && !out?.error && out?.applied?.domain === 'xn--sr8hvo.ws',
+    `${problems.join('; ')} ${out?.error || ''} ${out?.applied?.domain}`
+  );
+}
+// QA2 links L2-7: an archive url without its scheme is still a url.
+for (const tool of ['get_source', 'find_links', 'source_neighborhood']) {
+  const out = await run(tool, { id: 'thingelstad.com/2004/07/06/learn-to-row.html', limit: 1 });
+  const id = out?.source?.id || out?.results?.[0]?.id;
+  check(`KA ${tool} resolves a scheme-less archive url`, id === 'blog-1076487', String(out?.error || id));
+}
+// QA2 links L2-4: an id and a source_kind that disagree are refused, not
+// answered with 0 links.
+await run('find_links', { id: 'wt-351', source_kind: 'blog' }, { expectError: true }).then((out) => {
+  const said = `${out?.error || ''} ${out?.truncated?.hint || ''}`;
+  check(
+    'KA find_links id with a contradicting source_kind says so',
+    /source_kind/.test(said),
+    JSON.stringify(out).slice(0, 160)
+  );
+});
+// QA2 links L2-5: with id the links keep source order, and applied.sort
+// never claims an order it did not apply.
+for (const sort of ['oldest', 'newest']) {
+  const out = await run('find_links', { id: 'wt-351', sort, limit: 50 });
+  const dates = (out?.results || []).map((link) => String(link.publish_date || ''));
+  const ordered = dates.every(
+    (date, index) => !index || (sort === 'oldest' ? dates[index - 1] <= date : dates[index - 1] >= date)
+  );
+  const inOrder = (out?.results || []).length > 1 && dates.some((date) => date !== dates[0]) && ordered;
+  check(
+    `KA find_links id echoes the order it applied (sort ${sort})`,
+    out?.applied?.sort !== sort || inOrder,
+    String(out?.applied?.sort)
+  );
+}
 await run('latest_content', { limit: 3 });
 await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });
 await run('compare_eras', { topic: 'ethereum', year_a: [2021, 2021], year_b: [2024, 2024], limit: 2 });
 await run('source_neighborhood', { id: 'wt-182', limit: 3 });
+// QA2 links L2-3, L2-8: blog-1075885 has more incoming links than the
+// list holds. The hint names find_links url, which reaches every one, and
+// every listed link names a source get_source opens.
+for (const id of ['blog-1075885', 'wt-351', 'wt-182']) {
+  const near = await run('source_neighborhood', { id, limit: 3 });
+  const rendered = renderToolCallResult('source_neighborhood', near).structured || {};
+  if (rendered.incoming_count > (rendered.incoming_links || []).length) {
+    const hint = String(rendered.truncated?.hint || '');
+    const all = await run('find_links', { url: rendered.source?.url, limit: 1 });
+    check(
+      `KA source_neighborhood ${id} routes to every incoming link`,
+      /find_links with url/.test(hint) && all?.total_count >= rendered.incoming_count,
+      `${all?.total_count} vs ${rendered.incoming_count}: ${hint}`
+    );
+  } else {
+    check(`KA source_neighborhood ${id} has more incoming links than it lists`, id !== 'blog-1075885');
+  }
+  const ids = new Set(
+    ['outgoing_links', 'incoming_links', 'cross_source_links'].flatMap((list) =>
+      (rendered[list] || []).map((link) => link.id)
+    )
+  );
+  const dead = [];
+  for (const linkId of ids) {
+    const source = await ARCHIVE_TOOLS.get_source({ id: linkId, format: 'outline' }, { scope: 'all' });
+    if (!linkId || source?.source?.id !== linkId) dead.push(String(linkId));
+  }
+  check(
+    `KA source_neighborhood ${id} every link names a source get_source opens`,
+    ids.size > 0 && !dead.length,
+    dead.join(', ')
+  );
+}
 await run('find_evidence', {
   claims: ['Jamie registered thingelstad.eth in 2021', 'Jamie started The Weekly Thing in 2017']
 }).then((out) => {
@@ -981,6 +1069,40 @@ await run('currently_history', { limit: 3 });
 await run('find_links', { domain: 'github.com', limit: 3 });
 await run('list_content', { topic: 'Mastodon', limit: 3 });
 await run('archive_lens', { topic: 'Mastodon', limit: 3 });
+// QA2 lexical L2-2: following next_offset reaches every matched source.
+// Only operation timeline pages; the others answer for the whole match,
+// offer no next_offset, and their hint names timeline as the way through.
+for (const operation of ['timeline', 'by_year', 'first_last', 'reading_path', 'source_compare']) {
+  const seen = new Set();
+  let offset = 0;
+  let total = 0;
+  let stale = 0;
+  let hint = '';
+  for (let pages = 0; pages < 60; pages += 1) {
+    const page = await run('archive_lens', { topic: 'RSS', operation, limit: 7, ...(offset ? { offset } : {}) });
+    total = page?.total_count || 0;
+    if (!pages) hint = String(page?.truncated?.hint || '');
+    const before = seen.size;
+    Object.keys(page?.sources_by_id || {}).forEach((id) => seen.add(id));
+    if (pages && seen.size === before) stale += 1;
+    offset = page?.truncated?.next_offset || 0;
+    if (!offset) break;
+  }
+  if (operation === 'timeline') {
+    check(
+      `KA archive_lens timeline next_offset walk reaches every source`,
+      seen.size === total,
+      `${seen.size} vs ${total}`
+    );
+  } else {
+    check(`KA archive_lens ${operation} offers no page that shows nothing new`, stale === 0, `${stale} stale pages`);
+    check(
+      `KA archive_lens ${operation} hint names operation timeline for the rest`,
+      seen.size === total || /operation timeline/.test(hint),
+      hint
+    );
+  }
+}
 await run('on_this_day', { date: '05-13', limit_per_year: 1 });
 // QA2 T2-1: a windowed call at the top limit passes the 48K cap; the cut
 // must keep every year and its counts (checkAccounting on the render).
