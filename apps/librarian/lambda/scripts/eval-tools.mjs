@@ -621,6 +621,21 @@ await run('find_evidence', {
   );
 });
 await run('media_search', { query: 'minnehaha creek', limit: 4 });
+// File names are searchable (plan 4 step 1): the Straw Poll charts are
+// found by the word only their file names hold, and say so.
+await run('media_search', { query: 'strawpoll', limit: 12 }).then((out) => {
+  const results = out?.results || [];
+  check(
+    'KA media_search strawpoll finds the poll charts by file name',
+    out?.total_count >= 2,
+    String(out?.total_count)
+  );
+  check(
+    'KA media_search file-name match says filename',
+    results.some((item) => (item.match_reasons || []).some((reason) => reason.startsWith("filename: 'strawpoll"))),
+    JSON.stringify(results.map((item) => item.match_reasons))
+  );
+});
 await run('currently_history', { kind: 'reading', limit: 5 });
 {
   // on_this_day: WT1 went out 2017-05-13; past years only; every id resolves.

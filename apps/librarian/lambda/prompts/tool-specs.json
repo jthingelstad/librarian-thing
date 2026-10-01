@@ -1201,7 +1201,7 @@
   {
     "toolSpec": {
       "name": "media_search",
-      "description": "Search the photo and image index across the archive by what the images show. Every word of query must appear in the photo's alt text, caption, nearby context, vision-model description of its actual content, or a blog post's title - so visual queries work even when the caption never names what is shown. Words match whole, accents either way, and plurals by default (dog finds dogs). Omit query to list photos newest first, e.g. one issue's with issue_number. Results are newest first; page with offset. A Weekly Thing photo that reprints a blog photo folds into the blog photo, which is canonical; its also_in_issues names the issues it ran in, and collapsed_copies counts the folded copies. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
+      "description": "Search the photo and image index across the archive by what the images show. Every word of query must appear in the photo's alt text, caption, nearby context, vision-model description of its actual content, a blog post's title, or the words in its file name (strawpoll297.png is found by strawpoll) - so visual queries work even when the caption never names what is shown. Words match whole, accents either way, and plurals by default (dog finds dogs). Omit query to list photos newest first, e.g. one issue's with issue_number. Results are newest first; page with offset. A Weekly Thing photo that reprints a blog photo folds into the blog photo, which is canonical; its also_in_issues names the issues it ran in, and collapsed_copies counts the folded copies. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1260,7 +1260,7 @@
       }
     },
     "mcp": {
-      "description": "Find photos by what they show: every word of query in the alt text, caption, context, a vision description of the image, or a blog post's title (plurals match; dog finds dogs). Omit query to list, e.g. one issue's photos. Newest first; page with offset. Returns image_url and the source each appeared in; view_photo shows them to you (viewable: false says it cannot). Embed one as [![alt](image_url)](source_url).",
+      "description": "Find photos by what they show: every word of query in the alt text, caption, context, a vision description of the image, a blog post's title, or its file name's words (plurals match; dog finds dogs). match_reasons names the field each word matched. Omit query to list, e.g. one issue's photos. Newest first; page with offset. Returns image_url and the source each appeared in; view_photo shows them to you (viewable: false says it cannot). Embed one as [![alt](image_url)](source_url).",
       "outputSchema": {
         "type": "object",
         "properties": {

@@ -3464,9 +3464,54 @@ function mediaFields(item: Record<string, unknown>, kind: string): Array<[string
     ['alt', item.alt],
     ['context', item.context],
     ['description', item.description],
-    ...(kind === 'weekly_thing' ? [] : ([['title', item.subject]] as Array<[string, unknown]>))
+    ...(kind === 'weekly_thing' ? [] : ([['title', item.subject]] as Array<[string, unknown]>)),
+    // Last, so a word the photo's own text holds is credited there.
+    ['filename', fileNameWords(item)]
   ];
   return fields.map(([field, value]) => [field, String(value || '')] as [string, string]).filter(([, value]) => value);
+}
+
+// The words in a photo's file name (plan 4 step 1): strawpoll297.png was
+// unfindable by "strawpoll", which appeared nowhere in its text. Hashes,
+// UUIDs, camera and CMS names, dimensions and random ids are not words.
+const FILE_NAME_STOPWORDS = new Set(
+  (
+    'image images img imgs screenshot screenshots screen shot shots photo photos picture pictures untitled ' +
+    'cover upload uploads uploaded scaled thumb thumbs thumbnail large small medium original copy edited edit ' +
+    'final file files download unnamed default header banner resized resize crop cropped full size frame clip ' +
+    'attachment media asset assets temp test none null blank jpeg webp heic tiff export with your from that ' +
+    'this have what when where into over about them they their were will more'
+  ).split(' ')
+);
+const FILE_NAME_WORDS = new WeakMap<object, string>();
+
+export function fileNameWords(item: Record<string, unknown>) {
+  const known = FILE_NAME_WORDS.get(item);
+  if (known !== undefined) return known;
+  let base = '';
+  try {
+    base = decodeURIComponent(new URL(String(item.url || '')).pathname.split('/').pop() || '');
+  } catch {
+    base = '';
+  }
+  base = base
+    .replace(/\.[a-z0-9]{2,5}$/i, '')
+    .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, ' ');
+  const words = new Set<string>();
+  for (const token of base.split(/[^\p{L}\p{N}]+/u)) {
+    if (!token) continue;
+    if (/^[0-9a-f]{8,}$/i.test(token) && /\d/.test(token)) continue;
+    if (/\p{L}\d+\p{L}.*\d|\d+\p{L}+\d/u.test(token)) continue;
+    for (const part of token.split(/\d+/)) {
+      for (const piece of new Set([part, ...part.split(/(?<=\p{Ll})(?=\p{Lu})/u)])) {
+        const word = piece.toLowerCase();
+        if (word.length >= 4 && /^\p{L}+$/u.test(word) && !FILE_NAME_STOPWORDS.has(word)) words.add(word);
+      }
+    }
+  }
+  const text = [...words].join(' ');
+  FILE_NAME_WORDS.set(item, text);
+  return text;
 }
 
 // Photos by what they show (2.1.0). Every word of query must appear, each
