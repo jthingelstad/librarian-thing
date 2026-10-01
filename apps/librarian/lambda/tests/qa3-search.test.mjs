@@ -2,7 +2,8 @@
 // photos and time (Q2, Q3, Q6, Q7, Q9, Q10, Q13, Q14, Q17, Q20).
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { utilityDomain } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, utilityDomain } from '../dist/shared/archive-tools.mjs';
+import { validateToolArguments } from '../dist/shared/mcp.mjs';
 import { dedupeJournalTwins, pageWithoutTwins, primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 // Nothing here calls Bedrock.
@@ -109,4 +110,31 @@ test('a utility entry is its own host only; wikipedia.org keeps its language edi
   ]) {
     assert.equal(utilityDomain(host), false, host);
   }
+});
+
+test('a blank url, id or domain is refused, never read as absent (QA3 Q3)', async () => {
+  for (const [tool, args, key] of [
+    ['find_links', { url: '' }, 'url'],
+    ['find_links', { url: '   ' }, 'url'],
+    ['find_links', { id: '  ' }, 'id'],
+    ['find_links', { domain: '' }, 'domain'],
+    ['list_content', { domain: ' ' }, 'domain'],
+    ['search_archive', { query: 'rss', section: ' ' }, 'section'],
+    ['archive_gems', { theme: '' }, 'theme']
+  ]) {
+    assert.match(
+      validateToolArguments(tool, args).join(' '),
+      new RegExp(`^${key} is blank`),
+      `${tool} ${JSON.stringify(args)}`
+    );
+  }
+  assert.deepEqual(validateToolArguments('get_source', { id: '  ' }), ['id is required']);
+  assert.deepEqual(validateToolArguments('find_links', { domain: 'x.com' }), []);
+
+  primeCorpusCachesForTests(passageFixtures());
+  for (const args of [{ url: '' }, { id: '  ' }, { domain: '' }]) {
+    const out = await ARCHIVE_TOOLS.find_links(args, { scope: 'all' });
+    assert.equal(out.code, 'bad_request', JSON.stringify(args));
+  }
+  assert.equal((await ARCHIVE_TOOLS.list_content({ domain: '  ' }, { scope: 'all' })).code, 'bad_request');
 });

@@ -1499,7 +1499,19 @@ function findLinksSort(value: unknown): 'newest' | 'oldest' {
     : 'newest';
 }
 
+// A blank filter is refused, never read as absent: url:"" listed all
+// 36,523 links (QA3 Q3). The door (validateToolArguments) refuses it
+// first; this holds for registry calls that skip the door.
+function blankFilter(input: ToolArgs, keys: Array<keyof ToolArgs>) {
+  const key = keys.find((name) => typeof input[name] === 'string' && !String(input[name]).trim());
+  return key
+    ? { error: `${key} is blank: give it a value, or leave ${key} out to apply no ${key} filter.`, code: 'bad_request' }
+    : null;
+}
+
 async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const blank = blankFilter(input, ['url', 'id', 'domain', 'topic']);
+  if (blank) return blank;
   const domain = normalizedDomain(input.domain || '');
   // Case is the matcher's business: lowercasing here made case_sensitive a no-op.
   const topic = String(input.topic || '').trim();
@@ -2725,6 +2737,8 @@ async function matchedContent(input: ToolArgs, scope: unknown) {
 }
 
 async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const blank = blankFilter(input, ['domain', 'topic']);
+  if (blank) return blank;
   const { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched } =
     await matchedContent(input, scope);
   const byRecord = new Map(matched.map((entry) => [entry.record, entry]));

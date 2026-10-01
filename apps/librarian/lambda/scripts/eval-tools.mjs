@@ -1088,6 +1088,38 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     .filter((problem) => / to -|from - to/.test(problem));
   check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
 }
+// QA3 Q3: a blank or whitespace url, id or domain is refused at the door
+// on every tool that takes one, never read as absent (find_links url:""
+// listed all 36,523 links); find_links and list_content refuse it in
+// process too.
+{
+  const widened = [];
+  for (const tool of Object.keys(ARCHIVE_TOOLS)) {
+    const properties = mcpToolDeclarations([tool])[0]?.inputSchema?.properties || {};
+    for (const key of ['url', 'id', 'domain']) {
+      if (!(key in properties)) continue;
+      for (const value of ['', '   ']) {
+        if (!validateToolArguments(tool, { [key]: value }).some((problem) => problem.startsWith(`${key} is`))) {
+          widened.push(`${tool}.${key}=${JSON.stringify(value)}`);
+        }
+      }
+    }
+  }
+  check('KA a blank url, id or domain is refused at the door', widened.length === 0, widened.join(', '));
+  for (const [tool, args] of [
+    ['find_links', { url: '' }],
+    ['find_links', { id: '  ' }],
+    ['find_links', { domain: '' }],
+    ['list_content', { domain: ' ' }]
+  ]) {
+    const out = await run(tool, args, { expectError: true });
+    check(
+      `KA ${tool} ${JSON.stringify(args)} is bad_request`,
+      out?.code === 'bad_request',
+      JSON.stringify(out).slice(0, 120)
+    );
+  }
+}
 // QA2 L2-9 / L2-10: an offset past the end says so for every pageOf tool,
 // and a reversed year_range is refused in-process as at the door.
 for (const [tool, args] of [
