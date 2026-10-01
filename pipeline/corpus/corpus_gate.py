@@ -9,7 +9,10 @@ anything reaches S3. It fails the deploy when:
 - the Journal copies left unmatched rise above JOURNAL_UNMATCHED_MAX, the
   count after the 2026-10-01 permalink repair (pipeline/audits/
   repair_journal_permalinks.py), so a regression in matching or ingest
-  cannot quietly undo it; or
+  cannot quietly undo it;
+- a chunk's Journal copy is a post from outside its issue's week, [previous
+  issue - 3 days, this issue + 1 day] (QA2 I2-1): a Journal link to an older
+  post is a reference, and search would drop the passage as its twin; or
 - an issue page on the weekly site carries an audio edition the candidate
   does not (or carries a different one). The audio record lives only in the
   site's render copy (librarian_core.audio); a site checkout that failed
@@ -33,6 +36,7 @@ import argparse
 import gzip
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -41,10 +45,35 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
 
 from librarian_core.audio import audio_record, read_site_frontmatter  # noqa: E402
+from librarian_core.corpus import _journal_window  # noqa: E402
 
 # Journal copies the build could not tie to a blog post, after the
-# 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv).
-JOURNAL_UNMATCHED_MAX = 33
+# 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv)
+# and the merged-series match (QA2 I2-7: five of the 33 found their post).
+JOURNAL_UNMATCHED_MAX = 28
+_PERMALINK_DAY_RE = re.compile(r"/(\d{4})/(\d{2})/(\d{2})/")
+
+
+def journal_copy_outside_week(corpus: dict[str, Any]) -> list[str]:
+    """Chunk Journal copies whose post's permalink day is outside the issue's
+    week, one ``wt-N:microblog_id`` each. The window is the build's own
+    (``_journal_window``), over the issues in build order."""
+    weeks: dict[str, tuple[str, str]] = {}
+    previous = None
+    for issue in corpus.get("issues") or []:
+        day = str(issue.get("publish_date") or "")[:10]
+        weeks[str(issue.get("number"))] = _journal_window(day, previous)
+        previous = day or previous
+    stale = []
+    for chunk in corpus.get("chunks") or []:
+        first, last = weeks.get(str(chunk.get("issue_number")), ("", ""))
+        for copy in chunk.get("journal_posts") or []:
+            match = _PERMALINK_DAY_RE.search(str(copy.get("canonical_url") or ""))
+            if not first or not match or copy.get("copy_of_microblog_id") is None:
+                continue
+            if not first <= "-".join(match.groups()) <= last:
+                stale.append(f"wt-{chunk['issue_number']}:{copy['copy_of_microblog_id']}")
+    return sorted(set(stale))
 
 
 def site_audio(site_archive_dir: Path) -> dict[int, dict[str, Any]]:
@@ -91,6 +120,12 @@ def gate_failures(corpus: dict[str, Any], site_archive_dir: Path | None) -> list
         failures.append(
             f"journal copies unmatched rose to {unmatched} (ceiling {JOURNAL_UNMATCHED_MAX}): "
             "see journal_unmatched in the candidate"
+        )
+    stale = journal_copy_outside_week(corpus)
+    if stale:
+        failures.append(
+            f"{len(stale)} Journal copies are posts from outside their issue's week: "
+            + ", ".join(stale[:8])
         )
     if site_archive_dir is None or not site_archive_dir.is_dir():
         failures.append(
