@@ -21,6 +21,11 @@ Rules:
 - Multi-word terms always compile as `phrase`, even when `stem` is
   requested — a token-bag interpretation is the round-five alias bug.
 - The server never silently applies a looser mode than requested.
+- An emoji or symbol in the text may carry a variation selector
+  (U+FE0E, U+FE0F) whether or not the query typed one: `game ⚽ North`
+  finds `game ⚽️ North`, and the span keeps the selector (QA2 L2-1). A
+  keycap (U+20E3) is not a selector, so `2025` does not match keycap
+  digits; whether it should is an open question for Jamie.
 - `match_mode` is an input parameter on `archive_lens`, `list_content`,
   `find_links`, and the applied mode is echoed in the response as
   `match_mode`.

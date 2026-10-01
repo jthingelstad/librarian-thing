@@ -209,3 +209,23 @@ test('hits report all variants: literal span included even when inflected comes 
   assert.ok(spans.includes('goalies'));
   assert.ok(spans.includes('goalie'), 'literal variant reported even though inflected occurs first');
 });
+
+test('literal phrases cross an emoji that carries a variation selector (QA2 L2-1)', () => {
+  const text = 'the first round of the playoffs. ⚽️\n\nNov 2, 2024';
+  for (const phrase of ['playoffs. ⚽️ Nov 2', 'playoffs. ⚽ Nov 2']) {
+    const quote = compileLiteral(phrase);
+    assert.ok(quote.matches(text), phrase);
+    const hit = quote.firstHit(text);
+    assert.equal(hit.span, 'playoffs. ⚽️\n\nNov 2', 'the span is the text, selector included');
+    assert.equal(text.slice(hit.offset, hit.offset + hit.span.length), hit.span);
+  }
+  assert.ok(compileLiteral('gorgeous! ☀️ This').matches('so gorgeous! ☀️ This is'));
+  assert.ok(compileLiteral('roast ☕ Hat').matches('a new roast ☕️ Hat tip'), 'selector in the text only');
+  assert.ok(m('AT&T ☕ Park').matches('at AT&T ☕️ Park'), 'significant-punctuation terms too');
+  assert.equal(compileLiteral('playoffs. Nov 2').matches(text), false, 'the emoji is still text');
+  // Keycap digits are a product question (QA2 Question 3): 2025 does not
+  // match 2️⃣0️⃣2️⃣5️⃣, as before.
+  const keycaps = ['2', '0', '2', '5'].map((digit) => `${digit}️⃣`).join('');
+  assert.equal(compileLiteral('2025').matches(`the year ${keycaps}`), false);
+  assert.equal(m('2025').matches(`the year ${keycaps}`), false);
+});

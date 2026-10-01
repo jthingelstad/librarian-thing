@@ -492,6 +492,29 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     }
   }
 
+  // 8f. quote_search finds a verbatim phrase whatever emoji it crosses
+  //     (QA2 L2-1): the selector after an emoji (⚽ + U+FE0F) once ended
+  //     every match, so 86 of 86 "word, emoji, word" phrases read as absent.
+  {
+    const missed = [];
+    let asked = 0;
+    for (const issue of (wt.issues || []).filter((item) => /\uFE0F\s+\p{L}/u.test(item.body || ''))) {
+      if (asked >= 25) break;
+      const phrase = String(issue.body).match(/\p{L}+[.,!]? \S*\uFE0F\S*\s+\p{L}{3,}/u)?.[0];
+      if (!phrase) continue;
+      asked += 1;
+      const result = await call('quote_search', { phrase, year: yearOf(issue) });
+      if (!(result.results || []).some((row) => row.id === `wt-${issue.number}`)) {
+        missed.push(`wt-${issue.number}: ${phrase}`);
+      }
+    }
+    check(
+      'completeness quote_search crosses emoji variation selectors',
+      asked === 25 && missed.length === 0,
+      `${missed.length} of ${asked} missed: ${missed.slice(0, 4).join(' | ')}`
+    );
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

@@ -158,9 +158,17 @@ const APOSTROPHE = "(?:['\\u2018\\u2019\\u02BC\\u2032]|&#0?39;|&apos;|&[lr]squo;
 const QUOTE = '(?:["\\u201C\\u201D\\u201E\\u2033]|&quot;|&[lr]dquo;)';
 const DASH = '(?:[-\\u2010-\\u2015\\u2212]|&[mn]dash;)';
 const AMPERSAND = '(?:&amp;|&)';
+// A variation selector (U+FE0E text, U+FE0F emoji presentation) the text
+// carries after a character the query typed: foldQuery strips both as
+// marks, so "⚽️" arrives as "⚽" while the text still reads "⚽\uFE0F"
+// (QA2 L2-1: 86 of 86 "word ⚽️ word" phrases were missed). Only these two:
+// a keycap (U+20E3) still makes "2️⃣" a different character from "2".
+const VARIATION_SELECTOR = '[\\uFE0E\\uFE0F]?';
 // Whitespace in a literal phrase: any run of spaces, nbsp, line breaks and
 // the markdown emphasis between words ("simply **great**").
-const LITERAL_GAP = '(?:[\\s\\u00A0*_]|&nbsp;)+';
+const LITERAL_GAP = `${VARIATION_SELECTOR}(?:[\\s\\u00A0*_]|&nbsp;)+`;
+// Between the words of a term with significant punctuation (AT&T Park).
+const WORD_GAP = `${VARIATION_SELECTOR}(?:[\\s\\u00A0]|&nbsp;)+`;
 // Between the tokens of a phrase: anything that is not a letter or digit,
 // an entity counting as one character (Product &amp; Partner Fair).
 const PHRASE_GAP = '(?:&(?:amp|nbsp|quot|apos|#\\d+);|[^\\p{L}\\p{N}])+';
@@ -183,11 +191,13 @@ function typedChar(char: string) {
     const variants = LETTER_VARIANTS.get(char);
     return variants ? `[${char}${variants.join('')}]` : char;
   }
+  if (/^[\p{L}\p{N}]$/u.test(char)) return escapeRegExp(char);
   if (char === "'") return APOSTROPHE;
   if (char === '"') return QUOTE;
   if (char === '-') return DASH;
   if (char === '&') return AMPERSAND;
-  return escapeRegExp(char);
+  // A symbol or emoji may carry a selector in the text (QA2 L2-1).
+  return escapeRegExp(char) + VARIATION_SELECTOR;
 }
 
 // One token or literal string as a pattern, every character typedChar.
@@ -233,7 +243,7 @@ function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitiv
   }
   if (significantPunctuation(folded)) {
     // The string itself between word boundaries: C++ is C++, never "c'mon".
-    const body = typedPattern(folded, '(?:[\\s\\u00A0]|&nbsp;)+');
+    const body = typedPattern(folded, WORD_GAP);
     const re = new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
     return { raw: term, mode: tokens.length > 1 || /\s/.test(folded) ? 'phrase' : 'exact', re, strict: true };
   }
