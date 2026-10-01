@@ -5,8 +5,8 @@
   "server": {
     "name": "librarian",
     "title": "The Librarian - Jamie Thingelstad's archive",
-    "version": "2.4.0",
-    "version_format": "2.4.0+tools.<fingerprint>: the fingerprint hashes every packaged prompt file, the tool specs included, so it changes whenever the declared tools do",
+    "version": "2.5.0",
+    "version_format": "2.5.0+tools.<fingerprint>: the fingerprint hashes every packaged prompt file, the tool specs included, so it changes whenever the declared tools do",
     "website_url": "https://thingy.thingelstad.com/",
     "icons": [
       {

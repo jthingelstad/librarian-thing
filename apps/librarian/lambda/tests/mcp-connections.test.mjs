@@ -280,8 +280,8 @@ test('pure helpers: ids, page sizes and row shapes', () => {
   );
 });
 
-test('the contract (4.13.0, now 4.15.0) declares the /memory MCP actions', () => {
-  assert.equal(LIBRARIAN_CONTRACT.version, '4.15.0');
+test('the contract (4.13.0, now 4.16.0) declares the /memory MCP actions', () => {
+  assert.equal(LIBRARIAN_CONTRACT.version, '4.16.0');
   const actions = LIBRARIAN_CONTRACT.endpoints['/memory'].actions;
   assert.deepEqual(Object.keys(actions).sort(), [
     'mcp_clients',
