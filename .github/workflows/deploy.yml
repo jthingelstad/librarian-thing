@@ -196,6 +196,10 @@ jobs:
       # committed recall baseline. Failures block the deploy.
       - name: Tool-surface eval (invariants + known answers)
         run: npm --prefix apps/librarian/lambda run build && node apps/librarian/lambda/scripts/eval-tools.mjs
+        env:
+          # A push that rebuilds a corpus moves recall on purpose; the corpus
+          # gate below checks the baseline against the candidates instead.
+          EVAL_SKIP_BASELINE: ${{ (steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true') && '1' || '0' }}
 
       # Audio pointers on issue records (librarian_core.audio): the audio
       # edition's record lives only in the site's archive page frontmatter.

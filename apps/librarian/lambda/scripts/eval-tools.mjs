@@ -28,6 +28,11 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const distDir = process.env.EVAL_DIST_DIR || path.join(here, '..', 'dist');
 const baselinePath = path.join(here, '..', 'eval', 'baseline.json');
 const updateBaseline = process.argv.includes('--update-baseline');
+// Set by deploy.yml when the push rebuilds a corpus: the recall baseline
+// describes the corpora being built, so the corpus gate checks it against
+// the candidates, and the code eval over the live corpora checks only the
+// invariants and known answers.
+const skipBaseline = process.env.EVAL_SKIP_BASELINE === '1';
 const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
@@ -644,9 +649,23 @@ await runCompletenessChecks({
 });
 
 // --- baseline comparison --------------------------------------------------
+// Counts the completeness checks already pin exactly against an oracle;
+// they are printed for review, never banded (a new site page is not a
+// recall regression and must not fail a corpus deploy).
+const REPORT_ONLY = new Set([
+  'on_this_day_partition',
+  'site_pages',
+  'shared_permalink_posts',
+  'corpus_items',
+  'corpus_links'
+]);
+
 if (updateBaseline) {
-  writeFileSync(baselinePath, `${JSON.stringify(counts, null, 2)}\n`);
+  const banded = Object.fromEntries(Object.entries(counts).filter(([key]) => !REPORT_ONLY.has(key)));
+  writeFileSync(baselinePath, `${JSON.stringify(banded, null, 2)}\n`);
   console.log('baseline updated:', baselinePath);
+} else if (skipBaseline) {
+  console.log('baseline: skipped here; the corpus gate checks it against the candidate corpora');
 } else if (existsSync(baselinePath)) {
   const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
   for (const [key, expected] of Object.entries(baseline)) {

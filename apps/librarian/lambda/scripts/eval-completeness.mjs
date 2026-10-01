@@ -184,7 +184,15 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     for (const kind of ['weekly_thing', 'blog', 'podcast']) {
       parts += Number((await call(tool, { ...args, source_kind: kind, limit: 1 })).total_count) || 0;
     }
-    check(`completeness ${tool} scope all = sum of kinds`, all.total_count === parts, `${all.total_count} vs ${parts}`);
+    // media_search in scope all folds a Weekly Thing photo copy into its
+    // blog photo and counts the fold (Jamie, 2026-09-30: the blog is
+    // canonical); the identity holds with the folded copies added back.
+    const folded = Number(all.collapsed_copies) || 0;
+    check(
+      `completeness ${tool} scope all + collapsed copies = sum of kinds`,
+      all.total_count + folded === parts,
+      `${all.total_count} + ${folded} vs ${parts}`
+    );
   }
 
   // 7. Year partitions: the per-year totals sum to the unfiltered total.
