@@ -17,7 +17,9 @@ import { searchFaq } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
+  headingKey,
   journalCopyPosts,
+  knownSectionNames,
   loadCorpus,
   loadGraph,
   onThisDayYear,
@@ -861,6 +863,9 @@ function groupPassagesBySource(chunks: ArchiveRecord[], records: Map<string, Arc
 // topic and category name values the corpus has; anything else matched
 // nothing and read as "nothing in the archive" (QA F13). A topic may be
 // given by its cluster name or the slug librarian://topic/{slug} uses.
+const SEARCH_SECTION_FAMILIES =
+  'Featured, Notable, Briefly, FYI, Journal, Currently, Photo, Fortune, Reply All, Straw Poll, Give Back, App, Yearly Thing';
+
 async function searchFilterProblem(input: ToolArgs) {
   const wanted = (value: unknown) =>
     (Array.isArray(value) ? value : value == null || value === '' ? [] : [value])
@@ -884,6 +889,19 @@ async function searchFilterProblem(input: ToolArgs) {
         };
       }
       resolvedTopics.push(name);
+    }
+  }
+  // A section that names no heading, family or H2 group anywhere matched
+  // nothing and read as "nothing in the archive" (QA2 R2-2).
+  if (input.section != null && String(input.section).trim()) {
+    const section = headingKey(input.section);
+    await Promise.all(scopeKinds('all').map((kind) => loadCorpus(kind)));
+    const names = knownSectionNames();
+    if (!section || (!names.has(section) && ![...names].some((name) => name.includes(section)))) {
+      return {
+        error: `section "${String(input.section)}" names no section heading in the archive. Pass a heading from a Weekly Thing body or a section_family: ${SEARCH_SECTION_FAMILIES}.`,
+        code: 'bad_request'
+      };
     }
   }
   const categories = wanted(input.category);
@@ -1208,17 +1226,8 @@ function bodyPage(text: string, budget: number) {
   return paragraph > shown.length * 0.8 ? shown.slice(0, paragraph + 2) : shown;
 }
 
-// A section name as a heading reads it, so the name a caller copies from
-// the body finds its section: no-break spaces, markdown marks (#MNTech,
-// *Not*, `yes`) and doubled spaces do not count (QA F6).
-export function headingKey(value: unknown) {
-  return String(value ?? '')
-    .replace(/\u00a0/g, ' ')
-    .replace(/[*_`#]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-}
+// headingKey lives with the section filter in retrieval.mts (QA2 R2-2).
+export { headingKey };
 
 // Rows whose heading or family IS the wanted name win; otherwise every row
 // whose heading contains it (Jamie, 2026-09-30: an exact match wins).

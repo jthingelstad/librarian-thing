@@ -74,7 +74,7 @@
             },
             "section": {
               "type": "string",
-              "description": "A Weekly Thing section heading (substring) or family, e.g. \"Journal\"."
+              "description": "A Weekly Thing section heading or family, e.g. \"Journal\". A group heading from the body (\"Notable Links 📌\", \"Stream\", \"Now Reading 📚\") takes every passage under it; a name no heading, family or group has exactly matches inside headings; a name that matches nothing is an error."
             },
             "section_family": {
               "type": "string",

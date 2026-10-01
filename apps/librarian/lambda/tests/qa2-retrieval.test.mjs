@@ -2,7 +2,7 @@
 // page, not the candidate pool.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { pageWithoutTwins, primeCorpusCachesForTests, retrieve } from '../dist/shared/retrieval.mjs';
+import { matchesFilters, pageWithoutTwins, primeCorpusCachesForTests, retrieve } from '../dist/shared/retrieval.mjs';
 
 // retrieve() reranks through Bedrock; a test never calls out. The fixture
 // chunks carry no embeddings, so the semantic leg is skipped too.
@@ -74,4 +74,39 @@ test('pageWithoutTwins refills a page the dedupe shrank, and never past the rank
   assert.deepEqual(ids(pageWithoutTwins([copy, post], 5)), ['post']);
   // A post below the cut never drops the copy above it.
   assert.deepEqual(ids(pageWithoutTwins([copy, others[0], others[1], post], 3)), ['copy', 'a', 'b']);
+});
+
+test('section matches every passage under its H2 group heading (QA2 R2-2)', () => {
+  const body = [
+    '## Must Read',
+    '',
+    '### [Article One](https://a.com)',
+    '',
+    'About one.',
+    '',
+    '## Stream',
+    '',
+    'Lead-in.',
+    '',
+    '### Ms. PAC-MAN',
+    '',
+    'Tammy loves Ms. PAC-MAN.',
+    '',
+    '```',
+    '## not a heading',
+    '```'
+  ].join('\n');
+  const chunks = [
+    { id: 'c1', issue_number: 146, section: 'Article One', section_family: 'Featured', text: 'About one.' },
+    { id: 'c2', issue_number: 146, section: 'Stream', section_family: 'Journal', text: 'Lead-in.' },
+    { id: 'c3', issue_number: 146, section: 'Ms. PAC-MAN', section_family: 'Journal', text: 'Tammy loves Ms. PAC-MAN.' }
+  ];
+  primeCorpusCachesForTests({ weekly_thing: { issues: [{ number: 146, body }], chunks } });
+  const kept = (section) => chunks.filter((chunk) => matchesFilters(chunk, { section })).map((chunk) => chunk.id);
+  assert.deepEqual(kept('Stream'), ['c2', 'c3']);
+  assert.deepEqual(kept('must read'), ['c1']);
+  assert.deepEqual(kept('**Must  Read**'), ['c1'], 'heading marks and spaces fold');
+  assert.deepEqual(kept('Article One'), ['c1']);
+  assert.deepEqual(kept('PAC'), ['c3'], 'any other name still matches inside headings');
+  assert.deepEqual(kept('not a heading'), [], 'a heading-shaped line in a fence is not a group');
 });

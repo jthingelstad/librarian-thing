@@ -679,22 +679,119 @@ export function localDay(source: { published?: unknown; publish_date?: unknown }
   return stamp.slice(0, 10);
 }
 
-// Every section heading and family the loaded corpora hold, lowercased. A
-// section filter that names one exactly matches it exactly: "journal" had
-// also taken any heading containing the word (6 to 13 sections an issue).
+// A section name as a heading reads it, so the name a caller copies from
+// the body finds its section: no-break spaces, markdown marks (#MNTech,
+// *Not*, `yes`) and doubled spaces do not count (QA F6).
+export function headingKey(value: unknown) {
+  return String(value ?? '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/[*_`#]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+// Every section heading, family and H2 group the loaded corpora hold, as
+// heading keys. A section filter that names one exactly matches it
+// exactly: "journal" had also taken any heading containing the word (6 to
+// 13 sections an issue).
 let sectionNamesCache: Set<string> | undefined;
 
-function knownSectionNames() {
+export function knownSectionNames() {
   if (sectionNamesCache) return sectionNamesCache;
   const names = new Set<string>();
   for (const corpus of [corpusCache, blogCorpusCache, podcastCorpusCache]) {
     for (const chunk of corpus?.chunks || []) {
-      if (chunk.section) names.add(String(chunk.section).toLowerCase());
-      if (chunk.section_family) names.add(String(chunk.section_family).toLowerCase());
+      if (chunk.section) names.add(headingKey(chunk.section));
+      if (chunk.section_family) names.add(headingKey(chunk.section_family));
     }
   }
+  if (corpusCache) for (const placed of sectionGroups(corpusCache).values()) for (const key of placed) names.add(key);
+  names.delete('');
   sectionNamesCache = names;
   return names;
+}
+
+// The H2 groups each Weekly Thing chunk sits under in its issue's body
+// ("Notable Links 📌", "Stream", "Now Reading 📚"), by chunk id, as heading
+// keys. Chunk sections are the article or H3 names, so a section filter
+// naming the group heading a caller sees in the body (and that get_source
+// reads) matched 0 chunks or only the group's lead-in (QA2 R2-2: Notable
+// Links 📌 in 78 issues, 0 chunks). A chunk is placed by finding its text
+// in the body, after the chunk before it, and by its own heading: a chunk
+// that starts under a stray H2 ("Oh my…" in WT85) still belongs to the
+// group its article heading sits in. One found neither way (11 of 10,016)
+// stays under the groups of the chunk before it.
+const SECTION_GROUPS = new WeakMap<Corpus, Map<string, string[]>>();
+
+function bodyHeadings(body: string) {
+  const heads: Array<{ at: number; level: number; key: string }> = [];
+  let fenced = false;
+  let at = 0;
+  for (const line of body.split('\n')) {
+    if (/^\s*(?:```|~~~)/.test(line)) fenced = !fenced;
+    const match = fenced ? null : /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+    if (match) {
+      const name = match[2].replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1');
+      heads.push({ at, level: match[1].length, key: headingKey(name) });
+    }
+    at += line.length + 1;
+  }
+  return heads;
+}
+
+function sectionGroups(corpus: Corpus) {
+  let groups = SECTION_GROUPS.get(corpus);
+  if (groups) return groups;
+  groups = new Map();
+  const byIssue = new Map<string, CorpusChunk[]>();
+  for (const chunk of corpus.chunks || []) {
+    if (chunk.issue_number == null || chunk.id == null) continue;
+    const key = String(chunk.issue_number);
+    if (!byIssue.has(key)) byIssue.set(key, []);
+    byIssue.get(key)!.push(chunk);
+  }
+  for (const issue of corpus.issues || []) {
+    const body = String(issue.body || '');
+    const chunks = byIssue.get(String(issue.number)) || [];
+    if (!body || !chunks.length) continue;
+    const heads = bodyHeadings(body);
+    // The H2 a body position falls under ('' above the first, or under an H1).
+    const groupAt = (position: number) => {
+      let group = '';
+      for (const head of heads) {
+        if (head.at > position) break;
+        if (head.level <= 2) group = head.level === 2 ? head.key : '';
+      }
+      return group;
+    };
+    let from = 0;
+    let placed: string[] = [];
+    for (const chunk of chunks) {
+      const probe = String(chunk.text || '').slice(0, 60);
+      let at = probe ? body.indexOf(probe, from) : -1;
+      if (at < 0 && probe) at = body.indexOf(probe);
+      const own = headingKey(chunk.section);
+      const heading =
+        at >= 0
+          ? heads.filter((head) => head.key === own && head.at <= at).pop()
+          : heads.find((head) => head.key === own && head.at >= from);
+      const found = [at, heading ? heading.at : -1].filter((position) => position >= 0);
+      if (found.length) {
+        from = Math.max(...found);
+        placed = [...new Set(found.map(groupAt))].filter(Boolean);
+      }
+      if (placed.length) groups.set(String(chunk.id), placed);
+    }
+  }
+  SECTION_GROUPS.set(corpus, groups);
+  return groups;
+}
+
+// The H2 groups a chunk sits under, as heading keys (none outside a group).
+export function sectionGroupsOf(chunk: CorpusChunk): string[] {
+  if (!corpusCache || chunk.id == null || chunk.issue_number == null) return [];
+  return sectionGroups(corpusCache).get(String(chunk.id)) || [];
 }
 
 function isLeapYear(year: number) {
@@ -799,14 +896,16 @@ export function matchesFilters(
   if (endYear && (!year || year > endYear)) return false;
   const family = String(source.section_family || '').toLowerCase();
   if (section) {
-    // A name some section or family has exactly matches exactly, so
-    // section "Journal" finds the Journal family (WT351's day-headed one
-    // included) and not every heading with the word in it; any other
-    // name matches inside the heading, as always.
-    const wanted = String(section).trim().toLowerCase();
-    const heading = String(source.section || '').toLowerCase();
+    // A name some section, family or H2 group has exactly matches exactly,
+    // so section "Journal" finds the Journal family (WT351's day-headed
+    // one included) and not every heading with the word in it, and
+    // "Notable Links 📌" finds every article under that heading (QA2
+    // R2-2); any other name matches inside the heading, as always.
+    const wanted = headingKey(section) || String(section).trim().toLowerCase();
+    const heading = headingKey(source.section);
     const exact = knownSectionNames().has(wanted);
-    if (exact ? heading !== wanted && family !== wanted : !heading.includes(wanted) && family !== wanted) return false;
+    const named = heading === wanted || headingKey(family) === wanted || sectionGroupsOf(source).includes(wanted);
+    if (!named && (exact || !heading.includes(wanted))) return false;
   }
   const families = lowerList(sectionFamily);
   if (families.length && !families.includes(family)) return false;

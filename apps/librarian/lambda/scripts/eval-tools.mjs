@@ -596,6 +596,57 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     check(`KA search_archive "${query}" shows no copy beside all its posts`, twins.length === 0, twins.join(', '));
   }
 }
+// QA2 R2-2: search_archive section takes the H2 group headings a caller
+// sees in a body. For every ## heading with text under it, the filter
+// keeps at least one chunk of that issue (452 of 2,207 kept none: Notable
+// Links 📌 none in 78 issues); WT146's Stream keeps all 8 chunks, 9,099
+// chars, under it (the oracle's count), not only its 85-char header.
+{
+  const chunksOf = new Map();
+  for (const chunk of corpora.weekly_thing.chunks || []) {
+    const key = String(chunk.issue_number);
+    if (!chunksOf.has(key)) chunksOf.set(key, []);
+    chunksOf.get(key).push(chunk);
+  }
+  const missed = [];
+  let groups = 0;
+  for (const issue of corpora.weekly_thing.issues || []) {
+    const lines = String(issue.body || '').split('\n');
+    lines.forEach((line, index) => {
+      const heading = /^##\s+(.*?)\s*$/.exec(line);
+      if (!heading) return;
+      const next = lines.findIndex((other, at) => at > index && /^#{1,2}\s/.test(other));
+      if (!lines.slice(index + 1, next < 0 ? lines.length : next).some((other) => other.trim())) return;
+      groups += 1;
+      const kept = (chunksOf.get(String(issue.number)) || []).filter((chunk) =>
+        retrieval.matchesFilters(chunk, { section: heading[1] })
+      );
+      if (!kept.length) missed.push(`wt-${issue.number} "${heading[1]}"`);
+    });
+  }
+  check(
+    'KA search_archive section keeps a passage under every H2 group heading',
+    groups > 2000 && missed.length === 0,
+    `${missed.length} of ${groups}: ${missed.slice(0, 5).join(', ')}`
+  );
+  const stream = (chunksOf.get('146') || []).filter((chunk) => retrieval.matchesFilters(chunk, { section: 'Stream' }));
+  const chars = stream.reduce((sum, chunk) => sum + String(chunk.text || '').length, 0);
+  check(
+    'KA section Stream keeps all of wt-146 under it',
+    stream.length === 8 && chars === 9099,
+    `${stream.length}, ${chars}`
+  );
+  const notable = await run('search_archive', { query: 'privacy', section: 'Notable Links 📌', limit: 12 });
+  check(
+    'KA search_archive privacy in Notable Links 📌 finds passages',
+    (notable?.results || []).length > 0,
+    JSON.stringify(notable).slice(0, 120)
+  );
+  for (const section of ['No Such Heading Anywhere', '##']) {
+    const out = await run('search_archive', { query: 'privacy', section }, { expectError: true });
+    check(`KA search_archive section "${section}" is bad_request`, out?.code === 'bad_request', String(out?.error));
+  }
+}
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);
