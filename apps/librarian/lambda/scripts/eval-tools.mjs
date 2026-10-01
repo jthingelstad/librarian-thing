@@ -606,6 +606,29 @@ await run('latest_content', { limit: 3 });
 await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });
 await run('compare_eras', { topic: 'ethereum', year_a: [2021, 2021], year_b: [2024, 2024], limit: 2 });
+// QA2 T2-4: an era's sources_naming_topic is archive_lens's count for the
+// same words, so a voice narrows both (Twitter quoted 2017-18 is 0, and the
+// count once said 43 and hid the never-named note).
+for (const voice of ['quoted', 'jamie']) {
+  const eras = await run('compare_eras', {
+    topic: 'Twitter',
+    year_a: [2022, 2023],
+    year_b: [2017, 2018],
+    voice,
+    limit: 1
+  });
+  for (const [key, year_range] of [
+    ['era_a', [2022, 2023]],
+    ['era_b', [2017, 2018]]
+  ]) {
+    const lens = await run('archive_lens', { topic: 'Twitter', year_range, voice, limit: 1 });
+    check(
+      `KA compare_eras ${key} voice ${voice} counts what archive_lens counts`,
+      eras?.[key]?.sources_naming_topic === lens?.total_count,
+      `${eras?.[key]?.sources_naming_topic} vs ${lens?.total_count}`
+    );
+  }
+}
 await run('source_neighborhood', { id: 'wt-182', limit: 3 });
 await run('find_evidence', {
   claims: ['Jamie registered thingelstad.eth in 2021', 'Jamie started The Weekly Thing in 2017']

@@ -2654,7 +2654,14 @@ async function eraCounts(topic: string, era: unknown, input: ToolArgs, scope: un
   }
   const lens = published
     ? ((await toolArchiveLens(
-        { topic, year_range: era, ...(requestedSource ? { source_kind: requestedSource } : {}), limit: 1 },
+        // voice too, so the count is of the same words the results are (QA2 T2-4).
+        {
+          topic,
+          year_range: era,
+          ...(requestedSource ? { source_kind: requestedSource } : {}),
+          ...(input.voice ? { voice: input.voice } : {}),
+          limit: 1
+        },
         { scope } as ToolContext
       )) as { total_count?: number })
     : { total_count: 0 };
