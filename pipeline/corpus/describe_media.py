@@ -53,11 +53,10 @@ from pathlib import Path
 import anthropic
 import requests
 from dotenv import load_dotenv
-from librarian_core.corpus import build_corpus, extract_video_posters
+from librarian_core.corpus import build_blog_corpus, build_corpus
 
 ROOT = Path(__file__).resolve().parents[2]
 SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
-BLOG_POSTS = ROOT / "data" / "blog" / "posts"
 
 MODEL = "claude-haiku-4-5"
 CONCURRENCY = 8
@@ -79,8 +78,6 @@ ALLOWED_HOSTS = (
     "buttondown-attachments.s3.us-west-2.amazonaws.com",
 )
 
-IMG_TAG_RE = re.compile(r"<img\b[^>]*\bsrc=[\"']([^\"']+)[\"'][^>]*>", re.I)
-MD_IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)[^)]*\)")
 
 PROMPT = (
     "Describe this photo in one or two sentences (at most 30 words) for a "
@@ -104,28 +101,19 @@ def fetchable(url: str) -> bool:
 
 def collect_urls(keep=allowed) -> list[str]:
     urls: dict[str, None] = {}
-    # Weekly Thing media from a fresh build of data/issues, not the
-    # gitignored data/librarian/corpus.json: that local artifact is only as
-    # new as the last local build, and a stale one silently skipped every
-    # issue since (WT350-351 went undescribed that way).
-    for media in build_corpus().get("media", []):
-        url = str(media.get("url") or "")
-        if keep(url):
-            urls.setdefault(url)
-    for post in BLOG_POSTS.rglob("*.md"):
-        text = post.read_text(errors="ignore")
-        for match in IMG_TAG_RE.findall(text):
-            if keep(match):
-                urls.setdefault(match)
-        for match in MD_IMG_RE.findall(text):
-            if keep(match):
-                urls.setdefault(match)
-        # A video's poster still is a blog media record of its own (the
-        # corpus build's extract_video_posters); collecting only <img> and
-        # Markdown images left 108 of 110 undescribed (QA2 I2-5, 2026-10-01).
-        for poster in extract_video_posters(text):
-            if keep(poster["url"]):
-                urls.setdefault(poster["url"])
+    # Every media record the corpus builds emit, from fresh builds of
+    # data/issues and data/blog, not the gitignored local corpus.json: that
+    # artifact is only as new as the last local build, and a stale one
+    # silently skipped every issue since (WT350-351 went undescribed that
+    # way). Scanning post markdown instead missed the video posters (QA2
+    # I2-5) and every blog Page photo (626, QA3 M11), so the corpus is the
+    # one list. A posterless video's record is the video file: no still to
+    # describe.
+    for corpus in (build_corpus(), build_blog_corpus()):
+        for media in corpus.get("media", []):
+            url = str(media.get("url") or "")
+            if media.get("media_kind") != "video" and keep(url):
+                urls.setdefault(url)
     return list(urls)
 
 
