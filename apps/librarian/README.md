@@ -121,6 +121,27 @@ during client transitions. Contract changes are additive within a major; a
 breaking endpoint or SSE event change must introduce a new major artifact
 rather than weakening the existing schema.
 
+## Published MCP surface
+
+`contracts/mcp-surface.json` (plus a SHA-256 sidecar) is the MCP server as a client
+sees it: the tools exactly as `tools/list` declares them, which doors offer each,
+retired tools, resources and templates, prompts with their rendered call sequence,
+error codes with next steps, the result cap, budgets, OAuth facts, and the server
+instructions. `lambda/scripts/export-mcp-surface.mjs` builds it from the compiled
+modules, and it carries the semver server version only (no `+tools.<fingerprint>`),
+so it changes only when the surface does. Thingy vendors it and renders
+`/connect/reference/` from it.
+
+```bash
+npm --prefix apps/librarian/lambda run mcp-surface:export
+npm --prefix apps/librarian/lambda run mcp-surface:check   # part of verify
+# In the Thingy checkout:
+npm --prefix web run mcp-surface:sync
+```
+
+Re-export after any change to a tool spec, prompt, resource, error code, limit,
+budget, or OAuth lifetime; `verify` fails while the artifact is stale.
+
 ## Tech stack
 
 - **Node 24** (arm64) — Lambda runtime
