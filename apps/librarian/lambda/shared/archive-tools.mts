@@ -22,7 +22,7 @@ import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
 import { STOPWORDS, countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
-import { searchFaq } from './faq.mjs';
+import { faqQueryTerms, searchFaqAll } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
@@ -142,6 +142,7 @@ export const PAGED_LISTS: Record<string, string> = {
   media_search: 'results',
   on_this_day: 'years[].items',
   quote_search: 'results',
+  search_faq: 'results',
   top_references: 'top'
 };
 
@@ -160,12 +161,17 @@ export function pageOf<T>(name: string, items: T[], input: ToolArgs, noun = 'res
   const end = offset + shown.length;
   const nextOffset = end < items.length ? end : null;
   const range = shown.length ? `${offset + 1}-${end} of ${items.length}` : `none of ${items.length}`;
+  // An offset past the end says so and where the last page starts; "none
+  // of 148; this is the last page" read as an empty list (QA2 L2-9, L2-10).
+  const lastPage = items.length ? Math.floor((items.length - 1) / limit) * limit : 0;
   const hint =
     nextOffset !== null
       ? `${noun} ${range}; call again with offset ${nextOffset} for the next ${Math.min(limit, items.length - end)}.`
-      : offset && items.length
-        ? `${noun} ${range}; this is the last page.`
-        : '';
+      : offset >= items.length && items.length
+        ? `offset ${offset} is past the last of ${items.length} ${noun}; the last page starts at offset ${lastPage}${lastPage ? '' : ' (no offset)'}.`
+        : offset && items.length
+          ? `${noun} ${range}; this is the last page.`
+          : '';
   return { limit, offset, shown, nextOffset, omitted: items.length - shown.length, hint };
 }
 
@@ -740,21 +746,22 @@ async function faqReplacements() {
 
 async function toolSearchFaq(input: ToolArgs = {}) {
   const query = String(input.query || '').trim();
-  if (!query) return { results: [] };
-  const limit = toolLimit('search_faq', input);
+  if (!query) return { total_count: 0, results: [] };
   // Each answer opens whole as get_source site-faq.
-  const results = searchFaq(query, {
-    limit,
-    replacements: await faqReplacements()
-  }).map((result) => ({ source_id: 'site-faq', ...result }));
+  const matched = searchFaqAll(query, await faqReplacements()).map((result) => ({ source_id: 'site-faq', ...result }));
+  // Counted and paged like every list: "newsletter" at limit 1 showed 1 of
+  // 8 and said nothing of the other 7 (QA2 L2-8).
+  const page = pageOf('search_faq', matched, input);
   // Empty says why, so "no entry" never reads as bad input (QA F14).
-  return {
-    query,
-    results,
-    ...(results.length
-      ? {}
-      : { note: 'No FAQ entry matches; the FAQ covers the newsletter and site. search_archive searches the writing.' })
-  };
+  const note = matched.length
+    ? undefined
+    : faqQueryTerms(query).length
+      ? 'No FAQ entry matches; the FAQ covers the newsletter and site. search_archive searches the writing.'
+      : 'The query has only common words ("the", "and", "of"); ask with the words the question is about.';
+  return markTruncated(
+    { query, total_count: matched.length, results: page.shown, ...(note ? { note } : {}) },
+    { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
+  );
 }
 
 // Passage fields that describe the whole source: they ride once on the
@@ -1645,8 +1652,31 @@ async function toolDomainHistory(input: ToolArgs = {}, context: ToolContext = {}
 // its day and left same-day posts in corpus order, so the newest N was not
 // the newest N. Equal instants fall back to the id, newest id first.
 function sourceInstant(item: ArchiveRecord) {
-  const stamp = Date.parse(String(item.published || item.publish_date || ''));
+  const raw = String(item.published || item.publish_date || '').trim();
+  // A bare date (a podcast episode's 2025-10-05) is that Chicago day's noon,
+  // not UTC midnight, which is the evening before in Chicago: ep-1 had sorted
+  // below a post from Chicago 10-04 20:00 (QA2 T2-5).
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return chicagoNoon(raw);
+  const stamp = Date.parse(raw);
   return Number.isFinite(stamp) ? stamp : 0;
+}
+
+const CHICAGO_OFFSET = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', timeZoneName: 'shortOffset' });
+
+function chicagoNoon(day: string) {
+  const noonUtc = Date.parse(`${day}T12:00:00Z`);
+  if (!Number.isFinite(noonUtc)) return 0;
+  const zone = CHICAGO_OFFSET.formatToParts(noonUtc).find((part) => part.type === 'timeZoneName')?.value || '';
+  const hours = Number(/GMT([+-]\d+)/.exec(zone)?.[1] ?? -6);
+  return noonUtc - hours * 3_600_000;
+}
+
+// The Chicago day a source was published on, the day Jamie published it
+// (Jamie, 2026-09-30: "All of my content should be shown in Chicago time").
+// publish_date stays as the corpus holds it: a UTC timestamp for an issue,
+// the permalink day for a blog post (QA2 T2-5).
+function sourceDate(record: ArchiveRecord | Record<string, unknown>) {
+  return localDay(record as ArchiveRecord) || null;
 }
 
 function latestByDate<T extends ArchiveRecord>(items: T[]) {
@@ -1836,6 +1866,7 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     show: record.show,
     subject: record.subject,
     publish_date: record.publish_date,
+    date: sourceDate(record),
     year: recordYear(record) || null,
     section: record.section,
     url: absoluteSourceUrl(record.url),
@@ -2144,7 +2175,8 @@ function ambiguousSource(found: { ambiguous: ArchiveRecord[] }) {
   const candidates = found.ambiguous.map((record) => ({
     id: lensSourceId(record),
     subject: record.subject,
-    publish_date: record.publish_date
+    publish_date: record.publish_date,
+    date: sourceDate(record)
   }));
   return {
     error: `That url is shared by ${candidates.length} posts; pass one id: ${candidates.map((c) => c.id).join(', ')}.`,
@@ -2206,7 +2238,13 @@ function boundedStatsRecord(
   const topics = record.topics || [];
   omitted[`sources[].${at}.domains`] = (omitted[`sources[].${at}.domains`] || 0) + Math.max(0, domains.length - limit);
   omitted[`sources[].${at}.topics`] = (omitted[`sources[].${at}.topics`] || 0) + Math.max(0, topics.length - limit);
-  return { ...record, domains: domains.slice(0, limit), topics: topics.slice(0, limit) };
+  return {
+    id: lensSourceId(record),
+    ...record,
+    date: sourceDate(record),
+    domains: domains.slice(0, limit),
+    topics: topics.slice(0, limit)
+  };
 }
 
 // A source's chunk with a date; FAQ answers and site pages have none and
@@ -2247,6 +2285,18 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
     const countsByYear = countsByPublishYear(records);
     const rangeActive = Boolean(statsStartYear || statsEndYear);
+    // Within a year filter, oldest and newest are by the day the filter
+    // reads (the publish_date the year comes from), the moment breaking
+    // ties: a Blot import filed in 2020 but published 2018-12-30 was 2020's
+    // oldest blog post (QA2 T2-3; interim until the corpus files it by its
+    // Chicago day).
+    const byFilterDay = rangeActive
+      ? [...records].sort((a, b) =>
+          String(b.publish_date || '')
+            .slice(0, 10)
+            .localeCompare(String(a.publish_date || '').slice(0, 10))
+        )
+      : records;
     // Every count in this object describes the SAME scope: the applied
     // year_range when one is set (a *_total sibling keeps the corpus-wide
     // number). Mixing range-scoped and corpus-wide counts in one object
@@ -2281,8 +2331,8 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
             link_count_total: Number(corpus.link_count || 0) || undefined
           }
         : {}),
-      oldest: boundedStatsRecord(records[records.length - 1], listLimit, omitted, 'oldest'),
-      newest: boundedStatsRecord(records[0], listLimit, omitted, 'newest'),
+      oldest: boundedStatsRecord(byFilterDay[byFilterDay.length - 1], listLimit, omitted, 'oldest'),
+      newest: boundedStatsRecord(byFilterDay[0], listLimit, omitted, 'newest'),
       counts_by_year: countsByYear,
       year_count_summary: yearCountSummary(countsByYear),
       yearly_signals: yearlyContentSignals(records, {
@@ -2303,6 +2353,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           ...(record.issue_number ? { issue_number: record.issue_number } : {}),
           subject: record.subject,
           publish_date: record.publish_date,
+          date: sourceDate(record as ArchiveRecord),
           url: record.url
         })
       }),
@@ -2324,7 +2375,12 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       const seconds = withAudio.reduce((sum, record) => sum + (Number(record.audio_duration_seconds) || 0), 0);
       const edition = (record: ArchiveRecord | undefined) =>
         record
-          ? { id: lensSourceId(record), issue_number: record.issue_number, publish_date: record.publish_date }
+          ? {
+              id: lensSourceId(record),
+              issue_number: record.issue_number,
+              publish_date: record.publish_date,
+              date: sourceDate(record)
+            }
           : null;
       stats.audio_editions = {
         count: withAudio.length,
@@ -2376,6 +2432,9 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
             : '',
           omitted['sources[].top_domains']
             ? `top_domains holds the ${listLimit} most linked (domain_count says of how many); raise limit (max 40), or page through them all with top_references.`
+            : '',
+          omitted['sources[].oldest.domains'] || omitted['sources[].newest.domains']
+            ? `oldest and newest list the first ${listLimit} domains each links to; find_links with that id lists every link.`
             : '',
           ...hints
         ]
@@ -2444,7 +2503,7 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
       ),
       source_kind: requestedSource || null,
       total_count: ordered.length,
-      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record }))
+      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record, date: sourceDate(record) }))
     },
     { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
   );
@@ -2502,7 +2561,9 @@ const LIST_MATCHING_SECTIONS = 6;
 // Every source that passes the filters, newest first across the three
 // corpora (2.1.0; it had filled Weekly Thing first, so newer blog posts
 // never showed), paged with offset.
-async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+// Every source list_content's filters keep, with its chunks and links;
+// archive_gems draws a theme from the same list (QA2 L2-10).
+async function matchedContent(input: ToolArgs, scope: unknown) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const [startYear, endYear] = parseYearRange(input.year_range || input.year);
   const topic = String(input.topic || input.entity || input.query || '').trim();
@@ -2554,6 +2615,12 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       matched.push({ record, chunks, links });
     }
   }
+  return { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched };
+}
+
+async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched } =
+    await matchedContent(input, scope);
   const byRecord = new Map(matched.map((entry) => [entry.record, entry]));
   const ordered = latestByDate(matched.map((entry) => entry.record));
   const page = pageOf('list_content', ordered, input);
@@ -2680,6 +2747,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
         source_kind: 'weekly_thing',
         subject: issue.subject,
         publish_date: issue.publish_date,
+        date: sourceDate(issue),
         year: recordYear(record) || null,
         section: matchedSection?.name || null,
         topics: issue.topics || [],
@@ -2839,7 +2907,14 @@ async function eraCounts(topic: string, era: unknown, input: ToolArgs, scope: un
   }
   const lens = published
     ? ((await toolArchiveLens(
-        { topic, year_range: era, ...(requestedSource ? { source_kind: requestedSource } : {}), limit: 1 },
+        // voice too, so the count is of the same words the results are (QA2 T2-4).
+        {
+          topic,
+          year_range: era,
+          ...(requestedSource ? { source_kind: requestedSource } : {}),
+          ...(input.voice ? { voice: input.voice } : {}),
+          limit: 1
+        },
         { scope } as ToolContext
       )) as { total_count?: number })
     : { total_count: 0 };
@@ -2885,6 +2960,10 @@ const UNCAPPED_LIST_KEYS = new Set([
   'top_domains',
   'also_in_issue_counts'
 ]);
+// corpus_stats' oldest and newest domains are bounded by limit too
+// (boundedStatsRecord counts the rest); the depth cap had held them at 6
+// for every limit from 10 to 40 while limit 9 showed 9 (QA2 F7).
+const UNCAPPED_LIST_PATHS = new Set(['sources[].oldest.domains', 'sources[].newest.domains']);
 // Id lists are a few bytes an entry and bounded by limit; an {omitted}
 // marker inside one broke "every entry is an id".
 const ID_LIST_KEYS = new Set(['results', 'timeline', 'latest_sources', 'sample_sources']);
@@ -2925,6 +3004,7 @@ function compactLensLevel<T>(
     const itemPath = `${path}[]`;
     const each = (item: unknown) => compactLensLevel(item, depth + 1, scale, omitted, '', itemPath);
     if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
+    if (UNCAPPED_LIST_PATHS.has(path)) return value.map(each) as unknown as T;
     if (ID_LIST_KEYS.has(parentKey) && value.every((item) => typeof item === 'string')) return value;
     // Never truncate short arrays: cutting 3 match_reasons or 5 domains
     // saves nothing while the budget belongs on repeated large objects.
@@ -3455,7 +3535,16 @@ async function toolListTopics(input: ToolArgs = {}) {
           related: topic.related
         };
       }),
-      ...(topics.length ? {} : { note: 'The topic graph is not loaded, so only the clusters are listed.' })
+      ...(!topics.length
+        ? { note: 'The topic graph is not loaded, so only the clusters are listed.' }
+        : query && !matched.length
+          ? // A site topic is a name among each issue's 40 most-extracted
+            // names, so a real one can be missing (Mastodon, in 11 issues):
+            // say where every mention is counted (QA2 I2-3).
+            {
+              note: `No site topic is named "${query}". Topics come from each issue's 40 most-extracted names, so a name can be missing; list_content or archive_lens with topic "${query}" counts every source that mentions it.`
+            }
+          : {})
     },
     {
       omitted: { topics: page.omitted },
@@ -3499,6 +3588,60 @@ async function similarIssues(record: ArchiveRecord, limit: number) {
   });
 }
 
+// A gem's draw weight: link-rich and cross-source sources come up more
+// often, but any source in the pool can.
+function gemCandidate(record: ArchiveRecord, links: ArchiveRecord[], mood: string) {
+  const year = recordYear(record);
+  const cross = links.filter((link) => link.link_category === 'cross_source').length;
+  const domains = new Set([...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean));
+  const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
+  let score = domains.size + cross * 5 + links.length * 0.2;
+  let reason = cross
+    ? 'connects multiple Jamie-owned sources'
+    : domains.size
+      ? 'link-rich archive trail'
+      : 'quiet representative source';
+  if (mood.includes('forgotten') || mood.includes('old')) {
+    score += age * 0.5;
+    reason = 'older archive source worth resurfacing';
+  } else if (mood.includes('recent') || mood.includes('new')) {
+    score += Math.max(0, 20 - age);
+    reason = 'recent source with archive signals';
+  }
+  return { score, reason, record, link_count: links.length, cross_source_link_count: cross };
+}
+
+type GemCandidate = ReturnType<typeof gemCandidate>;
+
+// Draws limit from the pool at random, weighted toward link-rich sources.
+function drawGems(pool: GemCandidate[], limit: number) {
+  const weight = (item: { score: number }) => 1 + Math.sqrt(Math.max(0, item.score));
+  const band = [...pool];
+  const picked: GemCandidate[] = [];
+  while (picked.length < limit && band.length) {
+    let draw = (crypto.randomInt(1_000_000) / 1_000_000) * band.reduce((sum, item) => sum + weight(item), 0);
+    let index = 0;
+    while (index < band.length - 1 && draw >= weight(band[index])) {
+      draw -= weight(band[index]);
+      index += 1;
+    }
+    picked.push(band.splice(index, 1)[0]);
+  }
+  return picked;
+}
+
+function gemResult(item: GemCandidate) {
+  return {
+    ...compactContentRecord(item.record),
+    // A gem names an issue; two dozen domains per gem was most of the payload.
+    domains: (item.record.domains || []).slice(0, 5),
+    reason: item.reason,
+    score: Number(item.score.toFixed(2)),
+    link_count: item.link_count,
+    cross_source_link_count: item.cross_source_link_count
+  };
+}
+
 async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const theme = String(input.theme || input.topic || input.query || '').trim();
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
@@ -3511,41 +3654,33 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
   const mood = lower(input.mode) || lower(input.mood);
   const limit = toolLimit('archive_gems', input);
   if (theme) {
-    const lens = (await toolArchiveLens(
-      {
-        topic: theme,
-        operation: 'reading_path',
-        source_kind: requestedSource,
-        year_range: input.year_range,
-        limit
-      },
-      { scope }
-    )) as { reading_path?: ArchiveRecord[]; sources_by_id?: Record<string, unknown>; total_count?: number };
-    const path = (lens.reading_path || []).slice(0, limit);
-    // The path names ids; sources_by_id resolves them (and get_source takes them).
-    const byId = lens.sources_by_id || {};
-    const matchedCount = Number(lens.total_count || path.length);
+    // A theme draws at random from every source that names it - the
+    // sources list_content finds for that topic - like every other mode.
+    // It had returned the lens's fixed reading path, the same gems every
+    // time (QA2 L2-10; Jamie, 2026-09-30: "sounds like a bug").
+    const { matched } = await matchedContent(
+      { topic: theme, source_kind: requestedSource, year_range: input.year_range },
+      scope
+    );
+    const pool = matched.map(({ record, links }) => gemCandidate(record, links, ''));
+    const picked = drawGems(pool, limit);
+    for (const item of picked)
+      item.reason = `names ${theme}; drawn at random from the ${pool.length} sources that name it, weighted toward link-rich ones`;
     return markTruncated(
       {
         applied: { theme, ...(mood ? { ignored: { mode: mood } } : {}) },
         theme,
-        mode: 'theme_reading_path',
-        total_count: matchedCount,
-        results: path.map((source) => ({
-          ...source,
-          reason: source.reason || `representative source for ${theme}`
-        })),
-        sources_by_id: Object.fromEntries(
-          path.map((source) => String(source.id)).flatMap((id) => (byId[id] ? [[id, byId[id]]] : []))
-        )
+        mode: 'theme',
+        total_count: pool.length,
+        results: picked.map(gemResult)
       },
       {
-        omitted: { results: matchedCount - path.length },
-        hint: `A reading path is ${path.length} of the ${matchedCount} sources that mention ${theme}; archive_lens or list_content with that topic pages through all of them.`
+        omitted: { results: pool.length - picked.length },
+        hint: `These ${picked.length} are drawn at random from the ${pool.length} sources that name ${theme}; list_content or archive_lens with that topic pages through all of them.`
       }
     );
   }
-  const candidates = [];
+  const candidates: GemCandidate[] = [];
   const [startYear, endYear] = parseYearRange(input.year_range);
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
@@ -3555,24 +3690,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       const year = recordYear(record);
       if (startYear && (!year || year < startYear)) continue;
       if (endYear && (!year || year > endYear)) continue;
-      const links = linksBySource.get(sourceRecordKey(record)) || [];
-      const cross = links.filter((link) => link.link_category === 'cross_source').length;
-      const domains = new Set([...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean));
-      const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
-      let score = domains.size + cross * 5 + links.length * 0.2;
-      let reason = cross
-        ? 'connects multiple Jamie-owned sources'
-        : domains.size
-          ? 'link-rich archive trail'
-          : 'quiet representative source';
-      if (mood.includes('forgotten') || mood.includes('old')) {
-        score += age * 0.5;
-        reason = 'older archive source worth resurfacing';
-      } else if (mood.includes('recent') || mood.includes('new')) {
-        score += Math.max(0, 20 - age);
-        reason = 'recent source with archive signals';
-      }
-      candidates.push({ score, reason, record, link_count: links.length, cross_source_link_count: cross });
+      candidates.push(gemCandidate(record, linksBySource.get(sourceRecordKey(record)) || [], mood));
     }
   }
   // recent and forgotten are about age first: link richness only ranks
@@ -3591,34 +3709,15 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
   // repeated request returning the same gems "sounds like a bug"), weighted
   // toward link-rich sources but never limited to them: any source in the
   // pool can come up. The pool is everything for serendipity, the newest
-  // tenth for recent, the older half for forgotten.
-  const weight = (item: { score: number }) => 1 + Math.sqrt(Math.max(0, item.score));
-  const band = [...pool];
-  const picked = [];
-  while (picked.length < limit && band.length) {
-    let draw = (crypto.randomInt(1_000_000) / 1_000_000) * band.reduce((sum, item) => sum + weight(item), 0);
-    let index = 0;
-    while (index < band.length - 1 && draw >= weight(band[index])) {
-      draw -= weight(band[index]);
-      index += 1;
-    }
-    picked.push(band.splice(index, 1)[0]);
-  }
+  // tenth for recent, the older half for forgotten, and a theme's sources.
+  const picked = drawGems(pool, limit);
   for (const item of picked)
     item.reason = `${item.reason} (drawn at random from ${pool.length} sources, weighted toward link-rich ones)`;
   return {
     applied: { mode: mood || 'serendipity' },
     theme: null,
     mode: mood || 'serendipity',
-    results: picked.map((item) => ({
-      ...compactContentRecord(item.record),
-      // A gem names an issue; two dozen domains per gem was most of the payload.
-      domains: (item.record.domains || []).slice(0, 5),
-      reason: item.reason,
-      score: Number(item.score.toFixed(2)),
-      link_count: item.link_count,
-      cross_source_link_count: item.cross_source_link_count
-    }))
+    results: picked.map(gemResult)
   };
 }
 
@@ -4190,7 +4289,10 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
       links: entry.links,
       source_id: `wt-${entry.issue_number}`,
       issue_number: entry.issue_number,
-      publish_date: String(entry.publish_date || '').slice(0, 10),
+      // The issue's raw timestamp, and the Chicago day it went out: WT22's
+      // 2017-10-07T00:00Z is 2017-10-06 in Chicago (QA2 T2-5).
+      publish_date: entry.publish_date,
+      date: sourceDate(entry),
       issue_url: entry.issue_url
     };
   });
@@ -4659,6 +4761,11 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     const blank = claims.findIndex((claim) => !present(claim));
     if (blank >= 0) return claims.length > 1 ? `claims[${blank}] is blank` : 'claims is required';
   }
+  // A ninth caller alias was dropped in-process with no notice; the door
+  // refuses it (maxItems 8), and so does every door now (QA2 L2-11).
+  if (Array.isArray(args.aliases) && args.aliases.length > LENS_MAX_ALIASES) {
+    return `aliases holds at most ${LENS_MAX_ALIASES} names; ${args.aliases.length} were given`;
+  }
   for (const key of WORD_FILTERS[name] || []) {
     if (present(args[key]) && compileQuery({ term: args[key] }).isEmpty) {
       return `${key} "${String(args[key]).trim()}" has no letter or digit to match; quote_search finds exact characters`;
@@ -4668,6 +4775,13 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     if (!present(args[key]) && !Array.isArray(args[key])) continue;
     const problem = yearProblem(key, args[key]);
     if (problem) return problem;
+    // [2024, 2019] matched nothing in-process while the door refused it (QA2 L2-9).
+    if (Array.isArray(args[key])) {
+      const [start, end] = args[key] as unknown[];
+      if (present(start) && present(end) && Number(start) > Number(end)) {
+        return `${key} runs backwards: [${String(start)}, ${String(end)}] should be [${String(end)}, ${String(start)}]`;
+      }
+    }
   }
   for (const key of ['issue_number', 'also_in_issue']) {
     if (!present(args[key])) continue;
@@ -4702,6 +4816,41 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
   return null;
 }
 
+// Words of a several-word filter that have nothing to match on (an
+// emoji): "Photo 📷" matched exactly what "photo" matches and said nothing
+// of the camera (QA2 L2-11). A word is reported when the filter still
+// matches its own text with that word taken out.
+function droppedFilterWords(value: unknown) {
+  const words = String(value ?? '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (words.length < 2) return [];
+  const matcher = compileQuery({ term: words.join(' ') });
+  return words.filter(
+    (word, index) =>
+      !/[\p{L}\p{N}]/u.test(word) && matcher.matches(words.filter((_, other) => other !== index).join(' '))
+  );
+}
+
+// The arguments each tool publishes (tool-specs.json). A tool without a
+// spec (the registry-internal four) echoes whatever it was given.
+let publishedArgumentsCache: Map<string, Set<string>> | undefined;
+function publishedArguments(name: string) {
+  publishedArgumentsCache ||= new Map(
+    (loadToolSpecs() as Array<{ toolSpec?: { name?: string; inputSchema?: { json?: { properties?: object } } } }>)
+      .filter((spec) => spec.toolSpec?.name)
+      .map((spec) => [
+        String(spec.toolSpec!.name),
+        new Set(Object.keys(spec.toolSpec!.inputSchema?.json?.properties || {}))
+      ])
+  );
+  return publishedArgumentsCache.get(name);
+}
+// Unpublished names handlers still read for a published one (source for
+// source_kind, query or entity for topic, mood for mode, claim for claims).
+const READ_ALIASES = new Set(['source', 'query', 'entity', 'mood', 'topic', 'claim']);
+
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
   return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
     // A term the matcher cannot compile is the caller's to shorten, never
@@ -4726,6 +4875,24 @@ function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
     // applied (archive_gems with a theme ignores mode).
     if (own.ignored && typeof own.ignored === 'object') {
       for (const key of Object.keys(own.ignored)) delete applied[key];
+    }
+    // Echo only what the tool reads: list_content with voice echoed voice
+    // "jamie" and ignored it (QA2 L2-11). Anything else is named ignored.
+    const published = publishedArguments(name);
+    const ignored: Record<string, unknown> = {};
+    if (published) {
+      for (const key of Object.keys(applied)) {
+        if (key === 'limit' || key === 'ignored' || key in own || published.has(key) || READ_ALIASES.has(key)) continue;
+        ignored[key] = applied[key];
+        delete applied[key];
+      }
+    }
+    for (const key of WORD_FILTERS[name] || []) {
+      const dropped = name === 'media_search' ? [] : droppedFilterWords(input[key as keyof ToolArgs]);
+      if (dropped.length) ignored[`${key}_words`] = dropped;
+    }
+    if (Object.keys(ignored).length) {
+      applied.ignored = { ...((applied.ignored as Record<string, unknown> | undefined) || {}), ...ignored };
     }
     // The mode that ran, not the one asked for: stem on "Tesla" runs exact.
     if (applied.match_mode !== undefined && typeof record.match_mode === 'string')

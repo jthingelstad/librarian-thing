@@ -388,6 +388,23 @@ test('search_faq says when nothing matches', async () => {
   assert.match(out.note, /No FAQ entry matches/);
 });
 
+test('search_faq counts and pages its matches, skips common words and reads a possessive (QA2 F14, L2-8)', async () => {
+  const common = await ARCHIVE_TOOLS.search_faq({ query: 'the and of' }, CTX);
+  assert.equal(common.total_count, 0, 'common words match nothing');
+  assert.match(common.note, /only common words/);
+  const whole = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 10 }, CTX);
+  assert.ok(whole.total_count >= 2, `newsletter matches several entries (${whole.total_count})`);
+  const first = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 1 }, CTX);
+  assert.equal(first.total_count, whole.total_count);
+  assert.equal(first.results.length + first.truncated.omitted.results, first.total_count);
+  assert.equal(first.truncated.next_offset, 1);
+  const second = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 1, offset: 1 }, CTX);
+  assert.deepEqual(second.results[0], whole.results[1], 'offset reaches the next entry in the same order');
+  const possessive = await ARCHIVE_TOOLS.search_faq({ query: "Jamie's", limit: 10 }, CTX);
+  const plain = await ARCHIVE_TOOLS.search_faq({ query: 'Jamie', limit: 10 }, CTX);
+  assert.equal(possessive.total_count, plain.total_count, "Jamie's is Jamie");
+});
+
 test('compare_eras counts each era and says when one is empty', async () => {
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.compare_eras({ topic: 'espresso', year_a: [2005, 2005], year_b: [2018, 2018] }, CTX);
@@ -436,7 +453,7 @@ test('on_this_day: within a day, the issue, then the episode, then blog posts', 
   assert.deepEqual(kinds, ['weekly_thing', 'podcast', 'blog']);
 });
 
-test('archive_gems: every mode draws, and a theme path says how many sources it chose from', async () => {
+test('archive_gems: every mode draws, a theme included, and says how many sources it drew from', async () => {
   const issues = Array.from({ length: 60 }, (_v, index) => ({
     number: index + 1,
     subject: `WT${index + 1} on espresso`,
@@ -455,6 +472,14 @@ test('archive_gems: every mode draws, and a theme path says how many sources it 
     assert.ok(draws.size > 1, `${mode}: eight draws must not all be the same`);
   }
   const theme = await ARCHIVE_TOOLS.archive_gems({ theme: 'espresso', limit: 4 }, { scope: 'weekly_thing' });
-  assert.ok(theme.total_count > theme.results.length);
-  assert.match(theme.truncated.hint, /A reading path is \d+ of the \d+ sources that mention espresso/);
+  assert.equal(theme.total_count, 60, 'the pool is every source that names the theme');
+  assert.equal(theme.results.length + theme.truncated.omitted.results, theme.total_count);
+  assert.match(theme.truncated.hint, /drawn at random from the 60 sources that name espresso/);
+  // QA2 L2-10: a theme's gems vary like every mode's.
+  const draws = new Set();
+  for (let round = 0; round < 8; round += 1) {
+    const out = await ARCHIVE_TOOLS.archive_gems({ theme: 'espresso', limit: 2 }, { scope: 'weekly_thing' });
+    draws.add(out.results.map((item) => item.id).join(','));
+  }
+  assert.ok(draws.size > 1, 'theme: eight draws must not all be the same');
 });

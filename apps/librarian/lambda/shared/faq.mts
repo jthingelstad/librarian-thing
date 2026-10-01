@@ -61,8 +61,57 @@ export function markdownToPlainText(markdown: unknown) {
     .trim();
 }
 
+// Words every FAQ question and answer share: "the and of" scored five
+// entries (QA2 F14). A query of only these matches nothing, and says so.
+const FAQ_STOPWORDS = new Set([
+  'about',
+  'an',
+  'and',
+  'are',
+  'as',
+  'at',
+  'be',
+  'by',
+  'can',
+  'do',
+  'does',
+  'for',
+  'from',
+  'how',
+  'if',
+  'in',
+  'is',
+  'it',
+  'me',
+  'my',
+  'of',
+  'on',
+  'or',
+  'so',
+  'that',
+  'the',
+  'this',
+  'to',
+  'what',
+  'when',
+  'where',
+  'which',
+  'who',
+  'why',
+  'with'
+]);
+
+// "Jamie's" is Jamie: the possessive is stripped, or entries that say only
+// "Jamie's" never scored for "Jamie" (QA2 L2-8).
 function tokenize(value: unknown) {
-  return Array.from(String(value || '').matchAll(TOKEN_RE), (match) => match[0].toLowerCase());
+  return Array.from(String(value || '').matchAll(TOKEN_RE), (match) =>
+    match[0].toLowerCase().replace(/'s?$/, '')
+  ).filter((term) => term.length > 1);
+}
+
+/** The words of a query the FAQ is searched by: no common words. */
+export function faqQueryTerms(query: unknown) {
+  return [...new Set(tokenize(query).filter((term) => !FAQ_STOPWORDS.has(term)))];
 }
 
 export function faqEntries(replacements: Replacements = {}): FaqEntry[] {
@@ -82,8 +131,9 @@ export function faqEntries(replacements: Replacements = {}): FaqEntry[] {
   return entries;
 }
 
-export function searchFaq(query: unknown, { limit = 5, replacements = {} }: SearchFaqOptions = {}) {
-  const queryTerms = tokenize(query);
+/** Every FAQ entry the query scores on, best first. */
+export function searchFaqAll(query: unknown, replacements: Replacements = {}) {
+  const queryTerms = faqQueryTerms(query);
   if (!queryTerms.length) return [];
   const scored = [];
   for (const entry of faqEntries(replacements)) {
@@ -100,6 +150,9 @@ export function searchFaq(query: unknown, { limit = 5, replacements = {} }: Sear
   }
   return scored
     .sort((left, right) => right.score - left.score || left.entry.question.localeCompare(right.entry.question))
-    .slice(0, Math.max(1, Math.min(Number(limit) || 5, 10)))
     .map(({ entry }) => entry);
+}
+
+export function searchFaq(query: unknown, { limit = 5, replacements = {} }: SearchFaqOptions = {}) {
+  return searchFaqAll(query, replacements).slice(0, Math.max(1, Math.min(Number(limit) || 5, 10)));
 }

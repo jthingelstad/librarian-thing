@@ -208,6 +208,13 @@ function checkInvariants(tool, args, response) {
       .filter((match) => Array.isArray(body[match[1]]) && body[match[1]].length !== Number(match[2]))
       .map((match) => `${match[0]} (rendered ${body[match[1]].length})`);
     check(label('hint counts the rendered list'), miscounted.length === 0, miscounted.join('; '));
+    // An id list holding {id, resolved: false} declares object items (QA2 L2-11).
+    for (const [key, value] of Object.entries(body)) {
+      if (!Array.isArray(value) || !value.some((item) => item && typeof item === 'object' && 'resolved' in item))
+        continue;
+      const items = [schema.properties?.[key]?.items?.type || []].flat();
+      check(label(`${key} items declared string or object`), items.includes('string') && items.includes('object'));
+    }
     checkAccounting(tool, body, label);
   }
 }
@@ -227,7 +234,8 @@ const ENUMERATED_LISTS = {
   top_references: 'top',
   quote_search: 'results',
   list_topics: 'topics',
-  latest_content: 'results'
+  latest_content: 'results',
+  search_faq: 'results'
 };
 const PARTITIONS = [
   'counts_by_year',
@@ -494,6 +502,38 @@ for (const args of [{}, { source_kind: 'weekly_thing' }, { source_kind: 'blog', 
   check(
     'KA gems cap domains at 5',
     first.results.every((gem) => (gem.domains || []).length <= 5)
+  );
+}
+{
+  // QA2 L2-10: a theme draws at random from the sources that name it, like
+  // every mode (it returned one fixed reading path every time), and every
+  // gem is one list_content finds for that topic.
+  const named = new Set();
+  let listed = 0;
+  for (let offset = 0, pages = 0; pages < 40; pages += 1) {
+    const page = await ARCHIVE_TOOLS.list_content({ topic: 'coffee', limit: 120, offset }, { scope: 'all' });
+    (page.results || []).forEach((row) => named.add(row.id));
+    listed = page.total_count;
+    offset = page.truncated?.next_offset;
+    if (!offset) break;
+  }
+  const draws = [];
+  for (let round = 0; round < 3; round += 1) {
+    const gems = await run('archive_gems', { theme: 'coffee', limit: 6 });
+    draws.push(gems?.results || []);
+    check(
+      'KA gems theme total_count is the list_content count',
+      gems?.total_count === listed,
+      `${gems?.total_count} vs ${listed}`
+    );
+  }
+  const keys = draws.map((gems) => gems.map((gem) => gem.id).join(','));
+  check('KA gems theme draws vary', new Set(keys).size > 1, keys[0]);
+  const stray = draws.flat().filter((gem) => !named.has(gem.id));
+  check(
+    'KA gems theme draws only sources that name it',
+    named.size === listed && stray.length === 0,
+    stray.map((gem) => gem.id).join(', ')
   );
 }
 {
@@ -856,6 +896,29 @@ await run('latest_content', { limit: 3 });
 await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });
 await run('compare_eras', { topic: 'ethereum', year_a: [2021, 2021], year_b: [2024, 2024], limit: 2 });
+// QA2 T2-4: an era's sources_naming_topic is archive_lens's count for the
+// same words, so a voice narrows both (Twitter quoted 2017-18 is 0, and the
+// count once said 43 and hid the never-named note).
+for (const voice of ['quoted', 'jamie']) {
+  const eras = await run('compare_eras', {
+    topic: 'Twitter',
+    year_a: [2022, 2023],
+    year_b: [2017, 2018],
+    voice,
+    limit: 1
+  });
+  for (const [key, year_range] of [
+    ['era_a', [2022, 2023]],
+    ['era_b', [2017, 2018]]
+  ]) {
+    const lens = await run('archive_lens', { topic: 'Twitter', year_range, voice, limit: 1 });
+    check(
+      `KA compare_eras ${key} voice ${voice} counts what archive_lens counts`,
+      eras?.[key]?.sources_naming_topic === lens?.total_count,
+      `${eras?.[key]?.sources_naming_topic} vs ${lens?.total_count}`
+    );
+  }
+}
 await run('source_neighborhood', { id: 'wt-182', limit: 3 });
 // QA2 links L2-3, L2-8: blog-1075885 has more incoming links than the
 // list holds. The hint names find_links url, which reaches every one, and
@@ -951,6 +1014,67 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     .flatMap((tool) => validateToolArguments(tool, { offset: -1 }))
     .filter((problem) => / to -|from - to/.test(problem));
   check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
+}
+// QA2 L2-9 / L2-10: an offset past the end says so for every pageOf tool,
+// and a reversed year_range is refused in-process as at the door.
+for (const [tool, args] of [
+  ['list_content', { topic: 'RSS' }],
+  ['quote_search', { phrase: 'RSS reader' }],
+  ['list_topics', {}],
+  ['currently_history', {}],
+  ['find_links', { domain: 'github.com' }],
+  ['top_references', {}],
+  ['latest_content', {}],
+  ['media_search', { query: 'snow' }],
+  ['search_faq', { query: 'newsletter' }]
+]) {
+  const past = await run(tool, { ...args, offset: 99999 });
+  check(
+    `KA ${tool} offset past the end says so`,
+    /^offset 99999 is past the last of \d+/.test(String(past?.truncated?.hint || '')),
+    String(past?.truncated?.hint)
+  );
+}
+for (const [tool, args] of [
+  ['list_content', { topic: 'RSS' }],
+  ['archive_lens', { topic: 'RSS' }],
+  ['find_links', { domain: 'github.com' }],
+  ['corpus_stats', {}],
+  ['on_this_day', { date: '05-13' }]
+]) {
+  const reversed = await run(tool, { ...args, year_range: [2024, 2019] }, { expectError: true });
+  check(
+    `KA ${tool} reversed year_range refused in-process`,
+    reversed?.code === 'bad_request' && /backwards/.test(String(reversed?.error)),
+    JSON.stringify(reversed).slice(0, 80)
+  );
+}
+// QA2 L2-11: what a tool sets aside is named in applied.ignored, never
+// echoed as applied or dropped without a word.
+{
+  const photo = await run('list_content', { topic: 'Photo 📷', limit: 1 });
+  const plain = await run('list_content', { topic: 'photo', limit: 1 });
+  check(
+    'KA an emoji word in a topic is named ignored',
+    photo?.total_count === plain?.total_count && (photo?.applied?.ignored?.topic_words || []).includes('📷'),
+    JSON.stringify(photo?.applied)
+  );
+  const voiced = await run('list_content', { topic: 'iPhone', voice: 'jamie', limit: 1 });
+  check(
+    'KA list_content echoes only what it reads (voice is ignored)',
+    voiced?.applied?.voice === undefined && voiced?.applied?.ignored?.voice === 'jamie',
+    JSON.stringify(voiced?.applied)
+  );
+  const nine = await run(
+    'archive_lens',
+    { topic: 'ENS', aliases: ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9'], limit: 1 },
+    { expectError: true }
+  );
+  check(
+    'KA a ninth caller alias is refused in-process',
+    nine?.code === 'bad_request',
+    JSON.stringify(nine).slice(0, 80)
+  );
 }
 // File names are searchable (plan 4 step 1): the Straw Poll charts are
 // found by the word only their file names hold, and say so.
@@ -1058,8 +1182,99 @@ for (const [tool, args] of [
     String(out?.error).slice(0, 80)
   );
 }
+// QA2 T2-7: an issue is on its Chicago day, across DST and midnight UTC
+// (pins checked against the corpus send times: WT35 01:28Z Jan 7, WT251
+// 01:14Z Apr 24, WT299 01:45Z Nov 4). WT22 is read from the corpus: its
+// 00:00Z placeholder is being corrected to the day it went out.
+const chicagoDayOf = (stamp) =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' }).format(new Date(stamp));
+const wt22Day = chicagoDayOf(
+  (corpora.weekly_thing?.issues || []).find((issue) => Number(issue.number) === 22)?.publish_date
+);
+for (const [id, date] of [
+  ['wt-35', '2018-01-06'],
+  ['wt-22', wt22Day],
+  ['wt-251', '2023-04-23'],
+  ['wt-299', '2024-11-03']
+]) {
+  const day = await run('on_this_day', { date, source_kind: 'weekly_thing' });
+  const item = (day?.years || []).flatMap((row) => row.items).find((entry) => entry.id === id);
+  check(`KA on_this_day files ${id} on ${date}`, item?.date === date, JSON.stringify(item?.date));
+}
 await run('search_faq', { query: 'what is the weekly thing' });
+// QA2 T2-6: a resource takes no offset or limit, so a cut resource's hint
+// names the tool call for the rest, never "call again with offset".
+{
+  const { parseResourceUri, readResource } = await import(path.join(distDir, 'shared/mcp-resources.mjs'));
+  const reader = {
+    invoke: (name, input) => ARCHIVE_TOOLS[name](input, { scope: 'all' }),
+    render: (name, result) => renderToolCallResult(name, result)
+  };
+  let cut = 0;
+  for (const uri of ['librarian://on-this-day/09-26', 'librarian://year/2019', 'librarian://topic/apple']) {
+    const read = await readResource(parseResourceUri(uri), reader);
+    const hint = JSON.parse(read.text).truncated?.hint;
+    if (hint === undefined) continue;
+    cut += 1;
+    check(
+      `KA resource ${uri} hint names the tool call, not a parameter it lacks`,
+      !/call again|raise limit|with offset \d/.test(hint) && /call the \w+ tool/.test(hint),
+      hint
+    );
+  }
+  check('KA resource hints exercised on a cut resource', cut >= 2, String(cut));
+}
+// QA2 F14 / L2-8: search_faq counts every entry that names a word,
+// possessive included ("Jamie's" is Jamie), against the raw FAQ, and a
+// query of common words matches nothing.
+{
+  const faq = JSON.parse(readFileSync(path.join(here, '..', 'shared', 'faq.json'), 'utf8'));
+  const entries = (faq.sections || []).flatMap((section) =>
+    (section.entries || []).map((entry) => `${section.title}\n${entry.question}\n${entry.answer}`)
+  );
+  for (const word of ['Jamie', 'newsletter']) {
+    const oracle = entries.filter((text) => new RegExp(`\\b${word}\\b`, 'i').test(text)).length;
+    const out = await run('search_faq', { query: word, limit: 10 });
+    check(
+      `KA search_faq ${word} counts every entry naming it`,
+      out?.total_count === oracle,
+      `${out?.total_count} vs ${oracle}`
+    );
+  }
+  const common = await run('search_faq', { query: 'the and of' });
+  check('KA search_faq common words match nothing', common?.total_count === 0, String(common?.total_count));
+}
+// QA2 I2-3: a name that is no site topic says where every mention is
+// counted (Mastodon is in 11 issues and is no topic).
+{
+  const none = await run('list_topics', { query: 'Mastodon' });
+  const listed = await run('list_content', { topic: 'Mastodon', limit: 1 });
+  check(
+    'KA list_topics with no match points to list_content and archive_lens',
+    none?.total_count === 0 && /list_content/.test(none?.note || '') && /archive_lens/.test(none?.note || ''),
+    String(none?.note)
+  );
+  check('KA Mastodon is counted by list_content', listed?.total_count > 0, String(listed?.total_count));
+}
+{
+  // QA2 T2-5: currently_history showed WT22's UTC day (00:00Z on the 7th
+  // was the 6th in Chicago); it shows the Chicago day of the corpus stamp.
+  const reading = await run('currently_history', { year: 2017, kind: 'reading', limit: 120 });
+  const wt22 = (reading?.entries || []).find((entry) => entry.source_id === 'wt-22');
+  check(
+    'KA currently_history shows WT22 on its Chicago day',
+    wt22?.date === wt22Day,
+    JSON.stringify(wt22?.date ?? wt22?.publish_date)
+  );
+  const latest = await run('latest_content', { source_kind: 'podcast', limit: 1 });
+  check(
+    'KA latest_content dates an episode by its own day',
+    latest?.results?.[0]?.date === latest?.results?.[0]?.publish_date,
+    JSON.stringify(latest?.results?.[0]?.date)
+  );
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
+await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });
 await run('list_topics', { query: 'coffee' });
 await run('quote_search', { phrase: 'open web', limit: 3 });
@@ -1111,6 +1326,22 @@ if (allowNetwork) {
   await run('fetch_page', { url: 'https://www.thingelstad.com/' });
 } else {
   console.log('fetch_page skipped (EVAL_ALLOW_NETWORK != 1)');
+}
+
+// QA2 F7: corpus_stats oldest/newest domains honour limit (they were held
+// at 6 for every limit from 10 to 40 while limit 9 showed 9).
+for (const limit of [3, 9, 10, 12, 20, 40]) {
+  const stats = await run('corpus_stats', { source_kind: 'weekly_thing', limit });
+  const omitted = stats?.truncated?.omitted || {};
+  for (const at of ['oldest', 'newest']) {
+    const shown = (stats?.sources?.[0]?.[at]?.domains || []).length;
+    const all = shown + (omitted[`sources[].${at}.domains`] || 0);
+    check(
+      `KA corpus_stats limit ${limit} ${at}.domains shows min(limit, all)`,
+      shown === Math.min(limit, all),
+      `${shown} of ${all}`
+    );
+  }
 }
 
 // server_version presence (belt-and-braces cache signal).

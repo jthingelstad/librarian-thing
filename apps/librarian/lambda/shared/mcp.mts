@@ -634,7 +634,7 @@ export function initializeResult(requestedVersion: unknown) {
       'the thingelstad.com blog, and the Another Thing podcast.',
       'Start broad with search_archive, then deepen with get_source; use archive_lens for',
       'how-things-changed-over-time questions, compare_eras for then-versus-now, on_this_day for',
-      'this date in past years, list_topics for the topic catalogue, latest_content for freshness,',
+      'this date in every year (this one included), list_topics for the topic catalogue, latest_content for freshness,',
       'and corpus_stats for what the archive contains. voice: "jamie" (search_archive, quote_search,',
       "find_evidence, compare_eras and archive_lens) keeps only Jamie's own words, never passages Jamie quoted.",
       'year is shorthand for year_range [year, year]. When a result is cut, its truncated block says what',

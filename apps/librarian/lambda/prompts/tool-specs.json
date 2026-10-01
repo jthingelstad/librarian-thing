@@ -17,6 +17,12 @@
               "maximum": 10,
               "default": 5,
               "description": "Most results, 1 to 10 (default 5)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           },
           "required": ["query"]
@@ -31,15 +37,19 @@
           "query": {
             "type": "string"
           },
+          "total_count": {
+            "type": "integer",
+            "description": "FAQ entries that match, best first; results is one page of them."
+          },
           "results": {
             "type": "array"
           },
           "note": {
             "type": "string",
-            "description": "Present when no FAQ entry matches."
+            "description": "Present when no FAQ entry matches, saying why."
           }
         },
-        "required": ["results"]
+        "required": ["results", "total_count"]
       }
     }
   },
@@ -74,7 +84,7 @@
             },
             "section": {
               "type": "string",
-              "description": "A Weekly Thing section heading or family, e.g. \"Journal\". A group heading from the body (\"Notable Links 📌\", \"Stream\", \"Now Reading 📚\") takes every passage under it; a name no heading, family or group has exactly matches inside headings; a name that matches nothing is an error."
+              "description": "A Weekly Thing section heading or family, e.g. \"Journal\". A group heading from the body (\"Notable Links 📌\", \"Stream\", \"Now Reading 📚\") takes every passage under it; a name that is a heading or family exactly matches only that (\"coffee\" is Coffee, not Coffee Gear); any other name matches inside headings; a name that matches nothing is an error."
             },
             "section_family": {
               "type": "string",
@@ -180,7 +190,8 @@
         "type": "object",
         "properties": {
           "source": {
-            "type": "object"
+            "type": "object",
+            "description": "The source; its date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["source"]
@@ -190,7 +201,7 @@
   {
     "toolSpec": {
       "name": "list_content",
-      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -326,7 +337,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["total_count", "results"]
@@ -336,7 +347,7 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by source (id: every link in one issue, post or episode), domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved applies to links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not; an external link matches neither. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash, fragment and tracking parameters such as utm_*, ref, fbclid and smid ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by editorial picks (Weekly Thing headline links; source_kind blog ranks blog links) (the 20 most linked; truncated.omitted.top_domains counts the rest, and top_references pages through them all). year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); page with offset, and truncated.next_offset names the next page. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Query link metadata in the active source scope by source (id: every link in one issue, post or episode), domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved applies to links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not; an external link matches neither. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash, fragment and tracking parameters such as utm_*, ref, fbclid and smid ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by editorial picks (Weekly Thing headline links; source_kind blog ranks blog links) (the 20 most linked; truncated.omitted.top_domains counts the rest, and top_references pages through them all). year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); page with offset, and truncated.next_offset names the next page. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -543,7 +554,7 @@
           },
           "sources": {
             "type": "array",
-            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}."
+            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["sources"]
@@ -553,7 +564,7 @@
   {
     "toolSpec": {
       "name": "list_topics",
-      "description": "The archive's card catalogue. Returns the nine topic clusters every Weekly Thing issue is filed under (description, first and last seen, representative issues, related clusters; pass one to search_archive as topic) and the Weekly Thing site's topic pages: names mentioned in 3 or more issues, with issue counts, first and last issue, related topics and the public page URL. query narrows both by name. Use to see what the archive covers before searching, or to find the right name for archive_lens.",
+      "description": "The archive's card catalogue. Returns the nine topic clusters every Weekly Thing issue is filed under (description, first and last seen, representative issues, related clusters; pass one to search_archive as topic) and the Weekly Thing site's topic pages: names among the 40 most-extracted names of 3 or more issues, with those issue counts, first and last issue, related topics and the public page URL. The counts are of that sample, not of every mention; archive_lens and list_content count every source that names a topic. query narrows both by name. Use to see what the archive covers before searching, or to find the right name for archive_lens.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -581,7 +592,7 @@
       }
     },
     "mcp": {
-      "description": "The topic catalogue: the nine clusters every issue is filed under, and the weekly site's topic pages (names in 3+ issues) with counts, first and last issue, related topics and page url. query filters by name.",
+      "description": "The topic catalogue: the nine clusters every issue is filed under, and the weekly site's topic pages (names among the 40 most-extracted of 3+ issues; counts are of that sample, archive_lens counts every mention) with counts, first and last issue, related topics and page url. query filters by name.",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -604,10 +615,11 @@
           },
           "topics": {
             "type": "array",
-            "description": "Most issues first. issue_count is the issues whose topic extraction named it, not every mention: archive_lens counts mentions."
+            "description": "Most issues first. issue_count is the issues whose 40 most-extracted names include it, not every mention: archive_lens counts mentions."
           },
           "note": {
-            "type": "string"
+            "type": "string",
+            "description": "Present when the graph is not loaded, or when no site topic matches query (then it names the tools that count every mention)."
           }
         },
         "required": ["clusters", "topics", "total_count"]
@@ -617,7 +629,7 @@
   {
     "toolSpec": {
       "name": "latest_content",
-      "description": "Return the newest indexed issues/posts/episodes deterministically by publish_date. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Return the newest indexed issues/posts/episodes, newest first by the moment each was published (ties by id). Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -673,7 +685,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first by moment of publication."
+            "description": "Newest first by moment of publication. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["results", "total_count"]
@@ -756,7 +768,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["results", "total_count"]
@@ -900,13 +912,24 @@
           },
           "results": {
             "type": "array",
-            "description": "Ids."
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "timeline": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "latest_sources": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "years": {
             "type": "array",
@@ -1087,7 +1110,7 @@
   {
     "toolSpec": {
       "name": "archive_gems",
-      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme builds a reading path for that theme (ids resolve in sources_by_id and in get_source); otherwise mode biases toward forgotten (older), recent, or serendipity (a random draw from link-rich, cross-source sources). Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme draws at random from every source that names that theme (total_count says how many; list_content with that topic lists them all); otherwise mode biases toward forgotten (older), recent, or serendipity (a random draw from link-rich, cross-source sources). Every call draws afresh, weighted toward link-rich sources. Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1095,7 +1118,7 @@
             "theme": {
               "type": "string",
               "maxLength": 200,
-              "description": "Gems about this theme, as a reading path; omit for any."
+              "description": "Gems that name this theme, drawn at random from every source that does; omit for any."
             },
             "mode": {
               "type": "string",
@@ -1137,7 +1160,7 @@
       }
     },
     "mcp": {
-      "description": "A few sources worth reading: a reading path through a theme, or with no theme a draw by mode (serendipity, forgotten or recent).",
+      "description": "A few sources worth reading, drawn at random: from the sources that name a theme, or with no theme by mode (serendipity, forgotten or recent).",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -1149,7 +1172,7 @@
           },
           "total_count": {
             "type": "integer",
-            "description": "With theme: every source that mentions it; results is a reading path through some of them."
+            "description": "With theme: every source that names it (the list_content count); results is a random draw from them."
           },
           "results": {
             "type": "array"
@@ -1427,7 +1450,8 @@
             "description": "[{<key>, count}]"
           },
           "entries": {
-            "type": "array"
+            "type": "array",
+            "description": "Newest first. Each entry's date is the Chicago day its issue went out; publish_date is the issue's UTC timestamp as stored."
           }
         },
         "required": ["total_count", "entries"]
