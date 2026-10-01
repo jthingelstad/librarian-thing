@@ -263,6 +263,18 @@ function checkAccounting(tool, body, label) {
       `${listed} + ${omitted['years[].items'] || 0} vs ${body.total_count}`
     );
   }
+  if (tool === 'source_neighborhood') {
+    // Each list and its count (QA2 links L2-9: related_sources was cut to
+    // limit with no count).
+    for (const [list, count] of [
+      ['outgoing_links', 'outgoing_count'],
+      ['incoming_links', 'incoming_count'],
+      ['related_sources', 'related_count']
+    ]) {
+      const shown = (body[list] || []).length + (omitted[list] || 0);
+      check(label(`${list} shown + omitted = ${count}`), shown === body[count], `${shown} vs ${body[count]}`);
+    }
+  }
   if (!Number.isInteger(body.total_count)) return;
   for (const key of PARTITIONS) {
     if (!Array.isArray(body[key]) || omitted[key]) continue;
@@ -607,6 +619,39 @@ await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });
 await run('compare_eras', { topic: 'ethereum', year_a: [2021, 2021], year_b: [2024, 2024], limit: 2 });
 await run('source_neighborhood', { id: 'wt-182', limit: 3 });
+// QA2 links L2-3, L2-8: blog-1075885 has more incoming links than the
+// list holds. The hint names find_links url, which reaches every one, and
+// every listed link names a source get_source opens.
+for (const id of ['blog-1075885', 'wt-351', 'wt-182']) {
+  const near = await run('source_neighborhood', { id, limit: 3 });
+  const rendered = renderToolCallResult('source_neighborhood', near).structured || {};
+  if (rendered.incoming_count > (rendered.incoming_links || []).length) {
+    const hint = String(rendered.truncated?.hint || '');
+    const all = await run('find_links', { url: rendered.source?.url, limit: 1 });
+    check(
+      `KA source_neighborhood ${id} routes to every incoming link`,
+      /find_links with url/.test(hint) && all?.total_count >= rendered.incoming_count,
+      `${all?.total_count} vs ${rendered.incoming_count}: ${hint}`
+    );
+  } else {
+    check(`KA source_neighborhood ${id} has more incoming links than it lists`, id !== 'blog-1075885');
+  }
+  const ids = new Set(
+    ['outgoing_links', 'incoming_links', 'cross_source_links'].flatMap((list) =>
+      (rendered[list] || []).map((link) => link.id)
+    )
+  );
+  const dead = [];
+  for (const linkId of ids) {
+    const source = await ARCHIVE_TOOLS.get_source({ id: linkId, format: 'outline' }, { scope: 'all' });
+    if (!linkId || source?.source?.id !== linkId) dead.push(String(linkId));
+  }
+  check(
+    `KA source_neighborhood ${id} every link names a source get_source opens`,
+    ids.size > 0 && !dead.length,
+    dead.join(', ')
+  );
+}
 await run('find_evidence', {
   claims: ['Jamie registered thingelstad.eth in 2021', 'Jamie started The Weekly Thing in 2017']
 }).then((out) => {

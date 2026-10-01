@@ -1008,7 +1008,7 @@
   {
     "toolSpec": {
       "name": "source_neighborhood",
-      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed, and find_links with id pages through every link of a source) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1049,7 +1049,7 @@
           },
           "incoming_count": {
             "type": "integer",
-            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows the newest 30."
+            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows the newest 30, and find_links with the source url lists them all."
           },
           "incoming_links": {
             "type": "array"
@@ -1059,6 +1059,10 @@
           },
           "cross_source_links": {
             "type": "array"
+          },
+          "related_count": {
+            "type": "integer",
+            "description": "Sources that share a domain or words with this one; related_sources holds the top limit."
           },
           "related_sources": {
             "type": "array"

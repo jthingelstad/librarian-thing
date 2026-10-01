@@ -1716,6 +1716,8 @@ function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRe
   // pure duplication of two fields already present, and inconsistently
   // populated across sections. Dropped.
   delete (full as Record<string, unknown>).context;
+  // Its source is the parent.
+  delete (full as Record<string, unknown>).id;
   const child: Record<string, unknown> = {};
   const parentUrl = String(parent.url || (parent.issue_number ? `/archive/${parent.issue_number}/` : '') || '');
   for (const [key, value] of Object.entries(full)) {
@@ -1738,6 +1740,8 @@ function compactChildLink(link: ArchiveRecord, parent: ArchiveRecord): ArchiveRe
 
 function compactLink(link: ArchiveRecord): ArchiveRecord {
   return {
+    // The source the link sits in, for get_source (QA2 links L2-8).
+    id: linkSourceId(link) || undefined,
     source_kind: link.source_kind,
     corpus_kind: linkCorpusKind(link),
     issue_number: link.issue_number ?? null,
@@ -3079,8 +3083,14 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
     outgoingAll.length > outgoing.length
       ? `outgoing_links shows ${outgoing.length} of ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
       : '',
+    // No shown count here: the 48K cap can cut the list after this, and
+    // id and limit never reach the rest; find_links url does (QA2 links
+    // L2-3: "shows the newest 30 of 31" over 24, with no route to 7).
     incomingAll.length > incomingShown.length
-      ? `incoming_links shows the newest ${incomingShown.length} of ${incomingAll.length}.`
+      ? `incoming_links holds the newest links to this source, not all ${incomingAll.length}; find_links with url ${absoluteSourceUrl(bundle.record.url)} lists every one.`
+      : '',
+    related.length > limit
+      ? `related_sources is the ${limit} most related of ${related.length} sources that share a domain or words with this one${limit < TOOL_LIMITS.source_neighborhood.max ? `; raise limit (up to ${TOOL_LIMITS.source_neighborhood.max}) for more` : ''}.`
       : ''
   ].filter(Boolean);
   return markTruncated(
@@ -3096,6 +3106,9 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       incoming_links: incomingShown.map(compactLink),
       ...(crossSource.length ? { cross_source_count: crossSource.length } : {}),
       ...(crossShown.length ? { cross_source_links: crossShown.map(compactLink) } : {}),
+      // Every candidate that shares a domain or words, of which
+      // related_sources holds the top limit (QA2 links L2-9).
+      related_count: related.length,
       // Five domains say what a related source linked; the full list ran
       // to 700 chars an entry (archive_gems caps the same way).
       related_sources: related.slice(0, limit).map((item) => {
@@ -3114,7 +3127,8 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       omitted: {
         outgoing_links: outgoingAll.length - outgoing.length,
         incoming_links: incomingAll.length - incomingShown.length,
-        cross_source_links: crossUnshown.length - crossShown.length
+        cross_source_links: crossUnshown.length - crossShown.length,
+        related_sources: Math.max(0, related.length - limit)
       },
       hint: hints.join(' ')
     }
