@@ -1563,13 +1563,16 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   // Sort BEFORE the cut: corpus order is oldest first, so a limit of 20
   // on simonwillison.net's 69 links showed 2017-2023 and never said the
   // 49 newest (all of 2024-26) existed.
+  // Links on an undated page sort after the dated ones either way.
   const ordered = [...filteredLinks].sort((a, b) =>
     inSource
       ? 0
-      : sort === 'oldest'
-        ? String(a.publish_date || '').localeCompare(String(b.publish_date || ''))
-        : String(b.publish_date || '').localeCompare(String(a.publish_date || ''))
+      : Number(!a.publish_date) - Number(!b.publish_date) ||
+        (sort === 'oldest'
+          ? String(a.publish_date || '').localeCompare(String(b.publish_date || ''))
+          : String(b.publish_date || '').localeCompare(String(a.publish_date || '')))
   );
+  const undatedLinks = filteredLinks.filter((link) => !Number(link.issue_year || link.post_year || 0)).length;
   const page = pageOf(
     'find_links',
     ordered,
@@ -1650,6 +1653,8 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
       results,
       total_count: filteredLinks.length,
+      // Links on undated pages: in total_count, in no year_range.
+      ...(undatedLinks ? { undated_count: undatedLinks } : {}),
       top_domains,
       top_domains_measure: role ? `${role} links` : linkMeasure(sourceKind),
       counts_by_source: sortedCountList(countsBySource, 'source_kind'),
@@ -2402,7 +2407,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     // made links-per-issue math silently wrong by 2x.
     const corpusTotal =
       kind === 'blog'
-        ? Number(corpus.post_count || 0)
+        ? Number(corpus.post_count || 0) + Number(corpus.page_count || 0)
         : kind === 'podcast'
           ? Number(corpus.episode_count || 0)
           : Number(corpus.issue_count || 0);
@@ -2766,6 +2771,10 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
       total_count: ordered.length,
       counts_by_year: countList(ordered.map(recordYear), 'year').sort((a, b) => Number(a.year) - Number(b.year)),
+      // Undated pages: in total_count, in no year.
+      ...(ordered.some((record) => !recordYear(record))
+        ? { undated_count: ordered.filter((record) => !recordYear(record)).length }
+        : {}),
       counts_by_source: countList(
         ordered.map((record) => record.source_kind),
         'source_kind'

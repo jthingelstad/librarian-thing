@@ -306,7 +306,9 @@ function checkAccounting(tool, body, label) {
   if (!Number.isInteger(body.total_count)) return;
   for (const key of PARTITIONS) {
     if (!Array.isArray(body[key]) || omitted[key]) continue;
-    const sum = body[key].reduce((total, row) => total + (Number(row.count) || 0), 0);
+    // Undated pages are in total_count and in no year (2.4.0).
+    const undated = key === 'counts_by_year' ? Number(body.undated_count) || 0 : 0;
+    const sum = body[key].reduce((total, row) => total + (Number(row.count) || 0), 0) + undated;
     check(label(`${key} sums to total_count`), sum === body.total_count, `${sum} vs ${body.total_count}`);
   }
 }

@@ -109,6 +109,10 @@ test('list_content names the page by its page id', async () => {
   const ids = out.results.map((row) => row.id);
   assert.ok(ids.includes('page-71862'), JSON.stringify(ids));
   assert.deepEqual(ids, ['blog-71862', 'page-71862'], 'undated pages list after every dated source');
+  assert.equal(out.undated_count, 1, 'the page is in total_count and in no year');
+  assert.equal(out.counts_by_year.reduce((sum, row) => sum + row.count, 0) + out.undated_count, out.total_count);
+  const stats = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'blog' }, { scope: 'all' });
+  assert.equal(stats.sources[0].item_count, 2, 'item_count is posts and pages');
 });
 
 test('quote_search finds a phrase on a page, and corpus_stats counts pages', async () => {

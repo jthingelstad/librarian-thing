@@ -57,6 +57,12 @@ function domainOracle(links, domain) {
   }).length;
 }
 
+// A blog source's id: page-<uid> for a micro.blog page (a number space of
+// its own; 2.4.0), blog-<microblog id> for a post.
+function blogId(record) {
+  return record.page_id != null && record.page_id !== '' ? `page-${record.page_id}` : `blog-${record.microblog_id}`;
+}
+
 function yearOf(record) {
   const year = Number(String(record.publish_date || '').slice(0, 4));
   return Number.isFinite(year) ? year : null;
@@ -73,6 +79,8 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
   };
   const allLinks = [...bySource.weekly_thing.links, ...bySource.blog.links, ...bySource.podcast.links];
   const totalItems = Object.values(bySource).reduce((sum, source) => sum + source.items.length, 0);
+  // Pages are undated (2.4.0): every listing holds them, no date tool does.
+  const undatedItems = Object.values(bySource).flatMap((source) => source.items.filter((item) => !yearOf(item)));
   // The Chicago day each source was published on, by id (Jamie, 2026-09-30:
   // "All of my content should be shown in Chicago time").
   const chicago = new Intl.DateTimeFormat('en-CA', {
@@ -88,7 +96,7 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
   };
   const oracleDay = new Map([
     ...bySource.weekly_thing.items.map((issue) => [`wt-${issue.number}`, dayOf(issue)]),
-    ...bySource.blog.items.map((post) => [`blog-${post.microblog_id}`, dayOf(post)]),
+    ...bySource.blog.items.map((post) => [blogId(post), dayOf(post)]),
     ...bySource.podcast.items.map((episode) => [`ep-${episode.number}`, dayOf(episode)])
   ]);
 
@@ -110,10 +118,17 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
         `${source.link_count} vs ${oracle.links.length}`
       );
       const byYear = (source.counts_by_year || []).reduce((sum, row) => sum + (Number(row.count) || 0), 0);
+      const pages = Number(source.page_count) || 0;
       check(
-        `completeness corpus_stats ${source.source_kind} counts_by_year partitions items`,
-        byYear === oracle.items.length,
-        `${byYear} vs ${oracle.items.length}`
+        `completeness corpus_stats ${source.source_kind} counts_by_year + page_count partitions items`,
+        byYear + pages === oracle.items.length,
+        `${byYear} + ${pages} vs ${oracle.items.length}`
+      );
+      const oraclePages = oracle.items.filter((item) => item.page_id != null).length;
+      check(
+        `completeness corpus_stats ${source.source_kind} page_count`,
+        pages === oraclePages,
+        `${pages} vs ${oraclePages}`
       );
     }
     check(
@@ -180,7 +195,7 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     const thisYear = Number(chicago.format(new Date()).slice(0, 4));
     for (const target of [...new Set([thisYear, 2028])]) {
       const leap = new Date(Date.UTC(target, 1, 29)).getUTCMonth() === 1;
-      const pastItems = [...oracleDay.values()].filter((day) => Number(day.slice(0, 4)) <= target).length;
+      const pastItems = [...oracleDay.values()].filter((day) => day && Number(day.slice(0, 4)) <= target).length;
       let sum = 0;
       const seen = new Map();
       const misdated = [];
@@ -275,8 +290,11 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
       }
       return { items, total: -1 };
     };
+    // An undated page shows no date, and its oracle day is empty.
     const misdated = (items, idOf = (item) => item.id) =>
-      items.filter((item) => item.date !== oracleDay.get(idOf(item))).map((item) => `${idOf(item)} ${item.date}`);
+      items
+        .filter((item) => (item.date ?? '') !== (oracleDay.get(idOf(item)) ?? ''))
+        .map((item) => `${idOf(item)} ${item.date}`);
     // The day a reader sees: date, or what showed before it (publish_date).
     const shownDay = (item) => String(item.date ?? item.publish_date ?? '').slice(0, 10);
     const stepsForward = (items) => items.filter((item, i) => i > 0 && shownDay(item) > shownDay(items[i - 1]));
@@ -286,12 +304,23 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     ]) {
       const { items, total } = await walk(tool, { limit });
       const wrong = misdated(items);
-      const forward = stepsForward(items);
+      const forward = stepsForward(items.filter((item) => shownDay(item)));
+      // list_content is the catalogue (undated pages last); latest_content
+      // is by date, so it holds every dated source and no page.
+      const expected = tool === 'latest_content' ? totalItems - undatedItems.length : totalItems;
       check(
         `completeness ${tool} walk reaches every source`,
-        items.length === total && total === totalItems,
-        `${items.length} of ${total} (${totalItems})`
+        items.length === total && total === expected,
+        `${items.length} of ${total} (${expected})`
       );
+      if (tool === 'list_content') {
+        const firstUndated = items.findIndex((item) => !shownDay(item));
+        check(
+          'completeness list_content lists undated pages after every dated source',
+          firstUndated === -1 || items.slice(firstUndated).every((item) => !shownDay(item)),
+          `first undated at ${firstUndated} of ${items.length}`
+        );
+      }
       check(
         `completeness ${tool} dates every source in Chicago`,
         wrong.length === 0,
@@ -384,11 +413,16 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     ['find_links', { domain: 'github.com' }]
   ]) {
     const all = await call(tool, { ...args, limit: 1 });
-    let parts = 0;
+    // Undated pages are in the total and in no year.
+    let parts = Number(all.undated_count) || 0;
     for (let year = 2000; year <= new Date().getUTCFullYear(); year += 1) {
       parts += Number((await call(tool, { ...args, year, limit: 1 })).total_count) || 0;
     }
-    check(`completeness ${tool} years sum to total`, all.total_count === parts, `${all.total_count} vs ${parts}`);
+    check(
+      `completeness ${tool} years + undated_count sum to total`,
+      all.total_count === parts,
+      `${all.total_count} vs ${parts}`
+    );
   }
 
   // 8. Reachability: every source resolves through get_source, by the id
@@ -405,12 +439,12 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     for (const post of posts) urlCounts.set(post.url, (urlCounts.get(post.url) || 0) + 1);
     const ambiguous = [];
     for (const post of posts) {
-      const byId = await call('get_source', { id: `blog-${post.microblog_id}`, format: 'outline' });
-      if (byId.source?.subject !== post.subject) missing.push(`blog-${post.microblog_id}`);
+      const byId = await call('get_source', { id: blogId(post), format: 'outline' });
+      if (byId.source?.subject !== post.subject) missing.push(blogId(post));
       const byUrl = await call('get_source', { id: post.url, format: 'outline' });
       if (urlCounts.get(post.url) > 1) {
         const named = new Set((byUrl.candidates || []).map((candidate) => candidate.id));
-        const expected = posts.filter((item) => item.url === post.url).map((item) => `blog-${item.microblog_id}`);
+        const expected = posts.filter((item) => item.url === post.url).map(blogId);
         if (byUrl.code !== 'bad_request' || named.size !== expected.length || !expected.every((id) => named.has(id))) {
           ambiguous.push(post.url);
         }
@@ -455,14 +489,18 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     // measured against its own chunks (chunk ids carry the microblog id).
     const ownWords = new Map();
     for (const chunk of blog.chunks || []) {
-      const id = String(chunk.id || '').split(':')[1];
+      // blog:<id> or page:<id> - pages number apart from posts.
+      const id = String(chunk.id || '')
+        .split(':')
+        .slice(0, 2)
+        .join(':');
       ownWords.set(id, (ownWords.get(id) || 0) + (Number(chunk.word_count) || 0));
     }
     const merged = [];
-    for (const post of posts.filter((item) => urlCounts.get(item.url) > 1)) {
+    for (const post of posts.filter((item) => urlCounts.get(item.url) > 1 && item.microblog_id != null)) {
       const result = await call('get_source', { id: `blog-${post.microblog_id}`, format: 'outline' });
       const words = Number(result.source?.word_count) || 0;
-      const own = ownWords.get(String(post.microblog_id)) || 0;
+      const own = ownWords.get(`blog:${post.microblog_id}`) || 0;
       if (result.source?.subject !== post.subject || words > own * 1.2 + 20) {
         merged.push(`blog-${post.microblog_id} (${words} words vs ${own})`);
       }
@@ -607,22 +645,25 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     let blogHeadings = 0;
     const chunksOfPost = new Map();
     for (const chunk of blog.chunks || []) {
-      const key = String(chunk.microblog_id ?? /^blog:(\d+):/.exec(String(chunk.id || ''))?.[1] ?? '');
+      const key =
+        chunk.page_id != null
+          ? `page-${chunk.page_id}`
+          : `blog-${chunk.microblog_id ?? /^blog:(\d+):/.exec(String(chunk.id || ''))?.[1] ?? ''}`;
       if (!chunksOfPost.has(key)) chunksOfPost.set(key, []);
       chunksOfPost.get(key).push(chunk);
     }
     for (const [id, chunks] of chunksOfPost) {
       if (!chunks.some((chunk) => /^#{1,6}\s/m.test(String(chunk.text || '')))) continue;
-      const text = await readSection(`blog-${id}`, undefined, false);
+      const text = await readSection(id, undefined, false);
       if (text === null) {
-        blogPartial.push(`blog-${id} unreadable`);
+        blogPartial.push(`${id} unreadable`);
         continue;
       }
       for (const { name, paragraphs } of underHeadings(text, /^#{1,6}$/)) {
         blogHeadings += 1;
-        const read = await readSection(`blog-${id}`, name);
+        const read = await readSection(id, name);
         const missing = read === null ? paragraphs.length || 1 : paragraphs.filter((p) => !read.includes(p)).length;
-        if (missing) blogPartial.push(`blog-${id} "${name}" ${missing}`);
+        if (missing) blogPartial.push(`${id} "${name}" ${missing}`);
       }
     }
     check(
@@ -1043,9 +1084,10 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;
   counts.corpus_links = allLinks.length;
-  const undated = Object.values(bySource).flatMap((source) => source.items.filter((item) => !yearOf(item)));
+  // Every source but a thingelstad.com page has a date.
+  const undated = undatedItems.filter((item) => item.page_id == null);
   check(
-    'completeness every source is dated',
+    'completeness every source but a page is dated',
     undated.length === 0,
     undated
       .slice(0, 5)
