@@ -783,6 +783,22 @@ if (allowNetwork) {
   console.log('fetch_page skipped (EVAL_ALLOW_NETWORK != 1)');
 }
 
+// QA2 F7: corpus_stats oldest/newest domains honour limit (they were held
+// at 6 for every limit from 10 to 40 while limit 9 showed 9).
+for (const limit of [3, 9, 10, 12, 20, 40]) {
+  const stats = await run('corpus_stats', { source_kind: 'weekly_thing', limit });
+  const omitted = stats?.truncated?.omitted || {};
+  for (const at of ['oldest', 'newest']) {
+    const shown = (stats?.sources?.[0]?.[at]?.domains || []).length;
+    const all = shown + (omitted[`sources[].${at}.domains`] || 0);
+    check(
+      `KA corpus_stats limit ${limit} ${at}.domains shows min(limit, all)`,
+      shown === Math.min(limit, all),
+      `${shown} of ${all}`
+    );
+  }
+}
+
 // server_version presence (belt-and-braces cache signal).
 {
   const stats = await run('corpus_stats', { source_kind: 'weekly_thing' });

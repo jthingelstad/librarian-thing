@@ -2204,6 +2204,9 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           omitted['sources[].top_domains']
             ? `top_domains holds the ${listLimit} most linked (domain_count says of how many); raise limit (max 40), or page through them all with top_references.`
             : '',
+          omitted['sources[].oldest.domains'] || omitted['sources[].newest.domains']
+            ? `oldest and newest list the first ${listLimit} domains each links to; find_links with that id lists every link.`
+            : '',
           ...hints
         ]
           .filter(Boolean)
@@ -2707,6 +2710,10 @@ const UNCAPPED_LIST_KEYS = new Set([
   'top_domains',
   'also_in_issue_counts'
 ]);
+// corpus_stats' oldest and newest domains are bounded by limit too
+// (boundedStatsRecord counts the rest); the depth cap had held them at 6
+// for every limit from 10 to 40 while limit 9 showed 9 (QA2 F7).
+const UNCAPPED_LIST_PATHS = new Set(['sources[].oldest.domains', 'sources[].newest.domains']);
 // Id lists are a few bytes an entry and bounded by limit; an {omitted}
 // marker inside one broke "every entry is an id".
 const ID_LIST_KEYS = new Set(['results', 'timeline', 'latest_sources', 'sample_sources']);
@@ -2747,6 +2754,7 @@ function compactLensLevel<T>(
     const itemPath = `${path}[]`;
     const each = (item: unknown) => compactLensLevel(item, depth + 1, scale, omitted, '', itemPath);
     if (UNCAPPED_LIST_KEYS.has(parentKey)) return value;
+    if (UNCAPPED_LIST_PATHS.has(path)) return value.map(each) as unknown as T;
     if (ID_LIST_KEYS.has(parentKey) && value.every((item) => typeof item === 'string')) return value;
     // Never truncate short arrays: cutting 3 match_reasons or 5 domains
     // saves nothing while the budget belongs on repeated large objects.
