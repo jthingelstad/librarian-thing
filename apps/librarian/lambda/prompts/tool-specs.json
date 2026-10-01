@@ -591,6 +591,10 @@
           "topic_count": {
             "type": "integer"
           },
+          "aliases_checked": {
+            "type": "array",
+            "description": "query and the other names checked with it (the alias table, each side of a slash)."
+          },
           "matched_topics": {
             "type": "integer"
           },
@@ -1398,6 +1402,10 @@
       "outputSchema": {
         "type": "object",
         "properties": {
+          "aliases_checked": {
+            "type": "array",
+            "description": "query and the other names checked with it (the alias table, each side of a slash)."
+          },
           "total_count": {
             "type": "integer"
           },

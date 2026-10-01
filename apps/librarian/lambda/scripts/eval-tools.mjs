@@ -734,6 +734,29 @@ await run('currently_history', { kind: 'reading', limit: 5 });
     `${goRust?.total_count} vs ${goRustCi?.total_count}`
   );
 }
+// QA2 L2-5: list_topics and currently_history use the alias table and the
+// slash rule like every other filter ("Twitter/X" and "microblog" gave 0).
+{
+  const tx = await run('list_topics', { query: 'Twitter/X' });
+  const t = await run('list_topics', { query: 'Twitter' });
+  check(
+    'KA list_topics slash-or finds each side',
+    t?.total_count > 0 && tx?.total_count >= t.total_count,
+    `${tx?.total_count} vs ${t?.total_count}`
+  );
+  const ch = await run('currently_history', { query: 'microblog' });
+  const chDot = await run('currently_history', { query: 'micro.blog' });
+  check(
+    'KA currently_history uses the alias table',
+    chDot?.total_count > 0 && ch?.total_count === chDot.total_count,
+    `${ch?.total_count} vs ${chDot?.total_count}`
+  );
+  check(
+    'KA list_topics and currently_history echo aliases_checked',
+    (tx?.aliases_checked || []).includes('X') && (ch?.aliases_checked || []).includes('micro.blog'),
+    `${JSON.stringify(tx?.aliases_checked)} ${JSON.stringify(ch?.aliases_checked)}`
+  );
+}
 // QA2 L2-6: a topic or phrase past what the regex compiler takes was an
 // internal_error ("SyntaxError", "try again") that every retry repeated.
 for (const [tool, args] of [

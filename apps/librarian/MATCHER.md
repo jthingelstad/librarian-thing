@@ -172,6 +172,7 @@ case of the source text; `matched_term` is the input term as provided.
 | media_search | yes (every word; stem by default, accents and plurals fold) | match_mode |
 | list_issues | yes (exact per token) | no |
 | quote_search | yes (literal mode) | no |
+| list_topics, currently_history | yes (query; aliases and the slash rule, `aliases_checked` echoed, QA2 L2-5) | no |
 | search_archive | exempt - hybrid retrieval (TF-IDF + embeddings + RRF) | - |
 | find_evidence, compare_eras | exempt - semantic retrieval | - |
 | search_faq | exempt - lexical scoring, token-based | - |

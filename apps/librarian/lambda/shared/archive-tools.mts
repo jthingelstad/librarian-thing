@@ -3215,9 +3215,12 @@ function issueIdRange(numbers: Iterable<string>) {
 // substring-and-slug match made "C++" (slug "c") find 289 topics and "AI"
 // find Ukraine. An exact page or resource slug ("ai-and-agents") still
 // names its topic. The whole list pages with offset, most issues first.
+// The alias table and the slash rule apply as in every tool that filters
+// (QA2 L2-5: "Twitter/X" and "microblog" found nothing).
 async function toolListTopics(input: ToolArgs = {}) {
   const query = String(input.query || '').trim();
-  const matcher = compileTopicMatcher(query, { mode: 'exact' });
+  const aliases = query ? aliasesFor(query) : [];
+  const matcher = compileTopicMatcher(query, { mode: 'exact', aliases });
   const querySlug = siteTopicSlug(query);
   const named = (name: unknown) =>
     !query ||
@@ -3244,6 +3247,7 @@ async function toolListTopics(input: ToolArgs = {}) {
     {
       clusters,
       topic_count: topics.length,
+      ...(aliases.length ? { aliases_checked: [query, ...aliases] } : {}),
       ...(query ? { matched_topics: matched.length } : {}),
       total_count: matched.length,
       topics: page.shown.map((topic) => {
@@ -3952,7 +3956,9 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
     .toLowerCase();
   const [startYear, endYear] = parseYearRange(input.year_range);
   const query = String(input.query || '').trim();
-  const matcher = compileTopicMatcher(query);
+  // Aliases and the slash rule, as everywhere (QA2 L2-5).
+  const aliases = query ? aliasesFor(query) : [];
+  const matcher = compileTopicMatcher(query, { aliases });
   const corpus = await loadCorpus('weekly_thing');
   // "installing more" / "listening even more" are variants of their kind.
   const baseKind = (entry: Record<string, unknown>) => String(entry.kind || '').split(' ')[0];
@@ -4001,6 +4007,7 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   ];
   return markTruncated(
     {
+      ...(aliases.length ? { aliases_checked: [query, ...aliases] } : {}),
       total_count: entries.length,
       counts_by_kind: sortedCountList(byKind, 'kind'),
       counts_by_year: yearCountList(byYear),
