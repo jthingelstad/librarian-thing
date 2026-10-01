@@ -728,6 +728,28 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   counts.on_this_day_0513 = items.length;
 }
 await run('search_faq', { query: 'what is the weekly thing' });
+// QA2 T2-6: a resource takes no offset or limit, so a cut resource's hint
+// names the tool call for the rest, never "call again with offset".
+{
+  const { parseResourceUri, readResource } = await import(path.join(distDir, 'shared/mcp-resources.mjs'));
+  const reader = {
+    invoke: (name, input) => ARCHIVE_TOOLS[name](input, { scope: 'all' }),
+    render: (name, result) => renderToolCallResult(name, result)
+  };
+  let cut = 0;
+  for (const uri of ['librarian://on-this-day/09-26', 'librarian://year/2019', 'librarian://topic/apple']) {
+    const read = await readResource(parseResourceUri(uri), reader);
+    const hint = JSON.parse(read.text).truncated?.hint;
+    if (hint === undefined) continue;
+    cut += 1;
+    check(
+      `KA resource ${uri} hint names the tool call, not a parameter it lacks`,
+      !/call again|raise limit|with offset \d/.test(hint) && /call the \w+ tool/.test(hint),
+      hint
+    );
+  }
+  check('KA resource hints exercised on a cut resource', cut >= 2, String(cut));
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('list_topics', { limit: 5 });
 await run('list_topics', { query: 'coffee' });

@@ -609,7 +609,7 @@
   {
     "toolSpec": {
       "name": "latest_content",
-      "description": "Return the newest indexed issues/posts/episodes deterministically by publish_date. Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Return the newest indexed issues/posts/episodes, newest first by the moment each was published (ties by id). Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",

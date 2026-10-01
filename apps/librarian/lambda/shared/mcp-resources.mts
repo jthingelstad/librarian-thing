@@ -9,7 +9,7 @@
  *   librarian://blog/{id}          one blog post by micro.blog id, as markdown
  *   librarian://topic/{slug}       a topic's catalogue card and timeline
  *   librarian://year/{yyyy}        what the archive holds for one year
- *   librarian://on-this-day/{mm-dd} that calendar day in past years
+ *   librarian://on-this-day/{mm-dd} that calendar day in every year, this one included
  *
  * resources/list offers the newest issues. The list changes weekly and a
  * stateless server cannot notify, so neither listChanged nor subscribe is
@@ -56,7 +56,8 @@ export const RESOURCE_TEMPLATES = [
     uriTemplate: 'librarian://on-this-day/{mm-dd}',
     name: 'on-this-day',
     title: 'On this day',
-    description: 'What Jamie published on one calendar day in past years, e.g. librarian://on-this-day/09-29.',
+    description:
+      'What Jamie published on one calendar day in every year, this one included, e.g. librarian://on-this-day/09-29.',
     mimeType: 'application/json'
   }
 ];
@@ -183,11 +184,33 @@ async function readSource(resource: ParsedResource, id: string, reader: Resource
   };
 }
 
+// A resource is one fixed page: it takes no offset or limit, so a cut
+// result's hint names the tool call that reads the rest instead of telling
+// the reader to "call again with offset 5" (QA2 T2-6). The omitted counts
+// stay as the tool gave them.
+function resourceText(text: string, name: string, input: JsonRecord) {
+  let body: JsonRecord;
+  try {
+    body = record(JSON.parse(text));
+  } catch {
+    return text;
+  }
+  const truncated = record(body.truncated);
+  if (!body.truncated) return text;
+  const kept = { ...truncated };
+  delete kept.next_offset;
+  body.truncated = {
+    ...kept,
+    hint: `This resource is one fixed page and takes no offset or limit. For the rest, call the ${name} tool with ${JSON.stringify(input)} and follow its truncated hint.`
+  };
+  return JSON.stringify(body);
+}
+
 async function readTool(resource: ParsedResource, name: string, input: JsonRecord, reader: ResourceReader) {
   const result = await reader.invoke(name, input, `resource:${resource.kind}`);
   const rendered = reader.render(name, result);
   if (rendered.isError) throw new ResourceNotFound(`Nothing at ${resource.uri}`);
-  return { uri: resource.uri, mimeType: 'application/json', text: rendered.text };
+  return { uri: resource.uri, mimeType: 'application/json', text: resourceText(rendered.text, name, input) };
 }
 
 /** resources/read for one parsed URI: the contents entry. */
@@ -214,10 +237,15 @@ export async function readResource(resource: ParsedResource, reader: ResourceRea
       siteTopicSlug(String(entry.name || '')) === resource.value
   );
   if (!card) throw new ResourceNotFound(`No topic at ${resource.uri}; list_topics names them`);
-  const lens = record(await reader.invoke('archive_lens', { topic: card.name, limit: 12 }, auditAs));
+  const lensInput = { topic: card.name, limit: 12 };
+  const lens = record(await reader.invoke('archive_lens', lensInput, auditAs));
   const rendered = reader.render('archive_lens', { topic_card: card, ...lens });
   if (rendered.isError) throw new ResourceNotFound(`Nothing at ${resource.uri}`);
-  return { uri: resource.uri, mimeType: 'application/json', text: rendered.text };
+  return {
+    uri: resource.uri,
+    mimeType: 'application/json',
+    text: resourceText(rendered.text, 'archive_lens', lensInput)
+  };
 }
 
 /** resources/list: the newest Weekly Thing issues, as resources. */
