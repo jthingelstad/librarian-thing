@@ -22,6 +22,7 @@ export interface LensItem {
   transcript_url?: string;
   audio_url?: string;
   also_in_issues?: unknown;
+  linked_from_issues?: unknown;
   topics?: string[] | Set<string>;
   domains?: string[] | Set<string>;
   [key: string]: unknown;
@@ -331,6 +332,7 @@ function sourceFromChunk(chunk: LensItem): LensItem {
     transcript_url: chunk.transcript_url,
     audio_url: chunk.audio_url,
     also_in_issues: chunk.also_in_issues,
+    linked_from_issues: chunk.linked_from_issues,
     topics: chunk.topics || [],
     domains: chunk.domains || []
   };
@@ -393,6 +395,7 @@ function compactLensSource(item: LensSource) {
     transcript_url: item.transcript_url,
     audio_url: item.audio_url,
     also_in_issues: item.also_in_issues,
+    linked_from_issues: item.linked_from_issues,
     match_count: item.match_count || 0,
     strict_match: Boolean(item.strict),
     topics: Array.from(item.topics || [])

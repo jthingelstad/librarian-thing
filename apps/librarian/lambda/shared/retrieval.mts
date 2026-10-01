@@ -28,6 +28,7 @@ export interface CorpusChunk {
   topics?: string[];
   domains?: string[];
   also_in_issues?: unknown;
+  linked_from_issues?: unknown;
   text?: string;
   summary?: string;
   embedding?: number[];
@@ -178,7 +179,7 @@ export function primeCorpusCachesForTests(fixtures: {
   graph?: Record<string, unknown>;
 }) {
   corpusCache = fixtures.weekly_thing;
-  blogCorpusCache = withBlogIdentity(fixtures.blog);
+  blogCorpusCache = withBlogAppearances(withBlogIdentity(fixtures.blog), fixtures.weekly_thing);
   podcastCorpusCache = fixtures.podcast;
   graphCache = fixtures.graph;
   sectionNamesCache = undefined;
@@ -222,6 +223,7 @@ export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
   if (!response.Body) throw new Error('Corpus object body is empty');
   corpusCache = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
   sectionNamesCache = undefined;
+  withBlogAppearances(blogCorpusCache, corpusCache);
   logEvent('info', 'corpus_loaded', {
     source: 's3',
     scope: 'weekly_thing',
@@ -281,7 +283,7 @@ async function loadOptionalCorpus({
 // When an env key is unset, return an empty corpus so source-specific requests
 // degrade to no hits.
 async function loadBlogCorpus() {
-  return loadOptionalCorpus({
+  const blog = await loadOptionalCorpus({
     kind: 'blog',
     envKey: 'BLOG_CORPUS_KEY',
     disabledEvent: 'blog_corpus_disabled',
@@ -291,6 +293,12 @@ async function loadBlogCorpus() {
       blogCorpusCache = value;
     }
   });
+  // also_in_issues splits against the Weekly Thing's Journal copies; a
+  // blog-only call loads that corpus too (it is the one every turn reads).
+  if (blog === blogCorpusCache && !blog.appearance_stats && !corpusCache && process.env.CORPUS_BUCKET) {
+    await loadCorpus('weekly_thing').catch(() => undefined);
+  }
+  return withBlogAppearances(blog, corpusCache) || blog;
 }
 
 async function loadPodcastCorpus() {
@@ -449,9 +457,12 @@ export function compactSource(source: CorpusChunk, textLimit = 2000) {
     episode_number: source.episode_number,
     show: source.show,
     topics: source.topics || [],
-    // Present only on blog chunks that a WT issue Journal linked back to -
-    // lets the agent cross-reference ("Jamie also featured this in WT###").
+    // Present only on blog chunks a Weekly Thing issue carried: the issues
+    // whose Journal reprints the post, and the issues that link it without
+    // reprinting it (QA2 I2-1) - lets the agent cross-reference ("Jamie
+    // also featured this in WT###").
     also_in_issues: source.also_in_issues,
+    linked_from_issues: source.linked_from_issues,
     section_family: text(source.section_family),
     content_kind: text(source.content_kind),
     // Present only when a voice filter rewrote the text to those spans.
@@ -1202,9 +1213,26 @@ function postDays(corpus: Corpus) {
 }
 
 function journalCopyInWeek(chunk: CorpusChunk, post: Record<string, unknown>) {
-  if (post?.copy_of_microblog_id == null || !corpusCache || !blogCorpusCache) return true;
-  const week = issueWeeks(corpusCache).get(String(chunk.issue_number ?? ''));
-  const days = postDays(blogCorpusCache).get(String(post.copy_of_microblog_id));
+  return copyInWeek(corpusCache, blogCorpusCache, chunk, post);
+}
+
+// A corpus built with the window (QA3: journal_copy_stats.references is
+// its mark) holds copies only in journal_posts; an older one needs the
+// window applied here.
+function buildAppliesWindow(weekly: Corpus) {
+  const stats = weekly.journal_copy_stats as Record<string, unknown> | undefined;
+  return stats?.references !== undefined;
+}
+
+function copyInWeek(
+  weekly: Corpus | undefined,
+  blog: Corpus | undefined,
+  chunk: CorpusChunk,
+  post: Record<string, unknown>
+) {
+  if (post?.copy_of_microblog_id == null || !weekly || !blog || buildAppliesWindow(weekly)) return true;
+  const week = issueWeeks(weekly).get(String(chunk.issue_number ?? ''));
+  const days = postDays(blog).get(String(post.copy_of_microblog_id));
   if (!week || !days) return true;
   return days.some((day) => day >= week[0] && day <= week[1]);
 }
@@ -1215,6 +1243,48 @@ export function journalCopyPosts(chunk: CorpusChunk): Array<Record<string, unkno
   return ((chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []).filter(
     (post) => post && journalCopyInWeek(chunk, post)
   );
+}
+
+// Where a blog post appears in The Weekly Thing, two lists (Jamie,
+// 2026-10-01): also_in_issues, the issues whose Journal reprints the post;
+// linked_from_issues, the issues that link it without reprinting it (a
+// Notable pick, a link in prose, a Journal link to an older post). The
+// old single also_in_issues mixed them: 3,748 reprints, 409 links and 99
+// Journal references to older posts counted as reprints (QA2 I2-1, links
+// Q1). A blog corpus built with both lists (appearance_stats) is used as
+// is. An older one is split once at load, like withBlogIdentity: an issue
+// stays in also_in_issues when one of its Journal chunks copies the post
+// from its own week (copyInWeek), and every other issue the field named
+// moves to linked_from_issues, so nothing is dropped.
+export function withBlogAppearances(blog: Corpus | undefined, weekly: Corpus | undefined) {
+  if (!blog || !weekly || blog.appearance_stats) return blog;
+  const copies = new Map<string, Set<string>>();
+  for (const chunk of weekly.chunks || []) {
+    for (const post of (chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []) {
+      if (post?.copy_of_microblog_id == null || !copyInWeek(weekly, blog, chunk, post)) continue;
+      const id = String(post.copy_of_microblog_id);
+      if (!copies.has(id)) copies.set(id, new Set());
+      copies.get(id)!.add(String(chunk.issue_number));
+    }
+  }
+  const pairs = { also_in_issues: 0, linked_from_issues: 0 };
+  const split = (row: Record<string, unknown>, count: boolean) => {
+    if (!Array.isArray(row.also_in_issues) || row.microblog_id == null) return;
+    const copied = copies.get(String(row.microblog_id));
+    const also = row.also_in_issues.filter((issue) => copied?.has(String(issue)));
+    const linked = row.also_in_issues.filter((issue) => !copied?.has(String(issue)));
+    if (also.length) row.also_in_issues = also;
+    else delete row.also_in_issues;
+    if (linked.length) row.linked_from_issues = linked;
+    if (count) {
+      pairs.also_in_issues += also.length;
+      pairs.linked_from_issues += linked.length;
+    }
+  };
+  for (const post of (blog.posts as Array<Record<string, unknown>> | undefined) || []) split(post, true);
+  for (const chunk of blog.chunks || []) split(chunk, false);
+  blog.appearance_stats = { ...pairs, split_at_load: true };
+  return blog;
 }
 
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {

@@ -84,7 +84,7 @@ export function scopePromptLine(scope: unknown) {
     case 'podcast':
       return "Active source scope: **Another Thing podcast only**. Answer from podcast episode transcripts and show notes, not the Weekly Thing newsletter or Jamie's blog. Podcast sources have no WT issue number — cite them by episode title and link, not by WT<N>.";
     case 'both':
-      return 'Active source scope: **Weekly Thing archive + thingelstad.com blog**. Draw on both. Cite Weekly Thing issues as WT<N> and blog posts by title and link. When a source carries `also_in_issues`, the blog post was also featured in those Weekly Thing issue(s) — you may note the cross-reference (e.g. "Jamie also featured this in WT###").';
+      return 'Active source scope: **Weekly Thing archive + thingelstad.com blog**. Draw on both. Cite Weekly Thing issues as WT<N> and blog posts by title and link. When a source carries `also_in_issues`, those Weekly Thing issue(s) reprinted the blog post; `linked_from_issues` names issues that linked it without reprinting it — you may note the cross-reference (e.g. "Jamie also featured this in WT###", "Jamie linked this from WT###").';
     case 'weekly_thing_podcast':
       return "Active source scope: **Weekly Thing archive + Another Thing podcast**. Draw on both selected sources, not Jamie's blog. Cite Weekly Thing issues as WT<N>; cite podcast sources by episode title/link.";
     case 'blog_podcast':

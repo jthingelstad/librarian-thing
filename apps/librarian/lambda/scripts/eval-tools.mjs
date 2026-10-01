@@ -362,7 +362,20 @@ async function run(tool, args, options = {}) {
       'year',
       'limit'
     ],
-    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit', 'has_audio'],
+    list_content: [
+      'topic',
+      'match_mode',
+      'case_sensitive',
+      'source_kind',
+      'year_range',
+      'year',
+      'limit',
+      'has_audio',
+      'has_also_in_issues',
+      'also_in_issue',
+      'has_linked_from_issues',
+      'linked_from_issue'
+    ],
     find_links: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit'],
     corpus_stats: ['source_kind', 'year_range', 'year', 'limit'],
     top_references: ['source_kind', 'year_range', 'year', 'limit', 'include_utility'],
@@ -371,7 +384,16 @@ async function run(tool, args, options = {}) {
     get_source: ['id', 'section', 'format'],
     source_neighborhood: ['id', 'limit'],
     find_evidence: ['claims', 'source_kind', 'voice', 'limit'],
-    latest_content: ['source_kind', 'has_also_in_issues', 'also_in_issue', 'has_audio', 'limit', 'offset'],
+    latest_content: [
+      'source_kind',
+      'has_also_in_issues',
+      'also_in_issue',
+      'has_linked_from_issues',
+      'linked_from_issue',
+      'has_audio',
+      'limit',
+      'offset'
+    ],
     on_this_day: ['date', 'window_days', 'year_range', 'year', 'source_kind', 'include_microposts', 'limit_per_year']
   };
   for (const [tool, params] of Object.entries(EXPECTED_PARAMS)) {

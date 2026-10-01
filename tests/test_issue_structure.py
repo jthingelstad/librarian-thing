@@ -13,13 +13,20 @@ from librarian_core.links import section_family
 NBSP = " "
 
 
-def _write_issue(archive: Path, number: int, body: str, *, links: str = "") -> None:
+def _write_issue(
+    archive: Path,
+    number: int,
+    body: str,
+    *,
+    links: str = "",
+    publish_date: str = "2026-09-26T12:00:00Z",
+) -> None:
     (archive / str(number)).mkdir(parents=True)
     (archive / str(number) / "archive.md").write_text(
         "---\n"
         f"number: {number}\n"
         f"subject: Weekly Thing {number}\n"
-        "publish_date: 2026-09-26T12:00:00Z\n"
+        f"publish_date: {publish_date}\n"
         f"slug: weekly-thing-{number}-a-slug\n"
         "description: Jamie's dek for the issue.\n"
         f"{links}"
@@ -266,7 +273,9 @@ class BuildCorpusStructureTests(unittest.TestCase):
             encoding="utf-8",
         )
         _write_post(blog, 7, "http://jthingelstad.micro.blog/2017/05/13/surly.html", "Surly")
-        _write_issue(archive, 100, "An older issue.\n")
+        # The issue reprints a post from its own week: a Journal link to an
+        # older post is a reference, not a copy (QA2 I2-1).
+        _write_issue(archive, 100, "An older issue.\n", publish_date="2017-05-06T12:00:00Z")
         _write_issue(
             archive,
             101,
@@ -287,6 +296,7 @@ class BuildCorpusStructureTests(unittest.TestCase):
                 "  domain: example.com\n"
                 "  section: Notable\n"
             ),
+            publish_date="2017-05-13T12:00:00Z",
         )
         return core.build_corpus(
             archive,

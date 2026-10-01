@@ -91,6 +91,11 @@ def main() -> int:
     abstracts = annotate_blog_abstracts(corpus, BLOG_ABSTRACTS_PATH)
     titled = sum(1 for post in corpus["posts"] if post.get("post_kind") != "micropost")
     print(f"Built blog corpus: {corpus['post_count']} posts -> {corpus['chunk_count']} chunks")
+    appearances = corpus["appearance_stats"]
+    print(
+        f"issue appearances: {appearances['also_in_issues']} reprints (also_in_issues), "
+        f"{appearances['linked_from_issues']} links (linked_from_issues)"
+    )
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")
     print(f"blog abstracts merged: {abstracts}/{titled} titled posts")
 

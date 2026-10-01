@@ -48,7 +48,7 @@ def _page(directory: Path, number: int, audio: bool) -> None:
     directory.joinpath(f"{number}.md").write_text("\n".join(lines + ["---", "Body."]) + "\n")
 
 
-def _corpus(audio: dict | None, unmatched: int = 33) -> dict:
+def _corpus(audio: dict | None, unmatched: int = 28) -> dict:
     issue = {"number": 274}
     if audio is not None:
         issue["audio"] = audio
@@ -95,6 +95,32 @@ class AudioDriftTest(unittest.TestCase):
         failures = gate.gate_failures(_corpus(RECORD, unmatched=34), self.site)
         self.assertEqual(len(failures), 1)
         self.assertIn("unmatched rose to 34", failures[0])
+
+    def test_gate_fails_on_a_journal_copy_from_outside_the_week(self):
+        # QA2 I2-1: WT212's Journal linked a 2021 post in prose; a copy is a
+        # post from [previous issue - 3 days, this issue + 1 day].
+        corpus = _corpus(RECORD)
+        corpus["issues"] = [
+            {"number": 211, "publish_date": "2022-02-05T13:00:00Z"},
+            {"number": 212, "publish_date": "2022-02-12T13:00:00Z"},
+        ]
+        post = "https://www.thingelstad.com/{}.html"
+        corpus["chunks"] = [
+            {
+                "issue_number": 212,
+                "journal_posts": [
+                    {"copy_of_microblog_id": "1", "canonical_url": post.format("2022/02/02/a")},
+                    {"copy_of_microblog_id": "2", "canonical_url": post.format("2022/02/13/b")},
+                ],
+            }
+        ]
+        self.assertEqual(gate.gate_failures(corpus, self.site), [])
+        corpus["chunks"][0]["journal_posts"].append(
+            {"copy_of_microblog_id": "1464172", "canonical_url": post.format("2021/12/19/nfts")}
+        )
+        failures = gate.gate_failures(corpus, self.site)
+        self.assertEqual(len(failures), 1)
+        self.assertIn("wt-212:1464172", failures[0])
 
     def test_gate_fails_without_the_site_checkout(self):
         failures = gate.gate_failures(_corpus(RECORD), self.site / "missing")
