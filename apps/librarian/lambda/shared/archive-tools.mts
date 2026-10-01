@@ -4048,6 +4048,48 @@ function photoRanIn(wt: Corpus) {
   return index;
 }
 
+// A Weekly Thing copy and its blog photo carry separate vision
+// descriptions, captioned per url: WT340's copy of 0e514b8635.jpg is "an
+// indoor sports facility", the blog photo "an agility dog competition".
+// A photo matches when either copy's description holds the query words
+// (Jamie, 2026-10-01, QA3 Q13), so each copy is matched with its partner's
+// description too, and the blog photo, which is canonical, shows whichever
+// copy the words are in. "dog sports facility" found neither copy.
+const PHOTO_PARTNERS = new WeakMap<object, WeakMap<object, Map<string, Array<[string, string]>>>>();
+const NO_BLOG = {};
+
+function photoPartnerKey(sourceId: unknown, url: unknown) {
+  return `${String(sourceId)}\0${String(url)}`;
+}
+
+function photoPartners(wt: Corpus, blog: Corpus | undefined) {
+  let byBlog = PHOTO_PARTNERS.get(wt);
+  if (!byBlog) PHOTO_PARTNERS.set(wt, (byBlog = new WeakMap()));
+  const cached = byBlog.get(blog || NO_BLOG);
+  if (cached) return cached;
+  const index = new Map<string, Array<[string, string]>>();
+  const add = (key: string, field: string, text: unknown) => {
+    if (text) index.set(key, [...(index.get(key) || []), [field, String(text)]]);
+  };
+  const blogPhotos = new Map<string, Record<string, unknown>>();
+  for (const item of (blog?.media as Array<Record<string, unknown>> | undefined) || []) {
+    const sourceId = mediaSourceId(item as ArchiveRecord, 'blog');
+    if (sourceId && item.url) blogPhotos.set(photoPartnerKey(sourceId, item.url), item);
+  }
+  for (const item of (wt.media as Array<Record<string, unknown>> | undefined) || []) {
+    if (item.copy_of_microblog_id == null || !item.canonical_url || item.issue_number == null) continue;
+    const blogKey = photoPartnerKey(`blog-${String(item.copy_of_microblog_id)}`, item.canonical_url);
+    add(blogKey, `description (WT${String(item.issue_number)} copy)`, item.description);
+    add(
+      photoPartnerKey(`wt-${String(item.issue_number)}`, item.url),
+      'description (blog photo)',
+      blogPhotos.get(blogKey)?.description
+    );
+  }
+  byBlog.set(blog || NO_BLOG, index);
+  return index;
+}
+
 const byIssueNumber = (a: unknown, b: unknown) => String(a).localeCompare(String(b), 'en', { numeric: true });
 
 async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -4073,6 +4115,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     return { error: `No Weekly Thing issue ${issue} is in the archive.`, code: 'not_found' };
   }
   const ranIn = photoRanIn(wtCorpus);
+  const partners = photoPartners(wtCorpus, scopeKinds(scope).includes('blog') ? await loadCorpus('blog') : undefined);
   const kinds = scopeKinds(scope).filter(
     (kind) => (!requestedSource || kind === requestedSource) && (!issue || kind === 'weekly_thing')
   );
@@ -4088,7 +4131,8 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // description = the vision captioning pass (describe_media.py): the
       // pixels' own words, so a photo is findable when the authored text
       // says nothing (92% of WT media had empty alt before it).
-      const fields = mediaFields(item, kind);
+      const sourceId = mediaSourceId(item as ArchiveRecord, kind);
+      const fields = [...mediaFields(item, kind), ...(partners.get(photoPartnerKey(sourceId, item.url)) || [])];
       const reasons: string[] = [];
       for (const { matchers } of words) {
         const hit = matchers
@@ -4098,7 +4142,6 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
         reasons.push(`${hit.field}: '${hit.hit!.span}'`);
       }
       if (reasons.length < words.length) continue;
-      const sourceId = mediaSourceId(item as ArchiveRecord, kind);
       const key = `${sourceId || sourceKeyFromMedia(item as ArchiveRecord, kind)}\0${item.url}`;
       if (seen.has(key)) continue;
       seen.add(key);

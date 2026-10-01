@@ -151,3 +151,57 @@ test('search_archive says it is a ranked top-N and keeps the voice floor (QA3 Q6
   assert.match(spec.inputSchema.properties.voice.description, /under 40 characters/);
   assert.ok('note' in spec.outputSchema.properties);
 });
+
+function photoFixtures() {
+  const blogUrl = 'https://www.thingelstad.com/uploads/2026/0e514b8635.jpg';
+  return {
+    weekly_thing: {
+      issues: [{ number: 340, publish_date: '2027-02-08T14:44:36Z' }],
+      chunks: [],
+      media: [
+        {
+          url: 'https://files.thingelstad.com/weekly-thing/340/journal/0e514b8635.jpg',
+          source_kind: 'weekly_thing',
+          issue_number: 340,
+          source_url: '/archive/340/',
+          publish_date: '2027-02-08T14:44:36Z',
+          copy_of_microblog_id: '5747260',
+          canonical_url: blogUrl,
+          description: 'A large indoor sports facility with a domed ceiling.'
+        }
+      ]
+    },
+    blog: {
+      posts: [{ microblog_id: 5747260, url: 'https://www.thingelstad.com/2026/02/04/give-back.html' }],
+      chunks: [],
+      media: [
+        {
+          url: blogUrl,
+          source_kind: 'blog',
+          microblog_id: 5747260,
+          source_url: 'https://www.thingelstad.com/2026/02/04/give-back.html',
+          publish_date: '2026-02-04',
+          description: 'A large indoor arena hosts an agility dog competition.'
+        }
+      ]
+    }
+  };
+}
+
+test("a photo matches when either copy's description does, and the blog photo shows (QA3 Q13)", async () => {
+  primeCorpusCachesForTests(photoFixtures());
+  for (const query of ['agility dog', 'sports facility', 'dog sports facility']) {
+    const out = await ARCHIVE_TOOLS.media_search({ query }, { scope: 'all' });
+    assert.equal(out.total_count, 1, query);
+    assert.equal(out.results[0].source_id, 'blog-5747260', query);
+    assert.deepEqual(out.results[0].also_in_issues, [340], query);
+  }
+  const both = await ARCHIVE_TOOLS.media_search({ query: 'dog sports' }, { scope: 'all' });
+  assert.deepEqual(both.results[0].match_reasons, ["description: 'dog'", "description (WT340 copy): 'sports'"]);
+  assert.equal(both.collapsed_copies, 1);
+  // The blog photo outside the window: the copy shows, found by the blog's words.
+  const copy = await ARCHIVE_TOOLS.media_search({ query: 'agility', year: 2027 }, { scope: 'all' });
+  assert.equal(copy.results[0].source_id, 'wt-340');
+  assert.equal(copy.results[0].copy_of, 'blog-5747260');
+  assert.deepEqual(copy.results[0].match_reasons, ["description (blog photo): 'agility'"]);
+});

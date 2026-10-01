@@ -1100,6 +1100,44 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     String(out?.note)
   );
 }
+// QA3 Q13: a photo matches when either copy's description does, and the
+// blog photo, which is canonical, is the result. WT340's copy of
+// 0e514b8635.jpg is "an indoor sports facility", its blog photo "an
+// agility dog competition"; "dog sports facility" found neither copy. And
+// with no year filter no Weekly Thing copy of an indexed blog photo that
+// matched on descriptions alone stays unfolded: those words are its blog
+// photo's too. (A copy found by its issue's own context still stays.)
+{
+  const photo = (out) => (out?.results || []).find((row) => /0e514b8635/.test(String(row.image_url)));
+  for (const query of ['dog sports facility', 'sports facility', 'agility dog']) {
+    const hit = photo(await run('media_search', { query, limit: 40 }));
+    check(
+      `KA media_search "${query}" shows the blog photo of 0e514b8635.jpg`,
+      hit?.source_id === 'blog-5747260' && (hit?.also_in_issues || []).includes(340),
+      JSON.stringify(hit?.source_id)
+    );
+  }
+  const blogPhotos = new Set((corpora.blog?.media || []).map((item) => `blog-${item.microblog_id}\0${item.url}`));
+  const unfolded = [];
+  for (const query of ['dog', 'snow', 'coffee', 'family']) {
+    for (let offset = 0; offset < 5000;) {
+      const out = await run('media_search', { query, limit: 50, offset });
+      for (const row of out?.results || []) {
+        const byDescription = (row.match_reasons || []).every((reason) => reason.startsWith('description'));
+        if (row.copy_of && byDescription && blogPhotos.has(`${row.copy_of}\0${row.canonical_url}`)) {
+          unfolded.push(`${query}: ${row.source_id}`);
+        }
+      }
+      if (!out?.truncated?.next_offset) break;
+      offset = out.truncated.next_offset;
+    }
+  }
+  check(
+    'KA media_search folds every description-matched copy of an indexed blog photo',
+    unfolded.length === 0,
+    unfolded.slice(0, 5).join(', ')
+  );
+}
 // QA3 Q3: a blank or whitespace url, id or domain is refused at the door
 // on every tool that takes one, never read as absent (find_links url:""
 // listed all 36,523 links); find_links and list_content refuse it in
