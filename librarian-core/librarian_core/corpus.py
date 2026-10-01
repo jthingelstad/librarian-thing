@@ -1331,6 +1331,7 @@ def build_corpus(
                 entry["last_seen"] = publish_date
 
         body_images = extract_images(body)
+        issue_media_from = len(media)
         cover = issue_cover_image(metadata, {image["url"] for image in body_images}, shared_covers)
         for image in ([cover] if cover else []) + body_images:
             media.append(
@@ -1354,7 +1355,7 @@ def build_corpus(
         for entry in extract_now_reading_entries(body):
             currently.append({**entry, **issue_fields})
         # Journal entries are copies of blog posts; the post is canonical.
-        journal_at = [i for i, section in enumerate(split) if section.family == "Journal"]
+        journal_at = journal_section_indexes(split)
         first_day, last_day = _journal_window(publish_date, previous_date)
         previous_date = publish_date or previous_date
         section_copies: dict[int, list[JournalMatch]] = {}
@@ -1367,6 +1368,14 @@ def build_corpus(
         if journal_entries:
             issues[-1]["journal_entries"] = journal_entries
         all_entries.extend(journal_entries)
+        # A photo that is also a blog post's photo points at it, the blog copy
+        # canonical (Jamie, 2026-09-30), so readers can collapse the two.
+        copied = {entry["copy_of_microblog_id"] for entry in journal_entries}
+        for item in media[issue_media_from:]:
+            original = post_index.blog_photo(item["url"], copied)
+            if original:
+                item["copy_of_microblog_id"] = str(original[0].microblog_id)
+                item["canonical_url"] = original[1]
         journal_unmatched.extend(
             {"issue_number": number, "title": entry["title"], "url": entry["url"]}
             for entry in journal_entries
@@ -1626,19 +1635,57 @@ class JournalPost:
     word_set: frozenset[str]
     shingles: frozenset[tuple[str, ...]]
     label: str = ""  # the title, or the first words of an untitled post
+    images: tuple[str, ...] = ()  # the post's photo URLs, as its media has them
+
+
+# A micro.blog upload's name: ten hex digits or a UUID. The Weekly Thing
+# carries the same photo under that name on www.thingelstad.com,
+# cdn.uploads.micro.blog or files.thingelstad.com; any other name
+# ("IMG_1234.jpg") can belong to two different photos.
+_HASHED_PHOTO_NAME_RE = re.compile(
+    r"^(?:[0-9a-f]{10}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"
+    r"\.(?:jpe?g|png|gif|webp|heic)$"
+)
+
+
+def _hashed_photo_name(url: str) -> str | None:
+    name = urlparse(url).path.rsplit("/", 1)[-1].lower()
+    return name if _HASHED_PHOTO_NAME_RE.match(name) else None
 
 
 class JournalPostIndex:
-    """Blog posts by permalink path and by day."""
+    """Blog posts by permalink path, by day and by photo."""
 
     def __init__(self, posts: list[JournalPost]):
         self.by_path: dict[str, list[JournalPost]] = {}
         self.by_day: dict[str, list[JournalPost]] = {}
+        self.by_photo: dict[str, list[tuple[JournalPost, str]]] = {}
         for post in posts:
             path = _blog_target_path(post.url)
             if path:
                 self.by_path.setdefault(path, []).append(post)
             self.by_day.setdefault(post.day, []).append(post)
+            for image in post.images:
+                self.by_photo.setdefault(image, []).append((post, image))
+                name = _hashed_photo_name(image)
+                if name:
+                    self.by_photo.setdefault(name, []).append((post, image))
+
+    def blog_photo(self, url: str, prefer: set[str]) -> tuple[JournalPost, str] | None:
+        """The blog photo a Weekly Thing image copies: the same URL, else the
+        same micro.blog upload name. Among several posts, a post the issue's
+        Journal copies (``prefer``), else the earliest."""
+        found = self.by_photo.get(url) or self.by_photo.get(_hashed_photo_name(url) or "")
+        if not found:
+            return None
+        return min(
+            found,
+            key=lambda item: (
+                str(item[0].microblog_id) not in prefer,
+                item[0].day,
+                str(item[0].microblog_id),
+            ),
+        )
 
     def between(self, first: str, last: str) -> list[JournalPost]:
         """Posts from ``first`` to ``last`` (YYYY-MM-DD), both included."""
@@ -1683,6 +1730,7 @@ def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostInd
                 frozenset(tokens),
                 _shingles(tokens),
                 str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
+                tuple(image["url"] for image in extract_images(body)),
             )
         )
     return JournalPostIndex(posts)
@@ -1929,6 +1977,22 @@ def _chunk_journal_posts(
     return {"journal_posts": items} if items else {}
 
 
+def journal_section_indexes(sections: list[IssueSection]) -> list[int]:
+    """The sections of an issue's Journal: family Journal, and after it any
+    section whose H2 is no known family. A blog post copied with its own
+    H2s ("## A New Way to Mourn" in WT147's Stream) splits into sections
+    named after them, still part of the Journal."""
+    found, in_journal = [], False
+    for index, section in enumerate(sections):
+        if section.family == "Journal":
+            in_journal = True
+        elif not (in_journal and section_family(section.family) is None):
+            in_journal = False
+            continue
+        found.append(index)
+    return found
+
+
 def _journal_window(publish_date: str, previous_date: str | None) -> tuple[str, str]:
     last = str(publish_date or "")[:10]
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", last):
@@ -1978,11 +2042,8 @@ def journal_copy_issues(
         metadata, body = read_issue(path)
         number = metadata.get("number") or path.parent.name
         publish_date = metadata.get("publish_date") or ""
-        journal = [
-            section
-            for section in split_issue_sections(strip_thingy_blocks(body))
-            if section.family == "Journal"
-        ]
+        split = split_issue_sections(strip_thingy_blocks(body))
+        journal = [split[i] for i in journal_section_indexes(split)]
         first_day, last_day = _journal_window(publish_date, previous)
         previous = publish_date or previous
         if not journal or not first_day:
