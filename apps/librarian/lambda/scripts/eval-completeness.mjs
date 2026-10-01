@@ -613,6 +613,58 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     }
   }
 
+  // 8h. A url finds every link to that page however its path was
+  //     percent-encoded (QA2 links L2-1: Elf_%28film%29 found 0 of 8). Each
+  //     spelling in a group of corpus links whose paths differ only in
+  //     encoding finds the whole group.
+  {
+    const groups = new Map();
+    for (const link of allLinks) {
+      let parsed;
+      let path;
+      try {
+        parsed = new URL(String(link.url));
+        path = decodeURIComponent(parsed.pathname).replace(/\/+$/, '');
+      } catch {
+        continue;
+      }
+      const key = `${parsed.hostname.toLowerCase().replace(/^www\./, '')}${path}${parsed.search}`;
+      const group = groups.get(key) || { size: 0, spellings: new Map() };
+      group.size += 1;
+      const spelling = parsed.pathname.replace(/\/+$/, '');
+      if (!group.spellings.has(spelling)) group.spellings.set(spelling, link.url);
+      groups.set(key, group);
+    }
+    const split = [...groups].filter(([, group]) => group.spellings.size > 1);
+    const short = [];
+    for (const [key, group] of split) {
+      for (const url of group.spellings.values()) {
+        const found = await call('find_links', { url, limit: 1 });
+        if (found.total_count !== group.size) short.push(`${key} ${url} ${found.total_count}/${group.size}`);
+      }
+    }
+    check(
+      'completeness find_links url finds every encoding of a path',
+      split.length > 0 && short.length === 0,
+      `${short.length} spellings short across ${split.length} groups: ${short.slice(0, 3).join('; ')}`
+    );
+    const pins = [
+      ['https://en.wikipedia.org/wiki/Elf_%28film%29', 8],
+      ['https://en.wikipedia.org/wiki/Elf_(film)', 8],
+      ['https://en.wikipedia.org/wiki/The_Replacements_(band)', 7],
+      ['https://en.wikipedia.org/wiki/The_Replacements_%28band%29', 7],
+      ["https://en.wikipedia.org/wiki/Dunbar's_number", 4],
+      ['https://en.wikipedia.org/wiki/Dunbar%27s_number', 4],
+      ['https://en.wikipedia.org/wiki/M%c3%b6lkky', 4]
+    ];
+    const off = [];
+    for (const [url, want] of pins) {
+      const found = await call('find_links', { url, limit: 1 });
+      if (found.total_count !== want) off.push(`${url} ${found.total_count}/${want}`);
+    }
+    check('completeness find_links url encoding pins', off.length === 0, off.join('; '));
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

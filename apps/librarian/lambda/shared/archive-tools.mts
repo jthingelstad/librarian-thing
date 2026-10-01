@@ -491,6 +491,23 @@ const TRACKING_PARAMS = new Set([
   'cmpid',
   'igshid'
 ]);
+// One spelling per path: each segment decoded, then encoded one way, so
+// Elf_(film) and Elf_%28film%29, Dunbar's and Dunbar%27s, M%c3%b6lkky and
+// Mölkky are one page (QA2 links L2-1: a lookup in one spelling missed the
+// links stored in the other). A segment that does not decode stays as is.
+function canonicalPath(pathname: string) {
+  return pathname
+    .split('/')
+    .map((segment) => {
+      try {
+        return encodeURIComponent(decodeURIComponent(segment));
+      } catch {
+        return segment;
+      }
+    })
+    .join('/');
+}
+
 export function linkUrlKey(value: unknown) {
   const raw = String(value || '').trim();
   if (!raw) return '';
@@ -510,7 +527,7 @@ export function linkUrlKey(value: unknown) {
     }
   }
   const query = parsed.searchParams.toString();
-  const path = parsed.pathname.replace(/\/+$/, '');
+  const path = canonicalPath(parsed.pathname.replace(/\/+$/, ''));
   return `${parsed.hostname.toLowerCase().replace(/^www\./, '')}${path}${query ? `?${query}` : ''}`;
 }
 
@@ -1599,7 +1616,7 @@ function urlKey(value: unknown) {
     let host = url.hostname.toLowerCase().replace(/^www\./, '');
     // micro.blog serves the same posts on its own host (111 resolve only there).
     if (host === 'micro.thingelstad.com' || host === 'jthingelstad.micro.blog') host = 'thingelstad.com';
-    return `${host}${url.pathname.replace(/\/$/, '')}`.toLowerCase();
+    return `${host}${canonicalPath(url.pathname.replace(/\/$/, ''))}`.toLowerCase();
   } catch {
     return raw
       .toLowerCase()

@@ -113,6 +113,18 @@ test('linkUrlKey: tracking parameters and a doubled scheme never split a url', (
   assert.notEqual(linkUrlKey('https://example.com/?p=1'), linkUrlKey('https://example.com/?p=2'));
 });
 
+test('linkUrlKey: a percent-encoded path keys the same as its plain spelling (QA2 L2-1)', () => {
+  const pairs = [
+    ['https://en.wikipedia.org/wiki/Elf_(film)', 'https://en.wikipedia.org/wiki/Elf_%28film%29'],
+    ["https://en.wikipedia.org/wiki/Dunbar's_number", 'https://en.wikipedia.org/wiki/Dunbar%27s_number'],
+    ['https://en.wikipedia.org/wiki/Mölkky', 'https://en.wikipedia.org/wiki/M%c3%b6lkky'],
+    ['https://en.wikipedia.org/wiki/M%C3%B6lkky', 'https://en.wikipedia.org/wiki/M%c3%b6lkky']
+  ];
+  for (const [plain, encoded] of pairs) assert.equal(linkUrlKey(encoded), linkUrlKey(plain), encoded);
+  assert.notEqual(linkUrlKey('https://example.com/a%2Fb'), linkUrlKey('https://example.com/a/b'), 'an encoded slash');
+  assert.equal(linkUrlKey('https://example.com/100%'), 'example.com/100%', 'a bad escape stays');
+});
+
 test('top_references: every excluded link is counted in the window asked for', async () => {
   primeCorpusCachesForTests(fixtures());
   const y2024 = await ARCHIVE_TOOLS.top_references({ year: 2024, source_kind: 'weekly_thing' }, { scope: 'all' });
