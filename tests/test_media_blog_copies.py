@@ -155,6 +155,50 @@ class MediaBlogCopyTests(unittest.TestCase):
         self.assertIsNone(core._hashed_photo_name(PHONE))
         self.assertIsNone(core._hashed_photo_name(f"{BASE}/uploads/2017/5b1cabc144-2.jpg"))
 
+    def test_wt_builder_rehost_contract(self):
+        # wt-builder src/server/integrations/images.ts keyFor: a real WT350
+        # Journal photo and the CDN copy WT Builder made of it.
+        self.assertEqual(
+            core.wt_builder_rehost_url(
+                "https://www.thingelstad.com/uploads/2026/39697360-9ad9-47b4-82d2-e7ab416b6196.jpg",
+                350,
+            ),
+            "https://files.thingelstad.com/weekly-thing/350/images/16caa566dc0f.jpg",
+        )
+
+    def test_wt_builder_rehosted_photos_point_at_the_blog_photo(self):
+        # WT350 on, every issue photo is rehosted under a name derived from
+        # its source URL, so neither the URL nor the upload name matches.
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        blog, archive = Path(tmp.name) / "blog", Path(tmp.name) / "archive"
+        walk = f"{BASE}/uploads/2026/0a1b2c3d-4e5f-6071-8293-a4b5c6d7e8f9.jpg"
+        _post(
+            blog,
+            9,
+            f"{BASE}/2026/09/22/kubb.html",
+            "2026-09-22T23:00:00+00:00",
+            f"Kubb in the yard with the whole family tonight.\n\n![]({walk})",
+        )
+        copy = core.wt_builder_rehost_url(walk, 350)
+        currently = core.wt_builder_rehost_url(f"{BASE}/uploads/2026/not-a-post.jpg", 350)
+        _issue(
+            archive,
+            350,
+            "2026-09-26T12:00:00Z",
+            f"## Currently\n\n![Sailboats]({currently})\n\n## Journal\n\n"
+            f"Kubb in the yard with the whole family tonight. [→]({BASE}/2026/09/22/kubb.html)\n\n"
+            f"![Kubb]({copy})\n",
+        )
+        wt = core.build_corpus(archive, blog_dir=blog)
+        got = {
+            row["url"]: (row.get("copy_of_microblog_id"), row.get("canonical_url"))
+            for row in wt["media"]
+        }
+        self.assertEqual(got[copy], ("9", walk))
+        # A Currently photo is the issue's own: no post to point at.
+        self.assertEqual(got[currently], (None, None))
+
     def test_journal_runs_through_unknown_h2s(self):
         split = core.split_issue_sections(WT147)
         self.assertEqual(
@@ -176,7 +220,14 @@ class RealMediaBlogCopyTests(unittest.TestCase):
                 row["url"] == row["canonical_url"]
                 or core._hashed_photo_name(row["url"])
                 == core._hashed_photo_name(row["canonical_url"])
+                or core.wt_builder_rehost_url(row["canonical_url"], row["issue_number"])
+                == row["url"]
             )
+        # WT Builder issues: every Journal photo points at its post (WT350's
+        # and WT351's other photos are Currently photos, never blog posts).
+        rehosted = [row for row in wt["media"] if row["issue_number"] in (350, 351)]
+        tied = [row for row in rehosted if row.get("copy_of_microblog_id")]
+        self.assertGreaterEqual(len(tied), 16)
         # WT147's long post kept its own H2: its sections are still the Journal.
         wt147 = [
             chunk

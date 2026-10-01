@@ -1677,6 +1677,26 @@ def _hashed_photo_name(url: str) -> str | None:
     return name if _HASHED_PHOTO_NAME_RE.match(name) else None
 
 
+# WT Builder (WT350 on) rehosts every issue photo on the CDN under a name it
+# derives from the source URL, so a Journal photo's issue URL never shares
+# the blog photo's name. The derivation is a cross-repo contract with
+# wt-builder src/server/integrations/images.ts (keyFor, MAX_WIDTH,
+# JPEG_QUALITY); tests/test_media_blog_copies.py pins it on a WT350 photo.
+WT_BUILDER_REHOST_RE = re.compile(
+    r"^https://files\.thingelstad\.com/weekly-thing/(\d+)/images/[0-9a-f]{12}\.jpg$"
+)
+WT_BUILDER_REHOST_MAX_WIDTH = 1200
+WT_BUILDER_REHOST_JPEG_QUALITY = 80
+
+
+def wt_builder_rehost_url(source: str, issue_number: int | str) -> str:
+    """The CDN URL WT Builder gives ``source`` when it rehosts it for an issue."""
+    digest = hashlib.sha256(
+        f"{source}|w={WT_BUILDER_REHOST_MAX_WIDTH}|q={WT_BUILDER_REHOST_JPEG_QUALITY}".encode()
+    ).hexdigest()[:12]
+    return f"https://files.thingelstad.com/weekly-thing/{issue_number}/images/{digest}.jpg"
+
+
 class JournalPostIndex:
     """Blog posts by permalink path, by day and by photo."""
 
@@ -1684,7 +1704,9 @@ class JournalPostIndex:
         self.by_path: dict[str, list[JournalPost]] = {}
         self.by_day: dict[str, list[JournalPost]] = {}
         self.by_photo: dict[str, list[tuple[JournalPost, str]]] = {}
+        self.by_id: dict[str, JournalPost] = {}
         for post in posts:
+            self.by_id[str(post.microblog_id)] = post
             path = _blog_target_path(post.url)
             if path:
                 self.by_path.setdefault(path, []).append(post)
@@ -1697,9 +1719,21 @@ class JournalPostIndex:
 
     def blog_photo(self, url: str, prefer: set[str]) -> tuple[JournalPost, str] | None:
         """The blog photo a Weekly Thing image copies: the same URL, else the
-        same micro.blog upload name. Among several posts, a post the issue's
-        Journal copies (``prefer``), else the earliest."""
+        same micro.blog upload name, else (a WT Builder rehost) the photo of a
+        post the issue's Journal copies whose rehost URL it is. Among several
+        posts, a post the issue's Journal copies (``prefer``), else the
+        earliest."""
         found = self.by_photo.get(url) or self.by_photo.get(_hashed_photo_name(url) or "")
+        if not found:
+            rehost = WT_BUILDER_REHOST_RE.match(url)
+            if rehost:
+                found = [
+                    (post, image)
+                    for post in (self.by_id.get(str(key)) for key in sorted(prefer))
+                    if post
+                    for image in post.images
+                    if wt_builder_rehost_url(image, rehost.group(1)) == url
+                ]
         if not found:
             return None
         return min(
