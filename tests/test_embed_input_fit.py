@@ -7,6 +7,10 @@ text, and chunks ran to 5,230 characters, so 8.7% of Weekly Thing words and
 2.3% of blog words were in no embedding. Chunks are now sized to the room
 their own header leaves (embed_text_budget), and a chunk that already fit
 is built exactly as before, so its id and embedding stay.
+
+That bounds characters only. The model also stops at 512 tokens (QA2 I2-4),
+and about one input in eleven runs past it; test_embed_tokens.py pins that
+the build and the corpus gate count those.
 """
 
 import json

@@ -1280,6 +1280,56 @@ await run('search_faq', { query: 'what is the weekly thing' });
   check('KA a no-topic name is counted by list_content', listed?.total_count > 0, `${name}: ${listed?.total_count}`);
 }
 {
+  // QA2 I2-3 / Q18: a topic counts every issue that names it twice or more,
+  // not the issues whose 40 most-extracted names hold it (Tesla 14 against
+  // 25). A graph built before that says its counts are a sample.
+  const tesla = await run('list_topics', { query: 'Tesla' });
+  const topic = (tesla?.topics || []).find((entry) => entry.name.toLowerCase() === 'tesla');
+  const uncapped = Boolean(corpora.graph?.entity_index_uncapped);
+  checkCorpus(
+    'KA list_topics counts Tesla in every issue naming it twice',
+    topic?.issue_count >= 25,
+    JSON.stringify(topic)
+  );
+  checkCorpus('KA the topic graph is uncapped', uncapped);
+  check(
+    'KA list_topics calls its counts a sample only on a capped graph',
+    /a sample/.test(tesla?.note || '') === !uncapped,
+    String(tesla?.note)
+  );
+}
+{
+  // QA2 L2-7 (corpus half): an issue is filed under every cluster one of its
+  // passages carries. 108 issues had a labelled passage under a cluster the
+  // issue was not filed under (AI and agents: lens 253, card 217), so the
+  // cards, list_topics and list_content missed them.
+  const wt = corpora.weekly_thing || {};
+  const filed = new Set();
+  for (const cluster of wt.topics || []) {
+    for (const number of cluster.issue_numbers || []) filed.add(`${cluster.name}|${number}`);
+  }
+  const unfiled = new Set();
+  for (const chunk of wt.chunks || []) {
+    if (chunk.issue_number == null) continue;
+    for (const name of chunk.topics || []) {
+      if (!filed.has(`${name}|${chunk.issue_number}`)) unfiled.add(`${name} wt-${chunk.issue_number}`);
+    }
+  }
+  checkCorpus(
+    'KA every cluster a passage carries files its issue',
+    filed.size > 0 && unfiled.size === 0,
+    `${unfiled.size}: ${[...unfiled].slice(0, 4).join(', ')}`
+  );
+  const ai = await run('list_topics', { query: 'AI and agents' });
+  const card = (ai?.clusters || []).find((cluster) => cluster.name === 'AI and agents');
+  const lens = await run('list_content', { source_kind: 'weekly_thing', topic: 'AI and agents', limit: 1 });
+  checkCorpus(
+    'KA the AI and agents card counts every issue list_content files there',
+    card?.issue_count === lens?.total_count,
+    `${card?.issue_count} vs ${lens?.total_count}`
+  );
+}
+{
   // QA2 T2-5: currently_history showed WT22's UTC day (00:00Z on the 7th
   // was the 6th in Chicago); it shows the Chicago day of the corpus stamp.
   const reading = await run('currently_history', { year: 2017, kind: 'reading', limit: 120 });
@@ -1294,6 +1344,39 @@ await run('search_faq', { query: 'what is the weekly thing' });
     'KA latest_content dates an episode by its own day',
     latest?.results?.[0]?.date === latest?.results?.[0]?.publish_date,
     JSON.stringify(latest?.results?.[0]?.date)
+  );
+}
+{
+  // QA2 I2-8 / T2-2 / T2-3, Q16: a blog post has one date, its Chicago day.
+  // The permalink's date named another day for 121 posts and another year
+  // for 11 Blot imports, so on_this_day filed "Kyiv Photowalk" in 2019 and
+  // every year filter in 2020; 8 of those imports carried a 05:00Z
+  // placeholder (23:00 the evening before), now Chicago noon on its date.
+  const chicagoDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' });
+  const split = (corpora.blog?.posts || []).filter((post) => {
+    if (!post.published) return false;
+    const day = chicagoDay.format(Date.parse(post.published));
+    return day !== String(post.publish_date) || Number(day.slice(0, 4)) !== Number(post.post_year);
+  });
+  checkCorpus(
+    'KA a blog post is dated and filed by its Chicago day',
+    split.length === 0,
+    `${split.length}: ${split
+      .slice(0, 4)
+      .map((post) => `blog-${post.microblog_id} ${post.publish_date}`)
+      .join(', ')}`
+  );
+  const kyiv = await run('list_content', { source_kind: 'blog', year: 2019, topic: 'Kyiv' });
+  checkCorpus(
+    'KA list_content files a Blot import in the year it was published',
+    (kyiv?.results || []).some((item) => item.id === 'blog-1077264' && item.date === '2019-11-22'),
+    (kyiv?.results || []).map((item) => `${item.id} ${item.date}`).join(', ')
+  );
+  const stats = await run('corpus_stats', { source_kind: 'blog', year: 2020, limit: 1 });
+  checkCorpus(
+    'KA corpus_stats 2020 blog oldest is a 2020 post',
+    String(stats?.sources?.[0]?.oldest?.date || '').startsWith('2020-01-'),
+    JSON.stringify(stats?.sources?.[0]?.oldest)
   );
 }
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.

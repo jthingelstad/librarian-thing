@@ -492,7 +492,7 @@
           },
           "source": {
             "type": "object",
-            "description": "The source; its date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "The source; its date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           },
           "truncated": {
             "type": "object",
@@ -707,7 +707,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           },
           "truncated": {
             "type": "object",
@@ -1056,7 +1056,7 @@
           },
           "sources": {
             "type": "array",
-            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           },
           "truncated": {
             "type": "object",
@@ -1115,7 +1115,7 @@
         "readOnlyHint": true,
         "openWorldHint": false
       },
-      "description": "The topic catalogue: the nine clusters every issue is filed under, and the weekly site's topic pages (names among the 40 most-extracted of 3+ issues; counts are of that sample, archive_lens counts every mention) with counts, first and last issue, related topics and page url. query filters by name.",
+      "description": "The topic catalogue: the nine clusters every issue is filed under, and the weekly site's topic pages (names among the 40 most-extracted of 3+ issues, counting every issue that names one twice; archive_lens counts every mention) with counts, first and last issue, related topics and page url. query filters by name.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -1165,7 +1165,7 @@
           },
           "topics": {
             "type": "array",
-            "description": "Most issues first. issue_count is the issues whose 40 most-extracted names include it, not every mention: archive_lens counts mentions."
+            "description": "Most issues first. issue_count is every issue that names it twice or more (or holds it among its 40 most-extracted names), not every mention: archive_lens counts mentions."
           },
           "note": {
             "type": "string",
@@ -1214,7 +1214,7 @@
           "server_version"
         ]
       },
-      "chat_description": "The archive's card catalogue. Returns the nine topic clusters every Weekly Thing issue is filed under (description, first and last seen, representative issues, related clusters; pass one to search_archive as topic) and the Weekly Thing site's topic pages: names among the 40 most-extracted names of 3 or more issues, with those issue counts, first and last issue, related topics and the public page URL. The counts are of that sample, not of every mention; archive_lens and list_content count every source that names a topic. query narrows both by name. Use to see what the archive covers before searching, or to find the right name for archive_lens.",
+      "chat_description": "The archive's card catalogue. Returns the nine topic clusters every Weekly Thing issue is filed under (description, first and last seen, representative issues, related clusters; pass one to search_archive as topic) and the Weekly Thing site's topic pages: names among the 40 most-extracted names of 3 or more issues, each with the count of issues that name it twice or more, first and last issue, related topics and the public page URL. An issue that names a topic once is not in its count; archive_lens and list_content count every source that names a topic. query narrows both by name. Use to see what the archive covers before searching, or to find the right name for archive_lens.",
       "paged_list": "topics",
       "doors": {
         "mcp": true,
@@ -1293,7 +1293,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first by moment of publication. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first by moment of publication. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           },
           "truncated": {
             "type": "object",
@@ -1436,7 +1436,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           },
           "truncated": {
             "type": "object",

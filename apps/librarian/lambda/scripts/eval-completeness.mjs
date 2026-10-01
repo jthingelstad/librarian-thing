@@ -807,7 +807,7 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     const postDays = new Map(
       (blog.posts || []).map((post) => [
         String(post.microblog_id),
-        [dayOf(post.published), String(post.publish_date || '').slice(0, 10)].filter(Boolean)
+        [dayOf(post.published), String(post.publish_date || '').slice(0, 10), post.permalink_date].filter(Boolean)
       ])
     );
     const issueDays = (wt.issues || [])

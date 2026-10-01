@@ -1187,7 +1187,14 @@ function postDays(corpus: Corpus) {
   if (days) return days;
   days = new Map();
   for (const post of (corpus.posts as Array<Record<string, unknown>> | undefined) || []) {
-    const both = [localDay(post), String(post.publish_date || '').slice(0, 10)].filter((day) => DAY_SHAPE.test(day));
+    // A rebuilt corpus dates a post by its Chicago day and keeps the
+    // permalink's date as permalink_date where it differs (QA2 I2-8); an
+    // older corpus's publish_date is the permalink day.
+    const both = [
+      localDay(post),
+      String(post.publish_date || '').slice(0, 10),
+      String(post.permalink_date || '')
+    ].filter((day) => DAY_SHAPE.test(day));
     if (both.length) days.set(String(post.microblog_id), [...new Set(both)]);
   }
   POST_DAYS.set(corpus, days);

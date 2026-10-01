@@ -17,3 +17,6 @@ dependencies = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["librarian_core*"]
+
+[tool.setuptools.package-data]
+librarian_core = ["embed_vocab.txt"]

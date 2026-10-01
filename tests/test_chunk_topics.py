@@ -66,6 +66,38 @@ class ChunkTopicsTests(unittest.TestCase):
             set(issue_topics),
         )
 
+    def test_an_issue_is_filed_under_every_cluster_its_passages_carry(self):
+        # QA2 L2-7 (corpus half): the issue's own pass keeps its 6 strongest
+        # clusters, so a passage labelled with a 7th left the issue unfiled.
+        strong = (
+            "Bitcoin and Ethereum wallets. " * 6
+            + "RSS feeds and blogs on the web. " * 6
+            + "Privacy, security and encryption. " * 6
+            + "Productivity, OmniFocus and the workflow. " * 6
+            + "The fediverse, IndieWeb and ActivityPub. " * 6
+            + "Our trip to the lake and the hotel. " * 6
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            archive = Path(tmp) / "archive"
+            (archive / "1").mkdir(parents=True)
+            (archive / "1" / "archive.md").write_text(
+                "---\nnumber: 1\nsubject: Weekly Thing 1\npublish_date: 2018-06-02\n---\n\n"
+                f"## Essay\n\n{strong}\n\n## Notable\n\n### Claude\n\nA new model.\n",
+                encoding="utf-8",
+            )
+            corpus = core.build_corpus(archive, include_issue_bodies=True)
+        self.assertNotIn(
+            "AI and agents", core.detect_topics("Weekly Thing 1", core.topic_prose(strong))
+        )
+        labelled = {topic for chunk in corpus["chunks"] for topic in chunk["topics"]}
+        self.assertIn("AI and agents", labelled)
+        issue = corpus["issues"][0]
+        self.assertTrue(labelled <= set(issue["topics"]), issue["topics"])
+        self.assertEqual(issue["summary"]["topics"], issue["topics"])
+        cards = {topic["name"]: topic["issue_numbers"] for topic in corpus["topics"]}
+        self.assertEqual(cards["AI and agents"], [1])
+        self.assertEqual(set(cards), set(issue["topics"]))
+
     def test_blog_chunks_get_clusters_from_their_text(self):
         with tempfile.TemporaryDirectory() as tmp:
             posts = Path(tmp) / "posts" / "2018" / "06"

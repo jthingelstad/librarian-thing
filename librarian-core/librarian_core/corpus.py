@@ -19,11 +19,13 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlparse
+from zoneinfo import ZoneInfo
 
 import boto3
 import yaml
 from dotenv import load_dotenv
 
+from .embed_tokens import COHERE_EMBED_MAX_TOKENS, embed_token_count
 from .links import (
     extract_domains,
     link_label_text,
@@ -1467,6 +1469,52 @@ def build_corpus(
                     }
                 )
 
+    # An issue is filed under every cluster one of its passages carries. The
+    # issue's own pass keeps its 6 strongest clusters, so 108 issues had a
+    # passage labelled with a cluster the issue was not filed under (AI and
+    # agents 36: the lens found 253 issues, the card counted 217), and
+    # list_content, list_topics and the cards missed them (QA2 L2-7, corpus
+    # half). Filing stays where only the whole issue reaches a cluster's
+    # threshold; search_archive's topic filter reads the issue's filing too.
+    passage_clusters: dict[Any, dict[str, int]] = {}
+    for chunk in chunks:
+        if chunk.get("issue_number") is None:
+            continue
+        labels = passage_clusters.setdefault(chunk["issue_number"], {})
+        for topic in chunk.get("topics") or []:
+            labels[topic] = labels.get(topic, 0) + 1
+    issue_order = {issue["number"]: index for index, issue in enumerate(issues)}
+    for issue in issues:
+        labels = passage_clusters.get(issue["number"], {})
+        added = [
+            topic
+            for topic, _ in sorted(labels.items(), key=lambda item: (-item[1], item[0]))
+            if topic not in issue["topics"]
+        ]
+        if not added:
+            continue
+        issue["topics"].extend(added)
+        publish_date = issue.get("publish_date") or ""
+        for topic in added:
+            entry = topic_index.setdefault(
+                topic,
+                {
+                    "name": topic,
+                    "description": f"Archive material related to {topic.lower()}.",
+                    "first_seen": publish_date,
+                    "last_seen": publish_date,
+                    "issue_numbers": [],
+                    "representative_issues": [],
+                    "related_topics": [],
+                },
+            )
+            entry["issue_numbers"].append(issue["number"])
+            entry["issue_numbers"].sort(key=lambda number: issue_order.get(number, 0))
+            if publish_date and (not entry["first_seen"] or publish_date < entry["first_seen"]):
+                entry["first_seen"] = publish_date
+            if publish_date and publish_date > entry["last_seen"]:
+                entry["last_seen"] = publish_date
+
     for entry in topic_index.values():
         entry["representative_issues"] = entry["issue_numbers"][-8:]
         related = set()
@@ -2491,6 +2539,51 @@ def _blog_outbound_links(
     return records
 
 
+_CHICAGO = ZoneInfo("America/Chicago")
+
+
+def _parse_stamp(value: str | None) -> datetime | None:
+    try:
+        stamp = datetime.fromisoformat(str(value or "").strip().replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return stamp if stamp.tzinfo else None
+
+
+def blog_published(published: str | None, permalink_day: str | None) -> str | None:
+    """A blog post's ``published`` moment, with a date-only import placeholder
+    read as Chicago noon on its date (Jamie, 2026-10-01, QA2 Q16).
+
+    The Blot imports re-posted under 2020/04/21 permalinks carry exactly
+    05:00:00Z in Central Standard Time months: a bare date converted at a
+    fixed -05:00, which is 23:00 the evening before in Chicago. Such a stamp
+    names that UTC date at Chicago noon. A real 23:00 post (4482285, Nov 22
+    2024) keeps its time: its permalink names the same Chicago day, so the
+    stamp vouches for itself."""
+    stamp = _parse_stamp(published)
+    if stamp is None:
+        return published
+    utc = stamp.astimezone(timezone.utc)
+    local = utc.astimezone(_CHICAGO)
+    placeholder = (
+        (utc.hour, utc.minute, utc.second, utc.microsecond) == (5, 0, 0, 0)
+        and local.utcoffset() == timedelta(hours=-6)
+        and local.date().isoformat() != permalink_day
+    )
+    if not placeholder:
+        return published
+    noon = datetime(utc.year, utc.month, utc.day, 12, tzinfo=_CHICAGO)
+    return noon.astimezone(timezone.utc).isoformat()
+
+
+def chicago_day(published: str | None) -> str | None:
+    """The Chicago date of a ``published`` moment, the day Jamie published it
+    (Jamie, 2026-09-30: "All of my content should be shown in Chicago
+    time")."""
+    stamp = _parse_stamp(published)
+    return stamp.astimezone(_CHICAGO).date().isoformat() if stamp else None
+
+
 def build_blog_corpus(
     blog_dir: Path = BLOG_DIR,
     archive_dir: Path = ARCHIVE_DIR,
@@ -2532,11 +2625,14 @@ def build_blog_corpus(
         post_kind = str(metadata.get("post_kind") or "post").strip()
         section = "Micropost" if post_kind == "micropost" else "Blog post"
         match = _BLOG_PERMALINK_RE.search(url)
-        publish_date = None
-        if match:
-            publish_date = "-".join(match.group(1).split("/")[:3])
-        if not publish_date:
-            publish_date = str(metadata.get("published") or "")[:10] or None
+        permalink_date = "-".join(match.group(1).split("/")[:3]) if match else None
+        # One date per post: the Chicago day of `published`, which on_this_day
+        # files it under, also sets publish_date and the year every year
+        # filter reads. The permalink's date named another day for 121 posts
+        # and another year for 11 Blot imports, so one tool put "Kyiv
+        # Photowalk" in 2019 and the rest in 2020 (QA2 I2-8, T2-2, T2-3).
+        published = blog_published(str(metadata.get("published") or "") or None, permalink_date)
+        publish_date = chicago_day(published) or permalink_date or str(published or "")[:10] or None
         also_in_issues = (
             xref.get(_normalize_blog_path(url.split("//", 1)[-1].split("/", 1)[-1]))
             if url
@@ -2565,7 +2661,8 @@ def build_blog_corpus(
             "section": section,
             "also_in_issues": also_in_issues,
             "embed_text": embed_text,
-            "published": str(metadata.get("published") or "") or None,
+            "published": published,
+            "permalink_date": permalink_date,
             "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
         }
         target_path = _blog_target_path(url)
@@ -2667,6 +2764,10 @@ def build_blog_corpus(
         }
         if post_input["published"]:
             post_record["published"] = post_input["published"]
+        # The permalink's own date where it names another day: the Journal
+        # matcher pairs copies by it, so the week check reads it too.
+        if post_input.get("permalink_date") and post_input["permalink_date"] != publish_date:
+            post_record["permalink_date"] = post_input["permalink_date"]
         if post_input.get("updated"):
             post_record["updated"] = post_input["updated"]
         if post_input["categories"]:
@@ -2744,10 +2845,10 @@ def build_blog_corpus(
                 "source_kind": "blog",
                 "domains": post_domains,
             }
-            # The post's own timestamp, beside the permalink's date: the
-            # Lambda shows each day in Chicago time, and 121 permalinks name
-            # another day (the UTC day, or a permalink shared by several
-            # posts, "2006/09/09/000000.html").
+            # The post's own timestamp: the Lambda shows each day in Chicago
+            # time, and publish_date is that day (the permalink's date named
+            # another day for 121 posts: the UTC day, or a permalink shared by
+            # several posts, "2006/09/09/000000.html").
             if post_input["published"]:
                 chunk["published"] = post_input["published"]
             if post_input.get("updated"):
@@ -3045,6 +3146,16 @@ def fetch_bedrock_embeddings(
             f"{COHERE_EMBED_MAX_TEXT_CHARS} chars; their tails are in no embedding"
         )
     inputs = [text[:COHERE_EMBED_MAX_TEXT_CHARS] for text in inputs]
+    # QA2 I2-4: the model also stops at 512 tokens, and truncate END drops
+    # the rest without a word. Characters do not bound tokens (URLs, emoji
+    # and pasted blobs run two or three characters a token), so count them.
+    over_tokens = sum(1 for text in inputs if embed_token_count(text) > COHERE_EMBED_MAX_TOKENS)
+    if over_tokens:
+        print(
+            f"embed_input_truncated: {over_tokens} of {len(inputs)} inputs over "
+            f"{COHERE_EMBED_MAX_TOKENS} tokens; Cohere drops the tail past token "
+            f"{COHERE_EMBED_MAX_TOKENS}"
+        )
     response = boto3.client("bedrock-runtime").invoke_model(
         modelId=model,
         body=json.dumps({"texts": inputs, "input_type": input_type, "truncate": "END"}),

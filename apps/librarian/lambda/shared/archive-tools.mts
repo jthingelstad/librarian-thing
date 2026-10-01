@@ -1738,7 +1738,8 @@ function chicagoNoon(day: string) {
 // The Chicago day a source was published on, the day Jamie published it
 // (Jamie, 2026-09-30: "All of my content should be shown in Chicago time").
 // publish_date stays as the corpus holds it: a UTC timestamp for an issue,
-// the permalink day for a blog post (QA2 T2-5).
+// the Chicago day for a blog post (the permalink day before the QA2 I2-8
+// rebuild) (QA2 T2-5).
 function sourceDate(record: ArchiveRecord | Record<string, unknown>) {
   return localDay(record as ArchiveRecord) || null;
 }
@@ -3628,7 +3629,12 @@ async function toolListTopics(input: ToolArgs = {}) {
       ),
       related_clusters: cluster.related_topics || []
     }));
-  const topics = siteTopics(await loadGraph());
+  const graph = await loadGraph();
+  const topics = siteTopics(graph);
+  // A graph built since QA2 Q18 lists every issue that names a topic twice
+  // or more (entity_index_uncapped); an older one counts only the issues
+  // whose 40 most-extracted names hold it, and says so.
+  const sampled = !graph.entity_index_uncapped;
   const matched = query ? topics.filter((topic) => named(topic.name) || topic.slug === querySlug) : topics;
   const page = pageOf('list_topics', matched, input, 'topics');
   return markTruncated(
@@ -3652,13 +3658,18 @@ async function toolListTopics(input: ToolArgs = {}) {
       ...(!topics.length
         ? { note: 'The topic graph is not loaded, so only the clusters are listed.' }
         : query && !matched.length
-          ? // A site topic is a name among each issue's 40 most-extracted
-            // names, so a real one can be missing (Mastodon, in 11 issues):
-            // say where every mention is counted (QA2 I2-3).
+          ? // A site topic is a name among the 40 most-extracted names of
+            // 3 or more issues, so a real one can be missing (Mastodon, in
+            // 11 issues, before 2026-10-01): say where every mention is
+            // counted (QA2 I2-3). Its count is not capped (Q18).
             {
               note: `No site topic is named "${query}". Topics come from each issue's 40 most-extracted names, so a name can be missing; list_content or archive_lens with topic "${query}" counts every source that mentions it.`
             }
-          : {})
+          : sampled && matched.length
+            ? {
+                note: 'issue_count is a sample: this topic graph counts only the issues whose 40 most-extracted names include the topic. archive_lens and list_content count every source that names it.'
+              }
+            : {})
     },
     {
       omitted: { topics: page.omitted },
