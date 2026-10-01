@@ -99,6 +99,18 @@ function check(name, condition, detail = '') {
   }
 }
 
+// A known answer that a corpus fix makes true. When this push rebuilds the
+// corpus (skipBaseline), the code eval reads the live corpora the fix has
+// not reached yet, so it warns; the corpus gate re-runs it on the
+// candidates, where it must pass.
+function checkCorpus(name, condition, detail = '') {
+  if (condition || !skipBaseline) {
+    check(name, condition, detail);
+    return;
+  }
+  console.log(`eval-tools: corpus rebuild pending, the gate re-checks: ${name}${detail ? ` :: ${detail}` : ''}`);
+}
+
 // --- generic response invariants ------------------------------------------
 function walk(value, visit, keyPath = '') {
   visit(value, keyPath);
@@ -616,7 +628,7 @@ await run('list_topics', { query: 'coffee' });
 {
   const clock = await run('list_topics', { query: 'pm', limit: 100 });
   const junk = (clock?.topics || []).filter((topic) => /^(AM|PM)\s|\s(AM|PM)$/i.test(topic.name));
-  check(
+  checkCorpus(
     'KA list_topics has no clock-label topics',
     junk.length === 0,
     junk
