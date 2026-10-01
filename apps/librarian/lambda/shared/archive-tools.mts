@@ -8,7 +8,7 @@ import {
   matchesLensTopic,
   settleLensTruncation
 } from './archive-lens.mjs';
-import { aliasesFor, compileLiteral, compileQuery, normalizeMatchMode, trimTerm } from './matcher.mjs';
+import { aliasesFor, compileLiteral, compileQuery, foldQuery, normalizeMatchMode, trimTerm } from './matcher.mjs';
 import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
@@ -733,11 +733,29 @@ const SOURCE_LEVEL_FIELDS = [
 const SEARCH_PASSAGE_CHARS = 2000;
 const EVIDENCE_PASSAGE_CHARS = 450;
 
+// The matcher's folds, one character at a time so every offset still
+// points into the passage: accents off, curly apostrophes and dashes to
+// plain, nbsp to a space, lower case (QA2 R2-8).
+const WINDOW_FOLDS: Record<string, string> = { ø: 'o', đ: 'd', ł: 'l', ħ: 'h' };
+function foldForWindow(text: string) {
+  let folded = '';
+  for (const char of text.split('')) {
+    const lower = char.toLowerCase();
+    const plain =
+      WINDOW_FOLDS[lower] ??
+      foldQuery(lower)
+        .replace(/\u00a0/g, ' ')
+        .toLowerCase();
+    folded += plain.length === 1 ? plain : lower.length === 1 ? lower : char;
+  }
+  return folded;
+}
+
 export function passageWindow(chunk: ArchiveRecord, query: string, room: number) {
   const text = String(chunk.text || '');
   if (text.length <= room) return { text };
-  const lower = text.toLowerCase();
-  const terms = [...new Set(tokenize(query))].filter((term) => term.length > 2 && !STOPWORDS.has(term));
+  const lower = foldForWindow(text);
+  const terms = [...new Set(tokenize(foldQuery(query)))].filter((term) => term.length > 2 && !STOPWORDS.has(term));
   const hits: Array<{ at: number; term: string }> = [];
   for (const term of terms) {
     for (let at = lower.indexOf(term); at >= 0; at = lower.indexOf(term, at + term.length)) hits.push({ at, term });

@@ -657,6 +657,25 @@ await run('search_archive', {
   const ids = (out?.results || []).map((group) => group.id);
   check('KA search_archive topic reaches an issue filed only at issue level', ids.includes('wt-1'), ids.join(', '));
 });
+// QA2 R2-8: the passage window folds like the matcher, so a folded query
+// ("Molkky", a straight apostrophe) still centres the window on the word
+// (old: 64 of 90 accented and 708 of 717 curly-apostrophe windows missed).
+{
+  const { passageWindow } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
+  const chunkById = new Map((corpora.weekly_thing.chunks || []).map((chunk) => [String(chunk.id), chunk]));
+  for (const [id, query, word] of [
+    ['f9d23796519bfa14', 'Molkky', 'Mölkky'],
+    ['3c45b1a403d50ad0', "Tribune's", 'Tribune’s']
+  ]) {
+    const chunk = chunkById.get(id);
+    const window = chunk ? passageWindow(chunk, query, 450) : { text: '' };
+    check(
+      `KA passage window for "${query}" shows "${word}"`,
+      String(chunk?.text || '').length > 450 && window.text.includes(word),
+      `${String(chunk?.text || '').length} chars, window at ${window.clipped?.start}`
+    );
+  }
+}
 // QA2 R2-1 / R2-5: an H2 heading reads its whole extent, not the exact
 // row that shares its name (WT146 Stream gave 95 of 9,099 chars); a "#"
 // comment in fenced code does not end a blog section.
