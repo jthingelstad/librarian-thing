@@ -313,7 +313,9 @@ def clean_entity(value: str) -> str:
 # 20,000 and 18,000 characters and 24 links, which left 28.8% of Weekly
 # Thing text unread: 1,675 names that occur twice or more only past the cut
 # in 225 issues (Big Green Egg in WT9, MNUFC in WT19) were in no entity.
-def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
+def entity_counts(issue: dict[str, Any], link_weight: int = 2) -> dict[str, int]:
+    """Every name in the issue with its count; a linked domain counts
+    ``link_weight`` a link (2 when ranking an issue's names)."""
     text = " ".join(
         [
             str(issue.get("subject") or ""),
@@ -337,10 +339,30 @@ def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
     for link in issue.get("links", []) or []:
         domain = str(link.get("domain") or "").removeprefix("www.")
         if domain:
-            counts[domain] = counts.get(domain, 0) + 2
+            counts[domain] = counts.get(domain, 0) + link_weight
+    return counts
+
+
+def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
+    counts = entity_counts(issue)
     return [
         entity for entity, _ in sorted(counts.items(), key=lambda item: (-item[1], item[0]))[:limit]
     ]
+
+
+def named_twice(issue: dict[str, Any]) -> set[str]:
+    """The lowercase names an issue names twice or more, uncapped. A link is
+    one naming of its domain here: a domain linked once is named once."""
+    lowered: dict[str, int] = {}
+    for entity, count in entity_counts(issue, link_weight=1).items():
+        lowered[entity.lower()] = lowered.get(entity.lower(), 0) + count
+    return {key for key, count in lowered.items() if count >= 2}
+
+
+# A name is a site topic (a weekly.thingelstad.com topic page, a list_topics
+# entry) once 3 issues file it; the site's topics.js and the Lambda read the
+# same threshold.
+TOPIC_MIN_ISSUES = 3
 
 
 def heuristic_tropes(issue: dict[str, Any]) -> list[str]:
@@ -434,8 +456,10 @@ def build_graph(
     issues: dict[str, dict[str, Any]] = {}
     entity_index: dict[str, list[str]] = {}
     trope_index: dict[str, list[str]] = {}
+    twice: dict[str, set[str]] = {}
     for issue in corpus.get("issues", []):
         number = str(issue.get("number"))
+        twice[number] = named_twice(issue)
         if use_bedrock:
             try:
                 extracted = extract_with_bedrock(issue, model)
@@ -460,6 +484,17 @@ def build_graph(
             entity_index.setdefault(key, []).append(number)
         for key in dict.fromkeys(trope.lower() for trope in extracted["tropes"]):
             trope_index.setdefault(key, []).append(number)
+    # A topic's issues are every issue that names it twice or more, not only
+    # the issues whose 40 most-extracted names hold it (Jamie, 2026-10-01,
+    # QA2 Q18): 351 of 352 issues fill the 40, so Tesla counted 14 issues
+    # against the 25 that name it twice. Which names are topics stays the
+    # 40-name rule: uncapped, 1,000 more names (mostly domains linked once in
+    # three issues) would pass 3 issues and each get a public topic page.
+    for key, numbers in entity_index.items():
+        if len(numbers) < TOPIC_MIN_ISSUES:
+            continue
+        filed = set(numbers)
+        entity_index[key] = [n for n in twice if n in filed or key in twice[n]]
     return {
         "version": 1,
         "source": "data/librarian/corpus.json",
@@ -468,5 +503,8 @@ def build_graph(
         "issue_count": len(issues),
         "issues": issues,
         "entity_index": entity_index,
+        # Marks a graph whose topic issue lists are uncapped (list_topics
+        # stops calling its counts a top-40 sample).
+        "entity_index_uncapped": True,
         "trope_index": trope_index,
     }

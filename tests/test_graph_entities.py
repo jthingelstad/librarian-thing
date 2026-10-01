@@ -10,6 +10,12 @@ domain micro.blog), in 12 lists.
 QA round 2 (ingest I2-2): with links unwrapped, a Journal time label ran
 into the next line or label, so "PM We" (69 issues), "PM Saturday" (54) and
 25 more clock phrases became topics with public pages.
+
+QA round 2 (ingest I2-3, Jamie's Q18): entity_index kept each issue's 40
+most-extracted names, and 351 of 352 issues fill the 40, so a topic's issue
+count was a sample (Tesla 14 against the 25 issues that name it twice). A
+topic now lists every issue that names it twice or more; which names are
+topics stays the 40-name rule.
 """
 
 import re
@@ -80,9 +86,62 @@ class GraphEntityTests(unittest.TestCase):
         self.assertIn("Brandi Carlile", entities)
         self.assertIn("Tammy", entities)
 
+    def test_a_topic_lists_every_issue_that_names_it_twice(self):
+        filler = " ".join(f"Name{i} x Name{i} x Name{i} x" for i in range(45))
+
+        def issue(number, body):
+            return {"number": number, "subject": f"Issue {number}", "body": body, "links": []}
+
+        built = graph.build_graph(
+            {
+                "issues": [
+                    issue(1, "Tesla and Tesla."),
+                    issue(2, "Tesla and Tesla."),
+                    issue(3, "Tesla and Tesla."),
+                    # Tesla is named twice but is not among the 40 names.
+                    issue(4, f"{filler} Tesla and Tesla."),
+                    # Named once: not counted.
+                    issue(5, f"{filler} Tesla."),
+                    # Kubb is named twice in two issues: still no topic.
+                    issue(6, "Kubb and Kubb."),
+                    issue(7, f"{filler} Kubb, Kubb."),
+                ],
+                "chunks": [],
+            }
+        )
+        self.assertNotIn("Tesla", built["issues"]["4"]["entities"])
+        self.assertEqual(built["entity_index"]["tesla"], ["1", "2", "3", "4"])
+        self.assertEqual(built["entity_index"]["kubb"], ["6"])
+        self.assertTrue(built["entity_index_uncapped"])
+
+    def test_a_single_link_names_its_domain_once(self):
+        issue = {"number": 1, "subject": "", "body": "", "links": [{"domain": "om.co"}]}
+        self.assertNotIn("om.co", graph.named_twice(issue))
+        issue["links"].append({"domain": "www.om.co"})
+        self.assertIn("om.co", graph.named_twice(issue))
+        # Ranking still weighs a link double.
+        self.assertEqual(graph.entity_counts({**issue, "links": issue["links"][:1]})["om.co"], 2)
+
     def test_real_archive_graph(self):
         corpus = build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
-        index = graph.build_graph(corpus)["entity_index"]
+        built = graph.build_graph(corpus)
+        index = built["entity_index"]
+        # Every topic lists every issue that names it twice, and the 40-name
+        # lists still decide which names are topics.
+        topics = {key for key, numbers in index.items() if len(numbers) >= graph.TOPIC_MIN_ISSUES}
+        missing = []
+        for issue in corpus["issues"]:
+            number = str(issue["number"])
+            for key in graph.named_twice(issue) & topics:
+                if number not in index[key]:
+                    missing.append(f"{key} WT{number}")
+        self.assertEqual(missing, [])
+        capped = {}
+        for number, entry in built["issues"].items():
+            for key in dict.fromkeys(entity.lower() for entity in entry["entities"]):
+                capped.setdefault(key, []).append(number)
+        self.assertEqual(topics, {key for key, numbers in capped.items() if len(numbers) >= 3})
+        self.assertGreaterEqual(len(index["tesla"]), 25)
         junk = [
             key
             for key in index

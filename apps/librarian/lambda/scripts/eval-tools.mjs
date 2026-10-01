@@ -1280,6 +1280,25 @@ await run('search_faq', { query: 'what is the weekly thing' });
   check('KA a no-topic name is counted by list_content', listed?.total_count > 0, `${name}: ${listed?.total_count}`);
 }
 {
+  // QA2 I2-3 / Q18: a topic counts every issue that names it twice or more,
+  // not the issues whose 40 most-extracted names hold it (Tesla 14 against
+  // 25). A graph built before that says its counts are a sample.
+  const tesla = await run('list_topics', { query: 'Tesla' });
+  const topic = (tesla?.topics || []).find((entry) => entry.name.toLowerCase() === 'tesla');
+  const uncapped = Boolean(corpora.graph?.entity_index_uncapped);
+  checkCorpus(
+    'KA list_topics counts Tesla in every issue naming it twice',
+    topic?.issue_count >= 25,
+    JSON.stringify(topic)
+  );
+  checkCorpus('KA the topic graph is uncapped', uncapped);
+  check(
+    'KA list_topics calls its counts a sample only on a capped graph',
+    /a sample/.test(tesla?.note || '') === !uncapped,
+    String(tesla?.note)
+  );
+}
+{
   // QA2 T2-5: currently_history showed WT22's UTC day (00:00Z on the 7th
   // was the 6th in Chicago); it shows the Chicago day of the corpus stamp.
   const reading = await run('currently_history', { year: 2017, kind: 'reading', limit: 120 });
