@@ -25,6 +25,7 @@ import boto3
 import yaml
 from dotenv import load_dotenv
 
+from .embed_tokens import COHERE_EMBED_MAX_TOKENS, embed_token_count
 from .links import (
     extract_domains,
     link_label_text,
@@ -3145,6 +3146,16 @@ def fetch_bedrock_embeddings(
             f"{COHERE_EMBED_MAX_TEXT_CHARS} chars; their tails are in no embedding"
         )
     inputs = [text[:COHERE_EMBED_MAX_TEXT_CHARS] for text in inputs]
+    # QA2 I2-4: the model also stops at 512 tokens, and truncate END drops
+    # the rest without a word. Characters do not bound tokens (URLs, emoji
+    # and pasted blobs run two or three characters a token), so count them.
+    over_tokens = sum(1 for text in inputs if embed_token_count(text) > COHERE_EMBED_MAX_TOKENS)
+    if over_tokens:
+        print(
+            f"embed_input_truncated: {over_tokens} of {len(inputs)} inputs over "
+            f"{COHERE_EMBED_MAX_TOKENS} tokens; Cohere drops the tail past token "
+            f"{COHERE_EMBED_MAX_TOKENS}"
+        )
     response = boto3.client("bedrock-runtime").invoke_model(
         modelId=model,
         body=json.dumps({"texts": inputs, "input_type": input_type, "truncate": "END"}),

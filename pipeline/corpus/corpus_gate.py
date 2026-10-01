@@ -18,6 +18,11 @@ anything reaches S3. It fails the deploy when:
   ``published`` moment, or keeps a 05:00Z date-only placeholder (QA2 I2-8,
   Q16).
 
+It also reports, without failing, how many staged chunks run past Cohere
+Embed v3's 512-token cap (QA2 I2-4): the model drops the tail of each with
+no error, so the count is printed and raised as a workflow warning until
+the chunkers size by tokens.
+
 ``freshness`` runs on a schedule: it compares the site's audio records with
 the live corpus in S3 and sets ``stale=true`` in $GITHUB_OUTPUT when they
 differ, so the workflow rebuilds the Weekly Thing corpus. A new audio
@@ -44,7 +49,16 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
 
 from librarian_core.audio import audio_record, read_site_frontmatter  # noqa: E402
-from librarian_core.corpus import blog_published, chicago_day  # noqa: E402
+from librarian_core.corpus import (  # noqa: E402
+    COHERE_EMBED_MAX_TEXT_CHARS,
+    _embed_input,
+    blog_published,
+    chicago_day,
+)
+from librarian_core.embed_tokens import (  # noqa: E402
+    COHERE_EMBED_MAX_TOKENS,
+    embed_token_count,
+)
 
 # Journal copies the build could not tie to a blog post, after the
 # 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv).
@@ -129,6 +143,32 @@ def blog_date_failures(blog: dict[str, Any]) -> list[str]:
     return failures
 
 
+def embed_truncation(corpus: dict[str, Any]) -> list[tuple[str, int]]:
+    """(chunk id, tokens) for every chunk whose embedding input runs past
+    Cohere Embed v3's 512-token cap, longest first (QA2 I2-4). Measured
+    2026-10-01 on the live corpora: 1,308 of 10,051 Weekly Thing inputs and
+    630 of 11,973 blog inputs; Bedrock refuses the 537-token one when told
+    not to truncate."""
+    over = []
+    for chunk in corpus.get("chunks") or []:
+        tokens = embed_token_count(_embed_input(chunk)[:COHERE_EMBED_MAX_TEXT_CHARS])
+        if tokens > COHERE_EMBED_MAX_TOKENS:
+            over.append((str(chunk.get("id")), tokens))
+    return sorted(over, key=lambda item: (-item[1], item[0]))
+
+
+def embed_truncation_report(name: str, corpus: dict[str, Any]) -> tuple[int, str]:
+    """How many of ``corpus``'s chunks are truncated, and the line saying so."""
+    over = embed_truncation(corpus)
+    total = len(corpus.get("chunks") or [])
+    worst = ", ".join(f"{chunk_id} ({tokens})" for chunk_id, tokens in over[:5])
+    line = (
+        f"embed truncation: {name} {len(over)} of {total} chunk inputs run past "
+        f"{COHERE_EMBED_MAX_TOKENS} tokens; Cohere drops their tails"
+    )
+    return len(over), (f"{line} (longest: {worst})" if over else line)
+
+
 def load_json(path: Path) -> dict[str, Any]:
     data = path.read_bytes()
     if data[:2] == b"\x1f\x8b":
@@ -174,10 +214,18 @@ def main(argv: list[str] | None = None) -> int:
             print(f"corpus gate: no candidate corpus in {args.candidate}; nothing to check")
             return 0
         failures = []
+        staged = {}
         if candidate.is_file():
-            failures.extend(gate_failures(load_json(candidate), args.site_archive))
+            staged["corpus.json"] = load_json(candidate)
+            failures.extend(gate_failures(staged["corpus.json"], args.site_archive))
         if blog_candidate.is_file():
-            failures.extend(blog_date_failures(load_json(blog_candidate)))
+            staged["blog_corpus.json"] = load_json(blog_candidate)
+            failures.extend(blog_date_failures(staged["blog_corpus.json"]))
+        for name, corpus in staged.items():
+            truncated, report = embed_truncation_report(name, corpus)
+            print(report)
+            if truncated and os.environ.get("GITHUB_ACTIONS"):
+                print(f"::warning title=Embed truncation (QA2 I2-4)::{report}")
         for failure in failures:
             print(f"FAIL {failure}")
         print(f"corpus gate (archive checks): {len(failures)} failed")
