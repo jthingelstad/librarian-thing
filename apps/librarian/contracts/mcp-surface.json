@@ -2656,7 +2656,7 @@
           },
           "include_utility": {
             "type": "boolean",
-            "description": "Count utility and social sites too (wikipedia.org, linkedin.com, twitter.com, x.com, instagram.com, facebook.com, poap.gallery, poap.xyz, poap.delivery, amazon.com, micro.blog, with their subdomains); left out by default."
+            "description": "Count utility and social sites too (utility_domains: each its own host only, www, m. and mobile. aside, except wikipedia.org with its language editions; aws.amazon.com is not amazon.com); left out by default."
           },
           "source_kind": {
             "type": "string",
@@ -2718,7 +2718,7 @@
             "items": {
               "type": "string"
             },
-            "description": "The utility sites left out."
+            "description": "The utility hosts left out: each matches only itself (www, m. and mobile. aside), except wikipedia.org, which keeps its language editions."
           },
           "measure": {
             "type": "string",
@@ -2769,7 +2769,7 @@
           "server_version"
         ]
       },
-      "chat_description": "Who and what Jamie links to most: his editorial picks (Weekly Thing headline links in Notable, Briefly and the like), aggregated by exact host (www merged; subdomains are their own rows), with total counts, per-year counts, first/last seen, and sample titles. Left out, and counted in the same window: Jamie's own sites (excluded_internal_links), links in Weekly Thing commentary or the Journal (excluded_non_headline_links), blog and podcast links, which connect rather than recommend (excluded_blog_and_podcast_links; source_kind blog ranks blog links instead), and utility sites unless include_utility (excluded_utility_links: wikipedia.org, linkedin.com, twitter.com, x.com, instagram.com, facebook.com, poap.gallery, poap.xyz, poap.delivery, amazon.com, micro.blog, with their subdomains). Ranked by count, ties by domain; page with offset. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then find_links with domain for every link to one of them (subdomains, commentary and blog links included, so its count can be higher). Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "chat_description": "Who and what Jamie links to most: his editorial picks (Weekly Thing headline links in Notable, Briefly and the like), aggregated by exact host (www merged; subdomains are their own rows), with total counts, per-year counts, first/last seen, and sample titles. Left out, and counted in the same window: Jamie's own sites (excluded_internal_links), links in Weekly Thing commentary or the Journal (excluded_non_headline_links), blog and podcast links, which connect rather than recommend (excluded_blog_and_podcast_links; source_kind blog ranks blog links instead), and utility sites unless include_utility (excluded_utility_links: wikipedia.org with its language editions, and only the host itself, www, m. and mobile. aside, for linkedin.com, twitter.com, x.com, instagram.com, facebook.com, poap.gallery, poap.xyz, poap.delivery, collectors.poap.xyz, app.poap.xyz, amazon.com, micro.blog; any other subdomain is its own site and counts, so aws.amazon.com and other people's *.micro.blog blogs rank). Ranked by count, ties by domain; page with offset. Use FIRST for 'who does Jamie reference/cite most', 'favorite sources', or 'most-linked sites' - then find_links with domain for every link to one of them (subdomains, commentary and blog links included, so its count can be higher). Domains map to people (daringfireball.net is John Gruber, stratechery.com is Ben Thompson). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "paged_list": "top",
       "doors": {
         "mcp": true,

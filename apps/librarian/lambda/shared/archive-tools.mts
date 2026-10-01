@@ -4444,9 +4444,14 @@ function yearCountList(byYear: Map<number, number>) {
   return [...byYear.entries()].sort(([a], [b]) => a - b).map(([year, count]) => ({ year, count }));
 }
 
-// Reference sites rather than writing Jamie follows. A host matches itself
-// and its subdomains (en.m.wikipedia.org, mobile.twitter.com,
-// blog.linkedin.com); www is stripped before the test, so no www entries.
+// Reference sites rather than writing Jamie follows. An entry matches only
+// its own host, after the www, m and mobile prefixes (mobile.twitter.com,
+// m.facebook.com): a subdomain is its own site (Jamie, 2026-09-30,
+// "aws.amazon.com and amazon.com are radically different"), so
+// aws.amazon.com, blog.poap.xyz, engineering.linkedin.com and other
+// people's *.micro.blog blogs count as picks (QA3 Q2). wikipedia.org alone
+// keeps its subdomains: its language editions (en., de., en.m.) are the
+// same reference site.
 export const UTILITY_REFERENCE_DOMAINS = [
   'wikipedia.org',
   'linkedin.com',
@@ -4457,12 +4462,20 @@ export const UTILITY_REFERENCE_DOMAINS = [
   'poap.gallery',
   'poap.xyz',
   'poap.delivery',
+  // POAP's collector gallery (poap.gallery's successor) and its app.
+  'collectors.poap.xyz',
+  'app.poap.xyz',
   'amazon.com',
   'micro.blog'
 ];
 
-function utilityDomain(domain: string) {
-  return UTILITY_REFERENCE_DOMAINS.some((utility) => domainMatches(domain, utility));
+const UTILITY_WITH_SUBDOMAINS = new Set(['wikipedia.org']);
+
+export function utilityDomain(domain: string) {
+  const host = normalizedDomain(domain).replace(/^(?:(?:www|m|mobile)\.)+/, '');
+  return UTILITY_REFERENCE_DOMAINS.some((utility) =>
+    UTILITY_WITH_SUBDOMAINS.has(utility) ? domainMatches(host, utility) : host === utility
+  );
 }
 
 // Aggregate the link graph: which domains Jamie links to most, with per-year

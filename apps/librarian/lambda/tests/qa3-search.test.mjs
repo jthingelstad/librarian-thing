@@ -2,6 +2,7 @@
 // photos and time (Q2, Q3, Q6, Q7, Q9, Q10, Q13, Q14, Q17, Q20).
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { utilityDomain } from '../dist/shared/archive-tools.mjs';
 import { dedupeJournalTwins, pageWithoutTwins, primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 // Nothing here calls Bedrock.
@@ -77,4 +78,35 @@ test('a Journal copy drops only beside the passage of its post it copies (QA3 Q7
   // A one-passage post is its own passage, whatever Jamie edited.
   const short = copyOf('short-copy', SHORT_URL, 'Espresso, again. Edited for the issue.');
   assert.deepEqual(ids(dedupeJournalTwins([short, espresso])), [espresso.id]);
+});
+
+test('a utility entry is its own host only; wikipedia.org keeps its language editions (QA3 Q2)', () => {
+  for (const host of [
+    'amazon.com',
+    'www.amazon.com',
+    'mobile.twitter.com',
+    'm.facebook.com',
+    'twitter.com',
+    'micro.blog',
+    'en.wikipedia.org',
+    'en.m.wikipedia.org',
+    'de.wikipedia.org',
+    'collectors.poap.xyz'
+  ]) {
+    assert.equal(utilityDomain(host), true, host);
+  }
+  for (const host of [
+    'aws.amazon.com',
+    'console.aws.amazon.com',
+    'remars.amazon.com',
+    'code.facebook.com',
+    'blog.poap.xyz',
+    'blog.linkedin.com',
+    'engineering.linkedin.com',
+    'blog.twitter.com',
+    'manton.micro.blog',
+    'help.micro.blog'
+  ]) {
+    assert.equal(utilityDomain(host), false, host);
+  }
 });

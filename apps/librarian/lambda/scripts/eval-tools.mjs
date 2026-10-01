@@ -474,6 +474,30 @@ for (const args of [{}, { source_kind: 'weekly_thing' }, { source_kind: 'blog', 
     `${accounted} vs ${links?.total_count}`
   );
 }
+// QA3 Q2: a utility entry matches only its own host (Jamie: "aws.amazon.com
+// and amazon.com are radically different"); wikipedia.org keeps its
+// language editions. Jamie's headline picks on aws.amazon.com (29 on the
+// 2026-10-01 corpora), blog.poap.xyz and code.facebook.com rank again.
+{
+  const ranked = new Map();
+  for (let offset = 0; offset < 10_000;) {
+    const page = await run('top_references', { source_kind: 'weekly_thing', limit: 40, offset });
+    for (const row of page?.top || []) ranked.set(row.domain, row.count);
+    if (!page?.truncated?.next_offset) break;
+    offset = page.truncated.next_offset;
+  }
+  check(
+    'KA top_references ranks aws.amazon.com, blog.poap.xyz and code.facebook.com',
+    (ranked.get('aws.amazon.com') || 0) >= 25 && ranked.has('blog.poap.xyz') && ranked.has('code.facebook.com'),
+    JSON.stringify(['aws.amazon.com', 'blog.poap.xyz', 'code.facebook.com'].map((domain) => ranked.get(domain)))
+  );
+  const utility = [...ranked.keys()].filter(
+    (domain) =>
+      /(?:^|\.)wikipedia\.org$/.test(domain) ||
+      /^(?:(?:m|mobile)\.)?(?:amazon\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com|micro\.blog)$/.test(domain)
+  );
+  check('KA top_references ranks no utility host', utility.length === 0, utility.join(', '));
+}
 {
   const refs = await run('top_references', { source_kind: 'weekly_thing', limit: 10 });
   check(
