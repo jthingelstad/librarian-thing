@@ -1082,8 +1082,18 @@ async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = 
     scope
   });
   const records = await recordsByKey(scopeKinds(scope));
-  return { query, results: groupPassagesBySource(results as ArchiveRecord[], records, query) };
+  return {
+    query,
+    results: groupPassagesBySource(results as ArchiveRecord[], records, query),
+    note: SEARCH_RANKED_NOTE
+  };
 }
+
+// search_archive is a ranked top-N and does not page (Jamie, 2026-10-01,
+// QA3 Q6); the result says so, so a caller never reads it as every match
+// (QA2 R2-4: "Minnebar" showed 12 sources of the 130 that name it).
+const SEARCH_RANKED_NOTE =
+  'Ranked: the best passages for the query, not every match, and no paging. quote_search lists every literal match; archive_lens counts every source.';
 
 // Each corpus's source records by key, built once per loaded corpus.
 const RECORDS_BY_KEY = new WeakMap<Corpus, Map<string, ArchiveRecord>>();

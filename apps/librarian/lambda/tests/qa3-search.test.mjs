@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ARCHIVE_TOOLS, utilityDomain } from '../dist/shared/archive-tools.mjs';
-import { validateToolArguments } from '../dist/shared/mcp.mjs';
+import { mcpToolDeclarations, validateToolArguments } from '../dist/shared/mcp.mjs';
 import { dedupeJournalTwins, pageWithoutTwins, primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 // Nothing here calls Bedrock.
@@ -137,4 +137,17 @@ test('a blank url, id or domain is refused, never read as absent (QA3 Q3)', asyn
     assert.equal(out.code, 'bad_request', JSON.stringify(args));
   }
   assert.equal((await ARCHIVE_TOOLS.list_content({ domain: '  ' }, { scope: 'all' })).code, 'bad_request');
+});
+
+test('search_archive says it is a ranked top-N and keeps the voice floor (QA3 Q6, Q9)', async () => {
+  primeCorpusCachesForTests(passageFixtures());
+  const out = await ARCHIVE_TOOLS.search_archive({ query: 'single track' }, { scope: 'all' });
+  assert.ok(out.results.length > 0);
+  assert.match(out.note, /not every match/);
+  assert.match(out.note, /quote_search/);
+  assert.match(out.note, /archive_lens/);
+  const [spec] = mcpToolDeclarations(['search_archive']);
+  assert.match(spec.description, /does not page/);
+  assert.match(spec.inputSchema.properties.voice.description, /under 40 characters/);
+  assert.ok('note' in spec.outputSchema.properties);
 });

@@ -1088,6 +1088,18 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     .filter((problem) => / to -|from - to/.test(problem));
   check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
 }
+// QA3 Q6: search_archive is a ranked top-N; the result says so and names
+// the complete tools ("Minnebar": 12 sources shown of the 130 naming it).
+{
+  const out = await run('search_archive', { query: 'Minnebar', limit: 12 });
+  check(
+    'KA search_archive says it is ranked and points to quote_search and archive_lens',
+    /not every match/.test(out?.note || '') &&
+      /quote_search/.test(out?.note || '') &&
+      /archive_lens/.test(out?.note || ''),
+    String(out?.note)
+  );
+}
 // QA3 Q3: a blank or whitespace url, id or domain is refused at the door
 // on every tool that takes one, never read as absent (find_links url:""
 // listed all 36,523 links); find_links and list_content refuse it in

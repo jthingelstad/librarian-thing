@@ -294,7 +294,7 @@
         "readOnlyHint": true,
         "openWorldHint": false
       },
-      "description": "Search the whole archive (Weekly Thing, blog, podcast) by meaning and exact terms. Results are grouped by source, best first: the source's id, label, date, url and skim, then its matching passages. Narrow with year_range, section_family, content_kind, voice, topic (a list_topics cluster) or category (blog).",
+      "description": "Search the whole archive (Weekly Thing, blog, podcast) by meaning and exact terms. Results are grouped by source, best first: the source's id, label, date, url and skim, then its matching passages. Narrow with year_range, section_family, content_kind, voice, topic (a list_topics cluster) or category (blog). A ranked top-N that does not page: quote_search lists every literal match, archive_lens counts completely.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -348,7 +348,7 @@
               "quoted",
               "link"
             ],
-            "description": "Whose words: jamie (Jamie's own), quoted (passages Jamie quoted), link (headline link titles). Passages are cut to that voice."
+            "description": "Whose words: jamie (Jamie's own), quoted (passages Jamie quoted), link (headline link titles). Passages are cut to that voice. A voice=jamie passage left with under 40 characters of Jamie's words is dropped."
           },
           "source_kind": {
             "type": "string",
@@ -393,6 +393,10 @@
             "type": "array",
             "description": "Sources, best first, each with passages (a passage from an issue with an audio edition carries audio {url, start, chapter})."
           },
+          "note": {
+            "type": "string",
+            "description": "Says the list is ranked, not every match, and where the complete answers are."
+          },
           "truncated": {
             "type": "object",
             "properties": {
@@ -434,7 +438,7 @@
           "server_version"
         ]
       },
-      "chat_description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, section, section_family, content_kind, voice, topic or category based on what comes back. Results are grouped by source, best first: each carries its source's id, facts and skim (the issue's description, the post's abstract; a generated abstract says so) once, then its matching passages. A passage longer than 2,000 characters shows the stretch where the query's words gather, and clipped gives {start, end, chars}; get_source reads it whole. A Weekly Thing Journal passage is a copy of blog posts: copy_of names each post, which is canonical, and the post wins when both match. A passage from an issue with an audio edition carries audio {url, start, chapter}: its section's chapter, the url starting there. An unknown topic or category is an error that lists the valid ones. year_range is [start_year, end_year]; year is one year. voice=jamie keeps only Jamie's own words (quotations and link titles are cut from each passage). URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "chat_description": "Hybrid search over the active archive source scope: Weekly Thing, blog, podcast, or any enabled combination. Default first stop for broad topics, themes, and evidence gathering. Use iteratively when needed: refine query, year_range, section, section_family, content_kind, voice, topic or category based on what comes back. Results are grouped by source, best first: each carries its source's id, facts and skim (the issue's description, the post's abstract; a generated abstract says so) once, then its matching passages. A passage longer than 2,000 characters shows the stretch where the query's words gather, and clipped gives {start, end, chars}; get_source reads it whole. A Weekly Thing Journal passage is a copy of blog posts: copy_of names each post, which is canonical, and the post wins when both match. A passage from an issue with an audio edition carries audio {url, start, chapter}: its section's chapter, the url starting there. An unknown topic or category is an error that lists the valid ones. year_range is [start_year, end_year]; year is one year. voice=jamie keeps only Jamie's own words (quotations and link titles are cut from each passage), and drops a passage left with under 40 characters of them, so a quotation with a line of framing does not rank as Jamie's writing (archive_lens has no floor: it filters, it does not rank). This is a ranked top-N, not every match, and it does not page: quote_search lists every literal match, and archive_lens counts completely. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "doors": {
         "mcp": true,
         "webmcp": true,
