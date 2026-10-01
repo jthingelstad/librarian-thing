@@ -3520,23 +3520,95 @@ export function fileNameWords(item: Record<string, unknown>) {
 // matcher (café is cafe; AI and TV count; "crêpe" had listed the whole
 // archive), stem by default so dog finds dogs. The same image twice in one
 // source is one result. Without a query, photos are listed newest first.
+// The singular a plural query word names, so "dogs" finds the photos
+// described as a dog (QA M2-3: dogs 47 vs dog 223, beaches 5 vs 133).
+// Stem mode already widens the singular to its plurals. Irregular plurals
+// (leaves, people) stay as typed.
+const PLURAL_KEEPS = new Set(['news', 'lens', 'series', 'species', 'always', 'perhaps', 'christmas', 'texas', 'atlas']);
+export function singularOf(word: string) {
+  const lower = word.toLowerCase();
+  if (lower.length < 4 || PLURAL_KEEPS.has(lower) || !/^\p{L}+$/u.test(lower)) return '';
+  if (/ies$/.test(lower) && lower.length > 4) return `${word.slice(0, -3)}y`;
+  if (/(?:ss|sh|ch|x|z)es$/.test(lower)) return word.slice(0, -2);
+  if (/(?:ss|us|is|ics)$/.test(lower) || !lower.endsWith('s')) return '';
+  return word.slice(0, -1);
+}
+
+// media_search's words: each must match some field. phrase mode, or a query
+// in double quotes, is one phrase (QA M2-4: phrase had run as exact, word by
+// word). In stem mode a plural also finds its singular.
+function mediaQueryWords(query: string, mode: string) {
+  const quoted = /^\s*"[^"]+"\s*$/.test(query);
+  if ((mode === 'phrase' || quoted) && trimTerm(query)) {
+    const matcher = compileTopicMatcher(trimTerm(query), { mode: 'phrase' });
+    return { mode: 'phrase', words: [{ word: trimTerm(query), matchers: [matcher] }], ignored: [] as string[] };
+  }
+  const seen = new Map<string, { word: string; matchers: TopicMatcher[] }>();
+  const ignored: string[] = [];
+  for (const raw of query.split(/\s+/)) {
+    const word = trimTerm(raw);
+    if (!raw) continue;
+    const matcher = compileTopicMatcher(word, { mode });
+    if (!word || matcher.isEmpty) {
+      ignored.push(raw);
+      continue;
+    }
+    if (seen.has(word.toLowerCase())) continue;
+    const singular = mode === 'stem' ? singularOf(word) : '';
+    seen.set(word.toLowerCase(), {
+      word,
+      matchers: singular ? [matcher, compileTopicMatcher(singular, { mode })] : [matcher]
+    });
+  }
+  return { mode, words: [...seen.values()], ignored };
+}
+
+// Where each blog photo ran in the Weekly Thing, from every copy in the WT
+// media index, whatever the query matched (QA M2-1: a dog photo whose WT340
+// copy was described as a sports hall said nothing about WT340). Keyed by
+// the post the copy names and its url, so a photo two posts share is
+// credited to the one the Journal copied (QA M2-5).
+const PHOTO_RAN_IN = new WeakMap<object, Map<string, Set<unknown>>>();
+function photoRanIn(wt: Corpus) {
+  let index = PHOTO_RAN_IN.get(wt);
+  if (!index) {
+    index = new Map();
+    for (const item of (wt.media as Array<Record<string, unknown>> | undefined) || []) {
+      if (item.copy_of_microblog_id == null || !item.canonical_url || item.issue_number == null) continue;
+      const key = `blog-${String(item.copy_of_microblog_id)}\0${String(item.canonical_url)}`;
+      if (!index.has(key)) index.set(key, new Set());
+      index.get(key)!.add(item.issue_number);
+    }
+    PHOTO_RAN_IN.set(wt, index);
+  }
+  return index;
+}
+
+const byIssueNumber = (a: unknown, b: unknown) => String(a).localeCompare(String(b), 'en', { numeric: true });
+
 async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const query = String(input.query || '').trim();
-  const mode = normalizeMatchMode(input.match_mode) || 'stem';
-  const words = [
-    ...new Map(
-      query
-        .split(/\s+/)
-        .map((word) => trimTerm(word))
-        .filter(Boolean)
-        .map((word) => [word.toLowerCase(), compileTopicMatcher(word, { mode })] as const)
-    ).entries()
-  ].filter(([, matcher]) => !matcher.isEmpty);
+  const parsed = mediaQueryWords(query, normalizeMatchMode(input.match_mode) || 'stem');
+  const { mode, words } = parsed;
+  if (parsed.ignored.length && words.length) {
+    return {
+      error: `query word${parsed.ignored.length > 1 ? 's' : ''} ${parsed.ignored.map((word) => `"${word}"`).join(', ')} ${parsed.ignored.length > 1 ? 'have' : 'has'} no letter or digit to match; drop ${parsed.ignored.length > 1 ? 'them' : 'it'}, or describe what it shows in words.`,
+      code: 'bad_request'
+    };
+  }
   const [startYear, endYear] = parseYearRange(input.year_range);
   const requestedSource = normalizeSourceKind(input.source_kind || '');
   // One issue's photos: implies the Weekly Thing (the doors refuse it with
   // another source_kind).
   const issue = input.issue_number == null || input.issue_number === '' ? '' : issueKey(input.issue_number);
+  const wtCorpus = await loadCorpus('weekly_thing');
+  if (
+    issue &&
+    !((wtCorpus.issues as ArchiveRecord[] | undefined) || []).some((row) => issueKey(row.number) === issue)
+  ) {
+    return { error: `No Weekly Thing issue ${issue} is in the archive.`, code: 'not_found' };
+  }
+  const ranIn = photoRanIn(wtCorpus);
   const kinds = scopeKinds(scope).filter(
     (kind) => (!requestedSource || kind === requestedSource) && (!issue || kind === 'weekly_thing')
   );
@@ -3554,8 +3626,10 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       // says nothing (92% of WT media had empty alt before it).
       const fields = mediaFields(item, kind);
       const reasons: string[] = [];
-      for (const [, matcher] of words) {
-        const hit = fields.map(([field, text]) => ({ field, hit: matcher.firstHit(text) })).find((entry) => entry.hit);
+      for (const { matchers } of words) {
+        const hit = matchers
+          .flatMap((matcher) => fields.map(([field, text]) => ({ field, hit: matcher.firstHit(text) })))
+          .find((entry) => entry.hit);
         if (!hit) break;
         reasons.push(`${hit.field}: '${hit.hit!.span}'`);
       }
@@ -3564,7 +3638,13 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       const key = `${sourceId || sourceKeyFromMedia(item as ArchiveRecord, kind)}\0${item.url}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      found.push({ ...item, source_id: sourceId, ...(words.length ? { match_reasons: reasons } : {}) });
+      const ran = kind === 'blog' ? ranIn.get(`${sourceId}\0${String(item.url)}`) : undefined;
+      found.push({
+        ...item,
+        source_id: sourceId,
+        ...(ran ? { also_in_issues: [...ran].sort(byIssueNumber) } : {}),
+        ...(words.length ? { match_reasons: reasons } : {})
+      });
     }
   }
   const { kept, collapsed } = collapsePhotoCopies(found);
@@ -3578,11 +3658,14 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     )
     .map((entry) => entry.item);
   const page = pageOf('media_search', ordered, input, 'photos');
-  const narrowers = [
-    ...(input.year_range ? [] : ['year_range']),
-    ...(issue || (requestedSource && requestedSource !== 'weekly_thing') ? [] : ['issue_number']),
-    ...(requestedSource ? [] : ['source_kind'])
-  ];
+  // One issue's photos narrow by nothing but offset (QA M2-6).
+  const narrowers = issue
+    ? []
+    : [
+        ...(input.year_range ? [] : ['year_range']),
+        ...(issue || (requestedSource && requestedSource !== 'weekly_thing') ? [] : ['issue_number']),
+        ...(requestedSource ? [] : ['source_kind'])
+      ];
   return markTruncated(
     {
       query,
@@ -3630,13 +3713,17 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
 // and also_in_issues says where else it ran. A copy whose blog photo did
 // not match stays, naming its canonical post, so nothing drops silently.
 function collapsePhotoCopies(found: Array<Record<string, unknown>>) {
-  const blogByUrl = new Map<string, Record<string, unknown>>();
-  for (const item of found) if (item.source_kind === 'blog' && item.url) blogByUrl.set(String(item.url), item);
+  const blogPhotos = new Map<string, Record<string, unknown>>();
+  for (const item of found) {
+    if (item.source_kind === 'blog' && item.url) blogPhotos.set(`${String(item.source_id)}\0${String(item.url)}`, item);
+  }
   const kept: Array<Record<string, unknown>> = [];
   let collapsed = 0;
   for (const item of found) {
     const canonical =
-      item.source_kind === 'weekly_thing' && item.canonical_url ? blogByUrl.get(String(item.canonical_url)) : undefined;
+      item.source_kind === 'weekly_thing' && item.canonical_url && item.copy_of_microblog_id != null
+        ? blogPhotos.get(`blog-${String(item.copy_of_microblog_id)}\0${String(item.canonical_url)}`)
+        : undefined;
     if (!canonical) {
       kept.push(item);
       continue;
@@ -3644,7 +3731,7 @@ function collapsePhotoCopies(found: Array<Record<string, unknown>>) {
     collapsed += 1;
     const issues = new Set((canonical.also_in_issues as unknown[] | undefined) || []);
     if (item.issue_number != null) issues.add(item.issue_number);
-    canonical.also_in_issues = [...issues].sort((a, b) => String(a).localeCompare(String(b), 'en', { numeric: true }));
+    canonical.also_in_issues = [...issues].sort(byIssueNumber);
   }
   return { kept, collapsed };
 }

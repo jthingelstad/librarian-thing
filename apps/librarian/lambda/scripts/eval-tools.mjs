@@ -37,7 +37,9 @@ const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
 const { primeCorpusCachesForTests } = await import(path.join(distDir, 'shared/retrieval.mjs'));
-const { mcpToolDeclarations, renderToolCallResult } = await import(path.join(distDir, 'shared/mcp.mjs'));
+const { mcpToolDeclarations, renderToolCallResult, validateToolArguments } = await import(
+  path.join(distDir, 'shared/mcp.mjs')
+);
 const { runCompletenessChecks } = await import('./eval-completeness.mjs');
 
 // --- corpus loading -------------------------------------------------------
@@ -323,7 +325,7 @@ async function run(tool, args, options = {}) {
     corpus_stats: ['source_kind', 'year_range', 'year', 'limit'],
     top_references: ['source_kind', 'year_range', 'year', 'limit', 'include_utility'],
     quote_search: ['phrase', 'limit'],
-    media_search: ['query', 'year_range', 'year', 'issue_number', 'limit'],
+    media_search: ['query', 'year_range', 'year', 'issue_number', 'limit', 'source_kind', 'match_mode', 'offset'],
     get_source: ['id', 'section', 'format'],
     source_neighborhood: ['id', 'limit'],
     find_evidence: ['claims', 'source_kind', 'voice', 'limit'],
@@ -621,6 +623,52 @@ await run('find_evidence', {
   );
 });
 await run('media_search', { query: 'minnehaha creek', limit: 4 });
+// Round 2 media (2.3.0): plurals fold both ways, phrase is a phrase, a
+// word with nothing to match is refused, an unknown issue is not_found and
+// an issue listing offers only the offset.
+for (const [singular, plural] of [
+  ['dog', 'dogs'],
+  ['beach', 'beaches']
+]) {
+  const one = await run('media_search', { query: singular, limit: 1 });
+  const many = await run('media_search', { query: plural, limit: 1 });
+  check(
+    `KA media_search ${plural} finds what ${singular} finds`,
+    many?.total_count >= one?.total_count,
+    `${many?.total_count} vs ${one?.total_count}`
+  );
+}
+{
+  const phrase = await run('media_search', { query: 'book cover', match_mode: 'phrase', limit: 12 });
+  const exact = await run('media_search', { query: 'book cover', match_mode: 'exact', limit: 1 });
+  check(
+    'KA media_search phrase is narrower than exact',
+    phrase?.total_count > 0 && phrase.total_count < exact?.total_count,
+    `${phrase?.total_count} vs ${exact?.total_count}`
+  );
+  check(
+    'KA media_search phrase results hold the phrase',
+    (phrase?.results || []).every((item) =>
+      [item.alt, item.context, item.description].some((text) => /\bbook\W+covers?\b/i.test(String(text || '')))
+    )
+  );
+}
+await run('media_search', { query: 'dog 🐕' }, { expectError: true }).then((out) => {
+  check('KA media_search refuses a word with nothing to match', out?.code === 'bad_request', String(out?.error));
+});
+await run('media_search', { issue_number: 999 }, { expectError: true }).then((out) => {
+  check('KA media_search unknown issue is not_found', out?.code === 'not_found', String(out?.error));
+});
+await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
+  const hint = String(out?.truncated?.hint || '');
+  check('KA media_search issue listing hint offers only offset', !/source_kind|year_range/.test(hint), hint);
+});
+{
+  const loose = Object.keys(ARCHIVE_TOOLS)
+    .flatMap((tool) => validateToolArguments(tool, { offset: -1 }))
+    .filter((problem) => / to -|from - to/.test(problem));
+  check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
+}
 // File names are searchable (plan 4 step 1): the Straw Poll charts are
 // found by the word only their file names hold, and say so.
 await run('media_search', { query: 'strawpoll', limit: 12 }).then((out) => {

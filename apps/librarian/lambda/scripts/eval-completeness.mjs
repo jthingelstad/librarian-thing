@@ -427,6 +427,39 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     counts.audio_editions = withAudio.length;
   }
 
+  // 8e. A blog photo's also_in_issues names every issue it ran in, whatever
+  //     the query matched, and only on the post its copies name (QA M2-1,
+  //     M2-5: "family" lacked it on 137 of 246; 3 urls credited the wrong post).
+  {
+    const ranIn = new Map();
+    for (const item of bySource.weekly_thing.media) {
+      if (item.copy_of_microblog_id == null || !item.canonical_url) continue;
+      const key = `blog-${item.copy_of_microblog_id}\0${String(item.canonical_url).replace(/^https?:/, '')}`;
+      if (!ranIn.has(key)) ranIn.set(key, new Set());
+      ranIn.get(key).add(String(item.issue_number));
+    }
+    for (const args of [{ query: 'family' }, { query: 'family', source_kind: 'blog' }, { year: 2026 }]) {
+      const wrong = [];
+      for (let offset = 0; offset !== undefined;) {
+        const page = await call('media_search', { ...args, limit: 12, offset });
+        for (const item of page.results || []) {
+          if (item.source_kind !== 'blog') continue;
+          const want = [...(ranIn.get(`${item.source_id}\0${String(item.image_url).replace(/^https?:/, '')}`) || [])]
+            .sort()
+            .join(',');
+          const got = (item.also_in_issues || []).map(String).sort().join(',');
+          if (want !== got) wrong.push(`${item.source_id} ${got || '-'} vs ${want || '-'}`);
+        }
+        offset = page.truncated?.next_offset;
+      }
+      check(
+        `completeness media_search also_in_issues names every issue (${JSON.stringify(args)})`,
+        wrong.length === 0,
+        `${wrong.length}: ${wrong.slice(0, 4).join('; ')}`
+      );
+    }
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

@@ -267,7 +267,14 @@ function checkValue(path: string, value: unknown, schema: ArgSchema, problems: s
       ((typeof schema.minimum === 'number' && number < schema.minimum) ||
         (typeof schema.maximum === 'number' && number > schema.maximum))
     ) {
-      problems.push(`${path} must be from ${schema.minimum ?? '-'} to ${schema.maximum ?? '-'}`);
+      // One bound reads as one bound (QA M2-7: "must be from 0 to -").
+      problems.push(
+        typeof schema.minimum === 'number' && typeof schema.maximum === 'number'
+          ? `${path} must be from ${schema.minimum} to ${schema.maximum}`
+          : typeof schema.minimum === 'number'
+            ? `${path} must be at least ${schema.minimum}`
+            : `${path} must be at most ${schema.maximum}`
+      );
     }
   }
   if (Array.isArray(value)) {
