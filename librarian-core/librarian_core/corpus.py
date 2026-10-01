@@ -8,11 +8,14 @@ the graph builder.
 
 from __future__ import annotations
 
+import functools
 import hashlib
+import html
 import json
 import re
-from dataclasses import dataclass
-from datetime import datetime, timezone
+from dataclasses import dataclass, replace
+from datetime import date as _date
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin, urlparse
@@ -21,7 +24,15 @@ import boto3
 import yaml
 from dotenv import load_dotenv
 
-from .links import extract_domains, section_family
+from .links import (
+    extract_domains,
+    link_label_text,
+    markdown_links,
+    repair_url,
+    section_family,
+    unlink,
+    web_domain,
+)
 from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
@@ -190,7 +201,9 @@ def _drop_emptied_headings(body: str) -> str:
 
 
 def clean_heading(value: str) -> str:
-    value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
+    # The scanner, not a "[^\]]" regex, so "[Python post-Guido [LWN.net]](url)"
+    # is the title and not the raw markdown (QA 2026-09-30, links L7).
+    value = unlink(value)
     value = re.sub(r"[*_`#]+", "", value)
     return " ".join(value.split())
 
@@ -210,13 +223,37 @@ class IssueSection:
     raw_heading: str = ""
 
 
+# "[Title](url) > quote": a heading line whose blockquote lost its line break.
+_SWALLOWED_QUOTE_RE = re.compile(r"^(\[[^\n]*?\]\([^)\s]+\))\s+(>\s.*)$")
+# An H2 that is an item's byline ("by Robert Wright") or an aside ("Oh my…"),
+# not a section: it belongs to the item heading before it.
+_STRAY_H2_RE = re.compile(r"^(?:by\s.*|.*(?:…|\.\.\.))$", re.I)
+
+
 def split_issue_sections(body: str) -> list[IssueSection]:
     """Split on H1-H4 like ``split_sections``, carrying each section's H2 and
     family. Text before the first heading is the "Issue" intro, family Intro.
     An H2 missing from the family map is its own family, except after a
     group header: a known H2 with no text of its own followed straight by
     another H2 (the 2018 "Links 📌" over "Tech", "Business", ...), whose
-    family the unlisted H2s under it share."""
+    family the unlisted H2s under it share.
+
+    An item heading (H3/H4) never vanishes for having no text under it
+    (QA 2026-09-30, ingest F9: WT13's 574-word heading line and 14 other
+    H3s were in no section, their links in no link record):
+
+    - "### [Title](url) > quote..." is a heading that swallowed its
+      blockquote (a lost line break, WT13): the quote is its text.
+    - An empty item heading followed by a byline or aside H2 ("## by
+      Author" in WT23-39, "## Oh my…" in WT85 and WT130) takes that H2 and
+      its text as its own text; the stray H2 opens no family, so the items
+      after it keep theirs.
+    - "### [— Name (@handle) date](url)", a tweet embed's attribution
+      (WT127), closes the quote before it: it joins the previous section.
+    - An empty item heading followed by another item heading (the date
+      label "### Monday, May 18" in WT349, a title whose quote line became
+      an H3 in WT73) leads the next section's text.
+    - Otherwise the heading's own markdown is its text."""
     matches = list(HEADING_RE.finditer(body))
     if not matches:
         return [IssueSection("Issue", "Intro", "Issue", body.strip())]
@@ -228,11 +265,42 @@ def split_issue_sections(body: str) -> list[IssueSection]:
             sections.append(IssueSection("Issue", "Intro", "Issue", intro))
 
     parent, family, group = "Issue", "Intro", None
-    for index, match in enumerate(matches):
+    lead = ""
+    index = 0
+    while index < len(matches):
+        match = matches[index]
         following = matches[index + 1] if index + 1 < len(matches) else None
         end = following.start() if following else len(body)
         section_body = body[match.end() : end].strip()
-        heading = clean_heading(match.group(2))
+        raw_heading = match.group(2)
+        item = len(match.group(1)) >= 3
+        swallowed = _SWALLOWED_QUOTE_RE.match(raw_heading) if item else None
+        if swallowed:
+            raw_heading = swallowed.group(1)
+            section_body = f"{swallowed.group(2)}\n\n{section_body}".strip()
+        if (
+            item
+            and not section_body
+            and following is not None
+            and len(following.group(1)) <= 2
+            and _STRAY_H2_RE.match(clean_heading(following.group(2)))
+            and not section_family(clean_heading(following.group(2)))
+        ):
+            after = matches[index + 2] if index + 2 < len(matches) else None
+            stray_text = body[following.end() : after.start() if after else len(body)].strip()
+            section_body = f"{following.group(2).strip()}\n\n{stray_text}".strip()
+            index += 1
+        index += 1
+        heading = clean_heading(raw_heading)
+        if item and not section_body:
+            if heading.startswith(("—", "–")) and sections:
+                last = sections[-1]
+                sections[-1] = replace(last, text=f"{last.text}\n\n{raw_heading.strip()}")
+                continue
+            if following is not None and len(following.group(1)) >= 3:
+                lead = f"{lead}{raw_heading.strip()}\n\n"
+                continue
+            section_body = raw_heading.strip()
         if len(match.group(1)) <= 2:
             parent = heading
             known = section_family(heading)
@@ -246,7 +314,9 @@ def split_issue_sections(body: str) -> list[IssueSection]:
             else:
                 family = group or heading
         if section_body:
-            sections.append(IssueSection(heading, family, parent, section_body, match.group(2)))
+            if item and lead:
+                section_body, lead = f"{lead}{section_body}", ""
+            sections.append(IssueSection(heading, family, parent, section_body, raw_heading))
     return sections
 
 
@@ -290,7 +360,9 @@ def summarize_text(text: str, max_chars: int = 420) -> str:
 
 
 def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
-    tokens = [token.lower() for token in words(f"{subject} {body[:12000]}")]
+    # The whole text: an issue's clusters used to come from its first 12,000
+    # characters, which left most of 301 issues unread (QA 2026-09-30, F14).
+    tokens = [token.lower() for token in words(f"{subject} {body}")]
     counts = {}
     token_set = set(tokens)
     for topic, keywords in TOPIC_KEYWORDS.items():
@@ -303,6 +375,32 @@ def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
     ]
 
 
+# Link targets, tags and bare URLs: not the passage's words. A micro.blog or
+# feedburner URL is not the passage talking about blogs or feeds.
+_TOPIC_NOISE_RE = re.compile(r"\]\([^)]*\)|<[^>]+>|https?://\S+|www\.\S+", re.I)
+_MICRO_BLOG_RE = re.compile(r"\bmicro\.blog\b", re.I)
+
+
+def topic_prose(text: str) -> str:
+    """``text`` as the words the topic detector reads: link targets and
+    tags removed, "micro.blog" as the ``microblog`` keyword that the word
+    split would otherwise break in two."""
+    return _MICRO_BLOG_RE.sub("microblog", _TOPIC_NOISE_RE.sub(" ", text))
+
+
+def chunk_topics(heading: str, text: str) -> list[str]:
+    """The clusters one passage is about, from its own heading and text.
+
+    Chunks used to inherit their issue's clusters, and since every issue
+    links a micro.blog or blog URL, "Open web and RSS" sat on 8,856 of 8,895
+    Weekly Thing chunks, so search_archive's topic filter barely narrowed
+    (QA 2026-09-30, retrieval Q1). This is the same detector and the same
+    nine clusters as ``detect_topics``, read over the passage's prose (link
+    targets and tags removed), with "micro.blog" read as the ``microblog``
+    keyword that the word split would otherwise break in two."""
+    return detect_topics("", topic_prose(f"{heading}\n{text}"))
+
+
 # --- media / currently / journal extraction (2026-08 tool audit) ----------
 #
 # The audit exercise showed three brute-force patterns in the agent: photo
@@ -312,23 +410,47 @@ def detect_topics(subject: str, body: str, limit: int = 6) -> list[str]:
 # id-keyed embed cache stays warm.
 
 _MEDIA_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I | re.S)
-_MEDIA_MD_IMG_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+# Jamie's blog hosts: thingelstad.com, the legacy micro.thingelstad.com, and
+# jthingelstad.micro.blog, where 111 posts from 2017 still have their URLs
+# (Jamie, 2026-09-30: the same blog as thingelstad.com).
+_BLOG_HOST_PATTERN = r"(?:(?:www\.|micro\.)?thingelstad\.com|jthingelstad\.micro\.blog)"
 # A Journal entry's own permalink, in every era's style: "Thursday @ 9:28 PM",
 # "Sep 24, 2023 at 3:40 PM" (with a narrow no-break space), "2018-05-04 4:47
 # PM", "5:25 PM", and the 2017 "→". Links with any other text are Jamie
 # pointing at an older post, not an entry.
 _JOURNAL_ENTRY_LINK_RE = re.compile(
     r"\[(?:[^\]]*\d{1,2}:\d{2}[\s\u202f]*[AP]M[^\]]*|\s*→\s*)\]"
-    r"\((https?://(?:www\.|micro\.)?thingelstad\.com/\d{4}/\d{2}/\d{2}/[^)\s]+)\)",
+    rf"\((https?://{_BLOG_HOST_PATTERN}/\d{{4}}/\d{{2}}/\d{{2}}/[^)\s]+)\)",
     re.I,
 )
-_CURRENTLY_LINE_RE = re.compile(r"^\*\*([A-Za-z][A-Za-z ]{2,20}):\*\*\s*(.+)$", re.M)
-_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+)[^)]*\)")
+# The colon sits inside the bold ("**Reading:**") in most issues and outside
+# it ("**Dining**:") in ten lines from 2022-2025, which were dropped until
+# QA 2026-09-30 (ingest F12).
+_CURRENTLY_LINE_RE = re.compile(
+    r"^\*\*([A-Za-z][A-Za-z ]{2,20})(?::\*\*|\*\*\s*:)\s*(.+)$",
+    re.M,
+)
 
 
 def _img_attr(tag: str, name: str) -> str:
     match = re.search(rf"\b{name}\s*=\s*([\"\'])(.*?)\1", tag, re.I | re.S)
     return " ".join((match.group(2) if match else "").split())
+
+
+_VIDEO_TAG_RE = re.compile(r"<video\b[^>]*>", re.I | re.S)
+VIDEO_POSTER_CONTEXT = "Video poster, the still shown before the video plays"
+
+
+def extract_video_posters(text: str) -> list[dict[str, str]]:
+    """The still of each ``<video poster=...>`` as ``{url, alt, video_url}``.
+    115 blog videos carry one (QA 2026-09-30, media Q3); the still is the
+    only image of the video, so it is media like a photo."""
+    out = []
+    for tag in _VIDEO_TAG_RE.findall(text or ""):
+        poster = _img_attr(tag, "poster")
+        if poster:
+            out.append({"url": poster, "alt": "", "video_url": _img_attr(tag, "src")})
+    return out
 
 
 def extract_images(text: str) -> list[dict[str, str]]:
@@ -339,14 +461,74 @@ def extract_images(text: str) -> list[dict[str, str]]:
         url = _img_attr(tag, "src")
         if url:
             out.append({"url": url, "alt": _img_attr(tag, "alt")})
-    for alt, url in _MEDIA_MD_IMG_RE.findall(text or ""):
-        out.append({"url": url, "alt": " ".join(alt.split())})
+    for link in markdown_links(text or ""):
+        if link.kind == "image":
+            out.append({"url": link.url, "alt": " ".join(link.label.split())})
     return out
 
 
+# The front-matter ``image`` is the issue's cover: the image email clients
+# and link previews show. 57 issues' covers appear nowhere in their bodies,
+# so until QA 2026-09-30 (media Q4) they were in no media record, WT350 and
+# WT351 among them. One Buttondown attachment is the cover of WT3-22 (each
+# with its own signed query string): a placeholder, not a cover.
+COVER_CONTEXT = "Cover image"
+
+
+def _image_key(url: str) -> str:
+    return re.split(r"[?#]", url.strip(), maxsplit=1)[0]
+
+
+def _shared_cover_images(issue_metadata: list[dict[str, Any]]) -> set[str]:
+    """Front-matter cover images (query strings aside) that more than one
+    issue uses: placeholders rather than any one issue's cover."""
+    uses: dict[str, int] = {}
+    for metadata in issue_metadata:
+        image = str(metadata.get("image") or "")
+        if image:
+            uses[_image_key(image)] = uses.get(_image_key(image), 0) + 1
+    return {key for key, count in uses.items() if count > 1}
+
+
+def issue_cover_image(
+    metadata: dict[str, Any], body_image_urls: set[str], shared: set[str]
+) -> dict[str, str] | None:
+    """The issue's front-matter cover as an image entry ``{url, alt,
+    context}``, or None: no cover, not a web URL (WT236's "IMG_8973"), a
+    placeholder shared with other issues, or already an image in the body."""
+    image = str(metadata.get("image") or "").strip()
+    if not image.lower().startswith(("http://", "https://")):
+        return None
+    if _image_key(image) in shared or image in body_image_urls:
+        return None
+    alt = " ".join(str(metadata.get("image_alt") or "").split())
+    return {"url": image, "alt": alt, "context": COVER_CONTEXT}
+
+
+# HTML in a body line next to an image. Inline tags join the words around
+# them, as a browser shows them; any other tag is a break. A markdown
+# autolink ("<https://...>") is not a tag.
+_CONTEXT_INLINE_TAG_RE = re.compile(
+    r"</?(?:a|abbr|b|cite|code|em|i|mark|q|s|small|span|strong|sub|sup|u)\b[^>]*>", re.I
+)
+_CONTEXT_TAG_RE = re.compile(r"</?[a-zA-Z][a-zA-Z0-9-]*(?:\s[^>]*)?/?>|<!--.*?-->", re.S)
+_CONTEXT_AUTOLINK_RE = re.compile(r"<(https?://[^\s>]+)>")
+
+
+def _context_text(line: str) -> str:
+    """A body line as prose: tags gone, entities decoded, markdown plain.
+    plain_text alone keeps tags, so "<p>POAP <a href=...>" read as
+    "<pPOAP <a href=..." once its ">" went (2.2.0 media_search)."""
+    text = _CONTEXT_AUTOLINK_RE.sub(r"\1", line)
+    text = _CONTEXT_TAG_RE.sub(" ", _CONTEXT_INLINE_TAG_RE.sub("", text))
+    return plain_text(html.unescape(text))
+
+
 def _media_context(text: str, url: str, max_chars: int = 240) -> str:
-    """The prose nearest an image: the first non-empty, non-image line after
-    the tag (issue captions follow images), falling back to the line before."""
+    """The prose nearest an image: the first line after the tag with words
+    in it (issue captions follow images), falling back to the line before.
+    An image line or a line of markup alone ("<br clear="all">",
+    "</audio></p>") is passed over."""
     lines = (text or "").split("\n")
     index = next(
         (
@@ -359,16 +541,18 @@ def _media_context(text: str, url: str, max_chars: int = 240) -> str:
     if index is None:
         return ""
 
-    def usable(line: str) -> bool:
+    def prose(line: str) -> str:
         clean = line.strip()
-        return bool(clean) and "<img" not in clean and not clean.startswith("![") and clean != "---"
+        if not clean or "<img" in clean or clean.startswith("![") or clean == "---":
+            return ""
+        return _context_text(clean)
 
     for line in lines[index + 1 :]:
-        if usable(line):
-            return plain_text(line)[:max_chars]
+        if found := prose(line):
+            return found[:max_chars]
     for line in reversed(lines[:index]):
-        if usable(line):
-            return plain_text(line)[:max_chars]
+        if found := prose(line):
+            return found[:max_chars]
     return ""
 
 
@@ -412,16 +596,59 @@ def _canonical_blog_url(url: str) -> str:
     return "https://www.thingelstad.com/" + re.split(r"[?#]", match.group(1), maxsplit=1)[0]
 
 
+_H1_H2_RE = re.compile(r"^(#{1,2}\s+.+?)\s*$", re.M)
+_H3_RE = re.compile(r"^###\s+(.+?)\s*$", re.M)
+_READING_ERA_RE = re.compile(r"^(?:now\s+)?reading\b", re.I)
+
+
+def extract_now_reading_entries(body: str) -> list[dict[str, Any]]:
+    """Reading entries from the 2017-2018 "Now Reading 📚" sections (WT8-77),
+    the era before "**Reading:**" lines in a Currently section: one per H3
+    book (the H2's own lines, a cover image or a bare link, belong to the
+    first), or the section itself when it has no H3. Same shape as
+    ``extract_currently_entries``, kind "reading"."""
+    entries: list[dict[str, Any]] = []
+    parts = _H1_H2_RE.split(body or "")
+    for heading, block in zip(parts[1::2], parts[2::2], strict=True):
+        if not heading.startswith("## "):
+            continue
+        name = clean_heading(heading[3:])
+        if section_family(name) != "Currently" or not _READING_ERA_RE.match(name):
+            continue
+        books = _H3_RE.split(block)
+        lead, pairs = books[0], list(zip(books[1::2], books[2::2], strict=True))
+        if not pairs:
+            lead, pairs = "", [("", books[0])]
+        for index, (title, text) in enumerate(pairs):
+            source = f"{lead if index == 0 else ''}\n\n{title}\n\n{text}"
+            links: dict[str, dict[str, str]] = {}
+            for text_, url, _ in _body_links(source):
+                links.setdefault(url, {"title": text_ or url, "url": url})
+            # A bare store link above the blurb is a link, not the entry's words.
+            prose = plain_text(f"{clean_heading(title)}\n\n{text}")
+            prose = " ".join(re.sub(r"<?https?://\S+", " ", prose).split())
+            if prose or links:
+                entries.append({"kind": "reading", "text": prose, "links": [*links.values()]})
+    return entries
+
+
 def extract_currently_entries(section_text: str) -> list[dict[str, Any]]:
     """Typed entries from a Currently section: **Reading:** / **Playing:** /
-    **Watching:** / **Listening:** lines with their links and prose."""
+    **Watching:** / **Listening:** lines (or **Dining**:) with their links and
+    their whole prose. The text was cut at 400 characters until QA
+    2026-09-30 (time F4), which hid the later titles of long lines from
+    currently_history; the Lambda clips what it displays."""
     entries = []
     for label, rest in _CURRENTLY_LINE_RE.findall(section_text or ""):
-        links = [{"title": " ".join(t.split()), "url": u} for t, u in _MD_LINK_RE.findall(rest)]
+        links = [
+            {"title": link_label_text(link.label) or link.url, "url": link.url}
+            for link in markdown_links(rest)
+            if link.kind != "image"
+        ]
         entries.append(
             {
                 "kind": label.strip().lower(),
-                "text": plain_text(rest)[:400],
+                "text": plain_text(rest),
                 "links": links,
             }
         )
@@ -581,29 +808,119 @@ def _overlap_tail(text: str, overlap_words: int) -> str:
     return text[cut:].strip()
 
 
-def chunk_section(text: str, max_words: int = 400, overlap_words: int = 60) -> list[str]:
+def _cut_points(text: str, pattern: re.Pattern[str], atomic: list[tuple[int, int]]) -> list:
+    """``(start, end)`` of the whitespace after each ``pattern`` boundary in
+    ``text`` (a sentence end, a line break, a space), skipping any that falls
+    inside an ``atomic`` span (a markdown link or HTML tag)."""
+    points = []
+    for match in pattern.finditer(text):
+        raw = match.group(0)
+        start = match.start() + len(raw.rstrip())
+        if start <= 0 or match.end() >= len(text) or start == match.end():
+            continue
+        if any(left < start < right for left, right in atomic):
+            continue
+        points.append((start, match.end()))
+    return points
+
+
+_SPACE_CUT_RE = re.compile(r"[ \t]+")
+
+
+def _fitting_units(paragraph: str, max_chars: int) -> list[tuple[str, str]]:
+    """``paragraph`` as ``[(separator, piece)]`` pieces of at most
+    ``max_chars``. A paragraph that fits is one piece. One that does not is
+    cut at its sentence ends and line breaks, then a piece still too long at
+    its spaces (outside links and tags first), then, as a last resort, every
+    ``max_chars``. Each separator is the whitespace the cut removed, so the
+    pieces rejoin to the paragraph verbatim."""
+    units: list[tuple[str, str]] = [("\n\n", paragraph)]
+    for pattern, keep_atomic in (
+        (_OVERLAP_BOUNDARY_RE, True),
+        (_SPACE_CUT_RE, True),
+        (_SPACE_CUT_RE, False),
+    ):
+        refined: list[tuple[str, str]] = []
+        for separator, piece in units:
+            if len(piece) <= max_chars:
+                refined.append((separator, piece))
+                continue
+            atomic = (
+                [match.span() for match in _OVERLAP_ATOMIC_RE.finditer(piece)]
+                if keep_atomic
+                else []
+            )
+            cursor = 0
+            for start, end in _cut_points(piece, pattern, atomic):
+                if start == cursor:  # back-to-back boundaries: one wider separator
+                    separator, cursor = separator + piece[start:end], end
+                    continue
+                refined.append((separator, piece[cursor:start]))
+                separator, cursor = piece[start:end], end
+            refined.append((separator, piece[cursor:]))
+        units = refined
+    fitted: list[tuple[str, str]] = []
+    for separator, piece in units:
+        for offset in range(0, len(piece), max_chars):
+            fitted.append((separator if offset == 0 else "", piece[offset : offset + max_chars]))
+    return fitted
+
+
+def _fitting_overlap(previous: str, overlap_words: int, room: int) -> str:
+    """The longest overlap lead-in of at most ``overlap_words`` words that
+    fits in ``room`` characters, or "" when none does."""
+    for count in range(overlap_words, 0, -10):
+        overlap = _overlap_tail(previous, count)
+        if len(overlap) <= room:
+            return overlap
+    return ""
+
+
+def chunk_section(
+    text: str,
+    max_words: int = 400,
+    overlap_words: int = 60,
+    max_chars: int | None = None,
+) -> list[str]:
+    """Split ``text`` into chunks of at most ``max_words`` words, each after
+    the first opening with a verbatim overlap lead-in from the one before.
+
+    ``max_chars`` caps a chunk's length in characters too: it is the room
+    the chunk's text has inside one embedding input, which Bedrock cuts at
+    2,048 characters (``embed_text_budget``). Before the cap, 8.7% of Weekly
+    Thing words sat past that cut in no embedding at all (QA 2026-09-30,
+    ingest F1). The cap only changes a section that produced an overlong
+    chunk: a chunk that fits is built exactly as before, so its id stays."""
     tokens = words(text)
-    if len(tokens) <= max_words:
+    if len(tokens) <= max_words and (max_chars is None or len(text.strip()) <= max_chars):
         return [text.strip()] if text.strip() else []
 
     paragraphs = [p.strip() for p in re.split(r"\n{2,}", text) if p.strip()]
+    units = (
+        [unit for paragraph in paragraphs for unit in _fitting_units(paragraph, max_chars)]
+        if max_chars
+        else [("\n\n", paragraph) for paragraph in paragraphs]
+    )
     chunks: list[str] = []
-    current: list[str] = []
+    current = ""
     current_words = 0
 
-    for paragraph in paragraphs:
-        count = len(words(paragraph))
-        if current and current_words + count > max_words:
-            chunks.append("\n\n".join(current).strip())
+    for separator, unit in units:
+        count = len(words(unit))
+        too_long = max_chars is not None and len(current) + len(separator) + len(unit) > max_chars
+        if current and (current_words + count > max_words or too_long):
+            chunks.append(current.strip())
             overlap = _overlap_tail(chunks[-1], overlap_words)
-            current = [overlap, paragraph] if overlap else [paragraph]
+            if max_chars is not None and len(overlap) + 2 + len(unit) > max_chars:
+                overlap = _fitting_overlap(chunks[-1], overlap_words, max_chars - 2 - len(unit))
+            current = f"{overlap}\n\n{unit}" if overlap else unit
             current_words = len(words(overlap)) + count
         else:
-            current.append(paragraph)
+            current = f"{current}{separator}{unit}" if current else unit
             current_words += count
 
     if current:
-        chunks.append("\n\n".join(current).strip())
+        chunks.append(current.strip())
     return chunks
 
 
@@ -726,7 +1043,10 @@ def _site_page_chunks(
     about_path = site_dir / "about.njk"
     if about_path.exists():
         prose = _strip_njk_page(about_path.read_text(encoding="utf-8"), replacements=replacements)
-        for index, chunk_text in enumerate(chunk_section(prose)):
+        budget = embed_text_budget(
+            {"issue_number": None, "subject": "About the Weekly Thing", "section": "About"}
+        )
+        for index, chunk_text in enumerate(chunk_section(prose, max_chars=budget)):
             out.append(
                 {
                     "id": f"site:about:{index}",
@@ -757,7 +1077,14 @@ def _site_page_chunks(
     members_path = site_dir / "support.njk"
     if members_path.exists():
         prose = _strip_njk_page(members_path.read_text(encoding="utf-8"), replacements=replacements)
-        for index, chunk_text in enumerate(chunk_section(prose)):
+        budget = embed_text_budget(
+            {
+                "issue_number": None,
+                "subject": "Supporting Membership",
+                "section": "Supporting Membership",
+            }
+        )
+        for index, chunk_text in enumerate(chunk_section(prose, max_chars=budget)):
             out.append(
                 {
                     "id": f"site:members:{index}",
@@ -917,10 +1244,18 @@ def build_corpus(
         "blog": blog_post_lookup(blog_dir or BLOG_DIR),
         "podcast": podcast_episode_lookup(podcast_dir or PODCAST_DIR),
     }
-    for path in sorted(
-        archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
-    ):
-        metadata, body = read_issue(path)
+    issue_files = [
+        (path, *read_issue(path))
+        for path in sorted(
+            archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
+        )
+    ]
+    shared_covers = _shared_cover_images([metadata for _, metadata, _ in issue_files])
+    post_index = journal_post_index(blog_dir or BLOG_DIR)
+    journal_unmatched: list[dict[str, Any]] = []
+    all_entries: list[dict[str, Any]] = []
+    previous_date = None
+    for path, metadata, body in issue_files:
         body = strip_thingy_blocks(body)
         number = metadata.get("number") or path.parent.name
         subject = metadata.get("subject") or f"Weekly Thing {number}"
@@ -929,7 +1264,9 @@ def build_corpus(
         issue_word_count = len(words(body))
         split = split_issue_sections(body)
         sections = [(section.heading, section.text) for section in split]
-        topics = detect_topics(subject, body)
+        # The issue's clusters read the whole issue's words, as its
+        # chunks' do (``chunk_topics``).
+        topics = detect_topics(subject, topic_prose(body))
         issue_summary = {
             "abstract": summarize_text(body),
             "key_points": key_points_for_sections(sections),
@@ -1017,12 +1354,15 @@ def build_corpus(
             if publish_date and publish_date > entry["last_seen"]:
                 entry["last_seen"] = publish_date
 
-        for image in extract_images(body):
+        body_images = extract_images(body)
+        issue_media_from = len(media)
+        cover = issue_cover_image(metadata, {image["url"] for image in body_images}, shared_covers)
+        for image in ([cover] if cover else []) + body_images:
             media.append(
                 {
                     "url": image["url"],
                     "alt": image["alt"],
-                    "context": _media_context(body, image["url"]),
+                    "context": image.get("context") or _media_context(body, image["url"]),
                     "source_kind": "weekly_thing",
                     "issue_number": number,
                     "subject": subject,
@@ -1030,7 +1370,45 @@ def build_corpus(
                     "publish_date": publish_date,
                 }
             )
-        for issue_section in split:
+        issue_fields = {
+            "issue_number": number,
+            "subject": subject,
+            "publish_date": publish_date,
+            "issue_url": url,
+        }
+        for entry in extract_now_reading_entries(body):
+            currently.append({**entry, **issue_fields})
+        # Journal entries are copies of blog posts; the post is canonical.
+        journal_at = journal_section_indexes(split)
+        first_day, last_day = _journal_window(publish_date, previous_date)
+        previous_date = publish_date or previous_date
+        section_copies: dict[int, list[JournalMatch]] = {}
+        journal_entries: list[dict[str, Any]] = []
+        if journal_at and first_day:
+            per_section, journal_entries, _references = match_issue_journal(
+                [split[i] for i in journal_at], post_index, first_day=first_day, last_day=last_day
+            )
+            section_copies = dict(zip(journal_at, per_section))
+        if journal_entries:
+            issues[-1]["journal_entries"] = journal_entries
+        all_entries.extend(journal_entries)
+        # A photo that is also a blog post's photo points at it, the blog copy
+        # canonical (Jamie, 2026-09-30), so readers can collapse the two.
+        copied = {entry["copy_of_microblog_id"] for entry in journal_entries}
+        for item in media[issue_media_from:]:
+            original = post_index.blog_photo(item["url"], copied)
+            if original:
+                item["copy_of_microblog_id"] = str(original[0].microblog_id)
+                item["canonical_url"] = original[1]
+        journal_unmatched.extend(
+            {"issue_number": number, "title": entry["title"], "url": entry["url"]}
+            for entry in journal_entries
+            if entry["matched_by"] is None
+        )
+        entry_by_path: dict[str, dict[str, Any]] = {}
+        for entry in journal_entries:
+            entry_by_path.setdefault(_blog_target_path(entry["url"] or "") or "", entry)
+        for section_index, issue_section in enumerate(split):
             section, family, section_body = (
                 issue_section.heading,
                 issue_section.family,
@@ -1038,16 +1416,19 @@ def build_corpus(
             )
             if section.strip().lower() == "currently":
                 for entry in extract_currently_entries(section_body):
-                    currently.append(
-                        {
-                            **entry,
-                            "issue_number": number,
-                            "subject": subject,
-                            "publish_date": publish_date,
-                            "issue_url": url,
-                        }
-                    )
-            for index, chunk_text in enumerate(chunk_section(section_body)):
+                    currently.append({**entry, **issue_fields})
+            budget = embed_text_budget(
+                {
+                    "issue_number": number,
+                    "subject": subject,
+                    "publish_date": publish_date,
+                    "issue_abstract": issue_summary["abstract"],
+                    "section": section,
+                }
+            )
+            chunk_texts = chunk_section(section_body, max_chars=budget)
+            copies_by_chunk = chunk_copies(chunk_texts, section_copies.get(section_index, []))
+            for index, chunk_text in enumerate(chunk_texts):
                 if TEMPLATE_LEAK_RE.search(chunk_text):
                     raise RuntimeError(
                         f"Template/generated content leaked into corpus for issue {number}"
@@ -1074,10 +1455,15 @@ def build_corpus(
                         "spans": voice_spans(chunk_text, family),
                         "word_count": len(words(chunk_text)),
                         "content_kind": content_kind(section, family),
-                        "topics": topics,
+                        # The passage's own clusters; the issue's stay on
+                        # the issue record (list_content filters on those).
+                        "topics": chunk_topics(section, chunk_text),
                         "issue_abstract": issue_summary["abstract"],
                         "source_kind": "chunk",
                         **({"journal_post_urls": chunk_journal_urls} if chunk_journal_urls else {}),
+                        **_chunk_journal_posts(
+                            chunk_text, copies_by_chunk[index], entry_by_path, targets["blog"]
+                        ),
                     }
                 )
 
@@ -1133,6 +1519,18 @@ def build_corpus(
         "chunks": chunks,
         "media": media,
         "currently": currently,
+        "journal_copy_stats": {
+            "entries": len(all_entries),
+            "matched": sum(1 for entry in all_entries if entry["matched_by"]),
+            "matched_by_permalink": sum(
+                1 for entry in all_entries if entry["matched_by"] == "permalink"
+            ),
+            "matched_by_date_text": sum(
+                1 for entry in all_entries if entry["matched_by"] == "date_text"
+            ),
+            "unmatched": len(journal_unmatched),
+        },
+        "journal_unmatched": journal_unmatched,
     }
 
 
@@ -1146,24 +1544,28 @@ def build_corpus(
 # chunk primitives (``chunk_section`` / ``content_kind`` / ``words`` /
 # ``_privacy_audit``) so the embed + upload tooling is shared verbatim.
 
-# A thingelstad.com (or legacy micro.thingelstad.com) permalink, capturing
+# A thingelstad.com (or micro.thingelstad.com, jthingelstad.micro.blog) permalink, capturing
 # the ``YYYY/MM/DD/slug`` path that uniquely identifies a post. Used both to
 # scan issue Journal sections for blog back-references and to normalize a
 # blog post's own URL to the same key.
 _BLOG_PERMALINK_RE = re.compile(
-    r"https?://(?:www\.|micro\.)?thingelstad\.com/(\d{4}/\d{2}/\d{2}/[^\s)\"'<>]+)",
+    rf"https?://{_BLOG_HOST_PATTERN}/(\d{{4}}/\d{{2}}/\d{{2}}/[^\s)\"'<>]+)",
     re.I,
 )
 # An ``<img …>`` tag's alt text — inlined into the embedding text so photo
 # descriptions are searchable (the canonical store keeps the full tag).
 _BLOG_IMG_ALT_RE = re.compile(r'<img\b[^>]*?\balt\s*=\s*(["\'])(.*?)\1[^>]*?>', re.I | re.S)
 _BLOG_IMG_BARE_RE = re.compile(r"<img\b[^>]*?>", re.I | re.S)
-_BLOG_MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)(?:\s+['\"][^)]*['\"])?\)")
 _BLOG_HTML_LINK_RE = re.compile(
     r'<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
     re.I | re.S,
 )
-_BLOG_INTERNAL_DOMAINS = {"thingelstad.com", "www.thingelstad.com", "micro.thingelstad.com"}
+_BLOG_INTERNAL_DOMAINS = {
+    "thingelstad.com",
+    "www.thingelstad.com",
+    "micro.thingelstad.com",
+    "jthingelstad.micro.blog",
+}
 _CROSS_SOURCE_BY_DOMAIN = {
     "weekly.thingelstad.com": "weekly_thing",
     "another.thingelstad.com": "podcast",
@@ -1172,7 +1574,11 @@ _BLOG_HOSTLIKE_PATH_RE = re.compile(r"/(?:www\.)?[a-z0-9-]+\.[a-z]{2,}(?:/|$)", 
 
 
 def _is_thingelstad_domain(domain: str) -> bool:
-    return domain == "thingelstad.com" or domain.endswith(".thingelstad.com")
+    return (
+        domain == "thingelstad.com"
+        or domain.endswith(".thingelstad.com")
+        or domain in _BLOG_INTERNAL_DOMAINS
+    )
 
 
 def _normalize_blog_path(path_part: str) -> str:
@@ -1200,6 +1606,479 @@ def journal_blog_xref(archive_dir: Path = ARCHIVE_DIR) -> dict[str, list[Any]]:
         for match in _BLOG_PERMALINK_RE.finditer(body):
             xref.setdefault(_normalize_blog_path(match.group(1)), set()).add(number)
     return {key: sorted(nums, key=issue_sort_key) for key, nums in xref.items()}
+
+
+# --- Journal copies ------------------------------------------------------
+#
+# A Weekly Thing Journal entry is a copy of a blog post, and the blog post is
+# canonical (Jamie, 2026-09-30). Each entry is tied to its post by permalink
+# first. Hundreds of those permalinks went dead when micro.blog moved or
+# merged posts after the fact (WT1's TechJam microposts are one post now),
+# so a dead permalink falls back to a post from the same day (+/- 1) whose
+# text holds the entry's text. A Journal section with no permalink at all
+# (the 2020 "Stream" titles, the 2021 road-trip posts) falls back to a post
+# from the issue's week whose text it shares. Entries that match nothing are
+# counted in the WT corpus's ``journal_copies``, never dropped silently.
+
+_COPY_IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
+_COPY_TAG_RE = re.compile(r"<[^>]+>")
+_COPY_URL_RE = re.compile(r"https?://\S+")
+_COPY_WORD_RE = re.compile(r"[^\W_]+")
+# An entry's own link: a time ("Thursday @ 7:17 PM", "10:15 PM") or an arrow.
+_ENTRY_TIME_LABEL_RE = re.compile(r"\b\d{1,2}:\d{2}[\s ]*[ap]m\b", re.I)
+_COPY_SHINGLE = 4
+# An entry's words found in a post: the share that makes it a copy.
+_ENTRY_IN_POST = 0.6
+# A section's or post's shingles found in the other: the share for a copy.
+_TEXT_IN_TEXT = 0.5
+
+
+def _copy_words(text: str) -> list[str]:
+    """Lower-case words of markdown or HTML, without images, tags or URLs."""
+    text = _COPY_TAG_RE.sub(" ", _COPY_IMAGE_RE.sub(" ", text or ""))
+    return _COPY_WORD_RE.findall(_COPY_URL_RE.sub(" ", unlink(text)).lower())
+
+
+def _shingles(tokens: list[str] | tuple[str, ...]) -> frozenset[tuple[str, ...]]:
+    if len(tokens) < _COPY_SHINGLE:
+        return frozenset([tuple(tokens)]) if tokens else frozenset()
+    return frozenset(
+        tuple(tokens[i : i + _COPY_SHINGLE]) for i in range(len(tokens) - _COPY_SHINGLE + 1)
+    )
+
+
+@dataclass(frozen=True)
+class JournalPost:
+    """A blog post as the Journal matcher sees it. ``day`` is the permalink's
+    date (Jamie's local day), else the ``published`` date."""
+
+    microblog_id: Any
+    url: str
+    day: str
+    words: tuple[str, ...]
+    word_set: frozenset[str]
+    shingles: frozenset[tuple[str, ...]]
+    label: str = ""  # the title, or the first words of an untitled post
+    images: tuple[str, ...] = ()  # the post's photo URLs, as its media has them
+
+
+# A micro.blog upload's name: ten hex digits or a UUID. The Weekly Thing
+# carries the same photo under that name on www.thingelstad.com,
+# cdn.uploads.micro.blog or files.thingelstad.com; any other name
+# ("IMG_1234.jpg") can belong to two different photos.
+_HASHED_PHOTO_NAME_RE = re.compile(
+    r"^(?:[0-9a-f]{10}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"
+    r"\.(?:jpe?g|png|gif|webp|heic)$"
+)
+
+
+def _hashed_photo_name(url: str) -> str | None:
+    name = urlparse(url).path.rsplit("/", 1)[-1].lower()
+    return name if _HASHED_PHOTO_NAME_RE.match(name) else None
+
+
+class JournalPostIndex:
+    """Blog posts by permalink path, by day and by photo."""
+
+    def __init__(self, posts: list[JournalPost]):
+        self.by_path: dict[str, list[JournalPost]] = {}
+        self.by_day: dict[str, list[JournalPost]] = {}
+        self.by_photo: dict[str, list[tuple[JournalPost, str]]] = {}
+        for post in posts:
+            path = _blog_target_path(post.url)
+            if path:
+                self.by_path.setdefault(path, []).append(post)
+            self.by_day.setdefault(post.day, []).append(post)
+            for image in post.images:
+                self.by_photo.setdefault(image, []).append((post, image))
+                name = _hashed_photo_name(image)
+                if name:
+                    self.by_photo.setdefault(name, []).append((post, image))
+
+    def blog_photo(self, url: str, prefer: set[str]) -> tuple[JournalPost, str] | None:
+        """The blog photo a Weekly Thing image copies: the same URL, else the
+        same micro.blog upload name. Among several posts, a post the issue's
+        Journal copies (``prefer``), else the earliest."""
+        found = self.by_photo.get(url) or self.by_photo.get(_hashed_photo_name(url) or "")
+        if not found:
+            return None
+        return min(
+            found,
+            key=lambda item: (
+                str(item[0].microblog_id) not in prefer,
+                item[0].day,
+                str(item[0].microblog_id),
+            ),
+        )
+
+    def between(self, first: str, last: str) -> list[JournalPost]:
+        """Posts from ``first`` to ``last`` (YYYY-MM-DD), both included."""
+        try:
+            day, end = _date.fromisoformat(first), _date.fromisoformat(last)
+        except ValueError:
+            return []
+        posts: list[JournalPost] = []
+        while day <= end:
+            posts.extend(self.by_day.get(day.isoformat(), []))
+            day += timedelta(days=1)
+        return posts
+
+
+def _shift_day(day: str, days: int) -> str:
+    return (_date.fromisoformat(day) + timedelta(days=days)).isoformat()
+
+
+@functools.lru_cache(maxsize=2)
+def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostIndex:
+    posts = []
+    for path in sorted(Path(blog_dir).rglob("*.md")):
+        metadata, body = read_issue(path)
+        if metadata.get("microblog_id") is None:
+            continue
+        url = str(metadata.get("url") or "").strip()
+        match = _BLOG_PERMALINK_RE.search(url)
+        day = (
+            "-".join(match.group(1).split("/")[:3])
+            if match
+            else str(metadata.get("published") or "")[:10]
+        )
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+            continue
+        tokens = _copy_words(body)
+        posts.append(
+            JournalPost(
+                metadata["microblog_id"],
+                url,
+                day,
+                tuple(tokens),
+                frozenset(tokens),
+                _shingles(tokens),
+                str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
+                tuple(image["url"] for image in extract_images(body)),
+            )
+        )
+    return JournalPostIndex(posts)
+
+
+def journal_post_index(blog_dir: Path = BLOG_DIR) -> JournalPostIndex:
+    """Every blog post with its words, cached until a post file changes."""
+    files = list(blog_dir.rglob("*.md"))
+    stamp = (len(files), max((path.stat().st_mtime_ns for path in files), default=0))
+    return _cached_post_index(str(blog_dir.resolve()), stamp)
+
+
+@dataclass(frozen=True)
+class _JournalEntry:
+    url: str
+    text: str
+    own_link: bool  # a heading, time or arrow link: the entry's own permalink
+    section: int
+
+
+def _journal_entries(sections: list[IssueSection]) -> list[_JournalEntry]:
+    """The blog-permalink links of an issue's Journal sections, each with the
+    text it stands for: a heading link the whole section, a time link the
+    text up to the next time link, any other link its own line. A time link
+    with nothing after it (WT160 puts it just above the entry's H3) stands
+    for the next section."""
+    entries: list[_JournalEntry] = []
+    carried: list[str] = []
+    for position, section in enumerate(sections):
+        for url in carried:
+            entries.append(_JournalEntry(url, section.text, True, position))
+        carried = []
+        for link in markdown_links(section.raw_heading or ""):
+            if link.kind == "inline" and _BLOG_PERMALINK_RE.match(link.url):
+                entries.append(_JournalEntry(link.url, section.text, True, position))
+        text = section.text
+        links = [
+            link
+            for link in markdown_links(text)
+            if link.kind != "image" and _BLOG_PERMALINK_RE.match(link.url)
+        ]
+        timed = [link.start for link in links if _ENTRY_TIME_LABEL_RE.search(link.label)]
+        for link in links:
+            if _ENTRY_TIME_LABEL_RE.search(link.label):
+                end = next((start for start in timed if start > link.start), len(text))
+                if _copy_words(text[link.end : end]):
+                    entries.append(_JournalEntry(link.url, text[link.end : end], True, position))
+                else:
+                    carried.append(link.url)
+                continue
+            line_start = text.rfind("\n", 0, link.start) + 1
+            line_end = text.find("\n", link.end)
+            line = text[line_start : line_end if line_end >= 0 else len(text)]
+            own = link_label_text(link.label) == "→"
+            entries.append(_JournalEntry(link.url, line, own, position))
+    entries.extend(_JournalEntry(url, "", True, len(sections) - 1) for url in carried)
+    seen: set[str] = set()
+    unique = []
+    for entry in entries:
+        key = _blog_target_path(entry.url) or entry.url
+        if key not in seen:
+            seen.add(key)
+            unique.append(entry)
+    return unique
+
+
+def _entry_score(tokens: list[str], post: JournalPost) -> float:
+    distinct = set(tokens)
+    if not distinct:
+        return 0.0
+    if len(distinct) < 3:
+        # Too few words to count: the entry must be a phrase of the post.
+        return 1.0 if f" {' '.join(tokens)} " in f" {' '.join(post.words)} " else 0.0
+    return len(distinct & post.word_set) / len(distinct)
+
+
+def _best_post(tokens: list[str], candidates: list[JournalPost]) -> JournalPost | None:
+    scored = [
+        (_entry_score(tokens, post), len(_shingles(tokens) & post.shingles), post)
+        for post in candidates
+    ]
+    scored = [item for item in scored if item[0] >= _ENTRY_IN_POST]
+    if not scored:
+        return None
+    return max(scored, key=lambda item: (item[0], item[1]))[2]
+
+
+def _shares_text(section_shingles: frozenset, post: JournalPost) -> bool:
+    shared = len(section_shingles & post.shingles)
+    if shared < 3:
+        return False
+    return (
+        shared / len(post.shingles) >= _TEXT_IN_TEXT
+        or shared / len(section_shingles) >= _TEXT_IN_TEXT
+    )
+
+
+@dataclass
+class JournalMatch:
+    post: JournalPost
+    match: str  # permalink | date_text | week_text
+    anchor: str | None
+
+
+def match_issue_journal(
+    sections: list[IssueSection],
+    index: JournalPostIndex,
+    *,
+    first_day: str,
+    last_day: str,
+) -> tuple[list[list[JournalMatch]], list[dict[str, Any]], int]:
+    """The blog posts each Journal section copies, the issue's Journal
+    entries (each with ``copy_of_microblog_id`` and ``canonical_url`` when
+    it matched a post), and how many links went to other posts.
+
+    ``first_day``/``last_day`` bound the issue's week: from a few days before
+    the previous issue to the day after this one."""
+    per_section: list[list[JournalMatch]] = [[] for _ in sections]
+    entries: list[dict[str, Any]] = []
+    matched: set[Any] = set()
+    references = 0
+
+    def record(position: int, title: str, url: str | None, post, kind: str) -> None:
+        entries.append(
+            {
+                "title": title or sections[position].heading,
+                "section": sections[position].heading,
+                "url": url,
+                "copy_of_microblog_id": str(post.microblog_id) if post else None,
+                "canonical_url": post.url if post else None,
+                # A Journal section matched in the issue's week has no link:
+                # it too is a date-and-text match.
+                "matched_by": ("permalink" if kind == "permalink" else "date_text")
+                if post
+                else None,
+            }
+        )
+        if post is not None and post.microblog_id not in matched:
+            matched.add(post.microblog_id)
+            per_section[position].append(JournalMatch(post, kind, url))
+
+    for entry in _journal_entries(sections):
+        path = _blog_target_path(entry.url) or ""
+        tokens = _copy_words(entry.text)
+        title = (
+            sections[entry.section].heading
+            if entry.text == sections[entry.section].text
+            else _short_label(unlink(entry.text).replace("→", " ").strip().lstrip("—–-* "))
+        )
+        live = index.by_path.get(path, [])
+        if live:
+            post = _best_post(tokens, live)
+            if post is None and entry.own_link:
+                post = live[0]
+            if post is None:
+                # A link to another post, not this entry's own.
+                references += 1
+                continue
+            record(entry.section, title, entry.url, post, "permalink")
+            continue
+        day = "-".join(path.split("/")[:3])
+        if not entry.own_link and not first_day <= day <= last_day:
+            references += 1
+            continue
+        try:
+            candidates = index.between(_shift_day(day, -1), _shift_day(day, 1))
+        except ValueError:
+            candidates = []
+        post = _best_post(tokens, candidates) if tokens else None
+        record(entry.section, title, entry.url, post, "date_text")
+
+    week = [post for post in index.between(first_day, last_day) if len(post.words) >= 6]
+    for position, section in enumerate(sections):
+        section_shingles = _shingles(_copy_words(section.text))
+        if len(section_shingles) < 3:
+            continue
+        for post in week:
+            if post.microblog_id not in matched and _shares_text(section_shingles, post):
+                record(position, post.label, None, post, "week_text")
+    # A long post's own H3s split it over several sections (WT283's
+    # "Semisonic"): a section that is mostly a matched post's text is that
+    # post too, with no entry of its own.
+    found = [item for matches in per_section for item in matches]
+    for position, section in enumerate(sections):
+        if per_section[position]:
+            continue
+        section_shingles = _shingles(_copy_words(section.text))
+        if len(section_shingles) < 3:
+            continue
+        for item in found:
+            shared = len(section_shingles & item.post.shingles)
+            if shared >= 3 and shared / len(section_shingles) >= _TEXT_IN_TEXT:
+                per_section[position].append(JournalMatch(item.post, item.match, None))
+    return per_section, entries, references
+
+
+def _chunk_journal_posts(
+    chunk_text: str,
+    copies: list[JournalMatch],
+    entry_by_path: dict[str, dict[str, Any]],
+    blog_lookup: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """``journal_posts`` for a chunk: one object per ``journal_post_urls``
+    entry, in its order (``url`` as the issue wrote it), then the chunk's
+    other copies, whose entry link is the section heading or that matched
+    by text alone (no ``journal_post_urls`` entry to pair with)."""
+    items: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for raw in _JOURNAL_ENTRY_LINK_RE.findall(chunk_text or ""):
+        path = _blog_target_path(raw) or ""
+        final = blog_lookup.get(path, {}).get("url") or _canonical_blog_url(raw)
+        if final in seen:
+            continue
+        seen.add(final)
+        entry = entry_by_path.get(path)
+        live = blog_lookup.get(path)
+        if entry is None and live:
+            entry = {
+                "copy_of_microblog_id": str(live["microblog_id"]),
+                "canonical_url": live["url"],
+                "matched_by": "permalink",
+            }
+        items.append(
+            {
+                "url": raw,
+                "copy_of_microblog_id": (entry or {}).get("copy_of_microblog_id"),
+                "canonical_url": (entry or {}).get("canonical_url"),
+                "matched_by": (entry or {}).get("matched_by"),
+            }
+        )
+    paired = {item["copy_of_microblog_id"] for item in items}
+    for copy in copies:
+        if str(copy.post.microblog_id) in paired:
+            continue
+        paired.add(str(copy.post.microblog_id))
+        items.append(
+            {
+                "url": copy.anchor,
+                "copy_of_microblog_id": str(copy.post.microblog_id),
+                "canonical_url": copy.post.url,
+                "matched_by": "permalink" if copy.match == "permalink" else "date_text",
+            }
+        )
+    return {"journal_posts": items} if items else {}
+
+
+def journal_section_indexes(sections: list[IssueSection]) -> list[int]:
+    """The sections of an issue's Journal: family Journal, and after it any
+    section whose H2 is no known family. A blog post copied with its own
+    H2s ("## A New Way to Mourn" in WT147's Stream) splits into sections
+    named after them, still part of the Journal."""
+    found, in_journal = [], False
+    for index, section in enumerate(sections):
+        if section.family == "Journal":
+            in_journal = True
+        elif not (in_journal and section_family(section.family) is None):
+            in_journal = False
+            continue
+        found.append(index)
+    return found
+
+
+def _journal_window(publish_date: str, previous_date: str | None) -> tuple[str, str]:
+    last = str(publish_date or "")[:10]
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", last):
+        return "", ""
+    start = str(previous_date or "")[:10]
+    first = (
+        _shift_day(start, -3)
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", start)
+        else _shift_day(last, -14)
+    )
+    return first, _shift_day(last, 1)
+
+
+def chunk_copies(chunk_texts: list[str], matches: list[JournalMatch]) -> list[list[JournalMatch]]:
+    """Share a section's matched posts out to its chunks: the chunk holding
+    the entry's link, and any chunk whose text is mostly the post's."""
+    per_chunk: list[list[JournalMatch]] = [[] for _ in chunk_texts]
+    if not chunk_texts:
+        return per_chunk
+    shingles = [_shingles(_copy_words(text)) for text in chunk_texts]
+    for item in matches:
+        hits = {i for i, text in enumerate(chunk_texts) if item.anchor and item.anchor in text}
+        for i, chunk_shingles in enumerate(shingles):
+            shared = len(chunk_shingles & item.post.shingles)
+            if chunk_shingles and shared >= 3 and shared / len(chunk_shingles) >= _TEXT_IN_TEXT:
+                hits.add(i)
+        if not hits:
+            hits.add(
+                max(range(len(chunk_texts)), key=lambda i: len(shingles[i] & item.post.shingles))
+            )
+        for i in sorted(hits):
+            per_chunk[i].append(item)
+    return per_chunk
+
+
+def journal_copy_issues(
+    archive_dir: Path = ARCHIVE_DIR, blog_dir: Path = BLOG_DIR
+) -> dict[Any, list[Any]]:
+    """``{microblog_id: [issue numbers]}``: the issues whose Journal holds a
+    copy of the post. The WT build stamps the same matches on its chunks."""
+    index = journal_post_index(blog_dir)
+    issues: dict[Any, set] = {}
+    previous = None
+    for path in sorted(
+        archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
+    ):
+        metadata, body = read_issue(path)
+        number = metadata.get("number") or path.parent.name
+        publish_date = metadata.get("publish_date") or ""
+        split = split_issue_sections(strip_thingy_blocks(body))
+        journal = [split[i] for i in journal_section_indexes(split)]
+        first_day, last_day = _journal_window(publish_date, previous)
+        previous = publish_date or previous
+        if not journal or not first_day:
+            continue
+        per_section, _entries, _references = match_issue_journal(
+            journal, index, first_day=first_day, last_day=last_day
+        )
+        for matches in per_section:
+            for item in matches:
+                issues.setdefault(item.post.microblog_id, set()).add(number)
+    return {key: sorted(value, key=issue_sort_key) for key, value in issues.items()}
 
 
 # --- cross-source link targets ------------------------------------------
@@ -1327,7 +2206,6 @@ def resolve_link_target(
 # section is built from (the front-matter links, plus a heading link the
 # front matter missed); ``journal`` is any link inside a Journal; everything
 # else is ``commentary``: the links Jamie drops into what he writes.
-_HEADING_LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
 
 
 def _link_paragraph(text: str, position: int, max_chars: int = 240) -> str:
@@ -1349,13 +2227,9 @@ def issue_body_links(
     records: list[dict[str, Any]] = []
 
     def add(text: str, url: str, role: str, context: str) -> None:
-        url = url.strip()
         if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
             return
-        try:
-            domain = (urlparse(url).hostname or "").lower()
-        except ValueError:
-            return
+        domain = web_domain(url)
         if not domain:
             return
         skip_urls.add(url)
@@ -1366,20 +2240,18 @@ def issue_body_links(
                 "heading_context": section.heading if section.heading != section.parent else None,
                 "url": url,
                 "domain": domain,
-                "text": plain_text(text).strip() or domain,
+                "text": text or domain,
                 "context": context,
                 "link_role": role,
             }
         )
 
     body_role = "journal" if section.family == "Journal" else "commentary"
-    for match in _HEADING_LINK_RE.finditer(section.raw_heading or ""):
-        role = "headline" if section.family in LINK_FAMILIES else body_role
-        add(match.group(1), match.group(2), role, section.heading)
-    for match in _BLOG_MARKDOWN_LINK_RE.finditer(section.text):
-        add(match.group(1), match.group(2), body_role, _link_paragraph(section.text, match.start()))
-    for match in _BLOG_HTML_LINK_RE.finditer(section.text):
-        add(match.group(2), match.group(1), body_role, _link_paragraph(section.text, match.start()))
+    heading_role = "headline" if section.family in LINK_FAMILIES else body_role
+    for text, url, _ in _body_links(section.raw_heading or ""):
+        add(text, url, heading_role, section.heading)
+    for text, url, position in _body_links(section.text):
+        add(text, url, body_role, _link_paragraph(section.text, position))
     return records
 
 
@@ -1404,13 +2276,30 @@ def _short_label(text: str, max_words: int = 12) -> str:
     return label + ("…" if len(tokens) > max_words else "")
 
 
+def _body_links(body: str) -> list[tuple[str, str, int]]:
+    """``(text, url, position)`` for every link in a markdown/HTML body, text
+    already plain: markdown links first (a linked image ``[![alt](img)](target)``
+    is a link to its target, text the alt), then ``<a>`` anchors, then
+    ``<autolinks>`` and bare URLs, whose text is the URL. Images are media,
+    not links (``extract_images``). URLs come through ``repair_url``."""
+    scanned = markdown_links(body or "")
+    links = [
+        (link_label_text(link.label), link.url, link.start)
+        for link in scanned
+        if link.kind == "inline"
+    ]
+    links += [
+        (plain_text(_HTML_TAG_RE.sub(" ", match.group(2))), match.group(1).strip(), match.start())
+        for match in _BLOG_HTML_LINK_RE.finditer(body or "")
+    ]
+    links += [
+        (link.url, link.url, link.start) for link in scanned if link.kind in {"autolink", "bare"}
+    ]
+    return [(text, repair_url(url), position) for text, url, position in links]
+
+
 def _markdown_html_links(body: str) -> list[tuple[str, str]]:
-    links: list[tuple[str, str]] = []
-    for match in _BLOG_MARKDOWN_LINK_RE.finditer(body or ""):
-        links.append((match.group(1), match.group(2).strip()))
-    for match in _BLOG_HTML_LINK_RE.finditer(body or ""):
-        links.append((match.group(2), match.group(1).strip()))
-    return links
+    return [(text, url) for text, url, _ in _body_links(body)]
 
 
 def _blog_target_path(url: str) -> str | None:
@@ -1479,7 +2368,7 @@ def _blog_outbound_links(
             parsed = urlparse(resolved_url)
         except Exception:
             return
-        domain = (parsed.hostname or "").lower()
+        domain = web_domain(resolved_url)
         if not domain or resolved_url in seen_urls:
             return
         seen_urls.add(resolved_url)
@@ -1512,8 +2401,8 @@ def _blog_outbound_links(
             "section": "Micropost" if post_kind == "micropost" else "Blog post",
             "url": resolved_url,
             "domain": domain,
-            "text": plain_text(text).strip(),
-            "context": plain_text(text).strip(),
+            "text": text,
+            "context": text,
             "link_kind": link_kind,
             "link_category": link_category,
             "target_resolved": bool(target_post),
@@ -1553,6 +2442,7 @@ def build_blog_corpus(
     same way it can over Weekly Thing. Posts that also appear in a Weekly Thing
     Journal get an ``also_in_issues`` cross-reference."""
     xref = journal_blog_xref(archive_dir) if include_xref else {}
+    copied_in = journal_copy_issues(archive_dir, blog_dir) if include_xref else {}
     weekly_lookup = weekly_issue_lookup(archive_dir) if include_xref else {}
     podcast_lookup = podcast_episode_lookup(podcast_dir)
     chunks: list[dict[str, Any]] = []
@@ -1584,10 +2474,17 @@ def build_blog_corpus(
         )
         if not also_in_issues and match:
             also_in_issues = xref.get(_normalize_blog_path(match.group(1)))
+        if copied_in.get(microblog_id):
+            also_in_issues = sorted(
+                {*(also_in_issues or []), *copied_in[microblog_id]}, key=issue_sort_key
+            )
         embed_text = _blog_embed_text(body)
-        if not embed_text:
+        # A photo posted with no words and no alt text is still a post, and
+        # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
+        # dropped with its photo). It has nothing to embed, so no chunk.
+        if not embed_text and not extract_images(body) and not extract_video_posters(body):
             continue
-        subject = title or _short_label(embed_text)
+        subject = title or _short_label(embed_text) or "Photo"
         post_input = {
             "body": body,
             "microblog_id": microblog_id,
@@ -1658,14 +2555,44 @@ def build_blog_corpus(
                 {
                     "url": image["url"],
                     "alt": image["alt"],
-                    "context": _media_context(body, image["url"]) or plain_text(embed_text)[:240],
+                    "context": _media_context(body, image["url"])
+                    or _context_text(embed_text)[:240],
                     "source_kind": "blog",
+                    # The post's own key: six permalinks are shared by
+                    # fourteen posts, so source_url alone names the wrong one.
+                    "microblog_id": microblog_id,
                     "subject": subject,
                     "source_url": url,
                     "publish_date": publish_date,
                 }
             )
-        for index, chunk_text in enumerate(chunk_section(embed_text)):
+        image_urls = {image["url"] for image in extract_images(body)}
+        for poster in extract_video_posters(body):
+            if poster["url"] in image_urls:
+                continue
+            nearby = _context_text(embed_text)[:180]
+            media.append(
+                {
+                    "url": poster["url"],
+                    "alt": poster["alt"],
+                    "context": f"{VIDEO_POSTER_CONTEXT}. {nearby}".strip(),
+                    "source_kind": "blog",
+                    "microblog_id": microblog_id,
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                    "video_url": poster["video_url"],
+                }
+            )
+        budget = embed_text_budget(
+            {
+                "source_kind": "blog",
+                "publish_date": publish_date,
+                "subject": subject,
+                "section": section,
+            }
+        )
+        for index, chunk_text in enumerate(chunk_section(embed_text, max_chars=budget)):
             # Content-deterministic id (text hash suffix): when a post's body is
             # edited in place (alt-text inlined, de-wrap, typo fix) without
             # changing its chunk count, the id still changes — so the
@@ -1674,6 +2601,7 @@ def build_blog_corpus(
             # debugging. Mirrors the issue corpus's content-hashed `chunk_id`.
             chunk = {
                 "id": f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}",
+                "microblog_id": microblog_id,
                 "issue_number": None,
                 "subject": subject,
                 "publish_date": publish_date,
@@ -1684,10 +2612,16 @@ def build_blog_corpus(
                 "spans": voice_spans(chunk_text),
                 "word_count": len(words(chunk_text)),
                 "content_kind": "blog",
-                "topics": [],
+                "topics": chunk_topics(subject, chunk_text),
                 "source_kind": "blog",
                 "domains": post_domains,
             }
+            # The post's own timestamp, beside the permalink's date: the
+            # Lambda shows each day in Chicago time, and 121 permalinks name
+            # another day (the UTC day, or a permalink shared by several
+            # posts, "2006/09/09/000000.html").
+            if post_input["published"]:
+                chunk["published"] = post_input["published"]
             if also_in_issues:
                 chunk["also_in_issues"] = also_in_issues
             chunks.append(chunk)
@@ -1742,16 +2676,12 @@ def _podcast_show_note_links(
         if not link_url or link_url.startswith("#") or link_url.startswith("mailto:"):
             continue
         resolved_url = urljoin(episode_url, link_url)
-        try:
-            parsed = urlparse(resolved_url)
-        except Exception:
-            continue
-        domain = (parsed.hostname or "").lower()
+        domain = web_domain(resolved_url)
         if not domain or resolved_url in seen_urls:
             continue
         seen_urls.add(resolved_url)
         target_source_kind = None
-        if domain in {"thingelstad.com", "www.thingelstad.com", "micro.thingelstad.com"}:
+        if domain in _BLOG_INTERNAL_DOMAINS:
             target_source_kind = "blog"
         elif domain == "weekly.thingelstad.com":
             target_source_kind = "weekly_thing"
@@ -1773,8 +2703,8 @@ def _podcast_show_note_links(
                 "section": "Show notes",
                 "url": resolved_url,
                 "domain": domain,
-                "text": plain_text(text).strip(),
-                "context": plain_text(text).strip(),
+                "text": text,
+                "context": text,
                 "link_kind": link_kind,
                 "link_category": "cross_source"
                 if target_source_kind in {"blog", "weekly_thing", "podcast"}
@@ -1872,8 +2802,9 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
         if notes:
             sections.append(("Show notes", "podcast_notes", notes))
         for section, content_kind, text in sections:
+            budget = embed_text_budget({**base, "section": section})
             for index, chunk_text in enumerate(
-                chunk_section(text, max_words=320, overlap_words=55)
+                chunk_section(text, max_words=320, overlap_words=55, max_chars=budget)
             ):
                 chunks.append(
                     {
@@ -1883,6 +2814,7 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
                         "section": section,
                         "content_kind": content_kind,
                         "text": chunk_text,
+                        "topics": chunk_topics(subject, chunk_text),
                         "word_count": len(words(chunk_text)),
                     }
                 )
@@ -1915,18 +2847,14 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
 EMBED_RECIPE_VERSION = 2
 
 
-def _embed_input(chunk: dict[str, Any]) -> str:
-    """The text handed to the embedding model for one chunk. Blog chunks get a
-    blog-shaped header; everything else keeps the original Weekly-Thing header
-    verbatim so existing corpus.json embed inputs stay byte-identical (cache
-    stays warm)."""
+def _embed_header(chunk: dict[str, Any]) -> list[str]:
+    """The header lines ``_embed_input`` puts above a chunk's text."""
     if chunk.get("source_kind") == "blog":
         lines = [f"thingelstad.com blog — {chunk.get('publish_date') or ''}".rstrip(" —")]
         if chunk.get("subject"):
             lines.append(f"Post: {chunk['subject']}")
         lines.append(f"Section: {chunk['section']}")
-        lines.append(chunk["text"])
-        return "\n".join(lines)
+        return lines
     if chunk.get("source_kind") == "podcast":
         episode = chunk.get("episode_number")
         label = f"Episode {episode}" if episode is not None else "Episode"
@@ -1936,8 +2864,7 @@ def _embed_input(chunk: dict[str, Any]) -> str:
         lines.append(f"Section: {chunk['section']}")
         if chunk.get("summary"):
             lines.append(f"Summary: {chunk['summary']}")
-        lines.append(chunk["text"])
-        return "\n".join(lines)
+        return lines
     lines = [f"Weekly Thing #{chunk['issue_number']}: {chunk['subject']}"]
     if chunk.get("publish_date"):
         lines.append(f"Published: {chunk['publish_date']}")
@@ -1948,13 +2875,44 @@ def _embed_input(chunk: dict[str, Any]) -> str:
     if chunk.get("issue_abstract"):
         lines.append(f"Issue summary: {chunk['issue_abstract']}")
     lines.append(f"Section: {chunk['section']}")
-    lines.append(chunk["text"])
-    return "\n".join(lines)
+    return lines
+
+
+def _embed_input(chunk: dict[str, Any]) -> str:
+    """The text handed to the embedding model for one chunk. Blog chunks get a
+    blog-shaped header; everything else keeps the original Weekly-Thing header
+    verbatim so existing corpus.json embed inputs stay byte-identical (cache
+    stays warm)."""
+    return "\n".join([*_embed_header(chunk), chunk["text"]])
+
+
+# The fewest characters a chunk's text is ever given, so a freak header
+# cannot reduce chunking to slivers. No real header comes close: the longest
+# Weekly Thing one, issue summary and all, is under 700 characters.
+MIN_EMBED_TEXT_CHARS = 1000
+
+
+def embed_text_budget(chunk: dict[str, Any]) -> int:
+    """How many characters of text fit in ``chunk``'s embedding input below
+    the header ``_embed_input`` puts above it. Bedrock's Cohere embed takes
+    at most 2,048 characters a text, and text past that is in no embedding.
+    ``chunk`` needs only the header fields, not the text."""
+    header = "\n".join(_embed_header(chunk))
+    return max(COHERE_EMBED_MAX_TEXT_CHARS - len(header) - 1, MIN_EMBED_TEXT_CHARS)
 
 
 def fetch_bedrock_embeddings(
     inputs: list[str], model: str, input_type: str = "search_document"
 ) -> list[list[float]]:
+    # The builders size every chunk to fit (embed_text_budget), so this cut
+    # is a backstop that should never bite. Say so when it does: text past
+    # it is in no embedding.
+    over = sum(1 for text in inputs if len(text) > COHERE_EMBED_MAX_TEXT_CHARS)
+    if over:
+        print(
+            f"embed_input_truncated: {over} of {len(inputs)} inputs over "
+            f"{COHERE_EMBED_MAX_TEXT_CHARS} chars; their tails are in no embedding"
+        )
     inputs = [text[:COHERE_EMBED_MAX_TEXT_CHARS] for text in inputs]
     response = boto3.client("bedrock-runtime").invoke_model(
         modelId=model,

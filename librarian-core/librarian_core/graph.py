@@ -18,6 +18,7 @@ from typing import Any
 import boto3
 
 from .corpus import build_corpus
+from .links import unlink
 
 DEFAULT_MODEL = "us.anthropic.claude-sonnet-4-6"
 ENTITY_RE = re.compile(r"\b(?:[A-Z][A-Za-z0-9&'.-]+(?:\s+[A-Z][A-Za-z0-9&'.-]+){0,4})\b")
@@ -280,17 +281,35 @@ def load_corpus(path: Path) -> dict[str, Any]:
     return build_corpus(include_issue_bodies=True)
 
 
+# What is not the issue's words: HTML tags, bare and autolinked URLs. Link
+# and image markup becomes its label first (``unlink``). Until QA 2026-09-30
+# (ingest F13) the entity regex read URLs too, so a signed image URL's
+# "AWSAccessKeyId", "Expires" and "AKIA...&Signature" were entities of
+# WT3-21, and "following&tab" of WT193.
+_NOT_WORDS_RE = re.compile(r"<[^>]*>|<?https?://\S+|\bwww\.\S+", re.I)
+
+
+def entity_text(markdown: str) -> str:
+    """``markdown`` as its words, for entity and trope extraction."""
+    return _NOT_WORDS_RE.sub(" ", unlink(markdown))
+
+
 def clean_entity(value: str) -> str:
     value = " ".join(value.strip(" .,:;!?()[]{}").split())
     return value
 
 
+# Entities, tropes and the Bedrock extraction read the whole issue and all
+# its links. Until QA 2026-09-30 (ingest F14) they read the first 14,000,
+# 20,000 and 18,000 characters and 24 links, which left 28.8% of Weekly
+# Thing text unread: 1,675 names that occur twice or more only past the cut
+# in 225 issues (Big Green Egg in WT9, MNUFC in WT19) were in no entity.
 def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
     text = " ".join(
         [
             str(issue.get("subject") or ""),
-            " ".join(str(link.get("text") or "") for link in issue.get("links", [])[:24]),
-            str(issue.get("body") or "")[:14000],
+            " ".join(str(link.get("text") or "") for link in issue.get("links", [])),
+            entity_text(str(issue.get("body") or "")),
         ]
     )
     counts: dict[str, int] = {}
@@ -315,7 +334,7 @@ def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
 
 
 def heuristic_tropes(issue: dict[str, Any]) -> list[str]:
-    text = f"{issue.get('subject', '')} {issue.get('body', '')[:20000]}".lower()
+    text = f"{issue.get('subject', '')} {entity_text(issue.get('body', ''))}".lower()
     result = []
     for trope, keywords in TROPE_KEYWORDS.items():
         score = sum(1 for keyword in keywords if keyword in text)
@@ -369,7 +388,7 @@ def similarity_edges(corpus: dict[str, Any], top_k: int = 6) -> dict[str, list[d
 
 
 def extract_with_bedrock(issue: dict[str, Any], model: str) -> dict[str, list[str]]:
-    body = str(issue.get("body") or "")[:18000]
+    body = str(issue.get("body") or "")
     prompt = (
         "Extract archive metadata from this Weekly Thing issue. Return only JSON with keys "
         "entities and tropes. entities should include people, companies, products, places, and projects. "
@@ -425,10 +444,12 @@ def build_graph(
             "tropes": extracted["tropes"],
             "similar_issues": similarities.get(number, []),
         }
-        for entity in extracted["entities"]:
-            entity_index.setdefault(entity.lower(), []).append(number)
-        for trope in extracted["tropes"]:
-            trope_index.setdefault(trope.lower(), []).append(number)
+        # Once per issue: "Micro.blog" the name and micro.blog the domain
+        # are one key, which listed WT255 twice (QA 2026-09-30, ingest F13).
+        for key in dict.fromkeys(entity.lower() for entity in extracted["entities"]):
+            entity_index.setdefault(key, []).append(number)
+        for key in dict.fromkeys(trope.lower() for trope in extracted["tropes"]):
+            trope_index.setdefault(key, []).append(number)
     return {
         "version": 1,
         "source": "data/librarian/corpus.json",

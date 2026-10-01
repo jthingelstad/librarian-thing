@@ -278,10 +278,14 @@ def write_index(index: dict[str, Any]) -> None:
 # ── report ────────────────────────────────────────────────────────────
 
 
+OWN_BLOG_HOSTS = ("thingelstad.com", "jthingelstad.micro.blog")
+
+
 def _authorship_verdict(posts: list[dict[str, Any]]) -> str:
     if not posts:
         return "no posts to judge"
-    own = sum(1 for p in posts if "thingelstad.com" in (p.get("url") or ""))
+    # jthingelstad.micro.blog is the same blog: 111 posts from 2017 keep it.
+    own = sum(1 for p in posts if any(host in (p.get("url") or "") for host in OWN_BLOG_HOSTS))
     pct = 100.0 * own / len(posts)
     tag = "OWN blog ✓" if pct >= 95 else ("follow-timeline ✗" if pct <= 5 else "MIXED")
     return f"{own}/{len(posts)} on thingelstad.com ({pct:.0f}%) → {tag}"
