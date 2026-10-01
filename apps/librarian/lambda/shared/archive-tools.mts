@@ -1738,7 +1738,8 @@ function chicagoNoon(day: string) {
 // The Chicago day a source was published on, the day Jamie published it
 // (Jamie, 2026-09-30: "All of my content should be shown in Chicago time").
 // publish_date stays as the corpus holds it: a UTC timestamp for an issue,
-// the permalink day for a blog post (QA2 T2-5).
+// the Chicago day for a blog post (the permalink day before the QA2 I2-8
+// rebuild) (QA2 T2-5).
 function sourceDate(record: ArchiveRecord | Record<string, unknown>) {
   return localDay(record as ArchiveRecord) || null;
 }

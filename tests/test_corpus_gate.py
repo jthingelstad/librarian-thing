@@ -140,10 +140,66 @@ class WorkflowTest(unittest.TestCase):
         self.assertLess(fresh, self.names.index("Detect changes"))
 
     def test_archive_gate_runs_before_the_upload(self):
-        archive = self.names.index("Corpus gate (archive checks on the Weekly Thing candidate)")
+        archive = self.names.index("Corpus gate (archive checks on the staged candidates)")
         upload = self.names.index("Upload Weekly Thing corpus + graph to S3")
         self.assertLess(archive, upload)
         self.assertIn("corpus_gate.py gate", self.steps[archive]["run"])
+        self.assertIn("blog_corpus == 'true'", self.steps[archive]["if"])
+
+
+class BlogDateGateTest(unittest.TestCase):
+    """QA2 I2-8, T2-2 and Q16: a blog post is filed by the Chicago day of
+    ``published``, and a 05:00Z date-only placeholder reads as Chicago noon."""
+
+    def post(self, **fields):
+        return {
+            "microblog_id": 1,
+            "published": "2019-11-22T18:00:00+00:00",
+            "publish_date": "2019-11-22",
+            "post_year": 2019,
+            "permalink_date": "2020-04-21",
+            **fields,
+        }
+
+    def test_chicago_day_passes(self):
+        self.assertEqual(gate.blog_date_failures({"posts": [self.post()]}), [])
+
+    def test_permalink_day_fails(self):
+        failures = gate.blog_date_failures(
+            {"posts": [self.post(publish_date="2020-04-21", post_year=2020)]}
+        )
+        self.assertEqual(len(failures), 1)
+        self.assertIn("is 2019-11-22 in Chicago", failures[0])
+
+    def test_kept_placeholder_fails(self):
+        # 23:00 the evening before in Chicago, filed on that day: the date
+        # agrees, but the placeholder should have become noon on the 22nd.
+        kept = self.post(
+            published="2019-11-22T05:00:00+00:00", publish_date="2019-11-21", post_year=2019
+        )
+        failures = gate.blog_date_failures({"posts": [kept]})
+        self.assertEqual(len(failures), 1)
+        self.assertIn("placeholder", failures[0])
+
+    def test_a_real_late_post_is_not_a_placeholder(self):
+        # 4482285: 23:00 Chicago on Nov 22 2024, and its permalink says the 22nd.
+        late = self.post(
+            published="2024-11-23T05:00:00+00:00",
+            publish_date="2024-11-22",
+            post_year=2024,
+            permalink_date=None,
+        )
+        self.assertEqual(gate.blog_date_failures({"posts": [late]}), [])
+
+    def test_gate_command_reads_a_staged_blog_candidate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            stage = Path(tmp)
+            blog = {"posts": [self.post(publish_date="2020-04-21", post_year=2020)]}
+            (stage / "blog_corpus.json").write_text(json.dumps(blog))
+            argv = ["gate", "--candidate", str(stage), "--site-archive", str(stage / "none")]
+            self.assertEqual(gate.main(argv), 1)
+            (stage / "blog_corpus.json").write_text(json.dumps({"posts": [self.post()]}))
+            self.assertEqual(gate.main(argv), 0)
 
 
 class JournalRepairTest(unittest.TestCase):

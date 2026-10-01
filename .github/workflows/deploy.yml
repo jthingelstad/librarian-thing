@@ -302,9 +302,10 @@ jobs:
 
       # Journal copies unmatched at or under the post-repair ceiling, and every
       # site audio edition on its issue: a failed site checkout fails here
-      # instead of shipping a corpus with no audio pointers.
-      - name: Corpus gate (archive checks on the Weekly Thing candidate)
-        if: steps.changes.outputs.weekly_corpus == 'true'
+      # instead of shipping a corpus with no audio pointers. A staged blog
+      # candidate files every post by its Chicago day.
+      - name: Corpus gate (archive checks on the staged candidates)
+        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true'
         run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive .weekly-site/apps/site/archive
 
       - name: Upload Weekly Thing corpus + graph to S3

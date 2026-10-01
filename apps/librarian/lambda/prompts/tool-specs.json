@@ -191,7 +191,7 @@
         "properties": {
           "source": {
             "type": "object",
-            "description": "The source; its date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "The source; its date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           }
         },
         "required": ["source"]
@@ -341,7 +341,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           }
         },
         "required": ["total_count", "results"]
@@ -562,7 +562,7 @@
           },
           "sources": {
             "type": "array",
-            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           }
         },
         "required": ["sources"]
@@ -693,7 +693,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first by moment of publication. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first by moment of publication. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           }
         },
         "required": ["results", "total_count"]
@@ -776,7 +776,7 @@
           },
           "results": {
             "type": "array",
-            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "Newest first. On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the Chicago day for a blog post, the day for an episode."
           }
         },
         "required": ["results", "total_count"]

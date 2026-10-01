@@ -1296,6 +1296,39 @@ await run('search_faq', { query: 'what is the weekly thing' });
     JSON.stringify(latest?.results?.[0]?.date)
   );
 }
+{
+  // QA2 I2-8 / T2-2 / T2-3, Q16: a blog post has one date, its Chicago day.
+  // The permalink's date named another day for 121 posts and another year
+  // for 11 Blot imports, so on_this_day filed "Kyiv Photowalk" in 2019 and
+  // every year filter in 2020; 8 of those imports carried a 05:00Z
+  // placeholder (23:00 the evening before), now Chicago noon on its date.
+  const chicagoDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' });
+  const split = (corpora.blog?.posts || []).filter((post) => {
+    if (!post.published) return false;
+    const day = chicagoDay.format(Date.parse(post.published));
+    return day !== String(post.publish_date) || Number(day.slice(0, 4)) !== Number(post.post_year);
+  });
+  checkCorpus(
+    'KA a blog post is dated and filed by its Chicago day',
+    split.length === 0,
+    `${split.length}: ${split
+      .slice(0, 4)
+      .map((post) => `blog-${post.microblog_id} ${post.publish_date}`)
+      .join(', ')}`
+  );
+  const kyiv = await run('list_content', { source_kind: 'blog', year: 2019, topic: 'Kyiv' });
+  checkCorpus(
+    'KA list_content files a Blot import in the year it was published',
+    (kyiv?.results || []).some((item) => item.id === 'blog-1077264' && item.date === '2019-11-22'),
+    (kyiv?.results || []).map((item) => `${item.id} ${item.date}`).join(', ')
+  );
+  const stats = await run('corpus_stats', { source_kind: 'blog', year: 2020, limit: 1 });
+  checkCorpus(
+    'KA corpus_stats 2020 blog oldest is a 2020 post',
+    String(stats?.sources?.[0]?.oldest?.date || '').startsWith('2020-01-'),
+    JSON.stringify(stats?.sources?.[0]?.oldest)
+  );
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });

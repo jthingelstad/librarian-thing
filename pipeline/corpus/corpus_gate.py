@@ -13,7 +13,10 @@ anything reaches S3. It fails the deploy when:
 - an issue page on the weekly site carries an audio edition the candidate
   does not (or carries a different one). The audio record lives only in the
   site's render copy (librarian_core.audio); a site checkout that failed
-  would otherwise ship a corpus with every pointer gone.
+  would otherwise ship a corpus with every pointer gone; or
+- a staged blog candidate files a post by any day but the Chicago day of its
+  ``published`` moment, or keeps a 05:00Z date-only placeholder (QA2 I2-8,
+  Q16).
 
 ``freshness`` runs on a schedule: it compares the site's audio records with
 the live corpus in S3 and sets ``stale=true`` in $GITHUB_OUTPUT when they
@@ -41,6 +44,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
 
 from librarian_core.audio import audio_record, read_site_frontmatter  # noqa: E402
+from librarian_core.corpus import blog_published, chicago_day  # noqa: E402
 
 # Journal copies the build could not tie to a blog post, after the
 # 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv).
@@ -102,6 +106,29 @@ def gate_failures(corpus: dict[str, Any], site_archive_dir: Path | None) -> list
     return failures
 
 
+def blog_date_failures(blog: dict[str, Any]) -> list[str]:
+    """One line per blog post whose filed day or year is not the Chicago day
+    of its ``published`` moment (QA2 I2-8, T2-2: 121 posts were filed by the
+    permalink's date, 11 in another year), and per post still carrying a
+    05:00Z placeholder from a CST month that its permalink does not vouch for
+    (QA2 Q16: Jamie, 2026-10-01, those read as Chicago noon)."""
+    failures = []
+    for post in blog.get("posts") or []:
+        published = post.get("published")
+        day = chicago_day(published)
+        if not day:
+            continue
+        name = f"blog-{post.get('microblog_id')}"
+        if post.get("publish_date") != day or post.get("post_year") != int(day[:4]):
+            failures.append(
+                f"{name}: filed {post.get('publish_date')} ({post.get('post_year')}), "
+                f"published {published} is {day} in Chicago"
+            )
+        elif blog_published(published, post.get("permalink_date") or day) != published:
+            failures.append(f"{name}: 05:00Z placeholder {published} kept")
+    return failures
+
+
 def load_json(path: Path) -> dict[str, Any]:
     data = path.read_bytes()
     if data[:2] == b"\x1f\x8b":
@@ -142,10 +169,15 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "gate":
         candidate = args.candidate / "corpus.json"
-        if not candidate.is_file():
-            print(f"corpus gate: no Weekly Thing candidate at {candidate}; nothing to check")
+        blog_candidate = args.candidate / "blog_corpus.json"
+        if not candidate.is_file() and not blog_candidate.is_file():
+            print(f"corpus gate: no candidate corpus in {args.candidate}; nothing to check")
             return 0
-        failures = gate_failures(load_json(candidate), args.site_archive)
+        failures = []
+        if candidate.is_file():
+            failures.extend(gate_failures(load_json(candidate), args.site_archive))
+        if blog_candidate.is_file():
+            failures.extend(blog_date_failures(load_json(blog_candidate)))
         for failure in failures:
             print(f"FAIL {failure}")
         print(f"corpus gate (archive checks): {len(failures)} failed")
