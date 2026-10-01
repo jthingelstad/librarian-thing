@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -220,13 +220,37 @@ class IssueSection:
     raw_heading: str = ""
 
 
+# "[Title](url) > quote": a heading line whose blockquote lost its line break.
+_SWALLOWED_QUOTE_RE = re.compile(r"^(\[[^\n]*?\]\([^)\s]+\))\s+(>\s.*)$")
+# An H2 that is an item's byline ("by Robert Wright") or an aside ("Oh my…"),
+# not a section: it belongs to the item heading before it.
+_STRAY_H2_RE = re.compile(r"^(?:by\s.*|.*(?:…|\.\.\.))$", re.I)
+
+
 def split_issue_sections(body: str) -> list[IssueSection]:
     """Split on H1-H4 like ``split_sections``, carrying each section's H2 and
     family. Text before the first heading is the "Issue" intro, family Intro.
     An H2 missing from the family map is its own family, except after a
     group header: a known H2 with no text of its own followed straight by
     another H2 (the 2018 "Links 📌" over "Tech", "Business", ...), whose
-    family the unlisted H2s under it share."""
+    family the unlisted H2s under it share.
+
+    An item heading (H3/H4) never vanishes for having no text under it
+    (QA 2026-09-30, ingest F9: WT13's 574-word heading line and 14 other
+    H3s were in no section, their links in no link record):
+
+    - "### [Title](url) > quote..." is a heading that swallowed its
+      blockquote (a lost line break, WT13): the quote is its text.
+    - An empty item heading followed by a byline or aside H2 ("## by
+      Author" in WT23-39, "## Oh my…" in WT85 and WT130) takes that H2 and
+      its text as its own text; the stray H2 opens no family, so the items
+      after it keep theirs.
+    - "### [— Name (@handle) date](url)", a tweet embed's attribution
+      (WT127), closes the quote before it: it joins the previous section.
+    - An empty item heading followed by another item heading (the date
+      label "### Monday, May 18" in WT349, a title whose quote line became
+      an H3 in WT73) leads the next section's text.
+    - Otherwise the heading's own markdown is its text."""
     matches = list(HEADING_RE.finditer(body))
     if not matches:
         return [IssueSection("Issue", "Intro", "Issue", body.strip())]
@@ -238,11 +262,42 @@ def split_issue_sections(body: str) -> list[IssueSection]:
             sections.append(IssueSection("Issue", "Intro", "Issue", intro))
 
     parent, family, group = "Issue", "Intro", None
-    for index, match in enumerate(matches):
+    lead = ""
+    index = 0
+    while index < len(matches):
+        match = matches[index]
         following = matches[index + 1] if index + 1 < len(matches) else None
         end = following.start() if following else len(body)
         section_body = body[match.end() : end].strip()
-        heading = clean_heading(match.group(2))
+        raw_heading = match.group(2)
+        item = len(match.group(1)) >= 3
+        swallowed = _SWALLOWED_QUOTE_RE.match(raw_heading) if item else None
+        if swallowed:
+            raw_heading = swallowed.group(1)
+            section_body = f"{swallowed.group(2)}\n\n{section_body}".strip()
+        if (
+            item
+            and not section_body
+            and following is not None
+            and len(following.group(1)) <= 2
+            and _STRAY_H2_RE.match(clean_heading(following.group(2)))
+            and not section_family(clean_heading(following.group(2)))
+        ):
+            after = matches[index + 2] if index + 2 < len(matches) else None
+            stray_text = body[following.end() : after.start() if after else len(body)].strip()
+            section_body = f"{following.group(2).strip()}\n\n{stray_text}".strip()
+            index += 1
+        index += 1
+        heading = clean_heading(raw_heading)
+        if item and not section_body:
+            if heading.startswith(("—", "–")) and sections:
+                last = sections[-1]
+                sections[-1] = replace(last, text=f"{last.text}\n\n{raw_heading.strip()}")
+                continue
+            if following is not None and len(following.group(1)) >= 3:
+                lead = f"{lead}{raw_heading.strip()}\n\n"
+                continue
+            section_body = raw_heading.strip()
         if len(match.group(1)) <= 2:
             parent = heading
             known = section_family(heading)
@@ -256,7 +311,9 @@ def split_issue_sections(body: str) -> list[IssueSection]:
             else:
                 family = group or heading
         if section_body:
-            sections.append(IssueSection(heading, family, parent, section_body, match.group(2)))
+            if item and lead:
+                section_body, lead = f"{lead}{section_body}", ""
+            sections.append(IssueSection(heading, family, parent, section_body, raw_heading))
     return sections
 
 
