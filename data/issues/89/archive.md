@@ -300,11 +300,11 @@ I have no idea what I’m doing with this 3D Printer! But it’s still fun!
 
 ![](https://cdn.uploads.micro.blog/890/2019/abd6521e2f.jpg)
 
-### [Friday @ 4:47 PM](https://www.thingelstad.com/2019/01/11/internet-service-up.html)
+### [Friday @ 4:47 PM](https://www.thingelstad.com/2019/01/11/064432.html)
 
 Internet service up and running at the new house! 🥳
 
-### [Friday @ 6:44 AM](https://www.thingelstad.com/2019/01/11/today-is-moving.html)
+### [Friday @ 6:44 AM](https://www.thingelstad.com/2019/01/11/064432.html)
 
 Today is moving day! 📦🚛🏠🥳
 

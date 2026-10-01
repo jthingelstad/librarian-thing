@@ -381,7 +381,7 @@ We successfully escaped from the [Playground](https://theescapegame.com/newyorkc
 
 ![](https://www.thingelstad.com/uploads/2023/fd80df9d57.jpg)
 
-[Sunday @ 12:35 PM](https://www.thingelstad.com/2023/04/30/walking-the-high.html)
+[Sunday @ 12:35 PM](https://www.thingelstad.com/2023/04/30/walking-the-high-line-is.html)
 
 Walking the [High Line](https://www.thehighline.org) is now a tradition for any trip to New York. We hoped to find a break in the rain to make the walk but no break was to be found. We ended up getting off the path at [Chelsea Market](http://www.chelseamarket.com) to explore and have lunch.
 

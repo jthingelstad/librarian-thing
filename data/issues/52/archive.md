@@ -269,26 +269,26 @@ Going to learn some Cyrillic for my next trip to Kiev.
 
 Gorgeous evening to sit outside and relax.
 
-[2018-04-28 9:05 PM](https://www.thingelstad.com/2018/04/28/cue-wonderwall-nice.html)
+[2018-04-28 9:05 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 Cue Wonderwall! 🎼 Nice win Minnesota United! #MNUFC 2-1
 
-[2018-04-28 8:40 PM](https://www.thingelstad.com/2018/04/28/this-review-could.html)
+[2018-04-28 8:40 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 This review could have gotten really ugly. Luckily went the right way.
 
-[2018-04-28 8:37 PM](https://www.thingelstad.com/2018/04/28/goal-mnufc.html)
+[2018-04-28 8:37 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 GOAL!!!!!!!! ⚽️ #MNUFC 2-1
 
-[2018-04-28 8:33 PM](https://www.thingelstad.com/2018/04/28/bobby-bobby-bobby.html)
+[2018-04-28 8:33 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 B🚫OBBY!!! B🚫OBBY!!! B🚫OBBY!!! ⚽️ Nice save!
 
-[2018-04-28 8:00 PM](https://www.thingelstad.com/2018/04/28/halftime-family-selfie.html)
+[2018-04-28 8:00 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 Halftime family selfie at Minnesota United #MNUFC v Houston Dynamo. ⚽️ 1-1
 
-[2018-04-28 7:18 PM](https://www.thingelstad.com/2018/04/28/mn-united-completely.html)
+[2018-04-28 7:18 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 MN United! ⚽️🤦🏼‍♂️👎🏻 Completely outplayed on that drive. Down a goal.

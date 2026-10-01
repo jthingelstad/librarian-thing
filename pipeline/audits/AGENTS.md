@@ -18,6 +18,7 @@ These take an audit's output and apply fixes back to `data/issues/{N}/archive.md
 - `fix_micropost_photos.py` — restores photos where `mp-photo-alt[]=` markers survived in the body (146 photos across 21 issues at last run).
 - `restore_missing_micropost_photos.py` — restores silently-lost single-photo microposts (407 photos across 60 issues at last run).
 - `fix_link_list_anchors.py` — moves the opening bracket back to the start of MailChimp-era link-list titles the linkifier split (`- Title of [the page](url) host`). Bracket moves only; idempotent (279 items across 68 issues at first run, 2026-09).
+- `journal_permalink_map.py` + `repair_journal_permalinks.py` — the dead Journal permalinks micro.blog renamed or merged (2026-10-01). The map comes from the corpus's `date_text` Journal matches and is confirmed with GETs only; the repair rewrites exact `](old)` targets in `data/issues/N` AND the weekly site's render copy (sibling path), never front matter or `audio_*`. 432 links across 89 issues at first run. The corpus gate holds `journal_copy_stats.unmatched` at or under 33 so the repair can't quietly come undone.
 - `apply_audit_fixes.py` — apply LLM-suggested fixes from `tmp/llm-audit.json`. Operator chooses which suggestions to apply.
 - `migrate_images_to_s3.py` — move restored photos from `cdn.uploads.micro.blog` (hot-linked) to `files.thingelstad.com/weekly-thing/<N>/journal/`. Deferred today; not yet run on the ~550 restored photos.
 
@@ -41,7 +42,7 @@ The [`notes/audits/README.md`](../../notes/audits/README.md) documents what each
 2. Triage the findings — group by pattern (era-specific cruft? specific template? individual issues?).
 3. If a pattern: write a fix in `pipeline/audits/<descriptive>.py`. Idempotent. Operator-runnable.
 4. If a one-off: hand-edit `data/issues/{N}/archive.md` directly. Commit with a clear message.
-5. Merge to `main`: `deploy.yml` rebuilds and re-embeds the Weekly Thing corpus from `data/issues/`. Nothing here regenerates weekly.thingelstad.com's render copies (`apps/site/archive/{N}.md`) of past issues — the Studio site handoff retired at the 2026-08-28 split — so a repair reaches Thingy and MCP clients, not the public page.
+5. Merge to `main`: `deploy.yml` rebuilds and re-embeds the Weekly Thing corpus from `data/issues/`. Nothing here regenerates weekly.thingelstad.com's render copies (`apps/site/archive/{N}.md`) of past issues — the Studio site handoff retired at the 2026-08-28 split — so a repair reaches Thingy and MCP clients, not the public page — unless the repair writes the render copy too (as `repair_journal_permalinks.py` does) or someone runs wt-builder `npm run rerender:archive`.
 6. Optionally re-run the audit to confirm the fix.
 7. Snapshot the new audit output into `notes/audits/`.
 

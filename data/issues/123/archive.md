@@ -220,15 +220,15 @@ Interesting runtime. "An event-driven, portable runtime for building microservic
 
 Game 2 of the World Series and there has already been so much action in the first inning! 💥 Tied 2-2. ⚾️
 
-### [Tuesday @ 11:39 PM](https://www.thingelstad.com/2019/10/22/mazie-got-to.html)
+### [Tuesday @ 11:39 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
 Mazie got to go on stage and [dance and sing with Michael Franti](https://michaelfranti.com) tonight! 🎶✌🏻🤟🏻
 
-### [Tuesday @ 11:37 PM](https://www.thingelstad.com/2019/10/22/michael-franti-was.html)
+### [Tuesday @ 11:37 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
 [Michael Franti](https://michaelfranti.com) was amazing tonight. His music is so inspirational and uplifting. It’s a joy to experience. I love that he ends his shows with everyone singing “Imagine” together. 🎶✌🏻🤟🏻
 
-### [Tuesday @ 11:28 PM](https://www.thingelstad.com/2019/10/22/my-mom-sister.html)
+### [Tuesday @ 11:28 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
 My Mom, Sister, and our family [all went to the Michael Franti](https://michaelfranti.com) show tonight! Amazing show! 🎶
 

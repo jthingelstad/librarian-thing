@@ -260,15 +260,15 @@ $1.99 5/5 stars
 
 ## Microblog updates 🎈
 
-- When will chaos engineering have been successful? When we are comfortable dancing on air. [→](http://www.thingelstad.com/2017/11/10/when-will-chaos.html)
-- Casey Rosenthal sharing a lightning talk at Chaos Community Day. [→](http://www.thingelstad.com/2017/11/10/211523.html)
-- “The” Kent Beck sharing a lightning talk at Chaos Community Day. [→](http://www.thingelstad.com/2017/11/10/the-kent-beckhttpsenwikipediaorgwikikentbeck.html)
-- Next up Andy Fleener from local tech Sports Engine on Chaos Engineering. [→](http://www.thingelstad.com/2017/11/10/next-up-andy.html)
-- There should be a way to declare a namespace for @ references. Something like twitter:@ to steal from URI’s. Then microblog:@ could be smarter. /cc @manton [→](http://www.thingelstad.com/2017/11/10/there-should-be.html)
-- “So we picked C. And then we realized we didn’t want to write anything in C.” 🤣 @callmeforni [→](http://www.thingelstad.com/2017/11/10/so-we-picked.html)
-- Is Chaos Engineering related to DevOps the same way Extreme Programming is to Agile? Seems like it could be. [→](http://www.thingelstad.com/2017/11/10/is-chaos-engineering.html)
-- Fabulous agenda for Chaos Community Day. [→](http://www.thingelstad.com/2017/11/10/fabulous-agenda-for.html)
-- David Hussman and Leah Cunningham kicking off Chaos Community Day. Have already connected to many awesome people! 👍🏻👍🏻👍🏻 [→](http://www.thingelstad.com/2017/11/10/david-hussman-and.html)
+- When will chaos engineering have been successful? When we are comfortable dancing on air. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- Casey Rosenthal sharing a lightning talk at Chaos Community Day. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- “The” Kent Beck sharing a lightning talk at Chaos Community Day. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- Next up Andy Fleener from local tech Sports Engine on Chaos Engineering. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- There should be a way to declare a namespace for @ references. Something like twitter:@ to steal from URI’s. Then microblog:@ could be smarter. /cc @manton [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- “So we picked C. And then we realized we didn’t want to write anything in C.” 🤣 @callmeforni [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- Is Chaos Engineering related to DevOps the same way Extreme Programming is to Agile? Seems like it could be. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- Fabulous agenda for Chaos Community Day. [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
+- David Hussman and Leah Cunningham kicking off Chaos Community Day. Have already connected to many awesome people! 👍🏻👍🏻👍🏻 [→](https://www.thingelstad.com/2017/11/10/chaos-community-day.html)
 - Fun to have this Erik Sletten painting back up after years! Just fits! [→](http://www.thingelstad.com/2017/11/09/fun-to-have.html)
 - Excited to attend (and sponsor) Chaos Community Day tomorrow! Looking forward to learning how chaos engineering is driving improvement! [→](http://www.thingelstad.com/2017/11/09/excited-to-attend.html)
 - Great day at the #TeamSPS GrowthSummit18! So many great things to celebrate as we get ready for 2018! [→](http://www.thingelstad.com/2017/11/08/great-day-at.html)
@@ -281,8 +281,8 @@ $1.99 5/5 stars
 - Being able to raise your wrist and say “Hey Siri, turn espresso on” a few miles from home on a cold bike ride is so great! 👍🏻☕️⌚️ [→](http://www.thingelstad.com/2017/11/05/being-able-to.html)
 - Nice, chilly bike ride around the Minneapolis lakes today. Had to get the balaclava out! The Defiant One is still great! [→](http://www.thingelstad.com/2017/11/05/nice-chilly-bike.html)
 - My book club is reading Daemon by Daniel Suarez this month! I’ve wanted to read this one for a while. 👍 [→](http://www.thingelstad.com/2017/11/05/my-book-club.html)
-- My biggest ask for Workflow is to put groups of workflows in folders. 🤞🏻 [→](http://www.thingelstad.com/2017/11/04/my-biggest-ask.html)
-- Got Workflow working with the Mailchimp API. Weekly Thing automation leveling up! 👍🏻 [→](http://www.thingelstad.com/2017/11/04/got-workflowhttpsworkflowis-working.html)
+- My biggest ask for Workflow is to put groups of workflows in folders. 🤞🏻 [→](https://www.thingelstad.com/2017/11/04/got-workflow-working.html)
+- Got Workflow working with the Mailchimp API. Weekly Thing automation leveling up! 👍🏻 [→](https://www.thingelstad.com/2017/11/04/got-workflow-working.html)
 - The Kubbchucks are registered for the 2018 MN Kubb Winter Tournament! #kubb [→](http://www.thingelstad.com/2017/11/04/the-kubbchucks-are.html)
 
 ## The end 🎬

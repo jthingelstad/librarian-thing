@@ -213,31 +213,31 @@ My mind was blown tonight when I [was introduced to ”fractal” Romanesco broc
 
 ![](https://cdn.uploads.micro.blog/890/2019/0ae8b28d9c.jpg)
 
-### [Thursday @ 4:39 PM](https://www.thingelstad.com/2019/02/28/it-was-great.html)
+### [Thursday @ 4:39 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
 It was great to be able to share the impressive work we’ve done at SPS Commerce to make a technology career more inclusive and accessible. A lot of progress and momentum for more! [Thanks to @pattonamyj for the picture](https://twitter.com/pattonamyj/status/1101150885915299840) !
 
-### [Thursday @ 4:29 PM](https://www.thingelstad.com/2019/02/28/improving-diversity-in.html)
+### [Thursday @ 4:29 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
 Improving diversity In tech: York Solutions; Genesis10; Prime Digital Academy; Creating IT Futures; Software Guild; Summit Academy; Minnesota State IT Center of Excellence; Dougherty Family College; Apprenti; Keyot Crew212; Twin Cities Rise; Genesys Works; SciTechsperience
 
-### [Thursday @ 12:30 PM](https://www.thingelstad.com/2019/02/28/some-very-insightful.html)
+### [Thursday @ 12:30 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
 Some very insightful data being shared [this morning at MHTA Tech Talent](https://mhta.org/event/techtalent/) [event from Deb Broberg](https://www.linkedin.com/in/deb-broberg-sphr/) [of RealTime Talent, Allison Liuzzi](https://www.linkedin.com/in/allison-liuzzi-6564aa159/) [of Minnesota Compass Project, Matt Lewis](https://www.linkedin.com/in/matthew-lewis-37837aa/) of Make It. MSP.!
 
-### [Thursday @ 8:47 AM](https://www.thingelstad.com/2019/02/28/at-mhta-tech.html)
+### [Thursday @ 8:47 AM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
 [At MHTA Tech Talent](https://mhta.org/event/techtalent/) event today, [participating in panel shortly. Mike McNamara](https://www.linkedin.com/in/mike-mcnamara-04598226/) , CIO of Target, kicking it off. Event focused on efforts to increase diversity and inclusion in technology. Looking forward to [sharing our progress at SPS Commerce](https://spscommerce.com) .
 
-### [Monday @ 7:15 PM](https://www.thingelstad.com/2019/02/25/timberwolves-v-kings.html)
+### [Monday @ 7:15 PM](https://www.thingelstad.com/2019/02/25/175123.html)
 
 Timberwolves v Kings jump ball! 🏀
 
-### [Monday @ 7:14 PM](https://www.thingelstad.com/2019/02/25/basketball-teams-always.html)
+### [Monday @ 7:14 PM](https://www.thingelstad.com/2019/02/25/175123.html)
 
 Basketball teams always have impressive pregame experiences. 🏀 🔈
 
-### [Monday @ 6:51 PM](https://www.thingelstad.com/2019/02/25/fun-to-be.html)
+### [Monday @ 6:51 PM](https://www.thingelstad.com/2019/02/25/175123.html)
 
 Fun to be courtside watching the Timberwolves warmup. 🏀
 

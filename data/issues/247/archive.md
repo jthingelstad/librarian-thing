@@ -275,7 +275,7 @@ Partial day: 10,069 steps. 4.6 miles.
   * Pizza for lunch at Sunday Supper.
   * On time departure on DL1529 to Minneapolis.
 
-[Monday @ 12:50 PM](https://www.thingelstad.com/2023/03/20/we-finished-our.html)
+[Monday @ 12:50 PM](https://www.thingelstad.com/2023/03/20/we-finished-our-weekend-in.html)
 
 We finished our weekend in New York with a walk down the [High Line](https://www.thehighline.org). This is one of my favorite experiences in NYC.
 

@@ -6,6 +6,14 @@ name: Librarian — Corpus & API
 # Lambda when its code changed, and hands the topic graph to
 # weekly.thingelstad.com — the one cross-repo push left here. Publishing is
 # WT Builder's job; issue text arrives in data/issues/ as commits from it.
+#
+# A schedule pulls the audio editions in: WT Builder and the back-catalogue
+# job write them to the site's issue pages, not here, so each morning the
+# freshness check compares the site with the live corpus and rebuilds the
+# Weekly Thing corpus only when they differ (pipeline/corpus/corpus_gate.py).
+# An audio pointer changes no chunk text, so every embedding comes from the
+# cache. Sunday to Thursday only: a send rebuilds the corpus on its own, and
+# nothing automatic changes the corpus from Friday until the issue is sent.
 
 on:
   push:
@@ -26,6 +34,8 @@ on:
       - '.github/workflows/deploy.yml'
       - 'pyproject.toml'
       - 'uv.lock'
+  schedule:
+    - cron: '30 12 * * 0-4'  # 07:30 CDT / 06:30 CST, after the 02:15 back-catalogue run
   workflow_dispatch:
     inputs:
       scope:
@@ -89,10 +99,38 @@ jobs:
       - name: Lint
         run: uv run --locked ruff check .
 
+      - name: Check out weekly site archive pages for the audio check (read-only)
+        if: github.event_name == 'schedule'
+        uses: actions/checkout@v7
+        with:
+          repository: jthingelstad/weekly.thingelstad.com
+          persist-credentials: false
+          path: .weekly-site
+          sparse-checkout: apps/site/archive
+
+      - name: Audio freshness (site audio editions vs the live corpus)
+        id: audio
+        if: github.event_name == 'schedule'
+        run: uv run --locked python pipeline/corpus/corpus_gate.py freshness --site-archive .weekly-site/apps/site/archive --from-s3
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
       - name: Detect changes
         id: changes
         run: |
           set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            stale="${{ steps.audio.outputs.stale }}"
+            [[ "$stale" == "true" ]] || stale=false
+            {
+              echo "weekly_corpus=$stale"
+              echo "blog_corpus=false"
+              echo "podcast_corpus=false"
+              echo "lambda=$stale"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             corpus=false
@@ -261,6 +299,13 @@ jobs:
         env:
           EVAL_CORPUS_DIR: .candidate
           EVAL_CORPUS_FALLBACK: s3
+
+      # Journal copies unmatched at or under the post-repair ceiling, and every
+      # site audio edition on its issue: a failed site checkout fails here
+      # instead of shipping a corpus with no audio pointers.
+      - name: Corpus gate (archive checks on the Weekly Thing candidate)
+        if: steps.changes.outputs.weekly_corpus == 'true'
+        run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive .weekly-site/apps/site/archive
 
       - name: Upload Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'

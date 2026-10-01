@@ -213,7 +213,7 @@ This building is going to very cool when completed.
 
 ![](https://www.thingelstad.com/uploads/2018/0f37edd12f.jpg)
 
-### [Monday @ 8:17 PM](https://www.thingelstad.com/2018/10/08/011710.html)
+### [Monday @ 8:17 PM](https://www.thingelstad.com/2018/10/08/walking-the-high-line-in.html)
 
 Mazie and I hiked [the length of the High Line](https://www.thehighline.org) in Manhattan today. We started on 30th street and walked south to the end. It was a delightful way to spend the morning, and a nearly perfect photo walk opportunity. It was a great place to exercise the iPhone XS camera.
 

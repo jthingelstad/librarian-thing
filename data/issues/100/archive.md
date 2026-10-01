@@ -195,11 +195,11 @@ A trip to Austin, TX seems like it should have live [music. 🎶 We saw Bob Moul
 ![](https://cdn.uploads.micro.blog/890/2019/b76620b5dc.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/167c19445d.jpg)
 
-### [Wednesday @ 9:38 PM](https://www.thingelstad.com/2019/04/03/franklin-bbq-was.html)
+### [Wednesday @ 9:38 PM](https://www.thingelstad.com/2019/04/03/104013.html)
 
 [Franklin BBQ](https://franklinbbq.com) was amazing today. The brisket was the best I’ve ever had by a bunch. The ribs were delicious. The pulled pork was good. Also tried the Turkey special which was tasty. 👍🏻🤤🍽
 
-### [Wednesday @ 8:40 AM](https://www.thingelstad.com/2019/04/03/full-fanboy-mode.html)
+### [Wednesday @ 8:40 AM](https://www.thingelstad.com/2019/04/03/104013.html)
 
 Full fanboy mode [waiting in line at Franklin BBQ](https://franklinbbq.com) ! 😊 Brisket, ribs, and sausage on the way. 🤤 Couple of hours waiting in line.
 

@@ -213,7 +213,7 @@ First car I’ve had with an API. 😁
 
 Finally got my Bluetooth blood pressure monitor to re-pair with my phone, after much troubleshooting. It’s the little things. 🥳
 
-### [Sunday @ 8:44 PM](https://www.thingelstad.com/2018/12/02/there-was-a.html)
+### [Sunday @ 8:44 PM](https://www.thingelstad.com/2018/12/02/000000.html)
 
 There was a lot of very pretty looking snow to deal with this morning.
 

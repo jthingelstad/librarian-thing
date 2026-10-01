@@ -287,15 +287,15 @@ Lightning [⚡️ over the Big Top Chautauqua](https://www.bigtop.org) resulted 
 
 ![](https://cdn.uploads.micro.blog/890/2018/c3bc05ecb4.jpg)
 
-### [Saturday @ 9:48 PM](https://www.thingelstad.com/2018/06/16/magical-here-thank.html)
+### [Saturday @ 9:48 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
 Magical [here. 🎶✨ Thank you Brandi Carlile](http://www.brandicarlile.com) !
 
-### [Saturday @ 9:05 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-amazes.html)
+### [Saturday @ 9:05 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
 [Brandi Carlile](http://www.brandicarlile.com) amazes me every time! 🎶👏🏻
 
-### [Saturday @ 8:58 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-taking.html)
+### [Saturday @ 8:58 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
 [Brandi Carlile](http://www.brandicarlile.com) taking [the stage at Big Top Chautauqua](https://www.bigtop.org) . 🎶 Crowd is excited! 🙌🏻
 

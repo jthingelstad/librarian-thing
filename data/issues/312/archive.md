@@ -223,7 +223,7 @@ Cheers to 96 quarters of growth with the **Growth Cup** at the SPS Social.
 
 ![](https://files.thingelstad.com/weekly-thing/312/journal/f06ed3a323.jpg)
 
-[Mar 1, 2025 at 4:24 PM](https://www.thingelstad.com/2025/03/01/this-view-of-my-urban.html)
+[Mar 1, 2025 at 4:24 PM](https://www.thingelstad.com/2025/03/01/this-view-of-my-northup.html)
 
 This view of my [Urban Wing](https://urbanwing.com) sauna is still super pretty for me. Sauna up to 180 °F and ready to sweat.
 

@@ -233,9 +233,9 @@ $4.99 4.5/5 stars
 - [Would have been cool if Apple had an Eclipse watchOS watch face.](http://www.thingelstad.com/2017/08/19/would-have-been.html)
 - [Looking good St. Louis! 👏🏻](http://www.thingelstad.com/2017/08/19/looking-good-st.html)
 - [Sump Coffee has amazing espresso. This is a cathedral to coffee. So good.](http://www.thingelstad.com/2017/08/19/sump-coffeehttpswwwsumpcoffeecom-has.html)
-- [That’s a big prop!](http://www.thingelstad.com/2017/08/19/thats-a-big.html)
-- [Feeling safe.](http://www.thingelstad.com/2017/08/19/feeling-safe.html)
-- [City Museum is pretty amazing / crazy. Shot of tree house.](http://www.thingelstad.com/2017/08/19/city-museumhttpswwwcitymuseumorg-is.html)
+- [That’s a big prop!](https://www.thingelstad.com/2017/08/19/super-fun-time.html)
+- [Feeling safe.](https://www.thingelstad.com/2017/08/19/super-fun-time.html)
+- [City Museum is pretty amazing / crazy. Shot of tree house.](https://www.thingelstad.com/2017/08/19/super-fun-time.html)
 - [Super fun time at City Museum in St. Louis!](http://www.thingelstad.com/2017/08/19/super-fun-time.html)
 
 ## The end 🎬

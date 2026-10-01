@@ -300,13 +300,13 @@ Today’s #MNUFC match wasn’t the one I would have picked to be the last of th
 
 ![](https://www.thingelstad.com/uploads/2018/f4a10f94a7.jpg)
 
-### [Saturday @ 1:45 PM](https://www.thingelstad.com/2018/10/13/slow-start-for.html)
+### [Saturday @ 1:45 PM](https://www.thingelstad.com/2018/10/13/125945.html)
 
 Slow start for #MNUFC today. ⚽️
 
 ![](https://www.thingelstad.com/uploads/2018/b89871e3ee.jpg)
 
-### [Saturday @ 12:59 PM](https://www.thingelstad.com/2018/10/13/excited-for-our.html)
+### [Saturday @ 12:59 PM](https://www.thingelstad.com/2018/10/13/125945.html)
 
 Excited for our final MN United game of the 2018 season, and the last one in TCF Bank Stadium. Looking for some great soccer today! ⚽️👍🏻
 

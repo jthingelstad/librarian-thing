@@ -232,9 +232,13 @@ class RealJournalCopyTests(unittest.TestCase):
             for issue in wt["issues"]
             for entry in issue.get("journal_entries", [])
         }
-        # WT1's TechJam microposts were merged into one post on micro.blog.
-        techjam = entries[(1, f"{BASE}/2017/05/10/dan-talking-at.html")]
+        # WT1's TechJam microposts were merged into one post on micro.blog;
+        # since the 2026-10-01 repair the issue links that post, so the
+        # entry matches by permalink instead of by date and text.
+        techjam = entries[(1, f"{BASE}/2017/05/10/sps-techjam.html")]
         self.assertEqual(techjam["copy_of_microblog_id"], "1320679")
+        self.assertEqual(techjam["matched_by"], "permalink")
+        self.assertNotIn((1, f"{BASE}/2017/05/10/dan-talking-at.html"), entries)
         posts = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
         also = {
             str(post["microblog_id"]): set(post.get("also_in_issues") or [])

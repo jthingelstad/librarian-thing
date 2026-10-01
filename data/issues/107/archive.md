@@ -199,11 +199,11 @@ There is seriously no [better Polish sausage than Kramarczuk’s Deli](https://w
 
 [Another Saturday, another PR](https://members.onepeloton.com/profile/workouts/0fa0a4a0d7434bdf90f418acb6ea62f5) ! Plus hit 102% MHR! 🚴🏼‍♂️ #peloton
 
-### [Saturday @ 10:18 AM](https://www.thingelstad.com/2019/05/18/goals-from-franck.html)
+### [Saturday @ 10:18 AM](https://www.thingelstad.com/2019/05/18/095101.html)
 
 Goals from Franck Ribery and Arjen Robben [in today’s Bayern game, their final](https://www.mirror.co.uk/sport/football/news/franck-ribery-arjen-robben-break-16165414) and the title clencher, are amazing. ⚽️👏
 
-### [Saturday @ 9:51 AM](https://www.thingelstad.com/2019/05/18/awesome-goal-from.html)
+### [Saturday @ 9:51 AM](https://www.thingelstad.com/2019/05/18/095101.html)
 
 [Awesome goal from David Alaba](https://en.wikipedia.org/wiki/David_Alaba) to take Bayern [ahead 2-1! And then Renato Sanches](https://en.wikipedia.org/wiki/Renato_Sanches) to go 3-1! ⚽️ Championship Saturday! 👏
 

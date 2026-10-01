@@ -258,13 +258,13 @@ Settlers of Catan!
 
 ![](https://www.thingelstad.com/uploads/2018/b0ec483bc5.jpg)
 
-### [Saturday @ 4:57 PM](https://www.thingelstad.com/2018/10/20/kubb-king-of.html)
+### [Saturday @ 4:57 PM](https://www.thingelstad.com/2018/10/20/165400.html)
 
 Kubb, king of lawn games. Still love this painted set I won [at the US National Kubb Championship](http://www.usakubb.org) !
 
 ![](https://www.thingelstad.com/uploads/2018/b2f3d930c4.jpg)
 
-### [Saturday @ 4:54 PM](https://www.thingelstad.com/2018/10/20/fun-and-chilly.html)
+### [Saturday @ 4:54 PM](https://www.thingelstad.com/2018/10/20/165400.html)
 
 [Fun (and chilly!) day playing Kubb](https://en.wikipedia.org/wiki/Kubb) and [Mölkky](https://en.wikipedia.org/wiki/M%C3%B6lkky) at the Olson Family Weekend!
 

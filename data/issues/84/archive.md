@@ -236,19 +236,19 @@ Interesting book on writing and the workflows around it.
 
 Made my annual [donation to Internet Archive! Join me](https://archive.org/donate/) in supporting this great organization! 🌎
 
-### [Tuesday @ 9:35 PM](https://www.thingelstad.com/2018/12/11/wild-win.html)
+### [Tuesday @ 9:35 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Wild win! 7-1! 🏒
 
-### [Tuesday @ 8:20 PM](https://www.thingelstad.com/2018/12/11/wild-take-lead.html)
+### [Tuesday @ 8:20 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Wild take 2-0 lead over Montreal! 🏒
 
-### [Tuesday @ 7:55 PM](https://www.thingelstad.com/2018/12/11/hockey-time-with.html)
+### [Tuesday @ 7:55 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Hockey time with Amy Patton @pattonamyj, Ian Redlin and Paul Birkbeck @birkbeck! 🏒
 
-### [Tuesday @ 7:29 PM](https://www.thingelstad.com/2018/12/11/minnesota-wild-v.html)
+### [Tuesday @ 7:29 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Minnesota Wild v Montreal Canadiens! 🏒
 
@@ -292,11 +292,11 @@ I’m fixing my previous Twitter import and needed to get rid of thousands of ex
 
 Parked at SPS Tower for a concert at the State Theater. Took skyways and skipped jackets on way there. Didn’t think anout skyways being closed later. It was a very frigid walk back to the car! 🥶
 
-### [Saturday @ 11:24 PM](https://www.thingelstad.com/2018/12/08/the-new-standards.html)
+### [Saturday @ 11:24 PM](https://www.thingelstad.com/2018/12/08/212134.html)
 
 [The New Standards](http://www.thenewstandards.com) brought it home with “Snow Days”, on the permanent playlist for the Holiday Show! 🎶❄️
 
-### [Saturday @ 9:21 PM](https://www.thingelstad.com/2018/12/08/first-half-of.html)
+### [Saturday @ 9:21 PM](https://www.thingelstad.com/2018/12/08/212134.html)
 
 [First half of The New Standards](http://www.thenewstandards.com) Holiday Show was awesome. Okee Dokee Brothers, The Owls, Chris Koza, Jeremy Messersmith, Matt Wilson, Dessa, Tina Schleske, and Caroline Steele. 🎶
 

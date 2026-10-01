@@ -156,15 +156,15 @@ Cool to see Internet Archive building a command line tool like this to help peop
 
 ## Microposts 🎈
 
-### [Tuesday @ 8:49 PM](https://www.thingelstad.com/2019/06/11/our-teamsps-members.html)
+### [Tuesday @ 8:49 PM](https://www.thingelstad.com/2019/06/11/202657.html)
 
 Our #TeamSPS members from Ukraine and Australia getting in the Twins spirit! ⚾️🤩
 
-### [Tuesday @ 8:28 PM](https://www.thingelstad.com/2019/06/11/out-for-a.html)
+### [Tuesday @ 8:28 PM](https://www.thingelstad.com/2019/06/11/202657.html)
 
 Out for a great night of baseball with #TeamSPS Tech Managers! ⚾️💯
 
-### [Tuesday @ 8:26 PM](https://www.thingelstad.com/2019/06/11/great-night-for.html)
+### [Tuesday @ 8:26 PM](https://www.thingelstad.com/2019/06/11/202657.html)
 
 Great night for some Minnesota Twins baseball! ⚾️
 

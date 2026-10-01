@@ -168,11 +168,11 @@ One of #TeamSPS doing a lightning talk at DevOpsDays Minneapolis 2019! 🙌
 
 ## Microposts 🎈
 
-### [Sunday @ 12:41 AM](https://www.thingelstad.com/2019/09/01/there-were-figurative.html)
+### [Sunday @ 12:41 AM](https://www.thingelstad.com/2019/09/01/brandi-carlile-at.html)
 
 There were figurative and literal fireworks [going off at tonight’s Brandi Carlile](https://www.brandicarlile.com) show. She is amazing. I strongly recommend seeing her in concert.
 
-### [Sunday @ 12:40 AM](https://www.thingelstad.com/2019/09/01/brandi-carlile-put.html)
+### [Sunday @ 12:40 AM](https://www.thingelstad.com/2019/09/01/brandi-carlile-at.html)
 
 [Brandi Carlile](https://www.brandicarlile.com) put on an amazing show at the Minnesota State Fair tonight! 🎶
 

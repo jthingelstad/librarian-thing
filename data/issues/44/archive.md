@@ -176,11 +176,11 @@ Suggestion: if your store is named Helvetica, maybe use the Helvetica typeface? 
 
 Fabulous visit to Indmax #TeamSPS in Hyderabad. Thank you for the warm welcome and great questions! 🇮🇳
 
-[Wednesday @ 9:06 AM](https://www.thingelstad.com/2018/03/07/miniature-temple-in.html)
+[Wednesday @ 9:06 AM](https://www.thingelstad.com/2018/03/06/miniature-temple-in.html)
 
 Miniature temple in Hyderabad.
 
-[Wednesday @ 9:01 AM](https://www.thingelstad.com/2018/03/07/fabulous-evening-at.html)
+[Wednesday @ 9:01 AM](https://www.thingelstad.com/2018/03/06/fabulous-evening-at.html)
 
 [Fabulous evening at Taj Falaknuma Palace](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/) . Amazing palace [and very good dinner at Adaa](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/restaurants/adaa-restaurant/) .
 
@@ -200,11 +200,11 @@ A very warm and generous welcome to Hyderabad from our partners at Indmax. 🙏
 
 Finished great town hall with our partner Indmax #TeamSPS in Hyderabad! Also video to our Coimbatore team! So great to meet everyone! 🤝
 
-[Tuesday @ 9:41 AM](https://www.thingelstad.com/2018/03/06/starting-second-leg.html)
+[Tuesday @ 9:41 AM](https://www.thingelstad.com/2018/03/05/starting-second-leg.html)
 
 Starting second leg of India 🇮🇳 trip with flight to Hyderabad! ✈️
 
-[Tuesday @ 12:11 AM](https://www.thingelstad.com/2018/03/06/nice-evening-of.html)
+[Tuesday @ 12:11 AM](https://www.thingelstad.com/2018/03/05/nice-evening-of.html)
 
 Nice evening of good food and conversation with Bristlecone team.
 
@@ -220,10 +220,10 @@ Traffic in Delhi and Noida is “up close” and personal.
 
 Had a very good visit to HCL today. Impressive capabilities and people!
 
-[Monday @ 2:08 AM](https://www.thingelstad.com/2018/03/05/amy-kent-and.html)
+[Monday @ 2:08 AM](https://www.thingelstad.com/2018/03/04/amy-kent-and.html)
 
 Amy, Kent and I got a warm welcome from our partners at Bristlecone after 20 hours of traveling and arriving in Delhi at 1am.
 
-[Monday @ 2:07 AM](https://www.thingelstad.com/2018/03/05/the-customs-hall.html)
+[Monday @ 2:07 AM](https://www.thingelstad.com/2018/03/04/the-customs-hall.html)
 
 The customs hall at the Delhi airport has some cool artistic touches.

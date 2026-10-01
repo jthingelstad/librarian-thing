@@ -195,7 +195,7 @@ Who wants a tank? 🤠
 ![](https://cdn.uploads.micro.blog/890/2019/342afb16f2.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/88946b4e4c.jpg)
 
-### [Sunday @ 5:40 PM](https://www.thingelstad.com/2019/08/25/thank-you-to.html)
+### [Sunday @ 5:40 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
 Thank you to all the [organizations making Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) happen!
 
@@ -207,7 +207,7 @@ Had an amazing coffee at the new Little Joy Coffee in Downtown Northfield. Amazi
 ![](https://cdn.uploads.micro.blog/890/2019/df4ef6a340.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/4f06f3ac3c.jpg)
 
-### [Sunday @ 5:08 PM](https://www.thingelstad.com/2019/08/25/having-dinner-with.html)
+### [Sunday @ 5:08 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
 Having dinner with the city of Northfield! [Thanks to Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) !
 

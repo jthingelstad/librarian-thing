@@ -207,11 +207,11 @@ Free
 
 ## Status 🎈
 
-[Friday @ 9:24 PM](https://www.thingelstad.com/2018/03/02/dan-wilson-allrequest.html)
+[Friday @ 9:24 PM](https://www.thingelstad.com/2018/03/02/dan-wilson-at.html)
 
 [Dan Wilson](https://danwilsonmusic.com) all-request on piano. 🎹
 
-[Friday @ 9:01 PM](https://www.thingelstad.com/2018/03/02/dan-wilson-taking.html)
+[Friday @ 9:01 PM](https://www.thingelstad.com/2018/03/02/dan-wilson-at.html)
 
 [Dan Wilson](https://danwilsonmusic.com) taking the stage for his 3-ring Binder “all-requests” show at Icehouse! 🎶👍🏻
 
@@ -243,15 +243,15 @@ I got to be a guest reader in Tyler’s class today. Was fun to pick out a bunch
 
 Theatre [🎭 this afternoon. Make Believe Neighborhood](https://hobt.org/events/make-believe-neighborhood-18/) at In the Heart of the Beast Puppet and Mask Theatre.
 
-[Saturday @ 9:27 PM](https://www.thingelstad.com/2018/02/24/mass-start-speed.html)
+[Saturday @ 9:27 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
 Mass Start Speed Skating reminds me a lot of track cycling.
 
-[Saturday @ 5:57 PM](https://www.thingelstad.com/2018/02/24/interesting-strategy-in.html)
+[Saturday @ 5:57 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
 Interesting strategy in Curling.
 
-[Saturday @ 5:28 PM](https://www.thingelstad.com/2018/02/24/congratulations-to-duluth.html)
+[Saturday @ 5:28 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
 [Congratulations to Duluth Curling Club](https://www.duluthcurlingclub.org/) for bringing home the first US Gold in Curling.
 
@@ -259,7 +259,7 @@ Interesting strategy in Curling.
 
 [Forestry.io](https://forestry.io) is working great for me. Removes the friction from static blogging. 👍🏻
 
-[Saturday @ 5:16 PM](https://www.thingelstad.com/2018/02/24/if-curlinghttpsenwikipediaorgwikicurling-can.html)
+[Saturday @ 5:16 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
 [If Curling](https://en.wikipedia.org/wiki/Curling) can be [an Olympic sport than surely Kubb](https://en.wikipedia.org/wiki/Kubb) could be too. 🤞🏻
 
@@ -267,14 +267,14 @@ Interesting strategy in Curling.
 
 macOS Photos app grinds my laptop to a crawl. Fans blaring, everything sluggish. Very frustrating. Seemingly doing nothing and it’s taking 280% and more of CPU.
 
-[Saturday @ 10:55 AM](https://www.thingelstad.com/2018/02/24/we-made-meals.html)
+[Saturday @ 10:55 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
 We made 34,344 meals, enough to feed 94 kids for a year!
 
-[Saturday @ 10:53 AM](https://www.thingelstad.com/2018/02/24/we-packed-boxes.html)
+[Saturday @ 10:53 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
 We packed 22 [boxes at Feed My Starving Children](https://www.fmsc.org) this morning! 🙌🏻 Tyler picked a great event for his birthday!
 
-[Saturday @ 9:00 AM](https://www.thingelstad.com/2018/02/24/at-feed-my.html)
+[Saturday @ 9:00 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
 [At Feed My Starving Children](https://www.fmsc.org/) to pack meals. Tyler wanted to come here for his birthday. Love this handmade graph of progress.

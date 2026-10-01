@@ -344,7 +344,7 @@ I don't run the public betas for Apple OS releases -- and days like today are th
 
 ![](https://files.thingelstad.com/weekly-thing/327/journal/screenshot-2025-09-15-at-1.02.53pm.png)
 
-[Sep 17, 2025 at 10:33 AM](https://www.thingelstad.com/2025/09/17/poap-at-sps-women-in.html)
+[Sep 17, 2025 at 10:33 AM](https://www.thingelstad.com/2025/09/17/poap-for-sps-women-in.html)
 
 POAP [7453396](https://collectors.poap.xyz/token/7453396) for **[SPS Women in Tech Q3 2025 Lunch & Learn](https://poap.gallery/drops/207135)**.
 

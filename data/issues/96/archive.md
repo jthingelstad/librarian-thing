@@ -242,23 +242,23 @@ Nice dinner out with #TeamSPS in Toronto!
 
 ![](https://cdn.uploads.micro.blog/890/2019/8730f82f2f.jpg)
 
-### [Sunday @ 11:08 PM](https://www.thingelstad.com/2019/03/03/we-got-to.html)
+### [Sunday @ 11:08 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
 We got to see some 3-3 OT hockey along with a shootout! Only way it could have been better would have been for a Wild win! 🏒 Great game though!
 
-### [Sunday @ 8:09 PM](https://www.thingelstad.com/2019/03/03/tyler-had-a.html)
+### [Sunday @ 8:09 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
 Tyler had a game puck land (softly) right in his lap at tonight’s Wild game! 🥳🏒
 
-### [Sunday @ 8:08 PM](https://www.thingelstad.com/2019/03/03/minnesota-wild-v.html)
+### [Sunday @ 8:08 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
 Minnesota Wild v Nashville Predators tonight! 🏒
 
-### [Sunday @ 8:05 PM](https://www.thingelstad.com/2019/03/03/olympic-gold-medalist.html)
+### [Sunday @ 8:05 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
 [Olympic Gold medalist Lindsey Vonn](https://en.wikipedia.org/wiki/Lindsey_Vonn) dropped the game puck at tonight’s Wild game! 😎
 
-### [Sunday @ 8:03 PM](https://www.thingelstad.com/2019/03/03/time-for-some.html)
+### [Sunday @ 8:03 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
 Time for some Minnesota Wild Hockey! 🏒
 

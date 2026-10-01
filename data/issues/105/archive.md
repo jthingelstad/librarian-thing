@@ -155,7 +155,7 @@ Super geeky deep dive into the JPG format.
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
-### [Thursday @ 1:36 PM](https://www.thingelstad.com/2019/05/09/great-talks-at.html)
+### [Thursday @ 1:36 PM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Great talks at Tech Jam 2019, and incredible breadth. How about a lightning talk on emotional intelligence? #TeamSPS #SPSTechJam
 
@@ -163,31 +163,31 @@ Great talks at Tech Jam 2019, and incredible breadth. How about a lightning talk
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
-### [Thursday @ 11:47 AM](https://www.thingelstad.com/2019/05/09/break-time-hacky.html)
+### [Thursday @ 11:47 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Break time hacky sack - great way to stretch between sessions! #TeamSPS #SPSTechJam
 
-### [Thursday @ 10:54 AM](https://www.thingelstad.com/2019/05/09/awesome-that-we.html)
+### [Thursday @ 10:54 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Awesome that we have presenters at Tech Jam from Minneapolis 🇺🇸, Kiev 🇺🇦, Toronto 🇨🇦, and New Jersey 🇺🇸! Global teams FTW! #TeamSPS #SPSTechJam
 
-### [Thursday @ 9:47 AM](https://www.thingelstad.com/2019/05/09/inspiring-keynote-from.html)
+### [Thursday @ 9:47 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Inspiring keynote [from Chris Williams of Badass Agile](https://badassagile.com) at Tech Jam 2019! Good way to start off the day! #TeamSPS #SPSTechJam
 
-### [Thursday @ 8:48 AM](https://www.thingelstad.com/2019/05/09/a-huge-thank.html)
+### [Thursday @ 8:48 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 A huge thank you to the amazing organizers of Tech Jam 2019! Community events cannot happen without individuals that are willing to put personal passion and energy to make them happen! 👏 #TeamSPS #SPSTechJam
 
-### [Thursday @ 8:25 AM](https://www.thingelstad.com/2019/05/09/one-of-these.html)
+### [Thursday @ 8:25 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 “One of these cords isn’t working right!” Thad making it all work for #TeamSPS #SPSTechJam. 🤓
 
-### [Thursday @ 8:09 AM](https://www.thingelstad.com/2019/05/09/i-love-the.html)
+### [Thursday @ 8:09 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 I love the creativity that our team puts into our #TeamSPS activities, and I just 💙 this Tech Jam "comic" sticker! So nicely done [@ken_korth](https://twitter.com/ken_korth) ! #SPSTechJam
 
-### [Thursday @ 8:06 AM](https://www.thingelstad.com/2019/05/09/today-is-teamsps.html)
+### [Thursday @ 8:06 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Today is #TeamSPS Tech Jam 2019, where we collect as a community to share and learn from each other! We have presenters covering a wide range of topics, and representing many parts of our team! #SPSTechJam
 
@@ -206,7 +206,7 @@ Had fun playing board games with friends today: [Carcassonne](https://boardgameg
 
 Enjoying a classic rock morning: Drift Away by Dobie Gray, Pink Houses by John Mellencamp, American Pie by Don Mclean. 🎧
 
-### [Saturday @ 7:37 PM](https://www.thingelstad.com/2019/05/04/seconds-before-minnesota.html)
+### [Saturday @ 7:37 PM](https://www.thingelstad.com/2019/05/04/191509.html)
 
 Seconds before Minnesota United GOAL! 1-0 #MNUFC
 

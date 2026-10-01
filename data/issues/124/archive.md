@@ -251,11 +251,11 @@ I have long resisted adding technology to my Big Green Egg, holding that good BB
 
 ![](https://cdn.uploads.micro.blog/890/2019/e65c41fed1.jpg)
 
-### [Sunday @ 5:31 PM](https://www.thingelstad.com/2019/10/27/twenty-six-bags.html)
+### [Sunday @ 5:31 PM](https://www.thingelstad.com/2019/10/27/preparing-the-leaf.html)
 
 Twenty six bags! 🍂😬
 
-### [Sunday @ 3:20 PM](https://www.thingelstad.com/2019/10/27/preparing-the-lead.html)
+### [Sunday @ 3:20 PM](https://www.thingelstad.com/2019/10/27/preparing-the-leaf.html)
 
 Preparing the leaf pile. 🍂
 
@@ -279,11 +279,11 @@ I’ve gotten [pretty expert at replacing the thermopile](https://en.wikipedia.o
 
 Finally the Astros win one in the World Series! 2-1 now. Tyler’s spirits are lifted with his team showing some hope! ⚾️
 
-### [Friday @ 10:26 PM](https://www.thingelstad.com/2019/10/25/matt-wilson-finished.html)
+### [Friday @ 10:26 PM](https://www.thingelstad.com/2019/10/25/203647.html)
 
 [Matt Wilson](https://www.minneapolismatt.com) finished up with an [always great rendition of Snow Day](https://music.apple.com/us/album/snow-days/1443398974?i=294083092) ! 🎶
 
-### [Friday @ 8:36 PM](https://www.thingelstad.com/2019/10/25/at-the-music.html)
+### [Friday @ 8:36 PM](https://www.thingelstad.com/2019/10/25/203647.html)
 
 At The Music Space of Owatonna [for Matt Wilson & His Orchestra](https://www.minneapolismatt.com) in the Event of the Century, the Mattastrophe! 🎶👍
 

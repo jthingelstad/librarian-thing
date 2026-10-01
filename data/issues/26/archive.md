@@ -305,7 +305,7 @@ $9.99 4.5/5 stars
 ## Microblog updates 🎈
 
 - give a person a find/replace and you power them once; teach a person regular expressions and you give them superpowers ⚡️ [→](http://www.thingelstad.com/2017/11/02/give-a-person.html)
-- Got my very first communication ever regarding my Tesla Model 3 reservation. [→](http://www.thingelstad.com/2017/11/01/got-my-very.html)
+- Got my very first communication ever regarding my Tesla Model 3 reservation. [→](https://www.thingelstad.com/2017/11/01/got-my-very-first-communication.html)
 - Scenes from tonights #TeamSPS game night! I ran the Super Mario Kart tournament! Very competitive! 🏎🏆👍🏻 [→](http://www.thingelstad.com/2017/11/01/scenes-from-tonights.html)
 - Coldest Halloween 🎃 in 15 years definitely impacted turnout. ❄️ First year we didn’t run out of candy in a long time. 🍫 [→](http://www.thingelstad.com/2017/10/31/coldest-halloween-in.html)
 - Candy exchange in progress! 🍫🎃 [→](http://www.thingelstad.com/2017/10/31/candy-exchange-in.html)

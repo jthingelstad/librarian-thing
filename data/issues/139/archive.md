@@ -214,7 +214,7 @@ Focus for the rest of the week!
 
 ![](https://www.thingelstad.com/uploads/2020/1146e91d03.jpg)
 
-[Sunday @ 6:58 PM](https://www.thingelstad.com/2020/03/08/celebrating-international-womens.html)
+[Sunday @ 6:58 PM](https://www.thingelstad.com/2020/03/08/celebrating-international-womens-day-iwd.html)
 
 Celebrating [International Women’s Day](https://www.internationalwomensday.com) 2020! 👍 #IWD2020 #EachforEqual
 

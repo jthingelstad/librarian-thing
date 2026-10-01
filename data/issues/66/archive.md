@@ -358,11 +358,11 @@ Enjoying [a delicious lunch at Dinosaur Bar-B-Que](http://www.dinosaurbarbque.co
 
 ![](https://www.thingelstad.com/uploads/2018/643d4c3c78.jpg)
 
-### [Friday @ 11:23 PM](https://www.thingelstad.com/2018/08/03/starting-vacation-with.html)
+### [Friday @ 11:23 PM](https://www.thingelstad.com/2018/08/03/215437.html)
 
 Starting vacation with a 2 hour (and still counting) delay on the tarmac. ☹️
 
-### [Friday @ 9:54 PM](https://www.thingelstad.com/2018/08/03/flight-delayed-on.html)
+### [Friday @ 9:54 PM](https://www.thingelstad.com/2018/08/03/215437.html)
 
 Flight delayed on tarmac waiting out storm… asked about weather “Well, I’m not a meteorologist but I do have an iPhone.” ✈️⛈
 

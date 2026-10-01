@@ -295,17 +295,17 @@ My Book Club picked this for our next meeting and I’m very interested to learn
 **[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Microblog updates 🎈
-- [Moved to Big Blue @ Night stage to see Camper Van Beethoven!](http://www.thingelstad.com/2017/07/07/moved-to-big.html)
-- [Bruce Cockburn now on main stage at Winnipeg Folk Festival.](http://www.thingelstad.com/2017/07/07/bruce-cockburnhttpbrucecockburncom-now.html)
-- [Richard Inman just blew me away as a ‘tweener’ at Winnipeg Folk Festival. Wow!](http://www.thingelstad.com/2017/07/07/000551.html)
-- [Esmé Patterson kicking off Friday night on Winnipeg Folk Festival main stage.](http://www.thingelstad.com/2017/07/07/esm-pattersonhttpesmepattersoncom-kicking.html)
-- [Everyone seeking shade at the Bur Oak stage, Winnipeg Folk Festival.](http://www.thingelstad.com/2017/07/07/everyone-seeking-shade.html)
-- [Camping. Birds Hill Provincial Park.](http://www.thingelstad.com/2017/07/06/camping-birds-hill.html)
-- [The Shins closing out first night on main stage at Winnipeg Folk Festival.](http://www.thingelstad.com/2017/07/06/the-shinshttptheshinscom-closing.html)
-- [Brandi Carlile now on stage at Winnipeg Folk Festival. So great!](http://www.thingelstad.com/2017/07/06/brandi-carlilehttpwwwbrandicarlilecom-now.html)
-- [Folk Fest humor — What do you call a banjo player with a mortgage? … An Optimist!](http://www.thingelstad.com/2017/07/06/folk-fest-humor.html)
-- [The Small Glories starting the Winnipeg Folk Festival on the main stage.](http://www.thingelstad.com/2017/07/06/the-small-glorieshttpswwwthesmallgloriescom.html)
-- [Great spot for the Winnipeg Folk Festival main stage tonight. Brandi Carlile our highlight tonight!](http://www.thingelstad.com/2017/07/06/great-spot-for.html)
+- [Moved to Big Blue @ Night stage to see Camper Van Beethoven!](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)
+- [Bruce Cockburn now on main stage at Winnipeg Folk Festival.](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)
+- [Richard Inman just blew me away as a ‘tweener’ at Winnipeg Folk Festival. Wow!](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)
+- [Esmé Patterson kicking off Friday night on Winnipeg Folk Festival main stage.](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)
+- [Everyone seeking shade at the Bur Oak stage, Winnipeg Folk Festival.](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)
+- [Camping. Birds Hill Provincial Park.](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
+- [The Shins closing out first night on main stage at Winnipeg Folk Festival.](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
+- [Brandi Carlile now on stage at Winnipeg Folk Festival. So great!](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
+- [Folk Fest humor — What do you call a banjo player with a mortgage? … An Optimist!](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
+- [The Small Glories starting the Winnipeg Folk Festival on the main stage.](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
+- [Great spot for the Winnipeg Folk Festival main stage tonight. Brandi Carlile our highlight tonight!](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
 - [Bicycle as installation art. In Grand Forks, ND.](http://www.thingelstad.com/2017/07/05/bicycle-as-installation.html)
 - [I send a weekly newsletter with commentary on links I’ve found interesting, plus bonus content! Interested? Subscribe at weekly.thingelstad.com.](http://www.thingelstad.com/2017/07/05/i-send-a.html)
 - [Driving to Winnipeg Folk Festival today to start the third segment of summer vacation!](http://www.thingelstad.com/2017/07/05/driving-to-winnipeg.html)
@@ -326,7 +326,7 @@ My Book Club picked this for our next meeting and I’m very interested to learn
 - [Happy Sunday July 2, 2017… the first Sunday you can buy beer, wine and liquor in Minnesota!](http://www.thingelstad.com/2017/07/02/happy-sunday-july.html)
 - [Big congratulations to Turing Tumble! Backer 369 of 4,198 and they overfunded the Kickstarter finishing at $404,071!](http://www.thingelstad.com/2017/07/02/big-congratulations-to.html)
 - [I really like Chicago. This is as close as we get today. On our way back to Minnesota from Michigan.](http://www.thingelstad.com/2017/07/01/i-really-like.html)
-- [Self-service toll booths on I-90 by Chicago are terribly slow. Bring the people back! 😣](http://www.thingelstad.com/2017/07/01/selfservice-toll-booths.html)
+- [Self-service toll booths on I-90 by Chicago are terribly slow. Bring the people back! 😣](https://www.thingelstad.com/2017/07/01/i-really-like.html)
 
 ## The end 🎬
 

@@ -301,10 +301,10 @@ $1.99 4/5 stars
 ## Microblog updates 🎈
 
 - Official start of Christmas with tree up 🎄 and watching Elf 🎬 tonight. [→](http://www.thingelstad.com/2017/11/24/official-start-of.html)
-- 56k modem for the win! .net Monopoly. 😊 [→](http://www.thingelstad.com/2017/11/24/k-modem-for.html)
-- I had to buy Sun Microsystems in .com Monopoly. 💙 [→](http://www.thingelstad.com/2017/11/24/i-had-to.html)
-- Google and Amazon are not on The .com Edition Monopoly board. 🤷‍♂️ [→](http://www.thingelstad.com/2017/11/24/google-and-amazon.html)
-- Playing The .com Edition of Monopoly, of course. 😜 Hilarious tiles. Game starts with $1.5 billion per player. 💸 CBS MarketWatch has a tile, right next to Sun Microsystems! [→](http://www.thingelstad.com/2017/11/24/playing-the-com.html)
+- 56k modem for the win! .net Monopoly. 😊 [→](https://www.thingelstad.com/2017/11/24/161831.html)
+- I had to buy Sun Microsystems in .com Monopoly. 💙 [→](https://www.thingelstad.com/2017/11/24/161831.html)
+- Google and Amazon are not on The .com Edition Monopoly board. 🤷‍♂️ [→](https://www.thingelstad.com/2017/11/24/161831.html)
+- Playing The .com Edition of Monopoly, of course. 😜 Hilarious tiles. Game starts with $1.5 billion per player. 💸 CBS MarketWatch has a tile, right next to Sun Microsystems! [→](https://www.thingelstad.com/2017/11/24/161831.html)
 - Very true → “You are either building a learning organization, or you are losing to one who is.” — John Allspaw @allspaw [→](http://www.thingelstad.com/2017/11/24/very-true-you.html)
 - Christmas Tree decorating and reminiscing. 🎄 [→](http://www.thingelstad.com/2017/11/24/christmas-tree-decorating.html)
 - I don’t get 1000%+ price increase in BTC. 🤷‍♂️ [→](http://www.thingelstad.com/2017/11/22/i-dont-get.html)

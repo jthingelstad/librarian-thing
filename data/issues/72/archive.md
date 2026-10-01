@@ -333,7 +333,7 @@ It seems that the nVidia GPU in my 2012 MacBook Pro 15” Retina is failing fast
 
 Upgraded Nintendo Switch to 6.0 and Tyler and I are trying out Switch Online. It’s fun to play Donkey Kong on yet another modern game platform. 🤓🕹
 
-### [Tuesday @ 8:31 PM](https://www.thingelstad.com/2018/09/18/now-have-a.html)
+### [Tuesday @ 8:31 PM](https://www.thingelstad.com/2018/09/18/now-have-a-vin-for.html)
 
 Now have a VIN for my Tesla Model 3 and a scheduled delivery date for the weekend! 😎
 

@@ -249,19 +249,19 @@ I visited [Minnehack](https://minnehack.io) tonight and introduced [SPS Commerce
 ![](https://cdn.uploads.micro.blog/890/2019/a05bcacee0.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/c08699cff1.jpg)
 
-### [Saturday @ 2:39 PM](https://www.thingelstad.com/2019/02/02/these-three-kubb.html)
+### [Saturday @ 2:39 PM](https://www.thingelstad.com/2019/02/02/120059.html)
 
 These three #Kubb professionals took the Kubbchucks down without even flinching. Brutal.
 
-### [Saturday @ 2:05 PM](https://www.thingelstad.com/2019/02/02/throw-off-for.html)
+### [Saturday @ 2:05 PM](https://www.thingelstad.com/2019/02/02/120059.html)
 
 Throw off for entry into the Minnesota Kubb Championship bracket. INTENSE #KUBB ACTION! Throw 3 Kubbs, then 6 batons. Whoever downs most Kubbs wins! 🔥
 
-### [Saturday @ 12:40 PM](https://www.thingelstad.com/2019/02/02/kubbchucks-went-in.html)
+### [Saturday @ 12:40 PM](https://www.thingelstad.com/2019/02/02/120059.html)
 
 Kubbchucks went 2-1 in this mornings Minnesota Kubb round robin! On to the Championship bracket!
 
-### [Saturday @ 11:00 AM](https://www.thingelstad.com/2019/02/02/kubbchucks-playing-in.html)
+### [Saturday @ 11:00 AM](https://www.thingelstad.com/2019/02/02/120059.html)
 
 Kubbchucks playing in our 8th annual [Minnesota Kubb](http://minnesotakubb.com) winter tournament, part of the Loppet! Largest winter #Kubb tournament in the world!
 

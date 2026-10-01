@@ -229,11 +229,11 @@ Yikes. 🐦😬
 
 It’s great to [see OmniFocus with iOS 13 Features](https://www.omnigroup.com/blog/omnifocus-ios-13-features-testflight) coming soon! I particularly like seeing some new Shortcut options being added right away! 👏
 
-### [Wednesday @ 9:58 PM](https://www.thingelstad.com/2019/09/25/amazing-come-from.html)
+### [Wednesday @ 9:58 PM](https://www.thingelstad.com/2019/09/25/mn-united-v.html)
 
 Amazing come from behind win from MN United tonight to beat Sporting KC and clinch entry into the 2019 playoffs! 2-1 🙌 #MNUFC #MINvSKC ⚽️
 
-### [Wednesday @ 8:13 PM](https://www.thingelstad.com/2019/09/25/first-half-of.html)
+### [Wednesday @ 8:13 PM](https://www.thingelstad.com/2019/09/25/mn-united-v.html)
 
 First half of MN United v Sporting KC was tough to watch. United need to come out and connect some plays! #MNUFC #MINvSKC
 
@@ -259,15 +259,15 @@ Making my Mom’s Swedish Pancakes outside this morning. She did the batter, I�
 
 Walked into the pool with my AirPods in my pocket. Oops. Hoping they come back to life tomorrow. 💦
 
-### [Saturday @ 8:40 AM](https://www.thingelstad.com/2019/09/21/tough-loss-for.html)
+### [Saturday @ 8:40 AM](https://www.thingelstad.com/2019/09/21/saturday-morning-soccer.html)
 
 Tough loss for Spurs this morning to Leicester City 1-2. Ugh. #LCvTOT Now time for Bundesliga with Bayern v Köln. Great Lewandowski goal in 2nd minute to take early lead 1-0! ⚽️ #FCBKOE
 
-### [Saturday @ 8:03 AM](https://www.thingelstad.com/2019/09/21/premier-league-var.html)
+### [Saturday @ 8:03 AM](https://www.thingelstad.com/2019/09/21/saturday-morning-soccer.html)
 
 Premier League VAR rulings for offsides seem impossible for players. It’s impossible to know you are 1” ahead of a player many yards away from you. Does it make the game better? Doesn’t seem too.
 
-### [Saturday @ 7:52 AM](https://www.thingelstad.com/2019/09/21/harry-kanes-goal.html)
+### [Saturday @ 7:52 AM](https://www.thingelstad.com/2019/09/21/saturday-morning-soccer.html)
 
 Harry [Kane’s goal while falling this morning](https://soccer.nbcsports.com/2019/09/21/video-harry-kane-scores-mind-boggling-goal/) was amazing! Brilliant! ⚽️🤩🙌 Go Spurs! 1-0 #LCvTOT #PL
 
