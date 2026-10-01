@@ -156,8 +156,10 @@ class AnnotateBlogAbstractsTests(unittest.TestCase):
         annotate_blog_abstracts(self.corpus, self.root / "absent.json")
         micro = self.posts[str(MICRO_ID)]
         self.assertEqual(micro["abstract_source"], "text")
+        # The embedded tweet is a link labelled with its author (QA3 F16),
+        # where the strip used to delete it.
         self.assertEqual(
-            micro["abstract"], "Family tradition to watch Elf the day after Thanksgiving!"
+            micro["abstract"], "Family tradition to watch Elf the day after Thanksgiving! @someone"
         )
         # Photo-only micropost: its alt text is all the text it has.
         photo = self.posts[str(PHOTO_ONLY_ID)]

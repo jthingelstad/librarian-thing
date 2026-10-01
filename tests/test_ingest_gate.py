@@ -37,11 +37,13 @@ class ThingyGateTest(unittest.TestCase):
 
 class GateCommandTest(unittest.TestCase):
     def test_blog_only_candidate_is_checked(self):
+        # An empty blog candidate holds none of the real posts' code or
+        # embeds, so the blog checks fail it even with no WT candidate.
         with tempfile.TemporaryDirectory() as tmp:
             stage = Path(tmp)
             (stage / "blog_corpus.json").write_text(json.dumps({"posts": [], "media": []}))
             argv = ["gate", "--candidate", str(stage), "--site-archive", str(stage / "none")]
-            self.assertEqual(gate.main(argv), 0)
+            self.assertEqual(gate.main(argv), 1)
 
 
 if __name__ == "__main__":

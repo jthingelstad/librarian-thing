@@ -37,6 +37,7 @@ import argparse
 import gzip
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -45,6 +46,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
 
 from librarian_core.audio import audio_record, read_site_frontmatter  # noqa: E402
+from librarian_core.paths import BLOG_DIR  # noqa: E402
 
 # Journal copies the build could not tie to a blog post, after the
 # 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv).
@@ -110,12 +112,123 @@ def gate_failures(corpus: dict[str, Any], site_archive_dir: Path | None) -> list
 # carries, so a later change that undoes it fails the gate instead of shipping.
 
 
-def ingest_failures(corpus: dict[str, Any] | None, blog: dict[str, Any] | None) -> list[str]:
+def ingest_failures(
+    corpus: dict[str, Any] | None,
+    blog: dict[str, Any] | None,
+    blog_source_dir: Path = BLOG_DIR.parent,
+) -> list[str]:
     failures = []
     if corpus is not None:
         # F18: Thingy's words never enter the corpus.
         if "from-thingy" in json.dumps(corpus, ensure_ascii=False):
             failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
+    if blog is not None:
+        failures.extend(blog_source_failures(blog, blog_source_dir))
+    return failures
+
+
+# An oracle over the blog's markdown, written apart from the build's own
+# regexes so the two cannot share a mistake.
+_FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+_GATE_SHORTCODE_RE = re.compile(r"\{\{<\s*(x|tweet|youtube|vimeo)\s+([^>]*?)\s*>\}\}", re.I)
+_GATE_IFRAME_SRC_RE = re.compile(r"""<iframe\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", re.I)
+_GATE_STYLE_RE = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
+
+
+def _fold(text: str) -> str:
+    return " ".join(text.split())
+
+
+def _source_post(path: Path) -> tuple[tuple[str, str], str] | None:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return None
+    _, front, body = text.split("---", 2)
+    fields = dict(
+        line.split(":", 1) for line in front.splitlines() if ":" in line and line[:1].isalpha()
+    )
+    for name in ("microblog_id", "page_id"):
+        value = fields.get(name, "").strip().strip("\"'")
+        if value:
+            return (name, value), body
+    return None
+
+
+def _code_lines(body: str) -> list[str]:
+    lines, fence = [], None
+    for line in body.splitlines():
+        opener = _FENCE_RE.match(line)
+        if fence is None:
+            if opener:
+                fence = opener.group(1)
+        elif opener and opener.group(1)[0] == fence[0] and len(opener.group(1)) >= len(fence):
+            fence = None
+        elif len(line.strip()) >= 12:
+            lines.append(_fold(line))
+    return lines
+
+
+def _embed_urls(body: str) -> list[str]:
+    urls = [match.group(1) for match in _GATE_IFRAME_SRC_RE.finditer(body)]
+    for match in _GATE_SHORTCODE_RE.finditer(body):
+        name, args = match.group(1).lower(), match.group(2)
+        named = dict(re.findall(r"""(\w+)=["']?([^"'\s]+)""", args))
+        ident = named.get("id") or args.split()[0].strip("\"'")
+        if name in {"x", "tweet"}:
+            urls.append(f"/status/{ident}")
+        elif name == "youtube":
+            urls.append(f"v={ident}")
+        else:
+            urls.append(f"vimeo.com/{ident}")
+    return urls
+
+
+def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
+    """QA3 R2-6 and F16, against the blog's markdown: every fenced code line
+    (12+ chars) is in its post's chunk text, every embedded tweet, video and
+    iframe is one of its post's links, and no <style> rule is chunk text."""
+    texts: dict[tuple[str, str], list[str]] = {}
+    for chunk in blog.get("chunks") or []:
+        key = (
+            ("page_id", str(chunk["page_id"]))
+            if chunk.get("page_id") is not None
+            else ("microblog_id", str(chunk.get("microblog_id")))
+        )
+        texts.setdefault(key, []).append(chunk.get("text") or "")
+    links: dict[tuple[str, str], list[str]] = {}
+    for link in blog.get("links") or []:
+        key = (
+            ("page_id", str(link["page_id"]))
+            if link.get("page_id") is not None
+            else ("microblog_id", str(link.get("microblog_id")))
+        )
+        links.setdefault(key, []).append(link.get("url") or "")
+    code_missing, embeds_missing, css_kept = [], [], []
+    for path in sorted(source_dir.rglob("*.md")):
+        post = _source_post(path)
+        if post is None:
+            continue
+        key, body = post
+        text = _fold("\n".join(texts.get(key, [])))
+        code_missing += [f"{key[1]}: {line[:60]}" for line in _code_lines(body) if line not in text]
+        urls = links.get(key, [])
+        embeds_missing += [
+            f"{key[1]}: {want}" for want in _embed_urls(body) if not any(want in u for u in urls)
+        ]
+        for style in _GATE_STYLE_RE.finditer(body):
+            css_kept += [
+                f"{key[1]}: {line[:60]}"
+                for line in map(_fold, style.group(1).splitlines())
+                if len(line) >= 12 and line in text
+            ]
+    failures = []
+    for label, missing in (
+        ("fenced code lines missing from blog chunk text", code_missing),
+        ("embedded tweets, videos or iframes with no blog link", embeds_missing),
+        ("<style> CSS kept as blog chunk text", css_kept),
+    ):
+        if missing:
+            failures.append(f"{len(missing)} {label}, e.g. {missing[:3]}")
     return failures
 
 

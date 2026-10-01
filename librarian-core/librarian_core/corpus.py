@@ -2322,17 +2322,88 @@ def issue_body_links(
     return records
 
 
+# QA3 F16 and R2-6: the blog strip removed every "<...>", so it ate code
+# that holds a "<" (3,429 chars in 7 posts), "<[text](url)>" links and
+# autolinks, deleted Hugo shortcodes (349, with their tweets, videos and
+# collection names) and iframes without a link, and kept <style> CSS as
+# text. Code is now set aside before the strip and put back verbatim;
+# shortcodes and iframes become a markdown link to what they embed (a
+# collection its name), which the link scan then records; <style> and
+# <script> go with their contents.
+_FENCED_CODE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})[^\n]*\n.*?^[ \t]*\1[`~]*[ \t]*$", re.M | re.S)
+_INLINE_CODE_RE = re.compile(r"(?<!`)`[^`\n]+`(?!`)")
+_CODE_SLOT_RE = re.compile(r"\x00(\d+)\x00")
+_STYLE_SCRIPT_RE = re.compile(r"<(style|script)\b[^>]*>.*?</\1\s*>", re.I | re.S)
+_SHORTCODE_RE = re.compile(r"\{\{<\s*([\w-]+)(.*?)>\}\}", re.S)
+_SHORTCODE_ARG_RE = re.compile(r"""(?:(\w+)=)?(?:"([^"]*)"|'([^']*)'|(\S+))""")
+_IFRAME_RE = re.compile(
+    r"""<iframe\b[^>]*?\bsrc\s*=\s*(["'])(.*?)\1[^>]*>(?:.*?</iframe\s*>)?""", re.I | re.S
+)
+_ANGLE_LINK_RE = re.compile(r"<(\[[^\]\n]*\]\([^)\s]+\))>")
+_AUTOLINK_RE = re.compile(r"<((?:https?|ftp)://[^\s<>]+)>", re.I)
+
+
+def _shortcode_text(match: re.Match[str]) -> str:
+    name = match.group(1).lower()
+    named: dict[str, str] = {}
+    positional: list[str] = []
+    for arg in _SHORTCODE_ARG_RE.finditer(match.group(2)):
+        value = next((v for v in arg.groups()[1:] if v is not None), "")
+        if arg.group(1):
+            named[arg.group(1).lower()] = value
+        else:
+            positional.append(value)
+    ident = named.get("id") or (positional[0] if positional else "")
+    # The label says only what the shortcode says: whose tweet, which site.
+    if name in {"x", "tweet", "twitter"} and named.get("id"):
+        user = named.get("user")
+        url = f"https://twitter.com/{user or 'i/web'}/status/{named['id']}"
+        return f" [{'@' + user if user else 'Tweet'}]({url}) "
+    if name == "youtube" and ident:
+        start = f"&t={named['start']}s" if named.get("start", "").isdigit() else ""
+        return f" [YouTube video](https://www.youtube.com/watch?v={ident}{start}) "
+    if name == "vimeo" and ident:
+        return f" [Vimeo video](https://vimeo.com/{ident}) "
+    # A collection names its photo set; any other shortcode keeps its words.
+    return " " + " ".join([*positional, *named.values()]) + " "
+
+
+def _iframe_text(match: re.Match[str]) -> str:
+    url = match.group(2).strip()
+    host = web_domain(url)
+    return f" [{host}]({url}) " if host else " "
+
+
+def _expand_blog_embeds(body: str) -> str:
+    """Shortcodes and iframes as a link to what they embed (a collection as
+    its name), <style>/<script> gone."""
+    s = _STYLE_SCRIPT_RE.sub(" ", body or "")
+    s = _SHORTCODE_RE.sub(_shortcode_text, s)
+    return _IFRAME_RE.sub(_iframe_text, s)
+
+
 def _blog_embed_text(body: str) -> str:
     """Reduce a native-markdown blog post to embedding-friendly text: inline
     each ``<img>``'s alt text (good photo-search signal), drop any remaining
     HTML tags, normalize whitespace. Markdown links are left intact, matching
-    how issue chunks are embedded."""
-    s = _BLOG_IMG_ALT_RE.sub(lambda m: f" {m.group(2).strip()} ", body or "")
+    how issue chunks are embedded; code is kept verbatim."""
+    code: list[str] = []
+
+    def hold(match: re.Match[str]) -> str:
+        code.append(match.group(0))
+        return f"\x00{len(code) - 1}\x00"
+
+    s = _FENCED_CODE_RE.sub(hold, (body or "").replace("\x00", ""))
+    s = _INLINE_CODE_RE.sub(hold, s)
+    s = _expand_blog_embeds(s)
+    s = _ANGLE_LINK_RE.sub(r"\1", s)
+    s = _AUTOLINK_RE.sub(r"\1", s)
+    s = _BLOG_IMG_ALT_RE.sub(lambda m: f" {m.group(2).strip()} ", s)
     s = _BLOG_IMG_BARE_RE.sub(" ", s)
     s = _HTML_TAG_RE.sub(" ", s)
     s = re.sub(r"[ \t]+", " ", s)
     s = re.sub(r"\n\s*\n+", "\n\n", s)
-    return s.strip()
+    return _CODE_SLOT_RE.sub(lambda m: code[int(m.group(1))], s.strip())
 
 
 def _short_label(text: str, max_words: int = 12) -> str:
@@ -2519,7 +2590,7 @@ def _blog_outbound_links(
             )
         records.append(record)
 
-    for text, link_url in _markdown_html_links(body):
+    for text, link_url in _markdown_html_links(_expand_blog_embeds(body)):
         add(text, link_url)
     return records
 
