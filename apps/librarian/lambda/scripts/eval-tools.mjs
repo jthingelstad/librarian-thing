@@ -614,6 +614,18 @@ await run('get_issue', { number: '182' });
 await run('get_section', { number: '321', section: 'Journal' });
 await run('find_links', { topic: 'ethereum', limit: 5 });
 await run('domain_history', { domain: 'macstories.net' });
+// QA2 links L2-6: an internationalized domain is a host, taken as its
+// punycode, at the door and in the tool.
+{
+  const idn = '\u{1F578}\u{1F48D}.ws';
+  const problems = validateToolArguments('find_links', { domain: idn });
+  const out = await run('find_links', { domain: idn, limit: 1 });
+  check(
+    'KA find_links takes an IDN domain as its punycode',
+    !problems.length && !out?.error && out?.applied?.domain === 'xn--sr8hvo.ws',
+    `${problems.join('; ')} ${out?.error || ''} ${out?.applied?.domain}`
+  );
+}
 // QA2 links L2-4: an id and a source_kind that disagree are refused, not
 // answered with 0 links.
 await run('find_links', { id: 'wt-351', source_kind: 'blog' }, { expectError: true }).then((out) => {

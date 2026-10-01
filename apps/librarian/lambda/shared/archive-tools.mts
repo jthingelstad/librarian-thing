@@ -432,8 +432,10 @@ export function effectiveScope(scope: unknown, requestedSource: string) {
 // The host a domain filter or a link names: no scheme, www, port, path,
 // query, fragment, trailing dot or surrounding space ("github.com:443/x?y"
 // and " GitHub.com. " are github.com; each once returned 0 silently).
+// An internationalized host becomes its punycode (QA2 links L2-6:
+// 🕸💍.ws was refused as "not a host" while xn--ls8h3d.ws was taken).
 export function normalizedDomain(value: unknown) {
-  return String(value || '')
+  const host = String(value || '')
     .trim()
     .toLowerCase()
     .replace(/^(?:[a-z][a-z0-9+.-]*:\/\/)+/, '')
@@ -443,6 +445,12 @@ export function normalizedDomain(value: unknown) {
     .replace(/:\d+$/, '')
     .replace(/\.+$/, '')
     .replace(/^www\./, '');
+  if (!/[^\p{ASCII}]/u.test(host)) return host;
+  try {
+    return new URL(`https://${host}`).hostname.replace(/\.+$/, '').replace(/^www\./, '');
+  } catch {
+    return host;
+  }
 }
 
 // The host a link points at. A stored domain that is not a host gives way
