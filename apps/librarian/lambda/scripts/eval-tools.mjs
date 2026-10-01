@@ -200,6 +200,14 @@ function checkInvariants(tool, args, response) {
     check(label('outputSchema required keys present'), missing.length === 0, missing.join(', '));
     const undeclared = Object.keys(body).filter((key) => !(key in (schema.properties || {})));
     check(label('outputSchema declares every key'), undeclared.length === 0, undeclared.join(', '));
+    // A hint that counts a list ("outgoing_links shows 30 of 48") counts
+    // what was rendered, after the cap's own cuts (QA2 R2-11: wt-1 said 30
+    // and rendered 26).
+    const hintText = String(body.truncated?.hint || '');
+    const miscounted = [...hintText.matchAll(/\b([a-z_]+) shows (?:the \w+ )?(\d+) of (\d+)/g)]
+      .filter((match) => Array.isArray(body[match[1]]) && body[match[1]].length !== Number(match[2]))
+      .map((match) => `${match[0]} (rendered ${body[match[1]].length})`);
+    check(label('hint counts the rendered list'), miscounted.length === 0, miscounted.join('; '));
     checkAccounting(tool, body, label);
   }
 }
@@ -657,6 +665,10 @@ await run('search_archive', {
   const ids = (out?.results || []).map((group) => group.id);
   check('KA search_archive topic reaches an issue filed only at issue level', ids.includes('wt-1'), ids.join(', '));
 });
+// QA2 R2-11: the neighbourhoods the finding saw miscounted; the hint
+// invariant above checks them as rendered.
+await run('source_neighborhood', { id: 'wt-1' });
+await run('source_neighborhood', { id: 'blog-1075885' });
 // QA2 R2-8: the passage window folds like the matcher, so a folded query
 // ("Molkky", a straight apostrophe) still centres the window on the word
 // (old: 64 of 90 accented and 708 of 717 curly-apostrophe windows missed).

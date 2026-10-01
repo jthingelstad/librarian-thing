@@ -3132,13 +3132,15 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   const crossShown = crossUnshown.slice(0, NEIGHBORHOOD_LINKS);
   const id = lensSourceId(bundle.record);
   // Each list says how much of it is here (QA F7: the 30-link caps were
-  // silent; wt-274 links 151 times and showed 30).
+  // silent; wt-274 links 151 times and showed 30). The hint names the
+  // total, not the count shown: the size cap can cut a list further after
+  // this, and omitted counts what it cut (QA2 R2-11).
   const hints = [
     outgoingAll.length > outgoing.length
-      ? `outgoing_links shows ${outgoing.length} of ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
+      ? `outgoing_links is part of all ${outgoingAll.length}, headline picks first; find_links with id ${id} pages through all of them.`
       : '',
     incomingAll.length > incomingShown.length
-      ? `incoming_links shows the newest ${incomingShown.length} of ${incomingAll.length}.`
+      ? `incoming_links is the newest part of all ${incomingAll.length}; truncated.omitted counts the rest.`
       : ''
   ].filter(Boolean);
   return markTruncated(

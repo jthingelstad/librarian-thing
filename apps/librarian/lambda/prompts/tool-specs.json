@@ -1044,7 +1044,7 @@
           },
           "incoming_count": {
             "type": "integer",
-            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows the newest 30."
+            "description": "Every link elsewhere in the archive that points at the source; incoming_links shows up to the newest 30, and truncated.omitted counts the rest."
           },
           "incoming_links": {
             "type": "array"
