@@ -1468,6 +1468,52 @@ def build_corpus(
                     }
                 )
 
+    # An issue is filed under every cluster one of its passages carries. The
+    # issue's own pass keeps its 6 strongest clusters, so 108 issues had a
+    # passage labelled with a cluster the issue was not filed under (AI and
+    # agents 36: the lens found 253 issues, the card counted 217), and
+    # list_content, list_topics and the cards missed them (QA2 L2-7, corpus
+    # half). Filing stays where only the whole issue reaches a cluster's
+    # threshold; search_archive's topic filter reads the issue's filing too.
+    passage_clusters: dict[Any, dict[str, int]] = {}
+    for chunk in chunks:
+        if chunk.get("issue_number") is None:
+            continue
+        labels = passage_clusters.setdefault(chunk["issue_number"], {})
+        for topic in chunk.get("topics") or []:
+            labels[topic] = labels.get(topic, 0) + 1
+    issue_order = {issue["number"]: index for index, issue in enumerate(issues)}
+    for issue in issues:
+        labels = passage_clusters.get(issue["number"], {})
+        added = [
+            topic
+            for topic, _ in sorted(labels.items(), key=lambda item: (-item[1], item[0]))
+            if topic not in issue["topics"]
+        ]
+        if not added:
+            continue
+        issue["topics"].extend(added)
+        publish_date = issue.get("publish_date") or ""
+        for topic in added:
+            entry = topic_index.setdefault(
+                topic,
+                {
+                    "name": topic,
+                    "description": f"Archive material related to {topic.lower()}.",
+                    "first_seen": publish_date,
+                    "last_seen": publish_date,
+                    "issue_numbers": [],
+                    "representative_issues": [],
+                    "related_topics": [],
+                },
+            )
+            entry["issue_numbers"].append(issue["number"])
+            entry["issue_numbers"].sort(key=lambda number: issue_order.get(number, 0))
+            if publish_date and (not entry["first_seen"] or publish_date < entry["first_seen"]):
+                entry["first_seen"] = publish_date
+            if publish_date and publish_date > entry["last_seen"]:
+                entry["last_seen"] = publish_date
+
     for entry in topic_index.values():
         entry["representative_issues"] = entry["issue_numbers"][-8:]
         related = set()

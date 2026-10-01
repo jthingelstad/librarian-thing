@@ -1299,6 +1299,37 @@ await run('search_faq', { query: 'what is the weekly thing' });
   );
 }
 {
+  // QA2 L2-7 (corpus half): an issue is filed under every cluster one of its
+  // passages carries. 108 issues had a labelled passage under a cluster the
+  // issue was not filed under (AI and agents: lens 253, card 217), so the
+  // cards, list_topics and list_content missed them.
+  const wt = corpora.weekly_thing || {};
+  const filed = new Set();
+  for (const cluster of wt.topics || []) {
+    for (const number of cluster.issue_numbers || []) filed.add(`${cluster.name}|${number}`);
+  }
+  const unfiled = new Set();
+  for (const chunk of wt.chunks || []) {
+    if (chunk.issue_number == null) continue;
+    for (const name of chunk.topics || []) {
+      if (!filed.has(`${name}|${chunk.issue_number}`)) unfiled.add(`${name} wt-${chunk.issue_number}`);
+    }
+  }
+  checkCorpus(
+    'KA every cluster a passage carries files its issue',
+    filed.size > 0 && unfiled.size === 0,
+    `${unfiled.size}: ${[...unfiled].slice(0, 4).join(', ')}`
+  );
+  const ai = await run('list_topics', { query: 'AI and agents' });
+  const card = (ai?.clusters || []).find((cluster) => cluster.name === 'AI and agents');
+  const lens = await run('list_content', { source_kind: 'weekly_thing', topic: 'AI and agents', limit: 1 });
+  checkCorpus(
+    'KA the AI and agents card counts every issue list_content files there',
+    card?.issue_count === lens?.total_count,
+    `${card?.issue_count} vs ${lens?.total_count}`
+  );
+}
+{
   // QA2 T2-5: currently_history showed WT22's UTC day (00:00Z on the 7th
   // was the 6th in Chicago); it shows the Chicago day of the corpus stamp.
   const reading = await run('currently_history', { year: 2017, kind: 'reading', limit: 120 });
