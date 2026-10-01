@@ -63,7 +63,8 @@ def main() -> int:
     print(
         f"journal entries matched to blog posts: {stats['matched']}/{stats['entries']} "
         f"({stats['matched_by_permalink']} by permalink, {stats['matched_by_date_text']} by "
-        f"date and text), {stats['unmatched']} unmatched (journal_unmatched)"
+        f"date and text), {stats['unmatched']} unmatched (journal_unmatched); "
+        f"{stats['references']} links to other posts (journal_references)"
     )
     if args.embed:
         add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
