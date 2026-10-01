@@ -1,8 +1,13 @@
 # Plans: the QA follow-ups Jamie asked for as plans (2026-10-01)
 
 Jamie answered the 25 Librarian QA questions on 2026-09-30. Five answers asked
-for a plan rather than a change. This document is those plans. Nothing here
-has been built. Each plan ends with what Jamie needs to decide.
+for a plan rather than a change. This document is those plans. Each plan
+ends with what Jamie needs to decide.
+
+**Status (2026-10-01).** Jamie answered every decision the same day and asked
+for the plans built before the WT352 freeze. Split: the QA session owns the
+MCP/Lambda steps; the plans session built the rest. Each plan's **Status**
+line, just under its heading, says what is done and what is open.
 
 Numbers were measured on 2026-10-01 against the QA corpus (built from `main`
 on 2026-09-30) and the local sibling checkouts, unless a line says otherwise.
@@ -12,17 +17,24 @@ sent, nothing changes the corpus, `shared/retrieval.mts`, WT Builder or AT
 Builder. Lambda-only MCP changes may still ship. Every plan below says which
 side of that line its steps fall on.
 
-| # | Plan | Repos | Size | Earliest |
-|---|------|-------|------|----------|
-| 1 | Weekly site dates in Chicago time (answer 5) | weekly.thingelstad.com | small | after WT352 |
-| 2 | Journal permalinks repaired at the source (answer 2) | librarian-thing, weekly.thingelstad.com | medium | after WT352 |
-| 3 | WT Builder canonical link checks (answer 14) | wt-builder | medium | after WT352 |
-| 4 | Captions for the photos the vision pass missed (answer 17) | librarian-thing | small | filename search: now; captions: after WT352 |
-| 5 | The Weekly Thing audio editions in the corpus (item A) | librarian-thing | small to medium | MCP side: now; freshness: after WT352 |
+| # | Plan | Repos | Size | Status |
+|---|------|-------|------|--------|
+| 1 | Weekly site dates in Chicago time (answer 5) | weekly.thingelstad.com | small | **done** |
+| 2 | Journal permalinks repaired at the source (answer 2) | librarian-thing, weekly.thingelstad.com | medium | **done** |
+| 3 | WT Builder canonical link checks (answer 14) | wt-builder | medium | **done** (Lambda half in MCP 2.3.0) |
+| 4 | Captions for the photos the vision pass missed (answer 17) | librarian-thing | small | steps 2-4 **done**; step 1 open (QA, MCP) |
+| 5 | The Weekly Thing audio editions in the corpus (item A) | librarian-thing | small to medium | steps 1, 5 **done**; steps 2-4 open (QA, MCP) |
 
 ---
 
 ## 1. Weekly site dates in Chicago time
+
+**Status: done 2026-10-01.** Steps 1-4 shipped in weekly.thingelstad.com
+(bfaf0779, c0a43a91): one `SITE_TIME_ZONE`, the topic-page month format, a
+filter test, and `TZ=UTC` in CI. Step 6 shipped in wt-builder 49fe0d9 (the
+three UTC slices now take the Central day). WT22 was stamped exactly 00:00Z,
+so its canonical date moved to noon UTC (3858b69c) to read as Oct 7, the day
+it went out in Chicago.
 
 **What is wrong.** Every date the weekly site shows a reader is computed in
 UTC. Jamie's rule is Chicago time. Four of 352 issues change day as a result:
@@ -83,6 +95,16 @@ GUIDs are number-based, and redirects use the Buttondown slug.
 
 ## 2. Journal permalinks repaired at the source
 
+**Status: done 2026-10-01.** Jamie: repair rows where both URLs answer 200
+when the texts match, and "Repair all 432". 432 links in 89 issues repaired
+in both copies (25e81540 here, weekly 7f1fc2bb; no `audio_*` line touched).
+The map and its read-only confirmation are in `notes/audits/`; the scripts
+are `pipeline/audits/journal_permalink_map.py` and
+`repair_journal_permalinks.py`. `pipeline/corpus/corpus_gate.py` fails the
+deploy if `journal_copy_stats.unmatched` rises above 33. WT Builder's
+`rerender:archive` dry run reads both copies from GitHub: 350 pages, 0 would
+change.
+
 **What is wrong.** 481 Journal permalinks in Weekly Thing issues point at no
 blog post in the corpus. 472 of them are on www.thingelstad.com, and most are
 from 2017 to 2019 (170, 150 and 126). 476 of the 481 have a blog post on the
@@ -135,6 +157,16 @@ posts on the same day) are repaired or left alone.
 ---
 
 ## 3. WT Builder canonical link checks
+
+**Status: built and deployed 2026-10-01 (wt-builder af6bbd1).** Jamie: "Also
+Pinboard, automatic". Steps 1-4 as planned: `src/shared/links.ts`, the link
+check and "Links checked" unit, `canonical_url` on the rendered link only, a
+click-only *Move bookmark…*, and an automatic check on the website and email
+legs that refuses a dead link unless `?force=1` (warn, don't block). See
+wt-builder `docs/status.md`, *Link check*. The Lambda half went to the QA
+session: `linkUrlKey` matches the fixture's 22 cases and 3 pairs, which are
+copied into `apps/librarian/lambda/tests/fixtures/canonical-urls.json`
+(dfb2e4f0, ships in MCP 2.3.0).
 
 **What exists.** WT Builder has a URL *matching* key and no URL *checks*.
 - `linkKey` (`src/server/linked-before.ts:33-45`) drops the scheme, `www.`,
@@ -201,6 +233,15 @@ its URL, and the issue renders the canonical one.
 
 ## 4. Captions for the photos the vision pass missed
 
+**Status: steps 2-4 done 2026-10-01; step 1 open (QA session, Lambda).**
+Jamie: no API key in CI; captions stay a manual run (step 4). Step 2:
+`describe_media.py --retry-errors` described 237 more images (e89d9aef); 68
+can't be fetched at all (48 files.thingelstad.com 404s, 13 expired Buttondown
+URLs, and 7 others). It also found that the pass never collected blog video
+poster stills: 108 of 110 more described (23c43b1a). Every blog media record
+now has a description, and WT has all but those 68. Step 3: rebuilt through
+the corpus gate.
+
 **The premise needs one correction.** The QA finding's "279 photos" is a
 search gap, not a captioning gap. Those photos' file names hold words, like
 `strawpoll297.png` and `wikitribune.png`, that appear nowhere in their
@@ -258,6 +299,13 @@ their own (step 4), or keep the manual run.
 ---
 
 ## 5. The Weekly Thing audio editions in the corpus
+
+**Status: steps 1 and 5 done 2026-10-01; steps 2-4 open (QA session,
+Lambda).** Jamie: Thingy mentions audio only when asked (step 4). Step 1:
+`deploy.yml` runs Sunday-Thursday at 07:30 CT, rebuilding the WT corpus only
+when a site page's `audio_url` differs from the live corpus
+(`corpus_gate.py freshness`). Step 5: the corpus gate's archive checks fail
+when a site page with `audio_url` has no matching `issue.audio`.
 
 **Where it stands.** The corpus already knows about the audio editions,
 partly:
