@@ -65,11 +65,11 @@ from librarian_core.corpus import (  # noqa: E402
     blog_published,
     chicago_day,
 )
-from librarian_core.paths import BLOG_DIR  # noqa: E402
 from librarian_core.embed_tokens import (  # noqa: E402
     COHERE_EMBED_MAX_TOKENS,
     embed_token_count,
 )
+from librarian_core.paths import BLOG_DIR  # noqa: E402
 
 # Journal copies the build could not tie to a blog post, after the
 # 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv)

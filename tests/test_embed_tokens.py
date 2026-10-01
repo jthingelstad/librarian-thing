@@ -113,7 +113,12 @@ class GateReportTests(unittest.TestCase):
             (stage / "blog_corpus.json").write_text(json.dumps({"posts": [], **self.corpus()}))
             argv = ["gate", "--candidate", str(stage), "--site-archive", str(stage / "none")]
             out = StringIO()
-            with unittest.mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}):
+            # The ingest checks read the real blog markdown; they have their
+            # own tests.
+            with (
+                unittest.mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}),
+                unittest.mock.patch.object(gate, "ingest_failures", return_value=[]),
+            ):
                 with redirect_stdout(out):
                     self.assertEqual(gate.main(argv), 0)
         self.assertIn("::warning title=Embed truncation (QA2 I2-4)::", out.getvalue())

@@ -223,9 +223,12 @@ class BlogDateGateTest(unittest.TestCase):
             blog = {"posts": [self.post(publish_date="2020-04-21", post_year=2020)]}
             (stage / "blog_corpus.json").write_text(json.dumps(blog))
             argv = ["gate", "--candidate", str(stage), "--site-archive", str(stage / "none")]
-            self.assertEqual(gate.main(argv), 1)
-            (stage / "blog_corpus.json").write_text(json.dumps({"posts": [self.post()]}))
-            self.assertEqual(gate.main(argv), 0)
+            # The ingest checks read the real blog markdown, which a one-post
+            # candidate cannot match; they have their own tests.
+            with unittest.mock.patch.object(gate, "ingest_failures", return_value=[]):
+                self.assertEqual(gate.main(argv), 1)
+                (stage / "blog_corpus.json").write_text(json.dumps({"posts": [self.post()]}))
+                self.assertEqual(gate.main(argv), 0)
 
 
 class JournalRepairTest(unittest.TestCase):
