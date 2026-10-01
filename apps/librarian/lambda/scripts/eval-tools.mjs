@@ -1138,6 +1138,30 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     unfolded.slice(0, 5).join(', ')
   );
 }
+// QA3 Q14: per-year photo totals overlap by the copies whose blog photo is
+// in another year (5 on the 2026-10-01 corpora), never fall short of the
+// dated photos, and a year listing says so.
+{
+  let dated = 0;
+  for (let offset = 0; offset < 20_000;) {
+    const out = await run('media_search', { limit: 50, offset });
+    dated += (out?.results || []).filter((row) => /^\d{4}/.test(String(row.publish_date || ''))).length;
+    if (!out?.truncated?.next_offset) break;
+    offset = out.truncated.next_offset;
+  }
+  let summed = 0;
+  let noted = true;
+  for (let year = 1990; year <= 2026; year += 1) {
+    const out = await run('media_search', { year, limit: 1 });
+    summed += out?.total_count || 0;
+    if (out?.total_count && !/year totals can sum past/.test(out?.note || '')) noted = false;
+  }
+  check(
+    'KA media_search year totals cover every dated photo, overlapping by a few copies',
+    summed >= dated && summed - dated <= 50 && noted,
+    `${summed} summed vs ${dated} dated; noted ${noted}`
+  );
+}
 // QA3 Q3: a blank or whitespace url, id or domain is refused at the door
 // on every tool that takes one, never read as absent (find_links url:""
 // listed all 36,523 links); find_links and list_content refuse it in

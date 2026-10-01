@@ -205,3 +205,15 @@ test("a photo matches when either copy's description does, and the blog photo sh
   assert.equal(copy.results[0].copy_of, 'blog-5747260');
   assert.deepEqual(copy.results[0].match_reasons, ["description (blog photo): 'agility'"]);
 });
+
+test('per-year photo totals can overlap, and a year listing says so (QA3 Q14)', async () => {
+  primeCorpusCachesForTests(photoFixtures());
+  const all = await ARCHIVE_TOOLS.media_search({}, { scope: 'all' });
+  assert.equal(all.total_count, 1, 'the copy folds into its blog photo');
+  assert.equal(all.note, undefined);
+  const y2026 = await ARCHIVE_TOOLS.media_search({ year: 2026 }, { scope: 'all' });
+  const y2027 = await ARCHIVE_TOOLS.media_search({ year: 2027 }, { scope: 'all' });
+  assert.equal(y2026.total_count + y2027.total_count, 2, 'the photo counts in both years');
+  assert.equal(y2027.results[0].source_id, 'wt-340');
+  assert.match(y2026.note, /year totals can sum past the whole listing/);
+});

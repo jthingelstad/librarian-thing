@@ -4090,6 +4090,15 @@ function photoPartners(wt: Corpus, blog: Corpus | undefined) {
   return index;
 }
 
+// A copy folds into its blog photo only when both are in the window, so a
+// 2019 blog photo that a 2026 issue reprinted counts in each year's
+// listing and once in the whole one: year totals can sum a few past it
+// (10,842 against 10,838 on the round-2 QA corpora). Jamie, 2026-10-01
+// (QA3 Q14): accept the overlap and say so. Undated page photos are in no
+// year.
+const MEDIA_YEAR_NOTE =
+  "A photo counts in its own year, and a Weekly Thing copy also in its issue's year when its blog photo falls outside the window, so year totals can sum past the whole listing; photos on undated pages are in no year.";
+
 const byIssueNumber = (a: unknown, b: unknown) => String(a).localeCompare(String(b), 'en', { numeric: true });
 
 async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}) {
@@ -4180,6 +4189,7 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       ...(words.length ? {} : { listed: 'newest first; no query' }),
       total_count: ordered.length,
       ...(collapsed ? { collapsed_copies: collapsed } : {}),
+      ...(startYear || endYear ? { note: MEDIA_YEAR_NOTE } : {}),
       results: page.shown.map((item) => {
         const refusal = imageUrlRefusal(item.url);
         return {

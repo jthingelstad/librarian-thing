@@ -2382,6 +2382,10 @@
             "type": "array",
             "description": "Newest first. viewable: false and described: false flag a photo view_photo cannot show and one with no vision description."
           },
+          "note": {
+            "type": "string",
+            "description": "With a year filter: per-year totals can overlap (a copy counts in its issue's year when its blog photo is outside the window), and undated page photos are in no year."
+          },
           "truncated": {
             "type": "object",
             "properties": {
@@ -2424,7 +2428,7 @@
           "server_version"
         ]
       },
-      "chat_description": "Search the photo and image index across the archive by what the images show. Every word of query must appear in the photo's alt text, caption, nearby context, vision-model description of its actual content, a blog post's title, or the words in its file name (strawpoll297.png is found by strawpoll) - so visual queries work even when the caption never names what is shown. Words match whole, accents either way, and plurals both ways by default (dog finds dogs, dogs finds dog); match_mode phrase, or a query in double quotes, matches the words together in one field. Omit query to list photos newest first, e.g. one issue's with issue_number. Results are newest first; page with offset. A Weekly Thing photo that reprints a blog photo folds into the blog photo, which is canonical, and the two copies' vision descriptions count as one photo's: a word in either copy's description finds it (match_reasons names the copy); a blog photo's also_in_issues names every issue it ran in, whatever matched, and collapsed_copies counts the folded copies. An issue_number not in the archive is not_found. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
+      "chat_description": "Search the photo and image index across the archive by what the images show. Every word of query must appear in the photo's alt text, caption, nearby context, vision-model description of its actual content, a blog post's title, or the words in its file name (strawpoll297.png is found by strawpoll) - so visual queries work even when the caption never names what is shown. Words match whole, accents either way, and plurals both ways by default (dog finds dogs, dogs finds dog); match_mode phrase, or a query in double quotes, matches the words together in one field. Omit query to list photos newest first, e.g. one issue's with issue_number. Results are newest first; page with offset. A Weekly Thing photo that reprints a blog photo folds into the blog photo, which is canonical, and the two copies' vision descriptions count as one photo's: a word in either copy's description finds it (match_reasons names the copy); a blog photo's also_in_issues names every issue it ran in, whatever matched, and collapsed_copies counts the folded copies. With year or year_range a copy also counts in its issue's year when its blog photo is outside the window, so per-year totals can sum a little past the whole listing (note says so); photos on undated pages are in no year. An issue_number not in the archive is not_found. Use for 'show me photos of X', 'pictures from Y', or any question about images Jamie published. Returns direct image URLs plus the source issue or post. Show them as clickable linked thumbnails: [![alt](image_url)](source_url). Image URLs here are the exception to the no-raw-URL rule: they are meant to be embedded as markdown thumbnails in the answer.",
       "paged_list": "results",
       "doors": {
         "mcp": true,
