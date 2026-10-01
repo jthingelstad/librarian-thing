@@ -227,8 +227,10 @@ interface ToolArgs {
   link_category?: unknown;
   target_resolved?: unknown;
   has_also_in_issues?: unknown;
+  has_linked_from_issues?: unknown;
   has_audio?: unknown;
   also_in_issue?: unknown;
+  linked_from_issue?: unknown;
   microblog_id?: unknown;
   post_id?: unknown;
   page_id?: unknown;
@@ -359,7 +361,8 @@ function citationsFor(chunks: ArchiveRecord[]) {
       audio_url: text(chunk.audio_url),
       episode_number: chunk.episode_number,
       show: text(chunk.show),
-      also_in_issues: Array.isArray(chunk.also_in_issues) ? chunk.also_in_issues : undefined
+      also_in_issues: Array.isArray(chunk.also_in_issues) ? chunk.also_in_issues : undefined,
+      linked_from_issues: Array.isArray(chunk.linked_from_issues) ? chunk.linked_from_issues : undefined
     });
   }
   return citations;
@@ -838,7 +841,8 @@ const SOURCE_LEVEL_FIELDS = [
   'episode_number',
   'show',
   'topics',
-  'also_in_issues'
+  'also_in_issues',
+  'linked_from_issues'
 ] as const;
 
 // A passage longer than its room shows the stretch where the query's words
@@ -1812,6 +1816,7 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
       url: post.url,
       section: post.post_kind === 'page' ? 'Page' : post.post_kind === 'micropost' ? 'Micropost' : 'Blog post',
       also_in_issues: post.also_in_issues,
+      linked_from_issues: post.linked_from_issues,
       domains: post.domains || [],
       ...skimFields(kind, post)
     }));
@@ -1961,6 +1966,7 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     topics: record.topics || [],
     domains: record.domains || [],
     also_in_issues: record.also_in_issues,
+    linked_from_issues: record.linked_from_issues,
     // Skim: enough to decide whether to open the source. key_points and the
     // audio chapters ride get_source only.
     description: record.description,
@@ -2507,6 +2513,10 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       if (!rangeActive && corpus.page_count) stats.page_count = corpus.page_count;
       stats.posts_with_also_in_issues_count = withIssueRefs.length;
       stats.newest_also_in_issues = withIssueRefs[0] || null;
+      // The posts an issue links without reprinting (Jamie, 2026-10-01).
+      const linkedPosts = records.filter((record) => issueList(record.linked_from_issues).length);
+      stats.posts_with_linked_from_issues_count = linkedPosts.length;
+      stats.issues_linking_count = new Set(linkedPosts.flatMap((record) => issueList(record.linked_from_issues))).size;
       stats.issues_referenced_count = issueRows.length;
       stats.also_in_issue_counts = issueRows.slice(0, listLimit);
       if (issueRows.length > listLimit) {
@@ -2555,19 +2565,30 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
 // A filter on also_in_issues is a question about blog posts (the only
 // kind a Weekly Thing issue carries): has_also_in_issues false had
 // returned every issue and episode too, since they have no also_in_issues.
+// linked_from_issues (the issues that link a post without reprinting it)
+// filters the same way, and the two filters combine.
 function alsoInFilter(input: ToolArgs) {
-  const has = boolFilter(input.has_also_in_issues);
-  const raw = input.also_in_issue;
-  const wanted = raw !== undefined && raw !== null && String(raw).trim() ? Number(issueKey(raw)) : null;
-  const active = has !== null || wanted !== null;
+  const wantedIssue = (raw: unknown) =>
+    raw !== undefined && raw !== null && String(raw).trim() ? Number(issueKey(raw)) : null;
+  const lists = [
+    { field: 'also_in_issues', has: boolFilter(input.has_also_in_issues), wanted: wantedIssue(input.also_in_issue) },
+    {
+      field: 'linked_from_issues',
+      has: boolFilter(input.has_linked_from_issues),
+      wanted: wantedIssue(input.linked_from_issue)
+    }
+  ].filter((list) => list.has !== null || list.wanted !== null);
+  const active = lists.length > 0;
   return {
     active,
     keeps(record: ArchiveRecord) {
       if (!active) return true;
       if (record.source_kind !== 'blog') return false;
-      const refs = issueList(record.also_in_issues);
-      if (has !== null && Boolean(refs.length) !== has) return false;
-      return wanted === null || (Number.isFinite(wanted) && refs.includes(wanted));
+      return lists.every(({ field, has, wanted }) => {
+        const refs = issueList(record[field]);
+        if (has !== null && Boolean(refs.length) !== has) return false;
+        return wanted === null || (Number.isFinite(wanted) && refs.includes(wanted));
+      });
     }
   };
 }
@@ -4758,6 +4779,7 @@ const BOOLEAN_ARGS = new Set([
   'case_sensitive',
   'has_also_in_issues',
   'has_audio',
+  'has_linked_from_issues',
   'include_microposts',
   'include_utility',
   'target_resolved'
@@ -4768,7 +4790,7 @@ function echoValue(name: string, key: string, value: unknown) {
   if (key === 'offset') return toolOffset({ offset: value });
   if (key === 'year_range') return parseYearRange(value);
   if (key === 'domain') return normalizedDomain(value);
-  if (key === 'issue_number' || key === 'also_in_issue') {
+  if (key === 'issue_number' || key === 'also_in_issue' || key === 'linked_from_issue') {
     const issue = issueKey(value);
     return /^\d+$/.test(issue) ? Number(issue) : issue;
   }
@@ -4897,7 +4919,7 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
       }
     }
   }
-  for (const key of ['issue_number', 'also_in_issue']) {
+  for (const key of ['issue_number', 'also_in_issue', 'linked_from_issue']) {
     if (!present(args[key])) continue;
     const match = /^#?(\d{1,4})(-[a-z]+)?$/i.exec(String(args[key]).trim());
     if (!match || Number(match[1]) < 1) return `${key} must be an issue number such as 351`;
@@ -4923,8 +4945,13 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     if (present(args.source_kind) && normalizeSourceKind(args.source_kind) !== 'weekly_thing') {
       return 'has_audio asks about Weekly Thing audio editions; it cannot be combined with source_kind blog or podcast';
     }
-    if (boolFilter(args.has_also_in_issues) !== null || present(args.also_in_issue)) {
-      return 'has_audio keeps Weekly Thing issues and also_in_issues keeps blog posts; pass one of them';
+    if (
+      boolFilter(args.has_also_in_issues) !== null ||
+      present(args.also_in_issue) ||
+      boolFilter(args.has_linked_from_issues) !== null ||
+      present(args.linked_from_issue)
+    ) {
+      return 'has_audio keeps Weekly Thing issues and also_in_issues and linked_from_issues keep blog posts; pass one of them';
     }
   }
   return null;

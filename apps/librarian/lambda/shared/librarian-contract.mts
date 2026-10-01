@@ -215,6 +215,7 @@ const retrievePassage = object(
     show: string,
     topics: unknownArray,
     also_in_issues: unknownArray,
+    linked_from_issues: unknownArray,
     section_family: string,
     content_kind: string,
     voice: unknownArray,

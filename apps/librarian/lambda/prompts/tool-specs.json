@@ -201,7 +201,7 @@
   {
     "toolSpec": {
       "name": "list_content",
-      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts/pages, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found. Undated thingelstad.com pages list after every dated source; undated_count says how many are in total_count but in no year.",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts/pages, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, has_linked_from_issues, linked_from_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A blog result's also_in_issues names the issues that reprinted it; linked_from_issues the issues that linked it without reprinting it. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found. Undated thingelstad.com pages list after every dated source; undated_count says how many are in total_count but in no year.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -271,15 +271,23 @@
             },
             "has_also_in_issues": {
               "type": "boolean",
-              "description": "Blog posts: true keeps posts a Weekly Thing issue also carried, false those none did."
+              "description": "Blog posts: true keeps posts a Weekly Thing issue reprinted (its Journal carried the post), false those none did."
+            },
+            "has_linked_from_issues": {
+              "type": "boolean",
+              "description": "Blog posts: true keeps posts a Weekly Thing issue linked without reprinting (a pick, a link in prose, a Journal link to an older post), false those none did."
             },
             "has_audio": {
               "type": "boolean",
-              "description": "Weekly Thing issues: true keeps issues with an audio edition (a spoken reading with chapters, WT180 on), false those without. Keeps issues only; not with source_kind blog or podcast, nor with has_also_in_issues or also_in_issue."
+              "description": "Weekly Thing issues: true keeps issues with an audio edition (a spoken reading with chapters, WT180 on), false those without. Keeps issues only; not with source_kind blog or podcast, nor with the also_in_issues or linked_from_issues filters."
             },
             "also_in_issue": {
               "type": "integer",
-              "description": "Blog posts carried in this Weekly Thing issue number."
+              "description": "Blog posts this Weekly Thing issue number reprinted."
+            },
+            "linked_from_issue": {
+              "type": "integer",
+              "description": "Blog posts this Weekly Thing issue number linked without reprinting."
             },
             "limit": {
               "type": "integer",
@@ -308,7 +316,7 @@
       }
     },
     "mcp": {
-      "description": "List and count sources deterministically: by source_kind, year_range, topic, linked domain, link kind or category, blog posts an issue carried, and issues with an audio edition (has_audio; each carries audio_url and audio_duration_seconds). For how-many and which-ones questions; search_archive is for relevance.",
+      "description": "List and count sources deterministically: by source_kind, year_range, topic, linked domain, link kind or category, blog posts an issue reprinted (also_in_issue) or linked (linked_from_issue), and issues with an audio edition (has_audio; each carries audio_url and audio_duration_seconds). For how-many and which-ones questions; search_archive is for relevance.",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -562,7 +570,7 @@
           },
           "sources": {
             "type": "array",
-            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts; for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
+            "description": "One entry per source kind: item_count, chunk_count, link_count, domain_count, counts_by_year (oldest first), yearly_signals (newest first), top_domains; for the blog, post_count and page_count (undated pages, in item_count and in no year), issues_referenced_count and also_in_issue_counts (issues that reprinted posts), posts_with_linked_from_issues_count and issues_linking_count (issues that linked posts without reprinting them); for the Weekly Thing, audio_editions {count, total_seconds, first, last}; oldest and newest are sources (by the day the year filter reads). On each source, date is the Chicago day it was published (Jamie publishes in Central time); publish_date is the corpus value as stored: a UTC timestamp for an issue, the permalink day for a blog post, the day for an episode."
           }
         },
         "required": ["sources"]
@@ -637,7 +645,7 @@
   {
     "toolSpec": {
       "name": "latest_content",
-      "description": "Return the newest indexed issues/posts/episodes, newest first by the moment each was published (ties by id). Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts that were also featured in Weekly Thing; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Return the newest indexed issues/posts/episodes, newest first by the moment each was published (ties by id). Optional source_kind isolates \"weekly_thing\", \"blog\", or \"podcast\". Optional has_also_in_issues and also_in_issue filter blog posts a Weekly Thing issue reprinted, has_linked_from_issues and linked_from_issue those it linked without reprinting; has_audio keeps Weekly Thing issues with (or without) an audio edition, whose results carry audio_url, audio_duration_seconds and audio_chapters. Use for newest/latest/freshness questions; do not use semantic search for those. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -649,15 +657,23 @@
             },
             "has_also_in_issues": {
               "type": "boolean",
-              "description": "Blog posts: true keeps posts a Weekly Thing issue also carried, false those none did."
+              "description": "Blog posts: true keeps posts a Weekly Thing issue reprinted (its Journal carried the post), false those none did."
+            },
+            "has_linked_from_issues": {
+              "type": "boolean",
+              "description": "Blog posts: true keeps posts a Weekly Thing issue linked without reprinting (a pick, a link in prose, a Journal link to an older post), false those none did."
             },
             "has_audio": {
               "type": "boolean",
-              "description": "Weekly Thing issues: true keeps issues with an audio edition (a spoken reading with chapters, WT180 on), false those without. Keeps issues only; not with source_kind blog or podcast, nor with has_also_in_issues or also_in_issue."
+              "description": "Weekly Thing issues: true keeps issues with an audio edition (a spoken reading with chapters, WT180 on), false those without. Keeps issues only; not with source_kind blog or podcast, nor with the also_in_issues or linked_from_issues filters."
             },
             "also_in_issue": {
               "type": "integer",
-              "description": "Blog posts carried in this Weekly Thing issue number."
+              "description": "Blog posts this Weekly Thing issue number reprinted."
+            },
+            "linked_from_issue": {
+              "type": "integer",
+              "description": "Blog posts this Weekly Thing issue number linked without reprinting."
             },
             "limit": {
               "type": "integer",
@@ -677,7 +693,7 @@
       }
     },
     "mcp": {
-      "description": "The newest issues, posts and episodes, by date. has_also_in_issues and also_in_issue find blog posts an issue carried; has_audio finds issues with an audio edition (audio_url, audio_duration_seconds, audio_chapters).",
+      "description": "The newest issues, posts and episodes, by date. has_also_in_issues and also_in_issue find blog posts an issue reprinted, has_linked_from_issues and linked_from_issue those it only linked; has_audio finds issues with an audio edition (audio_url, audio_duration_seconds, audio_chapters).",
       "outputSchema": {
         "type": "object",
         "properties": {

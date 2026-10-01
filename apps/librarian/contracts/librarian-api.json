@@ -352,6 +352,9 @@
         "also_in_issues": {
           "type": "array"
         },
+        "linked_from_issues": {
+          "type": "array"
+        },
         "section_family": {
           "type": "string"
         },
