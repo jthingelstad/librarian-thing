@@ -47,7 +47,14 @@
 // every earlier year). An unknown voice or malformed calendar is a 400.
 // Passages carry section_family, content_kind, and voice when filtered.
 // The section filter also matches the family (additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.12.0';
+// 4.13.0: /memory actions for the reader's MCP connections - mcp_connections
+// lists the live OAuth connections (one per consent: client name, when it
+// was connected and last used, calls made), mcp_disconnect {connection_id}
+// revokes one (its refresh tokens and live access token), and mcp_log
+// {cursor?, limit?, connection_id?, surface?} pages the reader's MCP and
+// WebMCP tool calls newest first within retention_days. delete_profile
+// now also revokes every MCP connection (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.13.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -216,6 +223,39 @@ const quotaOverview = object({
   turns_today: number,
   tokens_today: number
 });
+const mcpConnection = object(
+  {
+    id: string,
+    client_id: string,
+    client_name: string,
+    connected_at: string,
+    last_authorized_at: string,
+    last_used_at: string,
+    call_count: number,
+    expires_at: string
+  },
+  ['id', 'client_id', 'client_name', 'connected_at']
+);
+const mcpLogEntry = object(
+  {
+    request_id: string,
+    created_at: string,
+    tool_name: string,
+    status: string,
+    duration_ms: number,
+    result_chars: number,
+    response_truncated: boolean,
+    // 'mcp' (an OAuth connection) or 'web' (the WebMCP page tools).
+    surface: string,
+    client_id: string,
+    client_name: string,
+    // Empty on rows recorded before 4.13.0 and on 'web' rows.
+    connection_id: string,
+    arguments: object({}),
+    server_version: string
+  },
+  ['request_id', 'created_at', 'tool_name', 'status', 'surface']
+);
 const chatModel = object({ id: string, label: string, premium: boolean }, ['id', 'label']);
 const accountOverview = object({
   first_seen_at: string,
@@ -294,6 +334,8 @@ export const LIBRARIAN_CONTRACT = {
     quotaOverview,
     chatModel,
     accountOverview,
+    mcpConnection,
+    mcpLogEntry,
     apiResponse: object(apiProperties),
     apiError: object({ error: string, message: string, errorMessage: string, request_id: string, requestId: string }),
     streamBase: object(streamProperties)
@@ -332,7 +374,13 @@ export const LIBRARIAN_CONTRACT = {
       )
     },
     '/feedback': endpoint(),
-    '/memory': endpoint(),
+    '/memory': endpoint({
+      mcp_connections: object({ connections: arrayOf(ref('mcpConnection')), retention_days: number }, ['connections']),
+      mcp_disconnect: object({ ok: boolean, connections: arrayOf(ref('mcpConnection')) }, ['ok']),
+      mcp_log: object({ entries: arrayOf(ref('mcpLogEntry')), next_cursor: string, retention_days: number }, [
+        'entries'
+      ])
+    }),
     // SSE agent loop. The response body is the stream_events sequence below;
     // request fields are listed here so removing one is a contract change.
     '/chat': {

@@ -34,6 +34,9 @@ interface McpAuditItemInput {
   // calls have no OAuth client, so their rows carry neither.
   clientId?: unknown;
   clientName?: unknown;
+  // The connection (OAuth refresh family) behind an 'mcp' call, so the
+  // reader's log can name and filter by it (4.13.0).
+  connectionId?: unknown;
   serverVersion?: unknown;
 }
 
@@ -72,6 +75,7 @@ export function mcpAuditItem({
   surface = 'mcp',
   clientId,
   clientName,
+  connectionId,
   serverVersion
 }: McpAuditItemInput): Record<string, AttributeValue> {
   const subscriber = String(subscriberHash || '').trim();
@@ -93,6 +97,9 @@ export function mcpAuditItem({
   const clientLabel = String(clientName || '')
     .trim()
     .slice(0, 100);
+  const connection = String(connectionId || '')
+    .trim()
+    .slice(0, 80);
   const version = String(serverVersion || '')
     .trim()
     .slice(0, 120);
@@ -135,6 +142,7 @@ export function mcpAuditItem({
     surface: dynamoString(surface),
     ...(client ? { client_id: dynamoString(client) } : {}),
     ...(clientLabel ? { client_name: dynamoString(clientLabel) } : {}),
+    ...(connection ? { connection_id: dynamoString(connection) } : {}),
     ...(version ? { server_version: dynamoString(version) } : {}),
     ttl: dynamoNumber(mcpAuditTtlSeconds(createdAt))
   };

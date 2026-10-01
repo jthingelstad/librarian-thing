@@ -4,6 +4,7 @@ import { htmlResponse, methodAndPath, parseBody } from '../shared/http.mjs';
 import type { LibrarianHttpEvent, LibrarianHttpResponse } from '../shared/http.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { validMagicCode } from '../shared/magic-link.mjs';
+import { recordMcpConnection } from '../shared/mcp-connections.mjs';
 import { clientIdentityHash, sendLoginCodeEmail, verifyPendingCode } from '../shared/magic-login.mjs';
 import type { OauthClient, OauthPending } from '../shared/oauth-store.mjs';
 import {
@@ -507,6 +508,13 @@ async function handleAuthorizationCodeGrant(body: JsonRecord) {
     entitlements: redeemed.entitlements,
     scope: redeemed.scope
   });
+  // The reader's account panel lists this consent as a connection.
+  await recordMcpConnection({
+    subscriberHash: redeemed.subscriberHash,
+    clientId,
+    familyId: tokens.familyId,
+    connectedAt: Math.floor(Date.now() / 1000)
+  });
   logEvent('info', 'oauth_token_issued', {
     client_id: clientId,
     subscriber_hash: redeemed.subscriberHash,
@@ -535,6 +543,13 @@ async function handleRefreshTokenGrant(body: JsonRecord) {
   if (result.status !== 'ok') {
     return tokenError('invalid_grant');
   }
+  // Upsert: a grant made before connection rows existed appears here.
+  await recordMcpConnection({
+    subscriberHash: result.grant.subscriberHash,
+    clientId,
+    familyId: result.tokens.familyId,
+    connectedAt: result.connectedAt
+  });
   logEvent('info', 'oauth_token_issued', {
     client_id: clientId,
     subscriber_hash: result.grant.subscriberHash,

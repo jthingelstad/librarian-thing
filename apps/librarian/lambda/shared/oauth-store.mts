@@ -67,6 +67,10 @@ export interface OauthTokens {
   familyId: string;
 }
 
+// A refresh family is one MCP connection: the consent that started it and
+// every rotation since. Its id is the connection id the account panel lists.
+export const OAUTH_FAMILY_ID_RE = /^[A-Za-z0-9_-]{16,64}$/;
+
 // ---------------------------------------------------------------------------
 // Pure helpers (unit-tested against the dist build)
 // ---------------------------------------------------------------------------
@@ -493,7 +497,7 @@ export async function redeemAuthCode(code: unknown): Promise<RedeemedAuthCode | 
 
 // --- Tokens ----------------------------------------------------------------
 
-async function putAccessToken(accessToken: string, grant: OauthGrant, now: number) {
+async function putAccessToken(accessToken: string, grant: OauthGrant, familyId: string, now: number) {
   const expiresAt = now + ACCESS_TOKEN_TTL_SECONDS;
   await dynamodb.send(
     new PutItemCommand({
@@ -502,6 +506,9 @@ async function putAccessToken(accessToken: string, grant: OauthGrant, now: numbe
         pk: dynamoString(`oauthaccess#${sha256Hex(accessToken)}`),
         sk: dynamoString('access'),
         client_id: dynamoString(grant.clientId),
+        // validateAccessToken refuses the token once this family is gone,
+        // so a disconnect ends the live access token too, not an hour later.
+        family_id: dynamoString(familyId),
         subscriber_hash: dynamoString(grant.subscriberHash),
         entitlements: dynamoString(JSON.stringify(grant.entitlements)),
         scope: dynamoString(grant.scope),
@@ -557,7 +564,7 @@ async function appendFamilyMember(familyId: string, refreshHash: string, now: nu
   );
 }
 
-async function revokeRefreshFamily(familyId: string) {
+export async function revokeRefreshFamily(familyId: string) {
   const table = tableName();
   const familyKey = { pk: dynamoString(`oauthfamily#${familyId}`), sk: dynamoString('family') };
   const familyRow = await getRow(`oauthfamily#${familyId}`, 'family');
@@ -574,20 +581,28 @@ async function revokeRefreshFamily(familyId: string) {
   logEvent('warning', 'oauth_refresh_family_revoked', { family_id: familyId, member_count: members.length });
 }
 
+/** Whether a connection (refresh family) is still live. */
+export async function refreshFamilyActive(familyId: string) {
+  return Boolean(await getRow(`oauthfamily#${familyId}`, 'family'));
+}
+
 export async function mintTokens(grant: OauthGrant, familyId = generateOpaqueId()): Promise<OauthTokens> {
   const now = nowSeconds();
   const accessToken = generateAccessToken();
   const refreshToken = generateRefreshToken();
-  await putAccessToken(accessToken, grant, now);
+  await putAccessToken(accessToken, grant, familyId, now);
   await putRefreshToken(refreshToken, grant, familyId, now);
   await appendFamilyMember(familyId, sha256Hex(refreshToken), now);
   return { accessToken, refreshToken, expiresIn: ACCESS_TOKEN_TTL_SECONDS, scope: grant.scope, familyId };
 }
 
 export type RefreshResult =
-  { status: 'invalid' } | { status: 'reuse_revoked' } | { status: 'ok'; tokens: OauthTokens; grant: OauthGrant };
+  | { status: 'invalid' }
+  | { status: 'reuse_revoked' }
+  // connectedAt: when the family's first consent happened (epoch seconds).
+  | { status: 'ok'; tokens: OauthTokens; grant: OauthGrant; connectedAt: number };
 
-const OAUTH_FAMILY_MAX_SECONDS = 90 * 24 * 60 * 60;
+export const OAUTH_FAMILY_MAX_SECONDS = 90 * 24 * 60 * 60;
 
 export async function redeemRefreshToken(refreshToken: unknown, clientId: string): Promise<RefreshResult> {
   const raw = String(refreshToken || '').trim();
@@ -653,7 +668,7 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
     return { status: 'reuse_revoked' };
   }
   const accessToken = generateAccessToken();
-  await putAccessToken(accessToken, grant, now);
+  await putAccessToken(accessToken, grant, familyId, now);
   await putRefreshToken(newRefreshToken, grant, familyId, now);
   await appendFamilyMember(familyId, sha256Hex(newRefreshToken), now);
   return {
@@ -665,7 +680,8 @@ export async function redeemRefreshToken(refreshToken: unknown, clientId: string
       scope: grant.scope,
       familyId
     },
-    grant
+    grant,
+    connectedAt: familyCreatedAt || now
   };
 }
 
@@ -674,6 +690,9 @@ export interface AccessTokenContext {
   entitlements: string[];
   scope: string;
   clientId: string;
+  // The connection (refresh family) behind the token. Empty only for
+  // tokens minted before 2026-10-01, which lapse within the hour.
+  familyId: string;
 }
 
 export async function validateAccessToken(token: unknown): Promise<AccessTokenContext | null> {
@@ -688,10 +707,15 @@ export async function validateAccessToken(token: unknown): Promise<AccessTokenCo
   const item = await getRow(`oauthaccess#${sha256Hex(raw)}`, 'access');
   if (!item) return null;
   if (itemNumber(item, 'expires_at') < nowSeconds()) return null;
+  // A revoked connection (disconnect, refresh reuse, family expiry) deletes
+  // its family row; the access token dies with it.
+  const familyId = itemString(item, 'family_id');
+  if (familyId && !(await getRow(`oauthfamily#${familyId}`, 'family'))) return null;
   return {
     subscriberHash: itemString(item, 'subscriber_hash'),
     entitlements: itemJsonList(item, 'entitlements'),
     scope: itemString(item, 'scope'),
-    clientId: itemString(item, 'client_id')
+    clientId: itemString(item, 'client_id'),
+    familyId
   };
 }

@@ -176,6 +176,25 @@ Thingy's design tokens, prefill the verified email from a first-party
 CSP `form-action` must keep `https:` - `'self'` alone silently blocks the
 consent redirect in Chromium.
 
+**Connections (contract 4.13.0, 2026-10-01).** A reader's "MCP connection" is
+one refresh family. Every code exchange and refresh upserts a
+`user#<hash>` / `mcpconn#<family id>` row (`shared/mcp-connections.mts`:
+client id and registered name, connected/last authorized; ttl = the family's
+90-day cap), and each audited `/mcp` call stamps `connection_id` on its
+audit row and bumps the row's `last_used_at`/`call_count`. Access tokens carry
+their `family_id`, and `validateAccessToken` refuses one whose family row is
+gone - so disconnecting (`revokeRefreshFamily`) cuts the client off at once,
+not when its access token expires. Tokens minted before 4.13.0 have no
+`family_id` and expire within the hour; grants from then show up as
+connections at their next refresh. The reader-facing doors are `/memory`
+actions on the auth Lambda, always scoped to the caller's own partition:
+`mcp_connections` (live families only), `mcp_disconnect` (`connection_id`;
+404 if not theirs or gone), and `mcp_log` (their own `mcp#` audit rows inside
+the retention window, newest first, filter by `connection_id` or `surface`,
+opaque base64url `next_cursor` that must decode to an `mcp#` sort key).
+`delete_profile` revokes every connection before deleting the profile. Thingy
+renders these in Profile > MCP connections and its request log.
+
 ## Evals gate the deploy
 
 Three layers run in `.github/workflows/deploy.yml` and block it on failure:

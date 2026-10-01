@@ -87,6 +87,7 @@ import {
   serverVersion
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
+import { touchMcpConnection } from '../shared/mcp-connections.mjs';
 import { converseImageFormat, fetchPhotos } from '../shared/photo-view.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
@@ -874,12 +875,14 @@ function archiveToolInvoker({
   subscriberHash,
   requestId,
   surface,
-  clientId
+  clientId,
+  connectionId
 }: {
   subscriberHash: string;
   requestId: string;
   surface: 'mcp' | 'web';
   clientId?: string;
+  connectionId?: string;
 }) {
   // auditAs names the row when a tool serves something other than a
   // tools/call: a resources/read is audited as resource:<kind>.
@@ -907,8 +910,10 @@ function archiveToolInvoker({
           responseMaxChars: MCP_RESULT_MAX_CHARS,
           surface,
           clientId,
+          connectionId,
           serverVersion: serverVersion()
         });
+        if (connectionId) await touchMcpConnection(subscriberHash, connectionId);
       } catch (error) {
         logEvent('warning', 'mcp_tool_audit_failed', {
           request_id: requestId,
@@ -959,11 +964,13 @@ function archiveToolInvoker({
 function viewPhotoInvoker({
   subscriberHash,
   requestId,
-  clientId
+  clientId,
+  connectionId
 }: {
   subscriberHash: string;
   requestId: string;
   clientId: string;
+  connectionId?: string;
 }) {
   return async (urls: unknown) => {
     const toolStart = performance.now();
@@ -991,8 +998,10 @@ function viewPhotoInvoker({
         responseMaxChars: MCP_RESULT_MAX_CHARS,
         surface: 'mcp',
         clientId,
+        connectionId,
         serverVersion: serverVersion()
       });
+      if (connectionId) await touchMcpConnection(subscriberHash, connectionId);
     } catch (error) {
       logEvent('warning', 'mcp_tool_audit_failed', {
         request_id: requestId,
@@ -1199,12 +1208,14 @@ async function handleMcpRoute({
       subscriberHash: grant.subscriberHash,
       requestId: String(summary.request_id || ''),
       surface: 'mcp',
-      clientId: grant.clientId
+      clientId: grant.clientId,
+      connectionId: grant.familyId
     }),
     viewPhoto: viewPhotoInvoker({
       subscriberHash: grant.subscriberHash,
       requestId: String(summary.request_id || ''),
-      clientId: grant.clientId
+      clientId: grant.clientId,
+      connectionId: grant.familyId
     })
   });
   finish(result.statusCode, result.payload);

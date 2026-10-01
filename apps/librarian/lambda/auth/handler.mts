@@ -44,6 +44,13 @@ import {
 } from '../shared/session.mjs';
 import { resolveSessionToken, withClearedSessionCookie, withSessionCookie } from '../shared/web-session.mjs';
 import { authProfile, getUserMemory, recordUserPreferredName } from '../shared/user-memory.mjs';
+import {
+  MCP_LOG_RETENTION_DAYS,
+  disconnectMcpConnection,
+  listMcpConnections,
+  readMcpLog,
+  revokeAllMcpConnections
+} from '../shared/mcp-connections.mjs';
 import { deleteThingyProfile, sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import {
   availableConversationModes,
@@ -549,7 +556,33 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
       entitlementsForSessionPayload(payload)
     );
   }
+  if (action === 'mcp_connections') {
+    const connections = await listMcpConnections(String(payload.sub));
+    return jsonResponse(200, { status: 'ok', connections, retention_days: MCP_LOG_RETENTION_DAYS }, event);
+  }
+  if (action === 'mcp_disconnect') {
+    const result = await disconnectMcpConnection(String(payload.sub), body.connection_id);
+    if (!result.ok) {
+      return result.reason === 'invalid'
+        ? jsonResponse(400, { error: 'That connection id is not valid.' }, event)
+        : jsonResponse(404, { error: 'That connection is already gone.' }, event);
+    }
+    const connections = await listMcpConnections(String(payload.sub));
+    return jsonResponse(200, { status: 'ok', ok: true, connections }, event);
+  }
+  if (action === 'mcp_log') {
+    const page = await readMcpLog(String(payload.sub), {
+      cursor: body.cursor,
+      limit: body.limit,
+      connectionId: body.connection_id,
+      surface: body.surface
+    });
+    return jsonResponse(200, { status: 'ok', ...page }, event);
+  }
   if (action === 'delete_profile') {
+    // MCP connections first: their tokens live outside the reader's
+    // partition, so deleting the partition alone would leave them working.
+    await revokeAllMcpConnections(String(payload.sub));
     const result = await deleteThingyProfile(payload.sub);
     if (!result.ok)
       return jsonResponse(500, { error: result.error || 'Thingy could not delete this profile right now.' }, event);
