@@ -21,7 +21,16 @@ from .corpus import build_corpus
 from .links import unlink
 
 DEFAULT_MODEL = "us.anthropic.claude-sonnet-4-6"
-ENTITY_RE = re.compile(r"\b(?:[A-Z][A-Za-z0-9&'.-]+(?:\s+[A-Z][A-Za-z0-9&'.-]+){0,4})\b")
+# A name may wrap onto the next line but never crosses a blank line, and a
+# clock's AM/PM is never its edge. A Journal time label ("Saturday @ 7:16
+# PM") ran into the next paragraph or label, and QA round 2 (ingest I2-2)
+# found "PM We" (69 issues), "PM Saturday" (54) and 25 more as topics with
+# public pages; a heading also ran across a blank line into the label
+# below it ("Journal Saturday").
+_CLOCK_EDGE_RE = re.compile(r"^(?:AM|PM)\s|\s(?:AM|PM)$", re.I)
+ENTITY_RE = re.compile(
+    r"\b(?:[A-Z][A-Za-z0-9&'.-]+(?:(?:[^\S\n]*\n)?[^\S\n]+[A-Z][A-Za-z0-9&'.-]+|\n[A-Z][A-Za-z0-9&'.-]+){0,4})\b"
+)
 STOP_ENTITIES = {
     # Brand / template tokens (matched lowercase below)
     "weekly thing",
@@ -319,6 +328,7 @@ def heuristic_entities(issue: dict[str, Any], limit: int = 40) -> list[str]:
             len(entity) < 3
             or entity.lower() in STOP_ENTITIES
             or entity.lower().startswith("weekly thing")
+            or _CLOCK_EDGE_RE.search(entity)
         ):
             continue
         if entity.isupper() and len(entity) <= 2:

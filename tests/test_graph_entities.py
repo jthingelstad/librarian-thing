@@ -6,6 +6,10 @@ URL (``?AWSAccessKeyId=AKIA...&Signature=...&Expires=...``) made
 and "following&tab" one of WT193. entity_index also listed an issue twice
 when two of its entities shared a lowercase key ("Micro.blog" and the
 domain micro.blog), in 12 lists.
+
+QA round 2 (ingest I2-2): with links unwrapped, a Journal time label ran
+into the next line or label, so "PM We" (69 issues), "PM Saturday" (54) and
+25 more clock phrases became topics with public pages.
 """
 
 import re
@@ -63,6 +67,19 @@ class GraphEntityTests(unittest.TestCase):
         self.assertEqual(built["entity_index"]["micro.blog"], ["8", "9"])
         self.assertFalse([k for k in built["entity_index"] if re.search(r"akia|awsaccess", k)])
 
+    def test_clock_labels_are_not_entities(self):
+        issue = {
+            "number": 44,
+            "subject": "Weekly Thing 44",
+            "body": "## Journal\n\n[Saturday @ 7:16 PM](https://www.thingelstad.com/2019/x.html)\n\n"
+            "We went to see Brandi Carlile with Tammy.\n\n[Sunday @ 9:02 AM](https://x.example/)\n",
+            "links": [{"text": "Saturday @ 7:16 PM"}, {"text": "Sunday @ 9:02 AM"}],
+        }
+        entities = graph.heuristic_entities(issue)
+        self.assertEqual([e for e in entities if re.search(r"^(AM|PM)\b|\b(AM|PM)$", e)], [])
+        self.assertIn("Brandi Carlile", entities)
+        self.assertIn("Tammy", entities)
+
     def test_real_archive_graph(self):
         corpus = build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         index = graph.build_graph(corpus)["entity_index"]
@@ -71,6 +88,7 @@ class GraphEntityTests(unittest.TestCase):
             for key in index
             if re.search(r"awsaccesskeyid|akia[0-9a-z]{12}|&signature|following&tab", key)
             or key == "expires"
+            or re.search(r"^(am|pm) | (am|pm)$", key)
         ]
         self.assertEqual(junk, [])
         self.assertEqual([k for k, v in index.items() if len(v) != len(set(v))], [])
