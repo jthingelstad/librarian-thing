@@ -4,7 +4,7 @@
 // corpus.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ARCHIVE_TOOLS, siteTopics, siteTopicSlug } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, audioChapterFor, siteTopics, siteTopicSlug } from '../dist/shared/archive-tools.mjs';
 import { yearlyContentSignals } from '../dist/shared/corpus-stats.mjs';
 import { validateToolArguments } from '../dist/shared/mcp.mjs';
 import { blogCategoryPostIds, matchesFilters, primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
@@ -194,6 +194,64 @@ test('source records carry the skim; get_source adds key_points and audio chapte
   const post = await ARCHIVE_TOOLS.get_source({ id: 'blog-77' }, { scope: 'blog' });
   assert.equal(post.source.abstract_source, 'generated', 'a generated abstract says so');
   assert.deepEqual(post.source.categories, ['Coffee']);
+});
+
+test('a section finds its audio chapter: name, then family, then the older chapter name (2.3.0)', () => {
+  const record = {
+    audio_url: 'https://cdn.example/9.mp3',
+    audio_chapters: [
+      { start: 0, title: 'Welcome' },
+      { start: 105.9, title: 'Must Read' },
+      { start: 300.2, title: 'Interview with 612 Series creator Erik Halaas' },
+      { start: 410, title: 'Route and Logs' },
+      { start: 520.6, title: 'Kicking off the 8th annual Team SPS Kubb Tournament with a quick ru…' },
+      { start: 785.5, title: 'Journal' }
+    ]
+  };
+  const at = (...names) => audioChapterFor(record, names);
+  assert.deepEqual(at('Friday', 'Journal'), { url: 'https://cdn.example/9.mp3#t=785', start: 785, chapter: 'Journal' });
+  assert.equal(
+    at('💬 Interview with 612 Series creator Erik Halaas', 'x').start,
+    300,
+    'an emoji prefix does not count'
+  );
+  assert.equal(at('Route & Logs').start, 410, '& reads as and');
+  assert.equal(
+    at('Kicking off the 8th annual Team SPS Kubb Tournament with a quick run through the rules', 'Journal').start,
+    520,
+    'a chapter title cut with … matches its section by prefix'
+  );
+  assert.equal(
+    at('The Revolution in Classic Tetris', 'Featured').chapter,
+    'Must Read',
+    'WT180 called Featured Must Read'
+  );
+  assert.deepEqual(at('Issue', 'Intro'), { url: 'https://cdn.example/9.mp3', start: 0, chapter: 'Welcome' });
+  assert.equal(at('Fortune'), undefined, 'no chapter, no start');
+  assert.equal(audioChapterFor({ audio_chapters: record.audio_chapters }, ['Journal']), undefined, 'no audio url');
+});
+
+test('has_audio keeps Weekly Thing issues with (or without) an audio edition (2.3.0)', async () => {
+  primeCorpusCachesForTests(fixtures());
+  const yes = await ARCHIVE_TOOLS.list_content({ has_audio: true }, { scope: 'all' });
+  assert.deepEqual(
+    yes.results.map((item) => item.id),
+    ['wt-1']
+  );
+  assert.equal(yes.scope, 'weekly_thing');
+  const no = await ARCHIVE_TOOLS.latest_content({ has_audio: 'false' }, { scope: 'all' });
+  assert.ok(
+    no.results.length > 0 && no.results.every((item) => item.source_kind === 'weekly_thing' && !item.audio_url)
+  );
+  const refused = await ARCHIVE_TOOLS.list_content({ has_audio: true, source_kind: 'podcast' }, { scope: 'all' });
+  assert.equal(refused.code, 'bad_request');
+  const stats = await ARCHIVE_TOOLS.corpus_stats({ source_kind: 'weekly_thing' }, { scope: 'all' });
+  assert.deepEqual(stats.sources[0].audio_editions, {
+    count: 1,
+    total_seconds: 600,
+    first: { id: 'wt-1', issue_number: 1, publish_date: stats.sources[0].audio_editions.first.publish_date },
+    last: { id: 'wt-1', issue_number: 1, publish_date: stats.sources[0].audio_editions.last.publish_date }
+  });
 });
 
 test('topic matches a chunk cluster; category resolves to blog post ids', async () => {

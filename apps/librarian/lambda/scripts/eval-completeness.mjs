@@ -386,6 +386,47 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     );
   }
 
+  // 8d. Audio editions (2.3.0): has_audio and corpus_stats audio_editions
+  //     count every issue whose corpus record carries an audio url, the
+  //     true and false lists partition the issues, and every chapter start
+  //     a section read returns is one of that issue's chapters.
+  {
+    const withAudio = bySource.weekly_thing.items.filter((issue) => issue.audio?.url);
+    const seconds = Math.round(withAudio.reduce((sum, issue) => sum + (Number(issue.audio.duration_seconds) || 0), 0));
+    const yes = await call('list_content', { has_audio: true, limit: 1 });
+    const no = await call('list_content', { has_audio: false, limit: 1 });
+    const latest = await call('latest_content', { has_audio: true, limit: 1 });
+    check(
+      'completeness has_audio true counts every audio edition',
+      yes.total_count === withAudio.length && latest.total_count === withAudio.length,
+      `${yes.total_count}/${latest.total_count} vs ${withAudio.length}`
+    );
+    check(
+      'completeness has_audio true and false partition the issues',
+      yes.total_count + no.total_count === bySource.weekly_thing.items.length,
+      `${yes.total_count} + ${no.total_count} vs ${bySource.weekly_thing.items.length}`
+    );
+    const stats = await call('corpus_stats', { source_kind: 'weekly_thing', limit: 1 });
+    const editions = stats.sources?.[0]?.audio_editions || {};
+    check(
+      'completeness corpus_stats audio_editions count and length',
+      editions.count === withAudio.length && editions.total_seconds === seconds,
+      `${editions.count}/${editions.total_seconds} vs ${withAudio.length}/${seconds}`
+    );
+    const wrongStart = [];
+    for (const issue of withAudio.slice(-12)) {
+      const out = await call('get_source', { id: `wt-${issue.number}`, section: 'Journal', format: 'outline' });
+      const audio = out.source?.section_audio;
+      if (!audio) continue;
+      const starts = (issue.audio.chapters || []).map((chapter) => Math.floor(Number(chapter.start)));
+      if (!starts.includes(audio.start) || !String(audio.url).startsWith(issue.audio.url)) {
+        wrongStart.push(`wt-${issue.number} ${audio.start}`);
+      }
+    }
+    check('completeness section_audio starts a real chapter', wrongStart.length === 0, wrongStart.join(', '));
+    counts.audio_editions = withAudio.length;
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

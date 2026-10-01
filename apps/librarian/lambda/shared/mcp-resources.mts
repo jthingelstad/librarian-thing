@@ -106,13 +106,35 @@ export function parseResourceUri(uri: unknown): ParsedResource | null {
 }
 
 /** One source (a get_source result) as a markdown document. */
+// 2537 seconds reads 42:17; an hour or more reads 1:02:05.
+function clockTime(seconds: number) {
+  const whole = Math.round(seconds);
+  const [h, m, s] = [Math.floor(whole / 3600), Math.floor((whole % 3600) / 60), whole % 60];
+  const pad = (value: number) => String(value).padStart(2, '0');
+  return h ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+}
+
+// The audio edition of an issue (an episode's own audio too), with its length.
+function listenLine(source: JsonRecord) {
+  const audio = String(source.audio_url || '');
+  if (!audio) return '';
+  const seconds = Number(source.audio_duration_seconds);
+  const chapters = Array.isArray(source.audio_chapters) ? source.audio_chapters.length : 0;
+  const details = [
+    Number.isFinite(seconds) && seconds > 0 ? clockTime(seconds) : '',
+    chapters ? `${chapters} chapters` : ''
+  ].filter(Boolean);
+  return `- Listen: ${audio}${details.length ? ` (${details.join(', ')})` : ''}`;
+}
+
 export function sourceMarkdown(source: JsonRecord, truncated: JsonRecord = {}) {
   const title = String(source.subject || source.title || source.id || 'Untitled');
   const url = absoluteSourceUrl(source.url);
   const facts = [
     source.id ? `- id: ${source.id}` : '',
     source.publish_date ? `- Published: ${String(source.publish_date).slice(0, 10)}` : '',
-    url ? `- URL: ${url}` : ''
+    url ? `- URL: ${url}` : '',
+    listenLine(source)
   ].filter(Boolean);
   const skim = String(source.description || source.abstract || '').trim();
   const body = String(source.body || '').trim();

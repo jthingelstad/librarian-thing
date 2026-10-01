@@ -318,7 +318,7 @@ async function run(tool, args, options = {}) {
       'year',
       'limit'
     ],
-    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit'],
+    list_content: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit', 'has_audio'],
     find_links: ['topic', 'match_mode', 'case_sensitive', 'source_kind', 'year_range', 'year', 'limit'],
     corpus_stats: ['source_kind', 'year_range', 'year', 'limit'],
     top_references: ['source_kind', 'year_range', 'year', 'limit', 'include_utility'],
@@ -327,6 +327,7 @@ async function run(tool, args, options = {}) {
     get_source: ['id', 'section', 'format'],
     source_neighborhood: ['id', 'limit'],
     find_evidence: ['claims', 'source_kind', 'voice', 'limit'],
+    latest_content: ['source_kind', 'has_also_in_issues', 'also_in_issue', 'has_audio', 'limit', 'offset'],
     on_this_day: ['date', 'window_days', 'year_range', 'year', 'source_kind', 'include_microposts', 'limit_per_year']
   };
   for (const [tool, params] of Object.entries(EXPECTED_PARAMS)) {
@@ -545,6 +546,16 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     JSON.stringify(groups.map((group) => [group.id, group.passages?.length]))
   );
   check('KA search_archive sends each source once', new Set(groups.map((group) => group.id)).size === groups.length);
+  const badAudio = groups.flatMap((group) =>
+    (group.passages || [])
+      .filter((passage) => passage.audio)
+      .filter(
+        ({ audio }) =>
+          !Number.isInteger(audio.start) || (audio.start && !String(audio.url).endsWith(`#t=${audio.start}`))
+      )
+      .map(() => group.id)
+  );
+  check('KA search_archive passage audio starts at its chapter', badAudio.length === 0, badAudio.join(', '));
 });
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
@@ -561,6 +572,29 @@ await run('get_source', { id: 'WT321', section: 'Notable' }).then((out) => {
     (out?.source?.links || []).length > 0 && (out?.source?.links || []).length <= 12
   );
   check('KA get_source section echo', out?.source?.section === 'Notable', String(out?.source?.section));
+});
+// Audio editions (2.3.0): a section read and a passage start their
+// chapter; WT274's Journal chapter starts at 1697 seconds.
+await run('get_source', { id: 'wt-274', section: 'Journal', format: 'outline' }).then((out) => {
+  const audio = out?.source?.section_audio;
+  check(
+    'KA get_source WT274 Journal starts its audio chapter',
+    audio?.start === 1697 && /\.mp3#t=1697$/.test(String(audio?.url)) && audio?.chapter === 'Journal',
+    JSON.stringify(audio)
+  );
+});
+await run('get_source', { id: 'wt-350', section: 'Friday', format: 'outline' }).then((out) => {
+  check(
+    'KA get_source a Journal day falls back to the Journal chapter',
+    out?.source?.section_audio?.chapter === 'Journal',
+    JSON.stringify(out?.source?.section_audio)
+  );
+});
+await run('get_source', { id: 'wt-100', section: 'Journal', format: 'outline' }).then((out) => {
+  check('KA get_source no audio edition, no section_audio', out?.source && !out.source.section_audio);
+});
+await run('list_content', { has_audio: true, source_kind: 'blog' }, { expectError: true }).then((out) => {
+  check('KA has_audio with source_kind blog is refused', out?.code === 'bad_request', String(out?.error));
 });
 await run('get_issue', { number: '182' });
 await run('get_section', { number: '321', section: 'Journal' });
@@ -657,7 +691,10 @@ const REPORT_ONLY = new Set([
   'site_pages',
   'shared_permalink_posts',
   'corpus_items',
-  'corpus_links'
+  'corpus_links',
+  // Grows ten a day while the audio back-catalogue runs; pinned exactly
+  // against its oracle in the completeness layer.
+  'audio_editions'
 ]);
 
 if (updateBaseline) {

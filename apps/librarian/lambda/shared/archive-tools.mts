@@ -182,6 +182,7 @@ interface ToolArgs {
   link_category?: unknown;
   target_resolved?: unknown;
   has_also_in_issues?: unknown;
+  has_audio?: unknown;
   also_in_issue?: unknown;
   microblog_id?: unknown;
   post_id?: unknown;
@@ -774,6 +775,51 @@ function journalCopies(chunk: ArchiveRecord) {
     }));
 }
 
+// WT Builder names an audio edition's chapters after the issue's sections
+// and, since WT350, its articles too (a long title cut with "…"). A
+// passage or a section read carries its chapter's start: its own name
+// first, then its family, then the family's older chapter name (WT180's
+// "Must Read" is Featured). No chapter, no audio block: the source's
+// audio_url still plays the whole issue.
+const CHAPTER_ALIASES: Record<string, string[]> = {
+  intro: ['welcome'],
+  featured: ['must read'],
+  notable: ['recommended links']
+};
+
+function chapterKey(value: unknown) {
+  return headingKey(String(value ?? '').normalize('NFKC'))
+    .replace(/&/g, 'and')
+    .replace(/\s+/g, ' ')
+    .replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+}
+
+export function audioChapterFor(record: ArchiveRecord | undefined, names: unknown[]) {
+  const url = String(record?.audio_url || '');
+  const chapters = (Array.isArray(record?.audio_chapters) ? record.audio_chapters : []) as Array<
+    Record<string, unknown>
+  >;
+  if (!url || !chapters.length) return undefined;
+  const find = (want: string) =>
+    chapters.find((chapter) => {
+      const title = chapterKey(chapter.title);
+      if (title === want) return true;
+      // A title cut with an ellipsis matches the section it starts.
+      const cut = /(?:…|\.\.\.)\s*$/.test(String(chapter.title ?? ''));
+      return cut && title.length >= 10 && want.startsWith(title);
+    });
+  const keys = [...new Set(names.map(chapterKey).filter(Boolean))];
+  const chapter =
+    keys.map(find).find(Boolean) ||
+    keys
+      .flatMap((key) => CHAPTER_ALIASES[key] || [])
+      .map(find)
+      .find(Boolean);
+  const start = Math.floor(Number(chapter?.start));
+  if (!chapter || !Number.isFinite(start) || start < 0) return undefined;
+  return { url: start ? `${url}#t=${start}` : url, start, chapter: String(chapter.title) };
+}
+
 // Ranked passages grouped by their source, in the order each source first
 // ranks: the source's facts and skim once, its passages beneath. MCP 2.0;
 // before it every passage repeated its source and a 450-char skim.
@@ -802,6 +848,8 @@ function groupPassagesBySource(chunks: ArchiveRecord[], records: Map<string, Arc
     }
     const copies = journalCopies(chunk);
     if (copies.length) own.copy_of = copies;
+    const audio = audioChapterFor(record, [chunk.section, chunk.section_family]);
+    if (audio) own.audio = audio;
     group.passages.push(own);
   }
   // The source's facts read first, then what matched in it.
@@ -1068,6 +1116,16 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
   }));
   const wanted = wantedSection.toLowerCase();
   const sectionLinks = wanted ? pickBySection(links, wanted, (link) => link) : links;
+  // A section read starts its chapter of the audio edition: the name asked
+  // for, then the sections it matched, then their families.
+  const sectionNames = new Set(sections.map((section) => headingKey(section.name)));
+  const sectionAudio = wanted
+    ? audioChapterFor(record, [
+        wantedSection,
+        ...sections.map((section) => section.name),
+        ...chunks.filter((chunk) => sectionNames.has(headingKey(chunk.section))).map((chunk) => chunk.section_family)
+      ])
+    : undefined;
   // With a section filter active, the returned source describes THAT
   // section: the section field echoes the filter and domains reflect the
   // filtered links, not the whole issue.
@@ -1081,6 +1139,7 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     key_points: Array.isArray(record.key_points) ? record.key_points.slice(0, 12) : undefined,
     audio_chapters: record.audio_chapters,
     ...(wanted ? { section: wantedSection, domains: sectionDomains } : {}),
+    ...(sectionAudio ? { section_audio: sectionAudio } : {}),
     word_count: sectionSummaries.reduce((sum, section) => sum + section.word_count, 0),
     section_filter: wantedSection || null,
     sections: sectionSummaries,
@@ -2086,6 +2145,20 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     if (kind === 'weekly_thing') {
       stats.issue_count = rangeActive ? records.length : corpus.issue_count || records.length;
       stats.content_item_count = records.length;
+      // The audio editions in the same range: a spoken reading of the issue
+      // with chapters (list_content has_audio lists them).
+      const withAudio = records.filter((record) => record.audio_url);
+      const seconds = withAudio.reduce((sum, record) => sum + (Number(record.audio_duration_seconds) || 0), 0);
+      const edition = (record: ArchiveRecord | undefined) =>
+        record
+          ? { id: lensSourceId(record), issue_number: record.issue_number, publish_date: record.publish_date }
+          : null;
+      stats.audio_editions = {
+        count: withAudio.length,
+        total_seconds: Math.round(seconds),
+        first: edition(withAudio[withAudio.length - 1]),
+        last: edition(withAudio[0])
+      };
     }
     if (kind === 'blog') {
       const withIssueRefs = records.filter((record) => issueList(record.also_in_issues).length);
@@ -2161,21 +2234,41 @@ function alsoInFilter(input: ToolArgs) {
   };
 }
 
+// has_audio asks about The Weekly Thing's audio editions (WT180 on). An
+// episode of the podcast is audio by nature, not an audio edition, so the
+// filter keeps issues only, as also_in_issues keeps blog posts.
+function audioFilter(input: ToolArgs) {
+  const has = boolFilter(input.has_audio);
+  return {
+    active: has !== null,
+    keeps(record: ArchiveRecord) {
+      if (has === null) return true;
+      if (record.source_kind !== 'weekly_thing') return false;
+      return Boolean(record.audio_url) === has;
+    }
+  };
+}
+
 async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const alsoIn = alsoInFilter(input);
+  const audio = audioFilter(input);
   const items = [];
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     if (alsoIn.active && kind !== 'blog') continue;
+    if (audio.active && kind !== 'weekly_thing') continue;
     const corpus = await loadCorpus(kind);
     items.push(...contentRecords(corpus, kind));
   }
-  const ordered = latestByDate(items.filter((item) => alsoIn.keeps(item)));
+  const ordered = latestByDate(items.filter((item) => alsoIn.keeps(item) && audio.keeps(item)));
   const page = pageOf('latest_content', ordered, input);
   return markTruncated(
     {
-      scope: effectiveScope(scope, requestedSource || (alsoIn.active ? 'blog' : '')),
+      scope: effectiveScope(
+        scope,
+        requestedSource || (alsoIn.active ? 'blog' : '') || (audio.active ? 'weekly_thing' : '')
+      ),
       source_kind: requestedSource || null,
       total_count: ordered.length,
       results: page.shown.map((record) => ({ id: lensSourceId(record), ...record }))
@@ -2212,7 +2305,7 @@ function countList(values: unknown[], key: string) {
 function listContentMatchReasons(
   record: ArchiveRecord,
   chunks: ArchiveRecord[],
-  filters: { topic: TopicMatcher; domain: string; linkKind: string; linkCategory: string }
+  filters: { topic: TopicMatcher; domain: string; linkKind: string; linkCategory: string; audio: boolean | null }
 ) {
   const reasons: string[] = [];
   if (!filters.topic.isEmpty) {
@@ -2226,6 +2319,7 @@ function listContentMatchReasons(
   if (filters.domain) reasons.push(`domain: ${filters.domain}`);
   if (filters.linkKind) reasons.push(`link_kind: ${filters.linkKind}`);
   if (filters.linkCategory) reasons.push(`link_category: ${filters.linkCategory}`);
+  if (filters.audio !== null) reasons.push(filters.audio ? 'has an audio edition' : 'no audio edition');
   if (!reasons.length) reasons.push('in requested scope and date range');
   return reasons;
 }
@@ -2248,6 +2342,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
     .trim();
   const targetResolved = boolFilter(input.target_resolved);
   const alsoIn = alsoInFilter(input);
+  const audio = audioFilter(input);
   const aliases = topic ? lensAliases(topic, input.aliases) : [];
   const topicMatcher = compileTopicMatcher(topic, {
     mode: normalizeMatchMode(input.match_mode),
@@ -2258,6 +2353,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     if (alsoIn.active && kind !== 'blog') continue;
+    if (audio.active && kind !== 'weekly_thing') continue;
     const corpus = await loadCorpus(kind);
     const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
     const linksBySource = groupBySourceKey(await linkRecords(kind), sourceKeyFromLink);
@@ -2266,7 +2362,7 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       const year = recordYear(record);
       if (startYear && (!year || year < startYear)) continue;
       if (endYear && (!year || year > endYear)) continue;
-      if (!alsoIn.keeps(record)) continue;
+      if (!alsoIn.keeps(record) || !audio.keeps(record)) continue;
       const key = sourceRecordKey(record);
       const chunks = chunksBySource.get(key) || [];
       const links = linksBySource.get(key) || [];
@@ -2305,13 +2401,22 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       ...compactContentRecord(record),
       link_count: headlineLinks,
       ...(links.length > headlineLinks ? { other_link_count: links.length - headlineLinks } : {}),
-      match_reasons: listContentMatchReasons(record, chunks, { topic: topicMatcher, domain, linkKind, linkCategory }),
+      match_reasons: listContentMatchReasons(record, chunks, {
+        topic: topicMatcher,
+        domain,
+        linkKind,
+        linkCategory,
+        audio: boolFilter(input.has_audio)
+      }),
       matching_sections: sections.slice(0, LIST_MATCHING_SECTIONS)
     };
   });
   return markTruncated(
     {
-      scope: effectiveScope(scope, requestedSource || (alsoIn.active ? 'blog' : '')),
+      scope: effectiveScope(
+        scope,
+        requestedSource || (alsoIn.active ? 'blog' : '') || (audio.active ? 'weekly_thing' : '')
+      ),
       source_kind: requestedSource || null,
       match_mode: topic ? topicMatcher.appliedMode : null,
       ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
@@ -3319,6 +3424,7 @@ async function toolFindEvidence(input: ToolArgs = {}, { scope }: ToolContext = {
     voice: input.voice
   };
   const results = [];
+  const records = await recordsByKey(scopeKinds(scope));
   for (const claim of claims) {
     const hits = (await retrieve(claim, limit, filters)) as ArchiveRecord[];
     results.push({
@@ -3331,11 +3437,13 @@ async function toolFindEvidence(input: ToolArgs = {}, { scope }: ToolContext = {
         const record = objectRecord(passage);
         delete record.topics;
         const copies = journalCopies(chunk);
+        const audio = audioChapterFor(records.get(sourceKeyFromChunk(chunk)), [chunk.section, chunk.section_family]);
         return {
           ...record,
           id: lensSourceId(chunk),
           voices: passageVoices(chunk),
-          ...(copies.length ? { copy_of: copies } : {})
+          ...(copies.length ? { copy_of: copies } : {}),
+          ...(audio ? { audio } : {})
         };
       })
     });
@@ -4071,6 +4179,7 @@ const NOT_ECHOED = new Set(['claims']);
 const BOOLEAN_ARGS = new Set([
   'case_sensitive',
   'has_also_in_issues',
+  'has_audio',
   'include_microposts',
   'include_utility',
   'target_resolved'
@@ -4206,6 +4315,16 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     normalizeSourceKind(args.source_kind) !== 'weekly_thing'
   ) {
     return 'issue_number names a Weekly Thing issue; it cannot be combined with source_kind blog or podcast';
+  }
+  // Two filters that keep different kinds would answer an empty list that
+  // looks like "none": refuse instead.
+  if (boolFilter(args.has_audio) !== null) {
+    if (present(args.source_kind) && normalizeSourceKind(args.source_kind) !== 'weekly_thing') {
+      return 'has_audio asks about Weekly Thing audio editions; it cannot be combined with source_kind blog or podcast';
+    }
+    if (boolFilter(args.has_also_in_issues) !== null || present(args.also_in_issue)) {
+      return 'has_audio keeps Weekly Thing issues and also_in_issues keeps blog posts; pass one of them';
+    }
   }
   return null;
 }

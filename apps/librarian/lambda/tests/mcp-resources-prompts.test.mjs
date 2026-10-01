@@ -325,6 +325,23 @@ test('a source resource says when its body was cut, from the truncated block (2.
   assert.match(cut, /_The body was cut to fit; get_source with id wt-351 and offset 15 reads the rest._$/);
 });
 
+test('a source resource with an audio edition says where to listen and how long (2.3.0)', () => {
+  const source = {
+    id: 'wt-274',
+    subject: 'WT274',
+    audio_url: 'https://files.example/274.mp3',
+    audio_duration_seconds: 2537.4,
+    audio_chapters: [
+      { start: 0, title: 'Welcome' },
+      { start: 1697, title: 'Journal' }
+    ],
+    body: 'Hello.'
+  };
+  assert.match(sourceMarkdown(source), /^- Listen: https:\/\/files\.example\/274\.mp3 \(42:17, 2 chapters\)$/m);
+  assert.match(sourceMarkdown({ ...source, audio_duration_seconds: 3725 }), /\(1:02:05, 2 chapters\)/);
+  assert.doesNotMatch(sourceMarkdown({ id: 'wt-100', subject: 'WT100', body: 'Hi.' }), /Listen/);
+});
+
 test('a source resource reads the whole body, page by page, as text (QA F9)', async () => {
   const calls = [];
   const pages = ['First half. ', 'Second half.'];
