@@ -239,6 +239,19 @@ test('a term the regex compiler cannot take throws MatchInputError, not SyntaxEr
   assert.ok(m('a'.repeat(200)).matches('a'.repeat(200)), 'a 200-character term compiles');
 });
 
+test('a slash whose sides are not names keeps the term whole (QA3 Q10)', () => {
+  for (const term of ['9/11', '24/7', 'OS/2', '1/2', 'I/O', 'A/B', 'and/or', 'w/o', 'w/ coffee', 'he/she']) {
+    assert.deepEqual(aliasesFor(term), [], term);
+  }
+  assert.deepEqual(aliasesFor('Twitter/X'), ['Twitter', 'X'], 'a capital letter beside a name is a name');
+  assert.deepEqual(aliasesFor('X/Twitter'), ['X', 'Twitter']);
+  assert.deepEqual(aliasesFor('TCP/IP'), ['TCP', 'IP']);
+  const nine = m('9/11', { aliases: aliasesFor('9/11') });
+  assert.ok(nine.matches('the 9/11 attacks'));
+  assert.equal(nine.matches('9 of the 11 people'), false, 'never its sides');
+  assert.equal(nine.matches('posted 2019/11/09'), false);
+});
+
 test('a schemeless url keeps its slashes; case_sensitive holds for slash sides (QA2 L2-4)', () => {
   assert.deepEqual(aliasesFor('github.com/jthingelstad'), []);
   assert.deepEqual(aliasesFor('weekly.thingelstad.com/archive/351'), []);

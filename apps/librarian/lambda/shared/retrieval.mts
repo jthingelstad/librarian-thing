@@ -1129,7 +1129,13 @@ export function pageWithoutTwins(ranked: CorpusChunk[], limit: number): CorpusCh
 // journal chunk drops only when EVERY post it copies has its twin in the
 // candidates it is checked against (the returned page, pageWithoutTwins):
 // a chunk that reprints two posts, one of which surfaced on its own, still
-// carries the other one's words (corpus QA, 2026-10-01).
+// carries the other one's words (corpus QA, 2026-10-01). The twin is judged
+// per passage (Jamie, 2026-10-01, QA3 Q7): a post long enough to be split
+// into several passages twins the copy only when its passages on the page
+// show the copy's words (showsCopiedWords), so the post's unrelated
+// paragraph never erases the copy of a different one (WT147's "mini
+// minnebar" copy is mostly in blog-1088967's third passage, not in the
+// "Fully remote" one). A one-passage post is its own passage.
 export function journalPostKeys(chunk: CorpusChunk): string[] {
   return [...new Set(journalPostKeySets(chunk).flat())];
 }
@@ -1288,17 +1294,81 @@ export function withBlogAppearances(blog: Corpus | undefined, weekly: Corpus | u
 }
 
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
-  const blogKeys = new Set<string>();
+  const postsByKey = new Map<string, CorpusChunk[]>();
+  const add = (key: string, candidate: CorpusChunk) => postsByKey.set(key, [...(postsByKey.get(key) || []), candidate]);
   for (const candidate of candidates) {
     if (candidate.source_kind !== 'blog') continue;
-    if (candidate.url) blogKeys.add(`url:${String(candidate.url)}`);
-    if (candidate.microblog_id != null) blogKeys.add(`id:${String(candidate.microblog_id)}`);
+    if (candidate.url) add(`url:${String(candidate.url)}`, candidate);
+    if (candidate.microblog_id != null) add(`id:${String(candidate.microblog_id)}`, candidate);
   }
-  if (!blogKeys.size) return candidates;
+  if (!postsByKey.size) return candidates;
   return candidates.filter((candidate) => {
     if (candidate.source_kind === 'blog') return true;
     const posts = journalPostKeySets(candidate);
     if (!posts.length) return true;
-    return !posts.every((keys) => keys.some((key) => blogKeys.has(key)));
+    return !posts.every((keys) =>
+      showsCopiedWords(candidate, [...new Set(keys.flatMap((key) => postsByKey.get(key) || []))])
+    );
+  });
+}
+
+// Does the page show the words a Journal copy took from one post? A post
+// the loaded blog corpus holds as one passage always does. For a longer
+// post, the copy's share is every run of PASSAGE_RUN_WORDS words (case,
+// punctuation and link targets aside) it has in common with any passage
+// of the post, and the page shows the copy when its passages of that post
+// hold at least half of the share. A copy that shares no run with any
+// passage (a teaser written for the issue) is its own words and stays.
+const PASSAGE_RUN_WORDS = 5;
+const POST_PASSAGES = new WeakMap<Corpus, Map<string, CorpusChunk[]>>();
+
+function postKey(chunk: CorpusChunk) {
+  return chunk.microblog_id != null ? `id:${String(chunk.microblog_id)}` : `url:${String(chunk.url || '')}`;
+}
+
+function postPassages(post: CorpusChunk): CorpusChunk[] {
+  if (!blogCorpusCache) return [post];
+  let passages = POST_PASSAGES.get(blogCorpusCache);
+  if (!passages) {
+    passages = new Map();
+    for (const chunk of blogCorpusCache.chunks || []) {
+      if (chunk.source_kind && chunk.source_kind !== 'blog') continue;
+      const key = postKey(chunk);
+      passages.set(key, [...(passages.get(key) || []), chunk]);
+    }
+    POST_PASSAGES.set(blogCorpusCache, passages);
+  }
+  return passages.get(postKey(post)) || [post];
+}
+
+export function passageRuns(text: unknown) {
+  const words = String(text || '')
+    .toLowerCase()
+    .replace(/\]\([^)]*\)/g, '] ')
+    .replace(/https?:\/\/\S+/g, ' ')
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean);
+  const runs = new Set<string>();
+  for (let index = 0; index + PASSAGE_RUN_WORDS <= words.length; index += 1) {
+    runs.add(words.slice(index, index + PASSAGE_RUN_WORDS).join(' '));
+  }
+  return runs;
+}
+
+function showsCopiedWords(copy: CorpusChunk, shown: CorpusChunk[]) {
+  const byPost = new Map<string, CorpusChunk[]>();
+  for (const passage of shown) byPost.set(postKey(passage), [...(byPost.get(postKey(passage)) || []), passage]);
+  let copyRuns: Set<string> | undefined;
+  const inAny = (texts: unknown[]) => {
+    copyRuns ||= passageRuns(copy.text);
+    const found = new Set<string>();
+    for (const text of texts) for (const run of passageRuns(text)) if (copyRuns.has(run)) found.add(run);
+    return found.size;
+  };
+  return [...byPost.values()].some((onPage) => {
+    const passages = postPassages(onPage[0]);
+    if (passages.length <= 1) return true;
+    const share = inAny(passages.map((passage) => passage.text));
+    return share > 0 && inAny(onPage.map((passage) => passage.text)) * 2 >= share;
   });
 }

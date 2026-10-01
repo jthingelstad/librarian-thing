@@ -829,12 +829,23 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
       });
       if (!stale.length) continue;
       stalePairs += stale.length;
-      const posts = stale.map((copy) => ({
-        id: `blog:${copy.copy_of_microblog_id}:0:x`,
-        source_kind: 'blog',
-        microblog_id: copy.copy_of_microblog_id,
-        url: copy.canonical_url || copy.url
-      }));
+      // Every passage of each post, so the per-passage twin test (QA3 Q7)
+      // cannot be what keeps the copy.
+      const posts = stale.flatMap((copy) => {
+        const passages = (blog.chunks || []).filter(
+          (passage) => String(passage.microblog_id) === String(copy.copy_of_microblog_id)
+        );
+        return passages.length
+          ? passages
+          : [
+              {
+                id: `blog:${copy.copy_of_microblog_id}:0:x`,
+                source_kind: 'blog',
+                microblog_id: copy.copy_of_microblog_id,
+                url: copy.canonical_url || copy.url
+              }
+            ];
+      });
       const kept = retrieval.dedupeJournalTwins?.([chunk, ...posts]).includes(chunk);
       const named = (retrieval.journalCopyPosts?.(chunk) || chunk.journal_posts).filter((copy) => stale.includes(copy));
       if (!kept || named.length) wrong.push(`wt-${chunk.issue_number} "${chunk.section}"${kept ? '' : ' dropped'}`);

@@ -496,6 +496,30 @@ for (const args of [{}, { source_kind: 'weekly_thing' }, { source_kind: 'blog', 
     `${accounted} vs ${links?.total_count}`
   );
 }
+// QA3 Q2: a utility entry matches only its own host (Jamie: "aws.amazon.com
+// and amazon.com are radically different"); wikipedia.org keeps its
+// language editions. Jamie's headline picks on aws.amazon.com (29 on the
+// 2026-10-01 corpora), blog.poap.xyz and code.facebook.com rank again.
+{
+  const ranked = new Map();
+  for (let offset = 0; offset < 10_000;) {
+    const page = await run('top_references', { source_kind: 'weekly_thing', limit: 40, offset });
+    for (const row of page?.top || []) ranked.set(row.domain, row.count);
+    if (!page?.truncated?.next_offset) break;
+    offset = page.truncated.next_offset;
+  }
+  check(
+    'KA top_references ranks aws.amazon.com, blog.poap.xyz and code.facebook.com',
+    (ranked.get('aws.amazon.com') || 0) >= 25 && ranked.has('blog.poap.xyz') && ranked.has('code.facebook.com'),
+    JSON.stringify(['aws.amazon.com', 'blog.poap.xyz', 'code.facebook.com'].map((domain) => ranked.get(domain)))
+  );
+  const utility = [...ranked.keys()].filter(
+    (domain) =>
+      /(?:^|\.)wikipedia\.org$/.test(domain) ||
+      /^(?:(?:m|mobile)\.)?(?:amazon\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com|micro\.blog)$/.test(domain)
+  );
+  check('KA top_references ranks no utility host', utility.length === 0, utility.join(', '));
+}
 {
   const refs = await run('top_references', { source_kind: 'weekly_thing', limit: 10 });
   check(
@@ -670,27 +694,102 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
   check('KA wt-212 is not a copy of blog-1464172', !named.includes('blog-1464172'), named.join(', '));
 }
 // QA2 R2-3: the Journal dedupe works on the returned page. WT147's "mini
-// minnebar" copy ranks 8th; its post ranks about 28th, below the cut, so
-// the copy stays (the pool-wide dedupe dropped it and neither showed). And
-// no page carries a copy beside every post it copies.
+// minnebar" copy ranked 8th and its post about 28th, below the cut, and the
+// pool-wide dedupe dropped the copy so neither showed. The ranks move with
+// the corpus (a re-strip put the copy 9th), so this reads them off the
+// deepest page: at the limit that reaches the first of the pair, one of
+// them shows, and the copy beside its post obeys QA3 Q7 (judged by the
+// post's passages on the page). One rank of slack:
+// neighbours swap between limits (blog-5854492 and blog-5267019). And no
+// page carries a copy beside every post it copies, when each of those
+// posts is one passage (QA3 Q7: a longer post's other passage keeps it).
 {
-  const page = await run('search_archive', { query: 'Minnebar session I attended', limit: 8 });
-  const ids = (page?.results || []).map((group) => group.id);
+  const passagesOf = new Map();
+  for (const chunk of corpora.blog?.chunks || []) {
+    const id = `blog-${chunk.microblog_id}`;
+    passagesOf.set(id, (passagesOf.get(id) || 0) + 1);
+  }
+  const query = 'Minnebar session I attended';
+  const { TOOL_LIMITS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
+  const deepest = TOOL_LIMITS.search_archive.max;
+  const deep = (await run('search_archive', { query, limit: deepest }))?.results || [];
+  const rank = (id) => deep.findIndex((group) => group.id === id) + 1;
+  const ranks = [rank('wt-147'), rank('blog-1088967')].filter(Boolean);
   check(
-    'KA search_archive keeps the wt-147 copy or its post blog-1088967',
-    ids.includes('wt-147') || ids.includes('blog-1088967'),
-    ids.join(', ')
+    `KA search_archive reaches the wt-147 copy or its post blog-1088967 by limit ${deepest}`,
+    ranks.length > 0,
+    deep.map((group) => group.id).join(', ')
   );
+  if (ranks.length) {
+    const limit = Math.min(deepest, Math.min(...ranks) + 1);
+    const ids = ((await run('search_archive', { query, limit }))?.results || []).map((group) => group.id);
+    check(
+      `KA search_archive keeps the wt-147 copy or its post blog-1088967 at limit ${limit}`,
+      ids.includes('wt-147') || ids.includes('blog-1088967'),
+      ids.join(', ')
+    );
+  }
+  // Beside its post the copy stays exactly when the in-process rule keeps
+  // it beside the passages the page shows (chunks found by content).
+  const post = deep.find((group) => group.id === 'blog-1088967');
+  if (post) {
+    const copy = (corpora.weekly_thing?.chunks || []).find(
+      (chunk) => chunk.issue_number === 147 && /person from Turkey/.test(chunk.text || '')
+    );
+    const shownPassages = (corpora.blog?.chunks || []).filter(
+      (chunk) =>
+        String(chunk.microblog_id) === '1088967' &&
+        post.passages.some((passage) => {
+          const opening = String(passage.text || '')
+            .replace(/^[.…\s]+/, '')
+            .slice(0, 60);
+          return opening && String(chunk.text || '').includes(opening);
+        })
+    );
+    const expected = Boolean(copy) && retrieval.dedupeJournalTwins([copy, ...shownPassages]).includes(copy);
+    check(
+      'KA search_archive keeps the wt-147 copy beside blog-1088967 by the passages the page shows',
+      shownPassages.length > 0 && Boolean(rank('wt-147')) === expected,
+      `wt-147 rank ${rank('wt-147')}; ${shownPassages.length} passages shown; rule keeps it ${expected}`
+    );
+  }
   for (const query of ['Minnebar session I attended', 'Tesla software update applied', 'mini Minnebar']) {
     const out = await run('search_archive', { query, limit: 12 });
     const shown = new Set((out?.results || []).map((group) => group.id));
     const twins = (out?.results || []).flatMap((group) =>
       group.passages
-        .filter((passage) => passage.copy_of?.length && passage.copy_of.every((copy) => shown.has(copy.id)))
+        .filter(
+          (passage) =>
+            passage.copy_of?.length &&
+            passage.copy_of.every((copy) => shown.has(copy.id) && (passagesOf.get(copy.id) || 1) === 1)
+        )
         .map(() => group.id)
     );
     check(`KA search_archive "${query}" shows no copy beside all its posts`, twins.length === 0, twins.join(', '));
   }
+}
+// QA3 Q7: Journal twins are judged per passage. WT147's "mini minnebar"
+// copy reprints the event paragraphs of blog-1088967; the post's opening
+// passage (remote work) never drops it, the passage holding the event
+// paragraph does. Chunks are found by content: ids move on a rebuild.
+{
+  const copy = (corpora.weekly_thing?.chunks || []).find(
+    (chunk) => chunk.issue_number === 147 && /person from Turkey/.test(chunk.text || '')
+  );
+  const passages = (corpora.blog?.chunks || []).filter((chunk) => String(chunk.microblog_id) === '1088967');
+  const opening = passages.find((chunk) => /^We have all shifted quickly/.test(chunk.text || ''));
+  const event = passages.find((chunk) => /^The event had a single track/.test(chunk.text || ''));
+  const kept = (post) => Boolean(copy && post && retrieval.dedupeJournalTwins([copy, post]).includes(copy));
+  check(
+    "KA wt-147 copy stays beside blog-1088967's opening passage",
+    Boolean(copy && opening) && kept(opening),
+    `copy ${Boolean(copy)}, passage ${Boolean(opening)}`
+  );
+  check(
+    'KA wt-147 copy drops beside the blog-1088967 passage it reprints',
+    Boolean(copy && event) && !kept(event),
+    `copy ${Boolean(copy)}, passage ${Boolean(event)}`
+  );
 }
 // QA2 R2-2: search_archive section takes the H2 group headings a caller
 // sees in a body. For every ## heading with text under it, the filter
@@ -1053,6 +1152,194 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     .filter((problem) => / to -|from - to/.test(problem));
   check('KA one-sided range messages name one bound', loose.length === 0, loose.slice(0, 3).join('; '));
 }
+// QA3 Q6: search_archive is a ranked top-N; the result says so and names
+// the complete tools ("Minnebar": 12 sources shown of the 130 naming it).
+{
+  const out = await run('search_archive', { query: 'Minnebar', limit: 12 });
+  check(
+    'KA search_archive says it is ranked and points to quote_search and archive_lens',
+    /not every match/.test(out?.note || '') &&
+      /quote_search/.test(out?.note || '') &&
+      /archive_lens/.test(out?.note || ''),
+    String(out?.note)
+  );
+}
+// QA3 Q13: a photo matches when either copy's description does, and the
+// blog photo, which is canonical, is the result. WT340's copy of
+// 0e514b8635.jpg is "an indoor sports facility", its blog photo "an
+// agility dog competition"; "dog sports facility" found neither copy. And
+// with no year filter no Weekly Thing copy of an indexed blog photo that
+// matched on descriptions alone stays unfolded: those words are its blog
+// photo's too. (A copy found by its issue's own context still stays.)
+{
+  const photo = (out) => (out?.results || []).find((row) => /0e514b8635/.test(String(row.image_url)));
+  for (const query of ['dog sports facility', 'sports facility', 'agility dog']) {
+    const hit = photo(await run('media_search', { query, limit: 40 }));
+    check(
+      `KA media_search "${query}" shows the blog photo of 0e514b8635.jpg`,
+      hit?.source_id === 'blog-5747260' && (hit?.also_in_issues || []).includes(340),
+      JSON.stringify(hit?.source_id)
+    );
+  }
+  const blogPhotos = new Set((corpora.blog?.media || []).map((item) => `blog-${item.microblog_id}\0${item.url}`));
+  const unfolded = [];
+  for (const query of ['dog', 'snow', 'coffee', 'family']) {
+    for (let offset = 0; offset < 5000;) {
+      const out = await run('media_search', { query, limit: 50, offset });
+      for (const row of out?.results || []) {
+        const byDescription = (row.match_reasons || []).every((reason) => reason.startsWith('description'));
+        if (row.copy_of && byDescription && blogPhotos.has(`${row.copy_of}\0${row.canonical_url}`)) {
+          unfolded.push(`${query}: ${row.source_id}`);
+        }
+      }
+      if (!out?.truncated?.next_offset) break;
+      offset = out.truncated.next_offset;
+    }
+  }
+  check(
+    'KA media_search folds every description-matched copy of an indexed blog photo',
+    unfolded.length === 0,
+    unfolded.slice(0, 5).join(', ')
+  );
+}
+// QA3 Q14: per-year photo totals overlap by the copies whose blog photo is
+// in another year (5 on the 2026-10-01 corpora), never fall short of the
+// dated photos, and a year listing says so.
+{
+  let dated = 0;
+  for (let offset = 0; offset < 20_000;) {
+    const out = await run('media_search', { limit: 50, offset });
+    dated += (out?.results || []).filter((row) => /^\d{4}/.test(String(row.publish_date || ''))).length;
+    if (!out?.truncated?.next_offset) break;
+    offset = out.truncated.next_offset;
+  }
+  let summed = 0;
+  let noted = true;
+  for (let year = 1990; year <= 2026; year += 1) {
+    const out = await run('media_search', { year, limit: 1 });
+    summed += out?.total_count || 0;
+    if (out?.total_count && !/year totals can sum past/.test(out?.note || '')) noted = false;
+  }
+  check(
+    'KA media_search year totals cover every dated photo, overlapping by a few copies',
+    summed >= dated && summed - dated <= 50 && noted,
+    `${summed} summed vs ${dated} dated; noted ${noted}`
+  );
+}
+// QA3 Q17: within a day the issue, the episode, then blog posts by their
+// Chicago time of day (microposts after the other posts). Posts on a day
+// used to run in corpus order: 1,420 of the 2,511 days with two or more
+// posts of a kind were out of time order on the 2026-10-01 corpora.
+{
+  const instants = new Map(
+    (corpora.blog?.posts || []).map((post) => [`blog-${post.microblog_id}`, Date.parse(post.published || '')])
+  );
+  const byTime = (ids) => [...ids].sort((a, b) => instants.get(a) - instants.get(b));
+  const chicagoDay = (stamp) =>
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' }).format(new Date(stamp));
+  for (const date of ['2021-08-06', '2023-03-04']) {
+    const year = Number(date.slice(0, 4));
+    const out = await run('on_this_day', { date, year_range: [year, year], limit_per_year: 20 });
+    const items = out?.years?.[0]?.items || [];
+    const posts = items.filter((item) => item.source_kind === 'blog' && !item.micropost).map((item) => item.id);
+    // The oracle: every post Jamie published that Chicago day, by instant.
+    const oracle = byTime(
+      (corpora.blog?.posts || [])
+        .filter((post) => post.post_kind === 'post' && post.published)
+        .filter((post) => chicagoDay(post.published) === date)
+        .map((post) => `blog-${post.microblog_id}`)
+    );
+    check(
+      `KA on_this_day ${date} runs its ${oracle.length} blog posts by time of day`,
+      oracle.length >= 5 && JSON.stringify(posts) === JSON.stringify(oracle),
+      `${posts.join(' ')} vs ${oracle.join(' ')}`
+    );
+  }
+  const outOfOrder = [];
+  for (let month = 1; month <= 12; month += 1) {
+    for (let day = 1; day <= new Date(Date.UTC(2024, month, 0)).getUTCDate(); day += 1) {
+      const date = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const out = await run('on_this_day', { date, limit_per_year: 20 });
+      for (const row of out?.years || []) {
+        for (const micropost of [false, true]) {
+          const ids = (row.items || [])
+            .filter((item) => item.source_kind === 'blog' && Boolean(item.micropost) === micropost)
+            .map((item) => item.id);
+          if (JSON.stringify(ids) !== JSON.stringify(byTime(ids))) outOfOrder.push(`${row.year}-${date}`);
+        }
+      }
+    }
+  }
+  check(
+    'KA on_this_day lists every day of blog posts by time of day',
+    outOfOrder.length === 0,
+    outOfOrder.slice(0, 5).join(', ')
+  );
+}
+// QA3 Q20: related means at least 3 shared distinctive terms. One shared
+// 5+-letter word was enough, so related_count was nearly the archive
+// (site-members 10,920, wt-351 10,919, blog-1381396 7,597 on the 2026-10-01
+// corpora); now it is a list worth counting, and Hildene sits beside the
+// Vermont trip's Day 7 log.
+{
+  for (const [id, was] of [
+    ['site-members', 10_920],
+    ['wt-351', 10_919],
+    ['blog-1381396', 7_597]
+  ]) {
+    const out = await run('source_neighborhood', { id, limit: 20 });
+    check(
+      `KA source_neighborhood ${id} related_count is a fraction of the ${was} it was`,
+      out?.related_count > 0 && out.related_count < was / 5,
+      String(out?.related_count)
+    );
+  }
+  const hildene = await run('source_neighborhood', { id: 'blog-1381396', limit: 8 });
+  const ids = (hildene?.related_sources || []).map((item) => item.id);
+  check(
+    'KA source_neighborhood blog-1381396 relates the Vermont Day 7 log',
+    ids.includes('blog-1380702'),
+    ids.join(', ')
+  );
+  const issues = await run('source_neighborhood', { id: 'wt-200' }, { scope: 'weekly_thing' });
+  check(
+    'KA source_neighborhood wt-200 has related issues in the Weekly Thing scope alone',
+    issues?.related_count > 0 && issues.related_count < 350,
+    String(issues?.related_count)
+  );
+}
+// QA3 Q3: a blank or whitespace url, id or domain is refused at the door
+// on every tool that takes one, never read as absent (find_links url:""
+// listed all 36,523 links); find_links and list_content refuse it in
+// process too.
+{
+  const widened = [];
+  for (const tool of Object.keys(ARCHIVE_TOOLS)) {
+    const properties = mcpToolDeclarations([tool])[0]?.inputSchema?.properties || {};
+    for (const key of ['url', 'id', 'domain']) {
+      if (!(key in properties)) continue;
+      for (const value of ['', '   ']) {
+        if (!validateToolArguments(tool, { [key]: value }).some((problem) => problem.startsWith(`${key} is`))) {
+          widened.push(`${tool}.${key}=${JSON.stringify(value)}`);
+        }
+      }
+    }
+  }
+  check('KA a blank url, id or domain is refused at the door', widened.length === 0, widened.join(', '));
+  for (const [tool, args] of [
+    ['find_links', { url: '' }],
+    ['find_links', { id: '  ' }],
+    ['find_links', { domain: '' }],
+    ['list_content', { domain: ' ' }]
+  ]) {
+    const out = await run(tool, args, { expectError: true });
+    check(
+      `KA ${tool} ${JSON.stringify(args)} is bad_request`,
+      out?.code === 'bad_request',
+      JSON.stringify(out).slice(0, 120)
+    );
+  }
+}
 // QA2 L2-9 / L2-10: an offset past the end says so for every pageOf tool,
 // and a reversed year_range is refused in-process as at the door.
 for (const [tool, args] of [
@@ -1177,6 +1464,41 @@ await run('currently_history', { kind: 'reading', limit: 5 });
     'KA case_sensitive holds for slash sides',
     goRust?.total_count < goRustCi?.total_count && goRust?.applied?.case_sensitive === true,
     `${goRust?.total_count} vs ${goRustCi?.total_count}`
+  );
+}
+// QA3 Q10: a slash whose sides are not names keeps the term whole. 9/11
+// matched 758 sources as "9" or "11"; now list_content lists exactly the
+// sources whose words (link targets aside) say 9/11 (13 on the 2026-10-01
+// corpora). Twitter/X still names either.
+{
+  const strip = (text) =>
+    String(text || '')
+      .replace(/\]\([^)]*\)/g, ']')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/\bwww\.\S+/g, ' ');
+  const says = (text) => /(?<![\p{L}\p{N}/])9\s*\/\s*11(?![\p{L}\p{N}/])/u.test(strip(text));
+  const oracle = new Set();
+  for (const issue of corpora.weekly_thing?.issues || []) if (says(issue.body)) oracle.add(`wt-${issue.number}`);
+  for (const chunk of corpora.blog?.chunks || []) {
+    if (says(chunk.text)) oracle.add(chunk.page_id != null ? `page-${chunk.page_id}` : `blog-${chunk.microblog_id}`);
+  }
+  for (const chunk of corpora.podcast?.chunks || []) if (says(chunk.text)) oracle.add(`ep-${chunk.episode_number}`);
+  const nine = await run('list_content', { topic: '9/11', limit: 40 });
+  const listed = (nine?.results || []).map((row) => row.id).sort();
+  check(
+    'KA 9/11 lists exactly the sources that say 9/11',
+    oracle.size > 0 && JSON.stringify(listed) === JSON.stringify([...oracle].sort()) && !nine?.aliases_checked,
+    `${listed.length} listed vs ${oracle.size}: ${JSON.stringify(nine?.aliases_checked)}`
+  );
+  for (const term of ['24/7', 'I/O', 'and/or', 'w/o']) {
+    const out = await run('list_content', { topic: term, limit: 1 });
+    check(`KA ${term} keeps its slash`, !out?.aliases_checked && out?.total_count < 20, `${out?.total_count}`);
+  }
+  const tx = await run('list_content', { topic: 'Twitter/X', limit: 1 });
+  check(
+    'KA Twitter/X still names either',
+    JSON.stringify(tx?.aliases_checked) === JSON.stringify(['Twitter/X', 'Twitter', 'X']) && tx?.total_count > 300,
+    `${JSON.stringify(tx?.aliases_checked)} ${tx?.total_count}`
   );
 }
 // QA2 L2-5: list_topics and currently_history use the alias table and the

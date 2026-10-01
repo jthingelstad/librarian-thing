@@ -294,6 +294,13 @@ function checkValue(path: string, value: unknown, schema: ArgSchema, problems: s
   }
 }
 
+// A blank filter read as an absent one and widened to everything:
+// find_links url:"", id:"  " or domain:"" listed all 36,523 links, and
+// applied said nothing (QA2 links residue; Jamie, 2026-10-01, QA3 Q3:
+// refuse). Every argument that names a source, link, host or subject is
+// refused blank or whitespace; a required one is "required".
+const BLANK_REFUSED = new Set(['id', 'url', 'domain', 'topic', 'section', 'section_family', 'category', 'theme']);
+
 export function validateToolArguments(name: string, args: unknown): string[] {
   if (args !== undefined && (args === null || typeof args !== 'object' || Array.isArray(args))) {
     return ['arguments must be an object'];
@@ -305,11 +312,16 @@ export function validateToolArguments(name: string, args: unknown): string[] {
   for (const key of Object.keys(record)) {
     if (!(key in properties)) problems.push(`unknown argument "${key}"`);
   }
+  const blank = (value: unknown) => typeof value === 'string' && !value.trim();
   for (const key of schema.required || []) {
-    if (record[key] === undefined || record[key] === null || record[key] === '') problems.push(`${key} is required`);
+    if (record[key] === undefined || record[key] === null || blank(record[key])) problems.push(`${key} is required`);
   }
   for (const [key, value] of Object.entries(record)) {
     if (key in properties) checkValue(key, value, properties[key], problems);
+    if (!(key in properties) || !BLANK_REFUSED.has(key) || (schema.required || []).includes(key)) continue;
+    if (blank(value) || (Array.isArray(value) && value.some(blank))) {
+      problems.push(`${key} is blank: give it a value, or leave ${key} out to apply no ${key} filter`);
+    }
   }
   for (const key of ['year_range', 'year_a', 'year_b']) {
     const range = record[key];
