@@ -2616,6 +2616,12 @@ def build_blog_corpus(
                 "source_kind": "blog",
                 "domains": post_domains,
             }
+            # The post's own timestamp, beside the permalink's date: the
+            # Lambda shows each day in Chicago time, and 121 permalinks name
+            # another day (the UTC day, or a permalink shared by several
+            # posts, "2006/09/09/000000.html").
+            if post_input["published"]:
+                chunk["published"] = post_input["published"]
             if also_in_issues:
                 chunk["also_in_issues"] = also_in_issues
             chunks.append(chunk)
