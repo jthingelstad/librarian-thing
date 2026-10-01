@@ -1,4 +1,19 @@
 {
+ "http://files.thingelstad.com/posts/2003/Blue-Dog-Mural-2.jpg": {
+  "described_at": "2026-10-01T10:42:00Z",
+  "description": "A bright, colorful children's room features a large red car mural on a green hillside backdrop. An orange ceiling, bookshelf, red ladder, and potted plants create a vibrant, playful indoor environment.",
+  "model": "claude-haiku-4-5"
+ },
+ "http://files.thingelstad.com/posts/2024/2024-Flight-Simulator-Tyler-Landing.jpg": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "Two pilots sit in a commercial aircraft cockpit during flight, with illuminated instrument panels visible and a landscape view through the windscreen below.",
+  "model": "claude-haiku-4-5"
+ },
+ "http://files.thingelstad.com/posts/2024/2024-Flight-Simulator-Tyler-Takeoff.jpg": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "Two people sit in a flight simulator cockpit with illuminated instrument panels and displays showing a runway view on the windscreen above.",
+  "model": "claude-haiku-4-5"
+ },
  "http://files.thingelstad.com/random/2023/beautiful-things-1200.jpg": {
   "described_at": "2026-10-01T10:11:58Z",
   "description": "A wooden desk displays vintage electronics including a Macintosh Classic computer, iPod, and toy car, alongside a Zelda shield replica, photographs, and a desk lamp in an indoor room setting.",
@@ -4487,6 +4502,16 @@
   "description": "A circular display showing colorful particles of varying sizes arranged on a dark background, labeled \"SPS TechConnect 2025\" at the bottom.",
   "model": "claude-haiku-4-5"
  },
+ "https://cdn.uploads.micro.blog/890/2026/frames/1729018-0-e4880d.jpg": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "A driveway camera captures a park scene with a play structure, walking path, and trees on April 17, 2026 at 4:04 AM. A dog is visible on the grass near the sidewalk.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://cdn.uploads.micro.blog/890/2026/frames/1729140-0-3f9885.jpg": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "Interior view of a 3D printer build platform showing a printed object with a textured surface under bright lighting. A Bambu Lab printer is visible at the top of the image.",
+  "model": "claude-haiku-4-5"
+ },
  "https://files.thingelstad.com/posts/2005/digital-photography/figure1.png": {
   "described_at": "2026-09-05T10:14:05Z",
   "description": "A line graph titled \"Storage Size of Digital Photos over Time\" displays the accumulation of photo storage in gigabytes from June 1999 to October 2005, showing growth from near zero to approximately 45 GB.",
@@ -4540,6 +4565,136 @@
  "https://files.thingelstad.com/posts/2005/digital-photography/megapixels.png": {
   "described_at": "2026-09-05T10:14:06Z",
   "description": "A line graph displays the distribution of digital camera megapixels among cameras, showing a bell curve peaking at 4 megapixels with approximately 30% of cameras, ranging from 1 to 7 megapixels on the horizontal axis.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2007/2007-chipai-fishing-trip.jpg": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "A photograph taken from a boat on calm water during a 2007 trip to Chipai, showing a shoreline with forested areas under a partly cloudy sky.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2007/dow-jones-minneapolis-disco-party-2007.jpg": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A band performs on stage under blue and purple concert lighting. Multiple musicians are visible playing instruments including guitar and singing into microphones, with a drummer in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/Winnipeg-Folk-Festival-2008.jpg": {
+  "described_at": "2026-10-01T10:42:07Z",
+  "description": "Five children stand in a grassy park at the Winnipeg Folk Festival 2008, holding popsicles. Trees and other festival attendees are visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/bigcharts-on-cnbc-day-1.jpg": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A man in a dark suit stands in a CNBC television studio presenting financial data displayed on monitors behind him, with stock market information and charts visible on screen.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/bigcharts-on-cnbc-day-2.jpg": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A man in a dark suit and tie appears on a financial news broadcast with stock market data and ticker symbols visible at the bottom of the screen, including references to BAX, CNBC, and various numerical values.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/c-lazy-u-horse-run.jpg": {
+  "described_at": "2026-10-01T10:42:08Z",
+  "description": "A herd of horses of various colors trots down a dirt road past wooden fencing at what appears to be a ranch, with forested mountains visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/dons-70th-birthday-memory-video-outtakes.jpg": {
+  "described_at": "2026-10-01T10:42:08Z",
+  "description": "A woman with blonde layered hair wearing a black sleeveless top and a necklace is shown smiling against a black background in what appears to be a video or interview still.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/dons-70th-birthday-memory-video.jpg": {
+  "described_at": "2026-10-01T10:42:07Z",
+  "description": "Two people pose together at an indoor event. A woman wears a white sleeveless top with red trim, and a man wears a checkered shirt and glasses. Other people are visible in the blurred background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/dons-70th-birthday.jpg": {
+  "described_at": "2026-10-01T10:42:08Z",
+  "description": "Two men stand in front of a residential house with a lawn. Both wear button-up shirts and glasses. The setting appears to be a suburban home exterior during daytime.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/driveway-paved.jpg": {
+  "described_at": "2026-10-01T10:42:07Z",
+  "description": "A residential driveway with a house, parked vehicles, and a yellow construction vehicle. Dust clouds are visible near landscaping work in progress on the lawn.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/iron-chef-eggs.jpg": {
+  "described_at": "2026-10-01T10:42:07Z",
+  "description": "A group of people gathered in a kitchen classroom around a central counter with cooking equipment and utensils hanging on the walls above. The setting appears to be a culinary or cooking instruction space with blue and navy colored furniture.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/iron-chef-minnetonka-yogurt.jpg": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A person wearing a white shirt with text is leaning toward a device on a wall in an indoor setting with beige and green colored walls.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/jamie-marketwatch-twitter-farewell.png": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A cartoon illustration of a man in a dark blue shirt appears on a light blue background next to the Twitter logo. Text reads \"59 Jamie Twitters: As interpreted by his colleagues and friends.\"",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/lazy-river.png": {
+  "described_at": "2026-10-01T10:42:08Z",
+  "description": "A resort swimming pool with several swimmers in clear blue water, surrounded by palm trees, lounge chairs, and multi-story hotel buildings under a bright sky.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/redwood-highway-timelapse.jpg": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "A vehicle travels on a paved road through a dense forest of tall evergreen trees. Yellow center line markings and a warning sign are visible along the tree-lined highway.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2008/windows-2000-launch-demo-with-marketwatch-and-bigcharts.jpg": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "A person stands at a control desk in front of a large wall of monitors displaying multiple screens in what appears to be a broadcast or security control room.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2009/Mazie%20on%20her%20Skuut.jpg": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "A child rides a balance bike on an asphalt path lined with brush and debris. The child wears a purple jacket and striped beanie while operating the tan and black two-wheeled bike.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2009/kawishiwi-falls.jpg": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "A series of white water rapids cascade over dark rocky boulders in a fast-flowing river, surrounded by green vegetation and trees along the banks.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2011/20110630-064429.jpg": {
+  "described_at": "2026-10-01T10:41:59Z",
+  "description": "A sump pump system installed in a concrete basin beneath a residential foundation, actively pumping water out of the pit during drainage operations.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2011/olson-8-ping-pong-9-up.png": {
+  "described_at": "2026-10-01T10:41:59Z",
+  "description": "A sequence of nine photos showing people playing table tennis in an indoor gymnasium or recreation room with wooden walls and exposed ceiling beams.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2020/family-oddball-match-round-3.jpg": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A video game screenshot showing two characters named Jamie and Tammy in a colorful indoor arena with pink and purple striped walls. The round counter displays 0-0 team scores, with a timestamp of 05:56.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2021/QuantumMirror.jpg": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "Jellyfish illuminated by purple and blue LED lighting in what appears to be an aquarium exhibit, creating a bioluminescent tunnel effect with the organisms densely packed and backlit.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2021/fifty-puzzle.jpg": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "A colorful hand-drawn map celebrating a 50th anniversary features various scenes including forests, towns, water activities, and celebrations across land and sea environments with text labels like \"Town Rules,\" \"Party,\" and \"Fifty.\"",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2024/Cannon-Lake-Flood-2024.jpg": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A residential neighborhood is flooded with murky brown water, submerging streets and lawns while several houses with siding remain partially visible above the floodwater on an overcast day.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2024/Lake Cam-20240624-Raccoons.jpg": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "Early morning lakeside scene with a beached rowboat in foreground, moored pontoon boat in shallow water, surrounded by reeds and overhanging trees. Timestamp shows June 24, 2024 at 4:53 AM.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://files.thingelstad.com/posts/2024/canoe-bay-garden-walk.jpg": {
+  "described_at": "2026-10-01T10:42:10Z",
+  "description": "A gravel garden pathway lined with yellow and orange flowers and green foliage leads toward a black metal gate in a wooded garden setting.",
   "model": "claude-haiku-4-5"
  },
  "https://files.thingelstad.com/projects/612-poap-challenge/612POAP.png": {
@@ -24148,6 +24303,11 @@
   "description": "A Quicksilver application window displays a cartoon character wearing glasses with feathers on the left side, labeled \"Rails API.app\" with the file path \"/Applications/Rails API.app\" below.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/234258f5b2.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A powerful waterfall cascades down a rocky cliff surrounded by dense coniferous forest. A rushing stream flows over boulders in the foreground beneath the falls.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/235b3d7820.jpg": {
   "described_at": "2026-09-05T10:14:37Z",
   "description": "A man in a blue shirt plays cornhole in a sunny park, tossing a bean bag toward a blue bucket target on a grass lawn surrounded by trees.",
@@ -25473,6 +25633,11 @@
   "description": "A rocket with circular windows is depicted against a brick wall with sun positions marked around it labeled \"morning,\" \"afternoon,\" and \"midday,\" illustrating solar tracking throughout the day.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/3af386f326.png": {
+  "described_at": "2026-10-01T10:42:00Z",
+  "description": "Heavy construction equipment including bulldozers and excavators operate at a dirt earthwork site behind orange warning cones and a white equipment box. Bare trees and cloudy sky visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/3b369a2ed1.jpg": {
   "described_at": "2026-09-05T10:30:15Z",
   "description": "A mobile phone screen displays AT&T LTE network status and a web browser showing the URL \"thingelstad.com\" with the website name visible below the address bar.",
@@ -26006,6 +26171,11 @@
  "https://www.thingelstad.com/uploads/2020/453edaa6b4.png": {
   "described_at": "2026-09-05T10:27:40Z",
   "description": "iPhone Settings General screen displaying options including Passcode Lock set to On, Restrictions set to Off, and menu items for Home, Date & Time, Keyboard, International, Accessibility, and Reset.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/4560c242c0.png": {
+  "described_at": "2026-10-01T10:41:59Z",
+  "description": "Construction site with heavy machinery including a bulldozer and two excavators moving earth. An orange and white traffic cone and white barrier with signage are visible in the foreground.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/4562c95845.jpg": {
@@ -28983,6 +29153,11 @@
   "description": "Movie poster featuring Robert Downey Jr. surrounded by various animals including dogs, a monkey, a parrot, and a duck. Text reads \"Dolittle\" with \"In Theaters January 17\" at the bottom.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/7a19081f14.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A green ceramic egg-shaped grill emits heavy white smoke in a garden setting surrounded by lush vegetation and a stepping stone pathway.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/7a1afafed5.jpg": {
   "described_at": "2026-09-05T10:14:46Z",
   "description": "People walk through an immersive digital art installation featuring blue and purple neon lighting, illuminated columns, and geometric patterns on the floor creating a futuristic underground or indoor venue atmosphere.",
@@ -29661,6 +29836,11 @@
  "https://www.thingelstad.com/uploads/2020/8567c9748b.gif": {
   "described_at": "2026-09-05T10:28:02Z",
   "description": "A gray square icon displays the white letters \"LR\" centered on its surface. This appears to be a software application or tool icon, likely representing Adobe Lightroom photo editing software.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/8567fa9042.png": {
+  "described_at": "2026-10-01T10:42:00Z",
+  "description": "A construction or equipment yard displays heavy machinery including excavators and trucks parked on dirt ground, with orange traffic barriers and a gray warehouse building visible under a partly cloudy sky.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/856defdb47.png": {
@@ -31186,6 +31366,11 @@
  "https://www.thingelstad.com/uploads/2020/9fbe90d15b.jpg": {
   "described_at": "2026-09-05T10:28:41Z",
   "description": "A blue and black wireless router with two external antennas and a flat panel antenna mounted on top is displayed against a white background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/9fe9288c9b.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A highway curves through a snowy winter landscape with vehicles ahead, power lines and transmission towers visible on the left, and bare trees lining the road under a cloudy sky.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/a01ca627e1.jpg": {
@@ -33126,6 +33311,11 @@
  "https://www.thingelstad.com/uploads/2020/c55f78f81f.jpg": {
   "described_at": "2026-09-05T10:00:26Z",
   "description": "A line graph titled \"Queries over the selected time period\" displays query volume data across a 24-hour period, with two colored lines tracking metrics from midnight to late evening.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/c56cbb33eb.png": {
+  "described_at": "2026-10-01T10:42:00Z",
+  "description": "A child sits on a concrete patio in a residential backyard during autumn. Colorful fall foliage, playground equipment, and houses are visible in the background.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/c59a2c24e8.jpg": {
@@ -35078,6 +35268,11 @@
   "description": "A speed profile chart displays velocity measurements over time on March 6, 2001, spanning from 7:12 to 18:00. The graph shows fluctuating speed values ranging between approximately 0 and 40 units throughout the day.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/e819b85140.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A person holds a lit sky lantern at night against a dark background. The white paper lantern glows from an internal flame as it's being prepared for release.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/e823be0aec.jpg": {
   "described_at": "2026-09-05T10:31:47Z",
   "description": "A vibraphone with illuminated bars sits on a concert stage under purple and blue stage lighting. A grand piano and other musical instruments are visible in the background of this indoor performance venue.",
@@ -35183,6 +35378,11 @@
   "description": "A cyclist wearing a blue jersey with \"Deceuninck\" visible raises both arms in victory while wearing a helmet and cycling gloves. The setting appears to be outdoors during a cycling race or competition.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/ea1510dc85.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A red and yellow raft with passengers floats on a calm river surrounded by semi-arid hills with sparse vegetation and scattered trees. The setting appears to be a recreational rafting or boating area in a mountainous region.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/ea2b456294.jpg": {
   "described_at": "2026-09-05T10:02:12Z",
   "description": "Four people wearing hairnets and surgical masks pose together indoors in what appears to be an educational or institutional setting with a world map visible in the background.",
@@ -35241,6 +35441,11 @@
  "https://www.thingelstad.com/uploads/2020/eb4b6368ef.jpg": {
   "described_at": "2026-09-05T10:28:38Z",
   "description": "A straight dirt road stretches through a tree-lined avenue with Spanish moss-draped oak trees on both sides, flanked by grass fields and small posts, creating a symmetrical rural landscape.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/eb4e29b4bd.png": {
+  "described_at": "2026-10-01T10:42:00Z",
+  "description": "A powerful waterfall cascades over dark rocky outcrops in a forested wilderness area. Coniferous and birch trees line the riverbank under a partly cloudy sky.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/eb59785974.jpg": {
@@ -35878,6 +36083,11 @@
   "description": "A woman with dark hair reclines on a green surface indoors, wearing a black sleeveless top and smiling at the camera. The setting appears to be an interior space with neutral-toned walls.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2020/f5c5c29a22.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "A waterfall cascades over a rocky ledge surrounded by dense green foliage, with a stone bridge spanning the river in the background and people visible on the bridge.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2020/f5cefdc032.gif": {
   "described_at": "2026-09-05T10:01:31Z",
   "description": "Weather radar image from KMPX Minneapolis-St. Paul showing precipitation mode data at 11:03 PM CDT on September 5, 2020, with reflectivity patterns displayed across Minnesota and surrounding areas.",
@@ -35976,6 +36186,11 @@
  "https://www.thingelstad.com/uploads/2020/f762534e01.jpg": {
   "described_at": "2026-09-05T10:44:29Z",
   "description": "A group of people plays badminton on the lawn of a two-story white house with black shutters and a brick chimney, surrounded by trees.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2020/f76b6324ca.png": {
+  "described_at": "2026-10-01T10:42:01Z",
+  "description": "Nighttime scene showing multiple bright lights in a dark blue sky above silhouetted trees and a lit ground area, possibly fireworks or aircraft lights over a park or open space.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2020/f78eec4c71.jpg": {
@@ -36693,6 +36908,11 @@
   "description": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe movie poster features a lion's face, children with weapons, a woman in winter clothing, polar bears, a lamp post, and a snowy fantasy setting.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2021/082d8530d5.png": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "Water treatment facility with large concrete basin, industrial pipes with blue protective covering, metal railings, and pump house structures. Rural setting with trees and utility vehicles visible in background.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2021/08373ea1cc.jpg": {
   "described_at": "2026-09-05T10:31:28Z",
   "description": "A group of men gather around a red table in a kitchen with red walls to slice and serve a large decorated sheet cake with blue frosting detail.",
@@ -37018,6 +37238,11 @@
   "description": "A movie poster for \"King Richard\" featuring Will Smith, showing three young people in athletic wear pushing a shopping cart filled with tennis balls against a cream-colored background. Text indicates theatrical and HBO Max release on November 19.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2021/1404b83f04.png": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "A wind farm with multiple white turbines operates in an arid desert landscape with sparse vegetation, mountains visible in the background under a partly cloudy sky.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2021/1406227c0d.jpg": {
   "described_at": "2026-09-05T10:19:41Z",
   "description": "A professional soccer match is underway at a modern stadium with spectators watching from the stands. Visible sponsors include SeatGeek, 3M, and Spire on the stadium signage.",
@@ -37151,6 +37376,11 @@
  "https://www.thingelstad.com/uploads/2021/1b375b48a8.jpg": {
   "described_at": "2026-09-05T10:19:26Z",
   "description": "A vintage mechanical printing press with numbered circular keys sits in a workshop garage surrounded by tools, chains, and storage shelves. The machine features a large wheel and appears to be a restored or maintained antique printing device.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2021/1b610d7415.png": {
+  "described_at": "2026-10-01T10:42:03Z",
+  "description": "A circular profile photo shows a person wearing sunglasses on a boat with water and trees visible in the background. The Peloton logo appears at the bottom of the image.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2021/1bace164b7.jpg": {
@@ -38096,6 +38326,11 @@
  "https://www.thingelstad.com/uploads/2021/3d5ae6ed44.jpg": {
   "described_at": "2026-09-05T10:31:09Z",
   "description": "A large stack of split firewood is neatly arranged against a weathered wooden fence in an outdoor yard setting. The logs display freshly cut surfaces in shades of brown and tan.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2021/3d70d2651d.png": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "A grand piano with its lid propped open sits in an indoor wooden-floored space, displaying its internal strings and mechanisms. Sheet music and a music stand are visible on top of the instrument.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2021/3dd41704d3.jpg": {
@@ -39933,6 +40168,11 @@
   "description": "A colorful illustration of anthropomorphic animals wearing winter clothing and accessories gathered together against a yellow background. The characters include cats, rabbits, and other creatures dressed in holiday attire with various decorative elements.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2021/88a9a44e59.png": {
+  "described_at": "2026-10-01T10:42:03Z",
+  "description": "A tabletop fire pit with an orange flame sits on a wooden deck overlooking a fenced backyard with lawn and landscaping. A person is visible in the background near the house.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2021/88e7e076e7.jpg": {
   "described_at": "2026-09-05T10:05:12Z",
   "description": "Interior of Faribault Woolen Mill Co., established 1865, showing textile manufacturing equipment including looms on the left, spools of yarn, storage containers, and an American flag displayed in the facility.",
@@ -41223,6 +41463,11 @@
   "description": "A dark gray Mazda CX-9 three-row SUV is photographed against a white background, displaying its front and driver's side profile with red interior seats visible through the windows.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2021/b83acac8d8.png": {
+  "described_at": "2026-10-01T10:42:03Z",
+  "description": "A mobile search interface displays recently viewed Apple MacBook Pro M1 models and a Leawood location. The screen includes a search bar, suggested searches for order status and store locator, and bottom navigation tabs.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2021/b8675836e5.jpg": {
   "described_at": "2026-09-05T10:04:10Z",
   "description": "Scattered printed pages with handwritten notes and answers lie on a wooden floor next to a yellow candle with a wooden wick. The papers appear to be homework or worksheet assignments with numbered questions and corrections.",
@@ -41713,6 +41958,11 @@
   "description": "A desert botanical garden features towering saguaro cacti and other desert plants along a paved pathway under clear blue sky, with visitors walking and a tan building visible on the right.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2021/cb5b7ac08e.png": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "A professional soccer match is underway in a large stadium filled with spectators. Players in red and blue uniforms are positioned on the field with advertising boards visible along the sidelines.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2021/cb8e64ff09.jpg": {
   "described_at": "2026-09-05T10:05:09Z",
   "description": "A large warehouse with red walls contains hundreds of bicycles of various colors and styles densely packed together, each tagged with identification labels.",
@@ -41891,6 +42141,11 @@
  "https://www.thingelstad.com/uploads/2021/d21c801fd5.jpg": {
   "described_at": "2026-09-05T10:19:47Z",
   "description": "A dragonfly perches on dried grass or grain stalks in a garden or field setting with blurred green lawn visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2021/d2d33ca282.png": {
+  "described_at": "2026-10-01T10:42:02Z",
+  "description": "A sandy beach with gentle waves rolling onto the shore. Beach visitors and colorful umbrellas are visible along the sandy area under a clear blue sky.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2021/d30302a819.jpg": {
@@ -43543,6 +43798,11 @@
   "description": "A snow-covered rural road lined with bare winter trees at sunset or sunrise, with a wooden mailbox visible on the left side and tire tracks marking the path ahead.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2022/3091932600.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A dog sled team pulls a blue sled down a snowy forest trail lined with bare trees, with handlers visible in the distance.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2022/31107ea589.jpg": {
   "described_at": "2026-09-05T10:05:55Z",
   "description": "A large indoor arena filled with thousands of spectators watching a DJ perform on an illuminated stage with colorful visuals and lighting equipment.",
@@ -43691,6 +43951,11 @@
  "https://www.thingelstad.com/uploads/2022/3d1ffa729a.jpg": {
   "described_at": "2026-09-05T10:06:21Z",
   "description": "A Romanesque Revival stone building with a distinctive red-tiled dome tower stands in a landscaped public plaza. The structure features arched entrances, ornamental stonework, and wide entrance stairs.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2022/3d706e8078.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A person in a blue jacket and green mask stands beside a large circular amusement ride simulator with a two-seat blue carriage inside. The industrial setting contains red structural supports and control equipment.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2022/3ee658382a.jpg": {
@@ -44298,6 +44563,11 @@
   "description": "A person wearing a straw hat with a blue band and dark sunglasses poses for a selfie outdoors in a residential backyard setting with green grass, trees, and a fence visible in the background.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2022/69c0bfe20a.png": {
+  "described_at": "2026-10-01T10:42:17Z",
+  "description": "A crowded pub or bar interior with patrons watching a soccer match on a television screen. The venue features holiday decorations, a bar counter with bottles, and framed artwork on the walls.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2022/69c2c2047f.jpg": {
   "described_at": "2026-09-05T10:43:41Z",
   "description": "A group of cyclists wearing helmets rides on a tree-lined paved path. The person in the foreground wears a white helmet and red patterned jacket while taking a selfie.",
@@ -44607,6 +44877,11 @@
   "description": "Early autumn snow blankets evergreen shrubs and trees in a residential neighborhood, with houses and parked cars visible along a tree-lined street.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2022/802647b6bd.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A waterfall cascades over dark basalt cliffs into a shallow river surrounded by moss-covered green slopes and scattered boulders in an Icelandic highland landscape.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2022/80e85abf24.jpg": {
   "described_at": "2026-09-05T10:05:58Z",
   "description": "A family of four poses in front of a wall displaying numerous framed gold and platinum music records. The setting appears to be a professional or institutional space, likely a music industry office or hall of fame.",
@@ -44712,6 +44987,11 @@
   "description": "A decorated gingerbread house with colorful candies and white icing sits on a red and cream zigzag patterned surface in a Christmas-themed indoor display with painted backdrop scenery and holiday decorations.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2022/8dc8a1bdc4.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A dog sled team pulls a sled through a snowy forest path lined with evergreen trees. The view is from the musher's perspective behind the sled.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2022/8e40213caf.jpg": {
   "described_at": "2026-09-05T10:43:26Z",
   "description": "Children in costume participate in an egg hunt in a hay maze at an outdoor festival. A wooden play structure and fence are visible in the background.",
@@ -44775,6 +45055,11 @@
  "https://www.thingelstad.com/uploads/2022/91483de491.jpg": {
   "described_at": "2026-09-05T10:43:54Z",
   "description": "A man and a white dog pose together in a snowy landscape with bare trees in the background. The man wears a black beanie, sunglasses, and a dark jacket with a blue logo. The dog wears a black harness and is on a leash.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2022/914cfe4047.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A traditional cuckoo clock with a peaked roof hangs on a white wooden wall. The clock features a round face with Roman numerals, decorative painted figures, and two pinecone-shaped weights suspended below.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2022/914f851c8d.jpg": {
@@ -45422,6 +45707,11 @@
   "description": "A wooden table displays numerous scented candles in various colors including cream, black, green, pink, and burgundy, each with wooden wicks, arranged in organized rows in what appears to be a home or workshop setting.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2022/c92810ccc4.png": {
+  "described_at": "2026-10-01T10:42:18Z",
+  "description": "A waterfall cascades down moss-covered cliffs into a rocky pool surrounded by lush green vegetation in an Icelandic landscape under clear blue sky.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2022/ca581bf287.jpg": {
   "described_at": "2026-09-05T10:19:30Z",
   "description": "A professional headshot of a man wearing a dark blue shirt against a white background. Text identifies him as a \"Large Corporate Orbie Winner\" with an SPS Commerce logo visible.",
@@ -45790,6 +46080,11 @@
  "https://www.thingelstad.com/uploads/2022/ece5fa5786.jpg": {
   "described_at": "2026-09-05T10:43:25Z",
   "description": "A family of four poses for a photo at a Renaissance faire or historical village event, with period buildings and trees visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2022/ed9eb12808.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A large concert venue filled with thousands of attendees watching a brightly lit stage performance with elaborate lighting and visual effects during an evening show.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2022/eda1fad1d4.jpg": {
@@ -46305,6 +46600,11 @@
  "https://www.thingelstad.com/uploads/2023/1261a07e8d.jpg": {
   "described_at": "2026-09-05T10:33:18Z",
   "description": "A periodic table of fictional elements is displayed on a dark wall, featuring colorful squares with element symbols, names, and categories organized by type such as TV shows, games, films, and literature.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2023/127b84acdb.png": {
+  "described_at": "2026-10-01T10:42:03Z",
+  "description": "The image appears to be completely black or failed to load properly, with no visible subjects, text, setting, or activity discernible.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2023/12de0595bd.jpg": {
@@ -47802,6 +48102,11 @@
   "description": "Two people stand on an abandoned railroad track lined with autumn foliage. The man wears a black jacket with a logo, and the woman wears a plaid shirt over a black graphic tee.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2023/63b8bd9e51.png": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "I can see this image appears to be completely or nearly black, making it impossible to identify visible subjects, settings, activities, or text content. The image may be corrupted, improperly exposed, or intentionally dark.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2023/6430d80db0.jpg": {
   "described_at": "2026-09-05T10:32:19Z",
   "description": "A collection of Feastables MrBeast chocolate bars in various flavors arranged on a wooden table, displaying colorful packaging with different designs and flavor varieties.",
@@ -47977,6 +48282,11 @@
   "description": "A street festival in an urban plaza features chalk drawings on pavement, vendor tents with signage including \"Smoothies\" and \"Shaved Ice,\" and crowds of people. The setting shows historic brick buildings and a street sign reading \"50th St.\"",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2023/6f2a333e8b.png": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "Two people examine digital pianos displayed on yellow tables in a music store. A \"Digital Pianos\" sign is visible overhead in the retail showroom.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2023/6fdfc00d1e.jpg": {
   "described_at": "2026-09-05T10:08:35Z",
   "description": "The Outlaw Music Festival 2023 tour performs on stage with multiple musicians and instruments. The event is presented by Wheatley Vodka, as shown on the large backdrop display.",
@@ -48125,6 +48435,11 @@
  "https://www.thingelstad.com/uploads/2023/77ce9d2e01.jpg": {
   "described_at": "2026-09-05T10:34:49Z",
   "description": "Three people pose inside and around a wooden playhouse surrounded by snow-covered branches and holiday light decorations, with a baseball stadium visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2023/77f4fc95e9.png": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "I can see this is a completely black or non-rendered image with no visible subjects, text, settings, or activities to describe.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2023/7869466976.jpg": {
@@ -49227,6 +49542,11 @@
   "description": "A group of cyclists ride on a paved path through a lush, tree-lined forest during daytime. The path is surrounded by dense green vegetation and tall trees creating a natural canopy overhead.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2023/c013f15122.png": {
+  "described_at": "2026-10-01T10:42:04Z",
+  "description": "I can see this is a completely black image with no visible subjects, text, or distinguishable details. The image appears to be either blank, unexposed, or failed to load properly.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2023/c0c45e88c9.jpg": {
   "described_at": "2026-09-05T10:34:41Z",
   "description": "An illuminated military tank sculpture made of green and yellow LED lights is displayed at night in an outdoor holiday setting, with a glowing Santa figure visible in the background.",
@@ -49250,6 +49570,11 @@
  "https://www.thingelstad.com/uploads/2023/c1e23ae19f.jpg": {
   "described_at": "2026-09-05T10:32:43Z",
   "description": "A large outdoor concert venue displays a banner reading \"Brandi Carlile's Mothership Weekend\" above a crowded audience seated in front of a stage with professional lighting and sound equipment.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2023/c23afdcec6.png": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "I can see this image appears to be almost entirely black or not loaded properly. I'm unable to identify any visible subjects, setting, activity, or text to describe for indexing purposes.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2023/c247980ef9.jpg": {
@@ -49410,6 +49735,11 @@
  "https://www.thingelstad.com/uploads/2023/caafac535f.jpg": {
   "described_at": "2026-09-05T10:32:15Z",
   "description": "A television broadcast studio at the Nasdaq stock exchange features two people at a desk with a large display screen behind them showing live stock market data and company tickers. A camera operator films the scene.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2023/cad8a8f956.png": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "A multi-tiered waterfall cascades down a rocky ravine surrounded by dense green vegetation and moss-covered stone walls in a forested mountain setting.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2023/cae0fe8692.png": {
@@ -49752,6 +50082,11 @@
   "description": "An aerial satellite map shows a yellow-outlined hiking or running trail route through forested terrain with multiple lakes. A green start marker and red end marker indicate the trail's beginning and conclusion points.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2023/df8b0cde25.png": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "A person holds a smartphone displaying a QR code while another person points at it nearby. A payment terminal and card reader are visible on a white table, suggesting a point-of-sale transaction or payment processing demonstration.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2023/df8b18f94d.jpg": {
   "described_at": "2026-09-05T10:08:26Z",
   "description": "Four adults stand together on a residential street in front of a food truck and parked vehicles. The setting appears to be a neighborhood gathering or community event.",
@@ -49835,6 +50170,11 @@
  "https://www.thingelstad.com/uploads/2023/e2fbf97130.jpg": {
   "described_at": "2026-09-05T10:33:24Z",
   "description": "A large pretzel with coarse salt sits on a metal stand on an outdoor dining table overlooking a scenic valley landscape. A glass of clear beverage with ice is positioned nearby.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2023/e2ffb9fcd7.png": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "A man holds a sledgehammer in front of a tall wooden structure decorated with vintage beer labels and illustrations, positioned in an outdoor carnival or fair setting surrounded by trees and fencing.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2023/e3a3a3fa04.jpg": {
@@ -50561,6 +50901,11 @@
   "description": "The poster features an animated girl in a red jacket against a dark background with glowing lanterns and traditional Japanese architecture. Text identifies this as \"Miyazaki's Spirited Away,\" a Studio Ghibli film that won multiple awards.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2023/poster.png": {
+  "described_at": "2026-10-01T10:42:09Z",
+  "description": "Interior view of a 3D printer with a white plastic build platform and black heating element, showing mechanical components and wiring inside an enclosed chamber.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2023/screenshot-2023-09-04-at-10.02.22-am.png": {
   "described_at": "2026-09-05T10:34:05Z",
   "description": "A task management interface displays a to-do item titled \"Curate 'On This Day' posts...\" with a link to theingelstad.com. The item is categorized under \"Personal Routines\" and \"Routines.\"",
@@ -50641,6 +50986,11 @@
   "description": "Movie poster for \"The Best Christmas Pageant Ever\" directed by Dallas Jenkins, showing a group of children around a burning Christmas tree with presents, set for theatrical release November 8.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/032330f6c4.png": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A grassy coastal hillside with scattered boulders overlooks calm sea waters under a partly cloudy sky, with rocky outcrops visible along the shoreline.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/03446790e4.jpg": {
   "described_at": "2026-09-05T10:38:57Z",
   "description": "Two people dressed as Santa and Mrs. Claus pose by an outdoor fireplace decorated for Christmas with garland and a \"Merry Christmas\" sign. A fire burns in the brick fireplace behind them.",
@@ -50686,6 +51036,11 @@
   "description": "An EGO brand cordless chainsaw rests in a green wheelbarrow filled with cut wood logs near a lake shore with bare trees and a dock visible in the background.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/06ff4d4942.png": {
+  "described_at": "2026-10-01T10:42:11Z",
+  "description": "A man in a dark blue suit and pink tie gives double thumbs up while standing on a red circular mat in an elegant hallway with arched doorways. Text at bottom reads \"the SOCIAL AN SPS COMMERCE gathering.\"",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/070600dbe6.jpg": {
   "described_at": "2026-09-05T10:36:37Z",
   "description": "A plate of barbecue featuring sliced brisket, mac and cheese, and a cornbread muffin served on parchment paper at a restaurant table.",
@@ -50704,6 +51059,11 @@
  "https://www.thingelstad.com/uploads/2024/083a88cc9e.jpg": {
   "described_at": "2026-09-05T10:36:42Z",
   "description": "A display of fresh mangoes with price stickers arranged on a black tray against a white marble countertop in what appears to be a grocery store or market setting.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/0883753b8b.png": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "The image appears to be almost entirely black or blank, with no clearly visible subjects, text, or distinguishing features that can be reliably described.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/09126263-3671-41a7-b360-d23f3d98b233.jpg": {
@@ -50836,6 +51196,11 @@
   "description": "A wooden sauna interior features wooden benches, ambient lighting, large windows overlooking a deck with outdoor furniture, and an instructional sign on the right wall.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/1191aa3c98.png": {
+  "described_at": "2026-10-01T10:42:11Z",
+  "description": "Two radar weather maps of Minneapolis-St. Paul showing precipitation intensity and storm patterns at different times (8:47 PM and 8:48 PM CDT), with color-coded reflectivity data overlaid on regional geography.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/11b80e8683.jpg": {
   "described_at": "2026-09-05T10:36:10Z",
   "description": "A man wearing a purple and white checkered shirt with a \"I Voted\" sticker displays a thumbs-up gesture in front of a residential house and trees.",
@@ -50956,6 +51321,11 @@
   "description": "Movie poster for \"The Fall Guy\" featuring actors Ryan Gosling and Emily Blunt against a background of explosions and fire, releasing in theaters May 3.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/196041667a.png": {
+  "described_at": "2026-10-01T10:42:10Z",
+  "description": "A person in a red kayak paddles on a calm river surrounded by lush green trees and vegetation on a sunny day in a residential area.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/19a311cf-ddc9-4e1e-8b8f-f18284a750a3.jpg": {
   "described_at": "2026-09-05T10:44:17Z",
   "description": "A cappuccino with latte art in a white cup and saucer sits on a wooden table in a caf\u00e9 setting, with a spoon on the saucer and blurred background items.",
@@ -50984,6 +51354,11 @@
  "https://www.thingelstad.com/uploads/2024/1af7a793bb.jpg": {
   "described_at": "2026-09-05T10:35:36Z",
   "description": "A circular commemorative badge for Star Wars' 7th anniversary on May 4th, 2024, featuring stylized character figures gathered around a glowing geometric symbol in an interior setting.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/1af7e09171.png": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "I can see this image appears to be completely black or failed to load properly. There are no visible subjects, text, or details that I can identify or describe.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/1bdfa47ee9.jpg": {
@@ -51151,6 +51526,11 @@
   "description": "A large green dragon sculpture stands on a blue base in a waterfront park with grass, trees, and parked vehicles visible in the background under a blue sky with white clouds.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/216445b904.png": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A bronze sculpture depicts a fish riding a bicycle, displayed indoors on a dark surface with a seascape backdrop and informational plaque visible at the base.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/21ae49e89a.jpg": {
   "described_at": "2026-09-05T10:37:09Z",
   "description": "A wooden deck with modern furniture overlooks a manicured lawn and ornamental grasses, with a water view and sunset visible in the distance beyond the tree line.",
@@ -51241,6 +51621,11 @@
   "description": "Ruins of a stone church with Gothic architecture, featuring a large pointed arch window and weathered walls. Two visitors stand inside the roofless structure among gravestones in an overgrown graveyard setting.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/24df887cc9.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A powerful waterfall cascades over dark basalt cliffs into a turbulent river below, with barren mountains visible in the distant background under an overcast sky.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/2573c8ba29.jpg": {
   "described_at": "2026-09-05T10:36:42Z",
   "description": "A movie poster for \"Jibaro\" features an elderly woman wearing sunglasses on a red scooter against a decorative crossstitch-patterned background. The tagline reads \"Revenge Has Never Been Sweeter\" with a release date of June 21.",
@@ -51284,6 +51669,11 @@
  "https://www.thingelstad.com/uploads/2024/281cbd7b44.jpg": {
   "described_at": "2026-09-05T10:35:17Z",
   "description": "A movie poster features cyclists riding on a desert highway with red rock formations in the background. The title \"Hard Miles\" appears in large orange letters with the tagline \"Push to the Limit.\"",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/28a97cecfc.png": {
+  "described_at": "2026-10-01T10:42:07Z",
+  "description": "A residential driveway features a concrete mixer truck and parked vehicles near a house surrounded by trees and landscaping on a sunny day.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/2920b199c2.jpg": {
@@ -51821,6 +52211,11 @@
   "description": "A large decorative fish sculpture mounted on a wooden base sits in a public park with green trees, grass, and parked vehicles visible in the background.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/4615e31dbd.png": {
+  "described_at": "2026-10-01T10:42:06Z",
+  "description": "The image appears to be completely black or failed to load properly, with no visible subjects, text, settings, or activities discernible.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/461beb6353.jpg": {
   "described_at": "2026-09-05T10:38:29Z",
   "description": "Four people pose for a photo on a rocky coastal cliff overlooking the sea. Visible text includes \"PARK\" on one person's shirt and partial text on another's black hoodie.",
@@ -52071,6 +52466,11 @@
   "description": "A library or museum corridor displays white marble busts along a rope-lined pathway, with bookshelves on the right and a large illuminated globe suspended from the ceiling. Visitors walk through the neoclassical space with letters visible on the wall.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/51e06f46bf.png": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "I can see this image appears to be completely black or failed to load properly. There are no visible subjects, text, settings, or activities discernible in the image provided.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/521cbb4cb3.jpg": {
   "described_at": "2026-09-05T10:35:06Z",
   "description": "A group of five men gather around a lit fire pit at night in an outdoor courtyard setting. One man wears a jacket with \"FSI\" visible on it, and they appear to be socializing during an evening gathering.",
@@ -52296,6 +52696,11 @@
   "description": "A person wearing a navy baseball cap with a blue logo and plaid jacket takes a selfie in a large convention hall filled with white chairs and numerous attendees standing in the background.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/5d2333961a.png": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A group of people on a forest trail observe a bird of prey with outstretched wings perched on someone's arm. The setting appears to be a woodland area with tall trees.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/5d6af3ca94.jpg": {
   "described_at": "2026-09-05T10:36:46Z",
   "description": "A calm seascape showing a clear horizon line dividing the turquoise water below from a blue sky with scattered white clouds above. The shallow water near shore gradually transitions to deeper blue tones farther out.",
@@ -52414,6 +52819,11 @@
  "https://www.thingelstad.com/uploads/2024/66519002-f483-4f29-a8ee-7ac437d26a5b.jpg": {
   "described_at": "2026-09-05T10:31:26Z",
   "description": "A wooden six-panel door with a metal handle is displayed next to a textured beige wall. A curved black room number plate reading \"404\" in gold lettering is mounted on the wall to the right of the door.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/671a424eab.png": {
+  "described_at": "2026-10-01T10:42:16Z",
+  "description": "A massive waterfall cascades over dark volcanic rock cliffs in Iceland, with moss-covered terrain in the foreground and cloudy skies above. The powerful water flow creates heavy mist at the base of the falls.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/677469fb40.jpg": {
@@ -53236,6 +53646,11 @@
   "description": "A coastal landscape features a cylindrical stone tower on rocky terrain overlooking a harbor town with residential buildings across the water under a partly cloudy sky.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/905b12852d.png": {
+  "described_at": "2026-10-01T10:42:10Z",
+  "description": "A sunset scene shows waves crashing on a rocky beach with a forested coastline silhouetted against an orange sky and setting sun.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/90b8314fe8.jpg": {
   "described_at": "2026-09-05T10:35:55Z",
   "description": "A group of approximately 20 professionally dressed adults stands together in a hotel ballroom in front of illuminated signage. The setting appears to be a formal event or conference with decorative blue curtains and patterned carpeting.",
@@ -53636,6 +54051,11 @@
   "description": "A man in a blue checkered shirt and black apron grills burgers on an outdoor barbecue, using a metal spatula to prepare multiple cheeseburgers on a blue plate.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/a7580ccdcc.png": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "I can see this image appears to be completely or nearly completely black, with no clearly visible subjects, text, setting, or activity discernible.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/a7e70fe6d5.png": {
   "described_at": "2026-09-05T10:35:11Z",
   "description": "A Bitcoin USD price chart displaying the past five years of trading data from 2020 to 2024, showing current price at 67,669.80 with a 1.329T increase, featuring green area graph visualization with price range from approximately 19,244 to 68,944 dollars.",
@@ -53759,6 +54179,11 @@
  "https://www.thingelstad.com/uploads/2024/ad3b8f286d.jpg": {
   "described_at": "2026-09-05T10:36:01Z",
   "description": "A speaker presents on stage at a conference event with a large screen displaying the title \"Every Conversation Counts: Building Extraordinary Relationships\" and the Riad Media branding.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/ad3c185d64.png": {
+  "described_at": "2026-10-01T10:42:10Z",
+  "description": "A close-up view of a car's steering wheel horn pad featuring a circular logo and spoke design, photographed indoors against a dark background with blue lighting visible.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/ad4b2ce41c.jpg": {
@@ -54279,6 +54704,11 @@
  "https://www.thingelstad.com/uploads/2024/c7338f8a14.jpg": {
   "described_at": "2026-09-05T10:37:29Z",
   "description": "An indoor exhibition displays a large field of grain or wheat in shades of tan and gray, with visitors walking along a modern building interior featuring glass windows and green architectural elements.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/c73eecb561.png": {
+  "described_at": "2026-10-01T10:42:17Z",
+  "description": "Model train tracks with a blue streamlined passenger train car on a wooden surface. The setup includes multiple parallel track sections with ballast detail typical of model railroad layouts.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/c768dd332e.jpg": {
@@ -55351,6 +55781,11 @@
   "description": "A museum display featuring skeletal remains of various animals arranged on wooden platforms with decorative carved pillars and tropical plants, located in what appears to be a natural history museum hall.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2024/fd8ffa3473.png": {
+  "described_at": "2026-10-01T10:42:11Z",
+  "description": "A wooden bench overlooks a small pond with rock borders in a park garden. Pink flowering bushes, mature trees, and a paved path surround the serene landscaped setting.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2024/fd95148bc8.jpg": {
   "described_at": "2026-09-05T10:37:46Z",
   "description": "A river flows through a lush forest with mature trees lining both banks, creating a natural canopy over the water in a woodland setting.",
@@ -55374,6 +55809,11 @@
  "https://www.thingelstad.com/uploads/2024/ferrari-poster.jpg": {
   "described_at": "2026-09-05T10:37:19Z",
   "description": "Movie poster for \"Ferrari\" directed by Michael Mann, featuring a man in a gray suit and sunglasses standing before a blurred red car. Text lists cast members Adam Driver, Pen\u00e9lope Cruz, and Shailene Woodley, with a Christmas release date noted.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/ff1b619b79.png": {
+  "described_at": "2026-10-01T10:42:11Z",
+  "description": "A person in a red shirt and green hat grills burgers topped with cheese on a portable barbecue surrounded by green foliage, with prepared patties visible on a blue tray below.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/ff32e5bc-e692-4ab7-8dfa-46c013875805.jpg": {
@@ -55414,6 +55854,11 @@
  "https://www.thingelstad.com/uploads/2024/img-0218.jpg": {
   "described_at": "2026-09-05T10:44:48Z",
   "description": "A conference presentation in a large lecture hall shows a speaker at a podium with an audience seated at tiered desks with laptops. The projection screen displays \"DOING IT WRONG\" with three labeled storage silos for DEV, QA, and OPS.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2024/img-0584.jpg": {
+  "described_at": "2026-10-01T10:42:18Z",
+  "description": "Model train tracks curve through a miniature landscape featuring trees and a light-colored ground surface, with a blurred background containing toy vehicles and a blue container.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2024/img-0585.jpeg": {
@@ -55874,6 +56319,11 @@
  "https://www.thingelstad.com/uploads/2025/032f856779.jpg": {
   "described_at": "2026-09-05T10:39:08Z",
   "description": "A cream pie with a graham cracker crust, topped with whipped cream, crushed toffee bits, and chocolate drizzle sits in a glass pie dish on a white marble countertop.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/03b15dfc44.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "A large indoor arena filled with spectators watches an NBA game under bright overhead lighting. A Canadian flag is visible in the upper left, and the jumbotron displays NBA branding above the court.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/03e02536ca.jpg": {
@@ -56486,6 +56936,11 @@
   "description": "Two hikers stand on a bridge overlooking a city skyline. The image displays \"612 POAP CHALLENGE\" text and a \"GOLD MEDAL\" badge, representing a challenge or achievement badge.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/25bcb7c676.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "A person wearing dark winter clothing and a headlamp operates an ice auger on a frozen lake at dusk, with evergreen trees and distant lights visible along the shoreline.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/25ebed62-e5f1-47bb-abad-5f3af11cf86e.png": {
   "described_at": "2026-09-05T10:41:48Z",
   "description": "A pixel-art style illustration depicts the Walker Art Center building against a blue sky. Text around the circular border reads \"6:12 POAP CHALLENGE\" with \"Walker Art Center\" at the bottom.",
@@ -56566,9 +57021,19 @@
   "description": "A clear plastic bin containing yellow Pok\u00e9mon Mystery Slab bags sits on a dark surface with a label indicating \"$40.00 PSA Slabs Only\" and a purple handle visible on the container.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/2a8d31e78f.png": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A professional hockey game is underway in a packed arena with spectators wearing team apparel. The ice rink displays sponsor logos including Regions Hospital, Enterprise, and Arctic Wolf along the boards.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/2ac85ced43.png": {
   "described_at": "2026-09-05T10:42:47Z",
   "description": "A flowchart titled \"The Weekly Thing Creation Process\" depicts Jamie Thingelstad's content creation workflow across four stages: collecting and filtering inputs, creating and curating content, building automated assembly systems, and finalizing and sending publications.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/2b19ba96ea.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A man wearing an \"Escaparium\" t-shirt and cap operates a stationary bike at an outdoor event in a grassy field. Multiple spectators observe the activity in daylight.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/2b2a3a911d.jpg": {
@@ -56921,6 +57386,11 @@
   "description": "A circular pixelated badge displays \"6.12 POAP Challenge\" at the top and \"Minnehaha Falls\" at the bottom, featuring a blocky map design with green, brown, and blue pixels representing terrain and water features.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/3ac3523900.png": {
+  "described_at": "2026-10-01T10:42:12Z",
+  "description": "A crowded beach with white sand and gentle waves, featuring blue umbrellas and beach equipment along the shoreline under clear skies.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/3accb5363d.jpg": {
   "described_at": "2026-09-05T10:41:23Z",
   "description": "A smartphone displays a digital content card dated September 25 featuring an illustrated candle with plants. The card titled \"Fresh Storytelling for Candle Labels\" discusses narrative techniques for enhancing donor connection through product design.",
@@ -57026,6 +57496,11 @@
   "description": "A summer camp scene at Magic Pines shows children swimming in a pool surrounded by pine trees, lounge chairs, a water slide, a cabin, and picnic areas during summer of 2025.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/3f928fd0a7.png": {
+  "described_at": "2026-10-01T10:42:14Z",
+  "description": "A man in a blue blazer and white shirt gives a thumbs up at \"The Social,\" an SPCS Commerce gathering event, standing on a red carpet between decorative silver walls under stage lighting.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/3ff2ae721b.jpg": {
   "described_at": "2026-09-05T10:42:28Z",
   "description": "A smartphone displays weather radar maps from KMVX Fargo showing precipitation and velocity data with radar stations KMBX, KBIS, and KMVX labeled across a regional weather monitoring interface.",
@@ -57111,6 +57586,11 @@
   "description": "A person wearing a gray beanie and white shirt eats a pastry while seated outdoors. The \"Smooe House\" sign is visible in the background at what appears to be a waterfront venue.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/4423944d33.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A vintage Chicago Coin's Basketball Champ arcade game displayed in a museum or collection setting. The mechanical game features a player figure and costs 5 cents for 15 balls to play.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/445f7f44-6386-4d47-b397-7fb804426254.gif": {
   "described_at": "2026-09-05T10:39:06Z",
   "description": "A circular badge displays colorful dots of varying sizes against a dark background, labeled \"SPS TechConnect 2025\" at the bottom.",
@@ -57154,6 +57634,11 @@
  "https://www.thingelstad.com/uploads/2025/458201db2e.jpg": {
   "described_at": "2026-09-05T10:40:19Z",
   "description": "A yellow \"Internet Phome Book\" rests on a kraft paper surface with colored drawings and markers visible. The scene shows a creative workspace with art supplies and instructional materials.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/4586dc41bc.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A house security camera captures a deer standing on a residential driveway in front of a two-car garage on June 10, 2025, at 10:10 AM.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/458f199786.png": {
@@ -57346,6 +57831,11 @@
   "description": "Vibrant red roses bloom in a formal garden setting with manicured hedges, pathways, and additional flowering plants visible in the background under clear blue sky.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/5498223aea.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A group of passengers wearing life jackets ride a yellow and blue jetboat labeled \"Montreal Jetboats\" on a river with trees visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/555d2825cd.jpg": {
   "described_at": "2026-09-05T10:40:11Z",
   "description": "Two people stand together in a garden beneath a flowering tree with white and pink blossoms. They are smiling at the camera in front of green foliage and landscaping.",
@@ -57489,6 +57979,11 @@
  "https://www.thingelstad.com/uploads/2025/5ff50100d5.jpg": {
   "described_at": "2026-09-05T10:42:32Z",
   "description": "A waterfront residential landscape at dusk features a manicured lawn with a white dog, a paved pathway, mature trees, and a deck area overlooking a calm river or lake with distant shoreline.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/604b32bc09.png": {
+  "described_at": "2026-10-01T10:42:14Z",
+  "description": "A group of runners jogs on a paved path through a park lined with trees. A black trash bin with orange accents stands in the foreground on the left side.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/606b017332.jpg": {
@@ -57766,6 +58261,11 @@
   "description": "A pixelated image of the Basilica of Saint Mary with a pink and green circular border. Text reads \"6.12 POAP CHALLENGE\" and \"Basilica of Saint Mary.\"",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/6e69c3537b.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A river flows through a dense coniferous forest with tall evergreen trees lining both banks. Mountains are visible in the misty background under an overcast sky.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/6eadb904-0598-424f-9e62-8fb52652a992.png": {
   "described_at": "2026-09-05T10:41:41Z",
   "description": "A golden circular emblem featuring a star centered above a lake landscape with trees, labeled \"612 POAP Challenge\" at the top and \"Lake Lover\" at the bottom.",
@@ -57949,6 +58449,11 @@
  "https://www.thingelstad.com/uploads/2025/766dc2244a.jpg": {
   "described_at": "2026-09-05T10:39:39Z",
   "description": "A movie poster for \"Minecraft Movie\" featuring five actors in colorful casual clothing standing outdoors with a pixelated sky background, releasing in theaters April 4 in Dolby Cinema, Real D 3D, and IMAX formats.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/76dfe76e22.png": {
+  "described_at": "2026-10-01T10:42:05Z",
+  "description": "I can see this image appears to be entirely or almost entirely black or not loaded properly. I'm unable to identify any visible subjects, text, settings, or activities to describe for indexing purposes.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/7740e31e1e.jpg": {
@@ -58496,9 +59001,19 @@
   "description": "An underground barrel-vaulted cellar or tunnel features a bar counter on the right, round tables with white tablecloths on the left, decorative geometric floor tiles, and hanging pendant lights illuminating the brick interior.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/91f6e959d5.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "An autonomous floor-cleaning robot with white and black casing operates in an indoor hallway with carpeted flooring. The robot is positioned near a gated enclosure, with modern office or institutional architecture visible in the background.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/91fd3490d3.jpg": {
   "described_at": "2026-09-05T10:41:14Z",
   "description": "A grid of milk bottles from various dairy producers displayed against colorful backgrounds in a pop art style arrangement. Each bottle features different vintage labels and branding from regional American dairies.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/922d47cfee.png": {
+  "described_at": "2026-10-01T10:42:14Z",
+  "description": "A narrow unpaved road lined with sparse vegetation and trees stretches across a rocky peninsula extending into a calm, misty lake or large body of water under overcast skies.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/92582d45-efd7-48f8-b01c-6464f92dc747.png": {
@@ -58984,6 +59499,11 @@
  "https://www.thingelstad.com/uploads/2025/add-to-list-shortcut.png": {
   "described_at": "2026-09-05T10:42:40Z",
   "description": "A macOS Shortcuts app window displays an \"Add To List\" automation workflow with multiple action blocks for managing projects, including filtering by folder and status, prompting for text input, and adding items to a project list.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/ae0b10ad3e.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "A mobile app profile displays an Ethereum wallet address with 170 POAPs collected across May, April, and March 2025, showing various digital badges and collectible pins.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/ae3b0ce482.jpg": {
@@ -60006,6 +60526,11 @@
   "description": "A large conference or convention center hosts hundreds of attendees seated at round tables. A presenter speaks from a stage on the right while attendees listen and work at laptops in an industrial warehouse-style space with exposed ceiling infrastructure.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/e6306d3a26.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "An iPhone home screen displays various app icons organized in a grid layout against a dark background with an Earth wallpaper, showing the time 6:53 and active recording indicator at the top.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/e6badd48af.jpg": {
   "described_at": "2026-09-05T10:40:58Z",
   "description": "A collage of food and beverages from Wild State restaurant shows two branded drinks, a pretzel with sesame seeds, pepperoni pizza slices, and soft-serve ice cream cones with toppings.",
@@ -60094,6 +60619,11 @@
  "https://www.thingelstad.com/uploads/2025/ea5d319e86.jpg": {
   "described_at": "2026-09-05T10:40:18Z",
   "description": "A movie poster for Marvel Studios' \"Thunderbolts\" featuring five characters in tactical gear standing in an urban setting with explosions in the background. Text reads \"Not super. Not heroes. Not giving up\" and \"Only in theaters May 2.\"",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/eae2d4d991.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "A Pok\u00e9mon TCG mobile app displays three booster packs for sale: Wisdom of Sea and Sky, Deluxe Pack ex, and Secluded Springs, with countdown timers and a Wonder Pick feature visible.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/eaf4f2045f.jpg": {
@@ -60261,6 +60791,11 @@
   "description": "Three people stand in a grassy field watching a cornhole game in progress. Painted wooden markers and game equipment are visible on the lawn with trees in the background.",
   "model": "claude-haiku-4-5"
  },
+ "https://www.thingelstad.com/uploads/2025/f0a4ad1a6e.png": {
+  "described_at": "2026-10-01T10:42:15Z",
+  "description": "The image is too dark and low contrast to identify specific subjects, settings, or activities with certainty. Only vague silhouettes and outlines are visible against a predominantly black background.",
+  "model": "claude-haiku-4-5"
+ },
  "https://www.thingelstad.com/uploads/2025/f0d3b7edca.jpg": {
   "described_at": "2026-09-05T10:42:06Z",
   "description": "A professional NHL hockey game is in progress at a packed arena, with teams in dark and white jerseys competing on the ice. Visible sponsorships include US Bank, BMO, and Michelob Golden Light along the boards.",
@@ -60364,6 +60899,11 @@
  "https://www.thingelstad.com/uploads/2025/f6c7e013e6.png": {
   "described_at": "2026-09-05T10:41:33Z",
   "description": "A mobile gaming interface displays a player named THiNGLES with 306 trophies in a battle royale game. The screen shows game currency, a character card, and a yellow \"Battle\" button for gameplay.",
+  "model": "claude-haiku-4-5"
+ },
+ "https://www.thingelstad.com/uploads/2025/f6de8cacf5.png": {
+  "described_at": "2026-10-01T10:42:13Z",
+  "description": "A fast-flowing river with turbulent whitewater rapids cuts through a rocky gorge surrounded by mixed boreal forest with coniferous and deciduous trees under clear blue sky.",
   "model": "claude-haiku-4-5"
  },
  "https://www.thingelstad.com/uploads/2025/f6e3c792b3.jpg": {

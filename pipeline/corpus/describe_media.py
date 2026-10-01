@@ -53,7 +53,7 @@ from pathlib import Path
 import anthropic
 import requests
 from dotenv import load_dotenv
-from librarian_core.corpus import build_corpus
+from librarian_core.corpus import build_corpus, extract_video_posters
 
 ROOT = Path(__file__).resolve().parents[2]
 SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
@@ -120,6 +120,12 @@ def collect_urls(keep=allowed) -> list[str]:
         for match in MD_IMG_RE.findall(text):
             if keep(match):
                 urls.setdefault(match)
+        # A video's poster still is a blog media record of its own (the
+        # corpus build's extract_video_posters); collecting only <img> and
+        # Markdown images left 108 of 110 undescribed (QA2 I2-5, 2026-10-01).
+        for poster in extract_video_posters(text):
+            if keep(poster["url"]):
+                urls.setdefault(poster["url"])
     return list(urls)
 
 

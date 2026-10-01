@@ -107,3 +107,31 @@ class SourceTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CollectUrlsTest(unittest.TestCase):
+    def test_blog_video_posters_are_collected_like_images(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as tmp:
+            post = Path(tmp) / "2025" / "post.md"
+            post.parent.mkdir()
+            post.write_text(
+                '<img src="https://www.thingelstad.com/uploads/2025/a.jpg" alt="">\n'
+                '<video src="https://www.thingelstad.com/uploads/2025/v.mov" '
+                'poster="https://www.thingelstad.com/uploads/2025/still.png"></video>\n'
+                '<video src="https://www.thingelstad.com/uploads/2025/w.mov" poster=""></video>\n'
+            )
+            with (
+                unittest.mock.patch.object(describe_media, "BLOG_POSTS", Path(tmp)),
+                unittest.mock.patch.object(describe_media, "build_corpus", lambda: {"media": []}),
+            ):
+                urls = describe_media.collect_urls(keep=describe_media.fetchable)
+        self.assertEqual(
+            urls,
+            [
+                "https://www.thingelstad.com/uploads/2025/a.jpg",
+                "https://www.thingelstad.com/uploads/2025/still.png",
+            ],
+        )
