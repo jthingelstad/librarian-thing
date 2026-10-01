@@ -306,13 +306,9 @@ Resources:
           CORPUS_BUCKET: !Ref CorpusBucket
           CORPUS_KEY: !Ref CorpusKey
           GRAPH_KEY: !Ref GraphKey
-          BUTTONDOWN_API_KEY: !Ref ButtondownApiKey
-          SESSION_SECRET: !Ref SessionSecret
           LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
-          THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
-          FASTMAIL_JMAP_TOKEN: !Ref FastmailJmapToken
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
           THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
           # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
@@ -346,11 +342,7 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
-          SESSION_SECRET: !Ref SessionSecret
           LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
-          THINGY_WEB_ORIGIN_TOKEN: !Ref ThingyWebOriginToken
-          LIBRARIAN_RETRIEVE_SECRET: !Ref LibrarianRetrieveSecret
-          LIBRARIAN_GOLDEN_RETRIEVE_SECRET: !Sub '{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}'
           LOG_LEVEL: !Ref LogLevel
           # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
           # TPM quota provisioning (AWS support case; known gate for the newest
@@ -366,7 +358,6 @@ Resources:
           # Deployed-revision stamp for recorded turns; the timestamped code
           # key already uniquely names each deployed artifact.
           LIBRARIAN_SOURCE_REVISION: !Ref StreamCodeKey
-          BRAVE_SEARCH_API_KEY: !Ref BraveSearchApiKey
           # Guest chat lane (2026-09): per-visitor taste + global fail-closed
           # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
           THINGY_GUEST_CHAT: "on"

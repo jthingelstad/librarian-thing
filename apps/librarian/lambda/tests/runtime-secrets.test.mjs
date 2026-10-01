@@ -1,8 +1,7 @@
 // The Lambdas read their credentials from one Secrets Manager secret at cold
 // start instead of plaintext function configuration: values land in
 // process.env, only names are logged, the read is cached, a failure retries,
-// and with no value to fall back on the handler refuses rather than running
-// unkeyed.
+// and a failed read refuses rather than running unkeyed.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
@@ -89,7 +88,7 @@ test('the secret fills process.env once, and the log names keys but never values
   });
 });
 
-test('with nothing to fall back on, a failed read refuses and the next call retries', async () => {
+test('a failed read refuses and the next call retries', async () => {
   await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN }, async () => {
     const client = fakeClient([new Error('AccessDeniedException'), JSON.stringify(SECRET)]);
     await assert.rejects(loadRuntimeSecrets(client), /Runtime credentials are unavailable/);
@@ -100,12 +99,11 @@ test('with nothing to fall back on, a failed read refuses and the next call retr
   });
 });
 
-test('before the cut-over a failed read falls back to the configured values', async () => {
-  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN, SESSION_SECRET: 'from-config' }, async (lines) => {
+test('a failed read refuses even when a value is already in the environment', async () => {
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN, SESSION_SECRET: 'stale' }, async (lines) => {
     const client = fakeClient([new Error('AccessDeniedException')]);
-    await loadRuntimeSecrets(client);
-    assert.equal(process.env.SESSION_SECRET, 'from-config');
-    assert.match(lines.join('\n'), /runtime_secrets_load_failed.*"fallback":"environment"/);
+    await assert.rejects(loadRuntimeSecrets(client), /Runtime credentials are unavailable/);
+    assert.match(lines.join('\n'), /runtime_secrets_load_failed/);
   });
 });
 

@@ -9,10 +9,9 @@ import { errorFields, logEvent } from './logging.mjs';
 // SESSION_SECRET and the rest keeps working unchanged; the values exist only
 // in this process's memory.
 //
-// Fails closed: without the secret and without a value already in the
-// environment the handler refuses the request instead of running unkeyed
-// (an empty THINGY_WEB_ORIGIN_TOKEN, for one, would switch off the origin
-// check). A failed read is retried on the next invocation.
+// Fails closed: without the secret the handler refuses the request instead
+// of running unkeyed (an empty THINGY_WEB_ORIGIN_TOKEN, for one, would switch
+// off the origin check). A failed read is retried on the next invocation.
 
 export const RUNTIME_SECRET_KEYS = [
   'BUTTONDOWN_API_KEY',
@@ -74,13 +73,7 @@ export async function loadRuntimeSecrets(secrets?: SecretsClient) {
   try {
     await loaded;
   } catch (error) {
-    // Before the cut-over the values are also still in the configuration;
-    // carry on with those rather than fail a sign-in.
-    if (process.env.SESSION_SECRET) {
-      logEvent('error', 'runtime_secrets_load_failed', errorFields(error, { fallback: 'environment' }));
-      return;
-    }
-    logEvent('error', 'runtime_secrets_load_failed', errorFields(error, { fallback: 'none' }));
+    logEvent('error', 'runtime_secrets_load_failed', errorFields(error));
     throw new Error('Runtime credentials are unavailable', { cause: error });
   }
 }
