@@ -549,6 +549,35 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     );
   }
 
+  // 8g. Every issue a topic cluster files is reachable by search_archive's
+  //     topic filter: at least one of its passages passes the filter (QA2
+  //     L2-7: the filter read only per-passage labels, and 250 issue
+  //     filings across seven clusters had no labelled passage).
+  {
+    const passagesOf = new Map();
+    for (const chunk of wt.chunks || []) {
+      const key = String(chunk.issue_number);
+      if (!passagesOf.has(key)) passagesOf.set(key, []);
+      passagesOf.get(key).push(chunk);
+    }
+    const unreachable = [];
+    let filings = 0;
+    for (const cluster of wt.topics || []) {
+      for (const number of cluster.issue_numbers || []) {
+        filings += 1;
+        const passages = passagesOf.get(String(number)) || [];
+        if (!passages.some((chunk) => retrieval.matchesFilters?.(chunk, { topic: cluster.name }))) {
+          unreachable.push(`${cluster.name} wt-${number}`);
+        }
+      }
+    }
+    check(
+      'completeness every issue a topic cluster files is reachable by the topic filter',
+      filings > 0 && unreachable.length === 0,
+      `${unreachable.length} of ${filings}: ${unreachable.slice(0, 4).join(', ')}`
+    );
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

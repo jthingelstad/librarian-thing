@@ -920,7 +920,8 @@ export function matchesFilters(
   const clusters = lowerList(topic);
   if (clusters.length) {
     const topics = Array.isArray(source.topics) ? source.topics.map((item) => String(item).toLowerCase()) : [];
-    if (!clusters.some((cluster) => topics.includes(cluster))) return false;
+    const filed = issueClusters(source);
+    if (!clusters.some((cluster) => topics.includes(cluster) || filed.has(cluster))) return false;
   }
   // A Set only: /retrieve passes request filters through, and a JSON body
   // cannot make one.
@@ -928,6 +929,37 @@ export function matchesFilters(
   const voices = voiceList(voice);
   if (voices.length && voicedText(source, voices).length < VOICE_MIN_CHARS) return false;
   return true;
+}
+
+// The clusters a Weekly Thing chunk's issue is filed under. Passages carry
+// their own cluster labels (chunk.topics), but the cards, list_topics and
+// archive_lens count the issue-level filing (cluster.issue_numbers,
+// issue.topics), a different labelling pass: an issue filed only at issue
+// level was unreachable by the topic filter (QA2 L2-7: Media and culture
+// 67 issues, Software development 56, Privacy and security 50). Either
+// filing now admits the chunk.
+const ISSUE_CLUSTERS = new WeakMap<Corpus, Map<string, Set<string>>>();
+const NO_CLUSTERS = new Set<string>();
+
+function issueClusters(source: CorpusChunk) {
+  if (!corpusCache || source.issue_number == null || publicSourceKind(source) !== 'weekly_thing') return NO_CLUSTERS;
+  let filed = ISSUE_CLUSTERS.get(corpusCache);
+  if (!filed) {
+    filed = new Map();
+    const file = (issue: unknown, cluster: unknown) => {
+      const key = String(issue);
+      if (!filed!.has(key)) filed!.set(key, new Set());
+      filed!.get(key)!.add(String(cluster).toLowerCase());
+    };
+    for (const cluster of (corpusCache.topics || []) as Array<Record<string, unknown>>) {
+      for (const issue of Array.isArray(cluster?.issue_numbers) ? cluster.issue_numbers : []) file(issue, cluster.name);
+    }
+    for (const issue of corpusCache.issues || []) {
+      for (const cluster of Array.isArray(issue.topics) ? issue.topics : []) file(issue.number, cluster);
+    }
+    ISSUE_CLUSTERS.set(corpusCache, filed);
+  }
+  return filed.get(String(source.issue_number)) || NO_CLUSTERS;
 }
 
 // The microblog id a blog chunk belongs to (ids are blog:{id}:{index}:{hash}).

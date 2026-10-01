@@ -647,6 +647,16 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     check(`KA search_archive section "${section}" is bad_request`, out?.code === 'bad_request', String(out?.error));
   }
 }
+// QA2 L2-7: WT1 is filed under Media and culture at issue level only; the
+// topic filter reaches it.
+await run('search_archive', {
+  query: 'Minnesota Original Layne Kennedy photographer',
+  topic: 'Media and culture',
+  limit: 5
+}).then((out) => {
+  const ids = (out?.results || []).map((group) => group.id);
+  check('KA search_archive topic reaches an issue filed only at issue level', ids.includes('wt-1'), ids.join(', '));
+});
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);

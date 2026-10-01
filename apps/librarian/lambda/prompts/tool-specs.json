@@ -106,7 +106,7 @@
             },
             "topic": {
               "type": "string",
-              "description": "A list_topics cluster, e.g. \"AI and agents\"; Weekly Thing only."
+              "description": "A list_topics cluster, e.g. \"AI and agents\". A Weekly Thing passage matches when its issue is filed under the cluster or the passage itself is labelled with it; blog and podcast passages match by their own labels (many blog passages and some podcast passages carry one)."
             },
             "category": {
               "type": "string",
