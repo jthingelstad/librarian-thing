@@ -672,9 +672,14 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
   check('KA wt-212 is not a copy of blog-1464172', !named.includes('blog-1464172'), named.join(', '));
 }
 // QA2 R2-3: the Journal dedupe works on the returned page. WT147's "mini
-// minnebar" copy ranks 8th; its post ranks about 28th, below the cut, so
-// the copy stays (the pool-wide dedupe dropped it and neither showed). And
-// no page carries a copy beside every post it copies, when each of those
+// minnebar" copy ranked 8th and its post about 28th, below the cut, and the
+// pool-wide dedupe dropped the copy so neither showed. The ranks move with
+// the corpus (a re-strip put the copy 9th), so this reads them off the
+// deepest page: at the limit that reaches the first of the pair, one of
+// them shows, and the copy beside its post obeys QA3 Q7 (judged by the
+// post's passages on the page). One rank of slack:
+// neighbours swap between limits (blog-5854492 and blog-5267019). And no
+// page carries a copy beside every post it copies, when each of those
 // posts is one passage (QA3 Q7: a longer post's other passage keeps it).
 {
   const passagesOf = new Map();
@@ -682,13 +687,50 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     const id = `blog-${chunk.microblog_id}`;
     passagesOf.set(id, (passagesOf.get(id) || 0) + 1);
   }
-  const page = await run('search_archive', { query: 'Minnebar session I attended', limit: 8 });
-  const ids = (page?.results || []).map((group) => group.id);
+  const query = 'Minnebar session I attended';
+  const { TOOL_LIMITS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
+  const deepest = TOOL_LIMITS.search_archive.max;
+  const deep = (await run('search_archive', { query, limit: deepest }))?.results || [];
+  const rank = (id) => deep.findIndex((group) => group.id === id) + 1;
+  const ranks = [rank('wt-147'), rank('blog-1088967')].filter(Boolean);
   check(
-    'KA search_archive keeps the wt-147 copy or its post blog-1088967',
-    ids.includes('wt-147') || ids.includes('blog-1088967'),
-    ids.join(', ')
+    `KA search_archive reaches the wt-147 copy or its post blog-1088967 by limit ${deepest}`,
+    ranks.length > 0,
+    deep.map((group) => group.id).join(', ')
   );
+  if (ranks.length) {
+    const limit = Math.min(deepest, Math.min(...ranks) + 1);
+    const ids = ((await run('search_archive', { query, limit }))?.results || []).map((group) => group.id);
+    check(
+      `KA search_archive keeps the wt-147 copy or its post blog-1088967 at limit ${limit}`,
+      ids.includes('wt-147') || ids.includes('blog-1088967'),
+      ids.join(', ')
+    );
+  }
+  // Beside its post the copy stays exactly when the in-process rule keeps
+  // it beside the passages the page shows (chunks found by content).
+  const post = deep.find((group) => group.id === 'blog-1088967');
+  if (post) {
+    const copy = (corpora.weekly_thing?.chunks || []).find(
+      (chunk) => chunk.issue_number === 147 && /person from Turkey/.test(chunk.text || '')
+    );
+    const shownPassages = (corpora.blog?.chunks || []).filter(
+      (chunk) =>
+        String(chunk.microblog_id) === '1088967' &&
+        post.passages.some((passage) => {
+          const opening = String(passage.text || '')
+            .replace(/^[.…\s]+/, '')
+            .slice(0, 60);
+          return opening && String(chunk.text || '').includes(opening);
+        })
+    );
+    const expected = Boolean(copy) && retrieval.dedupeJournalTwins([copy, ...shownPassages]).includes(copy);
+    check(
+      'KA search_archive keeps the wt-147 copy beside blog-1088967 by the passages the page shows',
+      shownPassages.length > 0 && Boolean(rank('wt-147')) === expected,
+      `wt-147 rank ${rank('wt-147')}; ${shownPassages.length} passages shown; rule keeps it ${expected}`
+    );
+  }
   for (const query of ['Minnebar session I attended', 'Tesla software update applied', 'mini Minnebar']) {
     const out = await run('search_archive', { query, limit: 12 });
     const shown = new Set((out?.results || []).map((group) => group.id));
