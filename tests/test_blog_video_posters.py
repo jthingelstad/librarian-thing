@@ -60,7 +60,8 @@ class VideoPosterTests(unittest.TestCase):
     def test_real_blog_posters(self):
         corpus = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
         posters = [item for item in corpus["media"] if item.get("video_url")]
-        self.assertEqual(len(posters), 111)
+        self.assertEqual(len([item for item in posters if item.get("microblog_id")]), 111)
+        self.assertEqual(len([item for item in posters if item.get("page_id")]), 5)
 
 
 if __name__ == "__main__":

@@ -39,7 +39,14 @@ import {
   localDay,
   voiceList
 } from './retrieval.mjs';
-import { WEEKLY_BASE_URL, absoluteSourceUrl, sourceLabel } from './source-identity.mjs';
+import {
+  WEEKLY_BASE_URL,
+  absoluteSourceUrl,
+  blogKeyPart,
+  blogSourceId,
+  hasBlogIdentity,
+  sourceLabel
+} from './source-identity.mjs';
 import type { Corpus, CorpusChunk } from './retrieval.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
 
@@ -57,6 +64,8 @@ interface ArchiveRecord extends CorpusChunk {
   target_resolved?: boolean;
   target_post_url?: string;
   target_microblog_id?: string | number;
+  target_page_id?: string | number;
+  page_id?: string | number;
   target_source_kind?: string;
   issue_url?: string;
   post_url?: string;
@@ -68,6 +77,7 @@ interface ArchiveRecord extends CorpusChunk {
   generated_at?: unknown;
   issue_count?: number;
   post_count?: number;
+  page_count?: number;
   episode_count?: number;
   [key: string]: unknown;
 }
@@ -221,6 +231,7 @@ interface ToolArgs {
   also_in_issue?: unknown;
   microblog_id?: unknown;
   post_id?: unknown;
+  page_id?: unknown;
   episode_number?: unknown;
   episode?: unknown;
   url?: unknown;
@@ -661,7 +672,8 @@ function normalizeSourceKind(value: unknown) {
   if (!raw) return '';
   if (['weekly_thing', 'weeklything', 'newsletter', 'issue', 'issues', 'archive', 'wt', 'chunk'].includes(raw))
     return 'weekly_thing';
-  if (['blog', 'thingelstad', 'thingelstad_com', 'post', 'posts', 'micropost'].includes(raw)) return 'blog';
+  if (['blog', 'thingelstad', 'thingelstad_com', 'post', 'posts', 'micropost', 'page', 'pages'].includes(raw))
+    return 'blog';
   if (['podcast', 'podcasts', 'another', 'another_thing', 'episode', 'episodes'].includes(raw)) return 'podcast';
   if (raw === 'site') return 'site';
   return '';
@@ -702,7 +714,9 @@ function normalizeLinkRecord(link: ArchiveRecord, kind: unknown): ArchiveRecord 
   const corpusKind = normalizeSourceKind(kind) || linkCorpusKind(link);
   const sourceKind =
     link.source_kind || (corpusKind === 'blog' ? 'blog' : corpusKind === 'podcast' ? 'podcast' : 'weekly_thing');
-  const targetResolved = Boolean(link.target_resolved || link.target_post_url || link.target_microblog_id);
+  const targetResolved = Boolean(
+    link.target_resolved || link.target_post_url || link.target_microblog_id || link.target_page_id
+  );
   const targetSourceKind = inferredTargetSourceKind(link, corpusKind, targetResolved);
   const isCrossSource = Boolean(
     targetSourceKind && CORPUS_SOURCE_KINDS.has(targetSourceKind) && targetSourceKind !== corpusKind
@@ -1585,9 +1599,11 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       link_category: link.link_category,
       target_resolved: Boolean(link.target_resolved),
       microblog_id: link.microblog_id,
+      page_id: link.page_id,
       target_blog_path: link.target_blog_path,
       target_source_kind: link.target_source_kind,
       target_microblog_id: link.target_microblog_id,
+      target_page_id: link.target_page_id,
       target_post_url: link.target_post_url,
       target_subject: link.target_subject,
       target_publish_date: link.target_publish_date,
@@ -1664,14 +1680,13 @@ function resolvedAs(link: ArchiveRecord, wanted: boolean) {
   return inferredLinkKind(link) === 'internal' && Boolean(link.target_resolved) === wanted;
 }
 
-// The id of the source a link sits in (wt-351, blog-<id>, ep-<n>), for
+// The id of the source a link sits in (wt-351, blog-<id>, page-<id>, ep-<n>), for
 // get_source; '' when the link record does not name its source.
 function linkSourceId(link: ArchiveRecord) {
   const present = (value: unknown) => value !== undefined && value !== null && String(value) !== '';
   if (present(link.issue_number)) return `wt-${link.issue_number}`;
   if (present(link.episode_number)) return `ep-${link.episode_number}`;
-  if (present(link.microblog_id)) return `blog-${link.microblog_id}`;
-  return '';
+  return blogSourceId(link);
 }
 
 async function toolDomainHistory(input: ToolArgs = {}, context: ToolContext = {}) {
@@ -1723,12 +1738,24 @@ function sourceDate(record: ArchiveRecord | Record<string, unknown>) {
   return localDay(record as ArchiveRecord) || null;
 }
 
-function latestByDate<T extends ArchiveRecord>(items: T[]) {
-  return items
+// Newest first. A thingelstad.com page has no publish date: the date tools
+// leave it out, and a catalogue or phrase search (keepUndated) lists pages
+// after every dated source, last edited first, so none is silently missed.
+function latestByDate<T extends ArchiveRecord>(items: T[], { keepUndated = false } = {}) {
+  const dated = items
     .filter((item) => item.publish_date)
     .map((item) => ({ item, at: sourceInstant(item), id: lensSourceId(item) }))
     .sort((a, b) => b.at - a.at || b.id.localeCompare(a.id, 'en', { numeric: true }))
     .map((entry) => entry.item);
+  if (!keepUndated) return dated;
+  const undated = items
+    .filter((item) => !item.publish_date)
+    .sort(
+      (a, b) =>
+        String(b.updated || '').localeCompare(String(a.updated || '')) ||
+        lensSourceId(a).localeCompare(lensSourceId(b), 'en', { numeric: true })
+    );
+  return [...dated, ...undated];
 }
 
 // The skim layer: what a source is about, before anyone calls get_source.
@@ -1759,7 +1786,9 @@ function skimFields(kind: string, raw: ArchiveRecord): ArchiveRecord {
       abstract: text(raw.abstract),
       abstract_source: text(raw.abstract_source),
       categories: Array.isArray(raw.categories) && raw.categories.length ? raw.categories.map(String) : undefined,
-      published: text(raw.published)
+      published: text(raw.published),
+      // A page has no written date; micro.blog reports only its last edit.
+      updated: text(raw.updated)
     };
   }
   if (kind === 'podcast') return { abstract: text(raw.summary) };
@@ -1772,10 +1801,11 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
     return posts.map((post) => ({
       source_kind: 'blog',
       microblog_id: post.microblog_id,
+      page_id: post.page_id,
       subject: post.subject,
       publish_date: post.publish_date,
       url: post.url,
-      section: post.post_kind === 'micropost' ? 'Micropost' : 'Blog post',
+      section: post.post_kind === 'page' ? 'Page' : post.post_kind === 'micropost' ? 'Micropost' : 'Blog post',
       also_in_issues: post.also_in_issues,
       domains: post.domains || [],
       ...skimFields(kind, post)
@@ -1816,13 +1846,19 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
 export function sourceRecordKey(record: ArchiveRecord) {
   const kind =
     normalizeSourceKind(record?.source_kind || '') ||
-    (record?.episode_number ? 'podcast' : record?.microblog_id ? 'blog' : record?.issue_number ? 'weekly_thing' : '');
+    (record?.episode_number
+      ? 'podcast'
+      : hasBlogIdentity(record || {})
+        ? 'blog'
+        : record?.issue_number
+          ? 'weekly_thing'
+          : '');
   if (kind === 'weekly_thing') return `weekly_thing\0${issueKey(record.issue_number || record.number)}`;
   // A blog post is its microblog_id: micro.blog gave several posts one
   // permalink, and a url key merged them (withBlogIdentity fills the id into
   // every corpus layer at load). The url is the fallback for a row with no id.
   // Podcast layers do not all carry the episode number, so the url leads.
-  if (kind === 'blog') return `blog\0${record.microblog_id || urlKey(record.url)}`;
+  if (kind === 'blog') return `blog\0${blogKeyPart(record) || urlKey(record.url)}`;
   if (kind === 'podcast') return `podcast\0${urlKey(record.url) || record.episode_number || record.number || ''}`;
   return `${kind || 'unknown'}\0${urlKey(record?.url)}`;
 }
@@ -1851,7 +1887,7 @@ function urlKey(value: unknown) {
 export function sourceKeyFromChunk(chunk: ArchiveRecord, fallbackKind = '') {
   const kind = normalizeSourceKind(chunk?.source_kind || fallbackKind) || fallbackKind;
   if (kind === 'weekly_thing' || chunk?.issue_number) return `weekly_thing\0${issueKey(chunk.issue_number)}`;
-  if (kind === 'blog') return `blog\0${chunk.microblog_id || urlKey(chunk.url)}`;
+  if (kind === 'blog') return `blog\0${blogKeyPart(chunk) || urlKey(chunk.url)}`;
   if (kind === 'podcast') return `podcast\0${urlKey(chunk.url) || chunk.episode_number || ''}`;
   return `${kind || 'unknown'}\0${urlKey(chunk?.url)}`;
 }
@@ -1860,7 +1896,7 @@ export function sourceKeyFromLink(link: ArchiveRecord) {
   const kind = linkCorpusKind(link);
   if (kind === 'weekly_thing' || link.issue_number) return `weekly_thing\0${issueKey(link.issue_number)}`;
   if (kind === 'blog')
-    return `blog\0${link.microblog_id || urlKey(link.post_url || link.source_url) || urlKey(link.url)}`;
+    return `blog\0${blogKeyPart(link) || urlKey(link.post_url || link.source_url) || urlKey(link.url)}`;
   if (kind === 'podcast')
     return `podcast\0${urlKey(link.episode_url || link.source_url) || link.episode_number || urlKey(link.url)}`;
   return `${kind || 'unknown'}\0${urlKey(link.source_url)}`;
@@ -1870,14 +1906,14 @@ export function sourceKeyFromLink(link: ArchiveRecord) {
 // several posts names none of them), or its episode page.
 export function sourceKeyFromMedia(item: ArchiveRecord, kind: string) {
   if (kind === 'weekly_thing' || item.issue_number) return `weekly_thing\0${issueKey(item.issue_number)}`;
-  if (kind === 'blog') return `blog\0${item.microblog_id || urlKey(item.source_url)}`;
+  if (kind === 'blog') return `blog\0${blogKeyPart(item) || urlKey(item.source_url)}`;
   return `${kind}\0${urlKey(item.source_url) || item.episode_number || ''}`;
 }
 
 function mediaSourceId(item: ArchiveRecord, kind: string) {
   if (kind === 'weekly_thing' && item.issue_number != null && item.issue_number !== '')
     return `wt-${item.issue_number}`;
-  if (kind === 'blog' && item.microblog_id) return `blog-${item.microblog_id}`;
+  if (kind === 'blog' && hasBlogIdentity(item)) return blogSourceId(item);
   if (kind === 'podcast' && item.episode_number != null && item.episode_number !== '')
     return `ep-${item.episode_number}`;
   return undefined;
@@ -1901,11 +1937,12 @@ function recordYear(record: ArchiveRecord) {
 
 function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
   return {
-    // The id get_source and source_neighborhood take back (wt-351, blog-987, ep-3).
+    // The id get_source and source_neighborhood take back (wt-351, blog-987, page-57851, ep-3).
     id: lensSourceId(record),
     source_kind: record.source_kind,
     issue_number: record.issue_number ?? null,
     microblog_id: record.microblog_id,
+    page_id: record.page_id,
     episode_number: record.episode_number,
     show: record.show,
     subject: record.subject,
@@ -1925,6 +1962,8 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     abstract: record.abstract ? clipText(record.abstract, SKIM_ABSTRACT_CHARS) : undefined,
     abstract_source: record.abstract_source,
     categories: record.categories,
+    // A page's last edit: it has no written date, so publish_date is null.
+    updated: record.updated,
     audio_duration_seconds: record.audio_duration_seconds
   };
 }
@@ -1969,6 +2008,7 @@ function compactLink(link: ArchiveRecord): ArchiveRecord {
     corpus_kind: linkCorpusKind(link),
     issue_number: link.issue_number ?? null,
     microblog_id: link.microblog_id,
+    page_id: link.page_id,
     episode_number: link.episode_number,
     show: link.show,
     subject: link.subject,
@@ -1988,6 +2028,7 @@ function compactLink(link: ArchiveRecord): ArchiveRecord {
     target_resolved: Boolean(link.target_resolved),
     target_source_kind: link.target_source_kind,
     target_microblog_id: link.target_microblog_id,
+    target_page_id: link.target_page_id,
     target_post_url: link.target_post_url,
     target_subject: link.target_subject,
     target_publish_date: link.target_publish_date,
@@ -2067,11 +2108,11 @@ function inferSourceKindFromInput(input: ToolArgs = {}) {
   if (explicit) return explicit;
   const id = String(input.id || '');
   if (id.startsWith('wt-')) return 'weekly_thing';
-  if (id.startsWith('blog-')) return 'blog';
+  if (id.startsWith('blog-') || id.startsWith('page-')) return 'blog';
   if (id.startsWith('ep-')) return 'podcast';
   if (id.startsWith('site-')) return 'weekly_thing';
   if (input.issue_number || input.number || input.issue) return 'weekly_thing';
-  if (input.microblog_id || input.post_id) return 'blog';
+  if (input.microblog_id || input.post_id || input.page_id) return 'blog';
   if (input.episode_number || input.episode) return 'podcast';
   const domain = normalizedDomain(input.url || input.permalink || '');
   return CORPUS_BY_DOMAIN[domain] || '';
@@ -2087,6 +2128,13 @@ function recordMatchesIdentifier(record: ArchiveRecord, input: ToolArgs = {}) {
   if (record.source_kind === 'weekly_thing' && issue !== undefined && issueKey(record.issue_number) === issueKey(issue))
     return true;
   if (record.source_kind === 'blog' && microblogId !== undefined && String(record.microblog_id) === String(microblogId))
+    return true;
+  if (
+    record.source_kind === 'blog' &&
+    input.page_id !== undefined &&
+    input.page_id !== null &&
+    String(record.page_id) === String(input.page_id)
+  )
     return true;
   if (record.source_kind === 'podcast' && episode !== undefined && String(record.episode_number) === String(episode))
     return true;
@@ -2106,8 +2154,8 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   delete rest.id;
   const issue = raw.match(/^(?:wt[-\s]?|#)?(\d{1,4})(-[a-z]+)?$/i);
   if (issue) return { ...rest, id: `wt-${Number(issue[1])}${(issue[2] || '').toLowerCase()}` };
-  const blog = raw.match(/^blog-(\d+)$/i);
-  if (blog) return { ...rest, id: `blog-${blog[1]}` };
+  const blog = raw.match(/^(blog|page)-(\d+)$/i);
+  if (blog) return { ...rest, id: `${blog[1].toLowerCase()}-${blog[2]}` };
   const episode = raw.match(/^ep-(\d+)$/i);
   if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
   if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
@@ -2191,9 +2239,16 @@ async function findSourceBundle(
     const lookup = recordLookup(corpus, kind);
     const id = input.id === undefined || input.id === null ? '' : String(input.id);
     const url = input.url || input.permalink;
-    const byNumber = ['issue_number', 'issue', 'number', 'microblog_id', 'post_id', 'episode_number', 'episode'].some(
-      (field) => (input as Record<string, unknown>)[field] !== undefined
-    );
+    const byNumber = [
+      'issue_number',
+      'issue',
+      'number',
+      'microblog_id',
+      'post_id',
+      'page_id',
+      'episode_number',
+      'episode'
+    ].some((field) => (input as Record<string, unknown>)[field] !== undefined);
     const matches = id
       ? lookup.byId.get(id) || []
       : url && !byNumber
@@ -2443,6 +2498,8 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       }
       const issueRows = sortedCountList(issueCounts, 'issue_number');
       stats.post_count = rangeActive ? records.length : corpus.post_count || records.length;
+      // Pages are undated, so a year_range never holds one.
+      if (!rangeActive && corpus.page_count) stats.page_count = corpus.page_count;
       stats.posts_with_also_in_issues_count = withIssueRefs.length;
       stats.newest_also_in_issues = withIssueRefs[0] || null;
       stats.issues_referenced_count = issueRows.length;
@@ -2636,7 +2693,7 @@ async function matchedContent(input: ToolArgs, scope: unknown) {
     const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
     const linksBySource = groupBySourceKey(await linkRecords(kind), sourceKeyFromLink);
     for (const record of contentRecords(corpus, kind)) {
-      if (!record.publish_date) continue;
+      // An undated page lists unless a year is asked for.
       const year = recordYear(record);
       if (startYear && (!year || year < startYear)) continue;
       if (endYear && (!year || year > endYear)) continue;
@@ -2666,7 +2723,10 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched } =
     await matchedContent(input, scope);
   const byRecord = new Map(matched.map((entry) => [entry.record, entry]));
-  const ordered = latestByDate(matched.map((entry) => entry.record));
+  const ordered = latestByDate(
+    matched.map((entry) => entry.record),
+    { keepUndated: true }
+  );
   const page = pageOf('list_content', ordered, input);
   let sectionsOmitted = 0;
   const results = page.shown.map((record) => {
@@ -2832,7 +2892,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       });
     }
   }
-  const ordered = latestByDate(found as ArchiveRecord[]) as Array<Record<string, unknown>>;
+  const ordered = latestByDate(found as ArchiveRecord[], { keepUndated: true }) as Array<Record<string, unknown>>;
   const page = pageOf('quote_search', ordered, input);
   return markTruncated(
     {
@@ -3260,6 +3320,7 @@ function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
   if (!link || !record) return false;
   if (record.source_kind === 'blog') {
     if (link.target_microblog_id && String(link.target_microblog_id) === String(record.microblog_id)) return true;
+    if (link.target_page_id != null && String(link.target_page_id) === String(record.page_id)) return true;
     if (link.target_post_url && urlKey(link.target_post_url) === urlKey(record.url)) return true;
   }
   if (record.source_kind === 'weekly_thing') {

@@ -22,6 +22,8 @@ class RepairUrlTests(unittest.TestCase):
             "http://https://x.example/a": "https://x.example/a",
             "ttps://blog.coinbase.com/2015/11/20/x/": "https://blog.coinbase.com/2015/11/20/x/",
             "https://www.hwardmiles.com.": "https://www.hwardmiles.com",
+            # the blogroll page (2026-10-01)
+            "htttps://weekly.thingelstad.com": "https://weekly.thingelstad.com",
             "https://www.hwardmiles.com./a?b=1": "https://www.hwardmiles.com/a?b=1",
         }
         for url, fixed in cases.items():
@@ -87,11 +89,12 @@ class RealCorporaDomainTests(unittest.TestCase):
             or not link["url"].lower().startswith(("http://", "https://"))
         ]
         self.assertEqual(bad, [], json.dumps(bad[:5]))
-        # 29 doubled-scheme links plus the 6 written correctly.
+        # 29 doubled-scheme links plus the 6 written correctly, all in posts;
+        # one page links it too.
         candles = [
             link for link in blog["links"] if link["url"] == "https://www.thingelstad.com/candles/"
         ]
-        self.assertEqual(len(candles), 35)
+        self.assertEqual(len([link for link in candles if link.get("microblog_id")]), 35)
 
 
 if __name__ == "__main__":

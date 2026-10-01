@@ -1,7 +1,1165 @@
 {
-  "generated_at": "2026-09-28T18:36:07+00:00",
-  "highest_id": 6034145,
-  "post_count": 10443,
+  "generated_at": "2026-10-01T18:00:22+00:00",
+  "highest_id": 6036084,
+  "page_count": 123,
+  "pages": {
+    "1017901": {
+      "path": "pages/collections/escape-in-europe.md",
+      "title": "Escape in Europe",
+      "updated": "2026-04-19T12:24:46+00:00",
+      "url": "https://www.thingelstad.com/collections/escape-in-europe/"
+    },
+    "103225": {
+      "path": "pages/lists/wishlists.md",
+      "title": "Wish Lists",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/wishlists/"
+    },
+    "122120": {
+      "path": "pages/collections/february-2021-photoblogging-challenge.md",
+      "title": "February 2021 Photoblogging Challenge",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/february-2021-photoblogging-challenge/"
+    },
+    "122121": {
+      "path": "pages/collections/arizona-2021.md",
+      "title": "Arizona 2021",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/arizona-2021/"
+    },
+    "133875": {
+      "path": "pages/lists/print-subscriptions.md",
+      "title": "Print Subscriptions",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/print-subscriptions/"
+    },
+    "138724": {
+      "path": "pages/lists/nonprofits.md",
+      "title": "Nonprofit Organizations",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/nonprofits/"
+    },
+    "161278": {
+      "path": "pages/lists/awards-recognition.md",
+      "title": "Awards & Recognition",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/awards-recognition/"
+    },
+    "162332": {
+      "path": "pages/lists/poap-events.md",
+      "title": "POAP Events",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/poap-events/"
+    },
+    "166913": {
+      "path": "pages/lists/nft-list.md",
+      "title": "NFT List",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/nft-list/"
+    },
+    "168875": {
+      "path": "pages/collections/vermont-road-trip.md",
+      "title": "Vermont Road Trip 2021",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/vermont-road-trip/"
+    },
+    "177": {
+      "path": "pages/about.md",
+      "title": "About",
+      "updated": "2026-09-12T18:07:59+00:00",
+      "url": "https://www.thingelstad.com/about/"
+    },
+    "190684": {
+      "path": "pages/collections/mea-2021-road-trip.md",
+      "title": "MEA 2021 Road Trip",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/mea-2021-road-trip/"
+    },
+    "191201": {
+      "path": "pages/puzzles.md",
+      "title": "Jiggy Thing Puzzles",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/puzzles/"
+    },
+    "215455": {
+      "path": "pages/collections/wordle-games.md",
+      "title": "Wordle Games",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/"
+    },
+    "224772": {
+      "path": "pages/collections/wordle-games/200.md",
+      "title": "Wordle Games 200",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/200/"
+    },
+    "224773": {
+      "path": "pages/collections/wordle-games/225.md",
+      "title": "Wordle Games 225",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/225/"
+    },
+    "228866": {
+      "path": "pages/collections/wordle-games/250.md",
+      "title": "Wordle Games 250",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/250/"
+    },
+    "238758": {
+      "path": "pages/lists/cameras.md",
+      "title": "Cameras",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/cameras/"
+    },
+    "238759": {
+      "path": "pages/collections/wordle-games/275.md",
+      "title": "Wordle Games 275",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/275/"
+    },
+    "252806": {
+      "path": "pages/collections/fabulous-fifty-trips.md",
+      "title": "Fabulous Fifty Trips",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/fabulous-fifty-trips/"
+    },
+    "252808": {
+      "path": "pages/collections/wordle-games/300.md",
+      "title": "Wordle Games 300",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/300/"
+    },
+    "256846": {
+      "path": "pages/how-to/claim-a-poap.md",
+      "title": "How to Claim a POAP",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/how-to/claim-a-poap/"
+    },
+    "264357": {
+      "path": "pages/collections/wordle-games/325.md",
+      "title": "Wordle Games 325",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/325/"
+    },
+    "264358": {
+      "path": "pages/collections/wordle-games/350.md",
+      "title": "Wordle Games 350",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/350/"
+    },
+    "289133": {
+      "path": "pages/collections/iceland-2022.md",
+      "title": "Iceland 2022: Ring Road",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/iceland-2022/"
+    },
+    "289134": {
+      "path": "pages/collections/wordle-games/375.md",
+      "title": "Wordle Games 375",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/375/"
+    },
+    "289135": {
+      "path": "pages/collections/wordle-games/400.md",
+      "title": "Wordle Games 400",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/400/"
+    },
+    "299488": {
+      "path": "pages/collections/europe-2004.md",
+      "title": "Europe 2004",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/europe-2004/"
+    },
+    "301339": {
+      "path": "pages/art/nnxyz/nifty-faces.md",
+      "title": "nnxyz nifty faces",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/art/nnxyz/nifty-faces/"
+    },
+    "303493": {
+      "path": "pages/collections/wordle-games/425.md",
+      "title": "Wordle Games 425",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/wordle-games/425/"
+    },
+    "334315": {
+      "path": "pages/collections/disney-2022.md",
+      "title": "Disney 2022",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/disney-2022/"
+    },
+    "334671": {
+      "path": "pages/art/nnxyz/nnotb.md",
+      "title": "NNOTB",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/art/nnxyz/nnotb/"
+    },
+    "334672": {
+      "path": "pages/art/nnxyz.md",
+      "title": "nnxyz",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/art/nnxyz/"
+    },
+    "353102": {
+      "path": "pages/lists/dao-vote.md",
+      "title": "Vote in DAOs",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/dao-vote/"
+    },
+    "353586": {
+      "path": "pages/lists/reference-documents.md",
+      "title": "Reference Documents",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/reference-documents/"
+    },
+    "353588": {
+      "path": "pages/how-to/send-me-money.md",
+      "title": "Send me Money",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/how-to/send-me-money/"
+    },
+    "366819": {
+      "path": "pages/collections/crypto.md",
+      "title": "Crypto",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/crypto/"
+    },
+    "371119": {
+      "path": "pages/lists/graffiti.md",
+      "title": "Blockchain Graffiti",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/graffiti/"
+    },
+    "381041": {
+      "path": "pages/lists/gnosis-staking-accounts.md",
+      "title": "Gnosis Staking Accounts",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/gnosis-staking-accounts/"
+    },
+    "410185": {
+      "path": "pages/lists/bicycles.md",
+      "title": "Bicycles",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/bicycles/"
+    },
+    "412129": {
+      "path": "pages/secure/pgp-public-key.md",
+      "title": "PGP Public Key",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/secure/pgp-public-key/"
+    },
+    "412992": {
+      "path": "pages/art/nnxyz/rawblocks.md",
+      "title": "nnxyz rawblocks",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/art/nnxyz/rawblocks/"
+    },
+    "421032": {
+      "path": "pages/art/nnxyz/abstract.md",
+      "title": "nnxyz abstract",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/art/nnxyz/abstract/"
+    },
+    "424201": {
+      "path": "pages/lists/brandi-carlile-shows.md",
+      "title": "Brandi Carlile Shows",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/brandi-carlile-shows/"
+    },
+    "428290": {
+      "path": "pages/collections/bitcoin-2023.md",
+      "title": "Bitcoin 2023",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/bitcoin-2023/"
+    },
+    "451148": {
+      "path": "pages/collections/switzerland-italy-2023.md",
+      "title": "Switzerland & Italy 2023",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/switzerland-italy-2023/"
+    },
+    "489108": {
+      "path": "pages/collections/shortcuts.md",
+      "title": "Shortcuts",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/shortcuts/"
+    },
+    "510973": {
+      "path": "pages/collections/team-sps-events.md",
+      "title": "TeamSPS Events",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/team-sps-events/"
+    },
+    "520037": {
+      "path": "pages/projects/fall-fundraiser.md",
+      "title": "Things 4 Good Fall Fundraiser",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/fall-fundraiser/"
+    },
+    "536729": {
+      "path": "pages/projects/link-blog.md",
+      "title": "Link Blog",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/link-blog/"
+    },
+    "545942": {
+      "path": "pages/secure.md",
+      "title": "Secure",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/secure/"
+    },
+    "57605": {
+      "path": "pages/lists/quotes.md",
+      "title": "Quotes",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/quotes/"
+    },
+    "57850": {
+      "path": "pages/projects/open-loop.md",
+      "title": "Open Loop",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/"
+    },
+    "57851": {
+      "path": "pages/about/bio.md",
+      "title": "Bio",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/about/bio/"
+    },
+    "57853": {
+      "path": "pages/about/fun-facts.md",
+      "title": "Fun Facts",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/about/fun-facts/"
+    },
+    "57854": {
+      "path": "pages/projects/open-loop/0-but-no-shoes.md",
+      "title": "Open Loop #0 - But No Shoes",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/0-but-no-shoes/"
+    },
+    "57866": {
+      "path": "pages/projects/open-loop/1-big-fuzzy-dead-cat.md",
+      "title": "Open Loop #1 - Big Fuzzy Dead Cat",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/1-big-fuzzy-dead-cat/"
+    },
+    "57867": {
+      "path": "pages/projects/open-loop/2-what-am-i-editing-anyway.md",
+      "title": "Open Loop #2 - What am I Editing Anyway?",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/2-what-am-i-editing-anyway/"
+    },
+    "57868": {
+      "path": "pages/projects/open-loop/3-kubb-fever.md",
+      "title": "Open Loop #3 - Kubb Fever",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/"
+    },
+    "57869": {
+      "path": "pages/projects/open-loop/4-enough-win-for-everyone.md",
+      "title": "Open Loop #4 - Enough Win for Everyone",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/4-enough-win-for-everyone/"
+    },
+    "57870": {
+      "path": "pages/projects/open-loop/5-i-know-its-terribly-useful.md",
+      "title": "Open Loop #5 - I Know It's Terribly Useful",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/5-i-know-its-terribly-useful/"
+    },
+    "57871": {
+      "path": "pages/projects/open-loop/6-loppet-2013.md",
+      "title": "Open Loop #6 - Loppet 2013",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/6-loppet-2013/"
+    },
+    "57872": {
+      "path": "pages/projects/open-loop/7-turtle-turtle-turtle.md",
+      "title": "Open Loop #7 - Turtle Turtle Turtle",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/7-turtle-turtle-turtle/"
+    },
+    "57873": {
+      "path": "pages/projects/open-loop/8-dont-eat-the-cupcake.md",
+      "title": "Open Loop #8 - Don't Eat the Cupcake",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/open-loop/8-dont-eat-the-cupcake/"
+    },
+    "57874": {
+      "path": "pages/projects.md",
+      "title": "Projects",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/"
+    },
+    "58764": {
+      "path": "pages/projects/book-club.md",
+      "title": "Book Club",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/book-club/"
+    },
+    "58777": {
+      "path": "pages/lists/services.md",
+      "title": "Services I Use",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/services/"
+    },
+    "58778": {
+      "path": "pages/lists/business-cards.md",
+      "title": "Business Cards",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/business-cards/"
+    },
+    "58779": {
+      "path": "pages/lists.md",
+      "title": "Lists",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/"
+    },
+    "58780": {
+      "path": "pages/lists/escape-rooms.md",
+      "title": "Escape Rooms",
+      "updated": "2026-03-20T13:19:33+00:00",
+      "url": "https://www.thingelstad.com/lists/escape-rooms/"
+    },
+    "596271": {
+      "path": "pages/lists/photography-workshops.md",
+      "title": "Photography Workshops",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/photography-workshops/"
+    },
+    "59702": {
+      "path": "pages/lists/newsletters.md",
+      "title": "Newsletters",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/newsletters/"
+    },
+    "60160": {
+      "path": "pages/collections.md",
+      "title": "Collections",
+      "updated": "2026-09-12T18:07:35+00:00",
+      "url": "https://www.thingelstad.com/collections/"
+    },
+    "60161": {
+      "path": "pages/collections/iceland.md",
+      "title": "Iceland",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/iceland/"
+    },
+    "60162": {
+      "path": "pages/collections/summer-of-love.md",
+      "title": "Summer of Love",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/summer-of-love/"
+    },
+    "60163": {
+      "path": "pages/collections/morgan-remodel.md",
+      "title": "Morgan Remodel",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/morgan-remodel/"
+    },
+    "60858": {
+      "path": "pages/lists/national-parks.md",
+      "title": "National Parks",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/national-parks/"
+    },
+    "611162": {
+      "path": "pages/collections/pi-day.md",
+      "title": "Pi Day",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/pi-day/"
+    },
+    "61648": {
+      "path": "pages/lists/family-traditions.md",
+      "title": "Family Traditions",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/family-traditions/"
+    },
+    "62421": {
+      "path": "pages/weekly-thing/recommendations.md",
+      "title": "Weekly Thing Recommendations",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/weekly-thing/recommendations/"
+    },
+    "62422": {
+      "path": "pages/weekly-thing/faq.md",
+      "title": "Weekly Thing FAQ",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/weekly-thing/faq/"
+    },
+    "62423": {
+      "path": "pages/lists/affiliates.md",
+      "title": "Affiliate Links",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/affiliates/"
+    },
+    "62424": {
+      "path": "pages/lists/birthday-interview-questions.md",
+      "title": "Birthday Interview Questions",
+      "updated": "2026-02-10T00:36:08+00:00",
+      "url": "https://www.thingelstad.com/lists/birthday-interview-questions/"
+    },
+    "62582": {
+      "path": "pages/lists/words.md",
+      "title": "Word Lists",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/words/"
+    },
+    "626937": {
+      "path": "pages/collections/milwaukee-spring-break.md",
+      "title": "Milwaukee Spring Break",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/milwaukee-spring-break/"
+    },
+    "63508": {
+      "path": "pages/collections/best-of.md",
+      "title": "Best of …",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/best-of/"
+    },
+    "63509": {
+      "path": "pages/about/insights-discovery-profile.md",
+      "title": "Insights Discovery Profile",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/about/insights-discovery-profile/"
+    },
+    "640651": {
+      "path": "pages/collections/turks-caicos.md",
+      "title": "Turks & Caicos 2022",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/turks-caicos/"
+    },
+    "64124": {
+      "path": "pages/lists/minnesota-state-parks.md",
+      "title": "Minnesota State Parks",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/minnesota-state-parks/"
+    },
+    "643246": {
+      "path": "pages/collections/minnebar.md",
+      "title": "Minnebar",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/minnebar/"
+    },
+    "65054": {
+      "path": "pages/lists/feeds.md",
+      "title": "RSS Subscriptions",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/feeds/"
+    },
+    "65063": {
+      "path": "pages/lists/programming-languages.md",
+      "title": "Programming Languages",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/programming-languages/"
+    },
+    "65500": {
+      "path": "pages/lists/digital-nonprofits.md",
+      "title": "Digital Non-Profits",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/digital-nonprofits/"
+    },
+    "66529": {
+      "path": "pages/lists/blogroll.md",
+      "title": "Blogroll",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/blogroll/"
+    },
+    "667632": {
+      "path": "pages/collections/ireland-2024.md",
+      "title": "Ireland 2024",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/ireland-2024/"
+    },
+    "66924": {
+      "path": "pages/lists/reduce-inbound-junk.md",
+      "title": "Reduce Inbound Junk",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/reduce-inbound-junk/"
+    },
+    "67693": {
+      "path": "pages/lists/vehicles.md",
+      "title": "Vehicles",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/vehicles/"
+    },
+    "678755": {
+      "path": "pages/collections/summer-challenge-2024.md",
+      "title": "Summer Challenge 2024",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/summer-challenge-2024/"
+    },
+    "699129": {
+      "path": "pages/now.md",
+      "title": "Now",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/now/"
+    },
+    "70093": {
+      "path": "pages/collections/texas-hellweek-2001.md",
+      "title": "Texas Hellweek 2001",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/texas-hellweek-2001/"
+    },
+    "706913": {
+      "path": "pages/lists/new-standards-shows.md",
+      "title": "List of The New Standards Shows",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/new-standards-shows/"
+    },
+    "71319": {
+      "path": "pages/contact.md",
+      "title": "Contact Me",
+      "updated": "2026-01-22T21:45:16+00:00",
+      "url": "https://www.thingelstad.com/contact/"
+    },
+    "71862": {
+      "path": "pages/magic-pines/charlie-brown-tree.md",
+      "title": "Charlie Brown Tree",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/magic-pines/charlie-brown-tree/"
+    },
+    "74431": {
+      "path": "pages/magic-pines/pool.md",
+      "title": "Magic Pines Pool Instructions",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/magic-pines/pool/"
+    },
+    "744471": {
+      "path": "pages/photos.md",
+      "title": "Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/"
+    },
+    "744472": {
+      "path": "pages/photos/coffee.md",
+      "title": "Coffee Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/coffee/"
+    },
+    "744481": {
+      "path": "pages/photos/iceland.md",
+      "title": "Iceland Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/iceland/"
+    },
+    "744482": {
+      "path": "pages/photos/ireland.md",
+      "title": "Ireland Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/ireland/"
+    },
+    "744483": {
+      "path": "pages/photos/teamsps.md",
+      "title": "TeamSPS Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/teamsps/"
+    },
+    "744488": {
+      "path": "pages/photos/italy.md",
+      "title": "Italy Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/italy/"
+    },
+    "744489": {
+      "path": "pages/photos/switzerland.md",
+      "title": "Switzerland Photos",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/photos/switzerland/"
+    },
+    "74950": {
+      "path": "pages/lists/reading-list.md",
+      "title": "Reading List",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/reading-list/"
+    },
+    "79648": {
+      "path": "pages/collections/yellowstone-2020.md",
+      "title": "Yellowstone 2020",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/yellowstone-2020/"
+    },
+    "79827": {
+      "path": "pages/collections/finger-lakes-2018.md",
+      "title": "Finger Lakes 2018",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/finger-lakes-2018/"
+    },
+    "800078": {
+      "path": "pages/collections/florida-2025.md",
+      "title": "Florida 2025",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/florida-2025/"
+    },
+    "859835": {
+      "path": "pages/lists/reading.md",
+      "title": "Reading",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/lists/reading/"
+    },
+    "861055": {
+      "path": "pages/collections/qmsb-2025.md",
+      "title": "QMSB Trip 2025",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/qmsb-2025/"
+    },
+    "88688": {
+      "path": "pages/collections/east-coast-adventure.md",
+      "title": "East Coast Adventure 2006",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collections/east-coast-adventure/"
+    },
+    "91071": {
+      "path": "pages/projects/book-club/rescheduling.md",
+      "title": "Book Club Rescheduling",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/book-club/rescheduling/"
+    },
+    "91072": {
+      "path": "pages/projects/book-club/picking.md",
+      "title": "Book Club Picking",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/projects/book-club/picking/"
+    },
+    "925223": {
+      "path": "pages/connect.md",
+      "title": "Connect",
+      "updated": "2026-01-20T14:17:58+00:00",
+      "url": "https://www.thingelstad.com/connect/"
+    },
+    "94905": {
+      "path": "pages/collection/daddy-daughter-trip-to-nyc.md",
+      "title": "Daddy/Daughter Trip to NYC",
+      "updated": "2025-12-06T18:37:30+00:00",
+      "url": "https://www.thingelstad.com/collection/daddy-daughter-trip-to-nyc/"
+    },
+    "968160": {
+      "path": "pages/about/resume.md",
+      "title": "Resume",
+      "updated": "2026-02-18T14:34:56+00:00",
+      "url": "https://www.thingelstad.com/about/resume/"
+    }
+  },
+  "pages_excluded": {
+    "104399": {
+      "reason": "redirect stub",
+      "title": "Wicky Thing Candles",
+      "url": "https://www.thingelstad.com/candles/"
+    },
+    "106730": {
+      "reason": "redirect stub",
+      "title": "Cake Eater Candle",
+      "url": "https://www.thingelstad.com/candles/cake-eater/"
+    },
+    "106852": {
+      "reason": "family page",
+      "title": "Christmas Puzzles",
+      "url": "https://www.thingelstad.com/family/christmas-puzzles/"
+    },
+    "106853": {
+      "reason": "redirect stub",
+      "title": "Lit Candle",
+      "url": "https://www.thingelstad.com/candles/lit/"
+    },
+    "106862": {
+      "reason": "redirect stub",
+      "title": "Man in the Pants Candle",
+      "url": "https://www.thingelstad.com/candles/man-in-the-pants/"
+    },
+    "129862": {
+      "reason": "family page",
+      "title": "Wish Tammy a Happy 50th Birthday!",
+      "url": "https://www.thingelstad.com/family/tammy/50th-birthday-video/"
+    },
+    "136041": {
+      "reason": "about the website, not content",
+      "title": "Hello",
+      "url": "https://www.thingelstad.com/hello/"
+    },
+    "1679": {
+      "reason": "about the website, not content",
+      "title": "On This Day",
+      "url": "https://www.thingelstad.com/on-this-day/"
+    },
+    "179633": {
+      "reason": "family page",
+      "title": "OFV: Birchwood Acres (2021)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/birchwood-acres/"
+    },
+    "191202": {
+      "reason": "redirect stub",
+      "title": "Things 4 Good",
+      "url": "https://www.thingelstad.com/things4good/"
+    },
+    "211490": {
+      "reason": "family page",
+      "title": "Claiming Jamie's 50th Birthday Token",
+      "url": "https://www.thingelstad.com/family/jamie/50th-birthday-poap/"
+    },
+    "255760": {
+      "reason": "family page",
+      "title": "Knox Listing Photos",
+      "url": "https://www.thingelstad.com/family/house/knox/listing-photos/"
+    },
+    "257068": {
+      "reason": "navigation only",
+      "title": "How To",
+      "url": "https://www.thingelstad.com/how-to/"
+    },
+    "262811": {
+      "reason": "navigation only",
+      "title": "Magic Pines",
+      "url": "https://www.thingelstad.com/magic-pines/"
+    },
+    "334673": {
+      "reason": "navigation only",
+      "title": "Art",
+      "url": "https://www.thingelstad.com/art/"
+    },
+    "336815": {
+      "reason": "family page",
+      "title": "Things 4 Good Fall Fundraiser and Open House",
+      "url": "https://www.thingelstad.com/family/things4good/fundraiser-2022/"
+    },
+    "4196": {
+      "reason": "about the website, not content",
+      "title": "Archive",
+      "url": "https://www.thingelstad.com/archive/"
+    },
+    "423536": {
+      "reason": "about the website, not content",
+      "title": "Surprise Me",
+      "url": "https://www.thingelstad.com/surprise-me-page/"
+    },
+    "545370": {
+      "reason": "family page",
+      "title": "Christmas Letter",
+      "url": "https://www.thingelstad.com/family/christmas-letter/"
+    },
+    "545371": {
+      "reason": "family page",
+      "title": "Christmas Letter 2023",
+      "url": "https://www.thingelstad.com/family/christmas-letter/2023/"
+    },
+    "545376": {
+      "reason": "family page",
+      "title": "Christmas Letter 2022",
+      "url": "https://www.thingelstad.com/family/christmas-letter/2022/"
+    },
+    "57849": {
+      "reason": "about the website, not content",
+      "title": "You've Subscribed, Almost…",
+      "url": "https://www.thingelstad.com/weekly-thing/success/"
+    },
+    "58781": {
+      "reason": "family page",
+      "title": "Family",
+      "url": "https://www.thingelstad.com/family/"
+    },
+    "58782": {
+      "reason": "family page",
+      "title": "Olson Family Vacation",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/"
+    },
+    "58783": {
+      "reason": "family page",
+      "title": "OFV: Grand Superior (2004)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/grand-superior/"
+    },
+    "58784": {
+      "reason": "family page",
+      "title": "OFV: Wisconsin Dells (2005)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/wisconsin-dells/"
+    },
+    "58785": {
+      "reason": "family page",
+      "title": "OFV: Lanesboro (2006)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/lanesboro-2006/"
+    },
+    "58786": {
+      "reason": "family page",
+      "title": "OFV: Lundeen Cabin (2007)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/lundeen-cabin/"
+    },
+    "58787": {
+      "reason": "family page",
+      "title": "OFV: Alexandria (2008)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/Alexandria/"
+    },
+    "58788": {
+      "reason": "family page",
+      "title": "OFV: Brainerd Lake House (2009)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/brainerd-lake-house/"
+    },
+    "58789": {
+      "reason": "family page",
+      "title": "OFV: Chequamegon (2010)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/chequamegon/"
+    },
+    "58790": {
+      "reason": "family page",
+      "title": "OFV: Barn on the Bluff (2011)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/barn-on-the-bluff/"
+    },
+    "58791": {
+      "reason": "family page",
+      "title": "OFV: Aitkin (2012)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/aitkin/"
+    },
+    "58801": {
+      "reason": "family page",
+      "title": "OFV: Lanesboro (2013)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/lanesboro-2013/"
+    },
+    "58802": {
+      "reason": "family page",
+      "title": "OFV: Grand View Lodge (2014)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/grand-view-lodge/"
+    },
+    "58803": {
+      "reason": "family page",
+      "title": "OFV: Hibbing (2015)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/hibbing/"
+    },
+    "58804": {
+      "reason": "family page",
+      "title": "OFV: Blue Heron Lodge (2016)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/blue-heron-lodge/"
+    },
+    "58805": {
+      "reason": "family page",
+      "title": "OFV: Nicaboyne Lake (2017)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/nicaboyne-lake/"
+    },
+    "60047": {
+      "reason": "family page",
+      "title": "History Day 2018: Irena Sendler",
+      "url": "https://www.thingelstad.com/family/mazie/history-day-irena/"
+    },
+    "60577": {
+      "reason": "about the website, not content",
+      "title": "About This Site",
+      "url": "https://www.thingelstad.com/about/colophon/"
+    },
+    "60675": {
+      "reason": "family page",
+      "title": "Happy Birthday!",
+      "url": "https://www.thingelstad.com/family/tammy/happy-birthday-2020/"
+    },
+    "62851": {
+      "reason": "empty",
+      "title": "Road Sign Math",
+      "url": "https://www.thingelstad.com/projects/road-sign-math/"
+    },
+    "63937": {
+      "reason": "about the website, not content",
+      "title": "Not Found 😟",
+      "url": "https://www.thingelstad.com/404.html/"
+    },
+    "66104": {
+      "reason": "family page",
+      "title": "Birthday Interviews",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/"
+    },
+    "66105": {
+      "reason": "family page",
+      "title": "Mazie's 4th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/mazies-4th-birthday/"
+    },
+    "66106": {
+      "reason": "family page",
+      "title": "Mazie's 5th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/mazies-5th-birthday/"
+    },
+    "66107": {
+      "reason": "family page",
+      "title": "Mazie's 6th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/mazies-6th-birthday/"
+    },
+    "66108": {
+      "reason": "family page",
+      "title": "Mazie's 13th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/mazies-13th-birthday/"
+    },
+    "66109": {
+      "reason": "family page",
+      "title": "Tyler's 4th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-4th-birthday/"
+    },
+    "66110": {
+      "reason": "family page",
+      "title": "Tyler's 5th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-5th-birthday/"
+    },
+    "66111": {
+      "reason": "family page",
+      "title": "Tyler's 6th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-6th-birthday/"
+    },
+    "66112": {
+      "reason": "family page",
+      "title": "Tyler's 7th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-7th-birthday/"
+    },
+    "66113": {
+      "reason": "family page",
+      "title": "Tyler's 8th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-8th-birthday/"
+    },
+    "66114": {
+      "reason": "family page",
+      "title": "Tyler's 10th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/tylers-10th-birthday/"
+    },
+    "662728": {
+      "reason": "family page",
+      "title": "OFV: Webster (2024)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/webster/"
+    },
+    "662729": {
+      "reason": "family page",
+      "title": "OFV: Fergus Falls (2023)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/fergus-falls/"
+    },
+    "662730": {
+      "reason": "family page",
+      "title": "OFV: River Lodge (2022)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/river-lodge/"
+    },
+    "66284": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/"
+    },
+    "66285": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1987",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1987/"
+    },
+    "66286": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1988",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1988/"
+    },
+    "66287": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1989",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1989/"
+    },
+    "66288": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1990",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1990/"
+    },
+    "66289": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1991",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1991/"
+    },
+    "66290": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1992",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1992/"
+    },
+    "66291": {
+      "reason": "family page",
+      "title": "Thingelstad Family Videos 1993",
+      "url": "https://www.thingelstad.com/family/thingelstad-family-videos/1993/"
+    },
+    "66292": {
+      "reason": "family page",
+      "title": "Gulick Family Videos",
+      "url": "https://www.thingelstad.com/family/gulick-family-videos/"
+    },
+    "66293": {
+      "reason": "family page",
+      "title": "Olson Family Videos",
+      "url": "https://www.thingelstad.com/family/olson-family-videos/"
+    },
+    "66294": {
+      "reason": "family page",
+      "title": "Interview with Grandpa",
+      "url": "https://www.thingelstad.com/family/mazie/interview-with-grandpa/"
+    },
+    "669217": {
+      "reason": "redirect stub",
+      "title": "Newsletter",
+      "url": "https://www.thingelstad.com/newsletter/"
+    },
+    "67437": {
+      "reason": "family page",
+      "title": "Mazie's 15th Birthday Interview",
+      "url": "https://www.thingelstad.com/family/birthday-interviews/mazies-15th-birthday/"
+    },
+    "70970": {
+      "reason": "empty",
+      "title": "Planet Kubb",
+      "url": "https://www.thingelstad.com/projects/planet-kubb/"
+    },
+    "71279": {
+      "reason": "empty",
+      "title": "Fifty in Fifties",
+      "url": "https://www.thingelstad.com/projects/fifty-in-fifties/"
+    },
+    "748340": {
+      "reason": "family page",
+      "title": "Christmas Letter 2024",
+      "url": "https://www.thingelstad.com/family/christmas-letter/2024/"
+    },
+    "761454": {
+      "reason": "about the website, not content",
+      "title": "Guestbook",
+      "url": "https://www.thingelstad.com/guestbook/"
+    },
+    "81162": {
+      "reason": "family page",
+      "title": "OFV: Park Rapids (2018)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/park-rapids/"
+    },
+    "81163": {
+      "reason": "family page",
+      "title": "OFV: Amery (2019)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/amery/"
+    },
+    "81164": {
+      "reason": "family page",
+      "title": "OFV: Spooky Olson Family Weekend (2020)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/spooky/"
+    },
+    "825761": {
+      "reason": "redirect stub",
+      "title": "612 POAP Challenge",
+      "url": "https://www.thingelstad.com/projects/612-poap-challenge/"
+    },
+    "853583": {
+      "reason": "family page",
+      "title": "OFV: Montréal/Vermont (2025)",
+      "url": "https://www.thingelstad.com/family/olson-family-vacation/montreal-vermont/"
+    },
+    "859840": {
+      "reason": "empty",
+      "title": "Reading List",
+      "url": "https://www.thingelstad.com/lists/reading/reading-list/"
+    },
+    "859841": {
+      "reason": "empty",
+      "title": "Books Read",
+      "url": "https://www.thingelstad.com/lists/reading/books-read/"
+    },
+    "897249": {
+      "reason": "redirect stub",
+      "title": "Podcast",
+      "url": "https://www.thingelstad.com/podcast/"
+    },
+    "926031": {
+      "reason": "about the website, not content",
+      "title": "Pagefind",
+      "url": "https://www.thingelstad.com/pagefind/"
+    }
+  },
+  "post_count": 10444,
   "posts": {
     "1003356": {
       "path": "posts/2019/12/2019-12-22-big-crowd-at.md",
@@ -43388,6 +44546,12 @@
       "published": "2026-09-27T17:53:39+00:00",
       "title": "",
       "url": "https://www.thingelstad.com/2026/09/27/we-got-the-very-last.html"
+    },
+    "6036084": {
+      "path": "posts/2026/09/2026-09-30-oh-no-of-quota.md",
+      "published": "2026-09-30T21:52:43+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/09/30/oh-no-of-quota.html"
     },
     "653561": {
       "path": "posts/2018/07/2018-07-20-clocks.md",

@@ -22,6 +22,15 @@ with YAML front matter (``microblog_id`` [uid], ``url``, ``title``,
 markdown body, plus a manifest at ``data/blog/index.json`` (``highest_id`` +
 ``posts`` keyed by uid) that drives incremental sync and corpus iteration.
 
+Pages (the micro.blog "pages" channel: About, Lists, Collections, Projects,
+Open Loop ...) come from the same query with ``mp-channel=pages`` and are
+written to ``data/blog/pages/{url path}.md`` with ``page_id`` (their own id
+space: page 71862 and post 71862 are different things), ``updated`` (micro.blog
+reports a page's last edit, not when it was written) and ``post_kind: page``.
+Pages are refreshed whole on every run, since they are edited in place; the
+manifest records each included page under ``pages`` and each one left out
+under ``pages_excluded`` with its reason.
+
 Markdown-only v1 — image rehosting is deferred, so ``<img>`` src attributes
 still point at micro.blog-hosted URLs (the corpus builder strips them from the
 embedding text; the canonical store keeps them for a future image pass).
@@ -64,7 +73,27 @@ sys.path.insert(0, str(REPO))
 from microblog import _content_to_markdown  # noqa: E402
 
 BLOG_DIR = REPO / "data" / "blog"
+PAGES_DIR = BLOG_DIR / "pages"
 INDEX_PATH = BLOG_DIR / "index.json"
+
+# Pages kept out of the archive (Jamie, 2026-10-01): the family pages, and
+# pages about the website rather than content. Empty pages, micro.blog's
+# template pages, redirect stubs (a body that is only a URL) and link-only
+# navigation pages are left out by rule (see ``page_exclusion``).
+PAGE_EXCLUDED_PREFIXES = ("/family/",)
+PAGE_SITE_PATHS = frozenset(
+    {
+        "/404.html",
+        "/about/colophon",
+        "/archive",
+        "/guestbook",
+        "/hello",
+        "/on-this-day",
+        "/pagefind",
+        "/surprise-me-page",
+        "/weekly-thing/success",
+    }
+)
 
 DEFAULT_MICROPUB_URL = "https://micro.blog/micropub"
 PAGE_SIZE = 500
@@ -98,10 +127,15 @@ def _first(props: dict, *keys: str):
     return None
 
 
-def _fetch_source_page(token: str, *, limit: int, offset: int) -> list[dict[str, Any]]:
+def _fetch_source_page(
+    token: str, *, limit: int, offset: int, channel: str | None = None
+) -> list[dict[str, Any]]:
+    params: dict[str, Any] = {"q": "source", "limit": limit, "offset": offset}
+    if channel:
+        params["mp-channel"] = channel
     resp = requests.get(
         _micropub_url(),
-        params={"q": "source", "limit": limit, "offset": offset},
+        params=params,
         headers={"Authorization": f"Bearer {token}", "User-Agent": _UA},
         timeout=_TIMEOUT,
     )
@@ -156,6 +190,20 @@ def iter_posts(*, limit: int | None, known_uids: set[int] | None):
         offset += len(page)
     out.sort(key=lambda p: p["id"])  # oldest-first, stable
     return out
+
+
+def fetch_pages() -> list[dict[str, Any]]:
+    """Every item in the micro.blog "pages" channel (drafts included; the
+    caller sorts them out), paginated like the posts."""
+    token = _api_key()
+    items: list[dict[str, Any]] = []
+    offset = 0
+    while True:
+        page = _fetch_source_page(token, limit=PAGE_SIZE, offset=offset, channel="pages")
+        items.extend(page)
+        if len(page) < PAGE_SIZE:
+            return items
+        offset += len(page)
 
 
 # ── mf2 item → rendered post ──────────────────────────────────────────
@@ -223,6 +271,94 @@ def render_post(item: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
+_BARE_URL_RE = re.compile(r"^https?://\S+$")
+_NAV_LINE_RE = re.compile(r"^\s*(?:[-*]\s*)?\[[^\]]*\]\(/[^)]*\)\s*$")
+
+
+def _page_path(url: str) -> str:
+    """The page's site path with micro.blog's doubled slashes collapsed and no
+    trailing slash: ``https://www.thingelstad.com/about//`` -> ``/about``."""
+    path = re.sub(r"/{2,}", "/", urlparse(url or "").path)
+    return path.rstrip("/") or "/"
+
+
+def page_exclusion(path: str, markdown: str, *, template: bool) -> str | None:
+    """Why a published page stays out of the archive, or None to keep it."""
+    if any(
+        path.startswith(prefix.rstrip("/") + "/") or path == prefix.rstrip("/")
+        for prefix in PAGE_EXCLUDED_PREFIXES
+    ):
+        return "family page"
+    if path in PAGE_SITE_PATHS:
+        return "about the website, not content"
+    if template:
+        return "micro.blog template page"
+    body = markdown.strip()
+    if not body:
+        return "empty"
+    if _BARE_URL_RE.match(body):
+        return "redirect stub"
+    lines = [line for line in body.splitlines() if line.strip()]
+    if all(_NAV_LINE_RE.match(line) for line in lines):
+        return "navigation only"
+    return None
+
+
+def render_page(item: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    """Convert a pages-channel item into ``(page, None)`` or, for a page left
+    out, ``(None, {id, url, title, reason})``. Drafts and items without a uid
+    are ``(None, None)``: not published, so not an exclusion."""
+    props = item.get("properties") or {}
+    status = _first(props, "post-status")
+    if status and str(status).lower() not in ("published", "publish"):
+        return None, None
+    try:
+        uid = int(_first(props, "uid"))
+    except TypeError, ValueError:
+        return None, None
+    path = _page_path(str(_first(props, "url") or ""))
+    host = urlparse(str(_first(props, "url") or "")).netloc or "www.thingelstad.com"
+    url = f"https://{host}{path}/" if path != "/" else f"https://{host}/"
+    title = str(_first(props, "name") or "").strip()
+    markdown = _content_to_markdown(props.get("content"))
+    template = str(_first(props, "microblog-template")).lower() == "true"
+    reason = page_exclusion(path, markdown, template=template)
+    if reason:
+        return None, {"id": uid, "url": url, "title": title, "reason": reason}
+    segments = [
+        re.sub(r"[^A-Za-z0-9._-]", "-", seg).strip("-") or "page"
+        for seg in path.strip("/").split("/")
+    ]
+    return {
+        "id": uid,
+        "path": "pages/" + "/".join(segments) + ".md",
+        "url": url,
+        "title": title,
+        "updated": str(_first(props, "published", "updated") or "").strip(),
+        "categories": _categories(props),
+        "markdown": markdown,
+    }, None
+
+
+def render_pages(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    pages: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    claimed: dict[str, int] = {}
+    for item in items:
+        page, skipped = render_page(item)
+        if skipped:
+            excluded.append(skipped)
+        if not page:
+            continue
+        if claimed.get(page["path"], page["id"]) != page["id"]:
+            page["path"] = re.sub(r"\.md$", f"-{page['id']}.md", page["path"])
+        claimed[page["path"]] = page["id"]
+        pages.append(page)
+    pages.sort(key=lambda p: p["path"])
+    excluded.sort(key=lambda p: p["url"])
+    return pages, excluded
+
+
 # ── file + manifest ───────────────────────────────────────────────────
 
 
@@ -251,6 +387,44 @@ def _front_matter(post: dict[str, Any]) -> str:
             "---",
         ]
     )
+
+
+def _page_front_matter(page: dict[str, Any]) -> str:
+    return "\n".join(
+        [
+            "---",
+            f"page_id: {page['id']}",
+            f"url: {_yaml_scalar(page['url'])}",
+            f"title: {_yaml_scalar(page['title'])}",
+            f"updated: {_yaml_scalar(page['updated'])}",
+            "post_kind: page",
+            f"categories: {_yaml_list(page['categories'])}",
+            "---",
+        ]
+    )
+
+
+def write_pages(pages: list[dict[str, Any]]) -> int:
+    """Write every included page and delete page files no longer included
+    (unpublished, excluded, or moved). Returns the number removed."""
+    keep = set()
+    for page in pages:
+        path = BLOG_DIR / page["path"]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            _page_front_matter(page) + "\n\n" + page["markdown"].strip() + "\n", encoding="utf-8"
+        )
+        keep.add(path.resolve())
+    removed = 0
+    if PAGES_DIR.exists():
+        for stale in sorted(PAGES_DIR.rglob("*.md")):
+            if stale.resolve() not in keep:
+                stale.unlink()
+                removed += 1
+        for directory in sorted(PAGES_DIR.rglob("*"), reverse=True):
+            if directory.is_dir() and not any(directory.iterdir()):
+                directory.rmdir()
+    return removed
 
 
 def write_post(post: dict[str, Any]) -> Path:
@@ -334,11 +508,17 @@ def main() -> int:
         print(f"                title={s['title']!r} kind={s['post_kind']}", flush=True)
         print(f"                md[:120]={s['markdown'][:120]!r}", flush=True)
 
+    print("\nfetching micro.blog pages channel…", flush=True)
+    pages, pages_excluded = render_pages(fetch_pages())
+    print(f"  pages:        {len(pages)} kept, {len(pages_excluded)} left out", flush=True)
+    reasons: dict[str, int] = {}
+    for skipped in pages_excluded:
+        reasons[skipped["reason"]] = reasons.get(skipped["reason"], 0) + 1
+    for reason, count in sorted(reasons.items()):
+        print(f"                {count} {reason}", flush=True)
+
     if args.dry_run:
         print("\n(dry-run — no files written)", flush=True)
-        return 0
-    if args.since_last and not posts:
-        print("\n(no new posts — local blog store unchanged)", flush=True)
         return 0
 
     written = 0
@@ -360,17 +540,39 @@ def main() -> int:
             "title": p["title"],
         }
         highest = max(highest, p["id"])
-    write_index(
-        {
-            "highest_id": highest,
-            "post_count": len(posts_index),
-            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "posts": posts_index,
-        }
-    )
+    removed = write_pages(pages)
+    new_index = {
+        "highest_id": highest,
+        "post_count": len(posts_index),
+        "posts": posts_index,
+        "page_count": len(pages),
+        "pages": {
+            str(page["id"]): {
+                "path": page["path"],
+                "url": page["url"],
+                "updated": page["updated"],
+                "title": page["title"],
+            }
+            for page in pages
+        },
+        "pages_excluded": {
+            str(skipped["id"]): {
+                "url": skipped["url"],
+                "title": skipped["title"],
+                "reason": skipped["reason"],
+            }
+            for skipped in pages_excluded
+        },
+    }
+    # The nightly sync commits whatever changed: a manifest that differs only
+    # in its timestamp is left alone, so a quiet night makes no commit.
+    unchanged = {k: v for k, v in index.items() if k != "generated_at"} == new_index
+    if not unchanged:
+        new_index["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        write_index(new_index)
     print(
-        f"\nwrote {written} post file(s); manifest tracks "
-        f"{len(posts_index)} post(s), highest_id={highest}",
+        f"\nwrote {written} post file(s) and {len(pages)} page(s) ({removed} stale page file(s) removed); "
+        f"manifest tracks {len(posts_index)} post(s), highest_id={highest}",
         flush=True,
     )
     return 0

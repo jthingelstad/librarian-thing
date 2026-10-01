@@ -2336,6 +2336,10 @@ def _markdown_html_links(body: str) -> list[tuple[str, str]]:
     return [(text, url) for text, url, _ in _body_links(body)]
 
 
+def _blog_section(post_kind: str) -> str:
+    return {"micropost": "Micropost", "page": "Page"}.get(post_kind, "Blog post")
+
+
 def _blog_target_path(url: str) -> str | None:
     match = _BLOG_PERMALINK_RE.search(url or "")
     if not match:
@@ -2371,6 +2375,22 @@ def _blog_link_category(
     return "internal_unresolved"
 
 
+def _site_page_path(url: str) -> str | None:
+    """A thingelstad.com page's path key (``/lists/escape-rooms``), or None
+    for another host or a dated post permalink."""
+    try:
+        parsed = urlparse(url or "")
+    except Exception:
+        return None
+    host = (parsed.hostname or "").lower()
+    if host and host not in _BLOG_INTERNAL_DOMAINS:
+        return None
+    if _BLOG_PERMALINK_RE.search(url or ""):
+        return None
+    path = re.sub(r"/{2,}", "/", parsed.path or "").rstrip("/").lower()
+    return path or None
+
+
 def _blog_outbound_links(
     body: str,
     *,
@@ -2382,8 +2402,12 @@ def _blog_outbound_links(
     post_lookup: dict[str, dict[str, Any]],
     weekly_lookup: dict[str, Any] | None = None,
     podcast_lookup: dict[str, dict[str, Any]] | None = None,
+    page_id: Any = None,
+    page_lookup: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Extract post-level outbound links from native blog markdown/HTML.
+    A page's links carry ``page_id`` in place of ``microblog_id``, and a link
+    to one of the archive's pages resolves to it (``target_page_id``).
 
     Unlike Weekly Thing's curated-link extractor, every non-image markdown
     link and HTML anchor in a blog post is editorial context. The resulting
@@ -2408,6 +2432,8 @@ def _blog_outbound_links(
         seen_urls.add(resolved_url)
         target_path = _blog_target_path(resolved_url)
         target_post = post_lookup.get(target_path or "")
+        if not target_post and page_lookup:
+            target_post = page_lookup.get(_site_page_path(resolved_url) or "")
         target_source_kind = _CROSS_SOURCE_BY_DOMAIN.get(domain)
         if (
             not target_source_kind
@@ -2424,7 +2450,7 @@ def _blog_outbound_links(
         )
         record = {
             "source_kind": "blog",
-            "microblog_id": microblog_id,
+            **({"page_id": page_id} if page_id is not None else {"microblog_id": microblog_id}),
             "post_url": post_url,
             "post_subject": subject,
             "subject": subject,
@@ -2432,7 +2458,7 @@ def _blog_outbound_links(
             "post_year": parse_year(publish_date),
             "issue_year": parse_year(publish_date),
             "post_kind": post_kind,
-            "section": "Micropost" if post_kind == "micropost" else "Blog post",
+            "section": _blog_section(post_kind),
             "url": resolved_url,
             "domain": domain,
             "text": text,
@@ -2447,7 +2473,10 @@ def _blog_outbound_links(
             record["target_blog_path"] = target_path
         if target_post:
             record["target_source_kind"] = "blog"
-            record["target_microblog_id"] = target_post.get("microblog_id")
+            if target_post.get("page_id") is not None:
+                record["target_page_id"] = target_post["page_id"]
+            else:
+                record["target_microblog_id"] = target_post.get("microblog_id")
             record["target_post_url"] = target_post.get("url")
             record["target_subject"] = target_post.get("subject")
             record["target_publish_date"] = target_post.get("publish_date")
@@ -2467,8 +2496,15 @@ def build_blog_corpus(
     archive_dir: Path = ARCHIVE_DIR,
     include_xref: bool = True,
     podcast_dir: Path = PODCAST_DIR,
+    pages_dir: Path | None = None,
 ) -> dict[str, Any]:
-    """Build the blog corpus from ``data/blog/posts/**/*.md``. One chunk per
+    """Build the blog corpus from ``data/blog/posts/**/*.md`` and the site's
+    pages, ``data/blog/pages/**/*.md`` (``pages_dir``, default beside
+    ``blog_dir``). A page is a blog source with its own id space: it carries
+    ``page_id`` (never ``microblog_id``; page 71862 and post 71862 differ),
+    ``post_kind: "page"``, section "Page", chunk ids ``page:{page_id}:...``,
+    no ``publish_date`` (micro.blog reports only a page's last edit, kept as
+    ``updated``), so date-anchored tools leave pages out. One chunk per
     ``chunk_section`` piece, ``source_kind: "blog"``, content-deterministic id
     ``blog:{microblog_id}:{index}:{body_hash}``. The corpus also carries a
     post-level outbound-link graph (``links`` / ``link_count`` plus chunk
@@ -2542,8 +2578,58 @@ def build_blog_corpus(
             }
         post_inputs.append(post_input)
 
+    page_lookup: dict[str, dict[str, Any]] = {}
+    pages_root = pages_dir if pages_dir is not None else blog_dir.parent / "pages"
+    for path in sorted(pages_root.rglob("*.md")) if pages_root.exists() else []:
+        metadata, body = read_issue(path)
+        page_id = metadata.get("page_id")
+        if page_id is None:
+            raise RuntimeError(f"{path} is missing page_id in front matter")
+        url = str(metadata.get("url") or "").strip()
+        embed_text = _blog_embed_text(body)
+        if not embed_text and not extract_images(body) and not extract_video_posters(body):
+            continue
+        title = str(metadata.get("title") or "").strip()
+        subject = title or _short_label(embed_text) or "Page"
+        page_input = {
+            "body": body,
+            "microblog_id": None,
+            "page_id": page_id,
+            "url": url,
+            "subject": subject,
+            "publish_date": None,
+            "post_kind": "page",
+            "section": "Page",
+            "also_in_issues": None,
+            "embed_text": embed_text,
+            "published": None,
+            "updated": str(metadata.get("updated") or "") or None,
+            "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
+        }
+        page_path = _site_page_path(url)
+        if page_path:
+            page_lookup[page_path] = {
+                "page_id": page_id,
+                "url": url,
+                "subject": subject,
+                "publish_date": None,
+            }
+        post_inputs.append(page_input)
+
+    page_count = 0
     for post_input in post_inputs:
-        post_count += 1
+        page_id = post_input.get("page_id")
+        if page_id is None:
+            post_count += 1
+        else:
+            page_count += 1
+        # The source's own key on every row it makes: a post's microblog_id,
+        # or a page's page_id.
+        identity = (
+            {"page_id": page_id}
+            if page_id is not None
+            else {"microblog_id": post_input["microblog_id"]}
+        )
         body = post_input["body"]
         microblog_id = post_input["microblog_id"]
         url = post_input["url"]
@@ -2563,11 +2649,13 @@ def build_blog_corpus(
             post_lookup=post_lookup,
             weekly_lookup=weekly_lookup,
             podcast_lookup=podcast_lookup,
+            page_id=page_id,
+            page_lookup=page_lookup,
         )
         post_domains = extract_domains(post_links)
         links.extend(post_links)
         post_record = {
-            "microblog_id": microblog_id,
+            **identity,
             "subject": subject,
             "publish_date": publish_date,
             "post_year": parse_year(publish_date),
@@ -2579,6 +2667,8 @@ def build_blog_corpus(
         }
         if post_input["published"]:
             post_record["published"] = post_input["published"]
+        if post_input.get("updated"):
+            post_record["updated"] = post_input["updated"]
         if post_input["categories"]:
             post_record["categories"] = post_input["categories"]
         if also_in_issues:
@@ -2594,7 +2684,7 @@ def build_blog_corpus(
                     "source_kind": "blog",
                     # The post's own key: six permalinks are shared by
                     # fourteen posts, so source_url alone names the wrong one.
-                    "microblog_id": microblog_id,
+                    **identity,
                     "subject": subject,
                     "source_url": url,
                     "publish_date": publish_date,
@@ -2611,7 +2701,7 @@ def build_blog_corpus(
                     "alt": poster["alt"],
                     "context": f"{VIDEO_POSTER_CONTEXT}. {nearby}".strip(),
                     "source_kind": "blog",
-                    "microblog_id": microblog_id,
+                    **identity,
                     "subject": subject,
                     "source_url": url,
                     "publish_date": publish_date,
@@ -2634,8 +2724,12 @@ def build_blog_corpus(
             # reusing the stale vector. Readable mbid:index prefix kept for
             # debugging. Mirrors the issue corpus's content-hashed `chunk_id`.
             chunk = {
-                "id": f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}",
-                "microblog_id": microblog_id,
+                "id": (
+                    f"page:{page_id}:{index}:{body_hash(chunk_text)}"
+                    if page_id is not None
+                    else f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}"
+                ),
+                **identity,
                 "issue_number": None,
                 "subject": subject,
                 "publish_date": publish_date,
@@ -2656,6 +2750,8 @@ def build_blog_corpus(
             # posts, "2006/09/09/000000.html").
             if post_input["published"]:
                 chunk["published"] = post_input["published"]
+            if post_input.get("updated"):
+                chunk["updated"] = post_input["updated"]
             if also_in_issues:
                 chunk["also_in_issues"] = also_in_issues
             chunks.append(chunk)
@@ -2670,6 +2766,7 @@ def build_blog_corpus(
         "embed_recipe": EMBED_RECIPE_VERSION,
         "issue_count": 0,
         "post_count": post_count,
+        "page_count": page_count,
         "chunk_count": len(chunks),
         "link_count": len(links),
         "issues": [],

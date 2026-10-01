@@ -6,7 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import { bedrock, bedrockAgentRuntime, embeddingModel, rerankModel, s3 } from './aws-clients.mjs';
 import { errorFields, logEvent as sharedLogEvent, truthyEnv } from './logging.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
-import { absoluteSourceUrl, publicSourceKind, sourceLabel } from './source-identity.mjs';
+import { absoluteSourceUrl, blogKeyPart, publicSourceKind, sourceLabel } from './source-identity.mjs';
 
 const DEFAULT_EMBEDDING_DIMENSIONS = 1024;
 const TOKEN_RE = /[a-z0-9][a-z0-9'-]{1,}/gi;
@@ -120,13 +120,15 @@ let graphCache: Record<string, unknown> | undefined;
 // 2026-09-30 carry the id on posts and links but not on chunks or media, so
 // it is filled in once at load: a chunk's from its id (blog:<id>:<n>:<hash>),
 // a photo's from the one post at its source url (none when the url is
-// shared - better unattached than on the wrong post).
+// shared - better unattached than on the wrong post). A page's rows carry
+// page_id and are never given a post's id.
 export function withBlogIdentity(corpus: Corpus | undefined) {
   if (!corpus) return corpus;
   type Row = Record<string, unknown>;
   const layer = (name: string) => ((corpus as Record<string, unknown>)[name] || []) as Row[];
   const idsByUrl = new Map<string, unknown[]>();
   for (const post of layer('posts')) {
+    if (post.page_id != null) continue;
     const key = postUrlKey(post.url);
     if (key) idsByUrl.set(key, [...(idsByUrl.get(key) || []), post.microblog_id]);
   }
@@ -135,18 +137,18 @@ export function withBlogIdentity(corpus: Corpus | undefined) {
     return ids.length === 1 && ids[0] ? ids[0] : undefined;
   };
   for (const chunk of layer('chunks')) {
-    if (chunk.microblog_id) continue;
+    if (chunk.microblog_id || chunk.page_id != null) continue;
     const match = /^blog:(\d+):/.exec(String(chunk.id || ''));
     const id = match ? Number(match[1]) : uniqueId(chunk.url);
     if (id) chunk.microblog_id = id;
   }
   for (const link of layer('links')) {
-    if (link.microblog_id) continue;
+    if (link.microblog_id || link.page_id != null) continue;
     const id = uniqueId(link.post_url || link.source_url);
     if (id) link.microblog_id = id;
   }
   for (const item of layer('media')) {
-    if (item.microblog_id) continue;
+    if (item.microblog_id || item.page_id != null) continue;
     const id = uniqueId(item.source_url);
     if (id) item.microblog_id = id;
   }
@@ -963,9 +965,12 @@ function issueClusters(source: CorpusChunk) {
 }
 
 // The microblog id a blog chunk belongs to (ids are blog:{id}:{index}:{hash}).
+// A blog chunk's source key part (blogKeyPart): the microblog_id from
+// blog:<id>:<n>:<hash>, page:<id> from a page's page:<id>:<n>:<hash>.
 function blogPostId(source: CorpusChunk) {
-  const match = /^blog:([^:]+):/.exec(String(source.id || ''));
-  return match ? match[1] : '';
+  const match = /^(blog|page):([^:]+):/.exec(String(source.id || ''));
+  if (!match) return '';
+  return match[1] === 'page' ? `page:${match[2]}` : match[2];
 }
 
 // The blog posts filed under any of these categories (case-insensitive).
@@ -976,7 +981,7 @@ export async function blogCategoryPostIds(category: unknown) {
   const corpus = await loadCorpus('blog');
   for (const post of (corpus.posts as Array<Record<string, unknown>> | undefined) || []) {
     const categories = Array.isArray(post.categories) ? post.categories.map((item) => String(item).toLowerCase()) : [];
-    if (wanted.some((item) => categories.includes(item))) ids.add(String(post.microblog_id));
+    if (wanted.some((item) => categories.includes(item))) ids.add(blogKeyPart(post));
   }
   return ids;
 }

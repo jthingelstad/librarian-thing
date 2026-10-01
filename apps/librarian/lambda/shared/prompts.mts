@@ -90,7 +90,12 @@ export function promptFingerprint(): string {
 //        *_note keys; counts are [{key, count}] lists and totals total_count;
 //        every tool declares an outputSchema and a successful call carries
 //        structuredContent; a result too large to fit is an error.
-export const MCP_SERVER_VERSION = '2.3.0';
+// 2.4.0 (2026-10-01): thingelstad.com pages join the blog source with their
+//        own ids, page-<page id> (About, Resume, the Lists, Collections and
+//        Projects, Open Loop); librarian://page/{id}; a page is undated
+//        (publish_date null, updated = its last edit), so date-anchored
+//        tools leave it out; links into a page resolve to target_page_id.
+export const MCP_SERVER_VERSION = '2.4.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

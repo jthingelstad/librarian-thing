@@ -243,6 +243,7 @@ class RealJournalCopyTests(unittest.TestCase):
         also = {
             str(post["microblog_id"]): set(post.get("also_in_issues") or [])
             for post in posts["posts"]
+            if post.get("microblog_id")
         }
         missing = [
             (number, entry["copy_of_microblog_id"])

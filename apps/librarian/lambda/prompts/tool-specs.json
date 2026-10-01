@@ -154,14 +154,14 @@
   {
     "toolSpec": {
       "name": "get_source",
-      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, or podcast episode. Use after search_archive, list_content, archive_lens, archive_gems, find_links or source_neighborhood identifies a specific source worth reading more deeply. Identify it by id as other tools emit it (wt-351, blog-<microblog id>, ep-<n>; WT351, a bare issue number or the source's url also work). Optional section narrows the returned text; format outline skips the body and links, text skips the links. body is the source's full text and sections lists its section names and word counts; a body longer than one result is cut and named in truncated, whose next_offset reads the rest; section reads one section or heading (an exact name wins), and a name that matches nothing is an error listing available_sections. A Weekly Thing issue with an audio edition carries audio_url, audio_duration_seconds and audio_chapters [{start, title}]; with section, section_audio {url, start, chapter} starts that section's chapter. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Fetch full context for one known archive source in the active scope: a Weekly Thing issue, blog post/micropost, thingelstad.com page, or podcast episode. Use after search_archive, list_content, archive_lens, archive_gems, find_links or source_neighborhood identifies a specific source worth reading more deeply. Identify it by id as other tools emit it (wt-351, blog-<microblog id>, page-<page id>, ep-<n>; WT351, a bare issue number or the source's url also work). Optional section narrows the returned text; format outline skips the body and links, text skips the links. body is the source's full text and sections lists its section names and word counts; a body longer than one result is cut and named in truncated, whose next_offset reads the rest; section reads one section or heading (an exact name wins), and a name that matches nothing is an error listing available_sections. A Weekly Thing issue with an audio edition carries audio_url, audio_duration_seconds and audio_chapters [{start, title}]; with section, section_audio {url, start, chapter} starts that section's chapter. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "id": {
               "type": "string",
-              "description": "The source id other tools return: wt-351, blog-<microblog id>, ep-<n>. WT351, a bare issue number or the source's url also work."
+              "description": "The source id other tools return: wt-351, blog-<microblog id>, page-<page id>, ep-<n>. WT351, a bare issue number or the source's url also work."
             },
             "section": {
               "type": "string",
@@ -201,7 +201,7 @@
   {
     "toolSpec": {
       "name": "list_content",
-      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts/pages, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -354,7 +354,7 @@
           "properties": {
             "id": {
               "type": "string",
-              "description": "Only the links in one source (wt-274, blog-<microblog id>, ep-<n>), in the order the source carries them; page with offset."
+              "description": "Only the links in one source (wt-274, blog-<microblog id>, page-<page id>, ep-<n>), in the order the source carries them; page with offset."
             },
             "domain": {
               "type": "string",
@@ -1043,14 +1043,14 @@
   {
     "toolSpec": {
       "name": "source_neighborhood",
-      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, page-<page id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "id": {
               "type": "string",
-              "description": "The source id other tools return: wt-351, blog-<microblog id>, ep-<n>. WT351, a bare issue number or the source's url also work."
+              "description": "The source id other tools return: wt-351, blog-<microblog id>, page-<page id>, ep-<n>. WT351, a bare issue number or the source's url also work."
             },
             "limit": {
               "type": "integer",

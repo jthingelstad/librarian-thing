@@ -7,6 +7,7 @@
  *
  *   librarian://wt/{n}             one Weekly Thing issue, as markdown
  *   librarian://blog/{id}          one blog post by micro.blog id, as markdown
+ *   librarian://page/{id}          one thingelstad.com page (About, a list, ...), as markdown
  *   librarian://topic/{slug}       a topic's catalogue card and timeline
  *   librarian://year/{yyyy}        what the archive holds for one year
  *   librarian://on-this-day/{mm-dd} that calendar day in every year, this one included
@@ -20,7 +21,7 @@ import { absoluteSourceUrl } from './source-identity.mjs';
 
 type JsonRecord = Record<string, unknown>;
 
-export type ResourceKind = 'wt' | 'blog' | 'topic' | 'year' | 'on-this-day';
+export type ResourceKind = 'wt' | 'blog' | 'page' | 'topic' | 'year' | 'on-this-day';
 
 export const RESOURCE_TEMPLATES = [
   {
@@ -35,6 +36,14 @@ export const RESOURCE_TEMPLATES = [
     name: 'blog-post',
     title: 'Blog post',
     description: 'One thingelstad.com blog post or micropost by its micro.blog id, e.g. librarian://blog/6034145.',
+    mimeType: 'text/markdown'
+  },
+  {
+    uriTemplate: 'librarian://page/{id}',
+    name: 'page',
+    title: 'Page',
+    description:
+      'One thingelstad.com page (About, Resume, a list, a collection, an Open Loop episode) by its page id, the number in page-<id>, e.g. librarian://page/57851.',
     mimeType: 'text/markdown'
   },
   {
@@ -71,6 +80,7 @@ export interface ParsedResource {
 const PATTERNS: Array<[ResourceKind, RegExp]> = [
   ['wt', /^(\d{1,4}(?:-[a-z]+)?)$/],
   ['blog', /^(\d{1,12})$/],
+  ['page', /^(\d{1,12})$/],
   ['topic', /^([a-z0-9]+(?:-[a-z0-9]+)*)$/],
   ['year', /^((?:19|20)\d{2})$/],
   ['on-this-day', /^((?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))$/]
@@ -218,6 +228,7 @@ export async function readResource(resource: ParsedResource, reader: ResourceRea
   const auditAs = `resource:${resource.kind}`;
   if (resource.kind === 'wt') return readSource(resource, `wt-${resource.value.replace(/^0+(?=\d)/, '')}`, reader);
   if (resource.kind === 'blog') return readSource(resource, `blog-${resource.value}`, reader);
+  if (resource.kind === 'page') return readSource(resource, `page-${resource.value}`, reader);
   if (resource.kind === 'year') {
     const year = Number(resource.value);
     return readTool(resource, 'corpus_stats', { year_range: [year, year] }, reader);

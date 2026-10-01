@@ -65,14 +65,27 @@ class BlogChunkPublishedTests(unittest.TestCase):
 class RealBlogChunkPublishedTests(unittest.TestCase):
     def test_every_chunk_has_its_posts_published(self):
         corpus = core.build_blog_corpus()
-        published = {post["microblog_id"]: post.get("published") for post in corpus["posts"]}
+        published = {
+            post["microblog_id"]: post.get("published")
+            for post in corpus["posts"]
+            if post.get("microblog_id")
+        }
+        post_chunks = [chunk for chunk in corpus["chunks"] if chunk.get("microblog_id")]
         mismatched = [
             chunk["id"]
-            for chunk in corpus["chunks"]
+            for chunk in post_chunks
             if chunk.get("published") != published[chunk["microblog_id"]]
         ]
         self.assertEqual(mismatched, [])
-        self.assertTrue(all(chunk.get("published") for chunk in corpus["chunks"]))
+        self.assertTrue(all(chunk.get("published") for chunk in post_chunks))
+        # Pages are undated: their chunks carry the page's last edit instead.
+        updated = {
+            post["page_id"]: post.get("updated") for post in corpus["posts"] if post.get("page_id")
+        }
+        for chunk in corpus["chunks"]:
+            if chunk.get("page_id"):
+                self.assertNotIn("published", chunk)
+                self.assertEqual(chunk.get("updated"), updated[chunk["page_id"]])
 
 
 if __name__ == "__main__":

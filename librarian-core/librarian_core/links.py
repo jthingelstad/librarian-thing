@@ -503,15 +503,17 @@ def link_label_text(label: str) -> str:
 
 _DOUBLED_SCHEME_RE = re.compile(r"^(?:https?:/+)+(?=https?:/)", re.I)
 _CLIPPED_SCHEME_RE = re.compile(r"^(ttps?)://", re.I)
+_STUTTERED_SCHEME_RE = re.compile(r"^ht{3,}(ps?)://", re.I)
 _HOST_TRAILING_DOT_RE = re.compile(r"\.+(?=(?::\d*)?$)")
 
 
 def repair_url(url: str) -> str:
     """``url`` with the typos that give it a wrong host fixed: a doubled
-    scheme, a scheme missing its "h", dots after the host name. Any other
-    URL comes back as it was (stripped)."""
+    scheme, a scheme missing its "h" or with an extra "t", dots after the
+    host name. Any other URL comes back as it was (stripped)."""
     url = _DOUBLED_SCHEME_RE.sub("", url.strip())
     url = _CLIPPED_SCHEME_RE.sub(lambda match: f"h{match.group(1)}://", url)
+    url = _STUTTERED_SCHEME_RE.sub(lambda match: f"htt{match.group(1)}://", url)
     try:
         parts = urlsplit(url)
         host = parts.hostname or ""

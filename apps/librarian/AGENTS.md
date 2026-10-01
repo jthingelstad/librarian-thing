@@ -210,17 +210,36 @@ upload script embeds into `.candidate/` with `--stage`, the "Corpus gate"
 step evals those candidates (`EVAL_CORPUS_FALLBACK=s3` reads the live copy of
 any corpus not rebuilt), and only then does `--upload-staged` ship the exact
 files it checked. A corpus that fails never reaches S3. Tool responses carry `server_version`
-(`2.3.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
-a stale tools/list. 2.3.0 (2026-10-01) is the second QA pass: Weekly Thing audio editions (`has_audio`, chapter starts on passages), and the round-2 completeness fixes; 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
+(`2.4.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+a stale tools/list. 2.4.0 (2026-10-01) adds Jamie's micro.blog Pages to the
+blog source (see "Pages" below); 2.3.0 (2026-10-01) is the second QA pass: Weekly Thing audio editions (`has_audio`, chapter starts on passages), and the round-2 completeness fixes; 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
 `get_source`, grouped `search_archive`, `find_evidence`, one `truncated`
 block, `outputSchema` and `structuredContent`); `reference/librarian.md` lists
 it, and `tests/mcp-conventions.test.mjs` enforces it. Readers connect with the
 steps on thingy web `web/connect/index.html`; keep that page's limits and tool
 claims in step with the server. Since 1.6.0 the MCP door also serves resources
-(`shared/mcp-resources.mts`: `librarian://wt/{n}`, `blog/{id}`, `topic/{slug}`,
+(`shared/mcp-resources.mts`: `librarian://wt/{n}`, `blog/{id}`, `page/{id}`, `topic/{slug}`,
 `year/{yyyy}`, `on-this-day/{mm-dd}`, read through the registry tools, one quota
 unit each, audited as `resource:<kind>`) and five prompts
 (`shared/mcp-prompts.mts`), which never speak as Jamie.
+
+## Pages (2.4.0, 2026-10-01)
+
+Jamie's micro.blog Pages (About, Lists, Collections, Open Loop) are part of
+the blog source. `pipeline/blog/ingest_blog.py` reads the Micropub `pages`
+channel every night into `data/blog/pages/`; `data/blog/index.json` names
+every page kept (`pages`) and every page left out with its reason
+(`pages_excluded`: `/family/`, pages about the website, templates, empty
+pages, redirect stubs, link-only navigation). Page uids are a separate number
+space from posts (page 71862 shares its number with a post), so a page is
+`page_id`, never `microblog_id`: its id is `page-<uid>`, its source key
+`page:<uid>`, its chunks `page:<uid>:<n>:<hash>`, and a link to it resolves
+as `target_page_id` (`shared/source-identity.mts` holds the helpers). A page's
+micro.blog `published` is its last edit, so pages are undated
+(`publish_date` null, `updated` shown): `latest_content`, `on_this_day`, year
+filters and eras leave them out; `list_content` and `quote_search` list them
+after every dated source; `corpus_stats` reports `page_count`. Tests:
+`lambda/tests/blog-pages.test.mjs`, `tests/test_blog_pages.py`.
 
 ## Conventions
 

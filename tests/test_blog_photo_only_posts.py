@@ -50,7 +50,7 @@ class PhotoOnlyPostTests(unittest.TestCase):
         corpus = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
         files = list(BLOG_DIR.rglob("*.md"))
         self.assertEqual(corpus["post_count"], len(files))
-        self.assertIn(5965985, {post["microblog_id"] for post in corpus["posts"]})
+        self.assertIn(5965985, {post.get("microblog_id") for post in corpus["posts"]})
 
 
 if __name__ == "__main__":

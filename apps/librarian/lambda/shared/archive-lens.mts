@@ -1,6 +1,7 @@
 import { compileQuery } from './matcher.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
 import { countsByPublishYear, yearCountSummary, yearFromPublishDate } from './corpus-stats.mjs';
+import { blogKeyPart, blogSourceId, hasBlogIdentity } from './source-identity.mjs';
 
 const DEFAULT_LIMIT = 18;
 
@@ -9,6 +10,7 @@ export interface LensItem {
   issue_number?: string | number | null;
   episode_number?: string | number;
   microblog_id?: string | number;
+  page_id?: string | number;
   show?: string;
   subject?: string;
   title?: string;
@@ -238,7 +240,7 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
   return reasons;
 }
 
-// Readable stable id for the sources_by_id map: wt-300, blog-987, ep-4,
+// Readable stable id for the sources_by_id map: wt-300, blog-987, page-57851, ep-4,
 // site-about / site-members / site-faq for the Weekly Thing's own pages
 // (they had come out as weekly_thing-about, which nothing opened), or the
 // url tail.
@@ -249,9 +251,8 @@ export function lensSourceId(item: LensItem) {
   if (item.episode_number !== undefined && item.episode_number !== null && String(item.episode_number) !== '') {
     return `ep-${item.episode_number}`;
   }
-  if (item.microblog_id !== undefined && item.microblog_id !== null && String(item.microblog_id) !== '') {
-    return `blog-${item.microblog_id}`;
-  }
+  const blogId = blogSourceId(item);
+  if (blogId) return blogId;
   const tail = String(item.url || '')
     .replace(/\/+$/, '')
     .split('/')
@@ -265,9 +266,11 @@ export function lensSourceId(item: LensItem) {
 export function isSitePage(item: LensItem) {
   const kind = String(item.source_kind || '');
   if (kind === 'site_page' || kind === 'faq') return true;
-  const hasId = [item.issue_number, item.episode_number, item.microblog_id].some(
-    (value) => value !== undefined && value !== null && String(value) !== ''
-  );
+  const hasId =
+    hasBlogIdentity(item) ||
+    [item.issue_number, item.episode_number].some(
+      (value) => value !== undefined && value !== null && String(value) !== ''
+    );
   return !hasId && /^\/(?!archive\/)[^/]/.test(String(item.url || ''));
 }
 
@@ -284,7 +287,7 @@ function postIdFiller(records: LensItem[]) {
     ids.set(url, (ids.get(url) || new Set()).add(String(record.microblog_id)));
   }
   return (item: LensItem): LensItem => {
-    if (item.microblog_id || normalizeLensSourceKind(item.source_kind) !== 'blog') return item;
+    if (hasBlogIdentity(item) || normalizeLensSourceKind(item.source_kind) !== 'blog') return item;
     const found = ids.get(String(item.url || '').replace(/\/+$/, ''));
     return found?.size === 1 ? { ...item, microblog_id: [...found][0] } : item;
   };
@@ -300,7 +303,7 @@ function sourceKey(item: LensItem) {
   const identity =
     String(item.issue_number ?? '') ||
     String(item.episode_number ?? '') ||
-    String(item.microblog_id ?? '') ||
+    blogKeyPart(item) ||
     String(item.url || '').replace(/\/+$/, '');
   return [normalizeLensSourceKind(item.source_kind), identity].join('\0');
 }
@@ -318,6 +321,7 @@ function sourceFromChunk(chunk: LensItem): LensItem {
     source_kind: normalizeLensSourceKind(chunk.source_kind),
     issue_number: chunk.issue_number ?? null,
     microblog_id: chunk.microblog_id,
+    page_id: chunk.page_id,
     episode_number: chunk.episode_number,
     show: chunk.show,
     subject: chunk.subject || '',
@@ -375,6 +379,7 @@ function compactLensSource(item: LensSource) {
     source_kind: item.source_kind,
     issue_number: item.issue_number ?? null,
     microblog_id: item.microblog_id,
+    page_id: item.page_id,
     episode_number: item.episode_number,
     show: item.show,
     subject: item.subject,
