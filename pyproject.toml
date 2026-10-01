@@ -18,6 +18,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pillow>=12.3.0",
+    "pillow-heif>=1.8.0",
     "pytest>=9.1.1,<10",
     "ruff>=0.15.22,<0.16",
 ]
