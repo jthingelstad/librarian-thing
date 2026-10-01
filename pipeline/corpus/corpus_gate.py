@@ -41,6 +41,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
@@ -122,6 +123,11 @@ def ingest_failures(
         # F18: Thingy's words never enter the corpus.
         if "from-thingy" in json.dumps(corpus, ensure_ascii=False):
             failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
+        if untied := untied_journal_photos(corpus, blog_source_dir):
+            failures.append(
+                f"{len(untied)} Weekly Thing photos are a blog photo but not tied to it "
+                f"(M2-2), e.g. {untied[:3]}"
+            )
     if blog is not None:
         failures.extend(blog_source_failures(blog, blog_source_dir))
     for name, built in (("Weekly Thing", corpus), ("blog", blog)):
@@ -153,6 +159,55 @@ _GATE_IFRAME_SRC_RE = re.compile(r"""<iframe\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']
 _GATE_STYLE_RE = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
 _GATE_VIDEO_RE = re.compile(r"<video\b[^>]*>", re.I)
 _GATE_ATTR_RE = r"""\b{}\s*=\s*["']([^"']*)["']"""
+
+
+_GATE_IMAGE_RES = (
+    re.compile(r"!\[[^\]]*\]\(\s*<?([^)\s>]+)"),
+    re.compile(r"""<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", re.I),
+    re.compile(r"""<video\b[^>]*?\bposter\s*=\s*["']([^"']+)["']""", re.I),
+)
+
+
+def _file_name(url: str) -> str:
+    return unquote(urlsplit(url).path.rsplit("/", 1)[-1]).lower()
+
+
+def untied_journal_photos(corpus: dict[str, Any], source_dir: Path) -> list[str]:
+    """QA3 M2-2: a WT photo with no ``canonical_url`` whose URL is a blog
+    photo's, or whose file name is the one photo of that name in the posts
+    its issue's Journal copies (the Shortcuts-era ``N/journal/<name>``
+    rehost), was listed twice. The blog photos come from the markdown."""
+    photos: dict[str, list[str]] = {}
+    for path in sorted(source_dir.rglob("*.md")):
+        post = _source_post(path)
+        if post is None or post[0][0] != "microblog_id":
+            continue
+        (_, post_id), body = post
+        photos[post_id] = [m.group(1) for regex in _GATE_IMAGE_RES for m in regex.finditer(body)]
+    every = {url for urls in photos.values() for url in urls}
+    copies = {
+        str(issue.get("number")): {
+            str(entry.get("copy_of_microblog_id")) for entry in issue.get("journal_entries") or []
+        }
+        for issue in corpus.get("issues") or []
+    }
+    untied = []
+    for item in corpus.get("media") or []:
+        url = str(item.get("url") or "")
+        if item.get("canonical_url") or not url:
+            continue
+        if item.get("source_kind", "weekly_thing") != "weekly_thing":
+            continue
+        name = _file_name(url)
+        named = {
+            photo
+            for post_id in copies.get(str(item.get("issue_number")), ())
+            for photo in photos.get(post_id, [])
+            if name and _file_name(photo) == name
+        }
+        if url in every or len(named) == 1:
+            untied.append(f"WT{item.get('issue_number')}: {url}")
+    return untied
 
 
 def _fold(text: str) -> str:

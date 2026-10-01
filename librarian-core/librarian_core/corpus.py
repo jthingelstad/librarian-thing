@@ -18,7 +18,7 @@ from datetime import date as _date
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import boto3
 import yaml
@@ -1740,6 +1740,35 @@ def _hashed_photo_name(url: str) -> str | None:
     return name if _HASHED_PHOTO_NAME_RE.match(name) else None
 
 
+def _photo_file_name(url: str) -> str:
+    """The decoded, lowercased file name of a photo URL ("" for none)."""
+    name = unquote(urlparse(url).path.rsplit("/", 1)[-1]).lower()
+    return name if "." in name else ""
+
+
+# Two copies keep the blog photo's own file name but not its URL (QA3 M2-2:
+# 96 photos listed twice). The Shortcuts workflow (WT263-WT349) rehosted each
+# Journal photo as weekly-thing/N/journal/<name>; a few issues used
+# micro.blog's CDN form of the upload, cdn.uploads.micro.blog/890/<year>/<name>
+# for uploads/<year>/<name>.
+SHORTCUTS_JOURNAL_REHOST_RE = re.compile(
+    r"^https://files\.thingelstad\.com/weekly-thing/\d+/journal/[^/?#]+$"
+)
+_MICROBLOG_CDN_UPLOAD_RE = re.compile(r"^https://cdn\.uploads\.micro\.blog/\d+/(\d{4})/[^/?#]+$")
+
+
+def _same_named_photo(url: str, image: str) -> bool:
+    """Whether blog photo ``image`` is ``url`` renamed by one of the copies
+    above: the same file name (and for the CDN form, the same year)."""
+    name = _photo_file_name(url)
+    if not name or _photo_file_name(image) != name:
+        return False
+    if SHORTCUTS_JOURNAL_REHOST_RE.match(url):
+        return True
+    cdn = _MICROBLOG_CDN_UPLOAD_RE.match(url)
+    return bool(cdn) and f"/uploads/{cdn.group(1)}/" in urlparse(image).path
+
+
 # WT Builder (WT350 on) rehosts every issue photo on the CDN under a name it
 # derives from the source URL, so a Journal photo's issue URL never shares
 # the blog photo's name. The derivation is a cross-repo contract with
@@ -1783,7 +1812,9 @@ class JournalPostIndex:
     def blog_photo(self, url: str, prefer: set[str]) -> tuple[JournalPost, str] | None:
         """The blog photo a Weekly Thing image copies: the same URL, else the
         same micro.blog upload name, else (a WT Builder rehost) the photo of a
-        post the issue's Journal copies whose rehost URL it is. Among several
+        post the issue's Journal copies whose rehost URL it is, else (QA3
+        M2-2: a Shortcuts-era rehost or the micro.blog CDN form) the one
+        photo of the copied posts with the same file name. Among several
         posts, a post the issue's Journal copies (``prefer``), else the
         earliest."""
         found = self.by_photo.get(url) or self.by_photo.get(_hashed_photo_name(url) or "")
@@ -1797,6 +1828,17 @@ class JournalPostIndex:
                     for image in post.images
                     if wt_builder_rehost_url(image, rehost.group(1)) == url
                 ]
+        if not found:
+            # Only inside the copied posts, and only when one photo there has
+            # the name: "img-7222.jpeg" elsewhere is another photo.
+            named = [
+                (post, image)
+                for post in (self.by_id.get(str(key)) for key in sorted(prefer, key=str))
+                if post
+                for image in post.images
+                if _same_named_photo(url, image)
+            ]
+            found = named if len(named) == 1 else []
         if not found:
             return None
         return min(
@@ -1851,7 +1893,10 @@ def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostInd
                 frozenset(tokens),
                 _shingles(tokens),
                 str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
-                tuple(image["url"] for image in extract_images(body)),
+                # A video's poster still is the post's photo too (QA3 M2-2:
+                # WT169 and WT191 ran two of them).
+                tuple(image["url"] for image in extract_images(body))
+                + tuple(poster["url"] for poster in extract_video_posters(body)),
             )
         )
     return JournalPostIndex(posts)

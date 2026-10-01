@@ -199,6 +199,73 @@ class MediaBlogCopyTests(unittest.TestCase):
         # A Currently photo is the issue's own: no post to point at.
         self.assertEqual(got[currently], (None, None))
 
+    def test_renamed_journal_copies_point_at_the_blog_photo(self):
+        # QA3 M2-2: the Shortcuts workflow rehosted Journal photos under the
+        # blog photo's file name, and a few issues used micro.blog's CDN form
+        # of the upload; a poster still is the post's photo too.
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        blog, archive = Path(tmp.name) / "blog", Path(tmp.name) / "archive"
+        chart = f"{BASE}/uploads/2023/weekly-thing-automation-2023.png"
+        poap = f"{BASE}/uploads/2023/minnebar-poap.gif"
+        poster = f"{BASE}/uploads/2023/aecbcc42c5.png"
+        _post(
+            blog,
+            21,
+            f"{BASE}/2023/05/01/automation.html",
+            "2023-05-01T23:00:00+00:00",
+            f"How the Weekly Thing gets automated these days.\n\n![]({chart})\n\n![]({poap})\n\n"
+            f'<video src="{BASE}/uploads/2023/a.mov" poster="{poster}"></video>\n\n'
+            f"![]({BASE}/uploads/2023/img-7222.jpeg)",
+        )
+        _post(
+            blog,
+            22,
+            f"{BASE}/2023/05/02/two-phones.html",
+            "2023-05-02T23:00:00+00:00",
+            f"Two phones on the table with nothing else to say.\n\n![]({BASE}/uploads/2023/img-7222.jpeg)",
+        )
+        _post(
+            blog,
+            23,
+            f"{BASE}/2023/05/03/not-copied.html",
+            "2023-05-03T23:00:00+00:00",
+            f"Another photo of a lake.\n\n![]({BASE}/uploads/2023/lake.png)",
+        )
+        rehost = "https://files.thingelstad.com/weekly-thing/263/journal/"
+        _issue(
+            archive,
+            263,
+            "2023-05-06T12:00:00Z",
+            "## Journal\n\n"
+            f"How the Weekly Thing gets automated these days. [→]({BASE}/2023/05/01/automation.html)\n\n"
+            f"Two phones on the table with nothing else to say. [→]({BASE}/2023/05/02/two-phones.html)\n\n"
+            f"![]({rehost}weekly-thing-automation-2023.png)\n\n"
+            "![](https://cdn.uploads.micro.blog/890/2023/minnebar-poap.gif)\n\n"
+            "![](https://cdn.uploads.micro.blog/890/2022/minnebar-poap.gif)\n\n"
+            f"![]({poster})\n\n"
+            f"![]({rehost}img-7222.jpeg)\n\n"
+            f"![]({rehost}lake.png)\n",
+        )
+        wt = core.build_corpus(archive, blog_dir=blog)
+        got = {
+            row["url"]: (row.get("copy_of_microblog_id"), row.get("canonical_url"))
+            for row in wt["media"]
+        }
+        self.assertEqual(got[f"{rehost}weekly-thing-automation-2023.png"], ("21", chart))
+        self.assertEqual(
+            got["https://cdn.uploads.micro.blog/890/2023/minnebar-poap.gif"], ("21", poap)
+        )
+        self.assertEqual(got[poster], ("21", poster))
+        # Another year's upload of the name is another file.
+        self.assertEqual(
+            got["https://cdn.uploads.micro.blog/890/2022/minnebar-poap.gif"], (None, None)
+        )
+        # Two copied posts hold an "img-7222.jpeg": which one is unknowable.
+        self.assertEqual(got[f"{rehost}img-7222.jpeg"], (None, None))
+        # A post the Journal does not copy is never tied by name.
+        self.assertEqual(got[f"{rehost}lake.png"], (None, None))
+
     def test_journal_runs_through_unknown_h2s(self):
         split = core.split_issue_sections(WT147)
         self.assertEqual(
@@ -214,15 +281,31 @@ class RealMediaBlogCopyTests(unittest.TestCase):
         same_url = [row for row in copies if row["url"] == row["canonical_url"]]
         self.assertGreaterEqual(len(same_url), 1600)
         self.assertGreaterEqual(len(copies), 3500)
+        by_rule = {"url": 0, "hashed": 0, "rehost": 0, "named": 0}
         for row in copies:
             self.assertIsInstance(row["copy_of_microblog_id"], str)
-            self.assertTrue(
-                row["url"] == row["canonical_url"]
-                or core._hashed_photo_name(row["url"])
-                == core._hashed_photo_name(row["canonical_url"])
-                or core.wt_builder_rehost_url(row["canonical_url"], row["issue_number"])
-                == row["url"]
-            )
+            hashed = core._hashed_photo_name(row["url"])
+            if row["url"] == row["canonical_url"]:
+                by_rule["url"] += 1
+            elif hashed and hashed == core._hashed_photo_name(row["canonical_url"]):
+                by_rule["hashed"] += 1
+            elif (
+                core.wt_builder_rehost_url(row["canonical_url"], row["issue_number"]) == row["url"]
+            ):
+                by_rule["rehost"] += 1
+            else:
+                self.assertTrue(core._same_named_photo(row["url"], row["canonical_url"]), row)
+                by_rule["named"] += 1
+        # QA3 M2-2: 93 Shortcuts-era Journal rehosts and 3 micro.blog CDN
+        # copies tie by file name (WT263-WT349).
+        self.assertEqual(by_rule["named"], 96)
+        # QA3 M2-2: WT169 and WT191 ran a blog video's poster still.
+        posters = {
+            (row["issue_number"], row["copy_of_microblog_id"])
+            for row in copies
+            if row["issue_number"] in (169, 191)
+        }
+        self.assertLessEqual({(169, "1230047"), (191, "1342986")}, posters)
         # WT Builder issues: every Journal photo points at its post (WT350's
         # and WT351's other photos are Currently photos, never blog posts).
         rehosted = [row for row in wt["media"] if row["issue_number"] in (350, 351)]

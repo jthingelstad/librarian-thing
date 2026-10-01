@@ -78,6 +78,37 @@ class RepeatedMediaTest(unittest.TestCase):
         self.assertIn("(M8)", failures[0])
 
 
+class UntiedJournalPhotoTest(unittest.TestCase):
+    """QA3 M2-2: a WT photo that is a blog photo must carry canonical_url."""
+
+    def test_untied_copies_fail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            blog = Path(tmp)
+            (blog / "post.md").write_text(
+                "---\nmicroblog_id: 21\n---\n\n"
+                "![](https://www.thingelstad.com/uploads/2023/chart.png)\n\n"
+                '<video src="a.mov" poster="https://www.thingelstad.com/uploads/2023/still.png">'
+                "</video>\n"
+            )
+            issue = {"number": 263, "journal_entries": [{"copy_of_microblog_id": "21"}]}
+            rows = [
+                {
+                    "issue_number": 263,
+                    "url": "https://files.thingelstad.com/weekly-thing/263/journal/chart.png",
+                },
+                {"issue_number": 263, "url": "https://www.thingelstad.com/uploads/2023/still.png"},
+                {"issue_number": 263, "url": "https://files.thingelstad.com/263/own.png"},
+            ]
+            corpus = {"issues": [issue], "media": rows}
+            self.assertEqual(
+                gate.untied_journal_photos(corpus, blog),
+                [f"WT263: {rows[0]['url']}", f"WT263: {rows[1]['url']}"],
+            )
+            for row in rows[:2]:
+                row["canonical_url"] = "tied"
+            self.assertEqual(gate.untied_journal_photos(corpus, blog), [])
+
+
 class GateCommandTest(unittest.TestCase):
     def test_blog_only_candidate_is_checked(self):
         # An empty blog candidate holds none of the real posts' code or
