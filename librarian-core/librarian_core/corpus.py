@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import functools
 import hashlib
+import html
 import json
 import re
 from dataclasses import dataclass, replace
@@ -504,9 +505,30 @@ def issue_cover_image(
     return {"url": image, "alt": alt, "context": COVER_CONTEXT}
 
 
+# HTML in a body line next to an image. Inline tags join the words around
+# them, as a browser shows them; any other tag is a break. A markdown
+# autolink ("<https://...>") is not a tag.
+_CONTEXT_INLINE_TAG_RE = re.compile(
+    r"</?(?:a|abbr|b|cite|code|em|i|mark|q|s|small|span|strong|sub|sup|u)\b[^>]*>", re.I
+)
+_CONTEXT_TAG_RE = re.compile(r"</?[a-zA-Z][a-zA-Z0-9-]*(?:\s[^>]*)?/?>|<!--.*?-->", re.S)
+_CONTEXT_AUTOLINK_RE = re.compile(r"<(https?://[^\s>]+)>")
+
+
+def _context_text(line: str) -> str:
+    """A body line as prose: tags gone, entities decoded, markdown plain.
+    plain_text alone keeps tags, so "<p>POAP <a href=...>" read as
+    "<pPOAP <a href=..." once its ">" went (2.2.0 media_search)."""
+    text = _CONTEXT_AUTOLINK_RE.sub(r"\1", line)
+    text = _CONTEXT_TAG_RE.sub(" ", _CONTEXT_INLINE_TAG_RE.sub("", text))
+    return plain_text(html.unescape(text))
+
+
 def _media_context(text: str, url: str, max_chars: int = 240) -> str:
-    """The prose nearest an image: the first non-empty, non-image line after
-    the tag (issue captions follow images), falling back to the line before."""
+    """The prose nearest an image: the first line after the tag with words
+    in it (issue captions follow images), falling back to the line before.
+    An image line or a line of markup alone ("<br clear="all">",
+    "</audio></p>") is passed over."""
     lines = (text or "").split("\n")
     index = next(
         (
@@ -519,16 +541,18 @@ def _media_context(text: str, url: str, max_chars: int = 240) -> str:
     if index is None:
         return ""
 
-    def usable(line: str) -> bool:
+    def prose(line: str) -> str:
         clean = line.strip()
-        return bool(clean) and "<img" not in clean and not clean.startswith("![") and clean != "---"
+        if not clean or "<img" in clean or clean.startswith("![") or clean == "---":
+            return ""
+        return _context_text(clean)
 
     for line in lines[index + 1 :]:
-        if usable(line):
-            return plain_text(line)[:max_chars]
+        if found := prose(line):
+            return found[:max_chars]
     for line in reversed(lines[:index]):
-        if usable(line):
-            return plain_text(line)[:max_chars]
+        if found := prose(line):
+            return found[:max_chars]
     return ""
 
 
@@ -2531,7 +2555,8 @@ def build_blog_corpus(
                 {
                     "url": image["url"],
                     "alt": image["alt"],
-                    "context": _media_context(body, image["url"]) or plain_text(embed_text)[:240],
+                    "context": _media_context(body, image["url"])
+                    or _context_text(embed_text)[:240],
                     "source_kind": "blog",
                     # The post's own key: six permalinks are shared by
                     # fourteen posts, so source_url alone names the wrong one.
@@ -2545,7 +2570,7 @@ def build_blog_corpus(
         for poster in extract_video_posters(body):
             if poster["url"] in image_urls:
                 continue
-            nearby = plain_text(embed_text)[:180]
+            nearby = _context_text(embed_text)[:180]
             media.append(
                 {
                     "url": poster["url"],
