@@ -1587,7 +1587,7 @@
   {
     "toolSpec": {
       "name": "on_this_day",
-      "description": "What Jamie published on this calendar day, in the date's own year and every year before, across the Weekly Thing, the blog and the podcast: the archive's \"on this day\". Defaults to today in America/Chicago. A source's day is its Chicago date (a Weekly Thing issue's send time, a blog post's published time); Feb 29 folds into Feb 28 in a year without one and is its own day in a year with one. Returns years newest first (years_ago 0 is the date's own year), each year's items in the order issue, episode, blog post (microposts last), each with years_ago and items {id, label, source_kind, title, date, url, excerpt, photo?}; read one with get_source(id), show a photo with view_photo. Use for anniversaries, \"what was Jamie writing a year ago\", and daily look-backs. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "What Jamie published on this calendar day, in the date's own year and every year before, across the Weekly Thing, the blog and the podcast: the archive's \"on this day\". Defaults to today in America/Chicago. A source's day is its Chicago date (a Weekly Thing issue's send time, a blog post's published time); Feb 29 folds into Feb 28 in a year without one and is its own day in a year with one. Returns years newest first (years_ago 0 is the date's own year), each year's items in the order issue, episode, blog posts by Chicago time of day (microposts after the other posts; a post with no time last), each with years_ago and items {id, label, source_kind, title, date, url, excerpt, photo?}; read one with get_source(id), show a photo with view_photo. Use for anniversaries, \"what was Jamie writing a year ago\", and daily look-backs. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -1648,7 +1648,7 @@
       }
     },
     "mcp": {
-      "description": "What Jamie published on this calendar day, this year and in past years, across the newsletter, the blog and the podcast; today in America/Chicago by default, window_days for the week around it. Years newest first.",
+      "description": "What Jamie published on this calendar day, this year and in past years, across the newsletter, the blog and the podcast; today in America/Chicago by default, window_days for the week around it. Years newest first; within a day the issue, the episode, then blog posts by Chicago time of day.",
       "outputSchema": {
         "type": "object",
         "properties": {

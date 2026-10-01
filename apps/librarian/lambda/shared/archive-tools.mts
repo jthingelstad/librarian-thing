@@ -4313,6 +4313,8 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const microposts = input.include_microposts !== false && input.include_microposts !== 'false';
 
   const byYear = new Map<number, Array<Record<string, unknown>>>();
+  // Each item's published instant, kept off the item (QA3 Q17).
+  const timeOfDay = new Map<Record<string, unknown>, number | null>();
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     const corpus = await loadCorpus(kind);
@@ -4373,6 +4375,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
           ...(photo.description ? { description: photo.description } : {})
         };
       byYear.set(year, [...(byYear.get(year) || []), item]);
+      timeOfDay.set(item, publishedInstant(record));
     }
   }
   const years = [...byYear.entries()]
@@ -4382,7 +4385,9 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
         (a, b) =>
           (KIND_ORDER[String(a.source_kind)] ?? 9) - (KIND_ORDER[String(b.source_kind)] ?? 9) ||
           Number(Boolean(a.micropost)) - Number(Boolean(b.micropost)) ||
-          String(a.date).localeCompare(String(b.date))
+          String(a.date).localeCompare(String(b.date)) ||
+          byTimeOfDay(timeOfDay.get(a), timeOfDay.get(b)) ||
+          String(a.id).localeCompare(String(b.id), 'en', { numeric: true })
       );
       return {
         year,
@@ -4420,6 +4425,24 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
           : `A year's total_count says how many it holds; items before offset ${offset} were skipped.`
     }
   );
+}
+
+// Within a day the issue, then the episode, then blog posts by their
+// Chicago time of day, microposts after the other posts (QA3 Q17, Jamie:
+// "newsletter and podcast episodes will never be multiple in a day. Only
+// blog would have multiple in a day."). Posts on one day used to keep corpus
+// order; a post with no published time now sorts last in its day, by id.
+function publishedInstant(record: ArchiveRecord) {
+  // The stamp localDay reads the day from; a bare date has no time of day.
+  const raw = String(record.published || record.publish_date || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(raw)) return null;
+  const stamp = Date.parse(raw);
+  return Number.isFinite(stamp) ? stamp : null;
+}
+
+function byTimeOfDay(a: number | null | undefined, b: number | null | undefined) {
+  if (a == null || b == null) return Number(a == null) - Number(b == null);
+  return a - b;
 }
 
 const ON_THIS_DAY_BASIS =

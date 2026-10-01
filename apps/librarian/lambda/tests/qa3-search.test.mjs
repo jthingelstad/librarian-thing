@@ -217,3 +217,59 @@ test('per-year photo totals can overlap, and a year listing says so (QA3 Q14)', 
   assert.equal(y2027.results[0].source_id, 'wt-340');
   assert.match(y2026.note, /year totals can sum past the whole listing/);
 });
+
+test('on_this_day runs a day of blog posts by Chicago time of day (QA3 Q17)', async () => {
+  const post = (id, published, extra = {}) => ({
+    microblog_id: id,
+    subject: `Post ${id}`,
+    publish_date: '2021-08-06',
+    url: `https://www.thingelstad.com/2021/08/06/${id}.html`,
+    post_kind: 'post',
+    ...(published ? { published } : {}),
+    ...extra
+  });
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      issues: [
+        { number: 150, subject: 'Weekly Thing 150', publish_date: '2021-08-07T03:00:00Z', url: '/archive/150/' }
+      ],
+      chunks: []
+    },
+    blog: {
+      // Corpus order is not time order (the 2021-08-06 Vermont posts).
+      posts: [
+        post(1381394, '2021-08-06T19:30:59+00:00'),
+        post(1380870, '2021-08-06T13:00:00+00:00', { post_kind: 'micropost', subject: '' }),
+        post(1380868, '2021-08-06T17:32:31+00:00'),
+        post(1380000, null),
+        post(1379999, null),
+        // 8:59 pm in Chicago, after midnight UTC: still Aug 6, and last.
+        post(1380702, '2021-08-07T01:59:00+00:00'),
+        post(1381396, '2021-08-06T21:06:17+00:00')
+      ],
+      chunks: []
+    }
+  });
+  const out = await ARCHIVE_TOOLS.on_this_day({ date: '2021-08-06', limit_per_year: 20 }, { scope: 'all' });
+  assert.deepEqual(
+    out.years[0].items.map((item) => item.id),
+    [
+      'wt-150',
+      'blog-1380868',
+      'blog-1381394',
+      'blog-1381396',
+      'blog-1380702',
+      // No time of day: last of the posts, by id.
+      'blog-1379999',
+      'blog-1380000',
+      // Microposts after the other posts.
+      'blog-1380870'
+    ]
+  );
+  assert.ok(
+    out.years[0].items.every((item) => !('published' in item)),
+    'the output shape is unchanged'
+  );
+  const [spec] = mcpToolDeclarations(['on_this_day']);
+  assert.match(spec.description, /blog posts by Chicago time of day/);
+});

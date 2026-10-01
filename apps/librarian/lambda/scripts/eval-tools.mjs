@@ -1162,6 +1162,56 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     `${summed} summed vs ${dated} dated; noted ${noted}`
   );
 }
+// QA3 Q17: within a day the issue, the episode, then blog posts by their
+// Chicago time of day (microposts after the other posts). Posts on a day
+// used to run in corpus order: 1,420 of the 2,511 days with two or more
+// posts of a kind were out of time order on the 2026-10-01 corpora.
+{
+  const instants = new Map(
+    (corpora.blog?.posts || []).map((post) => [`blog-${post.microblog_id}`, Date.parse(post.published || '')])
+  );
+  const byTime = (ids) => [...ids].sort((a, b) => instants.get(a) - instants.get(b));
+  const chicagoDay = (stamp) =>
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' }).format(new Date(stamp));
+  for (const date of ['2021-08-06', '2023-03-04']) {
+    const year = Number(date.slice(0, 4));
+    const out = await run('on_this_day', { date, year_range: [year, year], limit_per_year: 20 });
+    const items = out?.years?.[0]?.items || [];
+    const posts = items.filter((item) => item.source_kind === 'blog' && !item.micropost).map((item) => item.id);
+    // The oracle: every post Jamie published that Chicago day, by instant.
+    const oracle = byTime(
+      (corpora.blog?.posts || [])
+        .filter((post) => post.post_kind === 'post' && post.published)
+        .filter((post) => chicagoDay(post.published) === date)
+        .map((post) => `blog-${post.microblog_id}`)
+    );
+    check(
+      `KA on_this_day ${date} runs its ${oracle.length} blog posts by time of day`,
+      oracle.length >= 5 && JSON.stringify(posts) === JSON.stringify(oracle),
+      `${posts.join(' ')} vs ${oracle.join(' ')}`
+    );
+  }
+  const outOfOrder = [];
+  for (let month = 1; month <= 12; month += 1) {
+    for (let day = 1; day <= new Date(Date.UTC(2024, month, 0)).getUTCDate(); day += 1) {
+      const date = `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const out = await run('on_this_day', { date, limit_per_year: 20 });
+      for (const row of out?.years || []) {
+        for (const micropost of [false, true]) {
+          const ids = (row.items || [])
+            .filter((item) => item.source_kind === 'blog' && Boolean(item.micropost) === micropost)
+            .map((item) => item.id);
+          if (JSON.stringify(ids) !== JSON.stringify(byTime(ids))) outOfOrder.push(`${row.year}-${date}`);
+        }
+      }
+    }
+  }
+  check(
+    'KA on_this_day lists every day of blog posts by time of day',
+    outOfOrder.length === 0,
+    outOfOrder.slice(0, 5).join(', ')
+  );
+}
 // QA3 Q3: a blank or whitespace url, id or domain is refused at the door
 // on every tool that takes one, never read as absent (find_links url:""
 // listed all 36,523 links); find_links and list_content refuse it in
