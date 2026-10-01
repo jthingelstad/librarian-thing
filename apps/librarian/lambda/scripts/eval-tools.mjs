@@ -1257,16 +1257,23 @@ await run('search_faq', { query: 'what is the weekly thing' });
   check('KA search_faq common words match nothing', common?.total_count === 0, String(common?.total_count));
 }
 // QA2 I2-3: a name that is no site topic says where every mention is
-// counted (Mastodon is in 11 issues and is no topic).
+// counted. The name is the first candidate the graph has no topic for, so a
+// rebuilt graph (Mastodon became one on 2026-10-01) cannot break the check.
 {
-  const none = await run('list_topics', { query: 'Mastodon' });
-  const listed = await run('list_content', { topic: 'Mastodon', limit: 1 });
+  let name = 'Overcast';
+  let none;
+  for (const candidate of ['Overcast', 'Ghost', 'Raycast', 'Tailscale']) {
+    name = candidate;
+    none = await run('list_topics', { query: candidate });
+    if (none?.total_count === 0) break;
+  }
+  const listed = await run('list_content', { topic: name, limit: 1 });
   check(
     'KA list_topics with no match points to list_content and archive_lens',
     none?.total_count === 0 && /list_content/.test(none?.note || '') && /archive_lens/.test(none?.note || ''),
-    String(none?.note)
+    `${name}: ${none?.total_count} ${none?.note}`
   );
-  check('KA Mastodon is counted by list_content', listed?.total_count > 0, String(listed?.total_count));
+  check('KA a no-topic name is counted by list_content', listed?.total_count > 0, `${name}: ${listed?.total_count}`);
 }
 {
   // QA2 T2-5: currently_history showed WT22's UTC day (00:00Z on the 7th

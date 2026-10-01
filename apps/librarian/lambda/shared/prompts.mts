@@ -90,7 +90,7 @@ export function promptFingerprint(): string {
 //        *_note keys; counts are [{key, count}] lists and totals total_count;
 //        every tool declares an outputSchema and a successful call carries
 //        structuredContent; a result too large to fit is an error.
-export const MCP_SERVER_VERSION = '2.2.0';
+export const MCP_SERVER_VERSION = '2.3.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

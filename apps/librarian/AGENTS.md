@@ -191,8 +191,8 @@ upload script embeds into `.candidate/` with `--stage`, the "Corpus gate"
 step evals those candidates (`EVAL_CORPUS_FALLBACK=s3` reads the live copy of
 any corpus not rebuilt), and only then does `--upload-staged` ship the exact
 files it checked. A corpus that fails never reaches S3. Tool responses carry `server_version`
-(`2.2.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
-a stale tools/list. 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
+(`2.3.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+a stale tools/list. 2.3.0 (2026-10-01) is the second QA pass: Weekly Thing audio editions (`has_audio`, chapter starts on passages), and the round-2 completeness fixes; 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
 `get_source`, grouped `search_archive`, `find_evidence`, one `truncated`
 block, `outputSchema` and `structuredContent`); `reference/librarian.md` lists
 it, and `tests/mcp-conventions.test.mjs` enforces it. Readers connect with the
