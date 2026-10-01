@@ -409,13 +409,17 @@ def chunk_topics(heading: str, text: str) -> list[str]:
 # id-keyed embed cache stays warm.
 
 _MEDIA_IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I | re.S)
+# Jamie's blog hosts: thingelstad.com, the legacy micro.thingelstad.com, and
+# jthingelstad.micro.blog, where 111 posts from 2017 still have their URLs
+# (Jamie, 2026-09-30: the same blog as thingelstad.com).
+_BLOG_HOST_PATTERN = r"(?:(?:www\.|micro\.)?thingelstad\.com|jthingelstad\.micro\.blog)"
 # A Journal entry's own permalink, in every era's style: "Thursday @ 9:28 PM",
 # "Sep 24, 2023 at 3:40 PM" (with a narrow no-break space), "2018-05-04 4:47
 # PM", "5:25 PM", and the 2017 "→". Links with any other text are Jamie
 # pointing at an older post, not an entry.
 _JOURNAL_ENTRY_LINK_RE = re.compile(
     r"\[(?:[^\]]*\d{1,2}:\d{2}[\s\u202f]*[AP]M[^\]]*|\s*→\s*)\]"
-    r"\((https?://(?:www\.|micro\.)?thingelstad\.com/\d{4}/\d{2}/\d{2}/[^)\s]+)\)",
+    rf"\((https?://{_BLOG_HOST_PATTERN}/\d{{4}}/\d{{2}}/\d{{2}}/[^)\s]+)\)",
     re.I,
 )
 # The colon sits inside the bold ("**Reading:**") in most issues and outside
@@ -1507,12 +1511,12 @@ def build_corpus(
 # chunk primitives (``chunk_section`` / ``content_kind`` / ``words`` /
 # ``_privacy_audit``) so the embed + upload tooling is shared verbatim.
 
-# A thingelstad.com (or legacy micro.thingelstad.com) permalink, capturing
+# A thingelstad.com (or micro.thingelstad.com, jthingelstad.micro.blog) permalink, capturing
 # the ``YYYY/MM/DD/slug`` path that uniquely identifies a post. Used both to
 # scan issue Journal sections for blog back-references and to normalize a
 # blog post's own URL to the same key.
 _BLOG_PERMALINK_RE = re.compile(
-    r"https?://(?:www\.|micro\.)?thingelstad\.com/(\d{4}/\d{2}/\d{2}/[^\s)\"'<>]+)",
+    rf"https?://{_BLOG_HOST_PATTERN}/(\d{{4}}/\d{{2}}/\d{{2}}/[^\s)\"'<>]+)",
     re.I,
 )
 # An ``<img …>`` tag's alt text — inlined into the embedding text so photo
@@ -1523,7 +1527,12 @@ _BLOG_HTML_LINK_RE = re.compile(
     r'<a\s+[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
     re.I | re.S,
 )
-_BLOG_INTERNAL_DOMAINS = {"thingelstad.com", "www.thingelstad.com", "micro.thingelstad.com"}
+_BLOG_INTERNAL_DOMAINS = {
+    "thingelstad.com",
+    "www.thingelstad.com",
+    "micro.thingelstad.com",
+    "jthingelstad.micro.blog",
+}
 _CROSS_SOURCE_BY_DOMAIN = {
     "weekly.thingelstad.com": "weekly_thing",
     "another.thingelstad.com": "podcast",
@@ -1532,7 +1541,11 @@ _BLOG_HOSTLIKE_PATH_RE = re.compile(r"/(?:www\.)?[a-z0-9-]+\.[a-z]{2,}(?:/|$)", 
 
 
 def _is_thingelstad_domain(domain: str) -> bool:
-    return domain == "thingelstad.com" or domain.endswith(".thingelstad.com")
+    return (
+        domain == "thingelstad.com"
+        or domain.endswith(".thingelstad.com")
+        or domain in _BLOG_INTERNAL_DOMAINS
+    )
 
 
 def _normalize_blog_path(path_part: str) -> str:
@@ -2576,7 +2589,7 @@ def _podcast_show_note_links(
             continue
         seen_urls.add(resolved_url)
         target_source_kind = None
-        if domain in {"thingelstad.com", "www.thingelstad.com", "micro.thingelstad.com"}:
+        if domain in _BLOG_INTERNAL_DOMAINS:
             target_source_kind = "blog"
         elif domain == "weekly.thingelstad.com":
             target_source_kind = "weekly_thing"

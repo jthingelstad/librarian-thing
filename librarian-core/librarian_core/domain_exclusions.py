@@ -5,6 +5,8 @@ EXCLUDED_DOMAINS = {
     "weekly.thingelstad.com",
     "thingelstad.com",
     "www.thingelstad.com",
+    # The 2017 home of the same blog (micro.thingelstad.com is a subdomain)
+    "jthingelstad.micro.blog",
     # Buttondown
     "buttondown.com",
     "buttondown.email",
