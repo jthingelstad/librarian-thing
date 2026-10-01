@@ -101,6 +101,18 @@ function check(name, condition, detail = '') {
   }
 }
 
+// A known answer that a corpus fix makes true. When this push rebuilds the
+// corpus (skipBaseline), the code eval reads the live corpora the fix has
+// not reached yet, so it warns; the corpus gate re-runs it on the
+// candidates, where it must pass.
+function checkCorpus(name, condition, detail = '') {
+  if (condition || !skipBaseline) {
+    check(name, condition, detail);
+    return;
+  }
+  console.log(`eval-tools: corpus rebuild pending, the gate re-checks: ${name}${detail ? ` :: ${detail}` : ''}`);
+}
+
 // --- generic response invariants ------------------------------------------
 function walk(value, visit, keyPath = '') {
   visit(value, keyPath);
@@ -1277,6 +1289,20 @@ await run('search_faq', { query: 'what is the weekly thing' });
 await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });
 await run('list_topics', { query: 'coffee' });
+// QA2 ingest I2-2: a Journal time label ("Saturday @ 7:16 PM") once ran
+// into the next line, and "PM We" became a 69-issue topic with a public page.
+{
+  const clock = await run('list_topics', { query: 'pm', limit: 100 });
+  const junk = (clock?.topics || []).filter((topic) => /^(AM|PM)\s|\s(AM|PM)$/i.test(topic.name));
+  checkCorpus(
+    'KA list_topics has no clock-label topics',
+    junk.length === 0,
+    junk
+      .slice(0, 5)
+      .map((topic) => topic.name)
+      .join(', ')
+  );
+}
 await run('quote_search', { phrase: 'open web', limit: 3 });
 await run('media_search', { query: 'snow', limit: 3 });
 await run('top_references', { limit: 3 });
