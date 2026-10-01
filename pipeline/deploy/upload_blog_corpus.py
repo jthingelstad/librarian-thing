@@ -37,7 +37,9 @@ from upload_corpus import (  # noqa: E402
     build_chunk_cache,
     fetch_existing_corpus,
     merge_cached_embeddings,
+    staged_path,
     upload_json_gzip,
+    write_staged,
 )
 
 
@@ -63,10 +65,25 @@ def main() -> int:
         action="store_true",
         help="Build + embed locally but skip the S3 upload (dry run)",
     )
+    parser.add_argument(
+        "--stage",
+        metavar="DIR",
+        help="Build and embed into DIR/blog_corpus.json for the corpus gate; upload nothing",
+    )
+    parser.add_argument(
+        "--upload-staged",
+        metavar="DIR",
+        help="Upload DIR/blog_corpus.json as staged, after the gate passed; build nothing",
+    )
     args = parser.parse_args()
 
     if not args.bucket:
         raise RuntimeError("Provide --bucket or LIBRARIAN_BUCKET")
+
+    if args.upload_staged:
+        upload_json_gzip(args.bucket, args.key, staged_path(args.upload_staged, "blog_corpus.json"))
+        print(f"Uploaded staged blog corpus to s3://{args.bucket}/{args.key}")
+        return 0
 
     corpus = build_blog_corpus()
     annotated = annotate_media_descriptions(corpus, MEDIA_DESCRIPTIONS_PATH)
@@ -84,6 +101,10 @@ def main() -> int:
             merge_cached_embeddings(corpus, cache)
 
     add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
+
+    if args.stage:
+        write_staged(args.stage, "blog_corpus.json", corpus)
+        return 0
 
     if args.keep_output:
         out_path = Path(args.keep_output)

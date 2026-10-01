@@ -8,6 +8,9 @@ apps/librarian/lambda/dist/
 # Local cache
 cache/
 
+# Corpus gate staging (deploy.yml embeds candidates here before upload)
+.candidate/
+
 # Environment variables (backups of .env are secrets too)
 .env
 .env-*

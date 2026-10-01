@@ -72,6 +72,26 @@ def upload_json_gzip(bucket: str, key: str, path) -> None:
     )
 
 
+def write_staged(stage_dir: str | Path, name: str, payload: dict) -> Path:
+    """An embedded artifact, written where the deploy's corpus gate evals it
+    before anything reaches S3 (Jamie, 2026-09-30: the MCP must never
+    silently miss things, so a candidate corpus is checked before it is
+    served)."""
+    path = Path(stage_dir) / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"Staged {path} for the corpus gate")
+    return path
+
+
+def staged_path(stage_dir: str | Path, name: str) -> Path:
+    """A staged artifact to upload; missing means the stage step never ran."""
+    path = Path(stage_dir) / name
+    if not path.is_file():
+        raise FileNotFoundError(f"{path} was not staged; run with --stage first")
+    return path
+
+
 def fetch_existing_corpus(bucket: str, key: str) -> dict | None:
     """Pull the previously-deployed corpus from S3 to use as an embedding cache.
 
@@ -178,10 +198,30 @@ def main() -> int:
     parser.add_argument(
         "--full", action="store_true", help="Skip the incremental cache and re-embed every chunk"
     )
+    parser.add_argument(
+        "--stage",
+        metavar="DIR",
+        help="Build and embed into DIR/corpus.json and DIR/graph.json for the corpus gate; upload nothing",
+    )
+    parser.add_argument(
+        "--upload-staged",
+        metavar="DIR",
+        help="Upload DIR/corpus.json and DIR/graph.json as staged, after the gate passed; build nothing",
+    )
     args = parser.parse_args()
 
     if not args.bucket:
         raise RuntimeError("Provide --bucket or LIBRARIAN_BUCKET")
+
+    if args.upload_staged:
+        upload_json_gzip(args.bucket, args.key, staged_path(args.upload_staged, "corpus.json"))
+        print(f"Uploaded staged librarian corpus to s3://{args.bucket}/{args.key}")
+        if not args.skip_graph:
+            upload_json_gzip(
+                args.bucket, args.graph_key, staged_path(args.upload_staged, "graph.json")
+            )
+            print(f"Uploaded staged librarian graph to s3://{args.bucket}/{args.graph_key}")
+        return 0
 
     corpus = build_wt_corpus()
 
@@ -192,6 +232,12 @@ def main() -> int:
             merge_cached_embeddings(corpus, cache)
 
     add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
+
+    if args.stage:
+        write_staged(args.stage, "corpus.json", corpus)
+        if not args.skip_graph:
+            write_staged(args.stage, "graph.json", build_graph(corpus))
+        return 0
 
     if args.keep_output:
         upload_path = Path(args.keep_output)

@@ -6,7 +6,10 @@
  * script is layers 2 and 3.
  *
  * Corpus source: EVAL_CORPUS_DIR (corpus.json / blog_corpus.json /
- * podcast_corpus.json as plain JSON) or S3 via CORPUS_BUCKET credentials.
+ * podcast_corpus.json / graph.json as plain or gzipped JSON) or S3 via
+ * CORPUS_BUCKET credentials. With EVAL_CORPUS_FALLBACK=s3 a file missing
+ * from the dir is read from S3 instead: the deploy's corpus gate stages
+ * only the corpora it rebuilt and evals them beside the live rest.
  * Code under test: EVAL_DIST_DIR (default ../dist) - point it at an older
  * build to produce a pre-change report.
  *
@@ -33,45 +36,51 @@ const { mcpToolDeclarations, renderToolCallResult } = await import(path.join(dis
 const { runCompletenessChecks } = await import('./eval-completeness.mjs');
 
 // --- corpus loading -------------------------------------------------------
+const CORPUS_FILES = {
+  weekly_thing: 'corpus.json',
+  blog: 'blog_corpus.json',
+  podcast: 'podcast_corpus.json',
+  // The topic graph feeds list_topics, archive_lens topic cards and
+  // similar issues; without it those tools ran degraded in CI.
+  graph: 'graph.json'
+};
+
+function parseJsonBytes(bytes) {
+  const text = bytes[0] === 0x1f && bytes[1] === 0x8b ? gunzipSync(bytes).toString('utf8') : bytes.toString('utf8');
+  return JSON.parse(text);
+}
+
 async function loadCorpora() {
   const dir = process.env.EVAL_CORPUS_DIR;
-  const fromFile = (name) => {
-    const file = path.join(dir, name);
-    if (!existsSync(file)) return undefined;
-    const raw = readFileSync(file);
-    const text = raw[0] === 0x1f && raw[1] === 0x8b ? gunzipSync(raw).toString('utf8') : raw.toString('utf8');
-    return JSON.parse(text);
-  };
-  if (dir) {
-    return {
-      weekly_thing: fromFile('corpus.json'),
-      blog: fromFile('blog_corpus.json'),
-      podcast: fromFile('podcast_corpus.json'),
-      graph: fromFile('graph.json')
-    };
-  }
-  const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
-  const s3 = new S3Client({});
-  const bucket = process.env.CORPUS_BUCKET || 'weekly-thing-librarian';
+  const fallback = process.env.EVAL_CORPUS_FALLBACK === 's3';
+  let s3;
   const fetchKey = async (key) => {
+    if (!s3) {
+      const { S3Client } = await import('@aws-sdk/client-s3');
+      s3 = new S3Client({});
+    }
+    const { GetObjectCommand } = await import('@aws-sdk/client-s3');
+    const bucket = process.env.CORPUS_BUCKET || 'weekly-thing-librarian';
     try {
       const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
-      const bytes = Buffer.from(await response.Body.transformToByteArray());
-      const text = bytes[0] === 0x1f && bytes[1] === 0x8b ? gunzipSync(bytes).toString('utf8') : bytes.toString('utf8');
-      return JSON.parse(text);
+      return parseJsonBytes(Buffer.from(await response.Body.transformToByteArray()));
     } catch (error) {
       console.log(`corpus ${key} unavailable: ${error.name}`);
       return undefined;
     }
   };
-  return {
-    weekly_thing: await fetchKey('artifacts/corpus.json'),
-    blog: await fetchKey('artifacts/blog_corpus.json'),
-    podcast: await fetchKey('artifacts/podcast_corpus.json'),
-    // The topic graph feeds list_topics, archive_lens topic cards and
-    // similar issues; without it those tools ran degraded in CI.
-    graph: await fetchKey('artifacts/graph.json')
-  };
+  const corpora = {};
+  for (const [kind, name] of Object.entries(CORPUS_FILES)) {
+    const file = dir ? path.join(dir, name) : '';
+    if (file && existsSync(file)) {
+      corpora[kind] = parseJsonBytes(readFileSync(file));
+      console.log(`corpus ${name}: ${file}`);
+    } else if (!dir || fallback) {
+      corpora[kind] = await fetchKey(`artifacts/${name}`);
+      if (corpora[kind] && dir) console.log(`corpus ${name}: live S3 copy (not staged)`);
+    }
+  }
+  return corpora;
 }
 
 // --- reporting ------------------------------------------------------------

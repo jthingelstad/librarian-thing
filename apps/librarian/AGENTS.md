@@ -186,7 +186,11 @@ the real corpora from S3), and the committed recall baseline
 --update-baseline` to accept a REVIEWED recall change, e.g. after corpus
 growth). Locally: `EVAL_CORPUS_DIR=<dir-with-corpus.json>` runs it against
 local corpus files; `EVAL_DIST_DIR` points it at an older build for
-pre/post-change reports. Tool responses carry `server_version`
+pre/post-change reports. The same eval also gates every corpus upload: each
+upload script embeds into `.candidate/` with `--stage`, the "Corpus gate"
+step evals those candidates (`EVAL_CORPUS_FALLBACK=s3` reads the live copy of
+any corpus not rebuilt), and only then does `--upload-staged` ship the exact
+files it checked. A corpus that fails never reaches S3. Tool responses carry `server_version`
 (`2.2.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
 a stale tools/list. 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only
 `get_source`, grouped `search_archive`, `find_evidence`, one `truncated`

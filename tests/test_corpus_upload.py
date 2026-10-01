@@ -108,6 +108,57 @@ class WeeklyThingUploadMediaDescriptionTests(unittest.TestCase):
         described = [m for m in shipped["media"] if m.get("description")]
         self.assertEqual([m["url"] for m in described], [DESCRIBED])
 
+    def test_stage_writes_candidates_and_uploads_nothing(self):
+        # The corpus gate: deploy.yml evals what --stage wrote before any
+        # upload, then --upload-staged ships those exact files.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            archive, sidecar, _site = _fixture(root)
+            stage = root / "stage"
+            uploaded: list[tuple[str, str]] = []
+            base = ["upload_corpus.py", "--bucket", "b", "--key", "artifacts/corpus.json"]
+            patches = (
+                mock.patch.object(upload, "ARCHIVE_DIR", archive),
+                mock.patch.object(upload, "MEDIA_DESCRIPTIONS_PATH", sidecar),
+                mock.patch.object(upload, "load_dotenv"),
+                mock.patch.object(upload, "fetch_existing_corpus", return_value=None),
+                mock.patch.object(upload, "add_bedrock_embeddings"),
+                mock.patch.object(upload, "build_graph", return_value={"nodes": []}),
+                mock.patch.object(
+                    upload,
+                    "upload_json_gzip",
+                    side_effect=lambda b, k, p: uploaded.append((k, Path(p).name)),
+                ),
+            )
+            for patch in patches:
+                patch.start()
+            self.addCleanup(mock.patch.stopall)
+            with mock.patch.object(sys, "argv", base + ["--stage", str(stage)]):
+                self.assertEqual(upload.main(), 0)
+            self.assertEqual(uploaded, [])
+            staged = json.loads((stage / "corpus.json").read_text(encoding="utf-8"))
+            self.assertEqual(staged["issues"][0]["number"], 351)
+            self.assertEqual(json.loads((stage / "graph.json").read_text()), {"nodes": []})
+
+            with mock.patch.object(sys, "argv", base + ["--upload-staged", str(stage)]):
+                self.assertEqual(upload.main(), 0)
+            self.assertEqual(
+                uploaded,
+                [("artifacts/corpus.json", "corpus.json"), ("artifacts/graph.json", "graph.json")],
+            )
+
+    def test_upload_staged_refuses_a_missing_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            argv = ["upload_corpus.py", "--bucket", "b", "--upload-staged", tmp]
+            with (
+                mock.patch.object(upload, "load_dotenv"),
+                mock.patch.object(upload, "upload_json_gzip") as put,
+                mock.patch.object(sys, "argv", argv),
+                self.assertRaises(FileNotFoundError),
+            ):
+                upload.main()
+            put.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

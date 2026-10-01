@@ -222,27 +222,57 @@ jobs:
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build_podcast.py
 
-      # Embed every corpus the Librarian API can load. Each upload reuses
-      # cached embeddings from the previous S3 artifact when chunk ids match.
-      # The WT upload also builds the graph from the embedded corpus (real
-      # similar_issues) and uploads it beside the corpus; the site handoff
-      # below pushes that graph.
-      - name: Upload embedded Weekly Thing corpus + graph to S3
+      # Embed every corpus the Librarian API can load, into .candidate/
+      # first. Each build reuses cached embeddings from the previous S3
+      # artifact when chunk ids match. The WT stage also builds the graph
+      # from the embedded corpus (real similar_issues); the site handoff
+      # below pushes that graph once it is uploaded.
+      - name: Embed Weekly Thing corpus + graph (candidate)
         if: steps.changes.outputs.weekly_corpus == 'true'
-        run: uv run --locked python pipeline/deploy/upload_corpus.py
+        run: uv run --locked python pipeline/deploy/upload_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
           WEEKLY_SITE_ARCHIVE_DIR: .weekly-site/apps/site/archive
 
-      - name: Upload embedded blog corpus to S3
+      - name: Embed blog corpus (candidate)
         if: steps.changes.outputs.blog_corpus == 'true'
-        run: uv run --locked python pipeline/deploy/upload_blog_corpus.py
+        run: uv run --locked python pipeline/deploy/upload_blog_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
-      - name: Upload embedded podcast corpus to S3
+      - name: Embed podcast corpus (candidate)
         if: steps.changes.outputs.podcast_corpus == 'true'
-        run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py
+        run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py --stage .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      # The corpus gate: the same eval over the candidate corpora (the live
+      # S3 copy of any corpus not rebuilt) BEFORE anything is uploaded. A
+      # corpus that breaks an invariant or a known answer never reaches the
+      # Librarian (Jamie, 2026-09-30: the MCP must never silently miss
+      # things). The eval above checks the new code against live corpora.
+      - name: Corpus gate (eval the candidate corpora)
+        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true'
+        run: node apps/librarian/lambda/scripts/eval-tools.mjs
+        env:
+          EVAL_CORPUS_DIR: .candidate
+          EVAL_CORPUS_FALLBACK: s3
+
+      - name: Upload Weekly Thing corpus + graph to S3
+        if: steps.changes.outputs.weekly_corpus == 'true'
+        run: uv run --locked python pipeline/deploy/upload_corpus.py --upload-staged .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Upload blog corpus to S3
+        if: steps.changes.outputs.blog_corpus == 'true'
+        run: uv run --locked python pipeline/deploy/upload_blog_corpus.py --upload-staged .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Upload podcast corpus to S3
+        if: steps.changes.outputs.podcast_corpus == 'true'
+        run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py --upload-staged .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
