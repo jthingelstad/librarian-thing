@@ -3378,42 +3378,90 @@ function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
   return false;
 }
 
-function scoreRelatedSource(
-  base: SourceBundle,
-  candidate: ArchiveRecord,
-  candidateChunks: ArchiveRecord[],
-  candidateLinks: ArchiveRecord[]
-) {
-  if (sourceRecordKey(base.record) === sourceRecordKey(candidate)) return 0;
+// What "related" means (QA3 Q20): two sources are related when they share
+// at least RELATED_MIN_TERMS distinctive terms. A term is a word of five or
+// more letters from the title and the opening 3,000 characters (no
+// stopword, no number), or a domain the source linked as a pick; it is
+// distinctive when fewer than RELATED_TERM_CEILING of the sources in scope
+// use it, a ceiling never below RELATED_TERM_FLOOR sources (2% of the 351
+// issues alone is 7, which left wt-200 no related issue at all). One
+// shared 5+-letter word used to be enough, and a source of another kind
+// scored 2 for nothing: related_count ran 7,500 to 10,900 for most sources
+// (site-members 10,920: every source in the archive), so the count said
+// nothing about the list.
+const RELATED_MIN_TERMS = 3;
+const RELATED_TERM_CEILING = 0.02;
+const RELATED_TERM_FLOOR = 20;
+
+interface RelatedTerms {
+  words: Set<string>;
+  domains: Set<string>;
+}
+
+interface RelatedIndex {
+  terms: Map<string, RelatedTerms>;
+  wordSources: Map<string, number>;
+  domainSources: Map<string, number>;
+  sources: number;
+}
+
+const RELATED_INDEX = new WeakMap<Corpus, RelatedIndex>();
+
+function relatedTerms(record: ArchiveRecord, chunks: ArchiveRecord[], links: ArchiveRecord[]): RelatedTerms {
   // Shared picks make two sources related; two issues that both cite
   // Wikipedia in passing are not.
-  const baseDomains = new Set(
-    [
-      ...(base.record.domains || []),
-      ...(base.links || []).filter(isHeadlineLink).map((link) => linkDomain(link))
-    ].filter(Boolean)
+  const domains = new Set(
+    [...(record.domains || []), ...(links || []).filter(isHeadlineLink).map((link) => linkDomain(link))]
+      .filter(Boolean)
+      .map(String)
   );
-  const candidateDomains = new Set(
-    [
-      ...(candidate.domains || []),
-      ...(candidateLinks || []).filter(isHeadlineLink).map((link) => linkDomain(link))
-    ].filter(Boolean)
-  );
-  let score = 0;
-  for (const domain of candidateDomains) if (baseDomains.has(domain)) score += 4;
-  const baseTokens = new Set(
-    tokenize([base.record.subject, sourceTextFromChunks(base.chunks).slice(0, 3000)].join(' ')).filter(
-      (token) => token.length > 4
+  const words = new Set(
+    tokenize([record.subject, sourceTextFromChunks(chunks).slice(0, 3000)].join(' ')).filter(
+      (token) => token.length > 4 && !STOPWORDS.has(token) && !/^\d+$/.test(token)
     )
   );
-  const candidateTokens = new Set(
-    tokenize([candidate.subject, sourceTextFromChunks(candidateChunks).slice(0, 3000)].join(' ')).filter(
-      (token) => token.length > 4
-    )
-  );
-  for (const token of candidateTokens) if (baseTokens.has(token)) score += 1;
-  if (candidate.source_kind !== base.record.source_kind) score += 2;
-  return score;
+  return { words, domains };
+}
+
+async function relatedIndex(kind: string, corpus: Corpus) {
+  const cached = RELATED_INDEX.get(corpus);
+  if (cached) return cached;
+  const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
+  const linksBySource = groupBySourceKey(await linkRecords(kind), sourceKeyFromLink);
+  const index: RelatedIndex = { terms: new Map(), wordSources: new Map(), domainSources: new Map(), sources: 0 };
+  for (const record of contentRecords(corpus, kind)) {
+    const key = sourceRecordKey(record);
+    const terms = relatedTerms(record, chunksBySource.get(key) || [], linksBySource.get(key) || []);
+    index.terms.set(key, terms);
+    index.sources += 1;
+    for (const word of terms.words) index.wordSources.set(word, (index.wordSources.get(word) || 0) + 1);
+    for (const domain of terms.domains) index.domainSources.set(domain, (index.domainSources.get(domain) || 0) + 1);
+  }
+  RELATED_INDEX.set(corpus, index);
+  return index;
+}
+
+/** The base source's distinctive terms against every source in scope. */
+function distinctiveTerms(base: RelatedTerms, indexes: RelatedIndex[]) {
+  const sources = indexes.reduce((sum, index) => sum + index.sources, 0);
+  const ceiling = Math.max(sources * RELATED_TERM_CEILING, RELATED_TERM_FLOOR);
+  const usedBy = (term: string, field: 'wordSources' | 'domainSources') =>
+    indexes.reduce((sum, index) => sum + (index[field].get(term) || 0), 0);
+  return {
+    words: new Set([...base.words].filter((word) => usedBy(word, 'wordSources') < ceiling)),
+    domains: new Set([...base.domains].filter((domain) => usedBy(domain, 'domainSources') < ceiling))
+  };
+}
+
+function scoreRelatedSource(base: RelatedTerms, baseKind: unknown, candidate: ArchiveRecord, terms: RelatedTerms) {
+  let words = 0;
+  let domains = 0;
+  for (const word of terms.words) if (base.words.has(word)) words += 1;
+  for (const domain of terms.domains) if (base.domains.has(domain)) domains += 1;
+  if (words + domains < RELATED_MIN_TERMS) return null;
+  // The rank: a shared pick outweighs a shared word, and another kind of
+  // source (a post beside an issue) is worth a little more.
+  return domains * 4 + words + (candidate.source_kind !== baseKind ? 2 : 0);
 }
 
 // Links per list in a neighbourhood; outgoing_count and incoming_count say
@@ -3429,15 +3477,18 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
     (link) => sourceKeyFromLink(link) !== bundle.key && targetMatchesSource(link, bundle.record)
   );
   const related = [];
-  for (const kind of scopeKinds(scope)) {
-    const corpus = await loadCorpus(kind);
-    const chunksBySource = groupBySourceKey(corpus.chunks || [], (chunk) => sourceKeyFromChunk(chunk, kind));
+  const kinds = scopeKinds(scope);
+  const corpora = await Promise.all(kinds.map((kind) => loadCorpus(kind)));
+  const indexes = await Promise.all(kinds.map((kind, at) => relatedIndex(kind, corpora[at])));
+  const base = distinctiveTerms(relatedTerms(bundle.record, bundle.chunks, bundle.links), indexes);
+  for (const [at, kind] of kinds.entries()) {
     const linksBySource = groupBySourceKey(await linkRecords(kind), sourceKeyFromLink);
-    for (const record of contentRecords(corpus, kind)) {
+    for (const record of contentRecords(corpora[at], kind)) {
       const key = sourceRecordKey(record);
       if (key === bundle.key) continue;
-      const score = scoreRelatedSource(bundle, record, chunksBySource.get(key) || [], linksBySource.get(key) || []);
-      if (score > 0) related.push({ score, record, link_count: (linksBySource.get(key) || []).length });
+      const terms = indexes[at].terms.get(key);
+      const score = terms && scoreRelatedSource(base, bundle.record.source_kind, record, terms);
+      if (score) related.push({ score, record, link_count: (linksBySource.get(key) || []).length });
     }
   }
   related.sort(
@@ -3475,7 +3526,7 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       ? `incoming_links holds the newest links to this source, not all ${incomingAll.length}; find_links with url ${absoluteSourceUrl(bundle.record.url)} lists every one.`
       : '',
     related.length > limit
-      ? `related_sources is the ${limit} most related of ${related.length} sources that share a domain or words with this one${limit < TOOL_LIMITS.source_neighborhood.max ? `; raise limit (up to ${TOOL_LIMITS.source_neighborhood.max}) for more` : ''}.`
+      ? `related_sources is the ${limit} most related of ${related.length} sources sharing ${RELATED_MIN_TERMS} or more distinctive words or picked domains with this one${limit < TOOL_LIMITS.source_neighborhood.max ? `; raise limit (up to ${TOOL_LIMITS.source_neighborhood.max}) for more` : ''}.`
       : ''
   ].filter(Boolean);
   return markTruncated(
@@ -3491,8 +3542,8 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       incoming_links: incomingShown.map(compactLink),
       ...(crossSource.length ? { cross_source_count: crossSource.length } : {}),
       ...(crossShown.length ? { cross_source_links: crossShown.map(compactLink) } : {}),
-      // Every candidate that shares a domain or words, of which
-      // related_sources holds the top limit (QA2 links L2-9).
+      // Every source related by RELATED_MIN_TERMS distinctive terms, of
+      // which related_sources holds the top limit (QA2 links L2-9, QA3 Q20).
       related_count: related.length,
       // Five domains say what a related source linked; the full list ran
       // to 700 chars an entry (archive_gems caps the same way).

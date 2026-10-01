@@ -1254,6 +1254,38 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
     outOfOrder.slice(0, 5).join(', ')
   );
 }
+// QA3 Q20: related means at least 3 shared distinctive terms. One shared
+// 5+-letter word was enough, so related_count was nearly the archive
+// (site-members 10,920, wt-351 10,919, blog-1381396 7,597 on the 2026-10-01
+// corpora); now it is a list worth counting, and Hildene sits beside the
+// Vermont trip's Day 7 log.
+{
+  for (const [id, was] of [
+    ['site-members', 10_920],
+    ['wt-351', 10_919],
+    ['blog-1381396', 7_597]
+  ]) {
+    const out = await run('source_neighborhood', { id, limit: 20 });
+    check(
+      `KA source_neighborhood ${id} related_count is a fraction of the ${was} it was`,
+      out?.related_count > 0 && out.related_count < was / 5,
+      String(out?.related_count)
+    );
+  }
+  const hildene = await run('source_neighborhood', { id: 'blog-1381396', limit: 8 });
+  const ids = (hildene?.related_sources || []).map((item) => item.id);
+  check(
+    'KA source_neighborhood blog-1381396 relates the Vermont Day 7 log',
+    ids.includes('blog-1380702'),
+    ids.join(', ')
+  );
+  const issues = await run('source_neighborhood', { id: 'wt-200' }, { scope: 'weekly_thing' });
+  check(
+    'KA source_neighborhood wt-200 has related issues in the Weekly Thing scope alone',
+    issues?.related_count > 0 && issues.related_count < 350,
+    String(issues?.related_count)
+  );
+}
 // QA3 Q3: a blank or whitespace url, id or domain is refused at the door
 // on every tool that takes one, never read as absent (find_links url:""
 // listed all 36,523 links); find_links and list_content refuse it in

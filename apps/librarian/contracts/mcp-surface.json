@@ -1918,7 +1918,7 @@
         "readOnlyHint": true,
         "openWorldHint": false
       },
-      "description": "What surrounds one source (by id): its outgoing and incoming links, links between Jamie's own sites, similar issues by meaning, and related sources by shared domains.",
+      "description": "What surrounds one source (by id): its outgoing and incoming links, links between Jamie's own sites, similar issues by meaning, and related sources: sharing at least 3 distinctive words or picked domains (each used by fewer than max(2% of the sources in scope, 20) sources).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -1973,7 +1973,7 @@
           },
           "related_count": {
             "type": "integer",
-            "description": "Sources that share a domain or words with this one; related_sources holds the top limit."
+            "description": "Sources sharing at least 3 distinctive terms (words of five or more letters, or picked domains, each used by fewer than max(2% of the sources in scope, 20) sources) with this one; related_sources holds the top limit."
           },
           "related_sources": {
             "type": "array"
@@ -2019,7 +2019,7 @@
           "server_version"
         ]
       },
-      "chat_description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, page-<page id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources by shared domains/text signals. Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "chat_description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, page-<page id>, ep-<n>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources (related means sharing at least 3 distinctive terms: words of five or more letters from the title and opening, or domains it linked as picks, each used by fewer than max(2% of the sources in scope, 20) sources; related_count counts them all, related_sources lists the top limit). Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "doors": {
         "mcp": true,
         "webmcp": true,

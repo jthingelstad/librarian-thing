@@ -273,3 +273,46 @@ test('on_this_day runs a day of blog posts by Chicago time of day (QA3 Q17)', as
   const [spec] = mcpToolDeclarations(['on_this_day']);
   assert.match(spec.description, /blog posts by Chicago time of day/);
 });
+
+test('source_neighborhood relates sources by 3 shared distinctive terms, and the count is the list (QA3 Q20)', async () => {
+  // Thirty posts share "kitchen" (too common to count); a few share rare words.
+  const texts = {
+    1: 'Hildene mansion gardens and the Lincoln family kitchen.',
+    2: 'Hildene mansion gardens again, with the kitchen.',
+    3: 'Hildene mansion kitchen, nothing else in common.',
+    4: 'Lincoln and the gardens, a kitchen visit.'
+  };
+  const posts = [];
+  const chunks = [];
+  for (let id = 1; id <= 30; id += 1) {
+    const url = `https://www.thingelstad.com/2021/08/06/p${id}.html`;
+    posts.push({ microblog_id: id, subject: '', publish_date: '2021-08-06', url, post_kind: 'post' });
+    chunks.push({
+      microblog_id: id,
+      source_kind: 'blog',
+      url,
+      section: 'Blog post',
+      text: texts[id] || `A kitchen story number ${id}.`
+    });
+  }
+  primeCorpusCachesForTests({
+    weekly_thing: {
+      // An issue shares only "kitchen": another kind no longer makes it related.
+      issues: [
+        { number: 150, subject: 'Weekly Thing 150', publish_date: '2021-08-07T03:00:00Z', url: '/archive/150/' }
+      ],
+      chunks: [{ issue_number: 150, source_kind: 'chunk', section: 'Notable', text: 'The kitchen remodel.' }]
+    },
+    blog: { posts, chunks }
+  });
+  const out = await ARCHIVE_TOOLS.source_neighborhood({ id: 'blog-1' }, { scope: 'all' });
+  // blog-2 shares hildene, mansion, gardens; blog-3 two words; blog-4 two.
+  assert.deepEqual(
+    out.related_sources.map((item) => item.id),
+    ['blog-2']
+  );
+  assert.equal(out.related_count, 1);
+  const [spec] = mcpToolDeclarations(['source_neighborhood']);
+  assert.match(spec.description, /at least 3 distinctive/);
+  assert.match(spec.outputSchema.properties.related_count.description, /at least 3 distinctive terms/);
+});
