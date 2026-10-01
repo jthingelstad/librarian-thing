@@ -1906,6 +1906,11 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   const episode = raw.match(/^ep-(\d+)$/i);
   if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
   if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
+  // An archive url pasted without its scheme (QA2 links L2-7:
+  // thingelstad.com/2004/07/06/learn-to-row.html was not_found).
+  if (/^(www\.)?(jthingelstad\.micro\.blog|([a-z0-9-]+\.)*thingelstad\.com)\//i.test(raw)) {
+    return { ...rest, url: `https://${raw}` };
+  }
   return { ...rest, id: raw };
 }
 

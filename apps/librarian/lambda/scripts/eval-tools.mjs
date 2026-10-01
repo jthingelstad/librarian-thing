@@ -626,6 +626,12 @@ await run('domain_history', { domain: 'macstories.net' });
     `${problems.join('; ')} ${out?.error || ''} ${out?.applied?.domain}`
   );
 }
+// QA2 links L2-7: an archive url without its scheme is still a url.
+for (const tool of ['get_source', 'find_links', 'source_neighborhood']) {
+  const out = await run(tool, { id: 'thingelstad.com/2004/07/06/learn-to-row.html', limit: 1 });
+  const id = out?.source?.id || out?.results?.[0]?.id;
+  check(`KA ${tool} resolves a scheme-less archive url`, id === 'blog-1076487', String(out?.error || id));
+}
 // QA2 links L2-4: an id and a source_kind that disagree are refused, not
 // answered with 0 links.
 await run('find_links', { id: 'wt-351', source_kind: 'blog' }, { expectError: true }).then((out) => {
