@@ -381,21 +381,103 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     }
     check('completeness every issue body reads whole with offset', short.length === 0, short.slice(0, 4).join(', '));
 
-    const empty = [];
+    // Every paragraph under a heading is in that section's read, page by
+    // page (QA2 R2-1: 107 headings read partial, an exact row winning over
+    // the H2's extent; wt-146 Stream returned 95 of 9,099 chars).
+    const fold = (text) =>
+      String(text || '')
+        .replace(/\u00a0/g, ' ')
+        .replace(/[*_`]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    const readSection = async (id, section, folded = true) => {
+      let offset = 0;
+      let text = '';
+      for (let page = 0; page < 20; page += 1) {
+        const result = await call('get_source', {
+          id,
+          format: 'text',
+          ...(section === undefined ? {} : { section }),
+          ...(offset ? { offset } : {})
+        });
+        if (result.error) return null;
+        text += String(result.source?.body || '');
+        offset = result.truncated?.next_offset || 0;
+        if (!offset) break;
+      }
+      return folded ? fold(text) : text;
+    };
+    const underHeadings = (body, pattern) => {
+      const lines = String(body || '').split('\n');
+      const heads = [];
+      let fenced = false;
+      lines.forEach((line, index) => {
+        if (/^\s*(?:```|~~~)/.test(line)) fenced = !fenced;
+        const heading = !fenced && /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+        if (heading) heads.push({ index, level: heading[1].length, name: heading[2] });
+      });
+      return heads
+        .filter((head) => pattern.test('#'.repeat(head.level)))
+        .map((head) => {
+          const next = heads.find((other) => other.index > head.index && other.level <= head.level);
+          const paragraphs = lines
+            .slice(head.index + 1, next ? next.index : lines.length)
+            .join('\n')
+            .split(/\n\s*\n/)
+            .map(fold)
+            .filter((paragraph) => paragraph.length >= 30 && !/^#{1,6}\s/.test(paragraph));
+          return { name: head.name, paragraphs };
+        });
+    };
+    const partial = [];
     let headings = 0;
+    let missingParagraphs = 0;
     for (const issue of bySource.weekly_thing.items) {
-      for (const line of String(issue.body || '').split('\n')) {
-        const heading = /^#{2,3}\s+(.*?)\s*$/.exec(line);
-        if (!heading) continue;
+      for (const { name, paragraphs } of underHeadings(issue.body, /^#{2,3}$/)) {
         headings += 1;
-        const result = await call('get_source', { id: `wt-${issue.number}`, section: heading[1], format: 'text' });
-        if (result.error || !String(result.source?.body || '').trim()) empty.push(`wt-${issue.number} "${heading[1]}"`);
+        const text = await readSection(`wt-${issue.number}`, name);
+        const missing = text === null ? paragraphs.length || 1 : paragraphs.filter((p) => !text.includes(p)).length;
+        if (missing || !text) {
+          missingParagraphs += missing;
+          partial.push(`wt-${issue.number} "${name}" ${missing}`);
+        }
       }
     }
     check(
-      'completeness every body heading reads as a section',
-      headings > 0 && empty.length === 0,
-      `${empty.length} of ${headings}: ${empty.slice(0, 4).join(', ')}`
+      'completeness every body heading reads whole as a section',
+      headings > 0 && partial.length === 0,
+      `${partial.length} of ${headings} (${missingParagraphs} paragraphs): ${partial.slice(0, 4).join(', ')}`
+    );
+    // The same for every heading in a blog post, outside fenced code (QA2
+    // R2-5: a "#" comment in a code fence ended the read). The post's own
+    // whole read is the oracle body: its chunks overlap, so joining them
+    // would repeat text.
+    const blogPartial = [];
+    let blogHeadings = 0;
+    const chunksOfPost = new Map();
+    for (const chunk of blog.chunks || []) {
+      const key = String(chunk.microblog_id ?? /^blog:(\d+):/.exec(String(chunk.id || ''))?.[1] ?? '');
+      if (!chunksOfPost.has(key)) chunksOfPost.set(key, []);
+      chunksOfPost.get(key).push(chunk);
+    }
+    for (const [id, chunks] of chunksOfPost) {
+      if (!chunks.some((chunk) => /^#{1,6}\s/m.test(String(chunk.text || '')))) continue;
+      const text = await readSection(`blog-${id}`, undefined, false);
+      if (text === null) {
+        blogPartial.push(`blog-${id} unreadable`);
+        continue;
+      }
+      for (const { name, paragraphs } of underHeadings(text, /^#{1,6}$/)) {
+        blogHeadings += 1;
+        const read = await readSection(`blog-${id}`, name);
+        const missing = read === null ? paragraphs.length || 1 : paragraphs.filter((p) => !read.includes(p)).length;
+        if (missing) blogPartial.push(`blog-${id} "${name}" ${missing}`);
+      }
+    }
+    check(
+      'completeness every blog heading reads whole as a section',
+      blogHeadings > 0 && blogPartial.length === 0,
+      `${blogPartial.length} of ${blogHeadings}: ${blogPartial.slice(0, 4).join(', ')}`
     );
 
     const perIssue = new Map();

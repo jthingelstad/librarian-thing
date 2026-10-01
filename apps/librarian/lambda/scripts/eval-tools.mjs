@@ -657,6 +657,54 @@ await run('search_archive', {
   const ids = (out?.results || []).map((group) => group.id);
   check('KA search_archive topic reaches an issue filed only at issue level', ids.includes('wt-1'), ids.join(', '));
 });
+// QA2 R2-1 / R2-5: an H2 heading reads its whole extent, not the exact
+// row that shares its name (WT146 Stream gave 95 of 9,099 chars); a "#"
+// comment in fenced code does not end a blog section.
+for (const [id, section, phrase] of [
+  ['wt-146', 'Stream', 'Ms. PAC-MAN'],
+  ['wt-8', 'Now Reading 📚', 'American Eclipse'],
+  ['blog-4180550', 'Posting to Micro.blog', 'curl']
+]) {
+  const out = await run('get_source', { id, section, format: 'text' });
+  const body = String(out?.source?.body || '');
+  check(`KA get_source ${id} "${section}" reads "${phrase}"`, body.includes(phrase), `${body.length} chars`);
+}
+// QA2 R2-7: a miss lists the body headings too, and each one it lists reads.
+for (const [id, heading] of [
+  ['blog-1076058', 'Transcript'],
+  ['wt-4', null]
+]) {
+  const miss = await run('get_source', { id, section: 'zz no such section' }, { expectError: true });
+  const names = miss?.available_sections || [];
+  check(
+    `KA get_source ${id} miss lists its sections`,
+    names.length > 0 && (!heading || names.includes(heading)),
+    names.join(' | ')
+  );
+  const unread = [];
+  for (const name of names) {
+    const out = await run('get_source', { id, section: name, format: 'outline' }, { expectError: true });
+    if (out?.error) unread.push(name);
+  }
+  check(`KA get_source ${id} every available section reads`, unread.length === 0, unread.join(' | '));
+}
+// QA2 R2-9 / R2-10: a section of only heading marks, and an offset the read
+// cannot honour, are refused rather than read as something else.
+for (const [label, args] of [
+  ['section "##"', { id: 'wt-351', section: '##' }],
+  ['offset with outline', { id: 'wt-351', format: 'outline', offset: 100 }],
+  ['offset past the end', { id: 'wt-351', format: 'text', offset: 999999 }]
+]) {
+  const out = await run('get_source', args, { expectError: true });
+  check(
+    `KA get_source ${label} is bad_request`,
+    out?.code === 'bad_request',
+    String(out?.error || out?.source?.section)
+  );
+}
+await run('get_source', { id: 'wt-351', format: 'text', offset: '100' }).then((out) => {
+  check('KA get_source string offset echoes as a number', out?.applied?.offset === 100, JSON.stringify(out?.applied));
+});
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);

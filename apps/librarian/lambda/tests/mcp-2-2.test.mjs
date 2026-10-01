@@ -245,7 +245,8 @@ test('get_source: an exact section wins, any body heading reads, and a miss list
   assert.match(marked.source.body, /About two\./, 'markdown marks and no-break spaces do not count');
   const missing = await ARCHIVE_TOOLS.get_source({ id: 'wt-35', section: 'Nonexistent' }, CTX);
   assert.equal(missing.code, 'bad_request');
-  assert.deepEqual(missing.available_sections, ['Coffee', 'Coffee Gear', 'Article One', 'MNTech meetup']);
+  // The body's own group headings are listed too (QA2 R2-7).
+  assert.deepEqual(missing.available_sections, ['Coffee', 'Coffee Gear', 'Article One', 'MNTech meetup', 'Links 📌']);
   assert.equal(headingKey('*Not* `yes`  #1'), 'not yes 1');
 });
 
@@ -348,7 +349,10 @@ test('a Journal chunk that copies two posts stays until both posts are in the po
     ['wt-36-journal', 'blog-601'],
     'post two is only in the copy'
   );
-  assert.deepEqual(dedupeJournalTwins([copy, postOne, postTwo]).map((chunk) => chunk.id), ['blog-601', 'blog-602']);
+  assert.deepEqual(
+    dedupeJournalTwins([copy, postOne, postTwo]).map((chunk) => chunk.id),
+    ['blog-601', 'blog-602']
+  );
   const unmatched = { ...copy, journal_posts: [copy.journal_posts[0], { url: null, matched_by: null }] };
   assert.deepEqual(
     dedupeJournalTwins([unmatched, postOne, postTwo]).map((chunk) => chunk.id),
