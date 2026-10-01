@@ -1080,6 +1080,108 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     check('completeness site-members incoming_count 2', members.incoming_count === 2, String(members.incoming_count));
   }
 
+  // 8m. Where a blog post appears in The Weekly Thing, two lists (Jamie,
+  //     2026-10-01; QA2 I2-1, links Q1): also_in_issues, the issues whose
+  //     Journal reprints the post from the issue's own week; and
+  //     linked_from_issues, every other issue that links it (a pick, prose,
+  //     a Journal link to an older post). The oracle reads the raw corpora:
+  //     reprints from the Weekly Thing chunks' journal_posts inside
+  //     [previous issue - 3 days, issue + 1 day] (Chicago or permalink day,
+  //     as 8g), links from the Weekly Thing links whose url names the
+  //     post's permalink (two posts can share one). Every issue lands in
+  //     exactly one list, and none is dropped, on corpora built before the
+  //     split and after it.
+  {
+    const chicago = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' });
+    const dayOf = (stamp) => {
+      const value = String(stamp || '');
+      return /T/.test(value) && Number.isFinite(Date.parse(value))
+        ? chicago.format(Date.parse(value))
+        : value.slice(0, 10);
+    };
+    const shift = (day, days) => new Date(Date.parse(`${day}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+    const postDays = new Map(
+      (blog.posts || []).map((post) => [
+        String(post.microblog_id),
+        [dayOf(post.published), String(post.publish_date || '').slice(0, 10)].filter(Boolean)
+      ])
+    );
+    const issueDays = (wt.issues || [])
+      .map((issue) => [String(issue.number), dayOf(issue.publish_date)])
+      .sort((a, b) => a[1].localeCompare(b[1]));
+    const weeks = new Map(
+      issueDays.map(([number, day], index) => [
+        number,
+        [index ? shift(issueDays[index - 1][1], -3) : '0000-00-00', shift(day, 1)]
+      ])
+    );
+    const add = (map, key, issue) => {
+      if (!map.has(key)) map.set(key, new Set());
+      map.get(key).add(String(issue));
+    };
+    const reprinted = new Map();
+    for (const chunk of wt.chunks || []) {
+      const week = weeks.get(String(chunk.issue_number));
+      for (const copy of chunk.journal_posts || []) {
+        if (copy?.copy_of_microblog_id == null) continue;
+        const days = postDays.get(String(copy.copy_of_microblog_id)) || [];
+        if (!week || !days.length || days.some((day) => day >= week[0] && day <= week[1])) {
+          add(reprinted, String(copy.copy_of_microblog_id), chunk.issue_number);
+        }
+      }
+    }
+    const permalink = (url) => {
+      const match =
+        /^https?:\/\/(?:www\.|micro\.)?(?:thingelstad\.com|jthingelstad\.micro\.blog)\/(\d{4}\/\d{2}\/\d{2}\/[^?#]+?)(?:\.html)?\/?(?:[?#].*)?$/i.exec(
+          String(url || '').trim()
+        );
+      return match ? match[1].toLowerCase() : '';
+    };
+    const postsAt = new Map();
+    for (const post of blog.posts || []) {
+      const key = post.microblog_id == null ? '' : permalink(post.url);
+      if (key) postsAt.set(key, [...(postsAt.get(key) || []), String(post.microblog_id)]);
+    }
+    const named = new Map();
+    for (const link of wt.links || []) {
+      for (const id of postsAt.get(permalink(link.url)) || []) add(named, id, link.issue_number);
+    }
+    for (const [id, issues] of reprinted) for (const issue of issues) add(named, id, issue);
+    const sorted = (values) => [...(values || [])].map(String).sort().join(',');
+    // Each post is read once per list it is in; both reads show both lists.
+    const got = new Map();
+    for (const filter of ['has_also_in_issues', 'has_linked_from_issues']) {
+      for (let offset = 0; offset !== undefined;) {
+        const page = await call('list_content', { source_kind: 'blog', [filter]: true, limit: 120, offset });
+        for (const row of page.results || []) {
+          got.set(row.id, { also: sorted(row.also_in_issues), linked: sorted(row.linked_from_issues) });
+        }
+        offset = page.truncated?.next_offset;
+      }
+    }
+    const wrong = [];
+    let pairs = 0;
+    for (const [id, issues] of named) {
+      pairs += issues.size;
+      const want = {
+        also: sorted(reprinted.get(id)),
+        linked: sorted([...issues].filter((issue) => !reprinted.get(id)?.has(issue)))
+      };
+      const have = got.get(`blog-${id}`) || { also: '', linked: '' };
+      if (have.also !== want.also || have.linked !== want.linked) {
+        wrong.push(
+          `blog-${id} also ${have.also || '-'}/${want.also || '-'} linked ${have.linked || '-'}/${want.linked || '-'}`
+        );
+      }
+    }
+    const extra = [...got.keys()].filter((id) => !named.has(id.replace(/^blog-/, '')));
+    check(
+      'completeness also_in_issues and linked_from_issues partition the issues naming each post',
+      named.size > 0 && wrong.length === 0 && extra.length === 0,
+      `${named.size} posts, ${pairs} pairs: ${wrong.length} wrong (${wrong.slice(0, 4).join('; ')}), ${extra.length} extra (${extra.slice(0, 4).join(', ')})`
+    );
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;
