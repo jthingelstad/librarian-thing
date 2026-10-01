@@ -2886,11 +2886,26 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   // (matcher.mts ENTITY_ALIASES: ENS is Ethereum Name Service); the
   // separate entity lens did this until 2.0 folded it in.
   const aliases = lensAliases(topic, input.aliases);
+  // years[].top_domains counts links, by find_links' measure: editorial
+  // picks (source_kind blog or podcast: that source's links) to other
+  // sites, by host with www merged (QA2 links L9, L10).
+  const linkDomains = new Map<string, Map<string, number>>();
+  for (const link of await linkRecords(scope)) {
+    if (requestedSource && linkCorpusKind(link) !== requestedSource) continue;
+    if (inferredLinkKind(link) === 'internal' || !rankedLink(link, requestedSource)) continue;
+    const domain = linkDomain(link);
+    const id = linkSourceId(link);
+    if (!domain || !id) continue;
+    const counts = linkDomains.get(id) || new Map<string, number>();
+    counts.set(domain, (counts.get(domain) || 0) + 1);
+    linkDomains.set(id, counts);
+  }
   const payload = compactLensPayload(
     {
       scope: effectiveScope(scope, requestedSource),
       source_kind: requestedSource || null,
       ...(aliases.length ? { aliases_checked: [topic, ...aliases] } : {}),
+      top_domains_measure: linkMeasure(requestedSource),
       ...buildArchiveLens({
         topic,
         aliases,
@@ -2901,7 +2916,8 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
         chunks,
         yearRange: input.year_range,
         limit: toolLimit('archive_lens', input),
-        offset: toolOffset(input)
+        offset: toolOffset(input),
+        linkDomains
       })
     },
     { params: ['year_range', 'source_kind'] }

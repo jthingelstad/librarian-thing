@@ -547,6 +547,72 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     check('completeness archive_lens voice=jamie keeps a short post (blog-805918)', ids.includes('blog-805918'));
   }
 
+  // 8g. archive_lens years[].top_domains counts links, not documents: each
+  //     year's Weekly Thing headline links to other sites from the matched
+  //     issues, by host with www merged, and domain_count says how many
+  //     hosts the six are of (QA2 links L9, L10: Mastodon 2023 showed 6 of
+  //     81 with no count, and www.macstories.net apart from macstories.net).
+  {
+    const chicagoYear = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric' });
+    const issueYear = new Map(
+      bySource.weekly_thing.items.map((issue) => [
+        `wt-${issue.number}`,
+        Number(chicagoYear.format(new Date(issue.publish_date)))
+      ])
+    );
+    for (const topic of ['Mastodon', 'RSS']) {
+      const matched = new Set();
+      let first;
+      for (let offset = 0; ;) {
+        const page = await call('archive_lens', {
+          topic,
+          source_kind: 'weekly_thing',
+          limit: 40,
+          ...(offset ? { offset } : {})
+        });
+        first = first || page;
+        for (const ref of page.results || []) matched.add(typeof ref === 'string' ? ref : ref.id);
+        offset = page.truncated?.next_offset || 0;
+        if (!offset) break;
+      }
+      const oracle = new Map();
+      for (const link of bySource.weekly_thing.links) {
+        const id = `wt-${link.issue_number}`;
+        if (!matched.has(id) || (link.link_role && link.link_role !== 'headline')) continue;
+        const host = hostOf(link.url).replace(/^www\./, '');
+        if (!host || host === 'thingelstad.com' || host.endsWith('.thingelstad.com')) continue;
+        const year = issueYear.get(id);
+        if (!oracle.has(year)) oracle.set(year, new Map());
+        oracle.get(year).set(host, (oracle.get(year).get(host) || 0) + 1);
+      }
+      const wrong = [];
+      // Every year's cut, the years compaction dropped included.
+      const omitted = [...oracle.values()].reduce((sum, hosts) => sum + Math.max(0, hosts.size - 6), 0);
+      for (const row of first.years || []) {
+        const hosts = oracle.get(row.year) || new Map();
+        const want = [...hosts]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .slice(0, row.top_domains.length || 6)
+          .map(([domain, count]) => `${domain}:${count}`)
+          .join(',');
+        const got = row.top_domains.map((entry) => `${entry.domain}:${entry.count}`).join(',');
+        if (row.domain_count !== hosts.size || got !== want) {
+          wrong.push(`${row.year} ${row.domain_count}/${hosts.size} ${got} vs ${want}`);
+        }
+      }
+      check(
+        `completeness archive_lens ${topic} years[].top_domains count links by host`,
+        (first.years || []).length > 0 && wrong.length === 0,
+        wrong.slice(0, 3).join('; ')
+      );
+      check(
+        `completeness archive_lens ${topic} omitted years[].top_domains is what the years leave out`,
+        (first.truncated?.omitted?.['years[].top_domains'] || 0) === omitted,
+        `${first.truncated?.omitted?.['years[].top_domains']} vs ${omitted}`
+      );
+    }
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;

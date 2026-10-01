@@ -898,7 +898,12 @@
             "type": "array"
           },
           "years": {
-            "type": "array"
+            "type": "array",
+            "description": "Per year, newest first: source_count, evidence_count, top_sections, top_domains (the 6 most linked by top_domains_measure; domain_count says of how many) and sample_sources."
+          },
+          "top_domains_measure": {
+            "type": "string",
+            "description": "What years[].top_domains counts."
           },
           "sources": {
             "type": "array"

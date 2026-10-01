@@ -46,6 +46,7 @@ interface ArchiveLensInput {
   yearRange?: unknown;
   limit?: number;
   offset?: number;
+  linkDomains?: Map<string, Map<string, number>>;
 }
 
 interface YearBucket {
@@ -412,7 +413,14 @@ function topCounts(map: Map<string, number>, key: string, limit = 10) {
     .map(([name, count]) => ({ [key]: name, count }));
 }
 
-function yearBuckets(items: LensSource[]) {
+// The most linked domains a year shows; domain_count says of how many.
+export const LENS_YEAR_TOP_DOMAINS = 6;
+
+// linkDomains (lens source id -> host -> links) counts each year's domains
+// in links, the measure find_links and top_references use (QA2 links L9,
+// L10: record domains counted documents and kept www.macstories.net apart
+// from macstories.net). Without it, record domains stand in (fixtures).
+function yearBuckets(items: LensSource[], linkDomains?: Map<string, Map<string, number>>) {
   const buckets = new Map<number, YearBucket>();
   for (const item of items) {
     const year = yearFromPublishDate(item.publish_date);
@@ -431,7 +439,13 @@ function yearBuckets(items: LensSource[]) {
     bucket.source_count += 1;
     bucket.evidence_count += item.match_count || 0;
     for (const section of item.sections || []) bucket.sections.set(section, (bucket.sections.get(section) || 0) + 1);
-    for (const domain of item.domains || []) bucket.domains.set(domain, (bucket.domains.get(domain) || 0) + 1);
+    if (linkDomains) {
+      for (const [domain, count] of linkDomains.get(lensSourceId(item)) || []) {
+        bucket.domains.set(domain, (bucket.domains.get(domain) || 0) + count);
+      }
+    } else {
+      for (const domain of item.domains || []) bucket.domains.set(domain, (bucket.domains.get(domain) || 0) + 1);
+    }
     if (bucket.sources.length < 5) bucket.sources.push(lensSourceId(item));
   }
   return Array.from(buckets.values())
@@ -441,7 +455,8 @@ function yearBuckets(items: LensSource[]) {
       source_count: bucket.source_count,
       evidence_count: bucket.evidence_count,
       top_sections: topCounts(bucket.sections, 'section', 6),
-      top_domains: topCounts(bucket.domains, 'domain', 6),
+      top_domains: topCounts(bucket.domains, 'domain', LENS_YEAR_TOP_DOMAINS),
+      domain_count: Array.from(bucket.domains.keys()).filter(Boolean).length,
       sample_sources: bucket.sources
     }));
 }
@@ -520,7 +535,8 @@ export function buildArchiveLens({
   chunks = [],
   yearRange = null,
   limit = DEFAULT_LIMIT,
-  offset = 0
+  offset = 0,
+  linkDomains
 }: ArchiveLensInput = {}) {
   const normalizedOperation = normalizeLensOperation(operation);
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
@@ -588,7 +604,8 @@ export function buildArchiveLens({
   // offset pages the timeline (2.1.0): oldest first, [offset, offset + limit).
   const timelineIds = matched.slice(start, start + maxResults).map(lensSourceId);
   const latestIds = [...matched].reverse().slice(0, maxResults).map(lensSourceId);
-  const years = yearBuckets(matched);
+  const years = yearBuckets(matched, linkDomains);
+  const domainsOmitted = years.reduce((sum, bucket) => sum + bucket.domain_count - bucket.top_domains.length, 0);
   const bySource = sourceBuckets(matched);
   // A reading path is a short tour: at most 12 stops (archive_gems' most).
   const path = readingPath(matched, Math.min(maxResults, READING_PATH_MAX));
@@ -665,7 +682,8 @@ export function buildArchiveLens({
     latest_sources: keptOnly(latestIds),
     years: years.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
     sources: bySource.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
-    reading_path: path.filter((entry) => kept.has(entry.id))
+    reading_path: path.filter((entry) => kept.has(entry.id)),
+    ...(domainsOmitted ? { truncated: { omitted: { 'years[].top_domains': domainsOmitted } } } : {})
   };
   return settleLensTruncation(payload, { offset: requestedOffset, limit: maxResults });
 }
@@ -709,7 +727,10 @@ export function settleLensTruncation<T extends object>(value: T, { offset = 0, l
   } else if (offset && total) {
     hints.push(`The timeline shows ${offset + 1}-${pageEnd} of ${total}; this is the last page.`);
   }
-  if (Object.keys(omitted).some((path) => path !== 'sources_by_id' && path !== 'results')) {
+  if (omitted['years[].top_domains']) {
+    hints.push(`years[].top_domains holds each year's ${LENS_YEAR_TOP_DOMAINS} most linked of its domain_count.`);
+  }
+  if (Object.keys(omitted).some((path) => !['sources_by_id', 'results', 'years[].top_domains'].includes(path))) {
     hints.push('Narrow with year_range or source_kind for the rest.');
   }
   delete payload.truncated;
