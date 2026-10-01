@@ -151,6 +151,8 @@ _FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})")
 _GATE_SHORTCODE_RE = re.compile(r"\{\{<\s*(x|tweet|youtube|vimeo)\s+([^>]*?)\s*>\}\}", re.I)
 _GATE_IFRAME_SRC_RE = re.compile(r"""<iframe\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", re.I)
 _GATE_STYLE_RE = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
+_GATE_VIDEO_RE = re.compile(r"<video\b[^>]*>", re.I)
+_GATE_ATTR_RE = r"""\b{}\s*=\s*["']([^"']*)["']"""
 
 
 def _fold(text: str) -> str:
@@ -204,7 +206,9 @@ def _embed_urls(body: str) -> list[str]:
 def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
     """QA3 R2-6 and F16, against the blog's markdown: every fenced code line
     (12+ chars) is in its post's chunk text, every embedded tweet, video and
-    iframe is one of its post's links, and no <style> rule is chunk text."""
+    iframe is one of its post's links, and no <style> rule is chunk text.
+    QA3 I2-5: every <video> is a media record of its post, by its poster
+    still or, with no poster, by the video itself."""
     texts: dict[tuple[str, str], list[str]] = {}
     for chunk in blog.get("chunks") or []:
         key = (
@@ -221,7 +225,15 @@ def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
             else ("microblog_id", str(link.get("microblog_id")))
         )
         links.setdefault(key, []).append(link.get("url") or "")
-    code_missing, embeds_missing, css_kept = [], [], []
+    media: dict[tuple[str, str], set[str]] = {}
+    for item in blog.get("media") or []:
+        key = (
+            ("page_id", str(item["page_id"]))
+            if item.get("page_id") is not None
+            else ("microblog_id", str(item.get("microblog_id")))
+        )
+        media.setdefault(key, set()).add(item.get("url") or "")
+    code_missing, embeds_missing, css_kept, videos_missing = [], [], [], []
     for path in sorted(source_dir.rglob("*.md")):
         post = _source_post(path)
         if post is None:
@@ -233,6 +245,11 @@ def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
         embeds_missing += [
             f"{key[1]}: {want}" for want in _embed_urls(body) if not any(want in u for u in urls)
         ]
+        for tag in _GATE_VIDEO_RE.findall(body):
+            found = [re.search(_GATE_ATTR_RE.format(name), tag, re.I) for name in ("poster", "src")]
+            want = next((m.group(1) for m in found if m and m.group(1)), None)
+            if want and want not in media.get(key, set()):
+                videos_missing.append(f"{key[1]}: {want}")
         for style in _GATE_STYLE_RE.finditer(body):
             css_kept += [
                 f"{key[1]}: {line[:60]}"
@@ -244,6 +261,7 @@ def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
         ("fenced code lines missing from blog chunk text", code_missing),
         ("embedded tweets, videos or iframes with no blog link", embeds_missing),
         ("<style> CSS kept as blog chunk text", css_kept),
+        ("blog videos with no media record", videos_missing),
     ):
         if missing:
             failures.append(f"{len(missing)} {label}, e.g. {missing[:3]}")

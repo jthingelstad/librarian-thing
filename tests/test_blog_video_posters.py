@@ -5,12 +5,19 @@ QA 2026-09-30 (media Q3, approved by Jamie): 111 blog videos carry a
 media_search could not find them.
 """
 
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
 
 from librarian_core import corpus as core
-from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR
+from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR, REPO
+
+_spec = importlib.util.spec_from_file_location(
+    "test_blog_video_posters_gate", REPO / "pipeline" / "corpus" / "corpus_gate.py"
+)
+gate = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(gate)
 
 VIDEO = (
     '<video controls="controls" playsinline="playsinline" '
@@ -57,11 +64,64 @@ class VideoPosterTests(unittest.TestCase):
         self.assertTrue(poster["context"].startswith(core.VIDEO_POSTER_CONTEXT))
         self.assertIn("First boat ride", poster["context"])
 
+    def test_posterless_video_is_a_video_record(self):
+        # QA3 (ingest I2-5): poster="" left a video with no media record.
+        self.assertEqual(
+            core.extract_posterless_videos(f"{VIDEO}\n{EMPTY}"),
+            [
+                {
+                    "url": "https://files.thingelstad.com/posts/2007/drive.mp4",
+                    "video_url": "https://files.thingelstad.com/posts/2007/drive.mp4",
+                }
+            ],
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            posts = Path(tmp) / "posts" / "2007" / "05"
+            posts.mkdir(parents=True)
+            (posts / "2007-05-25-drive-to-work.md").write_text(
+                "---\nmicroblog_id: 8\n"
+                'url: "https://www.thingelstad.com/2007/05/25/drive-to-work.html"\n'
+                'title: "Drive to work"\npublished: "2007-05-25T12:00:00+00:00"\n'
+                "post_kind: post\ncategories: []\n---\n\n"
+                f"Time-elapsed video of my morning drive.\n\n<p>{EMPTY}</p>\n",
+                encoding="utf-8",
+            )
+            archive = Path(tmp) / "archive"
+            archive.mkdir()
+            corpus = core.build_blog_corpus(blog_dir=Path(tmp) / "posts", archive_dir=archive)
+            # The corpus gate checks every <video> has a record.
+            self.assertEqual(gate.blog_source_failures(corpus, Path(tmp) / "posts"), [])
+            [failure] = gate.blog_source_failures({**corpus, "media": []}, Path(tmp) / "posts")
+            self.assertIn("1 blog videos with no media record", failure)
+        [video] = corpus["media"]
+        self.assertEqual(video["media_kind"], "video")
+        self.assertEqual(video["url"], video["video_url"])
+        self.assertEqual(video["alt"], "")
+        self.assertNotIn("description", video)
+        self.assertEqual(
+            video["context"],
+            f"{core.VIDEO_NO_POSTER_CONTEXT}. Time-elapsed video of my morning drive.",
+        )
+
     def test_real_blog_posters(self):
         corpus = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
-        posters = [item for item in corpus["media"] if item.get("video_url")]
+        posters = [
+            item
+            for item in corpus["media"]
+            if item.get("video_url") and item.get("media_kind") != "video"
+        ]
         self.assertEqual(len([item for item in posters if item.get("microblog_id")]), 111)
         self.assertEqual(len([item for item in posters if item.get("page_id")]), 5)
+        videos = [item for item in corpus["media"] if item.get("media_kind") == "video"]
+        self.assertEqual(
+            sorted((item["microblog_id"], item["url"].rsplit("/", 1)[1]) for item in videos),
+            [
+                (1075505, "Sausage%20Making.m4v"),
+                (1076043, "drive-to-work-1.mp4"),
+                (1076043, "drive-to-work-2.mp4"),
+                (1076047, "drive-to-work-1.mp4"),
+            ],
+        )
 
 
 if __name__ == "__main__":

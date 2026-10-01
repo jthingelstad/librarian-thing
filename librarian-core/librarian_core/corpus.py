@@ -486,6 +486,23 @@ def extract_video_posters(text: str) -> list[dict[str, str]]:
     return out
 
 
+# QA3 (ingest I2-5): 4 blog videos in 3 posts have poster="", so no still
+# and, until now, no media record at all. Each is a record of its own, the
+# video's URL with media_kind "video", found by its post's words; nothing is
+# said about what it shows, because nothing has looked.
+VIDEO_NO_POSTER_CONTEXT = "Video with no poster still"
+
+
+def extract_posterless_videos(text: str) -> list[dict[str, str]]:
+    """``{url, video_url}`` for each ``<video>`` with a src and no poster."""
+    out = []
+    for tag in _VIDEO_TAG_RE.findall(text or ""):
+        src = _img_attr(tag, "src")
+        if src and not _img_attr(tag, "poster"):
+            out.append({"url": src, "video_url": src})
+    return out
+
+
 def extract_images(text: str) -> list[dict[str, str]]:
     """Every image in a markdown/html body as {url, alt}, attribute-order
     agnostic, covering both <img> tags and markdown image syntax."""
@@ -2669,7 +2686,12 @@ def build_blog_corpus(
         # A photo posted with no words and no alt text is still a post, and
         # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
         # dropped with its photo). It has nothing to embed, so no chunk.
-        if not embed_text and not extract_images(body) and not extract_video_posters(body):
+        if not (
+            embed_text
+            or extract_images(body)
+            or extract_video_posters(body)
+            or extract_posterless_videos(body)
+        ):
             continue
         subject = title or _short_label(embed_text) or "Photo"
         post_input = {
@@ -2704,7 +2726,12 @@ def build_blog_corpus(
             raise RuntimeError(f"{path} is missing page_id in front matter")
         url = str(metadata.get("url") or "").strip()
         embed_text = _blog_embed_text(body)
-        if not embed_text and not extract_images(body) and not extract_video_posters(body):
+        if not (
+            embed_text
+            or extract_images(body)
+            or extract_video_posters(body)
+            or extract_posterless_videos(body)
+        ):
             continue
         title = str(metadata.get("title") or "").strip()
         subject = title or _short_label(embed_text) or "Page"
@@ -2823,6 +2850,22 @@ def build_blog_corpus(
                     "source_url": url,
                     "publish_date": publish_date,
                     "video_url": poster["video_url"],
+                }
+            )
+        for video in distinct_images(extract_posterless_videos(body)):
+            nearby = _context_text(embed_text)[:180]
+            media.append(
+                {
+                    "url": video["url"],
+                    "alt": "",
+                    "context": f"{VIDEO_NO_POSTER_CONTEXT}. {nearby}".strip(),
+                    "source_kind": "blog",
+                    **identity,
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                    "video_url": video["video_url"],
+                    "media_kind": "video",
                 }
             )
         budget = embed_text_budget(
