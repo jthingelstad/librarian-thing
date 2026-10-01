@@ -78,8 +78,10 @@ import {
   WEB_TOOLS,
   handleMcpMessage,
   mcpToolDeclarations,
+  invalidArgumentsRecord,
   invalidArgumentsResult,
   renderToolCallResult,
+  toolErrorRecord,
   toolFailureResult,
   validateToolArguments,
   serverVersion
@@ -353,7 +355,7 @@ function quotedToolValue(value: unknown) {
 
 function toolActivityCommentary(name: string, input: unknown = {}) {
   const value = objectValue(input);
-  const query = quotedToolValue(value.query || value.topic || value.theme || value.domain);
+  const query = quotedToolValue(value.query || value.phrase || value.topic || value.theme || value.domain);
   switch (name) {
     case 'search_faq':
       return query ? `Checking the FAQ for ${query}.` : 'Checking the public FAQ first.';
@@ -362,19 +364,8 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
     case 'quote_search':
       return query ? `Looking for the exact phrase ${query}.` : 'Looking for exact wording in the archive.';
     case 'get_source':
-      return value.url || value.source_id || value.issue_number
-        ? 'Opening a promising source for fuller context.'
-        : 'Opening it up for a closer look.';
-    case 'get_issue':
-      return value.issue_number
-        ? `Opening WT${shortToolValue(value.issue_number, 12)} for issue-level context.`
-        : 'Opening a Weekly Thing issue.';
-    case 'get_section':
-      return value.issue_number
-        ? `Opening a specific section from WT${shortToolValue(value.issue_number, 12)}.`
-        : 'Flipping to the right section.';
+      return value.id ? 'Opening a promising source for fuller context.' : 'Opening it up for a closer look.';
     case 'find_links':
-    case 'domain_history':
       return query ? `Tracing link metadata around ${query}.` : 'Tracing link and domain metadata.';
     case 'corpus_stats':
       return 'Counting up the archive.';
@@ -382,15 +373,28 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
       return 'Checking the freshest indexed sources.';
     case 'list_content':
       return 'Pulling the exact list.';
+    case 'list_topics':
+      return 'Browsing the topic catalogue.';
     case 'archive_lens':
-    case 'compare_eras':
       return query ? `Mapping ${query} across time and source types.` : 'Mapping the theme across the archive.';
+    case 'compare_eras':
+      return query ? `Setting two eras of ${query} side by side.` : 'Setting two eras side by side.';
+    case 'on_this_day':
+      return 'Flipping back through this date in earlier years.';
     case 'source_neighborhood':
       return 'Looking at what connects to this.';
     case 'archive_gems':
       return query ? `Looking for a surprising archive gem around ${query}.` : 'Looking for a surprising archive gem.';
     case 'find_evidence':
       return 'Checking the draft against archive evidence.';
+    case 'media_search':
+      return query ? `Looking through the photos for ${query}.` : 'Looking through the archive photos.';
+    case 'view_photo':
+      return 'Taking a closer look at the photos.';
+    case 'currently_history':
+      return 'Checking what Jamie was reading, playing and watching.';
+    case 'top_references':
+      return 'Tallying who Jamie links to most.';
     default:
       return 'Narrowing it down...';
   }
@@ -664,6 +668,12 @@ async function streamBedrockAgentAnswer(
         });
       }
       const handler = allowedToolNames && !allowedToolNames.has(toolName) ? undefined : toolHandlers[toolName];
+      // Same door rule as /mcp and /tools: an argument the schema does not
+      // declare, or a value it refuses, is an error that names the problem -
+      // never silently dropped by the handler.
+      const viewPhotoBound =
+        toolName === VIEW_PHOTO_TOOL && (!allowedToolNames || allowedToolNames.has(VIEW_PHOTO_TOOL));
+      const argumentProblems = handler || viewPhotoBound ? validateToolArguments(toolName, toolInput) : [];
       let result: JsonRecord;
       // Thingy's eyes: view_photo hands Converse real image blocks so the
       // model SEES the photos; the trace, citations, and DynamoDB get the
@@ -672,7 +682,9 @@ async function streamBedrockAgentAnswer(
       const toolStart = performance.now();
       let ok = true;
       try {
-        if (toolName === VIEW_PHOTO_TOOL && (!allowedToolNames || allowedToolNames.has(VIEW_PHOTO_TOOL))) {
+        if (argumentProblems.length) {
+          result = invalidArgumentsRecord(toolName, argumentProblems);
+        } else if (viewPhotoBound) {
           const { photos, refused } = await fetchPhotos(toolInput.image_urls);
           result = photos.length
             ? { shown: photos.map(({ url, bytes, mimeType }) => ({ url, bytes, mime_type: mimeType })), refused }
@@ -686,7 +698,11 @@ async function streamBedrockAgentAnswer(
         } else {
           result = handler
             ? objectValue(await handler(toolInput, { scope, subscriberHash: options.subscriberHash }))
-            : { error: `Unknown tool: ${toolName}` };
+            : {
+                error: `Unknown tool: ${toolName}`,
+                code: 'bad_request',
+                next: 'Call only the tools in your tool list.'
+              };
         }
       } catch (error) {
         ok = false;
@@ -699,7 +715,7 @@ async function streamBedrockAgentAnswer(
             tool_name: toolName
           })
         );
-        result = { error: `${toolName} failed: ${errorName(error)}` };
+        result = { error: `${toolName} failed: ${errorName(error)}`, code: 'internal_error' };
         // Surface the failure as its own activity row (the client styles
         // ✗-prefixed lines in the error tone, like a failed command).
         if (!shouldStopWriting()) {
@@ -710,6 +726,8 @@ async function streamBedrockAgentAnswer(
           });
         }
       }
+      // An error carries its code and one next step, as on the MCP door.
+      if (typeof result.error === 'string' && result.error) result = toolErrorRecord(result);
       toolTrace.calls.push({
         name: toolName,
         input: compactTraceValue(toolInput, 1000),

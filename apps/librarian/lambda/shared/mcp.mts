@@ -208,7 +208,7 @@ function errorCodeFor(message: string): ToolErrorCode {
   return 'upstream_error';
 }
 
-function toolErrorRecord(result: JsonRecord): JsonRecord {
+export function toolErrorRecord(result: JsonRecord): JsonRecord {
   const message = String(result.error);
   const declared = String(result.code || '');
   const code = (TOOL_ERROR_CODES as readonly string[]).includes(declared)
@@ -328,15 +328,20 @@ export function validateToolArguments(name: string, args: unknown): string[] {
   return problems;
 }
 
-/** The isError result for arguments that fail validation. */
-export function invalidArgumentsResult(name: string, problems: string[]) {
+/** The error record for arguments that fail validation (the chat loop's form). */
+export function invalidArgumentsRecord(name: string, problems: string[]): JsonRecord {
   const spec = mcpToolDeclarations([name])[0];
   const accepted = Object.keys((spec?.inputSchema as { properties?: Record<string, unknown> })?.properties || {});
-  return renderToolCallResult(name, {
+  return toolErrorRecord({
     error: `Invalid arguments for ${name}: ${problems.join('; ')}.`,
     code: 'bad_request',
     accepted_arguments: accepted
   });
+}
+
+/** The isError result for arguments that fail validation. */
+export function invalidArgumentsResult(name: string, problems: string[]) {
+  return renderToolCallResult(name, invalidArgumentsRecord(name, problems));
 }
 
 // ── Rendering under the cap ────────────────────────────────────────────
