@@ -500,6 +500,19 @@ def extract_images(text: str) -> list[dict[str, str]]:
     return out
 
 
+def distinct_images(images: list[dict[str, str]]) -> list[dict[str, str]]:
+    """One entry per image URL, in first-seen order, with the first non-empty
+    alt. QA3 M8: a post that shows one image several times (a 2004 chess
+    post repeats one gif 10 times; 26 extra rows in 10 posts) is one media
+    record, not one per occurrence."""
+    seen: dict[str, dict[str, str]] = {}
+    for image in images:
+        kept = seen.setdefault(image["url"], dict(image))
+        if not kept.get("alt") and image.get("alt"):
+            kept["alt"] = image["alt"]
+    return list(seen.values())
+
+
 # The front-matter ``image`` is the issue's cover: the image email clients
 # and link previews show. 57 issues' covers appear nowhere in their bodies,
 # so until QA 2026-09-30 (media Q4) they were in no media record, WT350 and
@@ -1387,7 +1400,7 @@ def build_corpus(
             if publish_date and publish_date > entry["last_seen"]:
                 entry["last_seen"] = publish_date
 
-        body_images = extract_images(body)
+        body_images = distinct_images(extract_images(body))
         issue_media_from = len(media)
         cover = issue_cover_image(metadata, {image["url"] for image in body_images}, shared_covers)
         for image in ([cover] if cover else []) + body_images:
@@ -2778,7 +2791,7 @@ def build_blog_corpus(
         if also_in_issues:
             post_record["also_in_issues"] = also_in_issues
         posts.append(post_record)
-        for image in extract_images(body):
+        for image in distinct_images(extract_images(body)):
             media.append(
                 {
                     "url": image["url"],

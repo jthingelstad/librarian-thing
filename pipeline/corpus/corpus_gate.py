@@ -124,7 +124,25 @@ def ingest_failures(
             failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
     if blog is not None:
         failures.extend(blog_source_failures(blog, blog_source_dir))
+    for name, built in (("Weekly Thing", corpus), ("blog", blog)):
+        if built is not None and (repeated := repeated_media(built)):
+            failures.append(
+                f"{len(repeated)} {name} media rows repeat an image in the same source "
+                f"(M8), e.g. {repeated[:3]}"
+            )
     return failures
+
+
+def repeated_media(corpus: dict[str, Any]) -> list[str]:
+    """QA3 M8: one media row per image per source, however often it shows."""
+    seen, repeated = set(), []
+    for item in corpus.get("media") or []:
+        source = item.get("issue_number") or item.get("microblog_id") or item.get("page_id")
+        key = (item.get("source_kind"), str(source), item.get("url"))
+        if key in seen:
+            repeated.append(f"{source}: {item.get('url')}")
+        seen.add(key)
+    return repeated
 
 
 # An oracle over the blog's markdown, written apart from the build's own
