@@ -40,12 +40,39 @@ One table (`ENTITY_ALIASES` in `matcher.mts`), seeded:
 | wt | Weekly Thing |
 
 Each alias compiles under its own mode (multi-word alias = phrase).
-`archive_lens` adds the table's aliases for its topic to any the caller
-passes in `aliases` (at most 8, deduped case-insensitively) and reports
-the full set as `aliases_checked`. (MCP 2.0 folded `entity_lens`, which
+Aliases work both ways (2.1.0): Minnebar finds minnestar as minnestar finds
+Minnebar. `archive_lens` always keeps the table's aliases for its topic and
+adds the caller's `aliases` beside them (the caller's capped at 8, deduped
+case-insensitively); passing your own never drops a built-in one (Jamie,
+2026-09-30). It reports the full set as `aliases_checked`. (MCP 2.0 folded `entity_lens`, which
 did this alone, into `archive_lens`.) Match reasons
 attribute the specific alias span that hit (`text: 'ethereum name
 service'`), never a bag of tokens.
+
+**A slash means or (2.2.0).** `Twitter/X` names either: each side, and
+each side's aliases, is an alias of the whole (Jamie, 2026-09-30). A url
+(`https://x.com/a`) or a path (`/archive/`) keeps its slashes.
+
+## Sections
+
+A section filter names a heading or a family. A name some section or
+family has exactly wins over a substring (Jamie, 2026-09-30: `coffee`
+finds Coffee, not Coffee Gear); any other name matches inside headings.
+Headings compare as written in the body: no-break spaces, markdown marks
+(`#MNTech`, `*Not*`, `` `yes` ``) and doubled spaces do not count
+(`headingKey`). `get_source` also reads any `##`/`###` heading the body
+carries (an H2 group over its articles, an H3 inside a post) to the next
+heading of its level, and a name that matches nothing is `bad_request`
+with `available_sections`, never an empty success.
+
+## Voice
+
+`voice` keeps one speaker's words: `jamie` (Jamie's own), `quoted`
+(blockquotes) or `link` (headline link titles), from each chunk's spans.
+Image markup is nobody's voice, because alt text is mostly machine-written,
+so `![alt](url)` and `<img alt>` leave a voiced passage. FAQ answers and
+site pages are the site speaking, not Jamie writing on a topic, so no
+voice matches them (Jamie, 2026-09-30).
 
 ## Provenance
 
@@ -119,7 +146,8 @@ case of the source text; `matched_term` is the input term as provided.
 |---|---|---|
 | archive_lens | yes | yes |
 | list_content, find_links | yes | yes |
-| list_issues, media_search | yes (exact per token) | no |
+| media_search | yes (every word; stem by default, accents and plurals fold) | match_mode |
+| list_issues | yes (exact per token) | no |
 | quote_search | yes (literal mode) | no |
 | search_archive | exempt - hybrid retrieval (TF-IDF + embeddings + RRF) | - |
 | find_evidence, compare_eras | exempt - semantic retrieval | - |

@@ -507,6 +507,9 @@ function readingPath(items: LensSource[], limit: number) {
   return Array.from(chosen.values()).slice(0, limit);
 }
 
+// A reading path is a short tour, at most this many stops.
+export const READING_PATH_MAX = 12;
+
 export function buildArchiveLens({
   topic = '',
   aliases = [],
@@ -583,7 +586,8 @@ export function buildArchiveLens({
   const latestIds = [...matched].reverse().slice(0, maxResults).map(lensSourceId);
   const years = yearBuckets(matched);
   const bySource = sourceBuckets(matched);
-  const path = readingPath(matched, Math.min(maxResults, 8));
+  // A reading path is a short tour: at most 12 stops (archive_gems' most).
+  const path = readingPath(matched, Math.min(maxResults, READING_PATH_MAX));
   const resultIds =
     normalizedOperation === 'first_last'
       ? Array.from(

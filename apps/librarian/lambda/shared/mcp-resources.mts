@@ -75,6 +75,18 @@ const PATTERNS: Array<[ResourceKind, RegExp]> = [
   ['on-this-day', /^((?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))$/]
 ];
 
+/** MM-DD (02-29 included) or YYYY-MM-DD that is a day on the calendar. */
+export function isCalendarDate(value: unknown) {
+  const match = /^(?:(\d{4})-)?(\d{2})-(\d{2})$/.exec(String(value ?? ''));
+  if (!match) return false;
+  // Without a year, a leap year: February 29 is a day some years have.
+  const year = match[1] ? Number(match[1]) : 2024;
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
 /** A librarian:// URI, or null when it names nothing this server serves. */
 export function parseResourceUri(uri: unknown): ParsedResource | null {
   const match = String(uri || '').match(/^librarian:\/\/([a-z-]+)\/([^/?#]+)\/?$/);
@@ -88,6 +100,8 @@ export function parseResourceUri(uri: unknown): ParsedResource | null {
     return null;
   }
   const value = pattern && decoded.match(pattern[1]);
+  // 02-30 fits the pattern but is no day (QA F16: it read as an empty day).
+  if (value && pattern[0] === 'on-this-day' && !isCalendarDate(value[1])) return null;
   return pattern && value ? { uri: String(uri), kind: pattern[0], value: value[1] } : null;
 }
 
@@ -104,7 +118,7 @@ export function sourceMarkdown(source: JsonRecord, truncated: JsonRecord = {}) {
   const body = String(source.body || '').trim();
   const cut = Array.isArray(truncated.clipped) && truncated.clipped.includes('source.body');
   const note = cut
-    ? `\n\n_The body was cut to fit; get_source with id ${String(source.id)} and a section reads one section whole._`
+    ? `\n\n_The body was cut to fit; get_source with id ${String(source.id)}${truncated.next_offset ? ` and offset ${String(truncated.next_offset)}` : ''} reads the rest._`
     : '';
   return [`# ${title}`, facts.join('\n'), skim ? `> ${skim}` : '', `${body}${note}`].filter(Boolean).join('\n\n');
 }
@@ -122,13 +136,28 @@ function record(value: unknown): JsonRecord {
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonRecord) : {};
 }
 
+// The whole source: format text (the links the markdown never shows ate
+// the body's room, QA F9), read page by page with get_source's offset.
+const RESOURCE_MAX_PAGES = 8;
+
 async function readSource(resource: ParsedResource, id: string, reader: ResourceReader) {
-  const result = record(await reader.invoke('get_source', { id }, `resource:${resource.kind}`));
+  const auditAs = `resource:${resource.kind}`;
+  let result = record(await reader.invoke('get_source', { id, format: 'text' }, auditAs));
   if (result.error || !result.source) throw new ResourceNotFound(`No source at ${resource.uri}`);
+  const source = { ...record(result.source) };
+  let body = String(source.body || '');
+  for (let page = 1; page < RESOURCE_MAX_PAGES; page += 1) {
+    const offset = Number(record(result.truncated).next_offset) || 0;
+    if (!offset) break;
+    result = record(await reader.invoke('get_source', { id, format: 'text', offset }, auditAs));
+    if (result.error || !result.source) break;
+    body += String(record(result.source).body || '');
+  }
+  source.body = body;
   return {
     uri: resource.uri,
     mimeType: 'text/markdown',
-    text: sourceMarkdown(record(result.source), record(result.truncated))
+    text: sourceMarkdown(source, record(result.truncated))
   };
 }
 

@@ -107,16 +107,16 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     );
   }
 
-  // 2. on_this_day files every dated source from a past year on exactly one
-  //    day of this year: the days' totals sum to those sources, and no
-  //    listed id repeats. (In a year without Feb 29, 02-29 is Feb 28 and
+  // 2. on_this_day files every dated source, this year's included (Jamie,
+  //    2026-09-30), on exactly one day of this year: the days' totals sum to
+  //    those sources, and no listed id repeats. (In a year without Feb 29, 02-29 is Feb 28 and
   //    Feb 29 sources fold into it, so 02-29 is only asked in a leap year.)
   {
     const thisYear = Number(
       new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago', year: 'numeric' }).format(new Date())
     );
     const pastItems = Object.values(bySource).reduce(
-      (sum, source) => sum + source.items.filter((item) => yearOf(item) < thisYear).length,
+      (sum, source) => sum + source.items.filter((item) => yearOf(item) <= thisYear).length,
       0
     );
     let sum = 0;
@@ -132,7 +132,7 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
         }
       }
     }
-    check('completeness on_this_day days sum to every past-year source', sum === pastItems, `${sum} vs ${pastItems}`);
+    check('completeness on_this_day days sum to every dated source', sum === pastItems, `${sum} vs ${pastItems}`);
     const repeats = [...seen].filter(([, n]) => n > 1).map(([id]) => id);
     check(
       'completeness on_this_day files each source on one day',
@@ -313,6 +313,68 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
       'completeness every emitted id resolves',
       dead.length === 0,
       `${dead.length} of ${emitted.size}: ${dead.slice(0, 4).join(', ')}`
+    );
+  }
+
+  // 8c. Every word is readable. A Weekly Thing body read page by page with
+  //     get_source's offset is the whole issue (QA F5); every ## and ###
+  //     heading in a body, asked for as a section, returns text (QA F6);
+  //     and a neighbourhood's outgoing_count and find_links id both count
+  //     every link the issue carries (QA F7).
+  {
+    const short = [];
+    for (const issue of bySource.weekly_thing.items) {
+      let offset = 0;
+      let text = '';
+      for (let page = 0; page < 10; page += 1) {
+        const result = await call('get_source', {
+          id: `wt-${issue.number}`,
+          format: 'text',
+          ...(offset ? { offset } : {})
+        });
+        text += String(result.source?.body || '');
+        offset = result.truncated?.next_offset || 0;
+        if (!offset) break;
+      }
+      if (text !== String(issue.body || ''))
+        short.push(`wt-${issue.number} ${text.length}/${String(issue.body || '').length}`);
+    }
+    check('completeness every issue body reads whole with offset', short.length === 0, short.slice(0, 4).join(', '));
+
+    const empty = [];
+    let headings = 0;
+    for (const issue of bySource.weekly_thing.items) {
+      for (const line of String(issue.body || '').split('\n')) {
+        const heading = /^#{2,3}\s+(.*?)\s*$/.exec(line);
+        if (!heading) continue;
+        headings += 1;
+        const result = await call('get_source', { id: `wt-${issue.number}`, section: heading[1], format: 'text' });
+        if (result.error || !String(result.source?.body || '').trim()) empty.push(`wt-${issue.number} "${heading[1]}"`);
+      }
+    }
+    check(
+      'completeness every body heading reads as a section',
+      headings > 0 && empty.length === 0,
+      `${empty.length} of ${headings}: ${empty.slice(0, 4).join(', ')}`
+    );
+
+    const perIssue = new Map();
+    for (const link of bySource.weekly_thing.links) {
+      perIssue.set(String(link.issue_number), (perIssue.get(String(link.issue_number)) || 0) + 1);
+    }
+    const busiest = [...perIssue].sort((a, b) => b[1] - a[1]).slice(0, 25);
+    const miscounted = [];
+    for (const [issue, count] of busiest) {
+      const near = await call('source_neighborhood', { id: `wt-${issue}` });
+      const listed = await call('find_links', { id: `wt-${issue}`, limit: 1 });
+      if (near.outgoing_count !== count || listed.total_count !== count) {
+        miscounted.push(`wt-${issue} ${near.outgoing_count}/${listed.total_count} vs ${count}`);
+      }
+    }
+    check(
+      'completeness neighbourhood and find_links id count every link',
+      miscounted.length === 0,
+      miscounted.join(', ')
     );
   }
 

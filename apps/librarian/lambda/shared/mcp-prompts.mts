@@ -8,6 +8,8 @@
  * names Jamie rather than using a pronoun.
  */
 
+import { isCalendarDate } from './mcp-resources.mjs';
+
 type PromptArgs = Record<string, string>;
 
 interface PromptArgument {
@@ -65,7 +67,7 @@ const PROMPTS: PromptDefinition[] = [
         `2. list_content with year_range [${year}, ${year}] and source_kind "weekly_thing" for the issues; again with source_kind "blog" for the posts.`,
         `3. currently_history for ${year}: what Jamie was reading, watching, playing and building.`,
         `4. top_references for ${year}: the sites Jamie linked to most.`,
-        `5. media_search for ${year} for a few photos worth showing; view_photo before describing one.`,
+        `5. media_search with year ${year} (no query lists them newest first) for a few photos worth showing; view_photo before describing one.`,
         "6. Read two or three of the year's defining issues or posts with get_source.",
         '',
         `Then write the review: the themes, the moments, what Jamie was into, and the links that mattered. ${CITE}`
@@ -104,7 +106,7 @@ const PROMPTS: PromptDefinition[] = [
         required: false
       }
     ],
-    check: ({ date }) => (!date || /^(\d{4}-)?\d{2}-\d{2}$/.test(date) ? '' : 'date must be MM-DD or YYYY-MM-DD'),
+    check: ({ date }) => (!date || isCalendarDate(date) ? '' : 'date must be a calendar day as MM-DD or YYYY-MM-DD'),
     text: ({ date }) =>
       [
         `Show what Jamie Thingelstad published this week in past years${date ? ` (around ${date})` : ''}, using the Librarian tools.`,

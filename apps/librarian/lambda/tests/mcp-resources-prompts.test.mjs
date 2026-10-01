@@ -10,7 +10,7 @@ import {
   mcpToolDeclarations,
   renderToolCallResult
 } from '../dist/shared/mcp.mjs';
-import { parseResourceUri, sourceMarkdown } from '../dist/shared/mcp-resources.mjs';
+import { isCalendarDate, parseResourceUri, readResource, sourceMarkdown } from '../dist/shared/mcp-resources.mjs';
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
 function fixtures() {
@@ -170,7 +170,9 @@ test('prompts/get refuses unknown prompts and bad arguments as invalid params', 
     { name: 'thinking_over_time', arguments: {} },
     { name: 'year_in_review', arguments: { year: 'last year' } },
     { name: 'reading_path', arguments: { theme: 'rss', length: '40' } },
-    { name: 'research_brief', arguments: { subject: 'Obsidian', tone: 'snarky' } }
+    { name: 'research_brief', arguments: { subject: 'Obsidian', tone: 'snarky' } },
+    { name: 'this_week_in_past_years', arguments: { date: '13-45' } },
+    { name: 'this_week_in_past_years', arguments: { date: '2025-02-29' } }
   ]) {
     const reply = await rpc('prompts/get', params, context);
     assert.equal(reply.payload.error.code, -32602, JSON.stringify(params));
@@ -319,6 +321,41 @@ test('a source resource says when its body was cut, from the truncated block (2.
   const source = { id: 'wt-351', subject: 'WT351', body: 'The first part.' };
   const whole = sourceMarkdown(source);
   assert.doesNotMatch(whole, /cut to fit/);
-  const cut = sourceMarkdown(source, { clipped: ['source.body'], hint: 'Pass section.' });
-  assert.match(cut, /_The body was cut to fit; get_source with id wt-351 and a section reads one section whole._$/);
+  const cut = sourceMarkdown(source, { clipped: ['source.body'], next_offset: 15 });
+  assert.match(cut, /_The body was cut to fit; get_source with id wt-351 and offset 15 reads the rest._$/);
+});
+
+test('a source resource reads the whole body, page by page, as text (QA F9)', async () => {
+  const calls = [];
+  const pages = ['First half. ', 'Second half.'];
+  const reader = {
+    invoke: async (name, input) => {
+      calls.push({ name, ...input });
+      const index = input.offset ? 1 : 0;
+      return {
+        source: { id: 'wt-274', subject: 'WT274', body: pages[index] },
+        ...(index ? {} : { truncated: { clipped: ['source.body'], next_offset: pages[0].length } })
+      };
+    },
+    render: () => ({ text: '', isError: false })
+  };
+  const read = await readResource(parseResourceUri('librarian://wt/274'), reader);
+  assert.match(read.text, /First half\. Second half\.$/);
+  assert.doesNotMatch(read.text, /cut to fit/);
+  assert.deepEqual(
+    calls.map((call) => [call.format, call.offset]),
+    [
+      ['text', undefined],
+      ['text', 12]
+    ]
+  );
+});
+
+test('an impossible calendar day is not a resource or a prompt date (QA F16)', async () => {
+  assert.equal(parseResourceUri('librarian://on-this-day/02-30'), null);
+  assert.equal(parseResourceUri('librarian://on-this-day/04-31'), null);
+  assert.ok(parseResourceUri('librarian://on-this-day/02-29'));
+  assert.equal(isCalendarDate('2025-02-29'), false);
+  assert.equal(isCalendarDate('2024-02-29'), true);
+  assert.equal(isCalendarDate('13-45'), false);
 });

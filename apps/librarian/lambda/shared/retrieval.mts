@@ -153,13 +153,15 @@ export function withBlogIdentity(corpus: Corpus | undefined) {
   return corpus;
 }
 
-// Host and path only: www., micro.thingelstad.com and a trailing slash name
-// the same post (archive-tools urlKey, which cannot be imported here).
+// Host and path only: www., micro.thingelstad.com, jthingelstad.micro.blog
+// and a trailing slash name the same post (archive-tools urlKey, which
+// cannot be imported here).
 function postUrlKey(value: unknown) {
   return String(value || '')
     .trim()
     .toLowerCase()
     .replace(/^https?:\/\//, '')
+    .replace(/^jthingelstad\.micro\.blog(?=\/|$)/, 'thingelstad.com')
     .replace(/^(?:www\.|micro\.(?=thingelstad\.com))/, '')
     .replace(/[?#].*$/, '')
     .replace(/\/$/, '');
@@ -177,6 +179,7 @@ export function primeCorpusCachesForTests(fixtures: {
   blogCorpusCache = withBlogIdentity(fixtures.blog);
   podcastCorpusCache = fixtures.podcast;
   graphCache = fixtures.graph;
+  sectionNamesCache = undefined;
   indexedCache = undefined;
   blogIndexedCache = undefined;
   podcastIndexedCache = undefined;
@@ -216,6 +219,7 @@ export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
   const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
   if (!response.Body) throw new Error('Corpus object body is empty');
   corpusCache = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
+  sectionNamesCache = undefined;
   logEvent('info', 'corpus_loaded', {
     source: 's3',
     scope: 'weekly_thing',
@@ -251,6 +255,7 @@ async function loadOptionalCorpus({
     if (!response.Body) throw new Error(`${kind} corpus object body is empty`);
     const loaded = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
     setCache(kind === 'blog' ? withBlogIdentity(loaded)! : loaded);
+    sectionNamesCache = undefined;
     logEvent('info', 'corpus_loaded', {
       source: 's3',
       scope: kind,
@@ -623,18 +628,69 @@ export function voiceList(value: unknown) {
   return lowerList(value);
 }
 
+// Image markup is nobody's voice: alt text is mostly machine-written
+// (Jamie, 2026-09-30), so ![alt](url) and <img alt> leave a voiced passage.
+const IMAGE_MARKUP = /!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>/gi;
+// Site copy and FAQ answers are the site speaking, not Jamie writing on a
+// topic: no voice matches them.
+const VOICELESS_KINDS = new Set(['faq', 'site_page']);
+
 // The chunk's text in the wanted voices only, in reading order. No spans
 // means the whole chunk is Jamie's.
 export function voicedText(chunk: CorpusChunk, voices: string[]) {
   const text = String(chunk.text || '');
   if (!voices.length) return text;
+  if (VOICELESS_KINDS.has(String(chunk.content_kind || chunk.source_kind || ''))) return '';
   const spans = Array.isArray(chunk.spans) ? (chunk.spans as ChunkSpan[]) : null;
-  if (!spans) return voices.includes('jamie') ? text : '';
+  const unimaged = (value: string) =>
+    value
+      .replace(IMAGE_MARKUP, ' ')
+      .replace(/[ \t]{2,}/g, ' ')
+      .trim();
+  if (!spans) return voices.includes('jamie') ? unimaged(text) : '';
   return spans
     .filter((span) => voices.includes(String(span.voice || '')))
-    .map((span) => text.slice(Number(span.start) || 0, Number(span.end) || 0).trim())
+    .map((span) => unimaged(text.slice(Number(span.start) || 0, Number(span.end) || 0)))
     .filter(Boolean)
     .join('\n\n');
+}
+
+// A source's day is its Chicago date: Jamie lives and publishes in Central
+// time (2026-09-30). A timestamp converts (WT35 went out 01:28Z Jan 7, which
+// is Jan 6 in Chicago); a bare date (a permalink, an episode date) already
+// is local. Blog posts carry `published`, the moment, beside the permalink.
+const CHICAGO_DAY = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'America/Chicago',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+});
+
+export function localDay(source: { published?: unknown; publish_date?: unknown } | undefined) {
+  const stamp = String(source?.published || source?.publish_date || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}T/.test(stamp)) {
+    const time = Date.parse(stamp);
+    if (Number.isFinite(time)) return CHICAGO_DAY.format(time);
+  }
+  return stamp.slice(0, 10);
+}
+
+// Every section heading and family the loaded corpora hold, lowercased. A
+// section filter that names one exactly matches it exactly: "journal" had
+// also taken any heading containing the word (6 to 13 sections an issue).
+let sectionNamesCache: Set<string> | undefined;
+
+function knownSectionNames() {
+  if (sectionNamesCache) return sectionNamesCache;
+  const names = new Set<string>();
+  for (const corpus of [corpusCache, blogCorpusCache, podcastCorpusCache]) {
+    for (const chunk of corpus?.chunks || []) {
+      if (chunk.section) names.add(String(chunk.section).toLowerCase());
+      if (chunk.section_family) names.add(String(chunk.section_family).toLowerCase());
+    }
+  }
+  sectionNamesCache = names;
+  return names;
 }
 
 function isLeapYear(year: number) {
@@ -739,16 +795,14 @@ export function matchesFilters(
   if (endYear && (!year || year > endYear)) return false;
   const family = String(source.section_family || '').toLowerCase();
   if (section) {
-    // The heading (substring, as always) or the family exactly, so
-    // section "Journal" also finds WT351's day-headed Journal.
-    const wanted = String(section).toLowerCase();
-    if (
-      !String(source.section || '')
-        .toLowerCase()
-        .includes(wanted) &&
-      family !== wanted
-    )
-      return false;
+    // A name some section or family has exactly matches exactly, so
+    // section "Journal" finds the Journal family (WT351's day-headed one
+    // included) and not every heading with the word in it; any other
+    // name matches inside the heading, as always.
+    const wanted = String(section).trim().toLowerCase();
+    const heading = String(source.section || '').toLowerCase();
+    const exact = knownSectionNames().has(wanted);
+    if (exact ? heading !== wanted && family !== wanted : !heading.includes(wanted) && family !== wanted) return false;
   }
   const families = lowerList(sectionFamily);
   if (families.length && !families.includes(family)) return false;
@@ -756,7 +810,7 @@ export function matchesFilters(
   if (kinds.length && !kinds.includes(String(source.content_kind || '').toLowerCase())) return false;
   const window = parseCalendar(calendar);
   if (window && typeof window === 'object') {
-    const published = String(source.publish_date || '').slice(0, 10);
+    const published = localDay(source);
     const year = onThisDayYear(published, window.month, window.day, window.window, window.targetYear);
     if (year === null || year >= window.targetYear) return false;
   }
@@ -895,23 +949,35 @@ export async function retrieve(
 }
 
 // A Weekly Thing Journal chunk reprints blog posts; when both the journal
-// chunk and a standalone blog chunk for the same post URL surface as
+// chunk and a standalone blog chunk for the same post surface as
 // candidates, the blog chunk always wins - the blog post is the canonical
-// home of the writing (Jamie's call, 2026-08-29). The URL is the join key,
-// stamped as journal_post_urls at corpus build. A journal chunk with no
-// blog twin in the pool stays.
+// home of the writing (Jamie's call, 2026-08-29, restated 2026-09-30). The
+// join is the post URL (journal_post_urls) and, where the corpus build tied
+// the copy to its post, the post's microblog_id (journal_posts), which
+// survives micro.blog changing a permalink after the issue went out. A
+// journal chunk with no blog twin in the pool stays.
+export function journalPostKeys(chunk: CorpusChunk): string[] {
+  const keys = new Set<string>();
+  for (const url of (chunk.journal_post_urls as string[] | undefined) || []) keys.add(`url:${String(url)}`);
+  for (const post of (chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []) {
+    if (post?.copy_of_microblog_id != null) keys.add(`id:${String(post.copy_of_microblog_id)}`);
+    if (post?.canonical_url) keys.add(`url:${String(post.canonical_url)}`);
+  }
+  return [...keys];
+}
+
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
   const journalOwners = new Map<string, CorpusChunk>();
   for (const candidate of candidates) {
-    for (const url of (candidate.journal_post_urls as string[] | undefined) || []) {
-      journalOwners.set(String(url), candidate);
-    }
+    for (const key of journalPostKeys(candidate)) journalOwners.set(key, candidate);
   }
   if (!journalOwners.size) return candidates;
   const dropped = new Set<CorpusChunk>();
   for (const candidate of candidates) {
-    if (candidate.source_kind !== 'blog' || !candidate.url) continue;
-    const twin = journalOwners.get(String(candidate.url));
+    if (candidate.source_kind !== 'blog') continue;
+    const twin =
+      (candidate.url && journalOwners.get(`url:${String(candidate.url)}`)) ||
+      (candidate.microblog_id != null && journalOwners.get(`id:${String(candidate.microblog_id)}`));
     if (twin) dropped.add(twin);
   }
   return candidates.filter((candidate) => !dropped.has(candidate));

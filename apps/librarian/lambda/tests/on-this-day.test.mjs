@@ -135,7 +135,7 @@ test('onThisDayYear matches the month-day, folds Feb 29, and spans a year bounda
   assert.match(chicagoToday(), /^\d{4}-\d{2}-\d{2}$/);
 });
 
-test('on_this_day returns past years newest first across all three corpora', async () => {
+test('on_this_day returns the date year and past years, newest first, across all three corpora', async () => {
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.on_this_day({ date: '2026-09-29' }, { scope: 'all' });
   assert.equal(out.applied.date, '2026-09-29');
@@ -146,12 +146,14 @@ test('on_this_day returns past years newest first across all three corpora', asy
   assert.deepEqual(
     out.years.map((row) => [row.year, row.years_ago]),
     [
+      [2026, 0],
       [2025, 1],
       [2024, 2],
       [2019, 7]
     ]
   );
-  const [wt] = out.years[1].items;
+  assert.equal(out.years[0].items[0].id, 'wt-350', "what Jamie published on the date itself is on this day");
+  const [wt] = out.years[2].items;
   assert.deepEqual(
     { id: wt.id, label: wt.label, url: wt.url, excerpt: wt.excerpt },
     {
@@ -166,12 +168,11 @@ test('on_this_day returns past years newest first across all three corpora', asy
     alt: 'A tidepool',
     description: 'A rocky tidepool at low tide.'
   });
-  const blog = out.years[2].items;
+  const blog = out.years[3].items;
   assert.equal(blog[0].id, 'blog-987');
   assert.match(blog[0].excerpt, /^The first chunk of the 2019 post/);
   assert.equal(blog[1].micropost, true, 'microposts sort after posts');
-  assert.equal(out.years[0].items[0].excerpt, 'An episode about agents.');
-  assert.ok(!out.years.some((row) => row.year === 2026), 'the date year itself is never on this day');
+  assert.equal(out.years[1].items[0].excerpt, 'An episode about agents.');
 });
 
 test('on_this_day honours window, microposts, source_kind, year_range and limit_per_year', async () => {

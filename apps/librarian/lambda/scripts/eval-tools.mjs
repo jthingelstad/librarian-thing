@@ -202,7 +202,8 @@ const ENUMERATED_LISTS = {
   currently_history: 'entries',
   top_references: 'top',
   quote_search: 'results',
-  list_topics: 'topics'
+  list_topics: 'topics',
+  latest_content: 'results'
 };
 const PARTITIONS = [
   'counts_by_year',
@@ -394,6 +395,26 @@ async function run(tool, args, options = {}) {
     quotes.results.some((row) => row.source_kind === 'blog' && String(row.publish_date).startsWith('2024-07-14'))
   );
 }
+// Every link top_references sees is counted or excluded under a named
+// reason, so the reasons and the count add up to find_links' total for the
+// same window (Jamie, 2026-09-30: never silently exclude).
+for (const args of [{}, { source_kind: 'weekly_thing' }, { source_kind: 'blog', year: 2024 }, { year: 2019 }]) {
+  const refs = await run('top_references', { ...args, limit: 1 });
+  const links = await run('find_links', { ...args, limit: 1 });
+  const accounted = [
+    'counted_links',
+    'excluded_internal_links',
+    'excluded_non_headline_links',
+    'excluded_blog_and_podcast_links',
+    'excluded_utility_links',
+    'excluded_malformed_links'
+  ].reduce((sum, key) => sum + (Number(refs?.[key]) || 0), 0);
+  check(
+    `KA top_references ${JSON.stringify(args)}: counted + excluded = find_links total`,
+    accounted === links?.total_count,
+    `${accounted} vs ${links?.total_count}`
+  );
+}
 {
   const refs = await run('top_references', { source_kind: 'weekly_thing', limit: 10 });
   check(
@@ -431,7 +452,7 @@ async function run(tool, args, options = {}) {
   check('KA gems draws vary', draw(first) !== draw(second), draw(first));
   check(
     'KA gems disclose sampling',
-    first.results.every((gem) => /randomly drawn from \d+ qualifying/.test(gem.reason))
+    first.results.every((gem) => /drawn at random from \d+ sources/.test(gem.reason))
   );
   check(
     'KA gems cap domains at 5',
@@ -563,8 +584,8 @@ await run('currently_history', { kind: 'reading', limit: 5 });
     JSON.stringify(items.map((item) => item.id).slice(0, 8))
   );
   check(
-    'KA on_this_day returns past years only, newest first',
-    (day?.years || []).every((row, index, rows) => row.year < 2026 && (!index || rows[index - 1].year > row.year))
+    'KA on_this_day returns the date year and earlier, newest first',
+    (day?.years || []).every((row, index, rows) => row.year <= 2026 && (!index || rows[index - 1].year > row.year))
   );
   for (const item of items.slice(0, 12)) {
     const source = await ARCHIVE_TOOLS.get_source({ id: item.id }, { scope: 'all' });

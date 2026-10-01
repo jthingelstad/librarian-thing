@@ -411,6 +411,17 @@ export const ENTITY_ALIASES: Record<string, string[]> = {
 export function aliasesFor(term: unknown): string[] {
   const key = normalizeTerm(term).toLowerCase();
   if (!key) return [];
+  // "Twitter/X" names either (Jamie, 2026-09-30): each side, and its own
+  // aliases, is an alias of the whole. A url or a path keeps its slashes.
+  const sides = key.includes('/') && !/:\/\/|^\/|\/$/.test(key) ? key.split(/\s*\/\s*/).filter(Boolean) : [];
+  if (sides.length > 1) {
+    const original = normalizeTerm(term)
+      .split(/\s*\/\s*/)
+      .filter(Boolean);
+    return [...new Set([...original, ...sides.flatMap((side) => aliasesFor(side))])].filter(
+      (name) => name.toLowerCase() !== key
+    );
+  }
   for (const [entity, aliases] of Object.entries(ENTITY_ALIASES)) {
     const family = [entity, ...aliases];
     if (family.some((name) => name.toLowerCase() === key)) {

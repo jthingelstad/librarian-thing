@@ -107,7 +107,7 @@ export function yearCountSummary(countsByYear: YearCount[] = []) {
   };
 }
 
-const STOPWORDS = new Set([
+export const STOPWORDS = new Set([
   'about',
   'after',
   'again',
