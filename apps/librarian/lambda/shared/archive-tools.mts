@@ -2339,7 +2339,9 @@ const LIST_MATCHING_SECTIONS = 6;
 // Every source that passes the filters, newest first across the three
 // corpora (2.1.0; it had filled Weekly Thing first, so newer blog posts
 // never showed), paged with offset.
-async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+// Every source list_content's filters keep, with its chunks and links;
+// archive_gems draws a theme from the same list (QA2 L2-10).
+async function matchedContent(input: ToolArgs, scope: unknown) {
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
   const [startYear, endYear] = parseYearRange(input.year_range || input.year);
   const topic = String(input.topic || input.entity || input.query || '').trim();
@@ -2391,6 +2393,12 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
       matched.push({ record, chunks, links });
     }
   }
+  return { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched };
+}
+
+async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}) {
+  const { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched } =
+    await matchedContent(input, scope);
   const byRecord = new Map(matched.map((entry) => [entry.record, entry]));
   const ordered = latestByDate(matched.map((entry) => entry.record));
   const page = pageOf('list_content', ordered, input);
@@ -3303,6 +3311,60 @@ async function similarIssues(record: ArchiveRecord, limit: number) {
   });
 }
 
+// A gem's draw weight: link-rich and cross-source sources come up more
+// often, but any source in the pool can.
+function gemCandidate(record: ArchiveRecord, links: ArchiveRecord[], mood: string) {
+  const year = recordYear(record);
+  const cross = links.filter((link) => link.link_category === 'cross_source').length;
+  const domains = new Set([...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean));
+  const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
+  let score = domains.size + cross * 5 + links.length * 0.2;
+  let reason = cross
+    ? 'connects multiple Jamie-owned sources'
+    : domains.size
+      ? 'link-rich archive trail'
+      : 'quiet representative source';
+  if (mood.includes('forgotten') || mood.includes('old')) {
+    score += age * 0.5;
+    reason = 'older archive source worth resurfacing';
+  } else if (mood.includes('recent') || mood.includes('new')) {
+    score += Math.max(0, 20 - age);
+    reason = 'recent source with archive signals';
+  }
+  return { score, reason, record, link_count: links.length, cross_source_link_count: cross };
+}
+
+type GemCandidate = ReturnType<typeof gemCandidate>;
+
+// Draws limit from the pool at random, weighted toward link-rich sources.
+function drawGems(pool: GemCandidate[], limit: number) {
+  const weight = (item: { score: number }) => 1 + Math.sqrt(Math.max(0, item.score));
+  const band = [...pool];
+  const picked: GemCandidate[] = [];
+  while (picked.length < limit && band.length) {
+    let draw = (crypto.randomInt(1_000_000) / 1_000_000) * band.reduce((sum, item) => sum + weight(item), 0);
+    let index = 0;
+    while (index < band.length - 1 && draw >= weight(band[index])) {
+      draw -= weight(band[index]);
+      index += 1;
+    }
+    picked.push(band.splice(index, 1)[0]);
+  }
+  return picked;
+}
+
+function gemResult(item: GemCandidate) {
+  return {
+    ...compactContentRecord(item.record),
+    // A gem names an issue; two dozen domains per gem was most of the payload.
+    domains: (item.record.domains || []).slice(0, 5),
+    reason: item.reason,
+    score: Number(item.score.toFixed(2)),
+    link_count: item.link_count,
+    cross_source_link_count: item.cross_source_link_count
+  };
+}
+
 async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}) {
   const theme = String(input.theme || input.topic || input.query || '').trim();
   const requestedSource = normalizeSourceKind(input.source_kind || input.source || '');
@@ -3315,41 +3377,33 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
   const mood = lower(input.mode) || lower(input.mood);
   const limit = toolLimit('archive_gems', input);
   if (theme) {
-    const lens = (await toolArchiveLens(
-      {
-        topic: theme,
-        operation: 'reading_path',
-        source_kind: requestedSource,
-        year_range: input.year_range,
-        limit
-      },
-      { scope }
-    )) as { reading_path?: ArchiveRecord[]; sources_by_id?: Record<string, unknown>; total_count?: number };
-    const path = (lens.reading_path || []).slice(0, limit);
-    // The path names ids; sources_by_id resolves them (and get_source takes them).
-    const byId = lens.sources_by_id || {};
-    const matchedCount = Number(lens.total_count || path.length);
+    // A theme draws at random from every source that names it - the
+    // sources list_content finds for that topic - like every other mode.
+    // It had returned the lens's fixed reading path, the same gems every
+    // time (QA2 L2-10; Jamie, 2026-09-30: "sounds like a bug").
+    const { matched } = await matchedContent(
+      { topic: theme, source_kind: requestedSource, year_range: input.year_range },
+      scope
+    );
+    const pool = matched.map(({ record, links }) => gemCandidate(record, links, ''));
+    const picked = drawGems(pool, limit);
+    for (const item of picked)
+      item.reason = `names ${theme}; drawn at random from the ${pool.length} sources that name it, weighted toward link-rich ones`;
     return markTruncated(
       {
         applied: { theme, ...(mood ? { ignored: { mode: mood } } : {}) },
         theme,
-        mode: 'theme_reading_path',
-        total_count: matchedCount,
-        results: path.map((source) => ({
-          ...source,
-          reason: source.reason || `representative source for ${theme}`
-        })),
-        sources_by_id: Object.fromEntries(
-          path.map((source) => String(source.id)).flatMap((id) => (byId[id] ? [[id, byId[id]]] : []))
-        )
+        mode: 'theme',
+        total_count: pool.length,
+        results: picked.map(gemResult)
       },
       {
-        omitted: { results: matchedCount - path.length },
-        hint: `A reading path is ${path.length} of the ${matchedCount} sources that mention ${theme}; archive_lens or list_content with that topic pages through all of them.`
+        omitted: { results: pool.length - picked.length },
+        hint: `These ${picked.length} are drawn at random from the ${pool.length} sources that name ${theme}; list_content or archive_lens with that topic pages through all of them.`
       }
     );
   }
-  const candidates = [];
+  const candidates: GemCandidate[] = [];
   const [startYear, endYear] = parseYearRange(input.year_range);
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
@@ -3359,24 +3413,7 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
       const year = recordYear(record);
       if (startYear && (!year || year < startYear)) continue;
       if (endYear && (!year || year > endYear)) continue;
-      const links = linksBySource.get(sourceRecordKey(record)) || [];
-      const cross = links.filter((link) => link.link_category === 'cross_source').length;
-      const domains = new Set([...(record.domains || []), ...links.map((link) => linkDomain(link))].filter(Boolean));
-      const age = year ? Math.max(0, new Date().getUTCFullYear() - year) : 0;
-      let score = domains.size + cross * 5 + links.length * 0.2;
-      let reason = cross
-        ? 'connects multiple Jamie-owned sources'
-        : domains.size
-          ? 'link-rich archive trail'
-          : 'quiet representative source';
-      if (mood.includes('forgotten') || mood.includes('old')) {
-        score += age * 0.5;
-        reason = 'older archive source worth resurfacing';
-      } else if (mood.includes('recent') || mood.includes('new')) {
-        score += Math.max(0, 20 - age);
-        reason = 'recent source with archive signals';
-      }
-      candidates.push({ score, reason, record, link_count: links.length, cross_source_link_count: cross });
+      candidates.push(gemCandidate(record, linksBySource.get(sourceRecordKey(record)) || [], mood));
     }
   }
   // recent and forgotten are about age first: link richness only ranks
@@ -3395,34 +3432,15 @@ async function toolArchiveGems(input: ToolArgs = {}, { scope }: ToolContext = {}
   // repeated request returning the same gems "sounds like a bug"), weighted
   // toward link-rich sources but never limited to them: any source in the
   // pool can come up. The pool is everything for serendipity, the newest
-  // tenth for recent, the older half for forgotten.
-  const weight = (item: { score: number }) => 1 + Math.sqrt(Math.max(0, item.score));
-  const band = [...pool];
-  const picked = [];
-  while (picked.length < limit && band.length) {
-    let draw = (crypto.randomInt(1_000_000) / 1_000_000) * band.reduce((sum, item) => sum + weight(item), 0);
-    let index = 0;
-    while (index < band.length - 1 && draw >= weight(band[index])) {
-      draw -= weight(band[index]);
-      index += 1;
-    }
-    picked.push(band.splice(index, 1)[0]);
-  }
+  // tenth for recent, the older half for forgotten, and a theme's sources.
+  const picked = drawGems(pool, limit);
   for (const item of picked)
     item.reason = `${item.reason} (drawn at random from ${pool.length} sources, weighted toward link-rich ones)`;
   return {
     applied: { mode: mood || 'serendipity' },
     theme: null,
     mode: mood || 'serendipity',
-    results: picked.map((item) => ({
-      ...compactContentRecord(item.record),
-      // A gem names an issue; two dozen domains per gem was most of the payload.
-      domains: (item.record.domains || []).slice(0, 5),
-      reason: item.reason,
-      score: Number(item.score.toFixed(2)),
-      link_count: item.link_count,
-      cross_source_link_count: item.cross_source_link_count
-    }))
+    results: picked.map(gemResult)
   };
 }
 

@@ -335,10 +335,11 @@ test('archive_gems theme mode returns ids that resolve (review defect 8)', async
     }
   });
   const out = await ARCHIVE_TOOLS.archive_gems({ theme: 'tidepools', limit: 4 }, { scope: 'weekly_thing' });
-  assert.equal(out.mode, 'theme_reading_path');
+  // A theme draws from the sources that name it (QA2 L2-10); each gem is
+  // its own record, and its id opens it.
+  assert.equal(out.mode, 'theme');
   assert.ok(out.results.length > 0);
   for (const entry of out.results) {
-    assert.ok(out.sources_by_id[entry.id], `${entry.id} resolves in sources_by_id`);
     const source = await ARCHIVE_TOOLS.get_source({ id: entry.id }, { scope: 'weekly_thing' });
     assert.equal(source.source.id, entry.id);
   }

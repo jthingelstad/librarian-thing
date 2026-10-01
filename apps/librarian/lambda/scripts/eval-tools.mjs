@@ -485,6 +485,38 @@ for (const args of [{}, { source_kind: 'weekly_thing' }, { source_kind: 'blog', 
   );
 }
 {
+  // QA2 L2-10: a theme draws at random from the sources that name it, like
+  // every mode (it returned one fixed reading path every time), and every
+  // gem is one list_content finds for that topic.
+  const named = new Set();
+  let listed = 0;
+  for (let offset = 0, pages = 0; pages < 40; pages += 1) {
+    const page = await ARCHIVE_TOOLS.list_content({ topic: 'coffee', limit: 120, offset }, { scope: 'all' });
+    (page.results || []).forEach((row) => named.add(row.id));
+    listed = page.total_count;
+    offset = page.truncated?.next_offset;
+    if (!offset) break;
+  }
+  const draws = [];
+  for (let round = 0; round < 3; round += 1) {
+    const gems = await run('archive_gems', { theme: 'coffee', limit: 6 });
+    draws.push(gems?.results || []);
+    check(
+      'KA gems theme total_count is the list_content count',
+      gems?.total_count === listed,
+      `${gems?.total_count} vs ${listed}`
+    );
+  }
+  const keys = draws.map((gems) => gems.map((gem) => gem.id).join(','));
+  check('KA gems theme draws vary', new Set(keys).size > 1, keys[0]);
+  const stray = draws.flat().filter((gem) => !named.has(gem.id));
+  check(
+    'KA gems theme draws only sources that name it',
+    named.size === listed && stray.length === 0,
+    stray.map((gem) => gem.id).join(', ')
+  );
+}
+{
   // Per-hit strictness: first_last under stem, for a term whose corpus
   // hits are literal, must equal the exact-mode first (round-seven P0).
   const exact = await run('archive_lens', { topic: 'Ethereum', source_kind: 'weekly_thing', operation: 'first_last' });

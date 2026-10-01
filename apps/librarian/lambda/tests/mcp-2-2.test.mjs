@@ -452,7 +452,7 @@ test('on_this_day: within a day, the issue, then the episode, then blog posts', 
   assert.deepEqual(kinds, ['weekly_thing', 'podcast', 'blog']);
 });
 
-test('archive_gems: every mode draws, and a theme path says how many sources it chose from', async () => {
+test('archive_gems: every mode draws, a theme included, and says how many sources it drew from', async () => {
   const issues = Array.from({ length: 60 }, (_v, index) => ({
     number: index + 1,
     subject: `WT${index + 1} on espresso`,
@@ -471,6 +471,14 @@ test('archive_gems: every mode draws, and a theme path says how many sources it 
     assert.ok(draws.size > 1, `${mode}: eight draws must not all be the same`);
   }
   const theme = await ARCHIVE_TOOLS.archive_gems({ theme: 'espresso', limit: 4 }, { scope: 'weekly_thing' });
-  assert.ok(theme.total_count > theme.results.length);
-  assert.match(theme.truncated.hint, /A reading path is \d+ of the \d+ sources that mention espresso/);
+  assert.equal(theme.total_count, 60, 'the pool is every source that names the theme');
+  assert.equal(theme.results.length + theme.truncated.omitted.results, theme.total_count);
+  assert.match(theme.truncated.hint, /drawn at random from the 60 sources that name espresso/);
+  // QA2 L2-10: a theme's gems vary like every mode's.
+  const draws = new Set();
+  for (let round = 0; round < 8; round += 1) {
+    const out = await ARCHIVE_TOOLS.archive_gems({ theme: 'espresso', limit: 2 }, { scope: 'weekly_thing' });
+    draws.add(out.results.map((item) => item.id).join(','));
+  }
+  assert.ok(draws.size > 1, 'theme: eight draws must not all be the same');
 });

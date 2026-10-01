@@ -1088,14 +1088,14 @@
   {
     "toolSpec": {
       "name": "archive_gems",
-      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme builds a reading path for that theme (ids resolve in sources_by_id and in get_source); otherwise mode biases toward forgotten (older), recent, or serendipity (a random draw from link-rich, cross-source sources). Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "description": "Surface a small, grounded set of interesting archive sources for serendipity, reading/listening recommendations, or \"surprise me\" prompts. Optional theme draws at random from every source that names that theme (total_count says how many; list_content with that topic lists them all); otherwise mode biases toward forgotten (older), recent, or serendipity (a random draw from link-rich, cross-source sources). Every call draws afresh, weighted toward link-rich sources. Optional source_kind and year_range narrow the pool. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "inputSchema": {
         "json": {
           "type": "object",
           "properties": {
             "theme": {
               "type": "string",
-              "description": "Gems about this theme, as a reading path; omit for any."
+              "description": "Gems that name this theme, drawn at random from every source that does; omit for any."
             },
             "mode": {
               "type": "string",
@@ -1137,7 +1137,7 @@
       }
     },
     "mcp": {
-      "description": "A few sources worth reading: a reading path through a theme, or with no theme a draw by mode (serendipity, forgotten or recent).",
+      "description": "A few sources worth reading, drawn at random: from the sources that name a theme, or with no theme by mode (serendipity, forgotten or recent).",
       "outputSchema": {
         "type": "object",
         "properties": {
@@ -1149,7 +1149,7 @@
           },
           "total_count": {
             "type": "integer",
-            "description": "With theme: every source that mentions it; results is a reading path through some of them."
+            "description": "With theme: every source that names it (the list_content count); results is a random draw from them."
           },
           "results": {
             "type": "array"
