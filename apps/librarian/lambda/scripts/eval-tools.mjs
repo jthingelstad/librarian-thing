@@ -219,7 +219,8 @@ const ENUMERATED_LISTS = {
   top_references: 'top',
   quote_search: 'results',
   list_topics: 'topics',
-  latest_content: 'results'
+  latest_content: 'results',
+  search_faq: 'results'
 };
 const PARTITIONS = [
   'counts_by_year',
@@ -763,7 +764,28 @@ await run('search_faq', { query: 'what is the weekly thing' });
   }
   check('KA resource hints exercised on a cut resource', cut >= 2, String(cut));
 }
+// QA2 F14 / L2-8: search_faq counts every entry that names a word,
+// possessive included ("Jamie's" is Jamie), against the raw FAQ, and a
+// query of common words matches nothing.
+{
+  const faq = JSON.parse(readFileSync(path.join(here, '..', 'shared', 'faq.json'), 'utf8'));
+  const entries = (faq.sections || []).flatMap((section) =>
+    (section.entries || []).map((entry) => `${section.title}\n${entry.question}\n${entry.answer}`)
+  );
+  for (const word of ['Jamie', 'newsletter']) {
+    const oracle = entries.filter((text) => new RegExp(`\\b${word}\\b`, 'i').test(text)).length;
+    const out = await run('search_faq', { query: word, limit: 10 });
+    check(
+      `KA search_faq ${word} counts every entry naming it`,
+      out?.total_count === oracle,
+      `${out?.total_count} vs ${oracle}`
+    );
+  }
+  const common = await run('search_faq', { query: 'the and of' });
+  check('KA search_faq common words match nothing', common?.total_count === 0, String(common?.total_count));
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
+await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });
 await run('list_topics', { query: 'coffee' });
 await run('quote_search', { phrase: 'open web', limit: 3 });

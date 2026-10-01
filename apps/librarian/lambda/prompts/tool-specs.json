@@ -17,6 +17,12 @@
               "maximum": 10,
               "default": 5,
               "description": "Most results, 1 to 10 (default 5)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
             }
           },
           "required": ["query"]
@@ -31,15 +37,19 @@
           "query": {
             "type": "string"
           },
+          "total_count": {
+            "type": "integer",
+            "description": "FAQ entries that match, best first; results is one page of them."
+          },
           "results": {
             "type": "array"
           },
           "note": {
             "type": "string",
-            "description": "Present when no FAQ entry matches."
+            "description": "Present when no FAQ entry matches, saying why."
           }
         },
-        "required": ["results"]
+        "required": ["results", "total_count"]
       }
     }
   },

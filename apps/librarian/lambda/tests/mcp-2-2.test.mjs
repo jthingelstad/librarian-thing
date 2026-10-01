@@ -348,7 +348,10 @@ test('a Journal chunk that copies two posts stays until both posts are in the po
     ['wt-36-journal', 'blog-601'],
     'post two is only in the copy'
   );
-  assert.deepEqual(dedupeJournalTwins([copy, postOne, postTwo]).map((chunk) => chunk.id), ['blog-601', 'blog-602']);
+  assert.deepEqual(
+    dedupeJournalTwins([copy, postOne, postTwo]).map((chunk) => chunk.id),
+    ['blog-601', 'blog-602']
+  );
   const unmatched = { ...copy, journal_posts: [copy.journal_posts[0], { url: null, matched_by: null }] };
   assert.deepEqual(
     dedupeJournalTwins([unmatched, postOne, postTwo]).map((chunk) => chunk.id),
@@ -382,6 +385,23 @@ test('search_faq says when nothing matches', async () => {
   const out = await ARCHIVE_TOOLS.search_faq({ query: 'zxqvbn florp' }, CTX);
   assert.deepEqual(out.results, []);
   assert.match(out.note, /No FAQ entry matches/);
+});
+
+test('search_faq counts and pages its matches, skips common words and reads a possessive (QA2 F14, L2-8)', async () => {
+  const common = await ARCHIVE_TOOLS.search_faq({ query: 'the and of' }, CTX);
+  assert.equal(common.total_count, 0, 'common words match nothing');
+  assert.match(common.note, /only common words/);
+  const whole = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 10 }, CTX);
+  assert.ok(whole.total_count >= 2, `newsletter matches several entries (${whole.total_count})`);
+  const first = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 1 }, CTX);
+  assert.equal(first.total_count, whole.total_count);
+  assert.equal(first.results.length + first.truncated.omitted.results, first.total_count);
+  assert.equal(first.truncated.next_offset, 1);
+  const second = await ARCHIVE_TOOLS.search_faq({ query: 'newsletter', limit: 1, offset: 1 }, CTX);
+  assert.deepEqual(second.results[0], whole.results[1], 'offset reaches the next entry in the same order');
+  const possessive = await ARCHIVE_TOOLS.search_faq({ query: "Jamie's", limit: 10 }, CTX);
+  const plain = await ARCHIVE_TOOLS.search_faq({ query: 'Jamie', limit: 10 }, CTX);
+  assert.equal(possessive.total_count, plain.total_count, "Jamie's is Jamie");
 });
 
 test('compare_eras counts each era and says when one is empty', async () => {

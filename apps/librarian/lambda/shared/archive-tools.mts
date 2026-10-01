@@ -13,7 +13,7 @@ import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
 import { STOPWORDS, countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
-import { searchFaq } from './faq.mjs';
+import { faqQueryTerms, searchFaqAll } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
@@ -113,6 +113,7 @@ export const PAGED_LISTS: Record<string, string> = {
   media_search: 'results',
   on_this_day: 'years[].items',
   quote_search: 'results',
+  search_faq: 'results',
   top_references: 'top'
 };
 
@@ -686,21 +687,22 @@ async function faqReplacements() {
 
 async function toolSearchFaq(input: ToolArgs = {}) {
   const query = String(input.query || '').trim();
-  if (!query) return { results: [] };
-  const limit = toolLimit('search_faq', input);
+  if (!query) return { total_count: 0, results: [] };
   // Each answer opens whole as get_source site-faq.
-  const results = searchFaq(query, {
-    limit,
-    replacements: await faqReplacements()
-  }).map((result) => ({ source_id: 'site-faq', ...result }));
+  const matched = searchFaqAll(query, await faqReplacements()).map((result) => ({ source_id: 'site-faq', ...result }));
+  // Counted and paged like every list: "newsletter" at limit 1 showed 1 of
+  // 8 and said nothing of the other 7 (QA2 L2-8).
+  const page = pageOf('search_faq', matched, input);
   // Empty says why, so "no entry" never reads as bad input (QA F14).
-  return {
-    query,
-    results,
-    ...(results.length
-      ? {}
-      : { note: 'No FAQ entry matches; the FAQ covers the newsletter and site. search_archive searches the writing.' })
-  };
+  const note = matched.length
+    ? undefined
+    : faqQueryTerms(query).length
+      ? 'No FAQ entry matches; the FAQ covers the newsletter and site. search_archive searches the writing.'
+      : 'The query has only common words ("the", "and", "of"); ask with the words the question is about.';
+  return markTruncated(
+    { query, total_count: matched.length, results: page.shown, ...(note ? { note } : {}) },
+    { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
+  );
 }
 
 // Passage fields that describe the whole source: they ride once on the
