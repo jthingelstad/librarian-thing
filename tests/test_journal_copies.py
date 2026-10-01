@@ -168,6 +168,8 @@ class JournalCopyTests(unittest.TestCase):
                 "matched_by_permalink": 2,
                 "matched_by_date_text": 4,
                 "unmatched": 1,
+                # WT2's "As I wrote before" link to a 2016 post.
+                "references": 1,
             },
         )
         self.assertEqual(
@@ -213,11 +215,176 @@ class JournalCopyTests(unittest.TestCase):
     def test_every_copy_is_in_its_posts_also_in_issues(self):
         _, posts = self.build()
         also = {post["microblog_id"]: post.get("also_in_issues") for post in posts["posts"]}
+        linked = {post["microblog_id"]: post.get("linked_from_issues") for post in posts["posts"]}
         self.assertEqual(also[2], [1])
         self.assertEqual(also[4], [2])
         self.assertEqual(also[5], [2])
-        # Linked from an issue, as before: still listed.
-        self.assertEqual(also[6], [2])
+        # Linked from an issue that does not reprint it: linked_from_issues
+        # (Jamie, 2026-10-01), never dropped.
+        self.assertIsNone(also[6])
+        self.assertEqual(linked[6], [2])
+        self.assertEqual(posts["appearance_stats"], {"also_in_issues": 5, "linked_from_issues": 1})
+
+
+# QA2 I2-1, I2-6, I2-7: what the Journal links that are not copies become,
+# an own entry named earlier in prose, a permalink two posts share, and the
+# lines of a photo series micro.blog merged into one post.
+ISSUE_3 = """## Journal
+
+### [Four Great Years](<BASE>/2017/05/26/four-great-years.html)
+
+Four great years of writing here. Over those years I've used .Text [→](<BASE>/2006/11/25/migrating-text.html)
+and WordPress [→](<BASE>/2014/03/01/wordpress-move.html).
+
+Also see [the skull rock hike](<BASE>/2017/05/26/skull-rock.html), the best of the trip.
+
+### [Friday @ 6:52 PM](<BASE>/2017/05/26/skull-rock.html)
+
+We hiked to the skull rock and back.
+
+### Sous Vide
+
+- First run with the Sous Vide worked great! [Now I know](<BASE>/2017/05/25/first-run.html)
+- First run with [the Sous Vide. Making beef.](<BASE>/2017/05/25/first-run.html)
+
+### [Saturday @ 1:37 PM](<BASE>/2017/05/27/133747.html)
+
+SPS Tech Jam 2017! #TeamSPS #SPSTechJam
+
+### [Saturday @ 1:36 PM](<BASE>/2017/05/27/080643.html)
+
+Great talks at Tech Jam 2017, and incredible breadth. #TeamSPS
+
+### [Saturday @ 3:27 PM](<BASE>/2017/05/27/152728.html)
+
+⚾️💥🤩
+""".replace("<BASE>", BASE)
+
+
+class JournalReferenceTests(unittest.TestCase):
+    def build(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        blog, archive = Path(tmp.name) / "blog", Path(tmp.name) / "archive"
+        _post(
+            blog,
+            10,
+            f"{BASE}/2017/05/26/four-great-years.html",
+            "2017-05-26T20:00:00+00:00",
+            "Four great years of writing here. Over those years I've used .Text and WordPress.",
+            "Four Great Years",
+        )
+        _post(
+            blog,
+            11,
+            f"{BASE}/2006/11/25/migrating-text.html",
+            "2006-11-25T20:00:00+00:00",
+            "Migrating from .Text to WordPress, and over the years I've used both.",
+        )
+        _post(
+            blog,
+            12,
+            f"{BASE}/2014/03/01/wordpress-move.html",
+            "2014-03-01T20:00:00+00:00",
+            "And WordPress it is.",
+        )
+        _post(
+            blog,
+            13,
+            f"{BASE}/2017/05/26/skull-rock.html",
+            "2017-05-26T23:52:00+00:00",
+            "We hiked to the skull rock and back.",
+        )
+        _post(
+            blog,
+            14,
+            f"{BASE}/2017/05/25/first-run.html",
+            "2017-05-25T23:03:00+00:00",
+            "First run with the Sous Vide. Making beef.",
+        )
+        _post(
+            blog,
+            15,
+            f"{BASE}/2017/05/25/first-run.html",
+            "2017-05-26T02:42:00+00:00",
+            "First run with the Sous Vide worked great! Now I know.",
+        )
+        _post(
+            blog,
+            16,
+            f"{BASE}/2017/05/27/080643.html",
+            "2017-05-27T13:06:00+00:00",
+            "Great talks at TechJam 2017, and incredible breadth.\n\nSPS TechJam 2017!\n\n⚾️💥🤩",
+            "SPS TechJam 2017",
+        )
+        _issue(archive, 1, "2017-05-20T13:00:00Z", "## Notable\n\nNothing.\n")
+        _issue(archive, 2, "2017-05-27T13:00:00Z", ISSUE_3)
+        wt = core.build_corpus(archive, include_issue_bodies=True, blog_dir=blog)
+        posts = core.build_blog_corpus(blog_dir=blog, archive_dir=archive)
+        return wt, posts
+
+    def test_links_to_older_posts_are_references(self):
+        wt, posts = self.build()
+        issue = next(issue for issue in wt["issues"] if issue["number"] == 2)
+        self.assertEqual(
+            [
+                (item["microblog_id"], item["url"].rsplit("/", 1)[-1])
+                for item in issue["journal_references"]
+            ],
+            [("11", "migrating-text.html"), ("12", "wordpress-move.html")],
+        )
+        copied = {
+            post["copy_of_microblog_id"]
+            for chunk in wt["chunks"]
+            for post in chunk.get("journal_posts", [])
+        }
+        self.assertNotIn("11", copied)
+        self.assertNotIn("12", copied)
+        urls = [url for chunk in wt["chunks"] for url in chunk.get("journal_post_urls", [])]
+        self.assertFalse([url for url in urls if "/2006/" in url or "/2014/" in url])
+        by_id = {post["microblog_id"]: post for post in posts["posts"]}
+        self.assertNotIn("also_in_issues", by_id[11])
+        self.assertEqual(by_id[11]["linked_from_issues"], [2])
+        self.assertEqual(by_id[12]["linked_from_issues"], [2])
+        self.assertEqual(wt["journal_copy_stats"]["references"], 2)
+
+    def test_own_link_wins_over_an_earlier_mention(self):
+        wt, _ = self.build()
+        entries = [e for i in wt["issues"] for e in i.get("journal_entries", [])]
+        skull = [e for e in entries if e["copy_of_microblog_id"] == "13"]
+        self.assertEqual(
+            [(e["url"], e["matched_by"]) for e in skull],
+            [(f"{BASE}/2017/05/26/skull-rock.html", "permalink")],
+        )
+
+    def test_a_shared_permalink_copies_each_post_it_names(self):
+        wt, posts = self.build()
+        entries = [e for i in wt["issues"] for e in i.get("journal_entries", [])]
+        self.assertEqual(
+            sorted(e["copy_of_microblog_id"] for e in entries if "first-run" in (e["url"] or "")),
+            ["14", "15"],
+        )
+        by_id = {post["microblog_id"]: post for post in posts["posts"]}
+        self.assertEqual((by_id[14]["also_in_issues"], by_id[15]["also_in_issues"]), ([2], [2]))
+
+    def test_merged_series_lines_find_their_post(self):
+        wt, _ = self.build()
+        entries = {
+            e["url"]: e for i in wt["issues"] for e in i.get("journal_entries", []) if e["url"]
+        }
+        for slug in ("133747.html", "152728.html"):
+            entry = entries[f"{BASE}/2017/05/27/{slug}"]
+            self.assertEqual(
+                (entry["copy_of_microblog_id"], entry["matched_by"]), ("16", "date_text")
+            )
+        self.assertEqual(wt["journal_unmatched"], [])
+
+    def test_every_issue_naming_a_post_is_in_exactly_one_list(self):
+        _, posts = self.build()
+        for post in posts["posts"]:
+            also = set(post.get("also_in_issues") or [])
+            linked = set(post.get("linked_from_issues") or [])
+            self.assertFalse(also & linked, post["microblog_id"])
 
 
 class RealJournalCopyTests(unittest.TestCase):
@@ -251,6 +418,61 @@ class RealJournalCopyTests(unittest.TestCase):
             if entry["copy_of_microblog_id"] and number not in also[entry["copy_of_microblog_id"]]
         ]
         self.assertEqual(missing, [])
+        # QA2 I2-6: an own time link after an earlier mention of the post.
+        skull = entries[(174, f"{BASE}/2021/02/15/skull-rock-in.html")]
+        self.assertEqual(
+            (skull["copy_of_microblog_id"], skull["matched_by"]), ("1267487", "permalink")
+        )
+        # QA2 I2-7: lines of a photo series micro.blog merged into one post.
+        for number, url, post in [
+            (105, f"{BASE}/2019/05/09/133747.html", "1318870"),
+            (105, f"{BASE}/2019/05/09/sps-tech-jam.html", "1318870"),
+            (105, f"{BASE}/2019/05/04/minnesota-united-v.html", "1316384"),
+            (108, f"{BASE}/2019/05/25/beautiful-game-mnufc.html", "1182817"),
+            (125, f"{BASE}/2019/11/03/152728.html", "1437903"),
+        ]:
+            self.assertEqual(entries[(number, url)]["copy_of_microblog_id"], post, url)
+        # QA2 I2-1: a copy is a post from the issue's week, [previous issue
+        # - 3 days, this issue + 1 day] (Jamie, 2026-10-01); everything else
+        # the Journal links is a reference.
+        days = {
+            post["microblog_id"]: post["publish_date"]
+            for post in posts["posts"]
+            if post.get("microblog_id")
+        }
+        dated = [(issue["number"], issue["publish_date"][:10]) for issue in wt["issues"]]
+        weeks = {
+            number: (core._journal_window(day, dated[i - 1][1] if i else None))
+            for i, (number, day) in enumerate(dated)
+        }
+        stale = [
+            (chunk["issue_number"], copy["copy_of_microblog_id"])
+            for chunk in wt["chunks"]
+            for copy in chunk.get("journal_posts", [])
+            if copy["copy_of_microblog_id"]
+            and not weeks[chunk["issue_number"]][0]
+            <= days[int(copy["copy_of_microblog_id"])]
+            <= weeks[chunk["issue_number"]][1]
+        ]
+        self.assertEqual(stale, [])
+        references = {
+            (issue["number"], item["microblog_id"])
+            for issue in wt["issues"]
+            for item in issue.get("journal_references", [])
+        }
+        # WT334 "Also see 2021 and 2015."; WT212's link back to an NFT post.
+        self.assertIn((212, "1464172"), references)
+        self.assertEqual(
+            stats["references"], sum(len(i.get("journal_references", [])) for i in wt["issues"])
+        )
+        linked = {
+            str(post["microblog_id"]): set(post.get("linked_from_issues") or [])
+            for post in posts["posts"]
+            if post.get("microblog_id")
+        }
+        self.assertIn(212, linked["1464172"])
+        self.assertNotIn(212, also["1464172"])
+        self.assertFalse([mid for mid in also if also[mid] & linked[mid]])
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ import hashlib
 import html
 import json
 import re
+import unicodedata
 from dataclasses import dataclass, replace
 from datetime import date as _date
 from datetime import datetime, timedelta, timezone
@@ -1254,6 +1255,7 @@ def build_corpus(
     post_index = journal_post_index(blog_dir or BLOG_DIR)
     journal_unmatched: list[dict[str, Any]] = []
     all_entries: list[dict[str, Any]] = []
+    all_references: list[dict[str, Any]] = []
     previous_date = None
     for path, metadata, body in issue_files:
         body = strip_thingy_blocks(body)
@@ -1384,14 +1386,20 @@ def build_corpus(
         previous_date = publish_date or previous_date
         section_copies: dict[int, list[JournalMatch]] = {}
         journal_entries: list[dict[str, Any]] = []
+        journal_references: list[dict[str, Any]] = []
         if journal_at and first_day:
-            per_section, journal_entries, _references = match_issue_journal(
+            per_section, journal_entries, journal_references = match_issue_journal(
                 [split[i] for i in journal_at], post_index, first_day=first_day, last_day=last_day
             )
             section_copies = dict(zip(journal_at, per_section))
         if journal_entries:
             issues[-1]["journal_entries"] = journal_entries
+        # Journal links to posts the issue does not reprint: kept, so the
+        # post can list the issue in linked_from_issues (QA2 I2-1).
+        if journal_references:
+            issues[-1]["journal_references"] = journal_references
         all_entries.extend(journal_entries)
+        all_references.extend(journal_references)
         # A photo that is also a blog post's photo points at it, the blog copy
         # canonical (Jamie, 2026-09-30), so readers can collapse the two.
         copied = {entry["copy_of_microblog_id"] for entry in journal_entries}
@@ -1408,6 +1416,9 @@ def build_corpus(
         entry_by_path: dict[str, dict[str, Any]] = {}
         for entry in journal_entries:
             entry_by_path.setdefault(_blog_target_path(entry["url"] or "") or "", entry)
+        reference_paths = {
+            _blog_target_path(item["url"] or "") or "" for item in journal_references
+        } - set(entry_by_path)
         for section_index, issue_section in enumerate(split):
             section, family, section_body = (
                 issue_section.heading,
@@ -1435,10 +1446,13 @@ def build_corpus(
                     )
                 # The blog post's own URL where the corpus has it, so the
                 # retrieval dedupe joins even when that URL is on another host.
+                # A time or arrow link to an older post is a reference, not
+                # an entry's own (QA2 I2-1), so it is no journal post url.
                 chunk_journal_urls = list(
                     dict.fromkeys(
                         targets["blog"].get(_blog_target_path(u) or "", {}).get("url") or u
                         for u in journal_post_urls(chunk_text)
+                        if (_blog_target_path(u) or "") not in reference_paths
                     )
                 )
                 chunks.append(
@@ -1462,7 +1476,11 @@ def build_corpus(
                         "source_kind": "chunk",
                         **({"journal_post_urls": chunk_journal_urls} if chunk_journal_urls else {}),
                         **_chunk_journal_posts(
-                            chunk_text, copies_by_chunk[index], entry_by_path, targets["blog"]
+                            chunk_text,
+                            copies_by_chunk[index],
+                            entry_by_path,
+                            targets["blog"],
+                            reference_paths,
                         ),
                     }
                 )
@@ -1529,6 +1547,9 @@ def build_corpus(
                 1 for entry in all_entries if entry["matched_by"] == "date_text"
             ),
             "unmatched": len(journal_unmatched),
+            # Journal links to posts the issue does not reprint (an older
+            # post, or another post named in prose): references, not entries.
+            "references": len(all_references),
         },
         "journal_unmatched": journal_unmatched,
     }
@@ -1639,6 +1660,23 @@ def _copy_words(text: str) -> list[str]:
     return _COPY_WORD_RE.findall(_COPY_URL_RE.sub(" ", unlink(text)).lower())
 
 
+_COPY_HASHTAG_RE = re.compile(r"(?<![\w&])#\w+")
+
+
+def _squash(text: str) -> str:
+    """Text without hashtags, spaces, punctuation or emoji variation
+    selectors, lower-cased: "SPS Tech Jam 2019! #TeamSPS" and "SPS TechJam
+    2019!" both read "spstechjam2019", and an emoji-only line keeps its
+    emoji."""
+    text = _COPY_TAG_RE.sub(" ", _COPY_IMAGE_RE.sub(" ", text or ""))
+    text = _COPY_HASHTAG_RE.sub(" ", _COPY_URL_RE.sub(" ", unlink(text))).lower()
+    return "".join(
+        char
+        for char in text
+        if char not in "\ufe0e\ufe0f" and unicodedata.category(char)[0] not in "PZC"
+    )
+
+
 def _shingles(tokens: list[str] | tuple[str, ...]) -> frozenset[tuple[str, ...]]:
     if len(tokens) < _COPY_SHINGLE:
         return frozenset([tuple(tokens)]) if tokens else frozenset()
@@ -1660,6 +1698,7 @@ class JournalPost:
     shingles: frozenset[tuple[str, ...]]
     label: str = ""  # the title, or the first words of an untitled post
     images: tuple[str, ...] = ()  # the post's photo URLs, as its media has them
+    squashed: str = ""  # title and text as ``_squash`` has them
 
 
 # A micro.blog upload's name: ten hex digits or a UUID. The Weekly Thing
@@ -1789,6 +1828,7 @@ def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostInd
                 _shingles(tokens),
                 str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
                 tuple(image["url"] for image in extract_images(body)),
+                _squash(f"{metadata.get('title') or ''} {body}"),
             )
         )
     return JournalPostIndex(posts)
@@ -1809,12 +1849,12 @@ class _JournalEntry:
     section: int
 
 
-def _journal_entries(sections: list[IssueSection]) -> list[_JournalEntry]:
+def _journal_entry_links(sections: list[IssueSection]) -> list[_JournalEntry]:
     """The blog-permalink links of an issue's Journal sections, each with the
     text it stands for: a heading link the whole section, a time link the
     text up to the next time link, any other link its own line. A time link
     with nothing after it (WT160 puts it just above the entry's H3) stands
-    for the next section."""
+    for the next section. Every occurrence, in order: a path can repeat."""
     entries: list[_JournalEntry] = []
     carried: list[str] = []
     for position, section in enumerate(sections):
@@ -1845,14 +1885,26 @@ def _journal_entries(sections: list[IssueSection]) -> list[_JournalEntry]:
             own = link_label_text(link.label) == "→"
             entries.append(_JournalEntry(link.url, line, own, position))
     entries.extend(_JournalEntry(url, "", True, len(sections) - 1) for url in carried)
-    seen: set[str] = set()
-    unique = []
-    for entry in entries:
-        key = _blog_target_path(entry.url) or entry.url
-        if key not in seen:
-            seen.add(key)
-            unique.append(entry)
-    return unique
+    return entries
+
+
+def _journal_entry_groups(sections: list[IssueSection]) -> list[list[_JournalEntry]]:
+    """An issue's Journal links grouped by post path, in order of first
+    appearance; within a group the entry's own links (heading, time or
+    arrow) come first. Jamie often names a post in an earlier line ("...the
+    skull rock hike...") and then gives it its own time link: the own link
+    is the entry, and the earlier line only a reference to it (QA2 I2-6:
+    first-wins kept the reference, so 23 own entries were lost)."""
+    groups: dict[str, list[_JournalEntry]] = {}
+    for entry in _journal_entry_links(sections):
+        groups.setdefault(_blog_target_path(entry.url) or entry.url, []).append(entry)
+    return [sorted(group, key=lambda entry: not entry.own_link) for group in groups.values()]
+
+
+def _journal_entries(sections: list[IssueSection]) -> list[_JournalEntry]:
+    """One entry per post path: its own link where it has one, else its
+    first mention."""
+    return [group[0] for group in _journal_entry_groups(sections)]
 
 
 def _entry_score(tokens: list[str], post: JournalPost) -> float:
@@ -1899,19 +1951,35 @@ def match_issue_journal(
     *,
     first_day: str,
     last_day: str,
-) -> tuple[list[list[JournalMatch]], list[dict[str, Any]], int]:
+) -> tuple[list[list[JournalMatch]], list[dict[str, Any]], list[dict[str, Any]]]:
     """The blog posts each Journal section copies, the issue's Journal
     entries (each with ``copy_of_microblog_id`` and ``canonical_url`` when
-    it matched a post), and how many links went to other posts.
+    it matched a post), and its references: the links that went to other
+    posts.
 
-    ``first_day``/``last_day`` bound the issue's week: from a few days before
-    the previous issue to the day after this one."""
+    ``first_day``/``last_day`` bound the issue's week: from three days before
+    the previous issue to the day after this one (Jamie, 2026-10-01). A copy
+    is a post from that week, whatever the link looks like; a link to an
+    older post ("Also see 2021 and 2015.", WT337's escape-room list, WT184's
+    "[→]" list of past blog engines) is a reference, never a copy (QA2 I2-1)."""
     per_section: list[list[JournalMatch]] = [[] for _ in sections]
     entries: list[dict[str, Any]] = []
+    references: list[dict[str, Any]] = []
     matched: set[Any] = set()
-    references = 0
+    # Entries no post matched, for the merged-post pass below.
+    unmatched: list[tuple[dict[str, Any], _JournalEntry, str]] = []
 
-    def record(position: int, title: str, url: str | None, post, kind: str) -> None:
+    def in_week(post: JournalPost) -> bool:
+        return first_day <= post.day <= last_day
+
+    def title_of(entry: _JournalEntry) -> str:
+        return (
+            sections[entry.section].heading
+            if entry.text == sections[entry.section].text
+            else _short_label(unlink(entry.text).replace("→", " ").strip().lstrip("—–-* "))
+        )
+
+    def record(position: int, title: str, url: str | None, post, kind: str) -> dict[str, Any]:
         entries.append(
             {
                 "title": title or sections[position].heading,
@@ -1929,36 +1997,101 @@ def match_issue_journal(
         if post is not None and post.microblog_id not in matched:
             matched.add(post.microblog_id)
             per_section[position].append(JournalMatch(post, kind, url))
+        return entries[-1]
 
-    for entry in _journal_entries(sections):
-        path = _blog_target_path(entry.url) or ""
-        tokens = _copy_words(entry.text)
-        title = (
-            sections[entry.section].heading
-            if entry.text == sections[entry.section].text
-            else _short_label(unlink(entry.text).replace("→", " ").strip().lstrip("—–-* "))
+    def reference(entry: _JournalEntry, post: JournalPost | None) -> None:
+        references.append(
+            {
+                "title": title_of(entry),
+                "section": sections[entry.section].heading,
+                "url": entry.url,
+                "microblog_id": str(post.microblog_id) if post else None,
+                "canonical_url": post.url if post else None,
+            }
         )
+
+    for group in _journal_entry_groups(sections):
+        path = _blog_target_path(group[0].url) or ""
         live = index.by_path.get(path, [])
-        if live:
-            post = _best_post(tokens, live)
-            if post is None and entry.own_link:
-                post = live[0]
-            if post is None:
-                # A link to another post, not this entry's own.
-                references += 1
-                continue
-            record(entry.section, title, entry.url, post, "permalink")
-            continue
         day = "-".join(path.split("/")[:3])
-        if not entry.own_link and not first_day <= day <= last_day:
-            references += 1
+        if live:
+            candidates = [post for post in live if in_week(post)]
+            kind = "permalink"
+        else:
+            # A dead permalink: a post from the same day (+/- 1) whose text
+            # holds the entry's. A link that is no entry's own, to a day
+            # outside the week, is a reference to an older post.
+            try:
+                candidates = [
+                    post
+                    for post in index.between(_shift_day(day, -1), _shift_day(day, 1))
+                    if in_week(post)
+                ]
+            except ValueError:
+                candidates = []
+            kind = "date_text"
+        # Six permalinks are shared by fourteen posts (WT39 links both
+        # "First run with the Sous Vide" posts by one URL): each mention
+        # may copy a different post at the path.
+        hits: list[tuple[_JournalEntry, JournalPost]] = []
+        for entry in group:
+            tokens = _copy_words(entry.text)
+            taken = {post.microblog_id for _, post in hits}
+            post = _best_post(tokens, [p for p in candidates if p.microblog_id not in taken])
+            if post is not None:
+                hits.append((entry, post))
+        if not hits and live and group[0].own_link and candidates:
+            hits = [(group[0], candidates[0])]
+        for entry, post in hits:
+            record(entry.section, title_of(entry), entry.url, post, kind)
+        if hits:
+            continue
+        own = group[0].own_link
+        if live or not (own or first_day <= day <= last_day):
+            # A link to another post, not this entry's own.
+            reference(group[0], _best_post(_copy_words(group[0].text), live) or (live or [None])[0])
+            continue
+        unmatched.append(
+            (
+                record(group[0].section, title_of(group[0]), group[0].url, None, kind),
+                group[0],
+                day,
+            )
+        )
+
+    # micro.blog merged some photo series into one post and dropped the
+    # hashtags (WT105's "SPS Tech Jam 2019! #TeamSPS #SPSTechJam" is a line
+    # of the "SPS TechJam 2019" post; WT125's "⚾️💥🤩" a line of the
+    # 3:09 PM post). An own entry no post matched is that day's post a
+    # sibling entry already matched when its words, without hashtags and
+    # spaces, or its emoji, are in that post (QA2 I2-7).
+    siblings = [post for post in index.by_id.values() if post.microblog_id in matched]
+    for item, entry, day in unmatched:
+        if not entry.own_link:
+            continue
+        needle = _squash(entry.text)
+        if not needle:
             continue
         try:
-            candidates = index.between(_shift_day(day, -1), _shift_day(day, 1))
+            near = {_shift_day(day, -1), day, _shift_day(day, 1)}
         except ValueError:
-            candidates = []
-        post = _best_post(tokens, candidates) if tokens else None
-        record(entry.section, title, entry.url, post, "date_text")
+            continue
+        post = next(
+            (
+                post
+                for post in sorted(siblings, key=lambda post: str(post.microblog_id))
+                if post.day in near and needle in post.squashed
+            ),
+            None,
+        )
+        if post is not None:
+            item.update(
+                copy_of_microblog_id=str(post.microblog_id),
+                canonical_url=post.url,
+                matched_by="date_text",
+            )
+            if all(match.post is not post for match in per_section[entry.section]):
+                per_section[entry.section].append(JournalMatch(post, "date_text", entry.url))
 
     week = [post for post in index.between(first_day, last_day) if len(post.words) >= 6]
     for position, section in enumerate(sections):
@@ -1990,6 +2123,7 @@ def _chunk_journal_posts(
     copies: list[JournalMatch],
     entry_by_path: dict[str, dict[str, Any]],
     blog_lookup: dict[str, dict[str, Any]],
+    reference_paths: set[str] | frozenset[str] = frozenset(),
 ) -> dict[str, Any]:
     """``journal_posts`` for a chunk: one object per ``journal_post_urls``
     entry, in its order (``url`` as the issue wrote it), then the chunk's
@@ -1999,6 +2133,8 @@ def _chunk_journal_posts(
     seen: set[str] = set()
     for raw in _JOURNAL_ENTRY_LINK_RE.findall(chunk_text or ""):
         path = _blog_target_path(raw) or ""
+        if path in reference_paths:
+            continue
         final = blog_lookup.get(path, {}).get("url") or _canonical_blog_url(raw)
         if final in seen:
             continue
@@ -2537,17 +2673,22 @@ def build_blog_corpus(
             publish_date = "-".join(match.group(1).split("/")[:3])
         if not publish_date:
             publish_date = str(metadata.get("published") or "")[:10] or None
-        also_in_issues = (
+        linked_in = (
             xref.get(_normalize_blog_path(url.split("//", 1)[-1].split("/", 1)[-1]))
             if url
             else None
         )
-        if not also_in_issues and match:
-            also_in_issues = xref.get(_normalize_blog_path(match.group(1)))
-        if copied_in.get(microblog_id):
-            also_in_issues = sorted(
-                {*(also_in_issues or []), *copied_in[microblog_id]}, key=issue_sort_key
-            )
+        if not linked_in and match:
+            linked_in = xref.get(_normalize_blog_path(match.group(1)))
+        # Two lists (Jamie, 2026-10-01): also_in_issues, the issues whose
+        # Journal reprints the post; linked_from_issues, the issues that link
+        # it without reprinting it (a Notable pick, a link in prose, a
+        # Journal reference to an older post). Every issue that names the
+        # post is in exactly one (QA2 I2-1, links Q1).
+        also_in_issues = copied_in.get(microblog_id) or None
+        linked_from_issues = (
+            sorted(set(linked_in or []) - set(also_in_issues or []), key=issue_sort_key) or None
+        )
         embed_text = _blog_embed_text(body)
         # A photo posted with no words and no alt text is still a post, and
         # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
@@ -2564,6 +2705,7 @@ def build_blog_corpus(
             "post_kind": post_kind,
             "section": section,
             "also_in_issues": also_in_issues,
+            "linked_from_issues": linked_from_issues,
             "embed_text": embed_text,
             "published": str(metadata.get("published") or "") or None,
             "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
@@ -2601,6 +2743,7 @@ def build_blog_corpus(
             "post_kind": "page",
             "section": "Page",
             "also_in_issues": None,
+            "linked_from_issues": None,
             "embed_text": embed_text,
             "published": None,
             "updated": str(metadata.get("updated") or "") or None,
@@ -2638,6 +2781,7 @@ def build_blog_corpus(
         post_kind = post_input["post_kind"]
         section = post_input["section"]
         also_in_issues = post_input["also_in_issues"]
+        linked_from_issues = post_input["linked_from_issues"]
         embed_text = post_input["embed_text"]
         post_links = _blog_outbound_links(
             body,
@@ -2673,6 +2817,8 @@ def build_blog_corpus(
             post_record["categories"] = post_input["categories"]
         if also_in_issues:
             post_record["also_in_issues"] = also_in_issues
+        if linked_from_issues:
+            post_record["linked_from_issues"] = linked_from_issues
         posts.append(post_record)
         for image in extract_images(body):
             media.append(
@@ -2754,6 +2900,8 @@ def build_blog_corpus(
                 chunk["updated"] = post_input["updated"]
             if also_in_issues:
                 chunk["also_in_issues"] = also_in_issues
+            if linked_from_issues:
+                chunk["linked_from_issues"] = linked_from_issues
             chunks.append(chunk)
 
     _privacy_audit(chunks)
@@ -2769,6 +2917,13 @@ def build_blog_corpus(
         "page_count": page_count,
         "chunk_count": len(chunks),
         "link_count": len(links),
+        # (post, issue) pairs in each list. Its presence also tells the
+        # Lambda the two lists are stored; on an older corpus it splits
+        # also_in_issues itself.
+        "appearance_stats": {
+            "also_in_issues": sum(len(post.get("also_in_issues") or []) for post in posts),
+            "linked_from_issues": sum(len(post.get("linked_from_issues") or []) for post in posts),
+        },
         "issues": [],
         "media": media,
         "posts": posts,
