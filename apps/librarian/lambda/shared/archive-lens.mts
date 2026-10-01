@@ -524,7 +524,11 @@ export function buildArchiveLens({
 }: ArchiveLensInput = {}) {
   const normalizedOperation = normalizeLensOperation(operation);
   const maxResults = Math.min(Math.max(Number(limit || DEFAULT_LIMIT), 1), 40);
-  const start = Math.max(0, Math.floor(Number(offset) || 0));
+  const requestedOffset = Math.max(0, Math.floor(Number(offset) || 0));
+  // offset pages operation timeline only; the other operations answer for
+  // the whole match, so a page past the first held the same answer (QA2
+  // lexical L2-2: reading_path offered 22 pages and reached 7 of 148).
+  const start = normalizedOperation === 'timeline' ? requestedOffset : 0;
   const sources = new Map<string, LensSource>();
   // One compiled matcher per scan - the regexes are built once, not per item.
   const matcher = adapt(
@@ -663,14 +667,17 @@ export function buildArchiveLens({
     sources: bySource.map((bucket) => ({ ...bucket, sample_sources: keptOnly(bucket.sample_sources) })),
     reading_path: path.filter((entry) => kept.has(entry.id))
   };
-  return settleLensTruncation(payload, { offset: start, limit: maxResults });
+  return settleLensTruncation(payload, { offset: requestedOffset, limit: maxResults });
 }
 
 // What a lens left out and how to read it, counted from the payload as it
 // stands: archive_lens settles it again after compaction cuts
 // sources_by_id, so the hint names what was sent (QA L11: it said 41 held
 // when 19 were). offset pages the timeline (results, under operation
-// timeline); first and latest always answer for the whole match.
+// timeline); first and latest always answer for the whole match. Under
+// any other operation the answer is already whole, so no next_offset is
+// offered and the hint names operation timeline as the way through every
+// source (QA2 lexical L2-2).
 export function settleLensTruncation<T extends object>(value: T, { offset = 0, limit = DEFAULT_LIMIT } = {}): T {
   const payload = value as Record<string, unknown>;
   const total = Number(payload.total_count) || 0;
@@ -680,13 +687,20 @@ export function settleLensTruncation<T extends object>(value: T, { offset = 0, l
   delete omitted.sources_by_id;
   delete omitted.results;
   if (total > held) omitted.sources_by_id = total - held;
+  const paged = payload.operation === 'timeline';
   const pageEnd = Math.min(offset + limit, total);
   const pageLength = Math.max(0, pageEnd - offset);
-  if (payload.operation === 'timeline' && total > pageLength) omitted.results = total - pageLength;
-  const nextOffset = pageEnd < total ? pageEnd : null;
+  if (paged && total > pageLength) omitted.results = total - pageLength;
+  const nextOffset = paged && pageEnd < total ? pageEnd : null;
   const hints: string[] = [];
   if (total > held) hints.push(`sources_by_id holds ${held} of ${total} matched sources.`);
-  if (offset >= total && offset && total) {
+  if (!paged) {
+    if (total > held || offset) {
+      hints.push(
+        `operation ${payload.operation} answers for all ${total} and does not page${offset ? ` (offset ${offset} was not applied)` : ''}; archive_lens with operation timeline pages through every matched source with offset.`
+      );
+    }
+  } else if (offset >= total && offset && total) {
     hints.push(`offset ${offset} is past the last of ${total} matched sources.`);
   } else if (nextOffset !== null) {
     hints.push(

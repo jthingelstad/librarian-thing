@@ -715,6 +715,40 @@ await run('currently_history', { limit: 3 });
 await run('find_links', { domain: 'github.com', limit: 3 });
 await run('list_content', { topic: 'Mastodon', limit: 3 });
 await run('archive_lens', { topic: 'Mastodon', limit: 3 });
+// QA2 lexical L2-2: following next_offset reaches every matched source.
+// Only operation timeline pages; the others answer for the whole match,
+// offer no next_offset, and their hint names timeline as the way through.
+for (const operation of ['timeline', 'by_year', 'first_last', 'reading_path', 'source_compare']) {
+  const seen = new Set();
+  let offset = 0;
+  let total = 0;
+  let stale = 0;
+  let hint = '';
+  for (let pages = 0; pages < 60; pages += 1) {
+    const page = await run('archive_lens', { topic: 'RSS', operation, limit: 7, ...(offset ? { offset } : {}) });
+    total = page?.total_count || 0;
+    if (!pages) hint = String(page?.truncated?.hint || '');
+    const before = seen.size;
+    Object.keys(page?.sources_by_id || {}).forEach((id) => seen.add(id));
+    if (pages && seen.size === before) stale += 1;
+    offset = page?.truncated?.next_offset || 0;
+    if (!offset) break;
+  }
+  if (operation === 'timeline') {
+    check(
+      `KA archive_lens timeline next_offset walk reaches every source`,
+      seen.size === total,
+      `${seen.size} vs ${total}`
+    );
+  } else {
+    check(`KA archive_lens ${operation} offers no page that shows nothing new`, stale === 0, `${stale} stale pages`);
+    check(
+      `KA archive_lens ${operation} hint names operation timeline for the rest`,
+      seen.size === total || /operation timeline/.test(hint),
+      hint
+    );
+  }
+}
 await run('on_this_day', { date: '05-13', limit_per_year: 1 });
 // QA2 T2-1: a windowed call at the top limit passes the 48K cap; the cut
 // must keep every year and its counts (checkAccounting on the render).

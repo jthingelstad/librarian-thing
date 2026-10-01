@@ -818,7 +818,7 @@
               "type": "integer",
               "minimum": 0,
               "default": 0,
-              "description": "Skip this many before the first one returned (default 0), to page through the whole list in the order above. A cut list's truncated.next_offset is the value for the next page."
+              "description": "Pages operation timeline only: skip this many sources, oldest first (default 0); truncated.next_offset is the value for the next page. The other operations answer for every matched source and do not page; use operation timeline to read them all."
             },
             "match_mode": {
               "type": "string",
