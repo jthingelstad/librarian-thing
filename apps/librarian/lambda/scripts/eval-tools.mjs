@@ -756,12 +756,14 @@ await run('source_neighborhood', { id: 'blog-1075885' });
 // (old: 64 of 90 accented and 708 of 717 curly-apostrophe windows missed).
 {
   const { passageWindow } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
-  const chunkById = new Map((corpora.weekly_thing.chunks || []).map((chunk) => [String(chunk.id), chunk]));
-  for (const [id, query, word] of [
-    ['f9d23796519bfa14', 'Molkky', 'Mölkky'],
-    ['3c45b1a403d50ad0', "Tribune's", 'Tribune’s']
+  // Chunk ids hash the text, so a rebuild moves them: take the first chunk
+  // where the word sits past the first 450 characters, out of a plain cut.
+  const chunks = corpora.weekly_thing.chunks || [];
+  for (const [query, word] of [
+    ['Molkky', 'Mölkky'],
+    ["Tribune's", 'Tribune’s']
   ]) {
-    const chunk = chunkById.get(id);
+    const chunk = chunks.find((candidate) => String(candidate.text || '').indexOf(word) > 450);
     const window = chunk ? passageWindow(chunk, query, 450) : { text: '' };
     check(
       `KA passage window for "${query}" shows "${word}"`,
