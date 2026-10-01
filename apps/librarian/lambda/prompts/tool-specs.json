@@ -422,7 +422,7 @@
               "type": "string",
               "enum": ["newest", "oldest"],
               "default": "newest",
-              "description": "newest first (default) or oldest first, before limit applies."
+              "description": "newest first (default) or oldest first, before limit applies. With id the links keep the source's own order and applied.sort says source_order."
             },
             "match_mode": {
               "type": "string",

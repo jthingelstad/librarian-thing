@@ -614,6 +614,31 @@ await run('get_issue', { number: '182' });
 await run('get_section', { number: '321', section: 'Journal' });
 await run('find_links', { topic: 'ethereum', limit: 5 });
 await run('domain_history', { domain: 'macstories.net' });
+// QA2 links L2-4: an id and a source_kind that disagree are refused, not
+// answered with 0 links.
+await run('find_links', { id: 'wt-351', source_kind: 'blog' }, { expectError: true }).then((out) => {
+  const said = `${out?.error || ''} ${out?.truncated?.hint || ''}`;
+  check(
+    'KA find_links id with a contradicting source_kind says so',
+    /source_kind/.test(said),
+    JSON.stringify(out).slice(0, 160)
+  );
+});
+// QA2 links L2-5: with id the links keep source order, and applied.sort
+// never claims an order it did not apply.
+for (const sort of ['oldest', 'newest']) {
+  const out = await run('find_links', { id: 'wt-351', sort, limit: 50 });
+  const dates = (out?.results || []).map((link) => String(link.publish_date || ''));
+  const ordered = dates.every(
+    (date, index) => !index || (sort === 'oldest' ? dates[index - 1] <= date : dates[index - 1] >= date)
+  );
+  const inOrder = (out?.results || []).length > 1 && dates.some((date) => date !== dates[0]) && ordered;
+  check(
+    `KA find_links id echoes the order it applied (sort ${sort})`,
+    out?.applied?.sort !== sort || inOrder,
+    String(out?.applied?.sort)
+  );
+}
 await run('latest_content', { limit: 3 });
 await run('list_content', { topic: 'ethereum', match_mode: 'exact', limit: 5 });
 await run('list_issues', { topic: 'ethereum', limit: 5 });

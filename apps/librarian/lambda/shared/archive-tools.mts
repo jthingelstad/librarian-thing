@@ -1321,6 +1321,14 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const inSource = hasId ? await findSourceBundle({ id: input.id }, { scope }) : null;
   if (hasId && !inSource) return { error: 'Source not found in the active source scope.' };
   if (inSource && 'ambiguous' in inSource) return ambiguousSource(inSource);
+  // An id and a source_kind that disagree can only answer 0 (QA2 links
+  // L2-4: wt-351 with source_kind blog said 0 links, silently).
+  if (inSource && sourceKind && inSource.kind !== sourceKind) {
+    return {
+      error: `id ${lensSourceId(inSource.record)} is a ${inSource.kind} source; drop source_kind or pass source_kind ${inSource.kind}.`,
+      code: 'bad_request'
+    };
+  }
   // A topic matches in the link's own fields. The graph's entity_index is
   // issue-level: admitting every link of a listed issue gave "ethereum"
   // 770 links of which 1 in 50 mentioned it.
@@ -1431,7 +1439,9 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const otherSort = sort === 'newest' ? 'oldest' : 'newest';
   return markTruncated(
     {
-      applied: { sort },
+      // A source's links come in its own order; sort does not apply (QA2
+      // links L2-5: it echoed "oldest" over source order).
+      applied: { sort: inSource ? 'source_order' : sort },
       ...(topic ? { match_mode: topicMatcher.appliedMode, case_sensitive: input.case_sensitive === true } : {}),
       results,
       total_count: filteredLinks.length,
