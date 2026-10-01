@@ -335,8 +335,19 @@ test('the token endpoint takes client_id over HTTP Basic with an empty secret', 
   assert.equal(tokenRequestClientId({ headers: { authorization: 'Bearer x' } }, { client_id: CLIENT }), CLIENT);
 });
 
+const clientRow = (extra = {}) => ({
+  pk: S(`oauthclient#${CLIENT}`),
+  sk: S('client'),
+  client_id: S(CLIENT),
+  client_name: S('AWS DevOps Agent'),
+  redirect_uris: S('["https://example.com/callback"]'),
+  created_at: N(now() - DAY),
+  ttl: N(now() + 300 * DAY),
+  ...extra
+});
+
 test('a Basic secret is answered 401 invalid_client; a Basic id reaches the grant', async () => {
-  const table = fakeTable();
+  const table = fakeTable([clientRow()]);
   try {
     const withSecret = await handleToken({
       headers: {
@@ -394,5 +405,22 @@ test('the Buttondown re-check: active and premium verify, gone lapses, an error 
     globalThis.fetch = originalFetch;
     if (originalKey === undefined) delete process.env.BUTTONDOWN_API_KEY;
     else process.env.BUTTONDOWN_API_KEY = originalKey;
+  }
+});
+
+test('a client that no longer exists is refused 401 invalid_client before any grant (4.15.0)', async () => {
+  const table = fakeTable([refreshRow(), familyRow()]);
+  try {
+    const response = await handleToken({
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=${CLIENT}`
+    });
+    assert.equal(response.statusCode, 401);
+    assert.equal(JSON.parse(response.body).error, 'invalid_client');
+    assert.match(JSON.parse(response.body).error_description, /Unknown client/);
+    // The refresh token was never touched.
+    assert.equal(table.rows.get(`oauthrefresh#${refreshHash}|refresh`).rotated_to, undefined);
+  } finally {
+    table.restore();
   }
 });

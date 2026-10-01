@@ -246,9 +246,32 @@ reader's grant would decay. Its replacement is the web session's re-check:
   an empty secret (`tokenRequestClientId`; a non-empty secret, or a Basic id
   that disagrees with the body, is a 401 `invalid_client`). The
   `offline_access` scope that DevOps Agent always sends is accepted and dropped
-  (`normalizeScope`). DevOps Agent does no dynamic registration. Register its
-  callback URL with `/register` and give it the client id. Leave the client
-  secret blank and PKCE on.
+  (`normalizeScope`). DevOps Agent does no dynamic registration; the reader
+  sets it up by hand in Thingy (below).
+
+**Apps set up by hand (contract 4.15.0, 2026-10-01).** Some clients ask for a
+client ID instead of registering themselves (AWS DevOps Agent's 3LO form shows
+a callback URL and asks for client ID, secret, authorization and exchange
+URLs, scope, PKCE). Profile > MCP connections in Thingy has a generic "connect
+an app that asks for a client ID" form (Jamie: no per-app presets): a name and
+the app's callback URL. `/memory` actions (`shared/mcp-registered-clients.mts`):
+- `mcp_register_client` `{client_name, redirect_uri}` creates a public client
+  whose row carries `owner_hash`, plus a `user#<hash>` / `mcpclient#<id>` panel
+  row. At most `MAX_READER_CLIENTS` (10) per reader, 10 per hour. It answers
+  the client with `settings`: client id, empty secret, `/authorize`, `/token`,
+  `/mcp`, `archive:read`, `pkce: true` - every value the form needs.
+- `mcp_clients` lists them (lapsed client rows dropped and cleaned up) with
+  their settings and live `connection_count`.
+- `mcp_delete_client` `{client_id}` disconnects the reader's connections
+  through it, then deletes the client and the panel row.
+- An owned client authorizes its owner only (`clientOwnerRefusal`, at the code
+  and approve steps): a reader cannot cut someone else off by deleting it.
+- `/token` refuses a client that no longer exists (401 `invalid_client`), so a
+  deleted app stops refreshing even without a connection row, and the lookup
+  renews the client's one-year ttl, so a client that only refreshes never
+  lapses.
+- `delete_profile` deletes the reader's owned clients.
+Tests: `lambda/tests/mcp-registered-clients.test.mjs`.
 
 ## Evals gate the deploy
 

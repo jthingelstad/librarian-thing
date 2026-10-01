@@ -51,6 +51,13 @@ import {
   readMcpLog,
   revokeAllMcpConnections
 } from '../shared/mcp-connections.mjs';
+import {
+  MAX_READER_CLIENTS,
+  deleteAllReaderClients,
+  deleteReaderClient,
+  listReaderClients,
+  registerReaderClient
+} from '../shared/mcp-registered-clients.mjs';
 import { deleteThingyProfile, sessionAllowedForThingyProfile } from '../shared/profile-deletion.mjs';
 import {
   availableConversationModes,
@@ -571,6 +578,44 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
     const connections = await listMcpConnections(String(payload.sub));
     return jsonResponse(200, { status: 'ok', ok: true, connections }, event);
   }
+  if (action === 'mcp_clients') {
+    const clients = await listReaderClients(String(payload.sub));
+    return jsonResponse(200, { status: 'ok', clients, max_clients: MAX_READER_CLIENTS }, event);
+  }
+  if (action === 'mcp_register_client') {
+    const result = await registerReaderClient(String(payload.sub), {
+      clientName: body.client_name,
+      redirectUri: body.redirect_uri
+    });
+    if (!result.ok) {
+      const refusals = {
+        invalid_name: [400, 'Give the app a name.'],
+        invalid_redirect_uri: [
+          400,
+          'The callback URL must be a full https:// address (http only for localhost), with no #fragment.'
+        ],
+        too_many: [409, `You can set up at most ${MAX_READER_CLIENTS} apps. Delete one you no longer use first.`],
+        rate_limited: [429, 'Too many apps set up in the last hour. Try again later.']
+      } as const;
+      const [statusCode, error] = refusals[result.reason];
+      return jsonResponse(statusCode, { error, reason: result.reason }, event);
+    }
+    const clients = await listReaderClients(String(payload.sub));
+    return jsonResponse(200, { status: 'ok', client: result.client, clients }, event);
+  }
+  if (action === 'mcp_delete_client') {
+    const result = await deleteReaderClient(String(payload.sub), body.client_id);
+    if (!result.ok) {
+      return result.reason === 'invalid'
+        ? jsonResponse(400, { error: 'That client id is not valid.' }, event)
+        : jsonResponse(404, { error: 'That app is already gone.' }, event);
+    }
+    const [clients, connections] = await Promise.all([
+      listReaderClients(String(payload.sub)),
+      listMcpConnections(String(payload.sub))
+    ]);
+    return jsonResponse(200, { status: 'ok', ok: true, clients, connections }, event);
+  }
   if (action === 'mcp_log') {
     const page = await readMcpLog(String(payload.sub), {
       cursor: body.cursor,
@@ -584,6 +629,7 @@ async function handleMemory(event: LibrarianHttpEvent, body: JsonRecord, start: 
     // MCP connections first: their tokens live outside the reader's
     // partition, so deleting the partition alone would leave them working.
     await revokeAllMcpConnections(String(payload.sub));
+    await deleteAllReaderClients(String(payload.sub));
     const result = await deleteThingyProfile(payload.sub);
     if (!result.ok)
       return jsonResponse(500, { error: result.error || 'Thingy could not delete this profile right now.' }, event);

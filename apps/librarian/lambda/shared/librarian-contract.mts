@@ -61,7 +61,16 @@
 // expires_at moves forward with each refresh. The token endpoint also
 // takes client_id as HTTP Basic with an empty secret, and accepts and
 // ignores the offline_access scope (AWS DevOps Agent 3LO; additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.14.0';
+// 4.15.0: /memory actions for apps a reader sets up by hand (clients that
+// ask for a client ID instead of registering themselves) - mcp_clients
+// lists them with each one's settings (client id, authorization, token and
+// MCP URLs, scope, PKCE) and live connection count, mcp_register_client
+// {client_name, redirect_uri} registers one bound to the reader (only they
+// can authorize it; at most max_clients), and mcp_delete_client {client_id}
+// disconnects its connections and deletes it. The token endpoint now
+// refuses a client that no longer exists with 401 invalid_client, and
+// delete_profile also deletes the reader's apps (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.15.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -243,6 +252,32 @@ const mcpConnection = object(
   },
   ['id', 'client_id', 'client_name', 'connected_at']
 );
+const mcpClientSettings = object(
+  {
+    client_id: string,
+    // Always empty: clients are public. The form's secret field stays blank.
+    client_secret: string,
+    authorization_url: string,
+    token_url: string,
+    mcp_url: string,
+    scope: string,
+    pkce: boolean
+  },
+  ['client_id', 'authorization_url', 'token_url', 'mcp_url', 'scope', 'pkce']
+);
+const mcpRegisteredClient = object(
+  {
+    client_id: string,
+    client_name: string,
+    redirect_uri: string,
+    created_at: string,
+    // Renewed whenever the app signs in or refreshes.
+    expires_at: string,
+    connection_count: number,
+    settings: ref('mcpClientSettings')
+  },
+  ['client_id', 'client_name', 'redirect_uri', 'settings']
+);
 const mcpLogEntry = object(
   {
     request_id: string,
@@ -342,6 +377,8 @@ export const LIBRARIAN_CONTRACT = {
     chatModel,
     accountOverview,
     mcpConnection,
+    mcpClientSettings,
+    mcpRegisteredClient,
     mcpLogEntry,
     apiResponse: object(apiProperties),
     apiError: object({ error: string, message: string, errorMessage: string, request_id: string, requestId: string }),
@@ -384,6 +421,19 @@ export const LIBRARIAN_CONTRACT = {
     '/memory': endpoint({
       mcp_connections: object({ connections: arrayOf(ref('mcpConnection')), retention_days: number }, ['connections']),
       mcp_disconnect: object({ ok: boolean, connections: arrayOf(ref('mcpConnection')) }, ['ok']),
+      mcp_clients: object({ clients: arrayOf(ref('mcpRegisteredClient')), max_clients: number }, ['clients']),
+      mcp_register_client: object(
+        { client: ref('mcpRegisteredClient'), clients: arrayOf(ref('mcpRegisteredClient')) },
+        ['client']
+      ),
+      mcp_delete_client: object(
+        {
+          ok: boolean,
+          clients: arrayOf(ref('mcpRegisteredClient')),
+          connections: arrayOf(ref('mcpConnection'))
+        },
+        ['ok']
+      ),
       mcp_log: object({ entries: arrayOf(ref('mcpLogEntry')), next_cursor: string, retention_days: number }, [
         'entries'
       ])

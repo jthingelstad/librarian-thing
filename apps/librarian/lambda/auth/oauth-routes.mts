@@ -18,6 +18,7 @@ import {
   mintTokens,
   normalizeScope,
   OAUTH_SCOPES,
+  oauthIssuer,
   redeemAuthCode,
   redeemRefreshToken,
   sanitizeClientName,
@@ -43,11 +44,7 @@ const DEFAULT_CLIENT_NAME = 'MCP client';
 
 type JsonRecord = Record<string, unknown>;
 
-export function oauthIssuer() {
-  return String(process.env.LIBRARIAN_OAUTH_ISSUER || 'https://librarian.thingelstad.com')
-    .trim()
-    .replace(/\/+$/, '');
-}
+export { oauthIssuer };
 
 // RFC 8414 authorization server metadata.
 export function authorizationServerMetadata() {
@@ -124,12 +121,12 @@ export function tokenRequestClientId(event: LibrarianHttpEvent, body: JsonRecord
   return clientId;
 }
 
-function invalidClient() {
+function invalidClient(description = 'Clients are public: send client_id with an empty secret, or in the body.') {
   return oauthJson(
     401,
     {
       error: 'invalid_client',
-      error_description: 'Clients are public: send client_id with an empty secret, or in the body.'
+      error_description: description
     },
     { 'www-authenticate': 'Basic realm="librarian"' }
   );
@@ -370,6 +367,19 @@ async function loadValidatedClient(clientId: unknown, redirectUri: unknown) {
 
 const AUTHORIZE_RATE_LIMIT_MAX = 30;
 
+// A client a reader registered from Thingy's account panel authorizes that
+// reader only: its id is pasted into one person's app, and deleting it there
+// must not cut anyone else off.
+export function clientOwnerRefusal(client: OauthClient, subscriberHash: string) {
+  if (!client.ownerHash || client.ownerHash === subscriberHash) return null;
+  logEvent('info', 'oauth_authorize_rejected', { reason: 'client_owner_mismatch', client_id: client.clientId });
+  return errorPage(
+    403,
+    'This app belongs to another account',
+    "This app was set up in someone else's Thingy account. Set it up from your own Thingy profile, under MCP connections, and use the client ID you get there."
+  );
+}
+
 async function handleAuthorizeGet(event: LibrarianHttpEvent) {
   // Each GET creates a pending row; cap churn per client identity.
   if (!(await checkRateLimit(`oauth#authorize:${clientIdentityHash(event)}`, AUTHORIZE_RATE_LIMIT_MAX))) {
@@ -477,6 +487,11 @@ async function handleCodeStep(event: LibrarianHttpEvent, pending: OauthPending, 
     subscriber: result.subscriber,
     status: result.subscriberStatus
   });
+  const refusal = clientOwnerRefusal(client, emailHash(result.email));
+  if (refusal) {
+    await deletePending(pending.id);
+    return refusal;
+  }
   await updatePending(pending.id, {
     subscriberHash: emailHash(result.email),
     entitlements: entitlements.map(String),
@@ -494,6 +509,11 @@ async function handleCodeStep(event: LibrarianHttpEvent, pending: OauthPending, 
 async function handleApproveStep(pending: OauthPending, client: OauthClient, body: JsonRecord) {
   if (pending.status !== 'verified' || !pending.subscriberHash) {
     return errorPage(400, 'Sign-in incomplete', 'Verify your email before approving access. Start over from the app.');
+  }
+  const refusal = clientOwnerRefusal(client, pending.subscriberHash);
+  if (refusal) {
+    await deletePending(pending.id);
+    return refusal;
   }
   if (String(body.decision || '') !== 'approve') {
     await deletePending(pending.id);
@@ -644,6 +664,14 @@ export async function handleToken(event: LibrarianHttpEvent) {
   if (clientId === null) {
     logEvent('warning', 'oauth_token_client_auth_rejected', {});
     return invalidClient();
+  }
+  // The client must still exist (contract 4.15.0): a reader deleting an app
+  // in Thingy ends its refreshes even if a connection row was never written.
+  // getClient also renews the client's one-year ttl, so a client that only
+  // ever refreshes does not lapse.
+  if (clientId && !(await getClient(clientId))) {
+    logEvent('info', 'oauth_token_unknown_client', { client_id: clientId });
+    return invalidClient('Unknown client: register it again and reconnect.');
   }
   const grantType = String(body.grant_type || '');
   if (grantType === 'authorization_code') return handleAuthorizationCodeGrant(body, clientId);

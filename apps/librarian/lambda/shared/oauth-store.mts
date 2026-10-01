@@ -15,6 +15,12 @@ export const ACCESS_TOKEN_PREFIX = 'lat_';
 export const REFRESH_TOKEN_PREFIX = 'lrt_';
 export const AUTH_CODE_PREFIX = 'lac_';
 
+export function oauthIssuer() {
+  return String(process.env.LIBRARIAN_OAUTH_ISSUER || 'https://librarian.thingelstad.com')
+    .trim()
+    .replace(/\/+$/, '');
+}
+
 export const CLIENT_TTL_SECONDS = 365 * 24 * 60 * 60;
 export const PENDING_TTL_SECONDS = 600;
 export const AUTH_CODE_TTL_SECONDS = 300;
@@ -35,6 +41,11 @@ export interface OauthClient {
   clientName: string;
   redirectUris: string[];
   createdAt: number;
+  // Set when a reader registered the client from Thingy (contract 4.15.0):
+  // only that reader may authorize it. Empty for /register clients.
+  ownerHash: string;
+  // When the row lapses unless the client is used (ttl, epoch seconds).
+  expiresAt: number;
 }
 
 export interface OauthPending {
@@ -238,13 +249,16 @@ async function getRow(pk: string, sk: string) {
 
 export async function createClient({
   clientName,
-  redirectUris
+  redirectUris,
+  ownerHash = ''
 }: {
   clientName: string;
   redirectUris: string[];
+  ownerHash?: string;
 }): Promise<OauthClient> {
   const clientId = generateClientId();
   const createdAt = nowSeconds();
+  const expiresAt = createdAt + CLIENT_TTL_SECONDS;
   await dynamodb.send(
     new PutItemCommand({
       TableName: tableName(),
@@ -255,13 +269,50 @@ export async function createClient({
         client_name: dynamoString(clientName),
         redirect_uris: dynamoString(JSON.stringify(redirectUris)),
         created_at: dynamoNumber(createdAt),
-        ttl: dynamoNumber(createdAt + CLIENT_TTL_SECONDS)
+        ...(ownerHash ? { owner_hash: dynamoString(ownerHash) } : {}),
+        ttl: dynamoNumber(expiresAt)
       },
       ConditionExpression: 'attribute_not_exists(pk)'
     })
   );
-  logEvent('info', 'oauth_client_registered', { client_id: clientId, redirect_uri_count: redirectUris.length });
-  return { clientId, clientName, redirectUris, createdAt };
+  logEvent('info', 'oauth_client_registered', {
+    client_id: clientId,
+    redirect_uri_count: redirectUris.length,
+    reader_registered: Boolean(ownerHash)
+  });
+  return { clientId, clientName, redirectUris, createdAt, ownerHash, expiresAt };
+}
+
+function clientFromItem(item: Record<string, AttributeValue>): OauthClient {
+  return {
+    clientId: itemString(item, 'client_id'),
+    clientName: itemString(item, 'client_name'),
+    redirectUris: itemJsonList(item, 'redirect_uris'),
+    createdAt: itemNumber(item, 'created_at'),
+    ownerHash: itemString(item, 'owner_hash'),
+    expiresAt: itemNumber(item, 'ttl')
+  };
+}
+
+/** Read a client without counting it as used (the account panel's list). */
+export async function peekClient(clientId: string): Promise<OauthClient | null> {
+  const id = validClientId(clientId);
+  if (!id) return null;
+  const item = await getRow(`oauthclient#${id}`, 'client');
+  if (!item || itemNumber(item, 'ttl') <= nowSeconds()) return null;
+  return clientFromItem(item);
+}
+
+export async function deleteClient(clientId: string) {
+  const id = validClientId(clientId);
+  if (!id) return;
+  await dynamodb.send(
+    new DeleteItemCommand({
+      TableName: tableName(),
+      Key: { pk: dynamoString(`oauthclient#${id}`), sk: dynamoString('client') }
+    })
+  );
+  logEvent('info', 'oauth_client_deleted', { client_id: id });
 }
 
 export async function getClient(clientId: string): Promise<OauthClient | null> {
@@ -284,12 +335,7 @@ export async function getClient(clientId: string): Promise<OauthClient | null> {
   } catch (error) {
     logEvent('warning', 'oauth_client_ttl_refresh_failed', errorFields(error, { client_id: id }));
   }
-  return {
-    clientId: itemString(item, 'client_id'),
-    clientName: itemString(item, 'client_name'),
-    redirectUris: itemJsonList(item, 'redirect_uris'),
-    createdAt: itemNumber(item, 'created_at')
-  };
+  return { ...clientFromItem(item), expiresAt: nowSeconds() + CLIENT_TTL_SECONDS };
 }
 
 // --- Pending authorizations ------------------------------------------------
