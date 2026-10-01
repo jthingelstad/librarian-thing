@@ -298,7 +298,7 @@ Nice and easy, simple, web analytics offering that respects privacy and just giv
 
 Was looking like the Vikings might tie that game up, then a fumble. Ugh. 🏈
 
-### [Thursday @ 5:03 PM](https://www.thingelstad.com/2018/09/27/winners-from-teamsps.html)
+### [Thursday @ 5:03 PM](https://www.thingelstad.com/2018/09/27/sps-kubb-tournament.html)
 
 Winners from #TeamSPS Technology Kubb Tournament: 1. Skubby Doo 2. King Kubbas 3. Kubbernetes. Best team name winner Bring Back Kubbicles Plz!
 
@@ -310,19 +310,19 @@ Winners from #TeamSPS Technology Kubb Tournament: 1. Skubby Doo 2. King Kubbas 3
 
 ![](https://www.thingelstad.com/uploads/2018/ab0312f0db.jpg)
 
-### [Thursday @ 4:33 PM](https://www.thingelstad.com/2018/09/27/teams-that-kubb.html)
+### [Thursday @ 4:33 PM](https://www.thingelstad.com/2018/09/27/sps-kubb-tournament.html)
 
 Teams that Kubb together, win together! #TeamSPS
 
 ![](https://www.thingelstad.com/uploads/2018/3c7665fe85.jpg)
 
-### [Thursday @ 3:27 PM](https://www.thingelstad.com/2018/09/27/results-after-round.html)
+### [Thursday @ 3:27 PM](https://www.thingelstad.com/2018/09/27/sps-kubb-tournament.html)
 
 Results after round 1 of #TeamSPS Technology Kubb Tournament! Skubby Doo v King Kubbas in the lead!
 
 ![](https://www.thingelstad.com/uploads/2018/74f5736bd5.jpg)
 
-### [Thursday @ 3:25 PM](https://www.thingelstad.com/2018/09/27/202510.html)
+### [Thursday @ 3:25 PM](https://www.thingelstad.com/2018/09/27/sps-kubb-tournament.html)
 
 Great day for our #TeamSPS Technology Kubb Tournament! Good luck to all the teams!
 
@@ -360,17 +360,17 @@ I had my 200mm lens for the kids soccer games and there were a bunch of planes l
 
 ![](https://www.thingelstad.com/uploads/2018/b781552331.jpg)
 
-### [Saturday @ 9:09 PM](https://www.thingelstad.com/2018/09/22/hey-siri-loons.html)
+### [Saturday @ 9:09 PM](https://www.thingelstad.com/2018/09/22/minnesota-united-v.html)
 
 “Hey Siri, Loons win!” Cue Wonderwall! 🎧⚽️🙌 Great game #MNUFC! B🚫BBY for President!
 
-### [Saturday @ 8:03 PM](https://www.thingelstad.com/2018/09/22/stellar-first-half.html)
+### [Saturday @ 8:03 PM](https://www.thingelstad.com/2018/09/22/minnesota-united-v.html)
 
 Stellar first half from MN United #MNUFC to take a 3-0 lead v Portland Timbers! ⚽️🙌⚽️🙌⚽️🙌
 
 ![](https://www.thingelstad.com/uploads/2018/f9c017513e.jpg)
 
-### [Saturday @ 7:28 PM](https://www.thingelstad.com/2018/09/22/gorgeous-work-mnufc.html)
+### [Saturday @ 7:28 PM](https://www.thingelstad.com/2018/09/22/minnesota-united-v.html)
 
 Gorgeous work MNUFC to take lead 1-0! ⚽️👏🏻
 
@@ -382,11 +382,11 @@ Saturday morning soccer! ⚽️
 
 ![](https://www.thingelstad.com/uploads/2018/21a46b8961.jpg)
 
-### [Saturday @ 8:02 AM](https://www.thingelstad.com/2018/09/22/only-a-few.html)
+### [Saturday @ 8:02 AM](https://www.thingelstad.com/2018/09/22/072633.html)
 
 Only a few minutes into the “post home button” iOS experience and I can already see that the gesture interface is going to significantly increase my use of fast app switching.
 
-### [Saturday @ 7:26 AM](https://www.thingelstad.com/2018/09/22/upgrading-to-the.html)
+### [Saturday @ 7:26 AM](https://www.thingelstad.com/2018/09/22/072633.html)
 
 Upgrading to the new iPhone XS using iCloud Backup. First time I’ve done this not using iTunes local backup. 🤞🏻 Also letting it magically move my Apple Watch settings.
 

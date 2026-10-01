@@ -264,10 +264,10 @@ Unlocked Izel in Alto’s Odyssey and set a new record run. 👍🏻
 
 Nice home opener [win Minnesota United! 👏⚽️👏⚽️👏⚽️ Cue Wonderwall](https://www.youtube.com/watch?v=NigfEqrZ_IM) ! 👍
 
-[Saturday @ 2:33 PM](https://www.thingelstad.com/2018/03/17/wow-rapid-goals.html)
+[Saturday @ 2:33 PM](https://www.thingelstad.com/2018/03/17/nice-home-opener.html)
 
 Wow – 3 rapid goals leave #MNUFC leading 2-1! ⚽️
 
-[Saturday @ 2:23 PM](https://www.thingelstad.com/2018/03/17/goal-yeah-minnesota.html)
+[Saturday @ 2:23 PM](https://www.thingelstad.com/2018/03/17/nice-home-opener.html)
 
 GOAL!!! Yeah Minnesota United! #mnufc 1-0! ⚽️

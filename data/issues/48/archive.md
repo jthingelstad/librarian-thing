@@ -207,11 +207,11 @@ Went to [setup Cloudflare’s new 1.1.1.1 DNS service](https://1.1.1.1) [and it 
 
 [Visited the Michigan Avenue Apple Store](https://www.apple.com/retail/michiganavenue/) when we were in Chicago. Amazing architecture. The building feels invisible.
 
-[Friday @ 7:40 PM](https://www.thingelstad.com/2018/04/06/family-selfie-from.html)
+[Friday @ 7:40 PM](https://www.thingelstad.com/2018/04/06/193931.html)
 
 Family selfie from the [top of the John Hancock Tower](https://en.wikipedia.org/wiki/875_North_Michigan_Avenue) .
 
-[Friday @ 7:39 PM](https://www.thingelstad.com/2018/04/06/the-view-from.html)
+[Friday @ 7:39 PM](https://www.thingelstad.com/2018/04/06/193931.html)
 
 [The view from the 360 Chicago](http://www.360chicago.com) [deck on the John Hancock Tower](https://en.wikipedia.org/wiki/875_North_Michigan_Avenue) was incredible.
 
@@ -219,15 +219,15 @@ Family selfie from the [top of the John Hancock Tower](https://en.wikipedia.org/
 
 [The Thorne Miniature Rooms](http://www.artic.edu/aic/collections/thorne) at the Art Institute of Chicago are incredible. You can find detail in each one over and over.
 
-[Friday @ 2:28 PM](https://www.thingelstad.com/2018/04/06/192805.html)
+[Friday @ 2:28 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 [Chicago Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate) .
 
-[Friday @ 2:27 PM](https://www.thingelstad.com/2018/04/06/inside-the-chicago.html)
+[Friday @ 2:27 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 [Inside the Chicago Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate) .
 
-[Friday @ 2:26 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gatehttpsenwikipediaorgwikicloudgate.html)
+[Friday @ 2:26 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 [Chicago Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate) sculpture.
 

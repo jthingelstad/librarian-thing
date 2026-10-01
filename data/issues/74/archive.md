@@ -216,7 +216,7 @@ My Apple Watch has gotten very confused with 8 duplicates of all calendar events
 
 ![](https://www.thingelstad.com/uploads/2018/676d6a4c61.jpg)
 
-### [Monday @ 9:22 PM](https://www.thingelstad.com/2018/10/01/picked-up-my.html)
+### [Monday @ 9:22 PM](https://www.thingelstad.com/2018/10/01/picked-up-my-tesla-model.html)
 
 Picked up my Tesla Model 3 today! Wow!
 

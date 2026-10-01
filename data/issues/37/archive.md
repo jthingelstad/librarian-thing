@@ -113,8 +113,8 @@ Free 4/5 stars
 - [Nice start by the Vikings! 🏈](https://www.thingelstad.com/2018/01/14/nice-start-by.html)
 - [Espresso crema.](https://www.thingelstad.com/2018/01/14/espresso-crema.html)
 - New light hung! 💡 This is about the [extent of my handyman skills. 👷🏻‍♂️](https://www.thingelstad.com/2018/01/14/new-light-hung.html)
-- Pleased with my first go at Nordic Waffles! Tasted delicious. Kids liked them too. May cut the [cardamom back a touch next time.](https://www.thingelstad.com/2018/01/14/pleased-with-my.html)
-- Trying my hand at some Nordic Waffles this morning with the help [of Stine Aasland’s We Love Waffles!](https://www.thingelstad.com/2018/01/14/trying-my-hand.html)
+- Pleased with my first go at Nordic Waffles! Tasted delicious. Kids liked them too. May cut the [cardamom back a touch next time.](https://www.thingelstad.com/2018/01/14/073400.html)
+- Trying my hand at some Nordic Waffles this morning with the help [of Stine Aasland’s We Love Waffles!](https://www.thingelstad.com/2018/01/14/073400.html)
 - Went to Young Joni for dinner for the first time. 🍽 [Delicious food and amazing location. 👍🏻](https://www.thingelstad.com/2018/01/13/went-to-young.html)
 
 ## The end 🎬

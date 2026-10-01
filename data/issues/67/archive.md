@@ -281,13 +281,13 @@ Great day for #TeamSPS summer picnic! Thank you all for making SPS such an aweso
 
 ![](https://www.thingelstad.com/uploads/2018/b557db6898.jpg)
 
-### [Monday @ 10:47 PM](https://www.thingelstad.com/2018/08/13/but-for-now.html)
+### [Monday @ 10:47 PM](https://www.thingelstad.com/2018/08/13/214618.html)
 
 “… but for now it sounds like heaven.” Yes it does Jay, yes it does. 👍🏻 Thank you [for another great show Son Volt](http://sonvolt.net) ! 🎶
 
 ![](https://www.thingelstad.com/uploads/2018/f2d6a38a78.jpg)
 
-### [Monday @ 8:46 PM](https://www.thingelstad.com/2018/08/13/at-my-happy.html)
+### [Monday @ 8:46 PM](https://www.thingelstad.com/2018/08/13/214618.html)
 
 At my happy place 😊, listening [to Jay Farrar / Son Volt](http://sonvolt.net) at the Minnesota Zoo. 🎶
 

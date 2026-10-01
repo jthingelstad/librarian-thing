@@ -323,11 +323,11 @@ Monopoly “The .com Edition” can provide hours of entertainment just by looki
 
 ![](https://www.thingelstad.com/uploads/2018/68a92f15c4.jpg)
 
-### [Friday @ 7:17 PM](https://www.thingelstad.com/2018/11/16/back-in-minneapolis.html)
+### [Friday @ 7:17 PM](https://www.thingelstad.com/2018/11/16/050143.html)
 
 Back in Minneapolis! Luggage made it through the short transfer too! 👍🏻
 
-### [Friday @ 10:22 AM](https://www.thingelstad.com/2018/11/16/with-international-travel.html)
+### [Friday @ 10:22 AM](https://www.thingelstad.com/2018/11/16/050143.html)
 
 With international travel today, I’m happy [to have this weeks Weekly Thing](https://weekly.thingelstad.com) scheduled to go out tomorrow morning! 😊👍🏻
 
@@ -335,17 +335,17 @@ With international travel today, I’m happy [to have this weeks Weekly Thing](h
 
 I’m going to finally break, and submit to Adobe’s Creative Cloud Photography subscription (1 TB) and Lightroom CC. Sick of being stuck. 😕
 
-### [Friday @ 9:45 AM](https://www.thingelstad.com/2018/11/16/made-my-ams.html)
+### [Friday @ 9:45 AM](https://www.thingelstad.com/2018/11/16/050143.html)
 
 Made my AMS connection. Took 17 min to get from E4, through security, back to main terminal, and finally back to E8! ✈️👍🏻😎
 
-### [Friday @ 6:15 AM](https://www.thingelstad.com/2018/11/16/first-step-we.html)
+### [Friday @ 6:15 AM](https://www.thingelstad.com/2018/11/16/050143.html)
 
 First step, we have an airplane! Going to need everything to go perfect, along with some luck, to make my connection. And run! RUN! 🏃🏼‍♂️🍀✈️
 
 ![](https://www.thingelstad.com/uploads/2018/9ca6171c26.jpg)
 
-### [Friday @ 5:01 AM](https://www.thingelstad.com/2018/11/16/not-good-flight.html)
+### [Friday @ 5:01 AM](https://www.thingelstad.com/2018/11/16/050143.html)
 
 Not good, flight out of KBP is delayed and I now land in AMS when my connecting flight to MSP takes off. Hoping for magic. 🤞🏻
 

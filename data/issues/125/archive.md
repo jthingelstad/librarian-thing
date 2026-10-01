@@ -202,15 +202,15 @@ Looks like we are a new show at the Brave New Workshop! 🤩
 
 ⚾️💥🤩
 
-### [Sunday @ 3:09 PM](https://www.thingelstad.com/2019/11/03/hitting-balls-at.html)
+### [Sunday @ 3:09 PM](https://www.thingelstad.com/2019/11/03/160928.html)
 
 Hitting [balls at Batting Cages of Minnesota](http://www.battingcagesofmn.com) ! ⚾️🙌
 
-### [Saturday @ 10:11 PM](https://www.thingelstad.com/2019/11/02/enjoyed-open-mike.html)
+### [Saturday @ 10:11 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
 [Enjoyed Open Mike Eagle](http://mikeeagle.net) at the Wits Reunion show tonight. Recommend checking out his music. 🎶
 
-### [Saturday @ 8:04 PM](https://www.thingelstad.com/2019/11/02/at-the-wits.html)
+### [Saturday @ 8:04 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
 At the Wits Reunion show at the Fitzgerald!
 

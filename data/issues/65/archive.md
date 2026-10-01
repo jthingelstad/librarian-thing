@@ -227,23 +227,23 @@ These Beanie Boos keep multiplying. 😳
 
 ![](https://cdn.uploads.micro.blog/890/2018/ccbb3aa9d5.jpg)
 
-### [Tuesday @ 7:50 PM](https://www.thingelstad.com/2018/07/31/international-champions-cup.html)
+### [Tuesday @ 7:50 PM](https://www.thingelstad.com/2018/07/31/194646.html)
 
 [International Champions Cup](https://www.internationalchampionscup.com) soccer ⚽️ at US Bank Stadium.
 
-### [Tuesday @ 7:46 PM](https://www.thingelstad.com/2018/07/31/tottenham-hotspur-v.html)
+### [Tuesday @ 7:46 PM](https://www.thingelstad.com/2018/07/31/194646.html)
 
 ⚽️ Tottenham Hotspur v AC Milan at US Bank Stadium tonight! 🙌🏻
 
-### [Monday @ 10:08 PM](https://www.thingelstad.com/2018/07/30/twins-win.html)
+### [Monday @ 10:08 PM](https://www.thingelstad.com/2018/07/30/192656.html)
 
 Twins win! ⚾️
 
-### [Monday @ 8:36 PM](https://www.thingelstad.com/2018/07/30/nice-sunset-hitting.html)
+### [Monday @ 8:36 PM](https://www.thingelstad.com/2018/07/30/192656.html)
 
 Nice sunset hitting downtown Minneapolis from Target Field.
 
-### [Monday @ 7:26 PM](https://www.thingelstad.com/2018/07/30/twins-v-indians.html)
+### [Monday @ 7:26 PM](https://www.thingelstad.com/2018/07/30/192656.html)
 
 Twins v Indians tonight! ⚾️
 

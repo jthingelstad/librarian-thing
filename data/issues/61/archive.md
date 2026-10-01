@@ -440,19 +440,19 @@ It’s amazing to be able to listen to new John Coltrane [music. Enjoying Both D
 
 ![](https://cdn.uploads.micro.blog/890/2018/665f4849f4.jpg)
 
-### [Friday @ 9:54 PM](https://www.thingelstad.com/2018/06/29/its-totally-cheating.html)
+### [Friday @ 9:54 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 It’s totally [cheating but I listened to Wonderwall](https://www.dark-clouds.com/2017/03/93535/) on the way home and I felt better. ⚽️ Next time Minnesota United! #mnufc 🙌🏻
 
-### [Friday @ 8:45 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-cant.html)
+### [Friday @ 8:45 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 Minnesota United can’t find the back, front, side or any other part of the net tonight. ⚽️😭 #mnufc
 
-### [Friday @ 7:28 PM](https://www.thingelstad.com/2018/06/29/002848.html)
+### [Friday @ 7:28 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 Family selfie at Minnesota United FC soccer game! ⚽️ Too hot for scarves tonight! 94° F 🔥 #mnufc #MINvDAL
 
-### [Friday @ 7:21 PM](https://www.thingelstad.com/2018/06/29/002112.html)
+### [Friday @ 7:21 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 [Time for some Minnesota United FC](https://www.mnufc.com) v FC Dallas soccer! ⚽️
 

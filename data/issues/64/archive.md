@@ -260,23 +260,23 @@ I made a Workflow in iOS that pulls a specific budget [amount for me from YNAB�
 
 Biked into work today! 🚲 Two weeks makes the start of a streak.
 
-### [Sunday @ 7:50 PM](https://www.thingelstad.com/2018/07/22/family-having-a.html)
+### [Sunday @ 7:50 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Family having a great time at #MNUFC match, except Tyler who is cheering for LAFC for some reason. ⚽️ 5-1 #MINvLAFC
 
-### [Sunday @ 7:26 PM](https://www.thingelstad.com/2018/07/22/ibarra-ramirez-mnufc.html)
+### [Sunday @ 7:26 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Ibarra! Ramirez! #MNUFC goes 5-1! ⚽️🙌🏻 #MINvLAFC
 
-### [Sunday @ 7:02 PM](https://www.thingelstad.com/2018/07/22/great-first-half.html)
+### [Sunday @ 7:02 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Great first half MNUFC! Top notch play! 3-1! #mnufc #MINvLAFC
 
-### [Sunday @ 6:35 PM](https://www.thingelstad.com/2018/07/22/totally-amazing-gorgeous.html)
+### [Sunday @ 6:35 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Totally amazing, gorgeous goal from MN United! Then neutralized in 60 seconds with an answer from LAFC. 1-1 ⚽️ #mnufc #MINvLAFC
 
-### [Sunday @ 6:31 PM](https://www.thingelstad.com/2018/07/22/233148.html)
+### [Sunday @ 6:31 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Great start to MN United v LAFC! Some serious soccer! ⚽️ #MNUFC #MINvLAFC
 
@@ -298,11 +298,11 @@ Clocks.
 
 ![](https://cdn.uploads.micro.blog/890/2018/67382a4687.jpg)
 
-### [Friday @ 8:26 AM](https://www.thingelstad.com/2018/07/20/new-motor-and.html)
+### [Friday @ 8:26 AM](https://www.thingelstad.com/2018/07/20/071111.html)
 
 New motor and some related parts [on the way from Chris’ Coffee](https://www.chriscoffee.com) to repair my espresso machine. The technicians at Chris’ Coffee are incredibly knowledgable and patient. 🌟
 
-### [Friday @ 7:11 AM](https://www.thingelstad.com/2018/07/20/pulled-the-lever.html)
+### [Friday @ 7:11 AM](https://www.thingelstad.com/2018/07/20/071111.html)
 
 Pulled the lever to make espresso this morning and to my shock and horror realized the pump in my Andreja Premium Evo has died! 😱
 

@@ -231,7 +231,7 @@ My [coffee subscription](https://paircupworks.com/products/copy-of-monthly-coffe
 
 ![](https://files.thingelstad.com/weekly-thing/303/journal/b91c6fdf3f.jpg)
 
-[Nov 22, 2024 at 10:17 PM](https://www.thingelstad.com/2024/11/22/added-the-bullfrog.html)
+[Nov 22, 2024 at 10:17 PM](https://www.thingelstad.com/2024/11/23/added-the-bullfrog-x-hot.html)
 
 Added the [Bullfrog X8](https://www.bullfrogspas.com/spas/x-series-hot-tubs/x8/) hot tub to pair with the [Urban Wing](https://urbanwing.com/pages/sauna) sauna. Happened to get it installed on the [10th anniversary](https://www.thingelstad.com/2014/11/22/magic-pines.html) of signing the purchase agreement for Magic Pines. Looking forward to some delightful time this winter! 🌨️ Now to get everything ready to use!
 

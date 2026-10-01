@@ -182,47 +182,47 @@ Neat program to route stdin and stdout to an external process and make it access
 
 ## Microposts 🎈
 
-### [Wednesday @ 8:30 PM](https://www.thingelstad.com/2019/01/30/over-members-of.html)
+### [Wednesday @ 8:30 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Over 50 members of #TeamSPS Tech shared demos, milestones, learnings, and upcoming plans today. It was incredible to see how we are continuing to advance! Great tech organizations are learning organizations, and we learn fast! I am humbled to be surrounded by so much talent!
 
-### [Wednesday @ 7:54 PM](https://www.thingelstad.com/2019/01/30/hashtags-irl-spstech.html)
+### [Wednesday @ 7:54 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Hashtags IRL! #SPSTech #TeamSPS Should have gotten this before the Hors d’ouevre’s were cashed!
 
-### [Wednesday @ 7:52 PM](https://www.thingelstad.com/2019/01/30/how-do-you.html)
+### [Wednesday @ 7:52 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 How do you wrap up the #TeamSPS [Tech Summit for 2019? Trivia Mafia](https://www.triviamafia.com) !
 
-### [Wednesday @ 7:49 PM](https://www.thingelstad.com/2019/01/30/time-to-socialize.html)
+### [Wednesday @ 7:49 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Time to socialize and mingle for #TeamSPS Tech!
 
-### [Wednesday @ 7:46 PM](https://www.thingelstad.com/2019/01/30/we-finished-the.html)
+### [Wednesday @ 7:46 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 We finished the fourth session of #TeamSPS Tech Summit 2019 with more service team wins! 🙌🥳🏆
 
-### [Wednesday @ 2:39 PM](https://www.thingelstad.com/2019/01/30/fabulous-third-session.html)
+### [Wednesday @ 2:39 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Fabulous third session for #TeamSPS Tech Summit 2019! Service team wins all over the place! 🙌
 
-### [Wednesday @ 2:15 PM](https://www.thingelstad.com/2019/01/30/worryasaservice-cloud-database.html)
+### [Wednesday @ 2:15 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 “Worry-as-a-Service” 🤣 Cloud database engineering managing hundreds of distributed databases for #TeamSPS
 
-### [Wednesday @ 11:37 AM](https://www.thingelstad.com/2019/01/30/great-highlights-from.html)
+### [Wednesday @ 11:37 AM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Great highlights from more teams at #TeamSPS 2019 Tech Summit! Security, Australian Team, Career Paths, Tech Patterns & Frameworks!
 
-### [Wednesday @ 10:26 AM](https://www.thingelstad.com/2019/01/30/great-start-to.html)
+### [Wednesday @ 10:26 AM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Great start to our #TeamSPS 2019 Tech Summit with sessions from Jim Frome, Dan Juckniess, and Karin Lucas!
 
-### [Wednesday @ 7:39 AM](https://www.thingelstad.com/2019/01/30/yesterdays-rehearsal-for.html)
+### [Wednesday @ 7:39 AM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 Yesterday’s rehearsal for #TeamSPS Tech Summit 2019! Excited for a great day, braving the Bold North’s -20F! 🙌🔥🥶
 
-### [Wednesday @ 7:37 AM](https://www.thingelstad.com/2019/01/30/view-from-the.html)
+### [Wednesday @ 7:37 AM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
 View from the control room as we get ready to start #TeamSPS Tech Summit 2019!
 

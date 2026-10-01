@@ -347,7 +347,7 @@ Tammy and I had a great time exploring New York, and getting plenty of steps in,
 
 ![](https://cdn.uploads.micro.blog/890/2023/2420a1fc89.png)
 
-[Friday @ 11:34 AM](https://www.thingelstad.com/2023/04/21/gorgeous-day-to.html)
+[Friday @ 11:34 AM](https://www.thingelstad.com/2023/04/21/gorgeous-day-to-enjoy-a.html)
 
 Gorgeous day to enjoy a walk along the [High Line](https://www.thehighline.org) in Manhattan. Just one month after [Tyler and I walked it](https://www.thingelstad.com/2023/03/20/we-finished-our.html) and the everything was so much greener and some flowers were showing. Walking the High Line is now a tradition for any trip to New York!
 

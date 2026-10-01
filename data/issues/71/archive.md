@@ -274,7 +274,7 @@ I’m “geekily” [excited to get my Anki Vector](https://www.anki.com/en-us/v
 
 The iPhone Xs is going to be a great upgrade from my iPhone 7. 📱 The Apple Watch Series 4 is enough of a jump to make me consider upgrading my Series 3. ⌚️
 
-### [Sunday @ 6:05 PM](https://www.thingelstad.com/2018/09/09/quest-for-bingo.html)
+### [Sunday @ 6:05 PM](https://www.thingelstad.com/2018/09/09/bingo-at-stanleys.html)
 
 Quest for Bingo Blackout victory thwarted again! ☹️
 
@@ -282,7 +282,7 @@ Quest for Bingo Blackout victory thwarted again! ☹️
 
 ![](https://www.thingelstad.com/uploads/2018/2bc0f495de.jpg)
 
-### [Sunday @ 5:04 PM](https://www.thingelstad.com/2018/09/09/220452.html)
+### [Sunday @ 5:04 PM](https://www.thingelstad.com/2018/09/09/bingo-at-stanleys.html)
 
 [Bingo at Stanley’s](https://www.stanleysbarroom.com) !
 

@@ -241,15 +241,15 @@ I think a lot about digital tracking and privacy online. It worries me greatly a
 
 ## Microblog updates 🎈
 - [Dan Wilson hinting at new Semisonic album? New song “Basement Tapes” sounds great!](http://www.thingelstad.com/2017/06/17/dan-wilson-hinting.html)
-- [Semisonic - FNT!](http://www.thingelstad.com/2017/06/17/030009.html)
-- [It’s amazing how many bands are still playing from the 90’s. Pixies. Dinosaur Jr. many others.](http://www.thingelstad.com/2017/06/17/its-amazing-how.html)
-- [Cool to have Jeremy Messersmith open for Semisonic. His voice reminds me of Dan Wilson.](http://www.thingelstad.com/2017/06/17/cool-to-have.html)
+- [Semisonic - FNT!](https://www.thingelstad.com/2017/06/17/excited-to-see.html)
+- [It’s amazing how many bands are still playing from the 90’s. Pixies. Dinosaur Jr. many others.](https://www.thingelstad.com/2017/06/17/excited-to-see.html)
+- [Cool to have Jeremy Messersmith open for Semisonic. His voice reminds me of Dan Wilson.](https://www.thingelstad.com/2017/06/17/excited-to-see.html)
 - [Excited to see Semisonic playing Great Divide tonight!](http://www.thingelstad.com/2017/06/17/excited-to-see.html)
 - [Minnehaha creek tonight.](http://www.thingelstad.com/2017/06/16/minnehaha-creek-tonight.html)
 - [Last day of school for both kids, last day of T-Ball and Daughters birthday to boot. busy](http://www.thingelstad.com/2017/06/15/last-day-of.html)
 - [Withings getting acquired, and the brand merging in with Nokia, makes me worry about my Withings products. 😕](http://www.thingelstad.com/2017/06/15/withings-getting-acquired.html)
 - [Looking up.](http://www.thingelstad.com/2017/06/14/014059.html)
-- [Asparagus too for the steak. Big Green Egg makes everything delicious.](http://www.thingelstad.com/2017/06/10/asparagus-too-for.html)
+- [Asparagus too for the steak. Big Green Egg makes everything delicious.](https://www.thingelstad.com/2017/06/10/beef-tenderloin-on.html)
 - [Beef tenderloin on the Big Green Egg tonight.](http://www.thingelstad.com/2017/06/10/beef-tenderloin-on.html)
 - [Put the archive of the Open Loop podcast that @garrickvanburen and I did in 2012 back online. Fun stuff. Lot’s of Kubb. 👍🏻](http://www.thingelstad.com/2017/06/10/put-the-archive.html)
 ## The end 🎬

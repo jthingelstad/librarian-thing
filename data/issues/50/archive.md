@@ -208,15 +208,15 @@ St Volodymyr’s Cathedral in Kyiv, Ukraine.
 
 [tag](https://duckduckgo.com/?q=01110100+01100001+01100111)
 
-[Friday @ 4:27 AM](https://www.thingelstad.com/2018/04/20/time-to-head.html)
+[Friday @ 4:27 AM](https://www.thingelstad.com/2018/04/19/time-to-head.html)
 
 Time to head home! Successful 8th trip to Kyiv to visit #TeamSPS! 🛫
 
-[Friday @ 4:15 AM](https://www.thingelstad.com/2018/04/20/just-preordered-blocker.html)
+[Friday @ 4:15 AM](https://www.thingelstad.com/2018/04/19/just-preordered-blocker.html)
 
 [Just preordered 1Blocker X](https://itunes.apple.com/us/app/1blocker-x/id1365531024?mt=8) . I rely on 1Blocker to keep me protected on the web. I use it on all my devices.
 
-[Friday @ 3:52 AM](https://www.thingelstad.com/2018/04/20/ive-never-understood.html)
+[Friday @ 3:52 AM](https://www.thingelstad.com/2018/04/19/ive-never-understood.html)
 
 I’ve never understood why people wrap their luggage. I see this mostly on international travel. Turns out it’s mainly to prevent tampering! Why would [you wrap your luggage in plastic?](https://travel.stackexchange.com/questions/3220/why-would-you-wrap-your-luggage-in-plastic)
 
@@ -228,7 +228,7 @@ I’ve never understood why people wrap their luggage. I see this mostly on inte
 
 My collection of travel cables is bonkers. 😬
 
-[Thursday @ 6:51 AM](https://www.thingelstad.com/2018/04/19/morning-in-kiev.html)
+[Thursday @ 6:51 AM](https://www.thingelstad.com/2018/04/18/morning-in-kiev.html)
 
 Morning in Kiev, Ukraine.
 
@@ -248,23 +248,23 @@ Sunrise draping through Paris Charles de Gaulle Airport this morning.
 
 Heading to Kiev to visit #TeamSPS! ✈️ MSP - CDG - KBP
 
-[Monday @ 5:15 AM](https://www.thingelstad.com/2018/04/16/enjoyed-darkest-hourhttpsimdbcomtitlett.html)
+[Monday @ 5:15 AM](https://www.thingelstad.com/2018/04/15/enjoyed-darkest-hourhttpsimdbcomtitlett.html)
 
 [Enjoyed Darkest Hour](https://imdb.com/title/tt4555426/) . 🎬
 
-[Monday @ 12:10 AM](https://www.thingelstad.com/2018/04/16/it-is-still.html)
+[Monday @ 12:10 AM](https://www.thingelstad.com/2018/04/15/it-is-still.html)
 
 🌨 It is still snowing in Minneapolis. 🤦‍♂️ I am flying to Ukraine 🇺🇦 tomorrow and will be enjoying the actual Spring weather!
 
-[Sunday @ 7:22 PM](https://www.thingelstad.com/2018/04/15/model-trains-are.html)
+[Sunday @ 7:22 PM](https://www.thingelstad.com/2018/04/15/120105.html)
 
 Model trains are always fun. Tyler and I are running the train yard today. Z-Scale is hard though.
 
-[Sunday @ 7:01 PM](https://www.thingelstad.com/2018/04/15/snow-day-seems.html)
+[Sunday @ 7:01 PM](https://www.thingelstad.com/2018/04/15/120105.html)
 
 Snow day seems like a good day to get the Z-Scale train out.
 
-[Sunday @ 6:59 PM](https://www.thingelstad.com/2018/04/15/cleared-three-neighbors.html)
+[Sunday @ 6:59 PM](https://www.thingelstad.com/2018/04/15/094726.html)
 
 Cleared three neighbors driveways out with my snowblower. Building karma points today. 👍🏻
 
@@ -272,7 +272,7 @@ Cleared three neighbors driveways out with my snowblower. Building karma points 
 
 With all the amazing capabilities of the iPhone camera system, it still can’t expose snow properly. I have to up the exposure on all of them. Perhaps Apple needs some camera engineers that don’t live in California.
 
-[Sunday @ 4:47 PM](https://www.thingelstad.com/2018/04/15/well-over-a.html)
+[Sunday @ 4:47 PM](https://www.thingelstad.com/2018/04/15/094726.html)
 
 Well over a foot of snow to deal this morning. Heavy too with the warm temperatures recently. Had to go at the slowest speed.
 
@@ -280,14 +280,14 @@ Well over a foot of snow to deal this morning. Heavy too with the warm temperatu
 
 [My friend @dangrigsby](https://micro.blog/dangrigsby) is newly on [micro.blog — you should follow him](https://micro.blog/dangrigsby) ! 👍
 
-[Sunday @ 1:02 AM](https://www.thingelstad.com/2018/04/15/planning-to-just.html)
+[Sunday @ 1:02 AM](https://www.thingelstad.com/2018/04/14/planning-to-just.html)
 
 Planning to just let the snow keep falling, and get completely snowed in until tomorrow morning, then I’ll get the snowblower out. Seems like time for family movie night! 🍿
 
-[Sunday @ 12:07 AM](https://www.thingelstad.com/2018/04/15/minnebar-lunch-panorama.html)
+[Sunday @ 12:07 AM](https://www.thingelstad.com/2018/04/14/minnebar-lunch-panorama.html)
 
 Minnebar lunch panorama.
 
-[Sunday @ 12:05 AM](https://www.thingelstad.com/2018/04/15/people-flying-their.html)
+[Sunday @ 12:05 AM](https://www.thingelstad.com/2018/04/14/people-flying-their.html)
 
 People flying their drones through VR goggles looks kind of creepy. 😬

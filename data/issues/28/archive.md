@@ -196,8 +196,8 @@ https://creativecommons.org
 ## Microblog updates 🎈
 
 - Micro.blog Photo Challenge, Day 7: Shadow. Einstein. /cc @douglane [→](http://www.thingelstad.com/2017/11/17/021039.html)
-- Hanging with @pbacken at #TeamSPS “Hop To It” Brew Off! [→](http://www.thingelstad.com/2017/11/16/hanging-with-pbackenhttpsmicroblogpbacken.html)
-- Fun (and cold!) #TeamSPS Brew Off today. Tailgate style! [→](http://www.thingelstad.com/2017/11/16/fun-and-cold.html)
+- Hanging with @pbacken at #TeamSPS “Hop To It” Brew Off! [→](https://www.thingelstad.com/2017/11/16/teamsps-brew-off.html)
+- Fun (and cold!) #TeamSPS Brew Off today. Tailgate style! [→](https://www.thingelstad.com/2017/11/16/teamsps-brew-off.html)
 - Micro.blog Photo Challenge, Day 6: Seasonal. /cc @douglane [→](http://www.thingelstad.com/2017/11/16/001031.html)
 - Excited for tomorrow’s #TeamSPS Brew Off! Part of our annual United Way campaign. Give back! [→](http://www.thingelstad.com/2017/11/15/excited-for-tomorrows.html)
 - Micro.blog Photo Challenge, Day 5: Liquid. CO2! /cc @douglanr [→](http://www.thingelstad.com/2017/11/15/012043.html)
@@ -205,9 +205,9 @@ https://creativecommons.org
 - Micro.blog Photo Challenge, Day 3: On The Move! /cc @douglane [→](http://www.thingelstad.com/2017/11/13/234858.html)
 - Got my photography site back online. Still cleanup to do, but fun to see some of my favorite images. [→](http://www.thingelstad.com/2017/11/12/got-my-photography.html)
 - Photo Challenge Day 2: Tasty! Smoking pork belly for bacon! /cc @douglane [→](http://www.thingelstad.com/2017/11/12/191007.html)
-- After putting more complicated theme in Hugo takes 5.2 sec for 9,970 pages. Still a speed demon. [→](http://www.thingelstad.com/2017/11/11/after-putting-more.html)
-- Hugo seems like it would be superior for my website needs in every way. May need to dig in and make it happen. [→](http://www.thingelstad.com/2017/11/11/hugohttpsgohugoio-seems-like.html)
-- Hugo just generated 8,173 pages in 2.4 seconds. Jekyll takes around 500 seconds to do similar. Whoa. 🤯 [→](http://www.thingelstad.com/2017/11/11/hugo-just-generated.html)
+- After putting more complicated theme in Hugo takes 5.2 sec for 9,970 pages. Still a speed demon. [→](https://www.thingelstad.com/2017/11/11/145246.html)
+- Hugo seems like it would be superior for my website needs in every way. May need to dig in and make it happen. [→](https://www.thingelstad.com/2017/11/11/145246.html)
+- Hugo just generated 8,173 pages in 2.4 seconds. Jekyll takes around 500 seconds to do similar. Whoa. 🤯 [→](https://www.thingelstad.com/2017/11/11/145246.html)
 - Photo Challenge Day 1: Squares /cc @douglane [→](http://www.thingelstad.com/2017/11/11/193440.html)
 - Went to a Bat Mitzvah for the first time today and was taken at the beauty of the ceremony! [→](http://www.thingelstad.com/2017/11/11/went-to-a.html)
 

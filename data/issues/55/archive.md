@@ -242,19 +242,19 @@ Getting rid of some old cables. 😳
 
 Had a fun time [recording an interview with Matt Norman](http://www.mattnorman.com) [(@MattNorman) today for his Humble Leadership](http://www.mattnorman.com/category/humble-leadership-profiles/) series. 📹
 
-### [Tuesday @ 8:34 PM](https://www.thingelstad.com/2018/05/22/kramarczuks-polish-sausage.html)
+### [Tuesday @ 8:34 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 [Kramarczuk’s](https://www.kramarczuks.com) Polish sausage with sauerkraut! Delicious – must have at Target Field. ⚾️
 
-### [Tuesday @ 8:18 PM](https://www.thingelstad.com/2018/05/22/panorama-of-target.html)
+### [Tuesday @ 8:18 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Panorama of Target Field. ⚾️
 
-### [Tuesday @ 8:03 PM](https://www.thingelstad.com/2018/05/22/enjoying-a-perfect.html)
+### [Tuesday @ 8:03 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Enjoying a perfect night for baseball! ⚾️
 
-### [Tuesday @ 7:12 PM](https://www.thingelstad.com/2018/05/22/minnesota-twins-v.html)
+### [Tuesday @ 7:12 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Minnesota Twins v Detroit Tigers! ⚾️
 
@@ -276,7 +276,7 @@ Afternoon coffee flight – macchiato with cappuccino at Cafe Umbria. ☕️
 
 ![](https://cdn.uploads.micro.blog/890/2018/8dadb1619a.jpg)
 
-### [Sunday @ 3:40 PM](https://www.thingelstad.com/2018/05/20/white-sox-beat.html)
+### [Sunday @ 3:40 PM](https://www.thingelstad.com/2018/05/20/131223.html)
 
 White Sox beat Texas Rangers 3-0! ⚾️🙌 Nice game!
 
@@ -308,11 +308,11 @@ Chicago skyline.
 
 ![](https://cdn.uploads.micro.blog/890/2018/c3f8a9f17b.jpg)
 
-### [Sunday @ 2:06 PM](https://www.thingelstad.com/2018/05/20/time-for-lunch.html)
+### [Sunday @ 2:06 PM](https://www.thingelstad.com/2018/05/20/131223.html)
 
 Time for lunch. Sox leading 3-0! 👍🏻⚾️
 
-### [Sunday @ 1:12 PM](https://www.thingelstad.com/2018/05/20/white-sox-v.html)
+### [Sunday @ 1:12 PM](https://www.thingelstad.com/2018/05/20/131223.html)
 
 White Sox v Texas Rangers! ⚾️
 

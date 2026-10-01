@@ -229,55 +229,55 @@ Addictive software.
 
 ## Microposts 🎈
 
-### [Wednesday @ 5:02 PM](https://www.thingelstad.com/2018/05/16/220235.html)
+### [Wednesday @ 5:02 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Time for some fun socializing for #TeamSPS at #SPSTechJam! 🍻
 
-### [Wednesday @ 4:36 PM](https://www.thingelstad.com/2018/05/16/not-sure-about.html)
+### [Wednesday @ 4:36 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Not sure about the @optimuspaul sticker in the lower right. 😳
 
-### [Wednesday @ 4:26 PM](https://www.thingelstad.com/2018/05/16/another-great-teamsps.html)
+### [Wednesday @ 4:26 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Another great #TeamSPS #SPSTechJam! Wonderful topics, great speakers and an amazing team! 🙌🏆
 
-### [Wednesday @ 4:07 PM](https://www.thingelstad.com/2018/05/16/at-sps-it.html)
+### [Wednesday @ 4:07 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [“At SPS it might be Kube](https://kubernetes.io) [or Kubb](https://en.wikipedia.org/wiki/Kubb) [!” Kelly Hamm](https://www.linkedin.com/in/hammkelly/) [at SumoLogic](https://www.sumologic.com) knows #TeamSPS — and thanks for the Kubb set!
 
-### [Wednesday @ 3:07 PM](https://www.thingelstad.com/2018/05/16/i-left-my.html)
+### [Wednesday @ 3:07 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 I left my iPad at my seat while stepping away and #TeamSPS security was on the job with a good reminder! 🔐
 
-### [Wednesday @ 3:02 PM](https://www.thingelstad.com/2018/05/16/women-in-tech.html)
+### [Wednesday @ 3:02 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Women in Tech sharing with #TeamSPS the great work they are leading! 🙌🏆 #SPSTechJam
 
-### [Wednesday @ 1:55 PM](https://www.thingelstad.com/2018/05/16/afternoon-sessions-for.html)
+### [Wednesday @ 1:55 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Afternoon sessions for #SPSTechJam. 🙌🏆
 
-### [Wednesday @ 11:40 AM](https://www.thingelstad.com/2018/05/16/evolutionary-architecture-kotlin.html)
+### [Wednesday @ 11:40 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [Evolutionary architecture](http://evolutionaryarchitecture.com), [Kotlin](https://kotlinlang.org), and [GraphQL](http://graphql.org). Great 2nd half of the morning at #SPSTechJam! 🙌🏆
 
-### [Wednesday @ 11:29 AM](https://www.thingelstad.com/2018/05/16/today-we-have.html)
+### [Wednesday @ 11:29 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Today we have people from United States 🇺🇸 (multiple cities), Ukraine 🇺🇦, Canada 🇨🇦, India 🇮🇳 and Bulgaria 🇧🇬 with #TeamSPS and partners here in Minneapolis. Global! 🌏
 
-### [Wednesday @ 10:27 AM](https://www.thingelstad.com/2018/05/16/great-teamsps-speakers.html)
+### [Wednesday @ 10:27 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Great #TeamSPS speakers at #SPSTechJam! Thank you for sharing! 🙌🏆
 
-### [Wednesday @ 8:52 AM](https://www.thingelstad.com/2018/05/16/bridget-kromhout-bridgetkromhout.html)
+### [Wednesday @ 8:52 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [Bridget Kromhout](https://bridgetkromhout.com) @bridgetkromhout getting #SPSTechJam started off! Computers are easy, people are hard! 👏
 
-### [Wednesday @ 8:49 AM](https://www.thingelstad.com/2018/05/16/a-huge-thank.html)
+### [Wednesday @ 8:49 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 A huge thank you to the #TeamSPS TechJam event organizers! 👏 Your passion and drive make us a better team! #SPSTechJam
 
-### [Wednesday @ 7:11 AM](https://www.thingelstad.com/2018/05/16/today-is-our.html)
+### [Wednesday @ 7:11 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Today is our annual #TeamSPS TechJam event bringing the global SPS technology team together to learn, share, and have fun. The agenda is packed with over two dozen presenters. Automation, GraphQL, Containers, Architecture and more on the agenda! 🙌🏆 #SPSTechJam
 
@@ -319,23 +319,23 @@ Learned that you cannot make whipped cream in an ice cream maker bowl. 🤦🏼�
 
 I like the augmented memory effect I get when adding a link to Pinboard and it tells me I previously saved the link – multiple years ago. 🤓
 
-### [Saturday @ 3:06 PM](https://www.thingelstad.com/2018/05/12/sj-quakes-remember.html)
+### [Saturday @ 3:06 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 SJ Quakes - remember to send a nice Thank You to the Yellow Team for the win. Next time #MNUFC! ⚽️😡
 
-### [Saturday @ 1:36 PM](https://www.thingelstad.com/2018/05/12/gorgeous-goal-from.html)
+### [Saturday @ 1:36 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 Gorgeous goal from Ramirez to bring #MNUFC to 1-1 with SJ. ⚽️ Yellow team is horrible.
 
-### [Saturday @ 1:13 PM](https://www.thingelstad.com/2018/05/12/goal-for-the.html)
+### [Saturday @ 1:13 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 Goal for the Yellow Team to give San Jose early lead! 😡⚽️ #MNUFC
 
-### [Saturday @ 1:12 PM](https://www.thingelstad.com/2018/05/12/mn-united-mnufc.html)
+### [Saturday @ 1:12 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 MN United #MNUFC game time! ⚽️
 
-### [Saturday @ 12:23 PM](https://www.thingelstad.com/2018/05/12/ready-for-mn.html)
+### [Saturday @ 12:23 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 Ready for MN United game! ⚽️👏🏻
 

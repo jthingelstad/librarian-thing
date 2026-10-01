@@ -119,10 +119,10 @@ https://archive.org
 - I 💙 this! #TeamSPS slide to highlight my disdain for pie charts. 😁 The exploded slices are a great touch! I’ll stick [to pie you eat, thanks. 🥧](https://www.thingelstad.com/2017/12/17/i-this-teamsps.html)
 - We went to Martina for the first time last night and I was very impressed! The space is great and we got to sit right by the kitchen and watch the woodfire grill being stoked. We started with the Crab Cakes which were amazing. Then we had the Pork Chop Pizzaiola and Fusilli with Lamb Shoulder for the main and both were fabulous. The Panqueque dessert was delicious. The meal didn’t cost an arm and a leg and they even have a kids menu and mocktails, which we will likely try out next time [when we bring the whole family.](https://www.thingelstad.com/2017/12/17/martina-restaurant.html)
 - Tammy and I went to see Lady Bird last night. It was really good and I liked it a lot, despite my [bias against coming of age stories.](https://www.thingelstad.com/2017/12/17/tammy-and-i.html)
-- [Semisonic at First Ave! 👏🏻👏🏻👏🏻](https://www.thingelstad.com/2017/12/16/semisonic-at-first.html)
-- [Excited for tonight’s Semisonic show!](https://www.thingelstad.com/2017/12/16/excited-for-tonights.html)
-- Snowy [field along the Northstar Train route.](https://www.thingelstad.com/2017/12/16/snowy-field-along.html)
-- Afternoon father-son excursion on the Northstar Train [to Big Lake and back. 👨‍👦🚆](https://www.thingelstad.com/2017/12/16/afternoon-fatherson-excursion.html)
+- [Semisonic at First Ave! 👏🏻👏🏻👏🏻](https://www.thingelstad.com/2017/12/16/204420.html)
+- [Excited for tonight’s Semisonic show!](https://www.thingelstad.com/2017/12/16/204420.html)
+- Snowy [field along the Northstar Train route.](https://www.thingelstad.com/2017/12/16/113506.html)
+- Afternoon father-son excursion on the Northstar Train [to Big Lake and back. 👨‍👦🚆](https://www.thingelstad.com/2017/12/16/113506.html)
 
 ## The end 🎬
 

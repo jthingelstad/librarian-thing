@@ -19,14 +19,28 @@ skipped, so re-running after new content only pays for new images. A
 permanent per-URL failure is recorded with an `error` so it is not retried
 forever; delete its entry to retry.
 
+The normal pass hands the API each image by URL, and the API refuses large
+or unusual files (a 7 MB TIFF served as image/jpeg, a HEIC) with a bare 400.
+`--retry-errors` fetches each failed image itself, converts anything the API
+won't take (HEIC, WebP, TIFF, longer than 1,568 px, over 5 MB) to JPEG, and
+sends it inline. What still fails gets a precise error: fetch_404,
+fetch_403, fetch_error, decode_error or api_400. Because nothing here sends
+the API a URL, this mode also takes the images the normal pass never tried:
+http:// ones (fetched over https first) and hosts outside the allowlist.
+Their sidecar key stays the URL exactly as the corpus has it.
+
     uv run --locked python pipeline/corpus/describe_media.py --dry-run
     uv run --locked python pipeline/corpus/describe_media.py
     uv run --locked python pipeline/corpus/describe_media.py --limit 20
+    uv run --locked python pipeline/corpus/describe_media.py --retry-errors --dry-run
+    uv run --locked python pipeline/corpus/describe_media.py --retry-errors
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
+import io
 import json
 import os
 import re
@@ -37,8 +51,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import anthropic
+import requests
 from dotenv import load_dotenv
-from librarian_core.corpus import build_corpus
+from librarian_core.corpus import build_corpus, extract_video_posters
 
 ROOT = Path(__file__).resolve().parents[2]
 SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
@@ -46,6 +61,14 @@ BLOG_POSTS = ROOT / "data" / "blog" / "posts"
 
 MODEL = "claude-haiku-4-5"
 CONCURRENCY = 8
+
+# What the API takes inline without complaint: these formats, at most this
+# long on the long edge (it downsizes anything larger anyway) and this many
+# bytes. Anything else is converted to JPEG first.
+INLINE_FORMATS = {"JPEG": "image/jpeg", "PNG": "image/png", "GIF": "image/gif"}
+MAX_EDGE = 1568
+MAX_BYTES = 5 * 1024 * 1024
+USER_AGENT = "librarian-thing describe_media (+https://weekly.thingelstad.com)"
 
 # Only hosts the archive actually serves images from (parity with the
 # Lambda's photo-view allowlist). Anything else in old markup is a stray.
@@ -75,7 +98,11 @@ def allowed(url: str) -> bool:
     return host.endswith(ALLOWED_HOSTS[0]) or host in ALLOWED_HOSTS
 
 
-def collect_urls() -> list[str]:
+def fetchable(url: str) -> bool:
+    return url.startswith(("https://", "http://"))
+
+
+def collect_urls(keep=allowed) -> list[str]:
     urls: dict[str, None] = {}
     # Weekly Thing media from a fresh build of data/issues, not the
     # gitignored data/librarian/corpus.json: that local artifact is only as
@@ -83,20 +110,88 @@ def collect_urls() -> list[str]:
     # issue since (WT350-351 went undescribed that way).
     for media in build_corpus().get("media", []):
         url = str(media.get("url") or "")
-        if allowed(url):
+        if keep(url):
             urls.setdefault(url)
     for post in BLOG_POSTS.rglob("*.md"):
         text = post.read_text(errors="ignore")
         for match in IMG_TAG_RE.findall(text):
-            if allowed(match):
+            if keep(match):
                 urls.setdefault(match)
         for match in MD_IMG_RE.findall(text):
-            if allowed(match):
+            if keep(match):
                 urls.setdefault(match)
+        # A video's poster still is a blog media record of its own (the
+        # corpus build's extract_video_posters); collecting only <img> and
+        # Markdown images left 108 of 110 undescribed (QA2 I2-5, 2026-10-01).
+        for poster in extract_video_posters(text):
+            if keep(poster["url"]):
+                urls.setdefault(poster["url"])
     return list(urls)
 
 
-def describe(client: anthropic.Anthropic, url: str) -> dict:
+class ImageFailure(Exception):
+    """A failure recorded as the sidecar entry's error code."""
+
+    def __init__(self, code: str):
+        super().__init__(code)
+        self.code = code
+
+
+def fetch(url: str) -> bytes:
+    """The image bytes. An http:// URL is tried over https first."""
+    candidates = [url]
+    if url.startswith("http://"):
+        candidates.insert(0, "https://" + url[len("http://") :])
+    code = "fetch_error"
+    for candidate in candidates:
+        try:
+            response = requests.get(candidate, timeout=30, headers={"User-Agent": USER_AGENT})
+        except requests.RequestException:
+            continue
+        if response.status_code == 200 and response.content:
+            return response.content
+        code = f"fetch_{response.status_code}"
+    raise ImageFailure(code)
+
+
+def prepare(data: bytes) -> tuple[str, bytes]:
+    """(media type, bytes) the API takes inline: the original when it is
+    already a small JPEG/PNG/GIF, otherwise a JPEG at most MAX_EDGE long."""
+    from PIL import Image, ImageOps
+    from pillow_heif import register_heif_opener
+
+    register_heif_opener()
+    try:
+        image = Image.open(io.BytesIO(data))
+        image.load()
+    except Exception as error:  # noqa: BLE001 - any decoder failure is the same verdict
+        raise ImageFailure("decode_error") from error
+    if image.format in INLINE_FORMATS and max(image.size) <= MAX_EDGE and len(data) <= MAX_BYTES:
+        return INLINE_FORMATS[image.format], data
+    image = ImageOps.exif_transpose(image)
+    if image.mode in ("RGBA", "LA", "P"):
+        image = image.convert("RGBA")
+        flat = Image.new("RGB", image.size, "white")
+        flat.paste(image, mask=image.getchannel("A"))
+        image = flat
+    else:
+        image = image.convert("RGB")
+    image.thumbnail((MAX_EDGE, MAX_EDGE))
+    out = io.BytesIO()
+    image.save(out, format="JPEG", quality=85)
+    return "image/jpeg", out.getvalue()
+
+
+def inline_source(url: str) -> dict:
+    media_type, data = prepare(fetch(url))
+    return {
+        "type": "base64",
+        "media_type": media_type,
+        "data": base64.b64encode(data).decode("ascii"),
+    }
+
+
+def describe(client: anthropic.Anthropic, url: str, source: dict | None = None) -> dict:
     response = client.messages.create(
         model=MODEL,
         max_tokens=120,
@@ -104,7 +199,7 @@ def describe(client: anthropic.Anthropic, url: str) -> dict:
             {
                 "role": "user",
                 "content": [
-                    {"type": "image", "source": {"type": "url", "url": url}},
+                    {"type": "image", "source": source or {"type": "url", "url": url}},
                     {"type": "text", "text": PROMPT},
                 ],
             }
@@ -128,6 +223,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument(
+        "--retry-errors",
+        action="store_true",
+        help="fetch failed and never-tried images locally and send them inline",
+    )
     args = parser.parse_args()
 
     load_dotenv(ROOT / ".env")
@@ -140,8 +240,14 @@ def main() -> int:
     if SIDECAR.exists():
         sidecar = json.loads(SIDECAR.read_text())
 
-    urls = collect_urls()
-    pending = [u for u in urls if u not in sidecar]
+    if args.retry_errors:
+        urls = collect_urls(keep=fetchable)
+        pending = [u for u in urls if "description" not in sidecar.get(u, {})]
+        retried = sum(1 for u in pending if u in sidecar)
+        print(f"retry: {retried} failed before, {len(pending) - retried} never tried")
+    else:
+        urls = collect_urls()
+        pending = [u for u in urls if u not in sidecar]
     if args.limit:
         pending = pending[: args.limit]
     print(f"images: {len(urls)} unique | in sidecar: {len(sidecar)} | to do: {len(pending)}")
@@ -159,7 +265,12 @@ def main() -> int:
     def work(url: str) -> None:
         nonlocal done, flushed
         try:
-            entry = describe(client, url)
+            if args.retry_errors:
+                entry = describe(client, url, inline_source(url))
+            else:
+                entry = describe(client, url)
+        except ImageFailure as failure:
+            entry = {"error": failure.code, "model": MODEL}
         except anthropic.RateLimitError:
             raise  # let the retry pass below pick these up
         except anthropic.APIStatusError as error:
@@ -173,6 +284,7 @@ def main() -> int:
             entry = {"error": type(error).__name__, "model": MODEL}
         with lock:
             sidecar[url] = entry
+            finished.add(url)
             done += 1
             if done % 25 == 0 or time.monotonic() - flushed > 30:
                 flush()
@@ -180,8 +292,9 @@ def main() -> int:
                 print(f"  {done}/{len(pending)}")
 
     # Two passes: the second retries anything a transient failure skipped.
+    finished: set[str] = set()
     for attempt in (1, 2):
-        todo = [u for u in pending if u not in sidecar]
+        todo = [u for u in pending if u not in finished]
         if not todo:
             break
         with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool:
@@ -192,9 +305,11 @@ def main() -> int:
                 except Exception as error:  # noqa: BLE001 - transient; next pass retries
                     if attempt == 2:
                         with lock:
-                            sidecar.setdefault(
-                                futures[future], {"error": type(error).__name__, "model": MODEL}
-                            )
+                            if futures[future] not in sidecar:
+                                sidecar[futures[future]] = {
+                                    "error": type(error).__name__,
+                                    "model": MODEL,
+                                }
         flush()
 
     described = sum(1 for v in sidecar.values() if "description" in v)

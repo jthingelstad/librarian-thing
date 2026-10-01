@@ -256,7 +256,7 @@ First breakfast on flat-top grill came out good. Still need more practice! 👨�
 
 ![](https://cdn.uploads.micro.blog/890/2019/90bfd78f56.jpg)
 
-### [Saturday @ 9:03 PM](https://www.thingelstad.com/2019/05/25/cue-wonderwall-loons.html)
+### [Saturday @ 9:03 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Cue WONDERWALL! Loons win 1-0! 🙌🎶⚽️ #MNUFC #MINvHOU
 
@@ -264,19 +264,19 @@ Cue WONDERWALL! Loons win 1-0! 🙌🎶⚽️ #MNUFC #MINvHOU
 
 Beautiful Game! ⚽️ #MNUFC #MINvHOU
 
-### [Saturday @ 8:01 PM](https://www.thingelstad.com/2019/05/25/ground-crew-out.html)
+### [Saturday @ 8:01 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Ground crew out giving Allianz Field some TLC! 🌱😍 #MINvHOU #MNUFC ⚽️
 
-### [Saturday @ 7:59 PM](https://www.thingelstad.com/2019/05/25/darwin-quintero-getting.html)
+### [Saturday @ 7:59 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Darwin Quintero getting a concussion check! All good! 👍 #MINvHOU #MNUFC ⚽️👏
 
-### [Saturday @ 7:32 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-celebrating.html)
+### [Saturday @ 7:32 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Minnesota United celebrating goal against Houston! 1-0 #MINvHOU #MNUFC ⚽️👏
 
-### [Saturday @ 7:31 PM](https://www.thingelstad.com/2019/05/25/kickoff-for-minnesota.html)
+### [Saturday @ 7:31 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Kickoff for Minnesota United v Houston Dynamos! #MINvHOU #MNUFC ⚽️👏
 

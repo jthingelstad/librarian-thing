@@ -206,13 +206,13 @@ Grateful to be able to partake in the Annual Business Meeting of the Mpls Downto
 
 ![](https://www.thingelstad.com/uploads/2020/6be974e644.jpg)
 
-[Sunday @ 7:41 PM](https://www.thingelstad.com/2020/02/09/family-selfie-at.html)
+[Sunday @ 7:41 PM](https://www.thingelstad.com/2020/02/09/182038.html)
 
 Family selfie at Minnesota Wild game! Go Wild! #mnwild 🏒
 
 ![](https://www.thingelstad.com/uploads/2020/591361e31b.jpg)
 
-[Sunday @ 7:20 PM](https://www.thingelstad.com/2020/02/09/minnesota-wild-v.html)
+[Sunday @ 7:20 PM](https://www.thingelstad.com/2020/02/09/182038.html)
 
 Minnesota Wild v Colorado Avalanche tonight! Go Wild! 🏒
 

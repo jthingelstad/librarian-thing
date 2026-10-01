@@ -208,33 +208,33 @@ Waiting for the sun to come up at Paris CDG. ✈️
 
 ![](https://www.thingelstad.com/uploads/2018/63c947b7ef.jpg)
 
-### [Tuesday @ 3:54 AM](https://www.thingelstad.com/2018/11/13/im-finding-myself.html)
+### [Tuesday @ 3:54 AM](https://www.thingelstad.com/2018/11/12/im-finding-myself.html)
 
 I’m finding myself frustrated with pure static hosting. It adds too much friction [to publishing. I’m intrigued by Statamic](https://statamic.com) as a ‘best of both worlds’ option. If people have experience with it, I’d love to hear those.
 
-### [Tuesday @ 1:22 AM](https://www.thingelstad.com/2018/11/13/the-new-ipad.html)
+### [Tuesday @ 1:22 AM](https://www.thingelstad.com/2018/11/12/the-new-ipad.html)
 
 The new 12.9” iPad Pro with the attached keyboard is a good size for an airline seat tray. The previous generation 12.9” I found too large for flights and used the smaller one. This one works fine with keyboard.
 
-### [Monday @ 5:27 AM](https://www.thingelstad.com/2018/11/12/long-international-flight.html)
+### [Monday @ 5:27 AM](https://www.thingelstad.com/2018/11/11/long-international-flight.html)
 
 Long international flight tomorrow → of course you update the firmware on your headphones! 😁
 
 ![](https://www.thingelstad.com/uploads/2018/d7d2d4d318.jpg)
 
-### [Monday @ 4:59 AM](https://www.thingelstad.com/2018/11/12/wait-the-newest.html)
+### [Monday @ 4:59 AM](https://www.thingelstad.com/2018/11/11/wait-the-newest.html)
 
 Wait, the newest version of Apple Photos cannot import DNG files? What the … 😤
 
-### [Monday @ 4:16 AM](https://www.thingelstad.com/2018/11/12/after-a-couple.html)
+### [Monday @ 4:16 AM](https://www.thingelstad.com/2018/11/11/185128.html)
 
 After a couple calls it sounds like Ukraine is fine with a passport expiring within 6 months, as long as it’s valid for your trip. Should be good to go! 👍🏻 🇺🇦 ✈️
 
-### [Monday @ 2:51 AM](https://www.thingelstad.com/2018/11/12/i-might-be.html)
+### [Monday @ 2:51 AM](https://www.thingelstad.com/2018/11/11/185128.html)
 
 I might be learning the hard way about flying internationally when your passport expires within 6 months. 😕
 
-### [Sunday @ 6:47 AM](https://www.thingelstad.com/2018/11/11/044742.html)
+### [Sunday @ 6:47 AM](https://www.thingelstad.com/2018/11/10/044742.html)
 
 [Family movie night – watched Ferdinand](https://www.imdb.com/title/tt3411444/) . 🎬 Good movie, but upon learning what bullfighting is the kids thought that was crazy.
 

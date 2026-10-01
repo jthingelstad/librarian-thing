@@ -423,7 +423,7 @@ I usually time my orders to get things at a discount with a deal so the real cos
 
 For the Things 4 Good sale we cover these costs. All $25 of the donation goes to the charities. But it is interesting to see where the costs are in the production.
 
-[Nov 18, 2024 at 7:00 PM](https://www.thingelstad.com/2024/11/18/the-urban-wing.html)
+[Nov 18, 2024 at 7:00 PM](https://www.thingelstad.com/2024/11/18/the-northup-sauna-was-delivered.html)
 
 The [Urban Wing](https://urbanwing.com) sauna was delivered today! Darin and crew did a great job. It fits in the spot just right. I love how bright it is inside. Can't wait to fire this up and have a good sweat soon! 😅 🔥
 

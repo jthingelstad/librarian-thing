@@ -290,13 +290,13 @@ I’m having a fun time with the [Pi-Hole](https://pi-hole.net), just to see the
 
 ![](https://www.thingelstad.com/uploads/2020/c55f78f81f.jpg)
 
-[Thursday @ 10:40 PM](https://www.thingelstad.com/2020/02/27/upon-seeing-this.html)
+[Thursday @ 10:40 PM](https://www.thingelstad.com/2020/02/27/213625.html)
 
 Upon seeing this cable tray, Amy Patton @pattonamyj blurts out, “That’s beautiful,” with absolutely no irony. Only in tech… 🤩🙌 (PS: I agree!) Nice job Target Field tech team!
 
 ![](https://www.thingelstad.com/uploads/2020/d2115c46da.jpg)
 
-[Thursday @ 10:36 PM](https://www.thingelstad.com/2020/02/27/after-the-tech.html)
+[Thursday @ 10:36 PM](https://www.thingelstad.com/2020/02/27/213625.html)
 
 After the [Tech Talent](https://mhta.org/event/techtalent/) event today [John Avenson](https://www.linkedin.com/in/john-avenson-0440b66/), VP of Technology for the Minnesota Twins, took a small group on a short technology tour of [Target Field](https://www.mlb.com/twins/ballpark). It was an awesome time! I loved hearing how the network works and how all the cabling is routed around.
 
@@ -308,13 +308,13 @@ After the [Tech Talent](https://mhta.org/event/techtalent/) event today [John Av
 
 ![](https://www.thingelstad.com/uploads/2020/0ce6f99d91.jpg)
 
-[Thursday @ 10:29 PM](https://www.thingelstad.com/2020/02/27/it-was-a.html)
+[Thursday @ 10:29 PM](https://www.thingelstad.com/2020/02/27/mhta-tech-talent.html)
 
 It was a privilege to be able to share some perspective and success stories at the [MHTA Tech Talent](https://mhta.org/event/techtalent/) 2020 event about what we are doing at [SPS Commerce](https://www.spscommerce.com) to attract, retain, and develop technology talent! #TechTalent
 
 ![](https://www.thingelstad.com/uploads/2020/396b8cd452.jpg)
 
-[Thursday @ 10:24 PM](https://www.thingelstad.com/2020/02/27/the-success-stories.html)
+[Thursday @ 10:24 PM](https://www.thingelstad.com/2020/02/27/mhta-tech-talent.html)
 
 The Success Stories from Minnesota Workplaces at today's [MHTA Tech Talent](https://mhta.org/event/techtalent/) 2020 event were very informative. It was great to hear what is working for everyone. This event is only in its 2nd year but is already a mainstay for the community. #TechTalent
 
@@ -324,7 +324,7 @@ The Success Stories from Minnesota Workplaces at today's [MHTA Tech Talent](http
 
 ![](https://www.thingelstad.com/uploads/2020/7920b98f4c.jpg)
 
-[Thursday @ 10:22 PM](https://www.thingelstad.com/2020/02/27/learned-a-lot.html)
+[Thursday @ 10:22 PM](https://www.thingelstad.com/2020/02/27/mhta-tech-talent.html)
 
 Learned a lot this morning at the [MHTA Tech Talent](https://mhta.org/event/techtalent/) 2020 event! A wealth of data from [Grant Riewe](https://www.linkedin.com/in/grantriewe/), [Erin Olson](https://www.linkedin.com/in/erin-olson-research/), [Sri Koneru](https://www.linkedin.com/in/sridhar-koneru/), and [Tim Welsh](https://www.linkedin.com/in/tim-a-welsh/). #TechTalent
 
@@ -340,13 +340,13 @@ Learned a lot this morning at the [MHTA Tech Talent](https://mhta.org/event/tech
 
 Maybe taking your blood pressure a couple hours after “breakfast for dinner” with bacon isn’t a great idea. 😬🥓
 
-[Wednesday @ 9:00 PM](https://www.thingelstad.com/2020/02/26/pihole-up-and.html)
+[Wednesday @ 9:00 PM](https://www.thingelstad.com/2020/02/26/191614.html)
 
 Pi-Hole up and running! Easy to setup. 👍
 
 ![](https://www.thingelstad.com/uploads/2020/8489fb2a71.jpg)
 
-[Wednesday @ 8:16 PM](https://www.thingelstad.com/2020/02/26/configuring-my-raspbery.html)
+[Wednesday @ 8:16 PM](https://www.thingelstad.com/2020/02/26/191614.html)
 
 Configuring my Raspberry Pi 3B+ with [Pi-Hole](https://pi-hole.net)! 🤓
 

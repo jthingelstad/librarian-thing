@@ -182,7 +182,7 @@ Was great to catch up today with friends and MarketWatch colleagues Anna Klombie
 
 Had a nice layover in Amsterdam. ✈️ Now flipped my clocks back to central time and am looking forward to 🛬 back home. 🏠👨‍👩‍👧‍👦
 
-[Saturday @ 4:05 PM](https://www.thingelstad.com/2018/03/10/starting-flights-home.html)
+[Saturday @ 4:05 PM](https://www.thingelstad.com/2018/03/11/starting-flights-home.html)
 
 Starting flights home from India! 🛫 Delhi (DEL) → Amsterdam (AMS) → Minneapolis (MSP) 🛬 Depart at 3:15 AM. 🤪
 

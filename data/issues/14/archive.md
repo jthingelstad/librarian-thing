@@ -243,7 +243,7 @@ Free 4.5/5 stars
 - [Bowbells Hotel.](http://www.thingelstad.com/2017/08/07/bowbells-hotelhttpbowbellshotelandbunkhousecom.html)
 - [Thinking about my grandparents legacy: 6 kids, 15 grandchildren and 21 great grandchildren (so far…)](http://www.thingelstad.com/2017/08/06/thinking-about-my.html)
 - [Tomatoes doing very well. 🍅🍅🍅](http://www.thingelstad.com/2017/08/06/tomatoes-doing-very.html)
-- [Look up — at hops!](http://www.thingelstad.com/2017/08/06/look-up-at.html)
+- [Look up — at hops!](https://www.thingelstad.com/2017/08/06/my-uncle-tims.html)
 - [My Uncle Tim’s hops are doing very well! Posts are 16’ high. 🍺](http://www.thingelstad.com/2017/08/06/my-uncle-tims.html)
 - [Figured out how to digitally sign git commits. Cool capability. See verified label on 85ce711.](http://www.thingelstad.com/2017/08/05/figured-out-how.html)
 - [Bought a trivial amount of BTC and ETH. If previous patterns repeat, the price should drop precipitously now. 😊](http://www.thingelstad.com/2017/08/05/bought-a-trivial.html)

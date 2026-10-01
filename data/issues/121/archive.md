@@ -185,7 +185,7 @@ Not sure this is a tour I would want to take. Chernobyl isn't that far from wher
 
 ### [Solid State: Minnesota's High Tech History - Twin Cities PBS](https://www.tpt.org/solid-state/)
 
-[I was at the premier](https://www.thingelstad.com/2019/10/08/attending-the-premier.html) of this movie. It is an interesting look at the minicomputer market that thrived in Minnesota. I learned some new things, like Control Data was the first company to sell peripherals for other companies minicomputers. What did Minnesota miss? By all counts we completely missed the microcomputer movement here.
+[I was at the premier](https://www.thingelstad.com/2019/10/08/151356.html) of this movie. It is an interesting look at the minicomputer market that thrived in Minnesota. I learned some new things, like Control Data was the first company to sell peripherals for other companies minicomputers. What did Minnesota miss? By all counts we completely missed the microcomputer movement here.
 
 ### [Three Big Things: The Most Important Forces Shaping the World · Collaborative Fund](https://www.collaborativefund.com/blog/three-big-things-the-most-important-forces-shaping-the-world/)
 
@@ -232,23 +232,23 @@ Crowd queuing up for Minnedemo 33 at the Riverview Theater!
 
 ![](https://cdn.uploads.micro.blog/890/2019/36a8f98e3f.jpg)
 
-### [Tuesday @ 4:28 PM](https://www.thingelstad.com/2019/10/08/good-panel-conversation.html)
+### [Tuesday @ 4:28 PM](https://www.thingelstad.com/2019/10/08/151356.html)
 
 Good panel [conversation following screening of Solid State](https://www.tpt.org/solid-state/) .
 
-### [Tuesday @ 3:13 PM](https://www.thingelstad.com/2019/10/08/attending-the-premier.html)
+### [Tuesday @ 3:13 PM](https://www.thingelstad.com/2019/10/08/151356.html)
 
 Attending the premier of [Solid State: Minnesota’s High Tech History](https://www.tpt.org/solid-state/) [hosted by MHTA](https://mhta.org) .
 
-### [Monday @ 11:42 PM](https://www.thingelstad.com/2019/10/07/cruz-youre-our.html)
+### [Monday @ 11:42 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Cruz, you’re our only hope. 😬⚾️
 
-### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/kepler-we-need.html)
+### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Kepler! We need this! ⚾️
 
-### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/time-for-some.html)
+### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Time for some baseball! ⚾️
 

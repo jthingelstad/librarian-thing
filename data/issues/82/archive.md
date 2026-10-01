@@ -231,23 +231,23 @@ Nice to see SPS Commerce in the top spot, by a ways!
 
 ## Microposts 🎈
 
-### [Wednesday @ 11:26 AM](https://www.thingelstad.com/2018/11/28/amazon-qldb-and.html)
+### [Wednesday @ 11:26 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
 [Amazon Quantum Ledger Database](https://aws.amazon.com/qldb/) [and Managed Blockchain](https://aws.amazon.com/managed-blockchain/) look like good building blocks.
 
-### [Wednesday @ 11:02 AM](https://www.thingelstad.com/2018/11/28/aws-reinvent-house.html)
+### [Wednesday @ 11:02 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
 [AWS re:Invent house band playing Blackbird](https://en.wikipedia.org/wiki/Blackbird_(Beatles_song)) from The Beatles went from just being bad to actually making me angry. 😡
 
-### [Wednesday @ 10:59 AM](https://www.thingelstad.com/2018/11/28/announcing-aws-lake.html)
+### [Wednesday @ 10:59 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
 "[Announcing AWS Lake Formation](https://aws.amazon.com/lake-formation/)!" — "Sounds glacial!" 🤣
 
-### [Wednesday @ 10:48 AM](https://www.thingelstad.com/2018/11/28/164812.html)
+### [Wednesday @ 10:48 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
 The house band thing at AWS re:Invent just doesn’t work for me. ✋
 
-### [Wednesday @ 10:40 AM](https://www.thingelstad.com/2018/11/28/very-fun-to.html)
+### [Wednesday @ 10:40 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
 Very fun to see my former [Dow Jones colleague Dean Del Vecchio](https://www.linkedin.com/in/dean-a-del-vecchio-66a874/) on stage at AWS re:Invent 2018! 👏 Guardian Life Insurance Selects [AWS as Its Preferred Cloud Provider](https://press.aboutamazon.com/news-releases/news-release-details/guardian-life-insurance-selects-aws-its-preferred-cloud-provider/)
 

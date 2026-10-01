@@ -168,15 +168,15 @@ This looks like a potential option to link books to instead of feeding visitors 
 
 LinkedIn is now prompting you to identify your teammates, and then asks you specifically to reflect your current and past reporting relationships. Isn’t this just a way to mine org chart data from companies?
 
-### [Thursday @ 10:50 PM](https://www.thingelstad.com/2019/08/22/after-the-teamsps.html)
+### [Thursday @ 10:50 PM](https://www.thingelstad.com/2019/08/22/teamsps-kubb-tournament.html)
 
 After the 2019 #TeamSPS Kubb tournament a bunch of folks hung out and played, you guessed it, more Kubb! Next year we might introduce Mölkky at the end!
 
-### [Thursday @ 10:49 PM](https://www.thingelstad.com/2019/08/22/after-the-round.html)
+### [Thursday @ 10:49 PM](https://www.thingelstad.com/2019/08/22/teamsps-kubb-tournament.html)
 
 After the round robin our #TeamSPS Kubb groups split into brackets with a winner in each bracket! We kept track old school, just like most tournaments do!
 
-### [Thursday @ 10:46 PM](https://www.thingelstad.com/2019/08/22/we-had-a.html)
+### [Thursday @ 10:46 PM](https://www.thingelstad.com/2019/08/22/teamsps-kubb-tournament.html)
 
 We had a great time with our 2019 #TeamSPS Kubb Tournament today! We had 20 teams having a lot of fun, getting to know their teammates better, and enjoying a gorgeous day outside!
 
@@ -213,11 +213,11 @@ St. Croix River at Interstate State Park, from Wisconsin side.
 
 ![](https://cdn.uploads.micro.blog/890/2019/3ec9fd0491.jpg)
 
-### [Sunday @ 11:51 AM](https://www.thingelstad.com/2019/08/18/heading-west-at.html)
+### [Sunday @ 11:51 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
 [Heading West! At Fawn-Doe-Rosa](https://www.fawndoerosa.com) .
 
-### [Sunday @ 10:35 AM](https://www.thingelstad.com/2019/08/18/deer-selfie.html)
+### [Sunday @ 10:35 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
 Deer Selfie.
 

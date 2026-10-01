@@ -220,11 +220,11 @@ Great [#TeamSPS outing to play epic Whirleyball](https://www.whirlyballtwincitie
 ![](https://cdn.uploads.micro.blog/890/2019/f89c89713d.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/aacca309ac.jpg)
 
-### [Saturday @ 9:26 PM](https://www.thingelstad.com/2019/12/07/enjoyed-winter-fireworks.html)
+### [Saturday @ 9:26 PM](https://www.thingelstad.com/2019/12/07/holidazzle.html)
 
 Enjoyed winter [fireworks at Loring Park for Holidazzle](https://www.holidazzle.com) tonight!
 
-### [Saturday @ 9:04 PM](https://www.thingelstad.com/2019/12/07/we-went-to.html)
+### [Saturday @ 9:04 PM](https://www.thingelstad.com/2019/12/07/holidazzle.html)
 
 [We went to Holidazzle](https://www.holidazzle.com) for the first time in years and years. Last time we went it was still a parade. It was fun, but there were a lot of people and big lines.
 
