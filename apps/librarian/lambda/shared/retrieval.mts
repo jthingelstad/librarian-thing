@@ -474,8 +474,12 @@ function sourceHeader(source: CorpusChunk) {
   return `Weekly Thing #${source.issue_number}: ${source.subject || ''}`;
 }
 
-async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8): Promise<CorpusChunk[]> {
-  if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, limit);
+// The whole pool comes back in rerank order (depth), not only the page:
+// retrieve() cuts the page itself, and a Journal copy dropped from it is
+// refilled from below the cut (QA2 R2-3). Rerank cost is per document sent,
+// not per result returned.
+async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8, depth = limit): Promise<CorpusChunk[]> {
+  if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, depth);
   const start = performance.now();
   const top = sources.slice(0, Math.max(limit * 5, 100));
   const rerankInputs: RerankSource[] = top.map((source) => {
@@ -511,7 +515,7 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
         rerankingConfiguration: {
           type: 'BEDROCK_RERANKING_MODEL',
           bedrockRerankingConfiguration: {
-            numberOfResults: Math.min(rerankInputs.length, Math.max(limit, 8)),
+            numberOfResults: Math.min(rerankInputs.length, Math.max(depth, limit, 8)),
             modelConfiguration: { modelArn: rerankModelArn() }
           }
         }
@@ -539,7 +543,7 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8):
       error_type: error instanceof Error ? error.constructor.name : 'Error'
     });
   }
-  return sources.slice(0, limit);
+  return sources.slice(0, depth);
 }
 
 async function embedForCorpus(query: unknown, corpus: Corpus) {
@@ -936,7 +940,7 @@ export async function retrieve(
   }
 
   const voices = voiceList(filters.voice);
-  let fused = dedupeJournalTwins(fuseCandidates(semantic, lexical, candidateLimit));
+  let fused = fuseCandidates(semantic, lexical, candidateLimit);
   // A voice filter rewrites each passage to that voice's spans BEFORE the
   // rerank, so a chunk that matched on a quotation ranks on Jamie's framing
   // alone, and the caller never receives the quoted words as Jamie's.
@@ -944,8 +948,28 @@ export async function retrieve(
   // rerank: false skips the cross-region rerank call - RRF order is good
   // enough for grounding pools (welcome chips) where latency matters more
   // than final ordering precision. Answer-path retrieval always reranks.
-  if (opts.rerank === false) return withAgeLabel(fused.slice(0, limit));
-  return withAgeLabel((await rerankSources(query, fused, limit)).slice(0, limit));
+  if (opts.rerank === false) return withAgeLabel(pageWithoutTwins(fused, limit));
+  return withAgeLabel(pageWithoutTwins(await rerankSources(query, fused, limit, fused.length), limit));
+}
+
+// The page: the ranked list cut at limit, less each Journal copy whose
+// posts are all on that page, refilled from below the cut until the page
+// is full or the list runs out. The dedupe once ran on the whole pool
+// before ranking, so a copy inside the limit vanished when its post sat
+// at rank 28, and neither showed (QA2 R2-3); and a dedupe after the cut
+// would shrink the page below limit with more candidates waiting.
+export function pageWithoutTwins(ranked: CorpusChunk[], limit: number): CorpusChunk[] {
+  const dropped = new Set<CorpusChunk>();
+  for (;;) {
+    const page: CorpusChunk[] = [];
+    for (const chunk of ranked) {
+      if (page.length >= limit) break;
+      if (!dropped.has(chunk)) page.push(chunk);
+    }
+    const kept = new Set(dedupeJournalTwins(page));
+    if (kept.size === page.length) return page;
+    for (const chunk of page) if (!kept.has(chunk)) dropped.add(chunk);
+  }
 }
 
 // A Weekly Thing Journal chunk reprints blog posts; when both the journal
@@ -956,8 +980,9 @@ export async function retrieve(
 // the copy to its post, the post's microblog_id (journal_posts), which
 // survives micro.blog changing a permalink after the issue went out. A
 // journal chunk drops only when EVERY post it copies has its twin in the
-// pool: a chunk that reprints two posts, one of which surfaced on its own,
-// still carries the other one's words (corpus QA, 2026-10-01).
+// candidates it is checked against (the returned page, pageWithoutTwins):
+// a chunk that reprints two posts, one of which surfaced on its own, still
+// carries the other one's words (corpus QA, 2026-10-01).
 export function journalPostKeys(chunk: CorpusChunk): string[] {
   return [...new Set(journalPostKeySets(chunk).flat())];
 }

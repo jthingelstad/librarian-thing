@@ -573,6 +573,29 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
     .flatMap((group) => group.passages.flatMap((passage) => (passage.copy_of || []).map((copy) => copy.id)));
   check('KA wt-212 is not a copy of blog-1464172', !named.includes('blog-1464172'), named.join(', '));
 }
+// QA2 R2-3: the Journal dedupe works on the returned page. WT147's "mini
+// minnebar" copy ranks 8th; its post ranks about 28th, below the cut, so
+// the copy stays (the pool-wide dedupe dropped it and neither showed). And
+// no page carries a copy beside every post it copies.
+{
+  const page = await run('search_archive', { query: 'Minnebar session I attended', limit: 8 });
+  const ids = (page?.results || []).map((group) => group.id);
+  check(
+    'KA search_archive keeps the wt-147 copy or its post blog-1088967',
+    ids.includes('wt-147') || ids.includes('blog-1088967'),
+    ids.join(', ')
+  );
+  for (const query of ['Minnebar session I attended', 'Tesla software update applied', 'mini Minnebar']) {
+    const out = await run('search_archive', { query, limit: 12 });
+    const shown = new Set((out?.results || []).map((group) => group.id));
+    const twins = (out?.results || []).flatMap((group) =>
+      group.passages
+        .filter((passage) => passage.copy_of?.length && passage.copy_of.every((copy) => shown.has(copy.id)))
+        .map(() => group.id)
+    );
+    check(`KA search_archive "${query}" shows no copy beside all its posts`, twins.length === 0, twins.join(', '));
+  }
+}
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);
