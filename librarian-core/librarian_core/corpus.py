@@ -19,7 +19,7 @@ from datetime import date as _date
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 from zoneinfo import ZoneInfo
 
 import boto3
@@ -175,30 +175,63 @@ def read_issue(path: Path) -> tuple[dict[str, Any], str]:
 # Jamie's, so the corpus never sees them: no chunk, count, topic, link or
 # summary is built from them. The frame is a cross-repo contract, pinned by
 # tests here and in wt-builder tests/echoes.test.ts.
-THINGY_BLOCK_RE = re.compile(r'<div class="from-thingy">.*?\n</div>[ \t]*\n?', re.S)
+# QA3 F18: the frame is found by its class, not by one exact spelling (quotes,
+# extra classes, other attributes and case may vary), and it ends at the
+# </div> that balances it, counting nested divs. A close on the same line as
+# text or indented still ends it; an unclosed frame raises instead of eating
+# Jamie's text or leaking Thingy's.
+THINGY_OPEN_RE = re.compile(
+    r"""<div\b[^>]*?\bclass\s*=\s*["']?[^"'>]*?\bfrom-thingy\b(?![\w-])[^>]*>""", re.I
+)
+_DIV_TAG_RE = re.compile(r"<(/?)div\b[^>]*>", re.I)
+_TRAILING_LINE_RE = re.compile(r"[ \t]*(?:\r?\n)?")
+_HEADING_BEFORE_RE = re.compile(r"(?:^|\n)(#{1,4})\s+[^\n]*\S[^\n]*\n\s*\Z")
+
+
+def _thingy_block_end(body: str, start: int) -> int:
+    depth = 0
+    for tag in _DIV_TAG_RE.finditer(body, start):
+        depth += -1 if tag.group(1) else 1
+        if depth == 0:
+            return _TRAILING_LINE_RE.match(body, tag.end()).end()
+    line = body.count("\n", 0, start) + 1
+    raise ValueError(f'unclosed Thingy block (<div class="from-thingy">) at line {line}')
 
 
 def strip_thingy_blocks(body: str) -> str:
-    stripped = THINGY_BLOCK_RE.sub("", body)
-    if stripped == body:
+    pieces: list[str] = []
+    cuts: list[int] = []
+    position = 0
+    while match := THINGY_OPEN_RE.search(body, position):
+        pieces.append(body[position : match.start()])
+        cuts.append(sum(len(piece) for piece in pieces))
+        position = _thingy_block_end(body, match.start())
+    if not cuts:
         return body
-    return re.sub(r"\n{3,}", "\n\n", _drop_emptied_headings(stripped))
+    pieces.append(body[position:])
+    return re.sub(r"\n{3,}", "\n\n", _drop_emptied_headings("".join(pieces), cuts))
 
 
-def _drop_emptied_headings(body: str) -> str:
+def _drop_emptied_headings(body: str, cuts: list[int]) -> str:
     """Drop a heading the Thingy strip left with nothing under it (WB frames
     Echoes as "## Echoes" plus the block), so get_source bodies don't end on
-    a bare heading. A heading followed by a deeper one is not empty."""
-    matches = list(HEADING_RE.finditer(body))
+    a bare heading. Only the heading directly before a removed block is a
+    candidate (QA3 F18): an empty "## Links" group header elsewhere in the
+    issue is Jamie's and stays. A heading followed by a deeper one is not
+    empty."""
     spans = []
-    for index, match in enumerate(matches):
-        following = matches[index + 1] if index + 1 < len(matches) else None
-        end = following.start() if following else len(body)
-        if body[match.end() : end].strip():
+    for cut in cuts:
+        before = _HEADING_BEFORE_RE.search(body, 0, cut)
+        if not before:
             continue
-        if following is None or len(following.group(1)) <= len(match.group(1)):
-            spans.append((match.start(), end))
-    for start, end in reversed(spans):
+        following = HEADING_RE.search(body, cut)
+        end = following.start() if following else len(body)
+        if body[cut:end].strip():
+            continue
+        if following is None or len(following.group(1)) <= len(before.group(1)):
+            start = before.start() + (1 if body[before.start()] == "\n" else 0)
+            spans.append((start, end))
+    for start, end in sorted(set(spans), reverse=True):
         body = body[:start] + body[end:]
     return body.rstrip() + "\n" if spans else body
 
@@ -456,6 +489,23 @@ def extract_video_posters(text: str) -> list[dict[str, str]]:
     return out
 
 
+# QA3 (ingest I2-5): 4 blog videos in 3 posts have poster="", so no still
+# and, until now, no media record at all. Each is a record of its own, the
+# video's URL with media_kind "video", found by its post's words; nothing is
+# said about what it shows, because nothing has looked.
+VIDEO_NO_POSTER_CONTEXT = "Video with no poster still"
+
+
+def extract_posterless_videos(text: str) -> list[dict[str, str]]:
+    """``{url, video_url}`` for each ``<video>`` with a src and no poster."""
+    out = []
+    for tag in _VIDEO_TAG_RE.findall(text or ""):
+        src = _img_attr(tag, "src")
+        if src and not _img_attr(tag, "poster"):
+            out.append({"url": src, "video_url": src})
+    return out
+
+
 def extract_images(text: str) -> list[dict[str, str]]:
     """Every image in a markdown/html body as {url, alt}, attribute-order
     agnostic, covering both <img> tags and markdown image syntax."""
@@ -468,6 +518,19 @@ def extract_images(text: str) -> list[dict[str, str]]:
         if link.kind == "image":
             out.append({"url": link.url, "alt": " ".join(link.label.split())})
     return out
+
+
+def distinct_images(images: list[dict[str, str]]) -> list[dict[str, str]]:
+    """One entry per image URL, in first-seen order, with the first non-empty
+    alt. QA3 M8: a post that shows one image several times (a 2004 chess
+    post repeats one gif 10 times; 26 extra rows in 10 posts) is one media
+    record, not one per occurrence."""
+    seen: dict[str, dict[str, str]] = {}
+    for image in images:
+        kept = seen.setdefault(image["url"], dict(image))
+        if not kept.get("alt") and image.get("alt"):
+            kept["alt"] = image["alt"]
+    return list(seen.values())
 
 
 # The front-matter ``image`` is the issue's cover: the image email clients
@@ -707,6 +770,8 @@ _LINK_LINE_RE = re.compile(
 )
 # A Briefly headline: "{commentary} → **[Title](url)**".
 _BOLD_LINK_RE = re.compile(r"\*\*\[[^\]\n]*\]\([^)\s]+\)\*\*")
+# A list item's line: its first link is the item's own (QA3 F10).
+_LIST_ITEM_RE = re.compile(r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+.*$", re.M)
 
 
 def voice_spans(text: str, family: str | None = None) -> list[dict[str, Any]]:
@@ -1314,10 +1379,12 @@ def build_corpus(
                 links.append(record)
         if include_issue_bodies:
             seen_urls = {str(link.get("url") or "") for link in issue_links}
+            earlier: dict[str, dict[str, Any]] = {}
             for section in split:
-                for record in issue_body_links(section, skip_urls=seen_urls):
+                for record in issue_body_links(section, skip_urls=seen_urls, earlier=earlier):
                     record = {**link_fields, **record}
                     record.update(resolve_link_target(record["url"], **targets))
+                    earlier[record["url"]] = record
                     issue_links.append(record)
                     links.append(record)
         issues.append(
@@ -1358,7 +1425,7 @@ def build_corpus(
             if publish_date and publish_date > entry["last_seen"]:
                 entry["last_seen"] = publish_date
 
-        body_images = extract_images(body)
+        body_images = distinct_images(extract_images(body))
         issue_media_from = len(media)
         cover = issue_cover_image(metadata, {image["url"] for image in body_images}, shared_covers)
         for image in ([cover] if cover else []) + body_images:
@@ -1764,6 +1831,35 @@ def _hashed_photo_name(url: str) -> str | None:
     return name if _HASHED_PHOTO_NAME_RE.match(name) else None
 
 
+def _photo_file_name(url: str) -> str:
+    """The decoded, lowercased file name of a photo URL ("" for none)."""
+    name = unquote(urlparse(url).path.rsplit("/", 1)[-1]).lower()
+    return name if "." in name else ""
+
+
+# Two copies keep the blog photo's own file name but not its URL (QA3 M2-2:
+# 96 photos listed twice). The Shortcuts workflow (WT263-WT349) rehosted each
+# Journal photo as weekly-thing/N/journal/<name>; a few issues used
+# micro.blog's CDN form of the upload, cdn.uploads.micro.blog/890/<year>/<name>
+# for uploads/<year>/<name>.
+SHORTCUTS_JOURNAL_REHOST_RE = re.compile(
+    r"^https://files\.thingelstad\.com/weekly-thing/\d+/journal/[^/?#]+$"
+)
+_MICROBLOG_CDN_UPLOAD_RE = re.compile(r"^https://cdn\.uploads\.micro\.blog/\d+/(\d{4})/[^/?#]+$")
+
+
+def _same_named_photo(url: str, image: str) -> bool:
+    """Whether blog photo ``image`` is ``url`` renamed by one of the copies
+    above: the same file name (and for the CDN form, the same year)."""
+    name = _photo_file_name(url)
+    if not name or _photo_file_name(image) != name:
+        return False
+    if SHORTCUTS_JOURNAL_REHOST_RE.match(url):
+        return True
+    cdn = _MICROBLOG_CDN_UPLOAD_RE.match(url)
+    return bool(cdn) and f"/uploads/{cdn.group(1)}/" in urlparse(image).path
+
+
 # WT Builder (WT350 on) rehosts every issue photo on the CDN under a name it
 # derives from the source URL, so a Journal photo's issue URL never shares
 # the blog photo's name. The derivation is a cross-repo contract with
@@ -1807,7 +1903,9 @@ class JournalPostIndex:
     def blog_photo(self, url: str, prefer: set[str]) -> tuple[JournalPost, str] | None:
         """The blog photo a Weekly Thing image copies: the same URL, else the
         same micro.blog upload name, else (a WT Builder rehost) the photo of a
-        post the issue's Journal copies whose rehost URL it is. Among several
+        post the issue's Journal copies whose rehost URL it is, else (QA3
+        M2-2: a Shortcuts-era rehost or the micro.blog CDN form) the one
+        photo of the copied posts with the same file name. Among several
         posts, a post the issue's Journal copies (``prefer``), else the
         earliest."""
         found = self.by_photo.get(url) or self.by_photo.get(_hashed_photo_name(url) or "")
@@ -1821,6 +1919,17 @@ class JournalPostIndex:
                     for image in post.images
                     if wt_builder_rehost_url(image, rehost.group(1)) == url
                 ]
+        if not found:
+            # Only inside the copied posts, and only when one photo there has
+            # the name: "img-7222.jpeg" elsewhere is another photo.
+            named = [
+                (post, image)
+                for post in (self.by_id.get(str(key)) for key in sorted(prefer, key=str))
+                if post
+                for image in post.images
+                if _same_named_photo(url, image)
+            ]
+            found = named if len(named) == 1 else []
         if not found:
             return None
         return min(
@@ -1875,7 +1984,10 @@ def _cached_post_index(blog_dir: str, _stamp: tuple[int, int]) -> JournalPostInd
                 frozenset(tokens),
                 _shingles(tokens),
                 str(metadata.get("title") or "").strip() or _short_label(_blog_embed_text(body)),
-                tuple(image["url"] for image in extract_images(body)),
+                # A video's poster still is the post's photo too (QA3 M2-2:
+                # WT169 and WT191 ran two of them).
+                tuple(image["url"] for image in extract_images(body))
+                + tuple(poster["url"] for poster in extract_video_posters(body)),
                 _squash(f"{metadata.get('title') or ''} {body}"),
             )
         )
@@ -2437,14 +2549,25 @@ def issue_body_links(
     section: IssueSection,
     *,
     skip_urls: set[str],
+    earlier: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Link records for one split section, minus ``skip_urls`` (the issue's
     front-matter links and anything an earlier section already gave), which
     it extends. Records carry ``link_role`` and the section's family; the
-    caller adds the issue fields and targets."""
+    caller adds the issue fields and targets. ``earlier`` maps a URL to the
+    issue's record for it, so a later headline occurrence can promote it."""
     records: list[dict[str, Any]] = []
 
     def add(text: str, url: str, role: str, context: str) -> None:
+        if url in skip_urls and role == "headline" and earlier and url in earlier:
+            # One row per (issue, url) (QA3 F10): an App pick's linked icon
+            # or a commentary mention can come before the item's own
+            # headline (WT10-WT41's App H3s); the row takes the headline.
+            first = earlier[url]
+            if first.get("link_role") == "commentary":
+                first["link_role"] = "headline"
+                first["text"] = text or first.get("text")
+            return
         if not url or url.startswith(("#", "mailto:")) or url in skip_urls:
             return
         domain = web_domain(url)
@@ -2466,24 +2589,117 @@ def issue_body_links(
 
     body_role = "journal" if section.family == "Journal" else "commentary"
     heading_role = "headline" if section.family in LINK_FAMILIES else body_role
+    # QA3 F10: in a link family, a link that is a whole line ("- [Title](url)
+    # domain.com"), a bold lead ("... → **[Title](url)**") or the first link
+    # of a list item ("- Python 3.7: [Introducing Data Classes](url)") is the
+    # item's headline; the Briefly and Breadcrumbs eras have no H3 for it.
+    # Before, 688 of these were commentary.
+    body_links = _body_links(section.text)
+    headline_spans: list[tuple[int, int]] = []
+    if section.family in LINK_FAMILIES:
+        headline_spans = [
+            match.span()
+            for pattern in (_LINK_LINE_RE, _BOLD_LINK_RE)
+            for match in pattern.finditer(section.text)
+        ]
+        for item in _LIST_ITEM_RE.finditer(section.text):
+            starts = [p for _, _, p in body_links if item.start() <= p < item.end()]
+            if starts:
+                headline_spans.append((min(starts), min(starts) + 1))
     for text, url, _ in _body_links(section.raw_heading or ""):
         add(text, url, heading_role, section.heading)
-    for text, url, position in _body_links(section.text):
-        add(text, url, body_role, _link_paragraph(section.text, position))
+    for text, url, position in body_links:
+        role = (
+            "headline"
+            if any(start <= position < end for start, end in headline_spans)
+            else body_role
+        )
+        add(text, url, role, _link_paragraph(section.text, position))
     return records
+
+
+# QA3 F16 and R2-6: the blog strip removed every "<...>", so it ate code
+# that holds a "<" (3,429 chars in 7 posts), "<[text](url)>" links and
+# autolinks, deleted Hugo shortcodes (349, with their tweets, videos and
+# collection names) and iframes without a link, and kept <style> CSS as
+# text. Code is now set aside before the strip and put back verbatim;
+# shortcodes and iframes become a markdown link to what they embed (a
+# collection its name), which the link scan then records; <style> and
+# <script> go with their contents.
+_FENCED_CODE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})[^\n]*\n.*?^[ \t]*\1[`~]*[ \t]*$", re.M | re.S)
+_INLINE_CODE_RE = re.compile(r"(?<!`)`[^`\n]+`(?!`)")
+_CODE_SLOT_RE = re.compile(r"\x00(\d+)\x00")
+_STYLE_SCRIPT_RE = re.compile(r"<(style|script)\b[^>]*>.*?</\1\s*>", re.I | re.S)
+_SHORTCODE_RE = re.compile(r"\{\{<\s*([\w-]+)(.*?)>\}\}", re.S)
+_SHORTCODE_ARG_RE = re.compile(r"""(?:(\w+)=)?(?:"([^"]*)"|'([^']*)'|(\S+))""")
+_IFRAME_RE = re.compile(
+    r"""<iframe\b[^>]*?\bsrc\s*=\s*(["'])(.*?)\1[^>]*>(?:.*?</iframe\s*>)?""", re.I | re.S
+)
+_ANGLE_LINK_RE = re.compile(r"<(\[[^\]\n]*\]\([^)\s]+\))>")
+_AUTOLINK_RE = re.compile(r"<((?:https?|ftp)://[^\s<>]+)>", re.I)
+
+
+def _shortcode_text(match: re.Match[str]) -> str:
+    name = match.group(1).lower()
+    named: dict[str, str] = {}
+    positional: list[str] = []
+    for arg in _SHORTCODE_ARG_RE.finditer(match.group(2)):
+        value = next((v for v in arg.groups()[1:] if v is not None), "")
+        if arg.group(1):
+            named[arg.group(1).lower()] = value
+        else:
+            positional.append(value)
+    ident = named.get("id") or (positional[0] if positional else "")
+    # The label says only what the shortcode says: whose tweet, which site.
+    if name in {"x", "tweet", "twitter"} and named.get("id"):
+        user = named.get("user")
+        url = f"https://twitter.com/{user or 'i/web'}/status/{named['id']}"
+        return f" [{'@' + user if user else 'Tweet'}]({url}) "
+    if name == "youtube" and ident:
+        start = f"&t={named['start']}s" if named.get("start", "").isdigit() else ""
+        return f" [YouTube video](https://www.youtube.com/watch?v={ident}{start}) "
+    if name == "vimeo" and ident:
+        return f" [Vimeo video](https://vimeo.com/{ident}) "
+    # A collection names its photo set; any other shortcode keeps its words.
+    return " " + " ".join([*positional, *named.values()]) + " "
+
+
+def _iframe_text(match: re.Match[str]) -> str:
+    url = match.group(2).strip()
+    host = web_domain(url)
+    return f" [{host}]({url}) " if host else " "
+
+
+def _expand_blog_embeds(body: str) -> str:
+    """Shortcodes and iframes as a link to what they embed (a collection as
+    its name), <style>/<script> gone."""
+    s = _STYLE_SCRIPT_RE.sub(" ", body or "")
+    s = _SHORTCODE_RE.sub(_shortcode_text, s)
+    return _IFRAME_RE.sub(_iframe_text, s)
 
 
 def _blog_embed_text(body: str) -> str:
     """Reduce a native-markdown blog post to embedding-friendly text: inline
     each ``<img>``'s alt text (good photo-search signal), drop any remaining
     HTML tags, normalize whitespace. Markdown links are left intact, matching
-    how issue chunks are embedded."""
-    s = _BLOG_IMG_ALT_RE.sub(lambda m: f" {m.group(2).strip()} ", body or "")
+    how issue chunks are embedded; code is kept verbatim."""
+    code: list[str] = []
+
+    def hold(match: re.Match[str]) -> str:
+        code.append(match.group(0))
+        return f"\x00{len(code) - 1}\x00"
+
+    s = _FENCED_CODE_RE.sub(hold, (body or "").replace("\x00", ""))
+    s = _INLINE_CODE_RE.sub(hold, s)
+    s = _expand_blog_embeds(s)
+    s = _ANGLE_LINK_RE.sub(r"\1", s)
+    s = _AUTOLINK_RE.sub(r"\1", s)
+    s = _BLOG_IMG_ALT_RE.sub(lambda m: f" {m.group(2).strip()} ", s)
     s = _BLOG_IMG_BARE_RE.sub(" ", s)
     s = _HTML_TAG_RE.sub(" ", s)
     s = re.sub(r"[ \t]+", " ", s)
     s = re.sub(r"\n\s*\n+", "\n\n", s)
-    return s.strip()
+    return _CODE_SLOT_RE.sub(lambda m: code[int(m.group(1))], s.strip())
 
 
 def _short_label(text: str, max_words: int = 12) -> str:
@@ -2670,7 +2886,7 @@ def _blog_outbound_links(
             )
         records.append(record)
 
-    for text, link_url in _markdown_html_links(body):
+    for text, link_url in _markdown_html_links(_expand_blog_embeds(body)):
         add(text, link_url)
     return records
 
@@ -2789,7 +3005,12 @@ def build_blog_corpus(
         # A photo posted with no words and no alt text is still a post, and
         # its photo is still media (QA 2026-09-30, ingest F4: 5965985 was
         # dropped with its photo). It has nothing to embed, so no chunk.
-        if not embed_text and not extract_images(body) and not extract_video_posters(body):
+        if not (
+            embed_text
+            or extract_images(body)
+            or extract_video_posters(body)
+            or extract_posterless_videos(body)
+        ):
             continue
         subject = title or _short_label(embed_text) or "Photo"
         post_input = {
@@ -2826,7 +3047,12 @@ def build_blog_corpus(
             raise RuntimeError(f"{path} is missing page_id in front matter")
         url = str(metadata.get("url") or "").strip()
         embed_text = _blog_embed_text(body)
-        if not embed_text and not extract_images(body) and not extract_video_posters(body):
+        if not (
+            embed_text
+            or extract_images(body)
+            or extract_video_posters(body)
+            or extract_posterless_videos(body)
+        ):
             continue
         title = str(metadata.get("title") or "").strip()
         subject = title or _short_label(embed_text) or "Page"
@@ -2921,7 +3147,7 @@ def build_blog_corpus(
         if linked_from_issues:
             post_record["linked_from_issues"] = linked_from_issues
         posts.append(post_record)
-        for image in extract_images(body):
+        for image in distinct_images(extract_images(body)):
             media.append(
                 {
                     "url": image["url"],
@@ -2953,6 +3179,22 @@ def build_blog_corpus(
                     "source_url": url,
                     "publish_date": publish_date,
                     "video_url": poster["video_url"],
+                }
+            )
+        for video in distinct_images(extract_posterless_videos(body)):
+            nearby = _context_text(embed_text)[:180]
+            media.append(
+                {
+                    "url": video["url"],
+                    "alt": "",
+                    "context": f"{VIDEO_NO_POSTER_CONTEXT}. {nearby}".strip(),
+                    "source_kind": "blog",
+                    **identity,
+                    "subject": subject,
+                    "source_url": url,
+                    "publish_date": publish_date,
+                    "video_url": video["video_url"],
+                    "media_kind": "video",
                 }
             )
         budget = embed_text_budget(

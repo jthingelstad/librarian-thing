@@ -17,6 +17,10 @@ anything reaches S3. It fails the deploy when:
   does not (or carries a different one). The audio record lives only in the
   site's render copy (librarian_core.audio); a site checkout that failed
   would otherwise ship a corpus with every pointer gone; or
+- an ingest check fails (``ingest_failures``, QA 2026-10-01 round 3): a
+  regression in the build's strips or media ties that would otherwise ship
+  without a sound. The blog checks run on the blog candidate when one is
+  staged; or
 - a staged blog candidate files a post by any day but the Chicago day of its
   ``published`` moment, or keeps a 05:00Z date-only placeholder (QA2 I2-8,
   Q16).
@@ -48,6 +52,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "librarian-core"))
@@ -60,6 +65,7 @@ from librarian_core.corpus import (  # noqa: E402
     blog_published,
     chicago_day,
 )
+from librarian_core.paths import BLOG_DIR  # noqa: E402
 from librarian_core.embed_tokens import (  # noqa: E402
     COHERE_EMBED_MAX_TOKENS,
     embed_token_count,
@@ -204,6 +210,257 @@ def embed_truncation_report(name: str, corpus: dict[str, Any]) -> tuple[int, str
     return len(over), (f"{line} (longest: {worst})" if over else line)
 
 
+# Ingest checks (QA 2026-10-01 round 3). Each pins a fix the corpus build
+# carries, so a later change that undoes it fails the gate instead of shipping.
+
+
+def ingest_failures(
+    corpus: dict[str, Any] | None,
+    blog: dict[str, Any] | None,
+    blog_source_dir: Path = BLOG_DIR.parent,
+) -> list[str]:
+    failures = []
+    if corpus is not None:
+        # F18: Thingy's words never enter the corpus.
+        if "from-thingy" in json.dumps(corpus, ensure_ascii=False):
+            failures.append("a Thingy frame (from-thingy) reached the Weekly Thing corpus")
+        if commentary := headline_shaped_commentary(corpus):
+            failures.append(
+                f"{len(commentary)} headline-shaped links in link families are labelled "
+                f"commentary (F10), e.g. {commentary[:3]}"
+            )
+        if untied := untied_journal_photos(corpus, blog_source_dir):
+            failures.append(
+                f"{len(untied)} Weekly Thing photos are a blog photo but not tied to it "
+                f"(M2-2), e.g. {untied[:3]}"
+            )
+    if blog is not None:
+        failures.extend(blog_source_failures(blog, blog_source_dir))
+    for name, built in (("Weekly Thing", corpus), ("blog", blog)):
+        if built is not None and (repeated := repeated_media(built)):
+            failures.append(
+                f"{len(repeated)} {name} media rows repeat an image in the same source "
+                f"(M8), e.g. {repeated[:3]}"
+            )
+    return failures
+
+
+def repeated_media(corpus: dict[str, Any]) -> list[str]:
+    """QA3 M8: one media row per image per source, however often it shows."""
+    seen, repeated = set(), []
+    for item in corpus.get("media") or []:
+        source = item.get("issue_number") or item.get("microblog_id") or item.get("page_id")
+        key = (item.get("source_kind"), str(source), item.get("url"))
+        if key in seen:
+            repeated.append(f"{source}: {item.get('url')}")
+        seen.add(key)
+    return repeated
+
+
+# An oracle over the blog's markdown, written apart from the build's own
+# regexes so the two cannot share a mistake.
+_FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+_GATE_SHORTCODE_RE = re.compile(r"\{\{<\s*(x|tweet|youtube|vimeo)\s+([^>]*?)\s*>\}\}", re.I)
+_GATE_IFRAME_SRC_RE = re.compile(r"""<iframe\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", re.I)
+_GATE_STYLE_RE = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
+_GATE_VIDEO_RE = re.compile(r"<video\b[^>]*>", re.I)
+_GATE_ATTR_RE = r"""\b{}\s*=\s*["']([^"']*)["']"""
+
+
+_LINK_FAMILIES = {"Featured", "Notable", "Briefly", "FYI", "App"}
+_GATE_LINK_LINE_RE = re.compile(
+    r"^[ \t]*(?:[-*+][ \t]+)?(?:\*\*)?\[[^\]\n]*\]\(([^)\s]+)\)(?:\*\*)?(?:[ \t]+\S+\.\w+)?[ \t]*$",
+    re.M,
+)
+_GATE_BOLD_LINK_RE = re.compile(r"\*\*\[[^\]\n]*\]\(([^)\s]+)\)\*\*")
+_GATE_LIST_LINK_RE = re.compile(
+    r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+[^\n]*?(?<!!)\[[^\]\n]*\]\(([^)\s]+)\)", re.M
+)
+
+
+def headline_shaped_commentary(corpus: dict[str, Any]) -> list[str]:
+    """QA3 F10: in a link family, a link that is a whole line, a bold lead or
+    the first link of a list item is the item's headline; labelled commentary, link_role "headline" drops
+    it (688 did). Each issue's section texts are the oracle."""
+    found = []
+    for issue in corpus.get("issues") or []:
+        shaped = {
+            match.group(1)
+            for section in issue.get("sections") or []
+            if section.get("section_family") in _LINK_FAMILIES
+            for pattern in (_GATE_LINK_LINE_RE, _GATE_BOLD_LINK_RE, _GATE_LIST_LINK_RE)
+            for match in pattern.finditer(section.get("text") or "")
+        }
+        found += [
+            f"WT{issue.get('number')}: {link.get('url')}"
+            for link in issue.get("links") or []
+            if link.get("link_role") == "commentary" and link.get("url") in shaped
+        ]
+    return found
+
+
+_GATE_IMAGE_RES = (
+    re.compile(r"!\[[^\]]*\]\(\s*<?([^)\s>]+)"),
+    re.compile(r"""<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", re.I),
+    re.compile(r"""<video\b[^>]*?\bposter\s*=\s*["']([^"']+)["']""", re.I),
+)
+
+
+def _file_name(url: str) -> str:
+    return unquote(urlsplit(url).path.rsplit("/", 1)[-1]).lower()
+
+
+def untied_journal_photos(corpus: dict[str, Any], source_dir: Path) -> list[str]:
+    """QA3 M2-2: a WT photo with no ``canonical_url`` whose URL is a blog
+    photo's, or whose file name is the one photo of that name in the posts
+    its issue's Journal copies (the Shortcuts-era ``N/journal/<name>``
+    rehost), was listed twice. The blog photos come from the markdown."""
+    photos: dict[str, list[str]] = {}
+    for path in sorted(source_dir.rglob("*.md")):
+        post = _source_post(path)
+        if post is None or post[0][0] != "microblog_id":
+            continue
+        (_, post_id), body = post
+        photos[post_id] = [m.group(1) for regex in _GATE_IMAGE_RES for m in regex.finditer(body)]
+    every = {url for urls in photos.values() for url in urls}
+    copies = {
+        str(issue.get("number")): {
+            str(entry.get("copy_of_microblog_id")) for entry in issue.get("journal_entries") or []
+        }
+        for issue in corpus.get("issues") or []
+    }
+    untied = []
+    for item in corpus.get("media") or []:
+        url = str(item.get("url") or "")
+        if item.get("canonical_url") or not url:
+            continue
+        if item.get("source_kind", "weekly_thing") != "weekly_thing":
+            continue
+        name = _file_name(url)
+        named = {
+            photo
+            for post_id in copies.get(str(item.get("issue_number")), ())
+            for photo in photos.get(post_id, [])
+            if name and _file_name(photo) == name
+        }
+        if url in every or len(named) == 1:
+            untied.append(f"WT{item.get('issue_number')}: {url}")
+    return untied
+
+
+def _fold(text: str) -> str:
+    return " ".join(text.split())
+
+
+def _source_post(path: Path) -> tuple[tuple[str, str], str] | None:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return None
+    _, front, body = text.split("---", 2)
+    fields = dict(
+        line.split(":", 1) for line in front.splitlines() if ":" in line and line[:1].isalpha()
+    )
+    for name in ("microblog_id", "page_id"):
+        value = fields.get(name, "").strip().strip("\"'")
+        if value:
+            return (name, value), body
+    return None
+
+
+def _code_lines(body: str) -> list[str]:
+    lines, fence = [], None
+    for line in body.splitlines():
+        opener = _FENCE_RE.match(line)
+        if fence is None:
+            if opener:
+                fence = opener.group(1)
+        elif opener and opener.group(1)[0] == fence[0] and len(opener.group(1)) >= len(fence):
+            fence = None
+        elif len(line.strip()) >= 12:
+            lines.append(_fold(line))
+    return lines
+
+
+def _embed_urls(body: str) -> list[str]:
+    urls = [match.group(1) for match in _GATE_IFRAME_SRC_RE.finditer(body)]
+    for match in _GATE_SHORTCODE_RE.finditer(body):
+        name, args = match.group(1).lower(), match.group(2)
+        named = dict(re.findall(r"""(\w+)=["']?([^"'\s]+)""", args))
+        ident = named.get("id") or args.split()[0].strip("\"'")
+        if name in {"x", "tweet"}:
+            urls.append(f"/status/{ident}")
+        elif name == "youtube":
+            urls.append(f"v={ident}")
+        else:
+            urls.append(f"vimeo.com/{ident}")
+    return urls
+
+
+def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
+    """QA3 R2-6 and F16, against the blog's markdown: every fenced code line
+    (12+ chars) is in its post's chunk text, every embedded tweet, video and
+    iframe is one of its post's links, and no <style> rule is chunk text.
+    QA3 I2-5: every <video> is a media record of its post, by its poster
+    still or, with no poster, by the video itself."""
+    texts: dict[tuple[str, str], list[str]] = {}
+    for chunk in blog.get("chunks") or []:
+        key = (
+            ("page_id", str(chunk["page_id"]))
+            if chunk.get("page_id") is not None
+            else ("microblog_id", str(chunk.get("microblog_id")))
+        )
+        texts.setdefault(key, []).append(chunk.get("text") or "")
+    links: dict[tuple[str, str], list[str]] = {}
+    for link in blog.get("links") or []:
+        key = (
+            ("page_id", str(link["page_id"]))
+            if link.get("page_id") is not None
+            else ("microblog_id", str(link.get("microblog_id")))
+        )
+        links.setdefault(key, []).append(link.get("url") or "")
+    media: dict[tuple[str, str], set[str]] = {}
+    for item in blog.get("media") or []:
+        key = (
+            ("page_id", str(item["page_id"]))
+            if item.get("page_id") is not None
+            else ("microblog_id", str(item.get("microblog_id")))
+        )
+        media.setdefault(key, set()).add(item.get("url") or "")
+    code_missing, embeds_missing, css_kept, videos_missing = [], [], [], []
+    for path in sorted(source_dir.rglob("*.md")):
+        post = _source_post(path)
+        if post is None:
+            continue
+        key, body = post
+        text = _fold("\n".join(texts.get(key, [])))
+        code_missing += [f"{key[1]}: {line[:60]}" for line in _code_lines(body) if line not in text]
+        urls = links.get(key, [])
+        embeds_missing += [
+            f"{key[1]}: {want}" for want in _embed_urls(body) if not any(want in u for u in urls)
+        ]
+        for tag in _GATE_VIDEO_RE.findall(body):
+            found = [re.search(_GATE_ATTR_RE.format(name), tag, re.I) for name in ("poster", "src")]
+            want = next((m.group(1) for m in found if m and m.group(1)), None)
+            if want and want not in media.get(key, set()):
+                videos_missing.append(f"{key[1]}: {want}")
+        for style in _GATE_STYLE_RE.finditer(body):
+            css_kept += [
+                f"{key[1]}: {line[:60]}"
+                for line in map(_fold, style.group(1).splitlines())
+                if len(line) >= 12 and line in text
+            ]
+    failures = []
+    for label, missing in (
+        ("fenced code lines missing from blog chunk text", code_missing),
+        ("embedded tweets, videos or iframes with no blog link", embeds_missing),
+        ("<style> CSS kept as blog chunk text", css_kept),
+        ("blog videos with no media record", videos_missing),
+    ):
+        if missing:
+            failures.append(f"{len(missing)} {label}, e.g. {missing[:3]}")
+    return failures
+
+
 def load_json(path: Path) -> dict[str, Any]:
     data = path.read_bytes()
     if data[:2] == b"\x1f\x8b":
@@ -245,19 +502,19 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "gate":
         candidate = args.candidate / "corpus.json"
         blog_candidate = args.candidate / "blog_corpus.json"
-        if not candidate.is_file() and not blog_candidate.is_file():
+        corpus = load_json(candidate) if candidate.is_file() else None
+        blog = load_json(blog_candidate) if blog_candidate.is_file() else None
+        if corpus is None and blog is None:
             print(f"corpus gate: no candidate corpus in {args.candidate}; nothing to check")
             return 0
-        failures = []
-        staged = {}
-        if candidate.is_file():
-            staged["corpus.json"] = load_json(candidate)
-            failures.extend(gate_failures(staged["corpus.json"], args.site_archive))
-        if blog_candidate.is_file():
-            staged["blog_corpus.json"] = load_json(blog_candidate)
-            failures.extend(blog_date_failures(staged["blog_corpus.json"]))
-        for name, corpus in staged.items():
-            truncated, report = embed_truncation_report(name, corpus)
+        failures = gate_failures(corpus, args.site_archive) if corpus is not None else []
+        if blog is not None:
+            failures.extend(blog_date_failures(blog))
+        failures.extend(ingest_failures(corpus, blog))
+        for name, staged in (("corpus.json", corpus), ("blog_corpus.json", blog)):
+            if staged is None:
+                continue
+            truncated, report = embed_truncation_report(name, staged)
             print(report)
             if truncated and os.environ.get("GITHUB_ACTIONS"):
                 print(f"::warning title=Embed truncation (QA2 I2-4)::{report}")

@@ -4146,11 +4146,16 @@ async function toolMediaSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
       total_count: ordered.length,
       ...(collapsed ? { collapsed_copies: collapsed } : {}),
       results: page.shown.map((item) => {
-        const refusal = imageUrlRefusal(item.url);
+        // A blog video with no poster still is its own record (QA3, ingest
+        // I2-5): its url is the video, which view_photo cannot show.
+        const video = item.media_kind === 'video';
+        const refusal = video ? 'a video with no still image' : imageUrlRefusal(item.url);
         return {
           // The id get_source opens for the photo's issue, post or episode.
           source_id: item.source_id,
           image_url: allowedImageUrl(item.url) || item.url,
+          ...(video ? { media_kind: 'video' } : {}),
+          ...(item.video_url ? { video_url: item.video_url } : {}),
           ...(refusal ? { viewable: false, not_viewable_because: refusal } : {}),
           alt: item.alt,
           context: item.context,

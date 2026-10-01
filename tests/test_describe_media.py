@@ -110,27 +110,51 @@ if __name__ == "__main__":
 
 
 class CollectUrlsTest(unittest.TestCase):
-    def test_blog_video_posters_are_collected_like_images(self):
+    def test_every_corpus_media_record_is_collected(self):
+        # The pass reads the corpus builds' media, so a video poster (QA2
+        # I2-5) and a blog Page photo (QA3 M11: 626 never tried) are taken
+        # like any image; a posterless video's record is the video file.
         import tempfile
         from pathlib import Path
 
+        from librarian_core.corpus import build_blog_corpus
+
         with tempfile.TemporaryDirectory() as tmp:
-            post = Path(tmp) / "2025" / "post.md"
-            post.parent.mkdir()
+            post = Path(tmp) / "posts" / "2025" / "01" / "post.md"
+            post.parent.mkdir(parents=True)
             post.write_text(
+                "---\nmicroblog_id: 9\n"
+                'url: "https://www.thingelstad.com/2025/01/02/post.html"\n'
+                'title: ""\npublished: "2025-01-02T12:00:00+00:00"\n'
+                "post_kind: micropost\ncategories: []\n---\n\n"
                 '<img src="https://www.thingelstad.com/uploads/2025/a.jpg" alt="">\n'
                 '<video src="https://www.thingelstad.com/uploads/2025/v.mov" '
                 'poster="https://www.thingelstad.com/uploads/2025/still.png"></video>\n'
                 '<video src="https://www.thingelstad.com/uploads/2025/w.mov" poster=""></video>\n'
             )
+            page = Path(tmp) / "pages" / "art.md"
+            page.parent.mkdir()
+            page.write_text(
+                '---\npage_id: 60161\nurl: "https://www.thingelstad.com/art/"\n'
+                'title: "Art"\nupdated: "2026-09-12T18:07:35+00:00"\n'
+                "post_kind: page\ncategories: []\n---\n\n"
+                "An abstract.\n\n![](https://files.thingelstad.com/art/a-small.jpg)\n"
+            )
+            archive = Path(tmp) / "archive"
+            archive.mkdir()
+            blog = build_blog_corpus(
+                blog_dir=Path(tmp) / "posts", archive_dir=archive, podcast_dir=archive
+            )
+            self.assertIn("video", {m.get("media_kind") for m in blog["media"]})
             with (
-                unittest.mock.patch.object(describe_media, "BLOG_POSTS", Path(tmp)),
+                unittest.mock.patch.object(describe_media, "build_blog_corpus", lambda: blog),
                 unittest.mock.patch.object(describe_media, "build_corpus", lambda: {"media": []}),
             ):
                 urls = describe_media.collect_urls(keep=describe_media.fetchable)
         self.assertEqual(
-            urls,
+            sorted(urls),
             [
+                "https://files.thingelstad.com/art/a-small.jpg",
                 "https://www.thingelstad.com/uploads/2025/a.jpg",
                 "https://www.thingelstad.com/uploads/2025/still.png",
             ],

@@ -303,7 +303,9 @@ jobs:
       # Journal copies unmatched at or under the post-repair ceiling, and every
       # site audio edition on its issue: a failed site checkout fails here
       # instead of shipping a corpus with no audio pointers. A staged blog
-      # candidate files every post by its Chicago day.
+      # candidate files every post by its Chicago day, and the ingest checks
+      # (corpus_gate.ingest_failures) read it too, so this runs for a
+      # blog-only rebuild as well.
       - name: Corpus gate (archive checks on the staged candidates)
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true'
         run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive .weekly-site/apps/site/archive
