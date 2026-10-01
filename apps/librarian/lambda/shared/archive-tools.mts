@@ -550,7 +550,9 @@ const TRACKING_PARAMS = new Set([
   'cmpid',
   'igshid',
   'vero_id',
-  'wickedid'
+  'wickedid',
+  '__twitter_impression',
+  'smprod'
 ]);
 const AMP_PARAMS = new Set(['amp', '_amp', 'amp_js_v', 'usqp']);
 // m.example.com is example.com in another dress; amp.dev and m.me are sites

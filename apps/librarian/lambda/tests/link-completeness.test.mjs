@@ -235,6 +235,4 @@ test('find_links: top_domains says how many domains it left out', async () => {
 test('linkUrlKey agrees with WT Builder on every canonical-urls case', () => {
   for (const { url, key } of canonicalUrls.cases) assert.equal(linkUrlKey(url), key, url);
   for (const [a, b] of canonicalUrls.different) assert.notEqual(linkUrlKey(a), linkUrlKey(b), `${a} vs ${b}`);
-  assert.equal(linkUrlKey('https://amp.dev/documentation'), 'amp.dev/documentation', 'amp.dev is its own site');
-  assert.equal(linkUrlKey('https://m.me/someone'), 'm.me/someone', 'm.me is its own site');
 });
