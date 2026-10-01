@@ -17,6 +17,7 @@ import { searchFaq } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
+  journalCopyPosts,
   loadCorpus,
   loadGraph,
   onThisDayYear,
@@ -765,9 +766,10 @@ export function passageWindow(chunk: ArchiveRecord, query: string, room: number)
 
 // A Weekly Thing Journal passage reprints blog posts, and the blog post is
 // the canonical item (Jamie, 2026-09-30): copy_of names each post the
-// corpus build tied it to, so the agent opens and cites the post.
+// corpus build tied it to, so the agent opens and cites the post. An older
+// post the Journal only linked to is not one (QA2 I2-1).
 function journalCopies(chunk: ArchiveRecord) {
-  return ((chunk.journal_posts as Array<Record<string, unknown>> | undefined) || [])
+  return journalCopyPosts(chunk)
     .filter((post) => post?.copy_of_microblog_id != null)
     .map((post) => ({
       id: `blog-${String(post.copy_of_microblog_id)}`,

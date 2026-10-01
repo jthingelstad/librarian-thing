@@ -36,7 +36,7 @@ const skipBaseline = process.env.EVAL_SKIP_BASELINE === '1';
 const allowNetwork = process.env.EVAL_ALLOW_NETWORK === '1';
 
 const { ARCHIVE_TOOLS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
-const { primeCorpusCachesForTests } = await import(path.join(distDir, 'shared/retrieval.mjs'));
+const { primeCorpusCachesForTests, ...retrieval } = await import(path.join(distDir, 'shared/retrieval.mjs'));
 const { mcpToolDeclarations, renderToolCallResult, validateToolArguments } = await import(
   path.join(distDir, 'shared/mcp.mjs')
 );
@@ -559,6 +559,20 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
   );
   check('KA search_archive passage audio starts at its chapter', badAudio.length === 0, badAudio.join(', '));
 });
+// QA2 I2-1: WT212's Journal links back to a 2021 post; that is a reference,
+// not a copy, so the post surfacing never drops the passage, and the
+// passage never names the post as its original.
+{
+  const query = 'NFTs are a truly new thing that cannot be copied';
+  const all = await run('search_archive', { query, limit: 12 });
+  const ids = (all?.results || []).map((group) => group.id);
+  check('KA search_archive keeps wt-212 under scope all', ids.includes('wt-212'), ids.join(', '));
+  const wt = await run('search_archive', { query, limit: 12, source_kind: 'weekly_thing' });
+  const named = (wt?.results || [])
+    .filter((group) => group.id === 'wt-212')
+    .flatMap((group) => group.passages.flatMap((passage) => (passage.copy_of || []).map((copy) => copy.id)));
+  check('KA wt-212 is not a copy of blog-1464172', !named.includes('blog-1464172'), named.join(', '));
+}
 await run('get_source', { id: 'wt-321', format: 'outline' }).then((out) => {
   check('KA get_source outline has no body', out?.source && out.source.body === undefined);
   check('KA get_source outline names sections', (out?.source?.sections || []).length > 3);
@@ -741,6 +755,7 @@ await runCompletenessChecks({
   corpora,
   check,
   counts,
+  retrieval,
   call: async (tool, args) => {
     const response = await ARCHIVE_TOOLS[tool](args, { scope: 'all' });
     const rendered = renderToolCallResult(tool, response);

@@ -62,7 +62,7 @@ function yearOf(record) {
   return Number.isFinite(year) ? year : null;
 }
 
-export async function runCompletenessChecks({ corpora, call, check, counts }) {
+export async function runCompletenessChecks({ corpora, call, check, counts, retrieval = {} }) {
   const wt = corpora.weekly_thing || {};
   const blog = corpora.blog || {};
   const podcast = corpora.podcast || {};
@@ -490,6 +490,63 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
         `${wrong.length}: ${wrong.slice(0, 4).join('; ')}`
       );
     }
+  }
+
+  // 8f. A Journal copy is a post from the issue's own week, never an older
+  //     post Jamie linked to in Journal prose (QA2 I2-1: five passages of new
+  //     writing were dropped as "copies" of 2016-2023 posts). The oracle
+  //     finds every pairing whose post's day (Chicago or permalink) falls
+  //     outside [previous issue - 3 days, issue + 1 day]; with those posts in
+  //     the pool the passage stays, and copy_of never names them.
+  {
+    const chicago = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' });
+    const dayOf = (stamp) => {
+      const value = String(stamp || '');
+      return /T/.test(value) && Number.isFinite(Date.parse(value))
+        ? chicago.format(Date.parse(value))
+        : value.slice(0, 10);
+    };
+    const shift = (day, days) => new Date(Date.parse(`${day}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+    const postDays = new Map(
+      (blog.posts || []).map((post) => [
+        String(post.microblog_id),
+        [dayOf(post.published), String(post.publish_date || '').slice(0, 10)].filter(Boolean)
+      ])
+    );
+    const issueDays = (wt.issues || [])
+      .map((issue) => [String(issue.number), dayOf(issue.publish_date)])
+      .sort((a, b) => a[1].localeCompare(b[1]));
+    const weeks = new Map(
+      issueDays.map(([number, day], index) => [
+        number,
+        [index ? shift(issueDays[index - 1][1], -3) : '0000-00-00', shift(day, 1)]
+      ])
+    );
+    let stalePairs = 0;
+    const wrong = [];
+    for (const chunk of wt.chunks || []) {
+      const week = weeks.get(String(chunk.issue_number));
+      const stale = (chunk.journal_posts || []).filter((copy) => {
+        const days = postDays.get(String(copy?.copy_of_microblog_id));
+        return week && days?.length && days.every((day) => day < week[0] || day > week[1]);
+      });
+      if (!stale.length) continue;
+      stalePairs += stale.length;
+      const posts = stale.map((copy) => ({
+        id: `blog:${copy.copy_of_microblog_id}:0:x`,
+        source_kind: 'blog',
+        microblog_id: copy.copy_of_microblog_id,
+        url: copy.canonical_url || copy.url
+      }));
+      const kept = retrieval.dedupeJournalTwins?.([chunk, ...posts]).includes(chunk);
+      const named = (retrieval.journalCopyPosts?.(chunk) || chunk.journal_posts).filter((copy) => stale.includes(copy));
+      if (!kept || named.length) wrong.push(`wt-${chunk.issue_number} "${chunk.section}"${kept ? '' : ' dropped'}`);
+    }
+    check(
+      'completeness a Journal copy is from the issue week',
+      wrong.length === 0,
+      `${wrong.length} of ${stalePairs} out-of-week pairings honoured: ${wrong.slice(0, 5).join(', ')}`
+    );
   }
 
   // 9. Corpus size into the baseline: a build that drops more than 10% of

@@ -973,6 +973,8 @@ function journalPostKeySets(chunk: CorpusChunk): string[][] {
   const sets: string[][] = [];
   for (let index = 0; index < count; index += 1) {
     const post = posts[index] || {};
+    // An older post Jamie linked to is a reference, not a copy (QA2 I2-1).
+    if (!journalCopyInWeek(chunk, post)) continue;
     const keys = new Set<string>();
     if (urls[index]) keys.add(`url:${urls[index]}`);
     if (post.url) keys.add(`url:${String(post.url)}`);
@@ -981,6 +983,70 @@ function journalPostKeySets(chunk: CorpusChunk): string[][] {
     sets.push([...keys]);
   }
   return sets;
+}
+
+// A Journal copy reprints a post from the issue's own week. The corpus
+// build also paired permalinks in Journal prose ("Also see 2021 and
+// 2015.", WT337's escape-room list) with the old posts they link to, and
+// the dedupe then dropped new writing as a "copy" whenever that old post
+// surfaced (QA2 I2-1: wt-212, wt-264, wt-267, wt-274, wt-333). Until the
+// build applies its own issue window, a post counts as copied only when
+// its Chicago day (or its permalink day) falls in [previous issue - 3
+// days, this issue + 1 day]. A chunk, issue or post the loaded corpora do
+// not know keeps its pairing.
+const JOURNAL_WEEK_BEFORE_DAYS = 3;
+const JOURNAL_WEEK_AFTER_DAYS = 1;
+const ISSUE_WEEKS = new WeakMap<Corpus, Map<string, [string, string]>>();
+const POST_DAYS = new WeakMap<Corpus, Map<string, string[]>>();
+const DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+
+function shiftDay(day: string, days: number) {
+  const time = Date.parse(`${day}T00:00:00Z`);
+  return Number.isFinite(time) ? new Date(time + days * DAY_MS).toISOString().slice(0, 10) : day;
+}
+
+function issueWeeks(corpus: Corpus) {
+  let weeks = ISSUE_WEEKS.get(corpus);
+  if (weeks) return weeks;
+  const dated = (corpus.issues || [])
+    .map((issue) => [String(issue.number), localDay(issue)] as const)
+    .filter(([, day]) => DAY_SHAPE.test(day))
+    .sort((a, b) => a[1].localeCompare(b[1]));
+  weeks = new Map();
+  dated.forEach(([number, day], index) => {
+    const from = index ? shiftDay(dated[index - 1][1], -JOURNAL_WEEK_BEFORE_DAYS) : '0000-00-00';
+    weeks!.set(number, [from, shiftDay(day, JOURNAL_WEEK_AFTER_DAYS)]);
+  });
+  ISSUE_WEEKS.set(corpus, weeks);
+  return weeks;
+}
+
+function postDays(corpus: Corpus) {
+  let days = POST_DAYS.get(corpus);
+  if (days) return days;
+  days = new Map();
+  for (const post of (corpus.posts as Array<Record<string, unknown>> | undefined) || []) {
+    const both = [localDay(post), String(post.publish_date || '').slice(0, 10)].filter((day) => DAY_SHAPE.test(day));
+    if (both.length) days.set(String(post.microblog_id), [...new Set(both)]);
+  }
+  POST_DAYS.set(corpus, days);
+  return days;
+}
+
+function journalCopyInWeek(chunk: CorpusChunk, post: Record<string, unknown>) {
+  if (post?.copy_of_microblog_id == null || !corpusCache || !blogCorpusCache) return true;
+  const week = issueWeeks(corpusCache).get(String(chunk.issue_number ?? ''));
+  const days = postDays(blogCorpusCache).get(String(post.copy_of_microblog_id));
+  if (!week || !days) return true;
+  return days.some((day) => day >= week[0] && day <= week[1]);
+}
+
+// The journal_posts entries that are copies: the ones from the issue's own
+// week (copy_of names only these).
+export function journalCopyPosts(chunk: CorpusChunk): Array<Record<string, unknown>> {
+  return ((chunk.journal_posts as Array<Record<string, unknown>> | undefined) || []).filter(
+    (post) => post && journalCopyInWeek(chunk, post)
+  );
 }
 
 export function dedupeJournalTwins(candidates: CorpusChunk[]): CorpusChunk[] {
