@@ -73,6 +73,24 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
   };
   const allLinks = [...bySource.weekly_thing.links, ...bySource.blog.links, ...bySource.podcast.links];
   const totalItems = Object.values(bySource).reduce((sum, source) => sum + source.items.length, 0);
+  // The Chicago day each source was published on, by id (Jamie, 2026-09-30:
+  // "All of my content should be shown in Chicago time").
+  const chicago = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  // The oracle day: a timestamp's Chicago date; a bare date is already local.
+  const dayOf = (record) => {
+    const stamp = String(record.published || record.publish_date || '').trim();
+    return /^\d{4}-\d{2}-\d{2}T/.test(stamp) ? chicago.format(Date.parse(stamp)) : stamp.slice(0, 10);
+  };
+  const oracleDay = new Map([
+    ...bySource.weekly_thing.items.map((issue) => [`wt-${issue.number}`, dayOf(issue)]),
+    ...bySource.blog.items.map((post) => [`blog-${post.microblog_id}`, dayOf(post)]),
+    ...bySource.podcast.items.map((episode) => [`ep-${episode.number}`, dayOf(episode)])
+  ]);
 
   // 1. corpus_stats reports every item and link the corpora hold, and its
   //    per-year counts partition the items.
@@ -112,6 +130,7 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
   //     was an April Blot import published in 2018).
   {
     const wrong = [];
+    const undated = [];
     for (const kind of ['weekly_thing', 'blog', 'podcast']) {
       const yearField = kind === 'blog' ? 'post_year' : 'issue_year';
       const byYear = new Map();
@@ -131,12 +150,21 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
         if (oldest !== days[0] || newest !== days.at(-1)) {
           wrong.push(`${kind} ${year}: ${oldest}..${newest} vs ${days[0]}..${days.at(-1)}`);
         }
+        for (const end of [source.oldest, source.newest]) {
+          if (!end?.date || end.date !== oracleDay.get(end.id))
+            undated.push(`${end?.id} ${end?.date} (oracle ${oracleDay.get(end?.id)})`);
+        }
       }
     }
     check(
       'completeness corpus_stats oldest and newest bound each year',
       wrong.length === 0,
       wrong.slice(0, 4).join('; ')
+    );
+    check(
+      'completeness corpus_stats oldest and newest carry their Chicago date',
+      undated.length === 0,
+      `${undated.length}: ${undated.slice(0, 4).join('; ')}`
     );
   }
 
@@ -149,22 +177,6 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
   //    Feb 28 and Feb 29 sources fold into it, so 02-29 is only asked in a
   //    leap year.)
   {
-    const chicago = new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'America/Chicago',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-    // The oracle day: a timestamp's Chicago date; a bare date is already local.
-    const dayOf = (record) => {
-      const stamp = String(record.published || record.publish_date || '').trim();
-      return /^\d{4}-\d{2}-\d{2}T/.test(stamp) ? chicago.format(Date.parse(stamp)) : stamp.slice(0, 10);
-    };
-    const oracleDay = new Map([
-      ...bySource.weekly_thing.items.map((issue) => [`wt-${issue.number}`, dayOf(issue)]),
-      ...bySource.blog.items.map((post) => [`blog-${post.microblog_id}`, dayOf(post)]),
-      ...bySource.podcast.items.map((episode) => [`ep-${episode.number}`, dayOf(episode)])
-    ]);
     const thisYear = Number(chicago.format(new Date()).slice(0, 4));
     for (const target of [...new Set([thisYear, 2028])]) {
       const leap = new Date(Date.UTC(target, 1, 29)).getUTCMonth() === 1;
@@ -246,11 +258,78 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     check(`${label} repeats nothing`, repeats === 0, `${repeats} repeats`);
   }
 
-  // 3. currently_history reaches every Currently entry.
+  // 2c. Every source a listing tool emits carries date, the Chicago day it
+  //     was published, and the full newest-first walks never step forward a
+  //     day (QA2 T2-5: only on_this_day showed the Chicago day; 125 sources
+  //     showed a UTC or permalink day, and ep-1's bare date sorted as UTC
+  //     midnight, the Chicago evening before).
   {
-    const result = await call('currently_history', { limit: 120 });
+    const walk = async (tool, args, key = 'results') => {
+      const items = [];
+      let offset = 0;
+      for (let guard = 0; guard < 1000; guard += 1) {
+        const result = await call(tool, { ...args, ...(offset ? { offset } : {}) });
+        items.push(...(result[key] || []));
+        offset = result.truncated?.next_offset;
+        if (!offset) return { items, total: result.total_count };
+      }
+      return { items, total: -1 };
+    };
+    const misdated = (items, idOf = (item) => item.id) =>
+      items.filter((item) => item.date !== oracleDay.get(idOf(item))).map((item) => `${idOf(item)} ${item.date}`);
+    // The day a reader sees: date, or what showed before it (publish_date).
+    const shownDay = (item) => String(item.date ?? item.publish_date ?? '').slice(0, 10);
+    const stepsForward = (items) => items.filter((item, i) => i > 0 && shownDay(item) > shownDay(items[i - 1]));
+    for (const [tool, limit] of [
+      ['list_content', 120],
+      ['latest_content', 30]
+    ]) {
+      const { items, total } = await walk(tool, { limit });
+      const wrong = misdated(items);
+      const forward = stepsForward(items);
+      check(
+        `completeness ${tool} walk reaches every source`,
+        items.length === total && total === totalItems,
+        `${items.length} of ${total} (${totalItems})`
+      );
+      check(
+        `completeness ${tool} dates every source in Chicago`,
+        wrong.length === 0,
+        `${wrong.length}: ${wrong.slice(0, 4).join('; ')}`
+      );
+      check(
+        `completeness ${tool} walk never steps forward a day`,
+        forward.length === 0,
+        `${forward.length}: ${forward
+          .slice(0, 4)
+          .map((item) => `${item.id} ${shownDay(item)}`)
+          .join('; ')}`
+      );
+    }
+    const quoted = await walk('quote_search', { phrase: 'good morning', limit: 50 });
+    const quotedWrong = misdated(quoted.items);
+    check(
+      'completeness quote_search dates every source in Chicago',
+      quoted.items.length > 0 && quotedWrong.length === 0,
+      `${quoted.items.length} items; ${quotedWrong.length}: ${quotedWrong.slice(0, 4).join('; ')}`
+    );
+    const sourcesWrong = [];
+    for (const id of ['wt-22', 'wt-35', 'wt-299', 'wt-251', 'blog-20021', 'blog-1077238', 'ep-1']) {
+      const source = (await call('get_source', { id, limit: 1 })).source || {};
+      if (source.date !== oracleDay.get(id)) sourcesWrong.push(`${id} ${source.date} (oracle ${oracleDay.get(id)})`);
+    }
+    check('completeness get_source dates each source in Chicago', sourcesWrong.length === 0, sourcesWrong.join('; '));
+    // 3. currently_history reaches every Currently entry, each on its
+    //    issue's Chicago day.
+    const currently = await walk('currently_history', { limit: 120 }, 'entries');
     const oracle = (wt.currently || []).length;
-    check('completeness currently_history total', result.total_count === oracle, `${result.total_count} vs ${oracle}`);
+    check('completeness currently_history total', currently.total === oracle, `${currently.total} vs ${oracle}`);
+    const entriesWrong = misdated(currently.items, (entry) => entry.source_id);
+    check(
+      'completeness currently_history dates every entry in Chicago',
+      currently.items.length === oracle && entriesWrong.length === 0,
+      `${currently.items.length} entries; ${entriesWrong.length}: ${entriesWrong.slice(0, 4).join('; ')}`
+    );
   }
 
   // 4. Domain filters: find_links counts equal a host-equality-or-subdomain

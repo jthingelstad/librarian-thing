@@ -896,6 +896,23 @@ await run('search_faq', { query: 'what is the weekly thing' });
   );
   check('KA Mastodon is counted by list_content', listed?.total_count > 0, String(listed?.total_count));
 }
+{
+  // QA2 T2-5: WT22 went out 2017-10-06 in Chicago (00:00Z on the 7th);
+  // currently_history had shown its UTC day.
+  const reading = await run('currently_history', { year: 2017, kind: 'reading', limit: 120 });
+  const wt22 = (reading?.entries || []).find((entry) => entry.source_id === 'wt-22');
+  check(
+    'KA currently_history shows WT22 on its Chicago day',
+    wt22?.date === '2017-10-06',
+    JSON.stringify(wt22?.date ?? wt22?.publish_date)
+  );
+  const latest = await run('latest_content', { source_kind: 'podcast', limit: 1 });
+  check(
+    'KA latest_content dates an episode by its own day',
+    latest?.results?.[0]?.date === latest?.results?.[0]?.publish_date,
+    JSON.stringify(latest?.results?.[0]?.date)
+  );
+}
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('search_faq', { query: 'newsletter', limit: 1 });
 await run('list_topics', { limit: 5 });

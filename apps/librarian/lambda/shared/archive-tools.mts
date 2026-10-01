@@ -1488,8 +1488,31 @@ async function toolDomainHistory(input: ToolArgs = {}, context: ToolContext = {}
 // its day and left same-day posts in corpus order, so the newest N was not
 // the newest N. Equal instants fall back to the id, newest id first.
 function sourceInstant(item: ArchiveRecord) {
-  const stamp = Date.parse(String(item.published || item.publish_date || ''));
+  const raw = String(item.published || item.publish_date || '').trim();
+  // A bare date (a podcast episode's 2025-10-05) is that Chicago day's noon,
+  // not UTC midnight, which is the evening before in Chicago: ep-1 had sorted
+  // below a post from Chicago 10-04 20:00 (QA2 T2-5).
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return chicagoNoon(raw);
+  const stamp = Date.parse(raw);
   return Number.isFinite(stamp) ? stamp : 0;
+}
+
+const CHICAGO_OFFSET = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', timeZoneName: 'shortOffset' });
+
+function chicagoNoon(day: string) {
+  const noonUtc = Date.parse(`${day}T12:00:00Z`);
+  if (!Number.isFinite(noonUtc)) return 0;
+  const zone = CHICAGO_OFFSET.formatToParts(noonUtc).find((part) => part.type === 'timeZoneName')?.value || '';
+  const hours = Number(/GMT([+-]\d+)/.exec(zone)?.[1] ?? -6);
+  return noonUtc - hours * 3_600_000;
+}
+
+// The Chicago day a source was published on, the day Jamie published it
+// (Jamie, 2026-09-30: "All of my content should be shown in Chicago time").
+// publish_date stays as the corpus holds it: a UTC timestamp for an issue,
+// the permalink day for a blog post (QA2 T2-5).
+function sourceDate(record: ArchiveRecord | Record<string, unknown>) {
+  return localDay(record as ArchiveRecord) || null;
 }
 
 function latestByDate<T extends ArchiveRecord>(items: T[]) {
@@ -1679,6 +1702,7 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     show: record.show,
     subject: record.subject,
     publish_date: record.publish_date,
+    date: sourceDate(record),
     year: recordYear(record) || null,
     section: record.section,
     url: absoluteSourceUrl(record.url),
@@ -1978,7 +2002,8 @@ function ambiguousSource(found: { ambiguous: ArchiveRecord[] }) {
   const candidates = found.ambiguous.map((record) => ({
     id: lensSourceId(record),
     subject: record.subject,
-    publish_date: record.publish_date
+    publish_date: record.publish_date,
+    date: sourceDate(record)
   }));
   return {
     error: `That url is shared by ${candidates.length} posts; pass one id: ${candidates.map((c) => c.id).join(', ')}.`,
@@ -2040,7 +2065,13 @@ function boundedStatsRecord(
   const topics = record.topics || [];
   omitted[`sources[].${at}.domains`] = (omitted[`sources[].${at}.domains`] || 0) + Math.max(0, domains.length - limit);
   omitted[`sources[].${at}.topics`] = (omitted[`sources[].${at}.topics`] || 0) + Math.max(0, topics.length - limit);
-  return { ...record, domains: domains.slice(0, limit), topics: topics.slice(0, limit) };
+  return {
+    id: lensSourceId(record),
+    ...record,
+    date: sourceDate(record),
+    domains: domains.slice(0, limit),
+    topics: topics.slice(0, limit)
+  };
 }
 
 // A source's chunk with a date; FAQ answers and site pages have none and
@@ -2149,6 +2180,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
           ...(record.issue_number ? { issue_number: record.issue_number } : {}),
           subject: record.subject,
           publish_date: record.publish_date,
+          date: sourceDate(record as ArchiveRecord),
           url: record.url
         })
       }),
@@ -2170,7 +2202,12 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
       const seconds = withAudio.reduce((sum, record) => sum + (Number(record.audio_duration_seconds) || 0), 0);
       const edition = (record: ArchiveRecord | undefined) =>
         record
-          ? { id: lensSourceId(record), issue_number: record.issue_number, publish_date: record.publish_date }
+          ? {
+              id: lensSourceId(record),
+              issue_number: record.issue_number,
+              publish_date: record.publish_date,
+              date: sourceDate(record)
+            }
           : null;
       stats.audio_editions = {
         count: withAudio.length,
@@ -2293,7 +2330,7 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
       ),
       source_kind: requestedSource || null,
       total_count: ordered.length,
-      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record }))
+      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record, date: sourceDate(record) }))
     },
     { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
   );
@@ -2525,6 +2562,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
         source_kind: 'weekly_thing',
         subject: issue.subject,
         publish_date: issue.publish_date,
+        date: sourceDate(issue),
         year: recordYear(record) || null,
         section: matchedSection?.name || null,
         topics: issue.topics || [],
@@ -4022,7 +4060,10 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
       links: entry.links,
       source_id: `wt-${entry.issue_number}`,
       issue_number: entry.issue_number,
-      publish_date: String(entry.publish_date || '').slice(0, 10),
+      // The issue's raw timestamp, and the Chicago day it went out: WT22's
+      // 2017-10-07T00:00Z is 2017-10-06 in Chicago (QA2 T2-5).
+      publish_date: entry.publish_date,
+      date: sourceDate(entry),
       issue_url: entry.issue_url
     };
   });

@@ -249,8 +249,18 @@ test('has_audio keeps Weekly Thing issues with (or without) an audio edition (2.
   assert.deepEqual(stats.sources[0].audio_editions, {
     count: 1,
     total_seconds: 600,
-    first: { id: 'wt-1', issue_number: 1, publish_date: stats.sources[0].audio_editions.first.publish_date },
-    last: { id: 'wt-1', issue_number: 1, publish_date: stats.sources[0].audio_editions.last.publish_date }
+    first: {
+      id: 'wt-1',
+      issue_number: 1,
+      publish_date: stats.sources[0].audio_editions.first.publish_date,
+      date: stats.sources[0].audio_editions.first.date
+    },
+    last: {
+      id: 'wt-1',
+      issue_number: 1,
+      publish_date: stats.sources[0].audio_editions.last.publish_date,
+      date: stats.sources[0].audio_editions.last.date
+    }
   });
 });
 
