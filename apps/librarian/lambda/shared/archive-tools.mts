@@ -8,7 +8,15 @@ import {
   matchesLensTopic,
   settleLensTruncation
 } from './archive-lens.mjs';
-import { aliasesFor, compileLiteral, compileQuery, normalizeMatchMode, trimTerm } from './matcher.mjs';
+import {
+  aliasesFor,
+  compileLiteral,
+  compileQuery,
+  MatchInputError,
+  normalizeMatchMode,
+  trimTerm,
+  urlShaped
+} from './matcher.mjs';
 import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
@@ -87,6 +95,24 @@ export const TOOL_LIMITS: Record<string, { min: number; max: number; default: nu
   list_topics: { min: 1, max: 100, default: 40 },
   // Passages per claim.
   find_evidence: { min: 1, max: 8, default: 3 }
+};
+
+// The longest text each matched argument takes (QA2 L2-6): the matcher
+// compiles a term to a regex, and V8's compiler overflows at about 1,700
+// characters, which surfaced as internal_error. tool-specs.json declares
+// the same maxLength (a test holds the two together), the doors refuse a
+// longer value, and argumentProblems refuses it in-process. A quotation
+// gets room for a paragraph; a name, alias or filter word does not need it.
+export const TEXT_LIMITS: Record<string, Record<string, number>> = {
+  archive_lens: { topic: 200, aliases: 200 },
+  list_content: { topic: 200, aliases: 200 },
+  find_links: { topic: 200 },
+  compare_eras: { topic: 200 },
+  archive_gems: { theme: 200 },
+  list_topics: { query: 200 },
+  media_search: { query: 200 },
+  currently_history: { query: 200 },
+  quote_search: { phrase: 1000 }
 };
 
 export function toolLimit(name: string, input: { limit?: unknown } = {}) {
@@ -1264,9 +1290,11 @@ function noSuchSection(wanted: string, record: ArchiveRecord, rows: Array<{ name
 // title, heading, surrounding context, or domain).
 const FIND_LINK_FIELDS = ['text', 'title', 'heading_context', 'context', 'domain'] as const;
 
-function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher) {
+// A url-shaped topic (github.com/jthingelstad) is also looked for in the
+// link's own url, where it is written (QA2 L2-4).
+function findLinkMatchReasons(link: ArchiveRecord, matcher: TopicMatcher, withUrl = false) {
   const reasons: string[] = [];
-  for (const field of FIND_LINK_FIELDS) {
+  for (const field of withUrl ? [...FIND_LINK_FIELDS, 'url' as const] : FIND_LINK_FIELDS) {
     const hit = matcher.firstHit(String(link[field] || ''));
     if (hit) reasons.push(`${field}: '${hit.span}'`);
   }
@@ -1313,6 +1341,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     aliases: aliasesFor(topic),
     caseSensitive: input.case_sensitive === true
   });
+  const urlTopic = urlShaped(trimTerm(topic));
   const filteredLinks = [];
   const matchReasonsByLink = new Map<ArchiveRecord, string[]>();
   for (const link of await linkRecords(scope)) {
@@ -1328,7 +1357,7 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     if (urlKey && linkUrlKey(link.url) !== urlKey) continue;
     if (startYear && (!year || year < startYear)) continue;
     if (endYear && (!year || year > endYear)) continue;
-    const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher) : [];
+    const matchReasons = topic ? findLinkMatchReasons(link, topicMatcher, urlTopic) : [];
     if (topic && !matchReasons.length) continue;
     filteredLinks.push(link);
     if (topic) matchReasonsByLink.set(link, matchReasons);
@@ -3186,9 +3215,12 @@ function issueIdRange(numbers: Iterable<string>) {
 // substring-and-slug match made "C++" (slug "c") find 289 topics and "AI"
 // find Ukraine. An exact page or resource slug ("ai-and-agents") still
 // names its topic. The whole list pages with offset, most issues first.
+// The alias table and the slash rule apply as in every tool that filters
+// (QA2 L2-5: "Twitter/X" and "microblog" found nothing).
 async function toolListTopics(input: ToolArgs = {}) {
   const query = String(input.query || '').trim();
-  const matcher = compileTopicMatcher(query, { mode: 'exact' });
+  const aliases = query ? aliasesFor(query) : [];
+  const matcher = compileTopicMatcher(query, { mode: 'exact', aliases });
   const querySlug = siteTopicSlug(query);
   const named = (name: unknown) =>
     !query ||
@@ -3215,6 +3247,7 @@ async function toolListTopics(input: ToolArgs = {}) {
     {
       clusters,
       topic_count: topics.length,
+      ...(aliases.length ? { aliases_checked: [query, ...aliases] } : {}),
       ...(query ? { matched_topics: matched.length } : {}),
       total_count: matched.length,
       topics: page.shown.map((topic) => {
@@ -3923,7 +3956,9 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
     .toLowerCase();
   const [startYear, endYear] = parseYearRange(input.year_range);
   const query = String(input.query || '').trim();
-  const matcher = compileTopicMatcher(query);
+  // Aliases and the slash rule, as everywhere (QA2 L2-5).
+  const aliases = query ? aliasesFor(query) : [];
+  const matcher = compileTopicMatcher(query, { aliases });
   const corpus = await loadCorpus('weekly_thing');
   // "installing more" / "listening even more" are variants of their kind.
   const baseKind = (entry: Record<string, unknown>) => String(entry.kind || '').split(' ')[0];
@@ -3972,6 +4007,7 @@ async function toolCurrentlyHistory(input: ToolArgs = {}) {
   ];
   return markTruncated(
     {
+      ...(aliases.length ? { aliases_checked: [query, ...aliases] } : {}),
       total_count: entries.length,
       counts_by_kind: sortedCountList(byKind, 'kind'),
       counts_by_year: yearCountList(byYear),
@@ -4413,6 +4449,16 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
   if (name === 'quote_search' && String(args.phrase).trim().length < 3) {
     return 'phrase must be at least 3 characters';
   }
+  for (const [key, max] of Object.entries(TEXT_LIMITS[name] || {})) {
+    const values = Array.isArray(args[key]) ? (args[key] as unknown[]) : [args[key]];
+    for (const [index, value] of values.entries()) {
+      if (!present(value) || Array.from(String(value)).length <= max) continue;
+      const path = Array.isArray(args[key]) ? `${key}[${index}]` : key;
+      return `${path} takes at most ${max} characters (got ${Array.from(String(value)).length})${
+        name === 'quote_search' ? '; search for a distinctive sentence of it' : ''
+      }`;
+    }
+  }
   if (name === 'find_evidence') {
     const claims = Array.isArray(args.claims) ? args.claims : [args.claims ?? args.claim];
     const blank = claims.findIndex((claim) => !present(claim));
@@ -4463,10 +4509,19 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
 
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
   return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
-    const problem = argumentProblems(name, rawInput);
-    if (problem) return { error: problem, code: 'bad_request' };
-    const input = withYearRange(rawInput);
-    const result = await handler(input, context);
+    // A term the matcher cannot compile is the caller's to shorten, never
+    // an internal_error with "try again" (QA2 L2-6).
+    let result: unknown;
+    let input: ToolArgs;
+    try {
+      const problem = argumentProblems(name, rawInput);
+      if (problem) return { error: problem, code: 'bad_request' };
+      input = withYearRange(rawInput);
+      result = await handler(input, context);
+    } catch (error) {
+      if (error instanceof MatchInputError) return { error: error.message, code: 'bad_request' };
+      throw error;
+    }
     if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
     const record = result as Record<string, unknown>;
     if (record.error) return result;

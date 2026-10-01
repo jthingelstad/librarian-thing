@@ -219,12 +219,14 @@
             },
             "topic": {
               "type": "string",
+              "maxLength": 200,
               "description": "A word or phrase matched whole in subjects, text and linked domains; a list_topics cluster name matches only when named whole."
             },
             "aliases": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "maxLength": 200
               },
               "maxItems": 8,
               "description": "Other names for the same thing, e.g. [\"Ethereum Name Service\"] for ENS. Known aliases are added for you."
@@ -353,6 +355,7 @@
             },
             "topic": {
               "type": "string",
+              "maxLength": 200,
               "description": "A word or phrase matched in each link's text, title, heading, context or domain."
             },
             "source_kind": {
@@ -557,6 +560,7 @@
           "properties": {
             "query": {
               "type": "string",
+              "maxLength": 200,
               "description": "Part of a cluster or topic name, e.g. \"apple\"."
             },
             "limit": {
@@ -586,6 +590,10 @@
           },
           "topic_count": {
             "type": "integer"
+          },
+          "aliases_checked": {
+            "type": "array",
+            "description": "query and the other names checked with it (the alias table, each side of a slash)."
           },
           "matched_topics": {
             "type": "integer"
@@ -682,7 +690,8 @@
           "properties": {
             "phrase": {
               "type": "string",
-              "description": "The exact phrase, at least 3 characters; case does not matter."
+              "maxLength": 1000,
+              "description": "The exact phrase, 3 to 1000 characters; case does not matter."
             },
             "source_kind": {
               "type": "string",
@@ -764,12 +773,14 @@
           "properties": {
             "topic": {
               "type": "string",
+              "maxLength": 200,
               "description": "The topic, person, product or idea. Matched whole in subjects, text and linked domains; a list_topics cluster name matches only when named whole."
             },
             "aliases": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "maxLength": 200
               },
               "maxItems": 8,
               "description": "Other names for the same thing, e.g. [\"Ethereum Name Service\"] for ENS. Known aliases are added for you."
@@ -921,6 +932,7 @@
           "properties": {
             "topic": {
               "type": "string",
+              "maxLength": 200,
               "description": "The topic, searched by meaning within each era."
             },
             "year_a": {
@@ -1073,6 +1085,7 @@
           "properties": {
             "theme": {
               "type": "string",
+              "maxLength": 200,
               "description": "Gems about this theme, as a reading path; omit for any."
             },
             "mode": {
@@ -1208,6 +1221,7 @@
           "properties": {
             "query": {
               "type": "string",
+              "maxLength": 200,
               "description": "What the image should show, e.g. \"bike ride creek\" or \"cabin winter\"; every word must match. Omit to list."
             },
             "match_mode": {
@@ -1363,6 +1377,7 @@
             },
             "query": {
               "type": "string",
+              "maxLength": 200,
               "description": "Part of the entry text."
             },
             "limit": {
@@ -1387,6 +1402,10 @@
       "outputSchema": {
         "type": "object",
         "properties": {
+          "aliases_checked": {
+            "type": "array",
+            "description": "query and the other names checked with it (the alias table, each side of a slash)."
+          },
           "total_count": {
             "type": "integer"
           },

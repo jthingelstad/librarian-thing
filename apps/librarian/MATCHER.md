@@ -21,6 +21,16 @@ Rules:
 - Multi-word terms always compile as `phrase`, even when `stem` is
   requested — a token-bag interpretation is the round-five alias bug.
 - The server never silently applies a looser mode than requested.
+- An emoji or symbol in the text may carry a variation selector
+  (U+FE0E, U+FE0F) whether or not the query typed one: `game ⚽ North`
+  finds `game ⚽️ North`, and the span keeps the selector (QA2 L2-1). A
+  keycap (U+20E3) is not a selector, so `2025` does not match keycap
+  digits; whether it should is an open question for Jamie.
+- A matched text has a length cap (`TEXT_LIMITS`, declared as `maxLength`
+  in tool-specs): 200 characters for a topic, alias, theme or query, 1,000
+  for a quote_search phrase. Longer is `bad_request` at the door and
+  in-process, and a pattern the regex compiler still cannot take is
+  `bad_request` too, never `internal_error` (QA2 L2-6).
 - `match_mode` is an input parameter on `archive_lens`, `list_content`,
   `find_links`, and the applied mode is echoed in the response as
   `match_mode`.
@@ -51,7 +61,20 @@ service'`), never a bag of tokens.
 
 **A slash means or (2.2.0).** `Twitter/X` names either: each side, and
 each side's aliases, is an alias of the whole (Jamie, 2026-09-30). A url
-(`https://x.com/a`) or a path (`/archive/`) keeps its slashes.
+(`https://x.com/a`), a path (`/archive/`) or a schemeless url whose left
+side is a host (`github.com/jthingelstad`, `weekly.thingelstad.com/archive/351`:
+a lowercase common top-level domain, no space) keeps its slashes (QA2
+L2-4). So `micro.blog/Mastodon` is a url; `micro.blog / Mastodon`, with
+spaces, names either. `ASP.NET/PHP` and `Node.js/Deno` still split. Under
+`case_sensitive` the sides are the caller's own words and keep the case
+flag; their table aliases do not. Whether a side that is a number, a
+single letter or a stopword (`9/11`, `I/O`, `and/or`) should split is an
+open question for Jamie; today it does.
+
+**A hit inside a URL is not a mention** (a markdown link target, an
+`src`/`href`, a bare link), except for a url-shaped term: its mention is
+a url, so `github.com/jthingelstad` finds the sources that link it, and
+find_links also looks for it in each link's url.
 
 ## Sections
 
@@ -113,9 +136,9 @@ structurally impossible. Each lens source exposes `strict_match`.
 
 ## Case sensitivity
 
-`case_sensitive: true` (archive_lens, list_content, find_links) drops case folding for the primary term - topic "Go" matches
-the language, never "to go". Default is case-insensitive. Aliases never
-inherit case sensitivity; per the ETH rule below, a case-sensitive alias
+`case_sensitive: true` (archive_lens, list_content, find_links) drops case folding for the primary term and the sides of a
+slash term (`Go/Rust`) - topic "Go" matches the language, never "to go".
+Default is case-insensitive. Table aliases never inherit case sensitivity; per the ETH rule below, a case-sensitive alias
 requires per-alias case flags first.
 
 **Alias design rule:** never add ETH as an Ethereum/ENS alias under
@@ -149,6 +172,7 @@ case of the source text; `matched_term` is the input term as provided.
 | media_search | yes (every word; stem by default, accents and plurals fold) | match_mode |
 | list_issues | yes (exact per token) | no |
 | quote_search | yes (literal mode) | no |
+| list_topics, currently_history | yes (query; aliases and the slash rule, `aliases_checked` echoed, QA2 L2-5) | no |
 | search_archive | exempt - hybrid retrieval (TF-IDF + embeddings + RRF) | - |
 | find_evidence, compare_eras | exempt - semantic retrieval | - |
 | search_faq | exempt - lexical scoring, token-based | - |

@@ -704,6 +704,77 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   }
   counts.on_this_day_0513 = items.length;
 }
+// QA2 L2-4: a schemeless url is one term, not "github.com" or
+// "jthingelstad"; it is found where it is written, in links (27 sources and
+// 51 links on the 2026-10-01 corpora). case_sensitive holds for each side of
+// a slash term (Go/Rust ran case-insensitive: 1,060 either way).
+{
+  const url = await run('list_content', { topic: 'github.com/jthingelstad', limit: 1 });
+  check(
+    'KA slash keeps a schemeless url whole',
+    !(url?.aliases_checked || []).includes('jthingelstad') && url?.total_count > 0,
+    `${JSON.stringify(url?.aliases_checked)} ${url?.total_count}`
+  );
+  const links = await run('find_links', { topic: 'github.com/jthingelstad', limit: 1 });
+  const linkOracle = ['weekly_thing', 'blog', 'podcast']
+    .flatMap((kind) => corpora[kind]?.links || [])
+    .filter((link) =>
+      /(?<![\p{L}\p{N}])github\.com\/jthingelstad(?![\p{L}\p{N}])/iu.test(String(link.url || ''))
+    ).length;
+  check(
+    'KA find_links finds a url-shaped topic in each link url',
+    linkOracle > 0 && links?.total_count === linkOracle,
+    `${links?.total_count} vs ${linkOracle}`
+  );
+  const goRust = await run('list_content', { topic: 'Go/Rust', case_sensitive: true, limit: 1 });
+  const goRustCi = await run('list_content', { topic: 'Go/Rust', limit: 1 });
+  check(
+    'KA case_sensitive holds for slash sides',
+    goRust?.total_count < goRustCi?.total_count && goRust?.applied?.case_sensitive === true,
+    `${goRust?.total_count} vs ${goRustCi?.total_count}`
+  );
+}
+// QA2 L2-5: list_topics and currently_history use the alias table and the
+// slash rule like every other filter ("Twitter/X" and "microblog" gave 0).
+{
+  const tx = await run('list_topics', { query: 'Twitter/X' });
+  const t = await run('list_topics', { query: 'Twitter' });
+  check(
+    'KA list_topics slash-or finds each side',
+    t?.total_count > 0 && tx?.total_count >= t.total_count,
+    `${tx?.total_count} vs ${t?.total_count}`
+  );
+  const ch = await run('currently_history', { query: 'microblog' });
+  const chDot = await run('currently_history', { query: 'micro.blog' });
+  check(
+    'KA currently_history uses the alias table',
+    chDot?.total_count > 0 && ch?.total_count === chDot.total_count,
+    `${ch?.total_count} vs ${chDot?.total_count}`
+  );
+  check(
+    'KA list_topics and currently_history echo aliases_checked',
+    (tx?.aliases_checked || []).includes('X') && (ch?.aliases_checked || []).includes('micro.blog'),
+    `${JSON.stringify(tx?.aliases_checked)} ${JSON.stringify(ch?.aliases_checked)}`
+  );
+}
+// QA2 L2-6: a topic or phrase past what the regex compiler takes was an
+// internal_error ("SyntaxError", "try again") that every retry repeated.
+for (const [tool, args] of [
+  ['archive_lens', { topic: 'a'.repeat(5000) }],
+  ['list_content', { topic: 'a'.repeat(5000) }],
+  ['archive_lens', { topic: 'Ethereum', aliases: ['a'.repeat(5000)] }],
+  ['quote_search', { phrase: 'the '.repeat(1500) }]
+]) {
+  const out = await ARCHIVE_TOOLS[tool](args, { scope: 'all' }).catch((error) => ({
+    error: String(error),
+    code: 'internal_error'
+  }));
+  check(
+    `KA ${tool} long input is refused, never a crash`,
+    out?.code === 'bad_request' && !/SyntaxError/.test(String(out.error || '')),
+    String(out?.error).slice(0, 80)
+  );
+}
 await run('search_faq', { query: 'what is the weekly thing' });
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('list_topics', { limit: 5 });

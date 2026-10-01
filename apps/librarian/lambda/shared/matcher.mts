@@ -59,6 +59,9 @@ interface CompiledTerm {
   // text whose FIRST occurrence is inflected but which contains the
   // literal token elsewhere still scores strict.
   strictRe?: RegExp;
+  // A url-shaped term (github.com/jthingelstad, https://x.com/a) is a
+  // mention inside a link target too: that is where a url is written.
+  inUrl?: boolean;
 }
 
 export interface CanonicalMatcher {
@@ -81,6 +84,33 @@ export const STEM_MIN_CHARS = 6;
 // caring; -es only after s, x, z, ch or sh (bus, buses).
 const PLURAL_SUFFIX = "(s|'s|\\u2019s)?";
 const SIBILANT_PLURAL_SUFFIX = "(es|'s|\\u2019s)?";
+
+// A term the regex compiler cannot take (QA2 L2-6): typedChar makes every
+// letter a class, and V8 overflows its stack at about 1,700 of them. The
+// doors cap term lengths (TEXT_LIMITS in archive-tools); this is the
+// backstop, which the tool wrapper turns into bad_request, never a crash.
+export class MatchInputError extends Error {
+  constructor(term: string) {
+    const shown = term.length > 60 ? `${term.slice(0, 60)}…` : term;
+    super(`"${shown}" is too long to match (${Array.from(term).length} characters); shorten it`);
+    this.name = 'MatchInputError';
+  }
+}
+
+// V8 compiles a pattern on its first match, once for one-byte and once for
+// two-byte text, and a pattern too deep for the compiler throws there, not
+// in the constructor; both widths run here, inside the guard.
+function compilePattern(term: string, source: string, flags: string) {
+  try {
+    const re = new RegExp(source, flags);
+    re.test('');
+    re.test(String.fromCharCode(0x2019));
+    return re;
+  } catch (error) {
+    if (error instanceof SyntaxError || error instanceof RangeError) throw new MatchInputError(term);
+    throw error;
+  }
+}
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -158,9 +188,17 @@ const APOSTROPHE = "(?:['\\u2018\\u2019\\u02BC\\u2032]|&#0?39;|&apos;|&[lr]squo;
 const QUOTE = '(?:["\\u201C\\u201D\\u201E\\u2033]|&quot;|&[lr]dquo;)';
 const DASH = '(?:[-\\u2010-\\u2015\\u2212]|&[mn]dash;)';
 const AMPERSAND = '(?:&amp;|&)';
+// A variation selector (U+FE0E text, U+FE0F emoji presentation) the text
+// carries after a character the query typed: foldQuery strips both as
+// marks, so "⚽️" arrives as "⚽" while the text still reads "⚽\uFE0F"
+// (QA2 L2-1: 86 of 86 "word ⚽️ word" phrases were missed). Only these two:
+// a keycap (U+20E3) still makes "2️⃣" a different character from "2".
+const VARIATION_SELECTOR = '[\\uFE0E\\uFE0F]?';
 // Whitespace in a literal phrase: any run of spaces, nbsp, line breaks and
 // the markdown emphasis between words ("simply **great**").
-const LITERAL_GAP = '(?:[\\s\\u00A0*_]|&nbsp;)+';
+const LITERAL_GAP = `${VARIATION_SELECTOR}(?:[\\s\\u00A0*_]|&nbsp;)+`;
+// Between the words of a term with significant punctuation (AT&T Park).
+const WORD_GAP = `${VARIATION_SELECTOR}(?:[\\s\\u00A0]|&nbsp;)+`;
 // Between the tokens of a phrase: anything that is not a letter or digit,
 // an entity counting as one character (Product &amp; Partner Fair).
 const PHRASE_GAP = '(?:&(?:amp|nbsp|quot|apos|#\\d+);|[^\\p{L}\\p{N}])+';
@@ -183,11 +221,13 @@ function typedChar(char: string) {
     const variants = LETTER_VARIANTS.get(char);
     return variants ? `[${char}${variants.join('')}]` : char;
   }
+  if (/^[\p{L}\p{N}]$/u.test(char)) return escapeRegExp(char);
   if (char === "'") return APOSTROPHE;
   if (char === '"') return QUOTE;
   if (char === '-') return DASH;
   if (char === '&') return AMPERSAND;
-  return escapeRegExp(char);
+  // A symbol or emoji may carry a selector in the text (QA2 L2-1).
+  return escapeRegExp(char) + VARIATION_SELECTOR;
 }
 
 // One token or literal string as a pattern, every character typedChar.
@@ -229,17 +269,23 @@ function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitiv
 
   const flags = caseSensitive ? 'u' : 'iu';
   if (mode === 'literal') {
-    return { raw: term, mode, re: new RegExp(typedPattern(folded, LITERAL_GAP), flags), strict: true };
+    return { raw: term, mode, re: compilePattern(term, typedPattern(folded, LITERAL_GAP), flags), strict: true };
   }
   if (significantPunctuation(folded)) {
     // The string itself between word boundaries: C++ is C++, never "c'mon".
-    const body = typedPattern(folded, '(?:[\\s\\u00A0]|&nbsp;)+');
-    const re = new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
-    return { raw: term, mode: tokens.length > 1 || /\s/.test(folded) ? 'phrase' : 'exact', re, strict: true };
+    const body = typedPattern(folded, WORD_GAP);
+    const re = compilePattern(term, `${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
+    const mode = tokens.length > 1 || /\s/.test(folded) ? 'phrase' : 'exact';
+    return { raw: term, mode, re, strict: true, ...(urlShaped(folded) ? { inUrl: true } : {}) };
   }
   if (mode === 'phrase') {
     const body = tokens.map((token) => typedPattern(token, '')).join(PHRASE_GAP);
-    return { raw: term, mode, re: new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags), strict: true };
+    return {
+      raw: term,
+      mode,
+      re: compilePattern(term, `${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags),
+      strict: true
+    };
   }
   const token = typedPattern(tokens[0], '');
   if (mode === 'stem') {
@@ -254,15 +300,15 @@ function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitiv
     return {
       raw: term,
       mode,
-      re: new RegExp(`${BOUNDARY_BEFORE}${token}${suffix}${BOUNDARY_AFTER}`, flags),
+      re: compilePattern(term, `${BOUNDARY_BEFORE}${token}${suffix}${BOUNDARY_AFTER}`, flags),
       strict: false,
-      strictRe: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags)
+      strictRe: compilePattern(term, `${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags)
     };
   }
   return {
     raw: term,
     mode: 'exact',
-    re: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags),
+    re: compilePattern(term, `${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags),
     strict: true
   };
 }
@@ -276,8 +322,10 @@ function insideUrl(text: string, offset: number) {
   return /\]\(|:\/\/|^<?www\.|(?:src|href)=/i.test(lead);
 }
 
-// The first match of re in text that is not inside a URL.
-function mentionIn(re: RegExp, text: string): RegExpExecArray | null {
+// The first match of re in text that is not inside a URL (anywhere, for a
+// url-shaped term).
+function mentionIn(re: RegExp, text: string, inUrl = false): RegExpExecArray | null {
+  if (inUrl) return re.exec(text);
   if (!re.test(text)) return null;
   const scan = new RegExp(re.source, `${re.flags}g`);
   for (let match = scan.exec(text); match; match = scan.exec(text)) {
@@ -303,17 +351,22 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
   const compiled: CompiledTerm[] = [];
   const primaryTerm = compileTerm(primary, requested, caseSensitive);
   if (primaryTerm) compiled.push(primaryTerm);
+  // The sides of "Go/Rust" are the caller's own words, so they keep the
+  // caller's case flag (QA2 L2-4: case_sensitive "Go/Rust" matched every
+  // "go" while applied.case_sensitive said true).
+  const ownWords = new Set(caseSensitive ? slashSides(primary) : []);
   for (const alias of aliases) {
     // Aliases are first-class terms with their OWN mode: a multi-word
-    // alias is always a phrase regardless of the requested mode. Aliases
-    // never inherit case sensitivity (see MATCHER.md: the ETH rule needs
-    // per-alias case flags before any case-sensitive alias exists).
-    const compiledAlias = compileTerm(normalizeTerm(alias), requested === 'stem' ? null : requested);
+    // alias is always a phrase regardless of the requested mode. Table
+    // aliases never inherit case sensitivity (see MATCHER.md: the ETH rule
+    // needs per-alias case flags before any case-sensitive alias exists).
+    const name = normalizeTerm(alias);
+    const compiledAlias = compileTerm(name, requested === 'stem' ? null : requested, ownWords.has(name));
     if (compiledAlias) compiled.push(compiledAlias);
   }
 
   const hitFor = (entry: CompiledTerm, text: string): MatchHit | null => {
-    const match = mentionIn(entry.re, text);
+    const match = mentionIn(entry.re, text, entry.inUrl);
     if (!match) return null;
     const inflected = entry.mode === 'stem' && Boolean(match[1]);
     return {
@@ -332,11 +385,11 @@ export function compileQuery({ term, aliases = [], mode, caseSensitive = false }
     isEmpty: compiled.length === 0,
     matches(text: string) {
       if (!compiled.length) return true;
-      return compiled.some((entry) => Boolean(mentionIn(entry.re, text)));
+      return compiled.some((entry) => Boolean(mentionIn(entry.re, text, entry.inUrl)));
     },
     matchesStrict(text: string) {
       if (!compiled.length) return true;
-      return compiled.some((entry) => Boolean(mentionIn(entry.strict ? entry.re : entry.strictRe!, text)));
+      return compiled.some((entry) => Boolean(mentionIn(entry.strict ? entry.re : entry.strictRe!, text, entry.inUrl)));
     },
     firstHit(text: string) {
       let best: MatchHit | null = null;
@@ -372,7 +425,7 @@ export function compileLiteral(phrase: unknown): CanonicalMatcher {
   const raw = normalizeTerm(phrase);
   const folded = normalizeTerm(foldQuery(raw));
   const entry: CompiledTerm | null = folded
-    ? { raw, mode: 'literal', re: new RegExp(typedPattern(folded, LITERAL_GAP), 'iu'), strict: true }
+    ? { raw, mode: 'literal', re: compilePattern(raw, typedPattern(folded, LITERAL_GAP), 'iu'), strict: true }
     : null;
   return {
     raw: raw.toLowerCase(),
@@ -406,19 +459,42 @@ export const ENTITY_ALIASES: Record<string, string[]> = {
   wt: ['Weekly Thing']
 };
 
+// Top-level domains a schemeless url starts with, typed lowercase: "ASP.NET"
+// and "Node.js" are names, "github.com" and "micro.blog" are hosts.
+const URL_TLDS = new Set(
+  'com org net io co blog dev app me edu gov info xyz social eth ai fm tv us uk ca de nl fr jp au ly so sh cc gg is it page site link online'.split(
+    ' '
+  )
+);
+
+// "Twitter/X" names either (Jamie, 2026-09-30): the sides, as typed. A url
+// (https://x.com/a), a path (/archive/) or a schemeless url whose left side
+// is a host (github.com/jthingelstad, weekly.thingelstad.com/archive/351,
+// QA2 L2-4) keeps its slashes and has no sides.
+export function slashSides(term: unknown): string[] {
+  const value = normalizeTerm(term);
+  if (!value.includes('/') || /:\/\/|^\/|\/$/.test(value) || urlShaped(value)) return [];
+  const sides = value.split(/\s*\/\s*/).filter(Boolean);
+  return sides.length > 1 ? sides : [];
+}
+
+// A url with a scheme, or a host with a path and no space.
+export function urlShaped(value: string) {
+  if (/:\/\//.test(value)) return true;
+  if (/\s/.test(value) || !value.includes('/')) return false;
+  const host = /^(?:[\p{L}\p{N}-]+\.)+([a-z]{2,})$/u.exec(value.split('/')[0]);
+  return Boolean(host && URL_TLDS.has(host[1]));
+}
+
 // Aliases work both ways (2.1.0): Minnebar finds minnestar and Minnedemo,
 // as minnestar finds Minnebar. The term itself is never its own alias.
 export function aliasesFor(term: unknown): string[] {
   const key = normalizeTerm(term).toLowerCase();
   if (!key) return [];
-  // "Twitter/X" names either (Jamie, 2026-09-30): each side, and its own
-  // aliases, is an alias of the whole. A url or a path keeps its slashes.
-  const sides = key.includes('/') && !/:\/\/|^\/|\/$/.test(key) ? key.split(/\s*\/\s*/).filter(Boolean) : [];
+  // Each side of "Twitter/X", and its own aliases, is an alias of the whole.
+  const sides = slashSides(term);
   if (sides.length > 1) {
-    const original = normalizeTerm(term)
-      .split(/\s*\/\s*/)
-      .filter(Boolean);
-    return [...new Set([...original, ...sides.flatMap((side) => aliasesFor(side))])].filter(
+    return [...new Set([...sides, ...sides.flatMap((side) => aliasesFor(side))])].filter(
       (name) => name.toLowerCase() !== key
     );
   }

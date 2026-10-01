@@ -222,7 +222,8 @@ function toolErrorRecord(result: JsonRecord): JsonRecord {
 // Arguments are checked against the declared schema BEFORE any quota is
 // spent, so a malformed call costs nothing and says what was wrong. Scalars
 // are accepted in either spelling a client might send ("12" for 12); an
-// unknown argument, a bad enum, an out-of-range number, an inverted
+// unknown argument, a bad enum, an out-of-range number, a text past its
+// maxLength, an inverted
 // year_range, or year and year_range together is refused.
 interface ArgSchema {
   type?: string | string[];
@@ -231,6 +232,7 @@ interface ArgSchema {
   maximum?: number;
   minItems?: number;
   maxItems?: number;
+  maxLength?: number;
   items?: ArgSchema;
   properties?: Record<string, ArgSchema>;
   required?: string[];
@@ -256,6 +258,12 @@ function checkValue(path: string, value: unknown, schema: ArgSchema, problems: s
   if (types.length && !types.some((type) => matchesType(value, type))) {
     problems.push(`${path} must be ${types.join(' or ')}`);
     return;
+  }
+  // A term longer than the matcher compiles (QA2 L2-6), in characters.
+  if (typeof value === 'string' && typeof schema.maxLength === 'number') {
+    const length = Array.from(value).length;
+    if (length > schema.maxLength)
+      problems.push(`${path} takes at most ${schema.maxLength} characters (got ${length})`);
   }
   if (schema.enum && !schema.enum.includes(value)) {
     problems.push(`${path} must be one of ${schema.enum.map((option) => JSON.stringify(option)).join(', ')}`);
