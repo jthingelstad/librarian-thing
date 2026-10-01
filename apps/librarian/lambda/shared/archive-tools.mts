@@ -2884,8 +2884,8 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
     const domainsByKey = new Map(kindRecords.map((record) => [sourceRecordKey(record), record.domains || []]));
     chunks.push(
       ...(corpus.chunks || []).flatMap((chunk) => {
-        // voice=jamie reads only Jamie's spans: a topic he quoted is not a
-        // topic he wrote about, and the evidence never shows the quote.
+        // voice=jamie reads only Jamie's spans: a topic Jamie quoted is not a
+        // topic Jamie wrote about, and the evidence never shows the quote.
         const text = voices.length ? voicedText(chunk, voices) : chunk.text;
         if (voices.length && String(text).length < VOICE_MIN_CHARS) return [];
         return [
@@ -4440,6 +4440,11 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     const blank = claims.findIndex((claim) => !present(claim));
     if (blank >= 0) return claims.length > 1 ? `claims[${blank}] is blank` : 'claims is required';
   }
+  // A ninth caller alias was dropped in-process with no notice; the door
+  // refuses it (maxItems 8), and so does every door now (QA2 L2-11).
+  if (Array.isArray(args.aliases) && args.aliases.length > LENS_MAX_ALIASES) {
+    return `aliases holds at most ${LENS_MAX_ALIASES} names; ${args.aliases.length} were given`;
+  }
   for (const key of WORD_FILTERS[name] || []) {
     if (present(args[key]) && compileQuery({ term: args[key] }).isEmpty) {
       return `${key} "${String(args[key]).trim()}" has no letter or digit to match; quote_search finds exact characters`;
@@ -4490,6 +4495,41 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
   return null;
 }
 
+// Words of a several-word filter that have nothing to match on (an
+// emoji): "Photo 📷" matched exactly what "photo" matches and said nothing
+// of the camera (QA2 L2-11). A word is reported when the filter still
+// matches its own text with that word taken out.
+function droppedFilterWords(value: unknown) {
+  const words = String(value ?? '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (words.length < 2) return [];
+  const matcher = compileQuery({ term: words.join(' ') });
+  return words.filter(
+    (word, index) =>
+      !/[\p{L}\p{N}]/u.test(word) && matcher.matches(words.filter((_, other) => other !== index).join(' '))
+  );
+}
+
+// The arguments each tool publishes (tool-specs.json). A tool without a
+// spec (the registry-internal four) echoes whatever it was given.
+let publishedArgumentsCache: Map<string, Set<string>> | undefined;
+function publishedArguments(name: string) {
+  publishedArgumentsCache ||= new Map(
+    (loadToolSpecs() as Array<{ toolSpec?: { name?: string; inputSchema?: { json?: { properties?: object } } } }>)
+      .filter((spec) => spec.toolSpec?.name)
+      .map((spec) => [
+        String(spec.toolSpec!.name),
+        new Set(Object.keys(spec.toolSpec!.inputSchema?.json?.properties || {}))
+      ])
+  );
+  return publishedArgumentsCache.get(name);
+}
+// Unpublished names handlers still read for a published one (source for
+// source_kind, query or entity for topic, mood for mode, claim for claims).
+const READ_ALIASES = new Set(['source', 'query', 'entity', 'mood', 'topic', 'claim']);
+
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
   return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
     const problem = argumentProblems(name, rawInput);
@@ -4505,6 +4545,24 @@ function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
     // applied (archive_gems with a theme ignores mode).
     if (own.ignored && typeof own.ignored === 'object') {
       for (const key of Object.keys(own.ignored)) delete applied[key];
+    }
+    // Echo only what the tool reads: list_content with voice echoed voice
+    // "jamie" and ignored it (QA2 L2-11). Anything else is named ignored.
+    const published = publishedArguments(name);
+    const ignored: Record<string, unknown> = {};
+    if (published) {
+      for (const key of Object.keys(applied)) {
+        if (key === 'limit' || key === 'ignored' || key in own || published.has(key) || READ_ALIASES.has(key)) continue;
+        ignored[key] = applied[key];
+        delete applied[key];
+      }
+    }
+    for (const key of WORD_FILTERS[name] || []) {
+      const dropped = name === 'media_search' ? [] : droppedFilterWords(input[key as keyof ToolArgs]);
+      if (dropped.length) ignored[`${key}_words`] = dropped;
+    }
+    if (Object.keys(ignored).length) {
+      applied.ignored = { ...((applied.ignored as Record<string, unknown> | undefined) || {}), ...ignored };
     }
     // The mode that ran, not the one asked for: stem on "Tesla" runs exact.
     if (applied.match_mode !== undefined && typeof record.match_mode === 'string')

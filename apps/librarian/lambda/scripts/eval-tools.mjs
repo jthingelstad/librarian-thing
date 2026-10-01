@@ -200,6 +200,13 @@ function checkInvariants(tool, args, response) {
     check(label('outputSchema required keys present'), missing.length === 0, missing.join(', '));
     const undeclared = Object.keys(body).filter((key) => !(key in (schema.properties || {})));
     check(label('outputSchema declares every key'), undeclared.length === 0, undeclared.join(', '));
+    // An id list holding {id, resolved: false} declares object items (QA2 L2-11).
+    for (const [key, value] of Object.entries(body)) {
+      if (!Array.isArray(value) || !value.some((item) => item && typeof item === 'object' && 'resolved' in item))
+        continue;
+      const items = [schema.properties?.[key]?.items?.type || []].flat();
+      check(label(`${key} items declared string or object`), items.includes('string') && items.includes('object'));
+    }
     checkAccounting(tool, body, label);
   }
 }
@@ -725,6 +732,33 @@ for (const [tool, args] of [
     `KA ${tool} reversed year_range refused in-process`,
     reversed?.code === 'bad_request' && /backwards/.test(String(reversed?.error)),
     JSON.stringify(reversed).slice(0, 80)
+  );
+}
+// QA2 L2-11: what a tool sets aside is named in applied.ignored, never
+// echoed as applied or dropped without a word.
+{
+  const photo = await run('list_content', { topic: 'Photo 📷', limit: 1 });
+  const plain = await run('list_content', { topic: 'photo', limit: 1 });
+  check(
+    'KA an emoji word in a topic is named ignored',
+    photo?.total_count === plain?.total_count && (photo?.applied?.ignored?.topic_words || []).includes('📷'),
+    JSON.stringify(photo?.applied)
+  );
+  const voiced = await run('list_content', { topic: 'iPhone', voice: 'jamie', limit: 1 });
+  check(
+    'KA list_content echoes only what it reads (voice is ignored)',
+    voiced?.applied?.voice === undefined && voiced?.applied?.ignored?.voice === 'jamie',
+    JSON.stringify(voiced?.applied)
+  );
+  const nine = await run(
+    'archive_lens',
+    { topic: 'ENS', aliases: ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9'], limit: 1 },
+    { expectError: true }
+  );
+  check(
+    'KA a ninth caller alias is refused in-process',
+    nine?.code === 'bad_request',
+    JSON.stringify(nine).slice(0, 80)
   );
 }
 // File names are searchable (plan 4 step 1): the Straw Poll charts are

@@ -84,7 +84,7 @@
             },
             "section": {
               "type": "string",
-              "description": "A Weekly Thing section heading (substring) or family, e.g. \"Journal\"."
+              "description": "A Weekly Thing section heading or family, e.g. \"Journal\". A name that is a heading or family exactly matches only that (\"coffee\" is Coffee, not Coffee Gear); any other name matches inside headings."
             },
             "section_family": {
               "type": "string",
@@ -200,7 +200,7 @@
   {
     "toolSpec": {
       "name": "list_content",
-      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "List source-level metadata across the active scope: Weekly Thing issues, blog posts/microposts, and podcast episodes. Use for counts and deterministic listings by source_kind, year_range (or year), topic, linked domain, link_kind, link_category, target_resolved, has_also_in_issues, also_in_issue, or has_audio. Prefer this over semantic search for inventory questions like posts by year, which sources mention a domain, which blog posts crossed into Weekly Thing, or which issues have an audio edition. A Weekly Thing result with an audio edition carries audio_url and audio_duration_seconds. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -344,7 +344,7 @@
   {
     "toolSpec": {
       "name": "find_links",
-      "description": "Query link metadata in the active source scope by source (id: every link in one issue, post or episode), domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved applies to links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not; an external link matches neither. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash, fragment and tracking parameters such as utm_*, ref, fbclid and smid ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by editorial picks (Weekly Thing headline links; source_kind blog ranks blog links) (the 20 most linked; truncated.omitted.top_domains counts the rest, and top_references pages through them all). year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); page with offset, and truncated.next_offset names the next page. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons and evidence attribute the exact span found.",
+      "description": "Query link metadata in the active source scope by source (id: every link in one issue, post or episode), domain, topic, source_kind, link_kind, link_category, target_resolved, and year range. source_kind can be \"weekly_thing\", \"blog\", or \"podcast\" and lets you isolate one corpus even when the active scope is all. link_kind can be \"external\" or \"internal\". link_category includes \"external\", \"cross_source\", \"resolved_post\", \"collection_page\", \"upload_asset\", \"malformed_internal\", \"internal_unresolved\", and \"internal_site\". cross_source means a link between Jamie-owned corpora such as blog to Weekly Thing or podcast to blog. target_resolved applies to links to Jamie's own sites only: true keeps those that resolved to a known post or issue, false those that did not; an external link matches neither. Does not fetch linked pages. Call with url to ask \"has Jamie linked this before\" (matched however the link was spelled: scheme, www, trailing slash, fragment and tracking parameters such as utm_*, ref, fbclid and smid ignored). link_role narrows Weekly Thing links: headline (the pick a link section is built from), commentary (a link inside what Jamie wrote about it) or journal (a link in the Journal). Call with domain for domain history (the domain and its subdomains); call without filters for top external domains, ranked by editorial picks (Weekly Thing headline links; source_kind blog ranks blog links) (the 20 most linked; truncated.omitted.top_domains counts the rest, and top_references pages through them all). year_range is [start_year, end_year]; year is one year. Results are newest first (sort: \"oldest\" reverses); page with offset, and truncated.next_offset names the next page. Each result's id is its source, for get_source. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer. Matching is whole-token/phrase based (see match_mode); match_reasons name the exact span found.",
       "inputSchema": {
         "json": {
           "type": "object",
@@ -899,13 +899,24 @@
           },
           "results": {
             "type": "array",
-            "description": "Ids."
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "timeline": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "latest_sources": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": ["string", "object"]
+            },
+            "description": "Ids into sources_by_id; an id whose record was cut to fit is {id, resolved: false}."
           },
           "years": {
             "type": "array"
