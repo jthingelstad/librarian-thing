@@ -2981,6 +2981,13 @@ function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
     const targetUrl = link.target_url || link.url || link.link_url || '';
     if (urlKey(targetUrl) === urlKey(record.url)) return true;
   }
+  // A site page (about, members, FAQ) has no id a link could carry: a link
+  // to its url is a link to it (QA2 links L2-2: site-members said 0 of 2).
+  // Blog posts stay with their ids, since several share one permalink.
+  if (!['blog', 'weekly_thing', 'podcast'].includes(String(record.source_kind || '')) && record.url) {
+    const targetUrl = link.target_url || link.url || link.link_url || '';
+    if (targetUrl && urlKey(targetUrl) === urlKey(record.url)) return true;
+  }
   return false;
 }
 

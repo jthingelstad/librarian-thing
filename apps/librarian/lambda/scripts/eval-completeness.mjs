@@ -665,6 +665,38 @@ export async function runCompletenessChecks({ corpora, call, check, counts }) {
     check('completeness find_links url encoding pins', off.length === 0, off.join('; '));
   }
 
+  // 8i. A site page's incoming_count is every corpus link to its url (QA2
+  //     links L2-2: site-members said 0; wt-347 and wt-348 link it).
+  {
+    const pages = new Set(
+      (wt.chunks || [])
+        .filter((chunk) => ['site_page', 'faq'].includes(chunk.source_kind) && /^\//.test(String(chunk.url || '')))
+        .map((chunk) => String(chunk.url).replace(/\/+$/, ''))
+    );
+    const wrong = [];
+    for (const page of pages) {
+      const want = allLinks.filter((link) => {
+        const host = hostOf(link.url).replace(/^www\./, '');
+        let path = '';
+        try {
+          path = new URL(String(link.url)).pathname.replace(/\/+$/, '');
+        } catch {
+          return false;
+        }
+        return host === 'weekly.thingelstad.com' && path === page;
+      }).length;
+      const near = await call('source_neighborhood', { id: `site-${page.split('/').at(-1)}` });
+      if (near.incoming_count !== want) wrong.push(`site-${page.split('/').at(-1)} ${near.incoming_count}/${want}`);
+    }
+    check(
+      'completeness site pages count every link to them',
+      pages.size > 0 && wrong.length === 0,
+      `${pages.size} pages: ${wrong.join(', ')}`
+    );
+    const members = await call('source_neighborhood', { id: 'site-members' });
+    check('completeness site-members incoming_count 2', members.incoming_count === 2, String(members.incoming_count));
+  }
+
   // 9. Corpus size into the baseline: a build that drops more than 10% of
   //    the sources or links fails the band even when every tool is honest.
   counts.corpus_items = totalItems;
