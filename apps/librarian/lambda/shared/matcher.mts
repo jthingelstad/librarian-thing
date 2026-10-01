@@ -82,6 +82,33 @@ export const STEM_MIN_CHARS = 6;
 const PLURAL_SUFFIX = "(s|'s|\\u2019s)?";
 const SIBILANT_PLURAL_SUFFIX = "(es|'s|\\u2019s)?";
 
+// A term the regex compiler cannot take (QA2 L2-6): typedChar makes every
+// letter a class, and V8 overflows its stack at about 1,700 of them. The
+// doors cap term lengths (TEXT_LIMITS in archive-tools); this is the
+// backstop, which the tool wrapper turns into bad_request, never a crash.
+export class MatchInputError extends Error {
+  constructor(term: string) {
+    const shown = term.length > 60 ? `${term.slice(0, 60)}…` : term;
+    super(`"${shown}" is too long to match (${Array.from(term).length} characters); shorten it`);
+    this.name = 'MatchInputError';
+  }
+}
+
+// V8 compiles a pattern on its first match, once for one-byte and once for
+// two-byte text, and a pattern too deep for the compiler throws there, not
+// in the constructor; both widths run here, inside the guard.
+function compilePattern(term: string, source: string, flags: string) {
+  try {
+    const re = new RegExp(source, flags);
+    re.test('');
+    re.test(String.fromCharCode(0x2019));
+    return re;
+  } catch (error) {
+    if (error instanceof SyntaxError || error instanceof RangeError) throw new MatchInputError(term);
+    throw error;
+  }
+}
+
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -239,17 +266,22 @@ function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitiv
 
   const flags = caseSensitive ? 'u' : 'iu';
   if (mode === 'literal') {
-    return { raw: term, mode, re: new RegExp(typedPattern(folded, LITERAL_GAP), flags), strict: true };
+    return { raw: term, mode, re: compilePattern(term, typedPattern(folded, LITERAL_GAP), flags), strict: true };
   }
   if (significantPunctuation(folded)) {
     // The string itself between word boundaries: C++ is C++, never "c'mon".
     const body = typedPattern(folded, WORD_GAP);
-    const re = new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
+    const re = compilePattern(term, `${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags);
     return { raw: term, mode: tokens.length > 1 || /\s/.test(folded) ? 'phrase' : 'exact', re, strict: true };
   }
   if (mode === 'phrase') {
     const body = tokens.map((token) => typedPattern(token, '')).join(PHRASE_GAP);
-    return { raw: term, mode, re: new RegExp(`${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags), strict: true };
+    return {
+      raw: term,
+      mode,
+      re: compilePattern(term, `${BOUNDARY_BEFORE}${body}${BOUNDARY_AFTER}`, flags),
+      strict: true
+    };
   }
   const token = typedPattern(tokens[0], '');
   if (mode === 'stem') {
@@ -264,15 +296,15 @@ function compileTerm(term: string, requestedMode: MatchMode | null, caseSensitiv
     return {
       raw: term,
       mode,
-      re: new RegExp(`${BOUNDARY_BEFORE}${token}${suffix}${BOUNDARY_AFTER}`, flags),
+      re: compilePattern(term, `${BOUNDARY_BEFORE}${token}${suffix}${BOUNDARY_AFTER}`, flags),
       strict: false,
-      strictRe: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags)
+      strictRe: compilePattern(term, `${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags)
     };
   }
   return {
     raw: term,
     mode: 'exact',
-    re: new RegExp(`${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags),
+    re: compilePattern(term, `${BOUNDARY_BEFORE}${token}${BOUNDARY_AFTER}`, flags),
     strict: true
   };
 }
@@ -382,7 +414,7 @@ export function compileLiteral(phrase: unknown): CanonicalMatcher {
   const raw = normalizeTerm(phrase);
   const folded = normalizeTerm(foldQuery(raw));
   const entry: CompiledTerm | null = folded
-    ? { raw, mode: 'literal', re: new RegExp(typedPattern(folded, LITERAL_GAP), 'iu'), strict: true }
+    ? { raw, mode: 'literal', re: compilePattern(raw, typedPattern(folded, LITERAL_GAP), 'iu'), strict: true }
     : null;
   return {
     raw: raw.toLowerCase(),

@@ -18,7 +18,7 @@
 //   - MCP text names Jamie (no pronouns) and never mentions "the app"
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ARCHIVE_TOOLS, PAGED_LISTS, TOOL_LIMITS } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, PAGED_LISTS, TEXT_LIMITS, TOOL_LIMITS } from '../dist/shared/archive-tools.mjs';
 import {
   MCP_LAUNCH_TOOLS,
   MCP_RESULT_MAX_CHARS,
@@ -85,6 +85,37 @@ test('a limit above its maximum is refused before quota, for every tool', (t) =>
       assert.deepEqual(validateToolArguments(tool.name, { ...required, [key]: schema.maximum }), []);
       const problems = validateToolArguments(tool.name, { ...required, [key]: schema.maximum + 1 });
       assert.equal(problems.length, 1, `${tool.name}.${key} over max`);
+    }
+  }
+});
+
+// QA2 L2-6: a matched text longer than the regex compiler takes was an
+// internal_error ("Invalid regular expression: Stack overflow").
+test('every matched text declares the maxLength TEXT_LIMITS holds, and a longer one is refused', async () => {
+  for (const [name, keys] of Object.entries(TEXT_LIMITS)) {
+    const tool = declarations.find((entry) => entry.name === name);
+    assert.ok(tool, `${name} is declared`);
+    for (const [key, max] of Object.entries(keys)) {
+      const schema = tool.inputSchema.properties?.[key];
+      const declared = schema?.type === 'array' ? schema.items?.maxLength : schema?.maxLength;
+      assert.equal(declared, max, `${name}.${key} declares maxLength ${max}`);
+      const at = 'a'.repeat(max);
+      const over = 'a'.repeat(max + 1);
+      const value = (text) => (schema.type === 'array' ? [text] : text);
+      const required = { ...requiredArguments(tool), [key]: value(at) };
+      assert.deepEqual(validateToolArguments(name, required), [], `${name}.${key} at its maxLength passes the door`);
+      const problems = validateToolArguments(name, { ...required, [key]: value(over) });
+      assert.equal(problems.length, 1, `${name}.${key} over maxLength is refused at the door`);
+      const inProcess = await ARCHIVE_TOOLS[name]({ ...required, [key]: value(over) }, { scope: 'all' });
+      assert.equal(inProcess?.code, 'bad_request', `${name}.${key} over maxLength is refused in-process`);
+      assert.match(String(inProcess.error), /at most \d+ characters/);
+    }
+  }
+  for (const tool of declarations) {
+    for (const [key, schema] of Object.entries(tool.inputSchema.properties || {})) {
+      const declared = schema?.type === 'array' ? schema.items?.maxLength : schema?.maxLength;
+      if (declared !== undefined)
+        assert.equal(TEXT_LIMITS[tool.name]?.[key], declared, `${tool.name}.${key} is in TEXT_LIMITS`);
     }
   }
 });

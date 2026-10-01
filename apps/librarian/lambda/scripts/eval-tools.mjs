@@ -704,6 +704,24 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   }
   counts.on_this_day_0513 = items.length;
 }
+// QA2 L2-6: a topic or phrase past what the regex compiler takes was an
+// internal_error ("SyntaxError", "try again") that every retry repeated.
+for (const [tool, args] of [
+  ['archive_lens', { topic: 'a'.repeat(5000) }],
+  ['list_content', { topic: 'a'.repeat(5000) }],
+  ['archive_lens', { topic: 'Ethereum', aliases: ['a'.repeat(5000)] }],
+  ['quote_search', { phrase: 'the '.repeat(1500) }]
+]) {
+  const out = await ARCHIVE_TOOLS[tool](args, { scope: 'all' }).catch((error) => ({
+    error: String(error),
+    code: 'internal_error'
+  }));
+  check(
+    `KA ${tool} long input is refused, never a crash`,
+    out?.code === 'bad_request' && !/SyntaxError/.test(String(out.error || '')),
+    String(out?.error).slice(0, 80)
+  );
+}
 await run('search_faq', { query: 'what is the weekly thing' });
 // Every enumerating tool at a small limit, so checkAccounting sees a cut.
 await run('list_topics', { limit: 5 });

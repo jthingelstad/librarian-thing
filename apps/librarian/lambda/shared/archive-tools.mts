@@ -8,7 +8,7 @@ import {
   matchesLensTopic,
   settleLensTruncation
 } from './archive-lens.mjs';
-import { aliasesFor, compileLiteral, compileQuery, normalizeMatchMode, trimTerm } from './matcher.mjs';
+import { aliasesFor, compileLiteral, compileQuery, MatchInputError, normalizeMatchMode, trimTerm } from './matcher.mjs';
 import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
@@ -87,6 +87,24 @@ export const TOOL_LIMITS: Record<string, { min: number; max: number; default: nu
   list_topics: { min: 1, max: 100, default: 40 },
   // Passages per claim.
   find_evidence: { min: 1, max: 8, default: 3 }
+};
+
+// The longest text each matched argument takes (QA2 L2-6): the matcher
+// compiles a term to a regex, and V8's compiler overflows at about 1,700
+// characters, which surfaced as internal_error. tool-specs.json declares
+// the same maxLength (a test holds the two together), the doors refuse a
+// longer value, and argumentProblems refuses it in-process. A quotation
+// gets room for a paragraph; a name, alias or filter word does not need it.
+export const TEXT_LIMITS: Record<string, Record<string, number>> = {
+  archive_lens: { topic: 200, aliases: 200 },
+  list_content: { topic: 200, aliases: 200 },
+  find_links: { topic: 200 },
+  compare_eras: { topic: 200 },
+  archive_gems: { theme: 200 },
+  list_topics: { query: 200 },
+  media_search: { query: 200 },
+  currently_history: { query: 200 },
+  quote_search: { phrase: 1000 }
 };
 
 export function toolLimit(name: string, input: { limit?: unknown } = {}) {
@@ -4413,6 +4431,16 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
   if (name === 'quote_search' && String(args.phrase).trim().length < 3) {
     return 'phrase must be at least 3 characters';
   }
+  for (const [key, max] of Object.entries(TEXT_LIMITS[name] || {})) {
+    const values = Array.isArray(args[key]) ? (args[key] as unknown[]) : [args[key]];
+    for (const [index, value] of values.entries()) {
+      if (!present(value) || Array.from(String(value)).length <= max) continue;
+      const path = Array.isArray(args[key]) ? `${key}[${index}]` : key;
+      return `${path} takes at most ${max} characters (got ${Array.from(String(value)).length})${
+        name === 'quote_search' ? '; search for a distinctive sentence of it' : ''
+      }`;
+    }
+  }
   if (name === 'find_evidence') {
     const claims = Array.isArray(args.claims) ? args.claims : [args.claims ?? args.claim];
     const blank = claims.findIndex((claim) => !present(claim));
@@ -4463,10 +4491,19 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
 
 function withAppliedEcho(name: string, handler: ToolHandler): ToolHandler {
   return async (rawInput: ToolArgs = {}, context: ToolContext = {}) => {
-    const problem = argumentProblems(name, rawInput);
-    if (problem) return { error: problem, code: 'bad_request' };
-    const input = withYearRange(rawInput);
-    const result = await handler(input, context);
+    // A term the matcher cannot compile is the caller's to shorten, never
+    // an internal_error with "try again" (QA2 L2-6).
+    let result: unknown;
+    let input: ToolArgs;
+    try {
+      const problem = argumentProblems(name, rawInput);
+      if (problem) return { error: problem, code: 'bad_request' };
+      input = withYearRange(rawInput);
+      result = await handler(input, context);
+    } catch (error) {
+      if (error instanceof MatchInputError) return { error: error.message, code: 'bad_request' };
+      throw error;
+    }
     if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
     const record = result as Record<string, unknown>;
     if (record.error) return result;

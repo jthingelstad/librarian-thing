@@ -26,6 +26,11 @@ Rules:
   finds `game ⚽️ North`, and the span keeps the selector (QA2 L2-1). A
   keycap (U+20E3) is not a selector, so `2025` does not match keycap
   digits; whether it should is an open question for Jamie.
+- A matched text has a length cap (`TEXT_LIMITS`, declared as `maxLength`
+  in tool-specs): 200 characters for a topic, alias, theme or query, 1,000
+  for a quote_search phrase. Longer is `bad_request` at the door and
+  in-process, and a pattern the regex compiler still cannot take is
+  `bad_request` too, never `internal_error` (QA2 L2-6).
 - `match_mode` is an input parameter on `archive_lens`, `list_content`,
   `find_links`, and the applied mode is echoed in the response as
   `match_mode`.

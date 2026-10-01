@@ -5,6 +5,7 @@ import {
   compileLiteral,
   compileQuery,
   defaultMatchMode,
+  MatchInputError,
   normalizeMatchMode
 } from '../dist/shared/matcher.mjs';
 
@@ -228,4 +229,12 @@ test('literal phrases cross an emoji that carries a variation selector (QA2 L2-1
   const keycaps = ['2', '0', '2', '5'].map((digit) => `${digit}️⃣`).join('');
   assert.equal(compileLiteral('2025').matches(`the year ${keycaps}`), false);
   assert.equal(m('2025').matches(`the year ${keycaps}`), false);
+});
+
+test('a term the regex compiler cannot take throws MatchInputError, not SyntaxError (QA2 L2-6)', () => {
+  for (const compile of [() => m('a'.repeat(5000)), () => compileLiteral('the '.repeat(1500))]) {
+    assert.throws(compile, (error) => error instanceof MatchInputError && /too long to match/.test(error.message));
+  }
+  assert.ok(compileLiteral('the '.repeat(250)).matches('the '.repeat(300)), 'a 1000-character quotation compiles');
+  assert.ok(m('a'.repeat(200)).matches('a'.repeat(200)), 'a 200-character term compiles');
 });
