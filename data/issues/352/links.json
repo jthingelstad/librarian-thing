@@ -1,0 +1,181 @@
+{
+  "notable_links": [
+    {
+      "text": "Introducing dots | OpenAI",
+      "url": "https://openai.com/index/introducing-dots",
+      "domain": "openai.com",
+      "heading_context": "[Introducing dots | OpenAI](https://openai.com/index/introducing-dots)",
+      "section": "Notable"
+    },
+    {
+      "text": "Daring Fireball: I’ll Wait",
+      "url": "https://daringfireball.net/2026/09/ill_wait",
+      "domain": "daringfireball.net",
+      "heading_context": "[Daring Fireball: I’ll Wait](https://daringfireball.net/2026/09/ill_wait)",
+      "section": "Notable"
+    },
+    {
+      "text": "Introducing cf: the agentic CLI for the entire Cloudflare API",
+      "url": "https://blog.cloudflare.com/cloudflare-cf-cli-launch/",
+      "domain": "blog.cloudflare.com",
+      "heading_context": "[Introducing cf: the agentic CLI for the entire Cloudflare API](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)",
+      "section": "Notable"
+    },
+    {
+      "text": "The cryptographic world computer",
+      "url": "https://vitalik.eth.limo/general/2026/09/27/the_cryptographic_world_computer.html",
+      "domain": "vitalik.eth.limo",
+      "heading_context": "[The cryptographic world computer](https://vitalik.eth.limo/general/2026/09/27/the_cryptographic_world_computer.html)",
+      "section": "Notable"
+    },
+    {
+      "text": "MicroLLM lab — tiny LLMs, Q4, in your browser",
+      "url": "https://stateofutopia.com/experiments/microllmlab/",
+      "domain": "stateofutopia.com",
+      "heading_context": "[MicroLLM lab — tiny LLMs, Q4, in your browser](https://stateofutopia.com/experiments/microllmlab/)",
+      "section": "Notable"
+    },
+    {
+      "text": "Don’t confuse space and time.",
+      "url": "https://www.cjchilvers.com/blog/dont-confuse-space-and-time/",
+      "domain": "www.cjchilvers.com",
+      "heading_context": "[Don’t confuse space and time.](https://www.cjchilvers.com/blog/dont-confuse-space-and-time/)",
+      "section": "Notable"
+    },
+    {
+      "text": "Continuing our infrastructure updates: What’s changing in the coming months : r/modnews",
+      "url": "https://www.reddit.com/r/modnews/comments/1wubgvt/continuing_our_infrastructure_updates_whats/",
+      "domain": "www.reddit.com",
+      "heading_context": "[Continuing our infrastructure updates: What’s changing in the coming months : r/modnews](https://www.reddit.com/r/modnews/comments/1wubgvt/continuing_our_infrastructure_updates_whats/)",
+      "section": "Notable"
+    },
+    {
+      "text": "Trump's Use of Truth Social's Pay-To-See-Posts-First Scheme Violates Americans' 1st Amendment Equal Access Rights | Electronic Frontier Foundation",
+      "url": "https://www.eff.org/deeplinks/2026/09/ff-court-trumps-use-truth-socials-pay-see-posts-first-scheme-violates-americans",
+      "domain": "www.eff.org",
+      "heading_context": "[Trump's Use of Truth Social's Pay-To-See-Posts-First Scheme Violates Americans' 1st Amendment Equal Access Rights | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2026/09/ff-court-trumps-use-truth-socials-pay-see-posts-first-scheme-violates-americans)",
+      "section": "Notable"
+    },
+    {
+      "text": "You Are No Longer Invited to Dinner - Derek Thompson",
+      "url": "https://www.derekthompson.org/p/the-death-of-the-american-host",
+      "domain": "www.derekthompson.org",
+      "heading_context": "[You Are No Longer Invited to Dinner - Derek Thompson](https://www.derekthompson.org/p/the-death-of-the-american-host)",
+      "section": "Notable"
+    }
+  ],
+  "briefly_links": [
+    {
+      "text": "An Ode to Links - Jim Nielsen’s Blog",
+      "url": "https://blog.jim-nielsen.com/2026/ode-to-links/",
+      "domain": "blog.jim-nielsen.com",
+      "heading_context": "[An Ode to Links - Jim Nielsen’s Blog](https://blog.jim-nielsen.com/2026/ode-to-links/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Kids turned the comment section of an NPR podcast into a group chat | The Verge",
+      "url": "https://www.theverge.com/entertainment/1001056/this-american-life-npr-kids-group-chat-comment-section",
+      "domain": "www.theverge.com",
+      "heading_context": "[Kids turned the comment section of an NPR podcast into a group chat | The Verge](https://www.theverge.com/entertainment/1001056/this-american-life-npr-kids-group-chat-comment-section)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Beauty — A Markdown editor for people who notice things.",
+      "url": "https://www.markdown.beauty/",
+      "domain": "www.markdown.beauty",
+      "heading_context": "[Beauty — A Markdown editor for people who notice things.](https://www.markdown.beauty/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Building a certificate authority for the whole Internet",
+      "url": "https://blog.cloudflare.com/cloudflare-certificate-authority/",
+      "domain": "blog.cloudflare.com",
+      "heading_context": "[Building a certificate authority for the whole Internet](https://blog.cloudflare.com/cloudflare-certificate-authority/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "GLM-5.3 and the spread of advanced cyber capabilities | Anthropic",
+      "url": "https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities",
+      "domain": "www.anthropic.com",
+      "heading_context": "[GLM-5.3 and the spread of advanced cyber capabilities | Anthropic](https://www.anthropic.com/research/glm-5-3-and-the-spread-of-advanced-cyber-capabilities)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Introducing Gemini 4",
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+      "domain": "blog.google",
+      "heading_context": "[Introducing Gemini 4](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Plan mode is dead | Ayman Nadeem",
+      "url": "https://www.aymannadeem.com/artificial/intelligence,/developer/tools/2026/09/24/plan-mode-is-dead.html",
+      "domain": "www.aymannadeem.com",
+      "heading_context": "[Plan mode is dead | Ayman Nadeem](https://www.aymannadeem.com/artificial/intelligence,/developer/tools/2026/09/24/plan-mode-is-dead.html)",
+      "section": "Briefly"
+    },
+    {
+      "text": "The internet discovers TLA+. Now what? | Reasonable",
+      "url": "https://reasonable.io/blog/tla-tutorial/",
+      "domain": "reasonable.io",
+      "heading_context": "[The internet discovers TLA+. Now what? | Reasonable](https://reasonable.io/blog/tla-tutorial/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "The Bizarre, Murky History of Soviet-Born Tetris",
+      "url": "https://thereader.mitpress.mit.edu/the-bizarre-murky-history-of-soviet-born-tetris/",
+      "domain": "thereader.mitpress.mit.edu",
+      "heading_context": "[The Bizarre, Murky History of Soviet-Born Tetris](https://thereader.mitpress.mit.edu/the-bizarre-murky-history-of-soviet-born-tetris/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Museum of numbers",
+      "url": "https://numbermuseum.com/",
+      "domain": "numbermuseum.com",
+      "heading_context": "[Museum of numbers](https://numbermuseum.com/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "The DNS Museum",
+      "url": "https://dns.museum/",
+      "domain": "dns.museum",
+      "heading_context": "[The DNS Museum](https://dns.museum/)",
+      "section": "Briefly"
+    }
+  ],
+  "domains": [
+    "blog.cloudflare.com",
+    "blog.google",
+    "blog.jim-nielsen.com",
+    "daringfireball.net",
+    "dns.museum",
+    "en.wikipedia.org",
+    "getbeastbox.com",
+    "github.com",
+    "minnestar.org",
+    "numbermuseum.com",
+    "openai.com",
+    "ordway.org",
+    "reasonable.io",
+    "shop.ingramspark.com",
+    "stateofutopia.com",
+    "supercell.com",
+    "support.apple.com",
+    "thereader.mitpress.mit.edu",
+    "tv.apple.com",
+    "vitalik.eth.limo",
+    "wattwindow.com",
+    "www.anthropic.com",
+    "www.aymannadeem.com",
+    "www.cjchilvers.com",
+    "www.derekthompson.org",
+    "www.eff.org",
+    "www.markdown.beauty",
+    "www.pokemon.com",
+    "www.radishfarmstop.com",
+    "www.ramblingjosh.com",
+    "www.reddit.com",
+    "www.theverge.com"
+  ],
+  "word_count": 3074
+}
