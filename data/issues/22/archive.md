@@ -211,8 +211,7 @@ How many places hold your data and do not think of you as their customer? This i
 
 This is worth reading just for the graphs.
 
->
-Though it is unclear whether men or women are more accurate, many people are obviously ignorant about the reality of their partners’ lives. And even if men are open to doing more at home so their wives can do more at work, the necessity may not occur to them. Gender equality could be boosted by some frank kitchen-table conversations.
+> Though it is unclear whether men or women are more accurate, many people are obviously ignorant about the reality of their partners’ lives. And even if men are open to doing more at home so their wives can do more at work, the necessity may not occur to them. Gender equality could be boosted by some frank kitchen-table conversations.
 
 ### [Apple Watch Series 3 review: The start of something big - Six Colors](https://sixcolors.com/post/2017/10/apple-watch-series-3-review-the-start-of-something-big/)
 
@@ -226,8 +225,7 @@ Looking at these test shots the iPhone 8 one looks better to me in every case. W
 
 If you are curious to learn more about Stoicism this is a good, simple primer.
 
->
-Stoicism is more a meditative practice that allows us to take the negative feelings we experience, and turn them into thoughts that give us peacefulness and perspective on life.
+> Stoicism is more a meditative practice that allows us to take the negative feelings we experience, and turn them into thoughts that give us peacefulness and perspective on life.
 
 I’m intrigued by stoicism and I’m also surprised at how many people I've talked to recently that are also reading about it. I think there is something here that is a counter-balance to the intensity of social media that we've surrounded ourselves with.
 
@@ -263,8 +261,7 @@ I do a terrible job at having a deliberate beginning to my day. Before I get up 
 
 In general I find the research that people can do on Wikipedia to be amazing and this article is no exception. This is worth looking at just for the great graphs.
 
->
-We have managed to detect dynamical patterns in terms of events and collective memories in Wikipedia using the combination of the hyperlinks graph and the visitor activity on the website.
+> We have managed to detect dynamical patterns in terms of events and collective memories in Wikipedia using the combination of the hyperlinks graph and the visitor activity on the website.
 
 There is a lot of focus on using machine learning and algorithms to filter news for events and those algorithms have been easily tricked and manipulated. I wonder if something closer to what researches have been doing with Wikipedia data may be a better solution to that problem.
 
@@ -276,8 +273,7 @@ Nice, simple writeup on some of the highlights that make Kubernetes a compelling
 
 Whew — we now have pretty good proof that we are not living inside of a giant simulation inside some computer.
 
->
-If the complexity grew linearly with the number of particles being simulated, then doubling the number of partices would mean doubling the computing power required. If, however, the complexity grows on an exponential scale – where the amount of computing power has to double every time a single particle is added – then the task quickly becomes impossible.
+> If the complexity grew linearly with the number of particles being simulated, then doubling the number of partices would mean doubling the computing power required. If, however, the complexity grows on an exponential scale – where the amount of computing power has to double every time a single particle is added – then the task quickly becomes impossible.
 
 We are not in the [Matrix](http://www.imdb.com/title/tt0133093/)
 
@@ -301,18 +297,15 @@ With hundreds of thousands of these waiting to be purchased (including one from 
 
 This is one of the most interesting and thought provoking articles I’ve read about Facebook. This overview of the current size of the Facebook community is amazing.
 
->
-What is Facebook? We can talk about its scale: Population-wise, it’s larger than any single country; in fact, it’s bigger than any continent besides Asia. At 2 billion members, “monthly active Facebook users” is the single largest non-biologically sorted group of people on the planet after “Christians” — and, growing consistently at around 17 percent year after year, it could surpass that group before the end of 2017 and encompass one-third of the world’s population by this time next year. Outside China, where Facebook has been banned since 2009, one in every five minutes on the internet is spent on Facebook; in countries with only recently high rates of internet connectivity, like Myanmar and Kenya, Facebook is, for all intents and purposes, the whole internet. The point of this article is that Facebook has become something that we have never seen before. Something that we really don’t understand.
+> What is Facebook? We can talk about its scale: Population-wise, it’s larger than any single country; in fact, it’s bigger than any continent besides Asia. At 2 billion members, “monthly active Facebook users” is the single largest non-biologically sorted group of people on the planet after “Christians” — and, growing consistently at around 17 percent year after year, it could surpass that group before the end of 2017 and encompass one-third of the world’s population by this time next year. Outside China, where Facebook has been banned since 2009, one in every five minutes on the internet is spent on Facebook; in countries with only recently high rates of internet connectivity, like Myanmar and Kenya, Facebook is, for all intents and purposes, the whole internet. The point of this article is that Facebook has become something that we have never seen before. Something that we really don’t understand.
 
 The authors assertion is that Zuckerberg himself and Facebook as a whole doesn’t understand what it is.
 
->
-But if Facebook is bigger, newer, and weirder than a mere company, surely his trip is bigger, newer, and weirder than a mere presidential run. Maybe he’s doing research and development, reverse-­engineering social bonds to understand how Facebook might better facilitate them. Maybe Facebook is a church and Zuckerberg is offering his benedictions. Maybe Facebook is a state within a state and Zuckerberg is inspecting its boundaries. Maybe Facebook is an emerging political community and Zuckerberg is cultivating his constituents. Maybe Facebook is a surveillance state and Zuckerberg a dictator undertaking a propaganda tour. Maybe Facebook is a dual power — a network overlaid across the U.S., parallel to and in competition with the government to fulfill civic functions — and Zuckerberg is securing his command. Maybe Facebook is border control between the analog and the digital and Zuckerberg is inspecting one side for holes. Maybe Facebook is a fleet of alien spaceships that have colonized the globe and Zuckerberg is the viceroy trying to win over his new subjects.
+> But if Facebook is bigger, newer, and weirder than a mere company, surely his trip is bigger, newer, and weirder than a mere presidential run. Maybe he’s doing research and development, reverse-­engineering social bonds to understand how Facebook might better facilitate them. Maybe Facebook is a church and Zuckerberg is offering his benedictions. Maybe Facebook is a state within a state and Zuckerberg is inspecting its boundaries. Maybe Facebook is an emerging political community and Zuckerberg is cultivating his constituents. Maybe Facebook is a surveillance state and Zuckerberg a dictator undertaking a propaganda tour. Maybe Facebook is a dual power — a network overlaid across the U.S., parallel to and in competition with the government to fulfill civic functions — and Zuckerberg is securing his command. Maybe Facebook is border control between the analog and the digital and Zuckerberg is inspecting one side for holes. Maybe Facebook is a fleet of alien spaceships that have colonized the globe and Zuckerberg is the viceroy trying to win over his new subjects.
 
 This quote stood out to me. I tend to think a lot of social media is just for social media anyway.
 
->
-Facebook is good because it creates community; community is good because it enables Facebook. The values of Facebook are Facebook.
+> Facebook is good because it creates community; community is good because it enables Facebook. The values of Facebook are Facebook.
 
 This is a long article but it’s definitely worth a read.
 
@@ -356,8 +349,7 @@ I’m still firmly opposed to introducing technology to my grilling and smoking 
 
 Love this deep mathematical look at roasting coffee beans using a more advanced model:
 
->
-Our mathematical model uses multiphase physics to describe the evolution of the solid, liquid, and gas components within the coffee bean. This is a crucial difference from previous attempts to model coffee roasting, as existing models treated the coffee bean as a single “bulk” material.
+> Our mathematical model uses multiphase physics to describe the evolution of the solid, liquid, and gas components within the coffee bean. This is a crucial difference from previous attempts to model coffee roasting, as existing models treated the coffee bean as a single “bulk” material.
 
 A properly sophisticated model with precise measurement combined with a machine learning approach could result in a fabulous, consistent and even personalized roast! ☕️ Hat tip to [Isaiah](https://twitter.com/keating_isaiah) for the link!
 
