@@ -164,9 +164,12 @@ jobs:
             return 1
           }
 
+          # data/blog/ too: the Weekly Thing build ties each Journal copy to
+          # its blog post, and a new issue's posts often sync after it ships.
           weekly_corpus=false
           if has_change \
             '^data/issues/' \
+            '^data/blog/' \
             '^data/librarian/media-descriptions\.json$' \
             '^pipeline/corpus/build\.py$' \
             '^pipeline/corpus/describe_media\.py$' \

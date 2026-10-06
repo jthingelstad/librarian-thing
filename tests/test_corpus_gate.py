@@ -48,11 +48,22 @@ def _page(directory: Path, number: int, audio: bool) -> None:
     directory.joinpath(f"{number}.md").write_text("\n".join(lines + ["---", "Body."]) + "\n")
 
 
-def _corpus(audio: dict | None, unmatched: int = 28) -> dict:
+# On the reviewed list (notes/audits/journal-permalinks-unmatched-2026-10-01.csv).
+REVIEWED = {
+    "issue_number": 4,
+    "title": "Backed Turing Tumble",
+    "url": "http://www.thingelstad.com/2017/05/30/backed-turing-tumble.html",
+}
+
+
+def _corpus(audio: dict | None, unmatched: list | None = None) -> dict:
     issue = {"number": 274}
     if audio is not None:
         issue["audio"] = audio
-    return {"issues": [issue, {"number": 275}], "journal_copy_stats": {"unmatched": unmatched}}
+    return {
+        "issues": [issue, {"number": 275}],
+        "journal_unmatched": [REVIEWED] if unmatched is None else unmatched,
+    }
 
 
 RECORD = {
@@ -91,10 +102,28 @@ class AudioDriftTest(unittest.TestCase):
     def test_gate_passes_clean_candidate(self):
         self.assertEqual(gate.gate_failures(_corpus(RECORD), self.site), [])
 
-    def test_gate_fails_when_unmatched_rises(self):
-        failures = gate.gate_failures(_corpus(RECORD, unmatched=34), self.site)
+    def test_gate_fails_when_a_reviewed_issue_loses_its_match(self):
+        lost = {"issue_number": 274, "title": "A post", "url": "https://www.thingelstad.com/x"}
+        failures = gate.gate_failures(_corpus(RECORD, [REVIEWED, lost]), self.site)
         self.assertEqual(len(failures), 1)
-        self.assertIn("unmatched rose to 34", failures[0])
+        self.assertIn("wt-274: https://www.thingelstad.com/x", failures[0])
+
+    def test_a_new_issue_waiting_on_the_blog_sync_only_warns(self):
+        # WT352's Journal post of 2026-10-01 was not synced when it shipped.
+        waiting = {"issue_number": 352, "title": "Beastbox", "url": "https://www.thingelstad.com/y"}
+        corpus = _corpus(RECORD, [REVIEWED, waiting])
+        self.assertEqual(gate.gate_failures(corpus, self.site), [])
+        self.assertEqual(
+            gate.journal_unmatched_new(corpus), ([], ["wt-352: https://www.thingelstad.com/y"])
+        )
+
+    def test_every_reviewed_entry_is_known(self):
+        with gate.JOURNAL_UNMATCHED_REVIEWED.open(newline="", encoding="utf-8") as handle:
+            rows = [
+                {"issue_number": int(row["issue"]), "title": row["title"], "url": row["url"]}
+                for row in csv.DictReader(handle)
+            ]
+        self.assertEqual(gate.journal_unmatched_new({"journal_unmatched": rows}), ([], []))
 
     def test_gate_fails_on_a_journal_copy_from_outside_the_week(self):
         # QA2 I2-1: WT212's Journal linked a 2021 post in prose; a copy is a

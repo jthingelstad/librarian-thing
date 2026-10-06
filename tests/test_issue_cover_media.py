@@ -7,8 +7,10 @@ generic Buttondown attachment (WT3-22) and stay out; WT236's "IMG_8973" is
 not a URL.
 """
 
+import re
 import tempfile
 import unittest
+from collections import Counter
 from pathlib import Path
 
 from librarian_core import corpus as core
@@ -61,10 +63,23 @@ class IssueCoverTests(unittest.TestCase):
             for item in corpus["media"]
             if item["context"] == core.COVER_CONTEXT
         }
-        self.assertIn("350", covers)
-        self.assertIn("351", covers)
-        self.assertIn("352", covers)
-        self.assertEqual(len(covers), 37)
+        # Read from the front matter, not counted: every issue whose cover is
+        # its own web image, outside its body, so a new issue never moves it.
+        images = {}
+        for path in ARCHIVE_DIR.glob("*/archive.md"):
+            text = path.read_text(encoding="utf-8")
+            front, body = text.split("---", 2)[1:]
+            match = re.search(r"^image:\s*['\"]?(\S+?)['\"]?\s*$", front, re.M)
+            if match and match.group(1).lower().startswith(("http://", "https://")):
+                images[path.parent.name] = (match.group(1), body)
+        shared = Counter(re.split(r"[?#]", url, maxsplit=1)[0] for url, _ in images.values())
+        expected = {
+            number
+            for number, (url, body) in images.items()
+            if shared[re.split(r"[?#]", url, maxsplit=1)[0]] == 1 and url not in body
+        }
+        self.assertEqual(covers, expected)
+        self.assertLessEqual({"350", "351", "352"}, covers)
         self.assertFalse({str(n) for n in range(3, 23)} & covers)
 
 

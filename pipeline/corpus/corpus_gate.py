@@ -6,10 +6,12 @@ Two subcommands, one set of checks:
 ``gate`` runs in deploy.yml's corpus gate on the staged candidate, before
 anything reaches S3. It fails the deploy when:
 
-- the Journal copies left unmatched rise above JOURNAL_UNMATCHED_MAX, the
-  count after the 2026-10-01 permalink repair (pipeline/audits/
+- a Journal copy in an issue up to WT351 is left unmatched and is not on the
+  list reviewed after the 2026-10-01 permalink repair (pipeline/audits/
   repair_journal_permalinks.py), so a regression in matching or ingest
-  cannot quietly undo it;
+  cannot quietly undo it. A newer issue's unmatched copy is a warning: its
+  post is usually not synced yet, and the next blog sync rebuilds the
+  Weekly Thing corpus and ties it;
 - a chunk's Journal copy is a post from outside its issue's week, [previous
   issue - 3 days, this issue + 1 day] (QA2 I2-1): a Journal link to an older
   post is a reference, and search would drop the passage as its twin; or
@@ -45,6 +47,7 @@ until the next issue. Pull, not push: the site never triggers this repo.
 from __future__ import annotations
 
 import argparse
+import csv
 import gzip
 import json
 import os
@@ -71,11 +74,29 @@ from librarian_core.embed_tokens import (  # noqa: E402
 )
 from librarian_core.paths import BLOG_DIR  # noqa: E402
 
-# Journal copies the build could not tie to a blog post, after the
-# 2026-10-01 repair (notes/audits/journal-permalinks-unmatched-2026-10-01.csv)
-# and the merged-series match (QA2 I2-7: five of the 33 found their post).
-JOURNAL_UNMATCHED_MAX = 28
+# Journal copies the build could not tie to a blog post, reviewed after the
+# 2026-10-01 repair. Five of the 33 have since found their post (QA2 I2-7,
+# the merged-series match). The review covered every issue through WT351;
+# a later issue is checked against the blog as synced, which can lag it.
+JOURNAL_UNMATCHED_REVIEWED = ROOT / "notes/audits/journal-permalinks-unmatched-2026-10-01.csv"
+JOURNAL_REVIEWED_THROUGH = 351
 _PERMALINK_DAY_RE = re.compile(r"/(\d{4})/(\d{2})/(\d{2})/")
+
+
+def journal_unmatched_new(corpus: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """``(regressions, pending)``: unmatched Journal copies the review did not
+    list, ``wt-N: url`` each. A regression is in a reviewed issue; a pending
+    one is in a later issue, whose post the blog may not have synced yet."""
+    with JOURNAL_UNMATCHED_REVIEWED.open(newline="", encoding="utf-8") as handle:
+        reviewed = {(int(row["issue"]), row["url"]) for row in csv.DictReader(handle)}
+    regressions, pending = [], []
+    for entry in corpus.get("journal_unmatched") or []:
+        number = int(entry["issue_number"])
+        if (number, entry["url"]) in reviewed:
+            continue
+        line = f"wt-{number}: {entry['url']}"
+        (regressions if number <= JOURNAL_REVIEWED_THROUGH else pending).append(line)
+    return regressions, pending
 
 
 def journal_copy_outside_week(corpus: dict[str, Any]) -> list[str]:
@@ -137,14 +158,15 @@ def audio_drift(corpus: dict[str, Any], site: dict[int, dict[str, Any]]) -> list
 
 def gate_failures(corpus: dict[str, Any], site_archive_dir: Path | None) -> list[str]:
     failures = []
-    unmatched = (corpus.get("journal_copy_stats") or {}).get("unmatched")
-    if not isinstance(unmatched, int):
-        failures.append("journal_copy_stats.unmatched missing from the corpus")
-    elif unmatched > JOURNAL_UNMATCHED_MAX:
-        failures.append(
-            f"journal copies unmatched rose to {unmatched} (ceiling {JOURNAL_UNMATCHED_MAX}): "
-            "see journal_unmatched in the candidate"
-        )
+    if not isinstance(corpus.get("journal_unmatched"), list):
+        failures.append("journal_unmatched missing from the corpus")
+    else:
+        regressions, _ = journal_unmatched_new(corpus)
+        if regressions:
+            failures.append(
+                f"{len(regressions)} Journal copies no longer match their blog post "
+                f"(reviewed through WT{JOURNAL_REVIEWED_THROUGH}): " + ", ".join(regressions[:8])
+            )
     stale = journal_copy_outside_week(corpus)
     if stale:
         failures.append(
@@ -511,6 +533,15 @@ def main(argv: list[str] | None = None) -> int:
         if blog is not None:
             failures.extend(blog_date_failures(blog))
         failures.extend(ingest_failures(corpus, blog))
+        _, pending = journal_unmatched_new(corpus) if corpus is not None else ([], [])
+        if pending:
+            report = (
+                f"{len(pending)} Journal copies in new issues found no blog post (not synced "
+                "yet? the next blog sync rebuilds and ties them): " + ", ".join(pending[:8])
+            )
+            print(report)
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::warning title=Journal copies unmatched::{report}")
         for name, staged in (("corpus.json", corpus), ("blog_corpus.json", blog)):
             if staged is None:
                 continue

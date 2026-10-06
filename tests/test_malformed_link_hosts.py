@@ -8,6 +8,7 @@ and "http://carcassonne:///f/..." gave the domain "carcassonne".
 """
 
 import json
+import re
 import unittest
 
 from librarian_core import corpus as core
@@ -89,12 +90,21 @@ class RealCorporaDomainTests(unittest.TestCase):
             or not link["url"].lower().startswith(("http://", "https://"))
         ]
         self.assertEqual(bad, [], json.dumps(bad[:5]))
-        # 29 doubled-scheme links plus the 6 written correctly, all in posts;
-        # one page links it too.
-        candles = [
-            link for link in blog["links"] if link["url"] == "https://www.thingelstad.com/candles/"
-        ]
-        self.assertEqual(len([link for link in candles if link.get("microblog_id")]), 35)
+        # The 29 doubled-scheme links are the candles page's again: every post
+        # whose source names the page links it, however the link was typed.
+        linking = {
+            str(link["microblog_id"])
+            for link in blog["links"]
+            if link.get("microblog_id")
+            and link["url"].rstrip("/") == "https://www.thingelstad.com/candles"
+        }
+        naming = set()
+        for path in BLOG_DIR.rglob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            if "thingelstad.com/candles" in text:
+                naming.add(re.search(r'^microblog_id:\s*"?(\d+)', text, re.M).group(1))
+        self.assertEqual(linking, naming)
+        self.assertGreaterEqual(len(linking), 29)
 
 
 if __name__ == "__main__":

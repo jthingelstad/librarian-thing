@@ -1215,7 +1215,7 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
   }
   let summed = 0;
   let noted = true;
-  for (let year = 1990; year <= 2026; year += 1) {
+  for (let year = 1990; year <= new Date().getUTCFullYear(); year += 1) {
     const out = await run('media_search', { year, limit: 1 });
     summed += out?.total_count || 0;
     if (out?.total_count && !/year totals can sum past/.test(out?.note || '')) noted = false;
@@ -1304,7 +1304,7 @@ await run('media_search', { issue_number: 66, limit: 12 }).then((out) => {
   const issues = await run('source_neighborhood', { id: 'wt-200' }, { scope: 'weekly_thing' });
   check(
     'KA source_neighborhood wt-200 has related issues in the Weekly Thing scope alone',
-    issues?.related_count > 0 && issues.related_count < 350,
+    issues?.related_count > 0 && issues.related_count < (corpora.weekly_thing?.issues || []).length,
     String(issues?.related_count)
   );
 }
@@ -1428,7 +1428,9 @@ await run('currently_history', { kind: 'reading', limit: 5 });
   );
   check(
     'KA on_this_day returns the date year and earlier, newest first',
-    (day?.years || []).every((row, index, rows) => row.year <= 2026 && (!index || rows[index - 1].year > row.year))
+    (day?.years || []).every(
+      (row, index, rows) => row.year <= new Date().getUTCFullYear() && (!index || rows[index - 1].year > row.year)
+    )
   );
   for (const item of items.slice(0, 12)) {
     const source = await ARCHIVE_TOOLS.get_source({ id: item.id }, { scope: 'all' });
@@ -1823,7 +1825,6 @@ check('graph corpus loaded', Boolean(corpora.graph), 'artifacts/graph.json unava
 await runCompletenessChecks({
   corpora,
   check,
-  checkCorpus,
   counts,
   retrieval,
   call: async (tool, args) => {

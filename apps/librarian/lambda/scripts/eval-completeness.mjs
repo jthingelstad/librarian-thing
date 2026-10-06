@@ -68,7 +68,7 @@ function yearOf(record) {
   return Number.isFinite(year) ? year : null;
 }
 
-export async function runCompletenessChecks({ corpora, call, check, checkCorpus = check, counts, retrieval = {} }) {
+export async function runCompletenessChecks({ corpora, call, check, counts, retrieval = {} }) {
   const wt = corpora.weekly_thing || {};
   const blog = corpora.blog || {};
   const podcast = corpora.podcast || {};
@@ -1042,24 +1042,26 @@ export async function runCompletenessChecks({ corpora, call, check, checkCorpus 
       split.length > 0 && short.length === 0,
       `${short.length} spellings short across ${split.length} groups: ${short.slice(0, 3).join('; ')}`
     );
+    // The QA's named cases, each held to the corpus's own count for its
+    // path (never a fixed number: a new issue that links one moves it).
     const pins = [
-      ['https://en.wikipedia.org/wiki/Elf_%28film%29', 8],
-      ['https://en.wikipedia.org/wiki/Elf_(film)', 8],
-      // 8 since WT352 (2026-10-04) linked them again for the fall.
-      ['https://en.wikipedia.org/wiki/The_Replacements_(band)', 8],
-      ['https://en.wikipedia.org/wiki/The_Replacements_%28band%29', 8],
-      ["https://en.wikipedia.org/wiki/Dunbar's_number", 4],
-      ['https://en.wikipedia.org/wiki/Dunbar%27s_number', 4],
-      ['https://en.wikipedia.org/wiki/M%c3%b6lkky', 4]
+      'https://en.wikipedia.org/wiki/Elf_%28film%29',
+      'https://en.wikipedia.org/wiki/Elf_(film)',
+      'https://en.wikipedia.org/wiki/The_Replacements_(band)',
+      'https://en.wikipedia.org/wiki/The_Replacements_%28band%29',
+      "https://en.wikipedia.org/wiki/Dunbar's_number",
+      'https://en.wikipedia.org/wiki/Dunbar%27s_number',
+      'https://en.wikipedia.org/wiki/M%c3%b6lkky'
     ];
     const off = [];
-    for (const [url, want] of pins) {
+    for (const url of pins) {
+      const parsed = new URL(url);
+      const key = `${parsed.hostname.replace(/^www\./, '')}${decodeURIComponent(parsed.pathname)}`;
+      const want = groups.get(key)?.size || 0;
       const found = await call('find_links', { url, limit: 1 });
-      if (found.total_count !== want) off.push(`${url} ${found.total_count}/${want}`);
+      if (!want || found.total_count !== want) off.push(`${url} ${found.total_count}/${want}`);
     }
-    // Fixed counts, so a new issue that links one moves them: before the
-    // gate they read the live corpora the rebuild has not reached yet.
-    checkCorpus('completeness find_links url encoding pins', off.length === 0, off.join('; '));
+    check('completeness find_links url encoding pins', off.length === 0, off.join('; '));
   }
 
   // 8l. A site page's incoming_count is every corpus link to its url (QA2

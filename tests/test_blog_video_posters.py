@@ -6,6 +6,7 @@ media_search could not find them.
 """
 
 import importlib.util
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -110,9 +111,27 @@ class VideoPosterTests(unittest.TestCase):
             for item in corpus["media"]
             if item.get("video_url") and item.get("media_kind") != "video"
         ]
-        # 112 since the Beastbox demo video from Minnedemo (2026-10-01).
-        self.assertEqual(len([item for item in posters if item.get("microblog_id")]), 112)
-        self.assertEqual(len([item for item in posters if item.get("page_id")]), 5)
+        # Every poster still in the source, posts and pages, read from the
+        # markdown rather than counted, so a new video never moves it.
+        expected = set()
+        for path in BLOG_DIR.parent.rglob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            if not text.startswith("---"):
+                continue
+            front, body = text.split("---", 2)[1:]
+            owner = re.search(r'^(microblog_id|page_id):\s*"?(\d+)', front, re.M)
+            for tag in re.findall(r"<video\b[^>]*>", body, re.I):
+                poster = re.search(r"""\bposter=["']([^"']+)["']""", tag, re.I)
+                if owner and poster:
+                    expected.add((owner.group(1), owner.group(2), poster.group(1)))
+        found = {
+            ("page_id", str(item["page_id"]), item["url"])
+            if item.get("page_id") is not None
+            else ("microblog_id", str(item["microblog_id"]), item["url"])
+            for item in posters
+        }
+        self.assertEqual(found, expected)
+        self.assertGreater(len(found), 100)
         videos = [item for item in corpus["media"] if item.get("media_kind") == "video"]
         self.assertEqual(
             sorted((item["microblog_id"], item["url"].rsplit("/", 1)[1]) for item in videos),
