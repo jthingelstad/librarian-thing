@@ -2,7 +2,7 @@
 page_id: 66529
 url: "https://www.thingelstad.com/lists/blogroll/"
 title: "Blogroll"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-01T20:11:48+00:00"
 post_kind: page
 categories: []
 ---
@@ -36,7 +36,7 @@ These websites are all ones that you would identify with a person, and in this c
 
 These sites are fun things to put a smile on your face. Often hobbies or personal projects that individuals are creating.
 
-- [Weekly Thing](htttps://weekly.thingelstad.com): My own weekly newsletter!
+- [Weekly Thing](https://weekly.thingelstad.com): My own weekly newsletter!
 - [Road Sign Math](https://www.roadsignmath.xyz): The relaunched version of my website that focuses on mathematically significant road signs!
 - [Five Things on Friday](https://www.fivethingsonfriday.com): I’ve followed James Watley’s newsletter for years now and it is still one of my favorite weekend reads.
 - [People and Blogs](https://peopleandblogs.com): Wonderful newsletter that highlights different blogs and the people behind them.

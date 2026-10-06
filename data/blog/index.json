@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-01T18:00:22+00:00",
-  "highest_id": 6036084,
+  "generated_at": "2026-10-06T04:32:37+00:00",
+  "highest_id": 6038500,
   "page_count": 123,
   "pages": {
     "1017901": {
@@ -564,7 +564,7 @@
     "66529": {
       "path": "pages/lists/blogroll.md",
       "title": "Blogroll",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-01T20:11:48+00:00",
       "url": "https://www.thingelstad.com/lists/blogroll/"
     },
     "667632": {
@@ -1159,7 +1159,7 @@
       "url": "https://www.thingelstad.com/pagefind/"
     }
   },
-  "post_count": 10444,
+  "post_count": 10450,
   "posts": {
     "1003356": {
       "path": "posts/2019/12/2019-12-22-big-crowd-at.md",
@@ -44552,6 +44552,42 @@
       "published": "2026-09-30T21:52:43+00:00",
       "title": "",
       "url": "https://www.thingelstad.com/2026/09/30/oh-no-of-quota.html"
+    },
+    "6038048": {
+      "path": "posts/2026/10/2026-10-04-working-with-otto-this-morning.md",
+      "published": "2026-10-04T12:02:07+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/04/working-with-otto-this-morning.html"
+    },
+    "6038163": {
+      "path": "posts/2026/10/2026-10-04-had-a-great-time-cheering.md",
+      "published": "2026-10-04T15:19:16+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/04/had-a-great-time-cheering.html"
+    },
+    "6038168": {
+      "path": "posts/2026/10/2026-10-01-it-was-great-to-connect.md",
+      "published": "2026-10-02T02:30:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/01/it-was-great-to-connect.html"
+    },
+    "6038171": {
+      "path": "posts/2026/10/2026-10-01-beastbox-was-an-amazing-demo.md",
+      "published": "2026-10-02T02:45:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/01/beastbox-was-an-amazing-demo.html"
+    },
+    "6038173": {
+      "path": "posts/2026/10/2026-10-01-watt-window-was-my-other.md",
+      "published": "2026-10-02T02:50:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/01/watt-window-was-my-other.html"
+    },
+    "6038500": {
+      "path": "posts/2026/10/2026-10-04-i-was-inspired-by-the.md",
+      "published": "2026-10-05T02:17:36+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/04/i-was-inspired-by-the.html"
     },
     "653561": {
       "path": "posts/2018/07/2018-07-20-clocks.md",
