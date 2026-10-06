@@ -20,7 +20,7 @@ domains:
 - www.vice.com
 links:
 - text: When we share our fears, we might learn how much we're alike
-  url: https://mailchi.mp/74b699625b8c/when-we-share-our-fears-we-might-learn-how-much-were-alike?e=0354acacc9
+  url: https://mailchi.mp/74b699625b8c/when-we-share-our-fears-we-might-learn-how-much-were-alike
   domain: mailchi.mp
   heading_context: null
   section: Briefly
@@ -157,7 +157,7 @@ Buildings in downtown Minneapolis lit up in Yellow and Blue for Ukraine. 🇺�
 
 ## Briefly
 
-Pretty incredible story. → **[When we share our fears, we might learn how much we're alike](https://mailchi.mp/74b699625b8c/when-we-share-our-fears-we-might-learn-how-much-were-alike?e=0354acacc9)**
+Pretty incredible story. → **[When we share our fears, we might learn how much we're alike](https://mailchi.mp/74b699625b8c/when-we-share-our-fears-we-might-learn-how-much-were-alike)**
 
 Limiting our news intake, even during crisis, is worth thinking through. My strategy has been to **only** consume the email newsletters I get from news organizations. But big events like the Russia's War on Ukraine throw that out the window. → **[The Imperfectionist: Becoming news-resilient](https://ckarchive.com/b/r8u8hoh8eeov)**
 

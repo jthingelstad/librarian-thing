@@ -108,9 +108,9 @@ links:
   heading_context: '[Internet-in-a-Box](http://internet-in-a-box.org/)'
   section: Notable
 - text: Courting the common cold
-  url: https://mailchi.mp/cc6d2036903a/courting-the-common-cold?e=64d4d2a87c
+  url: https://mailchi.mp/cc6d2036903a/courting-the-common-cold
   domain: mailchi.mp
-  heading_context: '[Courting the common cold](https://mailchi.mp/cc6d2036903a/courting-the-common-cold?e=64d4d2a87c)'
+  heading_context: '[Courting the common cold](https://mailchi.mp/cc6d2036903a/courting-the-common-cold)'
   section: Notable
 - text: 'Loup TV 096: "Bitcoin 2021" Further Mainstreams Crypto | Loup Ventures'
   url: https://loupventures.com/loup-tv-096-bitcoin-2021-further-mainstreams-crypto/
@@ -339,7 +339,7 @@ We spend a lot of time thinking about the newest and greatest, but there are sti
 
 Devices like this are important to bridge those gaps until we can get the web everywhere.
 
-### [Courting the common cold](https://mailchi.mp/cc6d2036903a/courting-the-common-cold?e=64d4d2a87c)
+### [Courting the common cold](https://mailchi.mp/cc6d2036903a/courting-the-common-cold)
 
 I've heard multiple folks considering the continuation of mask wearing to fend off other viruses in general. I like this take from Mo Perry.
 

@@ -129,7 +129,7 @@ https://creativecommons.org
 
 - [Stripe Atlas: Writing copy for landing pages](https://stripe.com/atlas/guides/landing-page-copy) stripe.com
 Quick primer for non-marketing types to help write better copy to engage.
-- [What Leadership Really Feels Like](https://mailchi.mp/gapingvoid/what-leadership-really-feels-like?e=c0f58dbfb1) mailchi.mp
+- [What Leadership Really Feels Like](https://mailchi.mp/gapingvoid/what-leadership-really-feels-like) mailchi.mp
 A good explainer on why telling stories that connect to the future matters so much!
 - [The Gun Violence Map: Five Years of American Shootings](https://www.thetrace.org/features/gun-violence-interactive-shootings-map/) www.thetrace.org
 Eye opening way to show gun violence.
