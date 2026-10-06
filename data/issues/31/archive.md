@@ -150,6 +150,8 @@ Reasons for removing Google Analytics as the last tracking code I was using on m
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/31/cover.jpg)
+
 This is the cabin [just outside the Old Log Theatre](http://oldlog.com) . We went there this last week and this building always catches my eye.
 
 Dec 2, 2017 at 1:24 PM

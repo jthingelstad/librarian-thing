@@ -29,11 +29,16 @@ the API a URL, this mode also takes the images the normal pass never tried:
 http:// ones (fetched over https first) and hosts outside the allowlist.
 Their sidecar key stays the URL exactly as the corpus has it.
 
+`--url` describes the given URLs again, replacing what the sidecar holds. A
+replaced image keeps its URL (a corrected cover.jpg), so the normal pass,
+which skips any URL already described, would never look at it again.
+
     uv run --locked python pipeline/corpus/describe_media.py --dry-run
     uv run --locked python pipeline/corpus/describe_media.py
     uv run --locked python pipeline/corpus/describe_media.py --limit 20
     uv run --locked python pipeline/corpus/describe_media.py --retry-errors --dry-run
     uv run --locked python pipeline/corpus/describe_media.py --retry-errors
+    uv run --locked python pipeline/corpus/describe_media.py --url https://files.thingelstad.com/weekly-thing/31/cover.jpg
 """
 
 from __future__ import annotations
@@ -216,6 +221,12 @@ def main() -> int:
         action="store_true",
         help="fetch failed and never-tried images locally and send them inline",
     )
+    parser.add_argument(
+        "--url",
+        action="append",
+        default=[],
+        help="describe this URL again, replacing its entry (repeatable)",
+    )
     args = parser.parse_args()
 
     load_dotenv(ROOT / ".env")
@@ -228,7 +239,14 @@ def main() -> int:
     if SIDECAR.exists():
         sidecar = json.loads(SIDECAR.read_text())
 
-    if args.retry_errors:
+    if args.url:
+        urls = collect_urls()
+        unknown = [u for u in args.url if u not in urls]
+        if unknown:
+            print(f"not in any corpus: {', '.join(unknown)}", file=sys.stderr)
+            return 1
+        pending = list(args.url)
+    elif args.retry_errors:
         urls = collect_urls(keep=fetchable)
         pending = [u for u in urls if "description" not in sidecar.get(u, {})]
         retried = sum(1 for u in pending if u in sidecar)

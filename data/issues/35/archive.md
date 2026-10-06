@@ -17,7 +17,9 @@ I also kicked off the new year by taking [Shawn Blanc's Focus Course](https://th
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/35/cover.jpg)
 
 One of our New Years Eve traditions with the kids is a game of Clue. This year Mrs. Peacock did it with the Wrench in the Hall!
 

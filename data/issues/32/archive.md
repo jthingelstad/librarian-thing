@@ -19,7 +19,9 @@ Sign up for the EFF mailing list so you can stay up-to-date with the work they a
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/32/cover.jpg)
 
 Giant Super Mario Bros. found in the Skyways of Downtown Minneapolis.
 

@@ -68,6 +68,8 @@ I like many of the recommendations made in this article.
 
 My favorite picture from the last week.
 
+![](https://files.thingelstad.com/weekly-thing/51/cover.jpg)
+
 Downtown Minneapolis finally done with the snow and preparing for spring.
 
 Apr 27, 2018 at 4:55 PM

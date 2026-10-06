@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/33/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-23-2017/
 domains: []
 links: []
-word_count: 1684
+word_count: 1697
 ---
 It’s Christmas Eve Eve and we are in the final approach for the big day. There is much excitement to open presents and play, the kids are pretty eager too. 😂 We're spending Christmas at the lake 🏡 which is really nice. It’s quiet and relaxing. We'll make excursions to family on Christmas Eve and Christmas Day as well. A batch of [Wassail Tea](https://www.thingelstad.com/2004/wassail-tea/) is ready and I’m [on deck to make Glorified Rice](https://en.wikipedia.org/wiki/Glorified_rice) and some Jell-O with floating fruit!
 
@@ -17,7 +17,9 @@ I have a suggestion for everyone, one that I’m giving myself as well. Disconne
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/33/cover.jpg)
 
 [Semisonic](http://semisonic.com) performing Feeling Strangely Fine [in it's entirety at First Ave](http://first-avenue.com) -- awesome! 👏
 

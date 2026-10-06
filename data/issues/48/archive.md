@@ -17,6 +17,8 @@ It was "Spring" Break this week, and I put Spring in parenthesis due to signific
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/48/cover.jpg)
+
 [The Chicago Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate) [in Millennium Park](https://en.wikipedia.org/wiki/Millennium_Park) .
 
 Apr 5, 2018 at 10:43 AM

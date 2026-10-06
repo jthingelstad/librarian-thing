@@ -15,6 +15,8 @@ We officially welcomed the First Day of Spring 🌦 and with it above freezing t
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/46/cover.jpg)
+
 Steve Earle and the Dukes toured to celebrate [the 30th Anniversary of Copperhead Road](https://www.rollingstone.com/country/news/steve-earle-plots-copperhead-road-30th-anniversary-tour-w516415) .
 
 Mar 21, 2018 at 9:41 PM

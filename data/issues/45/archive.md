@@ -17,6 +17,8 @@ This week marked π day as well. We celebrated at the office and at home. At the
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/45/cover.jpg)
+
 Before leaving India we took a fun trip to Agra to see the Taj Mahal. In pictures the Taj Mahal often looks like a painting. It looks like that in person to. It was a spectacular palace to see.
 
 Mar 9, 2018 at 9:10 PM

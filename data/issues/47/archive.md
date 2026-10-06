@@ -15,6 +15,8 @@ It is Spring Break Season 🍃 and it seems like everyone is heading away for a 
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/47/cover.jpg)
+
 The last time we were at The Dakota they had the top off of the piano. They have a tradition of having artists sign the inside of the piano when they play, and they allowed people to come on stage and take pictures after the show. See Adele's name in the photo I took.
 
 Mar 28, 2018 at 8:55 PM

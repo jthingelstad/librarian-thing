@@ -114,6 +114,8 @@ Thompson's recap of the WWDC 2019 announcements is insightful. He gave a lot of 
 
 ## My Weekly Photo 📷
 
+![Peony Flowering in Lyndale Rose Garden.](https://files.thingelstad.com/weekly-thing/109/cover.jpg)
+
 Peony Flowering in Lyndale Rose Garden.
 Jun 2, 2019 at 4:01 PM
 Lyndale Rose Garden, 1500 E Lake Harriet Blvd, Minneapolis MN

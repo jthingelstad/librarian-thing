@@ -29,7 +29,9 @@ Analysis of the 913 links I saved to various websites in 2017.
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/38/cover.jpg)
 
 We got right around a foot of snow on Monday night and it covered everything in a pretty blanket of white powder.
 

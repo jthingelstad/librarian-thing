@@ -23,6 +23,8 @@ Big improvements to Weekly Thing template and better content display.
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/42/cover.jpg)
+
 The gorgeous copper pizza oven 🔥 at Pizzeria Lola. 🍕
 
 Feb 20, 2018 at 8:15 PM

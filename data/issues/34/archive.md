@@ -25,7 +25,9 @@ What apps do you have on your phone that are making you a better person?
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/34/cover.jpg)
 
 All bundled up for the winter with temperatures well below zero.
 

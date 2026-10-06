@@ -166,6 +166,8 @@ Also, I think I figured out how to embed an image in Mailchimp better than last 
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/24/cover.jpg)
+
 Oct 19, 2017 at 6:55 PM
 29525 S Nicaboyne Lake Rd Scott WI 54830
 

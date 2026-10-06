@@ -143,6 +143,8 @@ Tammy loves [to talk about my Project Terabyte](https://www.thingelstad.com/2004
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/25/cover.jpg)
+
 Plenty of pumpkins waiting to be taken home, cut open, carved up and put on display for Halloween.
 
 Oct 27, 2017 at 5:07 PM

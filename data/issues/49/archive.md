@@ -17,6 +17,8 @@ I was surprised by how many people were tuned into Mark Zuckerberg's congression
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/49/cover.jpg)
+
 Tammy and I went to see [The Decemberists](http://www.decemberists.com) playing at the [Palace Theatre](http://palacestpaul.com) last weekend.
 
 Apr 7, 2018 at 9:26 PM

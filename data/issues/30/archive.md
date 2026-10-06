@@ -132,6 +132,8 @@ What would a modern, cloud-native approach to re-energize the wiki movement look
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/30/cover.jpg)
+
 Leaves are all gone, the days are short. Only a few more days until we have snow come for the rest of the winter.
 
 Dec 1, 2017 at 4:10 PM

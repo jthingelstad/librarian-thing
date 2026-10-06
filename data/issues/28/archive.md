@@ -116,6 +116,8 @@ Wishing you a very Happy Thanksgiving! 🦃
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/28/cover.jpg)
+
 I [participated in the Micro.blog Photo Challenge](http://micro.douglane.com/2017/11/09/microblog-photo-challenge.html) this week. This is my abstract photo for liquid. The CO2 bubbles streak as they charge up and out of the water.
 
 Nov 15, 2017 at 7:08 PM

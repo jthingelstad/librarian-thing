@@ -27,6 +27,8 @@ Recap of my day at Minnebar 13.
 
 My favorite picture from the last week.
 
+![](https://files.thingelstad.com/weekly-thing/50/cover.jpg)
+
 People enjoying the Cherry [Blossoms in A.V. Fomin Botanical Garden](https://en.wikipedia.org/wiki/A.V._Fomin_Botanical_Garden)
 
 Apr 18, 2018 at 9:26 AM

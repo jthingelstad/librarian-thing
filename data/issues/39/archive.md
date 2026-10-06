@@ -9,11 +9,15 @@ image: https://files.thingelstad.com/weekly-thing/39/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-3-2018/
 domains: []
 links: []
-word_count: 1695
+word_count: 1698
 ---
 I've been thinking 🤔 that making links easier to go through would be an improvement to the Weekly Thing, both for you the reader, and for me the author! I've had to manually deal with blockquotes that I put into the links (and sometimes miss some). I figured out how to move the links section to [some Python 🐍 code in Pythonista](http://omz-software.com/pythonista/)  and with that I got it to format the content better (yeah for me!) and even better I now put the links into groups by topics! This will make it easier for you the reader to see what you like, and importantly, skip what isn't interesting to you. 👍
 
 ---
+
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/39/cover.jpg)
 
 [The Kubbchucks](http://kubbchucks.planetkubb.com) made our 6th annual [appearance at the largest winter Kubb](https://en.wikipedia.org/wiki/Kubb) tournament in the world! We enjoyed a day of throwing wood on frozen Lake Calhoun!
 

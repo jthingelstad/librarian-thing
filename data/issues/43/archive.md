@@ -27,6 +27,8 @@ Applying Semantic Versioning to every day of your life.
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/43/cover.jpg)
+
 This section of Minnehaha Creek, as it leaves Lake Harriet, never freezes. We went on a walk during a recent dumping of snow, and it was cool to see all these ducks in the creek, braving the winter, with snow piling up on their backs.
 
 Feb 24, 2018 at 7:46 PM

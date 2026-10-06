@@ -5,7 +5,7 @@ subject: Weekly Thing for November 11, 2017
 publish_date: '2017-11-11T14:20:43Z'
 slug: weekly-thing-for-november-11-2017
 description: RSS case, workplace surveillance, retail apocalypse, Facebook exploiting weakness, Al Franken big tech speech, iPhone X impressions, Hüsker Dü legacy.
-image: https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/2f/0b/60/2f0b6079-924f-870f-d4c0-a79edb16ef0a/Placeholder.mill/1200x630wa.jpg
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-november-11-2017/
 domains:
 - blog.balancedpayments.com

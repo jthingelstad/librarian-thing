@@ -559,3 +559,28 @@ A practical order: (1) quotes, (2) weekly photos, (3) WT42-52 split titles and t
 - `/tmp/wtq/audit/audit.py` -> `results.json` (per-issue sentences, anchors, headings, images, quotes)
 - `imgs.py` -> `imgs.json`; `emph.py` -> `emph.json`; `italq.py` -> `italq.json`; `worddiff.py` -> `worddiff.json`; `shortlines.py`; `dupgram.py`
 - `report.py` -> this file. Run with `/Users/otto/Projects/thingelstad.com/librarian-thing/.venv/bin/python` (needs bs4).
+
+## Repair log
+
+Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails in librarian-thing and weekly.thingelstad.com, quotes first, re-rendering audio for changed issues". Jamie can't review it by hand, so each round runs four checks:
+
+- a validator written separately from the apply script, rendered with the site's markdown-it;
+- planted faults the validator must catch;
+- an independent adversarial review against the emails;
+- `make check` plus the CI corpus gate.
+
+**Round 1, quotes** (`repair/`). 564 quotes in 103 issues are blockquotes again (317661ff). The validator checks:
+
+- the text is unchanged apart from `>` markers;
+- every email quote renders as a quote, and nothing else does;
+- no heading sits inside a quote;
+- quote edges and punctuation match the email.
+
+**Round 2, weekly photos** (`repair/photos/`). 30 issues get their photo back: 23–26, 28, 30–52, 97 and 109.
+
+- The image is the issue's cover, which `sweep.py` shows is pixel-identical to the email photo in every case. The alt is the email's.
+- Placement follows the email in WT23–52. WT97 and WT109 follow the WT53–130 convention (photo right under the heading), which every surviving section in that era uses.
+- WT39–41 get back the "Photo 📷" heading. WT32–38's "Photog" headings are corrected to the emails' "Photo".
+- The covers of WT31 (a waterfall) and WT32 (an EFF member badge) were different pictures, so the email photos replaced them on S3. The old versions are kept, CloudFront was invalidated, and the vision descriptions were redone (`describe_media.py --url`).
+- WT29's photo is gone everywhere (dead MailChimp URL, no archive copy), so it stays without one. Its dead cover URL and WT27's App Store "Placeholder" image are cleared to `''`, as WT1 is.
+- Left as found: WT97's "Dreaming of summer." line (the email's alt, flattened into text at import) and WT36's "thick" (the email says "think").

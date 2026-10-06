@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/40/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-10-2018/
 domains: []
 links: []
-word_count: 1616
+word_count: 1619
 ---
 It was pretty cool to watch the Super Bowl 🏈 last weekend with highlights of our fine city of Minneapolis. However, after weeks of increasing road closures 🚨 and security perimeters 👮 I'm pretty happy to see everyone head back to their home and let us get back to normal! 👋
 
@@ -28,6 +28,10 @@ Learn to identify patterns in software that create addictive feedback loops.
 A powerful CMS for static sites.
 
 ---
+
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/40/cover.jpg)
 
 Nice winter days with a bunch of snow and the sun keeping you warm are delightful.
 

@@ -17,6 +17,8 @@ India has been an amazing time. It has been much easier to get around than I exp
 
 ## Photo 📷
 
+![](https://files.thingelstad.com/weekly-thing/44/cover.jpg)
+
 A small Hindu Temple in the Midnight Bazaar.
 
 Mar 6, 2018 at 6:48 AM

@@ -15,7 +15,9 @@ I’m not a big football 🏈 fan, but you'd have to be a zombie 🧟‍♂️ t
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/37/cover.jpg)
 
 There is something magical about a collection of books waiting for you to go on a thousand adventures. Even more so when they are all kids books filled with magic.
 

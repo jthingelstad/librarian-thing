@@ -44,6 +44,8 @@ Even in my casual use of Stack Overflow I have come across some of the abrasive 
 
 My favorite picture from the last week.
 
+![](https://files.thingelstad.com/weekly-thing/52/cover.jpg)
+
 We typically visit Gooseberry Falls in the summer. This is our first time in the Spring when the snow melt is strong and the water is rushing down the falls. It was impressive to see the falls at it's strongest. It is also amazing that this shot is with my iPhone, not a fancy rig on a tripod with an extended exposure.
 
 May 3, 2018 at 12:17 PM

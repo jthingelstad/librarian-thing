@@ -81,6 +81,8 @@ What about bankers and consultants?
 
 ## My Weekly Photo 📷
 
+![Dreaming of summer.](https://files.thingelstad.com/weekly-thing/97/cover.jpg)
+
 We went to the lake this last weekend and I found myself playing Fishin’ in the Dark as we pulled in, and dreaming of summer, sunshine, and open water.
 
 Dreaming of summer.

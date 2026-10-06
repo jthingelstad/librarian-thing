@@ -161,6 +161,8 @@ This does change how some of my automation works to create the newsletter. It al
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/23/cover.jpg)
+
 MN United fans cheering during a corner kick at the last home game of the season!
 
 Oct 7, 2017 at 7:43 PM

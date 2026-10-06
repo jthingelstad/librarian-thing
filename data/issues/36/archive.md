@@ -17,7 +17,9 @@ My learning this week took me to Longboat Key, Florida. It was really nice to ge
 
 ---
 
-## Photog 📷
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/36/cover.jpg)
 
 The fog was very thick all day on the Gulf Coast in Florida. I don't think you could see even a hundred feet. The fog, water and sand blended into layers of grey.
 

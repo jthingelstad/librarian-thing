@@ -9,11 +9,15 @@ image: https://files.thingelstad.com/weekly-thing/41/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-17-2018/
 domains: []
 links: []
-word_count: 1528
+word_count: 1531
 ---
 This past week has been a blur with my brother and his family visiting 👪, my son's birthday 🎂, Valentine's day 💖 and our annual company party 🎉! I’m looking forward to catching up on some things this weekend, including my to do list and some sleep. 💤
 
 ---
+
+## Photo 📷
+
+![](https://files.thingelstad.com/weekly-thing/41/cover.jpg)
 
 Giant THANK YOU in lights 💡 at the SPS Social.
 

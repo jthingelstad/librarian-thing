@@ -171,6 +171,8 @@ I hope you all had a great Halloween! 🎃 We had the coldest one in over ten ye
 
 ## Photog 📷
 
+![](https://files.thingelstad.com/weekly-thing/26/cover.jpg)
+
 One block over from our house the neighborhood celebrates Halloween 🎃 with gusto! This skeleton hanging from a tree was an awesome highlight! 👻
 
 Oct 31, 2017 at 7:00 PM

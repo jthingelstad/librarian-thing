@@ -5,7 +5,7 @@ subject: Weekly Thing for November 25, 2017
 publish_date: '2017-11-25T13:00:00Z'
 slug: weekly-thing-for-november-25-2017
 description: AlphaGo Zero, brilliant jerks in engineering, net neutrality repeal, Uber data breach, pingfs ICMP storage, Pi-hole, products over projects.
-image: https://gallery.mailchimp.com/9819a09d90bc4bae56285dd82/images/2f2165ae-eaab-4b23-8c4f-d7bc1bc07bdd.jpg
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-november-25-2017/
 domains:
 - arstechnica.com
