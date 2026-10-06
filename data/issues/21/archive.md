@@ -113,7 +113,7 @@ links:
   domain: calnewport.com
   heading_context: '[Spend More Time Alone - Study Hacks - Cal Newport](http://calnewport.com/blog/2017/09/24/spend-more-time-alone/)'
   section: Links 📌
-word_count: 1837
+word_count: 1840
 ---
 This week was a blur with a tremendous amount going on at work as well as at home. I had a great evening hanging out with Steve, [Dennys](https://twitter.com/Dennysb) and [Layne](https://www.laynekennedy.com/index). We all went to Iceland together several years ago and it’s super fun every time we get together over some good food and beers. Unfortunately Dennys was sick and had to bail last minute. I also had my [R/W Book Club](https://rwbook.club) meeting this week and we discussed [our book](https://rwbook.club/book/how-to-live/) and had great conversations. Both of these nights were reminder that even when things are busy, and even more so when they are busy, it’s important to take some time to hang out with friends and chat, laugh and debate. I feel pretty lucky to have those opportunities. I highly recommend it! 👍
 
@@ -128,7 +128,9 @@ Our cabin is on Cannon Lake and there are a number of float planes that come and
 ## Links 📌
 ### [Privacy - Apple](https://www.apple.com/privacy/)
 
-*Apple products are designed to do amazing things. And designed to protect your privacy.* Apple outlining the work that they do in various platforms and services to protect your privacy. They don't mention Google here but they don't need to. I continue to believe that Apple has a long-term position that this is important, even if consumers don't value it highly today. The [Approach to Privacy](https://www.apple.com/privacy/approach-to-privacy/) page is worth a read too.
+> Apple products are designed to do amazing things. And designed to protect your privacy.
+
+Apple outlining the work that they do in various platforms and services to protect your privacy. They don't mention Google here but they don't need to. I continue to believe that Apple has a long-term position that this is important, even if consumers don't value it highly today. The [Approach to Privacy](https://www.apple.com/privacy/approach-to-privacy/) page is worth a read too.
 
 ### [How Silicon Valley Reacts to Apple's iPhone X - YouTube](https://www.youtube.com/watch?v=b4Xl4hPEV80&feature=youtu.be)
 
@@ -168,7 +170,11 @@ It’s Microsoft's big week for new announcements to Azure and this specific ang
 
 ### [I asked Tinder for my data. It sent me 800 pages of my deepest, darkest secrets | Technology | The Guardian](https://www.theguardian.com/technology/2017/sep/26/tinder-personal-data-dating-app-messages-hacked-sold)
 
-There are a lot of posts about all that Facebook knows about you — it’s interesting to see one on what Tinder knows about it’s users. This line at the end of the article drew my attention. *As a typical millennial constantly glued to my phone, my virtual life has fully merged with my real life. There is no difference any more.* That puts Terms of Service and Privacy Policies in a bit of a different light.
+There are a lot of posts about all that Facebook knows about you — it’s interesting to see one on what Tinder knows about it’s users. This line at the end of the article drew my attention.
+
+> As a typical millennial constantly glued to my phone, my virtual life has fully merged with my real life. There is no difference any more.
+
+That puts Terms of Service and Privacy Policies in a bit of a different light.
 
 ### [Relicensing the GraphQL specification – Lee Byron – Medium](https://medium.com/@leeb/relicensing-the-graphql-specification-e7d07a52301b)
 
@@ -192,7 +198,9 @@ Curious to understand better what people mean when they say **observability** an
 
 ### [Are Industrial Robot Costs Hitting an Inflection Point?](https://ark-invest.com/research/industrial-robot-costs)
 
-The graphs in this article tell the story of the dropping prices of industrial robots. Look at those graphs and then think of the employment in the industrial sector. Now what would the graph of Industrial Robot Cost look like if overlaid on the employment cost of people. It’s concerning where this goes, but seems inevitable. *As machine learning and new sensing capabilities impact them, not only will their performance improve but other costs associated with installation and integration should fall as well. For example, they will require little or no human programming and will be able to roam freely instead of being trapped in safety cages and by other barriers.*
+The graphs in this article tell the story of the dropping prices of industrial robots. Look at those graphs and then think of the employment in the industrial sector. Now what would the graph of Industrial Robot Cost look like if overlaid on the employment cost of people. It’s concerning where this goes, but seems inevitable.
+
+> As machine learning and new sensing capabilities impact them, not only will their performance improve but other costs associated with installation and integration should fall as well. For example, they will require little or no human programming and will be able to roam freely instead of being trapped in safety cages and by other barriers.
 
 ### [Spend More Time Alone - Study Hacks - Cal Newport](http://calnewport.com/blog/2017/09/24/spend-more-time-alone/)
 

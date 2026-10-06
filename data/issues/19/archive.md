@@ -161,7 +161,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Think, live, be positive aggressive | Phil Soran | TEDxFargo](https://www.youtube.com/watch?v=digQkAFiX_w)'
   section: Links 📌
-word_count: 2184
+word_count: 2186
 ---
 I’m doing a new thing -- I’m coaching Tyler's soccer team! We've had a jamboree event to get to know the players, and we just finished our second game today. It’s fun and to everyone's surprise, most of all my own, I've learned all the names of the kids on the team. The kids have a great time and you'd have to try hard to not have fun with them.
 
@@ -182,7 +182,11 @@ Love the first line of Apple's response to this criticism from creepy ad network
 
 ### [Understanding the prevalence of web traffic interception](https://blog.cloudflare.com/understanding-the-prevalence-of-web-traffic-interception/)
 
-This is more interesting information from Cloudflare: *We found that between 4% and 10% of the web’s encrypted traffic (HTTPS) is intercepted. Analyzing these intercepted connections further reveals that, while not always malicious, interception products most often weaken the encryption used to secure communication and puts users at risk.* That is more encrypted traffic interception than I would have ever guessed. 🔑
+This is more interesting information from Cloudflare:
+
+> We found that between 4% and 10% of the web’s encrypted traffic (HTTPS) is intercepted. Analyzing these intercepted connections further reveals that, while not always malicious, interception products most often weaken the encryption used to secure communication and puts users at risk.
+
+That is more encrypted traffic interception than I would have ever guessed. 🔑
 
 ### [Mozilla and the Washington Post Are Reinventing Online Comments - The Mozilla Blog](https://blog.mozilla.org/blog/2017/09/06/mozilla-washington-post-reinventing-online-comments/)
 
@@ -250,7 +254,9 @@ I’m a fan of Python and almost all the (very little) coding I do I do in Pytho
 
 ### [Equifax Breach Response Turns Dumpster Fire — Krebs on Security](https://krebsonsecurity.com/2017/09/equifax-breach-response-turns-dumpster-fire/)
 
-More background from Brian Krebs on this massive data breach at Equifax. *I cannot recall a previous data breach in which the breached company’s public outreach and response has been so haphazard and ill-conceived as the one coming right now from big-three credit bureau Equifax, which rather clumsily announced Thursday that an intrusion jeopardized Social security numbers and other information on 143 million Americans.*
+More background from Brian Krebs on this massive data breach at Equifax.
+
+> I cannot recall a previous data breach in which the breached company’s public outreach and response has been so haphazard and ill-conceived as the one coming right now from big-three credit bureau Equifax, which rather clumsily announced Thursday that an intrusion jeopardized Social security numbers and other information on 143 million Americans.
 
 ### [Why the Equifax breach is very possibly the worst leak of personal info ever | Ars Technica](https://arstechnica.com/information-technology/2017/09/why-the-equifax-breach-is-very-possibly-the-worst-leak-of-personal-info-ever/)
 

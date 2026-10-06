@@ -9,13 +9,21 @@ image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-august-5-2017/
 domains:
 - brettterpstra.com
+- genehughson.wordpress.com
 - github.com
+- mesosphere.com
+- opensource.com
 - regex101.com
 - tech.mn
+- treyhunner.com
 - www.bloomberg.com
+- www.coworker.org
 - www.dabeaz.com
 - www.forbes.com
+- www.goldenhillsoftware.com
 - www.gq.com
+- www.nature.com
+- www.theguardian.com
 - www.theverge.com
 - www.wired.com
 - www.zephoria.org
@@ -53,11 +61,57 @@ links:
 - text: Quantify everything with Exist.io custom tracking - BrettTerpstra.com
   url: http://brettterpstra.com/2017/08/02/quantify-everything-with-exist-dot-io-custom-tracking/
   domain: brettterpstra.com
-  heading_context: '[Quantify everything with Exist.io custom tracking - BrettTerpstra.com](http://brettterpstra.com/2017/08/02/quantify-everything-with-exist-dot-io-custom-tracking/) > Ever since I wrote Slogger, I’ve been working toward a more “quantified self.” I’m really bad at correlating events in my life beyond a couple of days. Did the bad night’s sleep last week lead to eating things the next day I normally wouldn’t, which led to increased stress and decreased physical activity over following days, which resulted in the way I’m feeling today? ### [Unread 1.7 Release Notes](https://www.goldenhillsoftware.com/unread/unread-1-7-release-notes/) Unread is my RSS reader of choice, backed by Feedbin. I’m happy to see it find a new home! 👏🏻 ### [antoinet/valora: WiFi Tracker Confuser](https://github.com/antoinet/valora) Very cool device to throw sand in the gears of people trying to track you. I hope and expect we''ll see more devices like this to fight back against privacy invasions. ###
-    [Docker vs. Kubernetes vs. Apache Mesos: Why What You Think You Know is Probably Wrong - Mesosphere](https://mesosphere.com/blog/docker-vs-kubernetes-vs-apache-mesos/) > There are countless articles, discussions, and lots of social chatter comparing Docker, Kubernetes, and Mesos. If you listen to the partially-informed, you’d think that the three open source projects are in a fight-to-the death for container supremacy. ### [Craft Your Python Like Poetry - Trey Hunner](http://treyhunner.com/2017/07/craft-your-python-like-poetry/) > Line length is a big deal… programmers argue about it quite a bit. PEP 8, the Python style guide, recommends a 79 character maximum line length but concedes that a line length up to 100 characters is acceptable for teams that agree to use a specific longer line length. ### [Recommit to the values that built Etsy and aimed to build a better world for us all | Coworker.org](https://www.coworker.org/petitions/recommit-to-etsy-s-values-and-support-the-etsy-community-for-the-long-term)
-    > As Etsy employees, we’re privileged to work at a company that takes its mission and values just as seriously as it takes its bottom line. Every day we come to work to support Etsy sellers in earning an income doing something they love. ### [toddmotto/public-apis: A collective list of public JSON APIs for use in web development.](https://github.com/toddmotto/public-apis) A collective list of public JSON APIs for use in web development. ### [Palantir: the ‘special ops’ tech giant that wields as much real-world power as Google | World news | The Guardian](https://www.theguardian.com/world/2017/jul/30/palantir-peter-thiel-cia-data-crime-police) > In Minority Report, the 2002 movie adaptation of the Philip K Dick novel, Tom Cruise plays a police officer in the LAPD “pre-crime” unit. Using the premonitions of sentient mutants called “pre-cogs”, the police are able to predict when someone is going to commit a crime before it happens, swooping down from helicopters and arresting them on the
-    street before they can do anything. ### [The digital native is a myth : Nature News](http://www.nature.com/news/the-digital-native-is-a-myth-1.22363) > Some people put the cut-off at 1984, but for most it is 1980. People born after that date are the digital natives; those born before are digital immigrants, doomed to be forever strangers in a computer-based strange land. ### [What Makes a Monolith Monolithic? | Form Follows Function](https://genehughson.wordpress.com/2017/07/26/what-makes-a-monolith-monolithic/) > It seems like everybody throws around the term “monolith”, but what do we mean by that? Sam Newman started the ball rolling yesterday with this tweet: I''m at that point in the new book where I have to define what monolith means. ### [Ops: It''s everyone''s job now | Opensource.com](https://opensource.com/article/17/7/state-systems-administration) I found this view of the continuing evolution of DevOps interesting. I particularly liked the quote that "Distributed systems are
-    never ''up''; they exist in a constant state of partially degraded service. is a lot of truth there.'
+  heading_context: '[Quantify everything with Exist.io custom tracking - BrettTerpstra.com](http://brettterpstra.com/2017/08/02/quantify-everything-with-exist-dot-io-custom-tracking/)'
+  section: Links 📌
+- text: Unread 1.7 Release Notes
+  url: https://www.goldenhillsoftware.com/unread/unread-1-7-release-notes/
+  domain: www.goldenhillsoftware.com
+  heading_context: '[Unread 1.7 Release Notes](https://www.goldenhillsoftware.com/unread/unread-1-7-release-notes/)'
+  section: Links 📌
+- text: 'antoinet/valora: WiFi Tracker Confuser'
+  url: https://github.com/antoinet/valora
+  domain: github.com
+  heading_context: '[antoinet/valora: WiFi Tracker Confuser](https://github.com/antoinet/valora)'
+  section: Links 📌
+- text: 'Docker vs. Kubernetes vs. Apache Mesos: Why What You Think You Know is Probably Wrong - Mesosphere'
+  url: https://mesosphere.com/blog/docker-vs-kubernetes-vs-apache-mesos/
+  domain: mesosphere.com
+  heading_context: '[Docker vs. Kubernetes vs. Apache Mesos: Why What You Think You Know is Probably Wrong - Mesosphere](https://mesosphere.com/blog/docker-vs-kubernetes-vs-apache-mesos/)'
+  section: Links 📌
+- text: Craft Your Python Like Poetry - Trey Hunner
+  url: http://treyhunner.com/2017/07/craft-your-python-like-poetry/
+  domain: treyhunner.com
+  heading_context: '[Craft Your Python Like Poetry - Trey Hunner](http://treyhunner.com/2017/07/craft-your-python-like-poetry/)'
+  section: Links 📌
+- text: Recommit to the values that built Etsy and aimed to build a better world for us all | Coworker.org
+  url: https://www.coworker.org/petitions/recommit-to-etsy-s-values-and-support-the-etsy-community-for-the-long-term
+  domain: www.coworker.org
+  heading_context: '[Recommit to the values that built Etsy and aimed to build a better world for us all | Coworker.org](https://www.coworker.org/petitions/recommit-to-etsy-s-values-and-support-the-etsy-community-for-the-long-term)'
+  section: Links 📌
+- text: 'toddmotto/public-apis: A collective list of public JSON APIs for use in web development.'
+  url: https://github.com/toddmotto/public-apis
+  domain: github.com
+  heading_context: '[toddmotto/public-apis: A collective list of public JSON APIs for use in web development.](https://github.com/toddmotto/public-apis)'
+  section: Links 📌
+- text: 'Palantir: the ‘special ops’ tech giant that wields as much real-world power as Google | World news | The Guardian'
+  url: https://www.theguardian.com/world/2017/jul/30/palantir-peter-thiel-cia-data-crime-police
+  domain: www.theguardian.com
+  heading_context: '[Palantir: the ‘special ops’ tech giant that wields as much real-world power as Google | World news | The Guardian](https://www.theguardian.com/world/2017/jul/30/palantir-peter-thiel-cia-data-crime-police)'
+  section: Links 📌
+- text: 'The digital native is a myth : Nature News'
+  url: http://www.nature.com/news/the-digital-native-is-a-myth-1.22363
+  domain: www.nature.com
+  heading_context: '[The digital native is a myth : Nature News](http://www.nature.com/news/the-digital-native-is-a-myth-1.22363)'
+  section: Links 📌
+- text: What Makes a Monolith Monolithic? | Form Follows Function
+  url: https://genehughson.wordpress.com/2017/07/26/what-makes-a-monolith-monolithic/
+  domain: genehughson.wordpress.com
+  heading_context: '[What Makes a Monolith Monolithic? | Form Follows Function](https://genehughson.wordpress.com/2017/07/26/what-makes-a-monolith-monolithic/)'
+  section: Links 📌
+- text: 'Ops: It''s everyone''s job now | Opensource.com'
+  url: https://opensource.com/article/17/7/state-systems-administration
+  domain: opensource.com
+  heading_context: '[Ops: It''s everyone''s job now | Opensource.com](https://opensource.com/article/17/7/state-systems-administration)'
   section: Links 📌
 - text: Our Minds Have Been Hijacked by Our Phones. Tristan Harris Wants to Rescue Them | WIRED
   url: https://www.wired.com/story/our-minds-have-been-hijacked-by-our-phones-tristan-harris-wants-to-rescue-them/
@@ -79,7 +133,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Here’s How Unicorns Trick You Into Thinking They’re Real - Bloomberg](https://www.bloomberg.com/news/articles/2017-08-02/the-magic-behind-many-unicorn-startups-complex-stock-contracts)'
   section: Links 📌
-word_count: 1449
+word_count: 1450
 ---
 Tammy and I started this week with a 3-day Inn to Inn Cycle Tour to celebrate our 15th Anniversary. We went with [Broken Paddle Guiding](http://brokenpaddleguiding.com) and had a great time! The kids stayed back and we got familiar with the challenges of climbing the bluffs in the [Driftless](https://en.wikipedia.org/wiki/Driftless_Area). It was a great way to get out and remember the fun we have on our bikes.
 
@@ -118,7 +172,49 @@ Very nice regex tool for your browser.
 
 > He's early. I'm not sure how early he got to Au Passage, a restaurant serving small plates (Aziz's choice) that's tucked away on a graffiti-riddled street in central Paris. But he beat me—and I was early.
 
-### [Quantify everything with Exist.io custom tracking - BrettTerpstra.com](http://brettterpstra.com/2017/08/02/quantify-everything-with-exist-dot-io-custom-tracking/) > Ever since I wrote Slogger, I’ve been working toward a more “quantified self.” I’m really bad at correlating events in my life beyond a couple of days. Did the bad night’s sleep last week lead to eating things the next day I normally wouldn’t, which led to increased stress and decreased physical activity over following days, which resulted in the way I’m feeling today? ### [Unread 1.7 Release Notes](https://www.goldenhillsoftware.com/unread/unread-1-7-release-notes/) Unread is my RSS reader of choice, backed by Feedbin. I’m happy to see it find a new home! 👏🏻 ### [antoinet/valora: WiFi Tracker Confuser](https://github.com/antoinet/valora) Very cool device to throw sand in the gears of people trying to track you. I hope and expect we'll see more devices like this to fight back against privacy invasions. ### [Docker vs. Kubernetes vs. Apache Mesos: Why What You Think You Know is Probably Wrong - Mesosphere](https://mesosphere.com/blog/docker-vs-kubernetes-vs-apache-mesos/) > There are countless articles, discussions, and lots of social chatter comparing Docker, Kubernetes, and Mesos. If you listen to the partially-informed, you’d think that the three open source projects are in a fight-to-the death for container supremacy. ### [Craft Your Python Like Poetry - Trey Hunner](http://treyhunner.com/2017/07/craft-your-python-like-poetry/) > Line length is a big deal… programmers argue about it quite a bit. PEP 8, the Python style guide, recommends a 79 character maximum line length but concedes that a line length up to 100 characters is acceptable for teams that agree to use a specific longer line length. ### [Recommit to the values that built Etsy and aimed to build a better world for us all | Coworker.org](https://www.coworker.org/petitions/recommit-to-etsy-s-values-and-support-the-etsy-community-for-the-long-term) > As Etsy employees, we’re privileged to work at a company that takes its mission and values just as seriously as it takes its bottom line. Every day we come to work to support Etsy sellers in earning an income doing something they love. ### [toddmotto/public-apis: A collective list of public JSON APIs for use in web development.](https://github.com/toddmotto/public-apis) A collective list of public JSON APIs for use in web development. ### [Palantir: the ‘special ops’ tech giant that wields as much real-world power as Google | World news | The Guardian](https://www.theguardian.com/world/2017/jul/30/palantir-peter-thiel-cia-data-crime-police) > In Minority Report, the 2002 movie adaptation of the Philip K Dick novel, Tom Cruise plays a police officer in the LAPD “pre-crime” unit. Using the premonitions of sentient mutants called “pre-cogs”, the police are able to predict when someone is going to commit a crime before it happens, swooping down from helicopters and arresting them on the street before they can do anything. ### [The digital native is a myth : Nature News](http://www.nature.com/news/the-digital-native-is-a-myth-1.22363) > Some people put the cut-off at 1984, but for most it is 1980. People born after that date are the digital natives; those born before are digital immigrants, doomed to be forever strangers in a computer-based strange land. ### [What Makes a Monolith Monolithic? | Form Follows Function](https://genehughson.wordpress.com/2017/07/26/what-makes-a-monolith-monolithic/) > It seems like everybody throws around the term “monolith”, but what do we mean by that? Sam Newman started the ball rolling yesterday with this tweet: I'm at that point in the new book where I have to define what monolith means. ### [Ops: It's everyone's job now | Opensource.com](https://opensource.com/article/17/7/state-systems-administration) I found this view of the continuing evolution of DevOps interesting. I particularly liked the quote that "Distributed systems are never 'up'; they exist in a constant state of partially degraded service. is a lot of truth there.
+### [Quantify everything with Exist.io custom tracking - BrettTerpstra.com](http://brettterpstra.com/2017/08/02/quantify-everything-with-exist-dot-io-custom-tracking/)
+
+> Ever since I wrote Slogger, I’ve been working toward a more “quantified self.” I’m really bad at correlating events in my life beyond a couple of days. Did the bad night’s sleep last week lead to eating things the next day I normally wouldn’t, which led to increased stress and decreased physical activity over following days, which resulted in the way I’m feeling today?
+
+### [Unread 1.7 Release Notes](https://www.goldenhillsoftware.com/unread/unread-1-7-release-notes/)
+
+Unread is my RSS reader of choice, backed by Feedbin. I’m happy to see it find a new home! 👏🏻
+
+### [antoinet/valora: WiFi Tracker Confuser](https://github.com/antoinet/valora)
+
+Very cool device to throw sand in the gears of people trying to track you. I hope and expect we'll see more devices like this to fight back against privacy invasions.
+
+### [Docker vs. Kubernetes vs. Apache Mesos: Why What You Think You Know is Probably Wrong - Mesosphere](https://mesosphere.com/blog/docker-vs-kubernetes-vs-apache-mesos/)
+
+> There are countless articles, discussions, and lots of social chatter comparing Docker, Kubernetes, and Mesos. If you listen to the partially-informed, you’d think that the three open source projects are in a fight-to-the death for container supremacy.
+
+### [Craft Your Python Like Poetry - Trey Hunner](http://treyhunner.com/2017/07/craft-your-python-like-poetry/)
+
+> Line length is a big deal… programmers argue about it quite a bit. PEP 8, the Python style guide, recommends a 79 character maximum line length but concedes that a line length up to 100 characters is acceptable for teams that agree to use a specific longer line length.
+
+### [Recommit to the values that built Etsy and aimed to build a better world for us all | Coworker.org](https://www.coworker.org/petitions/recommit-to-etsy-s-values-and-support-the-etsy-community-for-the-long-term)
+
+> As Etsy employees, we’re privileged to work at a company that takes its mission and values just as seriously as it takes its bottom line. Every day we come to work to support Etsy sellers in earning an income doing something they love.
+
+### [toddmotto/public-apis: A collective list of public JSON APIs for use in web development.](https://github.com/toddmotto/public-apis)
+
+A collective list of public JSON APIs for use in web development.
+
+### [Palantir: the ‘special ops’ tech giant that wields as much real-world power as Google | World news | The Guardian](https://www.theguardian.com/world/2017/jul/30/palantir-peter-thiel-cia-data-crime-police)
+
+> In Minority Report, the 2002 movie adaptation of the Philip K Dick novel, Tom Cruise plays a police officer in the LAPD “pre-crime” unit. Using the premonitions of sentient mutants called “pre-cogs”, the police are able to predict when someone is going to commit a crime before it happens, swooping down from helicopters and arresting them on the street before they can do anything.
+
+### [The digital native is a myth : Nature News](http://www.nature.com/news/the-digital-native-is-a-myth-1.22363)
+
+> Some people put the cut-off at 1984, but for most it is 1980. People born after that date are the digital natives; those born before are digital immigrants, doomed to be forever strangers in a computer-based strange land.
+
+### [What Makes a Monolith Monolithic? | Form Follows Function](https://genehughson.wordpress.com/2017/07/26/what-makes-a-monolith-monolithic/)
+
+> It seems like everybody throws around the term “monolith”, but what do we mean by that? Sam Newman started the ball rolling yesterday with this tweet: I'm at that point in the new book where I have to define what monolith means.
+
+### [Ops: It's everyone's job now | Opensource.com](https://opensource.com/article/17/7/state-systems-administration)
+
+I found this view of the continuing evolution of DevOps interesting. I particularly liked the quote that *"Distributed systems are never 'up'; they exist in a constant state of partially degraded service."* There is a lot of truth there.
 
 ### [Our Minds Have Been Hijacked by Our Phones. Tristan Harris Wants to Rescue Them | WIRED](https://www.wired.com/story/our-minds-have-been-hijacked-by-our-phones-tristan-harris-wants-to-rescue-them/)
 

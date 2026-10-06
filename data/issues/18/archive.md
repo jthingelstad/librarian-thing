@@ -97,7 +97,7 @@ links:
   domain: toolsandtoys.net
   heading_context: '[‘Weather Atlas’ for iOS —Tools and Toys](http://toolsandtoys.net/weather-atlas-for-ios/)'
   section: Links 📌
-word_count: 1364
+word_count: 1365
 ---
 This week I got this idea in my head that I just couldn't shake. As part of my workflow for publishing the Weekly Thing I have started to embed [markdown](https://daringfireball.net/projects/markdown/) into the text I put on Pinboard to capture links. Using markdown I can put other hyperlinks and some formatting into the link descriptions in the newsletter. It dawned on me that that markdown is also the same thing [Jekyll](https://jekyllrb.com) would use to make a post. Jekyll can also deal with arbitrary metadata for posts. 💡
 
@@ -116,7 +116,9 @@ An awesome evening fire at my brothers cabin with Pokegama Lake in the backgroun
 ## Links 📌
 ### [Chef Camp](http://www.chefcampmn.com/)
 
-*A wilderness culinary retreat. Chef-led campfire cooking classes, foraging and gourmet meals mix with classic summer camp activities.* This looks like a super fun time! Adding to our to do list for summer 2018! ✔︎
+> A wilderness culinary retreat. Chef-led campfire cooking classes, foraging and gourmet meals mix with classic summer camp activities.
+
+This looks like a super fun time! Adding to our to do list for summer 2018! ✔︎
 
 ### [Recode Your Health - How Apple Engineered Its Watch to Push You to Perform at Your Peak | Men's Health](http://www.menshealth.com/content/inside-apples-secret-performance-lab)
 

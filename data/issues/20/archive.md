@@ -182,7 +182,7 @@ links:
   domain: www.sarasoueidan.com
   heading_context: '[Migrating from Jekyll+Github Pages to Hugo+Netlify](https://www.sarasoueidan.com/blog/jekyll-ghpages-to-hugo-netlify/)'
   section: Links 📌
-word_count: 2142
+word_count: 2147
 ---
 This was a big week for people that have a lot of iOS devices with the launch of iOS 11 along with watchOS 4 and tvOS 11. You'll see a flood of Apple related links this week. More than any normal person would ever want to read, but where is the fun in being normal? 🤣
 
@@ -217,11 +217,19 @@ Apple purposefully doesn't tout CPU benchmarks on their machines and will usuall
 
 ### [The inside story of the iPhone X 'brain,' the A11 Bionic chip](http://mashable.com/2017/09/14/inside-apple-a11-bionic-and-silicon-team/#ECSZrnvVkOq8)
 
-What Apple is doing with the silicon behind the iPhone is amazing. They are miles ahead of anyone else in mobile. *You could be forgiven if, after Apple’s giant, two-hour product launch event on Tuesday, the only thing you remembered is the stunning iPhone X. It is special. It’s also nothing without the A11 Bionic CPU.* As an aside, it’s surprising to see how many companies Apple has purchased in the hardware and fabrication space.
+What Apple is doing with the silicon behind the iPhone is amazing. They are miles ahead of anyone else in mobile.
+
+> You could be forgiven if, after Apple’s giant, two-hour product launch event on Tuesday, the only thing you remembered is the stunning iPhone X. It is special. It’s also nothing without the A11 Bionic CPU.
+
+As an aside, it’s surprising to see how many companies Apple has purchased in the hardware and fabrication space.
 
 ### [Anatomy of a Moral Panic](http://idlewords.com/2017/09/anatomy_of_a_moral_panic.htm)
 
-So much truth in this article. I spent years in media and the incentives and revenue systems that have evolved there are not good for the mission of news organizations. *And reporters have no choice but to chase clicks. Because Google and Facebook have a duopoly on online advertising, the only measure of success in publishing is whether a story goes viral on social media. Authors are evaluated by how individual stories perform online, and face constant pressure to make them more arresting. Highly technical pieces are farmed out to junior freelancers working under strict time limits. Corrections, if they happen at all, are inserted quietly through ‘ninja edits’ after the fact.* That pretty much sums up the status quo.
+So much truth in this article. I spent years in media and the incentives and revenue systems that have evolved there are not good for the mission of news organizations.
+
+> And reporters have no choice but to chase clicks. Because Google and Facebook have a duopoly on online advertising, the only measure of success in publishing is whether a story goes viral on social media. Authors are evaluated by how individual stories perform online, and face constant pressure to make them more arresting. Highly technical pieces are farmed out to junior freelancers working under strict time limits. Corrections, if they happen at all, are inserted quietly through ‘ninja edits’ after the fact.
+
+That pretty much sums up the status quo.
 
 ### [SPS Academy | Elimisha Children's Project](https://elimishachildrensproject.org/kenya-school/)
 
@@ -253,11 +261,15 @@ Alright, so I've said many times that QR codes are dumb and have no utility. I m
 
 ### [Facebook’s war on free will | Technology | The Guardian](https://www.theguardian.com/technology/2017/sep/19/facebooks-war-on-free-will)
 
-*The long read: How technology is making our minds redundant*
+> The long read: How technology is making our minds redundant
 
 ### [How Useful is Tufte for Making Maps? | Making Maps: DIY Cartography](https://makingmaps.net/2007/08/16/how-useful-is-tufte-for-making-maps/)
 
-John Krygier, a cartographer and professor, takes [Tufte's](http://edwardtufte.com) visual display guidelines. *The 20 Tufteisms and the Six Commandments are superficially less than I expected, from the perspective of practical guidelines. But, upon reflection, they do touch on many of the fundamental issues that determine if a map design is going to work or not, and what could more practical than that?* Not a takedown per se, but a detailed breakdown of how you would practically apply these techniques.
+John Krygier, a cartographer and professor, takes [Tufte's](http://edwardtufte.com) visual display guidelines.
+
+> The 20 Tufteisms and the Six Commandments are superficially less than I expected, from the perspective of practical guidelines. But, upon reflection, they do touch on many of the fundamental issues that determine if a map design is going to work or not, and what could more practical than that?
+
+Not a takedown per se, but a detailed breakdown of how you would practically apply these techniques.
 
 ### [Satya Nadella Rewrites Microsoft’s Code](https://www.fastcompany.com/40457458/satya-nadella-rewrites-microsofts-code)
 
@@ -305,7 +317,11 @@ This article from a male co-founder reflecting on how his female co-founder was 
 
 ### [An open letter to the W3C Director, CEO, team and membership | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2017/09/open-letter-w3c-director-ceo-team-and-membership)
 
-I [linked to this W3C DRM decision](https://links.thingelstad.com/2017/07/the-w3c-has-overruled-and/) and now we see the [EFF](https://www.eff.org/) reaction to endorse "Encrypted Media Extensions", to make DRM possible, on the web. *You have to search long and hard to find an independent technologist who believes that DRM is possible, let alone a good idea. Yet, somewhere along the way, the business values of those outside the web got important enough, and the values of technologists who built it got disposable enough, that even the wise elders who make our standards voted for something they know to be a fool's errand.* I’m not sure what I think about leaving the [W3C](https://www.w3.org) to protest this but I do believe the EFF is on the right side of this position. Check out [Gruber's comments](https://daringfireball.net/linked/2017/09/18/eff-w3c-drm) on the same article.
+I [linked to this W3C DRM decision](https://links.thingelstad.com/2017/07/the-w3c-has-overruled-and/) and now we see the [EFF](https://www.eff.org/) reaction to endorse "Encrypted Media Extensions", to make DRM possible, on the web.
+
+> You have to search long and hard to find an independent technologist who believes that DRM is possible, let alone a good idea. Yet, somewhere along the way, the business values of those outside the web got important enough, and the values of technologists who built it got disposable enough, that even the wise elders who make our standards voted for something they know to be a fool's errand.
+
+I’m not sure what I think about leaving the [W3C](https://www.w3.org) to protest this but I do believe the EFF is on the right side of this position. Check out [Gruber's comments](https://daringfireball.net/linked/2017/09/18/eff-w3c-drm) on the same article.
 
 ### [Netlify: All-in-one platform for automating modern web projects.](https://www.netlify.com/)
 

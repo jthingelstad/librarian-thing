@@ -121,7 +121,7 @@ This week brings a brand new section to the Weekly Thing, a highlighted iOS appl
 
 ![image](https://assets.buttondown.email/4aa5b2bd-0994-4c13-85c1-da4f45ac1cf4.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=JYmgk1ZM9EUGRpQrZM3S%2FPPKDPU%3D&Expires=1707555018)
 
-Minnedemo happens at a wide variety of venues, but it’s always a lot of fun to have it in a busy place like Downtown Minneapolis and to see the event name 'up in lights'! 💡
+*Minnedemo happens at a wide variety of venues, but it’s always a lot of fun to have it in a busy place like Downtown Minneapolis and to see the event name 'up in lights'!* 💡
 
 *Jul 13, 2017, 6:53 PM 730 Hennepin Ave Minneapolis‎ MN‎ 55403 United States.*
 

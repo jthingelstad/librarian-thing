@@ -122,7 +122,7 @@ links:
   domain: jaxenter.com
   heading_context: '[NASA''s ten coding commandments - JAXenter](https://jaxenter.com/power-ten-nasas-coding-commandments-114124.html)'
   section: Links 📌
-word_count: 1463
+word_count: 1475
 ---
 I got great comments from the first Thing last week. This week I modified the structure a bit of the links area to try and make it more obvious when I was writing a comment on a link versus when I was excerpting a section of the link itself. I'm also adding this snazzy image so you know who this is from and I added a Promotion section where I can highlight something that I think others should check out. I plan on using this to promote non-profits and projects that I think are great.
 
@@ -158,7 +158,7 @@ Last weekend we finished putting in the horseshoe pits at the cabin and I'm very
 
 ### [jq](https://stedolan.github.io/jq/)
 
-*jq is like sed for JSON data - you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text. jq is written in portable C, and it has zero runtime dependencies.*
+> jq is like sed for JSON data - you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text. jq is written in portable C, and it has zero runtime dependencies.
 
 ### [Things 3: Beauty and Delight in a Task Manager -- MacStories](https://www.macstories.net/reviews/things-3-beauty-and-delight-in-a-task-manager/)
 
@@ -166,39 +166,39 @@ Last weekend we finished putting in the horseshoe pits at the cabin and I'm very
 
 ### [Cookie dough craze comes to Minnesota with not one, but two food trucks - StarTribune.com](http://www.startribune.com/cookie-dough-craze-comes-to-minnesota-with-not-one-but-two-food-trucks/422973123/)
 
-*The cookie dough craze that started on the East Coast and has taken social media by storm has finally worked its way to Minnesota. A safe-to-consume version of the stuff everyone loves to eat out of the mixing bowl --- even though they're not supposed to --- is just the latest fad food to take over cupcakes' one-time reign.*
+> The cookie dough craze that started on the East Coast and has taken social media by storm has finally worked its way to Minnesota. A safe-to-consume version of the stuff everyone loves to eat out of the mixing bowl --- even though they're not supposed to --- is just the latest fad food to take over cupcakes' one-time reign.
 
 ### [Intro to Micro.blog | noahread.net](https://noahread.net/blog/intro-to-micro-blog)
 
-*The long anticipated time has arrived. Manton Reece's Micro.blog is rolling out to Kickstarter backers. I've been on the platform for a while, but it is a lot of fun to see new folks showing up every day and talking to each other.*
+> The long anticipated time has arrived. Manton Reece's Micro.blog is rolling out to Kickstarter backers. I've been on the platform for a while, but it is a lot of fun to see new folks showing up every day and talking to each other.
 
 ### [JSON Feed: Version 1](https://jsonfeed.org/version/1)
 
-*The JSON Feed format is a pragmatic syndication format, like RSS and Atom, but with one big difference: it's JSON instead of XML. For most developers, JSON is far easier to read and write than XML. Developers may groan at picking up an XML parser, but decoding JSON is often just a single line of code.*
+> The JSON Feed format is a pragmatic syndication format, like RSS and Atom, but with one big difference: it's JSON instead of XML. For most developers, JSON is far easier to read and write than XML. Developers may groan at picking up an XML parser, but decoding JSON is often just a single line of code.
 
 ### [A New Kind of Science: A 15-Year View -- Backchannel](https://backchannel.com/a-new-kind-of-science-a-15-year-view-4f5668abe54f)
 
-*Starting now, in celebration of its 15th anniversary, A New Kind of Science will be freely available in its entirety, with high-resolution images, on the web or for download *
+> Starting now, in celebration of its 15th anniversary, A New Kind of Science will be freely available in its entirety, with high-resolution images, on the web or for download
 
 ### [Machine Learning ---xkcd.com](https://xkcd.com/1838/)
 
-*\"Just stir the pile until they start looking right.\"*
+> "Just stir the pile until they start looking right."
 
 ### [Storage Startup Vets Return w/ \$8.65m A for Atavium ---TechDotMN](http://tech.mn/news/2017/05/17/storage-startup-vets-return-w-8-65m-series-a-for-atavium/)
 
-*Atavium's revolutionary data management system gives its customers the ability to automate the lifecycle of their data, even before the data is created. Atavium will use this investment to build its engineering team and bring the product to market.*
+> Atavium's revolutionary data management system gives its customers the ability to automate the lifecycle of their data, even before the data is created. Atavium will use this investment to build its engineering team and bring the product to market.
 
 ### [Exponential growth devours and corrupts -- Signal v. Noise](https://m.signalvnoise.com/exponential-growth-devours-and-corrupts-c5562fbf131)
 
-*There is no higher God in Silicon Valley than growth. No sacrifice too big for its craving altar. As long as you keep your curve exponential, all your sins will be forgotten at the exit.*
+> There is no higher God in Silicon Valley than growth. No sacrifice too big for its craving altar. As long as you keep your curve exponential, all your sins will be forgotten at the exit.
 
 ### [Logs and Metrics -- Cindy Sridharan -- Medium](https://medium.com/@cindysridharan/logs-and-metrics-6d34d3026e38)
 
-*Both logs as well as metrics, on the other hand, are examples of whitebox monitoring, which refers to a category of monitoring tools and techniques that work with data reported from the internals of a system. Together with distributed request tracing, metrics and logs form the three pillars of observability.*
+> Both logs as well as metrics, on the other hand, are examples of whitebox monitoring, which refers to a category of monitoring tools and techniques that work with data reported from the internals of a system. Together with distributed request tracing, metrics and logs form the three pillars of observability.
 
 ### [What does sponsorship look like? | Lara Hogan](http://larahogan.me/blog/what-sponsorship-looks-like/)
 
-*What members of underrepresented groups in tech often need most is opportunity and visibility, not advice. They have to work extremely hard and be extremely good at what they do to combat the systemic privilege and unconscious bias at play in our work environments. They are consistently under-promoted and under-compensated for this work, even though it's excellent work.*
+> What members of underrepresented groups in tech often need most is opportunity and visibility, not advice. They have to work extremely hard and be extremely good at what they do to combat the systemic privilege and unconscious bias at play in our work environments. They are consistently under-promoted and under-compensated for this work, even though it's excellent work.
 
 ### [Carbon dioxide in carbonated beverages induces ghrelin release and increased food consumption in male rats: Implications on the onset of obesity. - PubMed - NCBI](https://www.ncbi.nlm.nih.gov/pubmed/28228348)
 
@@ -210,15 +210,15 @@ Last weekend we finished putting in the horseshoe pits at the cabin and I'm very
 
 ### [DigitalGlobe moves to the cloud with AWS Snowmobile | DigitalGlobe Blog](http://blog.digitalglobe.com/industry/digitalglobe-moves-to-the-cloud-with-aws-snowmobile/)
 
-*During our AWS Snowball experience, we developed a strong working relationship with AWS. When they approached us to be the inaugural user of the AWS Snowmobile, we climbed onboard. AWS Snowmobile is an exabyte-scale data transfer service used to move extremely large amounts of data to AWS. You can transfer up to 100PB per Snowmobile, a 45-foot long ruggedized shipping container, pulled by a semi-trailer truck.*
+> During our AWS Snowball experience, we developed a strong working relationship with AWS. When they approached us to be the inaugural user of the AWS Snowmobile, we climbed onboard. AWS Snowmobile is an exabyte-scale data transfer service used to move extremely large amounts of data to AWS. You can transfer up to 100PB per Snowmobile, a 45-foot long ruggedized shipping container, pulled by a semi-trailer truck.
 
 ### [Introducing Badger: A fast key-value store written natively in Go - Dgraph Blog](https://open.dgraph.io/post/badger/)
 
-*We have built an efficient and persistent log structured merge (LSM) tree based key-value store, natively in Go language. It is based upon WiscKey paper included in USENIX FAST 2016. This design is highly SSD-optimized and separates keys from values to minimize I/O amplification; leveraging both the sequential and the random performance of SSDs.*
+> We have built an efficient and persistent log structured merge (LSM) tree based key-value store, natively in Go language. It is based upon WiscKey paper included in USENIX FAST 2016. This design is highly SSD-optimized and separates keys from values to minimize I/O amplification; leveraging both the sequential and the random performance of SSDs.
 
 ### [NASA's ten coding commandments - JAXenter](https://jaxenter.com/power-ten-nasas-coding-commandments-114124.html)
 
-*NASA has produced its own set of coding standards to ensure code quality and safety among all NASA applications. These standards have evolved from their own guidelines and are set to be applicable to the greater software development industry.*
+> NASA has produced its own set of coding standards to ensure code quality and safety among all NASA applications. These standards have evolved from their own guidelines and are set to be applicable to the greater software development industry.
 
 ## Promotion 🎁
 

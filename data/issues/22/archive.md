@@ -182,7 +182,7 @@ links:
   domain: sinews.siam.org
   heading_context: '[Coffee Roasting, Mathematical Modelling, and Asymptotic Analysis](https://sinews.siam.org/Details-Page/coffee-roasting-mathematical-modelling-and-asymptotic-analysis)'
   section: Links 📌
-word_count: 3090
+word_count: 3092
 ---
 My Mother celebrated her birthday this week. Happy Birthdays Mom! 🎂 (Yes, she is a subscriber to the Weekly Thing. 😁) For her birthday we got her a Series 3 Apple Watch. I've noticed a lot of non-technical people wearing them and I could see her really liking it for notifications and the fitness features.
 
@@ -283,7 +283,9 @@ We are not in the [Matrix](http://www.imdb.com/title/tt0133093/)
 
 ### [Every Yahoo account that existed—all 3 billion—was compromised in 2013 hack | Ars Technica](https://arstechnica.com/information-technology/2017/10/yahoo-says-all-3-billion-accounts-were-compromised-in-2013-hack/)
 
-*Yahoo said a major security breach in 2013 compromised all three billion accounts the company maintained, a three-fold increase over the estimate it disclosed previously.* This has to be the largest breach in history. Wow.
+> Yahoo said a major security breach in 2013 compromised all three billion accounts the company maintained, a three-fold increase over the estimate it disclosed previously.
+
+This has to be the largest breach in history. Wow.
 
 ### [Are You Using Social Media or Being Used By It? - Study Hacks - Cal Newport](http://calnewport.com/blog/2017/10/02/are-you-using-social-media-or-being-used-by-it/)
 
@@ -291,7 +293,9 @@ Newport coins the term "social media industrial complex" and I love it. Good art
 
 ### [Tesla misses the mark on Model 3 production - by a lot - Oct. 2, 2017](http://money.cnn.com/2017/10/02/technology/tesla-model-3-production/index.html)
 
-*The actual number it built? 260, or 83% less than promised.* With hundreds of thousands of these waiting to be purchased (including one from yours truly) I sure hope they get this number up fast.
+> The actual number it built? 260, or 83% less than promised.
+
+With hundreds of thousands of these waiting to be purchased (including one from yours truly) I sure hope they get this number up fast.
 
 ### [Does Even Mark Zuckerberg Know What Facebook Is?](http://nymag.com/selectall/2017/10/does-even-mark-zuckerberg-know-what-facebook-is.html)
 

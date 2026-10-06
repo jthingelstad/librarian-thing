@@ -99,7 +99,7 @@ links:
   domain: blogs.harvard.edu
   heading_context: '[How the personal data extraction industry ends —Doc Searls Weblog](http://blogs.harvard.edu/doc/2017/08/26/extraction-ends/)'
   section: Links 📌
-word_count: 1375
+word_count: 1376
 ---
 The kids went back to school this week! Everyone had a great start to the school year. Now we have the holiday weekend and the unofficial end-of-summer here in Minnesota. We are heading to my brother's cabin on [Pokegama Lake](https://en.wikipedia.org/wiki/Pokegama_Lake) for the weekend and I'm looking forward to time on the lake and a nice evening by the fire. I hope you all are enjoying the long weekend!
 
@@ -120,7 +120,9 @@ Interesting (worrisome?) read from a publisher on how they think of their relati
 
 ### [Event Sourcing | Microsoft Docs](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 
-Microsoft writes up some amazing pattern and architecture stuff. This event sourcing pattern was mentioned in a discussion I was in recently. Good overview! *Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data. The store acts as the system of record and can be used to materialize the domain objects.*
+Microsoft writes up some amazing pattern and architecture stuff. This event sourcing pattern was mentioned in a discussion I was in recently. Good overview!
+
+> Instead of storing just the current state of the data in a domain, use an append-only store to record the full series of actions taken on that data. The store acts as the system of record and can be used to materialize the domain objects.
 
 ### [Twitter Bots Use Likes, RTs for Intimidation —Krebs on Security](https://krebsonsecurity.com/2017/08/twitter-bots-use-likes-rts-for-intimidation/)
 

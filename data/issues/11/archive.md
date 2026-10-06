@@ -81,7 +81,7 @@ links:
   domain: www.economist.com
   heading_context: '[Twitter users sue Donald Trump for excluding them](https://www.economist.com/blogs/democracyinamerica/2017/07/blocked-president)'
   section: Links 📌
-word_count: 1262
+word_count: 1263
 ---
 I had a crazy busy week, all good stuff. It felt like an accomplishment to get to Saturday morning! I’m due for multiple [weekly reviews](http://gettingthingsdone.com/2015/07/podcast-07-guided-gtd-weekly-review/) in a row to get back on track.
 
@@ -118,7 +118,9 @@ I’m a Kickstarter backer of Micro.blog and all of my status updates are sent u
 
 ### [Webmention.io](https://webmention.io/)
 
-*Webmention.io is a hosted service created to easily handle webmentions (and legacy pingbacks) on any web page.* This is a handy service for static websites that want to catch references from other sites. WordPress natively handles these but static websites cannot, without something like this. I added this to [my site](http://thingelstad.com/) so I can capture web mentions.
+> Webmention.io is a hosted service created to easily handle webmentions (and legacy pingbacks) on any web page.
+
+This is a handy service for static websites that want to catch references from other sites. WordPress natively handles these but static websites cannot, without something like this. I added this to [my site](http://thingelstad.com/) so I can capture web mentions.
 
 ### [Tufte CSS](https://edwardtufte.github.io/tufte-css/)
 

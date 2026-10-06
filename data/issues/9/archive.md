@@ -162,7 +162,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[Women in Tech Speak Frankly on Culture of Harassment - NYTimes.com](https://www.nytimes.com/2017/06/30/technology/women-entrepreneurs-speak-out-sexual-harassment.html)'
   section: Links 📌
-word_count: 2266
+word_count: 2267
 ---
 We have been finishing the second part of our summer vacation. After a week in Michigan we spent three days at our cabin celebrating the 4th of July with friends and family. We then drove up to Winnipeg for our first return trip to the Winnipeg Folk Festival in 9 years! My mother joined us and we've been listening to great music and remembering camping and a lack of showers. 😊 You will find a lot of microblog updates with photos from the Festival.
 
@@ -247,7 +247,9 @@ Another lawn game involving wood and throwing! I enjoy [Kubb](https://en.wikiped
 
 ### [Statement by Freada Kapor Klein and Mitch Kapor on the Resignation of Dave McClure](http://www.kaporcenter.org/press-coverage-posts/statement-by-freada-kapor-klein-and-mitch-kapor-on-the-resignation-of-dave-mcclure/)
 
-*The events of 2017 in the tech ecosystem depict a sector gone deeply awry. This is not just a case of a few bad actors. This is not something that is fixable with a pledge or a new policy. This is a culture that has been allowed to fester and to rot by enablers who refused to intervene when they witnessed inexcusable behavior or went to great lengths to avoid seeing it.* Wow! Accurate and direct. This is the kind of example and leadership we need in tech.
+> The events of 2017 in the tech ecosystem depict a sector gone deeply awry. This is not just a case of a few bad actors. This is not something that is fixable with a pledge or a new policy. This is a culture that has been allowed to fester and to rot by enablers who refused to intervene when they witnessed inexcusable behavior or went to great lengths to avoid seeing it.
+
+Wow! Accurate and direct. This is the kind of example and leadership we need in tech.
 
 ### [Exclusive: Dave McClure resigns as general partner of 500 Startups funds - Axios](https://www.axios.com/exclusive-dave-mcclure-resigns-as-general-partner-of-500-startups-2452701900.html)
 
