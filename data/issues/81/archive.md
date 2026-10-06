@@ -125,7 +125,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Shortcuts Archive – MacStories](https://www.macstories.net/shortcuts/)'
   section: Notable Links 📌
-word_count: 2212
+word_count: 2106
 ---
 Thanksgiving is here and we officially kick-off the holiday season! I hope you all had a fabulous Thanksgiving filled with good food, friends and warm conversation. My Thanksgiving was a bit questionable this year. I got sick with something after leaving Kiev. 🤢 I made it home feeling not so great, and then spent the weekend and early part of the week gradually getting better. The delights of travel! ✈️ I got just well enough to have Thanksgiving dinner.
 
@@ -250,12 +250,6 @@ If the above isn’t happening, you never move ahead because you don’t learn f
 ### [Shortcuts Archive – MacStories](https://www.macstories.net/shortcuts/)
 
 Updated and thorough collection of Shortcuts for iOS. Shortcuts is one of those tools that is best learned bully doing, and checking out examples like these is a great way to learn. Frederico and the MacStories team make some amazing Shortcuts.
-
-## Give Back 🎁
-
-https://www.hackthegap.com
-
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 

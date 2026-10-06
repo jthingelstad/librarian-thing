@@ -131,7 +131,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Larry Page Is a No-Show With Google Under a Harsh Spotlight - Bloomberg](https://www.bloomberg.com/news/features/2018-09-13/larry-page-is-a-no-show-with-google-under-a-harsh-spotlight)'
   section: Notable Links 📌
-word_count: 2587
+word_count: 2479
 ---
 Ok, this week got a bit heavy on all the announcements around the iPhone XS, Apple Watch Series 4 and iOS 12. I'm waiting for the iPhone XS to get delivered, and should have it in my hands very soon. Tammy and I both upgraded, and after reading the reviews I'm very interested to check out the camera capabilities. 📱
 
@@ -281,12 +281,6 @@ by Michael Pollan
 > A brilliant and brave investigation into the medical and scientific revolution taking place around psychedelic drugs--and the spellbinding story of his own life-changing psychedelic experiences
 
 My book club is reading this and I'm enjoying it. I like Pollan's other work, and it's sort of nice to read something from him not about food. The history of psychedelics is pretty interesting. I had no idea about the therapeutic and medical uses of it before it become part of counter-culture.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Highlighted iOS App 📱
 

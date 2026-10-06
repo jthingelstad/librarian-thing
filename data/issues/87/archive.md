@@ -75,7 +75,7 @@ links:
   domain: www.cunningleah.com
   heading_context: '[Leah Cunningham](http://www.cunningleah.com/)'
   section: Notable Links 📌
-word_count: 1385
+word_count: 1287
 ---
 We are in that really fun time as parents where our kids are old enough to stay up until midnight on New Years Eve, and happily also think it's fun to do that with their parents. I was reading various blog posts leading up to New Years about resolutions and various self-improvement ideas for the year ahead. Reflections on the past year and such. New Years Eve was a good reminder to chill out and just have fun as I joined the kids in screaming and shouting in elation as the clock tipped over into 2019. 🎉 It's good to step back and just welcome in the New Year with a bunch of whooping and hollering! Happy 2019 to everyone! 🍾
 
@@ -150,12 +150,6 @@ Why would anyone believe that Facebook is actually serious about this? The only 
 ### [Leah Cunningham](http://www.cunningleah.com/)
 
 My friend Leah Cunningham left the social web and is now on the IndieWeb. I recommend subscribing to her site with your favorite feed reader.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

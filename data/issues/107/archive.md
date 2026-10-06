@@ -63,7 +63,7 @@ links:
   domain: www.newyorker.com
   heading_context: '[Can “Indie” Social Media Save Us? | The New Yorker](https://www.newyorker.com/tech/annals-of-technology/can-indie-social-media-save-us)'
   section: Notable Links 📌
-word_count: 1624
+word_count: 1550
 ---
 It’s Memorial Day weekend in Minnesota! For Minnesotans this marks the official end of our long winter months, and the true beginning of the summer. The actual weather may not agree with us, but that doesn't matter. It’s time to declare summer! I’m [writing this outside](https://www.thingelstad.com/2019/05/24/nice-spot-to.html) and it is sublime. My main plan for the weekend is to get some more practice sessions on the flat top grill. I need to work on my short order cook skills! 🍳
 
@@ -146,12 +146,6 @@ Nice writeup by Cal Newport about IndieWeb solutions. I like that he highlights 
 > Despite its advantages, however, I suspect that the IndieWeb will not succeed in replacing existing social-media platforms at their current scale. For one thing, the IndieWeb lacks the carefully engineered addictiveness that helped fuel the rise of services like Facebook, Twitter, and Instagram. This addictiveness has kept people returning to their devices even when they know there are better uses for their time; remove the addiction, and you might lose the users.
 
 I totally agree, but I also don't think the goal is to be that scale. These services are human scale, and that is part of what makes them great.
-
-## Give Back 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

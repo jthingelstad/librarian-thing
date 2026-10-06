@@ -134,7 +134,7 @@ links:
   domain: calnewport.com
   heading_context: '[Beyond Digital Ethics - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/08/09/beyond-digital-ethics/)'
   section: Notable Links 📌
-word_count: 1975
+word_count: 1867
 ---
 I've always loved waterfalls, and this last weekend we got to finish our summer vacation by visiting one of the big ones — Niagara Falls! We started in the morning with a ride on the Maid of the Mist 🛥 before the lines were bad. We ventured on foot into Canada 🇨🇦 to explore the other side of Niagara and get the better view of the Horseshoe Falls. We quickly realized that it was complete mayhem on the Canadian side of the falls with minigolf, wax museums and tourist traps on every corner. We went on the Journey Behind the Falls and got to stand in a tunnel just 20 or 30 feet behind the falls and be immensely impressed, 😲 and scared, of the power of the falls. We retreated to the US 🇺🇸 and explored further, ending with the fireworks display at 10pm. 🎆 Niagara Falls was amazing, awe inspiring, and a bit scary to see that much power. What in the world were these people that got in barrels and went over the falls thinking!?
 
@@ -243,10 +243,6 @@ I still prefer Safari for protecting my privacy while blogging, but this set of 
 ### [Beyond Digital Ethics - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/08/09/beyond-digital-ethics/)
 
 Agree completely with this, but would also suggest they are different things. Digital ethics in my opinion is about education and college. This should be in the curriculum at Universities. It’s a long term thing, not meant to solve today’s issue. The shorter term matters are dealt with using the other methods described here.
-
-## Give Back 🎁
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

@@ -79,7 +79,7 @@ links:
   domain: www.defmacro.org
   heading_context: '[44 engineering management lessons | defmacro](https://www.defmacro.org/2014/10/03/engman.html)'
   section: Notable Links 📌
-word_count: 1403
+word_count: 1305
 ---
 Welcome to Weekly Thing #112!
 
@@ -158,12 +158,6 @@ Great questions to consider as a leader. I would also think these should be revi
 ### [44 engineering management lessons | defmacro](https://www.defmacro.org/2014/10/03/engman.html)
 
 Solid list of short, quick pieces of advice for a new engineering manager. 👍
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

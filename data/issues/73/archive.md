@@ -127,7 +127,7 @@ links:
   domain: en.wikipedia.org
   heading_context: '[“Don’t be evil.”](https://en.wikipedia.org/wiki/Don%27t_be_evil)'
   section: Notable Links 📌
-word_count: 2638
+word_count: 2557
 ---
 This week has had a mournful undercurrent for me after we said [goodbye to our dog Chase](https://www.thingelstad.com/2018/goodbye-chase/). I've never gone through this with a dog before. 😢 These four-legged friends can occupy a big place in our hearts.
 
@@ -266,12 +266,6 @@ I like this position, computer security is just security, and it’s really easy
 > The memo, authored by a Google engineer who was asked to work on the project, disclosed that the search system, codenamed Dragonfly, would require users to log in to perform searches, track their location — and share the resulting history with a Chinese partner who would have “unilateral access” to the data.
 
 👎
-
-## Give Back 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 

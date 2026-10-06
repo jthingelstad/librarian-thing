@@ -92,7 +92,7 @@ links:
   domain: www.wsj.com
   heading_context: '[You Give Apps Sensitive Personal Information. Then They Tell Facebook. - WSJ](https://www.wsj.com/articles/you-give-apps-sensitive-personal-information-then-they-tell-facebook-11550851636)'
   section: Notable Links 📌
-word_count: 1561
+word_count: 1480
 ---
 This is one of those weeks where I’m pretty behind. I just got done going through my queue of links and getting things all spiffed up! We have family in town for the weekend and a ton of fun stuff planned. I can’t wait! So this is going to be quick and get on with the rest of the weeks links! 🏃‍♂️
 
@@ -185,12 +185,6 @@ These are profound violations of trust and privacy.
 > None of those apps provided users any apparent way to stop that information from being sent to Facebook.
 
 Via [Daring Fireball](https://daringfireball.net/linked/2019/02/22/facebook-apps-data).
-
-## Give Back 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -104,7 +104,7 @@ links:
   domain: www.deps.co
   heading_context: '[Google Cloud Platform - The Good, Bad, and Ugly (It''s Mostly Good) - Deps](https://www.deps.co/blog/google-cloud-platform-good-bad-ugly/)'
   section: Notable Links 📌
-word_count: 1751
+word_count: 1670
 ---
 I was reminded this week why I should be riding my bike 🚲 to work on a regular basis. I have this [great bike](http://defiantbicycles.com/shop-fulton/defiant-one), and my commute to work is nearly all on bike trails along lakes and parkways in the city. 🏙 I get some fabulous views and it is a delightful route. SPS Tower 🏢 even has a gym in it where I can change and get ready for the day. But more important than all that, when I ride in I have more energy and am just happier. 😁 It is time to make this happen one day a week, and then maybe two.
 
@@ -231,12 +231,6 @@ Thorough comparison of GCP based on real-world usage.
 > I haven’t seen too many experience reports on Google Cloud, so I wanted to share how I’ve found it, what went well, and what still needs improving. I’ve split my thoughts below into good, meh, bad, ugly, and opportunities for improvement. I have compared and contrasted with Amazon Web Services (AWS), the other hosting provider that I have the most experience with, and GCP’s biggest competitor.
 
 Good overview.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

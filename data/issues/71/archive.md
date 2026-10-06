@@ -121,7 +121,7 @@ links:
   domain: www.troyhunt.com
   heading_context: '[Troy Hunt: Serverless to the Max: Doing Big Things for Small Dollars with Cloudflare Workers and Azure Functions](https://www.troyhunt.com/serverless-to-the-max-doing-big-things-for-small-dollars-with-cloudflare-workers-and-azure-functions/)'
   section: Notable Links 📌
-word_count: 1902
+word_count: 1821
 ---
 This last weekend Tammy and I were planning a weekend away for just the two of us in Indianapolis. Why Indianapolis? [Brandi Carlile](https://www.brandicarlile.com) was playing there, and why not! However, given our dog Chase's health, we decided to stay home and still have the kids spend the weekend with Grandma! We saw three movies in three days, and enjoyed a nice "staycation" with bike rides and nice dinners! It's been a while since we went to an 11am matinée! 🎬 See the micro posts at the end if you are curious which movies we saw.
 
@@ -236,12 +236,6 @@ Deep overview of how Troy Hunt designed Have I Been Pwned? to be very cost effic
 > It's costing me 2.6c per day to support 141M monthly queries of 517M records.
 
 That is amazing! The service is using Cloudflare Workers to push a lot of cached requests off of Azure. He calculates that without Cloudflare it would cost $9.19/day to run. Both of those amounts are amazing.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

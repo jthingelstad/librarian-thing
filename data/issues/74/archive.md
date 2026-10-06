@@ -87,7 +87,7 @@ links:
   domain: www.tomsguide.com
   heading_context: '[Here''s the One iPhone XS Feature That Justifies an Upgrade](https://www.tomsguide.com/us/iphone-xs-smart-hdr,news-28203.html)'
   section: Notable Links 📌
-word_count: 1412
+word_count: 1331
 ---
 It’s one of my favorite times in Minnesota — fall! 🍂 I was delighted to stop at [Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
 
@@ -181,12 +181,6 @@ I’ve been shooting with my iPhone XS for about two weeks now and I have to agr
 > In short, the iPhone XS is the best iPhone by far at approximating what you'd see with your own eyes. And most of the time, isn't the ultimate goal of photography to capture something we've seen and keep it forever?
 
 I’ve had several pictures come off the phone that I’ve marveled at the natural exposure of the photo.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

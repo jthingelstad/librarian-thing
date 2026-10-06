@@ -109,7 +109,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Automate Your Context - 2018 Monitorama - YouTube](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927)'
   section: Notable Links 📌
-word_count: 1968
+word_count: 1894
 ---
 Hello from Bayfield, Wisconsin! We are here to see [Brandi Carlile](http://brandicarlile.com) play at the [Big Top Chautauqua](https://www.bigtop.org). 🎶 It looks like the other thing we'll be doing is getting rained on. ☔️ No trip to Bayfield would be complete without a visit to the [Candy Shoppe](https://www.tripadvisor.com/Restaurant_Review-g60721-d3316141-Reviews-Candy_Shoppe-Bayfield_Wisconsin.html) as well for some delicious wine bread. 🤤
 
@@ -229,12 +229,6 @@ by Jared Diamond
 > In Jared Diamond’s follow-up to the Pulitzer-Prize winning Guns, Germs and Steel, the author explores how climate change, the population explosion and political discord create the conditions for the collapse of civilization.
 
 My book club is going back to Jared Diamond for a third time. Looking forward to this read, hopefully as a guide of what not to do.
-
-## Give Back 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

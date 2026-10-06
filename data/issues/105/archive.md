@@ -68,7 +68,7 @@ links:
   domain: search.creativecommons.org
   heading_context: '[CC Search](https://search.creativecommons.org/)'
   section: Notable Links 📌
-word_count: 1018
+word_count: 920
 ---
 I've now officially published the Weekly Thing for two years. 😲 It’s pretty cool to go back and look at [Weekly Thing #1](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how far this effort has come! Thank you all for subscribing, and if you know of others that you think would like it please send them to the [Weekly Thing website](https://weekly.thingelstad.com) and they can subscribe.
 
@@ -133,12 +133,6 @@ I like this approach to thinking about remote team members. I also like the stru
 ### [CC Search](https://search.creativecommons.org/)
 
 I’m a fan of Creative Commons, and donate to it annually. I’m glad to see them offering an image search service directly.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

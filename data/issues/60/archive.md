@@ -132,7 +132,7 @@ links:
   domain: www.buzzfeed.com
   heading_context: '[An Invisible Rating System At Your Favorite Chain Restaurant Is Costing Your Server](https://www.buzzfeed.com/carolineodonovan/ziosk-presto-tabletop-tablet-restaurant-rating-servers#.tqg28Jv8q)'
   section: Notable Links 📌
-word_count: 1878
+word_count: 1770
 ---
 I don't have a lot to update on this week, and there are no features or changes to the Weekly Thing for me to share and have a meta update around. 🤷‍♂️ Have a great weekend and enjoy the links below! ⬇️
 
@@ -257,12 +257,6 @@ Mathematica has been around for 30 years -- wow! When I read Wolfram's thoughts 
 ### [An Invisible Rating System At Your Favorite Chain Restaurant Is Costing Your Server](https://www.buzzfeed.com/carolineodonovan/ziosk-presto-tabletop-tablet-restaurant-rating-servers#.tqg28Jv8q)
 
 This is a great example of the unintended consequences of more technology in the workplace, and making uninformed decisions with the technology. People who understand how rating systems work, and the things that influence them, would never suggest you evaluate a servers performance on it.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

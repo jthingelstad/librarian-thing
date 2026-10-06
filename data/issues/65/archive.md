@@ -92,7 +92,7 @@ links:
   domain: www.digitalcommonwealth.org
   heading_context: '[M. C. Escher (1898-1972). Prints and Drawings - Digital Commonwealth](https://www.digitalcommonwealth.org/collections/commonwealth:3r076r52x)'
   section: Notable Links 📌
-word_count: 1288
+word_count: 1207
 ---
 We are starting a week of vacation 😎 in the [Finger Lakes](https://en.wikipedia.org/wiki/Finger_Lakes) region of New York! We are flying into Syracuse and staying in Ithaca for most of the week. We are going to see Niagara Falls, which I have wanted to see for a long time! I love waterfalls and that is the big one! 🙌
 
@@ -185,12 +185,6 @@ Measure it. 💯
 ### [M. C. Escher (1898-1972). Prints and Drawings - Digital Commonwealth](https://www.digitalcommonwealth.org/collections/commonwealth:3r076r52x)
 
 Like many technologists, I find [M. C. Escher's](https://en.wikipedia.org/wiki/M._C._Escher) art mesmerizing. This collection of prints from the Boston Library are a great way to experience them. The digitizations are very high resolution. This made me look for M. C. Escher desktop wallpaper for my computer, but everything I found was not high quality.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -129,7 +129,7 @@ links:
   domain: om.co
   heading_context: '[We are all trapped in the “Feed” — Om on Tech](https://om.co/2018/05/26/we-are-all-trapped-in-the-feed/)'
   section: Notable Links 📌
-word_count: 2233
+word_count: 2125
 ---
 Weekly Thing is now privacy enhanced. By default, MailChimp tracks when people open newsletters and what links you click on. Most of the people that read this know that I value my privacy, and I don't like the idea of being watched. So, in accordance with [not being a hypocrite](https://www.thingelstad.com/2017/removed-google-analytics/), I've disabled those features. I'm not sure if MailChimp will honor them both, it may still put tracking code on the links, but I know it will not track opens. Enjoy reading with more privacy. 😎
 
@@ -266,12 +266,6 @@ I like almost all of it but I find the closing bracket "dedenting" odd.
 ### [We are all trapped in the “Feed” — Om on Tech](https://om.co/2018/05/26/we-are-all-trapped-in-the-feed/)
 
 Om has the depth and breadth of experience with the web to provide this perspective. This is a good reason to opt out of “Big Tech” and it’s optimized engagement and seek out personal websites with their quirky and unexpected. I do believe that some feeds, ones that are not machine curated and in time order are fine for efficiency. For me Feedbin is that central place that connects me to the broad web. No ads or engagement metrics to satisfy, because I pay a small annual subscription for the service.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

@@ -93,7 +93,7 @@ links:
   domain: om.co
   heading_context: '[Links & Recommendations — On my Om](https://om.co/2019/01/06/links-recommendations/)'
   section: Notable Links 📌
-word_count: 1403
+word_count: 1322
 ---
 This is going to be a short intro this week as we are moving into our new house and everything is all over the place. I won't let that keep me from getting you amazing people your links on time though! Our stuff is in boxes 📦, and the government is shut down, but you will definitely get your links for your weekend enjoyment! 🙌 I will admit this weeks picture is a bit of a stretch though. 😅
 
@@ -174,12 +174,6 @@ I got these mindfulness aids for my birthday and have tried them a few times alr
 ### [Links & Recommendations — On my Om](https://om.co/2019/01/06/links-recommendations/)
 
 [Om Malik](https://en.wikipedia.org/wiki/Om_Malik) is starting link blogging. This is guaranteed to be a worthwhile stream of good information. 👍🏻
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -101,7 +101,7 @@ links:
   domain: 512pixels.net
   heading_context: '[The One Where I Announce I’m Joining Mac Power Users – 512 Pixels](https://512pixels.net/2018/11/joining-mpu/)'
   section: Notable Links 📌
-word_count: 2067
+word_count: 1986
 ---
 So what is it like to be right in the thick of it when technology teams manage through maximum capacity events? There are many similarities to running financial publishing systems through significant market events, providing giant "social scale" to applications deployed to millions of people in minutes, as well as running the largest retail network in the world at the highest volume time of year. You need a great team, real-time performance data, proper procedures, and experience — amongst other things.
 
@@ -203,12 +203,6 @@ This looks like a very cool book. Wish I could have got a copy of it ordered bef
 ### [The One Where I Announce I’m Joining Mac Power Users – 512 Pixels](https://512pixels.net/2018/11/joining-mpu/)
 
 I listen to Mac Power Users from time-to-time and it’s funny — I got the sense that Katie Floyd was less into the content in recent episodes, or something was off. It didn’t surprise me to hear that after.a 10 year run she's stepping aside. I think it will be interesting to see if the podcast gets some new spirit with a new cohost.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

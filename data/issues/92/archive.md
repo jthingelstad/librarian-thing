@@ -68,7 +68,7 @@ links:
   domain: weblog.rogueamoeba.com
   heading_context: '[Rogue Amoeba - The Design of Loopback 2](https://weblog.rogueamoeba.com/2019/01/02/the-design-of-loopback-2/)'
   section: Notable Links 📌
-word_count: 1563
+word_count: 1455
 ---
 It's been a busy week and I’m annoyed that I seem to have caught a new cold, right as I was recovering from the previous one. Let's get right to links and other fun stuff! 👉
 
@@ -153,12 +153,6 @@ I love that Bob Mould is still making those giant guitar sounds. I’m looking f
 ### [Rogue Amoeba - The Design of Loopback 2](https://weblog.rogueamoeba.com/2019/01/02/the-design-of-loopback-2/)
 
 This is a great overview of how to go about user experience design, just using some paper and pens. Teams often over complicate the tooling to get these design concepts created.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

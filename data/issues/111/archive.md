@@ -120,7 +120,7 @@ links:
   domain: blog.dropbox.com
   heading_context: '[Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)'
   section: Notable Links 📌
-word_count: 2913
+word_count: 2832
 ---
 Our summer has started off with a bang! 💥 Our daughter celebrated her Golden Birthday 🥳 this year, and just two days later we had a great Father's Day. Then the next day my wife Tammy took our daughter on her Golden Birthday trip! We've adopted two traditions around birthdays. The first is that when each kid turns 13 I take them on a long weekend to New York to see the Big City! 🛩 The other is that on their Golden Birthdays Tammy takes them on a big birthday trip. They have been having a blast in [Mackinac Island](https://www.mackinacisland.org).
 
@@ -252,12 +252,6 @@ I've owned Birkenstock's for as long as I can remember. Each pair last several y
 ### [Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)
 
 I stopped using Dropbox a couple years ago, and I’m glad I did. I just wanted to simplify and I could put everything on iCloud Drive. This announcement raises the age old question: is all software destined to become bloatware? 😕
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -117,7 +117,7 @@ links:
   domain: www.justinobeirne.com
   heading_context: '[Apple’s New Map](https://www.justinobeirne.com/new-apple-maps/)'
   section: Notable Links 📌
-word_count: 2398
+word_count: 2331
 ---
 I've been having a lot of fun with [Shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) the last couple of weeks. I've found some great ways to make routine things easier. I've also reinvigorated my [project templates](https://www.thingelstad.com/2017/using-project-templates/), just in time to use many of my annual holiday templates. I realized that my attempt to create a "generic" Shortcut that could run any template was limiting. I continue to store my templates in TaskPaper format to make them easy to edit, but the power comes in the Shortcut. I've made the project templates even more powerful having them block time on my calendar for the project, and even create draft emails that are ready to finish and send for the project.
 
@@ -249,12 +249,6 @@ if you haven't had a smart watch before it might seem odd that you need so much 
 ### [Apple’s New Map](https://www.justinobeirne.com/new-apple-maps/)
 
 Incredibly detailed post again from Justin O’Beirne detailing incredible detail on Apple's new map initiative. It is an interesting post to go through and see the incredible effort going into mapping, and what a strategic advantage it is for Google in a number of areas.
-
-## Give Back 🎁
-
-https://wikimediafoundation.org/wiki/Home
-
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Yet More Links 🍞
 

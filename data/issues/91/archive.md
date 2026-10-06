@@ -79,7 +79,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Developer Demos HomeKit’s New Integration with Smart TVs — MacStories](https://www.macstories.net/linked/developer-demos-homekits-new-integration-with-smart-tvs/)'
   section: Notable Links 📌
-word_count: 1716
+word_count: 1649
 ---
 We survived the deep freeze! 🥶 We had three days with the temperature between -27°F (-32.7°C) and -15°F (-26°C), for the high! Wind chills were something silly, like -50°F. I can't remember school ever being cancelled for four days in a row. I know it's particularly old man of me to say, but I don't think it was like that when I was a kid. 👴 The kids stayed home and got a bit of cabin fever. It reminded me when I was a kid in Minot, ND and we made the national news because the wind chill was -102°F! I think they cancelled school, that one day. Just sayin'... 👀
 
@@ -160,10 +160,6 @@ I agree with Newport's primary assertion here, that Jobs' would not have wanted 
 ### [Developer Demos HomeKit’s New Integration with Smart TVs — MacStories](https://www.macstories.net/linked/developer-demos-homekits-new-integration-with-smart-tvs/)
 
 Seriously, of all the devices I'd like to control with HomeKit my TV would be right up there. Controlling inputs would be dynamite. I’m hoping a bunch of companies add this to their TV's with an update! 🤞🏻
-
-## Give Back 🎁
-
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Yet More Links 🍞
 

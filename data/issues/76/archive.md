@@ -93,7 +93,7 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · On Cash](https://www.tbray.org/ongoing/When/201x/2018/10/11/On-Cash)'
   section: Notable Links 📌
-word_count: 1938
+word_count: 1833
 ---
 I just got back from seeing the [Foo Fighters](https://foofighters.com) play one of the final shows of their Concrete and Gold tour. I’ve seen the Foo’s play a few times now and it’s always a treat to see them. Every time I'm struck by how much they just love music. [Dave Grohl](https://en.wikipedia.org/wiki/Dave_Grohl) seems like someone that is all consumed and in love with his craft. [Taylor Hawkins](https://en.wikipedia.org/wiki/Taylor_Hawkins) has a grin ear-to-ear every time he’s on stage. Seeing them tonight you got the sense that they would have liked to have just kept playing. Once I saw them play for over 2 hours straight and we’re ready to keep going. The passion they have for what they do is incredible.
 
@@ -188,12 +188,6 @@ An assessment of static site generators and the somewhat miserable landscape of 
 ### [ongoing by Tim Bray · On Cash](https://www.tbray.org/ongoing/When/201x/2018/10/11/On-Cash)
 
 I like Bray's perspective on cash here. I tend to still pay for most of my routine, small purchases with cash. I'd add to his list of reasons the fact that as we move from real cash we devalue the expense. Keeping transactions in cash will make you more conscious of your spending, and hopefully spend less. 💸
-
-## Give Back 🎁
-
-https://www.hackthegap.com
-
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 

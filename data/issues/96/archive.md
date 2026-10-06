@@ -98,7 +98,7 @@ links:
   domain: www.technologyreview.com
   heading_context: '[10 Breakthrough Technologies 2019, curated by Bill Gates - MIT Technology Review](https://www.technologyreview.com/lists/technologies/2019/)'
   section: Notable Links 📌
-word_count: 1820
+word_count: 1722
 ---
 It’s been another week filled with much activity. I made a quick trip to Toronto this week to visit TeamSPS there. 🛩 It was a great trip and I got time to connect with a bunch of people, including over board games. 🎲 It also is going to kick off a pretty sustained burst of travel for me in the coming weeks. I’m bracing for several flights coming up. I’ve gotten back to my meditation practice and I’m reminded how impactful that is. I’ve also recommitted myself to keeping a gratitude journal. Both of those habits are at record long streaks right now. Gotta keep the streak going! 👍🏻
 
@@ -193,12 +193,6 @@ What a cool idea! Kudos to Microsoft for putting something truly innovative in l
 ### [10 Breakthrough Technologies 2019, curated by Bill Gates - MIT Technology Review](https://www.technologyreview.com/lists/technologies/2019/)
 
 I love that Bill Gates has turned his attention to technology areas that are much more impactful to human health and happiness. You'll notice social networks and advertising algorithms are nowhere on this list.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

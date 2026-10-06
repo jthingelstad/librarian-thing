@@ -80,7 +80,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Privacy on iPhone — Private Side - YouTube](https://www.youtube.com/watch?v=A_6uV9A12ok&app=desktop)'
   section: Notable Links 📌
-word_count: 1976
+word_count: 1895
 ---
 I spent this week in Australia visiting our office in Melbourne. 🇦🇺 After you get over the 24 hours of travel to get there, the city greets you with all sorts of cool stuff. I had a really great time. While I was there I got to take in Round 1 of the 2019 Australian Football League, or [as everyone there calls it, Footy](https://en.wikipedia.org/wiki/Australian_rules_football) . I was a bit in awe as [we entered the Melbourne Cricket Grounds](https://en.wikipedia.org/wiki/Melbourne_Cricket_Ground) . The size of the field is just enormous! The game took a bit to understand, but it started making sense after some locals answered some particularly simple questions. Footy reminded me of merging Soccer ⚽️ and American Football 🏈, and splashing in some Basketball 🏀 concepts for fun. There were 84,000 excited Australian Footy fans cheering on the start of the season. [Victoria is the heart of Footy](https://en.wikipedia.org/wiki/Victoria_(Australia)#Sport), and [this Richmond v Carlton game](https://www.richmondfc.com.au/video/2019-03-21/round-1-highlights) was a highly anticipated start to the season, even as Richmond ran away with the score.
 
@@ -183,12 +183,6 @@ All good practices to keep in mind when building distributed services.
 ### [Privacy on iPhone — Private Side - YouTube](https://www.youtube.com/watch?v=A_6uV9A12ok&app=desktop)
 
 This is the first time to my knowledge that Apple has put privacy front and center in their marketing. I expect we’ll see more of this.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

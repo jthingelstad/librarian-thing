@@ -67,7 +67,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[The Making of a YouTube Radical - The New York Times](https://www.nytimes.com/interactive/2019/06/08/technology/youtube-radical.html)'
   section: Notable Links 📌
-word_count: 1275
+word_count: 1177
 ---
 School is out, camps have started, and summer is now officially in full swing! This week was an absolute blur, and it's my daughters birthday this weekend so I'm keeping it short and we are going to get right to the links this week! Oh, and to all the Dads out there, have a great Fathers Day! 🤜🤛
 
@@ -136,12 +136,6 @@ This is a pretty incredible, detailed walk-through of how following a series of 
 > Perhaps this shouldn’t be a surprise. Our political culture is now built largely on shapeshifting internet platforms, which have made flipping partisan allegiances as easy as changing hairstyles. It’s possible that vulnerable young men like Mr. Cain will drift away from radical groups as they grow up and find stability elsewhere. It’s also possible that this kind of whiplash polarization is here to stay as political factions gain and lose traction online.
 
 I honestly tend to avoid YouTube. I've found the whole platform to be a bit of a mess.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

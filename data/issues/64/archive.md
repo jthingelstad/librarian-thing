@@ -104,7 +104,7 @@ links:
   domain: arstechnica.com
   heading_context: '[This full video shows just how bonkers the VW Pikes Peak record was | Ars Technica](https://arstechnica.com/cars/2018/07/this-full-video-shows-just-how-bonkers-the-vw-pikes-peak-record-was/)'
   section: Notable Links 📌
-word_count: 2091
+word_count: 1983
 ---
 Tammy and I celebrated 16 years of marriage this week! 💍 We celebrated by going out for the evening, starting with a movie. We saw [Sorry To Bother You](https://www.imdb.com/title/tt5688932/), which was fun, different and very original. 🎬 We had had a great dinner at [Italian Eatery](http://www.italianeatery.com). 🍽 Their Bucatini is amazing! We finished our night out with a puzzle room at [Missing Pieces](https://www.missingpiecesmn.com). 🔐 We did the [Ruin Raiders](https://www.missingpiecesmn.com/home/#ruin-raiders) room, and it was just the two of us. If you've never done a puzzle room, I recommend trying one. With only two people sometimes the sheer number of locks and puzzles to solve can be a challenge. The room was perfect though. There was just enough difficulty in the puzzles to make it very fun, but not so hard as to be frustrating.
 
@@ -212,12 +212,6 @@ by John Doerr
 > Legendary venture capitalist John Doerr reveals how the goal-setting system of Objectives and Key Results (OKRs) has helped tech giants from Intel to Google achieve explosive growth—and how it can help any organization thrive.
 
 I'm halfway through this book and I'm having a hard time finishing because I want to take the concepts in it and go put them to work right away. I had heard of OKRs before but I never really dove into them and this book is a wonderful and deep overview of how to put them to work. I find the values and structure very compelling. If you are looking for tools to help align around objectives, at work or otherwise, this is a good model. As an aside, the audiobook for this is a treat as it's read by Doerr and he many of the other people quoted and referenced in the book do their own reading as well. 🎧
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

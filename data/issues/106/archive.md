@@ -81,7 +81,7 @@ links:
   domain: nest.com
   heading_context: '[What’s happening at Nest? | Nest](https://nest.com/whats-happening/)'
   section: Notable Links 📌
-word_count: 1995
+word_count: 1884
 ---
 This last week was a crazy, busy week for me. The kind of week that required everything planned out and to go on autopilot from meeting to meeting and event to event. 📅 I’m pretty happy to be on the other side of it watching the Twins play baseball ⚾️ and putting together this weeks Thing!
 
@@ -184,12 +184,6 @@ I was a Dropcam customer, and the product was great. Then that became Nest. And 
 > We want to unify our efforts around third-party connected home devices under a single developer platform – a one-stop shop for both our developers and our customers to build a more helpful home. To accomplish this, we’ll be winding down Works with Nest on August 31, 2019, and delivering a single unified experience through the Works with Google Assistant program.
 
 So from a data perspective this lowers the barriers to Google using the data from these devices to augment their profile of a user. 😠
-
-## Give Back 🎁
-
-https://minnestar.org
-
-Minnestar (https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest BarCamp (https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. Become a Community Supporter today! (https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

@@ -75,7 +75,7 @@ links:
   domain: time.com
   heading_context: '[I Mentored Mark Zuckerberg. But I Can''t Stay Silent | Time](http://time.com/5505441/mark-zuckerberg-mentor-facebook-downfall/)'
   section: Notable Links 📌
-word_count: 1165
+word_count: 1084
 ---
 Hello from the Bold, and Frozen, North! ❄️ We are looking at several days with the thermometer never getting into positive numbers. 🥶 There should be plenty of opportunities to curate some fun links by the fire. 🔥
 
@@ -156,12 +156,6 @@ Nice work on their status page and accurately reflecting the dependencies they h
 ### [I Mentored Mark Zuckerberg. But I Can't Stay Silent | Time](http://time.com/5505441/mark-zuckerberg-mentor-facebook-downfall/)
 
 A pretty comprehensive critique of many things that Facebook does. This is from an early investor, [Roger McNamee](https://en.wikipedia.org/wiki/Roger_McNamee) who has been critical of Facebook for a while. Reading the article through all of Time's advertisements is a challenge.
-
-## Give Back 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 

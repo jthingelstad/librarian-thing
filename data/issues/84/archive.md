@@ -97,7 +97,7 @@ links:
   domain: blogs.windows.com
   heading_context: '[Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)'
   section: Notable Links 📌
-word_count: 2173
+word_count: 2067
 ---
 I’m writing this sitting on the floor of an empty room that will likely be the office in our new home. We closed today and are celebrating with takeout dinner in an empty house and thinking about how things will be laid out. We aren't moving until January.
 
@@ -206,12 +206,6 @@ I’m a [huge fan of Glengarry Glen Ross](https://en.wikipedia.org/wiki/Glengarr
 ### [Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)
 
 In 2009 I wrote a blog post on what [Microsoft could do to get "nerds" back](https://www.thingelstad.com/2009/my-solution-for-microsoft-to-get-nerds-back/). I should have titled it "geeks", but oh well. One of the two suggestions was to stop working on their own web engine, at the time Trident. It took 9 years, but Microsoft has announced they shifting their browser engine. Just one thing left, although you might argue that Windows Services for Linux is pretty close to the other recommendation I had.
-
-## Give Back 🎁
-
-https://www.hackthegap.com
-
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 

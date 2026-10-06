@@ -62,7 +62,7 @@ links:
   domain: www.fastcompany.com
   heading_context: '[Executive coach: 7 secrets to lasting career satisfaction](https://www.fastcompany.com/90296030/executive-coach-7-secrets-to-finding-lasting-career-satisfaction)'
   section: Notable Links 📌
-word_count: 1130
+word_count: 1049
 ---
 I'm slowly creeping up on issue #100 of the Weekly Thing! Just 7 more and we'll hit that fun milestone! 🎉 I've been contemplating some tweaks and refinements of this weekly cornucopia of content. I'd like to ask you, the most awesome reader ever, to take a moment for two things.
 
@@ -125,12 +125,6 @@ These ARPU numbers are amazing.
 ### [Executive coach: 7 secrets to lasting career satisfaction](https://www.fastcompany.com/90296030/executive-coach-7-secrets-to-finding-lasting-career-satisfaction)
 
 These seem like worthwhile actions to make sure you are adjusting your trajectory in a thoughtful way.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

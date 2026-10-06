@@ -87,7 +87,7 @@ links:
   domain: auth0.com
   heading_context: '[Auth0 Architecture: Running In Multiple Cloud Providers And Regions](https://auth0.com/blog/auth0-architecture-running-in-multiple-cloud-providers-and-regions/)'
   section: Notable Links 📌
-word_count: 1441
+word_count: 1335
 ---
 I'm ready to put this year's Fall allergy season into the Guinness Book of World Records. 🏆 Even with loratadine and pseudoephedrine I've been struggling with watery eyes, congestion and itching. I've been having to tell people that while they are very important to me, in fact, I am not crying upon seeing them. 😂
 
@@ -162,12 +162,6 @@ Nice set of slides highlighting the Product Ownership role. I like that this tou
 ### [Auth0 Architecture: Running In Multiple Cloud Providers And Regions](https://auth0.com/blog/auth0-architecture-running-in-multiple-cloud-providers-and-regions/)
 
 They increased availability, performance and reduced cost by consolidating on one cloud provider. This is an interesting argument about regionality within a single provider versus multi-cloud. There are big tradeoffs there.
-
-## Give Back 🎁
-
-https://www.hackthegap.com
-
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Highlighted iOS App 📱
 

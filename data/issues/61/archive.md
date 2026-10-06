@@ -151,7 +151,7 @@ links:
   domain: graphics.reuters.com
   heading_context: '[A Reuters Visual Guide: Blockchain explained](http://graphics.reuters.com/TECHNOLOGY-BLOCKCHAIN/010070P11GN/index.html)'
   section: Notable Links 📌
-word_count: 2996
+word_count: 2898
 ---
 We have been having a wonderful week staying at our cabin and having mulitple groups of friends and family down. We've had a lot of time on the pontoon, tubing and enjoying the [new lillypad](http://www.thingelstad.com/2018/06/30/the-lilypad-is.html). For those that are not familiar, this lillypad is 6' by 16' and floats on the top of the lake. It can hold over 1,000 pounds and kids have a great time climbing on it, jumping off, and playing king of the hill. I'm still learning how to wrestle it back out of the water. 💧 We had another stupendous display of fireworks. There are a lot of people on Cannon Lake that set off giant fireworks displays on the 4th of July. I hope all of you living the US had a great 4th of July 🇺🇸, and our friends to the north a great Canada Day! 🇨🇦
 
@@ -307,12 +307,6 @@ I've advocated for strong password management for years, and it’s critical for
 ### [A Reuters Visual Guide: Blockchain explained](http://graphics.reuters.com/TECHNOLOGY-BLOCKCHAIN/010070P11GN/index.html)
 
 A very well done overview of blockchain technology covering all of the primary concepts of blockchain. This is one of the best of these I've seen.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -104,7 +104,7 @@ links:
   domain: www.amazon.com
   heading_context: '[Lutron Caseta Wireless Smart Lighting Dimmer Switch (2 count) Starter Kit - Amazon.com](https://www.amazon.com/dp/B01M3XJUAD?tag=klf-20)'
   section: Notable Links 📌
-word_count: 2125
+word_count: 2044
 ---
 Minneapolis Public Schools started the 2018-19 school year this Monday, and with it the kids went off to school and summer break officially came to a close. 🏁 Summer flew by this year! There was so much going on. It was fabulous, and maybe 10% into the over-scheduled zone, but that's just fine. In our neighborhood the first day of school is a community event. Parents and kids walking to bus stops, or forming walking busses to take kids to school while photos are taken at various moments. The whole thing put a smile on my face, even as the kids were bemoaning the return of homework. 🚌
 
@@ -222,12 +222,6 @@ by Robert M Pirsig
 > A penetrating examination of how we live and how to live better A narration of a summer motorcycle trip undertaken by a father and his son, Zen and the Art of Motorcycle Maintenance becomes a personal and philosophical odyssey into fundamental questions on how to live.
 
 [When I was at David Hussman](https://www.thingelstad.com/2018/goodbye-to-my-friend-david-hussman/) 's memorial one of the speakers shared that David's favorite book was Zen and the Art of Motorcycle Maintenance. I've heard much about it, but I've never read it. I figured it was time to read it (or, listen to it since I am using the audiobook) and I'm enjoying it thoroughly. 🏍
-
-## Give Back 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 

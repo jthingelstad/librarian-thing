@@ -617,3 +617,10 @@ Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails
 - `validate.py` works from git: the bodies only lose lines, every lost line is a spotlight heading, logo, rule or blurb naming the organization, no spotlight heading, logo, blurb or cover survives in WT2–52, front matter changes only in image/word_count (and those three descriptions), and nothing outside WT2–52 changed. `mutate.py` plants 12 faults (a content line deleted, a blurb kept, a Give Back touched, a doubled rule, a cover cleared past WT22, a metadata key changed and others); the validator catches all 12.
 - Kept, as Jamie's own writing: WT31's and WT32's intros asking readers to give to Let's Encrypt and the EFF, the WT30 and WT32 microposts about donating, and WT3's intro mentioning "the photo of me" (the cleared cover).
 - Not in this round: the "## Give Back 🎁" sections of WT53–112, the same spotlight under its later name. Removing them was not approved.
+
+**Round 6, Give Back** (`repair/giveback/`). Approved by Jamie 2026-10-06: "remove the Give Back nonprofit sections from WT53–112 in librarian-thing and weekly.thingelstad.com, and re-render those issues' audio". The same spotlight as round 5 under its later name.
+
+- `apply.py` deletes the "## Give Back 🎁" section (heading, logo URL, blurb ending in its donate link; WT67 and WT91 had no logo line) from all 60 issues, WT53–112. No issue had a heading-less copy, and no description named the organization.
+- word_count drops 67–111 words per issue (`../spotlight/regen_meta.py`); links and domains are unchanged, since the extractor never counted the spotlight's links. The logos were bare URLs, so there were no image descriptions to drop.
+- `validate.py` adds to round 5's checks: front-matter links and word_count must be either untouched or exactly what the new body gives, and links.json may change only in a recomputed word_count. `mutate.py` plants 15 faults (plus a clean control); the validator catches all 15.
+- The spotlight is now gone from the whole archive: no "Promotion" or "Give Back" heading remains in any issue.

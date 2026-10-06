@@ -92,7 +92,7 @@ links:
   domain: www.vieler-photography.com
   heading_context: '[Dogs Catching Treats - Vieler Photography - Fotos Frei Schnauze](https://www.vieler-photography.com/portfolio/snapshots/)'
   section: Notable Links 📌
-word_count: 1456
+word_count: 1375
 ---
 I've been putting a fortune at the very bottom of the Weekly Thing for a while now. It's a surprise for those that read all the way to the end! 🎁 I was using a service for that that was mostly fine but occasionally gave bad fortunes 😒 that I would replace. Last week I didn't catch a bad one, so I rebuilt the fortune process and it now is part of my editorial selection. Better fortunes from now on! 🎉
 
@@ -183,12 +183,6 @@ This is the most comprehensive map I've found of charging stations for electric 
 ### [Dogs Catching Treats - Vieler Photography - Fotos Frei Schnauze](https://www.vieler-photography.com/portfolio/snapshots/)
 
 What awesome pictures – they crack me up! Via [Kottke.org](https://kottke.org/18/11/dogs-catching-treats).
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

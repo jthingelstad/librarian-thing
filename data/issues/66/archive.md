@@ -87,7 +87,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Here''s How America Uses Its Land](https://www.bloomberg.com/graphics/2018-us-land-use/)'
   section: Notable Links 📌
-word_count: 1806
+word_count: 1732
 ---
 We've been enjoying exploring the [Finger Lakes](https://www.fingerlakes.org) region of New York this week. We spent the last few days with [Ithaca](https://www.visitithaca.com) as our home base and ventured out to a number of places. The weather has been really hot, ☀️ which has put a damper on all the gorgeous gorge hiking that is in this region. Hiking in the upper 90's is just, well, not that much fun. 💦
 
@@ -188,12 +188,6 @@ Further evidence supporting the need for an ethics model for tech.
 ### [Here's How America Uses Its Land](https://www.bloomberg.com/graphics/2018-us-land-use/)
 
 I like the illustrations of land use in the United States. Plus you learn some things about our country. Cows use a lot of our land. 🤔
-
-## Give Back 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

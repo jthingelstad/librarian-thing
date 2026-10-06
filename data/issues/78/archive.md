@@ -79,7 +79,7 @@ links:
   domain: www.youtube.com
   heading_context: '[What Engineers Found When They Tore Apart Tesla''s Model 3](https://www.youtube.com/watch?v=Lj1a8rdX6DU)'
   section: Notable Links 📌
-word_count: 1457
+word_count: 1376
 ---
 Last week the moving train 🚂 was going and now it has fully left the station and is chugging down the tracks at a good clip! We signed the purchase agreement and have a close date for the new house. We won't be moving until January, but will close in the middle of December. Now job #1 is to sell our current house! Know anyone that wants a great house in South Minneapolis? 🤩
 
@@ -158,12 +158,6 @@ This is a fun read walking through a high performance solution and the best way 
 ### [What Engineers Found When They Tore Apart Tesla's Model 3](https://www.youtube.com/watch?v=Lj1a8rdX6DU)
 
 This is an interesting take on the Model 3. They seem to have good points on the body and challenges with assembling that. They were very impressed with the motor.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

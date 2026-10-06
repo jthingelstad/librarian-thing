@@ -114,7 +114,7 @@ links:
   domain: www.pewinternet.org
   heading_context: '[Teens, Social Media & Technology 2018 | Pew Research Center](http://www.pewinternet.org/2018/05/31/teens-social-media-technology-2018/)'
   section: Notable Links 📌
-word_count: 2092
+word_count: 2025
 ---
 With much fanfare and anticipation the school year has ended, and with it summer has officially started! 🏁 Now is the time to take a moment to savor it all. In a blink it will be fall, the kids will be heading back to school and it will have felt like 5 minutes. I'm hoping to soak in the summer a bit more this year.
 
@@ -225,12 +225,6 @@ A thorough overview of new iOS 12 features announced at WWDC. The new Shortcuts 
 ### [Teens, Social Media & Technology 2018 | Pew Research Center](http://www.pewinternet.org/2018/05/31/teens-social-media-technology-2018/)
 
 A lot of data on where teens are spending their time online. I don't join the chorus of marketers seeking to follow "what the kids are doing" all over the place. Look at the platforms used. It worries me that it’s all self-absorbed, mind-numbing, ["amusing ourselves to death"](https://www.goodreads.com/book/show/74034.Amusing_Ourselves_to_Death) social media. Given the world in our pocket, this is what we do? 🤦‍♂️
-
-## Give Back 🎁
-
-https://wikimediafoundation.org/wiki/Home
-
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Highlighted iOS App 📱
 

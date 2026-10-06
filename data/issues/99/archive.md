@@ -56,7 +56,7 @@ links:
   domain: blog.jessfraz.com
   heading_context: '[Jessie Frazelle''s Blog: Defining a Distinguished Engineer](https://blog.jessfraz.com/post/defining-a-distinguished-enginner/)'
   section: Notable Links 📌
-word_count: 1183
+word_count: 1075
 ---
 More travel this week! ✈️ I've been visiting #TeamSPS in Little Falls New Jersey! It’s been great to be here and see everyone, and far too long since I've visited. No board game night on this trip, next time! I've definitely been on planes a lot lately, and I’m only about halfway through. We are heading to Texas 🌵 for Spring Break this weekend. We'll be in Austin, San Antonio and Waco! Yes, barbecue is on the agenda! 🔥
 
@@ -125,12 +125,6 @@ Channel your inner Hemingway. ✍️
 ### [Jessie Frazelle's Blog: Defining a Distinguished Engineer](https://blog.jessfraz.com/post/defining-a-distinguished-enginner/)
 
 This is a great set of desires traits for technical leaders, and most apply to all leadership roles.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

@@ -87,7 +87,7 @@ links:
   domain: www.mentimeter.com
   heading_context: '[Interactive presentation software - Mentimeter](https://www.mentimeter.com/)'
   section: Notable Links 📌
-word_count: 1867
+word_count: 1797
 ---
 I've been continuing my focus on developing a meditation practice, and have crossed over 100 consecutive days meditating. I've been using [Headspace](https://www.headspace.com) and I like the daily meditation which allows me to only answer one question, how many minutes do I want to meditate?
 
@@ -195,12 +195,6 @@ This looks like a solid tool
 > Mentimeter is an easy-to-use presentation software used by more than 25 million people. With Mentimeter you can create fun and interactive presentations. We help you make your events, presentations, lectures, and workshops innovative and memorable.
 
 Thanks [Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/).
-
-## Give Back 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

@@ -105,7 +105,7 @@ links:
   domain: www.sonyaellenmann.com
   heading_context: '[Survivorship Bias and Startup Hype](https://www.sonyaellenmann.com/2018/06/survivorship-bias-and-startup-hype.html)'
   section: Notable Links 📌
-word_count: 1553
+word_count: 1472
 ---
 #59 • Jun 23, 2018
 
@@ -206,12 +206,6 @@ I can see how this would be handy at times, particularly in scripts.
 ### [Survivorship Bias and Startup Hype](https://www.sonyaellenmann.com/2018/06/survivorship-bias-and-startup-hype.html)
 
 I first read about survivorship bias in [Nassim Nicholas Taleb](http://www.fooledbyrandomness.com)'s "Fooled by Randomness" (which is a great read!). When you look for it, you see survivorship bias everywhere.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

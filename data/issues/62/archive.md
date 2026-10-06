@@ -87,7 +87,7 @@ links:
   domain: brutalist-web.design
   heading_context: '[Brutalist Web Design](https://brutalist-web.design/)'
   section: Notable Links 📌
-word_count: 1788
+word_count: 1680
 ---
 It has been a busy (good!) return from a very relaxed holiday week. Through an odd sequence of events I'm going to two baseball games and two soccer games in a week! ⚾️⚽️⚾️⚽️🙌 No complaints as I enjoy both a lot.
 
@@ -181,12 +181,6 @@ Some interesting data on the state of a number of technologies and the industry.
 ### [Brutalist Web Design](https://brutalist-web.design/)
 
 I like this translation of [Brutalist Architecture](https://en.wikipedia.org/wiki/Brutalist_architecture) to the web.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

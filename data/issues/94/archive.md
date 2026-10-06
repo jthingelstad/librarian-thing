@@ -105,7 +105,7 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · Tech Office Sketches](https://www.tbray.org/ongoing/When/201x/2019/02/15/Walking-Around-the-Office)'
   section: Notable Links 📌
-word_count: 1468
+word_count: 1360
 ---
 This week we broke the all-time record for February snowfall! ❄️ It’s fairly easy to tell with the giant piles of snow everywhere you look. I’m busy putting together some last minute things for Tyler’s birthday breakfast that we are hosting tomorrow (Nordic Waffles!) so I’m going to leave it short this week and get straight to the links! 👉
 
@@ -200,12 +200,6 @@ This is an interesting angle of privacy that I hadn't considered.
 ### [ongoing by Tim Bray · Tech Office Sketches](https://www.tbray.org/ongoing/When/201x/2019/02/15/Walking-Around-the-Office)
 
 State of the technology company environments from Tim Bray.
-
-## Give Back 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 

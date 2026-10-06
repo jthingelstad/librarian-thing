@@ -99,7 +99,7 @@ links:
   domain: medium.com
   heading_context: '[Three-day no-meeting schedule for engineers – Pinterest Engineering – Medium](https://medium.com/@Pinterest_Engineering/three-day-no-meeting-schedule-for-engineers-fca9f857a567)'
   section: Notable Links 📌
-word_count: 1794
+word_count: 1726
 ---
 I'm kicking off year two of the Weekly Thing with a significantly refined style. 🛀🏻 This is only the 4th refinement of the display and I'm hoping it's the last of signifance. I'm familiar with ZURB's Foundation framework from another project, so I decided to use [Foundation for Email](https://foundation.zurb.com/emails.html). I think I got it all right, but dealing with HTML in email clients is very challenging. If you get this and it looks broken, please let me know with a reply. 🤞 I also decided to put a fortune at the very end. 🥠
 
@@ -213,12 +213,6 @@ by Kim Scott
 > Radical Candor is packed with illuminating truths, insightful advice, and practical suggestions, all illustrated with engaging (and often funny) stories from Kim Scott’s own experiences at places like Apple, Google, and various start-ups.
 
 This book is making the rounds at a lot of companies, including ours. I just bought copies of it for all of the leaders in my team and we are reading it and discussing as a group.
-
-## Give Back 🎁
-
-https://wikimediafoundation.org/wiki/Home
-
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference [projects in the world, including Wikipedia](https://www.wikipedia.org) , a top-ten [internet property. Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Highlighted iOS App 📱
 

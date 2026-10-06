@@ -99,7 +99,7 @@ links:
   domain: www.principles.com
   heading_context: '[Principles by Ray Dalio](https://www.principles.com/principles-for-success/)'
   section: Notable Links 📌
-word_count: 1796
+word_count: 1715
 ---
 This was one of those weeks that goes by so fast it was hard to even see the blurred images as they went by. The week started with recognizing the Mom's, onto a very busy week of activities, and I took off today with [my brother](http://ikeating.micro.blog) for a weekend in Chicago! This weeks intro is going to be a little light so I can get some sleep. 😴
 
@@ -189,12 +189,6 @@ What a cool idea -- a service that allows you to send yourself an email in the f
 ### [Principles by Ray Dalio](https://www.principles.com/principles-for-success/)
 
 I have the audiobook of Principles in my queue. This new 30-minute video overview is very well done. Ray Dalio is an impressive storyteller.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

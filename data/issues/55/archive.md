@@ -86,7 +86,7 @@ links:
   domain: thesweetsetup.com
   heading_context: '[How to make journaling in Day One even better with automation – The Sweet Setup](https://thesweetsetup.com/make-journaling-day-one-even-better-automation/)'
   section: Notable Links 📌
-word_count: 1582
+word_count: 1484
 ---
 Summer is officially here! Somehow I managed to go to two baseball games this week. ⚾️ The kids are counting the days until school gets out. 🗓 And the entire state of Minnesota seems to have scattered to cabins around lakes to celebrate Memorial Day and with it our first temperatures well into the 90's. ☀️
 
@@ -186,12 +186,6 @@ by Yuval Noah Harari
 > From a renowned historian comes a groundbreaking narrative of humanity’s creation and evolution—a #1 international bestseller—that explores the ways in which biology and history have defined us and enhanced our understanding of what it means to be “human.”
 
 My book club is reading Sapiens and I’ve really enjoyed every bit of this book so far.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Highlighted iOS App 📱
 

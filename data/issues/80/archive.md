@@ -81,7 +81,7 @@ links:
   domain: joshholtsclaw.com
   heading_context: '[The Graphic Art of Incredibles 2 — Josh Holtsclaw](http://joshholtsclaw.com/blog/2018/3/5/the-graphic-art-of-incredibles-2)'
   section: Notable Links 📌
-word_count: 2017
+word_count: 1919
 ---
 I've been traveling in [Kiev](https://en.wikipedia.org/wiki/Kiev), Ukraine this week. As I queued at passport control, I counted up my stamps and noted that this is my ninth time to Ukraine. We have a technology office here that I visit twice a year to check in with the team. I commonly get asked by people back home about traveling here, thinking from the news in the US that it must be a very difficult place to go to. It isn't. The conflict with Russia has been roiling ever since I started to come here. My first time to Ukraine was during the protests in [Independence Square](https://en.wikipedia.org/wiki/Maidan_Nezalezhnosti), on that trip our final destination was to [Kharkiv](https://en.wikipedia.org/wiki/Kharkiv), on the eastern side of Ukraine. We moved our office to Kiev shortly thereafter.
 
@@ -168,12 +168,6 @@ I regularly talk with people about developing their careers and this stacking co
 ### [The Graphic Art of Incredibles 2 — Josh Holtsclaw](http://joshholtsclaw.com/blog/2018/3/5/the-graphic-art-of-incredibles-2)
 
 This is a fun behind-the-scenes look at the research that went into the graphics in Incredibles 2. I liked seeing the real places that served as the inspiration for the completely made up, animated world of The Incredibles.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

@@ -88,7 +88,7 @@ links:
   domain: pudding.cool
   heading_context: '[A People Map of the US](https://pudding.cool/2019/05/people-map/)'
   section: Notable Links 📌
-word_count: 1324
+word_count: 1243
 ---
 This week was the end of the school year for our kids. It was another year along in grade school for Tyler, but Mazie celebrated the significant milestone of moving on from Junior High and next year going on to the “big show,” aka, High School.
 
@@ -181,12 +181,6 @@ This is really cool and fun to play with.
 > A People Map of the US, where city names are replaced by their most Wikipedia’ed resident: people born in, lived in, or connected to a place.
 
 it’s very interesting to drill down to towns you know and see the names highlighted.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

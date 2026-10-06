@@ -27,7 +27,7 @@ links:
   domain: journals.plos.org
   heading_context: '[How much is social media worth? Estimating the value of Facebook by paying users to stop using it](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0207101)'
   section: Notable Links 📌
-word_count: 1469
+word_count: 1371
 ---
 It's just a couple more days until Christmas and 2018 is now winding down. The Christmas Cards have been sent, the presents are ready, and we will be enjoying time with family and friends as we celebrate the holidays, enjoy our traditions, open presents and spend time together. That last one is particularly important. 🎁👨‍👩‍👧‍👦
 
@@ -118,12 +118,6 @@ It’s not obvious to most people that a bunch of houses with fancy "smart doorb
 ### [Martin Tomsky - Illustrator - Gallery](http://tomsky.co.uk/gallery)
 
 Featured in Dec/Jan 2019 Make magazine. Incredible pieces of art.
-
-## Give Back 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 

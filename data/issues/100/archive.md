@@ -68,7 +68,7 @@ links:
   domain: techcrunch.com
   heading_context: '[Apple cancels AirPower product, citing inability to meet its high standards for hardware | TechCrunch](https://techcrunch.com/2019/03/29/apple-cancels-airpower-product-citing-inability-to-meet-its-high-standards-for-hardware/)'
   section: Notable Links 📌
-word_count: 1603
+word_count: 1522
 ---
 Welcome to Issue #100 of the Weekly Thing! 🎉 I'm a little surprised that I've been putting this out every week now for one hundred weeks. I wasn't sure at all where this would go when I started it. I had some ideas of putting some new elements in and streamlining some things but just haven't had the time to make any of that happen. Maybe we'll wait for the two year anniversary. We'll see! 🎁
 
@@ -135,12 +135,6 @@ Iceland has been making strides to be a data haven for digital rights. I do wond
 ### [Apple cancels AirPower product, citing inability to meet its high standards for hardware | TechCrunch](https://techcrunch.com/2019/03/29/apple-cancels-airpower-product-citing-inability-to-meet-its-high-standards-for-hardware/)
 
 Seems like there was at least some “magical thinking” involved with this planned product, and surprising cancelation of it when it was referenced just a couple weeks prior in the release of another new product. 👀
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 

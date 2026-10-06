@@ -68,7 +68,7 @@ links:
   domain: jvns.ca
   heading_context: '[What''s a senior engineer''s job? - Julia Evans](https://jvns.ca/blog/senior-engineer/)'
   section: Notable Links 📌
-word_count: 1719
+word_count: 1645
 ---
 You could call this the New York issue of the Weekly Thing. For years I’ve told my kids that when they turn 13 I will take them on a trip, just Dad and them, to New York City to see the sights. Mazie is 13 so we boarded our flight to Newark on Friday and spent the weekend seeing NYC in all of it’s grandeur. 👨‍👧
 
@@ -141,12 +141,6 @@ The Halide team is doing some amazing work with the new camera technology in the
 ### [What's a senior engineer's job? - Julia Evans](https://jvns.ca/blog/senior-engineer/)
 
 It’s a little surprising that 20-30 years into the discipline of software engineering we are still debating what different levels mean, but there is a lot of ambiguity and difference between organizations on this.
-
-## Give Back 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

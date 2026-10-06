@@ -91,7 +91,7 @@ links:
   domain: changelog.com
   heading_context: '[Away from Keyboard #10: Maria Boland Ploessl found her home in technology](https://changelog.com/afk/10)'
   section: Notable Links 📌
-word_count: 1448
+word_count: 1367
 ---
 Welcome to the final Weekly Thing of 2018! We had a great Christmas. One of my favorite traditions is each family member getting a project that we do over Christmas break. The kids each got big Lego projects: a [Ferris Wheel](https://shop.lego.com/en-US/product/Ferris-Wheel-10247) and an [Old Fishing Store](https://shop.lego.com/en-US/product/Old-Fishing-Store-21310). Tammy got an [Earth Puzzle](https://n-e-r-v-o-u-s.com/shop/product.php?code=368) that was much harder than I expected. I'm assembling a [UGears Steam Locomotive](https://ugears.online/collections/ugears_mechanical_models/products/460-steam-locomotive-with-tender-mechanical-model-advanced)! Each person has their work area and gets plenty of time to get their project done. 🧩
 
@@ -168,12 +168,6 @@ My friend [Leah Cunningham](https://medium.com/@cunningleah) has decided she's d
 ### [Away from Keyboard #10: Maria Boland Ploessl found her home in technology](https://changelog.com/afk/10)
 
 Fun interview with the ED of [Minnestar](https://minnestar.org), [Maria Boland Ploessl](https://www.linkedin.com/in/mariabploessl/) about minnestar and her transition into parenthood.
-
-## Give Back 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 
