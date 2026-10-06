@@ -68,7 +68,7 @@ function yearOf(record) {
   return Number.isFinite(year) ? year : null;
 }
 
-export async function runCompletenessChecks({ corpora, call, check, counts, retrieval = {} }) {
+export async function runCompletenessChecks({ corpora, call, check, checkCorpus = check, counts, retrieval = {} }) {
   const wt = corpora.weekly_thing || {};
   const blog = corpora.blog || {};
   const podcast = corpora.podcast || {};
@@ -1057,7 +1057,9 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
       const found = await call('find_links', { url, limit: 1 });
       if (found.total_count !== want) off.push(`${url} ${found.total_count}/${want}`);
     }
-    check('completeness find_links url encoding pins', off.length === 0, off.join('; '));
+    // Fixed counts, so a new issue that links one moves them: before the
+    // gate they read the live corpora the rebuild has not reached yet.
+    checkCorpus('completeness find_links url encoding pins', off.length === 0, off.join('; '));
   }
 
   // 8l. A site page's incoming_count is every corpus link to its url (QA2

@@ -1823,6 +1823,7 @@ check('graph corpus loaded', Boolean(corpora.graph), 'artifacts/graph.json unava
 await runCompletenessChecks({
   corpora,
   check,
+  checkCorpus,
   counts,
   retrieval,
   call: async (tool, args) => {
