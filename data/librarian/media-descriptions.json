@@ -44,15 +44,6 @@
   "description": "A bathroom shelf displays a potted plant, a motivational quote sign attributed to Dr. Jim Loehr, and a group photo. White subway tiles form the backsplash behind the wooden shelf.",
   "model": "claude-haiku-4-5"
  },
- "http://gallery.tinyletterapp.com/178527e39f3fdfbc6cb90d7ad4c92f8cc7481ff2/images/25192a65-96d3-4b97-ab6b-d324e8bf8d42.png": {
-  "error": "fetch_error",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/03e048c6-724f-4d0d-8d9b-76e3c6196525.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=aiFWauK1n%2FK5kSiq6LVIyVcJnDw%3D&Expires=1707552913": {
-  "described_at": "2026-09-05T09:56:42Z",
-  "description": "The image shows the WikiTRIBUNE logo in black text against a white background. WikiTRIBUNE is a news publication platform.",
-  "model": "claude-haiku-4-5"
- },
  "https://assets.buttondown.email/278ba0e4-ab76-4d16-9608-05fd2fb4eca6.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=ltGSTJk%2FNwu4r%2FdSvanA7OINBZ0%3D&Expires=1707554683": {
   "described_at": "2026-09-05T09:56:45Z",
   "description": "A large outdoor music festival crowd sits on grass with lawn chairs and blankets facing an illuminated stage with a distinctive arch design, surrounded by trees and festival infrastructure.",
@@ -178,21 +169,6 @@
   "description": "A peaceful river flows through a lush green forest canopy, with mature trees arching overhead and sunlight filtering through the leaves onto the water's surface.",
   "model": "claude-haiku-4-5"
  },
- "https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=JDRtMrtYGn%2FoIJHhTjWIMJKMMfs%3D&Expires=1707553415": {
-  "described_at": "2026-09-05T09:56:42Z",
-  "description": "The image shows the Creative Commons logo and text. It features a circular \"cc\" symbol next to the words \"creative commons\" in bold black typeface on a white background.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=jeZp3ABQ27jRC0K5uLCcuNOO0dQ%3D&Expires=1707903198": {
-  "described_at": "2026-09-05T09:56:42Z",
-  "description": "The image shows the Creative Commons logo and text. It features a circle with \"cc\" inside it on the left, followed by the words \"creative commons\" in bold black letters on a white background.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=zkSj6wNCTHCrsy9IF1FsG1Glb%2Bs%3D&Expires=1707554685": {
-  "described_at": "2026-09-05T09:56:45Z",
-  "description": "The Creative Commons logo appears against a white background. It displays the distinctive \"cc\" symbol in a circle alongside the text \"creative commons\" in bold black typeface.",
-  "model": "claude-haiku-4-5"
- },
  "https://assets.buttondown.email/8857108f-ca89-442d-acc6-a528d079a7d9.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=pPWMrln8fC%2B00wSTi2scAkfLtSk%3D&Expires=1707557261": {
   "described_at": "2026-09-05T09:56:50Z",
   "description": "A fire pit burns brightly on a shoreline at dusk, with a lake visible beyond tree-lined banks and a small boat in the distance.",
@@ -208,22 +184,6 @@
   "description": "A vineyard with rows of grapevines supported by wooden posts and wire trellising extends into the distance under a partly cloudy sky, with grass growing between the rows.",
   "model": "claude-haiku-4-5"
  },
- "https://assets.buttondown.email/Lets-Encrypt.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=38GtC7f5JibrUizvcGLgYvObAlg%3D&Expires=1707555309": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/Lets-Encrypt.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=hUSClBOkm0pHCspROkAUjrZ%2BHL4%3D&Expires=1707557955": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/Minnestar.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=eUOodusAi8sZmdiM79h8sSUgRNY%3D&Expires=1707556986": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/Wikimedia_Foundation_logo.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=9jZCP1IxiEk1k4NaedoLNOrGYYM%3D&Expires=1707556128": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
  "https://assets.buttondown.email/b2063fea-1429-4ee4-aa0f-33d5e663c1f1.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=FJgowbFrIqXzZc3X%2BfOUI14043g%3D&Expires=1707903196": {
   "described_at": "2026-09-05T09:56:43Z",
   "description": "Sailboats moored in calm water with golden reeds lining the shoreline under a cloudy sky.",
@@ -234,48 +194,9 @@
   "description": "A large group of runners participates in an organized road race through a tree-lined park during daytime. Participants wear colorful athletic gear including yellow, pink, and blue shirts, with spectators lining the sides of the paved path.",
   "model": "claude-haiku-4-5"
  },
- "https://assets.buttondown.email/creative-commons.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=FKU02xqCU7MP8UJAdtv%2BWzLrwOk%3D&Expires=1707557268": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/creative-commons.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=J%2BQ5JdRiEGPjh69GPTmD3CUU7ZU%3D&Expires=1707556718": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=0lzpnwUdgmxjXN0mj66nn21nmFU%3D&Expires=1707551705": {
-  "described_at": "2026-09-05T09:56:42Z",
-  "description": "A red asterisk or eight-pointed star symbol is displayed against a white background. The geometric design features four perpendicular arms arranged in a symmetrical pattern.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=SLYb0OGH9ykvyhC76zxgTX6s%2BeY%3D&Expires=1707553828": {
-  "described_at": "2026-09-05T09:56:44Z",
-  "description": "A red asterisk or eight-pointed star symbol is displayed against a white background. The geometric shape consists of intersecting rectangular arms arranged in a radial pattern.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=zUd36Q4gXO8QCkuGD0lfQbmy9xw%3D&Expires=1707554323": {
-  "described_at": "2026-09-05T09:56:44Z",
-  "description": "A red asterisk or star symbol with eight points arranged symmetrically on a white background. No text or setting is visible.",
-  "model": "claude-haiku-4-5"
- },
  "https://assets.buttondown.email/ef22dd1d-87ef-4614-89a8-50df627f4642.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=A13v%2Fw72oUoaPLaFtwWd%2FWnHTBM%3D&Expires=1707557503": {
   "described_at": "2026-09-05T09:56:50Z",
   "description": "An espresso machine dispenses coffee into a white cup on a mat. Two pressure gauges and chrome components are visible on the machine's left side.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=M7t0aPh%2Fx95EmGoeg6LdrIVj2hQ%3D&Expires=1707556418": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=Svi%2FXVP%2FXfd5T0OGxWLVYaLNe6s%3D&Expires=1707557505": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=lL2eoakEQfEm5MsbmxupmyCNpJw%3D&Expires=1707555883": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=y9qu57DmH%2Frxr5zas%2BqFSc129yo%3D&Expires=1707557735": {
-  "error": "fetch_415",
   "model": "claude-haiku-4-5"
  },
  "https://assets.buttondown.email/f2a3e9fd-bf6d-4c3e-859c-c6b68b7d32e5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=kUaRFaIjIdgCVDEp8LdLoT4%2BJC8%3D&Expires=1707553826": {
@@ -286,18 +207,6 @@
  "https://assets.buttondown.email/f8f5c2e3-580d-4644-be02-9522323fec93.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=Vy68ZhEZjpshBbRZz%2BfyUE9%2BmeU%3D&Expires=1707552912": {
   "described_at": "2026-09-05T09:56:42Z",
   "description": "A sunset view over calm water with a sandy beach in the foreground, several people wading in the shallow water, and moored buoys dotting the bay beneath a golden sky.",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/hack-the-gap.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=jQHY%2F9plJZ0yxkjgQdb%2Bh3lxanY%3D&Expires=1707558223": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/internet-archive.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=DC32nL3%2F5W9EgTWxWcCPp55TF94%3D&Expires=1707555020": {
-  "error": "fetch_415",
-  "model": "claude-haiku-4-5"
- },
- "https://assets.buttondown.email/wikitribune.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=5wh9BQPQOOjWMV03EtZW3I9gmaw%3D&Expires=1707555607": {
-  "error": "fetch_415",
   "model": "claude-haiku-4-5"
  },
  "https://blotcdn.com/blog_9b22fef1ce9945619fd5d5ec617b3deb/_image_cache/b0d97f7e-05b6-42d9-9d1e-4c26d1e0b656.jpg": {

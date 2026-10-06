@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/32/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-16-2017/
 domains: []
 links: []
-word_count: 2114
+word_count: 2006
 ---
 With this weeks vote by the FCC to eliminate net neutrality protections I want to turn your attention to the [Electronic Frontier Foundation](https://www.eff.org/). I've been a member of the EFF for many years and I think their mission is getting more important, particularly since the government seems to not think this matters.
 
@@ -173,14 +173,6 @@ http://www.amazon.com/dp/0451231899/?tag=thingelstad01-20
 The New York Times bestseller Daemon unleashed a terrifying technological vision of an all-powerful, malicious computer program. Now, our world is the Daemon's world—unless someone stops it once and for all...
 
 After reading Daemon and it’s cliffhanger ending I had to move on to Freedom right away!
-
----
-
-## Promotion 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ---
 

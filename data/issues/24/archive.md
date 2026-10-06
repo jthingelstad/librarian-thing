@@ -156,7 +156,7 @@ links:
   domain: www.macstories.net
   heading_context: '[More Great Shelf Apps to Boost iPad Productivity – MacStories](https://www.macstories.net/reviews/more-great-shelf-apps-to-boost-ipad-productivity/)'
   section: Links 📌
-word_count: 2403
+word_count: 2323
 ---
 We are away this weekend hanging out with the 19 members of the extended Olson Family clan — Tammy's side of the family. We've done this weekend away as a family for 14 years now. There were only 10 people at the first one, and now grandchildren have filled the ranks to 19. The relevance of getting away as an extended family has grown as everyone's schedules get busier and the opportunities to gather get more difficult.
 
@@ -300,12 +300,6 @@ If you find yourself writing an ICS or iCalendar feed by hand this will come in 
 ### [More Great Shelf Apps to Boost iPad Productivity – MacStories](https://www.macstories.net/reviews/more-great-shelf-apps-to-boost-ipad-productivity/)
 
 I’m still getting used to the new drag & drop capabilities in iOS 11. I've learned a lot from looking at how others use it and I grabbed Yoink as well as Copied after reading this post.
-
-## Promotion 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Featured App 📱
 

@@ -5,7 +5,7 @@ subject: Weekly Thing for August 26, 2017
 publish_date: '2017-08-26T13:00:00Z'
 slug: weekly-thing-for-august-26-2017
 description: Speech Commands Dataset, remote CEOs, pronouns and stock price, total solar eclipse 2017, Multi-Cloud AWS and GCP, PyGraphistry big graphs.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=uKR6YfgCmCK%2FbKlYGKBmOT%2BhzRc%3D&Expires=1707556709
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-august-26-2017/
 domains:
 - ask.metafilter.com
@@ -111,7 +111,7 @@ links:
   domain: www.bostonglobe.com
   heading_context: '[There goes the sun, total solar eclipse 2017 - The Boston Globe](http://www.bostonglobe.com/news/bigpicture/2017/08/21/there-goes-sun-total-solar-eclipse/txO5gaCugLPTHKdQYhUhSO/story.html)'
   section: Links 📌
-word_count: 1718
+word_count: 1619
 ---
 On Monday we got to experience the total eclipse in Eureka, MO. Many people asked what it was like and I've highlighted two things that are notable and require that you be there. First, it doesn't really look like the photos. The photos of the total eclipse just show the Suns corona with the black moon in front of it. Cameras cannot capture the range of exposure to truly see the eclipse. When you see it with your eye you can see the Moon being lit up by the Sun as well. There is more to see than just a black disc. The second is the rapid drop and rise in temperature. I didn’t have a thermometer but the temperature plummeted as the sun was blocked and quickly recovered. It was much more pronounced than I would have expected. We already added the [2024 total eclipse](https://en.wikipedia.org/wiki/Solar_eclipse_of_April_8,_2024) to our calendar!
 
@@ -204,11 +204,6 @@ by Sarah Bakewell
 *How to get along with people, how to deal with violence, how to adjust to losing someone you love—such questions arise in most people’s lives. They are all versions of a bigger question: How do you live? This question obsessed Renaissance writers, none more than Michel Eyquem de Montaigne, considered by many to be the first truly modern individual. He wrote free-roaming explorations of his thoughts and experience, unlike anything written before. More than four hundred years later, Montaigne’s honesty and charm still draw people to him. Readers come to him in search of companionship, wisdom, and entertainment —and in search of themselves. Just as they will to this spirited and singular biography.*
 
 My book club picked this for our next book and I’m diving in. I’m very intrigued by all the great reviews and mentions of this book. It wasn't on my radar at all but [Tom](http://tomeri.org) picks some great books.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/creative-commons.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=J%2BQ5JdRiEGPjh69GPTmD3CUU7ZU%3D&Expires=1707556718)](https://creativecommons.org)
-
-**[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=WJYzZDnKMIhcc5Ip2d%2B%2Fww74jpI%3D&Expires=1707556720)](https://itunes.apple.com/us/app/halide-raw-manual-camera/id885697368?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

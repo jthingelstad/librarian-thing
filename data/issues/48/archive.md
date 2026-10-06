@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/48/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-48-apr-7-2018/
 domains: []
 links: []
-word_count: 2153
+word_count: 2080
 ---
 It was "Spring" Break this week, and I put Spring in parenthesis due to significantly below average temperatures here for the last week. ❄️ We split our week away between the Wisconsin Dells 💦 and Chicago 🎭. We had a great time doing water park things in the Dells and then seeing museums and culture in Chicago.
 
@@ -174,12 +174,6 @@ Schneier is absolutely right to highlight that Facebook is not the only company 
 www.wired.com
 
 I’ve never left the feed reader world and am a very happy user of Feedbin. This article is a good overview of the RSS ecosystem and various services. Feed discovery is still the biggest issue here. Innoreader helps with that, and I’m curious how Dave Winer’s new feedbase project works out.
-
-## Promotion 🎁
-
-https://www.eff.org
-
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## App 📱
 

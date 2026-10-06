@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/43/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-43-mar-3-2018/
 domains: []
 links: []
-word_count: 2039
+word_count: 1932
 ---
 I was able to transition the Weekly Thing to this new custom template without breaking everyone’s email experience! 🙌 I can now happily continue to make small tweaks to improve the experience. 🔧 My brief experiment with serif fonts only lasted one issue though.
 
@@ -186,12 +186,6 @@ I use feed readers extensively and it’s a bummer when there is a website that 
 www.macdrifter.com
 
 I was very interested to read this. I've been an OmniFocus user since it was in beta, and lately Things 3 continues to get a lot of positive comments. I've considered switching, but I really don't want to do that. Switching task managers Is a major pain. This review ultimately came down on Things 3, but I’m going to wait for OmniFocus 3 before I make any decision.
-
-## Promotion 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## App 📱
 

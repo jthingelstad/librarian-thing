@@ -5,7 +5,7 @@ subject: Weekly Thing for September 30, 2017
 publish_date: '2017-09-30T13:00:00Z'
 slug: weekly-thing-for-september-30-2017
 description: Apple privacy, iPhone X reactions, Microsoft Teams replacing Skype, Amazon hardware event, GraphQL relicensing, Tinder data secrets, API documentation.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=QANXsb7t0cEIeCSzxwt2fqgag%2F0%3D&Expires=1707557948
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-september-30-2017/
 domains:
 - 512pixels.net
@@ -113,7 +113,7 @@ links:
   domain: calnewport.com
   heading_context: '[Spend More Time Alone - Study Hacks - Cal Newport](http://calnewport.com/blog/2017/09/24/spend-more-time-alone/)'
   section: Links 📌
-word_count: 1840
+word_count: 1758
 ---
 This week was a blur with a tremendous amount going on at work as well as at home. I had a great evening hanging out with Steve, [Dennys](https://twitter.com/Dennysb) and [Layne](https://www.laynekennedy.com/index). We all went to Iceland together several years ago and it’s super fun every time we get together over some good food and beers. Unfortunately Dennys was sick and had to bail last minute. I also had my [R/W Book Club](https://rwbook.club) meeting this week and we discussed [our book](https://rwbook.club/book/how-to-live/) and had great conversations. Both of these nights were reminder that even when things are busy, and even more so when they are busy, it’s important to take some time to hang out with friends and chat, laugh and debate. I feel pretty lucky to have those opportunities. I highly recommend it! 👍
 
@@ -205,11 +205,6 @@ The graphs in this article tell the story of the dropping prices of industrial r
 ### [Spend More Time Alone - Study Hacks - Cal Newport](http://calnewport.com/blog/2017/09/24/spend-more-time-alone/)
 
 This post struck a chord with me, particularly the framing of solitude as “the real key to solitude is to step away from reacting to the output of other minds”. Reflect on your day and think how often that happens. Not enough I would guess. When I think of how mobile technology combined with social media has infiltrated our lives I think of spray foam. If you fill a hole with spray foam it’s remarkable to watch it grow, spread and fill every space it can occupy. When we reflexively reach for those inputs, other people’s thoughts, so consistently we drown out even small moments of solitude.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/Lets-Encrypt.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=hUSClBOkm0pHCspROkAUjrZ%2BHL4%3D&Expires=1707557955)](https://letsencrypt.org)
-
-**[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit.** All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=3x27DFKyDDkFvLdTpJ4GSqVf7CE%3D&Expires=1707557956)](https://itunes.apple.com/us/app/cribbage-with-grandpas/id1131745606?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

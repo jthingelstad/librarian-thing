@@ -135,7 +135,7 @@ links:
   domain: www.macdrifter.com
   heading_context: '[Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)'
   section: Links 📌
-word_count: 1606
+word_count: 1512
 ---
 It dawned on me this week that I could write some short scripts and fix the hundreds (and now I realize thousands!) of photos that haven't been linked right on my [blog archive](https://www.thingelstad.com/archive/) ever since I moved to my new setup. After fixing the images, which worked in all but some edge cases, I was perusing my archive to check on the images. I also remembered why I like blogging. ✍🏻
 
@@ -243,12 +243,6 @@ Excellent writeup on approaching a large-scale monolithic application and beginn
 ### [Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)
 
 I've been a [Feedbin](https://feedbin.com) user for years now and highly recommend them. One of the best $30 a year I spend. If you have never experienced using a feed reader I would highly recommend giving it a try. This post doesn't highlight it but I also liked that [Feedbin added JSON Feed support](https://feedbin.com/blog/2017/05/22/feedbin-supports-json-feed/) right away.
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a backer. I've been impressed with [Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Featured App 📱
 

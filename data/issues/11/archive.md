@@ -5,7 +5,7 @@ subject: Weekly Thing for July 22, 2017
 publish_date: '2017-07-22T13:00:00Z'
 slug: weekly-thing-for-july-22-2017
 description: Cosette database, serverless hosting comparison, GitHub diversity report, GhostCtrl Android backdoor, Quilt data package manager, Trump Twitter lawsuit.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=5MEta%2BpGPoC3ng23ZOZSp3Is%2FXc%3D&Expires=1707555304
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-july-22-2017/
 domains:
 - blog.trendmicro.com
@@ -81,7 +81,7 @@ links:
   domain: www.economist.com
   heading_context: '[Twitter users sue Donald Trump for excluding them](https://www.economist.com/blogs/democracyinamerica/2017/07/blocked-president)'
   section: Links 📌
-word_count: 1263
+word_count: 1181
 ---
 I had a crazy busy week, all good stuff. It felt like an accomplishment to get to Saturday morning! I’m due for multiple [weekly reviews](http://gettingthingsdone.com/2015/07/podcast-07-guided-gtd-weekly-review/) in a row to get back on track.
 
@@ -145,11 +145,6 @@ Very cool Python package to bring data sets to do analysis with. This is a great
 ### [Twitter users sue Donald Trump for excluding them](https://www.economist.com/blogs/democracyinamerica/2017/07/blocked-president)
 
 What a crazy set of intersecting legal questions! Can the President of the United States block a citizen from reading what he says publicly? Even more interesting is the Terms of Service coming into play. *“Trump’s account is a stream of communication that’s wholly owned by Twitter”, Mr Feldman writes.* How crazy is that?
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/Lets-Encrypt.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=38GtC7f5JibrUizvcGLgYvObAlg%3D&Expires=1707555309)](https://letsencrypt.org)
-
-**[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit.** All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=rZfO0EREP5ew2vVD7UMQV8U%2BSks%3D&Expires=1707555311)](https://itunes.apple.com/us/app/drafts-quickly-capture-notes-share-anywhere/id905337691?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

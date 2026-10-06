@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/41/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-17-2018/
 domains: []
 links: []
-word_count: 1538
+word_count: 1460
 ---
 This past week has been a blur with my brother and his family visiting 👪, my son's birthday 🎂, Valentine's day 💖 and our annual company party 🎉! I’m looking forward to catching up on some things this weekend, including my to do list and some sleep. 💤
 
@@ -141,12 +141,6 @@ What a great term! I've experienced this myself on many occasions!
 > Meeting Blur. When the number of meetings exceeds your ability to remember what was said by whom, when, and where. Let’s forget for a moment why there are so many meetings2 and focus on your mental state. You’re a bright emotionally intelligent human. You walk into a meeting and have a credible mental profile of each human at the table. Why are they here? What do they want? How do they feel about the topic at hand? All of this information is front of mind and readily accessible.
 
 For me, this is where my trusted GTD system can help. I've also tried to use a note taking system but I've yet to get the return on that that I would like.
-
----
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ---
 

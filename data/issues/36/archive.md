@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/36/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-13-2018/
 domains: []
 links: []
-word_count: 1965
+word_count: 1884
 ---
 I had a very special week! I got to spend most of it focusing on professional improvement. 🕴🏻 It was a great opportunity and I took full advantage of it. Every year I try to find a couple of areas to make significant improvements in. Last year it was in managing my time better and making improvements in my GTD practice. This year I’m still framing up my focus areas but I like where it is going.
 
@@ -159,14 +159,6 @@ by Dan Harris
 Winner of the 2014 Living Now Book Award for Inspirational Memoir Nightline anchor Dan Harris embarks on an unexpected, hilarious, and deeply skeptical odyssey through the strange worlds of spirituality and self-help, and discovers a way to get happier that is truly achievable.
 
 I was recently given this audiobook and enjoyed it a lot. I've been contemplating a meditation practice for a long time, but like the author I get turned off by the sappy side of it. This book isn't about how to meditate, but it talks about the journey that Harris went on and what he feels the benefits have been. The chapter when he goes on a 10-day meditation retreat is pretty funny to boot.
-
----
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ---
 

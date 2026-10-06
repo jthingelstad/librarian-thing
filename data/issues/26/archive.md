@@ -165,7 +165,7 @@ links:
   domain: github.com
   heading_context: '[profiling: An interactive continuous Python profiler.](https://github.com/what-studio/profiling)'
   section: Links 📌
-word_count: 2011
+word_count: 1915
 ---
 I hope you all had a great Halloween! 🎃 We had the coldest one in over ten years and not surprisingly for the first time in years we still had candy 🍫 left at the end of the night. Mazie and her friends filled a pillowcase each with treats. Tyler and I went out until we couldn't feel our fingers and toes anymore. One of my favorites in our neighborhood is the [Mixed-Up-Holiday house](http://www.thingelstad.com/2017/10/31/mixed-up-holiday.html) that puts out decorations for several holidays, except Halloween. It’s very funny and in addition to the candy for the kids they have beer-to-go 🍺 for the parents!
 
@@ -283,12 +283,6 @@ Designing a game to help people learn your SaaS platforms API and capabilities s
 ### [profiling: An interactive continuous Python profiler.](https://github.com/what-studio/profiling)
 
 Very easy to use profiler to understand what is happening in your Python code. Can also do live profiling of long running processes. Very cool.
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a [backer. I've been impressed with Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Featured App 📱
 

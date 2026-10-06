@@ -5,7 +5,7 @@ subject: Weekly Thing for May 20, 2017
 publish_date: '2017-05-20T13:00:00Z'
 slug: weekly-thing-for-may-20-2017
 description: Twitter privacy opt-out, iPhone 7 photography, Things 3 task manager, JSON Feed, Micro.blog, Machine Learning xkcd, NASA coding commandments.
-image: http://gallery.tinyletterapp.com/178527e39f3fdfbc6cb90d7ad4c92f8cc7481ff2/images/25192a65-96d3-4b97-ab6b-d324e8bf8d42.png
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-may-20-2017/
 domains:
 - backchannel.com
@@ -122,7 +122,7 @@ links:
   domain: jaxenter.com
   heading_context: '[NASA''s ten coding commandments - JAXenter](https://jaxenter.com/power-ten-nasas-coding-commandments-114124.html)'
   section: Links 📌
-word_count: 1475
+word_count: 1401
 ---
 I got great comments from the first Thing last week. This week I modified the structure a bit of the links area to try and make it more obvious when I was writing a comment on a link versus when I was excerpting a section of the link itself. I'm also adding this snazzy image so you know who this is from and I added a Promotion section where I can highlight something that I think others should check out. I plan on using this to promote non-profits and projects that I think are great.
 
@@ -219,12 +219,6 @@ Last weekend we finished putting in the horseshoe pits at the cabin and I'm very
 ### [NASA's ten coding commandments - JAXenter](https://jaxenter.com/power-ten-nasas-coding-commandments-114124.html)
 
 > NASA has produced its own set of coding standards to ensure code quality and safety among all NASA applications. These standards have evolved from their own guidelines and are set to be applicable to the greater software development industry.
-
-## Promotion 🎁
-
-[![EFF Logo](http://gallery.tinyletterapp.com/178527e39f3fdfbc6cb90d7ad4c92f8cc7481ff2/images/25192a65-96d3-4b97-ab6b-d324e8bf8d42.png)](https://www.eff.org)
-
-**The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world.** I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Microblog updates 🎈
 

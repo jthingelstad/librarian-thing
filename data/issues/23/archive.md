@@ -153,7 +153,7 @@ links:
   domain: securitytxt.org
   heading_context: '[security.txt](https://securitytxt.org/)'
   section: Links 📌
-word_count: 2164
+word_count: 2084
 ---
 Big change this week – and hopefully you don't notice! I decided to move the Weekly Thing from TinyLetter to MailChimp. TinyLetter is a simple platform and was a great place to experiment and try things but I heard from a number of people that the Weekly Thing was going in there spam folders. I also had a couple of instances of failed delivery. MailChimp is a bit more complicated, but seems much more powerful. I can also now send the Weekly Thing from my domain so I hope that that will improve deliverability.
 
@@ -279,12 +279,6 @@ Read this article! I've had discussions close to many of the topic in this artic
 ### [security.txt](https://securitytxt.org/)
 
 This seems like a good idea. I don't know that anyone would ever need to notify me, but I went ahead and created a [security.txt](https://links.thingelstad.com/security.txt) anyway. It complements my [robots.txt](https://links.thingelstad.com/robots.txt) and [humans.txt](https://links.thingelstad.com/humans.txt).
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Featured App 📱
 

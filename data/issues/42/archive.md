@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/42/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-42-feb-24-2018/
 domains: []
 links: []
-word_count: 1792
+word_count: 1712
 ---
 I am a bit more excited than usual to send this issue of the Weekly Thing. When I moved to MailChimp I picked one of the default templates. It was okay, but there was a lot I didn’t like about it. Over the last couple weeks I built my own template up that has the capabilities I want and this issue (#42 by the way!) is the first to use it! See [my blog post](https://www.thingelstad.com/2018/weekly-thing-enhancements/) for more on these changes. 🙌
 
@@ -190,12 +190,6 @@ Alto's Adventure still is a great game after multiple years on iOS. I got Alto's
 www.underwaterphotographeroftheyear.com
 
 Amazing photographs. Underwater photography is still pretty esoteric since so few people go there. Some very captivating images here.
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## App 📱
 

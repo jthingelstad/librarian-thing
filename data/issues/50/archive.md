@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/50/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-50-apr-21-2018/
 domains: []
 links: []
-word_count: 2409
+word_count: 2342
 ---
 The Weekly Thing was highlighted in [the April 13th issue of Noticing](https://mailchi.mp/kottke/blogging-is-not-dead-edition-2575912502) , the new newsletter from kottke.org, along with a number of other blogs and newsletters. 🙌 It was awesome to be included, and it resulted in a bunch of new subscribers discovering the Weekly Thing! To all the new folks here, welcome to this weekly summary of new content, apps, books and many other "things" of interest! 👍 Grab a coffee ☕️ and look around a bit.
 
@@ -175,12 +175,6 @@ Additional links of interest from this week.
 - [Going Back To Blogging – whatevernevermind](http://www.whatevernevermind.com/going-back-to-blogging/)
 - [Facebook’s Second Life —Om Malik](https://om.co/2018/04/15/facebooks-second-life/)
 - [Data Lords: The Real Story of Big Data, Facebook and the Future of News – Talking Points Memo](https://talkingpointsmemo.com/edblog/data-lords-the-real-story-of-big-data-facebook-and-the-future-of-news)
-
-## Promotion 🎁
-
-https://wikimediafoundation.org/wiki/Home
-
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference [projects in the world, including Wikipedia](https://www.wikipedia.org) , a top-ten [internet property. Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## App 📱
 

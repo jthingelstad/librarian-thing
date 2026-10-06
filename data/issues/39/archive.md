@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/39/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-3-2018/
 domains: []
 links: []
-word_count: 1697
+word_count: 1619
 ---
 I've been thinking 🤔 that making links easier to go through would be an improvement to the Weekly Thing, both for you the reader, and for me the author! I've had to manually deal with blockquotes that I put into the links (and sometimes miss some). I figured out how to move the links section to some Python 🐍 code in [Pythonista](http://omz-software.com/pythonista/) and with that I got it to format the content better (yeah for me!) and even better I now put the links into groups by topics! This will make it easier for you the reader to see what you like, and importantly, skip what isn't interesting to you. 👍
 
@@ -167,12 +167,6 @@ http://www.amazon.com/dp/1439195455/?tag=thingelstad01-20
 From one of America’s greatest minds, a journey through psychology, philosophy, and lots of meditation to show how Buddhism holds the key to moral clarity and enduring happiness.
 
 I've just started into this book but I'm already pretty excited about it. This topic is interesting to me and I'm looking forward to learning more. Even better, this is my book club read for the month and I'm eager to discuss it at our next meeting!
-
----
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
 

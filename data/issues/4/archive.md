@@ -5,7 +5,7 @@ subject: Weekly Thing for June 3, 2017
 publish_date: '2017-06-03T13:00:00Z'
 slug: weekly-thing-for-june-3-2017
 description: Fuck Facebook, Pinboard acquires Delicious, enough microservices, Siri Speaker, Halide, Airbnb data science, blockchains ground up.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=FwVGTpDnmLiu1tJiokCb0R6%2F5yg%3D&Expires=1707551700
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-june-3-2017/
 domains:
 - aadrake.com
@@ -158,7 +158,7 @@ links:
   domain: www.thoughtworks.com
   heading_context: '[Platform Tech Strategy: The Three Layers | ThoughtWorks](https://www.thoughtworks.com/insights/blog/platform-tech-strategy-three-layers)'
   section: Links 📌
-word_count: 1617
+word_count: 1508
 ---
 No new sections to the Weekly Thing this week, I think the format is pretty well settled and I’m planning this week to more broadly spread the word about this. I need a better subscribe page on my main website for it. Feedback is still desired, just reply to this email if you have suggestions or just want to say hello!
 
@@ -277,11 +277,6 @@ Nice improvements in a very solid drawing app for the iPad Pro.
 ### [Platform Tech Strategy: The Three Layers | ThoughtWorks](https://www.thoughtworks.com/insights/blog/platform-tech-strategy-three-layers)
 
 > It feels like everyone is talking about platforms. Platform Thinking, Platform Strategies even the Platform Revolution. Platforms, it is argued, are the disruptive secret upon which a digital business is formed.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=0lzpnwUdgmxjXN0mj66nn21nmFU%3D&Expires=1707551705)](http://minnestar.org/?utm_campaign=2017-06-03&utm_medium=email&utm_source=weekly_thing)
-
-**[Minnestar](http://minnestar.org/?utm_campaign=2017-06-03&utm_medium=email&utm_source=weekly_thing) is the technology community for Minnesota.** If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? It’s also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Microblog updates 🎈
 - Walked around the block in an attempt to close my activity rings. Stubbornly stuck with 1 minute to go. [→](http://www.thingelstad.com/2017/06/02/walked-around-the.html)

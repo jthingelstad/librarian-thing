@@ -5,7 +5,7 @@ subject: Weekly Thing for July 29, 2017
 publish_date: '2017-07-29T13:00:00Z'
 slug: weekly-thing-for-july-29-2017
 description: Marketo outage, Bitcoin fork, historic Mission Control, Roombas mapping homes, Bear notes app, Stripe culture, Pokémon GO Fest Chicago.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=j9iR%2FrmXXPytSxAoSWKh6IfZfJQ%3D&Expires=1707555588
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-july-29-2017/
 domains:
 - anniemueller.com
@@ -129,7 +129,7 @@ links:
   domain: pokemongolive.com
   heading_context: '[Niantic Pokémon GO Fest Chicago Update - Pokémon GO](http://pokemongolive.com/en/post/pokemongofestupdate)'
   section: Links 📌
-word_count: 1726
+word_count: 1628
 ---
 One of the links I found this week is to [Incogneato](https://incognea.to), which collects anonymous feedback and allows you to continue the dialog. It’s like a comment box with superpowers for the web. To give at a try, I setup a [comment box for the Weekly Thing](http://ansr.me/vUhiN).
 
@@ -228,11 +228,6 @@ Long article that could use a TL;DR section but nothing hugely surprising here. 
 ### [Niantic Pokémon GO Fest Chicago Update - Pokémon GO](http://pokemongolive.com/en/post/pokemongofestupdate)
 
 The [first ever Pokemon GO Fest](http://www.businessinsider.com/pokmon-go-chicago-event-issues-ticket-refunds-after-widespread-outage-2017-7) was in Chicago this last weekend. The event was interesting with a lot of special activities surrounding it. Even with what I’m sure was detailed planning and any amount of cloud infrastructure needed the service still ran into performance issues. They took action on it right away but another data point on how hard it is to scale technology infrastructure and systems for events.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/wikitribune.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=5wh9BQPQOOjWMV03EtZW3I9gmaw%3D&Expires=1707555607)](https://www.wikitribune.com)
-
-**[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together.** WikiTribune just got funded and I became a backer. I've been impressed with [Wikipedia](https://www.wikipedia.org) and am excited about [Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they tackle this. [Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=C%2F9UcIhtHhSXGhH8kMrJz7%2BuHhk%3D&Expires=1707555609)](https://itunes.apple.com/us/app/bear/id1016366447?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

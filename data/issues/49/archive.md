@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/49/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-49-apr-14-2018/
 domains: []
 links: []
-word_count: 1725
+word_count: 1628
 ---
 Those of us in Northern climates have grown sick of winter, and it feels like we must have done something wrong to have this exceptionally cold April. To add insult to injury we are being treated to, what one hopes will be, a final barrage of several or more inches of snow. ❄️ Uncle already!
 
@@ -156,12 +156,6 @@ toolsandtoys.net
 > I thought I’d put together a “back to basics” guide on coffee brewing. We’ve certainly covered this topic in a number of ways, so think of this guide as a compilation/remix of all that information.
 
 I would agree with everything in here. It doesn't address the next level topics on espresso, but this is a good starter for doing coffee well.
-
-## Promotion 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## App 📱
 

@@ -4,12 +4,12 @@ number: 45
 subject: 'Weekly Thing #45 / Mar 17, 2018'
 publish_date: '2018-03-17T12:00:00Z'
 slug: weekly-thing-45-mar-17-2018
-description: Stack Overflow Developer Survey 2018, HyperCard Zine, Sankey diagram builder, Checklist for Checklists, DAKboard wall display, WikiTribune.
+description: Stack Overflow Developer Survey 2018, HyperCard Zine, Sankey diagram builder, Checklist for Checklists, DAKboard wall display.
 image: https://files.thingelstad.com/weekly-thing/45/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-45-mar-17-2018/
 domains: []
 links: []
-word_count: 1437
+word_count: 1343
 ---
 I returned from my India 🇮🇳 travels on Sunday afternoon, and then began to experience the worst jet lag ✈️, and pure exhaustion, I've ever had. 😴 It took until Thursday for me to stabalize back into something resembling a normal routine. I had a good trip, and will definitely be back, probably in the Fall.
 
@@ -141,12 +141,6 @@ Oh no. I’m afraid this applies to me and my desire to intervene when people ar
 artplusmarketing.com
 
 I encourage being mindful about the information you are consuming. We watch what we eat, I don't see a reason to not watch what we read and watch too. I'd take 90 minutes off of the scale here and give no time to what is called "consumption" and "interaction".
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a [backer. I've been impressed with Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## App 📱
 

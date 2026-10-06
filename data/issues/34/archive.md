@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/34/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-30-2017/
 domains: []
 links: []
-word_count: 2047
+word_count: 1966
 ---
 I hope you all have been having a wonderful Christmas and New Years and are getting some time away to rest and relax. I’m sure you're wondering how my first attempt at Glorified Rice turned out? It was pretty good! I learned I didn't need to make a double batch, and I needed a little more crushed pineapple.
 
@@ -143,14 +143,6 @@ by Box Brown
 It is, perhaps, the perfect video game. Simple yet addictive, Tetris delivers an irresistible, unending puzzle that has players hooked. Play it long enough and you’ll see those brightly colored geometric shapes everywhere.
 
 I had always heard that Tetris had a complicated legal background and this graphic novel is a fun read on the complicated web of relationships that were behind the most popular videogame in history. It also helps explain why even today all Tetris games are so strictly controlled.
-
----
-
-## Promotion 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
 

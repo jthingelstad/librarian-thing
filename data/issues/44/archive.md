@@ -4,12 +4,12 @@ number: 44
 subject: 'Weekly Thing #44 / Mar 10, 2018'
 publish_date: '2018-03-10T13:00:00Z'
 slug: weekly-thing-44-mar-10-2018
-description: International Women's Day, recruiting sessions, Americas unhappiness, cloud cost analytics, Rundeck orchestration, Modern Manager, Let's Encrypt.
+description: International Women's Day, recruiting sessions, Americas unhappiness, cloud cost analytics, Rundeck orchestration, Modern Manager.
 image: https://files.thingelstad.com/weekly-thing/44/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-44-mar-10-2018/
 domains: []
 links: []
-word_count: 1772
+word_count: 1692
 ---
 Hello from India! 🇮🇳 After many years, I've finally made my first trip to India. I've been here meeting with our partners. The agenda has been very busy. Seven flights 🛫 Minneapolis (MSP) → Paris (CDG) → Delhi (DEL) → Hyderabad (HYD) → Pune (PNQ) → Delhi (DEL) → Amsterdam (AMS) → Minneapolis (MSP) 🛬 in nine days is a new record for me. 🏆 Overall I felt pretty good, even with all the travel, and managed the jet lag without too much impact.
 
@@ -121,12 +121,6 @@ This made me thing of [Fooled by Randomness](https://en.wikipedia.org/wiki/Foole
 www.theguardian.com
 
 For all of the amazing work in the new digital economy, it’s a bit disheartening to see data like this. I worry that the lever of technology is so big that it’s going to cause fundamental breakdowns in our traditional economic systems.
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Status 🎈
 

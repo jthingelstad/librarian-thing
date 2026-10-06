@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/51/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-51-apr-28-2018/
 domains: []
 links: []
-word_count: 1803
+word_count: 1707
 ---
 I am again grouping links into Featured, Links and Breadcrumbs. It definitely allows people to filter a bit and take in parts of the newsletter on their own pace. I got some good feedback on the new layout. 👍
 
@@ -158,12 +158,6 @@ Additional links of interest from this week.
 - [Not getting angry about issues that make me angry – James Shelley](https://jamesshelley.com/2018/04/25/not-getting-angry-about-issues-that-make-me-angry/) (jamesshelley.com)
 - [The “unpatchable” exploit that makes every current Nintendo Switch hackable [Updated] | Ars Technica](https://arstechnica.com/gaming/2018/04/the-unpatchable-exploit-that-makes-every-current-nintendo-switch-hackable/) (arstechnica.com)
 - [A Modest Guide to Productivity —Frank Chimero](https://frankchimero.com/blog/2018/productivity-guide/) (frankchimero.com)
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a [backer. I've been impressed with Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Status 🎈
 

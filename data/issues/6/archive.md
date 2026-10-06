@@ -5,7 +5,7 @@ subject: Weekly Thing for June 17, 2017
 publish_date: '2017-06-17T13:00:00Z'
 slug: weekly-thing-for-june-17-2017
 description: iPad drag and drop, solar eclipse photography, spaces vs tabs salaries, Daisy blockchain SQLite, AI bots negotiate, Ukraine power grid malware.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=GOabc4pwE%2FQ%2BbLkOADE645aSx2A%3D&Expires=1707553412
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-june-17-2017/
 domains:
 - blog.eero.com
@@ -132,7 +132,7 @@ links:
   domain: crackedlabs.org
   heading_context: '[Corporate Surveillance in Everyday Life](http://crackedlabs.org/en/corporate-surveillance)'
   section: Links 📌
-word_count: 1477
+word_count: 1378
 ---
 This week I officially launched the Weekly Thing with a fully fleshed out [subscribe page](http://thingelstad.com/weekly-thing/). I shared it on LinkedIn and a bunch of people signed up. Welcome to all the new readers! Please forward this to anyone else you think would enjoy Weekly Thing!
 
@@ -233,11 +233,6 @@ This isn't at all surprising but falls in the category of 'when you thought it c
 ### [Corporate Surveillance in Everyday Life](http://crackedlabs.org/en/corporate-surveillance)
 
 I think a lot about digital tracking and privacy online. It worries me greatly as one of the least appreciated aspects of so much activity online. People shrug this off as not important but nearly everyone does that with no appreciation of the issue or how deep the surveillance goes. I haven't read this whole report, but it’s on my list to read in it’s entirety. I think I’m going to start using the word surveillance instead of tracking. It’s more accurate.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=JDRtMrtYGn%2FoIJHhTjWIMJKMMfs%3D&Expires=1707553415)](https://creativecommons.org)
-
-**[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Microblog updates 🎈
 - [Dan Wilson hinting at new Semisonic album? New song “Basement Tapes” sounds great!](http://www.thingelstad.com/2017/06/17/dan-wilson-hinting.html)

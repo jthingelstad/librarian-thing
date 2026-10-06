@@ -5,7 +5,7 @@ subject: Weekly Thing for July 8, 2017
 publish_date: '2017-07-08T13:00:00Z'
 slug: weekly-thing-for-july-8-2017
 description: Leaving Facebook, wildcard certificates, ancient Rome's concrete, Wikipedia text adventure, HEVC and HEIF, Little Snitch 4, Facebook election manipulation.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=Vk7hslbuVDOrUgs9X%2Fv0HV18vvg%3D&Expires=1707554681
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-july-8-2017/
 domains:
 - barryoreilly.com
@@ -162,7 +162,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[Women in Tech Speak Frankly on Culture of Harassment - NYTimes.com](https://www.nytimes.com/2017/06/30/technology/women-entrepreneurs-speak-out-sexual-harassment.html)'
   section: Links 📌
-word_count: 2267
+word_count: 2168
 ---
 We have been finishing the second part of our summer vacation. After a week in Michigan we spent three days at our cabin celebrating the 4th of July with friends and family. We then drove up to Winnipeg for our first return trip to the Winnipeg Folk Festival in 9 years! My mother joined us and we've been listening to great music and remembering camping and a lack of showers. 😊 You will find a lot of microblog updates with photos from the Festival.
 
@@ -290,11 +290,6 @@ by Nessa Carey
 *Nessa Carey takes us on a lively and up-to-date tour of what's known about epigenetic mechanisms and their implications for ageing and cancer.*
 
 My Book Club picked this for our next meeting and I’m very interested to learn more about the subject. The beginning has been very engaging.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=zkSj6wNCTHCrsy9IF1FsG1Glb%2Bs%3D&Expires=1707554685)](https://creativecommons.org)
-
-**[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Microblog updates 🎈
 - [Moved to Big Blue @ Night stage to see Camper Van Beethoven!](https://www.thingelstad.com/2017/07/07/winnipeg-folk-festival.html)

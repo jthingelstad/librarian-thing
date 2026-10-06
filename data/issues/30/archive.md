@@ -110,7 +110,7 @@ links:
   domain: blog.veitheller.de
   heading_context: '[Carp | Veit''s Blog](http://blog.veitheller.de/Carp.html)'
   section: Links 📌
-word_count: 1771
+word_count: 1691
 ---
 This week marked the official start of the Christmas 🎄 shopping season and a lot of you all went to stores and websites and bought things. I know because we were on high alert ⚡️ at work to make sure all of that stuff worked as it should, which we did very well!
 
@@ -218,12 +218,6 @@ A new entrant into the Password (Secret) Manager space. I've been a [1Password](
 ### [Carp | Veit's Blog](http://blog.veitheller.de/Carp.html)
 
 I find it fun to read through takes on various computer languages. There are so many languages and the vast majority never got any traction. A thorough blog post reviewing a language is sort of like a vacation to another country to explore it’s traditions and taste the flavors and importantly come back home shortly after. I had never heard of [Carp](https://github.com/carp-lang/Carp) but this is a thorough review of it. A Lisp language that compiles down to C to then be compiled natively.
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Featured App 📱
 

@@ -5,7 +5,7 @@ subject: Weekly Thing for September 9, 2017
 publish_date: '2017-09-09T13:00:00Z'
 slug: weekly-thing-for-september-9-2017
 description: Chef Camp, Apple Watch health, HomeKit accessories, cryptocurrency ban, AI world domination, Facebook code footprint, Weather Atlas iOS.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=tBupjDhHwOcYvh6jpbfXvXI2%2FWA%3D&Expires=1707557260
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-september-9-2017/
 domains:
 - bridgetkromhout.com
@@ -97,7 +97,7 @@ links:
   domain: toolsandtoys.net
   heading_context: '[‘Weather Atlas’ for iOS —Tools and Toys](http://toolsandtoys.net/weather-atlas-for-ios/)'
   section: Links 📌
-word_count: 1365
+word_count: 1266
 ---
 This week I got this idea in my head that I just couldn't shake. As part of my workflow for publishing the Weekly Thing I have started to embed [markdown](https://daringfireball.net/projects/markdown/) into the text I put on Pinboard to capture links. Using markdown I can put other hyperlinks and some formatting into the link descriptions in the newsletter. It dawned on me that that markdown is also the same thing [Jekyll](https://jekyllrb.com) would use to make a post. Jekyll can also deal with arbitrary metadata for posts. 💡
 
@@ -175,11 +175,6 @@ I think you have to always be a bit suspect about adopting too much of the pract
 ### [‘Weather Atlas’ for iOS —Tools and Toys](http://toolsandtoys.net/weather-atlas-for-ios/)
 
 I've got far too many weather applications but I've always wanted one that used a map as the main way to show information. This does a nice job of presenting weather data. A request would be to show temperature data for places that are not a favorite at various zoom levels. 🌤
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/creative-commons.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=FKU02xqCU7MP8UJAdtv%2BWzLrwOk%3D&Expires=1707557268)](https://creativecommons.org)
-
-**[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=1pNixrAoxzSh8TnzFBaf48rrjlg%3D&Expires=1707557269)](https://itunes.apple.com/us/app/weather-atlas-weather-radar-map-10-day-forecast/id1196015787?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

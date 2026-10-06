@@ -5,7 +5,7 @@ subject: Weekly Thing for May 27, 2017
 publish_date: '2017-05-27T13:00:00Z'
 slug: weekly-thing-for-may-27-2017
 description: 1Password Travel Mode, largest Git repo, JSON Feed, Gary Gygax D&D, Mister Rogers cardigans, Hello Weather iOS, Anker beating Apple.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=u%2BPuqhA5qIBDZI2qNPtkIHFc8fA%3D&Expires=1707903195
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-may-27-2017/
 domains:
 - apps.startribune.com
@@ -202,7 +202,7 @@ links:
   domain: www.macstories.net
   heading_context: '[iOS 11: iPad Wishes and Concept Video – MacStories](https://www.macstories.net/stories/ios-11-ipad-wishes-and-concept-video/)'
   section: Links 📌
-word_count: 2222
+word_count: 2123
 ---
 This week there are a couple of changes to the Thing. The first thing is the photo of me. My wife Tammy reads this as well and last week her first comment was about the photo I added. She had some colorful suggestions that I completely agreed with. Going with a more relaxed image from now on. 😁 The other addition this week is a new Photog section to highlight a photo from the week. I loved this shot from this week so that inspired me to add this. I’m not sure if I'll be able to consistently have a great shot but I'll try.
 
@@ -357,11 +357,6 @@ This is Andon, automated: nothing gets to production if anything is going to bre
 ### [iOS 11: iPad Wishes and Concept Video – MacStories](https://www.macstories.net/stories/ios-11-ipad-wishes-and-concept-video/)
 
 > Once heralded as a promising sign of Apple's renewed commitment to the iPad, iOS 9 has begun to feel like a one-hit wonder. iOS 9 represented a profound change for Apple's approach to the iPad. After years of stagnation and uninspired imitation of iPhone interface paradigms, iOS 9 allowed the iPad to explore the true potential of its large canvas; for the first time since the original tablet, Apple was creating new iPad-only features rather than adapting them from the iPhone.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/80248b9c-e085-4123-b0a1-2fc6900afd55.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=jeZp3ABQ27jRC0K5uLCcuNOO0dQ%3D&Expires=1707903198)](https://creativecommons.org)
-
-**[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity.** I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Microblog updates 🎈
 - Tyler and I having real All-American drive in dining at A&W! [→](http://www.thingelstad.com/2017/05/26/tyler-and-i.html)

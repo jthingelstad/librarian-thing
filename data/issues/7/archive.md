@@ -5,7 +5,7 @@ subject: Weekly Thing for June 24, 2017
 publish_date: '2017-06-24T13:00:00Z'
 slug: weekly-thing-for-june-24-2017
 description: GTD productivity with Trello, Pythonista iOS workflow, Russia cyberwar blueprint, RNC voter data leak, Pokémon GO raid battles, Instagram Python 3.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=aFnTWKJrjlZhCqTUSo6NViD2eVU%3D&Expires=1707553825
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-june-24-2017/
 domains:
 - blog.aptitive.com
@@ -134,7 +134,7 @@ links:
   domain: thenewstack.io
   heading_context: '[Instagram Makes a Smooth Move to Python 3 - The New Stack](https://thenewstack.io/instagram-makes-smooth-move-python-3/)'
   section: Links 📌
-word_count: 1432
+word_count: 1323
 ---
 This week the links section has some new stuff. Frequently I want to highlight other things when writing about a link, but I was stymied on how to do that in my system! Then I realized a workaround. 💡 I could write in Markdown in the description area on Pinboard and then convert the Markdown to HTML when I [build the newsletter](http://thingelstad.com/2017/assembling-the-weekly-thing/). Magic! ⚡️
 
@@ -237,11 +237,6 @@ I backed [Turing Tumble](https://www.kickstarter.com/projects/871405126/turing-t
 ### [Instagram Makes a Smooth Move to Python 3 - The New Stack](https://thenewstack.io/instagram-makes-smooth-move-python-3/)
 
 Send this to the folks that highlight how Python, or any interpreted language really, just *cannot* scale.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=SLYb0OGH9ykvyhC76zxgTX6s%2BeY%3D&Expires=1707553828)](http://minnestar.org)
-
-**[Minnestar](http://minnestar.org/) is the technology community for Minnesota.** If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Microblog updates 🎈
 - [Updating my Bose QuietComfort 35’s firmware from 1.0.6 to 1.3.2. I ❤️ updating firmware. 😁](http://www.thingelstad.com/2017/06/23/updating-my-bose.html)

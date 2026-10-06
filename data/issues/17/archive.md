@@ -5,7 +5,7 @@ subject: Weekly Thing for September 2, 2017
 publish_date: '2017-09-02T13:00:00Z'
 slug: weekly-thing-for-september-2-2017
 description: Google's Farm, Twitter bot intimidation, testing in production, software engineering rule of 3, Apple next iPhone, Sarahah uploads address book.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=dUkDL6NcnJpEkUGEVcAw6GdOdKs%3D&Expires=1707556979
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-september-2-2017/
 domains:
 - blogs.harvard.edu
@@ -99,7 +99,7 @@ links:
   domain: blogs.harvard.edu
   heading_context: '[How the personal data extraction industry ends —Doc Searls Weblog](http://blogs.harvard.edu/doc/2017/08/26/extraction-ends/)'
   section: Links 📌
-word_count: 1376
+word_count: 1267
 ---
 The kids went back to school this week! Everyone had a great start to the school year. Now we have the holiday weekend and the unofficial end-of-summer here in Minnesota. We are heading to my brother's cabin on [Pokegama Lake](https://en.wikipedia.org/wiki/Pokegama_Lake) for the weekend and I'm looking forward to time on the lake and a nice evening by the fire. I hope you all are enjoying the long weekend!
 
@@ -175,11 +175,6 @@ Super simple tool that allows you to filter an RSS feed. I love stuff like this.
 ### [How the personal data extraction industry ends —Doc Searls Weblog](http://blogs.harvard.edu/doc/2017/08/26/extraction-ends/)
 
 Doc Searls thinking about the long term aspects of all the personal data collection on the web. I wish that I was as confident as he that even the biggest players on the web will pass over time. Plus got to learn a new word [epiphenomenal](https://en.wikipedia.org/wiki/Epiphenomenon).
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/Minnestar.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=eUOodusAi8sZmdiM79h8sSUgRNY%3D&Expires=1707556986)](https://minnestar.org)
-
-**[Minnestar](https://minnestar.org/) is the technology community for Minnesota.** If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=J2CDWR%2F9TZTe0ktMAQkzY1F8WAk%3D&Expires=1707556987)](https://itunes.apple.com/us/app/day-one-journal/id1044867788?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

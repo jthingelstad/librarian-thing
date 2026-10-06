@@ -5,7 +5,7 @@ subject: Weekly Thing for June 10, 2017
 publish_date: '2017-06-10T13:00:00Z'
 slug: weekly-thing-for-june-10-2017
 description: End-to-End Encryption FAQ, UUID history, iOS 11 iPad features, macOS High Sierra, watchOS 4, AirPlay 2, Monument Valley 2, printer tracking dots.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=vjZBUJ1gR7nuqlXH7TMd3F1PDw4%3D&Expires=1707552911
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-june-10-2017/
 domains:
 - bridgetkromhout.com
@@ -185,7 +185,7 @@ links:
   domain: techblog.expedia.com
   heading_context: '[Cloud and Finance – Lessons learned | Expedia Engineering Blog](https://techblog.expedia.com/2017/05/19/cloud-and-finance-lessons-learned/)'
   section: Links 📌
-word_count: 1651
+word_count: 1553
 ---
 Welcome to another Weekly Thing! There are a lot of links for announcements from Apple's Worldwide Developer Conference this week. There were many interesting announcements this week.
 
@@ -328,11 +328,6 @@ Lucky to know Bridget and I really like her writing on diversity. Read all of th
 ### [Cloud and Finance – Lessons learned | Expedia Engineering Blog](https://techblog.expedia.com/2017/05/19/cloud-and-finance-lessons-learned/)
 
 Cloud technology is making technology teams thing about costs in a different way. It’s not always an easy path, but it’s good and it’s interesting to read as organizations work through this new dimension.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/03e048c6-724f-4d0d-8d9b-76e3c6196525.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=aiFWauK1n%2FK5kSiq6LVIyVcJnDw%3D&Expires=1707552913)](https://www.wikitribune.com)
-
-**[Wikitribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together.** Wikitribune just got funded and I became a backer. I’ve been impressed with [Wikipedia](https://www.wikipedia.org) and am excited about [Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I'll be very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they tackle this. [Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Microblog updates 🎈
 - Monument Valley 2 is really nice. High quality puzzle game. [→](http://www.thingelstad.com/2017/06/10/monument-valley-is.html)

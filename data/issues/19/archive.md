@@ -5,7 +5,7 @@ subject: Weekly Thing for September 16, 2017
 publish_date: '2017-09-16T13:00:00Z'
 slug: weekly-thing-for-september-16-2017
 description: Equifax breach, Safari cookie blocking, iPhone X event, Apple Watch Series 3, Python growth, 1Password command-line beta, Sublime Text 3.0.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=wKE9EUePnzV8CvbY%2FXRwm0AmdZE%3D&Expires=1707557501
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-september-16-2017/
 domains:
 - aftertheflood.co
@@ -161,7 +161,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Think, live, be positive aggressive | Phil Soran | TEDxFargo](https://www.youtube.com/watch?v=digQkAFiX_w)'
   section: Links 📌
-word_count: 2186
+word_count: 2112
 ---
 I’m doing a new thing -- I’m coaching Tyler's soccer team! We've had a jamboree event to get to know the players, and we just finished our second game today. It’s fun and to everyone's surprise, most of all my own, I've learned all the names of the kids on the team. The kids have a great time and you'd have to try hard to not have fun with them.
 
@@ -285,11 +285,6 @@ When the Apple Watch first came out there was a lot of hoping for an LTE version
 ### [Think, live, be positive aggressive | Phil Soran | TEDxFargo](https://www.youtube.com/watch?v=digQkAFiX_w)
 
 Great [TEDxFargo](http://tedxfargo.com) talk from [Phil Soran](https://www.linkedin.com/in/phil-soran-a802616a/), successful tech entrepreneur and also an [SPS Commerce](https://www.spscommerce.com) board member. His culture view of *positive aggressive* culture is great. I like naming the culture and having explicit discussions about it.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=Svi%2FXVP%2FXfd5T0OGxWLVYaLNe6s%3D&Expires=1707557505)](https://www.eff.org)
-
-**The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world.** I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Microblog updates 🎈
 - [Tried an idea I had to make Jekyll generate faster for my link blog. Thought using a built-in property (tags) instead of a custom one would be way faster. Profile showed it was actually two times slower. Sometimes computers are confusing. 🤓](http://www.thingelstad.com/2017/09/15/tried-an-idea.html)

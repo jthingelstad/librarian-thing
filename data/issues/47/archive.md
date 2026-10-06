@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/47/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-47-mar-31-2018/
 domains: []
 links: []
-word_count: 1197
+word_count: 1100
 ---
 It is Spring Break Season 🍃 and it seems like everyone is heading away for a week, including us. We are on our way to Chicago, with a stopover in the Wisconsin Dells. We'll be going from waterslides to [Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) this week. 😎
 
@@ -159,10 +159,6 @@ by Matthew Walker PhD
 The first sleep book by a leading scientific expert — Professor Matthew Walker, Director of UC Berkeley’s Sleep and Neuroimaging Lab — reveals his groundbreaking exploration of sleep, explaining how we can harness its transformative power to change our lives for the better.
 
 After reading multiple blog posts about this book, after Tammy reading it and recommending it and now with my book club picking it -- I'm happy to finally be reading this book.
-
-## Promotion 🎁
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Status 🎈
 

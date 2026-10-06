@@ -5,7 +5,7 @@ subject: Weekly Thing for July 1, 2017
 publish_date: '2017-07-01T13:00:00Z'
 slug: weekly-thing-for-july-1-2017
 description: Sorting Lego, iOS 11 beta, Let's Encrypt 100 million certificates, Day One premium, Affinity Photo iPad, .feedback scam, data-driven culture.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=mQLmdOmfFpISZM6kjls3GOLM3AY%3D&Expires=1707554318
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-july-1-2017/
 domains:
 - affinity.serif.com
@@ -117,7 +117,7 @@ links:
   domain: affinity.serif.com
   heading_context: '[Affinity Photo - Professional photo editing for iPad](https://affinity.serif.com/en-us/photo/ipad/)'
   section: Links 📌
-word_count: 1831
+word_count: 1722
 ---
 Hello from the wonderful West Coast of Michigan! We've been here for a week of vacation staying in Saugatuck. This is our second time here, the first was four years ago and we've loved it both times. This time we took full advantage of the gorgeous beaches and spent a few hours everyday at the beach just hanging out. The kids had so much fun! 👨‍👩‍👧‍👦 It was a joy just to be part of it with them. If you haven't been to this area we highly recommend it. There are a lot of microblog entries from the beach. 😊
 
@@ -214,11 +214,6 @@ by David Baron
 *Richly illustrated and meticulously researched, American Eclipse ultimately depicts a young nation that looked to the skies to reveal its towering ambition and expose its latent genius. On a scorching July afternoon in 1878, at the dawn of the Gilded Age, the moon’s shadow descended on the American West, darkening skies from Montana Territory to Texas.*
 
 We are going to St. Louis later this summer to experience the total eclipse this year. I’m very excited about the trip and am already thinking about how I can capture the kids reaction for them to see in the future. Tammy got me this book to read on the history of the last total eclipse in America. I've just gotten started with it but it’s a fun read thus far!
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/e5746c61-b868-40df-bbe2-fd92f458920c.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=zUd36Q4gXO8QCkuGD0lfQbmy9xw%3D&Expires=1707554323)](http://minnestar.org)
-
-**[Minnestar](http://minnestar.org/) is the technology community for Minnesota.** If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Microblog updates 🎈
 - [Go fly a kite! 🏖✨💨](http://www.thingelstad.com/2017/06/30/go-fly-a.html)

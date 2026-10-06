@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/46/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-46-mar-24-2018/
 domains: []
 links: []
-word_count: 1980
+word_count: 1884
 ---
 We officially welcomed the First Day of Spring 🌦 and with it above freezing temperatures. I've been watching the snow and ice recede, the days get longer and I'm starting to think about the ice coming off the lakes. Yeah, I'm a little eager.
 
@@ -211,12 +211,6 @@ Four key points to understanding the Site Reliability Engineer role and how it r
 www.espn.com
 
 Endearing exploration of the routines of Ichiro. If you build your existence around one thing, this is what it looks like. ⚾️
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a [backer. I've been impressed with Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## App 📱
 

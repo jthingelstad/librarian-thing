@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/40/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-10-2018/
 domains: []
 links: []
-word_count: 1616
+word_count: 1546
 ---
 It was pretty cool to watch the Super Bowl 🏈 last weekend with highlights of our fine city of Minneapolis. However, after weeks of increasing road closures 🚨 and security perimeters 👮 I'm pretty happy to see everyone head back to their home and let us get back to normal! 👋
 
@@ -153,12 +153,6 @@ Watching the two Falcon engines land nearly simultaneously made me think I was w
 ### [A GraphQL Primer: Why We Need A New Kind Of API (Part 1) — Smashing Magazine](https://www.smashingmagazine.com/2018/01/graphql-primer-new-api-part-1/)
 
 Good introduction to the problem that [GraphQL](http://graphql.org) is solving and the history of [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call), [SOAP](https://en.wikipedia.org/wiki/SOAP), and [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) thus far. I continue to think GraphQL has high applicability to many application. Interestingly I think that REST and GraphQL may find a reason to co-exist for a long time. [Make sure to read part 2](https://www.smashingmagazine.com/2018/01/graphql-primer-new-api-part-2/) of this as well.
-
----
-
-https://www.eff.org
-
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ---
 

@@ -5,7 +5,7 @@ subject: Weekly Thing for August 12, 2017
 publish_date: '2017-08-12T13:00:00Z'
 slug: weekly-thing-for-august-12-2017
 description: Coco Framework blockchain, James Damore Google manifesto, Ulysses subscription pricing, smartphones destroyed a generation, Bloomington Islamic center bombing.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=fiWdvqe%2Fidq0KxMZOr4SYB8EHpY%3D&Expires=1707556123
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-august-12-2017/
 domains:
 - 52tiger.net
@@ -123,7 +123,7 @@ links:
   domain: blog.ycombinator.com
   heading_context: '[YC’s 2017 Summer Reading List](https://blog.ycombinator.com/ycs-2017-summer-reading-list/)'
   section: Links 📌
-word_count: 1486
+word_count: 1418
 ---
 Summer has been in hyperdrive and this weekend I’m enjoying a respite of sorts. We had plans with my sister and stepfather but we ended up changing those and we were able to downshift to a much needed weekend of relaxation and some small projects at home. The kids go back to school in just 2 more weeks! Summer has gone quick!
 
@@ -222,11 +222,6 @@ by Anders Ericsson
 *Anders Ericsson has made a career studying chess champions, violin virtuosos, star athletes, and memory mavens. Peak distills three decades of myth-shattering research into a powerful learning strategy that is fundamentally different from the way people traditionally think about acquiring new abilities. Whether you want to stand out at work, improve your athletic or musical performance, or help your child achieve academic goals, Ericsson’s revolutionary methods will show you how to improve at almost any skill that matters to you.*
 
 My book club is reading Peak this month and I’m finding it pretty great. It’s an interesting read to extrapolate how you can improve abilities in a variety of different domains. Ericsson's writing is good and he creates a pretty clear path for designing systems to create continual improvement.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/Wikimedia_Foundation_logo.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=9jZCP1IxiEk1k4NaedoLNOrGYYM%3D&Expires=1707556128)](https://wikimediafoundation.org/wiki/Home)
-
-**The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property.** [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=sHhS09A0cILNCN9mLAJaCnFfMcs%3D&Expires=1707556130)](https://itunes.apple.com/us/app/signal-private-messenger/id874139669?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

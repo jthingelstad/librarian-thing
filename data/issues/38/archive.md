@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/38/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-27-2018/
 domains: []
 links: []
-word_count: 3259
+word_count: 3162
 ---
 There are a bunch of new subscribers to the Weekly Thing this week! Hello and welcome to you all! 🙌 Also, a bunch of fun links this week! 👓 LinkedIn is by far the most effective place for people to discover the Weekly Thing. If you feel like spreading the word, sharing a comment and link to https://weekly.thingelstad.com is always welcome! 👍
 
@@ -219,14 +219,6 @@ This is “app as art”. Silly, fun and creative.
 ### [xkcd: The End of the Rainbow](https://xkcd.com/1944/)
 
 Learning and fun. 😂🌈
-
----
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a backer. I've been impressed with [Wikipedia](https://www.wikipedia.org) and am excited about [Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ---
 

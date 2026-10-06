@@ -5,7 +5,7 @@ subject: Weekly Thing for July 15, 2017
 publish_date: '2017-07-15T13:00:00Z'
 slug: weekly-thing-for-july-15-2017
 description: Scheduling secrets, bullshit detection, Caddy HTTPS server, OmniGraffle 3.0 for iOS, Scapple, DRM toxic to culture, microservices design patterns, Acorn 6.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=9NlDfMCTEjoKUAR38V%2BJViLYK9Q%3D&Expires=1707555016
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-july-15-2017/
 domains:
 - asocialfolder.com
@@ -111,7 +111,7 @@ links:
   domain: boingboing.net
   heading_context: '[The W3C has overruled members'' objections and will publish its DRM for videos / Boing Boing](http://boingboing.net/2017/07/07/eschatology-watch.html)'
   section: Links 📌
-word_count: 1381
+word_count: 1299
 ---
 This week was absolutely bananas! 🍌 One of those weeks where you just hold on tight and manage to the end as best you can. Don't get me wrong, all good stuff, just a lot of it! Some sugar on top of it all -- [Minnestar](https://minnestar.org) launched a brand new website, and we had another great [Minnedemo](https://minnestar.org/minnedemo/) event this week!
 
@@ -193,11 +193,6 @@ I've always admired Microsofts architecture guidance. Nice to see them doing thi
 ### [The W3C has overruled members' objections and will publish its DRM for videos / Boing Boing](http://boingboing.net/2017/07/07/eschatology-watch.html)
 
 A few years ago it felt like our industry had pushed DRM back a bit and it was receding. In music DRM was all but gone after Apple forced the industry there. Now with the move to streaming music everything is DRM blocked again. The role of the W3C with DRM is a sticky one, but this doesn't look very good.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/internet-archive.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=DC32nL3%2F5W9EgTWxWcCPp55TF94%3D&Expires=1707555020)](https://archive.org)
-
-**[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more.** I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=iKMO%2BYYugOd8lEKSpgjCtjEWJZs%3D&Expires=1707555021)](https://itunes.apple.com/us/app/better-by-ind-ie/id1080964978?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

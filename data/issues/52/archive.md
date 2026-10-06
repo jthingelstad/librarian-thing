@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/52/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-52-may-5-2018/
 domains: []
 links: []
-word_count: 2275
+word_count: 2195
 ---
 This issue marks the first year of the Weekly Thing! 👏 I am enjoying this project, and I've heard from many of you who subscribe that you have found it valuable too! 👌
 
@@ -136,12 +136,6 @@ This article advocates to being more social science to the technology of the int
 kickstarter.engineering
 
 This is one of the most approachable descriptions of Event Sourcing and the key concepts behind it I have ever read. The animated diagrams help as well. Kickstarter’s specific implementation is very Rails and ActiveRecord heavy, but shows a lightweight application of the concepts.
-
-## Promotion 🎁
-
-https://letsencrypt.org
-
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## App 📱
 

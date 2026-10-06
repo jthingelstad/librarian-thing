@@ -154,7 +154,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)'
   section: Links 📌
-word_count: 2388
+word_count: 2291
 ---
 I want to welcome a bunch of new subscribers to the Weekly Thing -- [Hello! 👋 My friend David Hussman](https://twitter.com/davidhussman) [shared this](https://www.linkedin.com/feed/update/urn:li:activity:6337711918261825537) , and a bunch of new people signed up. 👍 Thank you for all for jumping in, and I hope you enjoy this as much as I enjoy sharing it. (Also, thank you, David!)
 
@@ -307,12 +307,6 @@ Well thought through list of Christmas presents for people that like a certain k
 ### [Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)
 
 I’m a big fan of [Insights Discovery](https://www.insights.com/products/insights-discovery) and an equally big fan of [Scott Schwefel](http://scottschwefel.com). I met Scott when we were both on the [CaringBridge](https://www.caringbridge.org) board and got exposed to the Insights program in an offsite we did with that board. I've brought more than a hundred people through the program at SPS and I find it an immensely valuable training and tool. I didn’t know that Scott did this [TEDx](https://www.ted.com/about/programs-initiatives/tedx-program) talk. He's a great presenter with equally great content. 👏🏻🏆
-
-## Promotion 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Featured App 📱
 

@@ -132,7 +132,7 @@ links:
   domain: bankunderground.co.uk
   heading_context: '[Is the economy suffering from the crisis of attention? | Bank Underground](https://bankunderground.co.uk/2017/11/24/is-the-economy-suffering-from-the-crisis-of-attention/)'
   section: Links 📌
-word_count: 1956
+word_count: 1876
 ---
 It’s December and in addition to all the Christmas shopping you are doing, it’s usually the time that we think about donating to charitable organizations. You'll see in my microblog updates that I did a number of those this week. I'd like to highlight [Let's Encrypt](https://letsencrypt.org)!
 
@@ -242,12 +242,6 @@ Some interesting and cool tech. Many (most?) people wear rings all the time. Thi
 ### [Is the economy suffering from the crisis of attention? | Bank Underground](https://bankunderground.co.uk/2017/11/24/is-the-economy-suffering-from-the-crisis-of-attention/)
 
 Interesting article theorizing on a possible connection between economic growth and the rise of mobile and social technology. The suggestion is that one of two things is happening: time on social is taking away from productive time or time on social is yielding a distracted population that is less productive. I would suggest both are likely true. Cal Newport [gave a thoughtful summary](http://calnewport.com/blog/2017/11/30/on-the-complicated-economics-of-attention-capital/) of this article as well.
-
-## Promotion 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Featured App 📱
 

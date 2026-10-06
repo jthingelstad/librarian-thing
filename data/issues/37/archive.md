@@ -4,12 +4,12 @@ number: 37
 subject: Weekly Thing for January 20, 2018
 publish_date: '2018-01-20T13:00:00Z'
 slug: weekly-thing-for-january-20-2018
-description: Nintendo Labo, Raspberry Pi Kubernetes cluster, Argo workflow engine, Datasette Publish, Micro.blog, Feedbin, Bruce Schneier IoT, Internet Archive.
+description: Nintendo Labo, Raspberry Pi Kubernetes cluster, Argo workflow engine, Datasette Publish, Micro.blog, Feedbin, Bruce Schneier IoT.
 image: https://files.thingelstad.com/weekly-thing/37/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-20-2018/
 domains: []
 links: []
-word_count: 1112
+word_count: 1031
 ---
 I’m not a big football 🏈 fan, but you'd have to be a zombie 🧟‍♂️ to not be excited about the Minnesota Vikings amazing win last Sunday! The newly named SPS Tower is in downtown Minneapolis, and with the upcoming Super Bowl we are planning for a bit of chaos. If the Vikings can make their way to that game, it will be an entirely different level of chaos. 🤞 Cross your fingers for this weekends game and hopefully making history!
 
@@ -79,14 +79,6 @@ Compelling article by [Bruce Schneier](https://www.schneier.com) arguing the inc
 > The market can’t fix this because neither the buyer nor the seller cares. The owners of the webcams and DVRs used in the denial-of-service attacks don’t care. Their devices were cheap to buy, they still work, and they don’t know any of the victims of the attacks. The sellers of those devices don’t care: They’re now selling newer and better models, and the original buyers only cared about price and features. There is no market solution, because the insecurity is what economists call an externality: It’s an effect of the purchasing decision that affects other people. Think of it kind of like invisible pollution.
 
 His argument is an interesting one and I think he's right. There are parts of the technology market where the buyer does care about security, but by device count that is far from a majority. I also appreciate his call to not connect things to the Internet just because. Realize there is risk associated with that.
-
----
-
-## Promotion 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
 

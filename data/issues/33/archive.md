@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/33/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-23-2017/
 domains: []
 links: []
-word_count: 1695
+word_count: 1614
 ---
 It’s Christmas Eve Eve and we are in the final approach for the big day. There is much excitement to open presents and play, the kids are pretty eager too. 😂 We're spending Christmas at the lake 🏡 which is really nice. It’s quiet and relaxing. We'll make excursions to family on Christmas Eve and Christmas Day as well. A batch of [Wassail Tea](https://www.thingelstad.com/2004/wassail-tea/) is ready and I’m on deck to make [Glorified Rice](https://en.wikipedia.org/wiki/Glorified_rice) and some Jell-O with floating fruit!
 
@@ -97,14 +97,6 @@ Vindication for when I get taken down my a “man cold”! 😷😁
 ### [Why Lightroom CC Is a Big Step Up from Apple’s Photos - TidBITS](http://tidbits.com/article/17666)
 
 I haven't used Lightroom much in the last couple of years but it’s still my go to for power user functionality with photos. Interesting to see Adobe taking a run at a complete rethink of Lightroom. The naming is really confusing, but I might check this out.
-
----
-
-## Promotion 🎁
-
-https://archive.org
-
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
 

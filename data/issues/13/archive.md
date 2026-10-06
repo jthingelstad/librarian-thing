@@ -5,7 +5,7 @@ subject: Weekly Thing for August 5, 2017
 publish_date: '2017-08-05T13:00:00Z'
 slug: weekly-thing-for-august-5-2017
 description: Patreon economic engine, GraphQL with GitHub, Aziz Ansari quitting internet, minds hijacked by phones, tech culture change.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=MlQFaOifaKpzwhXsWSNwrKmO5qY%3D&Expires=1707555879
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-august-5-2017/
 domains:
 - brettterpstra.com
@@ -133,7 +133,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Here’s How Unicorns Trick You Into Thinking They’re Real - Bloomberg](https://www.bloomberg.com/news/articles/2017-08-02/the-magic-behind-many-unicorn-startups-complex-stock-contracts)'
   section: Links 📌
-word_count: 1450
+word_count: 1376
 ---
 Tammy and I started this week with a 3-day Inn to Inn Cycle Tour to celebrate our 15th Anniversary. We went with [Broken Paddle Guiding](http://brokenpaddleguiding.com) and had a great time! The kids stayed back and we got familiar with the challenges of climbing the bluffs in the [Driftless](https://en.wikipedia.org/wiki/Driftless_Area). It was a great way to get out and remember the fun we have on our bikes.
 
@@ -232,11 +232,6 @@ I found this view of the continuing evolution of DevOps interesting. I particula
 
 News flash -- private valuations aren't very accurate. In other news, the sky is blue. 😲
 
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=lL2eoakEQfEm5MsbmxupmyCNpJw%3D&Expires=1707555883)](https://www.eff.org)
-
-**The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world.** I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Microblog updates 🎈
 - [Tammy got to paddle down the Chippewa River into the Mississippi River. Thanks Broken Paddle Guiding!](http://www.thingelstad.com/2017/08/02/tammy-got-to.html)

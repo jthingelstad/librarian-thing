@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/35/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-6-2018/
 domains: []
 links: []
-word_count: 1590
+word_count: 1482
 ---
 😬 I hope you all had a great New Years and a fabulous start to 2018! For me the New Year has kicked off with a bang! 🚀 This week has been a blur of various activities on all fronts. I celebrated my birthday 🎂 with fun and presents. I’m eager to put my new sous vide cooker to work and make some delicious eats!
 
@@ -103,14 +103,6 @@ I had no idea this was a known effect but it makes a lot of sense and the name i
 ### [Monitoring Home Power Consumption for less than $25](https://blog.kroy.io/monitoring-home-power-consumption-for-less-than-25/)
 
 This is super cool and I might have to try this. I know our house has a wireless meter system, the electric company installed it several years ago. I've never looked into how it works but if it’s this easy this could be a great way to get much more detail on our power usage. If you can get hourly, daily reports on power you should be able to connect your activities close enough to make changes to reduce usage.
-
----
-
-## Promotion 🎁
-
-https://minnestar.org
-
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ---
 

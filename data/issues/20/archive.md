@@ -5,7 +5,7 @@ subject: Weekly Thing for September 23, 2017
 publish_date: '2017-09-23T13:00:00Z'
 slug: weekly-thing-for-september-23-2017
 description: Relicensing React and Jest, A11 Bionic chip, iOS 11 review, iPhone 8 camera, Apple Watch Series 3, Swift 4.0, Facebook's war on free will.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=F1l8%2FYbT%2F2wosvZaOqZUtgNckA0%3D&Expires=1707557732
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-september-23-2017/
 domains:
 - arstechnica.com
@@ -182,7 +182,7 @@ links:
   domain: www.sarasoueidan.com
   heading_context: '[Migrating from Jekyll+Github Pages to Hugo+Netlify](https://www.sarasoueidan.com/blog/jekyll-ghpages-to-hugo-netlify/)'
   section: Links 📌
-word_count: 2147
+word_count: 2073
 ---
 This was a big week for people that have a lot of iOS devices with the launch of iOS 11 along with watchOS 4 and tvOS 11. You'll see a flood of Apple related links this week. More than any normal person would ever want to read, but where is the fun in being normal? 🤣
 
@@ -330,11 +330,6 @@ Impressive platform for hosting static web projects. Some interesting hooks for 
 ### [Migrating from Jekyll+Github Pages to Hugo+Netlify](https://www.sarasoueidan.com/blog/jekyll-ghpages-to-hugo-netlify/)
 
 I looked into [Hugo](https://gohugo.io) a while back and was very impressed, but [Github Pages](https://pages.github.com) native support for Jekyll keeps things really simple. This post highlights an interesting path to make a transition and introduced me to the very impressive [Netlify](https://www.netlify.com) service. I will very likely be moving [Link Thing](http://links.thingelstad.com) to Hugo for performance reasons alone.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=y9qu57DmH%2Frxr5zas%2BqFSc129yo%3D&Expires=1707557735)](https://www.eff.org)
-
-**The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world.** I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Microblog updates 🎈
 - [Wow! Words & Music by Dan Wilson tonight was magical. So good! 🎶](http://www.thingelstad.com/2017/09/22/wow-words-music.html)

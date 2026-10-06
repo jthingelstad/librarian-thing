@@ -104,7 +104,7 @@ links:
   domain: hacks.mozilla.org
   heading_context: '[Entering the Quantum Era—How Firefox got fast again and where it’s going to get faster – Mozilla Hacks – the Web developer blog](https://hacks.mozilla.org/2017/11/entering-the-quantum-era-how-firefox-got-fast-again-and-where-its-going-to-get-faster/)'
   section: Links 📌
-word_count: 1443
+word_count: 1346
 ---
 This week I decided to [jump into the Micro.blog Photo Challenge](http://micro.douglane.com/2017/11/09/microblog-photo-challenge.html) . 📷 This was a 7-day challenge with [a theme for each day: Squares](http://www.thingelstad.com/2017/11/11/193440.html) [, Tasty](http://www.thingelstad.com/2017/11/12/191007.html) [, On the Move](http://www.thingelstad.com/2017/11/13/234858.html) [, Up Close](http://www.thingelstad.com/2017/11/14/015301.html) [, Liquid](http://www.thingelstad.com/2017/11/15/012043.html) [, Seasonal](http://www.thingelstad.com/2017/11/16/001031.html) [, and Shadow](http://www.thingelstad.com/2017/11/17/021039.html) . I shot all the pictures on the day of the challenge. No dipping into my archive of photos. I also shot them all on my iPhone 7. 📱 It was a good reminder of how much I like photography and that I need to make time for creative activities like this. Some of the days were a real challenge with the theme. The last day was shadow, and it was rainy and dreary the entire day. There wasn’t a shadow anywhere. But wait, I can make my own with a flashlight. 🔦 Some assistance from Mazie with the flashlight and I got my shot.
 
@@ -188,12 +188,6 @@ Simple project from [Julia Evans](https://jvns.ca) that allows you to turn retwe
 ### [Entering the Quantum Era—How Firefox got fast again and where it’s going to get faster – Mozilla Hacks – the Web developer blog](https://hacks.mozilla.org/2017/11/entering-the-quantum-era-how-firefox-got-fast-again-and-where-its-going-to-get-faster/)
 
 I may have to give Firefox a look for the first time in several years. I love the ethos of Firefox, particularly the pro-privacy positions, but the performance has been so bad as to be comical. This is a nice, approachable writeup on how they have focused on performance. Even people that are less technical may find this interesting as it gives a glimpse into how your browser works and the complex processes involved with making software very fast.
-
-## Promotion 🎁
-
-https://creativecommons.org
-
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Microblog updates 🎈
 

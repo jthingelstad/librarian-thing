@@ -5,7 +5,7 @@ subject: Weekly Thing for August 19, 2017
 publish_date: '2017-08-19T13:00:00Z'
 slug: weekly-thing-for-august-19-2017
 description: Maria Ploessl Minnestar, flat Earthers solar eclipse, iOS 11 cop button, Daily Stormer terminated, Kubernetes at GitHub, AWS SAM Local beta.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=r9YpPTe%2FUs3biEetS1gon7lsVLg%3D&Expires=1707556411
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-august-19-2017/
 domains:
 - aws.amazon.com
@@ -109,7 +109,7 @@ links:
   domain: aws.amazon.com
   heading_context: '[New – AWS SAM Local (Beta) – Build and Test Serverless Applications Locally — AWS Blog](https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/)'
   section: Links 📌
-word_count: 1256
+word_count: 1182
 ---
 We are on our final road trip of this summer to see the total eclipse! We are spending the weekend in St. Louis with the highlight coming this afternoon with a visit to [City Museum](https://www.citymuseum.org). I’m also hoping to make a stop by [Sump Coffee](https://www.sumpcoffee.com/) which I declared as having the best coffee I had ever had the last time we visited. It’s like a temple to coffee! We will be in [Eureka, MO](http://www.eureka.mo.us/) staying at a [KOA Campground](http://koa.com/campgrounds/st-louis-west/) for the actual eclipse. Staying at a KOA before an eclipse seems like an absolute perfect pairing! Just over 2 minutes of total eclipse there and the weather outlook is improving!
 
@@ -189,11 +189,6 @@ Interesting new service [Sarahah](https://www.sarahah.com) provides a way for in
 ### [New – AWS SAM Local (Beta) – Build and Test Serverless Applications Locally — AWS Blog](https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/)
 
 This looks very useful for people building serverless apps on Lambda. Putting the code in a container is definitely nice, but the ability to simulate invokes from other AWS services is a big win too!
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/eff.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=M7t0aPh%2Fx95EmGoeg6LdrIVj2hQ%3D&Expires=1707556418)](https://www.eff.org)
-
-**The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world.** I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Microblog updates 🎈
 - [Created a Sarahah profile where people can send me anonymous feedback or comments. 🤞🏻](http://www.thingelstad.com/2017/08/18/created-a-sarahah.html)

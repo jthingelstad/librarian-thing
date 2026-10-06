@@ -5,7 +5,7 @@ subject: Weekly Thing for October 7, 2017
 publish_date: '2017-10-07T12:00:00Z'
 slug: weekly-thing-for-october-7-2017
 description: Equifax data breach, Yahoo 3 billion accounts, Apple Watch Series 3, Google Pixel 2 vs iPhone 8, Ikea buys TaskRabbit, SQL beating NoSQL, Kubernetes.
-image: https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb692d4b-a464-4126-aaac-e352b7edd7a5.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=FhMlMMgrea5JM1NuQ27GGpkGIWg%3D&Expires=1707558214
+image: ''
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-october-7-2017/
 domains:
 - arstechnica.com
@@ -182,7 +182,7 @@ links:
   domain: sinews.siam.org
   heading_context: '[Coffee Roasting, Mathematical Modelling, and Asymptotic Analysis](https://sinews.siam.org/Details-Page/coffee-roasting-mathematical-modelling-and-asymptotic-analysis)'
   section: Links 📌
-word_count: 3092
+word_count: 2986
 ---
 My Mother celebrated her birthday this week. Happy Birthdays Mom! 🎂 (Yes, she is a subscriber to the Weekly Thing. 😁) For her birthday we got her a Series 3 Apple Watch. I've noticed a lot of non-technical people wearing them and I could see her really liking it for notifications and the fitness features.
 
@@ -361,11 +361,6 @@ by Jennifer Doudna, Samuel Sternberg
 *Not since the atomic bomb has a technology so alarmed its inventors that they warned the world about its use. Not, that is, until the spring of 2015, when biologist Jennifer Doudna called for a worldwide moratorium on the use of the new gene-editing tool CRISPR—a revolutionary new technology that she helped create—to make heritable changes in human embryos. The cheapest, simplest, most effective way of manipulating DNA ever known, CRISPR may well give us the cure to HIV, genetic diseases, and some cancers, and will help address the world’s hunger crisis. Yet even the tiniest changes to DNA could have myriad, unforeseeable consequences—to say nothing of the ethical and societal repercussions of intentionally mutating embryos to create “better” humans.*
 
 My [book club](https://rwbook.club) has picked this this book for this month and it is a very interesting read indeed. It feels like we are at the "PC era" of gene manipulation. Leaving the super expensive research labs and coming closer to cheap and more readily accessible uses.
-
-## Promotion 🎁
-[![image](https://assets.buttondown.email/hack-the-gap.png?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=jQHY%2F9plJZ0yxkjgQdb%2Bh3lxanY%3D&Expires=1707558223)](https://www.hackthegap.com)
-
-**The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community.** I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Highlighted iOS App 📱
 [![image](https://assets.buttondown.email/512x512bb.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q&Signature=woGN4IyT6zwweWb17t1MBIX9R%2F4%3D&Expires=1707558226)](https://itunes.apple.com/us/app/flower/id1279174518?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)

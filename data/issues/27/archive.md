@@ -134,7 +134,7 @@ links:
   domain: om.co
   heading_context: '[iPhone X: Some Early Impressions – Om Malik](https://om.co/2017/11/03/iphone-x-some-early-impressions/)'
   section: Links 📌
-word_count: 2227
+word_count: 2131
 ---
 First thing, there is no photo this week. 😞 I only put photos in the Weekly Thing that are from that week and this week I didn’t capture anything. I could put some pictures I took from a couple events this week, but that would just be filling a slot. Another tactical thing I’m thinking about is better ways to show links in the Weekly Thing than just a list. Maybe highlighting a Top 3 or even putting in categories. Watch that space for some experiments. 👨‍🔬
 
@@ -247,12 +247,6 @@ by Daniel Suarez
 Daemons: computer programs that silently run in the background, waiting for a specific event or time to execute. They power almost every service. They make our networked world possible. But they also make it vulnerable...
 
 This book has been on my list for years and [I’m excited that my book club](https://rwbook.club) picked it this month!
-
-## Promotion 🎁
-
-https://www.wikitribune.com
-
-[WikiTribune](https://www.wikitribune.com) is a news platform that brings journalists and a community of volunteers together. WikiTribune just got funded and I became a [backer. I've been impressed with Wikipedia](https://www.wikipedia.org) [and am excited about Jimmy Wales](http://jimmywales.com) and team focusing on the news ecosystem. I am very curious to see how they realize these objectives. I've previously thought about how news can be reinvented. I focused more on the open source model instead of wiki, but either way I feel like a fundamental rethink is possible! Let's see how they [tackle this. Become a supporter today!](https://www.wikitribune.com/become-supporter/)
 
 ## Featured App 📱
 
