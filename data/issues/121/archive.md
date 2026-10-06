@@ -236,21 +236,31 @@ Crowd queuing up for Minnedemo 33 at the Riverview Theater!
 
 Good panel conversation following screening of [Solid State](https://www.tpt.org/solid-state/).
 
+![](https://cdn.uploads.micro.blog/890/2019/88da5a49c0.jpg)
+
 ### [Tuesday @ 3:13 PM](https://www.thingelstad.com/2019/10/08/151356.html)
 
 Attending the premier of [Solid State: Minnesota’s High Tech History](https://www.tpt.org/solid-state/) hosted by [MHTA](https://mhta.org).
+
+![](https://cdn.uploads.micro.blog/890/2019/a6b71adde2.jpg)
 
 ### [Monday @ 11:42 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Cruz, you’re our only hope. 😬⚾️
 
+![](https://cdn.uploads.micro.blog/890/2019/befc59251c.jpg)
+
 ### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Kepler! We need this! ⚾️
 
+![](https://cdn.uploads.micro.blog/890/2019/e59d8284c6.jpg)
+
 ### [Monday @ 11:39 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
 Time for some baseball! ⚾️
+
+![](https://cdn.uploads.micro.blog/890/2019/8b93b69b48.jpg)
 
 ### [Sunday @ 5:26 PM](https://www.thingelstad.com/2019/10/06/flying-the-mn.html)
 

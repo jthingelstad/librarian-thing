@@ -172,17 +172,27 @@ My dog Chase got some teeth pulled today and he’s really not pleased about it.
 
 Was great to catch up today with friends and MarketWatch colleagues Anna Klombies and Jim Bernard.
 
+![](https://cdn.uploads.micro.blog/890/2018/a0a5c1f1bd.jpg)
+
 [Wednesday @ 3:37 PM](https://www.thingelstad.com/2018/03/14/day-shirt.html)
 
 2018 π day shirt!
+
+![](https://cdn.uploads.micro.blog/890/2018/aa026cb27b.jpg)
 
 [Wednesday @ 3:12 PM](https://www.thingelstad.com/2018/03/14/teamsps-getting-reading.html)
 
 🥧 #TeamSPS getting reading to celebrate π day!
 
+![](https://cdn.uploads.micro.blog/890/2018/247438cd2c.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/8b8623d3b9.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/24f7febc23.jpg)
+
 [Sunday @ 4:10 AM](https://www.thingelstad.com/2018/03/11/091056.html)
 
 Had a nice layover in Amsterdam. ✈️ Now flipped my clocks back to central time and am looking forward to 🛬 back home. 🏠👨‍👩‍👧‍👦
+
+![](https://cdn.uploads.micro.blog/890/2018/db851c309b.jpg)
 
 [Saturday @ 4:05 PM](https://www.thingelstad.com/2018/03/11/starting-flights-home.html)
 
@@ -192,6 +202,10 @@ Starting flights home from India! 🛫 Delhi (DEL) → Amsterdam (AMS) → Minne
 
 Snake charmer. 🐍
 
+![](https://cdn.uploads.micro.blog/890/2018/bbf08a071e.jpg)
+
 [Saturday @ 3:56 AM](https://www.thingelstad.com/2018/03/10/had-a-wonderful.html)
 
 Had a wonderful visit to the Taj Mahal this morning. Amazing palace.
+
+![](https://cdn.uploads.micro.blog/890/2018/e637b9c510.jpg)

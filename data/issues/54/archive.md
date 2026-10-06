@@ -233,33 +233,51 @@ Addictive software.
 
 Time for some fun socializing for #TeamSPS at #SPSTechJam! 🍻
 
+![](https://cdn.uploads.micro.blog/890/2018/0e024d1939.jpg)
+
 ### [Wednesday @ 4:36 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Not sure about the @optimuspaul sticker in the lower right. 😳
+
+![](https://cdn.uploads.micro.blog/890/2018/17c2717f18.jpg)
 
 ### [Wednesday @ 4:26 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Another great #TeamSPS #SPSTechJam! Wonderful topics, great speakers and an amazing team! 🙌🏆
 
+![](https://cdn.uploads.micro.blog/890/2018/28d99fe3cf.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/9a679bc8bc.jpg)
+
 ### [Wednesday @ 4:07 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [“At SPS it might be Kube](https://kubernetes.io) [or Kubb](https://en.wikipedia.org/wiki/Kubb) [!” Kelly Hamm](https://www.linkedin.com/in/hammkelly/) [at SumoLogic](https://www.sumologic.com) knows #TeamSPS — and thanks for the Kubb set!
+
+![](https://cdn.uploads.micro.blog/890/2018/ced5a31b43.jpg)
 
 ### [Wednesday @ 3:07 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 I left my iPad at my seat while stepping away and #TeamSPS security was on the job with a good reminder! 🔐
 
+![](https://cdn.uploads.micro.blog/890/2018/64000e1dec.jpg)
+
 ### [Wednesday @ 3:02 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Women in Tech sharing with #TeamSPS the great work they are leading! 🙌🏆 #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2018/4800bd1643.jpg)
 
 ### [Wednesday @ 1:55 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Afternoon sessions for #SPSTechJam. 🙌🏆
 
+![](https://cdn.uploads.micro.blog/890/2018/36ff76999b.jpg)
+
 ### [Wednesday @ 11:40 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [Evolutionary architecture](http://evolutionaryarchitecture.com), [Kotlin](https://kotlinlang.org), and [GraphQL](http://graphql.org). Great 2nd half of the morning at #SPSTechJam! 🙌🏆
+
+![](https://cdn.uploads.micro.blog/890/2018/fbec27504b.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/52f5b4f0f2.jpg)
 
 ### [Wednesday @ 11:29 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
@@ -269,17 +287,28 @@ Today we have people from United States 🇺🇸 (multiple cities), Ukraine 🇺
 
 Great #TeamSPS speakers at #SPSTechJam! Thank you for sharing! 🙌🏆
 
+![](https://cdn.uploads.micro.blog/890/2018/3ed493c36d.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/616c6656b4.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/60c231dffc.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/35f9edcc6d.jpg)
+
 ### [Wednesday @ 8:52 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 [Bridget Kromhout](https://bridgetkromhout.com) @bridgetkromhout getting #SPSTechJam started off! Computers are easy, people are hard! 👏
+
+![](https://cdn.uploads.micro.blog/890/2018/47f5325773.jpg)
 
 ### [Wednesday @ 8:49 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 A huge thank you to the #TeamSPS TechJam event organizers! 👏 Your passion and drive make us a better team! #SPSTechJam
 
+![](https://cdn.uploads.micro.blog/890/2018/9e76105a01.jpg)
+
 ### [Wednesday @ 7:11 AM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
 Today is our annual #TeamSPS TechJam event bringing the global SPS technology team together to learn, share, and have fun. The agenda is packed with over two dozen presenters. Automation, GraphQL, Containers, Architecture and more on the agenda! 🙌🏆 #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2018/98211251ce.jpg)
 
 ### [Tuesday @ 6:51 PM](https://www.thingelstad.com/2018/05/15/hanging-out-with.html)
 
@@ -335,9 +364,13 @@ Goal for the Yellow Team to give San Jose early lead! 😡⚽️ #MNUFC
 
 MN United #MNUFC game time! ⚽️
 
+![](https://cdn.uploads.micro.blog/890/2018/511a8a5123.jpg)
+
 ### [Saturday @ 12:23 PM](https://www.thingelstad.com/2018/05/12/mn-united-v.html)
 
 Ready for MN United game! ⚽️👏🏻
+
+![](https://cdn.uploads.micro.blog/890/2018/913cc3b6dc.jpg)
 
 ## Fortune 🥠
 

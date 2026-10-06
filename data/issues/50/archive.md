@@ -206,9 +206,13 @@ I always feel a little defensive for Minneapolis when I have to pick “America/
 
 St Volodymyr’s Cathedral in Kyiv, Ukraine.
 
+![](https://cdn.uploads.micro.blog/890/2018/2d00c683ef.jpg)
+
 [Friday @ 8:11 AM](https://www.thingelstad.com/2018/04/20/tag.html)
 
 [tag](https://duckduckgo.com/?q=01110100+01100001+01100111)
+
+![](https://cdn.uploads.micro.blog/890/2018/43110e954f.jpg)
 
 [Friday @ 4:27 AM](https://www.thingelstad.com/2018/04/19/time-to-head.html)
 
@@ -226,17 +230,25 @@ I’ve never understood why people wrap their luggage. I see this mostly on inte
 
 Great Georgian dinner at [Gogi](http://gogi.com.ua) with our Kyiv leadership team. 😊
 
+![](https://cdn.uploads.micro.blog/890/2018/bba98240ac.jpg)
+
 [Thursday @ 4:50 PM](https://www.thingelstad.com/2018/04/19/my-collection-of.html)
 
 My collection of travel cables is bonkers. 😬
+
+![](https://cdn.uploads.micro.blog/890/2018/e92f4ffe67.jpg)
 
 [Thursday @ 6:51 AM](https://www.thingelstad.com/2018/04/18/morning-in-kiev.html)
 
 Morning in Kiev, Ukraine.
 
+![](https://cdn.uploads.micro.blog/890/2018/9aec3a3e4f.jpg)
+
 [Wednesday @ 8:26 AM](https://www.thingelstad.com/2018/04/18/cherry-blossoms-at.html)
 
 Cherry Blossoms at Botanical Garden in Kiev, Ukraine.
+
+![](https://cdn.uploads.micro.blog/890/2018/d1162461e9.jpg)
 
 [Tuesday @ 10:08 AM](https://www.thingelstad.com/2018/04/17/remember-headphone-cables.html)
 
@@ -246,6 +258,8 @@ Remember headphone cables? Those were bothersome.
 
 Sunrise draping through Paris Charles de Gaulle Airport this morning.
 
+![](https://cdn.uploads.micro.blog/890/2018/89c9b3c73f.jpg)
+
 [Monday @ 10:56 PM](https://www.thingelstad.com/2018/04/16/heading-to-kiev.html)
 
 Heading to Kiev to visit #TeamSPS! ✈️ MSP - CDG - KBP
@@ -253,6 +267,8 @@ Heading to Kiev to visit #TeamSPS! ✈️ MSP - CDG - KBP
 [Monday @ 5:15 AM](https://www.thingelstad.com/2018/04/15/enjoyed-darkest-hourhttpsimdbcomtitlett.html)
 
 Enjoyed [Darkest Hour](https://imdb.com/title/tt4555426/). 🎬
+
+![](https://cdn.uploads.micro.blog/890/2018/b5baf22124.jpg)
 
 [Monday @ 12:10 AM](https://www.thingelstad.com/2018/04/15/it-is-still.html)
 
@@ -262,9 +278,13 @@ Enjoyed [Darkest Hour](https://imdb.com/title/tt4555426/). 🎬
 
 Model trains are always fun. Tyler and I are running the train yard today. Z-Scale is hard though.
 
+![](https://cdn.uploads.micro.blog/890/2018/e9af6a9ab1.jpg)
+
 [Sunday @ 7:01 PM](https://www.thingelstad.com/2018/04/15/120105.html)
 
 Snow day seems like a good day to get the Z-Scale train out.
+
+![](https://cdn.uploads.micro.blog/890/2018/4878a0c782.jpg)
 
 [Sunday @ 6:59 PM](https://www.thingelstad.com/2018/04/15/094726.html)
 
@@ -278,6 +298,8 @@ With all the amazing capabilities of the iPhone camera system, it still can’t 
 
 Well over a foot of snow to deal this morning. Heavy too with the warm temperatures recently. Had to go at the slowest speed.
 
+![](https://cdn.uploads.micro.blog/890/2018/4653590610.jpg)
+
 [Sunday @ 1:03 AM](https://www.thingelstad.com/2018/04/15/my-friend-dangrigsbyhttpsmicroblogdangrigsby.html)
 
 My friend [@dangrigsby](https://micro.blog/dangrigsby) is newly on micro.blog — you should [follow him](https://micro.blog/dangrigsby)! 👍
@@ -290,6 +312,10 @@ Planning to just let the snow keep falling, and get completely snowed in until t
 
 Minnebar lunch panorama.
 
+![](https://cdn.uploads.micro.blog/890/2018/b63629e6b5.jpg)
+
 [Sunday @ 12:05 AM](https://www.thingelstad.com/2018/04/14/people-flying-their.html)
 
 People flying their drones through VR goggles looks kind of creepy. 😬
+
+![](https://cdn.uploads.micro.blog/890/2018/f819b445c2.jpg)

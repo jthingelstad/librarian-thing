@@ -255,9 +255,13 @@ Time to relax and enjoy a fire. 🔥
 
 First run on the flat top was a success, but will definitely require a few runs to get the hang of it. 🔥👍🏻
 
+![](https://cdn.uploads.micro.blog/890/2019/6923d1d7e8.jpg)
+
 ### [Saturday @ 11:23 AM](https://www.thingelstad.com/2019/04/20/112335.html)
 
 Ready to do some Flat Top Grilling! 🍔🔥
+
+![](https://cdn.uploads.micro.blog/890/2019/fea5c7ad6c.jpg)
 
 ## Fortune 🥠
 

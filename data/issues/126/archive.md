@@ -161,9 +161,13 @@ I haven't spent a lot of time thinking about my Someday/Maybe structure, and thi
 
 Wild go ahead 2-1 over Coyotes after Parise goal! 😊🏒 Oh wait, now Coyotes tie it back up 2-2. 😬
 
+![](https://cdn.uploads.micro.blog/890/2019/9f05f178a9.jpg)
+
 ### [Thursday @ 7:25 PM](https://www.thingelstad.com/2019/11/14/192527.html)
 
 Let’s go Wild! Wild v Coyotes tonight at Xcel Center! 🏒
+
+![](https://cdn.uploads.micro.blog/890/2019/845279ad3a.jpg)
 
 ### [Thursday @ 2:25 PM](https://www.thingelstad.com/2019/11/14/afternoon-workshop-and.html)
 
@@ -175,17 +179,25 @@ Afternoon workshop and training on Essential SAFe for our Technology and Product
 
 Congratulations to the four #TeamSPS members that we recognized for over twenty years with SPS Commerce today! Your contributions continue to add value each and every day! 🤩👏
 
+![](https://cdn.uploads.micro.blog/890/2019/0d1ca803fa.jpg)
+
 ### [Tuesday @ 3:58 PM](https://www.thingelstad.com/2019/11/12/growth-summit.html)
 
 [John Sweeney](https://www.bravenewworkshop.com/creativeoutreach/) gave a thought provoking and actionable keynote for #TeamSPS today on bringing an innovative mindset to everything we do! Loved all of it!
+
+![](https://cdn.uploads.micro.blog/890/2019/7aa33d6438.jpg)
 
 ### [Tuesday @ 3:56 PM](https://www.thingelstad.com/2019/11/12/growth-summit.html)
 
 We had a great time today at #TeamSPS celebrating our wins from 2019, and looking forward to the great work we are planning in 2020! 🙌🏆
 
+![](https://cdn.uploads.micro.blog/890/2019/d5a4cdbf0a.jpg)
+
 ### [Tuesday @ 3:50 PM](https://www.thingelstad.com/2019/11/12/growth-summit.html)
 
 Selfie with #TeamSPS before our 2020 Growth Summit! 🙌🤩🏆
+
+![](https://cdn.uploads.micro.blog/890/2019/19690a4c62.jpg)
 
 ### [Monday @ 9:26 AM](https://www.thingelstad.com/2019/11/11/our-newest-floor.html)
 
@@ -244,21 +256,32 @@ Impressively large US flag at [Minneapolis VA Health Care System](https://www.mi
 
 Wow! Wolves get a jump ball and score to tie at 110-110 and send this Warriors game to overtime! 🏀🤩 Great game!
 
+![](https://cdn.uploads.micro.blog/890/2019/b4f234ee6a.jpg)
+
 ### [Friday @ 8:28 PM](https://www.thingelstad.com/2019/11/08/timberwolves-v-warriors.html)
 
 Great first half for Timberwolves v Warriors game! Wolves trailing by 1, 60-61. 🏀
+
+![](https://cdn.uploads.micro.blog/890/2019/e9f358a5ef.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/6950a90214.jpg)
 
 ### [Friday @ 7:10 PM](https://www.thingelstad.com/2019/11/08/timberwolves-v-warriors.html)
 
 Tip-off! Go Wolves! 🏀
 
+![](https://cdn.uploads.micro.blog/890/2019/d232dd2cff.jpg)
+
 ### [Friday @ 6:54 PM](https://www.thingelstad.com/2019/11/08/timberwolves-v-warriors.html)
 
 Family selfie from Timberwolves v Golden State Warriors basketball game! 🏀
 
+![](https://cdn.uploads.micro.blog/890/2019/4d5af5fa62.jpg)
+
 ### [Friday @ 6:53 PM](https://www.thingelstad.com/2019/11/08/timberwolves-v-warriors.html)
 
 Ready for the Timberwolves v Golden State Warriors basketball game! 🏀
+
+![](https://cdn.uploads.micro.blog/890/2019/9a2102a8db.jpg)
 
 ## Yet More Links 🍞
 

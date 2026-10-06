@@ -134,9 +134,13 @@ https://letsencrypt.org
 
 Hallway.
 
+![](https://cdn.uploads.micro.blog/890/2018/60a46823e1.jpg)
+
 [Friday @ 1:16 PM](https://www.thingelstad.com/2018/03/09/delicious-indian-lunch.html)
 
 Delicious Indian lunch at Haldirams in Noida. The Cholley Bhature was amazing!
+
+![](https://cdn.uploads.micro.blog/890/2018/f7402d1f6c.jpg)
 
 [Friday @ 5:33 AM](https://www.thingelstad.com/2018/03/09/time-to-leave.html)
 
@@ -146,25 +150,39 @@ Time to leave Pune and fly 🛫 to Delhi. We’ll have a half-day of meetings in
 
 I got schooled today in ping pong 🏓 . Next time I need to practice up before I come to visit.
 
+![](https://cdn.uploads.micro.blog/890/2018/dd7f36eee8.jpg)
+
 [Thursday @ 11:10 PM](https://www.thingelstad.com/2018/03/08/we-had-an.html)
 
 We had an amazing day today with #TeamSPS in Pune! It was fabulous to meet everyone! 🤝
+
+![](https://cdn.uploads.micro.blog/890/2018/dd922e8734.jpg)
 
 [Thursday @ 11:08 PM](https://www.thingelstad.com/2018/03/08/173845.html)
 
 We got to celebrate [International Women’s Day](https://en.wikipedia.org/wiki/International_Women's_Day) while in Pune with Bristlecone. It was an honor to get to celebrate with everyone and even say a few words. It was fabulous to see so many women working in technology here! 👏🏻
 
+![](https://cdn.uploads.micro.blog/890/2018/941b4ab3c6.jpg)
+
 [Thursday @ 11:05 PM](https://www.thingelstad.com/2018/03/08/kent-amy-and.html)
 
 Kent, Amy and I took a moment to prove that everyone looks dorky in a VR headset. 👀😬
+
+![](https://cdn.uploads.micro.blog/890/2018/0986cad546.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/1828c4a865.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/e52cf5a039.jpg)
 
 [Thursday @ 11:03 PM](https://www.thingelstad.com/2018/03/08/nice-welcome-from.html)
 
 Nice welcome from our partners at [Bristlecone](http://www.bcone.com)!
 
+![](https://cdn.uploads.micro.blog/890/2018/757b8c13b8.jpg)
+
 [Thursday @ 11:01 PM](https://www.thingelstad.com/2018/03/08/bristleconehttpwwwbconecom-welcomed-us.html)
 
 [Bristlecone](http://www.bcone.com) welcomed us to the Pune office with this amazing sand art in the lobby! Wow! 👏🏻
+
+![](https://cdn.uploads.micro.blog/890/2018/b53552a8ec.jpg)
 
 [Wednesday @ 6:20 PM](https://www.thingelstad.com/2018/03/07/next-leg-of.html)
 
@@ -174,33 +192,54 @@ Next leg of India trip starting. Had a fabulous time In Hyderabad. Now boarding 
 
 Suggestion: if your store is named Helvetica, maybe use the Helvetica typeface? 😏
 
+![](https://cdn.uploads.micro.blog/890/2018/57b2414d6a.jpg)
+
 [Wednesday @ 6:05 PM](https://www.thingelstad.com/2018/03/07/fabulous-visit-to.html)
 
 Fabulous visit to Indmax #TeamSPS in Hyderabad. Thank you for the warm welcome and great questions! 🇮🇳
+
+![](https://cdn.uploads.micro.blog/890/2018/d69139b812.jpg)
 
 [Wednesday @ 9:06 AM](https://www.thingelstad.com/2018/03/06/miniature-temple-in.html)
 
 Miniature temple in Hyderabad.
 
+![](https://cdn.uploads.micro.blog/890/2018/c961e7f58a.jpg)
+
 [Wednesday @ 9:01 AM](https://www.thingelstad.com/2018/03/06/fabulous-evening-at.html)
 
 Fabulous evening at [Taj Falaknuma Palace](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/). Amazing palace and very good dinner at [Adaa](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/restaurants/adaa-restaurant/).
+
+![](https://cdn.uploads.micro.blog/890/2018/390d655017.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/73936b53c4.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/7563197037.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/490ef9f8a1.jpg)
 
 [Tuesday @ 6:57 PM](https://www.thingelstad.com/2018/03/06/visiting-midnight-bazaar.html)
 
 Visiting Midnight Bazaar in Hyderabad.
 
+![](https://cdn.uploads.micro.blog/890/2018/a885f8ee67.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/3e5ac35e36.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/2fe2eccd09.jpg)
+
 [Tuesday @ 5:43 PM](https://www.thingelstad.com/2018/03/06/beautiful-collection-of.html)
 
 Beautiful collection of roses. 🌹
+
+![](https://cdn.uploads.micro.blog/890/2018/d6895be4e8.jpg)
 
 [Tuesday @ 5:31 PM](https://www.thingelstad.com/2018/03/06/a-very-warm.html)
 
 A very warm and generous welcome to Hyderabad from our partners at Indmax. 🙏
 
+![](https://cdn.uploads.micro.blog/890/2018/4ce99944d0.jpg)
+
 [Tuesday @ 5:18 PM](https://www.thingelstad.com/2018/03/06/finished-great-town.html)
 
 Finished great town hall with our partner Indmax #TeamSPS in Hyderabad! Also video to our Coimbatore team! So great to meet everyone! 🤝
+
+![](https://cdn.uploads.micro.blog/890/2018/491e17c59a.jpg)
 
 [Tuesday @ 9:41 AM](https://www.thingelstad.com/2018/03/05/starting-second-leg.html)
 
@@ -210,22 +249,36 @@ Starting second leg of India 🇮🇳 trip with flight to Hyderabad! ✈️
 
 Nice evening of good food and conversation with Bristlecone team.
 
+![](https://cdn.uploads.micro.blog/890/2018/2276b4f388.jpg)
+
 [Monday @ 6:33 PM](https://www.thingelstad.com/2018/03/05/cool-candle-display.html)
 
 Cool candle display at Taj Hotel in New Delhi.
+
+![](https://cdn.uploads.micro.blog/890/2018/6fd4ed6574.jpg)
 
 [Monday @ 5:45 PM](https://www.thingelstad.com/2018/03/05/traffic-in-delhi.html)
 
 Traffic in Delhi and Noida is “up close” and personal.
 
+![](https://cdn.uploads.micro.blog/890/2018/f2cf18b011.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/f544b5bb13.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/5da48c6d5a.jpg)
+
 [Monday @ 5:30 PM](https://www.thingelstad.com/2018/03/05/had-a-very.html)
 
 Had a very good visit to HCL today. Impressive capabilities and people!
+
+![](https://cdn.uploads.micro.blog/890/2018/b507639b93.jpg)
 
 [Monday @ 2:08 AM](https://www.thingelstad.com/2018/03/04/amy-kent-and.html)
 
 Amy, Kent and I got a warm welcome from our partners at Bristlecone after 20 hours of traveling and arriving in Delhi at 1am.
 
+![](https://cdn.uploads.micro.blog/890/2018/22d8204f50.jpg)
+
 [Monday @ 2:07 AM](https://www.thingelstad.com/2018/03/04/the-customs-hall.html)
 
 The customs hall at the Delhi airport has some cool artistic touches.
+
+![](https://cdn.uploads.micro.blog/890/2018/eb1cadab7a.jpg)

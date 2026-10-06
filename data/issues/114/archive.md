@@ -172,13 +172,22 @@ LinkedIn is now prompting you to identify your teammates, and then asks you spec
 
 After the 2019 #TeamSPS Kubb tournament a bunch of folks hung out and played, you guessed it, more Kubb! Next year we might introduce Mölkky at the end!
 
+![](https://cdn.uploads.micro.blog/890/2019/bc2708d335.jpg)
+
 ### [Thursday @ 10:49 PM](https://www.thingelstad.com/2019/08/22/teamsps-kubb-tournament.html)
 
 After the round robin our #TeamSPS Kubb groups split into brackets with a winner in each bracket! We kept track old school, just like most tournaments do!
 
+![](https://cdn.uploads.micro.blog/890/2019/94c740707d.jpg)
+
 ### [Thursday @ 10:46 PM](https://www.thingelstad.com/2019/08/22/teamsps-kubb-tournament.html)
 
 We had a great time with our 2019 #TeamSPS Kubb Tournament today! We had 20 teams having a lot of fun, getting to know their teammates better, and enjoying a gorgeous day outside!
+
+![](https://cdn.uploads.micro.blog/890/2019/10707fdf07.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/38cb9e9b7d.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/dff5903fce.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/d6ed078178.jpg)
 
 ### [Wednesday @ 7:04 PM](https://www.thingelstad.com/2019/08/21/gorgeous-night-for.html)
 
@@ -217,17 +226,19 @@ St. Croix River at Interstate State Park, from Wisconsin side.
 
 Heading West! At [Fawn-Doe-Rosa](https://www.fawndoerosa.com).
 
+![](https://cdn.uploads.micro.blog/890/2019/245af20c2e.jpg)
+
 ### [Sunday @ 10:35 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
 Deer Selfie.
+
+![](https://cdn.uploads.micro.blog/890/2019/68000282dc.jpg)
 
 ### [Sunday @ 10:14 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
 Visiting [Fawn-Doe-Rosa](https://www.fawndoerosa.com)!
 
 ![](https://cdn.uploads.micro.blog/890/2019/1df4c2040e.jpg)
-![](https://cdn.uploads.micro.blog/890/2019/68000282dc.jpg)
-![](https://cdn.uploads.micro.blog/890/2019/245af20c2e.jpg)
 
 ### [Saturday @ 1:02 PM](https://www.thingelstad.com/2019/08/17/amery-wi-farmers.html)
 

@@ -233,9 +233,13 @@ It’s great to see [OmniFocus with iOS 13 Features](https://www.omnigroup.com/b
 
 Amazing come from behind win from MN United tonight to beat Sporting KC and clinch entry into the 2019 playoffs! 2-1 🙌 #MNUFC #MINvSKC ⚽️
 
+![](https://cdn.uploads.micro.blog/890/2019/89e9b57c91.jpg)
+
 ### [Wednesday @ 8:13 PM](https://www.thingelstad.com/2019/09/25/mn-united-v.html)
 
 First half of MN United v Sporting KC was tough to watch. United need to come out and connect some plays! #MNUFC #MINvSKC
+
+![](https://cdn.uploads.micro.blog/890/2019/41a6562b13.jpg)
 
 ### [Sunday @ 8:53 PM](https://www.thingelstad.com/2019/09/22/likely-the-last.html)
 

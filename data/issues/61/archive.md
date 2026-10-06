@@ -446,13 +446,19 @@ It’s totally cheating but I [listened to Wonderwall](https://www.dark-clouds.c
 
 Minnesota United can’t find the back, front, side or any other part of the net tonight. ⚽️😭 #mnufc
 
+![](https://cdn.uploads.micro.blog/890/2018/04bb2e4f25.jpg)
+
 ### [Friday @ 7:28 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 Family selfie at Minnesota United FC soccer game! ⚽️ Too hot for scarves tonight! 94° F 🔥 #mnufc #MINvDAL
 
+![](https://cdn.uploads.micro.blog/890/2018/0d430208b9.jpg)
+
 ### [Friday @ 7:21 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
 Time for some [Minnesota United FC](https://www.mnufc.com) v FC Dallas soccer! ⚽️
+
+![](https://cdn.uploads.micro.blog/890/2018/c4464af45e.jpg)
 
 ## Fortune 🥠
 

@@ -213,13 +213,19 @@ Free
 
 [Dan Wilson](https://danwilsonmusic.com) all-request on piano. 🎹
 
+![](https://cdn.uploads.micro.blog/890/2018/75d00ab1ad.jpg)
+
 [Friday @ 9:01 PM](https://www.thingelstad.com/2018/03/02/dan-wilson-at.html)
 
 [Dan Wilson](https://danwilsonmusic.com) taking the stage for his 3-ring Binder “all-requests” show at Icehouse! 🎶👍🏻
 
+![](https://cdn.uploads.micro.blog/890/2018/5ec83bcdab.jpg)
+
 [Friday @ 8:57 PM](https://www.thingelstad.com/2018/03/02/fun-performance-of.html)
 
 Fun performance of The Lion King at Justice Page Middle School tonight! 🎭
+
+![](https://cdn.uploads.micro.blog/890/2018/cdc164afe2.jpg)
 
 [Tuesday @ 9:12 PM](https://www.thingelstad.com/2018/02/27/still-finding-altos.html)
 
@@ -233,9 +239,14 @@ I’m amazed at the “superpowers” [Workflow](https://itunes.apple.com/us/app
 
 My sons 2nd grade class also has a mindfulness practice. It’s a great idea and it seems to work for them. 🧘‍♀️🧘‍♂️
 
+![](https://cdn.uploads.micro.blog/890/2018/cc46603dba.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/367e69c90c.jpg)
+
 [Monday @ 9:09 PM](https://www.thingelstad.com/2018/02/26/i-got-to.html)
 
 I got to be a guest reader in Tyler’s class today. Was fun to pick out a bunch of books for the 2nd Graders. 📚
+
+![](https://cdn.uploads.micro.blog/890/2018/979785418a.jpg)
 
 [Sunday @ 8:33 PM](https://www.thingelstad.com/2018/02/25/another-very-good.html)
 
@@ -277,6 +288,10 @@ We made 34,344 meals, enough to feed 94 kids for a year!
 
 We packed 22 boxes at [Feed My Starving Children](https://www.fmsc.org) this morning! 🙌🏻 Tyler picked a great event for his birthday!
 
+![](https://cdn.uploads.micro.blog/890/2018/80121176cc.jpg)
+
 [Saturday @ 9:00 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
 At [Feed My Starving Children](https://www.fmsc.org/) to pack meals. Tyler wanted to come here for his birthday. Love this handmade graph of progress.
+
+![](https://cdn.uploads.micro.blog/890/2018/483f93b456.jpg)

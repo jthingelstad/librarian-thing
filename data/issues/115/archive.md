@@ -191,13 +191,13 @@ Who wants a tank? 🤠
 
 Enjoying [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/)! 🍽🤝
 
-![](https://cdn.uploads.micro.blog/890/2019/3a0560a399.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/342afb16f2.jpg)
-![](https://cdn.uploads.micro.blog/890/2019/88946b4e4c.jpg)
 
 ### [Sunday @ 5:40 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
 Thank you to all the organizations making [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) happen!
+
+![](https://cdn.uploads.micro.blog/890/2019/88946b4e4c.jpg)
 
 ### [Sunday @ 5:37 PM](https://www.thingelstad.com/2019/08/25/had-an-amazing.html)
 
@@ -210,6 +210,8 @@ Had an amazing coffee at the new Little Joy Coffee in Downtown Northfield. Amazi
 ### [Sunday @ 5:08 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
 Having dinner with the city of Northfield! Thanks to [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/)!
+
+![](https://cdn.uploads.micro.blog/890/2019/3a0560a399.jpg)
 
 ### [Sunday @ 3:32 PM](https://www.thingelstad.com/2019/08/25/wiscopop-cherry-soda.html)
 

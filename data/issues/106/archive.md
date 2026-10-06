@@ -206,9 +206,13 @@ Arguments for Go with comparisons to Java and Python. 🤓
 
 We had a fabulous #TeamSPS Tech Leader outing tonight making a delicious meal at [Kitchen Window](https://kitchenwindow.com)! 🍽 We were joined by some awesome guests too! Such a great team, and a super fun evening! 🌮🍔🍺 Teams the cook together, win together!
 
+![](https://cdn.uploads.micro.blog/890/2019/bc8e45e0ed.jpg)
+
 [Sunday @ 8:01 PM](https://www.thingelstad.com/2019/05/12/my-sister-and.html)
 
 My sister and I had a great dinner with our Mom — Happy Mother’s Day! She has taught me so much, and continues to. Thank you Mom for everything, including the stuff I don’t even know about! 💚 @ChrestRosalin
+
+![](https://cdn.uploads.micro.blog/890/2019/f58ff622db.jpg)
 
 [Saturday @ 10:14 PM](https://www.thingelstad.com/2019/05/11/new-pr-for.html)
 
@@ -217,6 +221,8 @@ My sister and I had a great dinner with our Mom — Happy Mother’s Day! She ha
 [Friday @ 3:09 PM](https://www.thingelstad.com/2019/05/10/time-for-demos.html)
 
 Time for demos at the end of the #TeamSPS Tech Jam 2019 Hackathon! 13 teams built creative, fast, and new projects to share! 🙌🤩🚀 #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2019/58a6eeb5ee.jpg)
 
 ## Fortune 🥠
 

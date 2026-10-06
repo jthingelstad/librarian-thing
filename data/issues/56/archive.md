@@ -300,17 +300,25 @@ https://www.thingelstad.com/2018/06/01/great-conversation-tonight.html
 
 Great conversation tonight at [Meditation and the Science of Human Flourishing](https://tergar.org/events/meditation-science-human-flourishing/) with [Mingyur Rinpoche](https://en.wikipedia.org/wiki/Yongey_Mingyur_Rinpoche) and [Richard Davidson](https://en.wikipedia.org/wiki/Richard_Davidson) hosted by [Tergar Meditation Community](https://tergar.org).
 
+![](https://cdn.uploads.micro.blog/890/2018/73954a09c6.jpg)
+
 https://www.thingelstad.com/2018/06/01/of-course-we.html
 
 Of course we celebrate [National Donut Day](https://en.wikipedia.org/wiki/National_Doughnut_Day) at #TeamSPS! 🍩
+
+![](https://cdn.uploads.micro.blog/890/2018/cc55a23b6d.jpg)
 
 https://www.thingelstad.com/2018/06/01/coffee-spilled-sprayed.html
 
 Dropped my full cup of Dunn Bros coffee all over my desk, pouring 80% of it all over the place. Quickly wiping off my iPad proceeded to drop the iPad and hit the coffee cup again, spraying the remaining contents 6 feet away on the wall. Then attempting to mute the conference call I’m on, I hit the wrong button and hang up. I need to hit reset on this day and it’s not even 8am.
 
+![](https://cdn.uploads.micro.blog/890/2018/d7e0e014f2.jpg)
+
 https://www.thingelstad.com/2018/05/28/firmware-updates-are.html
 
 Firmware updates are the best! I have an irrational excitement about them — always! 🙌
+
+![](https://cdn.uploads.micro.blog/890/2018/43f419311d.jpg)
 
 https://www.thingelstad.com/2018/05/28/my-children-both.html
 
@@ -320,17 +328,26 @@ https://www.thingelstad.com/2018/05/28/204533.html
 
 Big Green Egg smoking. 🔥
 
+![](https://cdn.uploads.micro.blog/890/2018/052b7fcf2d.jpg)
+
 https://www.thingelstad.com/2018/05/26/first-tubing-of.html
 
 First tubing of 2018 today! 💦😁
+
+![](https://cdn.uploads.micro.blog/890/2018/1ed1622222.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/958f365794.jpg)
 
 https://www.thingelstad.com/2018/05/26/brisket-going-in.html
 
 Brisket going in the Big Green Egg for an overnight smoke. See ya in the morning! 🔥
 
+![](https://cdn.uploads.micro.blog/890/2018/23fa6b2d56.jpg)
+
 https://www.thingelstad.com/2018/05/26/look-up-sunny.html
 
 Look up - sunny! ☀️
+
+![](https://cdn.uploads.micro.blog/890/2018/2ca59d14fe.jpg)
 
 ## Fortune 🥠
 

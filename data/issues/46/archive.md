@@ -250,6 +250,8 @@ Shredding paper like I work in the White House. 🤣
 
 Steve Earle doing Copperhead Road at the Pantages! 👍🏻🎶
 
+![](https://cdn.uploads.micro.blog/890/2018/5d016cc55a.jpg)
+
 [Tuesday @ 10:02 PM](https://www.thingelstad.com/2018/03/20/backordered-the-better.html)
 
 Backordered the better [Marlon Bundo book](https://betterbundobook.com). Made me chuckle that it’s on back order.
@@ -257,6 +259,8 @@ Backordered the better [Marlon Bundo book](https://betterbundobook.com). Made me
 [Sunday @ 8:39 AM](https://www.thingelstad.com/2018/03/18/getting-crushed-in.html)
 
 Getting crushed in UNO this morning. 🤪
+
+![](https://cdn.uploads.micro.blog/890/2018/18b371afd9.jpg)
 
 [Saturday @ 11:24 PM](https://www.thingelstad.com/2018/03/17/unlocked-izel-in.html)
 

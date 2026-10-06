@@ -280,21 +280,32 @@ This might give me a reason to get a U2F key. 🔐
 
 GOAL!!! USA takes 1-0 lead v Guyana! 🇺🇸🇬🇾 CONCACAF Gold Cup 🏆⚽️
 
+![](https://cdn.uploads.micro.blog/890/2019/bccdc1f7ef.jpg)
+
 ### [Tuesday @ 8:49 PM](https://www.thingelstad.com/2019/06/18/concacaf-gold-cup.html)
 
 Time to water the grass at Allianz Field. 💦🌱⚽️
+
+![](https://cdn.uploads.micro.blog/890/2019/31b176929e.jpg)
 
 ### [Tuesday @ 8:44 PM](https://www.thingelstad.com/2019/06/18/concacaf-gold-cup.html)
 
 Tyler and I are READY TO CHEER for Team USA v Guyana CONCACAF Gold Cup! ⚽️🏆
 
+![](https://cdn.uploads.micro.blog/890/2019/1e67440e8b.jpg)
+
 ### [Tuesday @ 8:35 PM](https://www.thingelstad.com/2019/06/18/concacaf-gold-cup.html)
 
 Ready for the USA v Guyana CONCACAF Gold Cup Match! ⚽️🏆
 
+![](https://cdn.uploads.micro.blog/890/2019/56630bae58.jpg)
+
 ### [Tuesday @ 6:54 PM](https://www.thingelstad.com/2019/06/18/concacaf-gold-cup.html)
 
 Tyler and I are super excited for tonight’s [CONCACAF](https://en.wikipedia.org/wiki/CONCACAF) [Gold Cup](https://www.goldcup.org) matches at Allianz Field! ⚽️🏆 Panama v. Trinidad playing now!
+
+![](https://cdn.uploads.micro.blog/890/2019/fb4f0fcadb.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/b6609819ed.jpg)
 
 ### [Sunday @ 7:55 PM](https://www.thingelstad.com/2019/06/16/ive-made-the.html)
 

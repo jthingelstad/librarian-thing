@@ -217,9 +217,16 @@ $4.99 5/5 stars
 
 [Alto’s Odyssey](http://www.altosodyssey.com) is a beautiful game experience.
 
+![](https://cdn.uploads.micro.blog/890/2018/c53a257482.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/552e4056b7.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/1ecf5a15e7.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/8fad3bad0c.jpg)
+
 [Thursday @ 8:55 PM](https://www.thingelstad.com/2018/02/22/eero-update-today.html)
 
 Eero update today to support IPv6 and I can now go full IPv6 all the way online. Very nice! 👏
+
+![](https://cdn.uploads.micro.blog/890/2018/136c93b615.jpg)
 
 [Tuesday @ 9:32 PM](https://www.thingelstad.com/2018/02/20/its-all-twizzleshttpsenwikipediaorgwikitwizzle.html)
 
@@ -233,6 +240,9 @@ Using the Get and Set Clipboard actions in [Workflow](https://www.workflow.is) t
 
 I love these photos of Tammy and I from our annual [SPS Commerce](https://www.spscommerce.com) Social! 😊
 
+![](https://cdn.uploads.micro.blog/890/2018/48e7b8c97d.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/543f15ad74.jpg)
+
 [Sunday @ 6:05 PM](https://www.thingelstad.com/2018/02/18/went-down-a.html)
 
 Went down a rabbit hole 🕳 automating MailChimp for my [Weekly Thing newsletter](https://weekly.thingelstad.com). Wrestled control on my template.
@@ -245,6 +255,10 @@ At times while trying to quiet my mind, it is like thoughts are bouncing around 
 
 Beef tenderloin into the Sous Vides bath. 🤤🥩
 
+![](https://cdn.uploads.micro.blog/890/2018/32b4d44ba0.jpg)
+
 [Saturday @ 2:34 PM](https://www.thingelstad.com/2018/02/17/i-guess-i.html)
 
 I guess I exceeded the temperature for the spatula. 🤨
+
+![](https://cdn.uploads.micro.blog/890/2018/5419f15b50.jpg)

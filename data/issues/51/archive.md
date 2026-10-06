@@ -173,6 +173,8 @@ These are my small updates shared on my microblog last week.
 
 Kids are all of a sudden into [Beanie Boos](http://world.ty.com/?cat=BOOS). 🤷🏼‍♂️
 
+![](https://cdn.uploads.micro.blog/890/2018/6747a80798.jpg)
+
 [Sunday @ 12:17 PM](https://www.thingelstad.com/2018/04/22/happy-earth-dayhttpswwwearthdayorg.html)
 
 Happy [Earth Day](https://www.earthday.org) everyone! 🌏
@@ -180,6 +182,8 @@ Happy [Earth Day](https://www.earthday.org) everyone! 🌏
 [Sunday @ 8:20 AM](https://www.thingelstad.com/2018/04/22/the-bishops-on.html)
 
 The bishops on the “summer” side of our custom Chess set are Kubb players, of course.
+
+![](https://cdn.uploads.micro.blog/890/2018/87035880ee.jpg)
 
 [Sunday @ 8:19 AM](https://www.thingelstad.com/2018/04/22/this-time-of.html)
 

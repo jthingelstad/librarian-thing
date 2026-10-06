@@ -199,9 +199,14 @@ A trip to Austin, TX seems like it should have live music. 🎶 We saw [Bob Moul
 
 [Franklin BBQ](https://franklinbbq.com) was amazing today. The brisket was the best I’ve ever had by a bunch. The ribs were delicious. The pulled pork was good. Also tried the Turkey special which was tasty. 👍🏻🤤🍽
 
+![](https://cdn.uploads.micro.blog/890/2019/b4ab3ccca4.jpg)
+
 ### [Wednesday @ 8:40 AM](https://www.thingelstad.com/2019/04/03/104013.html)
 
 Full fanboy mode waiting in line at [Franklin BBQ](https://franklinbbq.com)! 😊 Brisket, ribs, and sausage on the way. 🤤 Couple of hours waiting in line.
+
+![](https://cdn.uploads.micro.blog/890/2019/2d26a2230f.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/567278f588.jpg)
 
 ### [Tuesday @ 2:45 PM](https://www.thingelstad.com/2019/04/02/lick-honest-ice.html)
 

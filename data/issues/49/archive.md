@@ -183,6 +183,8 @@ $1.99 4/5 stars
 
 First game of Tetris in years. Not bad! 🤗
 
+![](https://cdn.uploads.micro.blog/890/2018/d98c189db7.jpg)
+
 [Wednesday @ 8:02 PM](https://www.thingelstad.com/2018/04/11/not-entirely-sure.html)
 
 Not entirely sure what friending on Nintendo Switch does, but if you do that sort of thing, I’m at SW-3175-6148-7804.
@@ -191,14 +193,22 @@ Not entirely sure what friending on Nintendo Switch does, but if you do that sor
 
 The Decemberists at the Palace Theater.
 
+![](https://cdn.uploads.micro.blog/890/2018/dbe7f4f3e2.jpg)
+
 [Saturday @ 8:04 PM](https://www.thingelstad.com/2018/04/07/i-was-really.html)
 
 I was really happy that [India Palace](https://www.indiapalace.org) made [Lachha Paratha](https://en.wikipedia.org/wiki/Paratha) for us tonight (not on the menu). I had this in India a few weeks ago and loved it. 👏🏻
+
+![](https://cdn.uploads.micro.blog/890/2018/d264432edc.jpg)
 
 [Saturday @ 7:44 PM](https://www.thingelstad.com/2018/04/07/this-graph-is.html)
 
 This graph is in [Why We Sleep](https://rwbook.club/book/why-we-sleep/) and is super interesting. Only just getting started on this read and already learning a lot.
 
+![](https://cdn.uploads.micro.blog/890/2018/dd02f0fa35.jpg)
+
 [Saturday @ 7:37 PM](https://www.thingelstad.com/2018/04/07/the-ice-is.html)
 
 The ice is coming off of Cannon Lake! ☀️
+
+![](https://cdn.uploads.micro.blog/890/2018/b8b16fcd6a.jpg)

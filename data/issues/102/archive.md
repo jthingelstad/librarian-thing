@@ -228,13 +228,19 @@ Glad to see WebKit continuing to make privacy a core feature.
 
 The [2019 Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/announcing-the-2019-minnesota-aspirations-for-women-in-computing-awards-honorees/) Honorees tonight were very impressive! Congratulations to all of you! 🎉 #TeamSPS was there to celebrate and welcome the four interns joining SPS Commerce this summer. #MNAiC2019
 
+![](https://cdn.uploads.micro.blog/890/2019/1d89166928.jpg)
+
 ### [Wednesday @ 7:25 PM](https://www.thingelstad.com/2019/04/17/minnesota-aspirations-in.html)
 
 Fun and inspiring keynote at [Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/announcing-the-2019-minnesota-aspirations-for-women-in-computing-awards-honorees/) from [Amy Alexander](https://www.linkedin.com/in/amy-e-alexander/), Senior Biomedical Engineer at Mayo Clinic, sharing some of the incredible work she does to help patients. #MNAiC2019
 
+![](https://cdn.uploads.micro.blog/890/2019/07890175e2.jpg)
+
 ### [Wednesday @ 7:00 PM](https://www.thingelstad.com/2019/04/17/minnesota-aspirations-in.html)
 
 Excited to be at the [2019 Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/announcing-the-2019-minnesota-aspirations-for-women-in-computing-awards-honorees/) honoring amazing young women starting careers in technology! Very happy that #TeamSPS can be part of it!
+
+![](https://cdn.uploads.micro.blog/890/2019/4d50850ea1.jpg)
 
 ### [Monday @ 10:52 PM](https://www.thingelstad.com/2019/04/15/just-ordered-my.html)
 
@@ -247,6 +253,8 @@ Just ordered my [MacStories 10th Anniversary T-Shirt](https://www.macstories.net
 ### [Saturday @ 9:29 PM](https://www.thingelstad.com/2019/04/13/212938.html)
 
 Got to watch the [Space X Arabsat-6A](https://www.youtube.com/watch?v=TXMGu2d8c8g) launch from two days ago. Still amazes me watching the booster rockets land. 🚀😲
+
+![](https://cdn.uploads.micro.blog/890/2019/d068a99006.jpg)
 
 ### [Saturday @ 8:00 PM](https://www.thingelstad.com/2019/04/13/sad-to-hear.html)
 
@@ -263,6 +271,8 @@ Allianz Field satellite view needs an update! 😊
 
 Hard fought #MNUFC match against NYCFC. Ended in a 3-3 draw. Fabulous experience at Allianz Field for home opener!
 
+![](https://cdn.uploads.micro.blog/890/2019/d43df981e8.jpg)
+
 ### [Saturday @ 5:51 PM](https://www.thingelstad.com/2019/04/13/mn-united-home.html)
 
 Want. To. Hear. Wonderwall. ⚽️ C’mon United! #MNUFC 3-3
@@ -271,17 +281,25 @@ Want. To. Hear. Wonderwall. ⚽️ C’mon United! #MNUFC 3-3
 
 VAR serves justice for #MNUFC! ⚽️ 3-2 still.
 
+![](https://cdn.uploads.micro.blog/890/2019/2636e171c9.jpg)
+
 ### [Saturday @ 5:27 PM](https://www.thingelstad.com/2019/04/13/mn-united-home.html)
 
 They water the grass at halftime at Allianz Field. 💦⚽️
+
+![](https://cdn.uploads.micro.blog/890/2019/0a09f26717.jpg)
 
 ### [Saturday @ 5:25 PM](https://www.thingelstad.com/2019/04/13/mn-united-home.html)
 
 Family selfie from #MNUFC historic home opener in Allianz Field! 3-2 at halftime. ⚽️🙌😎
 
+![](https://cdn.uploads.micro.blog/890/2019/d83024aa63.jpg)
+
 ### [Saturday @ 4:21 PM](https://www.thingelstad.com/2019/04/13/mn-united-home.html)
 
 So excited to be here, right now, for the Minnesota United home opener in the gorgeous Allianz Field! ⚽️🖤🙌
+
+![](https://cdn.uploads.micro.blog/890/2019/6dfcf0c66f.jpg)
 
 ### [Saturday @ 7:38 AM](https://www.thingelstad.com/2019/04/13/coffee-cathedral-ratio.html)
 

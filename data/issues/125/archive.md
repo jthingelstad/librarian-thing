@@ -202,17 +202,25 @@ Looks like we are a new show at the Brave New Workshop! 🤩
 
 ⚾️💥🤩
 
+![](https://cdn.uploads.micro.blog/890/2019/3993afddfb.jpg)
+
 ### [Sunday @ 3:09 PM](https://www.thingelstad.com/2019/11/03/160928.html)
 
 Hitting balls at [Batting Cages of Minnesota](http://www.battingcagesofmn.com)! ⚾️🙌
+
+![](https://cdn.uploads.micro.blog/890/2019/8831888e67.jpg)
 
 ### [Saturday @ 10:11 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
 Enjoyed [Open Mike Eagle](http://mikeeagle.net) at the Wits Reunion show tonight. Recommend checking out his music. 🎶
 
+![](https://cdn.uploads.micro.blog/890/2019/7091d2e058.jpg)
+
 ### [Saturday @ 8:04 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
 At the Wits Reunion show at the Fitzgerald!
+
+![](https://cdn.uploads.micro.blog/890/2019/a74352e074.jpg)
 
 ### [Saturday @ 11:15 AM](https://www.thingelstad.com/2019/11/02/i-think-the.html)
 

@@ -261,9 +261,14 @@ Mazie and I had a great 18.4 mile bike ride today on the [Sakatah Singing Hills 
 
 The distillery at [10,000 Drops](https://www.10000drops.com). 10k💧
 
+![](https://cdn.uploads.micro.blog/890/2018/f992654953.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/3f83fcad0f.jpg)
+
 ### [Friday @ 6:18 PM](https://www.thingelstad.com/2018/07/06/181803.html)
 
 Enjoying a cocktail at the brand new [10,000 Drops](https://www.10000drops.com) distillery in Faribault. Delicious drinks! 🍹 Also pizza from [Pizzeria 201](http://pizzeria201.com) in Montgomery made from their food truck here. Worth a trip! 👍🏻
+
+![](https://cdn.uploads.micro.blog/890/2018/ee5d2a13a0.jpg)
 
 ### [Friday @ 2:07 PM](https://www.thingelstad.com/2018/07/06/the-best-bike.html)
 

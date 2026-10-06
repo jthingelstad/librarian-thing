@@ -136,21 +136,31 @@ Happy with fire pit setup. 🔥
 
 Good open session on Product Management with Adrienne Peirce, Shawn Heller, and Jeremy Moede. Lot of knowledge sharing! #minnebar
 
+![](https://cdn.uploads.micro.blog/890/2019/19e7414f0e.jpg)
+
 ### [Saturday @ 9:50 AM](https://www.thingelstad.com/2019/04/27/minnebar.html)
 
 Good Session 0 at Minnebar 14 with a wake-up call from [Sharon Kennedy Vickers](http://sharonkennedyvickers.com) on the issues that come from a lack of diversity in technology, and what we can do to improve as an ecosystem! #minnebar
+
+![](https://cdn.uploads.micro.blog/890/2019/72d197243b.jpg)
 
 ### [Saturday @ 9:39 AM](https://www.thingelstad.com/2019/04/27/minnebar.html)
 
 We have a growing, thriving technology community in the Twin Cities and Minnebar is an integral part of that community! I’ve been lucky to be involved with this organization since the beginning and love that [SPS Commerce](https://jobs.spscommerce.com) is a terabyte sponsor! #minnebar
 
+![](https://cdn.uploads.micro.blog/890/2019/d272dc1c0e.jpg)
+
 ### [Saturday @ 8:51 AM](https://www.thingelstad.com/2019/04/27/minnebar.html)
 
 Great energy going into Session 0 at [Minnebar 14](http://www.minnestar.org/minnebar)! Record registrations! #minnebar
 
+![](https://cdn.uploads.micro.blog/890/2019/7de9c8d1b1.jpg)
+
 ### [Saturday @ 8:49 AM](https://www.thingelstad.com/2019/04/27/minnebar.html)
 
 [Minnebar 14](http://www.minnestar.org/minnebar) kicking off! Looking forward to learning a ton again this year! 💙 this event, organization, and the community that makes it!
+
+![](https://cdn.uploads.micro.blog/890/2019/19835315d4.jpg)
 
 ### [Friday @ 10:12 PM](https://www.thingelstad.com/2019/04/26/we-had-a.html)
 

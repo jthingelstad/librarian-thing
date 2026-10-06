@@ -245,17 +245,25 @@ Had a fun time recording an interview with [Matt Norman](http://www.mattnorman.c
 
 [Kramarczuk’s](https://www.kramarczuks.com) Polish sausage with sauerkraut! Delicious – must have at Target Field. ⚾️
 
+![](https://cdn.uploads.micro.blog/890/2018/aa6a785475.jpg)
+
 ### [Tuesday @ 8:18 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Panorama of Target Field. ⚾️
+
+![](https://cdn.uploads.micro.blog/890/2018/638f211951.jpg)
 
 ### [Tuesday @ 8:03 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Enjoying a perfect night for baseball! ⚾️
 
+![](https://cdn.uploads.micro.blog/890/2018/edb1b9c38a.jpg)
+
 ### [Tuesday @ 7:12 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
 Minnesota Twins v Detroit Tigers! ⚾️
+
+![](https://cdn.uploads.micro.blog/890/2018/127c38fdad.jpg)
 
 ### [Sunday @ 11:14 PM](https://www.thingelstad.com/2018/05/20/the-tesla-coil.html)
 
@@ -278,6 +286,9 @@ Afternoon coffee flight – macchiato with cappuccino at Cafe Umbria. ☕️
 ### [Sunday @ 3:40 PM](https://www.thingelstad.com/2018/05/20/131223.html)
 
 White Sox beat Texas Rangers 3-0! ⚾️🙌 Nice game!
+
+![](https://cdn.uploads.micro.blog/890/2018/ae4d0ece38.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/0b6e46ddd0.jpg)
 
 ### [Sunday @ 2:54 PM](https://www.thingelstad.com/2018/05/20/chicago-at-night.html)
 
@@ -311,9 +322,13 @@ Chicago skyline.
 
 Time for lunch. Sox leading 3-0! 👍🏻⚾️
 
+![](https://cdn.uploads.micro.blog/890/2018/a6e541932b.jpg)
+
 ### [Sunday @ 1:12 PM](https://www.thingelstad.com/2018/05/20/131223.html)
 
 White Sox v Texas Rangers! ⚾️
+
+![](https://cdn.uploads.micro.blog/890/2018/48c25cd2a3.jpg)
 
 ### [Sunday @ 8:45 AM](https://www.thingelstad.com/2018/05/20/sailboats-in-chicago.html)
 

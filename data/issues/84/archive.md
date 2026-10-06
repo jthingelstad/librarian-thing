@@ -240,17 +240,25 @@ Made my annual donation to Internet Archive! [Join me](https://archive.org/donat
 
 Wild win! 7-1! 🏒
 
+![](https://cdn.uploads.micro.blog/890/2018/fcde46c3c2.jpg)
+
 ### [Tuesday @ 8:20 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Wild take 2-0 lead over Montreal! 🏒
+
+![](https://cdn.uploads.micro.blog/890/2018/5e4832098f.jpg)
 
 ### [Tuesday @ 7:55 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Hockey time with Amy Patton @pattonamyj, Ian Redlin and Paul Birkbeck @birkbeck! 🏒
 
+![](https://cdn.uploads.micro.blog/890/2018/19109948a1.jpg)
+
 ### [Tuesday @ 7:29 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
 Minnesota Wild v Montreal Canadiens! 🏒
+
+![](https://cdn.uploads.micro.blog/890/2018/f540d9830b.jpg)
 
 ### [Sunday @ 9:27 PM](https://www.thingelstad.com/2018/12/09/watched-pick-of.html)
 
@@ -296,9 +304,16 @@ Parked at SPS Tower for a concert at the State Theater. Took skyways and skipped
 
 [The New Standards](http://www.thenewstandards.com) brought it home with “Snow Days”, on the permanent playlist for the Holiday Show! 🎶❄️
 
+![](https://cdn.uploads.micro.blog/890/2018/e6e2379226.jpg)
+
 ### [Saturday @ 9:21 PM](https://www.thingelstad.com/2018/12/08/212134.html)
 
 First half of [The New Standards](http://www.thenewstandards.com) Holiday Show was awesome. Okee Dokee Brothers, The Owls, Chris Koza, Jeremy Messersmith, Matt Wilson, Dessa, Tina Schleske, and Caroline Steele. 🎶
+
+![](https://cdn.uploads.micro.blog/890/2018/dfd2650847.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/acc72f82c4.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/bb6dc34b46.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/155235c320.jpg)
 
 ### [Saturday @ 12:31 PM](https://www.thingelstad.com/2018/12/08/the-kingfield-at.html)
 

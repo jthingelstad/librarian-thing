@@ -205,61 +205,100 @@ Free 4.5/5 stars
 
 Went to setup [Cloudflare’s new 1.1.1.1 DNS service](https://1.1.1.1) and it looks like [Eero Plus](https://eero.com/plus) must work in part using DNS as well. Seems I cannot have Eero Plus and use 1.1.1.1. 🤔
 
+![](https://cdn.uploads.micro.blog/890/2018/f47aff8f1a.jpg)
+
 [Friday @ 7:45 PM](https://www.thingelstad.com/2018/04/06/visited-the-michigan.html)
 
 Visited the [Michigan Avenue Apple Store](https://www.apple.com/retail/michiganavenue/) when we were in Chicago. Amazing architecture. The building feels invisible.
+
+![](https://cdn.uploads.micro.blog/890/2018/58c624c0db.jpg)
 
 [Friday @ 7:40 PM](https://www.thingelstad.com/2018/04/06/193931.html)
 
 Family selfie from the top of the [John Hancock Tower](https://en.wikipedia.org/wiki/875_North_Michigan_Avenue).
 
+![](https://cdn.uploads.micro.blog/890/2018/1e54db93d1.jpg)
+
 [Friday @ 7:39 PM](https://www.thingelstad.com/2018/04/06/193931.html)
 
 The view from the [360 Chicago](http://www.360chicago.com) deck on the [John Hancock Tower](https://en.wikipedia.org/wiki/875_North_Michigan_Avenue) was incredible.
+
+![](https://cdn.uploads.micro.blog/890/2018/c0c664f566.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/1bd373a5b2.jpg)
 
 [Friday @ 7:35 PM](https://www.thingelstad.com/2018/04/06/the-thorne-miniature.html)
 
 The [Thorne Miniature Rooms](http://www.artic.edu/aic/collections/thorne) at the Art Institute of Chicago are incredible. You can find detail in each one over and over.
 
+![](https://cdn.uploads.micro.blog/890/2018/7942125c64.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/5ff11842bd.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/77fcd01e25.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/ae7b3ffa34.jpg)
+
 [Friday @ 2:28 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 Chicago [Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate).
+
+![](https://cdn.uploads.micro.blog/890/2018/2fba00047e.jpg)
 
 [Friday @ 2:27 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 Inside the Chicago [Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate).
 
+![](https://cdn.uploads.micro.blog/890/2018/2debc7dc6e.jpg)
+
 [Friday @ 2:26 PM](https://www.thingelstad.com/2018/04/06/chicago-cloud-gate.html)
 
 Chicago [Cloud Gate](https://en.wikipedia.org/wiki/Cloud_Gate) sculpture.
+
+![](https://cdn.uploads.micro.blog/890/2018/e07026bfcf.jpg)
 
 [Wednesday @ 8:53 PM](https://www.thingelstad.com/2018/04/04/chicago.html)
 
 Chicago.
 
+![](https://cdn.uploads.micro.blog/890/2018/955aa43dd4.jpg)
+
 [Wednesday @ 1:16 PM](https://www.thingelstad.com/2018/04/04/time-for-hamilton.html)
 
 Time for Hamilton! 🎭🎶
+
+![](https://cdn.uploads.micro.blog/890/2018/ec61b64871.jpg)
 
 [Wednesday @ 11:52 AM](https://www.thingelstad.com/2018/04/04/willis-towerhttpsenwikipediaorgwikiwillistower.html)
 
 [Willis Tower](https://en.wikipedia.org/wiki/Willis_Tower).
 
+![](https://cdn.uploads.micro.blog/890/2018/57024ca698.jpg)
+
 [Wednesday @ 10:58 AM](https://www.thingelstad.com/2018/04/04/million-three-different.html)
 
 $1 million three different ways ($1, $20, and $100 bills) at Chicago Fed [Money Museum](https://www.chicagofed.org/education/money-museum/index).
+
+![](https://cdn.uploads.micro.blog/890/2018/e606a2c7fd.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/70d8ee708b.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/42f20e547d.jpg)
 
 [Wednesday @ 9:38 AM](https://www.thingelstad.com/2018/04/04/delicious-espresso-at.html)
 
 Delicious espresso at [Caffe Umbria](https://caffeumbria.com) this morning.
 
+![](https://cdn.uploads.micro.blog/890/2018/e08f264940.jpg)
+
 [Tuesday @ 8:34 PM](https://www.thingelstad.com/2018/04/03/array-of-d.html)
 
 Array of 3D printers at [Museum of Science & Industry](https://www.msichicago.org).
 
+![](https://cdn.uploads.micro.blog/890/2018/a6cdb45c8a.jpg)
+
 [Tuesday @ 8:32 PM](https://www.thingelstad.com/2018/04/03/i-love-watching.html)
 
 I love watching the [Tesla coil](https://en.wikipedia.org/wiki/Tesla_coil) at the Chicago [Museum of Science & Industry](https://www.msichicago.org). ⚡️⚡️⚡️
+
+![](https://cdn.uploads.micro.blog/890/2018/8c9571a3d0.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/0484d983d4.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/25a80b19d8.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/7a5d66ba16.jpg)
 
 [Tuesday @ 8:26 PM](https://www.thingelstad.com/2018/04/03/tammy-has-our.html)
 
@@ -269,21 +308,31 @@ Tammy has our summer vacations planned out for the next 5 years. Now that is pla
 
 Forty minute wait for deep dish? Sure.
 
+![](https://cdn.uploads.micro.blog/890/2018/5e1e9b09ca.jpg)
+
 [Monday @ 4:24 PM](https://www.thingelstad.com/2018/04/02/ready-for-sharks.html)
 
 Ready for Sharks 4D movie at Shedd Aquarium!
+
+![](https://cdn.uploads.micro.blog/890/2018/a6df517d65.jpg)
 
 [Monday @ 1:04 PM](https://www.thingelstad.com/2018/04/02/delicious-unfiltered-foiken.html)
 
 Delicious unfiltered Foiken Haze New England IPA at [ERIS Brewery and Cider House](http://www.erischicago.com). 🍻
 
+![](https://cdn.uploads.micro.blog/890/2018/9e765f8044.jpg)
+
 [Sunday @ 8:11 PM](https://www.thingelstad.com/2018/04/01/011107.html)
 
 We had a blast at [Wizard Quest](https://www.wizardquest.com) today and completed our challenge with a ⭐️⭐️⭐️ rating! This was a really fun time for everyone.
 
+![](https://cdn.uploads.micro.blog/890/2018/8cbcdbcb7b.jpg)
+
 [Sunday @ 8:07 PM](https://www.thingelstad.com/2018/04/01/we-won-the.html)
 
 We won “The Circus” room at [D.O.A. Room Escape](https://www.doaroomescape.com/the-rooms/) today with a few minutes to spare! It was fun to do a room where the kids led the way! 👍🏻
+
+![](https://cdn.uploads.micro.blog/890/2018/7e716ea29b.jpg)
 
 [Sunday @ 10:03 AM](https://www.thingelstad.com/2018/04/01/150339.html)
 
@@ -293,6 +342,10 @@ We won “The Circus” room at [D.O.A. Room Escape](https://www.doaroomescape.c
 
 We had a great time at the [Rick Wilcox Magic Show](https://rickwilcox.com) tonight! 🎩 I got to go onstage for one of the segments! 👍🏻 The kids got signatures at the end.
 
+![](https://cdn.uploads.micro.blog/890/2018/ab74c4cf53.jpg)
+
 [Saturday @ 5:53 PM](https://www.thingelstad.com/2018/03/31/dinner-at-moosejaw.html)
 
 Dinner at [Moosejaw Pizza & Brewing](http://www.dellsmoosejaw.com). 🍽
+
+![](https://cdn.uploads.micro.blog/890/2018/20764cc298.jpg)

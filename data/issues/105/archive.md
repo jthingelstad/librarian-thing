@@ -155,17 +155,25 @@ Super geeky deep dive into the JPG format.
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
+![](https://cdn.uploads.micro.blog/890/2019/6321c43353.jpg)
+
 ### [Thursday @ 1:36 PM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Great talks at Tech Jam 2019, and incredible breadth. How about a lightning talk on emotional intelligence? #TeamSPS #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2019/4a7389ee18.jpg)
 
 ### [Thursday @ 12:32 PM](https://www.thingelstad.com/2019/05/09/sps-tech-jam.html)
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
+![](https://cdn.uploads.micro.blog/890/2019/fcc1563172.jpg)
+
 ### [Thursday @ 11:47 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Break time hacky sack - great way to stretch between sessions! #TeamSPS #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2019/25d7f4d228.jpg)
 
 ### [Thursday @ 10:54 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
@@ -179,17 +187,25 @@ Inspiring keynote from Chris Williams of [Badass Agile](https://badassagile.com)
 
 A huge thank you to the amazing organizers of Tech Jam 2019! Community events cannot happen without individuals that are willing to put personal passion and energy to make them happen! 👏 #TeamSPS #SPSTechJam
 
+![](https://cdn.uploads.micro.blog/890/2019/07765878c4.jpg)
+
 ### [Thursday @ 8:25 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 “One of these cords isn’t working right!” Thad making it all work for #TeamSPS #SPSTechJam. 🤓
+
+![](https://cdn.uploads.micro.blog/890/2019/de708c9adc.jpg)
 
 ### [Thursday @ 8:09 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 I love the creativity that our team puts into our #TeamSPS activities, and I just 💙 this Tech Jam "comic" sticker! So nicely done [@ken_korth](https://twitter.com/ken_korth)! #SPSTechJam
 
+![](https://cdn.uploads.micro.blog/890/2019/b290adc100.jpg)
+
 ### [Thursday @ 8:06 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 Today is #TeamSPS Tech Jam 2019, where we collect as a community to share and learn from each other! We have presenters covering a wide range of topics, and representing many parts of our team! #SPSTechJam
+
+![](https://cdn.uploads.micro.blog/890/2019/1143b2e147.jpg)
 
 ### [Sunday @ 9:38 PM](https://www.thingelstad.com/2019/05/05/had-fun-playing.html)
 
@@ -210,9 +226,13 @@ Enjoying a classic rock morning: Drift Away by Dobie Gray, Pink Houses by John M
 
 Seconds before Minnesota United GOAL! 1-0 #MNUFC
 
+![](https://cdn.uploads.micro.blog/890/2019/5644a0700d.jpg)
+
 ### [Saturday @ 7:15 PM](https://www.thingelstad.com/2019/05/04/minnesota-united-v.html)
 
 Minnesota United v Seattle Sounders! ⚽️ #MNUFC
+
+![](https://cdn.uploads.micro.blog/890/2019/d79519cea0.jpg)
 
 ### [Saturday @ 7:13 PM](https://www.thingelstad.com/2019/05/04/we-found-our.html)
 

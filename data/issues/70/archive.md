@@ -206,8 +206,6 @@ Just got invitation to OmniFocus 3 for Mac beta. Impressive and big redesign. I 
 
 ### [Monday @ 7:58 PM](https://www.thingelstad.com/2018/09/03/005804.html)
 
-https://www.thingelstad.com/uploads/2018/6ee7517ab7.jpg https://www.thingelstad.com/uploads/2018/e481c4fee5.jpg https://www.thingelstad.com/uploads/2018/0a73645af3.jpg https://www.thingelstad.com/uploads/2018/878b5f78d0.jpg
-
 We had a great time at the [Minnesota Renaissance Festival](http://www.renaissancefest.com) today!
 
 ![](https://cdn.uploads.micro.blog/890/2018/6ee7517ab7.jpg)

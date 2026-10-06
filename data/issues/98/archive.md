@@ -219,17 +219,31 @@ International travel is hard on sleep. 😳
 
 Melbourne Cricket Grounds at night.
 
+![](https://cdn.uploads.micro.blog/890/2019/0d554a538e.jpg)
+
 ### [Thursday @ 4:10 AM](https://www.thingelstad.com/2019/03/21/042204.html)
 
 Richmond 14-13-97 beats Carlton 9-10-64! Great game! Footy fan now! 🇦🇺😊👍🏻
+
+![](https://cdn.uploads.micro.blog/890/2019/07e7320eb6.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/c4f4a2d1ad.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/1d535efbc4.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/7369f49c1e.jpg)
 
 ### [Thursday @ 2:53 AM](https://www.thingelstad.com/2019/03/21/042204.html)
 
 Richmond 7-8-50 over Carlton 4-4-28 at half! Starting to understand Footy. Fun, fast game! 🇦🇺😊
 
+![](https://cdn.uploads.micro.blog/890/2019/a95cdb161c.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/c37a4dd361.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/2414ae1163.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/959cb76325.jpg)
+
 ### [Thursday @ 2:22 AM](https://www.thingelstad.com/2019/03/21/042204.html)
 
 Taking in my first game of AFL Footy at Melbourne Cricket Ground! 🙌
+
+![](https://cdn.uploads.micro.blog/890/2019/0f6b7e3192.jpg)
 
 ### [Thursday @ 1:08 AM](https://www.thingelstad.com/2019/03/21/i-tried-a.html)
 

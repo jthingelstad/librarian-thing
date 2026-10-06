@@ -267,9 +267,13 @@ https://www.thingelstad.com/2018/06/15/013142.html
 
 We had a delightful dinner at [Freehands Farm](http://www.freehandsfarm.com) outside Ashland, WI. 🍽 True farm to table dining - on the farm!
 
+![](https://cdn.uploads.micro.blog/890/2018/b21f3be536.jpg)
+
 https://www.thingelstad.com/2018/06/14/nice-family-bike.html
 
 Nice family bike ride around Lake Harriet tonight.
+
+![](https://cdn.uploads.micro.blog/890/2018/48489d9771.jpg)
 
 https://www.thingelstad.com/2018/06/13/got-a-silicon.html
 
@@ -278,6 +282,8 @@ Got a Silicon Dust [HDHomeRun Extend](https://www.silicondust.com/product/hdhome
 https://www.thingelstad.com/2018/06/12/idyllic-evening.html
 
 Idyllic evening.
+
+![](https://cdn.uploads.micro.blog/890/2018/2374b16972.jpg)
 
 https://www.thingelstad.com/2018/06/10/the-new-capabilities.html
 
@@ -290,6 +296,8 @@ Plugged my Jawbone Jambox into my laptop to change the configuration and found o
 https://www.thingelstad.com/2018/06/09/got-the-pork.html
 
 Got the pork shoulders on just as the rain started to pour! Hoping to smoke through 5 hours of rain just in time for dinner.
+
+![](https://cdn.uploads.micro.blog/890/2018/56b0bfa34f.jpg)
 
 https://www.thingelstad.com/2018/06/09/nice-talk-on.html
 

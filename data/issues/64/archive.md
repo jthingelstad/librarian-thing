@@ -264,13 +264,19 @@ Biked into work today! 🚲 Two weeks makes the start of a streak.
 
 Family having a great time at #MNUFC match, except Tyler who is cheering for LAFC for some reason. ⚽️ 5-1 #MINvLAFC
 
+![](https://cdn.uploads.micro.blog/890/2018/be8700b14b.jpg)
+
 ### [Sunday @ 7:26 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Ibarra! Ramirez! #MNUFC goes 5-1! ⚽️🙌🏻 #MINvLAFC
 
+![](https://cdn.uploads.micro.blog/890/2018/c418349469.jpg)
+
 ### [Sunday @ 7:02 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Great first half MNUFC! Top notch play! 3-1! #mnufc #MINvLAFC
+
+![](https://cdn.uploads.micro.blog/890/2018/0c191d0bde.jpg)
 
 ### [Sunday @ 6:35 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
@@ -279,6 +285,8 @@ Totally amazing, gorgeous goal from MN United! Then neutralized in 60 seconds wi
 ### [Sunday @ 6:31 PM](https://www.thingelstad.com/2018/07/22/mn-united-v.html)
 
 Great start to MN United v LAFC! Some serious soccer! ⚽️ #MNUFC #MINvLAFC
+
+![](https://cdn.uploads.micro.blog/890/2018/8f9e3847b0.jpg)
 
 ### [Saturday @ 6:29 PM](https://www.thingelstad.com/2018/07/21/232931.html)
 

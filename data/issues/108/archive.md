@@ -260,25 +260,38 @@ First breakfast on flat-top grill came out good. Still need more practice! 👨�
 
 Cue WONDERWALL! Loons win 1-0! 🙌🎶⚽️ #MNUFC #MINvHOU
 
+![](https://cdn.uploads.micro.blog/890/2019/6e876ef97b.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/391196fb69.jpg)
+
 ### [Saturday @ 8:56 PM](https://www.thingelstad.com/2019/05/25/beautiful-game-mnufc.html)
 
 Beautiful Game! ⚽️ #MNUFC #MINvHOU
+
+![](https://cdn.uploads.micro.blog/890/2019/363dcf270e.jpg)
 
 ### [Saturday @ 8:01 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Ground crew out giving Allianz Field some TLC! 🌱😍 #MINvHOU #MNUFC ⚽️
 
+![](https://cdn.uploads.micro.blog/890/2019/27cb5d479c.jpg)
+
 ### [Saturday @ 7:59 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Darwin Quintero getting a concussion check! All good! 👍 #MINvHOU #MNUFC ⚽️👏
+
+![](https://cdn.uploads.micro.blog/890/2019/8eba7f7cf9.jpg)
 
 ### [Saturday @ 7:32 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Minnesota United celebrating goal against Houston! 1-0 #MINvHOU #MNUFC ⚽️👏
 
+![](https://cdn.uploads.micro.blog/890/2019/2e55c46ca6.jpg)
+
 ### [Saturday @ 7:31 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Kickoff for Minnesota United v Houston Dynamos! #MINvHOU #MNUFC ⚽️👏
+
+![](https://cdn.uploads.micro.blog/890/2019/31a9ad95f8.jpg)
 
 ### [Saturday @ 1:29 PM](https://www.thingelstad.com/2019/05/25/flying-the-planet.html)
 

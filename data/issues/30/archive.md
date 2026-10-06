@@ -118,6 +118,8 @@ Amazon Web Services also had their annual event this week and announced an impre
 
 Now I need to get going on my Christmas shopping! 🎁
 
+![](https://cdn.uploads.micro.blog/890/2017/2a9503caf9.jpg)
+
 https://www.thingelstad.com/2017/11/29/in-our-chat.html
 
 ## Blog posts 📬

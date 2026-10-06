@@ -203,9 +203,13 @@ Another Saturday, [another PR](https://members.onepeloton.com/profile/workouts/0
 
 Goals from Franck Ribery and Arjen Robben in today’s Bayern game, [their final](https://www.mirror.co.uk/sport/football/news/franck-ribery-arjen-robben-break-16165414) and the title clencher, are amazing. ⚽️👏
 
+![](https://cdn.uploads.micro.blog/890/2019/02096f73b6.jpg)
+
 ### [Saturday @ 9:51 AM](https://www.thingelstad.com/2019/05/18/095101.html)
 
 Awesome goal from [David Alaba](https://en.wikipedia.org/wiki/David_Alaba) to take Bayern ahead 2-1! And then [Renato Sanches](https://en.wikipedia.org/wiki/Renato_Sanches) to go 3-1! ⚽️ Championship Saturday! 👏
+
+![](https://cdn.uploads.micro.blog/890/2019/8d0ea1f597.jpg)
 
 ## Fortune 🥠
 

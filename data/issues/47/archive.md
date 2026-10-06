@@ -170,13 +170,20 @@ After reading multiple blog posts about this book, after Tammy reading it and re
 
 Family selfie at the Wisconsin Dells [Kalahari Resort](https://www.kalahariresorts.com)! Tyler’s blackeye memorialized.
 
+![](https://cdn.uploads.micro.blog/890/2018/60d9a328e9.jpg)
+
 [Friday @ 8:53 AM](https://www.thingelstad.com/2018/03/30/delicious-kingfield-at.html)
 
 Delicious Kingfield at [Five Watt Coffee](http://fivewattcoffee.com) this morning. Heading out on vacation shortly.
 
+![](https://cdn.uploads.micro.blog/890/2018/3d3c74efa3.jpg)
+
 [Thursday @ 6:36 PM](https://www.thingelstad.com/2018/03/29/at-martinahttpswwwmartinarestaurantcom-for.html)
 
 At [Martina](https://www.martinarestaurant.com) for our first Gnocchi Night. Delicious.
+
+![](https://cdn.uploads.micro.blog/890/2018/cf839eee9c.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/b2a230ecb6.jpg)
 
 [Thursday @ 1:12 PM](https://www.thingelstad.com/2018/03/29/just-registered-for.html)
 
@@ -186,9 +193,13 @@ Just registered for [Minnebar 13](https://minnestar.org/minnebar/) – nice and 
 
 Seeing [Patricia Barber](http://www.patriciabarber.com) for the first time at [Dakota Jazz Club](http://www.dakotacooks.com). 🎶
 
+![](https://cdn.uploads.micro.blog/890/2018/e7d8e1c17b.jpg)
+
 [Tuesday @ 9:58 PM](https://www.thingelstad.com/2018/03/27/great-start-to.html)
 
 Great start to Season 5 of [Silicon Valley](https://www.hbo.com/silicon-valley). 🤣
+
+![](https://cdn.uploads.micro.blog/890/2018/6c8f9ecf76.jpg)
 
 [Tuesday @ 7:32 PM](https://www.thingelstad.com/2018/03/27/ive-gone-from.html)
 

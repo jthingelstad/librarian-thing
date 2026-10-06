@@ -199,21 +199,31 @@ This is so great! 👏
 
 Afternoon beverage at [Castle Danger Brewery](https://www.castledangerbrewery.com). 🍺
 
+![](https://cdn.uploads.micro.blog/890/2018/1d6962ddfe.jpg)
+
 [2018-05-04 4:01 PM](https://www.thingelstad.com/2018/05/04/family-photo-on.html)
 
 Family photo on shore of Lake Superior. Outside of Two Harbors.
+
+![](https://cdn.uploads.micro.blog/890/2018/4275e3effc.jpg)
 
 [2018-05-04 3:24 PM](https://www.thingelstad.com/2018/05/04/left-a-cairnhttpsenwikipediaorgwikicairn.html)
 
 Left a [cairn](https://en.wikipedia.org/wiki/Cairn). 🙏🏻
 
+![](https://cdn.uploads.micro.blog/890/2018/f7c781c58e.jpg)
+
 [2018-05-04 2:12 PM](https://www.thingelstad.com/2018/05/04/two-harbors-mn.html)
 
 Two Harbors, MN.
 
+![](https://cdn.uploads.micro.blog/890/2018/1cb8558e5b.jpg)
+
 [2018-05-04 1:27 PM](https://www.thingelstad.com/2018/05/04/it-seems-bananas.html)
 
 It seems bananas that there is a Banana Saver product one can buy. 🤦🏼‍♂️
+
+![](https://cdn.uploads.micro.blog/890/2018/82853e8769.jpg)
 
 [2018-05-03 10:55 PM](https://www.thingelstad.com/2018/05/03/its-possible-to.html)
 
@@ -222,6 +232,8 @@ It’s possible to make some pretty crazy stuff with [Workflow](https://www.work
 [2018-05-03 8:39 PM](https://www.thingelstad.com/2018/05/03/gooseberry-falls-was.html)
 
 Gooseberry Falls was amazing today.
+
+![](https://cdn.uploads.micro.blog/890/2018/4a4518d28c.jpg)
 
 [2018-05-03 8:33 PM](https://www.thingelstad.com/2018/05/03/why-does-microsoft.html)
 
@@ -235,21 +247,31 @@ When Twitter updates Terms of Service I get notices for multiple accounts that I
 
 North Shore requires a stop at [Betty’s Pies](https://bettyspies.com). I’m a pie traditionalist. Blueberry, cup of coffee.
 
+![](https://cdn.uploads.micro.blog/890/2018/34f713f3b8.jpg)
+
 [2018-05-03 1:42 PM](https://www.thingelstad.com/2018/05/03/lake-superior.html)
 
 Lake Superior.
+
+![](https://cdn.uploads.micro.blog/890/2018/7ad0f43776.jpg)
 
 [2018-05-03 1:12 PM](https://www.thingelstad.com/2018/05/03/snow-hanging-on.html)
 
 Snow hanging on up north.
 
+![](https://cdn.uploads.micro.blog/890/2018/f7a999ef59.jpg)
+
 [2018-05-03 12:41 PM](https://www.thingelstad.com/2018/05/03/gooseberry-falls-is.html)
 
 Gooseberry Falls is roaring with spring melt.
 
+![](https://cdn.uploads.micro.blog/890/2018/0e1dd11c2b.jpg)
+
 [2018-05-02 8:36 PM](https://www.thingelstad.com/2018/05/02/home-freehttphomefreemusiccom-stage.html)
 
 [Home Free](http://homefreemusic.com) stage photo. 🎶
+
+![](https://cdn.uploads.micro.blog/890/2018/5af008d83c.jpg)
 
 [2018-05-02 8:30 PM](https://www.thingelstad.com/2018/05/02/013027.html)
 
@@ -259,17 +281,27 @@ Excited to see [OmniFocus 3.0 for iOS ship date](https://www.omnigroup.com/blog/
 
 Whole family at [Home Free](http://homefreemusic.com) concert in Duluth. (One of Mazie’s favorite bands!) 🎶
 
+![](https://cdn.uploads.micro.blog/890/2018/02e3e7b921.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/c1e7dcf42f.jpg)
+![](https://cdn.uploads.micro.blog/890/2018/6e78fe5ccc.jpg)
+
 [2018-05-02 6:30 PM](https://www.thingelstad.com/2018/05/02/trying-out-omc.html)
 
 Trying out [OMC Smokehouse](https://omcsmokehouse.com) in Duluth, and of course a [Bent Paddle Kanū](http://bentpaddlebrewing.com/beer/flagship-beers.php).
+
+![](https://cdn.uploads.micro.blog/890/2018/6084a6baeb.jpg)
 
 [2018-05-01 8:48 PM](https://www.thingelstad.com/2018/05/01/going-to-learn.html)
 
 Going to learn some Cyrillic for my next trip to Kiev.
 
+![](https://cdn.uploads.micro.blog/890/2018/ee48ce03fe.jpg)
+
 [2018-04-30 7:34 PM](https://www.thingelstad.com/2018/04/30/gorgeous-evening-to.html)
 
 Gorgeous evening to sit outside and relax.
+
+![](https://cdn.uploads.micro.blog/890/2018/2c35c82804.jpg)
 
 [2018-04-28 9:05 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
@@ -278,6 +310,8 @@ Cue Wonderwall! 🎼 Nice win Minnesota United! #MNUFC 2-1
 [2018-04-28 8:40 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 This review could have gotten really ugly. Luckily went the right way.
+
+![](https://cdn.uploads.micro.blog/890/2018/d568fe79df.jpg)
 
 [2018-04-28 8:37 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
@@ -290,6 +324,8 @@ B🚫OBBY!!! B🚫OBBY!!! B🚫OBBY!!! ⚽️ Nice save!
 [2018-04-28 8:00 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 
 Halftime family selfie at Minnesota United #MNUFC v Houston Dynamo. ⚽️ 1-1
+
+![](https://cdn.uploads.micro.blog/890/2018/7e9f116723.jpg)
 
 [2018-04-28 7:18 PM](https://www.thingelstad.com/2018/04/28/minnesota-united-v.html)
 

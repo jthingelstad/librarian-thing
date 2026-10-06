@@ -263,13 +263,22 @@ This is a great explanation of why I am so focused on privacy online.
 
 Three minutes stoppage time MN United leading 3-1. Cue Wonderwall! 🎶🤩⚽️ #MNUFC #MINvRSL
 
+![](https://cdn.uploads.micro.blog/890/2019/f7f8f80204.jpg)
+
 ### [Sunday @ 6:24 PM](https://www.thingelstad.com/2019/09/15/mn-united-v.html)
 
 Great MN United 2nd half with goals from Quintero and Finlay! ⚽️⚽️ 3-1 #MNUFC #MINvRSL
 
+![](https://cdn.uploads.micro.blog/890/2019/296decd9d4.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/950026b91c.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/9f842e9a44.jpg)
+![](https://cdn.uploads.micro.blog/890/2019/fe7806dc6d.jpg)
+
 ### [Sunday @ 5:45 PM](https://www.thingelstad.com/2019/09/15/mn-united-v.html)
 
 Great first half for MN United v Real Salt Lake! ⚽️👍 1-1 Looking forward to shade in the 2nd half! 😓 #MINvRSL #MNUFC
+
+![](https://cdn.uploads.micro.blog/890/2019/6b061821ef.jpg)
 
 ### [Sunday @ 10:27 AM](https://www.thingelstad.com/2019/09/15/perfect-morning-for.html)
 
