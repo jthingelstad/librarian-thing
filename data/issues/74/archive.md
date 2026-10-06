@@ -87,7 +87,7 @@ links:
   domain: www.tomsguide.com
   heading_context: '[Here''s the One iPhone XS Feature That Justifies an Upgrade](https://www.tomsguide.com/us/iphone-xs-smart-hdr,news-28203.html)'
   section: Notable Links 📌
-word_count: 1416
+word_count: 1412
 ---
 It’s one of my favorite times in Minnesota — fall! 🍂 I was delighted to stop at [Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
 
@@ -117,7 +117,6 @@ In my opinion, Halide is the most powerful camera app on iOS, and this take on t
 
 Pumpkins at [Fireside Orchard](http://www.firesideorchard.com).
 
-Pumpkins at [Fireside Orchard](http://www.firesideorchard.com).
 Sep 30, 2018 at 1:36 PM
 2225 330th St W, Northfield MN 55057
 

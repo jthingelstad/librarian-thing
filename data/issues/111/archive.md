@@ -120,7 +120,7 @@ links:
   domain: blog.dropbox.com
   heading_context: '[Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)'
   section: Notable Links 📌
-word_count: 2926
+word_count: 2913
 ---
 Our summer has started off with a bang! 💥 Our daughter celebrated her Golden Birthday 🥳 this year, and just two days later we had a great Father's Day. Then the next day my wife Tammy took our daughter on her Golden Birthday trip! We've adopted two traditions around birthdays. The first is that when each kid turns 13 I take them on a long weekend to New York to see the Big City! 🛩 The other is that on their Golden Birthdays Tammy takes them on a big birthday trip. They have been having a blast in [Mackinac Island](https://www.mackinacisland.org).
 
@@ -170,7 +170,6 @@ It would be nice if you could understand your privacy situation based on your su
 
 Gorgeous evening, clouds overhead at Lake Harriet bandshell for Music in the Park. 🎶
 
-Gorgeous evening, clouds overhead at Lake Harriet bandshell for Music in the Park.
 Jun 14, 2019 at 6:55 PM
 1500 E Lake Harriet Blvd, Minneapolis MN
 

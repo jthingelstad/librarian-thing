@@ -117,7 +117,7 @@ links:
   domain: www.justinobeirne.com
   heading_context: '[Apple’s New Map](https://www.justinobeirne.com/new-apple-maps/)'
   section: Notable Links 📌
-word_count: 2405
+word_count: 2398
 ---
 I've been having a lot of fun with [Shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) the last couple of weeks. I've found some great ways to make routine things easier. I've also reinvigorated my [project templates](https://www.thingelstad.com/2017/using-project-templates/), just in time to use many of my annual holiday templates. I realized that my attempt to create a "generic" Shortcut that could run any template was limiting. I continue to store my templates in TaskPaper format to make them easy to edit, but the power comes in the Shortcut. I've made the project templates even more powerful having them block time on my calendar for the project, and even create draft emails that are ready to finish and send for the project.
 
@@ -167,7 +167,6 @@ The article gives Chrome credit for pushing HTTPS adoption on the web. I’m ske
 
 Red White and Blue for Election Day!
 
-Red White and Blue for Election Day
 Nov 6, 2018 at 4:50 PM
 SPS Tower, 333 S 7th St, Minneapolis MN
 

@@ -86,7 +86,7 @@ links:
   domain: thesweetsetup.com
   heading_context: '[How to make journaling in Day One even better with automation – The Sweet Setup](https://thesweetsetup.com/make-journaling-day-one-even-better-automation/)'
   section: Notable Links 📌
-word_count: 1591
+word_count: 1582
 ---
 Summer is officially here! Somehow I managed to go to two baseball games this week. ⚾️ The kids are counting the days until school gets out. 🗓 And the entire state of Minnesota seems to have scattered to cabins around lakes to celebrate Memorial Day and with it our first temperatures well into the 90's. ☀️
 
@@ -116,7 +116,6 @@ I believe this is part of the reason people are seeking out practices like medit
 
 Minnesota Twins playing the Detroit Tigers at Target Field. ⚾️
 
-Minnesota Twins playing the Detroit Tigers at Target Field.
 May 22, 2018 at 8:17 PM
 Target Field, Minneapolis, MN
 

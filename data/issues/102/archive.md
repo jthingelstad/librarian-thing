@@ -96,7 +96,7 @@ links:
   domain: om.co
   heading_context: '[3 pieces of advice in Jeff Bezos’ Shareholder Letter – On my Om](https://om.co/2019/04/17/3-pieces-of-advice-in-jeff-bezos-shareholder-letter/)'
   section: Notable Links 📌
-word_count: 2067
+word_count: 2042
 ---
 Happy Easter Weekend to all of you! I hope the Easter Bunny brings you something great in your basket. 🐰 And Happy Earth Day coming up on Monday! 🌎 I am so excited for this weekend. It’s one of those first weekends where all the snow is gone, and it looks like it’s going to be absolutely gorgeous! ☀️
 
@@ -128,7 +128,6 @@ All great technology organizations are learning organizations, and perhaps bring
 
 This United sign stands proudly in front of the just opened Allianz Field, the new Minnesota United home. Our family name is on there somewhere. ⚽️
 
-This United sign stands proudly in front of the just opened Allianz Field, the new Minnesota United home. Our family name is on there somewhere.
 Apr 13, 2019 at 6:24 PM
 Allianz Field, 400 Snelling Ave N, Saint Paul, MN
 
