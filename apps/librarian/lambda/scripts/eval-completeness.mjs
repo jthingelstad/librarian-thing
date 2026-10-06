@@ -1045,8 +1045,9 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
     const pins = [
       ['https://en.wikipedia.org/wiki/Elf_%28film%29', 8],
       ['https://en.wikipedia.org/wiki/Elf_(film)', 8],
-      ['https://en.wikipedia.org/wiki/The_Replacements_(band)', 7],
-      ['https://en.wikipedia.org/wiki/The_Replacements_%28band%29', 7],
+      // 8 since WT352 (2026-10-04) linked them again for the fall.
+      ['https://en.wikipedia.org/wiki/The_Replacements_(band)', 8],
+      ['https://en.wikipedia.org/wiki/The_Replacements_%28band%29', 8],
       ["https://en.wikipedia.org/wiki/Dunbar's_number", 4],
       ['https://en.wikipedia.org/wiki/Dunbar%27s_number', 4],
       ['https://en.wikipedia.org/wiki/M%c3%b6lkky', 4]
