@@ -68,7 +68,7 @@ links:
   domain: jvns.ca
   heading_context: '[What''s a senior engineer''s job? - Julia Evans](https://jvns.ca/blog/senior-engineer/)'
   section: Notable Links 📌
-word_count: 1722
+word_count: 1718
 ---
 You could call this the New York issue of the Weekly Thing. For years I’ve told my kids that when they turn 13 I will take them on a trip, just Dad and them, to New York City to see the sights. Mazie is 13 so we boarded our flight to Newark on Friday and spent the weekend seeing NYC in all of it’s grandeur. 👨‍👧
 
@@ -76,7 +76,7 @@ It was so great to see the city through her eyes. She loved the experience of Ne
 
 We had a fabulous time and we need to make this the first, not the last, of trips like this. ✈️
 
-I also want to welcome a group of subscribers that discovered the Weekly Thing via [Azeem Azhar's Exponential View](https://www.exponentialview.co) ! I subscribe to EV and they welcome subscribers to share things they are working on. In issue #186, there is a mention of the Weekly Thing in the “What you are up to” section. Welcome to my little spot in your mailbox to share what was interesting to me over the last week. I hope you enjoy it! 🤝
+I also want to welcome a group of subscribers that discovered the Weekly Thing via Azeem Azhar's [Exponential View](https://www.exponentialview.co)! I subscribe to EV and they welcome subscribers to share things they are working on. In issue #186, there is a mention of the Weekly Thing in the “What you are up to” section. Welcome to my little spot in your mailbox to share what was interesting to me over the last week. I hope you enjoy it! 🤝
 
 ## Featured Links 🏅
 
@@ -128,11 +128,11 @@ This app is a great tool for those that want to track their caffeine intake. It�
 
 ### [The Game of Kubb on Vimeo](https://vimeo.com/230077197)
 
-[My friend Garrick](https://garrickvanburen.com) sent me this humorous and fun introduction to the awesome game of Kubb. 👍
+My friend [Garrick](https://garrickvanburen.com) sent me this humorous and fun introduction to the awesome game of Kubb. 👍
 
 ### [Help us Build Ping.MN – ping.mn – Medium](https://medium.com/ping-mn/help-us-build-ping-mn-4f6c558e4a59)
 
-I’m curious to see how this new publication takes off. [They just had their first meeting](https://medium.com/ping-mn/noted-the-first-meeting-on-ping-mn-b4ae9e61d53d) and I like the general direction they are taking with this. Subscribed!
+I’m curious to see how this new publication takes off. They just had their [first meeting](https://medium.com/ping-mn/noted-the-first-meeting-on-ping-mn-b4ae9e61d53d) and I like the general direction they are taking with this. Subscribed!
 
 ### [Halide 1.10: The Smartest RAW – Halide](https://blog.halide.cam/halide-1-10-the-smartest-raw-8dd2c0e44a77)
 
@@ -146,7 +146,7 @@ It’s a little surprising that 20-30 years into the discipline of software engi
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -173,7 +173,7 @@ Perhaps the key to scaling isn’t as complicated as we make it — just write t
 
 ### [Thursday @ 7:11 PM](https://www.thingelstad.com/2018/10/11/excited-for-minnedemo.html)
 
-Excited for #Minnedemo 30 tonight! And [always proud to have SPS Commerce](https://jobs.spscommerce.com) as a Terabyte sponsor!
+Excited for #Minnedemo 30 tonight! And always proud to have [SPS Commerce](https://jobs.spscommerce.com) as a Terabyte sponsor!
 
 ![](https://www.thingelstad.com/uploads/2018/b233f89660.jpg)
 
@@ -215,7 +215,7 @@ This building is going to very cool when completed.
 
 ### [Monday @ 8:17 PM](https://www.thingelstad.com/2018/10/08/walking-the-high-line-in.html)
 
-Mazie and I hiked [the length of the High Line](https://www.thehighline.org) in Manhattan today. We started on 30th street and walked south to the end. It was a delightful way to spend the morning, and a nearly perfect photo walk opportunity. It was a great place to exercise the iPhone XS camera.
+Mazie and I hiked the length of the [High Line](https://www.thehighline.org) in Manhattan today. We started on 30th street and walked south to the end. It was a delightful way to spend the morning, and a nearly perfect photo walk opportunity. It was a great place to exercise the iPhone XS camera.
 
 ![](https://www.thingelstad.com/uploads/2018/d8f9f7edd1.jpg)
 
@@ -237,19 +237,19 @@ Mazie and I hiked [the length of the High Line](https://www.thehighline.org) in 
 
 ### [Sunday @ 10:20 PM](https://www.thingelstad.com/2018/10/07/032007.html)
 
-Mazie and [I went to School of Rock](https://schoolofrockthemusical.com) on Broadway tonight and loved it! Great music, amazing acting from such young actors! The kids play all the music and are amazing! Highly recommended! 🎶
+Mazie and I went to [School of Rock](https://schoolofrockthemusical.com) on Broadway tonight and loved it! Great music, amazing acting from such young actors! The kids play all the music and are amazing! Highly recommended! 🎶
 
 ![](https://www.thingelstad.com/uploads/2018/30f0fb16b3.jpg)
 
 ### [Sunday @ 10:16 PM](https://www.thingelstad.com/2018/10/07/i-returned-to.html)
 
-[I returned to Molyvos](https://www.molyvos.com) for the first time in probably 10 years. I can report the Lamb Shank Yuvetsi is still amazing and the rolled Baklava is delightful. 🍽👍🏻
+I returned to [Molyvos](https://www.molyvos.com) for the first time in probably 10 years. I can report the Lamb Shank Yuvetsi is still amazing and the rolled Baklava is delightful. 🍽👍🏻
 
 ![](https://www.thingelstad.com/uploads/2018/1fc0fb0d44.jpg)
 
 ### [Sunday @ 10:12 PM](https://www.thingelstad.com/2018/10/07/the-seaglass-carousel.html)
 
-[The Seaglass Carousel](http://thebattery.org/destinations/seaglass/) in Battery Park.
+The [Seaglass Carousel](http://thebattery.org/destinations/seaglass/) in Battery Park.
 
 ![](https://www.thingelstad.com/uploads/2018/5a19f34b73.jpg)
 
@@ -293,13 +293,13 @@ Driving a Ferrari in Manhattan? Seems like a crazy idea to me. 🤷‍♂️
 
 ### [Saturday @ 10:00 PM](https://www.thingelstad.com/2018/10/06/030055.html)
 
-Mazie and I got to hang out with [my great friend from college, Greg](https://www.linkedin.com/in/gregory-haley-a84757b6/) , and his fabulous family today in NYC. It was fun to go back to stories some 25 years ago now! 😳
+Mazie and I got to hang out with my great friend from college, [Greg](https://www.linkedin.com/in/gregory-haley-a84757b6/), and his fabulous family today in NYC. It was fun to go back to stories some 25 years ago now! 😳
 
 ![](https://www.thingelstad.com/uploads/2018/da8df0e296.jpg)
 
 ### [Saturday @ 9:54 PM](https://www.thingelstad.com/2018/10/06/gorgeous-bonbons-at.html)
 
-[Gorgeous Bonbons at Stick With Me](https://swmsweets.com) chocolates.
+Gorgeous Bonbons at [Stick With Me](https://swmsweets.com) chocolates.
 
 ![](https://www.thingelstad.com/uploads/2018/c6f4da1631.jpg)
 
@@ -321,7 +321,7 @@ Subways and long exposure capabilities on iPhone XS was a lot of fun today.
 
 ### [Saturday @ 9:45 PM](https://www.thingelstad.com/2018/10/06/024525.html)
 
-Mazie and I were very impressed [with the 9/11 Memorial & Museum](https://www.911memorial.org) today. An event that was so important and a life event, but happened before she was born. It was interesting to see her taking it all in. It does an amazing job of reliving that day.
+Mazie and I were very impressed with the [9/11 Memorial & Museum](https://www.911memorial.org) today. An event that was so important and a life event, but happened before she was born. It was interesting to see her taking it all in. It does an amazing job of reliving that day.
 
 ![](https://www.thingelstad.com/uploads/2018/69d2424982.jpg)
 
@@ -355,4 +355,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Never let the sun set on angry heart.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -134,13 +134,13 @@ links:
   section: Links 📌
 word_count: 1956
 ---
-It’s December and in addition to all the Christmas shopping you are doing, it’s usually the time that we think about donating to charitable organizations. You'll see in my microblog updates that I did a number of those this week. [I'd like to highlight Let's Encrypt](https://letsencrypt.org) !
+It’s December and in addition to all the Christmas shopping you are doing, it’s usually the time that we think about donating to charitable organizations. You'll see in my microblog updates that I did a number of those this week. I'd like to highlight [Let's Encrypt](https://letsencrypt.org)!
 
 Encrypting traffic on the web is a big deal. Without it, all of your web browsing is easily listened to by anyone. Did you know that Comcast is watching all the content that goes in and out of your house and using it to sell advertising profiles of you? If the traffic is encrypted, this is a lot harder. However, before Let's Encrypt getting the certificate to encrypt a site cost anywhere from $20/year to more than $100/year! It was a racket that a few companies were allowed to make a good amount of money on.
 
 Let's Encrypt changed that! I highlighted an article from them below, but it's worth noting that they provided 61 million free encryption certificates in 2017. A handful of those were to me, allowing all of the traffic to my various sites to be encrypted. This is arguably one of the most important things happening on the web right now, and they need our continued support to further the mission of securing the web.
 
-[Join me and donate now](https://letsencrypt.org/donate/) . If you don't host any content, I think $10 is a good amount to encourage the continued work. If you use Let's Encrypt certificates, give a little more. Let's Encrypt has changed the web for the better, and we need to continue to push this forward! 👏
+[Join me and donate now](https://letsencrypt.org/donate/). If you don't host any content, I think $10 is a good amount to encourage the continued work. If you use Let's Encrypt certificates, give a little more. Let's Encrypt has changed the web for the better, and we need to continue to push this forward! 👏
 
 ## Blog posts 📬
 
@@ -152,7 +152,7 @@ Reasons for removing Google Analytics as the last tracking code I was using on m
 
 ![](https://files.thingelstad.com/weekly-thing/31/cover.jpg)
 
-This is the cabin [just outside the Old Log Theatre](http://oldlog.com) . We went there this last week and this building always catches my eye.
+This is the cabin just outside the [Old Log Theatre](http://oldlog.com). We went there this last week and this building always catches my eye.
 
 Dec 2, 2017 at 1:24 PM
 Greenwood MN
@@ -177,7 +177,7 @@ As you consider the arguments around Net Neutrality being removed take a moment 
 
 ### [Disqus and Zeta – AVC](http://avc.com/2017/12/disqus-and-zeta/)
 
-I've considered using Disqus many times. The reality though is that Disqus is a commenting toy that you can deploy on your website while exposing your users to tracking and reducing their privacy. The fact that Disqus was bought by "largest independent marketing cloud" should give you confirmation of what I just said. If you use Disqus on your personal website, you should pull it off. Personally I block the Disqus widgets from loading using [1Blocker](https://1blocker.com) .
+I've considered using Disqus many times. The reality though is that Disqus is a commenting toy that you can deploy on your website while exposing your users to tracking and reducing their privacy. The fact that Disqus was bought by "largest independent marketing cloud" should give you confirmation of what I just said. If you use Disqus on your personal website, you should pull it off. Personally I block the Disqus widgets from loading using [1Blocker](https://1blocker.com).
 
 ### [Silicon Valley Is Sneaking Models Into This Year’s Holiday Parties - Bloomberg](https://www.bloomberg.com/news/articles/2017-12-07/silicon-valley-is-sneaking-models-into-this-year-s-holiday-parties)
 
@@ -185,7 +185,7 @@ First off, this is a service you can buy? 🤦🏼‍♂️ Second, we've got a 
 
 ### [Driving Change Episode 16 with Serial Entrepreneur Don Smithmier - YouTube](https://www.youtube.com/watch?v=v2e8l0w2tPQ)
 
-New [Don Smithmier](https://www.linkedin.com/in/don-smithmier-36069b1/) of [Go Kart Labs](https://gokartlabs.com). (See my [Driving Change episode](https://www.thingelstad.com/2017/driving-change/).)
+New Driving Change episode with [Don Smithmier](https://www.linkedin.com/in/don-smithmier-36069b1/) of [Go Kart Labs](https://gokartlabs.com). (See [my Driving Change](https://www.thingelstad.com/2017/driving-change/) episode.)
 
 ### [iPhone X: A New Frontier – MacStories](https://www.macstories.net/stories/iphone-x-a-new-frontier/)
 
@@ -213,11 +213,11 @@ Gruber's take on this is so spot on: > This is like Philip Morris introducing of
 
 ### [Software, Tech Talent, Diversity, and the Future of Everything | Mark Hurlburt | TEDxFargo - YouTube](https://www.youtube.com/watch?v=gTHZ2FwnM-A)
 
-[Very good talk from Mark Hurlburt](https://www.linkedin.com/in/markdhurlburt/) [of Prime Digital Academy](https://www.primeacademy.io) on bringing more diversity into software development. 👏
+Very good talk from [Mark Hurlburt](https://www.linkedin.com/in/markdhurlburt/) of [Prime Digital Academy](https://www.primeacademy.io) on bringing more diversity into software development. 👏
 
 ### [Vanilla — hide Mac menu bar icons for free](http://matthewpalmer.net/vanilla/)
 
-[I've used Bartender](https://www.macbartender.com) for a number of years now and didn't know there was another option. Vanilla is interesting and more subtle. Also has a free version and is only $4 to buy the pro add-ons.
+I've used [Bartender](https://www.macbartender.com) for a number of years now and didn't know there was another option. Vanilla is interesting and more subtle. Also has a free version and is only $4 to buy the pro add-ons.
 
 ### [A Quick Way to Sort Projects and Contexts | Using OmniFocus](http://www.usingomnifocus.com/2017/11/sorting-projects/)
 
@@ -241,7 +241,7 @@ Some interesting and cool tech. Many (most?) people wear rings all the time. Thi
 
 ### [Is the economy suffering from the crisis of attention? | Bank Underground](https://bankunderground.co.uk/2017/11/24/is-the-economy-suffering-from-the-crisis-of-attention/)
 
-Interesting article theorizing on a possible connection between economic growth and the rise of mobile and social technology. The suggestion is that one of two things is happening: time on social is taking away from productive time or time on social is yielding a distracted population that is less productive. I would suggest both are likely true. [Cal Newport gave a thoughtful summary](http://calnewport.com/blog/2017/11/30/on-the-complicated-economics-of-attention-capital/) of this article as well.
+Interesting article theorizing on a possible connection between economic growth and the rise of mobile and social technology. The suggestion is that one of two things is happening: time on social is taking away from productive time or time on social is yielding a distracted population that is less productive. I would suggest both are likely true. Cal Newport [gave a thoughtful summary](http://calnewport.com/blog/2017/11/30/on-the-complicated-economics-of-attention-capital/) of this article as well.
 
 ## Promotion 🎁
 

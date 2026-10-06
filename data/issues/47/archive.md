@@ -9,9 +9,9 @@ image: https://files.thingelstad.com/weekly-thing/47/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-47-mar-31-2018/
 domains: []
 links: []
-word_count: 1203
+word_count: 1197
 ---
-It is Spring Break Season 🍃 and it seems like everyone is heading away for a week, including us. We are on our way to Chicago, with a stopover in the Wisconsin Dells. We'll [be going from waterslides to Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) this week. 😎
+It is Spring Break Season 🍃 and it seems like everyone is heading away for a week, including us. We are on our way to Chicago, with a stopover in the Wisconsin Dells. We'll be going from waterslides to [Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) this week. 😎
 
 ## Photo 📷
 
@@ -26,12 +26,12 @@ The Dakota, 61 S 10th St, Minneapolis MN
 
 ## Web
 
-Back [to the Blog - Dan Cohen](https://dancohen.org/2018/03/21/back-to-the-blog/)
+[Back to the Blog - Dan Cohen](https://dancohen.org/2018/03/21/back-to-the-blog/)
 dancohen.org
 
 I'd love to see more of my friends go back to their blogs. Some nice perspective on doing that.
 
-The Missing Building Blocks of the [Web – Anil Dash – Medium](https://medium.com/@anildash/the-missing-building-blocks-of-the-web-3fa490ae5cbc)
+[The Missing Building Blocks of the Web – Anil Dash – Medium](https://medium.com/@anildash/the-missing-building-blocks-of-the-web-3fa490ae5cbc)
 medium.com
 
 Anil Dash with a look at the components of the web that we've forgotten about over time.
@@ -49,26 +49,26 @@ Photographer Peter Funch took photos at the same intersection in New York from 2
 
 ## Security
 
-Under Armour Says 150 [Million MyFitnessPal Accounts Hacked - Bloomberg](https://www.bloomberg.com/news/articles/2018-03-29/under-armour-says-150-million-myfitnesspal-accounts-were-hacked)
+[Under Armour Says 150 Million MyFitnessPal Accounts Hacked - Bloomberg](https://www.bloomberg.com/news/articles/2018-03-29/under-armour-says-150-million-myfitnesspal-accounts-were-hacked)
 www.bloomberg.com
 
 Another massive breach. This should be yet another reminder that adopting strict password hygiene, and never using the same password on multiple sites is critical.
 
-Troy Hunt: The [Legitimisation of Have I Been Pwned](https://www.troyhunt.com/the-legitimisation-of-have-i-been-pwned/)
+[Troy Hunt: The Legitimisation of Have I Been Pwned](https://www.troyhunt.com/the-legitimisation-of-have-i-been-pwned/)
 www.troyhunt.com
 
 Interesting background from the creator of Have I Been Pwned that specifically talks about the very grey area that this service runs in, but how it has started to provide very real, valuable capability for people.
 
 ## Tech
 
-Really Friendly Command [Line Intro - Hello Web Books](https://hellowebbooks.com/learn-command-line/)
+[Really Friendly Command Line Intro - Hello Web Books](https://hellowebbooks.com/learn-command-line/)
 hellowebbooks.com
 
 If you see people doing magical things by typing commands on the command line of their machine but have no idea what they are doing this is a good article to learn more.
 
 ## Games
 
-Daring Fireball: Are [There Any Tetris Games for Mac?](https://daringfireball.net/linked/2018/03/28/tetris-mac)
+[Daring Fireball: Are There Any Tetris Games for Mac?](https://daringfireball.net/linked/2018/03/28/tetris-mac)
 daringfireball.net
 
 I’m with Gruber on this. Quinn was a fabulous, simple and very elegant Tetris game for the Mac. There is currently no Tetris for the Mac. How is that better for Tetris?
@@ -80,7 +80,7 @@ fb.textile.photos
 
 Nice utility to take your exported Facebook data and get the pictures back in a way that is usable.
 
-How I [Erased 5000+ Facebook Comments and Likes](http://www.jaruzel.com/blog/How-I-Erased-5000-Facebook-Comments-and-Likes)
+[How I Erased 5000+ Facebook Comments and Likes](http://www.jaruzel.com/blog/How-I-Erased-5000-Facebook-Comments-and-Likes)
 www.jaruzel.com
 
 This is neat, although I don't know why people bother doing this. Does anyone really believe that Facebook deletes things when you send a delete command? I feel with near certainty that it simply sets the information into a hidden state, not deleted. Seems like a waste of effort.
@@ -92,35 +92,35 @@ Step by step directions to help you walk through the complicated process of dele
 
 ## Apps
 
-The 1Password 7 Beta for Mac Is Lit and You [Can Be, Too | AgileBits Blog](https://blog.agilebits.com/2018/03/28/the-1password-7-beta-for-mac-is-lit-and-you-can-be-too/)
+[The 1Password 7 Beta for Mac Is Lit and You Can Be, Too | AgileBits Blog](https://blog.agilebits.com/2018/03/28/the-1password-7-beta-for-mac-is-lit-and-you-can-be-too/)
 blog.agilebits.com
 
 I’m a big fan of 1Password and we have a family subscription to keep all of our personal and shared secrets manages. This new version looks really nice with some nice usability improvements and great integration with services like Have I Been Pwned.
 
 ## Kubb
 
-KubbCoin: The [Blockchain Meets Kubb | Kubb On](http://kubbon.com/2018/03/28/kubbcoin-the-blockchain-meets-kubb/)
+[KubbCoin: The Blockchain Meets Kubb | Kubb On](http://kubbon.com/2018/03/28/kubbcoin-the-blockchain-meets-kubb/)
 kubbon.com
 
-A cryptotoken [for my favorite lawn game Kubb](https://en.wikipedia.org/wiki/Kubb) ! Nice! 😎
+A cryptotoken for my favorite lawn game [Kubb](https://en.wikipedia.org/wiki/Kubb)! Nice! 😎
 
 ## Health
 
-Heart Rate Variability (HRV): What is it, and why does the [Apple Watch track it? | iMore](https://www.imore.com/heart-rate-variability-hrv-what-it-and-why-does-apple-watch-track-it)
+[Heart Rate Variability (HRV): What is it, and why does the Apple Watch track it? | iMore](https://www.imore.com/heart-rate-variability-hrv-what-it-and-why-does-apple-watch-track-it)
 www.imore.com
 
 I find it very impressive what the Apple Watch can detect from heart rate information. This is all just getting started too.
 
 ## Ethics
 
-Using Ethics [In Web Design — Smashing Magazine](https://www.smashingmagazine.com/2018/03/using-ethics-in-web-design/)
+[Using Ethics In Web Design — Smashing Magazine](https://www.smashingmagazine.com/2018/03/using-ethics-in-web-design/)
 www.smashingmagazine.com
 
 I wasn't expecting a comprehensive and well reasoned perspective on ethics in web design from Smashing Magazine but here it is. I like the thought and detail that has been put into this, and applaud them considering ethics in the design. 👏
 
 ## Product
 
-Notion – The all-in-one workspace for [your notes, tasks, wikis, and databases.](https://www.notion.so/)
+[Notion – The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/)
 www.notion.so
 
 This looks like an interesting all-in-one solution for small groups of people working together.
@@ -139,7 +139,7 @@ Great overview of giving engaging and effective presentations. Nearly everything
 
 ## Privacy
 
-Steve Jobs on privacy, Steve Jobs at [the D8 Conference (Video) - YouTube](https://www.youtube.com/watch?v=39iKLwlUqBo)
+[Steve Jobs on privacy, Steve Jobs at the D8 Conference (Video) - YouTube](https://www.youtube.com/watch?v=39iKLwlUqBo)
 www.youtube.com
 
 I hadn't ever heard this Steve Jobs comment on privacy.
@@ -168,27 +168,27 @@ After reading multiple blog posts about this book, after Tammy reading it and re
 
 [Friday @ 7:37 PM](https://www.thingelstad.com/2018/03/30/family-selfie-at.html)
 
-Family selfie [at the Wisconsin Dells Kalahari Resort](https://www.kalahariresorts.com) ! Tyler’s blackeye memorialized.
+Family selfie at the Wisconsin Dells [Kalahari Resort](https://www.kalahariresorts.com)! Tyler’s blackeye memorialized.
 
 [Friday @ 8:53 AM](https://www.thingelstad.com/2018/03/30/delicious-kingfield-at.html)
 
-[Delicious Kingfield at Five Watt Coffee](http://fivewattcoffee.com) this morning. Heading out on vacation shortly.
+Delicious Kingfield at [Five Watt Coffee](http://fivewattcoffee.com) this morning. Heading out on vacation shortly.
 
 [Thursday @ 6:36 PM](https://www.thingelstad.com/2018/03/29/at-martinahttpswwwmartinarestaurantcom-for.html)
 
-[At Martina](https://www.martinarestaurant.com) for our first Gnocchi Night. Delicious.
+At [Martina](https://www.martinarestaurant.com) for our first Gnocchi Night. Delicious.
 
 [Thursday @ 1:12 PM](https://www.thingelstad.com/2018/03/29/just-registered-for.html)
 
-[Just registered for Minnebar 13](https://minnestar.org/minnebar/) – nice [and easy as a community supporter](https://minnestar.org/community/community-supporters/) ! 🏅😊👍
+Just registered for [Minnebar 13](https://minnestar.org/minnebar/) – nice and easy as a [community supporter](https://minnestar.org/community/community-supporters/)! 🏅😊👍
 
 [Wednesday @ 7:37 PM](https://www.thingelstad.com/2018/03/28/seeing-patricia-barberhttpwwwpatriciabarbercom.html)
 
-[Seeing Patricia Barber](http://www.patriciabarber.com) for the [first time at Dakota Jazz Club](http://www.dakotacooks.com) . 🎶
+Seeing [Patricia Barber](http://www.patriciabarber.com) for the first time at [Dakota Jazz Club](http://www.dakotacooks.com). 🎶
 
 [Tuesday @ 9:58 PM](https://www.thingelstad.com/2018/03/27/great-start-to.html)
 
-Great start [to Season 5 of Silicon Valley](https://www.hbo.com/silicon-valley) . 🤣
+Great start to Season 5 of [Silicon Valley](https://www.hbo.com/silicon-valley). 🤣
 
 [Tuesday @ 7:32 PM](https://www.thingelstad.com/2018/03/27/ive-gone-from.html)
 
@@ -200,4 +200,4 @@ Got sick today and taken down. 🤢 Hoping for better day tomorrow. 😴
 
 [Saturday @ 8:33 PM](https://www.thingelstad.com/2018/03/24/mazie-passed-through.html)
 
-Mazie passed through regionals and is now moving onto the [statewide competition for National History Day](https://www.nhd.org/node/10632) . Very proud of her!
+Mazie passed through regionals and is now moving onto the statewide competition for [National History Day](https://www.nhd.org/node/10632). Very proud of her!

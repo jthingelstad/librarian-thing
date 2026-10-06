@@ -153,7 +153,7 @@ links:
   domain: securitytxt.org
   heading_context: '[security.txt](https://securitytxt.org/)'
   section: Links 📌
-word_count: 2165
+word_count: 2164
 ---
 Big change this week – and hopefully you don't notice! I decided to move the Weekly Thing from TinyLetter to MailChimp. TinyLetter is a simple platform and was a great place to experiment and try things but I heard from a number of people that the Weekly Thing was going in there spam folders. I also had a couple of instances of failed delivery. MailChimp is a bit more complicated, but seems much more powerful. I can also now send the Weekly Thing from my domain so I hope that that will improve deliverability.
 
@@ -196,7 +196,7 @@ Password expiration and special character requirements should go away in favor o
 
 ### [Perl turns 30 | Opensource.com](https://opensource.com/article/17/10/perl-turns-30)
 
-I like to give Perl code a hard time because so much of it is so sloppy. However, truth be told some of the very first coding I did on [the web was all Perl CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface) code doing really goofy things on the web. The block of Perl that I wrote for BigCharts was some of my favorite. It’s amazing that Perl is now 30 years old. These days I definitely prefer Python but Perl does deserve some respect at least for it’s regular expression capabilities.
+I like to give Perl code a hard time because so much of it is so sloppy. However, truth be told some of the very first coding I did on the web was all Perl [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface) code doing really goofy things on the web. The block of Perl that I wrote for BigCharts was some of my favorite. It’s amazing that Perl is now 30 years old. These days I definitely prefer Python but Perl does deserve some respect at least for it’s regular expression capabilities.
 
 ### [The Importance of Thinking Time — MyProductiveMac](http://www.myproductivemac.com/blog/the-importance-of-thinking-time11102017)
 
@@ -210,7 +210,7 @@ Cool use of ARKit and the writeup on how they built it is a good read. Some good
 
 ### [Replacing our search with Algolia | Netlify](https://www.netlify.com/blog/2017/10/10/replacing-our-search-with-algolia/)
 
-Netlify [shares how they moved from Lunr.js](https://lunrjs.com) [search using JavaScript to Algolia](https://twitter.com/anna_picchetti) using their hosted service and JavaScript library. I used Lunr.js to put search in Link Thing but searching 8,000+ documents is far too much for a client-side search solution.
+Netlify shares how they moved from [Lunr.js](https://lunrjs.com) search using JavaScript to [Algolia](https://twitter.com/anna_picchetti) using their hosted service and JavaScript library. I used Lunr.js to put search in Link Thing but searching 8,000+ documents is far too much for a client-side search solution.
 
 ### [Algolia | The Most Reliable Platform for Building Search](https://www.algolia.com/)
 
@@ -242,11 +242,11 @@ An entire OS written in x86 assembly? 🤦🏼‍♂️ That sounds like a task 
 
 ### [Min | A smarter, faster web browser](https://minbrowser.github.io/min/)
 
-It is fun to see experimentation in new web browsers and [what they include by default. Brave](https://www.brave.com) for example chooses to block trackers and ads by default. I like the idea of dimming tabs not in use (although I practice good tab hygiene). This browser also deals with low bandwidth situations directly. In some ways this reminds [me of a modern day lynx](http://lynx.invisible-island.net) browser, which I’m shocked to see is still in development.
+It is fun to see experimentation in new web browsers and what they include by default. [Brave](https://www.brave.com) for example chooses to block trackers and ads by default. I like the idea of dimming tabs not in use (although I practice good tab hygiene). This browser also deals with low bandwidth situations directly. In some ways this reminds me of a modern day [lynx](http://lynx.invisible-island.net) browser, which I’m shocked to see is still in development.
 
 ### [Azeem Azhar: The Exponential View](http://us15.campaign-archive.com/home/?u=eee7b8043119f98544067854b&id=d581eab324)
 
-[This newsletter from Azeem Azhar](https://twitter.com/azeem) is a real treat every week. This is one that I usually save and sit down with a good bit of time and my iPad to learn all sorts of new things. Subscribing recommended! 👍🏻
+This newsletter from [Azeem Azhar](https://twitter.com/azeem) is a real treat every week. This is one that I usually save and sit down with a good bit of time and my iPad to learn all sorts of new things. Subscribing recommended! 👍🏻
 
 ### [Silicon Valley | Asymco](http://www.asymco.com/2017/10/02/silicon-valley/)
 
@@ -262,7 +262,7 @@ Thorough background and introduction to blockchain technology along with a numbe
 
 ### [Workflow to Collect All Links](http://www.macdrifter.com/2017/10/workflow-to-collect-all-links.html)
 
-This is a great [example of the power of Workflow](https://workflow.is) . I have a number of workflows like this and they are surprisingly easy to do on iOS, and really not easy to do on any other platform. I have several workflows that increase my efficiency significantly. I find inspiration in seeing what other people do with this powerful tool.
+This is a great example of the power of [Workflow](https://workflow.is). I have a number of workflows like this and they are surprisingly easy to do on iOS, and really not easy to do on any other platform. I have several workflows that increase my efficiency significantly. I find inspiration in seeing what other people do with this powerful tool.
 
 ### [Overland GPS Tracking App for iPhone](https://overland.p3k.io/)
 

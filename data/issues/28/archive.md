@@ -104,13 +104,13 @@ links:
   domain: hacks.mozilla.org
   heading_context: '[Entering the Quantum Era—How Firefox got fast again and where it’s going to get faster – Mozilla Hacks – the Web developer blog](https://hacks.mozilla.org/2017/11/entering-the-quantum-era-how-firefox-got-fast-again-and-where-its-going-to-get-faster/)'
   section: Links 📌
-word_count: 1451
+word_count: 1443
 ---
 This week I decided to [jump into the Micro.blog Photo Challenge](http://micro.douglane.com/2017/11/09/microblog-photo-challenge.html) . 📷 This was a 7-day challenge with [a theme for each day: Squares](http://www.thingelstad.com/2017/11/11/193440.html) [, Tasty](http://www.thingelstad.com/2017/11/12/191007.html) [, On the Move](http://www.thingelstad.com/2017/11/13/234858.html) [, Up Close](http://www.thingelstad.com/2017/11/14/015301.html) [, Liquid](http://www.thingelstad.com/2017/11/15/012043.html) [, Seasonal](http://www.thingelstad.com/2017/11/16/001031.html) [, and Shadow](http://www.thingelstad.com/2017/11/17/021039.html) . I shot all the pictures on the day of the challenge. No dipping into my archive of photos. I also shot them all on my iPhone 7. 📱 It was a good reminder of how much I like photography and that I need to make time for creative activities like this. Some of the days were a real challenge with the theme. The last day was shadow, and it was rainy and dreary the entire day. There wasn’t a shadow anywhere. But wait, I can make my own with a flashlight. 🔦 Some assistance from Mazie with the flashlight and I got my shot.
 
-Speaking of [photos I got my photography website](https://photos.thingelstad.com) back online this past week. I’m still not loving the theme but it’s okay for now. I think I have some photos left to link up but it’s very workable. I also heard from a number of people that it was not cool to miss a photo in last weeks Weekly Thing, so I'll make sure that doesn't happen again. ☺️
+Speaking of photos I got [my photography website](https://photos.thingelstad.com) back online this past week. I’m still not loving the theme but it’s okay for now. I think I have some photos left to link up but it’s very workable. I also heard from a number of people that it was not cool to miss a photo in last weeks Weekly Thing, so I'll make sure that doesn't happen again. ☺️
 
-[I haven’t written about Micro.blog](https://micro.blog) but I should. I’ve used it exclusively to create all my status messages since it launched. People that follow me on Twitter are seeing a syndication of that content. I no longer author anything on Twitter, so I have full control of my content via Micro.blog. It’s one step away from the dumpster fire of hate known as Twitter. Micro.blog is still requires an invite. I have extra codes if any of you want one send me an email.
+I haven’t written about [Micro.blog](https://micro.blog) but I should. I’ve used it exclusively to create all my status messages since it launched. People that follow me on Twitter are seeing a syndication of that content. I no longer author anything on Twitter, so I have full control of my content via Micro.blog. It’s one step away from the dumpster fire of hate known as Twitter. Micro.blog is still requires an invite. I have extra codes if any of you want one send me an email.
 
 Wishing you a very Happy Thanksgiving! 🦃
 
@@ -118,7 +118,7 @@ Wishing you a very Happy Thanksgiving! 🦃
 
 ![](https://files.thingelstad.com/weekly-thing/28/cover.jpg)
 
-I [participated in the Micro.blog Photo Challenge](http://micro.douglane.com/2017/11/09/microblog-photo-challenge.html) this week. This is my abstract photo for liquid. The CO2 bubbles streak as they charge up and out of the water.
+I participated in the [Micro.blog Photo Challenge](http://micro.douglane.com/2017/11/09/microblog-photo-challenge.html) this week. This is my abstract photo for liquid. The CO2 bubbles streak as they charge up and out of the water.
 
 Nov 15, 2017 at 7:08 PM
 Minneapolis MN
@@ -139,7 +139,7 @@ Amazing new version of the Tesla Roadster. 0-60 mph in 1.9 seconds! 😲
 
 ### [Fly the airplane: Three practices for effective incident response | ITProPortal](https://www.itproportal.com/features/fly-the-airplane-three-practices-for-effective-incident-response/)
 
-Key things to consider in incident response to technology issues. I like [the callout to Gawande's Checklist Manifesto](https://rwbook.club/book/the-checklist-manifesto/) , a fabulous book!
+Key things to consider in incident response to technology issues. I like the callout to Gawande's [Checklist Manifesto](https://rwbook.club/book/the-checklist-manifesto/), a fabulous book!
 
 ### [Tim Berners-Lee on the future of the web: 'The system is failing' | Technology | The Guardian](https://www.theguardian.com/technology/2017/nov/15/tim-berners-lee-world-wide-web-net-neutrality)
 
@@ -155,23 +155,23 @@ Cool even that our team in Ukraine organized for Python developers in Kyiv! 👏
 
 ### [Topicbox: modern group email discussions](https://www.topicbox.com/)
 
-[Interesting new offering from Fastmail](https://www.fastmail.com/) . I use Fastmail for my personal email. Looks a lot like a message board but tied more tightly to email.
+Interesting new offering from [Fastmail](https://www.fastmail.com/). I use Fastmail for my personal email. Looks a lot like a message board but tied more tightly to email.
 
 ### [On Being - Daniel Kahneman - Why We Contradict Ourselves and Confound Each Other](https://onbeing.org/programs/daniel-kahneman-why-we-contradict-ourselves-and-confound-each-other-oct2017/)
 
-Kahneman is amazing and I greatly [enjoyed his Thinking Fast and Slow](https://rwbook.club/book/thinking-fast-and-slow/) . It’s one of those books that keeps coming to mind over and over after you've read it.
+Kahneman is amazing and I greatly enjoyed his [Thinking Fast and Slow](https://rwbook.club/book/thinking-fast-and-slow/). It’s one of those books that keeps coming to mind over and over after you've read it.
 
 ### [On Being - Atul Gawande - What Matters in the End](https://onbeing.org/programs/atul-gawande-what-matters-in-the-end-oct2017/)
 
-I’m [a big fan of Atul Gawande](http://atulgawande.com) and this episode of On Being is focused [on the material in Being Mortal](http://atulgawande.com/book/being-mortal/) , a book I think everyone should read.
+I’m a big fan of [Atul Gawande](http://atulgawande.com) and this episode of On Being is focused on the material in [Being Mortal](http://atulgawande.com/book/being-mortal/), a book I think everyone should read.
 
 ### [Containers Podcast](https://soundcloud.com/containersfmg)
 
-Good audio series [in the spirit of The Box](https://rwbook.club/book/the-box/) [, which my book club](https://rwbook.club) read a long time before I joined. An amazing look into how impactful the containerization of shipping has been [on the world. Also on iTunes](https://itunes.apple.com/us/podcast/containers/id1209559177?mt=2) .
+Good audio series in the spirit of [The Box](https://rwbook.club/book/the-box/), which [my book club](https://rwbook.club) read a long time before I joined. An amazing look into how impactful the containerization of shipping has been on the world. Also on [iTunes](https://itunes.apple.com/us/podcast/containers/id1209559177?mt=2).
 
 ### [Datasette: instantly create and publish an API for your SQLite databases](https://simonwillison.net/2017/Nov/13/datasette/)
 
-This is a really cool project to make public data sets available via a JSON API. Datasette dynamically creates [an API for any SQLite database](http://sqlite.org) , and there is a handy utility for Python to turn any CSV into a SQLite database. This writeup of [making a datasette for Polar Bears](https://gist.github.com/simonw/9f8bf23b37a42d7628c4dcc4bba10253) is a good overview. Super easy and simple project doing [a good thing. Listing of datasettes](https://github.com/simonw/datasette/wiki/Datasettes) . 👏
+This is a really cool project to make public data sets available via a JSON API. Datasette dynamically creates an API for any [SQLite database](http://sqlite.org), and there is a handy utility for Python to turn any CSV into a SQLite database. This writeup of [making a datasette for Polar Bears](https://gist.github.com/simonw/9f8bf23b37a42d7628c4dcc4bba10253) is a good overview. Super easy and simple project doing a good thing. [Listing of datasettes](https://github.com/simonw/datasette/wiki/Datasettes). 👏
 
 ### [How Many Robots Does It Take to Fill a Grocery Order? - Bloomberg](https://www.bloomberg.com/news/articles/2017-11-06/how-many-robots-does-it-take-to-fill-a-grocery-order)
 
@@ -183,7 +183,7 @@ Overview of Glitch that sounds pretty awesome for doing small web projects and s
 
 ### [Turn off retweets!](http://turn-off-retweets.glitch.me/)
 
-[Simple project from Julia Evans](https://jvns.ca) that allows you to turn retweets off for everyone you follow on Twitter. i've long wanted a feature on Twitter to do this. Used this right away and all retweets are disabled. 😁
+Simple project from [Julia Evans](https://jvns.ca) that allows you to turn retweets off for everyone you follow on Twitter. i've long wanted a feature on Twitter to do this. Used this right away and all retweets are disabled. 😁
 
 ### [Entering the Quantum Era—How Firefox got fast again and where it’s going to get faster – Mozilla Hacks – the Web developer blog](https://hacks.mozilla.org/2017/11/entering-the-quantum-era-how-firefox-got-fast-again-and-where-its-going-to-get-faster/)
 

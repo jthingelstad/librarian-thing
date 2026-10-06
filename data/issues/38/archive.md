@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/38/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-27-2018/
 domains: []
 links: []
-word_count: 3261
+word_count: 3259
 ---
 There are a bunch of new subscribers to the Weekly Thing this week! Hello and welcome to you all! 🙌 Also, a bunch of fun links this week! 👓 LinkedIn is by far the most effective place for people to discover the Weekly Thing. If you feel like spreading the word, sharing a comment and link to https://weekly.thingelstad.com is always welcome! 👍
 
@@ -64,7 +64,7 @@ This makes complete sense in large part because a computer science degree doesn'
 
 > JavaScript may be the most in-demand language by employers, but Python wins the heart of developers across all ages, according to our Love-Hate index. Python is also the most popular language that developers want to learn overall, and a significant share already knows it.
 
-What little coding I do is in Python and I always recommend that people that want to learn programming start [in Python. Clearly Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) [, the "Benevolent Dictator For Life"](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) of Python, did something very right. Also perhaps the editor wars are over?
+What little coding I do is in Python and I always recommend that people that want to learn programming start in Python. Clearly [Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum), the ["Benevolent Dictator For Life"](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) of Python, did something very right. Also perhaps the editor wars are over?
 
 > VIM beats all other editors by a landslide.
 
@@ -80,11 +80,11 @@ It is worth noting, in a sector that is so proud of dog fooding their own produc
 
 ### [Growing apart and losing touch is human and healthy](https://m.signalvnoise.com/growing-apart-and-losing-touch-is-human-and-healthy-52b5a678fbf5)
 
-[I concur with DHH's](https://en.wikipedia.org/wiki/David_Heinemeier_Hansson) thesis here.
+I concur with [DHH](https://en.wikipedia.org/wiki/David_Heinemeier_Hansson)'s thesis here.
 
 > What allowed me to change and prosper was the freedom to grow apart and lose touch with people. It’s hard to change yourself if you’re stuck in the same social orbit. There’s a gravitational force that pulls you into repeating the same circular pattern over and over again. Breaking out of that takes tremendous force.
 
-Many people can reflect on this in the college experience. It’s one of those seminal moments when you make a step change as a person. It happens when you change jobs. Sometimes it happens in the reverse, an alcoholic changes their friends as they become sober. The point is, your social network isn't a snowball that just gets bigger your entire life. It’s a collection that forms and reforms over years. I would also add [the important thinking around Dunbar's number](https://en.wikipedia.org/wiki/Dunbar%27s_number) that suggests the mean number of people that humans can maintain connections with is 148. The snowball metaphor just frankly doesn't work unless you are willing to freeze your development in your teens.
+Many people can reflect on this in the college experience. It’s one of those seminal moments when you make a step change as a person. It happens when you change jobs. Sometimes it happens in the reverse, an alcoholic changes their friends as they become sober. The point is, your social network isn't a snowball that just gets bigger your entire life. It’s a collection that forms and reforms over years. I would also add the important thinking around [Dunbar's number](https://en.wikipedia.org/wiki/Dunbar%27s_number) that suggests the mean number of people that humans can maintain connections with is 148. The snowball metaphor just frankly doesn't work unless you are willing to freeze your development in your teens.
 
 ### [Daring Fireball: Apple Previews iOS 11.3](https://daringfireball.net/2018/01/ios_11_point_3)
 
@@ -118,11 +118,11 @@ This is an interesting premise. I don't see organizations being ready for this, 
 
 ### [Privacy, simplified.](https://spreadprivacy.com/privacy-simplified/)
 
-👍 Very [cool! I use Duck Duck Go](https://duckduckgo.com) as my default search engine on all of my devices and I love this new addition. Now not only do you have a privacy forward search experience, but the services you visit from there will be privacy enhanced via this browser. I achieve something similar with a handful of plugins and content blockers. This is much simpler and is privacy by default.
+👍 Very cool! I use [Duck Duck Go](https://duckduckgo.com) as my default search engine on all of my devices and I love this new addition. Now not only do you have a privacy forward search experience, but the services you visit from there will be privacy enhanced via this browser. I achieve something similar with a handful of plugins and content blockers. This is much simpler and is privacy by default.
 
 ### [The Best Productivity and GTD App for Mac, iPhone, and iPad](https://thesweetsetup.com/apps/best-personal-gtd-app-suite/)
 
-[I’m sticking with OmniFocus](https://www.omnigroup.com/omnifocus) because I continue to believe the least productive thing you can do is spend significant time and energy switching productivity systems. It’s a common rabbit hole. But, it’s cool to see Things is doing so well.
+I’m sticking with [OmniFocus](https://www.omnigroup.com/omnifocus) because I continue to believe the least productive thing you can do is spend significant time and energy switching productivity systems. It’s a common rabbit hole. But, it’s cool to see Things is doing so well.
 
 ### [Personal Data Representatives: An Idea – Tom Steinberg – Medium](https://medium.com/@TomSteinberg/personal-data-representatives-an-idea-d2274d1af69b)
 
@@ -130,7 +130,7 @@ This seems completely unworkable but it’s a novel idea for managing access to 
 
 ### [Settlers of Catan and the Invasion of the German Board Games - The Atlantic](https://www.theatlantic.com/business/archive/2018/01/german-board-games-catan/550826/)
 
-These strategy board games pulled me into some casual board [gaming over recent years. Specifically Carcassonne](https://en.wikipedia.org/wiki/Carcassonne) [and Ticket to Ride](https://www.daysofwonder.com/tickettoride/en/) . Additionally strong digital versions of those games also make them very approachable and expose them to a new market. Starting with digital and then getting the actual board game has been pretty common for me.
+These strategy board games pulled me into some casual board gaming over recent years. Specifically [Carcassonne](https://en.wikipedia.org/wiki/Carcassonne) and [Ticket to Ride](https://www.daysofwonder.com/tickettoride/en/). Additionally strong digital versions of those games also make them very approachable and expose them to a new market. Starting with digital and then getting the actual board game has been pretty common for me.
 
 ### [ARK Invest - Big Ideas 2018 - Disruptive Innovation](https://research.ark-invest.com/hubfs/1_Download_Files_ARK-Invest/Infographics/Big%20Ideas%202018%20-%20ARK%20Invest.pdf?hsCtaTracking=37c67fc6-1932-4b42-887c-ba1332a0e7a9%7C4a9f618a-acf9-428b-a7ab-11965014a86b)
 
@@ -248,18 +248,18 @@ Free 1.5/5 stars
 
 ## Microblog updates 🎈
 
-- I have an [irrational enthusiasm for updating firmware. 🤩😎🤞🏻](https://www.thingelstad.com/2018/01/25/i-have-an.html)
-- Trying Dropmix for first time! [Pretty cool — a musical trip!](https://www.thingelstad.com/2018/01/25/trying-dropmixhttpsdropmixhasbrocomenus-for.html)
-- Three new board members joining the Minnestar board! Great to have more talented [people driving this organization forward! 👏](https://www.thingelstad.com/2018/01/23/three-new-board.html)
-- School cancelled tomorrow. Kids are filled with [excitement. 😊 I remember that feeling…](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
-- My Micro Monday recommendation is @eli for [great links and fun photos! 🙌🏻👏🏻](https://www.thingelstad.com/2018/01/22/my-micro-monday.html)
+- [I have an irrational enthusiasm for updating firmware. 🤩😎🤞🏻](https://www.thingelstad.com/2018/01/25/i-have-an.html)
+- [Trying Dropmix for first time! Pretty cool — a musical trip!](https://www.thingelstad.com/2018/01/25/trying-dropmixhttpsdropmixhasbrocomenus-for.html)
+- [Three new board members joining the Minnestar board! Great to have more talented people driving this organization forward! 👏](https://www.thingelstad.com/2018/01/23/three-new-board.html)
+- [School cancelled tomorrow. Kids are filled with excitement. 😊 I remember that feeling…](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
+- [My Micro Monday recommendation is @eli for great links and fun photos! 🙌🏻👏🏻](https://www.thingelstad.com/2018/01/22/my-micro-monday.html)
 - [Let it snow. ❄️](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
-- Two hours running snow blower. I’m done for tonight. We’ll see what we wake up to in the morning. The [snow is still coming down heavy.](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
-- A lot of [snow coming down in Minneapolis! ❄️](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
-- The Vikings didn’t play well tonight, but this game [is just hard to watch. 🏈☹️](https://www.thingelstad.com/2018/01/21/the-vikings-didnt.html)
-- I can’t think of a reason I would ever want [a notification from my Kindle app.](https://www.thingelstad.com/2018/01/21/i-cant-think.html)
-- This "done in [60.411 seconds" has me despising Jekyll.](https://www.thingelstad.com/2018/01/20/this-done-in.html)
-- One of my favorite Saturday [morning spots to do some reading.](https://www.thingelstad.com/2018/01/20/one-of-my.html)
+- [Two hours running snow blower. I’m done for tonight. We’ll see what we wake up to in the morning. The snow is still coming down heavy.](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
+- [A lot of snow coming down in Minneapolis! ❄️](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
+- [The Vikings didn’t play well tonight, but this game is just hard to watch. 🏈☹️](https://www.thingelstad.com/2018/01/21/the-vikings-didnt.html)
+- [I can’t think of a reason I would ever want a notification from my Kindle app.](https://www.thingelstad.com/2018/01/21/i-cant-think.html)
+- [This "done in 60.411 seconds" has me despising Jekyll.](https://www.thingelstad.com/2018/01/20/this-done-in.html)
+- [One of my favorite Saturday morning spots to do some reading.](https://www.thingelstad.com/2018/01/20/one-of-my.html)
 
 ## The end 🎬
 

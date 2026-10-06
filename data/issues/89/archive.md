@@ -121,11 +121,11 @@ links:
   domain: www.trapezemobile.com
   heading_context: '[How I Finally Hit 2000 on Lichess, and Improved my Chess Rating by 200 Points in 16 Days - Trapeze](https://www.trapezemobile.com/2019/01/10/how-i-finally-hit-2000-on-lichess-and-improved-my-chess-rating-by-200-points-in-16-days/)'
   section: Notable Links 📌
-word_count: 2099
+word_count: 2092
 ---
 Today we transitioned our move into full "looking forward" mode. We closed on the sale of the previous house and now will begin the deliberate process of settling into the new place. I'm glad we have the winter months to do that, and everything will be nicely in place once spring arrives!
 
-Enjoy this weeks links! I think there are some really good ones in here. 🏅 I've been having a lot of fun with what little time [I've had to play with Blot](https://blot.im) for my blogs. I'm slowly moving all but my microblog there, and I'm really happy with it. While I have you, it would be awesome if you would help spread the word about the Weekly Thing! [Send an email](mailto:?subject=Check%20out%20the%20Weekly%20Thing&body=Hello!%0A%0AI%20subscribe%20to%20this%20weekly%20email%20called%20the%20Weekly%20Thing.%20I've%20enjoyed%20it%20a%20lot%2C%20and%20think%20you%20might%20like%20it%20to.%20You%20can%20check%20out%20past%20issues%20and%20subscribe%20at%0A%0Ahttps%3A%2F%2Fweekly.thingelstad.com%2F%0A%0ACheers!%0A) to some friends that you think may enjoy it! Or share a link to https://weekly.thingelstad.com/ via whatever means you prefer!
+Enjoy this weeks links! I think there are some really good ones in here. 🏅 I've been having a lot of fun with what little time I've had to play with [Blot](https://blot.im) for my blogs. I'm slowly moving all but my microblog there, and I'm really happy with it. While I have you, it would be awesome if you would help spread the word about the Weekly Thing! [Send an email](mailto:?subject=Check%20out%20the%20Weekly%20Thing&body=Hello!%0A%0AI%20subscribe%20to%20this%20weekly%20email%20called%20the%20Weekly%20Thing.%20I've%20enjoyed%20it%20a%20lot%2C%20and%20think%20you%20might%20like%20it%20to.%20You%20can%20check%20out%20past%20issues%20and%20subscribe%20at%0A%0Ahttps%3A%2F%2Fweekly.thingelstad.com%2F%0A%0ACheers!%0A) to some friends that you think may enjoy it! Or share a link to [https://weekly.thingelstad.com/](https://weekly.thingelstad.com/) via whatever means you prefer!
 
 ## Featured Links 🏅
 
@@ -167,7 +167,7 @@ Pamela Park, Edina MN
 
 ### [Sprint to Stop Selling Location Data to Third Parties After Motherboard Investigation - Motherboard](https://motherboard.vice.com/en_us/article/qvqgnd/sprint-stop-selling-location-data-tmobile-att-microbilt-zumigo)
 
-Last week I shared a link to the [article about carriers selling location data](https://motherboard.vice.com/en_us/article/nepxbz/i-gave-a-bounty-hunter-300-dollars-located-phone-microbilt-zumigo-tmobile) . This activity got a lot of attention from people, and a mere week later Sprint is stopping this practice.
+Last week I shared a link to the article about [carriers selling location data](https://motherboard.vice.com/en_us/article/nepxbz/i-gave-a-bounty-hunter-300-dollars-located-phone-microbilt-zumigo-tmobile). This activity got a lot of attention from people, and a mere week later Sprint is stopping this practice.
 
 ### [Thinking Different: Keys to Adopting an iPad-First Workflow – MacStories](https://www.macstories.net/stories/thinking-different-keys-to-adopting-an-ipad-first-workflow/)
 
@@ -183,7 +183,7 @@ I really like the promotion and prevention ideas here, and I like Feld's comment
 
 ### [Nothing Can Stop Google. DuckDuckGo Is Trying Anyway.](https://medium.com/s/story/nothing-can-stop-google-duckduckgo-is-trying-anyway-718eb7391423)
 
-I've been using DuckDuckGo for a long time, and this behind the scenes look at the company is pretty great. Via [Leah Cunningham](http://www.cunningleah.com) .
+I've been using DuckDuckGo for a long time, and this behind the scenes look at the company is pretty great. Via [Leah Cunningham](http://www.cunningleah.com).
 
 ### [How Pamela Park became the epicenter of east Edina's teardown trend | Star Tribune](http://www.startribune.com/how-pamela-park-became-the-epicenter-of-east-edina-s-teardown-trend/503632302/)
 
@@ -209,11 +209,11 @@ This is a good and complete checklist that you could use to review your personal
 
 ### [Troy Hunt: The 773 Million Record "Collection #1" Data Breach](https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/)
 
-This is a huge dump of usernames and passwords. I use 1Password to protect myself from this stuff, and [they have a good blog post](https://blog.1password.com/773-million-collection-1/) on this one. Krebs on Security [also wrote about this massive dump](https://krebsonsecurity.com/2019/01/773m-password-megabreach-is-years-old/) , highlighting that in the big picture this is far from the biggest breach of its kind. 😳
+This is a huge dump of usernames and passwords. I use 1Password to protect myself from this stuff, and they have a [good blog post](https://blog.1password.com/773-million-collection-1/) on this one. Krebs on Security also [wrote about this massive dump](https://krebsonsecurity.com/2019/01/773m-password-megabreach-is-years-old/), highlighting that in the big picture this is far from the biggest breach of its kind. 😳
 
 ### [Jenn on Twitter: "Devops meetup January 2019 #devopsmsp"](https://twitter.com/geekgalgroks/status/1085332271304007682)
 
-A thorough, and nicely contextualized with [GIFs, Twitter thread covering Andy Domeier](https://twitter.com/ajdomie) from SPS on SRE teams!
+A thorough, and nicely contextualized with GIFs, Twitter thread covering [Andy Domeier](https://twitter.com/ajdomie) from SPS on SRE teams!
 
 ### [Engineering Management: The Pendulum Or The Ladder – charity.wtf](https://charity.wtf/2019/01/04/engineering-management-the-pendulum-or-the-ladder/)
 
@@ -247,7 +247,7 @@ I would like to be better at Chess. Some interesting ideas here for how to do th
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 
@@ -258,7 +258,7 @@ TL;DR? Just way too hard.
 - [mailtolink.me | markup generator for mailto links](https://mailtolink.me/)
 Cool utility to generate a mailto link. [These are handy](mailto:jamie@thingelstad.com?subject=Mail%20to%20links%20are%20great!&body=What's%20up%3F) and this makes them easy to make.
 - [Re-decentralizing the Web, for good this time | Ruben Verborgh](https://ruben.verborgh.org/articles/redecentralizing-the-web/) ruben.verborgh.org
-This is the [best description of what Tim Berners-Lee's Solid](https://solid.mit.edu) is about.
+This is the best description of what [Tim Berners-Lee](https://www.w3.org/People/Berners-Lee/)'s [Solid](https://solid.mit.edu) is about.
 - [The unlikely resurgence of Dungeons & Dragons makes its way to the Inland Northwest | The Pacific Northwest Inlander](https://www.inlander.com/spokane/nearly-45-years-after-its-creation-a-fantasy-game-played-with-paper-pencil-and-dice-is-having-its-biggest-year-yet-in-the-inland-northwest-a/Content?oid=15615918) www.inlander.com
 🎲⚔️🐉🤪
 - [The Art of Being an Instagram Husband - The Atlantic](https://www.theatlantic.com/technology/archive/2019/01/instagram-husbands-are-no-longer-ashamed/580033/) www.theatlantic.com
@@ -268,7 +268,7 @@ When did "Influencer" become a profession? 🤦‍♀️
 
 ### [Wednesday @ 9:35 PM](https://www.thingelstad.com/2019/01/16/youre-one-of.html)
 
-“You’re one of 772,904,991 people pwned in the Collection #1 data breach.” That is a shockingly large amount [of credentials compromised. Good blog post](https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/) describing it. Very happy I [use unique, random passwords with 1Password](https://1password.com) !
+“You’re one of 772,904,991 people pwned in the Collection #1 data breach.” That is a shockingly large amount of credentials compromised. Good [blog post](https://www.troyhunt.com/the-773-million-record-collection-1-data-reach/) describing it. Very happy I use unique, random passwords with [1Password](https://1password.com)!
 
 ### [Tuesday @ 7:14 PM](https://www.thingelstad.com/2019/01/15/is-there-anything.html)
 
@@ -282,7 +282,7 @@ Gorgeous day for a smoking session on the Big Green Egg! First smoke at the new 
 
 ### [Sunday @ 8:26 AM](https://www.thingelstad.com/2019/01/13/i-just-preordered.html)
 
-I [just preordered Cal Newport’s Digital Minimalism](http://calnewport.com/blog/2019/01/12/why-you-should-pre-order-digital-minimalism/) . I was going to buy it anyway so the additional benefits he added were a bonus! 📚
+I just [preordered Cal Newport’s Digital Minimalism](http://calnewport.com/blog/2019/01/12/why-you-should-pre-order-digital-minimalism/). I was going to buy it anyway so the additional benefits he added were a bonus! 📚
 
 ### [Saturday @ 11:03 AM](https://www.thingelstad.com/2019/01/12/170300.html)
 
@@ -290,7 +290,7 @@ Going back to Xfinity I lose fiber speed. Upside is back on IPv6. 🤷🏼‍♂
 
 ### [Saturday @ 9:24 AM](https://www.thingelstad.com/2019/01/12/took-my-new.html)
 
-Took [my new Ratio Eight Coffee Maker](https://ratiocoffee.com) [and Baratza Virtuoso](https://www.baratza.com/grinder/virtuoso/) grinder for a first run [this morning, paired with Sump Coffee](https://www.sumpcoffee.com) [beans. It’s like an automatic Chemex](https://www.chemexcoffeemaker.com) , delicious brew! ☕️ Awesome surprise from my amazing and thoughtful wife. 🥰
+Took my new [Ratio Eight Coffee Maker](https://ratiocoffee.com) and [Baratza Virtuoso](https://www.baratza.com/grinder/virtuoso/) grinder for a first run this morning, paired with [Sump Coffee](https://www.sumpcoffee.com) beans. It’s like an automatic [Chemex](https://www.chemexcoffeemaker.com), delicious brew! ☕️ Awesome surprise from my amazing and thoughtful wife. 🥰
 
 ![](https://cdn.uploads.micro.blog/890/2019/0eb0e6fb0c.jpg)
 
@@ -314,4 +314,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will be winged by an anti-aircraft battery.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

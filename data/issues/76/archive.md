@@ -93,9 +93,9 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · On Cash](https://www.tbray.org/ongoing/When/201x/2018/10/11/On-Cash)'
   section: Notable Links 📌
-word_count: 1939
+word_count: 1938
 ---
-I just got [back from seeing the Foo Fighters](https://foofighters.com) play one of the final shows of their Concrete and Gold tour. I’ve seen the Foo’s play a few times now and it’s always a treat to see them. Every time I'm struck by how much they just love music. [Dave Grohl](https://en.wikipedia.org/wiki/Dave_Grohl) seems like someone that is all consumed and in love with his craft. [Taylor Hawkins](https://en.wikipedia.org/wiki/Taylor_Hawkins) has a grin ear-to-ear every time he’s on stage. Seeing them tonight you got the sense that they would have liked to have just kept playing. Once I saw them play for over 2 hours straight and we’re ready to keep going. The passion they have for what they do is incredible.
+I just got back from seeing the [Foo Fighters](https://foofighters.com) play one of the final shows of their Concrete and Gold tour. I’ve seen the Foo’s play a few times now and it’s always a treat to see them. Every time I'm struck by how much they just love music. [Dave Grohl](https://en.wikipedia.org/wiki/Dave_Grohl) seems like someone that is all consumed and in love with his craft. [Taylor Hawkins](https://en.wikipedia.org/wiki/Taylor_Hawkins) has a grin ear-to-ear every time he’s on stage. Seeing them tonight you got the sense that they would have liked to have just kept playing. Once I saw them play for over 2 hours straight and we’re ready to keep going. The passion they have for what they do is incredible.
 
 They show this passion not just in the actions during the show, but the immense interest in the [music itself. Tonight they played ["Breakdown"](https://www.youtube.com/watch?v=qNxfPAF1frM) by [Tom Petty](https://en.wikipedia.org/wiki/Tom_Petty) during the encore, in remembrance of his birthday tomorrow. Grohl has taken to making movies about music, and even talks on it.
 
@@ -159,7 +159,7 @@ So when you give your photos to Google and Facebook they mine brands and objects
 
 ### [The Hidden Tribes of America - Hidden Tribes](https://hiddentribes.us/)
 
-I found this via [David Brooks Rich White Civil War](https://www.nytimes.com/2018/10/15/opinion/politics-race-white-tribalism.html) column.
+I found this via David Brooks [Rich White Civil War](https://www.nytimes.com/2018/10/15/opinion/politics-race-white-tribalism.html) column.
 
 > But this can change. A majority of Americans, whom we’ve called the "Exhausted Majority," are fed up by America’s polarization. They know we have more in common than that which divides us: our belief in freedom, equality, and the pursuit of the American dream. They share a deep sense of gratitude that they are citizens of the United States. They want to move past our differences.
 
@@ -179,7 +179,7 @@ A touching remembrance of Paul Allen by Bill Gates.
 
 ### [StartMail - Private & encrypted email made easy](https://www.startmail.com/en/)
 
-Nice to see another web-based, easy-to-use encrypted email service. This one has some additional privacy features that look great. I [maintain an encrypted address at Protonmail](https://protonmail.com) which has some similar features. As an aside, it’s notable that all encrypted email services I know of tout that their servers are not located in the United States as a feature. It’s sad that our government is known to treat digital right-to-privacy with so low regard.
+Nice to see another web-based, easy-to-use encrypted email service. This one has some additional privacy features that look great. I maintain an encrypted address at [Protonmail](https://protonmail.com) which has some similar features. As an aside, it’s notable that all encrypted email services I know of tout that their servers are not located in the United States as a feature. It’s sad that our government is known to treat digital right-to-privacy with so low regard.
 
 ### [About static site generators](https://fvsch.com/static-site-generators/)
 
@@ -193,7 +193,7 @@ I like Bray's perspective on cash here. I tend to still pay for most of my routi
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 
@@ -270,7 +270,7 @@ This picture captures most of what I’ll remember from yesterday’s Minnesota 
 
 ### [Sunday @ 8:26 AM](https://www.thingelstad.com/2018/10/14/132635.html)
 
-We had a great time [at the Minnesota Zoo Jack-o-Lantern Spectacular](https://mnzoo.org/jols-2/) last night. I was blown away by the artistry and overall experience. It [is created by Passion for Pumpkins](http://passionforpumpkins.com/photo-gallery/) with 5,000 pumpkins! The big, photo style pumpkins are very cool. 🎃👍🤩
+We had a great time at the Minnesota Zoo [Jack-o-Lantern Spectacular](https://mnzoo.org/jols-2/) last night. I was blown away by the artistry and overall experience. It is created by [Passion for Pumpkins](http://passionforpumpkins.com/photo-gallery/) with 5,000 pumpkins! The big, photo style pumpkins are very cool. 🎃👍🤩
 
 ![](https://www.thingelstad.com/uploads/2018/4827fd072e.jpg)
 
@@ -320,7 +320,7 @@ Umbrellas. ☂️
 
 ### [Saturday @ 12:54 PM](https://www.thingelstad.com/2018/10/13/175451.html)
 
-Had a fun [and delicious evening at Kitchen Window’s](https://kitchenwindow.com) Spanish Wine Dinner Class last night. Fun time, learned some things and nice people!
+Had a fun and delicious evening at [Kitchen Window’s](https://kitchenwindow.com) Spanish Wine Dinner Class last night. Fun time, learned some things and nice people!
 
 ![](https://www.thingelstad.com/uploads/2018/8151b5e485.jpg)
 
@@ -336,4 +336,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Never quarrel with one's bread and butter.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

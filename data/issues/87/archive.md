@@ -75,7 +75,7 @@ links:
   domain: www.cunningleah.com
   heading_context: '[Leah Cunningham](http://www.cunningleah.com/)'
   section: Notable Links 📌
-word_count: 1388
+word_count: 1385
 ---
 We are in that really fun time as parents where our kids are old enough to stay up until midnight on New Years Eve, and happily also think it's fun to do that with their parents. I was reading various blog posts leading up to New Years about resolutions and various self-improvement ideas for the year ahead. Reflections on the past year and such. New Years Eve was a good reminder to chill out and just have fun as I joined the kids in screaming and shouting in elation as the clock tipped over into 2019. 🎉 It's good to step back and just welcome in the New Year with a bunch of whooping and hollering! Happy 2019 to everyone! 🍾
 
@@ -84,7 +84,7 @@ We are in that really fun time as parents where our kids are old enough to stay 
 ### [Join Analog Social Media - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/12/29/join-analog-social-media/)
 
 Two things on this.
-1. [My book club read Bowling Alone](https://rwbook.club/book/bowling-alone/) which covers the value of clubs, and sadly the decline of many of them in America. This is a good book to go along with Newport's thesis here.
+1. My book club read [Bowling Alone](https://rwbook.club/book/bowling-alone/) which covers the value of clubs, and sadly the decline of many of them in America. This is a good book to go along with Newport's thesis here.
 2. While I’m talking about my book club, that is a "analog social media" activity that I value and treasure.
 
 🤝
@@ -174,35 +174,35 @@ Are we still talking about Linux on the desktop? 👀
 - [Release fish 3.0.0 (released December 28, 2018) · fish-shell/fish-shell](https://github.com/fish-shell/fish-shell/releases/tag/3.0.0) github.com
 I've been using fish shell for a while now and it feels modern and nice. It reminds me how zsh felt many, many years ago. These improvements in 3.0 are very good! 👍
 - [Trillion Dollar Coach - Eric Schmidt - Hardcover](https://www.harpercollins.com/9780062839268/trillion-dollar-coach/) www.harpercollins.com
-Will be looking forward to reading this book. [Via @SamPierson](https://twitter.com/sam_pierson/status/1078476847522988032?s=20) .
+Will be looking forward to reading this book. Via [@SamPierson](https://twitter.com/sam_pierson/status/1078476847522988032?s=20).
 
 ## Microposts 🎈
 
 ### [Monday @ 11:25 PM](https://www.thingelstad.com/2018/12/31/went-to-bohemian.html)
 
-[Went to Bohemian Rhapsody](https://www.rottentomatoes.com/m/bohemian_rhapsody) tonight and thought it was great! 🎬 Turns our New Years Eve is a busy night at theaters!
+Went to [Bohemian Rhapsody](https://www.rottentomatoes.com/m/bohemian_rhapsody) tonight and thought it was great! 🎬 Turns our New Years Eve is a busy night at theaters!
 
 ![](https://cdn.uploads.micro.blog/890/2019/c7533f10e9.jpg)
 
 ### [Monday @ 2:42 PM](https://www.thingelstad.com/2018/12/31/played-the-last.html)
 
-Played the last of [our new Christmas board games, Azul](https://boardgamegeek.com/boardgame/230802/azul) . Fun hidden strategies. Didn’t make sense at first a lot of fun after we figured it out.
+Played the last of our new Christmas board games, [Azul](https://boardgamegeek.com/boardgame/230802/azul). Fun hidden strategies. Didn’t make sense at first a lot of fun after we figured it out.
 
 ![](https://cdn.uploads.micro.blog/890/2018/46089b0ef9.jpg)
 
 ### [Sunday @ 11:05 PM](https://www.thingelstad.com/2018/12/30/watched-isle-of.html)
 
-[Watched Isle of Dogs](http://www.isleofdogsmovie.com) tonight. Very fun, original movie. 🎬
+Watched [Isle of Dogs](http://www.isleofdogsmovie.com) tonight. Very fun, original movie. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2018/9b2ba8b77a.jpg)
 
 ### [Sunday @ 3:00 PM](https://www.thingelstad.com/2018/12/30/ive-been-throwing.html)
 
-I’ve been throwing [a bunch of content at @Blot](https://micro.blog/Blot) and have been very impressed. Speed is okay even with 10,000 posts. There is a lot more capability in Blot than I thought! 🧐
+I’ve been throwing a bunch of content at [@Blot](https://micro.blog/Blot) and have been very impressed. Speed is okay even with 10,000 posts. There is a lot more capability in Blot than I thought! 🧐
 
 ### [Saturday @ 8:40 PM](https://www.thingelstad.com/2018/12/29/tyler-and-i.html)
 
-Tyler and I are having [a great time with FIFA 19](https://www.easports.com/fifa) on the Switch! This is the first sports game that I’ve enjoyed more than a couple times. 🕹
+Tyler and I are having a great time with [FIFA 19](https://www.easports.com/fifa) on the Switch! This is the first sports game that I’ve enjoyed more than a couple times. 🕹
 
 ![](https://cdn.uploads.micro.blog/890/2018/4244e191fa.jpg)
 
@@ -212,4 +212,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Ships are safe in harbor, but they were never meant to stay there.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

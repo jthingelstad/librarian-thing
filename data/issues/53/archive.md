@@ -99,15 +99,15 @@ links:
   domain: medium.com
   heading_context: '[Three-day no-meeting schedule for engineers – Pinterest Engineering – Medium](https://medium.com/@Pinterest_Engineering/three-day-no-meeting-schedule-for-engineers-fca9f857a567)'
   section: Notable Links 📌
-word_count: 1799
+word_count: 1793
 ---
-I'm kicking off year two of the Weekly Thing with a significantly refined style. 🛀🏻 This is only the 4th refinement of the display and I'm hoping it's the last of signifance. I'm familiar with ZURB's Foundation framework from another project, so I [decided to use Foundation for Email](https://foundation.zurb.com/emails.html) . I think I got it all right, but dealing with HTML in email clients is very challenging. If you get this and it looks broken, please let me know with a reply. 🤞 I also decided to put a fortune at the very end. 🥠
+I'm kicking off year two of the Weekly Thing with a significantly refined style. 🛀🏻 This is only the 4th refinement of the display and I'm hoping it's the last of signifance. I'm familiar with ZURB's Foundation framework from another project, so I decided to use [Foundation for Email](https://foundation.zurb.com/emails.html). I think I got it all right, but dealing with HTML in email clients is very challenging. If you get this and it looks broken, please let me know with a reply. 🤞 I also decided to put a fortune at the very end. 🥠
 
 ## Featured Links 🏅
 
 ### [Against Facebook](https://0xadada.pub/2018/05/01/against-facebook/)
 
-This is a powerful and comprehensive essay targeted at Facebook, but applies to all social media. The description given below is a great definition of the [addictive software patterns I've written about](https://www.thingelstad.com/2018/identify-addictive-application-patterns/) .
+This is a powerful and comprehensive essay targeted at Facebook, but applies to all social media. The description given below is a great definition of the [addictive software patterns I've written about](https://www.thingelstad.com/2018/identify-addictive-application-patterns/).
 
 > These gadgets are designed to create a “supernormal stimulus,” that is, a stimulus that produces a stronger than natural response. We can even internalize the supernormal stimulus—an example is the “phantom vibrate” we sometimes feel in our pocket when no vibration occurs. In the case of social media, the supernormal stimulus is used to exploit our response to novelty in order to elicit a behavior that works in the interests of the social media provider.
 
@@ -156,7 +156,7 @@ The audio examples and natural language of Google Duplex is amazing. Almost too 
 
 ### [The Subtle Sexism Of Your Open Plan Office](https://www.fastcodesign.com/90170941/the-subtle-sexism-of-your-open-plan-office)
 
-I’m a big proponent of open office spaces, but have not considered potential gender issues in an open office space. This reminded me of the inclusivity [objectives of the new Github's office](https://work.qz.com/1267108/githubs-refurbished-san-francisco-headquarters-is-designed-for-inclusivity/) .
+I’m a big proponent of open office spaces, but have not considered potential gender issues in an open office space. This reminded me of the [inclusivity objectives of the new Github's office](https://work.qz.com/1267108/githubs-refurbished-san-francisco-headquarters-is-designed-for-inclusivity/).
 
 ### [We’re in the Uncanny Valley of Targeted Advertising | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2018/04/were-uncanny-valley-targeted-advertising)
 
@@ -164,7 +164,7 @@ The EFF calls out Facebooks use of AI in it’s targeting systems. It’s notabl
 
 > The concern that you’re being surveilled persists, essentially, because you are being surveilled…
 
-Good call to action for running your own tools [to defend against this pervasive surveillance](http://crackedlabs.org/en/corporate-surveillance) .
+Good call to action for running your own tools to defend against this [pervasive surveillance](http://crackedlabs.org/en/corporate-surveillance).
 
 ### [iOS 11.4 to Disable USB Port After 7 Days: What It Means for Mobile Forensics | ElcomSoft blog](https://blog.elcomsoft.com/2018/05/ios-11-4-to-disable-usb-port-after-7-days-what-it-means-for-mobile-forensics/)
 
@@ -200,7 +200,7 @@ The ability to proactively notify you of compromised accounts and unacceptable s
 
 ### [Three-day no-meeting schedule for engineers – Pinterest Engineering – Medium](https://medium.com/@Pinterest_Engineering/three-day-no-meeting-schedule-for-engineers-fca9f857a567)
 
-Another data point [on the Manager v. Maker time](http://paulgraham.com/makersschedule.html) topic. I like that this article has some survey data as well, and allows for a hybrid. My main takeaway from these is that being deliberate about your time is important. Manage and plan your time to align with your objectives for each day.
+Another data point on the [Manager v. Maker time](http://paulgraham.com/makersschedule.html) topic. I like that this article has some survey data as well, and allows for a hybrid. My main takeaway from these is that being deliberate about your time is important. Manage and plan your time to align with your objectives for each day.
 
 ## Now Reading 📚
 
@@ -218,7 +218,7 @@ This book is making the rounds at a lot of companies, including ours. I just bou
 
 https://wikimediafoundation.org/wiki/Home
 
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference [projects in the world, including Wikipedia](https://www.wikipedia.org) , a top-ten [internet property. Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
+The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Highlighted iOS App 📱
 
@@ -253,7 +253,7 @@ My favorite text editor gets a nice bump.
 
 ### [Friday @ 8:37 PM](https://www.thingelstad.com/2018/05/11/013710.html)
 
-[Tammy and I saw Tully](https://imdb.com/title/tt5610554/) tonight. Good movie. 🎬
+Tammy and I saw [Tully](https://imdb.com/title/tt5610554/) tonight. Good movie. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2018/d01e2102b5.jpg)
 
@@ -265,7 +265,7 @@ Had a fabulous lunch today with the Minneapolis contingent of our #TeamSPS Comms
 
 ### [Wednesday @ 9:42 PM](https://www.thingelstad.com/2018/05/09/ready-for-a.html)
 
-Ready for a [group book discussion on Radical Candor](https://www.radicalcandor.com) by Kim Scott with our #TeamSPS technology leadership team!
+Ready for a group book discussion on [Radical Candor](https://www.radicalcandor.com) by Kim Scott with our #TeamSPS technology leadership team!
 
 ![](https://cdn.uploads.micro.blog/890/2018/292b21c14b.jpg)
 
@@ -289,14 +289,14 @@ May 5th and snow still hanging on! Lake Superior shoreline at Canal Park, Duluth
 
 ### [Saturday @ 1:36 PM](https://www.thingelstad.com/2018/05/05/we-escaped-from.html)
 
-We escaped from the Enchanted Forest [room at Zero Hour Escape Rooms](https://duluth.zerohourescaperooms.com) in Duluth. It was a very fun room, and pretty difficult.
+We escaped from the Enchanted Forest room at [Zero Hour Escape Rooms](https://duluth.zerohourescaperooms.com) in Duluth. It was a very fun room, and pretty difficult.
 
 ![](https://cdn.uploads.micro.blog/890/2018/40530bb279.jpg)
 
 ## Fortune 🥠
 
-You've made it all the way to the [end! 👏 Here is your fortune](https://fortunecookieapi.herokuapp.com) for this week.
+You've made it all the way to the end! 👏 Here is your [fortune](https://fortunecookieapi.herokuapp.com) for this week.
 
 Attack is the best form of defense
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

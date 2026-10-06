@@ -141,7 +141,12 @@ class GraphEntityTests(unittest.TestCase):
             for key in dict.fromkeys(entity.lower() for entity in entry["entities"]):
                 capped.setdefault(key, []).append(number)
         self.assertEqual(topics, {key for key, numbers in capped.items() if len(numbers) >= 3})
-        self.assertGreaterEqual(len(index["tesla"]), 25)
+        # Tesla's list is every issue that names it twice, not the 40-name sample
+        # (14 of 25 before 1991d717). An oracle, not a floor: archive repairs move
+        # the real count (WT44's doubled Tesla title).
+        twice = {str(i["number"]) for i in corpus["issues"] if "tesla" in graph.named_twice(i)}
+        self.assertEqual(set(index["tesla"]), twice | set(capped["tesla"]))
+        self.assertGreater(len(index["tesla"]), len(capped["tesla"]))
         junk = [
             key
             for key in index

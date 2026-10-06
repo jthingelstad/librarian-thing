@@ -134,7 +134,7 @@ links:
   domain: om.co
   heading_context: '[iPhone X: Some Early Impressions – Om Malik](https://om.co/2017/11/03/iphone-x-some-early-impressions/)'
   section: Links 📌
-word_count: 2231
+word_count: 2227
 ---
 First thing, there is no photo this week. 😞 I only put photos in the Weekly Thing that are from that week and this week I didn’t capture anything. I could put some pictures I took from a couple events this week, but that would just be filling a slot. Another tactical thing I’m thinking about is better ways to show links in the Weekly Thing than just a list. Maybe highlighting a Top 3 or even putting in categories. Watch that space for some experiments. 👨‍🔬
 
@@ -168,7 +168,7 @@ On one hand it’s sort of amazing that it’s 2017 and we are still figuring ou
 
 ### [walrus — redis toolkit for python](http://walrus.readthedocs.io/en/latest/)
 
-Very nice Python library to provide easier to use objects backed by [Redis](https://redis.io) . Some of the examples would be very useful to bootstrap a new project very quickly. 👍
+Very nice Python library to provide easier to use objects backed by [Redis](https://redis.io). Some of the examples would be very useful to bootstrap a new project very quickly. 👍
 
 ### [How Facebook Figures Out Everyone You've Ever Met](https://gizmodo.com/how-facebook-figures-out-everyone-youve-ever-met-1819822691)
 
@@ -184,7 +184,7 @@ Ahh, what? You can hire an actor to be a fake father to your child? Or hire an e
 
 ### [Orion Icon Library](https://orioniconlibrary.com/)
 
-In the category of shiny objects I like to check out icon libraries are close to charting libraries and typefaces. This one is pretty [interesting since it is all SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) based. Plus, the animation on the first load is amazing. 🤓
+In the category of shiny objects I like to check out icon libraries are close to charting libraries and typefaces. This one is pretty interesting since it is all [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) based. Plus, the animation on the first load is amazing. 🤓
 
 ### [Sean Parker unloads on Facebook "exploiting" human weakness](https://www.axios.com/sean-parker-unloads-on-facebook-2508036343.html)
 
@@ -196,11 +196,11 @@ When I see things like this I wonder how different is this than the tobacco indu
 
 ### [Al Franken Just Gave the Speech Big Tech Has Been Dreading](https://www.wired.com/story/al-franken-just-gave-the-speech-big-tech-has-been-dreading/amp)
 
-It makes me very proud that [our MN State Senator Al Franken](https://www.franken.senate.gov) [has a passion for digital issues](https://www.franken.senate.gov/?p=issue&id=178) . [He's been vocal about Net Neutrality](https://en.wikipedia.org/wiki/Net_neutrality) for many years.
+It makes me very proud that our MN State Senator [Al Franken](https://www.franken.senate.gov) has a passion for [digital issues](https://www.franken.senate.gov/?p=issue&id=178). He's been vocal about [Net Neutrality](https://en.wikipedia.org/wiki/Net_neutrality) for many years.
 
 ### [Apache Mesos Helps SPS Commerce Focus on Business and Build Tech Stack - Mesosphere](https://mesosphere.com/blog/apache-mesos-helps-sps-commerce-focus-on-business-and-build-tech-stack/)
 
-Nice feature on our [use of Mesos at SPS Commerce](https://www.spscommerce.com/) [and Q&A from Andy Domeier](https://www.linkedin.com/in/andy-domeier-10813432/) .
+Nice feature on our use of Mesos at [SPS Commerce](https://www.spscommerce.com/) and Q&A from [Andy Domeier](https://www.linkedin.com/in/andy-domeier-10813432/).
 
 ### [Field Nation CFO Lillemoe guides tech firm through explosive growth - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2017/11/06/2017-cfo-of-the-year-kent-lillemoe-field-nation.html)
 
@@ -212,7 +212,7 @@ What was the web like a decade ago? This search engine only indexes sites that c
 
 ### [Do You Remember? The Life and legacy of Hüsker Dü : NPR](http://www.npr.org/podcasts/550140934/do-you-remember-the-life-and-legacy-of-husker-du)
 
-I've been listening to [this 5-part series from The Current](https://www.thecurrent.org) [about Hüsker Dü](https://en.wikipedia.org/wiki/Hüsker_Dü) . I never got to see them play live but have all of their albums. One of the iconic Minneapolis bands. 🎶
+I've been listening to this 5-part series from [The Current](https://www.thecurrent.org) about [Hüsker Dü](https://en.wikipedia.org/wiki/Hüsker_Dü). I never got to see them play live but have all of their albums. One of the iconic Minneapolis bands. 🎶
 
 ### [Qeepsake - Text Msg Baby Journal](https://www.qeepsake.co/)
 
@@ -230,7 +230,7 @@ I don't do a lot of multiplayer gaming but reading this got me caught up with ho
 
 ### [Grammarly Keyboard for iOS — Tools and Toys](http://toolsandtoys.net/grammarly-keyboard-for-ios/)
 
-[I’m a subscriber to Grammarly](https://www.grammarly.com/) and find it very useful, particularly for professional things. I grabbed this iOS keyboard app right away and it is really good for a first iteration!
+I’m a subscriber to [Grammarly](https://www.grammarly.com/) and find it very useful, particularly for professional things. I grabbed this iOS keyboard app right away and it is really good for a first iteration!
 
 ### [iPhone X: Some Early Impressions – Om Malik](https://om.co/2017/11/03/iphone-x-some-early-impressions/)
 

@@ -9,13 +9,13 @@ image: https://files.thingelstad.com/weekly-thing/32/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-16-2017/
 domains: []
 links: []
-word_count: 2123
+word_count: 2114
 ---
-With this weeks vote by the FCC to eliminate net neutrality protections I want to turn your [attention to the Electronic Frontier Foundation](https://www.eff.org/) . I've been a member of the EFF for many years and I think their mission is getting more important, particularly since the government seems to not think this matters.
+With this weeks vote by the FCC to eliminate net neutrality protections I want to turn your attention to the [Electronic Frontier Foundation](https://www.eff.org/). I've been a member of the EFF for many years and I think their mission is getting more important, particularly since the government seems to not think this matters.
 
-The EFF is the leading organization fighting for your digital rights! As we experience more of our personal lives using digital platforms, having basic protections is critically important not just to your privacy but to our society as a whole! The EFF has been [fighting for those protections since 1990](https://www.eff.org/about/history) ! They are actively working on [a wide range of digital issues](https://www.eff.org/work) .
+The EFF is the leading organization fighting for your digital rights! As we experience more of our personal lives using digital platforms, having basic protections is critically important not just to your privacy but to our society as a whole! The EFF has been fighting for those protections [since 1990](https://www.eff.org/about/history)! They are actively working on a [wide range of digital issues](https://www.eff.org/work).
 
-Sign up for the EFF mailing list so you can stay up-to-date with the work they are doing. But even better, join me and [become a member of the EFF](https://supporters.eff.org/donate/) .
+Sign up for the EFF mailing list so you can stay up-to-date with the work they are doing. But even better, join me and [become a member of the EFF](https://supporters.eff.org/donate/).
 
 ---
 
@@ -34,7 +34,7 @@ Dec 14, 2017 at 1:57 PM
 
 ### [Brandi Carlile - The Mother (Live) - YouTube](https://www.youtube.com/watch?v=z865nKpgH0Q)
 
-[I've seen Brandi Carlile](http://brandicarlile.com) perform this great song a few times live. This video of her singing it to her daughter, who it is about, is fabulous. Album comes out on February 16. 🎶
+I've seen [Brandi Carlile](http://brandicarlile.com) perform this great song a few times live. This video of her singing it to her daughter, who it is about, is fabulous. Album comes out on February 16. 🎶
 
 ### [10 Reasons Why We Don’t Stick to Things : zen habits](https://zenhabits.net/wiggleroom/)
 
@@ -46,7 +46,7 @@ There is a lot of soul searching in news for how a news organization should work
 
 ### [Universal Basic Income explained](https://kottke.org/17/12/universal-basic-income-explained)
 
-Nice video overview of [the core concepts of basic income](https://en.wikipedia.org/wiki/Basic_income) including examples where it has been tried.
+Nice video overview of the core concepts of [basic income](https://en.wikipedia.org/wiki/Basic_income) including examples where it has been tried.
 
 ### [Some thoughts on social networks | mathew's web site](http://meta.ath0.com/2017/12/social-networks/)
 
@@ -54,7 +54,7 @@ Insightful observation that the negative aspects of platforms like Facebook don'
 
 ### [How Duterte Turned Facebook Into a Weapon—With Help From Facebook - Bloomberg](https://www.bloomberg.com/news/features/2017-12-07/how-rodrigo-duterte-turned-facebook-into-a-weapon-with-a-little-help-from-facebook)
 
-[When I read The Master Switch](https://www.amazon.com/Master-Switch-Rise-Information-Empires/dp/0307390993) I was particularly struck by the claim that large monopolies are really helpful for governments to manage and control things. It makes sense, if the government wants to monitor communications it’s easier if there is one communication service. This was the cozy pairing that AT&T had with the government before it was broken up. This article shows how a malevolent government could leverage the monopoly of Facebook in their company to achieve there ends. Worrisome examples of pretty terrible practices to manipulate a society.
+When I read [The Master Switch](https://www.amazon.com/Master-Switch-Rise-Information-Empires/dp/0307390993) I was particularly struck by the claim that large monopolies are really helpful for governments to manage and control things. It makes sense, if the government wants to monitor communications it’s easier if there is one communication service. This was the cozy pairing that AT&T had with the government before it was broken up. This article shows how a malevolent government could leverage the monopoly of Facebook in their company to achieve there ends. Worrisome examples of pretty terrible practices to manipulate a society.
 
 ### [Learning with Privacy at Scale - Apple](https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html)
 
@@ -66,7 +66,7 @@ I have a Coinbase account and have a very tiny amount of Bitcoin. This letter fr
 
 ### [Calm Technology](https://calmtech.com/)
 
-This reminds [me of the slow food manifesto](https://www.slowfoodusa.org/manifesto) , basic principles that should be applied to the software and systems we build. 👏
+This reminds me of the [slow food manifesto](https://www.slowfoodusa.org/manifesto), basic principles that should be applied to the software and systems we build. 👏
 
 ### [SQS & Lambda: teaming up – IOpipe Blog](https://read.iopipe.com/sqs-lambda-teaming-up-92c4096be49c)
 
@@ -88,7 +88,7 @@ Here is the SEC giving a warning to Coinbase and others that "hey, we might be r
 
 ### [Even more sieve extensions | FastMail Blog](https://blog.fastmail.com/2017/12/12/more-sieve-extensions/)
 
-I've paid Fastmail a very reasonable fee to host my email for years. They have a great service and I love the power features they have like full support of the sieve mail filtering language. If you feel like [signing up use my affiliate link](https://www.fastmail.com/?STKI=12008209) .
+I've paid Fastmail a very reasonable fee to host my email for years. They have a great service and I love the power features they have like full support of the sieve mail filtering language. If you feel like signing up use [my affiliate link](https://www.fastmail.com/?STKI=12008209).
 
 ### [Lua for Programmers Part 1: Language Essentials](http://nova-fusion.com/2012/08/27/lua-for-programmers-part-1/)
 
@@ -112,7 +112,7 @@ Wow! Finally Microsoft Windows based admins can just natively ssh from there mac
 
 ### [Popular Destinations rerouted to Russia | BGPmon](https://bgpmon.net/popular-destinations-rerouted-to-russia/)
 
-Wow -- this is pretty interesting and a bit scary. A bad [actor injecting routes into the BGP](https://en.wikipedia.org/wiki/Border_Gateway_Protocol) system of the internet and routing large amounts of data onto foreign territory. This seems like it’s intentional and hard to imagine it’s not a state sponsored activity.
+Wow -- this is pretty interesting and a bit scary. A bad actor injecting routes into the [BGP](https://en.wikipedia.org/wiki/Border_Gateway_Protocol) system of the internet and routing large amounts of data onto foreign territory. This seems like it’s intentional and hard to imagine it’s not a state sponsored activity.
 
 ### [Black Friday & Cyber Monday Performance Report 2017 - Catchpoint's Blog - Web Performance Monitoring](http://blog.catchpoint.com/2017/11/29/black-friday-cyber-monday-performance-report-2017/)
 
@@ -124,7 +124,7 @@ Interesting application that tracks how many times you look at your phone and ho
 
 ### [In digital innovation era, this technologist focuses on empathy in tech - SiliconANGLE](https://siliconangle.com/blog/2017/12/11/digital-innovation-era-technologist-focuses-empathy-tech-topwomenincloud/)
 
-A very cool interview with Minneapolis-native and [awesome tech community leader Bridget Kromhout](https://bridgetkromhout.com) ! Very cool! Her observations on the people side of working in tech are absolutely spot on! 👏 I think [the "unconference" Bridget mentions is Minnebar](https://minnestar.org/minnebar/) ! 🤔
+A very cool interview with Minneapolis-native and awesome tech community leader [Bridget Kromhout](https://bridgetkromhout.com)! Very cool! Her observations on the people side of working in tech are absolutely spot on! 👏 I think the "unconference" Bridget mentions is [Minnebar](https://minnestar.org/minnebar/)! 🤔
 
 ### [Google sent more traffic to publishers than Facebook in 2017 - Recode](https://www.recode.net/2017/12/11/16748026/google-facebook-publisher-traffic-2017-increase)
 
@@ -152,7 +152,7 @@ David Allen getting real with some tough love. 💪💛
 
 ### [8 emerging trends in container orchestration](https://www.datadoghq.com/container-orchestration/)
 
-Datadog did some interesting aggregated statistics [on container practices inside of Kubernetes](https://kubernetes.io) [and AWS ECS](https://aws.amazon.com/ecs/) . Some cool insights they can see across many deployments across various companies.
+Datadog did some interesting aggregated statistics on container practices inside of [Kubernetes](https://kubernetes.io) and [AWS ECS](https://aws.amazon.com/ecs/). Some cool insights they can see across many deployments across various companies.
 
 ### [By the Time I Get to Phoenix - Wikipedia](https://en.wikipedia.org/wiki/By_the_Time_I_Get_to_Phoenix)
 
@@ -202,10 +202,10 @@ $14.99 5/5 stars
 
 ## Microblog updates 🎈
 
-- Proud [member of the EFF! Donate now!](http://www.thingelstad.com/2017/12/12/proud-member-of.html)
-- Somebody thought these red sunglasses with flashing [lights were a good idea? 😕](http://www.thingelstad.com/2017/12/12/somebody-thought-these.html)
-- Spent a lot of time in this while [(sick) { sleep(); } loop today.](http://www.thingelstad.com/2017/12/11/spent-a-lot.html)
-- Earned [the botanist badge in Forest! 🌳🌳🌳](http://www.thingelstad.com/2017/12/10/earned-the-botanist.html)
+- [Proud member of the EFF! Donate now!](http://www.thingelstad.com/2017/12/12/proud-member-of.html)
+- [Somebody thought these red sunglasses with flashing lights were a good idea? 😕](http://www.thingelstad.com/2017/12/12/somebody-thought-these.html)
+- [Spent a lot of time in this while (sick) { sleep(); } loop today.](http://www.thingelstad.com/2017/12/11/spent-a-lot.html)
+- [Earned the botanist badge in Forest! 🌳🌳🌳](http://www.thingelstad.com/2017/12/10/earned-the-botanist.html)
 
 ## The end 🎬
 

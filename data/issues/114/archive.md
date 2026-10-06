@@ -75,7 +75,7 @@ links:
   domain: pascalprecht.github.io
   heading_context: '[The Impact of Meditating every day - Pascal Precht''s Blog](https://pascalprecht.github.io/posts/meditating-every-day/)'
   section: Notable Links 📌
-word_count: 1339
+word_count: 1336
 ---
 I've been thinking lately about how great the summer has been and how quickly time just keeps on moving. I’m doing my best to take it all in and make the most of it all. Fall is in the air, the first day of school is just around the corner, and the last of the summer checklist awaits.
 
@@ -182,7 +182,7 @@ We had a great time with our 2019 #TeamSPS Kubb Tournament today! We had 20 team
 
 ### [Wednesday @ 7:04 PM](https://www.thingelstad.com/2019/08/21/gorgeous-night-for.html)
 
-Gorgeous night [for pizza at Red Barn Farm](http://www.redbarnfarmofnorthfield.com) by Northfield.
+Gorgeous night for pizza at [Red Barn Farm](http://www.redbarnfarmofnorthfield.com) by Northfield.
 
 ![](https://cdn.uploads.micro.blog/890/2019/3958d2ea3a.jpg)
 
@@ -215,7 +215,7 @@ St. Croix River at Interstate State Park, from Wisconsin side.
 
 ### [Sunday @ 11:51 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
-[Heading West! At Fawn-Doe-Rosa](https://www.fawndoerosa.com) .
+Heading West! At [Fawn-Doe-Rosa](https://www.fawndoerosa.com).
 
 ### [Sunday @ 10:35 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
@@ -223,7 +223,7 @@ Deer Selfie.
 
 ### [Sunday @ 10:14 AM](https://www.thingelstad.com/2019/08/18/visiting-fawndoerosa.html)
 
-[Visiting Fawn-Doe-Rosa](https://www.fawndoerosa.com) !
+Visiting [Fawn-Doe-Rosa](https://www.fawndoerosa.com)!
 
 ![](https://cdn.uploads.micro.blog/890/2019/1df4c2040e.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/68000282dc.jpg)
@@ -257,4 +257,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will pioneer the first Martian colony.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

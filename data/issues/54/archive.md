@@ -99,9 +99,9 @@ links:
   domain: www.principles.com
   heading_context: '[Principles by Ray Dalio](https://www.principles.com/principles-for-success/)'
   section: Notable Links 📌
-word_count: 1800
+word_count: 1796
 ---
-This was one of those weeks that goes by so fast it was hard to even see the blurred images as they went by. The week started with recognizing the Mom's, onto a very busy week of activities, and I [took off today with my brother](http://ikeating.micro.blog) for a weekend in Chicago! This weeks intro is going to be a little light so I can get some sleep. 😴
+This was one of those weeks that goes by so fast it was hard to even see the blurred images as they went by. The week started with recognizing the Mom's, onto a very busy week of activities, and I took off today with [my brother](http://ikeating.micro.blog) for a weekend in Chicago! This weeks intro is going to be a little light so I can get some sleep. 😴
 
 ## Featured Links 🏅
 
@@ -205,7 +205,7 @@ The original jargon.txt file from around 1998. Many of these terms are still in 
 - [Regex Crossword](https://regexcrossword.com/) regexcrossword.com
 This is awesome! 💚 Learn Regex and have geeky fun at the same time.
 - [Your serverless Raspberry Pi cluster with Docker](https://blog.alexellis.io/your-serverless-raspberry-pi-cluster/) blog.alexellis.io
-Why not? 🤷‍♂️ [Similar to Raspberry Pi Kubernetes Cluster](https://chrisshort.net/my-raspberry-pi-kubernetes-cluster/) .
+Why not? 🤷‍♂️ Similar to [Raspberry Pi Kubernetes Cluster](https://chrisshort.net/my-raspberry-pi-kubernetes-cluster/).
 - [Meet Surface Hub 2 - Microsoft Devices BlogMicrosoft Devices Blog](https://blogs.windows.com/devices/2018/05/15/meet-surface-hub-2/) blogs.windows.com
 The video here is a compelling way to think about teams collaborating with technology.
 - [On null | Structure and Interpretation of Computer Programmers](https://www.sicpers.info/2018/05/on-null/) www.sicpers.info
@@ -283,7 +283,7 @@ Today is our annual #TeamSPS TechJam event bringing the global SPS technology te
 
 ### [Tuesday @ 6:51 PM](https://www.thingelstad.com/2018/05/15/hanging-out-with.html)
 
-Hanging [out with the amazing @bridgetkromhout (website](https://bridgetkromhout.com) ) at our #SPSTechJam speaker dinner! Looking forward to a day of learning and exploration tomorrow with Bridget kicking it off! 🙌🏆
+Hanging out with the amazing @bridgetkromhout ([website](https://bridgetkromhout.com)) at our #SPSTechJam speaker dinner! Looking forward to a day of learning and exploration tomorrow with Bridget kicking it off! 🙌🏆
 
 ![](https://cdn.uploads.micro.blog/890/2018/eb024c417d.jpg)
 
@@ -295,13 +295,13 @@ Happy Mother’s Day 2018 to my awesome mom!
 
 ### [Sunday @ 6:53 PM](https://www.thingelstad.com/2018/05/13/enjoying-a-delicious.html)
 
-[Enjoying a delicious Westvleteren 12](https://www.westvleterenbeers.com) — voted best beer in the world! Wow! 🍺
+Enjoying a delicious [Westvleteren 12](https://www.westvleterenbeers.com) — voted best beer in the world! Wow! 🍺
 
 ![](https://cdn.uploads.micro.blog/890/2018/180983b68d.jpg)
 
 ### [Sunday @ 5:44 PM](https://www.thingelstad.com/2018/05/13/224441.html)
 
-[Surly Hopshifter IPA](http://surlybrewing.com/beer/hopshifter/) . Awesome! 🍺
+[Surly Hopshifter IPA](http://surlybrewing.com/beer/hopshifter/). Awesome! 🍺
 
 ![](https://cdn.uploads.micro.blog/890/2018/338bd9c680.jpg)
 
@@ -345,4 +345,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Be slow in choosing, but slower in changing.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

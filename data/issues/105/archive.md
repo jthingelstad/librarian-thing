@@ -68,9 +68,9 @@ links:
   domain: search.creativecommons.org
   heading_context: '[CC Search](https://search.creativecommons.org/)'
   section: Notable Links 📌
-word_count: 1022
+word_count: 1018
 ---
-I've now officially published the Weekly Thing for two years. 😲 It’s pretty cool to go back [and look at Weekly Thing #1](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how far this effort has come! Thank you all for subscribing, and if you know of others that you think would like it please send [them to the Weekly Thing website](https://weekly.thingelstad.com) and they can subscribe.
+I've now officially published the Weekly Thing for two years. 😲 It’s pretty cool to go back and look at [Weekly Thing #1](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how far this effort has come! Thank you all for subscribing, and if you know of others that you think would like it please send them to the [Weekly Thing website](https://weekly.thingelstad.com) and they can subscribe.
 
 Now onto the links this week. A little less than normal. 🤷🏼‍♂️
 
@@ -173,7 +173,7 @@ Awesome that we have presenters at Tech Jam from Minneapolis 🇺🇸, Kiev 🇺
 
 ### [Thursday @ 9:47 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
-Inspiring keynote [from Chris Williams of Badass Agile](https://badassagile.com) at Tech Jam 2019! Good way to start off the day! #TeamSPS #SPSTechJam
+Inspiring keynote from Chris Williams of [Badass Agile](https://badassagile.com) at Tech Jam 2019! Good way to start off the day! #TeamSPS #SPSTechJam
 
 ### [Thursday @ 8:48 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
@@ -185,7 +185,7 @@ A huge thank you to the amazing organizers of Tech Jam 2019! Community events ca
 
 ### [Thursday @ 8:09 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
-I love the creativity that our team puts into our #TeamSPS activities, and I just 💙 this Tech Jam "comic" sticker! So nicely done [@ken_korth](https://twitter.com/ken_korth) ! #SPSTechJam
+I love the creativity that our team puts into our #TeamSPS activities, and I just 💙 this Tech Jam "comic" sticker! So nicely done [@ken_korth](https://twitter.com/ken_korth)! #SPSTechJam
 
 ### [Thursday @ 8:06 AM](https://www.thingelstad.com/2019/05/09/080643.html)
 
@@ -193,14 +193,14 @@ Today is #TeamSPS Tech Jam 2019, where we collect as a community to share and le
 
 ### [Sunday @ 9:38 PM](https://www.thingelstad.com/2019/05/05/had-fun-playing.html)
 
-Had fun playing board games with friends today: [Carcassonne](https://boardgamegeek.com/boardgame/822/carcassonne) and [Betrayal at House on the Hill](https://boardgamegeek.com/boardgame/10547/betrayal-house-hill) . 🎲
+Had fun playing board games with friends today: [Carcassonne](https://boardgamegeek.com/boardgame/822/carcassonne) and [Betrayal at House on the Hill](https://boardgamegeek.com/boardgame/10547/betrayal-house-hill). 🎲
 
 ![](https://cdn.uploads.micro.blog/890/2019/7ab07b2044.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/acd0c742e2.jpg)
 
 ### [Sunday @ 10:38 AM](https://www.thingelstad.com/2019/05/05/currently-on-this.html)
 
-[Currently 564/2,591 on this mornings spin](https://members.onepeloton.com/profile/workouts/8987abb9ef9f4df3a99d7c4a353e4ddc) ! The Peloton leaderboard definitely gets me pushing harder.
+Currently 564/2,591 on [this mornings spin](https://members.onepeloton.com/profile/workouts/8987abb9ef9f4df3a99d7c4a353e4ddc)! The Peloton leaderboard definitely gets me pushing harder.
 
 ### [Sunday @ 10:17 AM](https://www.thingelstad.com/2019/05/05/enjoying-a-classic.html)
 
@@ -228,4 +228,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You own a dog, but you can only feed a cat.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

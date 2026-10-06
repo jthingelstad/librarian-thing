@@ -105,7 +105,7 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · Tech Office Sketches](https://www.tbray.org/ongoing/When/201x/2019/02/15/Walking-Around-the-Office)'
   section: Notable Links 📌
-word_count: 1467
+word_count: 1468
 ---
 This week we broke the all-time record for February snowfall! ❄️ It’s fairly easy to tell with the giant piles of snow everywhere you look. I’m busy putting together some last minute things for Tyler’s birthday breakfast that we are hosting tomorrow (Nordic Waffles!) so I’m going to leave it short this week and get straight to the links! 👉
 
@@ -131,7 +131,7 @@ Stephen Wolfram gives an exhaustive inventory of his personal gear. Wow, just wo
 
 ### [50 Years In Tech. Part 16: From One Ice Floe To The Next](https://mondaynote.com/50-years-in-tech-part-16-from-one-ice-floe-to-the-next-3813b95ac579)
 
-[Jean-Louis Gassée](https://en.wikipedia.org/wiki/Jean-Louis_Gassée) has been writing some very fun retrospectives of his time in tech. If you remember [BeOS](https://en.wikipedia.org/wiki/BeOS) [and the BeBox](https://en.wikipedia.org/wiki/BeBox) this is a fun read. I also found this [little inside baseball look at NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) and Apple's acquisition of NeXT fun.
+[Jean-Louis Gassée](https://en.wikipedia.org/wiki/Jean-Louis_Gassée) has been writing some very fun retrospectives of his time in tech. If you remember [BeOS](https://en.wikipedia.org/wiki/BeOS) and the [BeBox](https://en.wikipedia.org/wiki/BeBox) this is a fun read. I also found this little inside baseball look at [NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) and Apple's acquisition of NeXT fun.
 
 > Later, I learned another version of the story from a NeXT and Apple insider. By 1996, Jobs had given up on NeXTSTEP and had focused the company on WebObjects, a set of tools and building blocks aimed at the design and implementation of high-performance, feature-rich websites. But the noise from the Apple-Be conversations attracted the attention of Avie Tevanian, VP of software at NeXT, who urged Jobs to dust off NeXTSTEP and whip up a demo. The master persuader convinced Gil Amelio to pay the price Apple didn’t want to pay for Be: $429M for NeXT.
 
@@ -147,11 +147,11 @@ I like this annual review that David Sparks walks through. 🤔
 
 ### [Commento: A fast, privacy-focused commenting platform](https://commento.io/)
 
-I've waited and waited for someone to come out with a commenting service that doesn't surveil users, charges a reasonable fee, and isn't filled with ads (I'm looking at you [Disqus](https://disqus.com)). This service looks high-quality and respects everyones privacy. I've [deployed it on my Link Blog](https://links.thingelstad.com/) to give it a try.
+I've waited and waited for someone to come out with a commenting service that doesn't surveil users, charges a reasonable fee, and isn't filled with ads (I'm looking at you [Disqus](https://disqus.com)). This service looks high-quality and respects everyones privacy. I've deployed it on my [Link Blog](https://links.thingelstad.com/) to give it a try.
 
 ### [When Kids Google Themselves - The Atlantic](https://www.theatlantic.com/technology/archive/2019/02/when-kids-realize-their-whole-life-already-online/582916/)
 
-I've thought about this, but have no great answers. I first read about this [back in this 2011 blog post](https://links.thingelstad.com/2011/07/hes-not-my-character-to-write-anymore) on the topic. It is a way bigger topic today, particularly with photos being some prominent. 🤷‍♂️
+I've thought about this, but have no great answers. I first read about this back in this [2011 blog post](https://links.thingelstad.com/2011/07/hes-not-my-character-to-write-anymore) on the topic. It is a way bigger topic today, particularly with photos being some prominent. 🤷‍♂️
 
 ### [WiFi Hides Inside a USB Cable | Hackaday](https://hackaday.com/2019/02/18/wifi-hides-inside-a-usb-cable/)
 
@@ -205,7 +205,7 @@ State of the technology company environments from Tim Bray.
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -236,13 +236,13 @@ Wild hockey game tonight!
 
 ### [Saturday @ 10:29 PM](https://www.thingelstad.com/2019/02/16/we-saw-a.html)
 
-[We saw A Dog’s Way Home](https://www.rottentomatoes.com/m/a_dogs_way_home) today. It was exactly what you would expect it to be. Good movie, particularly for the dog lovers amongst us.
+We saw [A Dog’s Way Home](https://www.rottentomatoes.com/m/a_dogs_way_home) today. It was exactly what you would expect it to be. Good movie, particularly for the dog lovers amongst us.
 
 ![](https://cdn.uploads.micro.blog/890/2019/b4aa1b89ae.jpg)
 
 ### [Saturday @ 10:28 PM](https://www.thingelstad.com/2019/02/16/we-played-quest.html)
 
-We played "Quest for the Amulet" at [Escape MSP Lakeville](https://escapemsp.com/tickets-lakeville/) today. It was a cool room, and we were nowhere even close to solving it when the clock rain out. 😬
+We played "Quest for the Amulet at Windmere Castle” at [Escape MSP Lakeville](https://escapemsp.com/tickets-lakeville/) today. It was a cool room, and we were nowhere even close to solving it when the clock rain out. 😬
 
 ![](https://cdn.uploads.micro.blog/890/2019/834d6260f7.jpg)
 
@@ -261,7 +261,7 @@ Had a majestic bald eagle visit us this morning. Just 50 or so feet away. Survey
 
 ### [Friday @ 6:53 PM](https://www.thingelstad.com/2019/02/15/tetris-on-the.html)
 
-[Tetris 99](https://www.nintendo.com/games/detail/tetris-99-switch) on the Switch is amazing! 🤩 So far my highest ranking is #4. I’ve [never gotten into Battle Royale games](https://en.wikipedia.org/wiki/Battle_royale_game) , but I love Tetris, and this is crazy fun. 🎮
+[Tetris 99](https://www.nintendo.com/games/detail/tetris-99-switch) on the Switch is amazing! 🤩 So far my highest ranking is #4. I’ve never gotten into [Battle Royale games](https://en.wikipedia.org/wiki/Battle_royale_game), but I love Tetris, and this is crazy fun. 🎮
 
 ![](https://cdn.uploads.micro.blog/890/2019/d05acfa1db.jpg)
 
@@ -283,4 +283,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Someone is speaking well of you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

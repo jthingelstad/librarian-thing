@@ -125,7 +125,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Shortcuts Archive – MacStories](https://www.macstories.net/shortcuts/)'
   section: Notable Links 📌
-word_count: 2213
+word_count: 2211
 ---
 Thanksgiving is here and we officially kick-off the holiday season! I hope you all had a fabulous Thanksgiving filled with good food, friends and warm conversation. My Thanksgiving was a bit questionable this year. I got sick with something after leaving Kiev. 🤢 I made it home feeling not so great, and then spent the weekend and early part of the week gradually getting better. The delights of travel! ✈️ I got just well enough to have Thanksgiving dinner.
 
@@ -255,11 +255,11 @@ Updated and thorough collection of Shortcuts for iOS. Shortcuts is one of those 
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 
-- If you want to understand Silicon Valley, [watch Silicon Valley | Bill Gates](https://www.gatesnotes.com/About-Bill-Gates/Silicon-Valley)
+- [If you want to understand Silicon Valley, watch Silicon Valley | Bill Gates](https://www.gatesnotes.com/About-Bill-Gates/Silicon-Valley)
 Bill Gates watches Silicon Valley? Huh! 📺
 - [Mini Kubb | Table Top Block Toppling Game | Scienz Games Co.](https://shop.minibeerpong.com/products/mini-kubb) shop.minibeerpong.com
 None of these table top Kubb games are very playable, but they are still kind of fun.
@@ -293,13 +293,13 @@ I’ve had more spinning beachballs in macOS Mojave than I’ve had in any recen
 
 ### [Wednesday @ 7:45 PM](https://www.thingelstad.com/2018/11/21/the-wassail-tea.html)
 
-[The Wassail Tea](https://www.thingelstad.com/2004/wassail-tea/) is ready – now Thanksgiving can happen! I love the smell of Wassail in the house.
+The [Wassail Tea](https://www.thingelstad.com/2004/wassail-tea/) is ready – now Thanksgiving can happen! I love the smell of Wassail in the house.
 
 ![](https://www.thingelstad.com/uploads/2018/6fb79b3202.jpg)
 
 ### [Wednesday @ 7:43 PM](https://www.thingelstad.com/2018/11/21/this-mini-kubb.html)
 
-[This Mini Kubb](https://shop.minibeerpong.com/products/mini-kubb) set is a kick, although pretty impossible to play, but still fun!
+This [Mini Kubb](https://shop.minibeerpong.com/products/mini-kubb) set is a kick, although pretty impossible to play, but still fun!
 
 ![](https://www.thingelstad.com/uploads/2018/ef46016af0.jpg)
 
@@ -329,7 +329,7 @@ Back in Minneapolis! Luggage made it through the short transfer too! 👍🏻
 
 ### [Friday @ 10:22 AM](https://www.thingelstad.com/2018/11/16/050143.html)
 
-With international travel today, I’m happy [to have this weeks Weekly Thing](https://weekly.thingelstad.com) scheduled to go out tomorrow morning! 😊👍🏻
+With international travel today, I’m happy to have this weeks [Weekly Thing](https://weekly.thingelstad.com) scheduled to go out tomorrow morning! 😊👍🏻
 
 ### [Friday @ 10:16 AM](https://www.thingelstad.com/2018/11/16/im-going-to.html)
 
@@ -355,4 +355,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Persuasion is better than force.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

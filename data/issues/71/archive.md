@@ -121,7 +121,7 @@ links:
   domain: www.troyhunt.com
   heading_context: '[Troy Hunt: Serverless to the Max: Doing Big Things for Small Dollars with Cloudflare Workers and Azure Functions](https://www.troyhunt.com/serverless-to-the-max-doing-big-things-for-small-dollars-with-cloudflare-workers-and-azure-functions/)'
   section: Notable Links 📌
-word_count: 1911
+word_count: 1902
 ---
 This last weekend Tammy and I were planning a weekend away for just the two of us in Indianapolis. Why Indianapolis? [Brandi Carlile](https://www.brandicarlile.com) was playing there, and why not! However, given our dog Chase's health, we decided to stay home and still have the kids spend the weekend with Grandma! We saw three movies in three days, and enjoyed a nice "staycation" with bike rides and nice dinners! It's been a while since we went to an 11am matinée! 🎬 See the micro posts at the end if you are curious which movies we saw.
 
@@ -147,7 +147,7 @@ This population of mosquitos being released are 99% male, so there shouldn't be 
 
 ![Organist playing before the movie at The Heights Theater.](https://files.thingelstad.com/weekly-thing/71/cover.jpg)
 
-Organist playing before the movie at The Heights Theater.
+Organist playing before the movie at [The Heights Theater](http://www.heightstheater.com).
 Sep 7, 2018 at 6:57 PM
 The Heights Theater, 3987 Central Ave NE, Columbia Heights, MN 55421
 
@@ -163,7 +163,7 @@ It’s hard to not share every article that Ben Thompson writes. Some great obse
 
 ### [The No. 1 Lifelong Habit Of Warren Buffett: The 5-Hour Rule](https://medium.com/the-mission/the-no-1-lifelong-habit-of-warren-buffett-the-5-hour-rule-57884dce03f3)
 
-I dig this concept of the Learner Lifestyle. I take the actual amounts of time with a grain of salt, but I think it is a good process to make sure you have time learning. I get some [of this through my book club](https://rwbook.club) and all the info that shows up in the Weekly Thing.
+I dig this concept of the Learner Lifestyle. I take the actual amounts of time with a grain of salt, but I think it is a good process to make sure you have time learning. I get some of this through [my book club](https://rwbook.club) and all the info that shows up in the Weekly Thing.
 
 ### [Screen Time for Kids Puts Powerful iOS Monitoring Tools and Use Restrictions in Parents’ Hands – MacStories](https://www.macstories.net/stories/screen-time-for-kids-puts-powerful-ios-monitoring-tools-and-use-restrictions-in-parents-hands/)
 
@@ -187,7 +187,7 @@ Good overview of the new iPhones announced this week. Tammy and I ordered the iP
 
 ### [Private by Default](https://feedbin.com/blog/2018/09/11/private-by-default/)
 
-This post [makes me want to send Feedbin](https://feedbin.com/) some more money on top of my annual subscription fee. I love the work that Ben has done here to protect his customers from invasive tracking while reading feeds. I love his item on Google Analytics:
+This post makes me want to send [Feedbin](https://feedbin.com/) some more money on top of my annual subscription fee. I love the work that Ben has done here to protect his customers from invasive tracking while reading feeds. I love his item on Google Analytics:
 
 > I thought about replacing Google Analytics with Matomo, but I came to the same conclusion that it didn’t provide anything I need in order to run Feedbin. Better to not collect that data at all.
 
@@ -195,11 +195,11 @@ Hat's off! 👏
 
 ### [Announcing the YNAB API Contest Winners! | YNAB](https://www.youneedabudget.com/announcing-the-ynab-api-contest-winners/)
 
-This is a great example of innovation enabled with API's. I've been a YNAB user for a long time now, and this contest they made for people to build with it is a great [idea. I downloaded Allowance for YNAB](https://itunes.apple.com/us/app/allowance-for-ynab/id1422989571?mt=8) right away -- it’s great! In fact, I had written my own Workflow to do what it does, but it does it way better. Nice!
+This is a great example of innovation enabled with API's. I've been a YNAB user for a long time now, and this contest they made for people to build with it is a great idea. I downloaded [Allowance for YNAB](https://itunes.apple.com/us/app/allowance-for-ynab/id1422989571?mt=8) right away -- it’s great! In fact, I had written my own Workflow to do what it does, but it does it way better. Nice!
 
 ### [Slowly Percolating Forms: Contemplation, Conversation, Commentary](http://slowperc.blogspot.com/2018/01/contemplation-conversation-commentary.html?m=1)
 
-Forwarded [to me from my friend Nick](https://www.linkedin.com/in/nick-swenson-976b7337/) . I like this way of thinking about learning topics.
+Forwarded to me from my friend [Nick](https://www.linkedin.com/in/nick-swenson-976b7337/). I like this way of thinking about learning topics.
 
 > … if we don't do our own contemplation and commentary, we abdicate a good deal of our involvement in our own learning, and we shift from being fires to vessels.
 
@@ -241,7 +241,7 @@ That is amazing! The service is using Cloudflare Workers to push a lot of cached
 
 https://letsencrypt.org
 
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
+[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -266,7 +266,7 @@ Seriously? 🤦‍♂️
 
 ### [Thursday @ 9:02 PM](https://www.thingelstad.com/2018/09/13/im-geekily-excited.html)
 
-I’m “geekily” [excited to get my Anki Vector](https://www.anki.com/en-us/vector) in [October. 🤓 I have a Cozmo](https://www.anki.com/en-us/cozmo) and the Vector looks like a very fun leap.
+I’m “geekily” excited to get my Anki [Vector](https://www.anki.com/en-us/vector) in October. 🤓 I have a [Cozmo](https://www.anki.com/en-us/cozmo) and the Vector looks like a very fun leap.
 
 ![](https://www.thingelstad.com/uploads/2018/fed2ae7a52.jpg)
 
@@ -284,37 +284,37 @@ Quest for Bingo Blackout victory thwarted again! ☹️
 
 ### [Sunday @ 5:04 PM](https://www.thingelstad.com/2018/09/09/bingo-at-stanleys.html)
 
-[Bingo at Stanley’s](https://www.stanleysbarroom.com) !
+Bingo at [Stanley’s](https://www.stanleysbarroom.com)!
 
 ![](https://www.thingelstad.com/uploads/2018/0a0916b437.jpg)
 
 ### [Sunday @ 4:25 PM](https://www.thingelstad.com/2018/09/09/it-took-us.html)
 
-It took us over an hour, but we did eventually solve the “It’s All Fun & Games” room [at Trapped Puzzle Room North Loop](https://www.trappedpuzzlerooms.com/north-loop) . 🗝
+It took us over an hour, but we did eventually solve the “It’s All Fun & Games” room at [Trapped Puzzle Room North Loop](https://www.trappedpuzzlerooms.com/north-loop). 🗝
 
 ![](https://www.thingelstad.com/uploads/2018/ebb5daaea1.jpg)
 
 ### [Sunday @ 4:22 PM](https://www.thingelstad.com/2018/09/09/we-really-enjoyed.html)
 
-[We really enjoyed BlacKkKlansman](https://imdb.com/title/tt7349662/) from Spike Lee. Good story, powerful message. 🎬
+We really enjoyed [BlacKkKlansman](https://imdb.com/title/tt7349662/) from Spike Lee. Good story, powerful message. 🎬
 
 ![](https://www.thingelstad.com/uploads/2018/64591b0efa.jpg)
 
 ### [Sunday @ 4:20 PM](https://www.thingelstad.com/2018/09/09/nice-brunch-this.html)
 
-Nice [brunch this morning at Lucky Oven](http://luckyovenbakery.com) . This was our first time back since their frenetic opening. Good food and a nice walk in the neighborhood. 🍽👍🏻
+Nice brunch this morning at [Lucky Oven](http://luckyovenbakery.com). This was our first time back since their frenetic opening. Good food and a nice walk in the neighborhood. 🍽👍🏻
 
 ![](https://www.thingelstad.com/uploads/2018/02644c9d26.jpg)
 
 ### [Saturday @ 7:22 PM](https://www.thingelstad.com/2018/09/08/002242.html)
 
-Tammy [and I went to Juliet, Naked](https://imdb.com/title/tt5607096/) today. Good movie, fun story. 🎬
+Tammy and I went to [Juliet, Naked](https://imdb.com/title/tt5607096/) today. Good movie, fun story. 🎬
 
 ![](https://www.thingelstad.com/uploads/2018/7e92f6f7bb.jpg)
 
 ### [Saturday @ 2:29 PM](https://www.thingelstad.com/2018/09/08/first-time-trying.html)
 
-First time trying rolled ice [cream at Loulou’s Sweet & Savory](http://loulouandco.com) . Wow! Delicious!
+First time trying rolled ice cream at [Loulou’s Sweet & Savory](http://loulouandco.com). Wow! Delicious!
 
 ![](https://www.thingelstad.com/uploads/2018/a92d480f41.jpg)
 
@@ -326,7 +326,7 @@ First time trying rolled ice [cream at Loulou’s Sweet & Savory](http://louloua
 
 ### [Saturday @ 12:52 PM](https://www.thingelstad.com/2018/09/08/175221.html)
 
-Very impressed with the Tostada Chilaquiles [with slow-roasted pork at Hola Arepa](http://holaarepa.com/menu/) ! Delicious! 🍽
+Very impressed with the Tostada Chilaquiles with slow-roasted pork at [Hola Arepa](http://holaarepa.com/menu/)! Delicious! 🍽
 
 ![](https://www.thingelstad.com/uploads/2018/960ccbf95a.jpg)
 
@@ -338,17 +338,17 @@ Cleaning my espresso machine’s portafilter always gives me a moment of pause w
 
 ### [Saturday @ 8:34 AM](https://www.thingelstad.com/2018/09/08/another-great-five.html)
 
-Another [great Five Things on Friday #266](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=fa4fb0ec9b) from James Whatley – one of my favorite newsletters. 👏
+Another great [Five Things on Friday #266](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=fa4fb0ec9b) from James Whatley – one of my favorite newsletters. 👏
 
 ### [Friday @ 7:16 PM](https://www.thingelstad.com/2018/09/07/seeing-identical-strangers.html)
 
-[Seeing Three Identical Strangers](https://imdb.com/title/tt7664504/) [at The Heights](http://www.heightstheater.com) .
+Seeing [Three Identical Strangers](https://imdb.com/title/tt7664504/) at [The Heights](http://www.heightstheater.com).
 
 ![](https://www.thingelstad.com/uploads/2018/4445540a25.jpg)
 
 ### [Friday @ 3:23 PM](https://www.thingelstad.com/2018/09/07/i-finally-order.html)
 
-I finally order a Tesla, and then Elon [Musk decides to lose his mind](https://www.cnbc.com/2018/09/07/elon-musk-smokes-weed-on-joe-rogan-podcast.html) . 🤦‍♂️
+I finally order a Tesla, and then Elon Musk decides to [lose his mind](https://www.cnbc.com/2018/09/07/elon-musk-smokes-weed-on-joe-rogan-podcast.html). 🤦‍♂️
 
 ## Fortune 🥠
 
@@ -357,4 +357,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 Joy shared is double joy;
 grief shared is (only) half grief.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

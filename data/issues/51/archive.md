@@ -9,20 +9,20 @@ image: https://files.thingelstad.com/weekly-thing/51/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-51-apr-28-2018/
 domains: []
 links: []
-word_count: 1808
+word_count: 1803
 ---
 I am again grouping links into Featured, Links and Breadcrumbs. It definitely allows people to filter a bit and take in parts of the newsletter on their own pace. I got some good feedback on the new layout. 👍
 
-This week our family celebrated Tammy's birthday! 🎂 Amongst her various [gifts, we got her a HomePod](https://www.apple.com/homepod/) . The HomePod is really nicely designed. The audio quality is truly impressive. Setup was ridiculously easy with the iPhone just detecting it and setting it up in a couple taps. The kids however keep yelling "Alexa!" at it and wondering why it isn't answering. 🙄
+This week our family celebrated Tammy's birthday! 🎂 Amongst her various gifts, we got her a [HomePod](https://www.apple.com/homepod/). The HomePod is really nicely designed. The audio quality is truly impressive. Setup was ridiculously easy with the iPhone just detecting it and setting it up in a couple taps. The kids however keep yelling "Alexa!" at it and wondering why it isn't answering. 🙄
 
 ## Featured 🏅
 
 Don't miss these gems from the past week.
 
-Jaron Lanier Interview on [What Went Wrong With the Internet](http://nymag.com/selectall/2018/04/jaron-lanier-interview-on-what-went-wrong-with-the-internet.html)
+[Jaron Lanier Interview on What Went Wrong With the Internet](http://nymag.com/selectall/2018/04/jaron-lanier-interview-on-what-went-wrong-with-the-internet.html)
 nymag.com
 
-I think it would be amazing [to have dinner with Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier) . He is incredibly articulate and has thought deeply about how technology impacts our social lives. In this interview Lanier reflects on Silicon Valley and "Big Tech", specifically hitting on the social platforms. He points directly at the economic model of ad driven platforms as the cause for much of the problems of social media.
+I think it would be amazing to have dinner with [Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier). He is incredibly articulate and has thought deeply about how technology impacts our social lives. In this interview Lanier reflects on Silicon Valley and "Big Tech", specifically hitting on the social platforms. He points directly at the economic model of ad driven platforms as the cause for much of the problems of social media.
 
 > And there’s only one way to merge the two things, which is what we call the advertising model, where everything’s free but you pay for it by selling ads. But then because the technology gets better and better, the computers get bigger and cheaper, there’s more and more data — what started out as advertising morphed into continuous behavior modification on a mass basis, with everyone under surveillance by their devices and receiving calculated stimulus to modify them.
 
@@ -36,7 +36,7 @@ Lanier's position on social media is intense, and thought provoking.
 
 A worthwhile and thought provoking read.
 
-Open, Closed, and [Privacy – Stratechery by Ben Thompson](https://stratechery.com/2018/open-closed-and-privacy/)
+[Open, Closed, and Privacy – Stratechery by Ben Thompson](https://stratechery.com/2018/open-closed-and-privacy/)
 stratechery.com
 
 I do have to agree with this argument.
@@ -79,12 +79,12 @@ Apr 27, 2018 at 4:55 PM
 
 Commentary on interesting links from the week.
 
-Moment: Gear and Travel [Company for Mobile Photography | Moment](https://www.shopmoment.com/)
+[Moment: Gear and Travel Company for Mobile Photography | Moment](https://www.shopmoment.com/)
 www.shopmoment.com
 
 Many of the snap on lenses for iPhones are cheap and make your photos look worse. I've heard very good things about these from multiple people. I haven't bought them, but if I did get snap on lenses for my phone these are the ones I would get. 📸
 
-Stop [Using 6-Digit iPhone Passcodes - Motherboard](https://motherboard.vice.com/en_us/article/59jq8a/how-to-make-a-secure-iphone-passcode-6-digits)
+[Stop Using 6-Digit iPhone Passcodes - Motherboard](https://motherboard.vice.com/en_us/article/59jq8a/how-to-make-a-secure-iphone-passcode-6-digits)
 motherboard.vice.com
 
 I've always used a 6-digit PIN (once that option came out), but this article made me consider that with TouchID I now don't need to use my PIN nearly as much, and the added security of an alphanumeric passcode is worth the trouble. I've switched all my devices to use a strong password now. 🔐
@@ -94,12 +94,12 @@ www.macstories.net
 
 1Blocker is my preferred way of managing my privacy and protecting myself while browsing the web. This new version is a solid upgrade.
 
-Micro.blog: [Providing Control Of Your Online Life](https://www.appleworld.today/blog/2018/4/26/microblog-providing-control-of-your-online-life)
+[Micro.blog: Providing Control Of Your Online Life](https://www.appleworld.today/blog/2018/4/26/microblog-providing-control-of-your-online-life)
 www.appleworld.today
 
 I love to see micro.blog getting more coverage as a viable option for easy publishing online.
 
-Journaling [is Boss Mode Thinking — MyProductiveMac](http://www.myproductivemac.com/blog/journaling-is-boss-mode-thinking2442018)
+[Journaling is Boss Mode Thinking — MyProductiveMac](http://www.myproductivemac.com/blog/journaling-is-boss-mode-thinking2442018)
 www.myproductivemac.com
 
 I can see the potential for this type of benefit.
@@ -108,7 +108,7 @@ I can see the potential for this type of benefit.
 
 I've never stuck a journaling habit, but it’s one I'd like to build at some point.
 
-0x74696d [| Software Defined Culture, Part 0](https://blog.0x74696d.com/posts/software-defined-culture/)
+[0x74696d | Software Defined Culture, Part 0](https://blog.0x74696d.com/posts/software-defined-culture/)
 blog.0x74696d.com
 
 A manifesto for how technology teams should operate.
@@ -118,7 +118,7 @@ mermaidjs.github.io
 
 A plain-text markdown option for diagrams and flowcharts. This seems to miss the ethos of markdown also being readable as plaintext, but interesting to peek at.
 
-Why I love editing video on iPad — and how it could still [be a lot better — iMore](https://www.imore.com/why-i-love-editing-video-ipad-it-can-still-be-lot-better)
+[Why I love editing video on iPad — and how it could still be a lot better — iMore](https://www.imore.com/why-i-love-editing-video-ipad-it-can-still-be-lot-better)
 www.imore.com
 
 Some interesting options for more advanced video editing tools on the iPad.
@@ -128,12 +128,12 @@ dcgross.com
 
 This is great. Always focus on improvement. Get a little better everyday, and magic happens. 👍
 
-We updated our pick for the best RSS app for [iPhone and iPad —The Sweet Setup](https://thesweetsetup.com/updated-pick-best-rss-app-iphone-ipad/)
+[We updated our pick for the best RSS app for iPhone and iPad —The Sweet Setup](https://thesweetsetup.com/updated-pick-best-rss-app-iphone-ipad/)
 thesweetsetup.com
 
 Unread paired with Feedbin is my RSS feed solution of choice.
 
-Captain Toad: Treasure Tracker: Everything [you need to know! — iMore](https://www.imore.com/captain-toad-treasure-tracker-everything-you-need-know)
+[Captain Toad: Treasure Tracker: Everything you need to know! — iMore](https://www.imore.com/captain-toad-treasure-tracker-everything-you-need-know)
 www.imore.com
 
 This is one of Tyler and my favorite games for the Wii U, and I’m pretty excited to see that the Switch version will support cooperative play. That is a great add for kids and parents or siblings to play together with.
@@ -141,23 +141,23 @@ This is one of Tyler and my favorite games for the Wii U, and I’m pretty excit
 ## Breadcrumbs 🍞
 
 Additional links of interest from this week.
-- Google Cloud Platform Blog: [Kubernetes best practices: Organizing with Namespaces](https://cloudplatform.googleblog.com/2018/04/Kubernetes-best-practices-Organizing-with-Namespaces.html) (cloudplatform.googleblog.com)
-- GraphiQL: GraphQL’s Killer [App – The GraphQLHub – Medium](https://medium.com/the-graphqlhub/graphiql-graphql-s-killer-app-9896242b2125) (medium.com)
-- Amazon Prime yearly subscription [increasing to $119 starting in May](https://www.imore.com/amazon-prime-yearly-subscription-increasing-119-starting-may) (www.imore.com)
-- Beyond Black Box Management [- Study Hacks - Cal Newport](http://calnewport.com/blog/2018/04/21/beyond-black-box-management/) (calnewport.com)
-- Why programmers are not [paid in proportion to their productivity](https://www.johndcook.com/blog/2009/12/23/why-programmers-are-not-paid-in-proportion-to-their-productivity/) (www.johndcook.com)
-- Using Drafts 5 [Taskpaper with OmniFocus | Rosemary Orchard](https://www.rosemaryorchard.com/blog/using-drafts-5-taskpaper-with-omnifocus) (www.rosemaryorchard.com)
-- How to centralize DNS management in a [multi-account environment — AWS Security Blog](https://aws.amazon.com/blogs/security/how-to-centralize-dns-management-in-a-multi-account-environment/) (aws.amazon.com)
-- One Giant [Leap For SQL: MySQL 8.0 Released](https://modern-sql.com/blog/2018-04/mysql-8.0) (modern-sql.com)
+- [Google Cloud Platform Blog: Kubernetes best practices: Organizing with Namespaces](https://cloudplatform.googleblog.com/2018/04/Kubernetes-best-practices-Organizing-with-Namespaces.html) (cloudplatform.googleblog.com)
+- [GraphiQL: GraphQL’s Killer App – The GraphQLHub – Medium](https://medium.com/the-graphqlhub/graphiql-graphql-s-killer-app-9896242b2125) (medium.com)
+- [Amazon Prime yearly subscription increasing to $119 starting in May](https://www.imore.com/amazon-prime-yearly-subscription-increasing-119-starting-may) (www.imore.com)
+- [Beyond Black Box Management - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/04/21/beyond-black-box-management/) (calnewport.com)
+- [Why programmers are not paid in proportion to their productivity](https://www.johndcook.com/blog/2009/12/23/why-programmers-are-not-paid-in-proportion-to-their-productivity/) (www.johndcook.com)
+- [Using Drafts 5 Taskpaper with OmniFocus | Rosemary Orchard](https://www.rosemaryorchard.com/blog/using-drafts-5-taskpaper-with-omnifocus) (www.rosemaryorchard.com)
+- [How to centralize DNS management in a multi-account environment — AWS Security Blog](https://aws.amazon.com/blogs/security/how-to-centralize-dns-management-in-a-multi-account-environment/) (aws.amazon.com)
+- [One Giant Leap For SQL: MySQL 8.0 Released](https://modern-sql.com/blog/2018-04/mysql-8.0) (modern-sql.com)
 - [Drafts 5 — Macdrifter](http://www.macdrifter.com/2018/04/drafts-5.html) (www.macdrifter.com)
-- The longest straight path on earth starts in East [China, ends in Liberia – Thatsmags.com](http://www.thatsmags.com/china/post/10356/the-longest-straight-path-on-earth-starts-in-east-china-ends-in-liberia) (www.thatsmags.com)
-- The Most Complete Guide to 6-Part Customer [Empathy Maps, Ever - Toggl Blog](https://toggl.wpengine.com/customer-empathy-map/) (toggl.wpengine.com)
-- What Happened When I Replied “Call Me” To Every [Email I Got For A Week](https://www.fastcompany.com/40446728/what-happened-when-i-replied-call-me-to-every-email-i-got-for-a-week) (www.fastcompany.com)
-- How [to break a Monolith into Microservices](https://martinfowler.com/articles/break-monolith-into-microservices.html) (martinfowler.com)
-- Microcasting [on Micro.blog with Wavelength – MacStories](https://www.macstories.net/reviews/microcasting-on-microblog-with-wavelength/) (www.macstories.net)
-- Not getting angry about issues that [make me angry – James Shelley](https://jamesshelley.com/2018/04/25/not-getting-angry-about-issues-that-make-me-angry/) (jamesshelley.com)
-- The “unpatchable” exploit that makes every current Nintendo [Switch hackable [Updated] | Ars Technica](https://arstechnica.com/gaming/2018/04/the-unpatchable-exploit-that-makes-every-current-nintendo-switch-hackable/) (arstechnica.com)
-- A [Modest Guide to Productivity —Frank Chimero](https://frankchimero.com/blog/2018/productivity-guide/) (frankchimero.com)
+- [The longest straight path on earth starts in East China, ends in Liberia – Thatsmags.com](http://www.thatsmags.com/china/post/10356/the-longest-straight-path-on-earth-starts-in-east-china-ends-in-liberia) (www.thatsmags.com)
+- [The Most Complete Guide to 6-Part Customer Empathy Maps, Ever - Toggl Blog](https://toggl.wpengine.com/customer-empathy-map/) (toggl.wpengine.com)
+- [What Happened When I Replied “Call Me” To Every Email I Got For A Week](https://www.fastcompany.com/40446728/what-happened-when-i-replied-call-me-to-every-email-i-got-for-a-week) (www.fastcompany.com)
+- [How to break a Monolith into Microservices](https://martinfowler.com/articles/break-monolith-into-microservices.html) (martinfowler.com)
+- [Microcasting on Micro.blog with Wavelength – MacStories](https://www.macstories.net/reviews/microcasting-on-microblog-with-wavelength/) (www.macstories.net)
+- [Not getting angry about issues that make me angry – James Shelley](https://jamesshelley.com/2018/04/25/not-getting-angry-about-issues-that-make-me-angry/) (jamesshelley.com)
+- [The “unpatchable” exploit that makes every current Nintendo Switch hackable [Updated] | Ars Technica](https://arstechnica.com/gaming/2018/04/the-unpatchable-exploit-that-makes-every-current-nintendo-switch-hackable/) (arstechnica.com)
+- [A Modest Guide to Productivity —Frank Chimero](https://frankchimero.com/blog/2018/productivity-guide/) (frankchimero.com)
 
 ## Promotion 🎁
 
@@ -171,11 +171,11 @@ These are my small updates shared on my microblog last week.
 
 [Sunday @ 8:05 PM](https://www.thingelstad.com/2018/04/22/kids-are-all.html)
 
-Kids are all [of a sudden into Beanie Boos](http://world.ty.com/?cat=BOOS) . 🤷🏼‍♂️
+Kids are all of a sudden into [Beanie Boos](http://world.ty.com/?cat=BOOS). 🤷🏼‍♂️
 
 [Sunday @ 12:17 PM](https://www.thingelstad.com/2018/04/22/happy-earth-dayhttpswwwearthdayorg.html)
 
-[Happy Earth Day](https://www.earthday.org) everyone! 🌏
+Happy [Earth Day](https://www.earthday.org) everyone! 🌏
 
 [Sunday @ 8:20 AM](https://www.thingelstad.com/2018/04/22/the-bishops-on.html)
 
@@ -187,8 +187,8 @@ This time of year is great for eagle watching as the ice comes off Cannon Lake. 
 
 [Saturday @ 11:08 AM](https://www.thingelstad.com/2018/04/21/got-great-tickets.html)
 
-Got great tickets to the two shows I wanted to see at the Music in the [Zoo this summer — Son Volt](http://suemclean.com/events/son-volt/) [and Michael Franti & Spearhead](http://suemclean.com/events/michael-franti-spearhead/) . 👍
+Got great tickets to the two shows I wanted to see at the Music in the Zoo this summer — [Son Volt](http://suemclean.com/events/son-volt/) and [Michael Franti & Spearhead](http://suemclean.com/events/michael-franti-spearhead/). 👍
 
 [Saturday @ 8:38 AM](https://www.thingelstad.com/2018/04/21/well-deserved-praise.html)
 
-Well deserved praise for my new favorite restaurant! Martina wows diners with flavors of [Argentina and Italy in south Minneapolis](http://www.startribune.com/martina-wows-diners-with-flavors-of-argentina-and-italy-in-south-minneapolis/480299553/?ref=nl&om_rid=1572228553&om_mid=81873353#1) .
+Well deserved praise for my new favorite restaurant! [Martina wows diners with flavors of Argentina and Italy in south Minneapolis](http://www.startribune.com/martina-wows-diners-with-flavors-of-argentina-and-italy-in-south-minneapolis/480299553/?ref=nl&om_rid=1572228553&om_mid=81873353#1).

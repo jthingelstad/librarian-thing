@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/37/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-20-2018/
 domains: []
 links: []
-word_count: 1115
+word_count: 1112
 ---
 I’m not a big football 🏈 fan, but you'd have to be a zombie 🧟‍♂️ to not be excited about the Minnesota Vikings amazing win last Sunday! The newly named SPS Tower is in downtown Minneapolis, and with the upcoming Super Bowl we are planning for a bit of chaos. If the Vikings can make their way to that game, it will be an entirely different level of chaos. 🤞 Cross your fingers for this weekends game and hopefully making history!
 
@@ -50,7 +50,7 @@ What a cool idea from Nintendo and an innovative way to use a small, portable ga
 
 ### [Here's The Vikings' Unbelievable Last-Second, Game-Winning Touchdown Over The Saints - Digg](http://digg.com/2018/vikings-keenum-diggs-touchdown-video)
 
-Enjoy [watching the 18 seconds miracle touchdown](http://www.startribune.com/even-former-vikings-qb-tommy-kramer-says-minneapolis-miracle-trumps-miracle-at-the-met/469807863/) from the Minnesota Vikings! 🏈
+Enjoy watching the 18 seconds [miracle touchdown](http://www.startribune.com/even-former-vikings-qb-tommy-kramer-says-minneapolis-miracle-trumps-miracle-at-the-met/469807863/) from the Minnesota Vikings! 🏈
 
 ### [Datasette Publish: a web app for publishing CSV files as an online database](https://simonwillison.net/2018/Jan/17/datasette-publish/)
 
@@ -58,11 +58,11 @@ I love what Simon Willison is doing here with Datasettes. He's focusing on makin
 
 ### [افكار و احلام » Two weeks with Micro.blog](https://www.ardisson.org/afkar/2018/01/12/two-weeks-with-micro-blog/)
 
-This is a very thorough write-up [of this persons introduction to Micro.blog](https://micro.blog) ! This is [where I host my micro blog](https://www.thingelstad.com) .
+This is a very thorough write-up of this persons introduction to [Micro.blog](https://micro.blog)! This is where I host [my micro blog](https://www.thingelstad.com).
 
 ### [Share to Micro.blog](https://feedbin.com/blog/2018/01/15/share-to-micro-dot-blog/)
 
-Awesome to see [my feed reader of choice, Feedbin](https://feedbin.com/) [, supporting posting to Micro.blog](https://micro.blog) natively! 👏
+Awesome to see my feed reader of choice, [Feedbin](https://feedbin.com/), supporting posting to [Micro.blog](https://micro.blog) natively! 👏
 
 ### [Open source container-native workflow engine for Kubernetes | Argo](https://applatix.com/open-source/argo/)
 
@@ -74,7 +74,7 @@ Very good writeup comparing current CloudFoundry and Kubernetes. I've been tryin
 
 ### [The Internet of Things' Dangerous Future: Bruce Schneier](http://nymag.com/selectall/2017/01/the-internet-of-things-dangerous-future-bruce-schneier.html)
 
-[Compelling article by Bruce Schneier](https://www.schneier.com) arguing the increasing threats we face in the security space.
+Compelling article by [Bruce Schneier](https://www.schneier.com) arguing the increasing threats we face in the security space.
 
 > The market can’t fix this because neither the buyer nor the seller cares. The owners of the webcams and DVRs used in the denial-of-service attacks don’t care. Their devices were cheap to buy, they still work, and they don’t know any of the victims of the attacks. The sellers of those devices don’t care: They’re now selling newer and better models, and the original buyers only cared about price and features. There is no market solution, because the insecurity is what economists call an externality: It’s an effect of the purchasing decision that affects other people. Think of it kind of like invisible pollution.
 
@@ -108,16 +108,16 @@ Free 4/5 stars
 
 ## Microblog updates 🎈
 
-- Gas pumps with screens blaring advertising should be required by law [to have always present off buttons.](https://www.thingelstad.com/2018/01/19/gas-pumps-with.html)
-- I have been impressed with the Anki Cozmo — its amazing how much [character this little robot has! 🤖](https://www.thingelstad.com/2018/01/14/i-have-been.html)
-- Getting the whole family shoveling the [snow makes it very quick! 🌨🌨🌨](https://www.thingelstad.com/2018/01/14/getting-the-whole.html)
-- Vikings! [🏈 That was an amazing play!](https://www.thingelstad.com/2018/01/14/vikings-that-was.html)
+- [Gas pumps with screens blaring advertising should be required by law to have always present off buttons.](https://www.thingelstad.com/2018/01/19/gas-pumps-with.html)
+- [I have been impressed with the Anki Cozmo — its amazing how much character this little robot has! 🤖](https://www.thingelstad.com/2018/01/14/i-have-been.html)
+- [Getting the whole family shoveling the snow makes it very quick! 🌨🌨🌨](https://www.thingelstad.com/2018/01/14/getting-the-whole.html)
+- [Vikings! 🏈 That was an amazing play!](https://www.thingelstad.com/2018/01/14/vikings-that-was.html)
 - [Nice start by the Vikings! 🏈](https://www.thingelstad.com/2018/01/14/nice-start-by.html)
 - [Espresso crema.](https://www.thingelstad.com/2018/01/14/espresso-crema.html)
-- New light hung! 💡 This is about the [extent of my handyman skills. 👷🏻‍♂️](https://www.thingelstad.com/2018/01/14/new-light-hung.html)
-- Pleased with my first go at Nordic Waffles! Tasted delicious. Kids liked them too. May cut the [cardamom back a touch next time.](https://www.thingelstad.com/2018/01/14/073400.html)
-- Trying my hand at some Nordic Waffles this morning with the help [of Stine Aasland’s We Love Waffles!](https://www.thingelstad.com/2018/01/14/073400.html)
-- Went to Young Joni for dinner for the first time. 🍽 [Delicious food and amazing location. 👍🏻](https://www.thingelstad.com/2018/01/13/went-to-young.html)
+- [New light hung! 💡 This is about the extent of my handyman skills. 👷🏻‍♂️](https://www.thingelstad.com/2018/01/14/new-light-hung.html)
+- [Pleased with my first go at Nordic Waffles! Tasted delicious. Kids liked them too. May cut the cardamom back a touch next time.](https://www.thingelstad.com/2018/01/14/073400.html)
+- [Trying my hand at some Nordic Waffles this morning with the help of Stine Aasland’s We Love Waffles!](https://www.thingelstad.com/2018/01/14/073400.html)
+- [Went to Young Joni for dinner for the first time. 🍽 Delicious food and amazing location. 👍🏻](https://www.thingelstad.com/2018/01/13/went-to-young.html)
 
 ## The end 🎬
 

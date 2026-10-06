@@ -80,7 +80,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Privacy on iPhone — Private Side - YouTube](https://www.youtube.com/watch?v=A_6uV9A12ok&app=desktop)'
   section: Notable Links 📌
-word_count: 1980
+word_count: 1976
 ---
 I spent this week in Australia visiting our office in Melbourne. 🇦🇺 After you get over the 24 hours of travel to get there, the city greets you with all sorts of cool stuff. I had a really great time. While I was there I got to take in Round 1 of the 2019 Australian Football League, or [as everyone there calls it, Footy](https://en.wikipedia.org/wiki/Australian_rules_football) . I was a bit in awe as [we entered the Melbourne Cricket Grounds](https://en.wikipedia.org/wiki/Melbourne_Cricket_Ground) . The size of the field is just enormous! The game took a bit to understand, but it started making sense after some locals answered some particularly simple questions. Footy reminded me of merging Soccer ⚽️ and American Football 🏈, and splashing in some Basketball 🏀 concepts for fun. There were 84,000 excited Australian Footy fans cheering on the start of the season. [Victoria is the heart of Footy](https://en.wikipedia.org/wiki/Victoria_(Australia)#Sport), and [this Richmond v Carlton game](https://www.richmondfc.com.au/video/2019-03-21/round-1-highlights) was a highly anticipated start to the season, even as Richmond ran away with the score.
 
@@ -122,7 +122,7 @@ Solid overview of numerous issues related to our modern food system.
 
 > … it’s becoming abundantly clear that the way most of us currently eat is not sustainable – either for the planet or for human health.
 
-[Having just read Growing a Revolution](https://www.goodreads.com/book/show/36236132-growing-a-revolution) , these topics hit a strong note with me.
+Having just read [Growing a Revolution](https://www.goodreads.com/book/show/36236132-growing-a-revolution), these topics hit a strong note with me.
 
 ### [Facebook Stored Hundreds of Millions of User Passwords in Plain Text for Years — Krebs on Security](https://krebsonsecurity.com/2019/03/facebook-stored-hundreds-of-millions-of-user-passwords-in-plain-text-for-years/)
 
@@ -142,7 +142,7 @@ Think about the person on the other side of the screen. It might help avoid prob
 
 ### [Meritocracy doesn't exist, and believing it does is bad for you](https://www.fastcompany.com/40510522/meritocracy-doesnt-exist-and-believing-it-does-is-bad-for-you)
 
-This is one of those counter-intuitive revelations. When [I read Thinking Fast and Slow](https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow) it was filled with this kind of stuff.
+This is one of those counter-intuitive revelations. When I read [Thinking Fast and Slow](https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow) it was filled with this kind of stuff.
 
 > … a growing body of research in psychology and neuroscience suggests that believing in meritocracy makes people more selfish, less self-critical, and even more prone to acting in discriminatory ways.
 
@@ -205,7 +205,7 @@ But why? Why? 😭
 
 ### [Thursday @ 8:59 PM](https://www.thingelstad.com/2019/03/22/enjoyed-watching-first.html)
 
-[Enjoyed watching First Man](https://m.imdb.com/title/tt1213641/) . Amazing story about an amazing time. 🚀🎬✈
+Enjoyed watching [First Man](https://m.imdb.com/title/tt1213641/). Amazing story about an amazing time. 🚀🎬✈
 
 ![](https://cdn.uploads.micro.blog/890/2019/e45cde228e.jpg)
 
@@ -239,7 +239,7 @@ I tried a Melbourne ["Magic"](https://www.afar.com/magazine/8-ways-to-order-a-co
 
 ### [Thursday @ 12:48 AM](https://www.thingelstad.com/2019/03/21/184832.html)
 
-I got a new Kangaroo [friend! This one from Kangaroo Island](https://en.wikipedia.org/wiki/Kangaroo_Island) was very friendly with super soft fur. 🦘
+I got a new Kangaroo friend! This one from [Kangaroo Island](https://en.wikipedia.org/wiki/Kangaroo_Island) was very friendly with super soft fur. 🦘
 
 ![](https://cdn.uploads.micro.blog/890/2019/41a66b763b.jpg)
 
@@ -263,11 +263,11 @@ I got a selfie with a Koala today! 🐨
 
 ### [Wednesday @ 5:28 PM](https://www.thingelstad.com/2019/03/21/just-got-tickets.html)
 
-Just got tickets to [go see the Carlton v Richmond](https://www.afl.com.au/match-centre/2019/1/carl-v-rich) AFL season opener tonight! Will finally get to experience a Footy game!
+Just got tickets to go see the [Carlton v Richmond](https://www.afl.com.au/match-centre/2019/1/carl-v-rich) AFL season opener tonight! Will finally get to experience a Footy game!
 
 ### [Wednesday @ 4:01 AM](https://www.thingelstad.com/2019/03/20/joined-teamsps-melbourne.html)
 
-Joined #TeamSPS Melbourne for game night this evening. They even had a brand [new copy of Ticket to Ride](https://boardgamegeek.com/boardgame/9209/ticket-ride) . Came in 2nd this [time. Also had some Exploding Kittens](https://explodingkittens.com) going. 🎲🎮
+Joined #TeamSPS Melbourne for game night this evening. They even had a brand new copy of [Ticket to Ride](https://boardgamegeek.com/boardgame/9209/ticket-ride). Came in 2nd this time. Also had some [Exploding Kittens](https://explodingkittens.com) going. 🎲🎮
 
 ![](https://cdn.uploads.micro.blog/890/2019/65f2f73dcc.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/4b1edc732e.jpg)
@@ -275,7 +275,7 @@ Joined #TeamSPS Melbourne for game night this evening. They even had a brand [ne
 
 ### [Tuesday @ 2:23 AM](https://www.thingelstad.com/2019/03/19/i-had-a.html)
 
-I had a [fabulous dinner tonight at Steak Ministry](https://steakministry.com.au) with the #TeamSPS leadership team in Melbourne! 🇦🇺
+I had a fabulous dinner tonight at [Steak Ministry](https://steakministry.com.au) with the #TeamSPS leadership team in Melbourne! 🇦🇺
 
 ![](https://cdn.uploads.micro.blog/890/2019/0b83356251.jpg)
 
@@ -310,4 +310,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will win success in whatever calling you adopt.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

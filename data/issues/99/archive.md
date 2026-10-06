@@ -60,13 +60,13 @@ word_count: 1183
 ---
 More travel this week! ✈️ I've been visiting #TeamSPS in Little Falls New Jersey! It’s been great to be here and see everyone, and far too long since I've visited. No board game night on this trip, next time! I've definitely been on planes a lot lately, and I’m only about halfway through. We are heading to Texas 🌵 for Spring Break this weekend. We'll be in Austin, San Antonio and Waco! Yes, barbecue is on the agenda! 🔥
 
-Not a ton of links this week. A bunch of folks have been asking [me about the Apple Media event](https://www.apple.com/apple-events/march-2019/) from earlier this week. In general it didn't get me that [Apple Card](https://www.apple.com/apple-card/) 💳 will probably be a slow [start but meaningful, and Apple Arcade](https://www.apple.com/apple-arcade/) looks really cool. 🕹 The rest? Well, it isn't even out yet so who knows. I won't [be getting rid of YouTube TV](https://tv.youtube.com) anytime soon.
+Not a ton of links this week. A bunch of folks have been asking me about the [Apple Media event](https://www.apple.com/apple-events/march-2019/) from earlier this week. In general it didn't get me that excited. I think the [Apple Card](https://www.apple.com/apple-card/) 💳 will probably be a slow start but meaningful, and [Apple Arcade](https://www.apple.com/apple-arcade/) looks really cool. 🕹 The rest? Well, it isn't even out yet so who knows. I won't be getting rid of [YouTube TV](https://tv.youtube.com) anytime soon.
 
 ## Featured Links 🏅
 
 ### [How Apple Card works | TechCrunch](https://techcrunch.com/2019/03/28/how-apple-card-works/)
 
-A lot of good details answered here on how the Apple Card will work. [MacStories has a very good writeup](https://www.macstories.net/news/apple-card-the-macstories-overview/) as well. I’m more intrigued about what Apple is doing here than I thought I would be. If you go way back to when the iPhone was introduced, Apple introduced [Visual Voicemail](https://support.apple.com/en-us/HT201436) . Today that is all just assumed, but back then voicemail worked with key presses. Apple changed the usability of voicemail in a big way, and made that the default. What they are doing with credit cards feels a little bit like that.
+A lot of good details answered here on how the Apple Card will work. MacStories [has a very good writeup](https://www.macstories.net/news/apple-card-the-macstories-overview/) as well. I’m more intrigued about what Apple is doing here than I thought I would be. If you go way back to when the iPhone was introduced, Apple introduced [Visual Voicemail](https://support.apple.com/en-us/HT201436). Today that is all just assumed, but back then voicemail worked with key presses. Apple changed the usability of voicemail in a big way, and made that the default. What they are doing with credit cards feels a little bit like that.
 
 ### [Don’t solve the problem. - Signal v. Noise](https://m.signalvnoise.com/dont-solve-the-problem/)
 
@@ -130,7 +130,7 @@ This is a great set of desires traits for technical leaders, and most apply to a
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -141,7 +141,7 @@ Some key reasons to be excited about HTTP/3.
 
 ### [Tuesday @ 7:17 PM](https://www.thingelstad.com/2019/03/26/tyler-and-i.html)
 
-Tyler and I are having a great [time at One Night of Queen](http://www.garymullenandtheworks.com/homepage) ! He is a huge Queen fan! 🤘
+Tyler and I are having a great time at [One Night of Queen](http://www.garymullenandtheworks.com/homepage)! He is a huge Queen fan! 🤘
 
 ![](https://cdn.uploads.micro.blog/890/2019/aea013283e.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/95ed09e43b.jpg)
@@ -162,7 +162,7 @@ Sous Vide tenderloin started! 🥩
 
 ### [Saturday @ 5:15 PM](https://www.thingelstad.com/2019/03/23/enjoying-an-evening.html)
 
-Enjoying [an evening with The New Standards](http://www.thenewstandards.com) [at The Dakota](https://www.dakotacooks.com) . 🎶🥃
+Enjoying an evening with [The New Standards](http://www.thenewstandards.com) at [The Dakota](https://www.dakotacooks.com). 🎶🥃
 
 ![](https://cdn.uploads.micro.blog/890/2019/0047bdb3aa.jpg)
 
@@ -172,4 +172,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 A gift of a flower will soon be made to you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

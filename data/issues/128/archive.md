@@ -92,7 +92,7 @@ links:
   domain: www.vanityfair.com
   heading_context: '[“You Don’t Bring Bad News to the Cult Leader”: Inside the Fall of WeWork | Vanity Fair](https://www.vanityfair.com/news/2019/11/inside-the-fall-of-wework)'
   section: Notable Links 📌
-word_count: 2080
+word_count: 2069
 ---
 For everyone in the United States 🇺🇸 I hope you all had as great of a Thanksgiving as I was lucky to have! We celebrated in the morning with Tammy's family, and in the evening with my family. This year was the first year that I roasted the turkey! 🦃 I've done plenty of cooking for larger groups, but being in charge of the star of the show for the "Big Show" made me a bit anxious. 😬 Adding in the complexities of taking the cooked turkey to another house made it a little trickier, but all came out just fine! 🚙 For those that dont know, doing the turkey with the brine, the stuffing, roasting, and carving is a lot of work and takes a good chunk of time. I think a brisket is easier!
 
@@ -114,7 +114,7 @@ I spent the week in Kyiv, Ukraine visiting the SPS team there. I got to travel w
 
 ### [Read Sacha Baron Cohen's scathing attack on Facebook in full: 'greatest propaganda machine in history' | Technology | The Guardian](https://www.theguardian.com/technology/2019/nov/22/sacha-baron-cohen-facebook-propaganda)
 
-[Sacha Baron Cohen](https://en.wikipedia.org/wiki/Sacha_Baron_Cohen) , of Borat and Ali G fame, gave [the keynote at the Anti-Defamation League](https://www.adl.org) Never is Now event. Honestly, you should take 25 [minutes and watch the full video](https://www.youtube.com/watch?v=ymaWq5yZIYM) . This is an incredibly insightful, purposeful take at the negative impacts of social media platforms. I love his statement that "Freedom of Speech is not Freedom of Reach". Social media platforms love to hide behind Freedom of Speech and it’s a completely false argument. Read their Terms of Service and you'll realize there is no freedom of anything. It’s a business! This writeup from the Daily Beast "Sacha Baron Cohen Uses ADL Speech to [Tear Apart Mark Zuckerberg and Facebook](https://www.thedailybeast.com/sacha-baron-cohen-uses-adl-speech-to-tear-apart-mark-zuckerberg-and-facebook) " is a good overview too. ✊
+[Sacha Baron Cohen](https://en.wikipedia.org/wiki/Sacha_Baron_Cohen), of Borat and Ali G fame, gave the keynote at the [Anti-Defamation League](https://www.adl.org) Never is Now event. Honestly, you should take 25 minutes and [watch the full video](https://www.youtube.com/watch?v=ymaWq5yZIYM). This is an incredibly insightful, purposeful take at the negative impacts of social media platforms. I love his statement that "Freedom of Speech is not Freedom of Reach". Social media platforms love to hide behind Freedom of Speech and it’s a completely false argument. Read their Terms of Service and you'll realize there is no freedom of anything. It’s a business! This writeup from the Daily Beast "[Sacha Baron Cohen Uses ADL Speech to Tear Apart Mark Zuckerberg and Facebook](https://www.thedailybeast.com/sacha-baron-cohen-uses-adl-speech-to-tear-apart-mark-zuckerberg-and-facebook)" is a good overview too. ✊
 
 ## My Weekly Photo 📷
 
@@ -136,13 +136,13 @@ Great guide to keeping the technology part of your life a bit simpler, and in th
 
 ### [Contract for the Web](https://contractfortheweb.org/)
 
-It’s hard for me to believe that an effort like this is going to have a real impact on the web and how companies act on it. I'd like to, but I’m very skeptical of it. Perhaps with the pedigree of Tim Berners-Lee it has a better chance. For more background on this, his opinion [article in the New York Times](https://www.nytimes.com/2019/11/24/opinion/world-wide-web.html) is a good overview. The Guardian also has a good overview, "Tim Berners-Lee unveils [global plan to save the web](https://www.theguardian.com/technology/2019/nov/24/tim-berners-lee-unveils-global-plan-to-save-the-internet) ". At least he's trying, and hopefully others will get on board.
+It’s hard for me to believe that an effort like this is going to have a real impact on the web and how companies act on it. I'd like to, but I’m very skeptical of it. Perhaps with the pedigree of Tim Berners-Lee it has a better chance. For more background on this, his [opinion article in the New York Times](https://www.nytimes.com/2019/11/24/opinion/world-wide-web.html) is a good overview. The Guardian also has a good overview, "[Tim Berners-Lee unveils global plan to save the web](https://www.theguardian.com/technology/2019/nov/24/tim-berners-lee-unveils-global-plan-to-save-the-internet)". At least he's trying, and hopefully others will get on board.
 
 ### [Braid: Synchronization for HTTP](https://braid.news/)
 
 This looks really interesting. Synchronization is a huge pain to write, and rewrite, all the time.
 
-> The Braid Protocol is a set of extensions to HTTP, which transform it from a state transfer protocol into a state synchronization protocol. When a resource is changed by one client or server, all other clients and [servers update. Braid supports Operational Transform](https://en.wikipedia.org/wiki/Operational_transformation) [and CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) at web URLs, enabling peer-to-peer, offline-capable web applications.
+> The Braid Protocol is a set of extensions to HTTP, which transform it from a state transfer protocol into a state synchronization protocol. When a resource is changed by one client or server, all other clients and servers update. Braid supports [Operational Transform](https://en.wikipedia.org/wiki/Operational_transformation) and [CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) at web URLs, enabling peer-to-peer, offline-capable web applications.
 
 It would be pretty amazing if Braid became as well-supported as REST.
 
@@ -160,15 +160,15 @@ Amazingly detailed and specific skill development framework for engineers.
 
 ### [Yes! and… How to be effective in the theatre of work](https://tomcritchlow.com/2019/11/18/yes-and/)
 
-Article is mostly about the book [Impro - Improvisation and the Theatre](https://www.amazon.com/Impro-Improvisation-Theatre-Keith-Johnstone/dp/0878301178) , which thanks to this article is now on my wish list, and how it applies to improving your capabilities at work. This article is particularly serendipitous for me. We just had our all-company meeting [at John Sweeney gave the keynote](https://www.thingelstad.com/2019/11/12/john-sweeney-gave.html) . Sweeney is with Brave New Workshop, an improve theatre, and they have an entire side [of their business consulting with companies](https://www.bravenewworkshop.com/creativeoutreach/) ! Might learning improve be a good next step in my own development? 🤪
+Article is mostly about the book [Impro - Improvisation and the Theatre](https://www.amazon.com/Impro-Improvisation-Theatre-Keith-Johnstone/dp/0878301178), which thanks to this article is now on my wish list, and how it applies to improving your capabilities at work. This article is particularly serendipitous for me. We just had our all-company meeting at [John Sweeney gave the keynote](https://www.thingelstad.com/2019/11/12/john-sweeney-gave.html). Sweeney is with Brave New Workshop, an improve theatre, and they have an entire side of their business [consulting with companies](https://www.bravenewworkshop.com/creativeoutreach/)! Might learning improve be a good next step in my own development? 🤪
 
 ### [Data General's Tom West dies • The Register](https://www.theregister.co.uk/2011/05/24/tom_west_obit/)
 
-I loved reading [The Soul of a New Machine](https://en.wikipedia.org/wiki/The_Soul_of_a_New_Machine) and the history [of Data General and Tom West](https://en.wikipedia.org/wiki/Tom_West) . It is too bad that he never experienced that same level of success again.
+I loved reading [The Soul of a New Machine](https://en.wikipedia.org/wiki/The_Soul_of_a_New_Machine) and the history of Data General and [Tom West](https://en.wikipedia.org/wiki/Tom_West). It is too bad that he never experienced that same level of success again.
 
 ### [inessential: You Choose](https://inessential.com/2019/10/29/you_choose)
 
-Completely agree with Brent Simmons here. My internet doesn't have the vast majority of [social media giants, thanks to 1Blocker](https://1blocker.com) . I, and you, can choose the internet we want. You are not obligated to any of these platforms.
+Completely agree with Brent Simmons here. My internet doesn't have the vast majority of social media giants, thanks to [1Blocker](https://1blocker.com). I, and you, can choose the internet we want. You are not obligated to any of these platforms.
 
 ### [Using OmniFocus 3.4 with Shortcuts - The Omni Group](https://www.omnigroup.com/blog/using-omnifocus-3.4-with-shortcuts)
 
@@ -198,7 +198,7 @@ You'd be forgiven for thinking enough of WeWork already, but this is a solid art
 
 ### [Thursday @ 2:51 PM](https://www.thingelstad.com/2019/11/28/got-my-turkey.html)
 
-[Got my Turkey Burn 2019](https://members.onepeloton.com/members/ca9d983af9f147abb4bf9aaa385a1871/workouts/2be74e592858457db3215a25d0417d7b) spin class in this morning! Spinning with over 16,000 people! #Peloton
+Got my [Turkey Burn 2019](https://members.onepeloton.com/members/ca9d983af9f147abb4bf9aaa385a1871/workouts/2be74e592858457db3215a25d0417d7b) spin class in this morning! Spinning with over 16,000 people! #Peloton
 
 ![](https://cdn.uploads.micro.blog/890/2019/9865fe6a73.jpg)
 
@@ -216,7 +216,7 @@ From our family to yours — Have a Very Happy Thanksgiving!
 
 ### [Saturday @ 9:23 PM](https://www.thingelstad.com/2019/11/23/watched-the-art.html)
 
-Watched The [Art of Racing in the Rain](https://www.rottentomatoes.com/m/the_art_of_racing_in_the_rain/) tonight. Good movie. 🐕🏎🌧
+Watched [The Art of Racing in the Rain](https://www.rottentomatoes.com/m/the_art_of_racing_in_the_rain/) tonight. Good movie. 🐕🏎🌧
 
 ![](https://cdn.uploads.micro.blog/890/2019/1932eb732c.jpg)
 
@@ -228,7 +228,7 @@ No fishin’ in the dark, but definitely grillin’ in the dark! Big Green Egg w
 
 ### [Friday @ 7:08 PM](https://www.thingelstad.com/2019/11/22/the-tesla-cybertruck.html)
 
-[The Tesla Cybertruck](https://www.tesla.com/cybertruck) is shocking, and looks awesome! Wow! Looks like a complete rethink. Love it! 🖤😲⚡️
+The Tesla [Cybertruck](https://www.tesla.com/cybertruck) is shocking, and looks awesome! Wow! Looks like a complete rethink. Love it! 🖤😲⚡️
 
 ![](https://cdn.uploads.micro.blog/890/2019/b430233991.jpg)
 
@@ -252,9 +252,9 @@ Miguel Ibarra has always been one of my favorite Minnesota United players. "The 
 
 ## Replies 📬
 
-Here are some replies from Weekly [Thing #127 / Nov 23, 2019](https://us2.campaign-archive.com/?u=9819a09d90bc4bae56285dd82&id=fe6b1a7a2b) .
+Here are some replies from [Weekly Thing #127 / Nov 23, 2019](https://us2.campaign-archive.com/?u=9819a09d90bc4bae56285dd82&id=fe6b1a7a2b).
 
-[Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/) shared [this video How Wolves Change Rivers](https://www.youtube.com/watch?v=ysa5OBhXz-Q) after reading the article I shared on Bison. It’s amazing how one change to the food chain can have such broad changes to everything around it!
+[Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/) shared this video [How Wolves Change Rivers](https://www.youtube.com/watch?v=ysa5OBhXz-Q) after reading the article I shared on Bison. It’s amazing how one change to the food chain can have such broad changes to everything around it!
 
 ## Fortune 🥠
 
@@ -262,4 +262,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will experience a strong urge to do good; but it will pass.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

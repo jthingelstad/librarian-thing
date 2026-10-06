@@ -134,7 +134,7 @@ links:
   domain: calnewport.com
   heading_context: '[Beyond Digital Ethics - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/08/09/beyond-digital-ethics/)'
   section: Notable Links 📌
-word_count: 1979
+word_count: 1975
 ---
 I've always loved waterfalls, and this last weekend we got to finish our summer vacation by visiting one of the big ones — Niagara Falls! We started in the morning with a ride on the Maid of the Mist 🛥 before the lines were bad. We ventured on foot into Canada 🇨🇦 to explore the other side of Niagara and get the better view of the Horseshoe Falls. We quickly realized that it was complete mayhem on the Canadian side of the falls with minigolf, wax museums and tourist traps on every corner. We went on the Journey Behind the Falls and got to stand in a tunnel just 20 or 30 feet behind the falls and be immensely impressed, 😲 and scared, of the power of the falls. We retreated to the US 🇺🇸 and explored further, ending with the fireworks display at 10pm. 🎆 Niagara Falls was amazing, awe inspiring, and a bit scary to see that much power. What in the world were these people that got in barrels and went over the falls thinking!?
 
@@ -182,7 +182,7 @@ I like this and agree with it entirely. I suspect the same is true in any discip
 
 ### [Health Checks and Graceful Degradation in Distributed Systems](https://medium.com/@copyconstruct/health-checks-in-distributed-systems-aa8a0e8c1672)
 
-I have been running health checks for decades. [BigCharts server is happy](http://bigcharts.marketwatch.com/up2.aspx) is the first. [MarketWatch is also happy](https://www.marketwatch.com/up2.aspx).
+I have been running health checks for decades. BigCharts [server is happy](http://bigcharts.marketwatch.com/up2.aspx) is the first. MarketWatch [is also happy](https://www.marketwatch.com/up2.aspx).
 
 > The “health” of a process is a spectrum. What we’re really interested in is the quality-of-service — such as how long it takes for a process to return the result of a given unit of work and the accuracy of the result.
 
@@ -194,11 +194,11 @@ Everything, truly everything, affects your culture. Given that, it’s not a sur
 
 ### [What We Learned from Writing 7,000 Artist Bios](https://www.artsy.net/article/elena-soboleva-what-we-learned-from-writing-7-000-artist-bios)
 
-This is specifically talking about artist bios, but I don't see why you wouldn't apply the same approach to any bio. Personally I really struggle with writing bios, so much so that I hired a [writer to help write my bio](https://www.thingelstad.com/about/bio/) .
+This is specifically talking about artist bios, but I don't see why you wouldn't apply the same approach to any bio. Personally I really struggle with writing bios, so much so that I hired a writer to help write [my bio](https://www.thingelstad.com/about/bio/).
 
 ### [Newsletters Are Immortal – Dave Pell – Medium](https://medium.com/@davepell/newsletters-are-immortal-9887b1a5dc6a)
 
-[I've been publishing my Weekly Thing](https://weekly.thingelstad.com) newsletter for over a year now and I've grown to really like it. [I subscribe to Dave Pell's NextDraft](https://nextdraft.com) , and it’s one of my favorite daily reads. I like these 6 P's of newsletters as he puts it.
+I've been publishing my [Weekly Thing](https://weekly.thingelstad.com) newsletter for over a year now and I've grown to really like it. I subscribe to Dave Pell's [NextDraft](https://nextdraft.com), and it’s one of my favorite daily reads. I like these 6 P's of newsletters as he puts it.
 
 ### [Six Months at Riot Games | Things I Like.](http://meagan-marie.tumblr.com/post/176788011970/six-months-at-riot-games)
 
@@ -246,7 +246,7 @@ Agree completely with this, but would also suggest they are different things. Di
 
 ## Give Back 🎁
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -283,13 +283,13 @@ Great day for #TeamSPS summer picnic! Thank you all for making SPS such an aweso
 
 ### [Monday @ 10:47 PM](https://www.thingelstad.com/2018/08/13/214618.html)
 
-“… but for now it sounds like heaven.” Yes it does Jay, yes it does. 👍🏻 Thank you [for another great show Son Volt](http://sonvolt.net) ! 🎶
+“… but for now it sounds like heaven.” Yes it does Jay, yes it does. 👍🏻 Thank you for another great show [Son Volt](http://sonvolt.net)! 🎶
 
 ![](https://www.thingelstad.com/uploads/2018/f2d6a38a78.jpg)
 
 ### [Monday @ 8:46 PM](https://www.thingelstad.com/2018/08/13/214618.html)
 
-At my happy place 😊, listening [to Jay Farrar / Son Volt](http://sonvolt.net) at the Minnesota Zoo. 🎶
+At my happy place 😊, listening to Jay Farrar / [Son Volt](http://sonvolt.net) at the Minnesota Zoo. 🎶
 
 ![](https://www.thingelstad.com/uploads/2018/03e80581d6.jpg)
 
@@ -301,7 +301,7 @@ One of the best games for time on an airplane? Tetris! But it requires an Intern
 
 ### [Sunday @ 3:55 PM](https://www.thingelstad.com/2018/08/12/we-finished-our.html)
 
-We finished our vacation by winning “The Wall” room in 57:53 with only [four clues at Enigma Escape Rooms](https://enigmabuffalo.com) in Buffalo, NY!
+We finished our vacation by winning “The Wall” room in 57:53 with only four clues at [Enigma Escape Rooms](https://enigmabuffalo.com) in Buffalo, NY!
 
 ![](https://www.thingelstad.com/uploads/2018/d717524404.jpg)
 
@@ -323,13 +323,13 @@ Spending the day walking around Niagara Falls, on both US and Canadian sides, ad
 
 ### [Saturday @ 11:40 AM](https://www.thingelstad.com/2018/08/11/getting-wet-on.html)
 
-Getting wet [on the Maid of the Mist](https://www.maidofthemist.com) in the Horsehoe Falls at Niagara Falls! 🙌🏻
+Getting wet on the [Maid of the Mist](https://www.maidofthemist.com) in the Horsehoe Falls at Niagara Falls! 🙌🏻
 
 ![](https://www.thingelstad.com/uploads/2018/957d9af485.jpg)
 
 ### [Friday @ 8:30 PM](https://www.thingelstad.com/2018/08/10/013052.html)
 
-We had [an amazing dinner at Good Luck](http://restaurantgoodluck.com) in Rochester, NY tonight. 🍽 The star of the meal was the 1 lb. Good Luck burger buried in French Fries and shared by all. An amazing meal, everything was delicious.
+We had an amazing dinner at [Good Luck](http://restaurantgoodluck.com) in Rochester, NY tonight. 🍽 The star of the meal was the 1 lb. Good Luck burger buried in French Fries and shared by all. An amazing meal, everything was delicious.
 
 ![](https://www.thingelstad.com/uploads/2018/435d8776d4.jpg)
 
@@ -339,4 +339,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Heavy givers are light complainers.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -68,7 +68,7 @@ links:
   domain: weblog.rogueamoeba.com
   heading_context: '[Rogue Amoeba - The Design of Loopback 2](https://weblog.rogueamoeba.com/2019/01/02/the-design-of-loopback-2/)'
   section: Notable Links 📌
-word_count: 1564
+word_count: 1563
 ---
 It's been a busy week and I’m annoyed that I seem to have caught a new cold, right as I was recovering from the previous one. Let's get right to links and other fun stuff! 👉
 
@@ -158,7 +158,7 @@ This is a great overview of how to go about user experience design, just using s
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -244,7 +244,7 @@ Longest punt in Super Bowl history! I guess that is something for the Rams. Supe
 
 ### [Saturday @ 9:44 PM](https://www.thingelstad.com/2019/02/02/i-visited-minnehack.html)
 
-I visited [Minnehack](https://minnehack.io) tonight and introduced [SPS Commerce](https://jobs.spscommerce.com) to 300+ students before we fed them a mountain of pizza! 🍕
+I visited [Minnehack](https://minnehack.io) tonight and [introduced SPS Commerce](https://jobs.spscommerce.com) to 300+ students before we fed them a mountain of pizza! 🍕
 
 ![](https://cdn.uploads.micro.blog/890/2019/a05bcacee0.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/c08699cff1.jpg)
@@ -271,4 +271,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Expect the worst, it's the least you can do.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

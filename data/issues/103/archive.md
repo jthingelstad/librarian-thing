@@ -98,7 +98,7 @@ links:
   domain: olivierforget.net
   heading_context: '[What it''s Like to View a SpaceX Falcon Heavy Launch](https://olivierforget.net/blog/2019/viewing-spacex-falcon-heavy-launch/)'
   section: Notable Links 📌
-word_count: 1793
+word_count: 1789
 ---
 We got really lucky when we moved in January, as there was almost no snow on the ground. Shortly after we moved, the walloping started with snowstorm after snowstorm. 🌨 Moving in the winter feels a little like a partial move. You move into your house, but you don't really see the yard or explore the outside spaces. It’s all frozen and covered in snow! As Spring has now arrived, I feel like we have thawed and can now finish the rest of the moving process, explore the yard, and get familiar with the rest of the space. 🗺
 
@@ -162,7 +162,7 @@ I've read a [number of remembrances of Bill Campbell](https://en.wikipedia.org/w
 
 ### [Apruve Announces New Board Member](https://www.prweb.com/releases/apruve_announces_new_board_member/prweb16248811.htm)
 
-[Congratulations to my friend David Novak](https://www.linkedin.com/in/davidnovak/) [on joining the Apruve](https://apruve.com) board!
+Congratulations to my friend [David Novak](https://www.linkedin.com/in/davidnovak/) on joining the [Apruve](https://apruve.com) board!
 
 ### [Amazon re:MARS 2019 | AI & ML Conference](https://remars.amazon.com/)
 
@@ -170,11 +170,11 @@ Interesting new conference from AWS focused on machine learning. I've been looki
 
 ### [When Do You Know You Are Emotionally Mature? 26 Suggestions - The Book of LifeThe Book of Life](https://www.theschooloflife.com/thebookoflife/when-do-you-know-you-are-emotionally-mature-26-suggestions/)
 
-What a great read. Wisdom here. I particularly liked #5, #12, and #24. [Via Five Things on Friday #292](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=4ee171fee1) .
+What a great read. Wisdom here. I particularly liked #5, #12, and #24. Via [Five Things on Friday #292](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=4ee171fee1).
 
 ### [Running Datasette on Glitch](https://simonwillison.net/2019/Apr/23/datasette-glitch/)
 
-This is a fun read for me in large part [because I've not worked with Glitch](https://glitch.com) . It looks very interesting. Plus, I like how Simon tackled the automation here using smart command line capabilities versus diving into code.
+This is a fun read for me in large part because I've not worked with [Glitch](https://glitch.com). It looks very interesting. Plus, I like how Simon tackled the automation here using smart command line capabilities versus diving into code.
 
 ### [SPS Commerce: Tech-Driven Value Creation - YouTube](https://www.youtube.com/watch?v=_UsnVPsDWGg)
 
@@ -212,7 +212,7 @@ Sounds amazing. 🚀
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 
@@ -239,7 +239,7 @@ Visiting every National Park is something I've thought would be a good retiremen
 
 ### [Sunday @ 7:00 PM](https://www.thingelstad.com/2019/04/21/used-the-scosche.html)
 
-[Used the Scosche Rhythm+](https://www.scosche.com/rhythm-plus-heart-rate-monitor-armband) heart rate monitor for first time today. I liked it on the forearm versus around the chest, and it seemed as accurate as the electrical versions. It does get very sweaty. Happy with it on initial run. 👍🏻
+Used the [Scosche Rhythm+](https://www.scosche.com/rhythm-plus-heart-rate-monitor-armband) heart rate monitor for first time today. I liked it on the forearm versus around the chest, and it seemed as accurate as the electrical versions. It does get very sweaty. Happy with it on initial run. 👍🏻
 
 ### [Sunday @ 6:25 PM](https://www.thingelstad.com/2019/04/21/new-pr-for.html)
 
@@ -265,4 +265,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Bridge ahead. Pay troll.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

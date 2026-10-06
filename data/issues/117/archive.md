@@ -128,7 +128,7 @@ links:
   domain: withoutbullshit.com
   heading_context: '[Travis Kalanick wrote an awesome letter to Uber employees. They never saw it. - without bullshit](https://withoutbullshit.com/blog/travis-kalanick-wrote-an-awesome-letter-to-uber-employees-they-never-saw-it)'
   section: Notable Links 📌
-word_count: 2003
+word_count: 2000
 ---
 I've been progressing from a full on hobble on Tuesday, to a notable limp on Wednesday, then mostly walking fine today. On Monday night I was kicking the soccer ball with Tyler. He was in goal and I was making shots so he could be the World's Best Goalkeeper. We were waiting for Mazie to finish Piano practice. Anyway, I tried to put a shot in the upper-corner of the net and went too low with my kick, caught the ground, rotated my knee too much and felt a shot of pain and a pop in my knee. The pain was quickly followed by hoping nobody witnessed my buffoonery. This is just one of life's reminders that you're middle-aged and if you don't use it, your gonna lose it. I was worried I may have hurt the knee more, but today the only thing that caused me any real difficulty was going down stairs. I suspect that will be fine in a couple more days.
 
@@ -138,7 +138,7 @@ This week Apple had their annual iPhone event with a bunch of new announcements.
 
 ### [How the World Would Look in 2050 If We Solved Climate Change | Time](https://time.com/5669022/climate-change-2050/)
 
-[Provocative article from Bill McKibben](https://en.wikipedia.org/wiki/Bill_McKibben) looking back from a fictional 2050 at how we have adapted to climate change.
+Provocative article from [Bill McKibben](https://en.wikipedia.org/wiki/Bill_McKibben) looking back from a fictional 2050 at how we have adapted to climate change.
 
 ### [I Quit Social Media for a Year and Nothing Magical Happened | Josh C. Simmons](https://joshcsimmons.com/2019/09/10/i-quit-social-media-for-a-year-and-nothing-magical-happened/)
 
@@ -180,7 +180,7 @@ I've done a lot to protect my privacy using tools on my web browsers, but DNS is
 
 > Alongside technologies like TLS 1.3 and encrypted SNI, DoH has the potential to provide tremendous privacy protections. But many Internet service providers and participants in the standardization process have expressed strong concerns about the development of the protocol. The UK Internet Service Providers Association even went so far as to call Mozilla an “Internet Villain” for its role in developing DoH.
 
-I've considered bringing [DNS into my house with Pi-hole](https://pi-hole.net) , but even better would be encrypted DNS requests.
+I've considered bringing DNS into my house with [Pi-hole](https://pi-hole.net), but even better would be encrypted DNS requests.
 
 ### [Spoils of #nature on Instagram - Beside](https://beside.media/dossier/spoils-of-nature-on-instagram/)
 
@@ -232,7 +232,7 @@ I think every engineer that wants to become a manager should read this list seve
 
 ### [Systems Thinking in Practice](https://www.ryanfrantz.com/posts/systems-thinking-in-practice.html#title)
 
-I've read and [shared copies of Thinking in Systems](http://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557) . This link is a good quick overview of the concepts.
+I've read and shared copies of [Thinking in Systems](http://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557). This link is a good quick overview of the concepts.
 
 ### [Analyzing hundreds of millions of SSL handshakes | Little Short Bulletins](https://www.leebutterman.com/2019/08/05/analyzing-hundreds-of-millions-of-ssl-connections.html)
 
@@ -261,13 +261,13 @@ I like Om's highlights of the Apple event this week.
 - [Replay Apple's September 10, 2019 Keynote and New Product Videos - MacStories](https://www.macstories.net/news/replay-apples-september-10-2019-keynote-and-new-product-videos/) www.macstories.net
 The individual video cuts from this weeks Apple announcements. 📺
 - [Our journey to type checking 4 million lines of Python | Dropbox Tech Blog](https://blogs.dropbox.com/tech/2019/09/our-journey-to-type-checking-4-million-lines-of-python/) blogs.dropbox.com
-I guess this is the kind of thing you can do when [you hire the creator of Python](https://www.python.org/~guido/) to be on your team.
+I guess this is the kind of thing you can do when you hire the [creator of Python](https://www.python.org/~guido/) to be on your team.
 
 ## Microposts 🎈
 
 ### [Monday @ 9:07 PM](https://www.thingelstad.com/2019/09/09/watched-shazam-last.html)
 
-[Watched Shazam](https://www.rottentomatoes.com/m/shazam/) last night. Pretty fun movie! 🎬👍
+Watched [Shazam](https://www.rottentomatoes.com/m/shazam/) last night. Pretty fun movie! 🎬👍
 
 ![](https://cdn.uploads.micro.blog/890/2019/250affb5d7.jpg)
 
@@ -299,4 +299,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Don't look now, but there is a multi-legged creature on your shoulder.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -92,9 +92,9 @@ links:
   domain: www.digitalcommonwealth.org
   heading_context: '[M. C. Escher (1898-1972). Prints and Drawings - Digital Commonwealth](https://www.digitalcommonwealth.org/collections/commonwealth:3r076r52x)'
   section: Notable Links 📌
-word_count: 1289
+word_count: 1288
 ---
-We are starting a week of [vacation 😎 in the Finger Lakes](https://en.wikipedia.org/wiki/Finger_Lakes) region of New York! We are flying into Syracuse and staying in Ithaca for most of the week. We are going to see Niagara Falls, which I have wanted to see for a long time! I love waterfalls and that is the big one! 🙌
+We are starting a week of vacation 😎 in the [Finger Lakes](https://en.wikipedia.org/wiki/Finger_Lakes) region of New York! We are flying into Syracuse and staying in Ithaca for most of the week. We are going to see Niagara Falls, which I have wanted to see for a long time! I love waterfalls and that is the big one! 🙌
 
 If you have recommendations of things to do in the area send me a reply! 💌
 
@@ -203,7 +203,7 @@ Very nice chart library.
 - [Google Cloud Platform Blog: Istio reaches 1.0: ready for prod](https://cloudplatform.googleblog.com/2018/07/istio-reaches-1-0-ready-for-prod.html) cloudplatform.googleblog.com
 Istio is an important part of te Kubernetes ecosystem. Good to see it in release.
 - [Add an "On This Day" feature to a Micro.blog website](https://github.com/cleverdevil/micromemories) github.com
-Fun JavaScript to power a look back feature on micro.blog. I [created my own On This Day](https://www.thingelstad.com/on-this-day/) page.
+Fun JavaScript to power a look back feature on micro.blog. I created [my own On This Day](https://www.thingelstad.com/on-this-day/) page.
 - [HR Software to Motivate, Inspire and Develop Your Workforce | BetterWorks](https://www.betterworks.com/) www.betterworks.com
 OKR platform for teams.
 - [Employee Productivity Management Software](https://www.newsteer.com/okr) www.newsteer.com
@@ -270,13 +270,13 @@ Had a fabulous afternoon at Shady Oak Beach! 🏖
 
 ### [Friday @ 11:13 PM](https://www.thingelstad.com/2018/07/27/041311.html)
 
-Tammy and I finished the [Ruin Raiders room at Missing Pieces](https://www.missingpiecesmn.com) all on our own! 🔓
+Tammy and I finished the Ruin Raiders room at [Missing Pieces](https://www.missingpiecesmn.com) all on our own! 🔓
 
 ![](https://cdn.uploads.micro.blog/890/2018/725e8cced7.jpg)
 
 ### [Friday @ 9:19 PM](https://www.thingelstad.com/2018/07/27/021941.html)
 
-Tammy and I [went to Sorry To Bother You](https://imdb.com/title/tt5688932/) tonight. Very fun, and original movie. Enjoyed it. 🎬
+Tammy and I went to [Sorry To Bother You](https://imdb.com/title/tt5688932/) tonight. Very fun, and original movie. Enjoyed it. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2018/b301c3de55.jpg)
 
@@ -286,4 +286,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 He that hurts another, hurts himself.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -92,7 +92,7 @@ links:
   domain: www.wsj.com
   heading_context: '[You Give Apps Sensitive Personal Information. Then They Tell Facebook. - WSJ](https://www.wsj.com/articles/you-give-apps-sensitive-personal-information-then-they-tell-facebook-11550851636)'
   section: Notable Links 📌
-word_count: 1570
+word_count: 1561
 ---
 This is one of those weeks where I’m pretty behind. I just got done going through my queue of links and getting things all spiffed up! We have family in town for the weekend and a ton of fun stuff planned. I can’t wait! So this is going to be quick and get on with the rest of the weeks links! 🏃‍♂️
 
@@ -100,7 +100,7 @@ This is one of those weeks where I’m pretty behind. I just got done going thro
 
 ### [The Power of Full Engagement: The Four Energy Management Principles That Drive Performance](https://fs.blog/2015/06/the-power-of-full-engagement/)
 
-[My friend Garrick](https://www.garrickvanburen.com) recommended this book and I thorough enjoyed it. This writeup captures the theme well. Over the years I have made great strides in optimizing my time and insuring that I have slots available for things I need to do. However, It’s common that I get to that time and lack all motivation and energy to actually do it! This sucks. The idea of managing time and energy efficiently is an important one. I like the pyramid that this book considers for building energy into your day.
+My friend [Garrick](https://www.garrickvanburen.com) recommended this book and I thorough enjoyed it. This writeup captures the theme well. Over the years I have made great strides in optimizing my time and insuring that I have slots available for things I need to do. However, It’s common that I get to that time and lack all motivation and energy to actually do it! This sucks. The idea of managing time and energy efficiently is an important one. I like the pyramid that this book considers for building energy into your day.
 
 ## My Weekly Photo 📷
 
@@ -154,11 +154,11 @@ I really don't understand how all this time is supposed to be made for a morning
 
 ### [Day One 3.0 for Mac Introduces Cleaner Design and Simplified UI – The Sweet Setup](https://thesweetsetup.com/day-one-3-0-for-mac-introduces-cleaner-design-and-simplified-ui/)
 
-My preferred journal application for macOS and iOS got a big step up on the [Mac. Official Day One 3.0 announcement](http://dayoneapp.com/2019/02/day-one-version-3-for-macos/) . I like the improvements.
+My preferred journal application for macOS and iOS got a big step up on the Mac. Official [Day One 3.0 announcement](http://dayoneapp.com/2019/02/day-one-version-3-for-macos/). I like the improvements.
 
 ### [How to Be a Good Board Member – Both Sides of the Table](https://bothsidesofthetable.com/how-to-be-a-good-board-member-df07f43d9aa8)
 
-This is a solid set of recommendations, easy to parse [and follow. Good stuff. Via AVC](https://avc.com/2019/02/how-to-be-a-good-board-member/) .
+This is a solid set of recommendations, easy to parse and follow. Good stuff. Via [AVC](https://avc.com/2019/02/how-to-be-a-good-board-member/).
 
 ### [HQ2: Understanding What Happened & Why - The Big Picture](https://ritholtz.com/2019/02/hq2-understanding-what-happened-why/)
 
@@ -166,7 +166,7 @@ Compelling recap of the HQ2 process that Amazon has being going through.
 
 > From the start, the entire HQ2 optics have been terrible. When the world’s wealthiest man happens to run the world’s most most valuable company goes looking for a new place to call home, perhaps compelling self-flagellation by states and local officials to win his business . . . well, let’s just say that is not the greatest look.
 
-[Totally agree. Via Daring Fireball](https://daringfireball.net/linked/2019/02/25/ritholtz-amazon-hq2) .
+Totally agree. Via [Daring Fireball](https://daringfireball.net/linked/2019/02/25/ritholtz-amazon-hq2).
 
 ### [Payroll Provider Gives Extortionists a Payday — Krebs on Security](https://krebsonsecurity.com/2019/02/payroll-provider-gives-extortionists-a-payday/)
 
@@ -184,13 +184,13 @@ These are profound violations of trust and privacy.
 >
 > None of those apps provided users any apparent way to stop that information from being sent to Facebook.
 
-[Via Daring Fireball](https://daringfireball.net/linked/2019/02/22/facebook-apps-data) .
+Via [Daring Fireball](https://daringfireball.net/linked/2019/02/22/facebook-apps-data).
 
 ## Give Back 🎁
 
 https://archive.org
 
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
+[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -209,13 +209,13 @@ More improvements to WebKit's baked in privacy protections.
 
 ### [Thursday @ 11:23 PM](https://www.thingelstad.com/2019/02/28/my-mind-was.html)
 
-My mind was blown tonight when I [was introduced to ”fractal” Romanesco broccoli](https://en.wikipedia.org/wiki/Romanesco_broccoli) ! 🤯🥦
+My mind was blown tonight when I was introduced to ”fractal” [Romanesco broccoli](https://en.wikipedia.org/wiki/Romanesco_broccoli)! 🤯🥦
 
 ![](https://cdn.uploads.micro.blog/890/2019/0ae8b28d9c.jpg)
 
 ### [Thursday @ 4:39 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
-It was great to be able to share the impressive work we’ve done at SPS Commerce to make a technology career more inclusive and accessible. A lot of progress and momentum for more! [Thanks to @pattonamyj for the picture](https://twitter.com/pattonamyj/status/1101150885915299840) !
+It was great to be able to share the impressive work we’ve done at SPS Commerce to make a technology career more inclusive and accessible. A lot of progress and momentum for more! Thanks to [@pattonamyj for the picture](https://twitter.com/pattonamyj/status/1101150885915299840)!
 
 ### [Thursday @ 4:29 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
@@ -223,11 +223,11 @@ Improving diversity In tech: York Solutions; Genesis10; Prime Digital Academy; C
 
 ### [Thursday @ 12:30 PM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
-Some very insightful data being shared [this morning at MHTA Tech Talent](https://mhta.org/event/techtalent/) [event from Deb Broberg](https://www.linkedin.com/in/deb-broberg-sphr/) [of RealTime Talent, Allison Liuzzi](https://www.linkedin.com/in/allison-liuzzi-6564aa159/) [of Minnesota Compass Project, Matt Lewis](https://www.linkedin.com/in/matthew-lewis-37837aa/) of Make It. MSP.!
+Some very insightful data being shared this morning at [MHTA Tech Talent](https://mhta.org/event/techtalent/) event from [Deb Broberg](https://www.linkedin.com/in/deb-broberg-sphr/) of RealTime Talent, [Allison Liuzzi](https://www.linkedin.com/in/allison-liuzzi-6564aa159/) of Minnesota Compass Project, [Matt Lewis](https://www.linkedin.com/in/matthew-lewis-37837aa/) of Make It. MSP.!
 
 ### [Thursday @ 8:47 AM](https://www.thingelstad.com/2019/02/28/mhta-tech-talent.html)
 
-[At MHTA Tech Talent](https://mhta.org/event/techtalent/) event today, [participating in panel shortly. Mike McNamara](https://www.linkedin.com/in/mike-mcnamara-04598226/) , CIO of Target, kicking it off. Event focused on efforts to increase diversity and inclusion in technology. Looking forward to [sharing our progress at SPS Commerce](https://spscommerce.com) .
+At [MHTA Tech Talent](https://mhta.org/event/techtalent/) event today, participating in panel shortly. [Mike McNamara](https://www.linkedin.com/in/mike-mcnamara-04598226/), CIO of Target, kicking it off. Event focused on efforts to increase diversity and inclusion in technology. Looking forward to sharing our progress at [SPS Commerce](https://spscommerce.com).
 
 ### [Monday @ 7:15 PM](https://www.thingelstad.com/2019/02/25/175123.html)
 
@@ -255,4 +255,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You are number 6! Who is number one?
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

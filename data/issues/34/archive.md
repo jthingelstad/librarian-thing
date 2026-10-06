@@ -128,7 +128,7 @@ This article got me thinking about other ways that your phone could be used to h
 
 ### [Foo Fighters: Christmas Medley (Live) - SNL - YouTube](https://www.youtube.com/watch?v=YIZcaYfrIms)
 
-[The Foo Fighters](http://foofighters.com) are so awesome, and now I find myself wishing for a Foo Fighters Christmas Album! 🎸🎄
+The [Foo Fighters](http://foofighters.com) are so awesome, and now I find myself wishing for a Foo Fighters Christmas Album! 🎸🎄
 
 ---
 
@@ -156,22 +156,22 @@ https://archive.org
 
 ## Microblog updates 🎈
 
-- Watched Hacksaw Ridge tonight. Very well done. Battle scenes were a bit much. Tammy and I have now watched [all the 2017 Best Picture nominees.](https://www.thingelstad.com/2017/12/29/watched-hacksaw-ridgehttpimdbcomtitlett.html)
-- Static site generators are great in so many ways, but the friction [in publishing with them is horrible.](https://www.thingelstad.com/2017/12/29/static-site-generators.html)
-- I want to be an energy efficient household but this monthly report from XcelEnergy does nothing to help me. Just makes me feel bad. Showing min/max/avg by day and hour would at least [give some data to work with.](https://www.thingelstad.com/2017/12/29/i-want-to.html)
-- … NAS issue resolved? After extended SMART test said all was fine I did another rebuild of the Volume and [after 14 hours it succeeded. 🤷‍♂️](https://www.thingelstad.com/2017/12/29/172544.html)
-- Watched The Circle. Thought [provoking ideas and concepts. Okay movie.](https://www.thingelstad.com/2017/12/28/watched-the-circlehttpwwwimdbcomtitlett.html)
-- I got an Anki Cozmo robot for Christmas and we’ve been having a lot of fun with it. Little [thing has a lot of character.](https://www.thingelstad.com/2017/12/28/i-got-an.html)
-- We are going to [bring in the new year… frozen!](https://www.thingelstad.com/2017/12/28/we-are-going.html)
-- Tyler and I did this LEGO Technic RC Tracked Racer. Very fun! One of the [most impressive LEGO kits we’ve done.](https://www.thingelstad.com/2017/12/28/tyler-and-i.html)
-- … back to NAS issue. I ran the extended SMART test on every drive in my Synology and no errors. Attempting to [repair the RAID volume again. 🤞🏻](https://www.thingelstad.com/2017/12/28/back-to-nas.html)
-- Watched Fences tonight. Amazing acting all around [and great dialogue. Thoroughly enjoyed it.](https://www.thingelstad.com/2017/12/27/watched-fenceshttpwwwimdbcomtitlett-tonight.html)
-- Playing Prime Climb with the family. Interesting game. Sort [of like Sorry. Lots of math!](https://www.thingelstad.com/2017/12/26/playing-prime-climbhttpprimeclimbgamecom.html)
-- Playing Maze [Racers with the kids. Fun game.](https://www.thingelstad.com/2017/12/26/020524.html)
-- Christmas Eve [dinner on Big Green Egg. 🔥❄️](https://www.thingelstad.com/2017/12/24/christmas-eve-dinner.html)
-- Nice gentle snow [for Christmas Eve this afternoon. 🌨](https://www.thingelstad.com/2017/12/24/nice-gentle-snow.html)
-- Watched Arthur Christmas again last night with the kids. 🎬 That movie might get a spot on the annual Christmas movie list [next to (but lower than) Elf.](https://www.thingelstad.com/2017/12/23/watched-arthur-christmashttpwwwimdbcomtitlett.html)
-- Been getting errors on disk 3 in one of my Synology DS416 units. Swapped out the bad disk and started volume repair. Now seeing errors on disk 2 and failing volume repair. Uh oh. 😳 [Luckily this data is all mirrored.](https://www.thingelstad.com/2017/12/23/been-getting-errors.html)
+- [Watched Hacksaw Ridge tonight. Very well done. Battle scenes were a bit much. Tammy and I have now watched all the 2017 Best Picture nominees.](https://www.thingelstad.com/2017/12/29/watched-hacksaw-ridgehttpimdbcomtitlett.html)
+- [Static site generators are great in so many ways, but the friction in publishing with them is horrible.](https://www.thingelstad.com/2017/12/29/static-site-generators.html)
+- [I want to be an energy efficient household but this monthly report from XcelEnergy does nothing to help me. Just makes me feel bad. Showing min/max/avg by day and hour would at least give some data to work with.](https://www.thingelstad.com/2017/12/29/i-want-to.html)
+- [… NAS issue resolved? After extended SMART test said all was fine I did another rebuild of the Volume and after 14 hours it succeeded. 🤷‍♂️](https://www.thingelstad.com/2017/12/29/172544.html)
+- [Watched The Circle. Thought provoking ideas and concepts. Okay movie.](https://www.thingelstad.com/2017/12/28/watched-the-circlehttpwwwimdbcomtitlett.html)
+- [I got an Anki Cozmo robot for Christmas and we’ve been having a lot of fun with it. Little thing has a lot of character.](https://www.thingelstad.com/2017/12/28/i-got-an.html)
+- [We are going to bring in the new year… frozen!](https://www.thingelstad.com/2017/12/28/we-are-going.html)
+- [Tyler and I did this LEGO Technic RC Tracked Racer. Very fun! One of the most impressive LEGO kits we’ve done.](https://www.thingelstad.com/2017/12/28/tyler-and-i.html)
+- [… back to NAS issue. I ran the extended SMART test on every drive in my Synology and no errors. Attempting to repair the RAID volume again. 🤞🏻](https://www.thingelstad.com/2017/12/28/back-to-nas.html)
+- [Watched Fences tonight. Amazing acting all around and great dialogue. Thoroughly enjoyed it.](https://www.thingelstad.com/2017/12/27/watched-fenceshttpwwwimdbcomtitlett-tonight.html)
+- [Playing Prime Climb with the family. Interesting game. Sort of like Sorry. Lots of math!](https://www.thingelstad.com/2017/12/26/playing-prime-climbhttpprimeclimbgamecom.html)
+- [Playing Maze Racers with the kids. Fun game.](https://www.thingelstad.com/2017/12/26/020524.html)
+- [Christmas Eve dinner on Big Green Egg. 🔥❄️](https://www.thingelstad.com/2017/12/24/christmas-eve-dinner.html)
+- [Nice gentle snow for Christmas Eve this afternoon. 🌨](https://www.thingelstad.com/2017/12/24/nice-gentle-snow.html)
+- [Watched Arthur Christmas again last night with the kids. 🎬 That movie might get a spot on the annual Christmas movie list next to (but lower than) Elf.](https://www.thingelstad.com/2017/12/23/watched-arthur-christmashttpwwwimdbcomtitlett.html)
+- [Been getting errors on disk 3 in one of my Synology DS416 units. Swapped out the bad disk and started volume repair. Now seeing errors on disk 2 and failing volume repair. Uh oh. 😳 Luckily this data is all mirrored.](https://www.thingelstad.com/2017/12/23/been-getting-errors.html)
 
 ## The end 🎬
 

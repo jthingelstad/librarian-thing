@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/45/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-45-mar-17-2018/
 domains: []
 links: []
-word_count: 1448
+word_count: 1437
 ---
 I returned from my India 🇮🇳 travels on Sunday afternoon, and then began to experience the worst jet lag ✈️, and pure exhaustion, I've ever had. 😴 It took until Thursday for me to stabalize back into something resembling a normal routine. I had a good trip, and will definitely be back, probably in the Fall.
 
@@ -92,7 +92,7 @@ This looks interesting. It uses Markdown to make slides. It’s easy to generate
 [John Carlis](https://johncarlis.weebly.com/about.html)
 johncarlis.weebly.com
 
-John Carlis was the Dean of Undergraduate Studies when I was in the Computer Science at the University of Minnesota. I took Lisp from John, and on several occasions we got a chance to catch up. He was an amazing professor and human being. Sadly the last time I saw him was at [John Riedl's funeral](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/) . [Also see In Memoriam: John Carlis](https://www.cs.umn.edu/news/memoriam-john-carlis) .
+John Carlis was the Dean of Undergraduate Studies when I was in the Computer Science at the University of Minnesota. I took Lisp from John, and on several occasions we got a chance to catch up. He was an amazing professor and human being. Sadly the last time I saw him was at [John Riedl's funeral](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/). Also see [In Memoriam: John Carlis](https://www.cs.umn.edu/news/memoriam-john-carlis).
 
 [Stephen Hawking, one of the world's great scientists, has died - Physics](https://www.economist.com/news/obituary/21738688-groundbreaking-physicist-was-76-stephen-hawking-one-worlds-great-scientists-has)
 www.economist.com
@@ -112,7 +112,7 @@ Fabulous Checklist for ensuring that your Checklist is a good Checklist! Check! 
 
 ## Business
 
-Toys R Us to close all 800 of its [Toys R Us to close all 800 of its U.S. stores - The Washington Post](https://www.washingtonpost.com/news/business/wp/2018/03/14/toys-r-us-to-close-all-800-of-its-u-s-stores/)
+[Toys R Us to close all 800 of its U.S. stores - The Washington Post](https://www.washingtonpost.com/news/business/wp/2018/03/14/toys-r-us-to-close-all-800-of-its-u-s-stores/)
 www.washingtonpost.com
 
 Large amounts of debt, and declining brand value.

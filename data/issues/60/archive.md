@@ -132,7 +132,7 @@ links:
   domain: www.buzzfeed.com
   heading_context: '[An Invisible Rating System At Your Favorite Chain Restaurant Is Costing Your Server](https://www.buzzfeed.com/carolineodonovan/ziosk-presto-tabletop-tablet-restaurant-rating-servers#.tqg28Jv8q)'
   section: Notable Links 📌
-word_count: 1885
+word_count: 1878
 ---
 I don't have a lot to update on this week, and there are no features or changes to the Weekly Thing for me to share and have a meta update around. 🤷‍♂️ Have a great weekend and enjoy the links below! ⬇️
 
@@ -140,11 +140,11 @@ I don't have a lot to update on this week, and there are no features or changes 
 
 ### [In Formula 1, you have to be amazing just to be average - The Verge](https://www.theverge.com/2018/6/26/17499438/formula1-french-grand-prix-behind-the-scenes)
 
-Some nice pictures and [behind the scenes look into Formula 1](https://www.formula1.com).
+Some nice pictures and behind the scenes look into [Formula 1](https://www.formula1.com).
 
 ### [How Silicon Valley is responding to the immigration crisis - Recode](https://www.recode.net/2018/6/25/17499356/charlotte-dave-willner-facebook-reunite-immigrant-parent-children-fundraiser-brian-chesky-podcast)
 
-I am often very critical of Facebook, but this is an example of something that would definitely not happen without Facebook. This fundraiser started by trying to raise $1,500 for RAICES to fund legal support [for families separated at the border](https://actionnetwork.org/fundraising/bondfund) . Within 2 days they had raised $1 million and are now over $20 million! I bypassed Facebook, but appreciated [them highlighting this organization](https://actionnetwork.org/fundraising/bondfund) and donated myself.
+I am often very critical of Facebook, but this is an example of something that would definitely not happen without Facebook. This fundraiser started by trying to raise $1,500 for [RAICES to fund legal support for families separated at the border](https://actionnetwork.org/fundraising/bondfund). Within 2 days they had raised $1 million and are now over $20 million! I bypassed Facebook, but appreciated them highlighting this organization and [donated](https://actionnetwork.org/fundraising/bondfund) myself.
 
 ### [The Legend of Nintendo - Bloomberg](https://www.bloomberg.com/news/features/2018-06-21/how-nintendo-s-switch-helped-the-japanese-gaming-giant-win-again)
 
@@ -164,7 +164,7 @@ Lake Harriet, 4869–4899 W Lake Harriet Pkwy, Minneapolis MN
 
 ### [Click ‘Delete’ to Save Your Soul - The New York Times](https://www.nytimes.com/2018/06/13/books/review/jaron-lanier-ten-arguments-for-deleting-your-social-media-accounts-right-now.html)
 
-[Review of Jaron Lanier's](http://www.jaronlanier.com) new book [Ten Arguments For Deleting Your Social Media Accounts Right Now](https://www.indiebound.org/book/9781250196682) . The book itself does not get a glowing review, but it comes with a punch at the end.
+Review of [Jaron Lanier's](http://www.jaronlanier.com) new book [Ten Arguments For Deleting Your Social Media Accounts Right Now](https://www.indiebound.org/book/9781250196682). The book itself does not get a glowing review, but it comes with a punch at the end.
 
 > Only at the very end does Lanier venture into new territory. His argument, however, is a profound one. He worries that our reliance on big tech companies is ruining our capacity for spirituality, by turning us into robotic extensions of their machines.
 
@@ -208,7 +208,7 @@ Keen observations on the very difficult spot that Intel is in. For the first tim
 
 ### [The Sweet Setup Guide to Cutting the Cord – The Sweet Setup](https://thesweetsetup.com/articles/sweet-setup-guide-cutting-cord/)
 
-Thorough guide to various options for getting rid of cable TV (or satellite TV). [I cut the cord in 2009](https://www.thingelstad.com/2009/directv-canceled/) . The options now are great. I've long had an Apple TV attached to each TV we have. I've recently gotten the [HDHomeRun](https://www.silicondust.com/hdhomerun/) referenced here and am using it with Plex on my Synology NAS. We also have Netflix, Hulu and HBO Now subscriptions.
+Thorough guide to various options for getting rid of cable TV (or satellite TV). I [cut the cord in 2009](https://www.thingelstad.com/2009/directv-canceled/). The options now are great. I've long had an Apple TV attached to each TV we have. I've recently gotten the [HDHomeRun](https://www.silicondust.com/hdhomerun/) referenced here and am using it with Plex on my Synology NAS. We also have Netflix, Hulu and HBO Now subscriptions.
 
 ### [Ways to think about machine learning — Benedict Evans](https://www.ben-evans.com/benedictevans/2018/06/22/ways-to-think-about-machine-learning-8nefy)
 
@@ -220,7 +220,7 @@ I like the pragmatic views in this.
 
 ### [Zero Tolerance for Zero Tolerance](https://littlebits.com/zero-tolerance-for-zero-tolerance)
 
-[The CEO of littlebits](https://littlebits.com/) , an immigrant and refuge, taking a position on the despicable separation of children from their parents at the border.
+The CEO of [littlebits](https://littlebits.com/), an immigrant and refuge, taking a position on the despicable separation of children from their parents at the border.
 
 > History will judge us if we sit still and allow this to happen. Our kids will not forgive us if we don’t stand up for them. Our conscience will not rest if we allow something so basically human to appear partisan. We must speak out.
 
@@ -262,7 +262,7 @@ This is a great example of the unintended consequences of more technology in the
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -277,7 +277,7 @@ I wish these graphs looked better.
 - [How To Fall Asleep And Why We Need More : Shots - Health News : NPR](https://www.npr.org/sections/health-shots/2017/10/16/558058812/sleep-scientist-warns-against-walking-through-life-in-an-underslept-state) www.npr.org
 I read the book, but this article captures some of the key points in snippet form.
 - [Self-Hosted Developer Bliss - Home - Bruno Antunes](https://blog.nootch.net/2018/06/24/self-hosted-developer-bliss/) blog.nootch.net
-Great collection of various tools for running your own [infrastructure. I hadn't heard of dokku](http://dokku.viewdocs.io/dokku/) but it looks great.
+Great collection of various tools for running your own infrastructure. I hadn't heard of [dokku](http://dokku.viewdocs.io/dokku/) but it looks great.
 - [Young people still love Twitter — as screenshots on Instagram - The Verge](https://www.theverge.com/2018/6/21/17442028/instagram-twitter-meme-accounts-screenshots-text) www.theverge.com
 The social web of meaninglessness.
 
@@ -291,17 +291,17 @@ First clematis flower of the year.
 
 ### [Tuesday @ 9:15 PM](https://www.thingelstad.com/2018/06/26/i-contributed-to.html)
 
-I contributed to RAICES Bond [Fund to help reunite immigrant children](https://actionnetwork.org/fundraising/bondfund) separated from their families after listening to this podcast [on responding to the immigration crisis](https://www.recode.net/2018/6/25/17499356/charlotte-dave-willner-facebook-reunite-immigrant-parent-children-fundraiser-brian-chesky-podcast) . They’ve raised over $20M and still going.
+I contributed to [RAICES Bond Fund to help reunite immigrant children](https://actionnetwork.org/fundraising/bondfund) separated from their families after listening to this [podcast on responding to the immigration crisis](https://www.recode.net/2018/6/25/17499356/charlotte-dave-willner-facebook-reunite-immigrant-parent-children-fundraiser-brian-chesky-podcast). They’ve raised over $20M and still going.
 
 ### [Monday @ 9:39 PM](https://www.thingelstad.com/2018/06/25/introducing-mazie-to.html)
 
-Introducing Mazie to the 1980’s [by watching Ferris Bueller’s Day Off](https://imdb.com/title/tt0091042/) . Classic. 🎬
+Introducing Mazie to the 1980’s by watching [Ferris Bueller’s Day Off](https://imdb.com/title/tt0091042/). Classic. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2018/73fdaf8bfb.jpg)
 
 ### [Monday @ 8:38 PM](https://www.thingelstad.com/2018/06/25/013826.html)
 
-We had a fun [time beating The Search for Atlantis](https://www.escape-frenzy.com/Our-Rooms/The-Search-for-Atlantis) at Escape Frenzy! Another escape room down! 🙌🏻
+We had a fun time beating [The Search for Atlantis](https://www.escape-frenzy.com/Our-Rooms/The-Search-for-Atlantis) at Escape Frenzy! Another escape room down! 🙌🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/770f8fa5f4.jpg)
 
@@ -331,4 +331,4 @@ Here is your fortune for this week. 👏
 
 Don't blow your own trumpet.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

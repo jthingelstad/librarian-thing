@@ -87,7 +87,7 @@ links:
   domain: brutalist-web.design
   heading_context: '[Brutalist Web Design](https://brutalist-web.design/)'
   section: Notable Links 📌
-word_count: 1792
+word_count: 1788
 ---
 It has been a busy (good!) return from a very relaxed holiday week. Through an odd sequence of events I'm going to two baseball games and two soccer games in a week! ⚾️⚽️⚾️⚽️🙌 No complaints as I enjoy both a lot.
 
@@ -125,7 +125,7 @@ Skipping the hard part could be a cost optimization to get validation quicker, o
 
 ### [Managing Digital: Concepts and Practices](http://pubs.opengroup.org/opengrouppress/managing-digital/)
 
-[New-ish book from Charles Betz](https://www.linkedin.com/in/charlestbetz/) , published in the open on the web.
+New-ish book from [Charles Betz](https://www.linkedin.com/in/charlestbetz/), published in the open on the web.
 
 > My answer would be that there is something different happening this time — digital delivery is becoming core, not context. The convergence of an abundance of computing resources, improving software development management, combined with a change in market focus from the supplier to the customer is changing the way we view Enterprise Architecture and IT management, and identifying the need to develop a digital workforce. The defining characteristics of a digital enterprise are becoming clear:
 > - Products or services that are either delivered fully digitally (e.g., digital media or online banking), or where physical products and services are obtained by the customer by digital means (e.g., online car sharing services)
@@ -136,7 +136,7 @@ I met Charles once at the Chaos Day event here in Minneapolis. He has a comprehe
 
 ### [Leadership Style Colors | Lara Hogan](https://larahogan.me/blog/leadership-style-colors/)
 
-This article [instantly made me think of Insights](https://www.insights.com/us/) which [I have used through Discovery Yourself](https://discoveryourself.com) many times. I've seen teams get value out of having shared language around colors and style. This suggestion is to build on that to be more comprehensive, and also to try operating in other colors, which I think is something you have to do from time-to-time. I lead red/blue myself.
+This article instantly made me think of [Insights](https://www.insights.com/us/) which I have used through [Discovery Yourself](https://discoveryourself.com) many times. I've seen teams get value out of having shared language around colors and style. This suggestion is to build on that to be more comprehensive, and also to try operating in other colors, which I think is something you have to do from time-to-time. I lead red/blue myself.
 
 ### [You are your Metadata: Identification and Obfuscation of Social Media Users using Metadata Information](https://www.ucl.ac.uk/~ucfamus/papers/icwsm18.pdf)
 
@@ -180,13 +180,13 @@ Some interesting data on the state of a number of technologies and the industry.
 
 ### [Brutalist Web Design](https://brutalist-web.design/)
 
-I [like this translation of Brutalist Architecture](https://en.wikipedia.org/wiki/Brutalist_architecture) to the web.
+I like this translation of [Brutalist Architecture](https://en.wikipedia.org/wiki/Brutalist_architecture) to the web.
 
 ## Give Back 🎁
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -247,23 +247,23 @@ Good night for a Twins game! ⚾️ Twins v KC Royals!
 
 ### [Sunday @ 5:26 PM](https://www.thingelstad.com/2018/07/08/my-turing-tumble.html)
 
-[My Turing Tumble](https://www.turingtumble.com) games arrived! I’m looking forward to making some mechanical computers 👍🏻, maybe even with the kids! 😊
+My [Turing Tumble](https://www.turingtumble.com) games arrived! I’m looking forward to making some mechanical computers 👍🏻, maybe even with the kids! 😊
 
 ![](https://cdn.uploads.micro.blog/890/2018/74d60043d9.jpg)
 
 ### [Saturday @ 1:43 PM](https://www.thingelstad.com/2018/07/07/184319.html)
 
-Mazie and I had a great 18.4 mile bike ride today on [the Sakatah Singing Hills State Trail](https://www.dnr.state.mn.us/state_trails/sakatah/index.html) . This has to be one of the nicest rides in the state, with much of it under the shade of trees. 🚴‍♀️🚴‍♂️
+Mazie and I had a great 18.4 mile bike ride today on the [Sakatah Singing Hills State Trail](https://www.dnr.state.mn.us/state_trails/sakatah/index.html). This has to be one of the nicest rides in the state, with much of it under the shade of trees. 🚴‍♀️🚴‍♂️
 
 ![](https://cdn.uploads.micro.blog/890/2018/01da93d6a5.jpg)
 
 ### [Friday @ 6:33 PM](https://www.thingelstad.com/2018/07/06/181803.html)
 
-[The distillery at 10,000 Drops](https://www.10000drops.com) . 10k💧
+The distillery at [10,000 Drops](https://www.10000drops.com). 10k💧
 
 ### [Friday @ 6:18 PM](https://www.thingelstad.com/2018/07/06/181803.html)
 
-Enjoying a cocktail [at the brand new 10,000 Drops](https://www.10000drops.com) distillery in Faribault. Delicious drinks! [🍹 Also pizza from Pizzeria 201](http://pizzeria201.com) in Montgomery made from their food truck here. Worth a trip! 👍🏻
+Enjoying a cocktail at the brand new [10,000 Drops](https://www.10000drops.com) distillery in Faribault. Delicious drinks! 🍹 Also pizza from [Pizzeria 201](http://pizzeria201.com) in Montgomery made from their food truck here. Worth a trip! 👍🏻
 
 ### [Friday @ 2:07 PM](https://www.thingelstad.com/2018/07/06/the-best-bike.html)
 
@@ -277,4 +277,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Do unto others as you would have them do to you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

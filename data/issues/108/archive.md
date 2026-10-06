@@ -87,7 +87,7 @@ links:
   domain: www.mentimeter.com
   heading_context: '[Interactive presentation software - Mentimeter](https://www.mentimeter.com/)'
   section: Notable Links 📌
-word_count: 1871
+word_count: 1870
 ---
 I've been continuing my focus on developing a meditation practice, and have crossed over 100 consecutive days meditating. I've been using [Headspace](https://www.headspace.com) and I like the daily meditation which allows me to only answer one question, how many minutes do I want to meditate?
 
@@ -121,7 +121,7 @@ This visual of EV car sales over time is pretty amazing. It puts the importance 
 
 ### [Chrome to limit full ad blocking extensions to enterprise users - 9to5Google](https://9to5google.com/2019/05/29/chrome-ad-blocking-enterprise-manifest-v3/)
 
-This is exactly why I will not use Chrome as my primary browser. It is a great browser, and every other browser is better because of the amazing job it did with Javascript performance. But they were the [last to support Do Not Track](https://en.wikipedia.org/wiki/Do_Not_Track) , and with this decision they are making it very clear that protecting your privacy is not aligned with their mission.
+This is exactly why I will not use Chrome as my primary browser. It is a great browser, and every other browser is better because of the amazing job it did with Javascript performance. But they were the last to support [Do Not Track](https://en.wikipedia.org/wiki/Do_Not_Track), and with this decision they are making it very clear that protecting your privacy is not aligned with their mission.
 
 ### [Announcing Minnestar's Newest Board Members - Minnestar](https://minnestar.org/announcing-minnestars-newest-board-members-2/)
 
@@ -167,7 +167,7 @@ I think I'd have to read this a couple of times along with some others to really
 
 ### [How Data (and Some Breathtaking Soccer) Brought Liverpool to the Cusp of Glory - The New York Times](https://www.nytimes.com/2019/05/22/magazine/soccer-data-liverpool.html)
 
-Good read for [Liverpool](https://www.liverpoolfc.com) fans coming into the [UEFA Champions League](https://www.uefa.com/uefachampionsleague/) this weekend. It's nice to see the data driven analysis made famous in [Moneyball](https://en.wikipedia.org/wiki/Moneyball) is thriving in soccer too! ⚽️🤓
+Good read for [Liverpool](https://www.liverpoolfc.com) fans coming into the [UEFA](https://www.uefa.com/uefachampionsleague/) Champions League this weekend. It's nice to see the data driven analysis made famous in [Moneyball](https://en.wikipedia.org/wiki/Moneyball) is thriving in soccer too! ⚽️🤓
 
 [(Don't Fear) The Reaper](https://www.highcaffeinecontent.com/blog/20190522-(Dont-Fear)-The-Reaper)
 www.highcaffeinecontent.com
@@ -186,7 +186,7 @@ Detailed and well-written overview of this powerful architectural pattern.
 
 ### [Available on MasterClass: "Aaron Franklin Teaches Texas-Style BBQ" — Tools and Toys](http://toolsandtoys.net/aaron-franklin-texas-style-bbq-masterclass/)
 
-OMG this is so amazing and awesome! I [experienced the magic of Franklin Barbecue](https://www.thingelstad.com/2019/04/03/full-fanboy-mode.html) and this series of classes with Aaron Franklin are exceedingly well done. I've also got [a bit of a 'man crush'](https://www.urbandictionary.com/define.php?term=mancrush) on Franklin. I'd love to hang out for a day of smoking BBQ with him. I'd even bring the beer! 😍🍻
+OMG this is so amazing and awesome! I [experienced the magic of Franklin Barbecue](https://www.thingelstad.com/2019/04/03/full-fanboy-mode.html) and this series of classes with Aaron Franklin are exceedingly well done. I've also got a bit of a '[man crush](https://www.urbandictionary.com/define.php?term=mancrush)' on Franklin. I'd love to hang out for a day of smoking BBQ with him. I'd even bring the beer! 😍🍻
 
 ### [Interactive presentation software - Mentimeter](https://www.mentimeter.com/)
 
@@ -194,13 +194,13 @@ This looks like a solid tool
 
 > Mentimeter is an easy-to-use presentation software used by more than 25 million people. With Mentimeter you can create fun and interactive presentations. We help you make your events, presentations, lectures, and workshops innovative and memorable.
 
-[Thanks Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/) .
+Thanks [Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/).
 
 ## Give Back 🎁
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -211,7 +211,7 @@ Incredible photography. 📷
 - [SR-71 Online - SR-71 Flight Manual](https://www.sr-71.org/blackbird/manual/) www.sr-71.org
 When I was a kid the SR-71 Blackbird was one of those amazing, nearly mythical things. How fun to be able to read the flight manual now!
 - [PugSQL :: SQL is Extremely Good, Actually](https://pugsql.org/) pugsql.org
-[Nice, KISS](https://en.wikipedia.org/wiki/KISS_principle) , approach to keeping your database interfaces simple in Python.
+Nice, [KISS](https://en.wikipedia.org/wiki/KISS_principle), approach to keeping your database interfaces simple in Python.
 - [Introducing Mercury OS – UX Collective](https://uxdesign.cc/introducing-mercury-os-f4de45a04289?gi=97b84ed69ea3) uxdesign.cc
 Cool conceptual framework for a different way of thinking about an operating system and the user experience for it.
 - [H.264 is magic: a technical walkthrough of a remarkable technology.](https://sidbala.com/h-264-is-magic/) sidbala.com
@@ -227,7 +227,7 @@ That first time starting the lawn mower each year is such a pain. Just start alr
 
 ### [Monday @ 8:22 PM](https://www.thingelstad.com/2019/05/27/we-saw-a.html)
 
-[We saw A Dog’s Journey](https://www.rottentomatoes.com/m/a_dogs_journey) — it was a good movie but you’ll need some tissues. 👍🏻
+We saw [A Dog’s Journey](https://www.rottentomatoes.com/m/a_dogs_journey) — it was a good movie but you’ll need some tissues. 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2019/1483fb9722.jpg)
 
@@ -282,7 +282,7 @@ Kickoff for Minnesota United v Houston Dynamos! #MINvHOU #MNUFC ⚽️👏
 
 ### [Saturday @ 1:29 PM](https://www.thingelstad.com/2019/05/25/flying-the-planet.html)
 
-[Flying the Planet Kubb](http://planetkubb.com) banner while the kids play some Kubb! 👍
+Flying the [Planet Kubb](http://planetkubb.com) banner while the kids play some Kubb! 👍
 
 ![](https://cdn.uploads.micro.blog/890/2019/d40090f8ee.jpg)
 
@@ -294,7 +294,7 @@ It’s boat day! Taking the pontoon out of storage and heading up river to the l
 
 ### [Friday @ 8:53 PM](https://www.thingelstad.com/2019/05/24/nice-spot-to.html)
 
-Nice [spot to get tomorrow’s Weekly Thing](https://weekly.thingelstad.com) ready! 😊
+Nice spot to get tomorrow’s [Weekly Thing](https://weekly.thingelstad.com) ready! 😊
 
 ![](https://cdn.uploads.micro.blog/890/2019/f22cfc37a8.jpg)
 
@@ -304,4 +304,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You enjoy the company of other people.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

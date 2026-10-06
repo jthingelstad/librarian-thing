@@ -75,9 +75,9 @@ links:
   domain: gettingthingsdone.com
   heading_context: '[Episode #54: David Allen on Someday/Maybe and Incubation Best Practices - Getting Things Done®](https://gettingthingsdone.com/2019/10/david-allen-on-someday-maybe-and-incubation-lists/)'
   section: Notable Links 📌
-word_count: 1656
+word_count: 1651
 ---
-Like clockwork cold weather arrived and I got a low-grade cold. Not the kind of cold that takes you out of commission. More the kind of cold that feels like the parking brake is half-way applied all the time, and makes you cough and sneeze, but not all the time. I'm trying to drown it out with a [barrage of vitamins. Premium Insurance Caps](https://www.hammernutrition.com/premium-insurance-caps?quantity=1&size=49) combined with Emergen-C. It was one of those weeks where I needed to be fully ON for a full raft of things on both the work and home calendars. I’m looking back now from Friday night and am happy that I successfully made it through. 🏁
+Like clockwork cold weather arrived and I got a low-grade cold. Not the kind of cold that takes you out of commission. More the kind of cold that feels like the parking brake is half-way applied all the time, and makes you cough and sneeze, but not all the time. I'm trying to drown it out with a barrage of vitamins. [Premium Insurance Caps](https://www.hammernutrition.com/premium-insurance-caps?quantity=1&size=49) combined with Emergen-C. It was one of those weeks where I needed to be fully ON for a full raft of things on both the work and home calendars. I’m looking back now from Friday night and am happy that I successfully made it through. 🏁
 
 Let's jump right into the links now, and there is a lot of micro posts at the end…
 
@@ -202,23 +202,23 @@ Our newest floor opened up in SPS Tower today! Great setup to enable #TeamSPS to
 
 ### [Sunday @ 4:04 PM](https://www.thingelstad.com/2019/11/10/congratulations-to-the.html)
 
-[Congratulations to the Seattle Sounders FC](https://www.soundersfc.com) for winning the 2019 MLS Cup! ⚽️🏆 Exciting game! Toronto wasn’t able to convert, and Seattle opened it up. 3-1!
+Congratulations to the [Seattle Sounders FC](https://www.soundersfc.com) for winning the 2019 MLS Cup! ⚽️🏆 Exciting game! Toronto wasn’t able to convert, and Seattle opened it up. 3-1!
 
 ### [Sunday @ 11:41 AM](https://www.thingelstad.com/2019/11/10/for-the-third.html)
 
-For the third time in four years we’ll be watching the Seattle Sounders play [Toronto FC in the MLS Cup](https://en.wikipedia.org/wiki/MLS_Cup) . ⚽️🏆
+For the third time in four years we’ll be watching the Seattle Sounders play Toronto FC in the [MLS Cup](https://en.wikipedia.org/wiki/MLS_Cup). ⚽️🏆
 
 ### [Sunday @ 8:15 AM](https://www.thingelstad.com/2019/11/10/missing-james-whatleys.html)
 
-[Missing James Whatley’s (@Whatleydude](https://twitter.com/Whatleydude) [) Five Things on Friday](https://us8.campaign-archive.com/home/?u=a84512488c22cce34b03cbcaa&id=77143865ef) [during its “odd hiatus](https://twitter.com/Whatleydude/status/1191395007573434370) ” — looking forward to the return.
+Missing James Whatley’s ([@Whatleydude](https://twitter.com/Whatleydude)) [Five Things on Friday](https://us8.campaign-archive.com/home/?u=a84512488c22cce34b03cbcaa&id=77143865ef) during its “[odd hiatus](https://twitter.com/Whatleydude/status/1191395007573434370)” — looking forward to the return.
 
 ### [Saturday @ 9:48 PM](https://www.thingelstad.com/2019/11/09/214808.html)
 
-We went to [the Children’s Theatre production of Cinderella](https://childrenstheatre.org/plays/2019-2020-season/cinderella) today and were completely blown away by how great it was! Engaging, modernized with current music, funny — a great theatre experience! Recommended! 🎭👍
+We went to the [Children’s Theatre production of Cinderella](https://childrenstheatre.org/plays/2019-2020-season/cinderella) today and were completely blown away by how great it was! Engaging, modernized with current music, funny — a great theatre experience! Recommended! 🎭👍
 
 ### [Saturday @ 9:44 PM](https://www.thingelstad.com/2019/11/09/checked-out-the.html)
 
-[Checked out the First Avenue](https://first-avenue.com) special [exhibit at the Minnesota History Center](http://www.mnhs.org/historycenter/) today. Loved the special highlights of [Hüsker Dü](https://en.wikipedia.org/wiki/Hüsker_Dü), [The Replacements](https://en.wikipedia.org/wiki/The_Replacements_%28band%29), and [Soul Asylum](https://www.soulasylum.com). Of course [Prince](https://en.wikipedia.org/wiki/Prince_%28musician%29) too. Hüsker Dü being described as “candy-coated razor wire” made me chuckle.
+Checked out the [First Avenue](https://first-avenue.com) special exhibit at the [Minnesota History Center](http://www.mnhs.org/historycenter/) today. Loved the special highlights of [Hüsker Dü](https://en.wikipedia.org/wiki/Hüsker_Dü), [The Replacements](https://en.wikipedia.org/wiki/The_Replacements_%28band%29), and [Soul Asylum](https://www.soulasylum.com). Of course [Prince](https://en.wikipedia.org/wiki/Prince_%28musician%29) too. Hüsker Dü being described as “candy-coated razor wire” made me chuckle.
 
 ![](https://cdn.uploads.micro.blog/890/2019/b60fcb007a.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/27cd3b09b6.jpg)
@@ -227,7 +227,7 @@ We went to [the Children’s Theatre production of Cinderella](https://childrens
 
 ### [Saturday @ 12:57 PM](https://www.thingelstad.com/2019/11/09/we-went-to.html)
 
-[We went to Keg & Case](https://www.kegandcase.com) for the first time and had a fabulous market lunch!
+We went to [Keg & Case](https://www.kegandcase.com) for the first time and had a fabulous market lunch!
 
 ![](https://cdn.uploads.micro.blog/890/2019/f9afe33570.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/ec36d8b6e5.jpg)
@@ -236,7 +236,7 @@ We went to [the Children’s Theatre production of Cinderella](https://childrens
 
 ### [Saturday @ 12:47 PM](https://www.thingelstad.com/2019/11/09/impressively-large-us.html)
 
-Impressively large US flag [at Minneapolis VA Health Care System](https://www.minneapolis.va.gov) . 🇺🇸
+Impressively large US flag at [Minneapolis VA Health Care System](https://www.minneapolis.va.gov). 🇺🇸
 
 ![](https://cdn.uploads.micro.blog/890/2019/cc817901ff.jpg)
 
@@ -277,4 +277,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Do not overtax your powers.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

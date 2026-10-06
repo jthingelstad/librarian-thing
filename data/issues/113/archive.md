@@ -86,7 +86,7 @@ links:
   domain: www.cio.com
   heading_context: '[Scaled agile helps modernize Guardian''s operations | CIO](https://www.cio.com/article/3429176/scaled-agile-helps-modernize-guardians-operations.html)'
   section: Notable Links 📌
-word_count: 1261
+word_count: 1260
 ---
 I’m back! 😎 In #112 I shared that I was going to take a break for the month of July. When August came around, things were just a blur and I called an audible and decided to take a couple more weeks off. Now I’m back on the keys excited to reconnect with all of you! 🙌
 
@@ -178,7 +178,7 @@ But LinkedIn is very different since it is a "professional" or business network.
 
 ### [Scaled agile helps modernize Guardian's operations | CIO](https://www.cio.com/article/3429176/scaled-agile-helps-modernize-guardians-operations.html)
 
-I [worked closely with Dean Del Vecchio](https://www.linkedin.com/in/dean-a-del-vecchio-66a874/) when I was at Dow Jones. Smart, fast-paced leader. He's been doing some great stuff at Guardian!
+I worked closely with [Dean Del Vecchio](https://www.linkedin.com/in/dean-a-del-vecchio-66a874/) when I was at Dow Jones. Smart, fast-paced leader. He's been doing some great stuff at Guardian!
 
 ## Yet More Links 🍞
 
@@ -219,4 +219,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Today's weirdness is tomorrow's reason why. -- Hunter S. Thompson
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

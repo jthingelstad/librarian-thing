@@ -92,7 +92,7 @@ links:
   domain: www.vieler-photography.com
   heading_context: '[Dogs Catching Treats - Vieler Photography - Fotos Frei Schnauze](https://www.vieler-photography.com/portfolio/snapshots/)'
   section: Notable Links 📌
-word_count: 1460
+word_count: 1456
 ---
 I've been putting a fortune at the very bottom of the Weekly Thing for a while now. It's a surprise for those that read all the way to the end! 🎁 I was using a service for that that was mostly fine but occasionally gave bad fortunes 😒 that I would replace. Last week I didn't catch a bad one, so I rebuilt the fortune process and it now is part of my editorial selection. Better fortunes from now on! 🎉
 
@@ -108,11 +108,11 @@ I continue to happily live in an Internet, with my 1Blocker setup, that doesn't 
 
 ### [The Total Incompatibility of Mindfulness and Busyness](https://medium.com/s/story/the-total-incompatibility-of-mindfulness-and-busyness-604458f689ff)
 
-[Article from Jon Kabat-Zinn](https://en.wikipedia.org/wiki/Jon_Kabat-Zinn) , one of the leaders of mindfulness practices.
+Article from [Jon Kabat-Zinn](https://en.wikipedia.org/wiki/Jon_Kabat-Zinn), one of the leaders of mindfulness practices.
 
 > Precisely because if we are overloaded to the point of being overwhelmed, it is likely that we will be so agitated, so distraught, so self-preoccupied that we won’t be able to meet anybody or any situation from a place of ease within the fullness of our own being in that moment, and that includes, most importantly, even an authentic meeting of ourselves and those we most care about.
 
-This is worth reading a few times, just to make sure it sinks in. [Via Leah Cunningham](https://www.linkedin.com/feed/update/urn:li:activity:6474770166122102784) .
+This is worth reading a few times, just to make sure it sinks in. Via [Leah Cunningham](https://www.linkedin.com/feed/update/urn:li:activity:6474770166122102784).
 
 ## My Weekly Photo 📷
 
@@ -182,7 +182,7 @@ This is the most comprehensive map I've found of charging stations for electric 
 
 ### [Dogs Catching Treats - Vieler Photography - Fotos Frei Schnauze](https://www.vieler-photography.com/portfolio/snapshots/)
 
-What awesome pictures – they crack me up! [Via Kottke.org](https://kottke.org/18/11/dogs-catching-treats) .
+What awesome pictures – they crack me up! Via [Kottke.org](https://kottke.org/18/11/dogs-catching-treats).
 
 ## Give Back 🎁
 
@@ -243,4 +243,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Try the Moo Shu Pork. It is especially good today.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

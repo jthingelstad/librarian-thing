@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/50/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-50-apr-21-2018/
 domains: []
 links: []
-word_count: 2414
+word_count: 2409
 ---
 The Weekly Thing was highlighted in [the April 13th issue of Noticing](https://mailchi.mp/kottke/blogging-is-not-dead-edition-2575912502) , the new newsletter from kottke.org, along with a number of other blogs and newsletters. 🙌 It was awesome to be included, and it resulted in a bunch of new subscribers discovering the Weekly Thing! To all the new folks here, welcome to this weekly summary of new content, apps, books and many other "things" of interest! 👍 Grab a coffee ☕️ and look around a bit.
 
@@ -29,7 +29,7 @@ My favorite picture from the last week.
 
 ![](https://files.thingelstad.com/weekly-thing/50/cover.jpg)
 
-People enjoying the Cherry [Blossoms in A.V. Fomin Botanical Garden](https://en.wikipedia.org/wiki/A.V._Fomin_Botanical_Garden)
+People enjoying the Cherry Blossoms in [A.V. Fomin Botanical Garden](https://en.wikipedia.org/wiki/A.V._Fomin_Botanical_Garden)
 
 Apr 18, 2018 at 9:26 AM
 Kiev, Ukraine
@@ -41,7 +41,7 @@ Don't miss these gems from the past week.
 [Peter Stern: A Birthday Note for my Daughter | LinkedIn](https://www.linkedin.com/pulse/dear-amina-peter-stern/)
 www.linkedin.com
 
-I have had [the pleasure of meeting Peter Stern](https://www.linkedin.com/in/iampeter/) on a few occasions. We first met when he was CTO of Datek, which was one of the early firms to bring trading to the masses, and also one of the first customers of BigCharts. Even after Peter and team sold Datek to Ameritrade, I had the great pleasure of having dinner with him in New York. Peter has a mind that devours any topic in front of it. This letter he wrote for his daughter recommending the book Sapiens by Yuval Noah Harari is a strong recommendation, but not just of this book.
+I have had the pleasure of meeting [Peter Stern](https://www.linkedin.com/in/iampeter/) on a few occasions. We first met when he was CTO of Datek, which was one of the early firms to bring trading to the masses, and also one of the first customers of BigCharts. Even after Peter and team sold Datek to Ameritrade, I had the great pleasure of having dinner with him in New York. Peter has a mind that devours any topic in front of it. This letter he wrote for his daughter recommending the book Sapiens by Yuval Noah Harari is a strong recommendation, but not just of this book.
 
 > History, philosophy, religion, biology, economics, linguistics, law, evolutionary biology, behavioral economics, topics I don’t even know how to explain. Tens of thousands of pages I read. Many of these books were unrewarding and were left on a stoop before you were born or simply tossed. The ones that are worth reading still line our bookshelves, with a few exceptions. Some books were really good, but your mother found their titles upsetting, awkward, or difficult to explain to guests. Those also got left on stoops. Sorry about that. You can ask me about them if you really want to know.
 
@@ -86,7 +86,7 @@ I believe that sharing a sincere Thank You with individuals at your office can b
 
 This article also highlights how poorly I executed the Thank You cards I sent when I graduated high school. I put all the gifts in a AppleWorks database, and then used mail merge to print them on my dot-matrix printer. To make it even worse, I actually put "Thank You for the $20." if people gave me cash. 🤦‍♂️
 
-Majority of teens worry about school shootings, and so do [most parents | Pew Research Center](http://www.pewresearch.org/fact-tank/2018/04/18/a-majority-of-u-s-teens-fear-a-shooting-could-happen-at-their-school-and-most-parents-share-their-concern/)
+[Majority of teens worry about school shootings, and so do most parents | Pew Research Center](http://www.pewresearch.org/fact-tank/2018/04/18/a-majority-of-u-s-teens-fear-a-shooting-could-happen-at-their-school-and-most-parents-share-their-concern/)
 www.pewresearch.org
 
 57% of teens are either very or somewhat worried about a shooting happening in their school. This should stand as an indictment on us in charge that we haven't done anything meaningful to make our kids feel safe in school.
@@ -108,7 +108,7 @@ Mail on macOS has more powerful search capabilities than you think. I also know 
 [Be a Deletist](https://deletist.xyz/)
 deletist.xyz
 
-An attempt to coin a word to refer to the act of deleting or expiring content on third party platforms. I've tried to do this on [Twitter for a while using TweetDelete](https://www.tweetdelete.net) , which never seems to get tweets deleted for me anymore. It’s an interesting concept but I would always assume that nothing is deleted. All of these third party platforms may hide the content, but they certainly don't delete it.
+An attempt to coin a word to refer to the act of deleting or expiring content on third party platforms. I've tried to do this on Twitter for a while using [TweetDelete](https://www.tweetdelete.net), which never seems to get tweets deleted for me anymore. It’s an interesting concept but I would always assume that nothing is deleted. All of these third party platforms may hide the content, but they certainly don't delete it.
 
 [Facebook Uses Artificial Intelligence to Predict Your Future Actions for Advertisers, Says Confidential Document](https://theintercept.com/2018/04/13/facebook-advertising-data-artificial-intelligence-ai/)
 theintercept.com
@@ -163,18 +163,18 @@ Five very good aspects to keep in mind to give better feedback. Good advice for 
 ## Breadcrumbs 🍞
 
 Additional links of interest from this week.
-- Richard Stallman, RMS, [on Privacy, Data, and Free Software](http://nymag.com/selectall/2018/04/richard-stallman-rms-on-privacy-data-and-free-software.html)
-- Python 3.7: [Introducing Data Classes | PyCharm Blog](https://blog.jetbrains.com/pycharm/2018/04/python-37-introducing-data-class/)
-- How founders can write a quality blog [post in 1 hour - Baremetrics](https://baremetrics.com/blog/founder-writing)
+- [Richard Stallman, RMS, on Privacy, Data, and Free Software](http://nymag.com/selectall/2018/04/richard-stallman-rms-on-privacy-data-and-free-software.html)
+- [Python 3.7: Introducing Data Classes | PyCharm Blog](https://blog.jetbrains.com/pycharm/2018/04/python-37-introducing-data-class/)
+- [How founders can write a quality blog post in 1 hour - Baremetrics](https://baremetrics.com/blog/founder-writing)
 - [Feature/Product Fit | Casey Accidental](http://caseyaccidental.com/feature-product-fit/)
-- Support #MNtech and Join [Minnestar's 100 Day Challenge! - Minnestar](https://minnestar.org/support-mntech-and-join-minnestars-100-day-challenge/)
-- Far more than 87m Facebook users had data compromised, MPs told [| UK news | The Guardian](https://www.theguardian.com/uk-news/2018/apr/17/facebook-users-data-compromised-far-more-than-87m-mps-told-cambridge-analytica)
+- [Support #MNtech and Join Minnestar's 100 Day Challenge! - Minnestar](https://minnestar.org/support-mntech-and-join-minnestars-100-day-challenge/)
+- [Far more than 87m Facebook users had data compromised, MPs told | UK news | The Guardian](https://www.theguardian.com/uk-news/2018/apr/17/facebook-users-data-compromised-far-more-than-87m-mps-told-cambridge-analytica)
 - [Cybersecurity Tech Accord](https://cybertechaccord.org/)
-- Tesla Model 3 production aims for 6,000 units per week in June after upgrade in May – ~5,000 with margin of [error, says Elon Musk | Electrek](https://electrek.co/2018/04/17/tesla-model-3-production-goal-6000-units-per-week/)
+- [Tesla Model 3 production aims for 6,000 units per week in June after upgrade in May – ~5,000 with margin of error, says Elon Musk | Electrek](https://electrek.co/2018/04/17/tesla-model-3-production-goal-6000-units-per-week/)
 - [2016 Transparency Report —GitHub](https://blog.github.com/2018-04-16-2016-Transparency-Report/)
 - [Going Back To Blogging – whatevernevermind](http://www.whatevernevermind.com/going-back-to-blogging/)
 - [Facebook’s Second Life —Om Malik](https://om.co/2018/04/15/facebooks-second-life/)
-- Data Lords: The Real Story of Big Data, Facebook and the Future [of News – Talking Points Memo](https://talkingpointsmemo.com/edblog/data-lords-the-real-story-of-big-data-facebook-and-the-future-of-news)
+- [Data Lords: The Real Story of Big Data, Facebook and the Future of News – Talking Points Memo](https://talkingpointsmemo.com/edblog/data-lords-the-real-story-of-big-data-facebook-and-the-future-of-news)
 
 ## Promotion 🎁
 
@@ -200,7 +200,7 @@ These are my small updates shared on my microblog last week.
 
 [Friday @ 4:34 PM](https://www.thingelstad.com/2018/04/20/i-always-feel.html)
 
-I always feel a little defensive for Minneapolis when I have to pick “America/Chicago” from a [list populated by the tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) . ✊
+I always feel a little defensive for Minneapolis when I have to pick “America/Chicago” from a list populated by the [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). ✊
 
 [Friday @ 8:35 AM](https://www.thingelstad.com/2018/04/20/st-volodymyrs-cathedral.html)
 
@@ -216,15 +216,15 @@ Time to head home! Successful 8th trip to Kyiv to visit #TeamSPS! 🛫
 
 [Friday @ 4:15 AM](https://www.thingelstad.com/2018/04/19/just-preordered-blocker.html)
 
-[Just preordered 1Blocker X](https://itunes.apple.com/us/app/1blocker-x/id1365531024?mt=8) . I rely on 1Blocker to keep me protected on the web. I use it on all my devices.
+Just preordered [1Blocker X](https://itunes.apple.com/us/app/1blocker-x/id1365531024?mt=8). I rely on 1Blocker to keep me protected on the web. I use it on all my devices.
 
 [Friday @ 3:52 AM](https://www.thingelstad.com/2018/04/19/ive-never-understood.html)
 
-I’ve never understood why people wrap their luggage. I see this mostly on international travel. Turns out it’s mainly to prevent tampering! Why would [you wrap your luggage in plastic?](https://travel.stackexchange.com/questions/3220/why-would-you-wrap-your-luggage-in-plastic)
+I’ve never understood why people wrap their luggage. I see this mostly on international travel. Turns out it’s mainly to prevent tampering! [Why would you wrap your luggage in plastic?](https://travel.stackexchange.com/questions/3220/why-would-you-wrap-your-luggage-in-plastic)
 
 [Thursday @ 6:07 PM](https://www.thingelstad.com/2018/04/19/great-georgian-dinner.html)
 
-[Great Georgian dinner at Gogi](http://gogi.com.ua) with our Kyiv leadership team. 😊
+Great Georgian dinner at [Gogi](http://gogi.com.ua) with our Kyiv leadership team. 😊
 
 [Thursday @ 4:50 PM](https://www.thingelstad.com/2018/04/19/my-collection-of.html)
 
@@ -252,7 +252,7 @@ Heading to Kiev to visit #TeamSPS! ✈️ MSP - CDG - KBP
 
 [Monday @ 5:15 AM](https://www.thingelstad.com/2018/04/15/enjoyed-darkest-hourhttpsimdbcomtitlett.html)
 
-[Enjoyed Darkest Hour](https://imdb.com/title/tt4555426/) . 🎬
+Enjoyed [Darkest Hour](https://imdb.com/title/tt4555426/). 🎬
 
 [Monday @ 12:10 AM](https://www.thingelstad.com/2018/04/15/it-is-still.html)
 
@@ -280,7 +280,7 @@ Well over a foot of snow to deal this morning. Heavy too with the warm temperatu
 
 [Sunday @ 1:03 AM](https://www.thingelstad.com/2018/04/15/my-friend-dangrigsbyhttpsmicroblogdangrigsby.html)
 
-[My friend @dangrigsby](https://micro.blog/dangrigsby) is newly on [micro.blog — you should follow him](https://micro.blog/dangrigsby) ! 👍
+My friend [@dangrigsby](https://micro.blog/dangrigsby) is newly on micro.blog — you should [follow him](https://micro.blog/dangrigsby)! 👍
 
 [Sunday @ 1:02 AM](https://www.thingelstad.com/2018/04/14/planning-to-just.html)
 

@@ -110,7 +110,7 @@ links:
   domain: blog.veitheller.de
   heading_context: '[Carp | Veit''s Blog](http://blog.veitheller.de/Carp.html)'
   section: Links 📌
-word_count: 1777
+word_count: 1771
 ---
 This week marked the official start of the Christmas 🎄 shopping season and a lot of you all went to stores and websites and bought things. I know because we were on high alert ⚡️ at work to make sure all of that stuff worked as it should, which we did very well!
 
@@ -163,11 +163,11 @@ Fun read, and very accurate.
 
 ### [Illimat](https://www.illimat.com/)
 
-I’m [a big fan of The Decemberists](http://www.decemberists.com) and a friend said this game was really awesome. On the Christmas list! 😁
+I’m a big fan of [The Decemberists](http://www.decemberists.com) and a friend said this game was really awesome. On the Christmas list! 😁
 
 ### [Panopticlick](https://panopticlick.eff.org/)
 
-Very cool website that allows you to see what information your browser is giving away on you and how well it fights against advertising and tracking technology. I had no idea this existed and it’s great that it does. [Found it via this announcement](https://www.eff.org/deeplinks/2017/11/panopticlick-30) about the new version.
+Very cool website that allows you to see what information your browser is giving away on you and how well it fights against advertising and tracking technology. I had no idea this existed and it’s great that it does. Found it via this [announcement](https://www.eff.org/deeplinks/2017/11/panopticlick-30) about the new version.
 
 ### [Quit social media | Dr. Cal Newport | TEDxTysons - YouTube](https://www.youtube.com/watch?v=3E7hkPZ-HTk)
 
@@ -185,7 +185,7 @@ This documentary looks pretty interesting. I like the focus of the intersection 
 
 ### [macOS High Sierra 'root' security bug: Stop and do this NOW | iMore](https://m.imore.com/macos-has-root-bug)
 
-This is a massively embarrassing security hole for Apple. 😳 [Now patched](https://support.apple.com/en-us/HT208315) .
+This is a massively embarrassing security hole for Apple. 😳 [Now patched](https://support.apple.com/en-us/HT208315).
 
 ### [Strongbox](https://schibsted.github.io/strongbox/)
 
@@ -193,11 +193,11 @@ Another option for storing secrets for your systems and infrastructure. 🔐
 
 ### [MindNode 5 - It starts with a thought - MindNode](https://mindnode.com/news/2017-11-28-mindnode-5-it-starts-with-a-thought)
 
-New major release of one of my favorite mind mapping tools (the other is [iThoughts](https://www.toketaware.com/ithoughts-ios) ). I like MindNode's simpler and light user interface. It’s a great place to do brainstorming. Also, a [good review of this on MacStories](https://www.macstories.net/reviews/mindnode-5-digital-mind-mapping-finally-clicked-for-me/) .
+New major release of one of my favorite mind mapping tools (the other is [iThoughts](https://www.toketaware.com/ithoughts-ios)). I like MindNode's simpler and light user interface. It’s a great place to do brainstorming. Also, a [good review of this on MacStories](https://www.macstories.net/reviews/mindnode-5-digital-mind-mapping-finally-clicked-for-me/).
 
 ### [MediaWiki Pivot Skin](https://pivot.wikiproject.net/wiki/Main_Page)
 
-[Very impressive skin/template for MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) [by Tom Hutchison](https://github.com/Hutchy68) . Tom and [I collaborated extensively on the Foreground](https://foreground.wikiproject.net/wiki/Main_Page) skin when I [was working on that for WikiApiary](https://wikiapiary.com/wiki/Main_Page) . Pivot looks great! 👍
+Very impressive skin/template for [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) by [Tom Hutchison](https://github.com/Hutchy68). Tom and I collaborated extensively on the [Foreground](https://foreground.wikiproject.net/wiki/Main_Page) skin when I was working on that for [WikiApiary](https://wikiapiary.com/wiki/Main_Page). Pivot looks great! 👍
 
 ### [Chaos Toolkit](http://chaostoolkit.org/)
 
@@ -211,11 +211,11 @@ This behavior sounds really familiar — 🚬! Food research and health effects 
 
 ### [RememBear: Secure Password Manager](https://www.remembear.com/)
 
-A new entrant into the Password (Secret) Manager space. I've been a [1Password](https://1password.com) user for years (and the whole family [is safe with 1Password for Families](https://1password.com/families/) ) and will stick with it. This is from the [same company that makes the TunnelBear](http://tunnelbear.com) VPN offering which I have used in the past.
+A new entrant into the Password (Secret) Manager space. I've been a [1Password](https://1password.com) user for years (and the whole family is safe with [1Password for Families](https://1password.com/families/)) and will stick with it. This is from the same company that makes the [TunnelBear](http://tunnelbear.com) VPN offering which I have used in the past.
 
 ### [Carp | Veit's Blog](http://blog.veitheller.de/Carp.html)
 
-I find it fun to read through takes on various computer languages. There are so many languages and the vast majority never got any traction. A thorough blog post reviewing a language is sort of like a vacation to another country to explore it’s traditions and taste the flavors and importantly come back home shortly after. [I had never heard of Carp](https://github.com/carp-lang/Carp) but this is a thorough review of it. A Lisp language that compiles down to C to then be compiled natively.
+I find it fun to read through takes on various computer languages. There are so many languages and the vast majority never got any traction. A thorough blog post reviewing a language is sort of like a vacation to another country to explore it’s traditions and taste the flavors and importantly come back home shortly after. I had never heard of [Carp](https://github.com/carp-lang/Carp) but this is a thorough review of it. A Lisp language that compiles down to C to then be compiled natively.
 
 ## Promotion 🎁
 

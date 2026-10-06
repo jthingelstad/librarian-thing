@@ -62,13 +62,13 @@ links:
   domain: www.fastcompany.com
   heading_context: '[Executive coach: 7 secrets to lasting career satisfaction](https://www.fastcompany.com/90296030/executive-coach-7-secrets-to-finding-lasting-career-satisfaction)'
   section: Notable Links 📌
-word_count: 1131
+word_count: 1130
 ---
 I'm slowly creeping up on issue #100 of the Weekly Thing! Just 7 more and we'll hit that fun milestone! 🎉 I've been contemplating some tweaks and refinements of this weekly cornucopia of content. I'd like to ask you, the most awesome reader ever, to take a moment for two things.
 
 I would love to hear any feedback you have! I’m all ears! 👂 I've done less app and book stuff as of late. I think the different ways of showing links work well. But most importantly it would be great to know what you think. So, what's up? Reply to this email and let me know! 🤩
 
-Also, I've been lucky to be joined by about 650 of the finest people on the Internet for the Weekly Thing. One of my favorite things, is seeing new people joining our little club. If you would take a moment to spread the word to a friend, colleague, relative, or anyone else that might like it that would be awesome! 🙌 I think the easiest thing is to send them to https://weekly.thingelstad.com to see the archive and subscribe! 👍 Cool? 😎 I have this thought that 1,000 people would be really neat.
+Also, I've been lucky to be joined by about 650 of the finest people on the Internet for the Weekly Thing. One of my favorite things, is seeing new people joining our little club. If you would take a moment to spread the word to a friend, colleague, relative, or anyone else that might like it that would be awesome! 🙌 I think the easiest thing is to send them to [https://weekly.thingelstad.com](https://weekly.thingelstad.com) to see the archive and subscribe! 👍 Cool? 😎 I have this thought that 1,000 people would be really neat.
 
 Now I'll get back to ruminating on some of these evolutions, and meanwhile let's jump into things. 🤜🤛
 
@@ -78,7 +78,7 @@ PS: I’m happy to say goodbye to this double-cold 🤧 sequence that I had the 
 
 ### [Reflecting on My Failure to Build a Billion-Dollar Company](https://medium.com/@shl/reflecting-on-my-failure-to-build-a-billion-dollar-company-b0c31d7db0e7)
 
-Reflections from [the CEO and Founder of Gumroad](https://gumroad.com) on building the business and the significant ups and downs. He grounds back to delivering value. It seems obvious, but that is really what matters.
+Reflections from the CEO and Founder of [Gumroad](https://gumroad.com) on building the business and the significant ups and downs. He grounds back to delivering value. It seems obvious, but that is really what matters.
 
 ## My Weekly Photo 📷
 
@@ -108,7 +108,7 @@ This article is written referring to product management, but nearly all of it ca
 
 ### [The Observation Deck » Reflecting on The Soul of a New Machine](http://dtrace.org/blogs/bmc/2019/02/10/reflecting-on-the-soul-of-a-new-machine/)
 
-Reading [this, along with Jess Fraz's writeup](https://blog.jessfraz.com/post/new-golden-age-of-building-with-soul/) makes me want to go and [re-read Soul of a New Machine](https://en.wikipedia.org/wiki/The_Soul_of_a_New_Machine) again too! It’s a great book. 📚
+Reading this, along with [Jess Fraz's writeup](https://blog.jessfraz.com/post/new-golden-age-of-building-with-soul/) makes me want to go and re-read [Soul of a New Machine](https://en.wikipedia.org/wiki/The_Soul_of_a_New_Machine) again too! It’s a great book. 📚
 
 ### [Bloomberg London: Workplace of the Future - YouTube](https://www.youtube.com/watch?v=iViOfbGTzKk)
 
@@ -134,7 +134,7 @@ https://letsencrypt.org
 
 ## Yet More Links 🍞
 
-- Brandi Carlile - The Joke [LIVE at the 61st GRAMMYs - YouTube](https://www.youtube.com/watch?feature=youtu.be&v=KJqL1yIm9e0&app=desktop)
+- [Brandi Carlile - The Joke (LIVE at the 61st GRAMMYs) - YouTube](https://www.youtube.com/watch?feature=youtu.be&v=KJqL1yIm9e0&app=desktop)
 We've been fans of Brandi Carlile for a while, and this performance at the Grammy's was amazing! 🎶
 - [Letting neural networks be weird — Candy Heart messages written by a neural network](http://aiweirdness.com/post/170685749687/candy-heart-messages-written-by-a-neural-network) aiweirdness.com
 Good reminder for everyone preparing for machine learning to take over the world. Let's first figure out Valentine's sayings. 😁
@@ -165,7 +165,7 @@ Big space, and a great respite from the cold and snowy winter.
 
 ### [Friday @ 11:05 PM](https://www.thingelstad.com/2019/02/08/watched-fyre-the.html)
 
-Watched FYRE: [The Greatest Party That Never Happened](https://www.netflix.com/title/81035279) tonight. I didn’t follow this story when it happened. Unbelievable mess, fraud. 🎬
+Watched [FYRE: The Greatest Party That Never Happened](https://www.netflix.com/title/81035279) tonight. I didn’t follow this story when it happened. Unbelievable mess, fraud. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/81f78b0bff.jpg)
 
@@ -177,13 +177,13 @@ Tesla, your HTML encoding is showing. & 😳
 
 ### [Friday @ 8:53 PM](https://www.thingelstad.com/2019/02/08/started-reading-digital.html)
 
-[Started reading Digital Minimalism](http://calnewport.com/books/digital-minimalism/) by Cal Newport tonight. 📚
+Started reading [Digital Minimalism](http://calnewport.com/books/digital-minimalism/) by Cal Newport tonight. 📚
 
 ![](https://cdn.uploads.micro.blog/890/2019/fe671f6c7a.jpg)
 
 ### [Friday @ 6:45 PM](https://www.thingelstad.com/2019/02/08/checking-out-the.html)
 
-Checking out the [Life Time Sport at Winter Park](https://sport.lifetime.life/locations/mn-eden-prairie-winter-park.html) . Super cool pick-up soccer for the kids! ⚽️
+Checking out the [Life Time Sport at Winter Park](https://sport.lifetime.life/locations/mn-eden-prairie-winter-park.html). Super cool pick-up soccer for the kids! ⚽️
 
 ![](https://cdn.uploads.micro.blog/890/2019/a1d04dd700.jpg)
 
@@ -193,4 +193,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You are standing on my toes.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

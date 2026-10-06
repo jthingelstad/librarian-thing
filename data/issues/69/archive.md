@@ -104,7 +104,7 @@ links:
   domain: www.amazon.com
   heading_context: '[Lutron Caseta Wireless Smart Lighting Dimmer Switch (2 count) Starter Kit - Amazon.com](https://www.amazon.com/dp/B01M3XJUAD?tag=klf-20)'
   section: Notable Links 📌
-word_count: 2135
+word_count: 2125
 ---
 Minneapolis Public Schools started the 2018-19 school year this Monday, and with it the kids went off to school and summer break officially came to a close. 🏁 Summer flew by this year! There was so much going on. It was fabulous, and maybe 10% into the over-scheduled zone, but that's just fine. In our neighborhood the first day of school is a community event. Parents and kids walking to bus stops, or forming walking busses to take kids to school while photos are taken at various moments. The whole thing put a smile on my face, even as the kids were bemoaning the return of homework. 🚌
 
@@ -118,11 +118,11 @@ There is much truth in this article, even though it’s a little hard for me to 
 
 Unfortunately you could say the exact same paragraph and replace "centralized" with "private".
 
-This article reminded me of one of my most memorable conversations I had with [a venture capital friend, Michael Gorman](https://www.linkedin.com/in/mbgorman/) . We were talking about the Internet and I commented that "the Internet prefers decentralization". On one level, a very technical one, that is true. The Internet is a massively distributed system. It can suffer significant outages without having total network failure. But I was mistakenly extending that concept to things being built on the Internet. Michael replied that he saw nothing to support that, that the Internet was full of "winner take all" businesses, with complete centralization and not even room for a 2nd place. He was absolutely right.
+This article reminded me of one of my most memorable conversations I had with a venture capital friend, [Michael Gorman](https://www.linkedin.com/in/mbgorman/). We were talking about the Internet and I commented that "the Internet prefers decentralization". On one level, a very technical one, that is true. The Internet is a massively distributed system. It can suffer significant outages without having total network failure. But I was mistakenly extending that concept to things being built on the Internet. Michael replied that he saw nothing to support that, that the Internet was full of "winner take all" businesses, with complete centralization and not even room for a 2nd place. He was absolutely right.
 
 ### [Is It Okay to Say “Hey Guys”? - The Atlantic](https://www.theatlantic.com/family/archive/2018/08/guys-gender-neutral/568231/)
 
-The gendered nature of the term "guys" was brought to [my attention first by Bridget Kromhout](https://bridgetkromhout.com) . At the time I honestly didn’t really hear what she was saying, but the matter stuck with me and over the last few years I've largely removed "guys" as a reference to a group of people. I think this is important, especially in industries like tech with such large gender imbalances.
+The gendered nature of the term "guys" was brought to my attention first by [Bridget Kromhout](https://bridgetkromhout.com). At the time I honestly didn’t really hear what she was saying, but the matter stuck with me and over the last few years I've largely removed "guys" as a reference to a group of people. I think this is important, especially in industries like tech with such large gender imbalances.
 
 > I also heard that guys could grate on women working at male-heavy companies. In tech in particular, some told me they saw the word as yet another symptom of a female-minimizing industry. “There are a lot of guys in tech and ‘guys’ is used all the time in my work and social environments by both men and women, but since it doesn't resonate with me anymore, I do feel like I'm not part of the group,” says Amy Chong, a 29-year-old user-experience researcher in San Francisco.
 
@@ -170,7 +170,7 @@ He's also no fan of Taleb's book.
 
 ### [How “systems thinking” can level up your work — and your life](https://medium.com/swlh/how-systems-thinking-can-level-up-your-work-and-your-life-24070e96d906)
 
-[I've read the Thinking in Systems](https://www.goodreads.com/book/show/3828902-thinking-in-systems) book that this is referring to and agree, it is a fabulous introduction to a sophisticated set of tools to look at systems.
+I've read the [Thinking in Systems](https://www.goodreads.com/book/show/3828902-thinking-in-systems) book that this is referring to and agree, it is a fabulous introduction to a sophisticated set of tools to look at systems.
 
 ### [Margin is Not a Luxury – sabbatical.blog](https://sabbatical.blog/2018/08/margin-is-not-a-luxury/)
 
@@ -210,7 +210,7 @@ I ran my personal site through this and I was impressed with the recommendations
 
 ### [Lutron Caseta Wireless Smart Lighting Dimmer Switch (2 count) Starter Kit - Amazon.com](https://www.amazon.com/dp/B01M3XJUAD?tag=klf-20)
 
-I didn’t realize that there were HomeKit compatible switches like this that you could use to convert a light to a smart light. There [is also a simple on-off version](https://www.amazon.com/dp/B017LRCG38?tag=klf-20) of the same switch.
+I didn’t realize that there were HomeKit compatible switches like this that you could use to convert a light to a smart light. There is also a [simple on-off version](https://www.amazon.com/dp/B017LRCG38?tag=klf-20) of the same switch.
 
 ## Now Reading 📚
 
@@ -227,13 +227,13 @@ by Robert M Pirsig
 
 https://archive.org
 
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
+[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 
 - [Exclusive: Apple Watch Series 4 revealed — massive display, dense watch face, more | 9to5Mac](https://9to5mac.com/2018/08/30/exclusive-apple-watch-series-4/) 9to5mac.com
 Every millimeter matters on a display as small as the Apple Watch. 👍⌚️
-- [Exclusive: This is ‘iPhone XS’ — design, larger version, iPhone XS' — design, larger version, and gold colors confirmed | 9to5Mac](https://9to5mac.com/2018/08/30/2018-iphone-xs-design-larger-version-gold-exclusive/) 9to5mac.com
+- [Exclusive: This is ‘iPhone XS’ — design, larger version, and gold colors confirmed | 9to5Mac](https://9to5mac.com/2018/08/30/2018-iphone-xs-design-larger-version-gold-exclusive/) 9to5mac.com
 I know what my next iPhone will be now. 📱
 - [dategrep: print lines matching a time range](https://github.com/mdom/dategrep) github.com
 Super handy for log files. 🤓
@@ -270,7 +270,7 @@ I dig this picture that my neighbor took of me taking first day of school pictur
 
 ### [Sunday @ 11:39 PM](https://www.thingelstad.com/2018/08/26/in-recognition-of.html)
 
-[In recognition of National Dog Day](https://www.nationaldogday.com) , a picture of Chase from four months ago.
+In recognition of [National Dog Day](https://www.nationaldogday.com), a picture of Chase from four months ago.
 
 ![](https://www.thingelstad.com/uploads/2018/0e8cdd4f36.jpg)
 
@@ -282,7 +282,7 @@ Celebrated Tammy’s Dad’s 80th Birthday today! Got a big Olson Family picture
 
 ### [Sunday @ 8:52 AM](https://www.thingelstad.com/2018/08/26/135227.html)
 
-[Michael Franti & Spearhead](https://www.michaelfranti.com) put on an amazing and inspiring show [at the Music in the Zoo](http://suemclean.com/zoo/) last night. It was awesome how he engaged the audience and brought kids on stage to sing and dance. There was so much positive energy! 🎶
+[Michael Franti & Spearhead](https://www.michaelfranti.com) put on an amazing and inspiring show at the [Music in the Zoo](http://suemclean.com/zoo/) last night. It was awesome how he engaged the audience and brought kids on stage to sing and dance. There was so much positive energy! 🎶
 
 ![](https://www.thingelstad.com/uploads/2018/5b5555bf00.jpg)
 
@@ -308,4 +308,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 If you lose your temper, don't look for it.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

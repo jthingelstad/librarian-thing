@@ -120,13 +120,13 @@ links:
   domain: blog.dropbox.com
   heading_context: '[Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)'
   section: Notable Links 📌
-word_count: 2932
+word_count: 2926
 ---
-Our summer has started off with a bang! 💥 Our daughter celebrated her Golden Birthday 🥳 this year, and just two days later we had a great Father's Day. Then the next day my wife Tammy took our daughter on her Golden Birthday trip! We've adopted two traditions around birthdays. The first is that when each kid turns 13 I take them on a long weekend to New York to see the Big City! 🛩 The other is that on their Golden Birthdays Tammy takes them on a big birthday trip. They have been [having a blast in Mackinac Island](https://www.mackinacisland.org) .
+Our summer has started off with a bang! 💥 Our daughter celebrated her Golden Birthday 🥳 this year, and just two days later we had a great Father's Day. Then the next day my wife Tammy took our daughter on her Golden Birthday trip! We've adopted two traditions around birthdays. The first is that when each kid turns 13 I take them on a long weekend to New York to see the Big City! 🛩 The other is that on their Golden Birthdays Tammy takes them on a big birthday trip. They have been having a blast in [Mackinac Island](https://www.mackinacisland.org).
 
 As a result, I've been solo Dad! ✊ Tyler has had camp during the day and I successfully arrived on time for pickup each and every day. Granted this is a feat that millions of people do every day like clockwork, yet I felt particularly impressed with myself for pulling it off. It is always awesome to get solo time with your kids. We've been doing what guys do when left alone. Staying up too late, pretending Fruit Loops is an acceptable meal, playing video games 🎮, and lots of soccer ⚽️, baseball ⚾️, playing catch, kicking the ball around, etc. Oh, and visiting multiple cheeseburger places in the same week. 🍔🍔🍔🍔
 
-This week I also finished replacing our home [network with brand new Ubiquity UniFi](https://unifi-sdn.ui.com) gear. New switches, gateway, and WiFi 5 access points. It’s awesome! I'll see if I can write a blog post on it soon.
+This week I also finished replacing our home network with brand new [Ubiquity UniFi](https://unifi-sdn.ui.com) gear. New switches, gateway, and WiFi 5 access points. It’s awesome! I'll see if I can write a blog post on it soon.
 
 ## Featured Links 🏅
 
@@ -154,11 +154,11 @@ I love how Om looks at his personal website. I feel similarly.
 
 > Like in my apartment, on my blog, I am king. My first decree was to eschew any and all analytics. I don’t want to be driven by “views,” or what Google deems worthy of rank. I write what pleases me, not some algorithm. Walking away from quantification of my creativity was an act of taking back control.
 
-I’m glad to see I’m in [such great company having removed analytics](https://www.thingelstad.com/2017/removed-google-analytics) from my website, and I also disable all [link tracking on the Weekly Thing](https://weekly.thingelstad.com) .
+I’m glad to see I’m in such great company having [removed analytics](https://www.thingelstad.com/2017/removed-google-analytics) from my website, and I also disable all link tracking on the [Weekly Thing](https://weekly.thingelstad.com).
 
 ### [The New Wilderness (Idle Words)](https://idlewords.com/2019/06/the_new_wilderness.htm)
 
-[I like how Maciej Cegłowski](https://idlewords.com/about.htm) frames the privacy topic (and a number of other topics for that matter). I've wished that the Internet had a form of "zoning" in this regard. In everyday life we make a number of assumptions about our privacy informed by our surroundings. When in a restaurant or store, I don't assume I have any privacy. When in a park, I do assume I have privacy.
+I like how [Maciej Cegłowski](https://idlewords.com/about.htm) frames the privacy topic (and a number of other topics for that matter). I've wished that the Internet had a form of "zoning" in this regard. In everyday life we make a number of assumptions about our privacy informed by our surroundings. When in a restaurant or store, I don't assume I have any privacy. When in a park, I do assume I have privacy.
 
 > Our discourse around privacy needs to expand to address foundational questions about the role of automation: To what extent is living in a surveillance-saturated world compatible with pluralism and democracy? What are the consequences of raising a generation of children whose every action feeds into a corporate database? What does it mean to be manipulated from an early age by machine learning algorithms that adaptively learn to shape our behavior?
 
@@ -206,7 +206,7 @@ I wonder if it really makes sense to put these TV's on the Internet. I pair all 
 
 ### [Opinion | You Care More About Your Privacy Than You Think - The New York Times](https://www.nytimes.com/2019/06/11/opinion/privacy-facebook-sexting.html)
 
-People often refer to some studies that suggest that people associate no value to privacy. Here is one that shows that that isn't true. I do believe there is a significant point here and it’s why companies work very hard to hide away privacy matters. Take 3 minutes and watch this [excerpt from Steve Jobs on privacy](https://www.youtube.com/watch?v=39iKLwlUqBo) . I love the new decision in iOS 13 that will actually show the specific location data before sharing, not just some abstract data, but the actual data that will be shared from you.
+People often refer to some studies that suggest that people associate no value to privacy. Here is one that shows that that isn't true. I do believe there is a significant point here and it’s why companies work very hard to hide away privacy matters. Take 3 minutes and watch this excerpt from [Steve Jobs on privacy](https://www.youtube.com/watch?v=39iKLwlUqBo). I love the new decision in iOS 13 that will actually show the specific location data before sharing, not just some abstract data, but the actual data that will be shared from you.
 
 ### [Introducing Guardian Firewall for iOS - Guardian Firewall](https://guardianapp.com/blog/2019/06/introducing-guardian-firewall-for-ios/)
 
@@ -248,7 +248,7 @@ I've owned Birkenstock's for as long as I can remember. Each pair last several y
 >
 > Birkenstock’s management is seemingly unimpressed by such antics.
 
-"These were not product people." Love that. [Via Five Things on Friday #300](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=3574e85eaa) .
+"These were not product people." Love that. Via [Five Things on Friday #300](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=3574e85eaa).
 
 ### [Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)
 
@@ -267,11 +267,11 @@ I should eat more salads, and would probably do that if they tasted more interes
 - [API Platform: REST and GraphQL framework on top of Symfony and React](https://api-platform.com/) api-platform.com
 Easy framework to build REST and GraphQL API-driven projects
 - [ongoing by Tim Bray · Go Creeping In](https://www.tbray.org/ongoing/When/201x/2019/06/12/Go-Creeping-In) www.tbray.org
-I can [echo this observation as well, Go](http://golang.org) seems to be making slow but steady progress and winning over many engineers as they build solutions.
+I can echo this observation as well, [Go](http://golang.org) seems to be making slow but steady progress and winning over many engineers as they build solutions.
 - [Be My Eyes - Bringing sight to blind and low-vision people](https://www.bemyeyes.com/) www.bemyeyes.com
 What an amazing idea for a smartphone app!
 - [My personal journey from MIT to GPL | Drew DeVault’s Blog](https://drewdevault.com/2019/06/13/My-journey-from-MIT-to-GPL.html) drewdevault.com
-I like the journey described here and it [echos why I use Creative Commons](https://creativecommons.org) [licenses with a similar "Share Alike](https://wiki.creativecommons.org/wiki/Share_Alike) " clause.
+I like the journey described here and it echos why I use [Creative Commons](https://creativecommons.org) licenses with a similar "[Share Alike](https://wiki.creativecommons.org/wiki/Share_Alike)" clause.
 - [Introducing support for U2F security keys | 1Password](https://blog.1password.com/introducing-support-for-u2f-security-keys/) blog.1password.com
 This might give me a reason to get a U2F key. 🔐
 
@@ -295,11 +295,11 @@ Ready for the USA v Guyana CONCACAF Gold Cup Match! ⚽️🏆
 
 ### [Tuesday @ 6:54 PM](https://www.thingelstad.com/2019/06/18/concacaf-gold-cup.html)
 
-Tyler and I [are super excited for tonight’s CONCACAF](https://en.wikipedia.org/wiki/CONCACAF) [Gold Cup](https://www.goldcup.org) matches at Allianz Field! ⚽️🏆 Panama v. Trinidad playing now!
+Tyler and I are super excited for tonight’s [CONCACAF](https://en.wikipedia.org/wiki/CONCACAF) [Gold Cup](https://www.goldcup.org) matches at Allianz Field! ⚽️🏆 Panama v. Trinidad playing now!
 
 ### [Sunday @ 7:55 PM](https://www.thingelstad.com/2019/06/16/ive-made-the.html)
 
-I’ve [made the jump to Ubiquity UniFi](https://unifi-sdn.ui.com) networking gear at home. Impressed thus far.
+I’ve made the jump to [Ubiquity UniFi](https://unifi-sdn.ui.com) networking gear at home. Impressed thus far.
 
 ### [Sunday @ 6:33 PM](https://www.thingelstad.com/2019/06/16/burgers-on-the.html)
 
@@ -309,7 +309,7 @@ Burgers on the Big Green Egg for Father’s Day dinner! 🔥🍔🍺
 
 ### [Sunday @ 10:51 AM](https://www.thingelstad.com/2019/06/16/started-fathers-day.html)
 
-Started Father’s [Day off with a 60-minute PR](https://members.onepeloton.com/profile/workouts/5732ea7f7bc74e9091cf9a289280b3e7) in Jenn Sherman’s Epic Sing Along ride! 🙌🚴🏼‍♂️😅 #peloton
+Started Father’s Day off with a [60-minute PR](https://members.onepeloton.com/profile/workouts/5732ea7f7bc74e9091cf9a289280b3e7) in Jenn Sherman’s Epic Sing Along ride! 🙌🚴🏼‍♂️😅 #peloton
 
 ## Fortune 🥠
 
@@ -317,4 +317,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Are you making all this up as you go along?
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

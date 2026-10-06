@@ -92,7 +92,7 @@ links:
   domain: logrocket.com
   heading_context: '[Stop building websites with infinite scroll!](https://logrocket.com/blog/infinite-scroll/)'
   section: Notable Links 📌
-word_count: 2021
+word_count: 2016
 ---
 For the last two years our family has been wrestling with the idea of moving to a new house. 🏡 Tammy has felt for a while that she wanted a change of scenery. The rest of us haven't been as eager to go along. This is the first time that we have considered moving now that the kids are old enough to have an opinion of their own. We've found the additional complications of their friends and the neighborhood to be challenging to get our heads around.
 
@@ -104,13 +104,13 @@ But still the itch has nagged on us. I finally also decided that it would be fun
 
 ### [Tim Cook data privacy speech: Apple CEO calls for comprehensive data laws in America - The Verge](https://www.theverge.com/2018/10/24/18017842/tim-cook-data-privacy-laws-us-speech-brussels)
 
-[Apple CEO Tim Cook](https://en.wikipedia.org/wiki/Tim_Cook) presenting on the complete disregard of privacy in the technology industry. His term of "data industrial complex" is very accurate, and I completely agree with his extension that "this is surveillance".
+Apple CEO [Tim Cook](https://en.wikipedia.org/wiki/Tim_Cook) presenting on the complete disregard of privacy in the technology industry. His term of "data industrial complex" is very accurate, and I completely agree with his extension that "this is surveillance".
 
 He coins four essential rights: right to have personal data minimized, right to knowledge, right to access, and right to security. I like the simplicity.
 
-You can [see the video directly on YouTube](https://www.youtube.com/watch?v=kVhOLkIs20A) or if [you prefer read the ArsTechnica transcript](https://arstechnica.com/tech-policy/2018/10/tim-cook-calls-for-strong-us-privacy-law-rips-data-industrial-complex/) .
+You can see the video [directly on YouTube](https://www.youtube.com/watch?v=kVhOLkIs20A) or if you prefer read the [ArsTechnica transcript](https://arstechnica.com/tech-policy/2018/10/tim-cook-calls-for-strong-us-privacy-law-rips-data-industrial-complex/).
 
-Cook [references Steve Jobs' talking about privacy](https://www.youtube.com/watch?v=39iKLwlUqBo) . I appreciate that Apple is leading the tech industry on this important topic. It’s also clear that Cook is personally passionate on this topic. [He even pulls Henry David Thoreau](https://en.wikipedia.org/wiki/Henry_David_Thoreau) in at the end.
+Cook references [Steve Jobs' talking about privacy](https://www.youtube.com/watch?v=39iKLwlUqBo). I appreciate that Apple is leading the tech industry on this important topic. It’s also clear that Cook is personally passionate on this topic. He even pulls [Henry David Thoreau](https://en.wikipedia.org/wiki/Henry_David_Thoreau) in at the end.
 
 ### [Apple Shortcuts: The Bicycle for the Mind is Back, but it’s Electric — Prolost](https://prolost.com/blog/bicycle)
 
@@ -160,7 +160,7 @@ This is a great example document.
 
 > A major problem that young researchers face is their inability to write good research papers. This document serves as a guideline on how to write a good technical paper.
 
-[Technical papers and white papers](https://en.wikipedia.org/wiki/White_paper) have been confused with marketing organizations taking over white papers as a form of advertising. It’s good to see a robust discussion of a straight technical paper.
+Technical papers and [white papers](https://en.wikipedia.org/wiki/White_paper) have been confused with marketing organizations taking over white papers as a form of advertising. It’s good to see a robust discussion of a straight technical paper.
 
 ### [How Minnesota Became the Land of 10,000 Startups - ReadWrite](https://readwrite.com/2018/10/22/how-minnesota-became-the-land-of-10000-startups/)
 
@@ -168,7 +168,7 @@ Nice overview of the startup activity happening here in the Twin Cities.
 
 > The number of tech businesses in Minnesota has grown exponentially since 2010, adding more than 500 startups since 2015 alone. Following the charge, venture capitalists now invest more than $200 million in the region annually.
 
-I [was very glad to see Minnestar](https://minnestar.org) mentioned along with a quote from our executive director!
+I was very glad to see [Minnestar](https://minnestar.org) mentioned along with a quote from our executive director!
 
 ### [The Org Chart Test – Rands in Repose](http://randsinrepose.com/archives/the-org-chart-test/)
 
@@ -196,7 +196,7 @@ Good stats from this service. I think there is a lot more to do with calendar da
 
 ### [Helm](https://thehelm.com/)
 
-[This article from The Verge](https://www.theverge.com/circuitbreaker/2018/10/17/17983018/helm-private-email-server-calendar-contacts-data) has a good introduction to Helm. It looks like an interesting solution for keeping your data in your control and even in your own residence where it is protected by the constitution. I don’t see this displacing my current providers, and I wonder how it compares to something like a Synology NAS.
+This article from [The Verge](https://www.theverge.com/circuitbreaker/2018/10/17/17983018/helm-private-email-server-calendar-contacts-data) has a good introduction to Helm. It looks like an interesting solution for keeping your data in your control and even in your own residence where it is protected by the constitution. I don’t see this displacing my current providers, and I wonder how it compares to something like a Synology NAS.
 
 ### [Stop building websites with infinite scroll!](https://logrocket.com/blog/infinite-scroll/)
 
@@ -221,7 +221,7 @@ My nook club read for this month. I’m almost done and the book is thought prov
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -260,7 +260,7 @@ Settlers of Catan!
 
 ### [Saturday @ 4:57 PM](https://www.thingelstad.com/2018/10/20/165400.html)
 
-Kubb, king of lawn games. Still love this painted set I won [at the US National Kubb Championship](http://www.usakubb.org) !
+Kubb, king of lawn games. Still love this painted set I won at the [US National Kubb Championship](http://www.usakubb.org)!
 
 ![](https://www.thingelstad.com/uploads/2018/b2f3d930c4.jpg)
 
@@ -298,7 +298,7 @@ Future jack-o-lanterns! 🎃
 
 ### [Friday @ 10:13 AM](https://www.thingelstad.com/2018/10/19/the-foo-fighters.html)
 
-[The Foo Fighters](https://foofighters.com) put on an amazing show last night at the Xcel Center. The energy and passion from the Foo’s is always amazing. 🤘
+The [Foo Fighters](https://foofighters.com) put on an amazing show last night at the Xcel Center. The energy and passion from the Foo’s is always amazing. 🤘
 
 ![](https://www.thingelstad.com/uploads/2018/4b3d1a19ea.jpg)
 
@@ -315,4 +315,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 No man or woman is worth your tears,
 and the one who is, won't make you cry.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

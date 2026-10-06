@@ -50,10 +50,10 @@ links:
   domain: sixcolors.com
   heading_context: '[iPhone X: Tomorrow''s iPhone today - Six Colors](https://sixcolors.com/post/2017/10/iphone-x-tomorrows-iphone-today/)'
   section: Links 📌
-- text: 'The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - MarketWatch'
+- text: 'The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - Outside the Box - MarketWatch'
   url: https://www.marketwatch.com/story/the-history-of-marketwatch-how-a-sports-data-startup-became-a-half-billion-dollar-financial-news-site-2017-10-30
   domain: www.marketwatch.com
-  heading_context: '[The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - MarketWatch](https://www.marketwatch.com/story/the-history-of-marketwatch-how-a-sports-data-startup-became-a-half-billion-dollar-financial-news-site-2017-10-30)'
+  heading_context: '[The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - Outside the Box - MarketWatch](https://www.marketwatch.com/story/the-history-of-marketwatch-how-a-sports-data-startup-became-a-half-billion-dollar-financial-news-site-2017-10-30)'
   section: Links 📌
 - text: 'GraphQL at massive scale: GraphQL as the glue in a microservice architecture'
   url: https://about.sourcegraph.com/graphql/graphql-at-massive-scale-graphql-as-the-glue-in-a-microservice-architecture/
@@ -165,9 +165,9 @@ links:
   domain: github.com
   heading_context: '[profiling: An interactive continuous Python profiler.](https://github.com/what-studio/profiling)'
   section: Links 📌
-word_count: 2014
+word_count: 2011
 ---
-I hope you all had a great Halloween! 🎃 We had the coldest one in over ten years and not surprisingly for the first time in years we still had candy 🍫 left at the end of the night. Mazie and her friends filled a pillowcase each with treats. Tyler and I went out until we couldn't feel our fingers and toes anymore. One of my favorites in [our neighborhood is the Mixed-Up-Holiday house](http://www.thingelstad.com/2017/10/31/mixed-up-holiday.html) that puts out decorations for several holidays, except Halloween. It’s very funny and in addition to the candy for the kids they have beer-to-go 🍺 for the parents!
+I hope you all had a great Halloween! 🎃 We had the coldest one in over ten years and not surprisingly for the first time in years we still had candy 🍫 left at the end of the night. Mazie and her friends filled a pillowcase each with treats. Tyler and I went out until we couldn't feel our fingers and toes anymore. One of my favorites in our neighborhood is the [Mixed-Up-Holiday house](http://www.thingelstad.com/2017/10/31/mixed-up-holiday.html) that puts out decorations for several holidays, except Halloween. It’s very funny and in addition to the candy for the kids they have beer-to-go 🍺 for the parents!
 
 ## Photog 📷
 
@@ -192,7 +192,7 @@ The origin story of the Internet is all around decentralization. In practice, it
 
 Jason Snell writes about his experience with the iPhone X and the beginning of the next era of the iPhone. > The iPhone X is as close as Apple has come yet to the ultimate form of a smartphone: a glass slab made entirely of touchscreen.
 
-### [The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - MarketWatch](https://www.marketwatch.com/story/the-history-of-marketwatch-how-a-sports-data-startup-became-a-half-billion-dollar-financial-news-site-2017-10-30)
+### [The history of MarketWatch: How a sports data startup became a half-billion-dollar financial news site - Outside the Box - MarketWatch](https://www.marketwatch.com/story/the-history-of-marketwatch-how-a-sports-data-startup-became-a-half-billion-dollar-financial-news-site-2017-10-30)
 
 On the 20th anniversary of the launch of MarketWatch Larry Kramer wrote an article to revisit the origin of the site. Nice walk down memory lane!
 
@@ -210,11 +210,11 @@ I've always thought it was cool to be the house that gave out the full size cand
 
 ### [Slides – Create and share presentations online](https://slides.com/)
 
-This is cool -- a nice usable web interface [along with collaboration powered by reveal.js](https://github.com/hakimel/reveal.js) .
+This is cool -- a nice usable web interface along with collaboration powered by [reveal.js](https://github.com/hakimel/reveal.js).
 
 ### [Perl is the most hated programming language / Boing Boing](https://boingboing.net/2017/10/31/perl-is-the-most-hated-program.html)
 
-Wow, I've sort of intuitively known this but it’s pretty amazing to [see with data. Sorry Larry Wall](https://en.wikipedia.org/wiki/Larry_Wall) !
+Wow, I've sort of intuitively known this but it’s pretty amazing to see with data. Sorry [Larry Wall](https://en.wikipedia.org/wiki/Larry_Wall)!
 
 ### [Frappe Charts](https://frappe.github.io/charts/)
 
@@ -226,11 +226,11 @@ Love this perspective and highlight from my [fellow Minnestar board member Jenna
 
 ### [Vim After 15 Years | Ian Langworth’s Things of Variable Interest](https://statico.github.io/vim3.html)
 
-This shows the amazing power that advanced editors put in the hands of their users. Even if you don't use vim or text editors this is a fun article to skim to get a sense of what technologists do with their tooling. I’m a vim user when I’m on a terminal, but I’m on a tricycle compared to this setup. When I want to do real [work I jump into Sublime Text](http://www.sublimetext.com) .
+This shows the amazing power that advanced editors put in the hands of their users. Even if you don't use vim or text editors this is a fun article to skim to get a sense of what technologists do with their tooling. I’m a vim user when I’m on a terminal, but I’m on a tricycle compared to this setup. When I want to do real work I jump into [Sublime Text](http://www.sublimetext.com).
 
 ### [How leading American newspapers got people to pay for news - Funnel vision](https://www.economist.com/news/business/21730683-first-three-part-series-future-journalism-how-leading-american-newspapers-got)
 
-Whoa, [nice call out in The Economist](https://www.economist.com) [to my friend Jim Bernard](https://www.linkedin.com/in/bernardjim/) and the work his team [has been doing at Star Tribune](http://www.startribune.com) ! 👏 > That gives the Star Tribune’s funnel mathematician a product to sell. Patrick Johnston, a digital executive poached from Target, the retail store, and his boss Jim Bernard, a former executive at Marketwatch, a business-news website, explain how a local newspaper’s funnel vision is different. They are, like the big papers, interested in the visitors who they call “intenders”, people whose browsing behaviour suggests they may be ready to subscribe.
+Whoa, nice call out in [The Economist](https://www.economist.com) to my friend [Jim Bernard](https://www.linkedin.com/in/bernardjim/) and the work his team has been doing at [Star Tribune](http://www.startribune.com)! 👏 > That gives the Star Tribune’s funnel mathematician a product to sell. Patrick Johnston, a digital executive poached from Target, the retail store, and his boss Jim Bernard, a former executive at Marketwatch, a business-news website, explain how a local newspaper’s funnel vision is different. They are, like the big papers, interested in the visitors who they call “intenders”, people whose browsing behaviour suggests they may be ready to subscribe.
 
 ### [Seashells](https://seashells.io/)
 
@@ -238,7 +238,7 @@ Huh, this is sort of whacky and geeky-cool. > Seashells lets you pipe output fro
 
 ### [1Password 7 now Available for iOS —Tools and Toys](http://toolsandtoys.net/1password-7-ios/)
 
-I store all my "secrets" in 1Password – passwords, banking info, software license keys and anything else that is "secret". Our whole [family does via 1Password for Families](https://1password.com/families/) . [I’m happy to see how AgileBits](https://agilebits.com) continues to innovate and improve this product.
+I store all my "secrets" in 1Password – passwords, banking info, software license keys and anything else that is "secret". Our whole family does via [1Password for Families](https://1password.com/families/). I’m happy to see how [AgileBits](https://agilebits.com) continues to innovate and improve this product.
 
 ### [sonar, a linting tool for the web](https://sonarwhal.com/)
 
@@ -266,11 +266,11 @@ I really don't get the idea of rewriting all the native applications we've had f
 
 ### [Apollo Client 2.0 – Apollo GraphQL](https://dev-blog.apollodata.com/apollo-client-2-0-5c8d0affcec7)
 
-[New version of the Apollo Client](https://github.com/apollographql/apollo-client) [to use GraphQL](http://graphql.org) in your Javascript applications.
+New version of the [Apollo Client](https://github.com/apollographql/apollo-client) to use [GraphQL](http://graphql.org) in your Javascript applications.
 
 ### [The New York Times is Now Available as a Tor Onion Service](https://open.nytimes.com/https-open-nytimes-com-the-new-york-times-as-a-tor-onion-service-e0d0b67b7482)
 
-This is great! 👏 Hats off to the New York Times for creating a truly private way to access their [content over to the Tor network](https://www.torproject.org) .
+This is great! 👏 Hats off to the New York Times for creating a truly private way to access their content over to the [Tor network](https://www.torproject.org).
 
 ### [DNS records lookup ~ dnsrecords.io](https://dnsrecords.io/)
 
@@ -300,7 +300,7 @@ https://itunes.apple.com/us/app/carcassonne/id375295479?mt=8&uo=4&at=1001lxyE&ct
 
 Famous boardgame and great iOS experience, with expansions as in-app purchases.
 
-This is a fabulous iOS interpretation of the famous board game. Happily it doesn't fall victim of the desire to add silly effects and stays true to the game. Having the computer do the complicated score keeping for you is a great add as well. Multiplayer support works great too. If you have this game, you can [friend me with this special link](http://carcassonne:///f/19be897d13137244) .
+This is a fabulous iOS interpretation of the famous board game. Happily it doesn't fall victim of the desire to add silly effects and stays true to the game. Having the computer do the complicated score keeping for you is a great add as well. Multiplayer support works great too. If you have this game, you can friend me with this [special link](http://carcassonne:///f/19be897d13137244).
 
 $9.99 4.5/5 stars
 

@@ -104,15 +104,15 @@ links:
   domain: www.deps.co
   heading_context: '[Google Cloud Platform - The Good, Bad, and Ugly (It''s Mostly Good) - Deps](https://www.deps.co/blog/google-cloud-platform-good-bad-ugly/)'
   section: Notable Links 📌
-word_count: 1758
+word_count: 1751
 ---
-I was reminded this week why I should be riding my bike 🚲 to work on a regular basis. I have [this great bike](http://defiantbicycles.com/shop-fulton/defiant-one) , and my commute to work is nearly all on bike trails along lakes and parkways in the city. 🏙 I get some fabulous views and it is a delightful route. SPS Tower 🏢 even has a gym in it where I can change and get ready for the day. But more important than all that, when I ride in I have more energy and am just happier. 😁 It is time to make this happen one day a week, and then maybe two.
+I was reminded this week why I should be riding my bike 🚲 to work on a regular basis. I have this [great bike](http://defiantbicycles.com/shop-fulton/defiant-one), and my commute to work is nearly all on bike trails along lakes and parkways in the city. 🏙 I get some fabulous views and it is a delightful route. SPS Tower 🏢 even has a gym in it where I can change and get ready for the day. But more important than all that, when I ride in I have more energy and am just happier. 😁 It is time to make this happen one day a week, and then maybe two.
 
 ## Featured Links 🏅
 
 ### [devopsdays Minneapolis 2018 Keynote - Amy Patton, SPS Commerce](https://www.youtube.com/watch?v=pMPHqlaocPQ&t=1h5m58s)
 
-[Amy Patton](https://twitter.com/pattonamyj) of SPS Commerce delivered [a fabulous keynote at devopsdays Minneapolis](https://www.devopsdays.org/events/2018-minneapolis/welcome/) on adopting DevOps in the enterprise. Great perspective and recommendations for teams looking to be more effective!
+[Amy Patton](https://twitter.com/pattonamyj) of SPS Commerce delivered a fabulous keynote at [devopsdays Minneapolis](https://www.devopsdays.org/events/2018-minneapolis/welcome/) on adopting DevOps in the enterprise. Great perspective and recommendations for teams looking to be more effective!
 
 ### [The P Rules](http://boz.com/articles/p-rules.html)
 
@@ -140,7 +140,7 @@ I've never seen this kind of metrics model for tracking people coming into your 
 
 Nice to see ACM update it’s Code of Ethics. Amazing that it hadn't been updated in 26 years. Consider how much the world of computing has changed in 26 years.
 
-> After a two-year process that included extensive input from computing professionals around the world, ACM, the Association for Computing Machinery, has updated its [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) . The revised Code of Ethics addresses the significant advances in computing technology and the growing pervasiveness of computing in all aspects of society since it was last updated in 1992.
+> After a two-year process that included extensive input from computing professionals around the world, ACM, the Association for Computing Machinery, has updated its [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct). The revised Code of Ethics addresses the significant advances in computing technology and the growing pervasiveness of computing in all aspects of society since it was last updated in 1992.
 
 I applaud the continuing discussion around ethics in computing. It’s nice to see privacy included in the code.
 
@@ -170,7 +170,7 @@ Comprehensive (and quick) overview of event-driven architecture and key principl
 
 ### [Feedback Equation | Lara Hogan](https://larahogan.me/blog/feedback-equation/)
 
-This [is very similar to Crucial Conversations](https://duckduckgo.com/?q=crucial+conversations&t=osx&ia=products) training, but succinct and easy to digest.
+This is very similar to [Crucial Conversations](https://duckduckgo.com/?q=crucial+conversations&t=osx&ia=products) training, but succinct and easy to digest.
 
 ### [TECHdotMN [VIDEO] MinneDemo 29 Presentations - TECHdotMN](https://tech.mn/news/2018/07/16/video-minnedemo-29-presentations/)
 
@@ -218,7 +218,7 @@ I have come to learn there is a lot more to organizational design than just this
 
 ### [Melatonin: Much More Than You Wanted To Know | Slate Star Codex](http://slatestarcodex.com/2018/07/10/melatonin-much-more-than-you-wanted-to-know/)
 
-I take [melatonin very regularly via REM Caps](https://www.hammernutrition.com/rem-caps/) .
+I take melatonin very regularly via [REM Caps](https://www.hammernutrition.com/rem-caps/).
 
 > Melatonin works on both systems. It has a weak “hypnotic” effect on Process S, making you immediately sleepier when you take it. It also has a stronger “chronobiotic” effect on the circadian rhythm, shifting what time of day your body considers sleep to be a good idea. Effective use of melatonin comes from understanding both these effects and using each where appropriate.
 
@@ -253,17 +253,17 @@ Custom calculators for all sorts of different scenarios. Interesting idea.
 - [Walmart establishes strategic partnership with Microsoft to further accelerate digital innovation in retail](https://news.walmart.com/2018/07/17/walmart-establishes-strategic-partnership-with-microsoft-to-further-accelerate-digital-innovation-in-retail) news.walmart.com
 Walmart inks long-term partnership with Microsoft in the cloud.
 - [[python-committers] Transfer of power](https://www.mail-archive.com/python-committers@python.org/msg05628.html) www.mail-archive.com
-[Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) , creator of Python, is stepping [Benevolent Dictator for Life](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) ! 😲
+Wow, [Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum), creator of Python, is stepping aside as [Benevolent Dictator for Life](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)! 😲
 
 ## Microposts 🎈
 
 ### [Thursday @ 9:17 AM](https://www.thingelstad.com/2018/07/19/backed-stages-card.html)
 
-[Backed Stages Card Game](https://www.kickstarter.com/projects/briteidea/stages-card-game-can-you-win-the-tour-de-france) on Kickstarter, a grand tour bicycle race themed card game! 🚲
+Backed [Stages Card Game](https://www.kickstarter.com/projects/briteidea/stages-card-game-can-you-win-the-tour-de-france) on Kickstarter, a grand tour bicycle race themed card game! 🚲
 
 ### [Tuesday @ 4:29 PM](https://www.thingelstad.com/2018/07/17/happy-world-emoji.html)
 
-[📅 Happy World Emoji Day](https://worldemojiday.com) ! 🙌🎉🎊
+📅 Happy [World Emoji Day](https://worldemojiday.com)! 🙌🎉🎊
 
 ### [Sunday @ 6:01 PM](https://www.thingelstad.com/2018/07/15/just-two-from.html)
 
@@ -273,32 +273,32 @@ Just two numbers from the blackout Grand Prize on the bottom right sheet. Someon
 
 ### [Sunday @ 5:24 PM](https://www.thingelstad.com/2018/07/15/bingo-at-stanleys.html)
 
-[Bingo at Stanley’s](https://www.stanleysbarroom.com) !
+Bingo at [Stanley’s](https://www.stanleysbarroom.com)!
 
 ![](https://cdn.uploads.micro.blog/890/2018/3409787360.jpg)
 
 ### [Sunday @ 1:35 PM](https://www.thingelstad.com/2018/07/15/exploring-the-brand.html)
 
-[Exploring the brand new Bell Museum](https://www.bellmuseum.umn.edu) !
+Exploring the brand new [Bell Museum](https://www.bellmuseum.umn.edu)!
 
 ![](https://cdn.uploads.micro.blog/890/2018/fa70840f94.jpg)
 
 ### [Sunday @ 10:21 AM](https://www.thingelstad.com/2018/07/15/coffee-flight-at.html)
 
-[Coffee flight at Fairgrounds](https://www.fairgrounds.cafe/cafe-minneapolis-north-loop/) : Verve (Santa Cruz), Dark Matter (Chicago), and Stumptown (Portland). All delicious. ☕️
+Coffee flight at [Fairgrounds](https://www.fairgrounds.cafe/cafe-minneapolis-north-loop/): Verve (Santa Cruz), Dark Matter (Chicago), and Stumptown (Portland). All delicious. ☕️
 
 ![](https://cdn.uploads.micro.blog/890/2018/617887d838.jpg)
 
 ### [Sunday @ 10:18 AM](https://www.thingelstad.com/2018/07/15/checking-out-the.html)
 
-Checking out the [new Fairgrounds Craft Coffee & Tea](https://www.fairgrounds.cafe/cafe-minneapolis-north-loop/) in North Loop. ☕️ Very good coffee. Fried egg sandwich is amazing.
+Checking out the new [Fairgrounds Craft Coffee & Tea](https://www.fairgrounds.cafe/cafe-minneapolis-north-loop/) in North Loop. ☕️ Very good coffee. Fried egg sandwich is amazing.
 
 ![](https://cdn.uploads.micro.blog/890/2018/9f3e6541a5.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/80765c88da.jpg)
 
 ### [Sunday @ 8:14 AM](https://www.thingelstad.com/2018/07/15/we-are-having.html)
 
-We are having a lot of fun with our Turing Tumble, and the maker extensions [of printing your own custom parts](https://community.turingtumble.com/t/first-custom-part-reflector/305) are very cool! 👏
+We are having a lot of fun with our Turing Tumble, and the maker extensions of [printing your own custom parts](https://community.turingtumble.com/t/first-custom-part-reflector/305) are very cool! 👏
 
 ### [Sunday @ 6:57 AM](https://www.thingelstad.com/2018/07/15/of-the-total.html)
 
@@ -306,7 +306,7 @@ We are having a lot of fun with our Turing Tumble, and the maker extensions [of 
 
 ### [Saturday @ 9:45 PM](https://www.thingelstad.com/2018/07/14/im-looking-forward.html)
 
-I’m looking [forward to attaching a Siri Shortcut](https://www.macstories.net/stories/shortcuts-a-new-vision-for-siri-and-ios-automation/) of “Hey Siri, Loons Win!” to this Workflow in iOS 12. 😊⚽️📱
+I’m looking forward to attaching a [Siri Shortcut](https://www.macstories.net/stories/shortcuts-a-new-vision-for-siri-and-ios-automation/) of “Hey Siri, Loons Win!” to this Workflow in iOS 12. 😊⚽️📱
 
 ![](https://cdn.uploads.micro.blog/890/2018/d9b69a1c9c.jpg)
 
@@ -346,4 +346,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Grow angry slowly; there's plenty of time.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

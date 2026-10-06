@@ -87,7 +87,7 @@ links:
   domain: auth0.com
   heading_context: '[Auth0 Architecture: Running In Multiple Cloud Providers And Regions](https://auth0.com/blog/auth0-architecture-running-in-multiple-cloud-providers-and-regions/)'
   section: Notable Links 📌
-word_count: 1445
+word_count: 1440
 ---
 I'm ready to put this year's Fall allergy season into the Guinness Book of World Records. 🏆 Even with loratadine and pseudoephedrine I've been struggling with watery eyes, congestion and itching. I've been having to tell people that while they are very important to me, in fact, I am not crying upon seeing them. 😂
 
@@ -111,7 +111,7 @@ This article captures part of the intrigue I have about Tesla, and what got me t
 
 ![Fairy House at Minnesota Renaissance Festival.](https://files.thingelstad.com/weekly-thing/70/cover.jpg)
 
-[Fairy House at Minnesota Renaissance Festival](http://www.renaissancefest.com) . The door is about 3 feet tall.
+Fairy House at [Minnesota Renaissance Festival](http://www.renaissancefest.com). The door is about 3 feet tall.
 
 Fairy House at Minnesota Renaissance Festival.
 Sep 3, 2018 at 1:00 PM
@@ -167,7 +167,7 @@ They increased availability, performance and reduced cost by consolidating on on
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Highlighted iOS App 📱
 
@@ -185,7 +185,7 @@ I found this app via another newsletter and think it's just great! I've had a ne
 
 - [Serverless Microservice Patterns for AWS - Jeremy Daly](https://www.jeremydaly.com/serverless-microservice-patterns-for-aws/)
 19 patterns used by teams to build production microservices.
-- Why does everyone hate Read Receipts? [We did some research to find out.](https://medium.com/@jameslynden/why-does-everyone-hate-read-receipts-we-did-some-research-to-find-out-11f224cd7974)
+- [Why does everyone hate Read Receipts? We did some research to find out.](https://medium.com/@jameslynden/why-does-everyone-hate-read-receipts-we-did-some-research-to-find-out-11f224cd7974)
 So I’m in the majority on my dislike of this feature. 🤨
 - [Reboot Your Dreamliner Every 248 Days To Avoid Integer Overflow](https://www.i-programmer.info/news/149-security/8548-reboot-your-dreamliner-every-248-days-to-avoid-integer-overflow.html) www.i-programmer.info
 🤦‍♂️✈️
@@ -208,7 +208,7 @@ Just got invitation to OmniFocus 3 for Mac beta. Impressive and big redesign. I 
 
 https://www.thingelstad.com/uploads/2018/6ee7517ab7.jpg https://www.thingelstad.com/uploads/2018/e481c4fee5.jpg https://www.thingelstad.com/uploads/2018/0a73645af3.jpg https://www.thingelstad.com/uploads/2018/878b5f78d0.jpg
 
-We had a great [time at the Minnesota Renaissance Festival](http://www.renaissancefest.com) today!
+We had a great time at the [Minnesota Renaissance Festival](http://www.renaissancefest.com) today!
 
 ![](https://cdn.uploads.micro.blog/890/2018/6ee7517ab7.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/e481c4fee5.jpg)
@@ -217,13 +217,13 @@ We had a great [time at the Minnesota Renaissance Festival](http://www.renaissan
 
 ### [Sunday @ 3:58 PM](https://www.thingelstad.com/2018/09/02/gone-bananas-at.html)
 
-[“Gone Bananas” at MN Nice Cream](https://www.mnnicecream.com) . 🍦
+“Gone Bananas” at [MN Nice Cream](https://www.mnnicecream.com). 🍦
 
 ![](https://www.thingelstad.com/uploads/2018/b0dc78df05.jpg)
 
 ### [Sunday @ 11:59 AM](https://www.thingelstad.com/2018/09/02/rainy-morning-of.html)
 
-[Rainy morning of Snap Circuits](https://www.elenco.com/brand/snap-circuits/) (#562 [Solar Space War) and Turing Tumble](https://www.turingtumble.com) (#18 Entanglement).
+Rainy morning of [Snap Circuits](https://www.elenco.com/brand/snap-circuits/) (#562 Solar Space War) and [Turing Tumble](https://www.turingtumble.com) (#18 Entanglement).
 
 ![](https://www.thingelstad.com/uploads/2018/02158b6b98.jpg)
 
@@ -231,7 +231,7 @@ We had a great [time at the Minnesota Renaissance Festival](http://www.renaissan
 
 ### [Friday @ 8:58 PM](https://www.thingelstad.com/2018/08/31/only-two-episodes.html)
 
-Only two episodes in, [and I’m already very into Succession](https://www.hbo.com/succession) .
+Only two episodes in, and I’m already very into [Succession](https://www.hbo.com/succession).
 
 ![](https://www.thingelstad.com/uploads/2018/714511fa1a.jpg)
 
@@ -247,4 +247,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 It's not over till it's over.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

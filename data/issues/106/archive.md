@@ -81,7 +81,7 @@ links:
   domain: nest.com
   heading_context: '[What’s happening at Nest? | Nest](https://nest.com/whats-happening/)'
   section: Notable Links 📌
-word_count: 2016
+word_count: 1992
 ---
 This last week was a crazy, busy week for me. The kind of week that required everything planned out and to go on autopilot from meeting to meeting and event to event. 📅 I’m pretty happy to be on the other side of it watching the Twins play baseball ⚾️ and putting together this weeks Thing!
 
@@ -137,11 +137,11 @@ These concepts that Amazon has built into the AWS engineering organization are r
 
 ### [Bunch, a batch app launcher for your Dock - BrettTerpstra.com](https://brettterpstra.com/2019/05/14/bunch-a-batch-app-launcher-for-your-dock/)
 
-For years I've used a script in AppleScript (https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html) called "Launch Apps.scpt" and when I get to work I run it to start the dozen or so applications that I run all day, every day. Bunch is an app version of that, and has some fun additional features. A fun project that Brett Terpstra (https://brettterpstra.com) has added to his list (https://brettterpstra.com/projects/) .
+For years I've used a script in [AppleScript](https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html) called "Launch Apps.scpt" and when I get to work I run it to start the dozen or so applications that I run all day, every day. Bunch is an app version of that, and has some fun additional features. A fun project that [Brett Terpstra](https://brettterpstra.com) has added to [his list](https://brettterpstra.com/projects/).
 
 ### [Millions of people uploaded photos to the Ever app. Then the company used them to develop facial recognition tools.](https://www.nbcnews.com/tech/security/millions-people-uploaded-photos-ever-app-then-company-used-them-n1003371)
 
-We need a name for services like this that provide some utility to a user, almost always for free, and then use the data provided to run a completely unrelated, often surveillance focused business on the other side. How about Doppelgänger (https://en.wikipedia.org/wiki/Doppelgänger) business?
+We need a name for services like this that provide some utility to a user, almost always for free, and then use the data provided to run a completely unrelated, often surveillance focused business on the other side. How about [Doppelgänger](https://en.wikipedia.org/wiki/Doppelgänger) business?
 
 > What isn’t obvious on Ever’s website or app — except for a brief reference that was added to the privacy policy after NBC News reached out to the company in April — is that the photos people share are used to train the company’s facial recognition system, and that Ever then offers to sell that technology to private companies, law enforcement and the military.
 
@@ -171,11 +171,11 @@ This is a shocking statistic.
 
 54% to 5% with no difference in the data itself? 😳
 
-The article highlights what I think is one of the keys to improving technology teams, creating an inclusive culture and environment. Yes, you need to do the structural things, but nurturing an inclusive culture is critical to sustained improvement, on a number of different areas. Thanks to Mike Carey (https://www.linkedin.com/in/mikecarey929/) for the link! 👍
+The article highlights what I think is one of the keys to improving technology teams, creating an inclusive culture and environment. Yes, you need to do the structural things, but nurturing an inclusive culture is critical to sustained improvement, on a number of different areas. Thanks to [Mike Carey](https://www.linkedin.com/in/mikecarey929/) for the link! 👍
 
 ### [The Time of Day Has a Significant Effect on Your Productivity](https://medium.com/@alltopstartups/the-time-of-day-has-a-significant-effect-on-your-productivity-c45b199410d5)
 
-I've been wanting to read When: The Scientific Secrets of Perfect Timing (https://www.danpink.com/books/when/) by Daniel Pink for a while and this article makes me want to read it more. It feels like there is something here. I see it in business, when people schedule meetings dependent only on availability. There are times that just don't work for certain conversations.
+I've been wanting to read [When: The Scientific Secrets of Perfect Timing](https://www.danpink.com/books/when/) by Daniel Pink for a while and this article makes me want to read it more. It feels like there is something here. I see it in business, when people schedule meetings dependent only on availability. There are times that just don't work for certain conversations.
 
 ### [What’s happening at Nest? | Nest](https://nest.com/whats-happening/)
 
@@ -189,32 +189,32 @@ So from a data perspective this lowers the barriers to Google using the data fro
 
 https://minnestar.org
 
-Minnestar (https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest BarCamp (https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. Become a Community Supporter today! (https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
-* Denver votes to decriminalise magic mushrooms by razor-thin margin - BBC News (https://www.bbc.com/news/world-us-canada-48185366) www.bbc.com
-I bet this vote doesn't go this way without Michael Pollan's recent book How to Change Your Mind (https://michaelpollan.com/books/how-to-change-your-mind/) . It’s a good and enlightening read.
-* Amazon S3 Path Deprecation Plan – The Rest of the Story | AWS News Blog (https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/) aws.amazon.com
+* [Denver votes to decriminalise magic mushrooms by razor-thin margin - BBC News](https://www.bbc.com/news/world-us-canada-48185366) www.bbc.com
+I bet this vote doesn't go this way without Michael Pollan's recent book [How to Change Your Mind](https://michaelpollan.com/books/how-to-change-your-mind/). It’s a good and enlightening read.
+* [Amazon S3 Path Deprecation Plan – The Rest of the Story | AWS News Blog](https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/) aws.amazon.com
 Changing how S3 handles paths is a huge migration effort for a large part of the internet.
-* Why Go? – Key advantages you may have overlooked · YourBasic Go (https://yourbasic.org/golang/advantages-over-java-python/) yourbasic.org
+* [Why Go? – Key advantages you may have overlooked · YourBasic Go](https://yourbasic.org/golang/advantages-over-java-python/) yourbasic.org
 Arguments for Go with comparisons to Java and Python. 🤓
 
 ## Microposts 🎈
 
-Wednesday @ 9:46 PM (https://www.thingelstad.com/2019/05/15/we-had-a.html)
+[Wednesday @ 9:46 PM](https://www.thingelstad.com/2019/05/15/we-had-a.html)
 
-We had a fabulous #TeamSPS Tech Leader outing tonight making a delicious meal at Kitchen Window (https://kitchenwindow.com) ! 🍽 We were joined by some awesome guests too! Such a great team, and a super fun evening! 🌮🍔🍺 Teams the cook together, win together!
+We had a fabulous #TeamSPS Tech Leader outing tonight making a delicious meal at [Kitchen Window](https://kitchenwindow.com)! 🍽 We were joined by some awesome guests too! Such a great team, and a super fun evening! 🌮🍔🍺 Teams the cook together, win together!
 
-Sunday @ 8:01 PM (https://www.thingelstad.com/2019/05/12/my-sister-and.html)
+[Sunday @ 8:01 PM](https://www.thingelstad.com/2019/05/12/my-sister-and.html)
 
 My sister and I had a great dinner with our Mom — Happy Mother’s Day! She has taught me so much, and continues to. Thank you Mom for everything, including the stuff I don’t even know about! 💚 @ChrestRosalin
 
-Saturday @ 10:14 PM (https://www.thingelstad.com/2019/05/11/new-pr-for.html)
+[Saturday @ 10:14 PM](https://www.thingelstad.com/2019/05/11/new-pr-for.html)
 
-New PR for 45 min spin (https://members.onepeloton.com/profile/workouts/870752e112644043bad6706d46f28c73) today! 14% in Zone 5 HR! 🙌🏻 #peloton
+[New PR for 45 min spin](https://members.onepeloton.com/profile/workouts/870752e112644043bad6706d46f28c73) today! 14% in Zone 5 HR! 🙌🏻 #peloton
 
-Friday @ 3:09 PM (https://www.thingelstad.com/2019/05/10/time-for-demos.html)
+[Friday @ 3:09 PM](https://www.thingelstad.com/2019/05/10/time-for-demos.html)
 
 Time for demos at the end of the #TeamSPS Tech Jam 2019 Hackathon! 13 teams built creative, fast, and new projects to share! 🙌🤩🚀 #SPSTechJam
 
@@ -224,4 +224,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Excellent day for putting Slinkies on an escalator.
 
-Thank you for subscribing to the Weekly Thing (https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

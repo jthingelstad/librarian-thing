@@ -93,7 +93,7 @@ links:
   domain: blog.usejournal.com
   heading_context: '[Writing Docs at Amazon – Noteworthy - The Journal Blog](https://blog.usejournal.com/writing-docs-at-amazon-e025808616bd)'
   section: Notable Links 📌
-word_count: 1965
+word_count: 1960
 ---
 I’m wrapping up four weeks of travel and I’m pretty excited to get home and rest up a bit. All of it has been great, both business as well as our vacation sliced into the middle, but you never truly relax on the road and I’m definitely feeling it. I’m unusually excited to have a weekend to kick back a bit, and get some solid sleep in my own bed. I think I’ll get a haircut too. I’m also happy to say that I’m actually missing my Peloton spin bike. I’m looking forward to getting a couple of classes in this weekend.
 
@@ -195,7 +195,7 @@ This is a neat project and one I’ve thought about before. Airtable is a very c
 
 ### [I Let a Stranger Watch Me Work for a Day — And I’ve Never Been More Productive - MEL Magazine](https://melmagazine.com/en-us/story/focusmate-review-productivity-work-hack)
 
-[I had never heard of FocusMate](https://www.focusmate.com/) before but it’s an intriguing service. I could particularly see people that work remote full-time using it. There has to be some interesting psychology going on here.
+I had never heard of [FocusMate](https://www.focusmate.com/) before but it’s an intriguing service. I could particularly see people that work remote full-time using it. There has to be some interesting psychology going on here.
 
 ### [Writing Docs at Amazon – Noteworthy - The Journal Blog](https://blog.usejournal.com/writing-docs-at-amazon-e025808616bd)
 
@@ -205,7 +205,7 @@ While written as a guide for doing this at Amazon, it all applies to doing the s
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -244,7 +244,7 @@ Our anthem for our time in San Antonio, TX has been "[In San Antonio, They Got T
 
 ### [Saturday @ 8:50 PM](https://www.thingelstad.com/2019/04/06/taking-in-some.html)
 
-Taking in some [Texas Soccer watching San Antonio FC](https://www.sanantoniofc.com) v Las Vegas Lights. San Antonio leading 1-0! ⚽️
+Taking in some Texas Soccer watching [San Antonio FC](https://www.sanantoniofc.com) v Las Vegas Lights. San Antonio leading 1-0! ⚽️
 
 ![](https://cdn.uploads.micro.blog/890/2019/4f81de9b3b.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/9f2cf15bd0.jpg)
@@ -259,13 +259,13 @@ The Orca’s at SeaWorld are amazing!
 
 ### [Saturday @ 8:43 PM](https://www.thingelstad.com/2019/04/06/todays-vacation-ice.html)
 
-Today's Vacation Ice Cream stop was [Steel City Pops](https://steelcitypops.com) . Made to order ice cream bars!
+Today's Vacation Ice Cream stop was [Steel City Pops](https://steelcitypops.com). Made to order ice cream bars!
 
 ![](https://cdn.uploads.micro.blog/890/2019/ff28b0bce1.jpg)
 
 ### [Saturday @ 8:41 PM](https://www.thingelstad.com/2019/04/06/we-had-an.html)
 
-We had an amazing afternoon in San Antonio at the [Pearl Farmers Market](http://atpearl.com/farmers-market). Also checked out [Hotel Emma](https://www.thehotelemma.com) , which is immensely cool.
+We had an amazing afternoon in San Antonio at the [Pearl Farmers Market](http://atpearl.com/farmers-market). Also checked out [Hotel Emma](https://www.thehotelemma.com), which is immensely cool.
 
 ![](https://cdn.uploads.micro.blog/890/2019/a03d5e3ba2.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/585aed8caa.jpg)
@@ -274,13 +274,13 @@ We had an amazing afternoon in San Antonio at the [Pearl Farmers Market](http://
 
 ### [Saturday @ 12:19 PM](https://www.thingelstad.com/2019/04/06/the-san-fernando.html)
 
-The San Fernando Cathedral Light Show was really cool last night! There is [a full video you can watch](https://www.youtube.com/watch?v=JdazinSmRKo) online.
+The San Fernando Cathedral Light Show was really cool last night! There is a [full video you can watch](https://www.youtube.com/watch?v=JdazinSmRKo) online.
 
 ![](https://cdn.uploads.micro.blog/890/2019/c15bfe3da0.jpg)
 
 ### [Saturday @ 12:11 PM](https://www.thingelstad.com/2019/04/06/we-saw-a.html)
 
-We saw a very cool magic show and got a magic lesson from [Scott Pepper and the Magicians Agency](https://scottpepper.com) ! ♠️♥️♣️♦️
+We saw a very cool magic show and got a magic lesson from [Scott Pepper and the Magicians Agency](https://scottpepper.com)! ♠️♥️♣️♦️
 
 ![](https://cdn.uploads.micro.blog/890/2019/815be007d2.jpg)
 
@@ -299,4 +299,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You should go home.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

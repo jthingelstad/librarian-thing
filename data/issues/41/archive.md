@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/41/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-17-2018/
 domains: []
 links: []
-word_count: 1531
+word_count: 1538
 ---
 This past week has been a blur with my brother and his family visiting 👪, my son's birthday 🎂, Valentine's day 💖 and our annual company party 🎉! I’m looking forward to catching up on some things this weekend, including my to do list and some sleep. 💤
 
@@ -76,7 +76,7 @@ Also a really cool idea behind it.
 
 ### [Bringing the power of AMP to Gmail](https://www.blog.google/products/g-suite/bringing-power-amp-gmail/)
 
-Ugh. 🤦‍♂️ [AMP](https://www.ampproject.org) was a bad idea to start with and extending it into email, effectively putting a little website into an email, is a terrible idea for privacy or even just our sanity as advertisers will use this to put all sorts of digital [Jack In The Box](https://en.wikipedia.org/wiki/Jack-in-the-box) traps in our email!
+Ugh. 🤦‍♂️ This is a horrible idea. [AMP](https://www.ampproject.org) was a bad idea to start with and extending it into email, effectively putting a little website into an email, is a terrible idea for privacy or even just our sanity as advertisers will use this to put all sorts of digital [Jack In The Box](https://en.wikipedia.org/wiki/Jack-in-the-box) traps in our email!
 
 ### [Solid](https://solid.mit.edu/)
 
@@ -84,7 +84,7 @@ It’s not very clear what this is attempting to do, but I like the blurb.
 
 > Solid (derived from "social linked data") is a proposed set of conventions and tools for building decentralized social applications based on Linked Data principles. Solid is modular and extensible and it relies as much as possible on existing W3C standards and protocols.
 
-[Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee) is involved.
+Notable that [Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee) is involved.
 
 ### [Last blog standing, “last guy dancing”: How Jason Kottke is thinking about kottke.org at 20 » Nieman Journalism Lab](http://www.niemanlab.org/2018/02/last-blog-standing-last-guy-dancing-how-jason-kottke-is-thinking-about-kottke-org-at-20/)
 
@@ -98,7 +98,7 @@ The web has 50 million more secure HTTPS endpoints now in part thanks to Let's E
 
 ### [New Apps for 2018 – MacStories](https://www.macstories.net/stories/new-apps-for-2018/)
 
-I always am curious to hear what apps Viticci is using and I love that he's highlighting some apps to improve himself, reminds me of my article [on apps that make you better](https://www.thingelstad.com/2017/what-apps-make-you-better/). I use [Headspace](https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) and [Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) as well, and should look at Workouts++.
+I always am curious to hear what apps Viticci is using and I love that he's highlighting some apps to improve himself, reminds me of my article on [apps that make you better](https://www.thingelstad.com/2017/what-apps-make-you-better/). I use [Headspace](https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) and [Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com) as well, and should look at Workouts++.
 
 ## Business
 
@@ -146,7 +146,7 @@ For me, this is where my trusted GTD system can help. I've also tried to use a n
 
 https://letsencrypt.org
 
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
+[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ---
 
@@ -164,14 +164,14 @@ Free 4.5/5 stars
 
 ---
 
-- Now I sort of want one of [these Loog Pro Electric guitars. 😊](https://www.thingelstad.com/2018/02/12/now-i-sort.html)
-- We got Tyler a Loog Pro Electric Red guitar and little Fender Mini Amp [for birthday. 🎸🎂 Huge hit! 😊👍🏻](https://www.thingelstad.com/2018/02/12/we-got-tyler.html)
+- [Now I sort of want one of these Loog Pro Electric guitars. 😊](https://www.thingelstad.com/2018/02/12/now-i-sort.html)
+- [We got Tyler a Loog Pro Electric Red guitar and little Fender Mini Amp for birthday. 🎸🎂 Huge hit! 😊👍🏻](https://www.thingelstad.com/2018/02/12/we-got-tyler.html)
 - [Espresso. 🤤☕️](https://www.thingelstad.com/2018/02/11/espresso.html)
-- Looks like Adobe has put Lightroom out of it’s misery. I’m going to have to [rethink my entire photo collection. Ugh.](https://www.thingelstad.com/2018/02/11/looks-like-adobe.html)
-- 🎬 The Greatest Showman was a fabulous movie! Really enjoyed the story and [the music. Very well done. ★★★★☆](https://www.thingelstad.com/2018/02/11/the-greatest-showmanhttpwwwimdbcomtitlett.html)
-- Saw preview for Isle [of Dogs — looks fabulous! 🎬](https://www.thingelstad.com/2018/02/11/saw-preview-for.html)
-- Tammy makes a Family Yearbook each year and I [made the cover this year! 😊](https://www.thingelstad.com/2018/02/10/tammy-makes-a.html)
-- Hosted Tyler’s bowling birthday party! 🎂 🎳 kids had a great time. 🎉 [Could use a nap now. 💤](https://www.thingelstad.com/2018/02/10/hosted-tylers-bowling.html)
+- [Looks like Adobe has put Lightroom out of it’s misery. I’m going to have to rethink my entire photo collection. Ugh.](https://www.thingelstad.com/2018/02/11/looks-like-adobe.html)
+- [🎬 The Greatest Showman was a fabulous movie! Really enjoyed the story and the music. Very well done. ★★★★☆](https://www.thingelstad.com/2018/02/11/the-greatest-showmanhttpwwwimdbcomtitlett.html)
+- [Saw preview for Isle of Dogs — looks fabulous! 🎬](https://www.thingelstad.com/2018/02/11/saw-preview-for.html)
+- [Tammy makes a Family Yearbook each year and I made the cover this year! 😊](https://www.thingelstad.com/2018/02/10/tammy-makes-a.html)
+- [Hosted Tyler’s bowling birthday party! 🎂 🎳 kids had a great time. 🎉 Could use a nap now. 💤](https://www.thingelstad.com/2018/02/10/hosted-tylers-bowling.html)
 
 ## The end 🎬
 

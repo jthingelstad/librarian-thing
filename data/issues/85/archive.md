@@ -27,7 +27,7 @@ links:
   domain: journals.plos.org
   heading_context: '[How much is social media worth? Estimating the value of Facebook by paying users to stop using it](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0207101)'
   section: Notable Links 📌
-word_count: 1471
+word_count: 1469
 ---
 It's just a couple more days until Christmas and 2018 is now winding down. The Christmas Cards have been sent, the presents are ready, and we will be enjoying time with family and friends as we celebrate the holidays, enjoy our traditions, open presents and spend time together. That last one is particularly important. 🎁👨‍👩‍👧‍👦
 
@@ -39,7 +39,7 @@ An absolutely delightful article for Christmas on NORAD and Santa Claus… 🎄
 
 > This year, 1,500 volunteers at Peterson Air Force Base in Colorado Springs will, once again, answer over 150,000 telephone calls and thousands of emails from children all over the world. And the NORAD Santa Tracker itself will receive over 20 million visits.
 
-[🎅 Via Chad Burdette](https://www.linkedin.com/in/strategyanddatawins/) .
+🎅 Via [Chad Burdette](https://www.linkedin.com/in/strategyanddatawins/).
 
 ### [Ant Colonies Retain Memories That Outlast the Lifespans of Individuals | Science | Smithsonian](https://www.smithsonianmag.com/science-nature/ant-colonies-retain-memories-outlast-lifespans-individuals-180971022/)
 
@@ -47,7 +47,7 @@ Insect colonies do some pretty incredible things:
 
 > The Finnish myrmecologist Rainer Rosengren showed that when the ants emerge in the spring, an older ant goes out with a young one along the older ant’s habitual trail. The older ant dies and the younger ant adopts that trail as its own, thus leading the colony to remember, or reproduce, the previous year’s trails.
 
-[My book club](https://rwbook.club/) [read Ant Encounters](https://www.goodreads.com/book/show/8895494-ant-encounters) several years ago and it had several incredibly interesting insights into how ant colonies work and learn.
+My [book club](https://rwbook.club/) read [Ant Encounters](https://www.goodreads.com/book/show/8895494-ant-encounters) several years ago and it had several incredibly interesting insights into how ant colonies work and learn.
 
 ## My Weekly Photo 📷
 
@@ -105,7 +105,7 @@ I've been impressed with Darkroom on iOS since I first used it. I had two issues
 
 ### [ongoing by Tim Bray · SF-4: Serverless Latency?](https://www.tbray.org/ongoing/When/201x/2018/12/14/SF-4)
 
-Tim Bray's [entire set of essays on Serverless](https://www.tbray.org/ongoing/When/201x/2018/12/09/Serverlessness) are fabulous. He's incredible knowledgable in this domain. This one on latency I thought was particularly informative to help the reader think about the problem in a more precise way.
+Tim Bray's entire [set of essays on Serverless](https://www.tbray.org/ongoing/When/201x/2018/12/09/Serverlessness) are fabulous. He's incredible knowledgable in this domain. This one on latency I thought was particularly informative to help the reader think about the problem in a more precise way.
 
 ### [Amazon’s Disturbing Plan to Add Face Surveillance to Your Front Door | American Civil Liberties Union](https://www.aclu.org/blog/privacy-technology/surveillance-technologies/amazons-disturbing-plan-add-face-surveillance-yo-0)
 
@@ -123,7 +123,7 @@ Featured in Dec/Jan 2019 Make magazine. Incredible pieces of art.
 
 https://creativecommons.org
 
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
+[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -148,13 +148,13 @@ Tesla 2018.48.12.1 update applied! 👍
 
 ### [Wednesday @ 9:27 PM](https://www.thingelstad.com/2018/12/19/great-teamsps-dinner.html)
 
-[Great #TeamSPS dinner tonight at Salut](https://salutbaramericain.com) St. Paul – what an awesome group! Good food, company and best of all great laughs! 🤣🙌
+Great #TeamSPS dinner tonight at [Salut](https://salutbaramericain.com) St. Paul – what an awesome group! Good food, company and best of all great laughs! 🤣🙌
 
 ![](https://cdn.uploads.micro.blog/890/2018/ae76951531.jpg)
 
 ### [Wednesday @ 9:24 PM](https://www.thingelstad.com/2018/12/19/had-a-great.html)
 
-Had a great time [competing in the Spies v Spies](https://www.trappedpuzzlerooms.com/spies-vs-spies) rooms at Trapped Puzzle rooms with #TeamSPS tech leaders! Orange team FTW! 👍🙌
+Had a great time competing in the [Spies v Spies](https://www.trappedpuzzlerooms.com/spies-vs-spies) rooms at Trapped Puzzle rooms with #TeamSPS tech leaders! Orange team FTW! 👍🙌
 
 ![](https://cdn.uploads.micro.blog/890/2018/df9b5a35ff.jpg)
 
@@ -166,11 +166,11 @@ Stop & go traffic is by far my favorite use case for Tesla Auto Pilot. Way less 
 
 ### [Sunday @ 9:43 PM](https://www.thingelstad.com/2018/12/16/my-daughter-taught.html)
 
-My daughter taught me a new typography fact tonight! Uppercase letters are called that because they were kept in an “upper case”, above the “lower case”, that had the lowercase letters in [it! 🤩 Wikipedia backs it up](https://en.wikipedia.org/wiki/Letter_case#Terminology) – Fun!
+My daughter taught me a new typography fact tonight! Uppercase letters are called that because they were kept in an “upper case”, above the “lower case”, that had the lowercase letters in it! 🤩 [Wikipedia backs it up](https://en.wikipedia.org/wiki/Letter_case#Terminology) – Fun!
 
 ### [Sunday @ 1:24 PM](https://www.thingelstad.com/2018/12/16/early-christmas-today.html)
 
-[Early Christmas today – Weekly Thing](https://weekly.thingelstad.com) pen! 👍🏻
+Early Christmas today – [Weekly Thing](https://weekly.thingelstad.com) pen! 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/c22c5850cf.jpg)
 
@@ -186,4 +186,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 A day for firm decisions!!!!! Or is it?
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

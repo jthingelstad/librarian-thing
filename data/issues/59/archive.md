@@ -105,7 +105,7 @@ links:
   domain: www.sonyaellenmann.com
   heading_context: '[Survivorship Bias and Startup Hype](https://www.sonyaellenmann.com/2018/06/survivorship-bias-and-startup-hype.html)'
   section: Notable Links 📌
-word_count: 1555
+word_count: 1553
 ---
 #59 • Jun 23, 2018
 
@@ -145,7 +145,7 @@ We need both.
 
 ### [How corporations have helped Minnesota's startup community grow | VentureBeat](https://venturebeat.com/2018/06/16/how-corporations-have-helped-minnesotas-startup-community-grow/)
 
-[Nice article from Chip Pearson](https://www.linkedin.com/in/chippearson/) describing how established companies in Minnesota have played a key role in the startup ecosystem. This feels a bit unique to our region.
+Nice article from [Chip Pearson](https://www.linkedin.com/in/chippearson/) describing how established companies in Minnesota have played a key role in the startup ecosystem. This feels a bit unique to our region.
 
 ### [WhenWorks Ends the Scheduling Back-and-Forth – MacStories](https://www.macstories.net/reviews/whenworks-ends-the-scheduling-back-and-forth/)
 
@@ -153,7 +153,7 @@ Good overview of new service, [WhenWorks](https://when.works). In the past I've 
 
 ### [Introducing YNAB’s API | YNAB](https://www.youneedabudget.com/introducing-ynabs-api/)
 
-Cool news from You Need a Budget!, [YNAB API](https://api.youneedabudget.com). We have been using [YNAB](https://www.youneedabudget.com) for a few years now and it works great for our family. Their transition a couple of years ago to a service-offering is allowing them to grow into new stuff like this API. I’m hopeful that this soon appears in [Zapier](https://zapier.com) and [IFTTT](https://ifttt.com) so I can build with it even more easily.
+Cool news from You Need a Budget!, they have a new [YNAB API](https://api.youneedabudget.com). We have been using [YNAB](https://www.youneedabudget.com) for a few years now and it works great for our family. Their transition a couple of years ago to a service-offering is allowing them to grow into new stuff like this API. I’m hopeful that this soon appears in [Zapier](https://zapier.com) and [IFTTT](https://ifttt.com) so I can build with it even more easily.
 
 ### [Shortage of skilled workers challenges Twin Cities tech firms - StarTribune.com](http://www.startribune.com/shortage-of-skilled-workers-challenges-twin-cities-tech-firms/485705742/)
 
@@ -161,7 +161,7 @@ Snapshot of the exceedingly difficult talent environment for companies in the Tw
 
 > The Twin Cities added 3,300 technology jobs last year, up 1.6 percent to 199,200. The area is one of the nation’s 15 largest tech-employment hubs, according to the Computing Technology Industry Association (CompTIA). These jobs typically pay seasoned workers $75,000 to $100,000 or more a year.
 
-[Nice photo of Mynul Khan](https://www.linkedin.com/in/mynulkhan/) , CEO of Field Nation.
+Nice photo of [Mynul Khan](https://www.linkedin.com/in/mynulkhan/), CEO of Field Nation.
 
 ### [My Data Request: Request your personal data from 100+ companies.](https://mydatarequest.com/)
 
@@ -169,7 +169,7 @@ Aggregates the methods for requesting your personal data from different companie
 
 ### [Microsoft and Flipgrid unite to bring social learning to students around the world - The Official Microsoft Blog](https://blogs.microsoft.com/blog/2018/06/18/microsoft-and-flipgrid-unite-to-bring-social-learning-to-students-around-the-world/)
 
-Congrats to the Flipgrid team, a Minneapolis-based startup, on a successful exit and sale to Microsoft! They [presented at Minnedemo in Sept 2014](https://minnestar.org/minnedemo/past-demos/?date=2014-09-11) . 👏
+Congrats to the Flipgrid team, a Minneapolis-based startup, on a successful exit and sale to Microsoft! They presented at [Minnedemo in Sept 2014](https://minnestar.org/minnedemo/past-demos/?date=2014-09-11). 👏
 
 ### [The Death of Supply Chain Management](https://hbr.org/2018/06/the-death-of-supply-chain-management)
 
@@ -235,13 +235,13 @@ One command to generate REST APIs for any MySql Database.
 
 ### [Sunday @ 9:32 PM](https://www.thingelstad.com/2018/06/17/mazie-got-nintendo.html)
 
-[Mazie got Nintendo Labo](https://labo.nintendo.com/) for the Switch, and has been busy building her piano kit for hours and is having a blast. Labo is such a unique game experience. 👍🏻
+Mazie got [Nintendo Labo](https://labo.nintendo.com/) for the Switch, and has been busy building her piano kit for hours and is having a blast. Labo is such a unique game experience. 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/15f518f43d.jpg)
 
 ### [Sunday @ 8:58 PM](https://www.thingelstad.com/2018/06/17/the-kids-got.html)
 
-The kids got me The Legend [of Zelda: Breath of the Wild](https://www.nintendo.com/games/detail/the-legend-of-zelda-breath-of-the-wild-switch) for Father’s day, so we are exploring tonight. 🤗
+The kids got me [The Legend of Zelda: Breath of the Wild](https://www.nintendo.com/games/detail/the-legend-of-zelda-breath-of-the-wild-switch) for Father’s day, so we are exploring tonight. 🤗
 
 ![](https://cdn.uploads.micro.blog/890/2018/9ad7010a8d.jpg)
 
@@ -283,13 +283,13 @@ Happy Fathers Day to all the Dad’s out there! I’m a lucky guy! 🙏🏻❤�
 
 ### [Saturday @ 10:27 PM](https://www.thingelstad.com/2018/06/16/lightning-over-the.html)
 
-Lightning [⚡️ over the Big Top Chautauqua](https://www.bigtop.org) resulted in an immediate stop to tonight’s show. Was great while it lasted!
+Lightning ⚡️ over the [Big Top Chautauqua](https://www.bigtop.org) resulted in an immediate stop to tonight’s show. Was great while it lasted!
 
 ![](https://cdn.uploads.micro.blog/890/2018/c3bc05ecb4.jpg)
 
 ### [Saturday @ 9:48 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
-Magical [here. 🎶✨ Thank you Brandi Carlile](http://www.brandicarlile.com) !
+Magical here. 🎶✨ Thank you [Brandi Carlile](http://www.brandicarlile.com)!
 
 ### [Saturday @ 9:05 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
@@ -297,7 +297,7 @@ Magical [here. 🎶✨ Thank you Brandi Carlile](http://www.brandicarlile.com) !
 
 ### [Saturday @ 8:58 PM](https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html)
 
-[Brandi Carlile](http://www.brandicarlile.com) taking [the stage at Big Top Chautauqua](https://www.bigtop.org) . 🎶 Crowd is excited! 🙌🏻
+[Brandi Carlile](http://www.brandicarlile.com) taking the stage at [Big Top Chautauqua](https://www.bigtop.org). 🎶 Crowd is excited! 🙌🏻
 
 ### [Saturday @ 1:33 PM](https://www.thingelstad.com/2018/06/16/family-selfie-in.html)
 
@@ -320,7 +320,7 @@ Lake Superior breakwater.
 
 ### [Saturday @ 1:01 PM](https://www.thingelstad.com/2018/06/16/it-is-worth.html)
 
-It is worth driving to Bayfield just to get the [Wine Bread at the Candy Shoppe](http://candyshoppe.four-food.com/) . So delicious. 🤤
+It is worth driving to Bayfield just to get the Wine Bread at the [Candy Shoppe](http://candyshoppe.four-food.com/). So delicious. 🤤
 
 ![](https://cdn.uploads.micro.blog/890/2018/340bb11c16.jpg)
 
@@ -330,4 +330,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Conscience makes cowards of us all.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

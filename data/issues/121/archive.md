@@ -93,7 +93,7 @@ links:
   domain: stacksense.io
   heading_context: '[Multi Cloud Happens But Not Necessarily By Design | StackSense](https://stacksense.io/krishnan/thought-leadership/multi-cloud-happens-but-not-necessarily-by-design/)'
   section: Notable Links 📌
-word_count: 1887
+word_count: 1885
 ---
 This week I got to attend three different technology events that all highlighted great things about the Twin Cities technology scene.
 
@@ -149,7 +149,7 @@ There is so much power in iOS 13's Shortcuts that I keep wanting to link to ever
 
 ### [First Look: New Emojis in iOS 13.2](https://blog.emojipedia.org/first-look-new-emojis-in-ios-13-2/)
 
-Tons of new Emoji coming to Apple devices. Great evolution of the skin tone picker and [the adoption of new gender-neutral Emoji](https://blog.emojipedia.org/unicode-brings-forward-gender-neutral-timeline/) .
+Tons of new Emoji coming to Apple devices. Great evolution of the skin tone picker and the adoption of new [gender-neutral Emoji](https://blog.emojipedia.org/unicode-brings-forward-gender-neutral-timeline/).
 
 ### [Where we do and don’t want automation | Derek Sivers](https://sivers.org/autom)
 
@@ -161,7 +161,7 @@ I didn’t know this service existed. It has the same $15/mo subscription to get
 
 ### [Quickness: Add Voice Contacts on the App Store](https://apps.apple.com/us/app/id1449776813)
 
-Found this little gem of an app via MacStories [iOS and iPadOS 13 App Roundup](https://www.macstories.net/roundups/ios-and-ipados-13-app-roundup-multiwindow-dark-mode-shortcuts-and-more/) . I use Contacts extensively, and being able to build Shortcuts that make it easier to add contacts is a great win. $2, easy buy for me.
+Found this little gem of an app via [MacStories iOS and iPadOS 13 App Roundup](https://www.macstories.net/roundups/ios-and-ipados-13-app-roundup-multiwindow-dark-mode-shortcuts-and-more/). I use Contacts extensively, and being able to build Shortcuts that make it easier to add contacts is a great win. $2, easy buy for me.
 
 ### [The China Cultural Clash – Stratechery by Ben Thompson](https://stratechery.com/2019/the-china-cultural-clash/)
 
@@ -203,13 +203,13 @@ This article highlights three common reasons that organizations adopt multiple c
 
 - [JOMO - The Joy of Missing Out - Feld Thoughts](https://feld.com/archives/2019/10/jomo-the-joy-of-missing-out.html) feld.com
 Opposite of FOMO. I like it! 👍
-- macOS 10.15 Catalina: The [Ars Technica review](https://arstechnica.com/gadgets/2019/10/macos-10-15-catalina-the-ars-technica-review/)
+- [macOS 10.15 Catalina: The Ars Technica review | Ars Technica](https://arstechnica.com/gadgets/2019/10/macos-10-15-catalina-the-ars-technica-review/)
 If you want to know everything you ever wanted to about macOS Catalina, this is the other of the two articles for you. There is more to this release than it looks. 👨‍💻
 - [macOS Catalina: The MacStories Review - MacStories](https://www.macstories.net/news/macos-catalina-the-macstories-review/) www.macstories.net
 If you want to know everything you ever wanted to about macOS Catalina, this is one of the two articles for you. 👩‍💻
 - [Different Types of Wine 18" x 24" Poster - Wine Folly](https://shop.winefolly.com/products/different-types-of-wine) shop.winefolly.com
 The relationships in this graph are super easy to follow. Probably the best wine classification/overview I've seen. 🍷
-- TikTok owner ByteDance's [first-half books $7 billion in revenue](https://www.cnbc.com/2019/09/30/tiktok-owner-bytedances-first-half-revenue-better-than-expected-at-over-7-billion-sources.html)
+- [TikTok owner ByteDance's first-half books $7 billion in revenue](https://www.cnbc.com/2019/09/30/tiktok-owner-bytedances-first-half-revenue-better-than-expected-at-over-7-billion-sources.html)
 I have no interest in TikTok, but I know "the kids" seem to dig it. I was blown away by the revenue numbers though. 💰💰💰
 
 ## Microposts 🎈
@@ -234,11 +234,11 @@ Crowd queuing up for Minnedemo 33 at the Riverview Theater!
 
 ### [Tuesday @ 4:28 PM](https://www.thingelstad.com/2019/10/08/151356.html)
 
-Good panel [conversation following screening of Solid State](https://www.tpt.org/solid-state/) .
+Good panel conversation following screening of [Solid State](https://www.tpt.org/solid-state/).
 
 ### [Tuesday @ 3:13 PM](https://www.thingelstad.com/2019/10/08/151356.html)
 
-Attending the premier of [Solid State: Minnesota’s High Tech History](https://www.tpt.org/solid-state/) [hosted by MHTA](https://mhta.org) .
+Attending the premier of [Solid State: Minnesota’s High Tech History](https://www.tpt.org/solid-state/) hosted by [MHTA](https://mhta.org).
 
 ### [Monday @ 11:42 PM](https://www.thingelstad.com/2019/10/07/233918.html)
 
@@ -260,14 +260,14 @@ Flying the MN United flag but our cheering wasn’t enough to get the good guys 
 
 ### [Sunday @ 1:41 PM](https://www.thingelstad.com/2019/10/06/mazie-and-i.html)
 
-Mazie and [I enjoyed some delicious Spinning Wylde](https://www.spinningwylde.com) gourmet cotton candy at Hack the Gap!
+Mazie and I enjoyed some delicious [Spinning Wylde](https://www.spinningwylde.com) gourmet cotton candy at Hack the Gap!
 
 ![](https://cdn.uploads.micro.blog/890/2019/675658fec4.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/230f52c87d.jpg)
 
 ### [Sunday @ 1:39 PM](https://www.thingelstad.com/2019/10/06/im-very-happy.html)
 
-I’m very happy that SPS Commerce and #TeamSPS are able to sponsor [and volunteer at Hack the Gap](https://www.hackthegap.com) again! This is a great organization and event hacking the diversity gap! 👏
+I’m very happy that SPS Commerce and #TeamSPS are able to sponsor and volunteer at [Hack the Gap](https://www.hackthegap.com) again! This is a great organization and event hacking the diversity gap! 👏
 
 ![](https://cdn.uploads.micro.blog/890/2019/89f1d3194c.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/b213cd26e9.jpg)
@@ -288,4 +288,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Someone is speaking well of you. How unusual!
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

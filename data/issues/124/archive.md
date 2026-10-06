@@ -99,7 +99,7 @@ links:
   domain: jules.thegrommet.com
   heading_context: '[For Fathers of Daughters | Jules Pieri](https://jules.thegrommet.com/2018/10/10/for-fathers-of-daughters/)'
   section: Notable Links 📌
-word_count: 2195
+word_count: 2190
 ---
 What a week! So much raking last week and yet there are more leaves to deal with. 🍂 We watched an immense World Series. ⚾️ Tyler and I were both cheering for the Astros, but the series was filled with so much excitement. It was also amazing to witness the first time World Series where the home team never won a game. How weird is that! 😩
 
@@ -147,7 +147,7 @@ A very sincere and heartfelt thank you to [the former Benevolent Dictator for Li
 
 ### [5 things Rob Pike attributes to Go's success —The Changelog](https://changelog.com/posts/5-things-rob-pike-attributes-to-gos-success)
 
-Very few people get the opportunity to create and launch a new programming language. It’s interesting to see [the key success criteria that Go](https://golang.org) 's creators believe were so important.
+Very few people get the opportunity to create and launch a new programming language. It’s interesting to see the key success criteria that [Go](https://golang.org)'s creators believe were so important.
 
 ### [Daring Fireball: AirPods Pro First Impressions](https://daringfireball.net/2019/10/airpods_pro_first_impressions)
 
@@ -205,7 +205,7 @@ As the author states, this article shouldn't even be needed. Publishers should h
 
 ### [For Fathers of Daughters | Jules Pieri](https://jules.thegrommet.com/2018/10/10/for-fathers-of-daughters/)
 
-I found [this article via Brad Feld's post](https://feld.com/archives/2019/10/jules-pieri-advice-for-fathers-of-daughters.html) . I appreciate the question that prompted the post. A good read for all men to consider, wether you are a father or not.
+I found this article via [Brad Feld's post](https://feld.com/archives/2019/10/jules-pieri-advice-for-fathers-of-daughters.html). I appreciate the question that prompted the post. A good read for all men to consider, wether you are a father or not.
 
 ## Microposts 🎈
 
@@ -239,7 +239,7 @@ Game 6 of the World Series is off to a very exciting start! 2-1 Astros at the bo
 
 ### [Monday @ 11:34 AM](https://www.thingelstad.com/2019/10/28/my-original-airpods.html)
 
-My original AirPods were badly in need of replacement after going in the pool with me. [Just ordered the new AirPods Pro](https://www.apple.com/newsroom/2019/10/apple-reveals-new-airpods-pro-available-october-30/) !
+My original AirPods were badly in need of replacement after going in the pool with me. Just ordered the new [AirPods Pro](https://www.apple.com/newsroom/2019/10/apple-reveals-new-airpods-pro-available-october-30/)!
 
 ### [Sunday @ 10:44 PM](https://www.thingelstad.com/2019/10/27/first-two-games.html)
 
@@ -247,7 +247,7 @@ First two games Nationals outscored Astro’s 17-7. Next three Astros outscored 
 
 ### [Sunday @ 9:14 PM](https://www.thingelstad.com/2019/10/27/i-have-long.html)
 
-I have long resisted adding technology to my Big Green Egg, holding that good BBQ is made with fire 🔥, smoke 💨, and love 💚. But these things are [getting more interesting. The EGG Genius](https://biggreenegg.com/product/egg-genius/) looks good (it is a Flameboss in a different color).
+I have long resisted adding technology to my Big Green Egg, holding that good BBQ is made with fire 🔥, smoke 💨, and love 💚. But these things are getting more interesting. The [EGG Genius](https://biggreenegg.com/product/egg-genius/) looks good (it is a Flameboss in a different color).
 
 ![](https://cdn.uploads.micro.blog/890/2019/e65c41fed1.jpg)
 
@@ -271,7 +271,7 @@ Great night for a campfire. 🔥
 
 ### [Saturday @ 1:10 PM](https://www.thingelstad.com/2019/10/26/ive-gotten-pretty.html)
 
-I’ve gotten [pretty expert at replacing the thermopile](https://en.wikipedia.org/wiki/Thermopile) in this gas fireplace. 🔥🛠
+I’ve gotten pretty expert at replacing the [thermopile](https://en.wikipedia.org/wiki/Thermopile) in this gas fireplace. 🔥🛠
 
 ![](https://cdn.uploads.micro.blog/890/2019/386d999d1a.jpg)
 
@@ -281,15 +281,15 @@ Finally the Astros win one in the World Series! 2-1 now. Tyler’s spirits are l
 
 ### [Friday @ 10:26 PM](https://www.thingelstad.com/2019/10/25/203647.html)
 
-[Matt Wilson](https://www.minneapolismatt.com) finished up with an [always great rendition of Snow Day](https://music.apple.com/us/album/snow-days/1443398974?i=294083092) ! 🎶
+[Matt Wilson](https://www.minneapolismatt.com) finished up with an always great rendition of [Snow Day](https://music.apple.com/us/album/snow-days/1443398974?i=294083092)! 🎶
 
 ### [Friday @ 8:36 PM](https://www.thingelstad.com/2019/10/25/203647.html)
 
-At The Music Space of Owatonna [for Matt Wilson & His Orchestra](https://www.minneapolismatt.com) in the Event of the Century, the Mattastrophe! 🎶👍
+At The Music Space of Owatonna for [Matt Wilson & His Orchestra](https://www.minneapolismatt.com) in the Event of the Century, the Mattastrophe! 🎶👍
 
 ### [Friday @ 7:59 PM](https://www.thingelstad.com/2019/10/25/listening-to-matt.html)
 
-Listening [to Matt Arthur & the Bratlanders](http://bratlanders.com) at The Music Space of Owatonna. Doing a Kris Kristofferson cover right now. 🎶
+Listening to [Matt Arthur & the Bratlanders](http://bratlanders.com) at The Music Space of Owatonna. Doing a Kris Kristofferson cover right now. 🎶
 
 ![](https://cdn.uploads.micro.blog/890/2019/6e6ad36255.jpg)
 
@@ -301,7 +301,7 @@ Very proud of my daughter setting a new 5k personal record in her final cross co
 
 ### [Friday @ 5:59 PM](https://www.thingelstad.com/2019/10/25/i-like-this.html)
 
-I like [this new feature in the Sanebox](https://www.sanebox.com) digest! Great to get “wisdom of the crowd” benefit. 👍
+I like this new feature in the [Sanebox](https://www.sanebox.com) digest! Great to get “wisdom of the crowd” benefit. 👍
 
 ![](https://cdn.uploads.micro.blog/890/2019/485889665f.jpg)
 
@@ -312,7 +312,7 @@ Some very impressive numbers here. 😲
 - [SLOs Are the API for Your Engineering Team](https://www.infoq.com/articles/slos-engineering-team-API/) www.infoq.com
 Interesting way to think about this. 🤔
 - [An Elegant Puzzle: Systems of Eng Management.](https://www.lethain.com/elegant-puzzle/) www.lethain.com
-This looks like a very good book. I have a few copies on the way to [the office. Thanks to Sam Pierson](https://www.linkedin.com/in/samuelpierson/) for the link.
+This looks like a very good book. I have a few copies on the way to the office. Thanks to [Sam Pierson](https://www.linkedin.com/in/samuelpierson/) for the link.
 - [SPS Commerce leads List of Twin Cities-based SaaS companies - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/10/25/list-leaders-updated-with-correction-sps-commerce.html) www.bizjournals.com
 Great to see SPS at the top of this list. 🙌
 - [Foxconn finally admits its empty Wisconsin ‘innovation centers’ aren’t being developed - The Verge](https://www.theverge.com/2019/10/23/20929453/foxconn-innovation-centers-on-hold-wisconsin-mount-pleasant-trump-deal) www.theverge.com
@@ -329,4 +329,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Your lucky number is 3552664958674928. Watch for it everywhere.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

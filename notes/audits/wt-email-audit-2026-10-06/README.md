@@ -584,3 +584,14 @@ Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails
 - The covers of WT31 (a waterfall) and WT32 (an EFF member badge) were different pictures, so the email photos replaced them on S3. The old versions are kept, CloudFront was invalidated, and the vision descriptions were redone (`describe_media.py --url`).
 - WT29's photo is gone everywhere (dead MailChimp URL, no archive copy), so it stays without one. Its dead cover URL and WT27's App Store "Placeholder" image are cleared to `''`, as WT1 is.
 - Left as found: WT97's "Dreaming of summer." line (the email's alt, flattened into text at import) and WT36's "thick" (the email says "think").
+
+**Round 3, links: content, not format** (`repair/links/`). 1,174 lines in 108 issues match the emails' content again. Jamie, 2026-10-06: "you're not restoring the format, you're restoring the content".
+
+- Restored: link anchors on the words the email linked, mostly titles whose opening words fell outside the link at import (1,114 lines); the stray space between a link and its punctuation (435); words lost or doubled at a link (13 and 6); 17 plain "(http…)" URLs and 7 email links the archive had lost.
+- Not restored, because they are format: bold and italics, the 💬 lead-ins, "→" microposts made into whole-text links (171 lines left as they are), the email's capitals, commas and quote marks, and a link stretched over a title plus its description (WT66, WT91).
+- Never touched: the "## Promotion 🎁" nonprofit spotlights and the "## Now Reading 📚" line. Jamie does not want those restored; WT39's Now Reading, in the email but not the archive, stays out.
+- URLs are the archive's own. In WT23–55 every email link is a Mailchimp click-tracking redirect; those were paired by order and never followed, so no fake clicks were recorded. Mailchimp `?e=` subscriber IDs are stripped (bd20a1c2, 6645c757) and the validator refuses any.
+- `validate_links.py` checks every changed line rendered with the site's markdown-it: no word invented or dropped against the email, no URL lost, anchors as the email has them, bold/italics/💬 exactly as before, no change of case, quote or comma alone, Promotion and Now Reading untouched, front matter unchanged but for word_count. `mutate_links.py` plants 14 faults; all that apply are caught. An independent review found no link, URL, anchor or emphasis defects; its five smaller findings are fixed or moot under the content rule.
+- `left-alone.json` lists the 424 lines the repair reported and did not change.
+- WT26's MarketWatch title gains "Outside the Box" from the email, so its front-matter links and links.json follow. word_count is recounted in all 108.
+- A fixed floor in `test_graph_entities` (Tesla in at least 25 issues) failed when WT44's doubled "Tesla" title was removed; it is now an oracle.

@@ -103,13 +103,13 @@ links:
   domain: www.theguardian.com
   heading_context: '[Uncovered: reality of how smartphones turned election news into chaos | Politics | The Guardian](https://www.theguardian.com/politics/2019/dec/05/uncovered-reality-of-how-smartphones-turned-election-news-into-chaos)'
   section: Notable Links 📌
-word_count: 1832
+word_count: 1825
 ---
-Welcome to Weekly Thing #130 and the final issue for 2019! I’m going to be taking my winter break and will be back on January 18th of 2020 (wow!) with Weekly Thing #131. I want to Thank You all for subscribing and playing along with me every week. Putting a summer and winter break into the schedule is a good way for me to make it sustainable for the long haul. It’s fun for me to go back to the [first one from May 13, 2017](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how much it’s changed. I have some thoughts of using this winter break to take the automation out for a tuneup and make it better, and I may make some changes to the layout and sections of the Weekly Thing. Stay tuned! 👍
+Welcome to Weekly Thing #130 and the final issue for 2019! I’m going to be taking my winter break and will be back on January 18th of 2020 (wow!) with Weekly Thing #131. I want to Thank You all for subscribing and playing along with me every week. Putting a summer and winter break into the schedule is a good way for me to make it sustainable for the long haul. It’s fun for me to go back to the first one from [May 13, 2017](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how much it’s changed. I have some thoughts of using this winter break to take the automation out for a tuneup and make it better, and I may make some changes to the layout and sections of the Weekly Thing. Stay tuned! 👍
 
-While I’m taking a little break, and while you are seeing your extended relatives and friends, give them the gift of me in their inbox! As your sharing all the great insights you've gleaned [send them to the Weekly Thing](https://weekly.thingelstad.com) website to subscribe. 😇
+While I’m taking a little break, and while you are seeing your extended relatives and friends, give them the gift of me in their inbox! As your sharing all the great insights you've gleaned send them to the [Weekly Thing](https://weekly.thingelstad.com) website to subscribe. 😇
 
-While I won't be in your inbox if you wish you [can put a little Christmas Thing](https://music.apple.com/us/playlist/christmas-thing/pl.u-vxVpMsgJqDJ) in your [ears! Inspired by MacSparky's Yule Playlist](https://www.macsparky.com/blog/2018/11/the-yule-apple-music-playlist?rq=yule) I put together our family Christmas favorites and shared it via an Apple [Music Playlist playfully called Christmas Thing](https://music.apple.com/us/playlist/christmas-thing/pl.u-vxVpMsgJqDJ) . 🎶🎄
+While I won't be in your inbox if you wish you can put a little [Christmas Thing](https://music.apple.com/us/playlist/christmas-thing/pl.u-vxVpMsgJqDJ) in your ears! Inspired by [MacSparky's Yule Playlist](https://www.macsparky.com/blog/2018/11/the-yule-apple-music-playlist?rq=yule) I put together our family Christmas favorites and shared it via an Apple Music Playlist playfully called [Christmas Thing](https://music.apple.com/us/playlist/christmas-thing/pl.u-vxVpMsgJqDJ). 🎶🎄
 
 Now lets get to all the great links! 👇
 
@@ -127,7 +127,7 @@ Great article highlighting the value of extending or enhancing time that you get
 
 ## And…
 
-> Facebook is now squarely in the red and a net negative for society. The social network held the promise of enhancing our time here, via connection, and has delivered on much of that. However, most time enhancement has been negated, as the social network is depressing our teens and endangering our most precious asset, girls. Teen [suicide has skyrocketed — up 77%](https://www.thecoddling.com/better-mental-health) for [older teen girls and up 151%](https://www.thecoddling.com/better-mental-health) for younger [teens (research by colleague Jonathan Haidt](http://thecoddling.com/) ).
+> Facebook is now squarely in the red and a net negative for society. The social network held the promise of enhancing our time here, via connection, and has delivered on much of that. However, most time enhancement has been negated, as the social network is depressing our teens and endangering our most precious asset, girls. Teen suicide has skyrocketed — up [77%](https://www.thecoddling.com/better-mental-health) for older teen girls and up [151%](https://www.thecoddling.com/better-mental-health) for younger teens (research by colleague [Jonathan Haidt](http://thecoddling.com/)).
 
 Good time for a New Years evaluation to delete Facebook and remove it from your life?
 
@@ -145,7 +145,7 @@ Amsterdam Airport Schiphol, Netherlands
 
 ### [disaster.radio | a disaster-resilient communications network powered by the sun](https://disaster.radio/)
 
-Love this project. In a world where I had unlimited free time I'd bite off a big chunk [of it to play with Scuttlebutt](https://scuttlebutt.nz) . It’s a really interesting protocol for rarely connected network devices. The video is a good overview. Maybe this [can be my version of prepping](https://www.dictionary.com/e/slang/prepper/) . 😎
+Love this project. In a world where I had unlimited free time I'd bite off a big chunk of it to play with [Scuttlebutt](https://scuttlebutt.nz). It’s a really interesting protocol for rarely connected network devices. The video is a good overview. Maybe this can be my version of [prepping](https://www.dictionary.com/e/slang/prepper/). 😎
 
 ### [It’s Time to Get Back to Basics – The Blog of Author Tim Ferriss](https://tim.blog/2019/12/11/its-time-to-get-back-to-basics/)
 
@@ -179,7 +179,7 @@ A ton of recommendations for different communications inside of a company. It se
 
 I find JSON-LD interesting. JSON is super interesting, but it lacks semantics. That is where JSON-LD comes in.
 
-> [JSON-LD](https://www.w3.org/2018/json-ld-wg/) [is a specification](https://w3c.github.io/json-ld-syntax/) being developed in [the World Wide Web Consortium (W3C](https://www.w3.org/) ) as a media type application/ld+json. This means you can still parse it as a plain-ol’ JSON document, but there are some additional conventions that add meaning to the content.
+> [JSON-LD](https://www.w3.org/2018/json-ld-wg/) is a [specification](https://w3c.github.io/json-ld-syntax/) being developed in the World Wide Web Consortium ([W3C](https://www.w3.org/)) as a media type application/ld+json. This means you can still parse it as a plain-ol’ JSON document, but there are some additional conventions that add meaning to the content.
 
 This might bring some of the good parts of XML to the JSON world.
 
@@ -215,18 +215,18 @@ This is a fabulous set of 12 recommendations for any technology leaders. This is
 
 ### [Thursday @ 4:24 PM](https://www.thingelstad.com/2019/12/12/great-teamsps-outing.html)
 
-Great [#TeamSPS outing to play epic Whirleyball](https://www.whirlyballtwincities.com) matches!
+Great #TeamSPS outing to play epic [Whirleyball](https://www.whirlyballtwincities.com) matches!
 
 ![](https://cdn.uploads.micro.blog/890/2019/f89c89713d.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/aacca309ac.jpg)
 
 ### [Saturday @ 9:26 PM](https://www.thingelstad.com/2019/12/07/holidazzle.html)
 
-Enjoyed winter [fireworks at Loring Park for Holidazzle](https://www.holidazzle.com) tonight!
+Enjoyed winter fireworks at Loring Park for [Holidazzle](https://www.holidazzle.com) tonight!
 
 ### [Saturday @ 9:04 PM](https://www.thingelstad.com/2019/12/07/holidazzle.html)
 
-[We went to Holidazzle](https://www.holidazzle.com) for the first time in years and years. Last time we went it was still a parade. It was fun, but there were a lot of people and big lines.
+We went to [Holidazzle](https://www.holidazzle.com) for the first time in years and years. Last time we went it was still a parade. It was fun, but there were a lot of people and big lines.
 
 ### [Saturday @ 8:58 PM](https://www.thingelstad.com/2019/12/07/a-christmas-tradition.html)
 
@@ -239,13 +239,13 @@ A Christmas tradition — the [13th Annual New Standards Holiday Show](http://ww
 
 ### [Saturday @ 3:58 PM](https://www.thingelstad.com/2019/12/07/we-had-a.html)
 
-We had a ton [of fun solving the Nutcracker Nightmare](https://www.trappedpuzzlerooms.com/nutcracker-nightmare/) room at Trapped Puzzle Rooms! Very fun puzzles, challenging, but just right for a family to solve! 🙌
+We had a ton of fun solving the [Nutcracker Nightmare](https://www.trappedpuzzlerooms.com/nutcracker-nightmare/) room at Trapped Puzzle Rooms! Very fun puzzles, challenging, but just right for a family to solve! 🙌
 
 ![](https://cdn.uploads.micro.blog/890/2019/7a0056b38b.jpg)
 
 ### [Saturday @ 1:25 PM](https://www.thingelstad.com/2019/12/07/our-first-visit.html)
 
-Our first visit to the very impressive [Gingerbread Wonderland at the Norway House](https://www.norwayhouse.org) . My vote for best went to Glensheen Mansion. 🇳🇴
+Our first visit to the very impressive Gingerbread Wonderland at the [Norway House](https://www.norwayhouse.org). My vote for best went to Glensheen Mansion. 🇳🇴
 
 ![](https://cdn.uploads.micro.blog/890/2019/e25aafa368.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/6d76da1f65.jpg)
@@ -283,4 +283,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Beware of Bigfoot!
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

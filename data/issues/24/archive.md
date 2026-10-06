@@ -156,11 +156,11 @@ links:
   domain: www.macstories.net
   heading_context: '[More Great Shelf Apps to Boost iPad Productivity – MacStories](https://www.macstories.net/reviews/more-great-shelf-apps-to-boost-ipad-productivity/)'
   section: Links 📌
-word_count: 2405
+word_count: 2403
 ---
 We are away this weekend hanging out with the 19 members of the extended Olson Family clan — Tammy's side of the family. We've done this weekend away as a family for 14 years now. There were only 10 people at the first one, and now grandchildren have filled the ranks to 19. The relevance of getting away as an extended family has grown as everyone's schedules get busier and the opportunities to gather get more difficult.
 
-This week I put some fun [things into the feeds and data](https://links.thingelstad.com/feeds/) [section of Link Thing](https://links.thingelstad.com) . I've always published RSS and JSON feeds [but I added an iCal feed](https://links.thingelstad.com/feeds/feed.ics) to that this week. Why? Mostly because I could. You can now overlay my links feed onto your calendar. More fun though is I expanded the full archive feeds. I've always provided a full CSV dump but I added two JSON versions. One [is a flat array of links](https://links.thingelstad.com/feeds/links.json) [the other is grouped by hostname](https://links.thingelstad.com/feeds/links-by-host.json) . I have no idea what people may want to do with those databases but it would be fun to see if anyone plays with them. 👩‍🔬
+This week I put some fun things into the [feeds and data](https://links.thingelstad.com/feeds/) section of [Link Thing](https://links.thingelstad.com). I've always published RSS and JSON feeds but I added an [iCal feed](https://links.thingelstad.com/feeds/feed.ics) to that this week. Why? Mostly because I could. You can now overlay my links feed onto your calendar. More fun though is I expanded the full archive feeds. I've always provided a full CSV dump but I added two JSON versions. One is a [flat array of links](https://links.thingelstad.com/feeds/links.json) the other is [grouped by hostname](https://links.thingelstad.com/feeds/links-by-host.json). I have no idea what people may want to do with those databases but it would be fun to see if anyone plays with them. 👩‍🔬
 
 Also, I think I figured out how to embed an image in Mailchimp better than last week. 😁
 
@@ -193,7 +193,7 @@ I've done a decent amount of thinking about how to effectively use 1:1 time. Mos
 
 ### [I haven't experienced imposter syndrome, and maybe you haven't either](https://rachsmith.com/2017/i-dont-have-imposter-syndrome)
 
-I [hear people use the imposter syndrome](https://en.wikipedia.org/wiki/Impostor_syndrome) term a lot and I really dislike it. Most successful people I know leap to tasks that are above their current skills. That is how many people gain skills. Usually, it’s a good thing in my experience. I’m not suggesting this isn't a real thing for some people, but I think it’s self-assigned far too often.
+I hear people use the [imposter syndrome](https://en.wikipedia.org/wiki/Impostor_syndrome) term a lot and I really dislike it. Most successful people I know leap to tasks that are above their current skills. That is how many people gain skills. Usually, it’s a good thing in my experience. I’m not suggesting this isn't a real thing for some people, but I think it’s self-assigned far too often.
 
 ### [“What Have I Done”: Early Facebook Employees Regret the Monster They Created | Vanity Fair](https://www.vanityfair.com/news/2017/10/early-facebook-employees-regret-the-monster-they-created)
 
@@ -241,7 +241,7 @@ Cool look into best practices that early stage companies use in sharing informat
 
 ### [First Look: Cardhop for Mac —The Sweet Setup](https://thesweetsetup.com/first-look-cardhop-mac/)
 
-I am an extensive user of my contacts system so this macOS app appealed to me right away. I already have quick [access to my contacts from LaunchBar](https://obdev.at/products/launchbar/index.html) but Cardhop offers the ability to add and edit information in the same place with a more optimized user experience. I purchased this and so far it looks very good.
+I am an extensive user of my contacts system so this macOS app appealed to me right away. I already have quick access to my contacts from [LaunchBar](https://obdev.at/products/launchbar/index.html) but Cardhop offers the ability to add and edit information in the same place with a more optimized user experience. I purchased this and so far it looks very good.
 
 ### [ProseMirror 1.0](http://marijnhaverbeke.nl/blog/prosemirror-1.html)
 

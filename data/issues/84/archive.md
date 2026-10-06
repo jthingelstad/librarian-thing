@@ -97,7 +97,7 @@ links:
   domain: blogs.windows.com
   heading_context: '[Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)'
   section: Notable Links 📌
-word_count: 2177
+word_count: 2172
 ---
 I’m writing this sitting on the floor of an empty room that will likely be the office in our new home. We closed today and are celebrating with takeout dinner in an empty house and thinking about how things will be laid out. We aren't moving until January.
 
@@ -169,7 +169,7 @@ Bosworth makes a good case here against protecting teams. I tend to agree. I've 
 
 ### [Minneapolis ends single-family zoning, undoing a major component of housing segregation.](https://slate.com/business/2018/12/minneapolis-single-family-zoning-housing-racism.html)
 
-Caught my eye to see Minneapolis city matters in Slate. There has been a lot of debate [and trepidation around the Minneapolis 2040](https://minneapolis2040.com) plan. I honestly haven't done the work to really understand all the components myself.
+Caught my eye to see Minneapolis city matters in Slate. There has been a lot of debate and trepidation around the [Minneapolis 2040](https://minneapolis2040.com) plan. I honestly haven't done the work to really understand all the components myself.
 
 ### [Tetris](https://www.colinfahey.com/tetris/tetris.html)
 
@@ -205,13 +205,13 @@ I’m a [huge fan of Glengarry Glen Ross](https://en.wikipedia.org/wiki/Glengarr
 
 ### [Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)
 
-In 2009 I wrote a blog post on what Microsoft [could do to get "nerds" back](https://www.thingelstad.com/2009/my-solution-for-microsoft-to-get-nerds-back/) . I should have titled it "geeks", but oh well. One of the two suggestions was to stop working on their own web engine, at the time Trident. It took 9 years, but Microsoft has announced they shifting their browser engine. Just one thing left, although you might argue that Windows Services for Linux is pretty close to the other recommendation I had.
+In 2009 I wrote a blog post on what [Microsoft could do to get "nerds" back](https://www.thingelstad.com/2009/my-solution-for-microsoft-to-get-nerds-back/). I should have titled it "geeks", but oh well. One of the two suggestions was to stop working on their own web engine, at the time Trident. It took 9 years, but Microsoft has announced they shifting their browser engine. Just one thing left, although you might argue that Windows Services for Linux is pretty close to the other recommendation I had.
 
 ## Give Back 🎁
 
 https://www.hackthegap.com
 
-[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 
@@ -220,7 +220,7 @@ Local software company acquired.
 - [Scripting API now in public beta! | Minecraft](https://minecraft.net/en-us/article/scripting-api-now-public-beta) minecraft.net
 I sense a sudden surge of kids learning Javascript!
 - [The Year Ahead Planner](https://yearcompass.com) yearcompass.com
-Nice PDF to walk you through a reflection and planning process for [the new year. Via Patrick Rhone](https://www.patrickrhone.net/5024-2/) .
+Nice PDF to walk you through a reflection and planning process for the new year. Via [Patrick Rhone](https://www.patrickrhone.net/5024-2/).
 - [Lime and Bird are each worth 10B+](https://www.futureengine.org/articles/scooters-are-worth-10b) www.futureengine.org
 What the… 😳💰
 - [Repl.it - Repl.it Multiplayer](https://repl.it/site/blog/multi) repl.it
@@ -234,7 +234,7 @@ Interesting book on writing and the workflows around it.
 
 ### [Thursday @ 9:59 PM](https://www.thingelstad.com/2018/12/13/made-my-annual.html)
 
-Made my annual [donation to Internet Archive! Join me](https://archive.org/donate/) in supporting this great organization! 🌎
+Made my annual donation to Internet Archive! [Join me](https://archive.org/donate/) in supporting this great organization! 🌎
 
 ### [Tuesday @ 9:35 PM](https://www.thingelstad.com/2018/12/11/192942.html)
 
@@ -254,13 +254,13 @@ Minnesota Wild v Montreal Canadiens! 🏒
 
 ### [Sunday @ 9:27 PM](https://www.thingelstad.com/2018/12/09/watched-pick-of.html)
 
-[Watched Pick of the Litter](https://imdb.com/title/tt5644050/) tonight. Nice movie, particularly for dog lovers. The training guide dogs go through is impressive. 🐕
+Watched [Pick of the Litter](https://imdb.com/title/tt5644050/) tonight. Nice movie, particularly for dog lovers. The training guide dogs go through is impressive. 🐕
 
 ![](https://cdn.uploads.micro.blog/890/2018/284539dc8a.jpg)
 
 ### [Sunday @ 9:19 PM](https://www.thingelstad.com/2018/12/09/we-explored-the.html)
 
-[We explored the Walker Art Center](https://walkerart.org) today. Modern art still makes me go “Huh?” a lot.
+We explored the [Walker Art Center](https://walkerart.org) today. Modern art still makes me go “Huh?” a lot.
 
 ![](https://cdn.uploads.micro.blog/890/2018/e550d2d7b2.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/752dbf624c.jpg)
@@ -270,7 +270,7 @@ Minnesota Wild v Montreal Canadiens! 🏒
 
 ### [Sunday @ 9:17 PM](https://www.thingelstad.com/2018/12/09/031730.html)
 
-We had a fun time [at the 2018 British Arrows Awards](https://walkerart.org/calendar/2018/2018-british-arrows-awards) today at the Walker. Liked the Nike, FIFA Soccer and Mini Cooper ads!
+We had a fun time at the [2018 British Arrows Awards](https://walkerart.org/calendar/2018/2018-british-arrows-awards) today at the Walker. Liked the Nike, FIFA Soccer and Mini Cooper ads!
 
 ### [Sunday @ 8:54 PM](https://www.thingelstad.com/2018/12/09/solid-boxing-workout.html)
 
@@ -298,21 +298,21 @@ Parked at SPS Tower for a concert at the State Theater. Took skyways and skipped
 
 ### [Saturday @ 9:21 PM](https://www.thingelstad.com/2018/12/08/212134.html)
 
-[First half of The New Standards](http://www.thenewstandards.com) Holiday Show was awesome. Okee Dokee Brothers, The Owls, Chris Koza, Jeremy Messersmith, Matt Wilson, Dessa, Tina Schleske, and Caroline Steele. 🎶
+First half of [The New Standards](http://www.thenewstandards.com) Holiday Show was awesome. Okee Dokee Brothers, The Owls, Chris Koza, Jeremy Messersmith, Matt Wilson, Dessa, Tina Schleske, and Caroline Steele. 🎶
 
 ### [Saturday @ 12:31 PM](https://www.thingelstad.com/2018/12/08/the-kingfield-at.html)
 
-[The Kingfield at Five Watt](http://fivewattcoffee.com) is definitely a treat, not an everyday coffee, but it sure is delicious. Fancy coffee time! ☕️
+The Kingfield at [Five Watt](http://fivewattcoffee.com) is definitely a treat, not an everyday coffee, but it sure is delicious. Fancy coffee time! ☕️
 
 ![](https://cdn.uploads.micro.blog/890/2018/f2c69c773e.jpg)
 
 ### [Saturday @ 12:25 PM](https://www.thingelstad.com/2018/12/08/tried-boludo-empanadas.html)
 
-[Tried Boludo Empanadas](https://www.boludoempanadas.com) today — wow! I got three empanadas: Pollo, Carne, and Jamon y Queso. All were [delicious! Good review in City Pages](http://citypages.com/restaurants/5-things-to-know-about-boludo-a-new-empanada-spot-from-martinas-pastry-mastermind/500778041) . 🤤
+Tried [Boludo Empanadas](https://www.boludoempanadas.com) today — wow! I got three empanadas: Pollo, Carne, and Jamon y Queso. All were delicious! Good [review in City Pages](http://citypages.com/restaurants/5-things-to-know-about-boludo-a-new-empanada-spot-from-martinas-pastry-mastermind/500778041). 🤤
 
 ### [Friday @ 7:56 PM](https://www.thingelstad.com/2018/12/07/had-fun-at.html)
 
-Had fun at the [89th annual Mt. Olivet Lutefisk Dinner](https://www.mtolivet.org/upcoming-events/lutefisk-dinner) tonight! Swedish Meatballs, Rice Pudding with Lingonberries, and Lefse for me.
+Had fun at the 89th annual [Mt. Olivet Lutefisk Dinner](https://www.mtolivet.org/upcoming-events/lutefisk-dinner) tonight! Swedish Meatballs, Rice Pudding with Lingonberries, and Lefse for me.
 
 Big Crowd for the Lutefisk Dinner My nephew Garrett and I having lefse. family selfie! family selfie!
 
@@ -327,4 +327,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Today is the last day of your life so far.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

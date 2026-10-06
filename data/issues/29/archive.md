@@ -154,7 +154,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)'
   section: Links 📌
-word_count: 2389
+word_count: 2388
 ---
 I want to welcome a bunch of new subscribers to the Weekly Thing -- [Hello! 👋 My friend David Hussman](https://twitter.com/davidhussman) [shared this](https://www.linkedin.com/feed/update/urn:li:activity:6337711918261825537) , and a bunch of new people signed up. 👍 Thank you for all for jumping in, and I hope you enjoy this as much as I enjoy sharing it. (Also, thank you, David!)
 
@@ -237,7 +237,7 @@ Great topic that more thought should be going to. API design is largely an after
 
 ### [pingfs: Stores your data in ICMP ping packets](https://github.com/yarrick/pingfs)
 
-This is completely bizarre -- a file system that [stores the data in an ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) packet stream ephemerally bouncing around via ping. 🤯
+This is completely bizarre -- a file system that stores the data in an [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) packet stream ephemerally bouncing around via ping. 🤯
 
 ### [The End Of Net Neutrality As We Know It – AVC](http://avc.com/2017/11/the-end-of-net-neutrality-as-we-know-it/)
 
@@ -306,7 +306,7 @@ Well thought through list of Christmas presents for people that like a certain k
 
 ### [Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)
 
-I’m [a big fan of Insights Discovery](https://www.insights.com/products/insights-discovery) and an [equally big fan of Scott Schwefel](http://scottschwefel.com) . I met Scott when [we were both on the CaringBridge](https://www.caringbridge.org) board and got exposed to the Insights program in an offsite we did with that board. I've brought more than a hundred people through the program at SPS and I find it an immensely valuable training and tool. I didn’t [know that Scott did this TEDx](https://www.ted.com/about/programs-initiatives/tedx-program) talk. He's a great presenter with equally great content. 👏🏻🏆
+I’m a big fan of [Insights Discovery](https://www.insights.com/products/insights-discovery) and an equally big fan of [Scott Schwefel](http://scottschwefel.com). I met Scott when we were both on the [CaringBridge](https://www.caringbridge.org) board and got exposed to the Insights program in an offsite we did with that board. I've brought more than a hundred people through the program at SPS and I find it an immensely valuable training and tool. I didn’t know that Scott did this [TEDx](https://www.ted.com/about/programs-initiatives/tedx-program) talk. He's a great presenter with equally great content. 👏🏻🏆
 
 ## Promotion 🎁
 

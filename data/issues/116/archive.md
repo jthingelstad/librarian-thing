@@ -69,9 +69,9 @@ links:
   domain: timharford.com
   heading_context: '[Tim Harford — Article — What we get wrong about meetings – and how to make them worth attending](http://timharford.com/2019/08/what-we-get-wrong-about-meetings-and-how-to-make-them-worth-attending/)'
   section: Notable Links 📌
-word_count: 1437
+word_count: 1434
 ---
-This week marked the beginning of another school year, and with that another opportunity for me to do my Dad routine for the first day. I made [Nordic Waffles](https://nordicwaffles.com) , one of our family favorites, for the kids to enjoy a delicious breakfast. Whipped cream, chocolate chips, Nutella, Jam, and even good old Pure Maple Syrup were on the offering to put on the waffles. Everyone got firsts and seconds. 🍽
+This week marked the beginning of another school year, and with that another opportunity for me to do my Dad routine for the first day. I made [Nordic Waffles](https://nordicwaffles.com), one of our family favorites, for the kids to enjoy a delicious breakfast. Whipped cream, chocolate chips, Nutella, Jam, and even good old Pure Maple Syrup were on the offering to put on the waffles. Everyone got firsts and seconds. 🍽
 
 After getting a good breakfast in I got out the "big camera", the Canon 5D with the big L-glass for the official first day of school photos. We are in a new house so we had to figure out the specific locations for school photos. The kids suggested that we drive to the old house and take them there too. I decided to skip that. Then Tammy took them to school. Mazie started her first year of High School which has me thinking, "Wow, I’ve got a high school child." and feeling a little old. Tyler went off to 4th grade and what mostly seems like pickup soccer during recess. Apparently he does other things there too, but I never hear about that stuff.
 
@@ -170,7 +170,7 @@ One of #TeamSPS doing a lightning talk at DevOpsDays Minneapolis 2019! 🙌
 
 ### [Sunday @ 12:41 AM](https://www.thingelstad.com/2019/09/01/brandi-carlile-at.html)
 
-There were figurative and literal fireworks [going off at tonight’s Brandi Carlile](https://www.brandicarlile.com) show. She is amazing. I strongly recommend seeing her in concert.
+There were figurative and literal fireworks going off at tonight’s [Brandi Carlile](https://www.brandicarlile.com) show. She is amazing. I strongly recommend seeing her in concert.
 
 ### [Sunday @ 12:40 AM](https://www.thingelstad.com/2019/09/01/brandi-carlile-at.html)
 
@@ -178,7 +178,7 @@ There were figurative and literal fireworks [going off at tonight’s Brandi Car
 
 ### [Sunday @ 12:37 AM](https://www.thingelstad.com/2019/09/01/we-made-a.html)
 
-We made a quick visit to our favorite [spots at the Minnesota State Fair](https://www.mnstatefair.org) !
+We made a quick visit to our favorite spots at the [Minnesota State Fair](https://www.mnstatefair.org)!
 
 ![](https://cdn.uploads.micro.blog/890/2019/1af04fcaf0.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/829ead0aab.jpg)
@@ -193,7 +193,7 @@ We made a quick visit to our favorite [spots at the Minnesota State Fair](https:
 
 ### [Sunday @ 12:30 AM](https://www.thingelstad.com/2019/09/01/we-had-a.html)
 
-We had a fun [time visiting the Minnesota Renaissance Festival](http://www.renaissancefest.com) today! Games, animals, and treats!
+We had a fun time visiting the [Minnesota Renaissance Festival](http://www.renaissancefest.com) today! Games, animals, and treats!
 
 ![](https://cdn.uploads.micro.blog/890/2019/8e8ce8753f.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/1d5d13b55f.jpg)
@@ -206,4 +206,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Chicken Little only has to be right once.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

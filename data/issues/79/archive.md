@@ -117,13 +117,13 @@ links:
   domain: www.justinobeirne.com
   heading_context: '[Apple’s New Map](https://www.justinobeirne.com/new-apple-maps/)'
   section: Notable Links 📌
-word_count: 2410
+word_count: 2405
 ---
-I've been having [a lot of fun with Shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) the last couple of weeks. I've found some great ways to make routine things easier. [I've also reinvigorated my project templates](https://www.thingelstad.com/2017/using-project-templates/) , just in time to use many of my annual holiday templates. I realized that my attempt to create a "generic" Shortcut that could run any template was limiting. I continue to store my templates in TaskPaper format to make them easy to edit, but the power comes in the Shortcut. I've made the project templates even more powerful having them block time on my calendar for the project, and even create draft emails that are ready to finish and send for the project.
+I've been having a lot of fun with [Shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) the last couple of weeks. I've found some great ways to make routine things easier. I've also reinvigorated my [project templates](https://www.thingelstad.com/2017/using-project-templates/), just in time to use many of my annual holiday templates. I realized that my attempt to create a "generic" Shortcut that could run any template was limiting. I continue to store my templates in TaskPaper format to make them easy to edit, but the power comes in the Shortcut. I've made the project templates even more powerful having them block time on my calendar for the project, and even create draft emails that are ready to finish and send for the project.
 
 A recent powerful Shortcut I made is called "Running Late". When I run this shortcut it finds calendar events that started in the last 30 minutes, or next two hours, and then builds a list of the organizers and attendees of those meetings. I can then select any number of those people and the Shortcut will then find those people in my Contacts, prompt me to pick a number to message them at, and then give me a default text message to send them. It makes it super easy to let someone know I'm running late.
 
-It takes a bit to get Shortcuts, but when you do you can find a lot of ways to automate routine items. [MacSparky has Siri Shortcuts Field Guide](https://learn.macsparky.com/p/siri) that is a great introduction and dive into all parts of Shortcuts. I sincerely think every iPhone user would have a variety of things that they could make easier using Shortcuts. If you find this stuff fun, it's worth the time to learn how to make Shortcuts.
+It takes a bit to get Shortcuts, but when you do you can find a lot of ways to automate routine items. MacSparky has [Siri Shortcuts Field Guide](https://learn.macsparky.com/p/siri) that is a great introduction and dive into all parts of Shortcuts. I sincerely think every iPhone user would have a variety of things that they could make easier using Shortcuts. If you find this stuff fun, it's worth the time to learn how to make Shortcuts.
 
 ## Featured Links 🏅
 
@@ -191,7 +191,7 @@ Apple’s position with custom silicon is super interesting. There has been rumo
 
 ### [Theresa Glomb](https://www.theresaglomb.com/)
 
-Dr. Theresa Gloms presented at our company Growth Summit this year and gave a great talk on improving work. She [shared her Let's Make Work Better](https://www.theresaglomb.com/slide-deck-lets-make-work-better) presentation. It was interesting to hear the research behind it, the overlap with many Getting Things Done concepts as well as Agile concepts.
+Dr. Theresa Gloms presented at our company Growth Summit this year and gave a great talk on improving work. She shared her [Let's Make Work Better](https://www.theresaglomb.com/slide-deck-lets-make-work-better) presentation. It was interesting to hear the research behind it, the overlap with many Getting Things Done concepts as well as Agile concepts.
 
 ### [The red flags and magic numbers that investors look for in your startup's metrics - 80 slide deck included! at andrewchen](https://andrewchen.co/investor-metrics-deck/)
 
@@ -255,7 +255,7 @@ Incredibly detailed post again from Justin O’Beirne detailing incredible detai
 
 https://wikimediafoundation.org/wiki/Home
 
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
+The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Yet More Links 🍞
 
@@ -278,11 +278,11 @@ This looks like a CSS framework I could actually use.
 
 ### [Wednesday @ 8:45 PM](https://www.thingelstad.com/2018/11/07/thanks-to-microblog.html)
 
-[Thanks to micro.blog new ActivityPub support](https://www.manton.org/2018/11/07/microblog-mastodon.html) , Mastadon users should be able to follow me at @jamie@micro.thingelstad.com.
+Thanks to micro.blog new [ActivityPub support](https://www.manton.org/2018/11/07/microblog-mastodon.html), Mastadon users should be able to follow me at @jamie@micro.thingelstad.com.
 
 ### [Wednesday @ 8:03 PM](https://www.thingelstad.com/2018/11/07/020311.html)
 
-Great day for #TeamSPS at our annual Growth Summit! A great year, and more on the way. Want to be [part of #TeamSPS? Join our team](https://jobs.spscommerce.com) !
+Great day for #TeamSPS at our annual Growth Summit! A great year, and more on the way. Want to be part of #TeamSPS? [Join our team](https://jobs.spscommerce.com)!
 
 ![](https://cdn.uploads.micro.blog/890/2018/f747f2ff19.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/3182bbc665.jpg)
@@ -290,7 +290,7 @@ Great day for #TeamSPS at our annual Growth Summit! A great year, and more on th
 
 ### [Tuesday @ 9:01 PM](https://www.thingelstad.com/2018/11/06/i-tried-teslas.html)
 
-I [tried Tesla’s new Navigate on Autopilot](https://www.tesla.com/blog/introducing-navigate-autopilot) feature tonight. It worked very well on first try. 👍🏻
+I tried Tesla’s new [Navigate on Autopilot](https://www.tesla.com/blog/introducing-navigate-autopilot) feature tonight. It worked very well on first try. 👍🏻
 
 ### [Tuesday @ 7:54 AM](https://www.thingelstad.com/2018/11/06/i-voted-remember.html)
 
@@ -304,7 +304,7 @@ iOS has Pythonista for Python, and Scriptable is awesome for JavaScript, but I w
 
 ### [Sunday @ 7:01 PM](https://www.thingelstad.com/2018/11/04/010137.html)
 
-[Tammy and I tried Colita](https://www.colitampls.com) for the first time tonight! 🍽 Started with Papa Noel to drink; then Fish Tacos, Avocado Tostada and finished with Stacked Tostadas, Brussel Sprouts, and Lamb Barbacoa Tacos (amazing!). Finished with Horchata Anglaise. Delicious!
+Tammy and I tried [Colita](https://www.colitampls.com) for the first time tonight! 🍽 Started with Papa Noel to drink; then Fish Tacos, Avocado Tostada and finished with Stacked Tostadas, Brussel Sprouts, and Lamb Barbacoa Tacos (amazing!). Finished with Horchata Anglaise. Delicious!
 
 ### [Sunday @ 2:49 PM](https://www.thingelstad.com/2018/11/04/nice-win-for.html)
 
@@ -312,7 +312,7 @@ Nice win for the Vikings! 🏈
 
 ### [Saturday @ 6:59 PM](https://www.thingelstad.com/2018/11/03/know-someone-wanting.html)
 
-Know someone wanting to move to South [Minneapolis? Our house is for sale](https://www.edinarealty.com/homes-for-sale/5237-morgan-avenue-s-minneapolis-mn-55419-5018320#/) ! We have loved living here. It is an amazing house and neighborhood!
+Know someone wanting to move to South Minneapolis? [Our house is for sale](https://www.edinarealty.com/homes-for-sale/5237-morgan-avenue-s-minneapolis-mn-55419-5018320#/)! We have loved living here. It is an amazing house and neighborhood!
 
 ![](https://cdn.uploads.micro.blog/890/2018/eed67fabc9.jpg)
 
@@ -336,4 +336,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Out of sight, out of mind.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

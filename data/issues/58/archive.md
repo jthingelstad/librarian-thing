@@ -109,9 +109,9 @@ links:
   domain: www.youtube.com
   heading_context: '[Automate Your Context - 2018 Monitorama - YouTube](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927)'
   section: Notable Links 📌
-word_count: 1971
+word_count: 1967
 ---
-Hello from Bayfield, Wisconsin! We [are here to see Brandi Carlile](http://brandicarlile.com) [play at the Big Top Chautauqua](https://www.bigtop.org) . 🎶 It looks like the other thing we'll be doing is getting rained on. ☔️ No trip to Bayfield would be complete without [a visit to the Candy Shoppe](https://www.tripadvisor.com/Restaurant_Review-g60721-d3316141-Reviews-Candy_Shoppe-Bayfield_Wisconsin.html) as well for some delicious wine bread. 🤤
+Hello from Bayfield, Wisconsin! We are here to see [Brandi Carlile](http://brandicarlile.com) play at the [Big Top Chautauqua](https://www.bigtop.org). 🎶 It looks like the other thing we'll be doing is getting rained on. ☔️ No trip to Bayfield would be complete without a visit to the [Candy Shoppe](https://www.tripadvisor.com/Restaurant_Review-g60721-d3316141-Reviews-Candy_Shoppe-Bayfield_Wisconsin.html) as well for some delicious wine bread. 🤤
 
 ## Featured Links 🏅
 
@@ -191,7 +191,7 @@ A lot of what I do with automation I've learned from macsparky and his enthusias
 
 ### [Coinholder Club](http://coinholder.club/)
 
-This is [a fun project from Elwin Loomis](https://www.linkedin.com/in/elwinloomis/) and I’m proud [to have been given a coin](http://www.coinholder.club/coinpage.php?id=DGJ8Y) ! [I also got a second coin](http://www.coinholder.club/coinpage.php?id=LKH3T) to recognize someone else. I love the spirit this embodies. 🙌
+This is a fun project from [Elwin Loomis](https://www.linkedin.com/in/elwinloomis/) and I’m proud to have been [given a coin](http://www.coinholder.club/coinpage.php?id=DGJ8Y)! I also got a [second coin](http://www.coinholder.club/coinpage.php?id=LKH3T) to recognize someone else. I love the spirit this embodies. 🙌
 
 ### [Be a Better Scrum Master: 10 Practices to Take to Heart](https://www.mountaingoatsoftware.com/blog/ten-sentences-with-all-the-scrum-master-advice-youll-ever-need)
 
@@ -219,7 +219,7 @@ A very good illustration of what depression feels like from my friend Patrick Rh
 
 ### [Automate Your Context - 2018 Monitorama - YouTube](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927)
 
-[Andy Domeier](https://twitter.com/ajdomie) of #TeamSPS [gave a great talk at Monitorama](https://monitorama.com) 2018 about automating release management processes. 👏 "Ship Fast and Ship Often" is a core value for us.
+[Andy Domeier](https://twitter.com/ajdomie) of #TeamSPS gave a great talk at [Monitorama](https://monitorama.com) 2018 about automating release management processes. 👏 "Ship Fast and Ship Often" is a core value for us.
 
 ## Now Reading 📚
 
@@ -234,7 +234,7 @@ My book club is going back to Jared Diamond for a third time. Looking forward to
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -253,7 +253,7 @@ A new entrant into web analytics that is not connected to big tech and mining yo
 Twenty years in and we are still figuring out how to deal with email. 😢
 - [Hjson, a user interface for JSON](https://hjson.org/) hjson.org
 - [IBM, Department of Energy Unveil World's Fastest Supercomputer - ExtremeTech](https://www.extremetech.com/extreme/271005-ibm-department-of-energy-unveil-summit-the-worlds-fastest-supercomputer) www.extremetech.com
-200 petaflops per second over 200,000 CPU cores with over [27,648 GPUs. 😳 NY Times article](https://www.nytimes.com/2018/06/08/technology/supercomputer-china-us.html) has a bunch more details.
+200 petaflops per second over 200,000 CPU cores with over 27,648 GPUs. 😳 [NY Times article](https://www.nytimes.com/2018/06/08/technology/supercomputer-china-us.html) has a bunch more details.
 - [Management books in review – Built to Run](https://kimmoir.blog/2018/06/05/management-books-in-review/) kimmoir.blog
 📚 Compilation of management books focused for technology leaders.
 - [10 weird and wonderful derailleurs – and how they changed cycling | Environment | The Guardian](https://www.theguardian.com/environment/bike-blog/2018/jun/07/10-weird-and-wonderful-derailleurs-and-how-they-changed-cycling) www.theguardian.com
@@ -265,7 +265,7 @@ I don’t get why anybody trusts this company or their platform. 🤷‍♂️
 
 https://www.thingelstad.com/2018/06/15/013142.html
 
-We had [a delightful dinner at Freehands Farm](http://www.freehandsfarm.com) outside Ashland, WI. 🍽 True farm to table dining - on the farm!
+We had a delightful dinner at [Freehands Farm](http://www.freehandsfarm.com) outside Ashland, WI. 🍽 True farm to table dining - on the farm!
 
 https://www.thingelstad.com/2018/06/14/nice-family-bike.html
 
@@ -273,7 +273,7 @@ Nice family bike ride around Lake Harriet tonight.
 
 https://www.thingelstad.com/2018/06/13/got-a-silicon.html
 
-[Got a Silicon Dust HDHomeRun Extend](https://www.silicondust.com/product/hdhomerun-extend/) today. I am very impressed with how easy setup was. Easily paired it with Plex on my Synology for DVR. 👍🏻
+Got a Silicon Dust [HDHomeRun Extend](https://www.silicondust.com/product/hdhomerun-extend/) today. I am very impressed with how easy setup was. Easily paired it with Plex on my Synology for DVR. 👍🏻
 
 https://www.thingelstad.com/2018/06/12/idyllic-evening.html
 
@@ -293,7 +293,7 @@ Got the pork shoulders on just as the rain started to pour! Hoping to smoke thro
 
 https://www.thingelstad.com/2018/06/09/nice-talk-on.html
 
-[Nice talk on Automate Your Context](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927) [at Monitorama](https://monitorama.com) [2018 from Andy Domeier](https://www.linkedin.com/in/andy-domeier-10813432/) (Twitter: @ajdomie) of #TeamSPS! 👏 Teams that ship more, win more!
+Nice talk on [Automate Your Context](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927) at [Monitorama](https://monitorama.com) 2018 from [Andy Domeier](https://www.linkedin.com/in/andy-domeier-10813432/) (Twitter: @ajdomie) of #TeamSPS! 👏 Teams that ship more, win more!
 
 ## Fortune 🥠
 
@@ -301,4 +301,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You are only young once, but you can stay immature indefinitely.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

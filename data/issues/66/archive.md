@@ -87,15 +87,15 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Here''s How America Uses Its Land](https://www.bloomberg.com/graphics/2018-us-land-use/)'
   section: Notable Links 📌
-word_count: 1813
+word_count: 1805
 ---
-We've [been enjoying exploring the Finger Lakes](https://www.fingerlakes.org) region of New York this week. We spent [the last few days with Ithaca](https://www.visitithaca.com) as our home base and ventured out to a number of places. The weather has been really hot, ☀️ which has put a damper on all the gorgeous gorge hiking that is in this region. Hiking in the upper 90's is just, well, not that much fun. 💦
+We've been enjoying exploring the [Finger Lakes](https://www.fingerlakes.org) region of New York this week. We spent the last few days with [Ithaca](https://www.visitithaca.com) as our home base and ventured out to a number of places. The weather has been really hot, ☀️ which has put a damper on all the gorgeous gorge hiking that is in this region. Hiking in the upper 90's is just, well, not that much fun. 💦
 
 We got some fun suggestions on places to go from last weeks newsletter, and since it is a week of vacation be warned there are a lot of microposts and pictures below. 📷 If you just come for the links, don't despair, there is great stuff there too. 👍
 
-[We are in Corning](https://www.corningny.com) now mostly [for the Corning Museum of Glass](https://www.cmog.org) , which is amazing. Soon we make our way for the grand finale, Niagara Falls!
+We are in [Corning](https://www.corningny.com) now mostly for the [Corning Museum of Glass](https://www.cmog.org), which is amazing. Soon we make our way for the grand finale, Niagara Falls!
 
-You may [have noticed that the Weekly Thing](https://weekly.thingelstad.com) logo has been changing colors lately. I wanted to bring color to it, but didn't like a mix of colors and didn't want to pick just one color. So I figured, why do I have to pick? 😁
+You may have noticed that the [Weekly Thing](https://weekly.thingelstad.com) logo has been changing colors lately. I wanted to bring color to it, but didn't like a mix of colors and didn't want to pick just one color. So I figured, why do I have to pick? 😁
 
 ## Featured Links 🏅
 
@@ -193,7 +193,7 @@ I like the illustrations of land use in the United States. Plus you learn some t
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -216,13 +216,13 @@ See how bad flight delays are across the US. ✈️
 
 ### [Thursday @ 11:29 PM](https://www.thingelstad.com/2018/08/09/after-intense-deliberation.html)
 
-After intense deliberation Mazie and Tyler each picked one of these to take home from the Corning [Museum of Glass. Paradox of Choice](https://en.wikipedia.org/wiki/The_Paradox_of_Choice) was strongly displayed. 😬
+After intense deliberation Mazie and Tyler each picked one of these to take home from the Corning Museum of Glass. [Paradox of Choice](https://en.wikipedia.org/wiki/The_Paradox_of_Choice) was strongly displayed. 😬
 
 ![](https://www.thingelstad.com/uploads/2018/7969ffa668.jpg)
 
 ### [Thursday @ 11:26 PM](https://www.thingelstad.com/2018/08/09/the-contemporary-galleries.html)
 
-The Contemporary Galleries [of the Corning Museum of Glass](https://www.cmog.org) have stunning art and equally amazing architecture. The way natural light comes into the space and completely changes exhibits is amazing.
+The Contemporary Galleries of the [Corning Museum of Glass](https://www.cmog.org) have stunning art and equally amazing architecture. The way natural light comes into the space and completely changes exhibits is amazing.
 
 ![](https://www.thingelstad.com/uploads/2018/2ce8bf9183.jpg)
 
@@ -234,13 +234,13 @@ The Contemporary Galleries [of the Corning Museum of Glass](https://www.cmog.org
 
 ### [Thursday @ 8:54 PM](https://www.thingelstad.com/2018/08/09/time-for-a.html)
 
-Time for a [drive-in movie at the Elmira Drive-In](http://www.elmiradrivein.com/) [to see Christopher Robbin](https://imdb.com/title/tt4575576/) . 🎬
+Time for a drive-in movie at the [Elmira Drive-In](http://www.elmiradrivein.com/) to see [Christopher Robbin](https://imdb.com/title/tt4575576/). 🎬
 
 ![](https://www.thingelstad.com/uploads/2018/baa5072b00.jpg)
 
 ### [Wednesday @ 9:02 PM](https://www.thingelstad.com/2018/08/08/we-had-to.html)
 
-We had to dodge the rain but [we got to see Taughannock Falls](https://parks.ny.gov/parks/62/details.aspx) today! Impressive waterfall!
+We had to dodge the rain but we got to see [Taughannock Falls](https://parks.ny.gov/parks/62/details.aspx) today! Impressive waterfall!
 
 ![](https://www.thingelstad.com/uploads/2018/e8fa327c13.jpg)
 
@@ -248,13 +248,13 @@ We had to dodge the rain but [we got to see Taughannock Falls](https://parks.ny.
 
 ### [Wednesday @ 3:36 PM](https://www.thingelstad.com/2018/08/08/193607.html)
 
-[Family selfie at Ventosa Vineyards](https://ventosavineyards.com) ! 🍷
+Family selfie at [Ventosa Vineyards](https://ventosavineyards.com)! 🍷
 
 ![](https://www.thingelstad.com/uploads/2018/8a674fc6ec.jpg)
 
 ### [Wednesday @ 3:35 PM](https://www.thingelstad.com/2018/08/08/fun-afternoon-tasting.html)
 
-Fun afternoon tasting all sorts [of beverages at 3 Brothers Winery](https://www.3brotherswinery.com) !
+Fun afternoon tasting all sorts of beverages at [3 Brothers Winery](https://www.3brotherswinery.com)!
 
 ![](https://www.thingelstad.com/uploads/2018/320dd12db7.jpg)
 
@@ -270,7 +270,7 @@ Cairns by Ithaca Falls.
 
 ### [Tuesday @ 8:45 PM](https://www.thingelstad.com/2018/08/07/ithaca-falls.html)
 
-[Ithaca Falls](https://en.wikipedia.org/wiki/Ithaca_Falls) . 😊👍🏻
+[Ithaca Falls](https://en.wikipedia.org/wiki/Ithaca_Falls). 😊👍🏻
 
 ![](https://www.thingelstad.com/uploads/2018/6a7bf32a6c.jpg)
 
@@ -278,7 +278,7 @@ Cairns by Ithaca Falls.
 
 ### [Tuesday @ 8:41 PM](https://www.thingelstad.com/2018/08/07/ice-cream-stop.html)
 
-Ice Cream stop [for today at Cornell Dairy Bar](https://living.cornell.edu/dine/wheretoeat/cafescoffeehouses/cornelldairybar.cfm) . 🤤🍦
+Ice Cream stop for today at [Cornell Dairy Bar](https://living.cornell.edu/dine/wheretoeat/cafescoffeehouses/cornelldairybar.cfm). 🤤🍦
 
 ![](https://www.thingelstad.com/uploads/2018/d080fc2ca4.jpg)
 
@@ -288,7 +288,7 @@ Ice Cream stop [for today at Cornell Dairy Bar](https://living.cornell.edu/dine/
 
 ### [Monday @ 10:02 PM](https://www.thingelstad.com/2018/08/06/great-beer-and.html)
 
-Great beer 🍺 and food [🍕 at Grist Iron Brewing Co](http://gristironbrewing.com) this evening, with a nice view of Lake Seneca in the distance. Plus awesome bag boards.
+Great beer 🍺 and food 🍕 at [Grist Iron Brewing Co](http://gristironbrewing.com) this evening, with a nice view of Lake Seneca in the distance. Plus awesome bag boards.
 
 ![](https://www.thingelstad.com/uploads/2018/db6af4fcd9.jpg)
 
@@ -298,7 +298,7 @@ Great beer 🍺 and food [🍕 at Grist Iron Brewing Co](http://gristironbrewing
 
 ### [Monday @ 9:57 PM](https://www.thingelstad.com/2018/08/06/015729.html)
 
-We had a fun (blazing [hot) sail on the True Love](https://www.schoonerexcursions.com) schooner on Seneca Lake today. ⛵️
+We had a fun (blazing hot) sail on the [True Love](https://www.schoonerexcursions.com) schooner on Seneca Lake today. ⛵️
 
 ![](https://www.thingelstad.com/uploads/2018/134e6bc357.jpg)
 
@@ -310,7 +310,7 @@ We had a fun (blazing [hot) sail on the True Love](https://www.schoonerexcursion
 
 ### [Monday @ 9:51 PM](https://www.thingelstad.com/2018/08/06/015115.html)
 
-We had a fun (and very hot) hike down and back up the Gorge [Trail at Watkins Glen State Park](https://parks.ny.gov/parks/142/details.aspx) . The trail wound around the water and through rock tunnels.
+We had a fun (and very hot) hike down and back up the Gorge Trail at [Watkins Glen State Park](https://parks.ny.gov/parks/142/details.aspx). The trail wound around the water and through rock tunnels.
 
 ![](https://www.thingelstad.com/uploads/2018/8b3052cf3e.jpg)
 
@@ -326,7 +326,7 @@ We all got to meet @DanoKubb in person today! Should have gotten a pic. #Kubb un
 
 ### [Saturday @ 9:25 PM](https://www.thingelstad.com/2018/08/04/the-kids-had.html)
 
-The kids [had fun racing at RPM Raceway](https://rpmraceway.com) in Syracuse. I was impressed with their electric karts. Very cool! 🏎
+The kids had fun racing at [RPM Raceway](https://rpmraceway.com) in Syracuse. I was impressed with their electric karts. Very cool! 🏎
 
 ![](https://www.thingelstad.com/uploads/2018/9ecbc54960.jpg)
 
@@ -334,7 +334,7 @@ The kids [had fun racing at RPM Raceway](https://rpmraceway.com) in Syracuse. I 
 
 ### [Saturday @ 5:26 PM](https://www.thingelstad.com/2018/08/04/212619.html)
 
-We had a great time doing The Heist and Cold [Case at the Museum of Intrigue](https://www.museumofintrigue.com) ! It is a very innovative, first of its kind approach to escape rooms!
+We had a great time doing The Heist and Cold Case at the [Museum of Intrigue](https://www.museumofintrigue.com)! It is a very innovative, first of its kind approach to escape rooms!
 
 ![](https://www.thingelstad.com/uploads/2018/6c3f10802e.jpg)
 
@@ -350,7 +350,7 @@ Tyler and I still have fun with Pokémon GO! My Trainer Code is 9399 2668 4290 i
 
 ### [Saturday @ 12:46 PM](https://www.thingelstad.com/2018/08/04/164657.html)
 
-Enjoying [a delicious lunch at Dinosaur Bar-B-Que](http://www.dinosaurbarbque.com) [Jason Greenberg](https://www.linkedin.com/in/jason-greenberg-7b01768/) @SPSJasonG for the recommendation! 🍽
+Enjoying a delicious lunch at [Dinosaur Bar-B-Que](http://www.dinosaurbarbque.com)! 🐖 Thanks [Jason Greenberg](https://www.linkedin.com/in/jason-greenberg-7b01768/) @SPSJasonG for the recommendation! 🍽
 
 ![](https://www.thingelstad.com/uploads/2018/c63820c515.jpg)
 
@@ -374,4 +374,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Change your thoughts and you change your world.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

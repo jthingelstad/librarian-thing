@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/35/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-6-2018/
 domains: []
 links: []
-word_count: 1583
+word_count: 1590
 ---
 😬 I hope you all had a great New Years and a fabulous start to 2018! For me the New Year has kicked off with a bang! 🚀 This week has been a blur of various activities on all fronts. I celebrated my birthday 🎂 with fun and presents. I’m eager to put my new sous vide cooker to work and make some delicious eats!
 
@@ -94,7 +94,7 @@ Thorough list of tools that this person uses to track and measure various aspect
 
 ### [Checklist-Checklist: 🌈 A Curated List of Checklists ✔︎✔︎](https://github.com/huyingjie/Checklist-Checklist)
 
-Like seeing [Checklist Manifesto](https://en.wikipedia.org/wiki/The_Checklist_Manifesto) I started a wiki at CCChecklist.org. The idea of that project [was to be a Creative Commons](https://creativecommons.org) licensed collection of checklists to share. This project is similar just using Github instead of a wiki. I never launched that project, but the concept is still really good. Minor nitpick that [Github Flavored Markdown](https://github.github.com/gfm/) for the checklists and I think [Taskpaper](https://www.taskpaper.com) would be a more useful and interoperable format.
+Like seeing this. After reading the [Checklist Manifesto](https://en.wikipedia.org/wiki/The_Checklist_Manifesto) I started a wiki at CCChecklist.org. The idea of that project was to be a [Creative Commons](https://creativecommons.org) licensed collection of checklists to share. This project is similar just using Github instead of a wiki. I never launched that project, but the concept is still really good. Minor nitpick that this is using [Github Flavored Markdown](https://github.github.com/gfm/) for the checklists and I think [Taskpaper](https://www.taskpaper.com) would be a more useful and interoperable format.
 
 ### [IKEA effect - Wikipedia](https://en.wikipedia.org/wiki/IKEA_effect)
 
@@ -116,16 +116,16 @@ https://minnestar.org
 
 ## Microblog updates 🎈
 
-- Entering the world of sous vide cooking with my new Joule. Love that I even get to update firmware on this! Has WiFi and can [be controlled anywhere from iOS. 😁👍🏻](https://www.thingelstad.com/2018/01/05/entering-the-world.html)
-- Just finished module 1 of The Focus Course. It is a slow start but I see it building some foundational things. Looking forward [to the rest of the modules.](https://www.thingelstad.com/2018/01/01/just-finished-module.html)
-- This was a fun surprise on my Apple Watch this morning. Was [this only a Siri face feature?](https://www.thingelstad.com/2018/01/01/this-was-a.html)
+- [Entering the world of sous vide cooking with my new Joule. Love that I even get to update firmware on this! Has WiFi and can be controlled anywhere from iOS. 😁👍🏻](https://www.thingelstad.com/2018/01/05/entering-the-world.html)
+- [Just finished module 1 of The Focus Course. It is a slow start but I see it building some foundational things. Looking forward to the rest of the modules.](https://www.thingelstad.com/2018/01/01/just-finished-module.html)
+- [This was a fun surprise on my Apple Watch this morning. Was this only a Siri face feature?](https://www.thingelstad.com/2018/01/01/this-was-a.html)
 - [Humbling game of Blokus! 😬](https://www.thingelstad.com/2017/12/31/humbling-game-of.html)
-- It was Mrs. Peacock in [the Hall with a Wrench! 🔧](https://www.thingelstad.com/2017/12/31/200954.html)
-- Time for family New Years Eve. Game [of Clue is first up! 🎲](https://www.thingelstad.com/2017/12/31/200954.html)
-- Got a set of the Bodum demitasse for Christmas. Lighter than my typical Illy demitasse but I like that [you can see the espresso. ☕️](https://www.thingelstad.com/2017/12/31/152103.html)
-- Leveling up my coffee fussiness with [this new coffee distribution tool. ☕️](https://www.thingelstad.com/2017/12/31/152103.html)
-- Tyler and I played Super Mario Odyssey through a few levels today and had a blast. The game is filled with little hidden gems. And playing as other characters [with the hat is amazing. 👍🏻💯](https://www.thingelstad.com/2017/12/30/tyler-and-i.html)
-- First time playing Ticket to Ride: Nordic Countries and liked it a lot. Limiting to only have 3 players, but fun routes and tunnels add challenges. Pairs well [with snow and hot cocoa. 😊](https://www.thingelstad.com/2017/12/30/first-time-playing.html)
+- [It was Mrs. Peacock in the Hall with a Wrench! 🔧](https://www.thingelstad.com/2017/12/31/200954.html)
+- [Time for family New Years Eve. Game of Clue is first up! 🎲](https://www.thingelstad.com/2017/12/31/200954.html)
+- [Got a set of the Bodum demitasse for Christmas. Lighter than my typical Illy demitasse but I like that you can see the espresso. ☕️](https://www.thingelstad.com/2017/12/31/152103.html)
+- [Leveling up my coffee fussiness with this new coffee distribution tool. ☕️](https://www.thingelstad.com/2017/12/31/152103.html)
+- [Tyler and I played Super Mario Odyssey through a few levels today and had a blast. The game is filled with little hidden gems. And playing as other characters with the hat is amazing. 👍🏻💯](https://www.thingelstad.com/2017/12/30/tyler-and-i.html)
+- [First time playing Ticket to Ride: Nordic Countries and liked it a lot. Limiting to only have 3 players, but fun routes and tunnels add challenges. Pairs well with snow and hot cocoa. 😊](https://www.thingelstad.com/2017/12/30/first-time-playing.html)
 
 ## The end 🎬
 

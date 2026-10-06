@@ -74,9 +74,9 @@ links:
   domain: www.redbull.com
   heading_context: '[Red Bull Trans-Siberian Extreme](https://www.redbull.com/us-en/events/red-bull-trans-siberian-extreme)'
   section: Notable Links 📌
-word_count: 1365
+word_count: 1360
 ---
-This week has been challenging on a couple of fronts. [The news of David Hussman's passing](https://www.caringbridge.org/visit/davidhussman2/journal/view/id/5b798405ec1003404f0f1ee1) spread quickly this last weekend. 😢 I've [lost one other friend to cancer](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/) , and he also seemed to be doing better than expected for a long time, and then his health went downhill very quickly. I don't know if that is common with cancer, but it feels like it is tricking you.
+This week has been challenging on a couple of fronts. The news of [David Hussman's passing](https://www.caringbridge.org/visit/davidhussman2/journal/view/id/5b798405ec1003404f0f1ee1) spread quickly this last weekend. 😢 I've [lost one other friend to cancer](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/), and he also seemed to be doing better than expected for a long time, and then his health went downhill very quickly. I don't know if that is common with cancer, but it feels like it is tricking you.
 
 At home, our dog Chase had a difficult week. 🐕 He tore one of his CCL's, which is the dog version of an ACL, and his right hind leg went lame. He was hobbling around and a couple of days later he tore the other CCL as well, and for a day couldn't walk or even stand. I've been carrying all 80 pounds of him up and down stairs the last few days and trying to get him to rest. He's 11 years old, and on top of this issue he has melanoma. Damnit cancer! He doesn't have a lot of time left and we want to make sure what he has is good. His knees have been slowly improving, and he has some pain medication to help as well. I think he will get past the CCL issues and get some more time.
 
@@ -96,7 +96,7 @@ The scale of this effort at Netflix is amazing.
 
 > Every day more than 1 trillion events are written into a streaming ingestion pipeline, which is processed and written to a 100PB cloud-native data warehouse. And every day, our users run more than 150,000 jobs against this data, spanning everything from reporting and analysis to machine learning and recommendation algorithms.
 
-[I haven't used Jupyter](http://jupyter.org) but it looks really compelling. I like how Netflix is using them for the exploration, as well as putting them into production pipelines.
+I haven't used [Jupyter](http://jupyter.org) but it looks really compelling. I like how Netflix is using them for the exploration, as well as putting them into production pipelines.
 
 ## My Weekly Photo 📷
 
@@ -146,21 +146,21 @@ Tammy and I have used YNAB for a few years now. I’m a fan of GTD. It’s like 
 
 ### [Global Passport Power Rank | The Passport Index 2018](https://www.passportindex.org/byRank.php)
 
-I saw [this article about traveling the world](https://www.bucketlistly.blog/posts/how-to-travel-third-world-passport-thai) and it linked to this Passport Power Rank. I hadn't really considered this, but when traveling with some colleagues a while back one of them commented that a US passport comes with significant benefits. Turns out Singapore has the most benefits of all!
+I saw this article about [traveling the world](https://www.bucketlistly.blog/posts/how-to-travel-third-world-passport-thai) and it linked to this Passport Power Rank. I hadn't really considered this, but when traveling with some colleagues a while back one of them commented that a US passport comes with significant benefits. Turns out Singapore has the most benefits of all!
 
 ### [Hacker Newsletter - The Hacker News Newsletter](https://hackernewsletter.com/)
 
-I don't like the comment section of Hacker News, so this weekly newsletter is a great way to [get the curation of Kale Davis](http://kaledavis.com) for the notable things to see on Hacker News each week.
+I don't like the comment section of Hacker News, so this weekly newsletter is a great way to get the curation of [Kale Davis](http://kaledavis.com) for the notable things to see on Hacker News each week.
 
 ### [Red Bull Trans-Siberian Extreme](https://www.redbull.com/us-en/events/red-bull-trans-siberian-extreme)
 
-I had not heard of this event and it is a monster “15 stages over the course of 25 days and covering a total of 9,100km”. iI reminds [me of the Race Across America](http://www.raceacrossamerica.org) , but intentionally more difficult in terrain.
+I had not heard of this event and it is a monster “15 stages over the course of 25 days and covering a total of 9,100km”. iI reminds me of the [Race Across America](http://www.raceacrossamerica.org), but intentionally more difficult in terrain.
 
 ## Give Back 🎁
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -189,7 +189,7 @@ Started allergy medicine — I don’t remember a year that I had to start this 
 
 ### [Sunday @ 4:55 PM](https://www.thingelstad.com/2018/08/19/very-sad-to.html)
 
-Very sad to hear of the passing of my friend David Hussman (@davidhussman). We will all miss you [dude! 😢 See his CaringBridge site](https://www.caringbridge.org/visit/davidhussman2/journal) .
+Very sad to hear of the passing of my friend David Hussman (@davidhussman). We will all miss you dude! 😢 See his [CaringBridge site](https://www.caringbridge.org/visit/davidhussman2/journal).
 
 ### [Saturday @ 4:39 PM](https://www.thingelstad.com/2018/08/18/very-happy-with.html)
 
@@ -210,4 +210,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 I am rubber and you are glue.
 Your words bounce off me and stick to you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

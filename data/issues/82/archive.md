@@ -101,7 +101,7 @@ links:
   domain: 512pixels.net
   heading_context: '[The One Where I Announce I’m Joining Mac Power Users – 512 Pixels](https://512pixels.net/2018/11/joining-mpu/)'
   section: Notable Links 📌
-word_count: 2069
+word_count: 2067
 ---
 So what is it like to be right in the thick of it when technology teams manage through maximum capacity events? There are many similarities to running financial publishing systems through significant market events, providing giant "social scale" to applications deployed to millions of people in minutes, as well as running the largest retail network in the world at the highest volume time of year. You need a great team, real-time performance data, proper procedures, and experience — amongst other things.
 
@@ -119,7 +119,7 @@ Like this perspective on performance management systems. Things of note:
 3. I like seeing OKR's highlighted here.
 4. I like the way this framed the engagement topic, and how a manager should think about team engagement in their overall work.
 
-Good things to consider as your organization evolves and grows. Via [Juselly French](https://www.linkedin.com/in/jusellyfrench/) .
+Good things to consider as your organization evolves and grows. Via [Juselly French](https://www.linkedin.com/in/jusellyfrench/).
 
 ### [Information Attacks against Democracies - Schneier on Security](https://www.schneier.com/blog/archives/2018/11/information_att.html)
 
@@ -154,7 +154,7 @@ Amazon introduced this highlighting that it was a technology they built in-house
 
 > Amazon QLDB is a new class of database that eliminates the need to engage in the complex development effort of building your own ledger-like applications. With QLDB, your data’s change history is immutable – it cannot be altered or deleted – and using cryptography, you can easily verify that there have been no unintended modifications to your application’s data.
 
-There is a [lot of overlap with Event Sourcing](https://www.martinfowler.com/eaaDev/EventSourcing.html) concepts, but I’m not sure it is applicable to that. This is marketed as providing the audit history trust of a blockchain, but not using decentralization.
+There is a lot of overlap with [Event Sourcing](https://www.martinfowler.com/eaaDev/EventSourcing.html) concepts, but I’m not sure it is applicable to that. This is marketed as providing the audit history trust of a blockchain, but not using decentralization.
 
 ### [Amazon Textract | Extract Text & Data | AWS](https://aws.amazon.com/textract/)
 
@@ -233,7 +233,7 @@ Nice to see SPS Commerce in the top spot, by a ways!
 
 ### [Wednesday @ 11:26 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
-[Amazon Quantum Ledger Database](https://aws.amazon.com/qldb/) [and Managed Blockchain](https://aws.amazon.com/managed-blockchain/) look like good building blocks.
+Amazon [Quantum Ledger Database](https://aws.amazon.com/qldb/) and [Managed Blockchain](https://aws.amazon.com/managed-blockchain/) look like good building blocks.
 
 ### [Wednesday @ 11:02 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
@@ -241,7 +241,7 @@ Nice to see SPS Commerce in the top spot, by a ways!
 
 ### [Wednesday @ 10:59 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
-"[Announcing AWS Lake Formation](https://aws.amazon.com/lake-formation/)!" — "Sounds glacial!" 🤣
+"Announcing [AWS Lake Formation](https://aws.amazon.com/lake-formation/)!" — "Sounds glacial!" 🤣
 
 ### [Wednesday @ 10:48 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
@@ -249,7 +249,7 @@ The house band thing at AWS re:Invent just doesn’t work for me. ✋
 
 ### [Wednesday @ 10:40 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
-Very fun to see my former [Dow Jones colleague Dean Del Vecchio](https://www.linkedin.com/in/dean-a-del-vecchio-66a874/) on stage at AWS re:Invent 2018! 👏 Guardian Life Insurance Selects [AWS as Its Preferred Cloud Provider](https://press.aboutamazon.com/news-releases/news-release-details/guardian-life-insurance-selects-aws-its-preferred-cloud-provider/)
+Very fun to see my former Dow Jones colleague [Dean Del Vecchio](https://www.linkedin.com/in/dean-a-del-vecchio-66a874/) on stage at AWS re:Invent 2018! 👏 [Guardian Life Insurance Selects AWS as Its Preferred Cloud Provider](https://press.aboutamazon.com/news-releases/news-release-details/guardian-life-insurance-selects-aws-its-preferred-cloud-provider/)
 
 ### [Monday @ 8:26 AM](https://www.thingelstad.com/2018/11/26/ready-for-cyber.html)
 
@@ -263,7 +263,7 @@ Nice win for the Vikings over the Packers – fun game to watch! 🏈
 
 ### [Saturday @ 8:51 PM](https://www.thingelstad.com/2018/11/24/we-tried-the.html)
 
-We tried the brand [new, just opened today, Final Frontier](https://www.missingpiecesmn.com/final-frontier) puzzle room at Missing Pieces. We didn’t solve it 😲, but really liked the room. We did not get the description of what we missed so we can come back and try again.
+We tried the brand new, just opened today, [Final Frontier](https://www.missingpiecesmn.com/final-frontier) puzzle room at Missing Pieces. We didn’t solve it 😲, but really liked the room. We did not get the description of what we missed so we can come back and try again.
 
 ![](https://cdn.uploads.micro.blog/890/2018/d98ee6e1e6.jpg)
 
@@ -277,4 +277,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Spare the rod and spoil the child.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

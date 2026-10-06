@@ -96,7 +96,7 @@ links:
   domain: om.co
   heading_context: '[3 pieces of advice in Jeff Bezos’ Shareholder Letter – On my Om](https://om.co/2019/04/17/3-pieces-of-advice-in-jeff-bezos-shareholder-letter/)'
   section: Notable Links 📌
-word_count: 2074
+word_count: 2067
 ---
 Happy Easter Weekend to all of you! I hope the Easter Bunny brings you something great in your basket. 🐰 And Happy Earth Day coming up on Monday! 🌎 I am so excited for this weekend. It’s one of those first weekends where all the snow is gone, and it looks like it’s going to be absolutely gorgeous! ☀️
 
@@ -188,7 +188,7 @@ If the end-game to real profit and margin for Uber is self-driving cars, one has
 
 ### [Calory Review: Simple, Convenient Calorie Tracking – MacStories](https://www.macstories.net/reviews/calory-review-simple-convenient-calorie-tracking/)
 
-There are so many food tracking applications, and I've used a lot [of them. I currently use Ate](https://youate.com) which is all about photo journaling. There are super precise calorie loggers, but this fun logger with a delightful user experience looks really good.
+There are so many food tracking applications, and I've used a lot of them. I currently use [Ate](https://youate.com) which is all about photo journaling. There are super precise calorie loggers, but this fun logger with a delightful user experience looks really good.
 
 ### [Daring Fireball: Disney+ Details: $7/Month, No Commercials, Tons of Old and New Content](https://daringfireball.net/2019/04/disney_plus)
 
@@ -196,13 +196,13 @@ This offering has some definite potential. Disney has an amazing catalog of cont
 
 ### [3 pieces of advice in Jeff Bezos’ Shareholder Letter – On my Om](https://om.co/2019/04/17/3-pieces-of-advice-in-jeff-bezos-shareholder-letter/)
 
-Summary of some key [highlights from Jeff Bezos Shareholder letter](https://blog.aboutamazon.com/company-news/2018-letter-to-shareholders) . I really like the "Wander" point. It is very uncomfortable to do that, but acknowledging that it is a necessary component to innovation is important.
+Summary of some key highlights from [Jeff Bezos Shareholder letter](https://blog.aboutamazon.com/company-news/2018-letter-to-shareholders). I really like the "Wander" point. It is very uncomfortable to do that, but acknowledging that it is a necessary component to innovation is important.
 
 ## Give Back 🎁
 
 https://www.eff.org
 
-[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
+The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
 
 ## Yet More Links 🍞
 
@@ -211,7 +211,7 @@ Lessons learned moving a very big social platform to Kubernetes.
 - [An Intro to Threading in Python – Real Python](https://realpython.com/intro-to-python-threading/) realpython.com
 Great overview of threading for Python with good code examples.
 - [Apple revamping Find My Friends & Find My iPhone in unified app, developing Tile-like personal item tracking - 9to5Mac](https://9to5mac.com/2019/04/17/find-my-iphone-revamp/) 9to5mac.com
-Makes sense. [Sounds like a clone of Tile](https://www.thetileapp.com/en-us/) .
+Makes sense. Sounds like a clone of [Tile](https://www.thetileapp.com/en-us/).
 - [‘Tim Cook: The Genius Who Took Apple to the Next Level’ Is an Insightful Look at the Values that Guide the Company’s CEO – MacStories](https://www.macstories.net/reviews/tim-cook-the-genius-who-took-apple-to-the-next-level-is-an-insightful-look-at-the-values-that-guide-the-companys-ceo/) www.macstories.net
 Tim Cook impresses me greatly, this book might be a good read.
 - [Desmos | Graphing Calculator](https://www.desmos.com/calculator) www.desmos.com
@@ -231,7 +231,7 @@ The [2019 Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/an
 
 ### [Wednesday @ 7:25 PM](https://www.thingelstad.com/2019/04/17/minnesota-aspirations-in.html)
 
-Fun and inspiring keynote [at Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/announcing-the-2019-minnesota-aspirations-for-women-in-computing-awards-honorees/) [from Amy Alexander](https://www.linkedin.com/in/amy-e-alexander/) , Senior Biomedical Engineer at Mayo Clinic, sharing some of the incredible work she does to help patients. #MNAiC2019
+Fun and inspiring keynote at [Minnesota Aspirations in Computing Awards](https://mnstateitcoe.org/announcing-the-2019-minnesota-aspirations-for-women-in-computing-awards-honorees/) from [Amy Alexander](https://www.linkedin.com/in/amy-e-alexander/), Senior Biomedical Engineer at Mayo Clinic, sharing some of the incredible work she does to help patients. #MNAiC2019
 
 ### [Wednesday @ 7:00 PM](https://www.thingelstad.com/2019/04/17/minnesota-aspirations-in.html)
 
@@ -239,7 +239,7 @@ Excited to be at the [2019 Minnesota Aspirations in Computing Awards](https://mn
 
 ### [Monday @ 10:52 PM](https://www.thingelstad.com/2019/04/15/just-ordered-my.html)
 
-Just [ordered my MacStories 10th Anniversary T-Shirt](https://www.macstories.net/news/announcing-the-macstories-10th-anniversary-t-shirt-and-pin/) ! 👕
+Just ordered my [MacStories 10th Anniversary T-Shirt](https://www.macstories.net/news/announcing-the-macstories-10th-anniversary-t-shirt-and-pin/)! 👕
 
 ### [Saturday @ 9:33 PM](https://www.thingelstad.com/2019/04/13/212938.html)
 
@@ -247,11 +247,11 @@ Just [ordered my MacStories 10th Anniversary T-Shirt](https://www.macstories.net
 
 ### [Saturday @ 9:29 PM](https://www.thingelstad.com/2019/04/13/212938.html)
 
-Got [to watch the Space X Arabsat-6A](https://www.youtube.com/watch?v=TXMGu2d8c8g) launch from two days ago. Still amazes me watching the booster rockets land. 🚀😲
+Got to watch the [Space X Arabsat-6A](https://www.youtube.com/watch?v=TXMGu2d8c8g) launch from two days ago. Still amazes me watching the booster rockets land. 🚀😲
 
 ### [Saturday @ 8:00 PM](https://www.thingelstad.com/2019/04/13/sad-to-hear.html)
 
-[Sad to hear that Creative Kidstuff](http://www.creativekidstuff.com/store/ck/site) is going out of business. That was always one of our favorite local stores. ☹️
+Sad to hear that [Creative Kidstuff](http://www.creativekidstuff.com/store/ck/site) is going out of business. That was always one of our favorite local stores. ☹️
 
 ### [Saturday @ 7:32 PM](https://www.thingelstad.com/2019/04/13/allianz-field-satellite.html)
 
@@ -286,19 +286,19 @@ So excited to be here, right now, for the Minnesota United home opener in the go
 
 ### [Saturday @ 7:38 AM](https://www.thingelstad.com/2019/04/13/coffee-cathedral-ratio.html)
 
-[Coffee Cathedral. Ratio](https://ratiocoffee.com) Eight making [magic with beans from Sump Coffee](https://www.sumpcoffee.com) . ☕️
+Coffee Cathedral. [Ratio](https://ratiocoffee.com) Eight making magic with beans from [Sump Coffee](https://www.sumpcoffee.com). ☕️
 
 ![](https://cdn.uploads.micro.blog/890/2019/0704c70798.jpg)
 
 ### [Friday @ 5:45 PM](https://www.thingelstad.com/2019/04/12/we-had-a.html)
 
-We [had a family debate that Nutella](https://www.nutella.com/en/us) from Europe wasn’t as sweet as what we get in the United States. I brought a jar of Nutella back and we did a blind taste test. Nobody could tell the difference, they tasted identical. 👍
+We had a family debate that [Nutella](https://www.nutella.com/en/us) from Europe wasn’t as sweet as what we get in the United States. I brought a jar of Nutella back and we did a blind taste test. Nobody could tell the difference, they tasted identical. 👍
 
 ![](https://cdn.uploads.micro.blog/890/2019/3f658dec45.jpg)
 
 ### [Friday @ 5:16 PM](https://www.thingelstad.com/2019/04/12/also-watched-arctic.html)
 
-[Also watched Arctic](https://www.rottentomatoes.com/m/arctic_2019/) on flight. Liked it a lot. Almost no dialogue, but that doesn’t take anything away. 🥶🎬✈️
+Also watched [Arctic](https://www.rottentomatoes.com/m/arctic_2019/) on flight. Liked it a lot. Almost no dialogue, but that doesn’t take anything away. 🥶🎬✈️
 
 ![](https://cdn.uploads.micro.blog/890/2019/9bac146ade.jpg)
 
@@ -310,7 +310,7 @@ I love the messages the kids leave for me on the chalkboard when I come home fro
 
 ### [Friday @ 11:51 AM](https://www.thingelstad.com/2019/04/12/watched-green-book.html)
 
-[Watched Green Book](https://www.rottentomatoes.com/m/green_book) and thoroughly enjoyed it. Great movie and equally great acting. 🎬✈️
+Watched [Green Book](https://www.rottentomatoes.com/m/green_book) and thoroughly enjoyed it. Great movie and equally great acting. 🎬✈️
 
 ![](https://cdn.uploads.micro.blog/890/2019/589d32b68f.jpg)
 
@@ -320,4 +320,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will be recognized and honored as a community leader.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

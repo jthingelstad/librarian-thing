@@ -129,9 +129,9 @@ links:
   domain: om.co
   heading_context: '[We are all trapped in the “Feed” — Om on Tech](https://om.co/2018/05/26/we-are-all-trapped-in-the-feed/)'
   section: Notable Links 📌
-word_count: 2236
+word_count: 2233
 ---
-Weekly Thing is now privacy enhanced. By default, MailChimp tracks when people open newsletters and what links you click on. Most of the people that read this know that I value my privacy, and I don't like the idea of being watched. So, in [accordance with not being a hypocrite](https://www.thingelstad.com/2017/removed-google-analytics/) , I've disabled those features. I'm not sure if MailChimp will honor them both, it may still put tracking code on the links, but I know it will not track opens. Enjoy reading with more privacy. 😎
+Weekly Thing is now privacy enhanced. By default, MailChimp tracks when people open newsletters and what links you click on. Most of the people that read this know that I value my privacy, and I don't like the idea of being watched. So, in accordance with [not being a hypocrite](https://www.thingelstad.com/2017/removed-google-analytics/), I've disabled those features. I'm not sure if MailChimp will honor them both, it may still put tracking code on the links, but I know it will not track opens. Enjoy reading with more privacy. 😎
 
 ## My Blog Posts ✍️
 
@@ -193,11 +193,11 @@ Interesting point, contrarian to most of my experience, but worth a read anyway.
 
 ### [OmniFocus 3 for iPhone and iPad — MacSparky](https://www.macsparky.com/blog/2018/5/omnifocus-3-for-iphone-and-ipad)
 
-David Sparks [authored the OmniFocus Video Field Guide](https://www.macsparky.com/omnifocus/) which transformed in fabulous ways how I use OmniFocus. Sparks is my "guru" when it comes to OmniFocus so of course his writeup is interesting.
+David Sparks authored the [OmniFocus Video Field Guide](https://www.macsparky.com/omnifocus/) which transformed in fabulous ways how I use OmniFocus. Sparks is my "guru" when it comes to OmniFocus so of course his writeup is interesting.
 
 ### [Impressions of OmniFocus 3 – Releasing May 30 on iOS – Kourosh Dini](http://www.kouroshdini.com/2018/05/30/impressions-of-omnifocus-3-releasing-may-30-on-ios/)
 
-Kuorosh Dini is a Zen Master of Getting Things Done, and does it all with OmniFocus. His take is a must read on OmniFocus as well. His [book on Creating Flow with OmniFocus](https://gumroad.com/l/creating_flow_with_omnifocus) is great too.
+Kuorosh Dini is a Zen Master of Getting Things Done, and does it all with OmniFocus. His take is a must read on OmniFocus as well. His book on [Creating Flow with OmniFocus](https://gumroad.com/l/creating_flow_with_omnifocus) is great too.
 
 ### [What to consider when choosing colors for data visualization | Chartable](https://blog.datawrapper.de/colors/)
 
@@ -271,7 +271,7 @@ Om has the depth and breadth of experience with the web to provide this perspect
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -298,11 +298,11 @@ A service that works to defend users privacy, leaks users data, while communicat
 
 https://www.thingelstad.com/2018/06/01/great-conversation-tonight.html
 
-Great conversation tonight at Meditation [and the Science of Human Flourishing](https://tergar.org/events/meditation-science-human-flourishing/) [with Mingyur Rinpoche](https://en.wikipedia.org/wiki/Yongey_Mingyur_Rinpoche) [and Richard Davidson](https://en.wikipedia.org/wiki/Richard_Davidson) [hosted by Tergar Meditation Community](https://tergar.org) .
+Great conversation tonight at [Meditation and the Science of Human Flourishing](https://tergar.org/events/meditation-science-human-flourishing/) with [Mingyur Rinpoche](https://en.wikipedia.org/wiki/Yongey_Mingyur_Rinpoche) and [Richard Davidson](https://en.wikipedia.org/wiki/Richard_Davidson) hosted by [Tergar Meditation Community](https://tergar.org).
 
 https://www.thingelstad.com/2018/06/01/of-course-we.html
 
-Of [course we celebrate National Donut Day](https://en.wikipedia.org/wiki/National_Doughnut_Day) at #TeamSPS! 🍩
+Of course we celebrate [National Donut Day](https://en.wikipedia.org/wiki/National_Doughnut_Day) at #TeamSPS! 🍩
 
 https://www.thingelstad.com/2018/06/01/coffee-spilled-sprayed.html
 
@@ -338,4 +338,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Blood is thicker than water.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

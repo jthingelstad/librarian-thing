@@ -87,9 +87,9 @@ links:
   domain: www.tomsguide.com
   heading_context: '[Here''s the One iPhone XS Feature That Justifies an Upgrade](https://www.tomsguide.com/us/iphone-xs-smart-hdr,news-28203.html)'
   section: Notable Links 📌
-word_count: 1419
+word_count: 1416
 ---
-It’s one of my favorite times in Minnesota — fall! 🍂 I was [delighted to stop at Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
+It’s one of my favorite times in Minnesota — fall! 🍂 I was delighted to stop at [Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
 
 I’m going to keep this short this week. Mazie and I just got into Manhattan for our long-planned Daddy/Daughter trip here to see the sites! I expect there will be many NYC photos next week! 🙌
 
@@ -115,9 +115,9 @@ In my opinion, Halide is the most powerful camera app on iOS, and this take on t
 
 ![Pumpkins at Fireside Orchard.](https://files.thingelstad.com/weekly-thing/74/cover.jpg)
 
-Pumpkins at Fireside Orchard (http://www.firesideorchard.com).
+Pumpkins at [Fireside Orchard](http://www.firesideorchard.com).
 
-Pumpkins at Fireside Orchard.
+Pumpkins at [Fireside Orchard](http://www.firesideorchard.com).
 Sep 30, 2018 at 1:36 PM
 2225 330th St W, Northfield MN 55057
 
@@ -133,19 +133,19 @@ Fair and balanced article highlighting the good things that Google has done for 
 
 ### [Privacy Badger Now Fights More Sneaky Google Tracking | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2018/10/privacy-badger-now-fights-more-sneaky-google-tracking)
 
-["Don't be evil."](https://en.wikipedia.org/wiki/Don%27t_be_evil) Wait, there is an HTML attribute just to spy on people now? What is this [ping](https://www.w3.org/TR/2010/WD-html5-20100304/interactive-elements.html#hyperlink-auditing) !
+["Don't be evil."](https://en.wikipedia.org/wiki/Don%27t_be_evil) Wait, there is an HTML attribute just to spy on people now? What is this [ping](https://www.w3.org/TR/2010/WD-html5-20100304/interactive-elements.html#hyperlink-auditing)!
 
 ### [Daring Fireball: Bloomberg’s ‘The Big Hack’](https://daringfireball.net/2018/10/bloomberg_the_big_hack)
 
-This Bloomberg [report on rogue chips from Supermicro](https://www.bloomberg.com/news/features/2018-10-04/the-big-hack-how-china-used-a-tiny-chip-to-infiltrate-america-s-top-companies) infiltrating Amazon and Apple is pretty amazing. Gruber’s take on it is a good summary.
+This [Bloomberg report on rogue chips from Supermicro](https://www.bloomberg.com/news/features/2018-10-04/the-big-hack-how-china-used-a-tiny-chip-to-infiltrate-america-s-top-companies) infiltrating Amazon and Apple is pretty amazing. Gruber’s take on it is a good summary.
 
 > I see no way around it: either Bloomberg’s report is significantly wrong, at least as pertains to Amazon and Apple, or Apple and Amazon have issued blatantly false denials.
 
-Apple and Amazon both vehemently deny this report. [Apple even issued a second statement](https://www.apple.com/newsroom/2018/10/what-businessweek-got-wrong-about-apple/) about it. It’s hard to know what really happened, but it’s notable to me that espionage at this level is known, and will impact how we can build new technology for certain purposes.
+Apple and Amazon both vehemently deny this report. Apple even issued a [second statement](https://www.apple.com/newsroom/2018/10/what-businessweek-got-wrong-about-apple/) about it. It’s hard to know what really happened, but it’s notable to me that espionage at this level is known, and will impact how we can build new technology for certain purposes.
 
 ### [Mike Bollinger is stepping down from TECHdotMN - TECHdotMN](https://tech.mn/news/2018/10/04/mike-is-stepping-down-from-techdotmn/)
 
-This looks to be [some fallout from a controversial article](https://tech.mn/news/2018/09/19/poll-should-minnesota-techies-be-treated-differently-based-on-their-appearance/) published by Mike’s cofounder of TECHdotMN. Unclear where this leaves the local publication. I admire what they have been trying to do.
+This looks to be some fallout from a [controversial article](https://tech.mn/news/2018/09/19/poll-should-minnesota-techies-be-treated-differently-based-on-their-appearance/) published by Mike’s cofounder of TECHdotMN. Unclear where this leaves the local publication. I admire what they have been trying to do.
 
 ### [Wi-Fi now has version numbers, and Wi-Fi 6 comes out next year - The Verge](https://www.theverge.com/2018/10/3/17926212/wifi-6-version-numbers-announced)
 
@@ -244,4 +244,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Never let the sun set on thy wrath.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

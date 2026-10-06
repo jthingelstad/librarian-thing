@@ -86,7 +86,7 @@ links:
   domain: thesweetsetup.com
   heading_context: '[How to make journaling in Day One even better with automation – The Sweet Setup](https://thesweetsetup.com/make-journaling-day-one-even-better-automation/)'
   section: Notable Links 📌
-word_count: 1592
+word_count: 1591
 ---
 Summer is officially here! Somehow I managed to go to two baseball games this week. ⚾️ The kids are counting the days until school gets out. 🗓 And the entire state of Minnesota seems to have scattered to cabins around lakes to celebrate Memorial Day and with it our first temperatures well into the 90's. ☀️
 
@@ -124,7 +124,7 @@ Target Field, Minneapolis, MN
 
 ### [Your Brain on Reading (Why Your Brain Needs You to Read Every Day)](https://medium.com/swlh/this-is-your-brain-on-reading-why-your-brain-needs-you-to-read-every-day-a472b04da2e0)
 
-[I’m currently reading Sapiens](http://www.ynharari.com/book/sapiens/) and that probably makes this post resonate with me even more, but I love all of the benefits highlighted here from reading on a consistent basis. 📚
+I’m currently reading [Sapiens](http://www.ynharari.com/book/sapiens/) and that probably makes this post resonate with me even more, but I love all of the benefits highlighted here from reading on a consistent basis. 📚
 
 ### [Abby Wambach, Remarks as Delivered | Barnard College](https://barnard.edu/commencement/archives/2018/abby-wambach-remarks)
 
@@ -236,11 +236,11 @@ Getting rid of some old cables. 😳
 
 ### [Thursday @ 6:12 PM](https://www.thingelstad.com/2018/05/24/got-my-preorder.html)
 
-[Got my pre-order of OmniFocus 3](https://www.omnigroup.com/blog/entry/omnifocus-3-for-ios-available-for-pre-order) in! 👍🏻
+Got my [pre-order of OmniFocus 3](https://www.omnigroup.com/blog/entry/omnifocus-3-for-ios-available-for-pre-order) in! 👍🏻
 
 ### [Thursday @ 6:06 PM](https://www.thingelstad.com/2018/05/24/230608.html)
 
-Had a fun time [recording an interview with Matt Norman](http://www.mattnorman.com) [(@MattNorman) today for his Humble Leadership](http://www.mattnorman.com/category/humble-leadership-profiles/) series. 📹
+Had a fun time recording an interview with [Matt Norman](http://www.mattnorman.com) (@MattNorman) today for his [Humble Leadership](http://www.mattnorman.com/category/humble-leadership-profiles/) series. 📹
 
 ### [Tuesday @ 8:34 PM](https://www.thingelstad.com/2018/05/22/191210.html)
 
@@ -268,7 +268,7 @@ The Tesla coil at Museum of Space and Industry in Chicago impresses me every tim
 
 ### [Sunday @ 8:15 PM](https://www.thingelstad.com/2018/05/20/just-finished-the.html)
 
-[Just finished the Mission: Mars](https://theescapegamechicago.com/escape-rooms/mission-mars/) room at The Escape Game in Chicago. Loved the room! Best escape room I’ve ever done! 👏
+Just finished the [Mission: Mars](https://theescapegamechicago.com/escape-rooms/mission-mars/) room at The Escape Game in Chicago. Loved the room! Best escape room I’ve ever done! 👏
 
 ### [Sunday @ 4:37 PM](https://www.thingelstad.com/2018/05/20/afternoon-coffee-flight.html)
 
@@ -343,4 +343,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Behind every great man stands a strong woman.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

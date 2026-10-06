@@ -86,9 +86,9 @@ links:
   domain: anonaddy.com
   heading_context: '[Free, Open-source Anonymous Email Forwarding - AnonAddy](https://anonaddy.com/)'
   section: Notable Links 📌
-word_count: 1749
+word_count: 1743
 ---
-What an awesome week it's been. Cyberweek 2019 is in the books! It's been a week of getting up really early, doubling my regular coffee intake, [and working with our great team](https://www.thingelstad.com/2019/12/05/technology-is-a.html) ! Every year has its own feel, a fingerprint of sorts, with stories that will be told for years ahead. I love the comradery that comes with such focus and dedication across a team on a shared objective!
+What an awesome week it's been. Cyberweek 2019 is in the books! It's been a week of getting up really early, doubling my regular coffee intake, and working with our [great team](https://www.thingelstad.com/2019/12/05/technology-is-a.html)! Every year has its own feel, a fingerprint of sorts, with stories that will be told for years ahead. I love the comradery that comes with such focus and dedication across a team on a shared objective!
 
 ## Featured Links 🏅
 
@@ -116,7 +116,7 @@ Nov 30, 2019 at 2:44 PM
 
 ### [Fenwick High School 2017 Commencement Speaker Mick Betancourt '92 - YouTube](https://www.youtube.com/watch?v=BZ2KnjJGJ3c)
 
-[My colleague Dan Juckniess](https://www.linkedin.com/in/dan-juckniess-68920a10/) shared this [Fenwick High School](https://www.fenwickfriars.com/) commencement speech with me after telling me the quote that he found so powerful in it.
+My colleague [Dan Juckniess](https://www.linkedin.com/in/dan-juckniess-68920a10/) shared this [Fenwick High School](https://www.fenwickfriars.com/) commencement speech with me after telling me the quote that he found so powerful in it.
 
 > Whatever your doing, is what you’ll get better at.
 > Go to the bar every night and drink, guess what you’ll get better at.
@@ -129,7 +129,7 @@ I travel to our office in Kyiv twice a year and learned early on about the Ukrai
 
 ### [Liam Bot](http://liam-bot.glitch.me/)
 
-[Funny parody of Facebook’s Liam Bot](https://www.nytimes.com/2019/12/02/technology/facebook-chatbot-workers.html) for difficult questions over the holidays. 🙂
+Funny parody of [Facebook’s Liam Bot](https://www.nytimes.com/2019/12/02/technology/facebook-chatbot-workers.html) for difficult questions over the holidays. 🙂
 
 ### [How Ring Went From ‘Shark Tank’ Reject to America’s Scariest Surveillance Company - VICE](https://www.vice.com/en_us/article/zmjp53/how-ring-went-from-shark-tank-reject-to-americas-scariest-surveillance-company)
 
@@ -229,7 +229,7 @@ Took advantage of Apple’s annual holiday sale to get some upgrades ordered! �
 
 ### [Saturday @ 10:59 PM](https://www.thingelstad.com/2019/11/30/we-made-our.html)
 
-We made our first trip to see Winter in [Bloom at the Minnesota Landscape Arboretum](http://arbwinter.umn.edu/) tonight. The fresh snow made all the lights look especially nice.
+We made our first trip to see [Winter in Bloom at the Minnesota Landscape Arboretum](http://arbwinter.umn.edu/) tonight. The fresh snow made all the lights look especially nice.
 
 ![](https://cdn.uploads.micro.blog/890/2019/3b1cba8bd5.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/311be0485c.jpg)
@@ -244,7 +244,7 @@ Tammy gave the kids a lesson on crushing it in Ms. Pac-Man. 🎮🏆
 
 ### [Saturday @ 10:49 PM](https://www.thingelstad.com/2019/11/30/went-to-victoria.html)
 
-[Went to Victoria Burrow](https://victoriaburrow.com/) for some mini-golf and arcade games. The mini-golf is really nice, but not kitschy. The games were all in great shape. The pizza is also really good.
+Went to [Victoria Burrow](https://victoriaburrow.com/) for some mini-golf and arcade games. The mini-golf is really nice, but not kitschy. The games were all in great shape. The pizza is also really good.
 
 ![](https://cdn.uploads.micro.blog/890/2019/105c44afe8.jpg)
 
@@ -258,13 +258,13 @@ We went to the [Excelsior Christkindlsmarkt Annual German Christmas Festival](ht
 
 ### [Saturday @ 10:40 PM](https://www.thingelstad.com/2019/11/30/we-went-to.html)
 
-[We went to Frozen II](https://www.rottentomatoes.com/m/frozen_2/) today and we all enjoyed it a lot! 🎬
+We went to [Frozen II](https://www.rottentomatoes.com/m/frozen_2/) today and we all enjoyed it a lot! 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/8dda6bfb3f.jpg)
 
 ### [Friday @ 8:28 PM](https://www.thingelstad.com/2019/11/29/family-tradition-to.html)
 
-[Family tradition to watch Elf](https://www.rottentomatoes.com/m/elf/) the day after Thanksgiving! What a great movie! 🎬🎄
+Family tradition to watch [Elf](https://www.rottentomatoes.com/m/elf/) the day after Thanksgiving! What a great movie! 🎬🎄
 
 ![](https://cdn.uploads.micro.blog/890/2019/1fff672a10.jpg)
 
@@ -290,7 +290,7 @@ Major new release of one of the biggest Python frameworks.
 - [A letter from Larry and Sergey](https://www.blog.google/inside-google/alphabet/letter-from-larry-and-sergey/) www.blog.google
 Definitely a momentous milestone for Google.
 - [Abilitech Medical raises $7.4 million, with investment from Sofia Fund - Minneapolis / St. Paul Business Journal](https://www.bizjournals.com/twincities/news/2019/12/03/abilitech-medical-raises-7-4-million.html) www.bizjournals.com
-Congratulations to a great local startup and a [former neighbor of mine Angie Conley](https://www.linkedin.com/in/angieconley/) !
+Congratulations to a great local startup and a former neighbor of mine [Angie Conley](https://www.linkedin.com/in/angieconley/)!
 - [Newsletters spam test by mail-tester.com](https://www.mail-tester.com/) www.mail-tester.com
 Really handy tool to test if your mail is likely to be flagged as spam. 💌
 - [ChessRoots - Chess opening graph from over 800 million Chess games](https://www.chessroots.com/) www.chessroots.com
@@ -302,11 +302,11 @@ Not sure how well something like this will work, but glad folks are working on i
 
 ## Replies 📬
 
-Here are some replies from Weekly [Thing #128 / Nov 30, 2019](https://us2.campaign-archive.com/?u=9819a09d90bc4bae56285dd82&id=64a970d27f) .
+Here are some replies from [Weekly Thing #128 / Nov 30, 2019](https://us2.campaign-archive.com/?u=9819a09d90bc4bae56285dd82&id=64a970d27f).
 
-[Jay Wineinger](https://www.linkedin.com/in/jwineinger/) sent in a helpful [article about cooking a spatchcocked Turkey](https://www.seriouseats.com/2012/11/how-to-spatchcock-cook-turkey-thanksgiving-fast-easy-way-spatchcocked.html) . Jay swears by it, with super consistent results and the full cook only taking 80 minutes!
+[Jay Wineinger](https://www.linkedin.com/in/jwineinger/) sent in a helpful [article about cooking a spatchcocked Turkey](https://www.seriouseats.com/2012/11/how-to-spatchcock-cook-turkey-thanksgiving-fast-easy-way-spatchcocked.html). Jay swears by it, with super consistent results and the full cook only taking 80 minutes!
 
-My comment praising Thanksgiving for it’s decided lack of presents [struck a chord with Anna Klombies](https://www.linkedin.com/in/annaklombies/) who shared this [article that makes that thought actionable](https://www.becomingminimalist.com/rethink-holidays/) .
+My comment praising Thanksgiving for it’s decided lack of presents struck a chord with [Anna Klombies](https://www.linkedin.com/in/annaklombies/) who shared [this article that makes that thought actionable](https://www.becomingminimalist.com/rethink-holidays/).
 
 ## Fortune 🥠
 
@@ -314,4 +314,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 There is a fly on your nose.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

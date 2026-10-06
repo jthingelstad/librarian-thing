@@ -103,11 +103,11 @@ links:
   domain: engineering.shopify.com
   heading_context: '[How to Write Fast Code in Ruby on Rails – Shopify Engineering](https://engineering.shopify.com/blogs/engineering/write-fast-code-ruby-rails)'
   section: Notable Links 📌
-word_count: 2344
+word_count: 2338
 ---
 I’m writing from the shore of Pokegama Lake at my brother’s cabin. It’s a crisp autumn day, and there are more leaves on the ground than on the trees. We are enjoying a little MEA break, one of the annual traditions for Minnesota families. The docks are mostly empty of boats now, waiting for the crew to come down the shoreline and put them all in for the winter. This is perfect weather for campfires and smores.
 
-I’m not big on reminiscing, but two things this week have had me enjoying looking back a lot. The [first is the On This Day](https://www.thingelstad.com/on-this-day/) page on my Micro.blog. It turns out I’ve been microblogging now for 12 years or more, and I’ve been having fun going to that page and remembering things that I totally forgot from the past. I love that I own my content for this and don’t need to rely on a surveillance system to do this.
+I’m not big on reminiscing, but two things this week have had me enjoying looking back a lot. The first is the [On This Day](https://www.thingelstad.com/on-this-day/) page on my Micro.blog. It turns out I’ve been microblogging now for 12 years or more, and I’ve been having fun going to that page and remembering things that I totally forgot from the past. I love that I own my content for this and don’t need to rely on a surveillance system to do this.
 
 Tammy also completed our family yearbook for 2018, and it arrived this week. Since 2010 Tammy has been creating a printed color yearbook for our family. She goes back and looks at all the photos from the year and puts it all together with her own commentary. She does a fantastic job, and it’s so fun to read through the years and see the photos. It is a real treasure. Another awesome thing she does is buy three copies. We have copies for each year that we keep out and look at regularly, but then each kid has pristine copies of each one that is kept for them to have and keep for themselves. 🥰
 
@@ -115,11 +115,11 @@ Tammy also completed our family yearbook for 2018, and it arrived this week. Sin
 
 ### [Without encryption we will lose all privacy. This is our new battleground | Edward Snowden | Opinion | The Guardian](https://www.theguardian.com/commentisfree/2019/oct/15/encryption-lose-privacy-us-uk-australia-facebook)
 
-Governments, particularly the US Government, has been fighting encryption for years. It wasn't a concern early on, until encryption got strong enough that the government couldn't break it. This goes all the way back to 1991 when [the government alleged that Phil Zimmerman](https://en.wikipedia.org/wiki/Phil_Zimmermann) , the creator of PGP, broke the law.
+Governments, particularly the US Government, has been fighting encryption for years. It wasn't a concern early on, until encryption got strong enough that the government couldn't break it. This goes all the way back to 1991 when the government alleged that [Phil Zimmerman](https://en.wikipedia.org/wiki/Phil_Zimmermann), the creator of PGP, broke the law.
 
 > The true explanation for why the US, UK and Australian governments want to do away with end-to-end encryption is less about public safety than it is about power: E2EE gives control to individuals and the devices they use to send, receive and encrypt communications, not to the companies and carriers that route them. This, then, would require government surveillance to become more targeted and methodical, rather than indiscriminate and universal.
 
-If this worries you, like it does me, I recommend joining me [in supporting the Electronic Frontier Foundation](https://www.eff.org) . 👍
+If this worries you, like it does me, I recommend joining me in supporting the [Electronic Frontier Foundation](https://www.eff.org). 👍
 
 ### [Nurturing the Minnesota Tech Community | SPS Commerce](https://www.spscommerce.com/blog/nurturing-minnesota-tech-community-spst/)
 
@@ -167,7 +167,7 @@ Main thing to highlight here, is even with all the investment that a company lik
 
 ### [Why Office Workers Can't Sleep (and Why That's Bad) | Literary Hub](https://lithub.com/why-office-workers-cant-sleep-and-why-thats-bad/)
 
-Less of a [scientific read than Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep) . I found the callouts to bright light in the morning interesting.
+Less of a scientific read than [Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep). I found the callouts to bright light in the morning interesting.
 
 > Exposure to bright, morning light was particularly powerful: those exposed to it between 8 a.m. and noon took an average of 18 minutes to fall asleep at night, compared to 45 minutes in the low light exposure group; they also slept for around 20 minutes longer and experienced fewer sleep disturbances. These associations were stronger during winter, when people may have had less opportunity to receive natural light during their journey to work.
 
@@ -185,7 +185,7 @@ This whole article is filled with a lot of pragmatism.
 
 ### [uPlot: An exceptionally fast, tiny time series chart](https://github.com/leeoniya/uPlot)
 
-Super fast as promised. This looks like a great time-series [charting package. It’s inspired from dygraph](https://github.com/danvk/dygraphs) which is what [I used when I made WikiApiary](https://wikiapiary.com/wiki/Main_Page) .
+Super fast as promised. This looks like a great time-series charting package. It’s inspired from [dygraph](https://github.com/danvk/dygraphs) which is what I used when I made [WikiApiary](https://wikiapiary.com/wiki/Main_Page).
 
 ### [Marc Benioff on Why We Need New Capitalism – On my Om](https://om.co/2019/10/14/marc-benioff-on-why-we-need-new-capitalism/)
 
@@ -230,7 +230,7 @@ Neat app. I bought it for $1 to see if I could get rid of some of the cards in m
 - [Cool New Features in Python 3.8 – Real Python](https://realpython.com/python38-new-features/) realpython.com
 Some great new features in Python! 🐍
 - [(Fish shell) fun: event handlers - BrettTerpstra.com](https://brettterpstra.com/2019/10/15/fish-shell-fun-event-handlers/) brettterpstra.com
-[I switched to fish](https://fishshell.com) shell a while ago, [after over a decade of zsh](https://www.zsh.org) , but I haven't gotten all geeked out on this stuff. Yet. 🤓
+I switched to [fish](https://fishshell.com) shell a while ago, after over a decade of [zsh](https://www.zsh.org), but I haven't gotten all geeked out on this stuff. Yet. 🤓
 - [The Unix Game](https://www.unixgame.io/unix50) www.unixgame.io
 Now this is the kind of game I can dig! 🤓
 - [Disgraced Google Exec Andy Rubin Quietly Left His Venture Firm Earlier This Year](https://www.buzzfeednews.com/article/ryanmac/andy-rubin-playground-global-google-quiet-departure)
@@ -250,7 +250,7 @@ After watching the Yankee’s school the Twins, I’m rather enjoying watching t
 
 ### [Thursday @ 10:36 PM](https://www.thingelstad.com/2019/10/17/tammy-and-i.html)
 
-Tammy and I thoroughly [enjoyed Mike Birbiglia’s The New One](https://www.birbigs.com/the-new-one) tonight. Birbig’s is one of the funniest comedians around in our book. 🤣
+Tammy and I thoroughly enjoyed Mike Birbiglia’s [The New One](https://www.birbigs.com/the-new-one) tonight. Birbig’s is one of the funniest comedians around in our book. 🤣
 
 ### [Thursday @ 4:02 PM](https://www.thingelstad.com/2019/10/17/maple-tree-showing.html)
 
@@ -266,7 +266,7 @@ Last time on the boat for 2019. Heading in to storage for the winter.
 
 ### [Sunday @ 6:04 PM](https://www.thingelstad.com/2019/10/13/greatly-enjoying-circus.html)
 
-[Greatly enjoying Circus Abyssinia’s Ethiopian Dreams](https://www.childrenstheatre.org/plays/2019-2020-season/circus-abyssinia-ethiopian-dreams) at the Children’s Theatre. 🤩🎭
+Greatly enjoying [Circus Abyssinia’s Ethiopian Dreams](https://www.childrenstheatre.org/plays/2019-2020-season/circus-abyssinia-ethiopian-dreams) at the Children’s Theatre. 🤩🎭
 
 ### [Saturday @ 9:00 AM](https://www.thingelstad.com/2019/10/12/noting-that-i.html)
 
@@ -276,13 +276,13 @@ Noting that I may be the very last person on Cannon Lake to get my boat in for t
 
 ### [Friday @ 10:47 PM](https://www.thingelstad.com/2019/10/11/weather-was-bad.html)
 
-Weather was bad tonight, [so went to Bad Weather Brewing](https://www.badweatherbrewery.com) for the first time. Great tap room! Very busy. 🍻
+Weather was bad tonight, so went to [Bad Weather Brewing](https://www.badweatherbrewery.com) for the first time. Great tap room! Very busy. 🍻
 
 ![](https://cdn.uploads.micro.blog/890/2019/4ca1ff0232.jpg)
 
 ### [Friday @ 10:45 PM](https://www.thingelstad.com/2019/10/11/took-in-black.html)
 
-[Took in Black Market StP](https://blackmarketstp.com) barbecue with a bunch of my old neighbors. Great food, outside, with October snow keeping the beers cold. 🍻
+Took in [Black Market StP](https://blackmarketstp.com) barbecue with a bunch of my old neighbors. Great food, outside, with October snow keeping the beers cold. 🍻
 
 ![](https://cdn.uploads.micro.blog/890/2019/2c955893e6.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/13d353b163.jpg)
@@ -294,4 +294,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Long life is in store for you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

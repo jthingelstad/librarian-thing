@@ -81,9 +81,9 @@ links:
   domain: joshholtsclaw.com
   heading_context: '[The Graphic Art of Incredibles 2 — Josh Holtsclaw](http://joshholtsclaw.com/blog/2018/3/5/the-graphic-art-of-incredibles-2)'
   section: Notable Links 📌
-word_count: 2022
+word_count: 2017
 ---
-[I've been traveling in Kiev](https://en.wikipedia.org/wiki/Kiev) , Ukraine this week. As I queued at passport control, I counted up my stamps and noted that this is my ninth time to Ukraine. We have a technology office here that I visit twice a year to check in with the team. I commonly get asked by people back home about traveling here, thinking from the news in the US that it must be a very difficult place to go to. It isn't. The conflict with Russia has been roiling ever since I started to come here. My first time to Ukraine was [during the protests in Independence Square](https://en.wikipedia.org/wiki/Maidan_Nezalezhnosti) , on that trip [our final destination was to Kharkiv](https://en.wikipedia.org/wiki/Kharkiv) , on the eastern side of Ukraine. We moved our office to Kiev shortly thereafter.
+I've been traveling in [Kiev](https://en.wikipedia.org/wiki/Kiev), Ukraine this week. As I queued at passport control, I counted up my stamps and noted that this is my ninth time to Ukraine. We have a technology office here that I visit twice a year to check in with the team. I commonly get asked by people back home about traveling here, thinking from the news in the US that it must be a very difficult place to go to. It isn't. The conflict with Russia has been roiling ever since I started to come here. My first time to Ukraine was during the protests in [Independence Square](https://en.wikipedia.org/wiki/Maidan_Nezalezhnosti), on that trip our final destination was to [Kharkiv](https://en.wikipedia.org/wiki/Kharkiv), on the eastern side of Ukraine. We moved our office to Kiev shortly thereafter.
 
 While we read about conflict in Eastern Ukraine it can be confusing to then fly into Kiev and see dozens of buildings under construction. In the time I've been coming here traffic is notably busier as the economy of Kiev has continued to grow. All while this cloud of uncertainty hangs over political matters, but to Ukrainians that is just normal.
 
@@ -133,7 +133,7 @@ This headline got me. When I was a kid my family moved into an honest-to-goodnes
 
 ### [Reclaiming RSS – Aral Balkan](https://ar.al/2018/06/29/reclaiming-rss/)
 
-Another call-to-action to support some of the original plumbing of the web around syndication. I found the term surveillance capitalism novel here. I do think that using the term surveillance as opposed to privacy is a good idea. People seem to not value their privacy, but they don’t want to be surveilled. I’m a big fan [of RSS and highly recommend Feedbin](https://feedbin.com) for anyone looking to get their content direct, with no algorithms and surveillance in the middle.
+Another call-to-action to support some of the original plumbing of the web around syndication. I found the term surveillance capitalism novel here. I do think that using the term surveillance as opposed to privacy is a good idea. People seem to not value their privacy, but they don’t want to be surveilled. I’m a big fan of RSS and highly recommend [Feedbin](https://feedbin.com) for anyone looking to get their content direct, with no algorithms and surveillance in the middle.
 
 ### [Open-Sourcing Our Incident Response Training | PagerDuty](https://www.pagerduty.com/blog/open-sourcing-incident-response-training/)
 
@@ -173,7 +173,7 @@ This is a fun behind-the-scenes look at the research that went into the graphics
 
 https://creativecommons.org
 
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
+[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -210,7 +210,7 @@ Waiting for the sun to come up at Paris CDG. ✈️
 
 ### [Tuesday @ 3:54 AM](https://www.thingelstad.com/2018/11/12/im-finding-myself.html)
 
-I’m finding myself frustrated with pure static hosting. It adds too much friction [to publishing. I’m intrigued by Statamic](https://statamic.com) as a ‘best of both worlds’ option. If people have experience with it, I’d love to hear those.
+I’m finding myself frustrated with pure static hosting. It adds too much friction to publishing. I’m intrigued by [Statamic](https://statamic.com) as a ‘best of both worlds’ option. If people have experience with it, I’d love to hear those.
 
 ### [Tuesday @ 1:22 AM](https://www.thingelstad.com/2018/11/12/the-new-ipad.html)
 
@@ -236,7 +236,7 @@ I might be learning the hard way about flying internationally when your passport
 
 ### [Sunday @ 6:47 AM](https://www.thingelstad.com/2018/11/10/044742.html)
 
-[Family movie night – watched Ferdinand](https://www.imdb.com/title/tt3411444/) . 🎬 Good movie, but upon learning what bullfighting is the kids thought that was crazy.
+Family movie night – watched [Ferdinand](https://www.imdb.com/title/tt3411444/). 🎬 Good movie, but upon learning what bullfighting is the kids thought that was crazy.
 
 ![](https://www.thingelstad.com/uploads/2018/e3884d08c6.jpg)
 
@@ -256,4 +256,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Patience is a virtue.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

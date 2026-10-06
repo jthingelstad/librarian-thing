@@ -86,7 +86,7 @@ links:
   domain: www.fastcompany.com
   heading_context: '[The first map of America''s food supply chain is mind-boggling](https://www.fastcompany.com/90422553/the-first-map-of-americas-food-supply-chain-is-mind-boggling)'
   section: Notable Links 📌
-word_count: 1875
+word_count: 1871
 ---
 Does it make sense when you are squeezing in, without enough time and just "getting it done", for something that you are trying to do to bring yourself more calm and presence? I find myself at the end of the day having not completed my daily meditation. I've even gotten in bed, realized I hadn't meditated yet, gotten up and done a 10-minute guided meditation, and then returned to bed. That's totally normal right?
 
@@ -98,7 +98,7 @@ I will keep doing it though, to keep the routine and the habit. I've done this 2
 
 ### [Scientists Now Know How Sleep Cleans Toxins From the Brain | WIRED](https://www.wired.com/story/scientists-now-know-how-sleep-cleans-toxins-from-the-brain/)
 
-[When I read Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep) it introduced me to the different types of non-REM sleep. This new research shows a bit more about what those other four stages of sleep do.
+When I read [Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep) it introduced me to the different types of non-REM sleep. This new research shows a bit more about what those other four stages of sleep do.
 
 > What she discovered was that during non-REM sleep, large, slow waves of cerebrospinal fluid were washing over the brain. The EEG readings helped show why. During non-REM sleep, neurons start to synchronize, turning on and off at the same time. “First you would see this electrical wave where all the neurons would go quiet,” says Lewis. Because the neurons had all momentarily stopped firing, they didn’t need as much oxygen. That meant less blood would flow to the brain. But Lewis’s team also observed that cerebrospinal fluid would then rush in, filling in the space left behind.
 
@@ -154,7 +154,7 @@ I feel the answer to this is very much know. Cities do not have the same goals a
 
 ### [What's Blockchain Actually Good for, Anyway? For Now, Not Much | WIRED](https://www.wired.com/story/whats-blockchain-good-for-not-much/)
 
-I've been a bear on blockchain for a while. I do believe that the technology solves a problem. It is a solution for trust in systems that need to provide that. However, outside of cryptocurrencies, in most developed countries we have trust. I would also note that negative articles on blockchain would be queued to start increasing right about now if the [technology follows a typical hype cycle](https://en.wikipedia.org/wiki/Hype_cycle) .
+I've been a bear on blockchain for a while. I do believe that the technology solves a problem. It is a solution for trust in systems that need to provide that. However, outside of cryptocurrencies, in most developed countries we have trust. I would also note that negative articles on blockchain would be queued to start increasing right about now if the technology follows a typical [hype cycle](https://en.wikipedia.org/wiki/Hype_cycle).
 
 ### [How a Harvard class project changed barbecue | Engadget](https://www.engadget.com/2019/10/25/harvard-barbecue-desora-kamado-joe-cinder-grills/)
 
@@ -178,7 +178,7 @@ That is amazing. It’s odd to me that self-driving airplanes is in so many ways
 
 ### [Weaving Books into the Web—Starting with Wikipedia | Internet Archive Blogs](https://blog.archive.org/2019/10/29/weaving-books-into-the-web-starting-with-wikipedia/)
 
-When you get all depressed about the Internet, the surveillance, the social media garbage, just read amazing cool stuff like this that is happening. Also, this is a good time to setup recurring donations to both [Wikipedia](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&country=US) and [Internet Archive](https://archive.org/donate) ! 💸
+When you get all depressed about the Internet, the surveillance, the social media garbage, just read amazing cool stuff like this that is happening. Also, this is a good time to setup recurring donations to both [Wikipedia](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&country=US) and [Internet Archive](https://archive.org/donate)! 💸
 
 ### [The first map of America's food supply chain is mind-boggling](https://www.fastcompany.com/90422553/the-first-map-of-americas-food-supply-chain-is-mind-boggling)
 
@@ -204,11 +204,11 @@ Looks like we are a new show at the Brave New Workshop! 🤩
 
 ### [Sunday @ 3:09 PM](https://www.thingelstad.com/2019/11/03/160928.html)
 
-Hitting [balls at Batting Cages of Minnesota](http://www.battingcagesofmn.com) ! ⚾️🙌
+Hitting balls at [Batting Cages of Minnesota](http://www.battingcagesofmn.com)! ⚾️🙌
 
 ### [Saturday @ 10:11 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
-[Enjoyed Open Mike Eagle](http://mikeeagle.net) at the Wits Reunion show tonight. Recommend checking out his music. 🎶
+Enjoyed [Open Mike Eagle](http://mikeeagle.net) at the Wits Reunion show tonight. Recommend checking out his music. 🎶
 
 ### [Saturday @ 8:04 PM](https://www.thingelstad.com/2019/11/02/200451.html)
 
@@ -252,4 +252,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Beware of low-flying butterflies.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -68,7 +68,7 @@ links:
   domain: www.vanityfair.com
   heading_context: '[WeWork Is Unloading Adam Neumann''s Cronies—and His Private Jet | Vanity Fair](https://www.vanityfair.com/news/2019/09/wework-adam-neumann-layoffs-private-jet)'
   section: Notable Links 📌
-word_count: 1408
+word_count: 1395
 ---
 I seem to be on a run lately where I’m running pretty late into my cut off time to get the Weekly Thing out to everyone. ⏳ Summer is behind us but we've jumped right into back to school, fall sports, and a regularly busy season at the office.
 
@@ -118,7 +118,7 @@ An interesting read looking at organizational design along synchronous v. asynch
 
 ### [52 Things I Know At 52 – Rhoneisms](https://www.patrickrhone.net/52-thinks-i-know-at-52/)
 
-[My friend Patrick Rhone](https://www.patrickrhone.net/) reflecting on his [52nd birthday, or version 52.0.0 (what?)](https://www.thingelstad.com/2018/your-version-number).
+My friend [Patrick Rhone](https://www.patrickrhone.net/) reflecting on his 52nd birthday, or version 52.0.0 ([what?](https://www.thingelstad.com/2018/your-version-number)).
 
 ### [Beachheads and Obstacles – Stratechery by Ben Thompson](https://stratechery.com/2019/beachheads-and-obstacles/)
 
@@ -162,9 +162,9 @@ Wow. Just wow.
 
 ## Yet More Links 🍞
 
-- [How to find the hours to make it happen – Derek Sivers](https://sivers.org/uncomf)
+- [Where to find the hours to make it happen | Derek Sivers](https://sivers.org/uncomf)
 ⏳
-- Bike crash left Spokane man unconscious, so his Apple Watch [Bike crash left Spokane man unconscious, but his Apple Watch called 911 — The Seattle Times](https://www.seattletimes.com/seattle-news/bike-crash-left-spokane-man-unconscious-but-his-apple-watch-called-911/)
+- [Bike crash left Spokane man unconscious, so his Apple Watch called 911 | The Seattle Times](https://www.seattletimes.com/seattle-news/bike-crash-left-spokane-man-unconscious-but-his-apple-watch-called-911/)
 Cool how some wearable tech is having a significant impact for people.
 - [Daring Fireball: Richard Stallman’s Disgrace](https://daringfireball.net/2019/09/richard_stallmans_disgrace) daringfireball.net
 More on Stallman's interactions and behavior.
@@ -173,13 +173,13 @@ More on Stallman's interactions and behavior.
 
 ### [Thursday @ 9:11 PM](https://www.thingelstad.com/2019/10/03/did-the-first.html)
 
-Did the first [Jess King Live workout on Peloton](https://members.onepeloton.com/profile/workouts/147077cd91f84a05a54194d125fc0d56) tonight. Wiped me out! Wow. Live DJ takes the music up a notch! Got the badge. 🚴‍♂️🎶💦
+Did the first Jess King Live workout on Peloton tonight. [Wiped me out!](https://members.onepeloton.com/profile/workouts/147077cd91f84a05a54194d125fc0d56) Wow. Live DJ takes the music up a notch! Got the badge. 🚴‍♂️🎶💦
 
 ![](https://cdn.uploads.micro.blog/890/2019/9f866791b0.jpg)
 
 ### [Sunday @ 8:58 PM](https://www.thingelstad.com/2019/09/29/this-never-gets.html)
 
-This [never gets old. Tesla Version 10](https://www.tesla.com/blog/introducing-software-version-10-0) on the way! 🤓
+This never gets old. Tesla [Version 10](https://www.tesla.com/blog/introducing-software-version-10-0) on the way! 🤓
 
 ![](https://cdn.uploads.micro.blog/890/2019/69b3dea8b1.jpg)
 
@@ -202,7 +202,7 @@ Mighty Mississippi at Wabasha, MN.
 
 ### [Saturday @ 8:57 PM](https://www.thingelstad.com/2019/09/28/we-continued-our.html)
 
-We continued our farm food tour today with crazy good [pizza from The Nelson Stone Barn](http://www.thenelsonstonebarn.com/pizzeria) ! Long wait, but the pizza is great and Spotted Cow Ice Cream for dessert.
+We continued our farm food tour today with crazy good pizza from [The Nelson Stone Barn](http://www.thenelsonstonebarn.com/pizzeria)! Long wait, but the pizza is great and Spotted Cow Ice Cream for dessert.
 
 ![](https://cdn.uploads.micro.blog/890/2019/be91ccffe3.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/702e805d76.jpg)
@@ -211,7 +211,7 @@ We continued our farm food tour today with crazy good [pizza from The Nelson Sto
 
 ### [Saturday @ 3:55 PM](https://www.thingelstad.com/2019/09/28/we-drove-out.html)
 
-[We drove out to Together Farms](https://www.togetherfarms.com) and had yummy cheeseburgers, Wisconsin Cheese Curds, and a beer! 🍔🍻
+We drove out to [Together Farms](https://www.togetherfarms.com) and had yummy cheeseburgers, Wisconsin Cheese Curds, and a beer! 🍔🍻
 
 ![](https://cdn.uploads.micro.blog/890/2019/b41a77c80e.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/768efedd89.jpg)
@@ -220,7 +220,7 @@ We continued our farm food tour today with crazy good [pizza from The Nelson Sto
 
 ### [Saturday @ 10:46 AM](https://www.thingelstad.com/2019/09/28/pie-for-breakfast.html)
 
-Pie [for breakfast at Stockholm Pie Company](https://www.stockholmpieandgeneralstore.com) . Delicious. 🥧
+Pie for breakfast at [Stockholm Pie Company](https://www.stockholmpieandgeneralstore.com). Delicious. 🥧
 
 ![](https://cdn.uploads.micro.blog/890/2019/0bfefe7c4b.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/dfa80c0a07.jpg)
@@ -231,4 +231,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Cold hands, no gloves.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

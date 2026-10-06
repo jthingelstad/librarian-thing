@@ -108,7 +108,7 @@ links:
   domain: conversionxl.com
   heading_context: '[I''ve Built Multiple Growth Teams. Here''s Why I Won''t Do It Again. | CXL](https://conversionxl.com/blog/dont-build-growth-teams/)'
   section: Notable Links 📌
-word_count: 2404
+word_count: 2400
 ---
 This week publishing the Weekly Thing caught up on me. I just finished putting all the notes together for the links and it’s late on a Friday night. You'll have to wait for next week for my pithy introduction. ⤵️
 
@@ -120,7 +120,7 @@ I ran across [this article to Remove Richard Stallman](https://medium.com/@selam
 
 > Yesterday RMS resigned from MIT and the Free Software Foundation he founded. For those who have followed his free-software movement, Stallman leaving MIT is like the big dome on Massachusetts Avenue itself getting an eviction notice. But after decades of tone-deaf comportment and complaints now emerging from women about his behavior, Stallman’s time was up.
 
-His time was up. I actually met Stallman once and had lunch with him. My [friend and former professor John Riedl](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl) was asked to have lunch with Stallman when he was speaking at the University of Minnesota in the early 2000's. He asked me to join them. The lunch was not great. Stallman isn't terribly pleasant, and dissected language and questions in a way that was very off-putting. I asked him a lot about the Internet, and after a couple of questions he looked at me and said "You know, computers can do things without being on the Internet.". Okay then.
+His time was up. I actually met Stallman once and had lunch with him. My friend and former professor [John Riedl](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl) was asked to have lunch with Stallman when he was speaking at the University of Minnesota in the early 2000's. He asked me to join them. The lunch was not great. Stallman isn't terribly pleasant, and dissected language and questions in a way that was very off-putting. I asked him a lot about the Internet, and after a couple of questions he looked at me and said "You know, computers can do things without being on the Internet.". Okay then.
 
 Back to the point of this article though. This all happened fast, all the better. But hopefully that doesn't let our industry sweep under the rug some self-examination that should be happening here.
 
@@ -212,11 +212,11 @@ That is shocking. Over 50% of clothing items made are simply discarded! 🔥👕
 
 ### ['They wanted me gone': Edward Snowden tells of whistleblowing, his AI fears and six years in Russia | US news | The Guardian](https://www.theguardian.com/us-news/ng-interactive/2019/sep/13/edward-snowden-interview-whistleblowing-russia-ai-permanent-record)
 
-Good read on what Snowden has been up to in exile in Russia, drumming up some interest [for his new book Permanent Record](https://www.panmacmillan.com/authors/edward-snowden/permanent-record/9781529035650) . Snowden is a smart, well-thought out individual. The memoir might be a good read.
+Good read on what Snowden has been up to in exile in Russia, drumming up some interest for his new book [Permanent Record](https://www.panmacmillan.com/authors/edward-snowden/permanent-record/9781529035650). Snowden is a smart, well-thought out individual. The memoir might be a good read.
 
 ### [James Whatley on Twitter: "June 5th, 2017 I tried to take my own life."](https://twitter.com/Whatleydude/status/1171512562854199300)
 
-I've subscribed to Watley's Five Things on [Friday newsletter and in Issue #303](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=9d9a3a29bc) he linked to this Tweet-thread where he shares a very personal and important story.
+I've subscribed to Watley's Five Things on Friday newsletter and in [Issue #303](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=9d9a3a29bc) he linked to this Tweet-thread where he shares a very personal and important story.
 
 ### [What interview questions really mean](https://www.fastcompany.com/90236574/every-interview-question-is-really-this-question)
 
@@ -273,38 +273,38 @@ Great first half for MN United v Real Salt Lake! ⚽️👍 1-1 Looking forward 
 
 ### [Sunday @ 10:27 AM](https://www.thingelstad.com/2019/09/15/perfect-morning-for.html)
 
-Perfect [morning for Linden Hill’s Farmers Market](https://www.lindenhillsfarmersmarket.org) .
+Perfect morning for [Linden Hill’s Farmers Market](https://www.lindenhillsfarmersmarket.org).
 
 ![](https://cdn.uploads.micro.blog/890/2019/9fd49c7e62.jpg)
 
 ### [Saturday @ 11:30 PM](https://www.thingelstad.com/2019/09/14/we-watched-aladdin.html)
 
-[We watched Aladdin](https://www.rottentomatoes.com/m/aladdin) tonight and everyone enjoyed it a lot. I definitely agree with the audience score over the critics on this one. Will Smith was really good in it. 🎬
+We watched [Aladdin](https://www.rottentomatoes.com/m/aladdin) tonight and everyone enjoyed it a lot. I definitely agree with the audience score over the critics on this one. Will Smith was really good in it. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/4057015483.jpg)
 
 ### [Saturday @ 11:27 PM](https://www.thingelstad.com/2019/09/14/i-made-butter.html)
 
-[I made Butter Chicken](https://thetakeout.com/instant-pot-indian-butter-chicken-recipe-1834199355) using the Instant Pot tonight. First time, was good, but I think I can do better next time. 👨‍🍳🇮🇳
+I made [Butter Chicken](https://thetakeout.com/instant-pot-indian-butter-chicken-recipe-1834199355) using the Instant Pot tonight. First time, was good, but I think I can do better next time. 👨‍🍳🇮🇳
 
 ![](https://cdn.uploads.micro.blog/890/2019/44eda69d0c.jpg)
 
 ### [Saturday @ 11:25 PM](https://www.thingelstad.com/2019/09/14/we-went-to.html)
 
-We [went to a Safe Hands Rescue](https://safehandsrescue.org) dog adoption event today to meet some pups that need homes. Didn’t come home with one, but starting to explore what our next dog will be.
+We went to a [Safe Hands Rescue](https://safehandsrescue.org) dog adoption event today to meet some pups that need homes. Didn’t come home with one, but starting to explore what our next dog will be.
 
 ![](https://cdn.uploads.micro.blog/890/2019/f19cc573c8.jpg)
 
 ### [Saturday @ 11:18 PM](https://www.thingelstad.com/2019/09/14/we-had-a.html)
 
-We had a nice morning [at the Mill City Farmers Market](https://millcityfarmersmarket.org) today.
+We had a nice morning at the [Mill City Farmers Market](https://millcityfarmersmarket.org) today.
 
 ![](https://cdn.uploads.micro.blog/890/2019/fbd3201e3d.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/be28fa875a.jpg)
 
 ### [Saturday @ 10:42 AM](https://www.thingelstad.com/2019/09/14/dan-hons-article.html)
 
-Dan Hon’s article on this Audi Concept Car video is [a great read (see section 1.1)](https://danhon.substack.com/p/s07e03-my-so-called-content) . 👏
+Dan Hon’s [article on this Audi Concept Car video is a great read (see section 1.1)](https://danhon.substack.com/p/s07e03-my-so-called-content). 👏
 
 ### [Saturday @ 10:37 AM](https://www.thingelstad.com/2019/09/14/finished-a-saturday.html)
 
@@ -312,7 +312,7 @@ Finished a Saturday morning Peloton spin class. I need to remember how good it f
 
 ### [Friday @ 3:02 PM](https://www.thingelstad.com/2019/09/13/started-getting-a.html)
 
-Started getting a crazy number [of robocalls. 😤 Found that Nomorobo](http://nomorobo.com) had become deactivated! Fixed, now better.
+Started getting a crazy number of robocalls. 😤 Found that [Nomorobo](http://nomorobo.com) had become deactivated! Fixed, now better.
 
 ## Fortune 🥠
 
@@ -320,4 +320,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You have a deep interest in all that is artistic.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

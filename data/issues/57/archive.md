@@ -114,7 +114,7 @@ links:
   domain: www.pewinternet.org
   heading_context: '[Teens, Social Media & Technology 2018 | Pew Research Center](http://www.pewinternet.org/2018/05/31/teens-social-media-technology-2018/)'
   section: Notable Links 📌
-word_count: 2097
+word_count: 2092
 ---
 With much fanfare and anticipation the school year has ended, and with it summer has officially started! 🏁 Now is the time to take a moment to savor it all. In a blink it will be fall, the kids will be heading back to school and it will have felt like 5 minutes. I'm hoping to soak in the summer a bit more this year.
 
@@ -128,7 +128,7 @@ I was on a panel this week at the DevOps meetup and got to speak to a number of 
 
 ### [Laziness Does Not Exist – E Price – Medium](https://medium.com/@dr_eprice/laziness-does-not-exist-3af27e312d01)
 
-This article is written from the position of a psychology professor understanding students, but it caught my attention and [make me remember Do The Work](https://www.goodreads.com/book/show/10645233-do-the-work) by Steven Pressfield as well.
+This article is written from the position of a psychology professor understanding students, but it caught my attention and make me remember [Do The Work](https://www.goodreads.com/book/show/10645233-do-the-work) by Steven Pressfield as well.
 
 > If a person’s behavior doesn’t make sense to you, it is because you are missing a part of their context. It’s that simple. I’m so grateful to Kim and their writing for making me aware of this fact. No psychology class, at any level, taught me that. But now that it is a lens that I have, I find myself applying it to all kinds of behaviors that are mistaken for signs of moral failure — and I’ve yet to find one that can’t be explained and empathized with.
 
@@ -180,7 +180,7 @@ Totally agree with Doc Searls on this. I have some "bots" that work for me, and 
 
 ### [WWDC 2018: Apple Just Made Safari the Good Privacy Browser | WIRED](https://www.wired.com/story/apple-safari-privacy-wwdc/)
 
-I 💙 Safari, and the privacy focus of Safari is a big part of it. That wasn't always the case, but over the last few years Apple has started to lead and even use this as a leading feature. I use Safari with [1Blocker](https://1blocker.com) and [Ghostery](https://www.ghostery.com) , as well with all privacy settings set high. These additional features will be great!
+I 💙 Safari, and the privacy focus of Safari is a big part of it. That wasn't always the case, but over the last few years Apple has started to lead and even use this as a leading feature. I use Safari with [1Blocker](https://1blocker.com) and [Ghostery](https://www.ghostery.com), as well with all privacy settings set high. These additional features will be great!
 
 ### [The Secret Reason that Development Teams Struggle to Deliver On Time, On Budget, or On Scope – 7pace Blog](https://www.7pace.com/blog/software-development-planning-fallacy)
 
@@ -224,13 +224,13 @@ A thorough overview of new iOS 12 features announced at WWDC. The new Shortcuts 
 
 ### [Teens, Social Media & Technology 2018 | Pew Research Center](http://www.pewinternet.org/2018/05/31/teens-social-media-technology-2018/)
 
-A lot of data on where teens are spending their time online. I don't join the chorus of marketers seeking to follow "what the kids are doing" all over the place. Look at the platforms used. It worries me that it’s all [self-absorbed, mind-numbing, "amusing ourselves to death"](https://www.goodreads.com/book/show/74034.Amusing_Ourselves_to_Death) social media. Given the world in our pocket, this is what we do? 🤦‍♂️
+A lot of data on where teens are spending their time online. I don't join the chorus of marketers seeking to follow "what the kids are doing" all over the place. Look at the platforms used. It worries me that it’s all self-absorbed, mind-numbing, ["amusing ourselves to death"](https://www.goodreads.com/book/show/74034.Amusing_Ourselves_to_Death) social media. Given the world in our pocket, this is what we do? 🤦‍♂️
 
 ## Give Back 🎁
 
 https://wikimediafoundation.org/wiki/Home
 
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
+The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Highlighted iOS App 📱
 
@@ -266,23 +266,23 @@ Definitely where Kubernetes should be focusing now.
 
 ### [Thursday @ 3:09 PM](https://www.thingelstad.com/2018/06/07/200951.html)
 
-[Great Minnestar](https://minnestar.org) board meeting today! Lucky to be part of a great organization helping to connect the Twin Cities technology community. 🙌
+Great [Minnestar](https://minnestar.org) board meeting today! Lucky to be part of a great organization helping to connect the Twin Cities technology community. 🙌
 
 ### [Tuesday @ 9:27 PM](https://www.thingelstad.com/2018/06/05/nice-turnout-tonight.html)
 
-Nice turnout tonight [for the Dev Ops Minneapolis meetup](https://www.meetup.com/DevOps-Minneapolis/events/249870267/) . 👍 It makes me happy that we can host the community at @SPS_Commerce! 🙌
+Nice turnout tonight for the [Dev Ops Minneapolis meetup](https://www.meetup.com/DevOps-Minneapolis/events/249870267/). 👍 It makes me happy that we can host the community at @SPS_Commerce! 🙌
 
 ![](https://cdn.uploads.micro.blog/890/2018/7466e53137.jpg)
 
 ### [Tuesday @ 8:51 PM](https://www.thingelstad.com/2018/06/05/i-had-a.html)
 
-I had a great [time talking about Changing the Enterprise](https://www.meetup.com/DevOps-Minneapolis/events/249870267/) at tonight’s [DevOps Minneapolis Meetup with Heather Mickman](https://www.linkedin.com/in/heather-mickman/) [(Twitter: @hmickman) and Bridget Kromhout](https://bridgetkromhout.com) (Twitter: @bridgetkromhout)! Great insights and an amazing community!
+I had a great time talking about [Changing the Enterprise](https://www.meetup.com/DevOps-Minneapolis/events/249870267/) at tonight’s DevOps Minneapolis Meetup with [Heather Mickman](https://www.linkedin.com/in/heather-mickman/) (Twitter: @hmickman) and [Bridget Kromhout](https://bridgetkromhout.com) (Twitter: @bridgetkromhout)! Great insights and an amazing community!
 
 ![](https://cdn.uploads.micro.blog/890/2018/983b8a6fa2.jpg)
 
 ### [Tuesday @ 6:29 AM](https://www.thingelstad.com/2018/06/05/us-internet-speed.html)
 
-[US Internet](https://fiber.usinternet.com) [speed test using Fast](https://fast.com) . Multiple tests ranged from 930-1000 Mbps.
+[US Internet](https://fiber.usinternet.com) speed test using [Fast](https://fast.com). Multiple tests ranged from 930-1000 Mbps.
 
 ![](https://cdn.uploads.micro.blog/890/2018/fed62e5002.jpg)
 
@@ -295,7 +295,7 @@ I had a great [time talking about Changing the Enterprise](https://www.meetup.co
 
 ### [Sunday @ 11:25 PM](https://www.thingelstad.com/2018/06/03/my-productivity-geek.html)
 
-My productivity geek wish for tomorrow’s WWDC event is to learn what Apple had [in mind when it bought Workflow](https://www.workflow.is) . 🤓
+My productivity geek wish for tomorrow’s WWDC event is to learn what Apple had in mind when it bought [Workflow](https://www.workflow.is). 🤓
 
 ### [Sunday @ 5:15 PM](https://www.thingelstad.com/2018/06/03/id-rather-github.html)
 
@@ -322,7 +322,7 @@ Was a great evening for s’mores! 🔥
 
 ### [Saturday @ 9:28 PM](https://www.thingelstad.com/2018/06/02/introduced-a-bunch.html)
 
-Introduced a [bunch of new people to Skittles](https://carrom.com/shop/skittles-spinning-top-board-game/) today. 👍🏻
+Introduced a bunch of new people to [Skittles](https://carrom.com/shop/skittles-spinning-top-board-game/) today. 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/4a4734cc33.jpg)
 
@@ -332,4 +332,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Cheerfulness smooths the road of life.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

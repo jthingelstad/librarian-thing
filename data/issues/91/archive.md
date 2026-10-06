@@ -79,7 +79,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Developer Demos HomeKit’s New Integration with Smart TVs — MacStories](https://www.macstories.net/linked/developer-demos-homekits-new-integration-with-smart-tvs/)'
   section: Notable Links 📌
-word_count: 1723
+word_count: 1716
 ---
 We survived the deep freeze! 🥶 We had three days with the temperature between -27°F (-32.7°C) and -15°F (-26°C), for the high! Wind chills were something silly, like -50°F. I can't remember school ever being cancelled for four days in a row. I know it's particularly old man of me to say, but I don't think it was like that when I was a kid. 👴 The kids stayed home and got a bit of cabin fever. It reminded me when I was a kid in Minot, ND and we made the national news because the wind chill was -102°F! I think they cancelled school, that one day. Just sayin'... 👀
 
@@ -127,7 +127,7 @@ This story as well as the one about Facebook is getting a lot of attention. A nu
 
 ### [Lawrence Lessig On What MMOs Can Teach Us About Real Life Politics — Seed](https://seed-project.io/context/2019/1/25/lawrence-lessig-on-what-mmos-can-teach-us-about-real-life-politics)
 
-I’m [a big fan of Larry Lessig](https://en.wikipedia.org/wiki/Lawrence_Lessig) . I had no idea that he was an advisor to Second Life. Seed sounds like SimCity taken to the extreme.
+I’m a big fan of [Larry Lessig](https://en.wikipedia.org/wiki/Lawrence_Lessig). I had no idea that he was an advisor to Second Life. Seed sounds like SimCity taken to the extreme.
 
 ### [Buttondown](https://buttondown.email/)
 
@@ -145,7 +145,7 @@ There are a few people who subscribe to this newsletter via Stoop. I haven't tri
 
 I’m a proud supporter of the EFF.
 
-> Zuckerberg ends his op-ed with a call for government regulation codifying the principles of "transparency, choice, and control." But in reality, Facebook is tirelessly fighting against laws that might do just that: it is actively battling to [undermine Illinois’ Biometric Information Privacy Act](https://www.eff.org/deeplinks/2018/12/eff-appellate-court-protect-biometric-privacy) in court, and the Internet Association, of which Facebook is a member, has asked California legislators to [weaken the California Consumer Privacy Act](https://www.eff.org/deeplinks/2018/12/facebooks-latest-scandal-shows-we-need-stronger-privacy-laws) , and is pushing for a national law only if it "preempts" and [rolls back those vital state protections](https://www.eff.org/deeplinks/2018/09/game-rigged-congress-invites-no-consumer-privacy-advocates-its-consumer-privacy) .
+> Zuckerberg ends his op-ed with a call for government regulation codifying the principles of "transparency, choice, and control." But in reality, Facebook is tirelessly fighting against laws that might do just that: it is actively [battling to undermine Illinois’ Biometric Information Privacy Act](https://www.eff.org/deeplinks/2018/12/eff-appellate-court-protect-biometric-privacy) in court, and the Internet Association, of which Facebook is a member, has asked California legislators to [weaken the California Consumer Privacy Act](https://www.eff.org/deeplinks/2018/12/facebooks-latest-scandal-shows-we-need-stronger-privacy-laws), and is pushing for a national law [only if it "preempts" and rolls back those vital state protections](https://www.eff.org/deeplinks/2018/09/game-rigged-congress-invites-no-consumer-privacy-advocates-its-consumer-privacy).
 
 Follow the money.
 
@@ -163,7 +163,7 @@ Seriously, of all the devices I'd like to control with HomeKit my TV would be ri
 
 ## Give Back 🎁
 
-[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
+The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Yet More Links 🍞
 
@@ -192,7 +192,7 @@ Hashtags IRL! #SPSTech #TeamSPS Should have gotten this before the Hors d’ouev
 
 ### [Wednesday @ 7:52 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
-How do you wrap up the #TeamSPS [Tech Summit for 2019? Trivia Mafia](https://www.triviamafia.com) !
+How do you wrap up the #TeamSPS Tech Summit for 2019? [Trivia Mafia](https://www.triviamafia.com)!
 
 ### [Wednesday @ 7:49 PM](https://www.thingelstad.com/2019/01/30/tech-summit.html)
 
@@ -232,7 +232,7 @@ Schools cancelled. Kids are rejoicing. 🥳
 
 ### [Sunday @ 7:49 PM](https://www.thingelstad.com/2019/01/27/we-saw-spiderman.html)
 
-[We saw Spider-Man: Into the Spider-Verse](https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse) today and I was completely blown away! I enjoyed the story thoroughly and the visuals were amazing. It feels like you are in a comic book! The soundtrack is great too! 😎🎬
+We saw [Spider-Man: Into the Spider-Verse](https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse) today and I was completely blown away! I enjoyed the story thoroughly and the visuals were amazing. It feels like you are in a comic book! The soundtrack is great too! 😎🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/8c7a447630.jpg)
 
@@ -253,19 +253,19 @@ Made my signature lasagna tonight. Delicious. 🤤🍽
 
 ### [Saturday @ 2:13 PM](https://www.thingelstad.com/2019/01/26/checking-out-ifly.html)
 
-[Checking out iFly Indoor Skydiving](https://www.iflyworld.com) . Wow!
+Checking out [iFly Indoor Skydiving](https://www.iflyworld.com). Wow!
 
 ![](https://cdn.uploads.micro.blog/890/2019/170a055b2a.jpg)
 
 ### [Friday @ 9:59 PM](https://www.thingelstad.com/2019/01/25/delightful-dinner-tonight.html)
 
-[Delightful dinner tonight at Oceanaire](https://www.theoceanaire.com/Home.aspx) with my brother and his wife. Yum!
+Delightful dinner tonight at [Oceanaire](https://www.theoceanaire.com/Home.aspx) with my brother and his wife. Yum!
 
 ![](https://cdn.uploads.micro.blog/890/2019/0536943c9c.jpg)
 
 ### [Friday @ 9:57 PM](https://www.thingelstad.com/2019/01/25/very-first-espresso.html)
 
-Very first espresso from [my new Breville Oracle espresso machine](https://www.breville.com/us/en/products/espresso/bes980.html) . I’m impressed with the capabilities and the quality of the espresso. ☕️
+Very first espresso from my new [Breville Oracle espresso machine](https://www.breville.com/us/en/products/espresso/bes980.html). I’m impressed with the capabilities and the quality of the espresso. ☕️
 
 ![](https://cdn.uploads.micro.blog/890/2019/8d2617cbd1.jpg)
 
@@ -275,4 +275,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Someone is speaking well of you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

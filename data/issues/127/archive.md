@@ -98,7 +98,7 @@ links:
   domain: 512pixels.net
   heading_context: '[Andrew Levitt Recreates Catalina Wallpaper – 512 Pixels](https://512pixels.net/2019/11/andrew-levitt-recreates-catalina-wallpaper/)'
   section: Notable Links 📌
-word_count: 2122
+word_count: 2116
 ---
 I spent this last week visiting our team in Kyiv, Ukraine. 🇺🇦 I was traveling with three others, two of whom had never been there before. We had some time on Sunday and we explored the city on foot for a while. It was great to see more of Kyiv. When people come to Kyiv they usually say it isn't what they were expecting. It’s a great European style city growing like crazy! Unofficially, some 5 million people.
 
@@ -106,7 +106,7 @@ I spent this last week visiting our team in Kyiv, Ukraine. 🇺🇦 I was travel
 
 ### [If You're Busy, You're Doing Something Wrong: The Surprisingly Relaxed Lives of Elite Achievers - Study Hacks - Cal Newport](https://www.calnewport.com/blog/2011/11/11/if-youre-busy-youre-doing-something-wrong-the-surprisingly-relaxed-lives-of-elite-achievers/)
 
-Newport is taking a number of different threads here and putting them together well. The idea of deliberate practice was something I read about in Peak: Secrets [from the New Science of Expertise](https://www.goodreads.com/book/show/26312997-peak) and appreciated a lot.
+Newport is taking a number of different threads here and putting them together well. The idea of deliberate practice was something I read about in [Peak: Secrets from the New Science of Expertise](https://www.goodreads.com/book/show/26312997-peak) and appreciated a lot.
 
 > In fact, the more elite the player, the more pronounced the peaks. For the best of the best — the subset of the elites who the professors thought would go on to play in one of Germany’s two best professional orchestras — there was essentially no deviation from a rigid two-sessions a day schedule.
 
@@ -118,7 +118,7 @@ To me, this is one of the most sinister aspects of social media and mobile devic
 
 ![The People](https://files.thingelstad.com/weekly-thing/127/cover.jpg)
 
-[The People's Friendship Arch](https://en.wikipedia.org/wiki/People%27s_Friendship_Arch) in Kyiv, Ukraine. Under the arch are two figures, a Ukrainian and Russian worker standing together. Note the crack that has been painted on the arch.
+The [People's Friendship Arch](https://en.wikipedia.org/wiki/People%27s_Friendship_Arch) in Kyiv, Ukraine. Under the arch are two figures, a Ukrainian and Russian worker standing together. Note the crack that has been painted on the arch.
 
 Nov 17, 2019 at 9:01 AM
 Kyiv, Ukraine
@@ -163,7 +163,7 @@ The history of coffee, and its spread around the world, is fascinating.
 
 > In the coffee houses they were introduced to ideas that spelled trouble for the Ottoman state: rebellion, self-determination and the fallibility of the powerful.
 
-[I watched Black Coffee](https://www.imdb.com/title/tt0963976/) several years ago and it asserts a similar path for the French Revolution as well. ☕️
+I watched [Black Coffee](https://www.imdb.com/title/tt0963976/) several years ago and it asserts a similar path for the French Revolution as well. ☕️
 
 ### [Americans and Privacy: Concerned, Confused and Feeling Lack of Control Over Their Personal Information | Pew Research Center](https://www.pewresearch.org/internet/2019/11/15/americans-and-privacy-concerned-confused-and-feeling-lack-of-control-over-their-personal-information/)
 
@@ -175,7 +175,7 @@ So basically I take from this article that American's went from first not caring
 
 ### [The Service Mesh: What Every Software Engineer Needs to Know about the World's Most Over-Hyped Technology](https://servicemesh.io/)
 
-Good [overview from the author of Linkerd](https://linkerd.io/) .
+Good overview from the author of [Linkerd](https://linkerd.io/).
 
 > If you’re encountering the idea of service mesh for the first time, you can be forgiven if your first reaction is mild horror. The design of the service mesh means that not only does it add latency to your application, it also consumes resources and also introduces a whole bunch of machinery. One minute you’re installing a service mesh, the next you’re suddenly on the hook for operating hundreds or thousands of proxies. Why would anyone want to do this?
 >
@@ -183,7 +183,7 @@ Good [overview from the author of Linkerd](https://linkerd.io/) .
 >
 > The more important answer is because this design is actually a great way to introduce additional logic into the system. That’s not only because there are a ton of features you can add right there, but also because you can add them without changing the ecosystem. In fact, the entire service mesh model is predicated on this very insight: that, in a multi-service system, regardless of what individual services actually do, the traffic between them is an ideal insertion point for functionality.
 
-Service mesh is on [a maximum in the hype cycle](https://en.wikipedia.org/wiki/Hype_cycle) .
+Service mesh is on a maximum in the [hype cycle](https://en.wikipedia.org/wiki/Hype_cycle).
 
 ### [Matthew Walker's "Why We Sleep" Is Riddled with Scientific and Factual Errors - Alexey Guzey](https://guzey.com/books/why-we-sleep/)
 
@@ -217,17 +217,17 @@ Something about this makes me smile and grin. 😀
 
 Sounds great, and I’m having fun trying to virtually follow #KubeCon. Maybe next year I can join the fun!
 
-> Packed house listening to [AuthN and AuthZ from the @Yelp](https://twitter.com/Yelp?ref_src=twsrc%5Etfw) team sharing their ServiceMesh security story. This is a great talk to think through security requirements you’re trying to solve for with your [mesh. I recommend the video! #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) [pic.twitter.com/O09hKm80G2](https://t.co/O09hKm80G2)
+> Packed house listening to AuthN and AuthZ from the [@Yelp](https://twitter.com/Yelp?ref_src=twsrc%5Etfw) team sharing their ServiceMesh security story. This is a great talk to think through security requirements you’re trying to solve for with your mesh. I recommend the video! [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) [pic.twitter.com/O09hKm80G2](https://t.co/O09hKm80G2)
 >
-> [— Andy Domeier (@AndyJD_) November 21, 2019](https://twitter.com/AndyJD_/status/1197594117695406080?ref_src=twsrc%5Etfw)
+> — Andy Domeier (@AndyJD_) [November 21, 2019](https://twitter.com/AndyJD_/status/1197594117695406080?ref_src=twsrc%5Etfw)
 
 ### [Thursday @ 7:16 PM](https://www.thingelstad.com/2019/11/21/great-to-see.html)
 
 Great to see #TeamSPS wrapping up a fantastic trip to #KubeCon!
 
-> It's incredibly hard to leave [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) in sunny San Diego. I wish it was here every year! [#TeamSPS](https://twitter.com/hashtag/TeamSPS?src=hash&ref_src=twsrc%5Etfw) had an awesome trip filled with tons of learning and new friends. Cheers to the continued [growth of a great community! pic.twitter.com/awKFrxse4w](https://t.co/awKFrxse4w)
+> It's incredibly hard to leave [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) in sunny San Diego. I wish it was here every year! [#TeamSPS](https://twitter.com/hashtag/TeamSPS?src=hash&ref_src=twsrc%5Etfw) had an awesome trip filled with tons of learning and new friends. Cheers to the continued growth of a great community! [pic.twitter.com/awKFrxse4w](https://t.co/awKFrxse4w)
 >
-> [— Andy Domeier (@AndyJD_) November 22, 2019](https://twitter.com/AndyJD_/status/1197672951581040641?ref_src=twsrc%5Etfw)
+> — Andy Domeier (@AndyJD_) [November 22, 2019](https://twitter.com/AndyJD_/status/1197672951581040641?ref_src=twsrc%5Etfw)
 
 ### [Thursday @ 3:10 PM](https://www.thingelstad.com/2019/11/21/international-business-travel.html)
 
@@ -241,7 +241,7 @@ On DL163 from AMS to MSP. One of the flight attendants is on her last flight as 
 
 ### [Thursday @ 11:50 AM](https://www.thingelstad.com/2019/11/21/watched-avengers-endgame.html)
 
-[Watched Avengers: Endgame](https://www.rottentomatoes.com/m/avengers_endgame) on my flight. I think nearly all the Avengers movies I’ve seen have been on flights. Very enjoyable movie, but the time travel angle is always a problem in Sci-Fi. 👍✈️🎬
+Watched [Avengers: Endgame](https://www.rottentomatoes.com/m/avengers_endgame) on my flight. I think nearly all the Avengers movies I’ve seen have been on flights. Very enjoyable movie, but the time travel angle is always a problem in Sci-Fi. 👍✈️🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/ddcbe02483.jpg)
 
@@ -255,9 +255,9 @@ Wrapped up another great trip in Kyiv with #TeamSPS Ukraine! 🇺🇦 Time to he
 
 Kubernetes on jets? Neat!
 
-> I have to say, I’m [really blown away by the #DOD](https://twitter.com/hashtag/DOD?src=hash&ref_src=twsrc%5Etfw) [talk at #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) ! Really impressive to see the stacks they are using. "We don't run huge clusters, we run many little clusters, weapon systems, business systems, etc… " They are even running [#kubernetes](https://twitter.com/hashtag/kubernetes?src=hash&ref_src=twsrc%5Etfw) [#istio](https://twitter.com/hashtag/istio?src=hash&ref_src=twsrc%5Etfw) on jets! [pic.twitter.com/HwmTFi0Qrt](https://t.co/HwmTFi0Qrt)
+> I have to say, I’m really blown away by the [#DOD](https://twitter.com/hashtag/DOD?src=hash&ref_src=twsrc%5Etfw) talk at [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw)! Really impressive to see the stacks they are using. "We don't run huge clusters, we run many little clusters, weapon systems, business systems, etc… " They are even running [#kubernetes](https://twitter.com/hashtag/kubernetes?src=hash&ref_src=twsrc%5Etfw) & [#istio](https://twitter.com/hashtag/istio?src=hash&ref_src=twsrc%5Etfw) on jets! [pic.twitter.com/HwmTFi0Qrt](https://t.co/HwmTFi0Qrt)
 >
-> [— Andy Domeier (@AndyJD_) November 19, 2019](https://twitter.com/AndyJD_/status/1196882449289998336?ref_src=twsrc%5Etfw)
+> — Andy Domeier (@AndyJD_) [November 19, 2019](https://twitter.com/AndyJD_/status/1196882449289998336?ref_src=twsrc%5Etfw)
 
 ### [Tuesday @ 10:01 AM](https://www.thingelstad.com/2019/11/19/fantastic-growth-summit.html)
 
@@ -277,7 +277,7 @@ I love this #TeamSPS created SPS Commerce logo art in our Kyiv office! 🇺🇦�
 
 ### [Monday @ 9:16 AM](https://www.thingelstad.com/2019/11/18/dan-juckniess-sps.html)
 
-[Dan Juckniess](https://www.linkedin.com/in/dan-juckniess-68920a10) , SPS SVP, Chief Sales Officer, sharing market and go-to-market wins with #TeamSPS in Kyiv, Ukraine.
+[Dan Juckniess](https://www.linkedin.com/in/dan-juckniess-68920a10), SPS SVP, Chief Sales Officer, sharing market and go-to-market wins with #TeamSPS in Kyiv, Ukraine.
 
 ![](https://cdn.uploads.micro.blog/890/2019/d2e3989f95.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/9f77573387.jpg)
@@ -289,13 +289,13 @@ Waiting to depart from Amsterdam to Kyiv on KL1385 and the pilot announced they 
 
 ### [Saturday @ 10:59 AM](https://www.thingelstad.com/2019/11/16/at-the-old.html)
 
-At the Old Log [Theatre for The Emporor’s New Clothes](http://oldlog.com/Shows/The-Emperors-New-Clothes) . 🎭
+At the [Old Log Theatre for The Emporor’s New Clothes](http://oldlog.com/Shows/The-Emperors-New-Clothes). 🎭
 
 ![](https://cdn.uploads.micro.blog/890/2019/eb0527484b.jpg)
 
 ### [Friday @ 11:59 PM](https://www.thingelstad.com/2019/11/15/we-went-to.html)
 
-We [went to Piff The Magic Dragon](https://piffthemagicdragon.com) [tonight at The Fitzgerald](https://thefitzgeraldtheater.com) . It was an odd and funny mix of magic and witty comedy. 🤪🎩🐲
+We went to [Piff The Magic Dragon](https://piffthemagicdragon.com) tonight at [The Fitzgerald](https://thefitzgeraldtheater.com). It was an odd and funny mix of magic and witty comedy. 🤪🎩🐲
 
 ![](https://cdn.uploads.micro.blog/890/2019/a663a3a7f6.jpg)
 
@@ -316,4 +316,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Try to relax and enjoy the crisis. -- Ashleigh Brilliant
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

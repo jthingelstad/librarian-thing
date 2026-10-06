@@ -79,13 +79,13 @@ links:
   domain: www.youtube.com
   heading_context: '[What Engineers Found When They Tore Apart Tesla''s Model 3](https://www.youtube.com/watch?v=Lj1a8rdX6DU)'
   section: Notable Links 📌
-word_count: 1458
+word_count: 1457
 ---
 Last week the moving train 🚂 was going and now it has fully left the station and is chugging down the tracks at a good clip! We signed the purchase agreement and have a close date for the new house. We won't be moving until January, but will close in the middle of December. Now job #1 is to sell our current house! Know anyone that wants a great house in South Minneapolis? 🤩
 
 The last few weeks have been a challenge for me to keep on top of things. I have a good system and try to keep projects moving along, but some balls have been dropped. If you've emailed me and not got an answer, that is why! 🙄
 
-A quick [report on the Tesla Model 3](https://www.tesla.com/model3) after a few weeks, I still am enamored with it! If you sat down and designed a car, just for me, a market of one, I don't know what you would do different than the Model 3. 😍
+A quick report on the [Tesla Model 3](https://www.tesla.com/model3) after a few weeks, I still am enamored with it! If you sat down and designed a car, just for me, a market of one, I don't know what you would do different than the Model 3. 😍
 
 ## Featured Links 🏅
 
@@ -244,7 +244,7 @@ Awesome campfire tonight. 🔥
 
 ### [Friday @ 8:42 PM](https://www.thingelstad.com/2018/10/26/the-pixl-magnetic.html)
 
-[The PIXL Magnetic Building System](https://www.kickstarter.com/projects/antsylabs/pixl-a-magnetic-building-system) looks really cool. Backed it! Fun to see the Fidget Cube team back at it.
+The [PIXL Magnetic Building System](https://www.kickstarter.com/projects/antsylabs/pixl-a-magnetic-building-system) looks really cool. Backed it! Fun to see the Fidget Cube team back at it.
 
 ## Fortune 🥠
 
@@ -252,4 +252,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Open confession is good for the soul.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

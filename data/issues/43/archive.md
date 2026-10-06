@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/43/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-43-mar-3-2018/
 domains: []
 links: []
-word_count: 2043
+word_count: 2039
 ---
 I was able to transition the Weekly Thing to this new custom template without breaking everyone’s email experience! 🙌 I can now happily continue to make small tweaks to improve the experience. 🔧 My brief experiment with serif fonts only lasted one issue though.
 
@@ -38,30 +38,30 @@ Feb 24, 2018 at 7:46 PM
 
 ## Security
 
-A 1.3Tbs DDoS Hit GitHub, [the Largest Yet Recorded | WIRED](https://www.wired.com/story/github-ddos-memcached/)
+[A 1.3Tbs DDoS Hit GitHub, the Largest Yet Recorded | WIRED](https://www.wired.com/story/github-ddos-memcached/)
 www.wired.com
 
-I’m continuously surprised why GitHub is [so frequently the target of DDoS](https://en.wikipedia.org/wiki/Denial-of-service_attack) attacks, but this is an amazing timeline:
+I’m continuously surprised why GitHub is so frequently the target of [DDoS](https://en.wikipedia.org/wiki/Denial-of-service_attack) attacks, but this is an amazing timeline:
 
 > GitHub briefly struggled with intermittent outages as a digital system assessed the situation. Within 10 minutes it had automatically called for help from its DDoS mitigation service, Akamai Prolexic. Prolexic took over as an intermediary, routing all the traffic coming into and out of GitHub, and sent the data through its scrubbing centers to weed out and block malicious packets. After eight minutes, attackers relented and the assault dropped off.
 
 That is an impressive, automated response to such a significant event. 👏
 
-AgileBits Blog [| Finding Pwned Passwords With 1Password](https://blog.agilebits.com/2018/02/22/finding-pwned-passwords-with-1password/)
+[AgileBits Blog | Finding Pwned Passwords With 1Password](https://blog.agilebits.com/2018/02/22/finding-pwned-passwords-with-1password/)
 blog.agilebits.com
 
-It’s awesome to [see AgileBits incorporate the Pwned Password](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/) [service from Troy Hunt](https://www.troyhunt.com) within 24 hours of it being released! Also great that this is going to be incorporated into the Watch Tower capability of 1Password. I’m a [big fan of 1Password for Families](https://1password.com/families/) . I'd recommend all families use it to share secrets and passwords.
+It’s awesome to see AgileBits incorporate the [Pwned Password](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/) service from [Troy Hunt](https://www.troyhunt.com) within 24 hours of it being released! Also great that this is going to be incorporated into the Watch Tower capability of 1Password. I’m a big fan of [1Password for Families](https://1password.com/families/). I'd recommend all families use it to share secrets and passwords.
 
 ## Software
 
 [David Lynch Teaches Typing by RhinoStew](https://rhinostew.itch.io/david-lynch-teaches-typing)
 rhinostew.itch.io
 
-This is so [weird, but I’m a David Lynch](https://en.wikipedia.org/wiki/David_Lynch) fan so it’s pretty fun.
+This is so weird, but I’m a [David Lynch](https://en.wikipedia.org/wiki/David_Lynch) fan so it’s pretty fun.
 
 ## Business
 
-Amazon Agrees to [Buy Smart-Doorbell Startup Ring - Bloomberg](https://www.bloomberg.com/news/articles/2018-02-27/amazon-com-is-said-to-agree-to-buy-smart-doorbell-startup-ring)
+[Amazon Agrees to Buy Smart-Doorbell Startup Ring - Bloomberg](https://www.bloomberg.com/news/articles/2018-02-27/amazon-com-is-said-to-agree-to-buy-smart-doorbell-startup-ring)
 www.bloomberg.com
 
 $1 billion dollars? Wow, that makes no sense to me. 💰
@@ -80,7 +80,7 @@ blog.benjamin-encz.de
 
 Interesting look at some different ways to manage engineering teams. I've always done "Product Team Engineering Manager" structure.
 
-Introducing C.A.R.E. – a simple framework [for user onboarding - Inside Intercom](https://blog.intercom.com/c-a-r-e-simple-framework-user-onboarding/)
+[Introducing C.A.R.E. – a simple framework for user onboarding - Inside Intercom](https://blog.intercom.com/c-a-r-e-simple-framework-user-onboarding/)
 blog.intercom.com
 
 Solid set of practices from Intercom on how they do customer onboarding. This is a huge area of focus for SaaS companies, particularly B2C ones.
@@ -91,7 +91,7 @@ You have to adapt these plays in the B2B market but the thinking behind this is 
 
 ## Programming
 
-Forde's Tenth Rule, or, "How I Learned to Stop [Worrying and ❤️ the State Machine"](http://raganwald.com/2018/02/23/forde.html)
+[Forde's Tenth Rule, or, "How I Learned to Stop Worrying and ❤️ the State Machine"](http://raganwald.com/2018/02/23/forde.html)
 raganwald.com
 
 Good introduction to state machines and how they are used in programming to deal with complexity. If you are around programmers and have heard state machines referenced this is a good introduction to the concepts and benefits.
@@ -99,14 +99,14 @@ Good introduction to state machines and how they are used in programming to deal
 [Requests-HTML: HTML Parsing for Humans™](https://github.com/kennethreitz/requests-html)
 github.com
 
-A [new Python module from Kenneth Reitz](https://www.kennethreitz.org/projects) [of Requests](http://docs.python-requests.org/en/master/#) fame. Reitz designs modules very well and this is worth looking at. Previously, the go to [for this thing was Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/) .
+A new Python module from [Kenneth Reitz](https://www.kennethreitz.org/projects) of [Requests](http://docs.python-requests.org/en/master/#) fame. Reitz designs modules very well and this is worth looking at. Previously, the go to for this thing was [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/).
 
 ## Web
 
 [Erasing history - Columbia Journalism Review](https://www.cjr.org/special_report/microfilm-newspapers-media-digital.php)
 www.cjr.org
 
-The permanence of digital content is something I think about for personal websites, but I hadn't considered how damaging that intersection could be for [newspaper sites. I've supported Internet Archive](https://archive.org) for years and their mission is to capture and save content. It seems like a good path would be for news websites content management systems to directly archive content into a place like Internet Archive and not rely on the web crawler to capture it.
+The permanence of digital content is something I think about for personal websites, but I hadn't considered how damaging that intersection could be for newspaper sites. I've supported [Internet Archive](https://archive.org) for years and their mission is to capture and save content. It seems like a good path would be for news websites content management systems to directly archive content into a place like Internet Archive and not rely on the web crawler to capture it.
 
 [Small b blogging](http://tomcritchlow.com/2018/02/23/small-b-blogging/)
 tomcritchlow.com
@@ -119,16 +119,16 @@ Personally I think of my blogging activity as being as much or more for me as a 
 
 ## Self-Improvement
 
-Live Like a Hydra [– Thinking Is Hard – Medium](https://medium.com/thinking-is-hard/live-like-a-hydra-c02337782a89)
+[Live Like a Hydra – Thinking Is Hard – Medium](https://medium.com/thinking-is-hard/live-like-a-hydra-c02337782a89)
 medium.com
 
-[I've read Nassim Nicholas Taleb](http://www.fooledbyrandomness.com) ['s Antifragile](https://www.amazon.com/Antifragile-Things-That-Disorder-Incerto/dp/1400067820/) but this essay on applying anti fragile concepts to your life is interesting:
+I've read [Nassim Nicholas Taleb](http://www.fooledbyrandomness.com)'s [Antifragile](https://www.amazon.com/Antifragile-Things-That-Disorder-Incerto/dp/1400067820/) but this essay on applying anti fragile concepts to your life is interesting:
 
 > An antifragile way of life is all about finding a way to gain from the inevitable disorder of life. To not only bounce back when things don’t go as planned, but to get stronger, smarter, and better at continuing as a result of running into this disorder.
 
 Thought provoking. 🤔
 
-The two mental shifts [highly successful people make — Quartz](https://qz.com/1213777/the-two-mental-shifts-highly-successful-people-make/)
+[The two mental shifts highly successful people make — Quartz](https://qz.com/1213777/the-two-mental-shifts-highly-successful-people-make/)
 qz.com
 
 This is an interesting read and challenges many thought patterns. I like the model it suggests of two shifts, and how different those shifts may be. Give this one a read and reflect on it for a while.
@@ -136,11 +136,11 @@ This is an interesting read and challenges many thought patterns. I like the mod
 [Brave Enough | Jessie Diggins](http://jessiediggins.com/brave-enough/)
 jessiediggins.com
 
-Fabulous [post from Olympic athlete Jessie Diggins](https://en.wikipedia.org/wiki/Jessica_Diggins) on goal setting and her approach to the 2018 [Winter Olympics. Thanks to Leah Cunningham](https://www.linkedin.com/in/leahcunningham/) for the link.
+Fabulous post from Olympic athlete [Jessie Diggins](https://en.wikipedia.org/wiki/Jessica_Diggins) on goal setting and her approach to the 2018 Winter Olympics. Thanks to [Leah Cunningham](https://www.linkedin.com/in/leahcunningham/) for the link.
 
 ## Privacy
 
-Differential Privacy for [Dummies – Roberto Agostino Vitillo's Blog](https://robertovitillo.com/2016/07/29/differential-privacy-for-dummies/)
+[Differential Privacy for Dummies – Roberto Agostino Vitillo's Blog](https://robertovitillo.com/2016/07/29/differential-privacy-for-dummies/)
 robertovitillo.com
 
 The first I heard of differential privacy was when Apple started to use the term to describe how they use advanced data techniques to make smart recommendations without reducing privacy. This paper is filled with more math than I can follow, but it explains a bit more about what differential privacy really is.
@@ -151,14 +151,14 @@ If your working on systems that collect user data and also want to protect priva
 
 ## Sports
 
-Duluth welcomes home golden [curlers | Minnesota Public Radio News](https://www.mprnews.org/story/2018/02/26/victorious-mens-curlers-come-home-duluth)
+[Duluth welcomes home golden curlers | Minnesota Public Radio News](https://www.mprnews.org/story/2018/02/26/victorious-mens-curlers-come-home-duluth)
 www.mprnews.org
 
 🏅 Great to see the Gold Medal US Curling team coming back home to Minnesota! 👏
 
 ## Culture
 
-programmers-oath: An oath for [programmers, comparable to the Hippocratic Oath](https://github.com/Widdershin/programmers-oath)
+[programmers-oath: An oath for programmers, comparable to the Hippocratic Oath](https://github.com/Widdershin/programmers-oath)
 github.com
 
 I've written a lot about the intersection of programming and ethics. Specifically the idea of a moral oath that programmers should vow to uphold. Here is someone taking an initial attempt to put something like that together. 🤔
@@ -168,21 +168,21 @@ I've written a lot about the intersection of programming and ethics. Specificall
 [Oscar Forner's personal website](https://oscarforner.com/2018/02/24/Software_development_using_Bash)
 oscarforner.com
 
-[Honestly bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) would be in my top 5 most often used tools and I know many people turn there nose to it. This writeup on tooling around bash though, including formatting, listing and unit testing is pretty cool. I had no idea there was a linter for bash!
+Honestly [bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) would be in my top 5 most often used tools and I know many people turn there nose to it. This writeup on tooling around bash though, including formatting, listing and unit testing is pretty cool. I had no idea there was a linter for bash!
 
-Google Cloud Platform Blog: 12 best practices for [user account, authorization and password management](https://cloudplatform.googleblog.com/2018/01/12-best-practices-for-user-account.html)
+[Google Cloud Platform Blog: 12 best practices for user account, authorization and password management](https://cloudplatform.googleblog.com/2018/01/12-best-practices-for-user-account.html)
 cloudplatform.googleblog.com
 
 Thorough list of things that you need to deal with if you are building an authentication system.
 
-Feed43 : Convert web [pages into professionally looking RSS feeds](https://feed43.com/)
+[Feed43 : Convert web pages into professionally looking RSS feeds](https://feed43.com/)
 feed43.com
 
 I use feed readers extensively and it’s a bummer when there is a website that doesn't have a feed for what I want. This site allows you to parse the HTML of the page and create an RSS feed from it. This could be handy to have.
 
 ## Productivity
 
-Things 3 From [an OmniFocus and TaskPaper User —Macdrifter](http://www.macdrifter.com/2018/02/things-3-from-an-omnifocus-and-taskpaper-user.html)
+[Things 3 From an OmniFocus and TaskPaper User —Macdrifter](http://www.macdrifter.com/2018/02/things-3-from-an-omnifocus-and-taskpaper-user.html)
 www.macdrifter.com
 
 I was very interested to read this. I've been an OmniFocus user since it was in beta, and lately Things 3 continues to get a lot of positive comments. I've considered switching, but I really don't want to do that. Switching task managers Is a major pain. This review ultimately came down on Things 3, but I’m going to wait for OmniFocus 3 before I make any decision.
@@ -223,11 +223,11 @@ Fun performance of The Lion King at Justice Page Middle School tonight! 🎭
 
 [Tuesday @ 9:12 PM](https://www.thingelstad.com/2018/02/27/still-finding-altos.html)
 
-[Still finding Alto’s Odyssey](https://itunes.apple.com/us/app/altos-odyssey/id1182456409?mt=8&uo=4) very fun. Great game! 👍🏻
+Still finding [Alto’s Odyssey](https://itunes.apple.com/us/app/altos-odyssey/id1182456409?mt=8&uo=4) very fun. Great game! 👍🏻
 
 [Monday @ 10:53 PM](https://www.thingelstad.com/2018/02/26/im-amazed-at.html)
 
-[I’m amazed at the “superpowers” Workflow](https://itunes.apple.com/us/app/workflow/id915249334?mt=8&uo=4) gives me from my phone! Automating routine things! 🙌🏻
+I’m amazed at the “superpowers” [Workflow](https://itunes.apple.com/us/app/workflow/id915249334?mt=8&uo=4) gives me from my phone! Automating routine things! 🙌🏻
 
 [Monday @ 9:11 PM](https://www.thingelstad.com/2018/02/26/my-sons-nd.html)
 
@@ -239,11 +239,11 @@ I got to be a guest reader in Tyler’s class today. Was fun to pick out a bunch
 
 [Sunday @ 8:33 PM](https://www.thingelstad.com/2018/02/25/another-very-good.html)
 
-[Another very good meal at Martina](https://www.martinarestaurant.com/) . Shaved brussel salad, beet salad, swordfish and panqueque. Wow!
+Another very good meal at [Martina](https://www.martinarestaurant.com/). Shaved brussel salad, beet salad, swordfish and panqueque. Wow!
 
 [Sunday @ 2:17 PM](https://www.thingelstad.com/2018/02/25/theatre-this-afternoon.html)
 
-Theatre [🎭 this afternoon. Make Believe Neighborhood](https://hobt.org/events/make-believe-neighborhood-18/) at In the Heart of the Beast Puppet and Mask Theatre.
+Theatre 🎭 this afternoon. [Make Believe Neighborhood](https://hobt.org/events/make-believe-neighborhood-18/) at In the Heart of the Beast Puppet and Mask Theatre.
 
 [Saturday @ 9:27 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
@@ -255,7 +255,7 @@ Interesting strategy in Curling.
 
 [Saturday @ 5:28 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
-[Congratulations to Duluth Curling Club](https://www.duluthcurlingclub.org/) for bringing home the first US Gold in Curling.
+Congratulations to [Duluth Curling Club](https://www.duluthcurlingclub.org/) for bringing home the first US Gold in Curling.
 
 [Saturday @ 5:23 PM](https://www.thingelstad.com/2018/02/24/forestryiohttpsforestryio-is-working.html)
 
@@ -263,7 +263,7 @@ Interesting strategy in Curling.
 
 [Saturday @ 5:16 PM](https://www.thingelstad.com/2018/02/24/if-curling-can.html)
 
-[If Curling](https://en.wikipedia.org/wiki/Curling) can be [an Olympic sport than surely Kubb](https://en.wikipedia.org/wiki/Kubb) could be too. 🤞🏻
+If [Curling](https://en.wikipedia.org/wiki/Curling) can be an Olympic sport than surely [Kubb](https://en.wikipedia.org/wiki/Kubb) could be too. 🤞🏻
 
 [Saturday @ 4:20 PM](https://www.thingelstad.com/2018/02/24/macos-photos-app.html)
 
@@ -275,8 +275,8 @@ We made 34,344 meals, enough to feed 94 kids for a year!
 
 [Saturday @ 10:53 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
-We packed 22 [boxes at Feed My Starving Children](https://www.fmsc.org) this morning! 🙌🏻 Tyler picked a great event for his birthday!
+We packed 22 boxes at [Feed My Starving Children](https://www.fmsc.org) this morning! 🙌🏻 Tyler picked a great event for his birthday!
 
 [Saturday @ 9:00 AM](https://www.thingelstad.com/2018/02/24/080007.html)
 
-[At Feed My Starving Children](https://www.fmsc.org/) to pack meals. Tyler wanted to come here for his birthday. Love this handmade graph of progress.
+At [Feed My Starving Children](https://www.fmsc.org/) to pack meals. Tyler wanted to come here for his birthday. Love this handmade graph of progress.

@@ -109,7 +109,7 @@ links:
   domain: www.matthewcassinelli.com
   heading_context: '[Announcing my Shortcuts Library, featuring 150 Siri Shortcuts to use with iOS 13 - Matthew Cassinelli](https://www.matthewcassinelli.com/ios-13-siri-shortcuts-library/)'
   section: Notable Links 📌
-word_count: 1387
+word_count: 1383
 ---
 👋
 
@@ -145,7 +145,7 @@ I’m very impressed with what Darkroom is doing with photo editing on iOS platf
 
 ### [SportsEngine, Inc. Announces Leadership Transition and Record Growth](https://www.sportsengine.com/corp/news-and-press/sportsengineInc-announces-leadership-transition-and-record-growth)
 
-[Congratulations to my friend Anna Klombies](https://www.linkedin.com/in/annaklombies/) and the other leaders at SportsEngine on such an amazing run as they transition to the next "generation" of leadership. 👏
+Congratulations to my friend [Anna Klombies](https://www.linkedin.com/in/annaklombies/) and the other leaders at SportsEngine on such an amazing run as they transition to the next "generation" of leadership. 👏
 
 ### [Google Contractors Officially Vote to Unionize - VICE](https://www.vice.com/en_us/article/8xwmnv/google-contractors-officially-vote-to-unionize)
 
@@ -153,7 +153,7 @@ This is actually HCL employees unionizing, not Google employees, the the headlin
 
 ### [Every business leader should read Charlene Li's "The Disruption Mindset" - without bullshit](https://withoutbullshit.com/blog/every-business-leader-should-read-charlene-lis-the-disruption-mindset)
 
-Very [strong endorsement for The Disruption Mindset](https://charleneli.com/disruption-mindset/) .
+Very strong endorsement for [The Disruption Mindset](https://charleneli.com/disruption-mindset/).
 
 > According to Charlene, the three elements of disruptive transformation are:
 > 1. A strategy inspired by future customers to make big gulp decisions.
@@ -200,7 +200,7 @@ Want more on the mess that is We Work? Here's more! 😳
 
 > WeWork will never ever, in its short history, generate a profit, let alone the tens of billions in revenues necessary to generate anywhere near the $3 billion in earnings required to (even then generously) value the company at £47 billion.
 
-[Adam Neumann is no longer CEO](https://www.bloomberg.com/news/articles/2019-09-24/wework-ex-ceo-to-staff-too-much-focus-has-been-placed-on-me) . I wonder if the damage can be repaired. They lost 2/3rds of their value in the run to the IPO. 💰⤵️🕳
+[Adam Neumann is no longer CEO](https://www.bloomberg.com/news/articles/2019-09-24/wework-ex-ceo-to-staff-too-much-focus-has-been-placed-on-me). I wonder if the damage can be repaired. They lost 2/3rds of their value in the run to the IPO. 💰⤵️🕳
 
 ### [Here’s why so many apps are asking to use Bluetooth on iOS 13 - The Verge](https://www.theverge.com/2019/9/19/20867286/ios-13-bluetooth-permission-privacy-feature-apps)
 
@@ -208,7 +208,7 @@ I've noticed this and have been surprised, and declined, some of the apps asking
 
 ### [Breville BDC450 "Precision Brewer" Coffee Maker — Tools and Toys](http://toolsandtoys.net/breville-precision-brewer-coffee-maker/)
 
-I've already got [two great coffeemakers, a Ratio 8](https://ratiocoffee.com/products/eight) [and a Bonavita](http://bonavitaworld.com/products/8-cup-one-touch-1) , but if I were looking now I would seriously consider this. I like the addition of these precision coffee makers that can execute repeatable and modifiable programs. ☕️
+I've already got two great coffeemakers, a [Ratio 8](https://ratiocoffee.com/products/eight) and a [Bonavita](http://bonavitaworld.com/products/8-cup-one-touch-1), but if I were looking now I would seriously consider this. I like the addition of these precision coffee makers that can execute repeatable and modifiable programs. ☕️
 
 ### [Announcing my Shortcuts Library, featuring 150 Siri Shortcuts to use with iOS 13 - Matthew Cassinelli](https://www.matthewcassinelli.com/ios-13-siri-shortcuts-library/)
 
@@ -227,7 +227,7 @@ Yikes. 🐦😬
 
 ### [Thursday @ 10:57 PM](https://www.thingelstad.com/2019/09/26/its-great-to.html)
 
-It’s great to [see OmniFocus with iOS 13 Features](https://www.omnigroup.com/blog/omnifocus-ios-13-features-testflight) coming soon! I particularly like seeing some new Shortcut options being added right away! 👏
+It’s great to see [OmniFocus with iOS 13 Features](https://www.omnigroup.com/blog/omnifocus-ios-13-features-testflight) coming soon! I particularly like seeing some new Shortcut options being added right away! 👏
 
 ### [Wednesday @ 9:58 PM](https://www.thingelstad.com/2019/09/25/mn-united-v.html)
 
@@ -269,7 +269,7 @@ Premier League VAR rulings for offsides seem impossible for players. It’s impo
 
 ### [Saturday @ 7:52 AM](https://www.thingelstad.com/2019/09/21/saturday-morning-soccer.html)
 
-Harry [Kane’s goal while falling this morning](https://soccer.nbcsports.com/2019/09/21/video-harry-kane-scores-mind-boggling-goal/) was amazing! Brilliant! ⚽️🤩🙌 Go Spurs! 1-0 #LCvTOT #PL
+[Harry Kane’s goal while falling this morning](https://soccer.nbcsports.com/2019/09/21/video-harry-kane-scores-mind-boggling-goal/) was amazing! Brilliant! ⚽️🤩🙌 Go Spurs! 1-0 #LCvTOT #PL
 
 ## Fortune 🥠
 
@@ -277,4 +277,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will reach the highest possible point in your business or profession.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

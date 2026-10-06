@@ -75,7 +75,7 @@ links:
   domain: time.com
   heading_context: '[I Mentored Mark Zuckerberg. But I Can''t Stay Silent | Time](http://time.com/5505441/mark-zuckerberg-mentor-facebook-downfall/)'
   section: Notable Links 📌
-word_count: 1171
+word_count: 1165
 ---
 Hello from the Bold, and Frozen, North! ❄️ We are looking at several days with the thermometer never getting into positive numbers. 🥶 There should be plenty of opportunities to curate some fun links by the fire. 🔥
 
@@ -155,7 +155,7 @@ Nice work on their status page and accurately reflecting the dependencies they h
 
 ### [I Mentored Mark Zuckerberg. But I Can't Stay Silent | Time](http://time.com/5505441/mark-zuckerberg-mentor-facebook-downfall/)
 
-A pretty comprehensive critique of many things that Facebook does. This is [from an early investor, Roger McNamee](https://en.wikipedia.org/wiki/Roger_McNamee) who has been critical of Facebook for a while. Reading the article through all of Time's advertisements is a challenge.
+A pretty comprehensive critique of many things that Facebook does. This is from an early investor, [Roger McNamee](https://en.wikipedia.org/wiki/Roger_McNamee) who has been critical of Facebook for a while. Reading the article through all of Time's advertisements is a challenge.
 
 ## Give Back 🎁
 
@@ -180,37 +180,37 @@ Target did an effort like this with Techstars and it lasted one cycle and was th
 
 ### [Wednesday @ 7:44 PM](https://www.thingelstad.com/2019/01/23/ordered-end-of.html)
 
-[Ordered End of Trust](https://store.mcsweeneys.net/products/mcsweeney-s-issue-54-the-end-of-trust) , McSweeney’s Issue 54 [done in collaboration with the EFF](https://www.eff.org) ! 💜
+Ordered [End of Trust](https://store.mcsweeneys.net/products/mcsweeney-s-issue-54-the-end-of-trust), McSweeney’s Issue 54 done in collaboration with the [EFF](https://www.eff.org)! 💜
 
 ### [Tuesday @ 11:15 PM](https://www.thingelstad.com/2019/01/22/just-signed-up.html)
 
-Just signed up [for a 4th site on @Blot](https://micro.blog/Blot) . This one will be to finally get a decent site for my Book Club.
+Just signed up for a 4th site on [@Blot](https://micro.blog/Blot). This one will be to finally get a decent site for my Book Club.
 
 ### [Monday @ 9:41 PM](https://www.thingelstad.com/2019/01/21/tammy-and-i.html)
 
-Tammy and I had [an amazing dinner at Popol Vuh](https://popolvuhmpls.com/popol-vuh/) last night. Guacamole, Jicama Salad, Costilla, and Carne Asada. Everything was delicious and so flavorful! The drinks were amazing as well!
+Tammy and I had an amazing dinner at [Popol Vuh](https://popolvuhmpls.com/popol-vuh/) last night. Guacamole, Jicama Salad, Costilla, and Carne Asada. Everything was delicious and so flavorful! The drinks were amazing as well!
 
 ![](https://cdn.uploads.micro.blog/890/2019/f96a374100.jpg)
 
 ### [Monday @ 9:34 PM](https://www.thingelstad.com/2019/01/21/updating-firmware-ftw.html)
 
-Updating firmware FTW! [This time the Joule Sous Vide](https://www.chefsteps.com/joule) .
+Updating firmware FTW! This time the [Joule Sous Vide](https://www.chefsteps.com/joule).
 
 ![](https://cdn.uploads.micro.blog/890/2019/a444e6f770.jpg)
 
 ### [Monday @ 9:31 PM](https://www.thingelstad.com/2019/01/21/tammys-sisters-and.html)
 
-Tammy’s sisters and my [brother-in-laws escaped Breakout - Operation: Casino](https://breakoutgames.com/minneapolis/rooms/#roomCasino) in 45 minutes! 🙌💪🔓
+Tammy’s sisters and my brother-in-laws escaped [Breakout - Operation: Casino](https://breakoutgames.com/minneapolis/rooms/#roomCasino) in 45 minutes! 🙌💪🔓
 
 ![](https://cdn.uploads.micro.blog/890/2019/6834192f7e.jpg)
 
 ### [Friday @ 10:54 PM](https://www.thingelstad.com/2019/01/18/ive-used-an.html)
 
-I’ve [used an Airport Express (Gen 1)](https://en.wikipedia.org/wiki/AirPort_Express) with an auto-switching amp to get AirPlay audio. The Airport [Express is discontinued now. Sonos Amp](https://www.sonos.com/en-us/shop/amp.html) does what I want, but is 3 times the cost. Recommendations on better solutions?
+I’ve used an [Airport Express (Gen 1)](https://en.wikipedia.org/wiki/AirPort_Express) with an auto-switching amp to get AirPlay audio. The Airport Express is discontinued now. [Sonos Amp](https://www.sonos.com/en-us/shop/amp.html) does what I want, but is 3 times the cost. Recommendations on better solutions?
 
 ### [Friday @ 8:56 PM](https://www.thingelstad.com/2019/01/18/quiet-friday-night.html)
 
-Quiet Friday night putting together [tomorrows issue of the Weekly Thing](https://weekly.thingelstad.com) . 👨‍💻
+Quiet Friday night putting together tomorrows issue of the [Weekly Thing](https://weekly.thingelstad.com). 👨‍💻
 
 ### [Friday @ 7:17 PM](https://www.thingelstad.com/2019/01/18/closed-on-the.html)
 
@@ -226,4 +226,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will soon forget this.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

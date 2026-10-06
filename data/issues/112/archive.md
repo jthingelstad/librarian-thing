@@ -79,15 +79,15 @@ links:
   domain: www.defmacro.org
   heading_context: '[44 engineering management lessons | defmacro](https://www.defmacro.org/2014/10/03/engman.html)'
   section: Notable Links 📌
-word_count: 1406
+word_count: 1403
 ---
 Welcome to Weekly Thing #112!
 
 After publishing every week since May 13, 2017 I've decided to build a little break into the Weekly Thing annual schedule. I’m going to be taking the month of July off from sending you wonderful links and other exciting things each Saturday morning. I know, what will you do with your morning coffee? ☕️ I trust you will be able to find alternatives and I will be eagerly waiting to land in your inbox on August 3rd with issue 113! Cool?
 
-I got the inspiration from James Whatley who writes Five Things on Friday. It’s a pretty [great weekly, you should totally subscribe](https://us8.list-manage.com/subscribe?u=a84512488c22cce34b03cbcaa&id=77143865ef) but since he takes July and August of you'll be waiting a bit. But it’s worth it, he's got 100% more animated GIFs than I do in the Weekly Thing. He's at issue 301, so three times ahead of me, and takes a break in the summer. I decided to lean into his wisdom. 😎
+I got the inspiration from James Whatley who writes Five Things on Friday. It’s a pretty great weekly, you should totally [subscribe](https://us8.list-manage.com/subscribe?u=a84512488c22cce34b03cbcaa&id=77143865ef) but since he takes July and August of you'll be waiting a bit. But it’s worth it, he's got 100% more animated GIFs than I do in the Weekly Thing. He's at issue 301, so three times ahead of me, and takes a break in the summer. I decided to lean into his wisdom. 😎
 
-While I’m taking the month off July I'd like to see about queuing up a new section for when I come back in August. New section you ask? Yes, new section! 😲 I've wanted to try an "Ask Me Anything" section in the Weekly Thing, or an AMA as the Reddit folks say. So let's give it a try, to prompt a question you can simply reply to this email and ask away, or if you'd like you can use this very fancy [Weekly Thing Ask Me Anything form](https://www.surveymonkey.com/r/NK8YWT5) I put together. Let the asking of anything begin! 👍
+While I’m taking the month off July I'd like to see about queuing up a new section for when I come back in August. New section you ask? Yes, new section! 😲 I've wanted to try an "Ask Me Anything" section in the Weekly Thing, or an AMA as the Reddit folks say. So let's give it a try, to prompt a question you can simply reply to this email and ask away, or if you'd like you can use this [very fancy Weekly Thing Ask Me Anything form](https://www.surveymonkey.com/r/NK8YWT5) I put together. Let the asking of anything begin! 👍
 
 So now that we have that all sorted, let's get onto it!
 
@@ -95,7 +95,7 @@ So now that we have that all sorted, let's get onto it!
 
 ### [Minneapolis Women in Tech Breakfast with Jennifer Tejada, CEO fo PagerDuty - YouTube](https://www.youtube.com/watch?v=lV7zvicV1Yg)
 
-[SPS' own Amy Patton](https://www.linkedin.com/in/amyjpatton/) [co-hosted this event with Jennifer Tejada](https://www.linkedin.com/in/jenntejada1/) of PagerDuty, and led the Fireside Chat Q&A [format. I greatly enjoyed the event](https://www.thingelstad.com/2019/06/26/excited-to-attend.html) and Jennifer's experiences as CEO of PagerDuty were insightful and fun to hear. This was the first Women in Tech event that I have attended, but it won't be my last. Having men in technology involved in these conversations is important to our industry making progress.
+SPS' own [Amy Patton](https://www.linkedin.com/in/amyjpatton/) co-hosted this event with [Jennifer Tejada](https://www.linkedin.com/in/jenntejada1/) of PagerDuty, and led the Fireside Chat Q&A format. I greatly enjoyed [the event](https://www.thingelstad.com/2019/06/26/excited-to-attend.html) and Jennifer's experiences as CEO of PagerDuty were insightful and fun to hear. This was the first Women in Tech event that I have attended, but it won't be my last. Having men in technology involved in these conversations is important to our industry making progress.
 
 ### [Forget monoliths vs. microservices. Cognitive load is what matters. | TechBeacon](https://techbeacon.com/app-dev-testing/forget-monoliths-vs-microservices-cognitive-load-what-matters)
 
@@ -113,7 +113,7 @@ Edina MN 55424
 
 ### [★ Jony Ive Is Leaving Apple — Daring Fireball](https://daringfireball.net/2019/06/jony_ive_leaves_apple)
 
-Wow! 💥 John Gruber is probably the best person in the world [to write about this news release](https://www.apple.com/newsroom/2019/06/jony-ive-to-form-independent-design-company-with-apple-as-client/) and what it means. While I think Ive has been pretty disconnected for a while now, I will still miss Ive's white room, voice from nowhere video introductions of new devices.
+Wow! 💥 John Gruber is probably the best person in the world to write about this [news release](https://www.apple.com/newsroom/2019/06/jony-ive-to-form-independent-design-company-with-apple-as-client/) and what it means. While I think Ive has been pretty disconnected for a while now, I will still miss Ive's white room, voice from nowhere video introductions of new devices.
 
 ### [Ethical Principles, OKRs, and KPIs: what YouTube and Facebook could learn from Tukey | Data Science Institute](https://datascience.columbia.edu/ethical-principles-okrs-and-kpis-what-youtube-and-facebook-could-learn-tukey#.XRMxf5DB5eg.twitter)
 
@@ -163,14 +163,14 @@ Solid list of short, quick pieces of advice for a new engineering manager. 👍
 
 https://creativecommons.org
 
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
+[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 
 - [How do you delegate to a group of people?](https://www.annashipman.co.uk/jfdi/delegating-to-a-team.html) www.annashipman.co.uk
 Interesting walkthrough about working across a leadership team.
 - [21wallpaper - Download curated wallpapers for you screen](https://21wallpaper.design/) 21wallpaper.design
-Cool website with some creative backgrounds for your devices. Device backgrounds is an interesting way to bring some art into your day [to day. Via Dense Discovery 42](https://www.densediscovery.com/issues/42) .
+Cool website with some creative backgrounds for your devices. Device backgrounds is an interesting way to bring some art into your day to day. Via [Dense Discovery 42](https://www.densediscovery.com/issues/42).
 - [Swedish Couple Builds Greenhouse Around Home to Stay Warm and Grow Food All Year Long](https://returntonow.net/2019/03/04/swedish-couple-builds-greenhouse-around-home-to-stay-warm-and-grow-food-all-year-long/) returntonow.net
 Cool idea for a house where the winters are long. The video is interesting as well and goes through the infrastructure. I wish they would have shown it in the winter though.
 
@@ -178,7 +178,7 @@ Cool idea for a house where the winters are long. The video is interesting as we
 
 ### [Wednesday @ 8:35 AM](https://www.thingelstad.com/2019/06/26/excited-to-attend.html)
 
-Excited to attend the Minneapolis Women in Tech Breakfast [with Jenn Tejada, CEO of PagerDuty](https://meet.pagerduty.com/mn-wit-breakfast) this morning! #MNWITBreakfast
+Excited to attend the [Minneapolis Women in Tech Breakfast with Jenn Tejada, CEO of PagerDuty](https://meet.pagerduty.com/mn-wit-breakfast) this morning! #MNWITBreakfast
 
 ![](https://cdn.uploads.micro.blog/890/2019/eb3e94a003.jpg)
 
@@ -188,7 +188,7 @@ Great performance by USA 🇺🇸 over Trinidad & Tobago 🇹🇹 winning 6-0 in
 
 ### [Saturday @ 11:49 AM](https://www.thingelstad.com/2019/06/22/blew-away-previous.html)
 
-Blew away previous 45-min PR and spent 17% [of the spin in Zone 5](https://members.onepeloton.com/profile/workouts/7f6d4edc8a9c45d0955410a1df4c83fb) ! 🤜🤛 #peloton
+Blew away previous 45-min PR and spent [17% of the spin in Zone 5](https://members.onepeloton.com/profile/workouts/7f6d4edc8a9c45d0955410a1df4c83fb)! 🤜🤛 #peloton
 
 ## Fortune 🥠
 
@@ -196,4 +196,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Go to a movie tonight. Darkness becomes you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

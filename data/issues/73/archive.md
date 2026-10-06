@@ -127,13 +127,13 @@ links:
   domain: en.wikipedia.org
   heading_context: '[“Don’t be evil.”](https://en.wikipedia.org/wiki/Don%27t_be_evil)'
   section: Notable Links 📌
-word_count: 2648
+word_count: 2638
 ---
-This week has had a mournful undercurrent for me after we [said goodbye to our dog Chase](https://www.thingelstad.com/2018/goodbye-chase/) . I've never gone through this with a dog before. 😢 These four-legged friends can occupy a big place in our hearts.
+This week has had a mournful undercurrent for me after we said [goodbye to our dog Chase](https://www.thingelstad.com/2018/goodbye-chase/). I've never gone through this with a dog before. 😢 These four-legged friends can occupy a big place in our hearts.
 
-Life feels like it's in overdrive right now. We are trying to finish up a series of several projects at our cabin before the winter comes. 🏡 I've been choreographing an upgrade cycle of seemingly everyone's iPhone. This week Tammy and I both made [the move to the iPhone XS](https://www.apple.com/iphone-xs/) . The camera is amazing and I expect to level up the picture I send each week. 📷
+Life feels like it's in overdrive right now. We are trying to finish up a series of several projects at our cabin before the winter comes. 🏡 I've been choreographing an upgrade cycle of seemingly everyone's iPhone. This week Tammy and I both made the move to the [iPhone XS](https://www.apple.com/iphone-xs/). The camera is amazing and I expect to level up the picture I send each week. 📷
 
-Final note for a fun thing coming up — I got [confirmation that my Tesla Model 3](https://www.tesla.com/model3) is ready for me to pickup on Monday! 🙌
+Final note for a fun thing coming up — I got confirmation that my [Tesla Model 3](https://www.tesla.com/model3) is ready for me to pickup on Monday! 🙌
 
 ## My Blog Posts ✍️
 
@@ -159,7 +159,7 @@ This helps reinforce why Apple has strategically positioned itself on the side o
 
 ![Rose in the Lyndale Park Rose Garden.](https://files.thingelstad.com/weekly-thing/73/cover.jpg)
 
-Blooming Rose 🌹 [in the Lyndale Park Rose Garden](https://www.minneapolisparks.org/parks__destinations/gardens__bird_sanctuaries/lyndale_park_rose_garden/) .
+Blooming Rose 🌹 in the [Lyndale Park Rose Garden](https://www.minneapolisparks.org/parks__destinations/gardens__bird_sanctuaries/lyndale_park_rose_garden/).
 
 Sep 23, 2018 at 1:36 PM
 Lyndale Park Rose Garden, 1500 E Lake Harriet Blvd, Minneapolis MN 55409
@@ -168,13 +168,13 @@ Lyndale Park Rose Garden, 1500 E Lake Harriet Blvd, Minneapolis MN 55409
 
 ### [Introducing Cloudflare Registrar: Domain Registration You Can Love](https://blog.cloudflare.com/cloudflare-registrar/)
 
-[I've been using Namecheap](https://www.namecheap.com) for years as my registrar. I find them reliable and easy to use. Cloudflare has a great reputation and their entry into the registrar service may get me to move.
+I've been using [Namecheap](https://www.namecheap.com) for years as my registrar. I find them reliable and easy to use. Cloudflare has a great reputation and their entry into the registrar service may get me to move.
 
 > Here's the promise of the Cloudflare Registrar: we'll follow the best possible security practices and offer you the best possible price. What do we mean by that? From the security side, we promise we'll allow you to enable two-factor authentication, we’ll lock your domain registration by default, and automatically enable best-practice security services like DNSSEC.
 >
 > From the price side it’s even simpler: we promise to never charge you anything more than the wholesale price each TLD charges. That’s true the first year and it’s true every subsequent year. If you register your domain with Cloudflare Registrar you’ll always pay the wholesale price with no markup.
 
-Cool that they are also allowing people to get earlier access if they make [a donation to Girls Who Code](https://girlswhocode.com/) !
+Cool that they are also allowing people to get earlier access if they make a donation to [Girls Who Code](https://girlswhocode.com/)!
 
 ### [Facebook Is Giving Advertisers Access to Your Shadow Contact Information](https://gizmodo.com/facebook-is-giving-advertisers-access-to-your-shadow-co-1828476051)
 
@@ -186,11 +186,11 @@ They are even doing this with data you give them for security purposes.
 
 > They found that when a user gives Facebook a phone number for two-factor authentication or in order to receive alerts about new log-ins to a user’s account, that phone number became targetable by an advertiser within a couple of weeks.
 
-[The EFF highlighted](https://www.eff.org/deeplinks/2018/09/you-gave-facebook-your-number-security-they-used-it-ads) this terrible use of security information for advertising targeting as well.
+The [EFF highlighted](https://www.eff.org/deeplinks/2018/09/you-gave-facebook-your-number-security-they-used-it-ads) this terrible use of security information for advertising targeting as well.
 
 ### [Firefox Monitor](https://monitor.firefox.com/)
 
-Right now this is just an alternative [front-end to have i been pwned?](https://haveibeenpwned.com) , but it’s great to see Firefox stepping into this space and I expect they will [continue to add more over time](https://venturebeat.com/2018/09/25/firefox-monitor-taps-have-i-been-pwned-to-inform-you-of-data-breaches/) .
+Right now this is just an alternative front-end to [have i been pwned?](https://haveibeenpwned.com), but it’s great to see Firefox stepping into this space and I expect they will continue to [add more over time](https://venturebeat.com/2018/09/25/firefox-monitor-taps-have-i-been-pwned-to-inform-you-of-data-breaches/).
 
 ### [Low←Tech Magazine](https://solar.lowtechmagazine.com/2018/09/how-to-build-a-lowtech-website/)
 
@@ -245,7 +245,7 @@ Interactive Life Insurance? Oh no. This seems like a terrible thing.
 
 ### [Chrome is a Google Service that happens to include a Browser Engine](https://ha.x0r.be/posts/chrome-is-a-google-service/)
 
-I've never used Chrome for privacy reasons, it’s too closely connected to the worlds largest advertising platform with a huge profit motive to collect information. Chrome was the last [browser to support Do Not Track](https://en.wikipedia.org/wiki/Do_Not_Track) while it prided itself on supporting new capabilities before everyone else. Now Google has tied Chrome even closer to it’s services. If you want private browsing Firefox is a good bet with enough extensions, and Safari does more to fight privacy invading trackers than any other browser out of the box. Matthew Greene has a more direct reaction to [this, and is done with Chrome](https://blog.cryptographyengineering.com/2018/09/23/why-im-leaving-chrome/). ["Don't be evil."](https://en.wikipedia.org/wiki/Don't_be_evil)
+I've never used Chrome for privacy reasons, it’s too closely connected to the worlds largest advertising platform with a huge profit motive to collect information. Chrome was the last browser to support [Do Not Track](https://en.wikipedia.org/wiki/Do_Not_Track) while it prided itself on supporting new capabilities before everyone else. Now Google has tied Chrome even closer to it’s services. If you want private browsing Firefox is a good bet with enough extensions, and Safari does more to fight privacy invading trackers than any other browser out of the box. Matthew Greene has a more [direct reaction to this, and is done with Chrome](https://blog.cryptographyengineering.com/2018/09/23/why-im-leaving-chrome/). ["Don't be evil."](https://en.wikipedia.org/wiki/Don't_be_evil)
 
 ### [Cloudflare Turns 8 — here’s what we mean by a “better Internet”](https://blog.cloudflare.com/cloudflare-turns-8/)
 
@@ -271,7 +271,7 @@ I like this position, computer security is just security, and it’s really easy
 
 https://archive.org
 
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
+[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -284,7 +284,7 @@ I've used GPG Suite at times to encrypt mail, and it’s been sad to me to see h
 - [Walmart Requires Lettuce, Spinach Suppliers to Join Blockchain - CIO Journal. - WSJ](https://blogs.wsj.com/cio/2018/09/24/walmart-requires-lettuce-spinach-suppliers-to-join-blockchain/) blogs.wsj.com
 Subscriber only link. Interesting real world use of Blockchain in retail's. Food seems to be one avenue where blockchain has some immediate use cases.
 - [Manyverse](https://www.manyver.se/) www.manyver.se
-[I've read about Scuttlebutt](https://www.scuttlebutt.nz/) before and found it intriguing, but this new application built on that protocol seems to be something normal folks could actually use.
+I've read about [Scuttlebutt](https://www.scuttlebutt.nz/) before and found it intriguing, but this new application built on that protocol seems to be something normal folks could actually use.
 - [macOS Mojave: The MacStories Review – MacStories](https://www.macstories.net/stories/macos-mojave-the-macstories-review/)
 Everything you ever wanted to know about the newest macOS.
 - [Apple and Salesforce partner to help redefine customer experiences on iOS - Apple](https://www.apple.com/newsroom/2018/09/apple-and-salesforce-partner-to-help-redefine-customer-experiences-on-ios/)
@@ -340,11 +340,11 @@ Two of my three Macs are upgraded to macOS Mojave. The last one that is still up
 
 ### [Sunday @ 7:14 PM](https://www.thingelstad.com/2018/09/23/power-just-got.html)
 
-Power just got restored at our cabin on Cannon Lake after Thursday nights huge storm. Was out from Thursday at 6:32p to Sunday at 5:28p, at total of 71 hours. That is a long time, but given the severity of [storms it’s impressive work from XcelEnergy](https://www.outagemap-xcelenergy.com/outagemap/?state=MN) .
+Power just got restored at our cabin on Cannon Lake after Thursday nights huge storm. Was out from Thursday at 6:32p to Sunday at 5:28p, at total of 71 hours. That is a long time, but given the severity of storms it’s impressive work from [XcelEnergy](https://www.outagemap-xcelenergy.com/outagemap/?state=MN).
 
 ### [Sunday @ 3:15 PM](https://www.thingelstad.com/2018/09/23/fountain-in-the.html)
 
-Fountain [in the Lyndale Park Rose Garden](https://www.minneapolisparks.org/parks__destinations/gardens__bird_sanctuaries/lyndale_park_rose_garden/) . The iPhone XS camera is very impressive.
+Fountain in the [Lyndale Park Rose Garden](https://www.minneapolisparks.org/parks__destinations/gardens__bird_sanctuaries/lyndale_park_rose_garden/). The iPhone XS camera is very impressive.
 
 ![](https://www.thingelstad.com/uploads/2018/909feb3739.jpg)
 
@@ -392,7 +392,7 @@ Upgrading to the new iPhone XS using iCloud Backup. First time I’ve done this 
 
 ### [Friday @ 11:16 PM](https://www.thingelstad.com/2018/09/21/really-enjoyed-hearts.html)
 
-[Really enjoyed Hearts Beat Loud](https://www.imdb.com/title/tt7158430/) . Nice story, good music. 🎬
+Really enjoyed [Hearts Beat Loud](https://www.imdb.com/title/tt7158430/). Nice story, good music. 🎬
 
 ![](https://www.thingelstad.com/uploads/2018/41496335af.jpg)
 
@@ -402,4 +402,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Never let the sun go down on your anger.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

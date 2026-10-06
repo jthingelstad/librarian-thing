@@ -131,7 +131,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Larry Page Is a No-Show With Google Under a Harsh Spotlight - Bloomberg](https://www.bloomberg.com/news/features/2018-09-13/larry-page-is-a-no-show-with-google-under-a-harsh-spotlight)'
   section: Notable Links 📌
-word_count: 2590
+word_count: 2587
 ---
 Ok, this week got a bit heavy on all the announcements around the iPhone XS, Apple Watch Series 4 and iOS 12. I'm waiting for the iPhone XS to get delivered, and should have it in my hands very soon. Tammy and I both upgraded, and after reading the reviews I'm very interested to check out the camera capabilities. 📱
 
@@ -143,9 +143,9 @@ The technology industry has an unusual amount of overly aggressive communication
 
 > This week people in our community confronted me about my lifetime of not understanding emotions. My flippant attacks in emails have been both unprofessional and uncalled for. Especially at times when I made it personal. In my quest for a better patch, this made sense to me. I know now this was not OK and I am truly sorry.
 
-This is a really big deal as Linus [is a role-model for many technologists](https://ds9a.nl/articles/posts/linus-communications/) . If he thinks it is appropriate to tear people apart over their code, maybe that would be a cool thing to do in a code review at the office! Hell no.
+This is a really big deal as Linus is a [role-model for many technologists](https://ds9a.nl/articles/posts/linus-communications/). If he thinks it is appropriate to tear people apart over their code, maybe that would be a cool thing to do in a code review at the office! Hell no.
 
-I was [also pleased to see this commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a104f8b5867c682d994ffa7a74093c54469c11f) to adopt a proper Code of Conduct for Linux Kernel development. To give a sense of how deep Linus' views affect the Linux Kernel team before this Code of Conduct they had a Code of Conflict!
+I was also pleased to see [this commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a104f8b5867c682d994ffa7a74093c54469c11f) to adopt a proper Code of Conduct for Linux Kernel development. To give a sense of how deep Linus' views affect the Linux Kernel team before this Code of Conduct they had a Code of Conflict!
 
 > The Code of Conflict is not achieving its implicit goal of fostering civility and the spirit of 'be excellent to each other'.
 
@@ -175,11 +175,11 @@ Cannon Lake, MN
 
 ### [The David Rubenstein Show: Jeff Bezos](https://www.youtube.com/watch?v=f3NBQcAqyu4)
 
-Great and wide-ranging interview with Amazon's Jeff Bezos. It’s amazing that Bezos still owns 16% of Amazon. I should make a point to watch more of Rubenstein's [interviews, his interview with Tim Cook](https://www.youtube.com/watch?v=2ZfGBGmEpRQ) is also great.
+Great and wide-ranging interview with Amazon's Jeff Bezos. It’s amazing that Bezos still owns 16% of Amazon. I should make a point to watch more of Rubenstein's interviews, [his interview with Tim Cook](https://www.youtube.com/watch?v=2ZfGBGmEpRQ) is also great.
 
 ### [The Decision Matrix: How to Prioritize What Matters](https://fs.blog/2018/09/decision-matrix/)
 
-A [good companion item to decision fatigue](https://en.wikipedia.org/wiki/Decision_fatigue) -- a framework for evaluating how to approach decisions using a 2x2 matrix. If you can make a finite number of decisions a day, make the right ones and delegate or defer the rest.
+A good companion item to [decision fatigue](https://en.wikipedia.org/wiki/Decision_fatigue) -- a framework for evaluating how to approach decisions using a 2x2 matrix. If you can make a finite number of decisions a day, make the right ones and delegate or defer the rest.
 
 ### [Occupations and Their Ideologies – Other Life](https://theotherlifenow.com/occupations-and-their-ideologies/)
 
@@ -235,7 +235,7 @@ Very cool new app built for Siri Shortcuts in iOS 12. This is like the companion
 
 ### [Apple's A12 Bionic is a powerhouse chip with a boosted dose of brains](https://www.theinquirer.net/inquirer/analysis/3062744/apples-a12-bionic-is-a-powerhouse-chip-with-a-boosted-dose-of-brains)
 
-[In 2008 Apple acquired P.A. Semi](https://en.wikipedia.org/wiki/P.A._Semi) for [$278 million. Apple has also acquired](https://en.wikipedia.org/wiki/List_of_mergers_and_acquisitions_by_Apple) a handful of additional semiconductor companies and they are now one of, if not the, most advanced chip manufacturers in the world. The Neural Engines 5 trillion operations per second is enabling a local approach to machine learning that is very different than everyone else's.
+In 2008 Apple acquired [P.A. Semi](https://en.wikipedia.org/wiki/P.A._Semi) for $278 million. Apple has also [acquired](https://en.wikipedia.org/wiki/List_of_mergers_and_acquisitions_by_Apple) a handful of additional semiconductor companies and they are now one of, if not the, most advanced chip manufacturers in the world. The Neural Engines 5 trillion operations per second is enabling a local approach to machine learning that is very different than everyone else's.
 
 > Core ML, Apple machine learning framework, apparently runs some nine times faster on the A12 Bionic, which should mean there's more performance on tap for developers to put AI abilities into their apps.
 
@@ -247,7 +247,7 @@ This is absolutely something I feel regularly. A lot of what I do all day is mak
 
 ### [Dean Hager Shares Leadership Strategies To Improve Your Company’s Culture](https://medium.com/authority-magazine/dean-hager-shares-leadership-strategies-to-improve-your-companys-culture-33503e0728c3)
 
-Solid and [comprehensive leadership advice from Dean Hager](https://www.linkedin.com/in/dean-hager-26b4681a/) , the CEO of Jamf. 👍
+Solid and comprehensive leadership advice from [Dean Hager](https://www.linkedin.com/in/dean-hager-26b4681a/), the CEO of Jamf. 👍
 
 ### [Advice to CEOs: digging out from a jammed calendar | Chad Dickerson's blog](https://blog.chaddickerson.com/2018/09/13/advice-to-ceos-digging-out-from-a-jammed-calendar/)
 
@@ -286,7 +286,7 @@ My book club is reading this and I'm enjoying it. I like Pollan's other work, an
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Highlighted iOS App 📱
 
@@ -347,7 +347,7 @@ Have all my relevant Apple devices upgraded to iOS 12, watchOS 5 and related dev
 
 ### [Sunday @ 7:23 PM](https://www.thingelstad.com/2018/09/16/impressive-update-for.html)
 
-[Impressive update for Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8) today! Happy to see iCloud sync arrive and already support for Siri Shortcuts! 👏🏻
+Impressive update for [Streaks](https://itunes.apple.com/us/app/streaks/id963034692?mt=8) today! Happy to see iCloud sync arrive and already support for Siri Shortcuts! 👏🏻
 
 ### [Saturday @ 5:19 PM](https://www.thingelstad.com/2018/09/15/our-deck-project.html)
 
@@ -370,4 +370,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 Expect the worst,
 it's the least you can do.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

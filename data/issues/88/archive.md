@@ -93,11 +93,11 @@ links:
   domain: om.co
   heading_context: '[Links & Recommendations — On my Om](https://om.co/2019/01/06/links-recommendations/)'
   section: Notable Links 📌
-word_count: 1407
+word_count: 1403
 ---
 This is going to be a short intro this week as we are moving into our new house and everything is all over the place. I won't let that keep me from getting you amazing people your links on time though! Our stuff is in boxes 📦, and the government is shut down, but you will definitely get your links for your weekend enjoyment! 🙌 I will admit this weeks picture is a bit of a stretch though. 😅
 
-I've also been playing around with a ([new to me](https://blot.thingelstad.com/2018/12/maybe-blot)) [blogging service called Blot](https://blot.im). I have been very impressed with it's capabilities and it feels like the right trade off between power and ease-of-use. If you are looking for a new blogging service I recommend giving Blot a try. I have already moved my [Link Blog](https://links.thingelstad.com) and [Photo Blog](https://photos.thingelstad.com) to Blot, and have [a working copy of my thingelstad.com](https://blot.thingelstad.com) site there too that I will flip to primary soon. I already have a couple of posts ([locomotive](https://blot.thingelstad.com/2019/01/ugears-locomotive) and [moving](https://blot.thingelstad.com/2019/01/moving-day)) there that aren't in the Weekly Thing since I haven't made that flip. 👍
+I've also been playing around with a ([new to me](https://blot.thingelstad.com/2018/12/maybe-blot)) blogging service called [Blot](https://blot.im). I have been very impressed with it's capabilities and it feels like the right trade off between power and ease-of-use. If you are looking for a new blogging service I recommend giving Blot a try. I have already moved my [Link Blog](https://links.thingelstad.com) and [Photo Blog](https://photos.thingelstad.com) to Blot, and have a working copy of my [thingelstad.com](https://blot.thingelstad.com) site there too that I will flip to primary soon. I already have a couple of posts ([locomotive](https://blot.thingelstad.com/2019/01/ugears-locomotive) and [moving](https://blot.thingelstad.com/2019/01/moving-day)) there that aren't in the Weekly Thing since I haven't made that flip. 👍
 
 ## Featured Links 🏅
 
@@ -194,19 +194,19 @@ Functional language implemented in Python so you can mix and match.
 - [Pokémon GO Caught Nearly $800 Million in Global Revenue Last Year, Growing 35% Over 2017](https://sensortower.com/blog/pokemon-go-revenue-december-2018) sensortower.com
 35% revenue growth for an established game like this is very impressive.
 - [How to Delete Online Accounts You No Longer Need - Consumer Reports](https://www.consumerreports.org/privacy/how-to-delete-online-accounts-you-no-longer-need/) www.consumerreports.org
-Handy set of links to delete accounts on a number of [big social networks. Via Recomendo 129](http://recomendo.com/issues/dual-scale-tape-measures-gmail-tips-papier-152521) .
+Handy set of links to delete accounts on a number of big social networks. Via [Recomendo 129](http://recomendo.com/issues/dual-scale-tape-measures-gmail-tips-papier-152521).
 
 ## Microposts 🎈
 
 ### [Sunday @ 8:18 PM](https://www.thingelstad.com/2019/01/06/watched-smallfoot-fun.html)
 
-[Watched Smallfoot](https://www.rottentomatoes.com/m/smallfoot) , fun family movie. 🎬
+Watched [Smallfoot](https://www.rottentomatoes.com/m/smallfoot), fun family movie. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/2f284d75a6.jpg)
 
 ### [Sunday @ 8:15 PM](https://www.thingelstad.com/2019/01/06/family-friends-joined.html)
 
-Family friends joined us [and we beat the Diagonal Alley](https://www.trappedpuzzlerooms.com/diagonal-alley) room at Trapped North Loop. The room was exceptionally well done, highly recommended! 🧩
+Family friends joined us and we beat the [Diagonal Alley](https://www.trappedpuzzlerooms.com/diagonal-alley) room at Trapped North Loop. The room was exceptionally well done, highly recommended! 🧩
 
 ![](https://cdn.uploads.micro.blog/890/2019/86d3c94195.jpg)
 
@@ -218,7 +218,7 @@ My daughter made me the most amazing birthday card! She made a broken laptop out
 
 ### [Sunday @ 8:09 PM](https://www.thingelstad.com/2019/01/06/we-went-back.html)
 
-We went back to Missing Pieces on Thursday [and successfully completed the Final Frontier](https://www.missingpiecesmn.com/final-frontier) [room after failing in November](https://www.thingelstad.com/2018/11/24/we-tried-the.html) ! 🧩
+We went back to Missing Pieces on Thursday and successfully completed the [Final Frontier](https://www.missingpiecesmn.com/final-frontier) room after [failing in November](https://www.thingelstad.com/2018/11/24/we-tried-the.html)! 🧩
 
 ![](https://cdn.uploads.micro.blog/890/2019/2536cd7cc0.jpg)
 
@@ -228,4 +228,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Today is what happened to yesterday.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -67,7 +67,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[The Making of a YouTube Radical - The New York Times](https://www.nytimes.com/interactive/2019/06/08/technology/youtube-radical.html)'
   section: Notable Links 📌
-word_count: 1276
+word_count: 1275
 ---
 School is out, camps have started, and summer is now officially in full swing! This week was an absolute blur, and it's my daughters birthday this weekend so I'm keeping it short and we are going to get right to the links this week! Oh, and to all the Dads out there, have a great Fathers Day! 🤜🤛
 
@@ -79,7 +79,7 @@ This has some great visualization of various privacy policies. It's telling how 
 
 > Airbnb’s privacy policy, on the other hand, is particularly inscrutable. It’s full of long, jargon-laden sentences that obscure Airbnb’s data practices and provides cover to use data in expansive ways. For example, here is how Airbnb justifies collecting users’ personal information. Vague language like “adequate performance” and “legitimate interest” allows for a wide range of interpretation, providing flexibility for Airbnb to defend its data practices in a lawsuit while making it harder for users to understand what is being done with their data.
 
-This is where services such [as Terms of Service; Didn't Read](https://tosdr.org) should be able to help crowdsource these intentionally obfuscated documents and turn them into something that normal people can understand. However, these services, like many in the pro-privacy space, aren't exactly taking off like wildfire.
+This is where services such as [Terms of Service; Didn't Read](https://tosdr.org) should be able to help crowdsource these intentionally obfuscated documents and turn them into something that normal people can understand. However, these services, like many in the pro-privacy space, aren't exactly taking off like wildfire.
 
 ## My Weekly Photo 📷
 
@@ -111,7 +111,7 @@ This bums me out. [Make: Magazine](https://makezine.com) and Maker Faire's are r
 
 ### [Google Tried to Prove Managers Don't Matter. Instead, It Discovered 10 Traits of the Very Best Ones | Inc.com](https://www.inc.com/scott-mautz/google-tried-to-prove-managers-dont-matter-instead-they-discovered-10-traits-of-very-best-ones.html)
 
-[This article is a listicle](https://en.wikipedia.org/wiki/Listicle) but the content is quick and spot on.
+This article is a [listicle](https://en.wikipedia.org/wiki/Listicle) but the content is quick and spot on.
 
 ### [I left the ad industry because our use of data tracking terrified me](https://www.fastcompany.com/90359992/an-ad-tech-pioneer-on-where-our-data-economy-went-wrong-and-how-to-fix-it)
 
@@ -184,4 +184,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will pioneer the first Martian colony.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

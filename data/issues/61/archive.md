@@ -151,15 +151,15 @@ links:
   domain: graphics.reuters.com
   heading_context: '[A Reuters Visual Guide: Blockchain explained](http://graphics.reuters.com/TECHNOLOGY-BLOCKCHAIN/010070P11GN/index.html)'
   section: Notable Links 📌
-word_count: 3007
+word_count: 2998
 ---
-We have been having a wonderful week staying at our cabin and having mulitple groups of friends and family down. We've had a lot of time on the pontoon, [tubing and enjoying the new lillypad](http://www.thingelstad.com/2018/06/30/the-lilypad-is.html) . For those that are not familiar, this lillypad is 6' by 16' and floats on the top of the lake. It can hold over 1,000 pounds and kids have a great time climbing on it, jumping off, and playing king of the hill. I'm still learning how to wrestle it back out of the water. 💧 We had another stupendous display of fireworks. There are a lot of people on Cannon Lake that set off giant fireworks displays on the 4th of July. I hope all of you living the US had a great 4th of July 🇺🇸, and our friends to the north a great Canada Day! 🇨🇦
+We have been having a wonderful week staying at our cabin and having mulitple groups of friends and family down. We've had a lot of time on the pontoon, tubing and enjoying the [new lillypad](http://www.thingelstad.com/2018/06/30/the-lilypad-is.html). For those that are not familiar, this lillypad is 6' by 16' and floats on the top of the lake. It can hold over 1,000 pounds and kids have a great time climbing on it, jumping off, and playing king of the hill. I'm still learning how to wrestle it back out of the water. 💧 We had another stupendous display of fireworks. There are a lot of people on Cannon Lake that set off giant fireworks displays on the 4th of July. I hope all of you living the US had a great 4th of July 🇺🇸, and our friends to the north a great Canada Day! 🇨🇦
 
 ## Featured Links 🏅
 
 ### [Scaling Agile FAQ | Silicon Valley Product Group](https://svpg.com/scaling-agile-faq/)
 
-I've been reading a lot about SAFe and I know a number of people that are intrigued by what it offers. I've seen the struggles of Scaling Agile beyond a small number of teams and SAFe seems to have a thought for how that can be done. In the interest of sharing the positive over the negative, I came [to this link from Marty Cagan](https://www.linkedin.com/in/cagan/) 's total and complete takedown [of SAFe, Revenge of the PMO](https://svpg.com/revenge-of-the-pmo/) (please read in addition to this link)!
+I've been reading a lot about SAFe and I know a number of people that are intrigued by what it offers. I've seen the struggles of Scaling Agile beyond a small number of teams and SAFe seems to have a thought for how that can be done. In the interest of sharing the positive over the negative, I came to this link from [Marty Cagan](https://www.linkedin.com/in/cagan/)'s total and complete takedown of SAFe, [Revenge of the PMO](https://svpg.com/revenge-of-the-pmo/) (please read in addition to this link)!
 
 He highlights that many organizations, in his view, have yet to truly embrace the most important part of agile.
 
@@ -167,7 +167,7 @@ He highlights that many organizations, in his view, have yet to truly embrace th
 
 Honestly, I would agree with that assertion.
 
-> A couple years ago I wrote about [the root causes of product failure](http://www.svpg.com/product-fail) in product companies and I identified ten key attributes of Waterfall and project-mindset. I went through and compared this list with SAFe, and literally all ten problems exist in SAFe. Indeed, I would argue that all ten problems are inherent in that process.
+> A couple years ago I wrote about the [root causes of product failure](http://www.svpg.com/product-fail) in product companies and I identified ten key attributes of Waterfall and project-mindset. I went through and compared this list with SAFe, and literally all ten problems exist in SAFe. Indeed, I would argue that all ten problems are inherent in that process.
 
 He does give that there are three areas where SAFe may work well, and I note that one of them is a "big regarding-platforming event". I wonder if this goes back to product versus project organizations?
 
@@ -209,7 +209,7 @@ The team behind Alpha Go now creating intelligent agents that can play a capture
 
 ### [How to read | Robert Heaton](https://robertheaton.com/2018/06/25/how-to-read/)
 
-This reminds me how [one of my book club friends](http://tomeri.org) reads. It also [reminds me of Derek Sivers Book](https://sivers.org/book) pages. I often think I should write a blog post on each book I read. This reinforces that that is a good idea.
+This reminds me how [one of my book club friends](http://tomeri.org) reads. It also reminds me of [Derek Sivers Book](https://sivers.org/book) pages. I often think I should write a blog post on each book I read. This reinforces that that is a good idea.
 
 ### [How Facebook Punked and then Gut Punched the News Biz – Talking Points Memo](https://talkingpointsmemo.com/edblog/how-facebook-punked-and-then-gut-punched-the-news-biz)
 
@@ -217,7 +217,7 @@ I love it when Josh Marshall of Talking Points Memo turns to the topic of being 
 
 > The first should be obvious: you can’t build businesses around a company as unreliable and poorly run as Facebook. Only a year ago, when I would talk to big money players in the digital media world, there was a consistent refrain: social video on Facebook, that’s the whole game. That struck me as crazy at the time, given everything we were seeing in the industry. And it was crazy. There’s no news publisher entitlement to Facebook traffic. And Facebook is a highly unreliable company. We’ve seen this pattern repeat itself a number of times over the course of company’s history: its scale allows it to create whole industries around it depending on its latest plan or product or gambit. But again and again, with little warning it abandons and destroys those businesses.
 
-Wether [Facebook is a platform or not](https://stratechery.com/2018/the-bill-gates-line/) , it does not have the maturity and long-term view needed to run a platform that supports a vibrant ecosystem over the long term.
+Wether Facebook [is a platform or not](https://stratechery.com/2018/the-bill-gates-line/), it does not have the maturity and long-term view needed to run a platform that supports a vibrant ecosystem over the long term.
 
 ### [Working Backwards - All Things Distributed](https://www.allthingsdistributed.com/2006/11/working_backwards.html)
 
@@ -229,7 +229,7 @@ There is a lot to like here. I tend to think the best processes and frameworks f
 
 ### [My iPhone Photography Kit | Jordan Merrick](https://www.jordanmerrick.com/posts/iphone-photography-kit)
 
-I've been doing a lot of photography with my iPhone, and true photography not just snapshots. I liked reading about what Jordan Merrick is using to [get great shots. The DxO One](https://www.dxo.com/us/dxo-one) [and Moment lenses](https://www.shopmoment.com/shop/categories/lenses) are high on my wishlist.
+I've been doing a lot of photography with my iPhone, and true photography not just snapshots. I liked reading about what Jordan Merrick is using to get great shots. The [DxO One](https://www.dxo.com/us/dxo-one) and [Moment lenses](https://www.shopmoment.com/shop/categories/lenses) are high on my wishlist.
 
 ### [The Players on Your DevSecOps Team - CYBRIC](https://www.cybric.io/the-players-on-your-devsecops-team/)
 
@@ -245,18 +245,18 @@ I’m hoping they share videos from the sessions. I’m very pleased to see this
 
 ### [Michael Pollan: "How to Change Your Mind" | Talks at Google](https://www.youtube.com/watch?v=KuhmZSFvhL0)
 
-This talk [piqued my interest in Michael Pollan](https://michaelpollan.com) 's new [book How to Change Your Mind](https://michaelpollan.com/books/how-to-change-your-mind/) about psychedelics. Don't be discouraged that the talk is all Q&A style, which I often find meandering and less impactful. The questions are good and the topics covered are interesting. I was surprised to see meditation make a showing in the discussion as well.
+This talk piqued my interest in [Michael Pollan](https://michaelpollan.com)'s new book [How to Change Your Mind](https://michaelpollan.com/books/how-to-change-your-mind/) about psychedelics. Don't be discouraged that the talk is all Q&A style, which I often find meandering and less impactful. The questions are good and the topics covered are interesting. I was surprised to see meditation make a showing in the discussion as well.
 
 ### [My framework for one-on-ones - Engineering Management](https://engineering-management.space/post/1on1-framework/)
 
 I always like to see how others manage one-on-one meeting time with their teams. This is what happens when a very logic-based engineer attempts to opitimize one-on-one structures. This seems way too formal to me, but interesting snippets.
 
-Itty bitty sites
+[Itty bitty sites](https://itty.bitty.site/#About/XQAAAAKrCQAAAAAAAAAeHMqHyTY4PyKmqfkwr6ooCXSIMxPQ7ojYR153HqZD3W+keVdvwyoyd+luwncAksvskG/my97qDaUEyfDGB0QDbdURMwS0L90o5EpQ7O+BMmWrcB7fs71TJEJv1I/T/JfksoiYu9CqkeO/3MjEVGWv6XhfDjWJZ9laLARogtAZtwl7FltrwO/ppSfgeKOjxCxTNdUQH9WBM3de22qOzClzeZaSsSM+/ETbHBIHe1Qc+UF7PDfY470lZNjQg3wfOam9KudUiHOOQD3Kn8FLfaae0lmdK4VHRgxpDtL1nExkdF+pzNQAIyktIv3dQUPDKhGJ61c+WBTNP6NI5AvZ0uFT+Mc2oG0mMUwwuupCrjTxxpYv3l4L3W5lBXqWDjEH+cL8VZc6xz4WwIMG5J9jaQTv1SSxJ1dLg2Z2F7iNQ0fCFI74yeqBM1koHGbscBj4GpwWuA7y/fMCu3sEzcwefjBOuUwDdDfsdxqQLnjywtBxR5qHmngo/agjHyILkZxU8IiTgJeSbjcEOWdiVxcb9tEdtZ7eDwWQcwMsQdU9A9sCnargxl1IdVsbB9dfcFTQL8OpvjdqnmFZZJ6n2cKr51FonrcrMjm68aS4Lemk+D4sRaHnN+O5BrF10BiSfjumSkvhZ0Uwu/tR35LSmtC1UmVPgRNMwWkSHZjfjEdqueqhYglmB7nHQ8TDWCTb7lJLtTdhx1btg7UWsAuNIhffUpBo+T+3oh8sg8c41WaX5JaNL19UkD2M0qFd8Sayfr0qeGXnrLrKkS0t56ckjui2rTTmUDKFup4CnEtE7fu6nGYeGSoCwGoRlYQD/SU1/GSIWfs8hSpK3KeSZgUQXk14b7dh2LaqrVKGJLja/hFcQCt2gdGD+Ml+iH+Cy0lqj3D32RSarS3k4mJyTKsGnETyXVlCbJtC7kiZ/gZ7i8ClkjOjSl7vH1h7l/yJZxfqmRNdl0Tr6HSxjwcNGISk66vPw5WVM2RxDcUJecKKoShy+sLRgZIwYj0YgSM+5NMGTXtBkBxabwiWnxcECQTItyM2XWkNjvIYJyHX5lVKC5z2wJn3yV8KPobM6ky+6l3oMBo2ffIQ4P35hgBU7bTOtF35gH0sxUWeVp+bVQ+Fwwo+v76Gcu1d/ZrXwiSFNfgxeBfE2zKfKeiZKPoJQgUSbwFXjlFgovL4fVjxBtS60mByYJLH/MakoIBlYL0w6mOukdQqv6FsyIj6Hlp4XqIBEydVIUjBSF8tQcPLdSgXxVkJKR1iWOK0tMefTK79Nn+qQE0VhRKmu7wBJeqboC7tnOpISeWc9NvG2GDVEa1W9bP7hEBEj+ThZNaWIkEOiX7PxZe/XmneEJdWyIMEKv2zB7qybBG/wVy1b7lz3wmg84u75TFjUd1hf7/+yOalyXiVvb/zrNAh8B62Hd1yAzlqY0kD2xM69DSKezUZA4seMZ7FEFdUENmkSnZwFMVIKutAgUpiMYG1fTcLHgwb6iWAi5YOrWoBlTcsk3fCDXIMrjFgSKZ/Bgp8PydrcQ2GYgkCtxRaEM4tgTHRheFg06vQdo478dSnhmSobCvF1nghp1ZuNsQvJdk8/eu/ZgeJp8OjJNzPL0Ovk9orPPtoX2uyUFXfP2qJIuVvjsx4opouk4lHrQZzADX3Wg3Tf4+eYos/HWyCeEDn/8Gnr1A=)
 (https://itty.bitty.site/#About/XQAAAAKrCQAAAAAAAAAeHMqHyTY4PyKmqfkwr6ooCXSIMxPQ7ojYR153HqZD3W+keVdvwyoyd+luwncAksvskG/my97qDaUEyfDGB0QDbdURMwS0L90o5EpQ7O+BMmWrcB7fs71TJEJv1I/T/JfksoiYu9CqkeO/3MjEVGWv6XhfDjWJZ9laLARogtAZtwl7FltrwO/ppSfgeKOjxCxTNdUQH9WBM3de22qOzClzeZaSsSM+/ETbHBIHe1Qc+UF7PDfY470lZNjQg3wfOam9KudUiHOOQD3Kn8FLfaae0lmdK4VHRgxpDtL1nExkdF+pzNQAIyktIv3dQUPDKhGJ61c+WBTNP6NI5AvZ0uFT+Mc2oG0mMUwwuupCrjTxxpYv3l4L3W5lBXqWDjEH+cL8VZc6xz4WwIMG5J9jaQTv1SSxJ1dLg2Z2F7iNQ0fCFI74yeqBM1koHGbscBj4GpwWuA7y/fMCu3sEzcwefjBOuUwDdDfsdxqQLnjywtBxR5qHmngo/agjHyILkZxU8IiTgJeSbjcEOWdiVxcb9tEdtZ7eDwWQcwMsQdU9A9sCnargxl1IdVsbB9dfcFTQL8OpvjdqnmFZZJ6n2cKr51FonrcrMjm68aS4Lemk+D4sRaHnN+O5BrF10BiSfjumSkvhZ0Uwu/tR35LSmtC1UmVPgRNMwWkSHZjfjEdqueqhYglmB7nHQ8TDWCTb7lJLtTdhx1btg7UWsAuNIhffUpBo+T+3oh8sg8c41WaX5JaNL19UkD2M0qFd8Sayfr0qeGXnrLrKkS0t56ckjui2rTTmUDKFup4CnEtE7fu6nGYeGSoCwGoRlYQD/SU1/GSIWfs8hSpK3KeSZgUQXk14b7dh2LaqrVKGJLja/hFcQCt2gdGD+Ml+iH+Cy0lqj3D32RSarS3k4mJyTKsGnETyXVlCbJtC7kiZ/gZ7i8ClkjOjSl7vH1h7l/yJZxfqm
 RNdl0Tr6HSxjwcNGISk66vPw5WVM2RxDcUJecKKoShy+sLRgZIwYj0YgSM+5NMGTXtBkBxabwiWnxcECQTItyM2XWkNjvIYJyHX5lVKC5z2wJn3yV8KPobM6ky+6l3oMBo2ffIQ4P35hgBU7bTOtF35gH0sxUWeVp+bVQ+Fwwo+v76Gcu1d/ZrXwiSFNfgxeBfE2zKfKeiZKPoJQgUSbwFXjlFgovL4fVjxBtS60mByYJLH/MakoIBlYL0w6mOukdQqv6FsyIj6Hlp4XqIBEydVIUjBSF8tQcPLdSgXxVkJKR1iWOK0tMefTK79Nn+qQE0VhRKmu7wBJeqboC7tnOpISeWc9NvG2GDVEa1W9bP7hEBEj+ThZNaWIkEOiX7PxZe/XmneEJdWyIMEKv2zB7qybBG/wVy1b7lz3wmg84u75TFjUd1hf7/+yOalyXiVvb/zrNAh8B62Hd1yAzlqY0kD2xM69DSKezUZA4seMZ7FEFdUENmkSnZwFMVIKutAgUpiMYG1fTcLHgwb6iWAi5YOrWoBlTcsk3fCDXIMrjFgSKZ/Bgp8PydrcQ2GYgkCtxRaEM4tgTHRheFg06vQdo478dSnhmSobCvF1nghp1ZuNsQvJdk8/eu/ZgeJp8OjJNzPL0Ovk9orPPtoX2uyUFXfP2qJIuVvjsx4opouk4lHrQZzADX3Wg3Tf4+eYos/HWyCeEDn/8Gnr1A=)
 itty.bitty.site
 
-This made me smile and chuckle and I love it. You can create a web page where the content of the page is encoded into the URL. What an interesting way to create content that lives, well, nowhere! [You could do some fun things](https://itty.bitty.site/#itty_bitty_sites_link/?XQAAAAIUAQAAAAAAAAAqGgknZBnPpvshEOXcR709setpq3Dyo6Uc6XE7WO93QffRqtxmZZRTDPmWg0+MV0EJX4h+bb16cfGPw1UYTeTi/ltlaDtWUNIKxwcKVYrUUSLytA12fQi9+TsrTM1qn96oNUe0UYrsxe1ZsNUaWrV77/B0hEG5KiPgsJ5axgh6hJwO3o66lwhcgqka6lyIM5atjTU99DdndTQvKJz4sIEcFxrxYMktYZmt/9xPsI5+8ZgHekbfIZjz9LtXFoGuVDJZ/tTz0pBhogtp/5/PoQA=) with this! 👏
+This made me smile and chuckle and I love it. You can create a web page where the content of the page is encoded into the URL. What an interesting way to create content that lives, well, nowhere! You could do [some fun things](https://itty.bitty.site/#itty_bitty_sites_link/?XQAAAAIUAQAAAAAAAAAqGgknZBnPpvshEOXcR709setpq3Dyo6Uc6XE7WO93QffRqtxmZZRTDPmWg0+MV0EJX4h+bb16cfGPw1UYTeTi/ltlaDtWUNIKxwcKVYrUUSLytA12fQi9+TsrTM1qn96oNUe0UYrsxe1ZsNUaWrV77/B0hEG5KiPgsJ5axgh6hJwO3o66lwhcgqka6lyIM5atjTU99DdndTQvKJz4sIEcFxrxYMktYZmt/9xPsI5+8ZgHekbfIZjz9LtXFoGuVDJZ/tTz0pBhogtp/5/PoQA=) with this! 👏
 
 ### [The 4 One-on-One Meeting Questions You Should *Not* Ask Your Employee](https://knowyourcompany.com/learn/guides/8-how-to-have-effective-one-on-one-meetings/2-four-questions-not-to-ask-during-one-on-one-meeting/)
 
@@ -272,11 +272,11 @@ I've used contexts (now tags) in OmniFocus for "Home : Arriving" and "Work : Arr
 
 ### [New Podcast: Automators —macsparky](https://www.macsparky.com/blog/2018/7/new-podcast-automators)
 
-I've learned a lot [from listening to Mac Power Users](https://www.relay.fm/mpu) [and David Sparks](https://www.macsparky.com) . I was excited to hear that he and Rosemary Orchard [are launching a new podcast Automators](https://automators.fm/) . 🎧 The focus of this new podcast is just on automation, something I've gotten a lot of value out [of. Here is Rosemary Orchard's announcement](https://www.rosemaryorchard.com/blog/launching-automators-podcast) as well.
+I've learned a lot from listening to [Mac Power Users](https://www.relay.fm/mpu) and [David Sparks](https://www.macsparky.com). I was excited to hear that he and Rosemary Orchard are launching a new podcast [Automators](https://automators.fm/). 🎧 The focus of this new podcast is just on automation, something I've gotten a lot of value out of. Here is [Rosemary Orchard's announcement](https://www.rosemaryorchard.com/blog/launching-automators-podcast) as well.
 
 ### [New analysis shows how Facebook and Google push users into sharing personal data : Forbrukerrådet](https://www.forbrukerradet.no/side/facebook-and-google-manipulate-users-into-sharing-personal-data/)
 
-I did not [read the 42 page full report](https://fil.forbrukerradet.no/wp-content/uploads/2018/06/2018-06-27-deceived-by-design-final.pdf) , but the synopsis is not surprising and I’m glad that people are looking into these practices more.
+I did not read the 42 page [full report](https://fil.forbrukerradet.no/wp-content/uploads/2018/06/2018-06-27-deceived-by-design-final.pdf), but the synopsis is not surprising and I’m glad that people are looking into these practices more.
 
 ### [Why you should not use Google Cloud. – Punch a Server – Medium](https://medium.com/@serverpunch/why-you-should-not-use-google-cloud-75ea2aec00de)
 
@@ -296,7 +296,7 @@ This but is like a gateway to Buddhist practices. If you face yourself, you need
 
 ### [Brave Introduces Beta of Private Tabs with Tor for Enhanced Privacy while Browsing | Brave Browser](https://brave.com/tor-tabs-beta/)
 
-The Brave browser continues [to do interesting things. Integrating Tor](https://www.torproject.org) services directly into the private tabs is a powerful idea to bring Tor anonymity to a much larger audience.
+The Brave browser continues to do interesting things. Integrating [Tor](https://www.torproject.org) services directly into the private tabs is a powerful idea to bring Tor anonymity to a much larger audience.
 
 ### [How my role as CTO has changed as we've grown to 100 engineers](https://engineering.gusto.com/how-my-role-as-cto-has-changed-as-weve-grown-to-100-engineers/)
 
@@ -314,7 +314,7 @@ A very well done overview of blockchain technology covering all of the primary c
 
 https://creativecommons.org
 
-[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons [license. Donate to Creative Commons today!](https://creativecommons.org/donate/)
+[Creative Commons](https://creativecommons.org) helps you legally share your knowledge and creativity to build a more equitable, accessible, and innovative world — unlocking the full potential of the internet to drive a new era of development, growth, and productivity. I have been a supporter of Creative Commons for years. Larry Lessig, the founder of Creative Commons, has done the world a great thing by creating a legal structure to help authors and creators encourage remix culture. In addition to donating, you should consider making your content under a Creative Commons license. [Donate to Creative Commons today!](https://creativecommons.org/donate/)
 
 ## Yet More Links 🍞
 
@@ -345,13 +345,13 @@ There is an API for dog pictures? 🐕 Yep. 🤩
 
 ### [Thursday @ 8:44 PM](https://www.thingelstad.com/2018/07/05/i-got-a.html)
 
-[I got a Specialized Crosstrail](https://www.specialized.com/us/en/crosstrail---hydraulic-disc/p/129173?color=239899-129173) bike today. 🚴‍♂️ Took it for a brief ride tonight and really like it. A great value for the price. 👍🏻
+I got a [Specialized Crosstrail](https://www.specialized.com/us/en/crosstrail---hydraulic-disc/p/129173?color=239899-129173) bike today. 🚴‍♂️ Took it for a brief ride tonight and really like it. A great value for the price. 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/caf7374679.jpg)
 
 ### [Thursday @ 8:29 PM](https://www.thingelstad.com/2018/07/05/delicious-pizza-at.html)
 
-[Delicious pizza at Dino’s Pizzeria](http://www.dinospizzeria.com/) in Mankato tonight. 🍕 I also got to play with the crayons on the table.
+Delicious pizza at [Dino’s Pizzeria](http://www.dinospizzeria.com/) in Mankato tonight. 🍕 I also got to play with the crayons on the table.
 
 ![](https://cdn.uploads.micro.blog/890/2018/3d10225107.jpg)
 
@@ -375,7 +375,7 @@ Keeping an eye on the Big Green Egg and brisket using the iGrill 2.
 
 ### [Monday @ 9:56 PM](https://www.thingelstad.com/2018/07/02/player-ticket-to.html)
 
-[5-player Ticket to Ride](https://www.daysofwonder.com/tickettoride/en/usa/) tonight! Tyler and I were Blue Team. We played aggressively, but finished tied for 3rd. 🚂🚂🚂🚂🚂
+5-player [Ticket to Ride](https://www.daysofwonder.com/tickettoride/en/usa/) tonight! Tyler and I were Blue Team. We played aggressively, but finished tied for 3rd. 🚂🚂🚂🚂🚂
 
 ![](https://cdn.uploads.micro.blog/890/2018/ed3f38e33b.jpg)
 
@@ -430,19 +430,19 @@ The lilypad is a huge hit with the kids!
 
 ### [Saturday @ 8:12 AM](https://www.thingelstad.com/2018/06/30/tyler-and-mazie.html)
 
-Tyler and Mazie have found a bunch of fun summer destinations in 111 Places in the Twin [Cities That You Must Not Miss](http://www.111places.com/single-post/2017/11/21/Press-Release-111-Places-In-The-Twin-Cities-That-You-Must-Not-Miss) . We are flipping through it this morning and it’s impressive! 👏
+Tyler and Mazie have found a bunch of fun summer destinations in [111 Places in the Twin Cities That You Must Not Miss](http://www.111places.com/single-post/2017/11/21/Press-Release-111-Places-In-The-Twin-Cities-That-You-Must-Not-Miss). We are flipping through it this morning and it’s impressive! 👏
 
 ![](https://cdn.uploads.micro.blog/890/2018/ec4db62fb9.jpg)
 
 ### [Saturday @ 8:07 AM](https://www.thingelstad.com/2018/06/30/its-amazing-to.html)
 
-It’s amazing to be able to listen to new John Coltrane [music. Enjoying Both Directions at Once](https://itunes.apple.com/us/album/both-directions-at-once-the-lost-album-deluxe-version/1394187263) this morning. 🎶
+It’s amazing to be able to listen to new John Coltrane music. Enjoying [Both Directions at Once](https://itunes.apple.com/us/album/both-directions-at-once-the-lost-album-deluxe-version/1394187263) this morning. 🎶
 
 ![](https://cdn.uploads.micro.blog/890/2018/665f4849f4.jpg)
 
 ### [Friday @ 9:54 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
-It’s totally [cheating but I listened to Wonderwall](https://www.dark-clouds.com/2017/03/93535/) on the way home and I felt better. ⚽️ Next time Minnesota United! #mnufc 🙌🏻
+It’s totally cheating but I [listened to Wonderwall](https://www.dark-clouds.com/2017/03/93535/) on the way home and I felt better. ⚽️ Next time Minnesota United! #mnufc 🙌🏻
 
 ### [Friday @ 8:45 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
@@ -454,7 +454,7 @@ Family selfie at Minnesota United FC soccer game! ⚽️ Too hot for scarves ton
 
 ### [Friday @ 7:21 PM](https://www.thingelstad.com/2018/06/29/minnesota-united-fc.html)
 
-[Time for some Minnesota United FC](https://www.mnufc.com) v FC Dallas soccer! ⚽️
+Time for some [Minnesota United FC](https://www.mnufc.com) v FC Dallas soccer! ⚽️
 
 ## Fortune 🥠
 
@@ -462,4 +462,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Do as you would be done by.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

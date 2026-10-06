@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/36/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-13-2018/
 domains: []
 links: []
-word_count: 1966
+word_count: 1965
 ---
 I had a very special week! I got to spend most of it focusing on professional improvement. 🕴🏻 It was a great opportunity and I took full advantage of it. Every year I try to find a couple of areas to make significant improvements in. Last year it was in managing my time better and making improvements in my GTD practice. This year I’m still framing up my focus areas but I like where it is going.
 
@@ -84,7 +84,7 @@ A while back I spent a chunk of time thinking about how open source software pri
 
 ### [Legends of the Ancient Web](http://idlewords.com/talks/ancient_web.htm)
 
-[Recent talk by Maciej Cegłowski](http://idlewords.com/about.htm) talking about the history of radio and how that was used as a tool of mass influence. Adds some perspective to todays debates about the web and social media.
+Recent talk by [Maciej Cegłowski](http://idlewords.com/about.htm) talking about the history of radio and how that was used as a tool of mass influence. Adds some perspective to todays debates about the web and social media.
 
 ### [No tracking, no revenue: Apple's privacy feature costs ad companies millions | Technology | The Guardian](https://www.theguardian.com/technology/2018/jan/09/apple-tracking-block-costs-advertising-companies-millions-dollars-criteo-web-browser-safari)
 
@@ -116,11 +116,11 @@ Want to type emoji easier? Neat utility that brings the common shortcut of Slack
 
 ### [Feedbin is the Best Way to Read Twitter](https://feedbin.com/blog/2018/01/11/feedbin-is-the-best-way-to-read-twitter/)
 
-[Innovative new feature from Feedbin](https://feedbin.com) , which is what I use for my RSS feeds. This is an interesting gap filler for some source that may publish on Twitter but may not publish RSS. I don't think I would consider using it as an alternative timeline, and don't think you should use timelines anyway.
+Innovative new feature from [Feedbin](https://feedbin.com), which is what I use for my RSS feeds. This is an interesting gap filler for some source that may publish on Twitter but may not publish RSS. I don't think I would consider using it as an alternative timeline, and don't think you should use timelines anyway.
 
 ### [This Is Water - David Foster Wallace Commencement Speech - YouTube](https://www.youtube.com/watch?v=8CrOL-ydFMI)
 
-Incredibly moving speech that I hadn't heard [the speech from David Foster Wallace](https://en.wikipedia.org/wiki/David_Foster_Wallace) before. Now I want to read his books. Take the time and listen to this.
+Incredibly moving speech that I hadn't heard the speech from [David Foster Wallace](https://en.wikipedia.org/wiki/David_Foster_Wallace) before. Now I want to read his books. Take the time and listen to this.
 
 ### [📙 Emojipedia — 😃 Home of Emoji Meanings 💁👌🎍😍](https://emojipedia.org/)
 
@@ -190,11 +190,11 @@ Free 5/5 stars
 
 - [Family movie night watching Leap! Everyone liked it. 🎬](https://www.thingelstad.com/2018/01/12/family-movie-night.html)
 - [A smartphone filled with social apps is the physical manifestation of Buddhist monkey mind.](https://www.thingelstad.com/2018/01/12/a-smartphone-filled.html)
-- I continue to see more people covering the camera in their laptops. How come nobody covers the [forward facing camera on their mobile phone?](https://www.thingelstad.com/2018/01/12/i-continue-to.html)
+- [I continue to see more people covering the camera in their laptops. How come nobody covers the forward facing camera on their mobile phone?](https://www.thingelstad.com/2018/01/12/i-continue-to.html)
 - [Fog.](https://www.thingelstad.com/2018/01/11/fog.html)
-- Enjoying 10% Happier on [audiobook](https://www.thingelstad.com/2018/01/10/014252.html). Approachable introduction to mindfulness. 📚
-- We went to the Bakken Museum today which was very fun! They have a demonstration or “game” there where you play another person by quieting your mind and making the EEG reading go down, moving a ball towards the other person. Tammy grabbed this great picture of me quieting my mind… 😊 ["Mind like water…" 💧](https://www.thingelstad.com/2018/01/06/mind-like-water.html)
-- Fun with [photo booth at Pizzeria Lola! 📷](https://www.thingelstad.com/2018/01/06/fun-with-photo.html)
+- [Enjoying 10% Happier on audiobook. Approachable introduction to mindfulness. 📚](https://www.thingelstad.com/2018/01/10/014252.html)
+- [We went to the Bakken Museum today which was very fun! They have a demonstration or “game” there where you play another person by quieting your mind and making the EEG reading go down, moving a ball towards the other person. Tammy grabbed this great picture of me quieting my mind… 😊 "Mind like water…" 💧](https://www.thingelstad.com/2018/01/06/mind-like-water.html)
+- [Fun with photo booth at Pizzeria Lola! 📷](https://www.thingelstad.com/2018/01/06/fun-with-photo.html)
 
 ## The end 🎬
 

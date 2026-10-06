@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/44/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-44-mar-10-2018/
 domains: []
 links: []
-word_count: 1782
+word_count: 1772
 ---
 Hello from India! 🇮🇳 After many years, I've finally made my first trip to India. I've been here meeting with our partners. The agenda has been very busy. Seven flights 🛫 Minneapolis (MSP) → Paris (CDG) → Delhi (DEL) → Hyderabad (HYD) → Pune (PNQ) → Delhi (DEL) → Amsterdam (AMS) → Minneapolis (MSP) 🛬 in nine days is a new record for me. 🏆 Overall I felt pretty good, even with all the travel, and managed the jet lag without too much impact.
 
@@ -70,7 +70,7 @@ This positions platform in a way as the technical manifestation of mature techno
 [Teevity - Cloud costs analytics - Home](https://www.teevity.com/)
 www.teevity.com
 
-Seems like a [cheaper and easier version of CloudHealth](https://www.cloudhealthtech.com) .
+Seems like a cheaper and easier version of [CloudHealth](https://www.cloudhealthtech.com).
 
 [Rundeck - Job Scheduler and Orchestration](http://rundeck.org/)
 rundeck.org
@@ -86,7 +86,7 @@ I hand't heard of this app until a recent meeting where a team was highlighting 
 
 The fluffy language aside, it seems like a useful tool.
 
-What it’s like to be a [What it's like to be a developer at … – Increment: Development](https://increment.com/development/what-its-like-to-be-a-developer-at/)
+[What it’s like to be a developer at … – Increment: Development](https://increment.com/development/what-its-like-to-be-a-developer-at/)
 increment.com
 
 Cool article that gives a little glimpse 👀 of what it’s like to be a developer at a handful of different companies.
@@ -115,7 +115,7 @@ It’s human nature to want to associate your successes with skill and active ch
 
 > The researchers argue that the following factors are all important in giving people more chances of success: a stimulating environment rich in opportunities, a good education, intensive training, and an efficient strategy for the distribution of funds and resources.
 
-This made [me thing of Fooled by Randomness](https://en.wikipedia.org/wiki/Fooled_by_Randomness) as I read it. I highly recommend that book. It forever changed how I look at track records.
+This made me thing of [Fooled by Randomness](https://en.wikipedia.org/wiki/Fooled_by_Randomness) as I read it. I highly recommend that book. It forever changed how I look at track records.
 
 [Uber and Lyft drivers' median hourly wage is just $3.37, report finds | Technology | The Guardian](https://www.theguardian.com/technology/2018/mar/01/uber-lyft-driver-wages-median-report)
 www.theguardian.com
@@ -152,7 +152,7 @@ We had an amazing day today with #TeamSPS in Pune! It was fabulous to meet every
 
 [Thursday @ 11:08 PM](https://www.thingelstad.com/2018/03/08/173845.html)
 
-We [got to celebrate International Women’s Day](https://en.wikipedia.org/wiki/International_Women's_Day) while in Pune with Bristlecone. It was an honor to get to celebrate with everyone and even say a few words. It was fabulous to see so many women working in technology here! 👏🏻
+We got to celebrate [International Women’s Day](https://en.wikipedia.org/wiki/International_Women's_Day) while in Pune with Bristlecone. It was an honor to get to celebrate with everyone and even say a few words. It was fabulous to see so many women working in technology here! 👏🏻
 
 [Thursday @ 11:05 PM](https://www.thingelstad.com/2018/03/08/kent-amy-and.html)
 
@@ -160,7 +160,7 @@ Kent, Amy and I took a moment to prove that everyone looks dorky in a VR headset
 
 [Thursday @ 11:03 PM](https://www.thingelstad.com/2018/03/08/nice-welcome-from.html)
 
-Nice [welcome from our partners at Bristlecone](http://www.bcone.com) !
+Nice welcome from our partners at [Bristlecone](http://www.bcone.com)!
 
 [Thursday @ 11:01 PM](https://www.thingelstad.com/2018/03/08/bristleconehttpwwwbconecom-welcomed-us.html)
 
@@ -184,7 +184,7 @@ Miniature temple in Hyderabad.
 
 [Wednesday @ 9:01 AM](https://www.thingelstad.com/2018/03/06/fabulous-evening-at.html)
 
-[Fabulous evening at Taj Falaknuma Palace](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/) . Amazing palace [and very good dinner at Adaa](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/restaurants/adaa-restaurant/) .
+Fabulous evening at [Taj Falaknuma Palace](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/). Amazing palace and very good dinner at [Adaa](https://taj.tajhotels.com/en-in/taj-falaknuma-palace-hyderabad/restaurants/adaa-restaurant/).
 
 [Tuesday @ 6:57 PM](https://www.thingelstad.com/2018/03/06/visiting-midnight-bazaar.html)
 

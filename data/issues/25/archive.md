@@ -135,11 +135,11 @@ links:
   domain: www.macdrifter.com
   heading_context: '[Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)'
   section: Links 📌
-word_count: 1609
+word_count: 1606
 ---
-It dawned on me this week that I could write some short scripts and fix the hundreds (and now I realize thousands!) of photos that haven't been [linked right on my blog archive](https://www.thingelstad.com/archive/)  ever since I moved to my new setup. After fixing the images, which worked in all but some edge cases, I was perusing my archive to check on the images. I also remembered why I like blogging. ✍🏻
+It dawned on me this week that I could write some short scripts and fix the hundreds (and now I realize thousands!) of photos that haven't been linked right on my [blog archive](https://www.thingelstad.com/archive/) ever since I moved to my new setup. After fixing the images, which worked in all but some edge cases, I was perusing my archive to check on the images. I also remembered why I like blogging. ✍🏻
 
-Tammy loves [to talk about my Project Terabyte](https://www.thingelstad.com/2004/project-terabyte/) . I decided that I was going to build myself a terabyte of storage at home. Before you laugh, this was 2004. Now you can get this for a few bucks at Best Buy. Back then it wasn't so simple. I got a chuckle reading through that post, and the images, and remembering how amazing that setup was at the time. A good reminder to how quickly all this techie stuff ages into irrelevance. But the content, that is still a lot of fun. 👍
+Tammy loves to talk about my [Project Terabyte](https://www.thingelstad.com/2004/project-terabyte/). I decided that I was going to build myself a terabyte of storage at home. Before you laugh, this was 2004. Now you can get this for a few bucks at Best Buy. Back then it wasn't so simple. I got a chuckle reading through that post, and the images, and remembering how amazing that setup was at the time. A good reminder to how quickly all this techie stuff ages into irrelevance. But the content, that is still a lot of fun. 👍
 
 ## Photog 📷
 
@@ -190,11 +190,11 @@ This looks like a super handy API to easily get key metadata for a given URL. Wo
 
 ### [Move fast, break nothing - The Download](https://blog.eero.com/how-eero-protects-you-from-krack/)
 
-Nice to see [eero come out with a KRACK](https://en.wikipedia.org/wiki/KRACK) fix so quickly! 👏 I run an eero mesh network at home and have been happy with it.
+Nice to see eero come out with a [KRACK](https://en.wikipedia.org/wiki/KRACK) fix so quickly! 👏 I run an eero mesh network at home and have been happy with it.
 
 ### [wallabag: a self hostable application for saving web pages](https://wallabag.org/en)
 
-[I use Pinboard](https://pinboard.in/) to save my links (and power [Link Thing](https://links.thingelstad.com)) but Wallabag looks like a well designed and robust solution for people that want to self-host and have total control of their bookmarks.
+I use [Pinboard](https://pinboard.in/) to save my links (and power [Link Thing](https://links.thingelstad.com)) but Wallabag looks like a well designed and robust solution for people that want to self-host and have total control of their bookmarks.
 
 ### [Dramatiq: simple task processing](https://dramatiq.io/)
 
@@ -210,7 +210,7 @@ Oatmeal hits the nail on the head, like usual.
 
 ### [Command-line-text-processing/gnu_awk.md at master · learnbyexample](https://github.com/learnbyexample/Command-line-text-processing/blob/master/gnu_awk.md)
 
-I recently had to go through a hundred [or so markdown files with YAML](http://yaml.org) [front matter for Jekyll](https://jekyllrb.com) [and modify the front matter](https://jekyllrb.com/docs/frontmatter/) with data from the filename. I did 3 or 4 by hand and realized how much that was going to be terrible. Then I wrote a for loop in a bash script with awk and sed and I was done in a couple minutes. This writeup of awk is very nice and the examples are rich. I'd recommend [reading the similar one for sed](https://github.com/learnbyexample/Command-line-text-processing/blob/master/gnu_sed.md)
+I recently had to go through a hundred or so markdown files with [YAML](http://yaml.org) front matter for [Jekyll](https://jekyllrb.com) and modify the [front matter](https://jekyllrb.com/docs/frontmatter/) with data from the filename. I did 3 or 4 by hand and realized how much that was going to be terrible. Then I wrote a for loop in a bash script with awk and sed and I was done in a couple minutes. This writeup of awk is very nice and the examples are rich. I'd recommend reading the similar one for [sed](https://github.com/learnbyexample/Command-line-text-processing/blob/master/gnu_sed.md)
 
 ### [Giving social networking back to you - The Mastodon Project](https://joinmastodon.org/)
 
@@ -222,7 +222,7 @@ I’ve heard a number of great things about this new Ken Burns series. Adding to
 
 ### [TLDR pages](https://tldr.sh/)
 
-This project feels like Stack Overflow meets man pages. Nice to see [there is a version for Dash](https://kapeli.com/dash) .
+This project feels like Stack Overflow meets man pages. Nice to see there is a version for [Dash](https://kapeli.com/dash).
 
 ### [AlphaGo Zero: Learning from scratch | DeepMind](https://deepmind.com/blog/alphago-zero-learning-scratch/)
 
@@ -230,7 +230,7 @@ AlphaGo made headlines when it beat the best Go players in the world. The same t
 
 ### [Parse shell one-liners with pyparsing | nvbn blog](https://nvbn.github.io/2016/07/05/shell-ast/)
 
-The specific example in [this blog post of using Pyparsing](http://pyparsing.wikispaces.com) [to write an abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) isn't the reason I’m highlighting it. I've read about PyParsing before and even attempted to write a parser [for the Planet Kubb notation system](http://wiki.planetkubb.com/wiki/Notation) . This is a library developers should know about. Too often people use regex in bad ways to solve these problems when [a parser with a proper BNF](https://en.wikipedia.org/wiki/Backus–Naur_form) is the right approach.
+The specific example in this blog post of using [Pyparsing](http://pyparsing.wikispaces.com) to write an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) isn't the reason I’m highlighting it. I've read about PyParsing before and even attempted to write a parser for the [Planet Kubb notation system](http://wiki.planetkubb.com/wiki/Notation). This is a library developers should know about. Too often people use regex in bad ways to solve these problems when a parser with a proper [BNF](https://en.wikipedia.org/wiki/Backus–Naur_form) is the right approach.
 
 ### [A Photo Tour of Apple’s New Flagship Chicago Store – MacStories](https://www.macstories.net/news/a-photo-tour-of-apples-new-flagship-chicago-store/)
 
@@ -238,11 +238,11 @@ Apple continues to impress with jaw-dropping architecture in their retail stores
 
 ### [Low-risk Monolith to Microservice Evolution Part I – Software Blog](http://blog.christianposta.com/microservices/low-risk-monolith-to-microservice-evolution/)
 
-Excellent writeup on approaching a large-scale monolithic application and beginning to decompose it. I've seen these approaches used first-hand and they work. However, it takes a lot of time. The time probably goes up more than linear as size of the monolith [goes up. Check out part 2](http://blog.christianposta.com/microservices/low-risk-monolith-to-microservice-evolution-part-ii/) of the article as well.
+Excellent writeup on approaching a large-scale monolithic application and beginning to decompose it. I've seen these approaches used first-hand and they work. However, it takes a lot of time. The time probably goes up more than linear as size of the monolith goes up. Check out [part 2](http://blog.christianposta.com/microservices/low-risk-monolith-to-microservice-evolution-part-ii/) of the article as well.
 
 ### [Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)
 
-[I've been a Feedbin](https://feedbin.com) user for years now and highly recommend them. One of the best $30 a year I spend. If you have never experienced using a feed reader I would highly recommend giving it a try. This post doesn't highlight it but I also liked [that Feedbin added JSON Feed support](https://feedbin.com/blog/2017/05/22/feedbin-supports-json-feed/) right away.
+I've been a [Feedbin](https://feedbin.com) user for years now and highly recommend them. One of the best $30 a year I spend. If you have never experienced using a feed reader I would highly recommend giving it a try. This post doesn't highlight it but I also liked that [Feedbin added JSON Feed support](https://feedbin.com/blog/2017/05/22/feedbin-supports-json-feed/) right away.
 
 ## Promotion 🎁
 

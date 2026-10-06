@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/49/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-49-apr-14-2018/
 domains: []
 links: []
-word_count: 1729
+word_count: 1725
 ---
 Those of us in Northern climates have grown sick of winter, and it feels like we must have done something wrong to have this exceptionally cold April. To add insult to injury we are being treated to, what one hopes will be, a final barrage of several or more inches of snow. ❄️ Uncle already!
 
@@ -43,7 +43,7 @@ Interesting service to be the back end of activity streams for various products.
 [The best text editor for macOS – The Sweet Setup](https://thesweetsetup.com/apps/best-text-editor-macos/)
 thesweetsetup.com
 
-[I’m sticking with Sublime Text](https://www.sublimetext.com/) as my editor of choice but it [is interesting to read about Atom](https://atom.io/) and it’s model for extensibility. I [agree with this writeup about BBEdit](https://www.barebones.com/products/bbedit/) . It is historically great, but if you don't know it I don't think I would be investing in learning it due to the lack of extensibility. ⌨️
+I’m sticking with [Sublime Text](https://www.sublimetext.com/) as my editor of choice but it is interesting to read about [Atom](https://atom.io/) and it’s model for extensibility. I agree with this writeup about [BBEdit](https://www.barebones.com/products/bbedit/). It is historically great, but if you don't know it I don't think I would be investing in learning it due to the lack of extensibility. ⌨️
 
 ## Social Media
 
@@ -74,7 +74,7 @@ I really like what Manton Reece is doing around micro.blog, and now pulling in a
 
 ## Music
 
-Johnny Cash: [Johnny Cash: American Recordings Album Review | Pitchfork](https://pitchfork.com/reviews/albums/johnny-cash-american-recordings/)
+[Johnny Cash: American Recordings Album Review | Pitchfork](https://pitchfork.com/reviews/albums/johnny-cash-american-recordings/)
 pitchfork.com
 
 I so distinctly remember getting this CD when I was in college and being instantly transfixed by it. 🎶
@@ -86,11 +86,11 @@ I loved reading the back story on this. I think the amazing thing about the Cash
 [The Decemberists - Full concert (4/7/18 at Palace Theatre in Saint Paul, MN) - YouTube](https://www.youtube.com/watch?v=P4Jz3tMddw4)
 www.youtube.com
 
-[I really like The Decemberists](http://www.decemberists.com) , and the show we saw last weekend was recorded in full and is on YouTube. Not sure how long this will be up there, but it was a stellar show. 🎶
+I really like [The Decemberists](http://www.decemberists.com), and the show we saw last weekend was recorded in full and is on YouTube. Not sure how long this will be up there, but it was a stellar show. 🎶
 
 ## Tech
 
-Amazon spent nearly [$23 billion on R&D last year - Recode](https://www.recode.net/2018/4/9/17204004/amazon-research-development-rd)
+[Amazon spent nearly $23 billion on R&D last year - Recode](https://www.recode.net/2018/4/9/17204004/amazon-research-development-rd)
 www.recode.net
 
 Amazon spent 2x as much as Apple in R&D? They spent nearly 2x more than all of the other companies. Wow. 😲
@@ -102,14 +102,14 @@ Highlights on things to watch out for when using GraphQL.
 
 > For me personally, the thing that astounds me about GraphQL isn't just the awesome technical solutions it enables, but also the organizational impact of a more decoupled environment where teams can develop independently of one another and focus more on upholding public contracts rather than knowing too much about internal implementations.
 
-Thank you for [making 10 years of GitHub possible](https://github.com/ten)
+[Thank you for making 10 years of GitHub possible](https://github.com/ten)
 github.com
 
 This is a fun reflection on the first 10 years of GitHub.
 
 > For 10 years, you’ve shared, tinkered, and built on GitHub from all around the world. Before we head into the next decade, we’ve collected some of our favorite moments and milestones—just a few of the ways you’ve pushed software forward.
 
-The impact that GitHub has had on open-source, and coding practices in general is amazing. There are many services that exist [today that would not if git](https://git-scm.com) and GitHub were not created. Let's hope that GitHub stays in good hands.
+The impact that GitHub has had on open-source, and coding practices in general is amazing. There are many services that exist today that would not if [git](https://git-scm.com) and GitHub were not created. Let's hope that GitHub stays in good hands.
 
 [Database Flow](https://databaseflow.com/)
 databaseflow.com
@@ -137,7 +137,7 @@ I love the direct, to the point, writing in this. I also like that Altman's advi
 [Don't Give Away Historic Details About Yourself — Krebs on Security](https://krebsonsecurity.com/2018/04/dont-give-away-historic-details-about-yourself/)
 krebsonsecurity.com
 
-🔒 Interesting that bad actors are using silly social games to collect information on people that can then be combined with compromised passwords to answer security questions! Personally I always fill these security questions [with random words, generated by 1Password](https://1password.com) and stored there. I use words since you sometimes have to speak these over the phone. Never share the same answers, and they are random.
+🔒 Interesting that bad actors are using silly social games to collect information on people that can then be combined with compromised passwords to answer security questions! Personally I always fill these security questions with random words, generated by [1Password](https://1password.com) and stored there. I use words since you sometimes have to speak these over the phone. Never share the same answers, and they are random.
 
 ## Games
 
@@ -173,7 +173,7 @@ by Electronic Arts
 
 Rediscover the world-famous Tetris® game you know and love, with all-new features and boundless ways to play. Take a quick break and enjoy endless action that’s free of ads and interruptions. Keep your lines clear and keep your cool as things heat up in this puzzle game that’s easy to pick up, but difficult to master. Don’t miss out on one of the best-selling mobile games of all time – this is Tetris®, updated and reimagined!
 
-I decided to introduce our kids to Tetris. It's been years since I played, and I've generally found the versions of Tetris from the big game studioes to be pretty bad. The copyright [enforcement regime of The Tetris Company](http://tetris.com) keeps all non-licensed versions out. So, I was a little surprised to find this one to be okay. Marathon mode works well, and the one-touch controls are fine. Recommended.
+I decided to introduce our kids to Tetris. It's been years since I played, and I've generally found the versions of Tetris from the big game studioes to be pretty bad. The copyright enforcement regime of [The Tetris Company](http://tetris.com) keeps all non-licensed versions out. So, I was a little surprised to find this one to be okay. Marathon mode works well, and the one-touch controls are fine. Recommended.
 
 $1.99 4/5 stars
 
@@ -193,11 +193,11 @@ The Decemberists at the Palace Theater.
 
 [Saturday @ 8:04 PM](https://www.thingelstad.com/2018/04/07/i-was-really.html)
 
-I [was really happy that India Palace](https://www.indiapalace.org) [made Lachha Paratha](https://en.wikipedia.org/wiki/Paratha) for us tonight (not on the menu). I had this in India a few weeks ago and loved it. 👏🏻
+I was really happy that [India Palace](https://www.indiapalace.org) made [Lachha Paratha](https://en.wikipedia.org/wiki/Paratha) for us tonight (not on the menu). I had this in India a few weeks ago and loved it. 👏🏻
 
 [Saturday @ 7:44 PM](https://www.thingelstad.com/2018/04/07/this-graph-is.html)
 
-This [graph is in Why We Sleep](https://rwbook.club/book/why-we-sleep/) and is super interesting. Only just getting started on this read and already learning a lot.
+This graph is in [Why We Sleep](https://rwbook.club/book/why-we-sleep/) and is super interesting. Only just getting started on this read and already learning a lot.
 
 [Saturday @ 7:37 PM](https://www.thingelstad.com/2018/04/07/the-ice-is.html)
 

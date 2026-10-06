@@ -98,7 +98,7 @@ links:
   domain: www.technologyreview.com
   heading_context: '[10 Breakthrough Technologies 2019, curated by Bill Gates - MIT Technology Review](https://www.technologyreview.com/lists/technologies/2019/)'
   section: Notable Links 📌
-word_count: 1825
+word_count: 1820
 ---
 It’s been another week filled with much activity. I made a quick trip to Toronto this week to visit TeamSPS there. 🛩 It was a great trip and I got time to connect with a bunch of people, including over board games. 🎲 It also is going to kick off a pretty sustained burst of travel for me in the coming weeks. I’m bracing for several flights coming up. I’ve gotten back to my meditation practice and I’m reminded how impactful that is. I’ve also recommitted myself to keeping a gratitude journal. Both of those habits are at record long streaks right now. Gotta keep the streak going! 👍🏻
 
@@ -140,7 +140,7 @@ Mostly I read this as Facebook has surveilled it’s users so much, and continue
 
 ### [Book: Zucked: Waking Up to the Facebook Catastrophe - Feld Thoughts](https://feld.com/archives/2019/03/book-zucked-waking-up-to-the-facebook-catastrophe.html)
 
-This book is on my reading list. [I enjoyed to the Recode Decode](https://www.recode.net/podcasts/2019/2/11/18220779/zucked-book-roger-mcnamee-decode-kara-swisher-podcast-mark-zuckerberg-facebook-fb-sheryl-sandberg) episode with Roger McNamee.
+This book is on my reading list. I enjoyed to the [Recode Decode](https://www.recode.net/podcasts/2019/2/11/18220779/zucked-book-roger-mcnamee-decode-kara-swisher-podcast-mark-zuckerberg-facebook-fb-sheryl-sandberg) episode with Roger McNamee.
 
 ### [Big Idea Famine](https://jods.mitpress.mit.edu/pub/issue3-negroponte)
 
@@ -164,7 +164,7 @@ Feld and I seem to be reading some similar books lately. I enjoyed reading this 
 
 ### [How to get better at estimating your time](https://www.fastcompany.com/90313102/how-to-get-better-at-estimating-your-time)
 
-I like the 2nd recommendation in here of having other people estimate for you. In a way, that is what agile teams [do when they do Planning Poker](https://en.wikipedia.org/wiki/Planning_poker) .
+I like the 2nd recommendation in here of having other people estimate for you. In a way, that is what agile teams do when they do [Planning Poker](https://en.wikipedia.org/wiki/Planning_poker).
 
 ### [Camille Fournier on Scaling, Structure, and Growing as an Engineering Manager](https://blog.gitprime.com/camille-fournier-on-scaling-structure-and-growing-as-an-engineering-manager/)
 
@@ -180,7 +180,7 @@ My view on meditation is very similar to how Gates positions this.
 
 > I now see that meditation is simply exercise for the mind, similar to the way we exercise our muscles when we play sports. For me, it has nothing to do with faith or mysticism. It’s about taking a few minutes out of my day, learning how to pay attention to the thoughts in my head, and gaining a little bit of distance from them.
 
-[Via Patrick Rhone](https://www.patrickrhone.net/5499-2/) .
+Via [Patrick Rhone](https://www.patrickrhone.net/5499-2/).
 
 ### [Mailist App – Save links for later and get reminded](https://mailist.app/)
 
@@ -256,7 +256,7 @@ Minnesota Wild v Nashville Predators tonight! 🏒
 
 ### [Sunday @ 8:05 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
-[Olympic Gold medalist Lindsey Vonn](https://en.wikipedia.org/wiki/Lindsey_Vonn) dropped the game puck at tonight’s Wild game! 😎
+Olympic Gold medalist [Lindsey Vonn](https://en.wikipedia.org/wiki/Lindsey_Vonn) dropped the game puck at tonight’s Wild game! 😎
 
 ### [Sunday @ 8:03 PM](https://www.thingelstad.com/2019/03/03/180318.html)
 
@@ -270,7 +270,7 @@ Went axe throwing for the first time tonight and did this!
 
 ### [Saturday @ 6:32 PM](https://www.thingelstad.com/2019/03/02/we-visited-the.html)
 
-We visited the 80’s this afternoon with [a trip to the Roller Garden](https://www.rollergarden.com) ! 😁
+We visited the 80’s this afternoon with a trip to the [Roller Garden](https://www.rollergarden.com)! 😁
 
 ![](https://cdn.uploads.micro.blog/890/2019/badd9268c8.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/e2224b2825.jpg)
@@ -280,13 +280,13 @@ We visited the 80’s this afternoon with [a trip to the Roller Garden](https://
 
 ### [Saturday @ 6:24 PM](https://www.thingelstad.com/2019/03/02/172449.html)
 
-We had a great morning helping pack over 250 boxes of [food at Feed My Starving Children](https://www.fmsc.org) !
+We had a great morning helping pack over 250 boxes of food at [Feed My Starving Children](https://www.fmsc.org)!
 
 ![](https://cdn.uploads.micro.blog/890/2019/770627d0dc.jpg)
 
 ### [Saturday @ 9:17 AM](https://www.thingelstad.com/2019/03/02/we-had-a.html)
 
-We had a fun time playing the Primetime [Showdown at Game Show Battle Rooms](https://www.gameshowbattlerooms.com) last night! Lots of laughs! 🤣 Why couldn’t I think of a vegetable that starts with a “B”? 🙄
+We had a fun time playing the Primetime Showdown at [Game Show Battle Rooms](https://www.gameshowbattlerooms.com) last night! Lots of laughs! 🤣 Why couldn’t I think of a vegetable that starts with a “B”? 🙄
 
 ![](https://cdn.uploads.micro.blog/890/2019/c09d02d13f.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/6c596a9b3f.jpg)
@@ -300,4 +300,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Cold hands, no gloves.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

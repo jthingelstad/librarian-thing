@@ -104,9 +104,9 @@ links:
   domain: arstechnica.com
   heading_context: '[This full video shows just how bonkers the VW Pikes Peak record was | Ars Technica](https://arstechnica.com/cars/2018/07/this-full-video-shows-just-how-bonkers-the-vw-pikes-peak-record-was/)'
   section: Notable Links 📌
-word_count: 2098
+word_count: 2091
 ---
-Tammy and I celebrated 16 years of marriage this week! 💍 We celebrated by going out for the evening, starting with a movie. [We saw Sorry To Bother You](https://www.imdb.com/title/tt5688932/) , which was fun, different and very original. 🎬 We had had [a great dinner at Italian Eatery](http://www.italianeatery.com) . 🍽 Their Bucatini is amazing! We finished our night out with [a puzzle room at Missing Pieces](https://www.missingpiecesmn.com) . [🔐 We did the Ruin Raiders](https://www.missingpiecesmn.com/home/#ruin-raiders) room, and it was just the two of us. If you've never done a puzzle room, I recommend trying one. With only two people sometimes the sheer number of locks and puzzles to solve can be a challenge. The room was perfect though. There was just enough difficulty in the puzzles to make it very fun, but not so hard as to be frustrating.
+Tammy and I celebrated 16 years of marriage this week! 💍 We celebrated by going out for the evening, starting with a movie. We saw [Sorry To Bother You](https://www.imdb.com/title/tt5688932/), which was fun, different and very original. 🎬 We had had a great dinner at [Italian Eatery](http://www.italianeatery.com). 🍽 Their Bucatini is amazing! We finished our night out with a puzzle room at [Missing Pieces](https://www.missingpiecesmn.com). 🔐 We did the [Ruin Raiders](https://www.missingpiecesmn.com/home/#ruin-raiders) room, and it was just the two of us. If you've never done a puzzle room, I recommend trying one. With only two people sometimes the sheer number of locks and puzzles to solve can be a challenge. The room was perfect though. There was just enough difficulty in the puzzles to make it very fun, but not so hard as to be frustrating.
 
 It was a fun night that upon reflection had a bit of what being together is about. New and original experiences, with a comforting and delightful bond, working together as we face new puzzles and challenges and then sharing in the joy of accomplishment. 💑
 
@@ -126,7 +126,7 @@ This is pretty amazing! Atlassian just gave up in the team chat space.
 
 > As part of this partnership, Atlassian will discontinue Hipchat and Stride, and provide a migration path to Slack for all their customers. We are purchasing the IP for Hipchat Cloud and Stride to better support that path to Slack, while Atlassian is making a small, but symbolically important investment in our business.
 
-😲 This [Bloomberg article](https://www.bloomberg.com/news/articles/2018-07-26/slack-and-atlassian-team-up-to-take-on-microsoft-in-chat-software) has some of the details on how this went down. I was curious who approached who, and it was Atlassian that approached Slack.
+😲 This [Bloomberg](https://www.bloomberg.com/news/articles/2018-07-26/slack-and-atlassian-team-up-to-take-on-microsoft-in-chat-software) article has some of the details on how this went down. I was curious who approached who, and it was Atlassian that approached Slack.
 
 > Taking out a competitor is good for Slack, said Butterfield: “There’s fewer choices for people.”
 
@@ -144,7 +144,7 @@ Surly Beer Hall, Minneapolis MN
 
 ### [A pre-history of weeknotes, plus why I write them and perhaps why you should too (Week 16)](https://medium.com/job-garden/a-pre-history-of-weeknotes-plus-why-i-write-them-and-perhaps-why-you-should-too-week-16-31a4a5cbf7b0)
 
-I've never thought of weeknotes as a thing, but I guess they are. I guess the Weekly Thing is a weeknote. I found the weeknotes mentioned interesting. I also love this saying [in the article In medias res](https://en.wikipedia.org/wiki/In_medias_res) , starting in the middle.
+I've never thought of weeknotes as a thing, but I guess they are. I guess the Weekly Thing is a weeknote. I found the weeknotes mentioned interesting. I also love this saying in the article [In medias res](https://en.wikipedia.org/wiki/In_medias_res), starting in the middle.
 
 ### [Boobs, Muscles & Fairy Wings: Everything I Know About How Humans Design Their Avatar Selves | Hunter Walk](https://hunterwalk.com/2018/07/23/boobs-muscles-fairy-wings-everything-i-know-about-how-humans-design-their-avatar-selves/)
 
@@ -188,7 +188,7 @@ Free, simple and solves a gap in call blockers. I subscribe to [NoMoRoBo](https:
 
 ### [Data Transfer Project](https://datatransferproject.dev/)
 
-I applaud this effort. It has the potential to recognize that moving large amounts of data between cloud services can sometimes be very difficult, and often involve a slow intermediate broadband connection. Just consider downloading 100,000 photos to your home to then upload to another service. It will be immensely faster for the services to exchange them directly. There is [additional detail in the Verge article](https://www.theverge.com/2018/7/20/17589246/data-transfer-project-google-facebook-microsoft-twitter) announcing this.
+I applaud this effort. It has the potential to recognize that moving large amounts of data between cloud services can sometimes be very difficult, and often involve a slow intermediate broadband connection. Just consider downloading 100,000 photos to your home to then upload to another service. It will be immensely faster for the services to exchange them directly. There is additional detail in the [Verge article](https://www.theverge.com/2018/7/20/17589246/data-transfer-project-google-facebook-microsoft-twitter) announcing this.
 
 ### [Get More Work Done: Eight Ways to Avoid the 'Halfway Zone' - The Simple Dollar](https://www.thesimpledollar.com/get-more-work-done-avoid-the-halfway-zone/)
 
@@ -217,7 +217,7 @@ I'm halfway through this book and I'm having a hard time finishing because I wan
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 [non-profit. Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -244,17 +244,17 @@ Looks a bit like Rails for Python.
 - [The future of WebAssembly - A look at upcoming features and proposals](https://blog.scottlogic.com/2018/07/20/wasm-future.html) blog.scottlogic.com
 I haven't been following WebAssembly but it looks intriguing -- or possibly a terrible idea.
 - [The Emoji Demo](https://www.youtube.com/watch?v=rr_l-KBDHS4) www.youtube.com
-An 8k textmode emoji [macOS intro done in terminal, source](https://github.com/willkirkby/the-emoji-demo) . 😲
+An 8k textmode emoji macOS intro done in terminal, [source](https://github.com/willkirkby/the-emoji-demo). 😲
 - [Frank's Compulsive Guide To Postal Addresses](http://www.columbia.edu/~fdc/postal/) www.columbia.edu
 More than you ever wanted to know about addresses.
 - [Python has brought computer programming to a vast new audience - Programming languages](https://www.economist.com/science-and-technology/2018/07/21/python-has-brought-computer-programming-to-a-vast-new-audience) www.economist.com
-[Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) [stepping down as BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) of Python even made it to the Economist! Yay for Python making the pages of the Economist.
+[Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) stepping down as [BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) of Python even made it to the Economist! Yay for Python making the pages of the Economist.
 
 ## Microposts 🎈
 
 ### [Thursday @ 6:45 PM](https://www.thingelstad.com/2018/07/26/i-made-a.html)
 
-I made a Workflow in iOS that pulls a specific budget [amount for me from YNAB’s API](https://api.youneedabudget.com) , then added it to my Today Widget. Super quick access to data. Will be fun to make this a Siri Shortcut!
+I made a Workflow in iOS that pulls a specific budget amount for me from [YNAB’s API](https://api.youneedabudget.com), then added it to my Today Widget. Super quick access to data. Will be fun to make this a Siri Shortcut!
 
 ### [Thursday @ 8:41 AM](https://www.thingelstad.com/2018/07/26/biked-into-work.html)
 
@@ -300,7 +300,7 @@ Clocks.
 
 ### [Friday @ 8:26 AM](https://www.thingelstad.com/2018/07/20/071111.html)
 
-New motor and some related parts [on the way from Chris’ Coffee](https://www.chriscoffee.com) to repair my espresso machine. The technicians at Chris’ Coffee are incredibly knowledgable and patient. 🌟
+New motor and some related parts on the way from [Chris’ Coffee](https://www.chriscoffee.com) to repair my espresso machine. The technicians at Chris’ Coffee are incredibly knowledgable and patient. 🌟
 
 ### [Friday @ 7:11 AM](https://www.thingelstad.com/2018/07/20/071111.html)
 
@@ -313,4 +313,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 Love is in the offing.
 Be affectionate to one who adores you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

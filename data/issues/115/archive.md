@@ -80,9 +80,9 @@ links:
   domain: www.jonathanturner.org
   heading_context: '[Introducing nushell](http://www.jonathanturner.org/2019/08/introducing-nushell.html)'
   section: Notable Links 📌
-word_count: 1484
+word_count: 1476
 ---
-Welcome to Labor Day weekend and for many families the last weekend before school starts again. This week I got to attend the parent session for Freshman orientation. It doesn't seem that long ago that it was the first day of kindergarten, and now they are talking about college counselors and when you might [start taking the PSAT! Time flies!](https://www.thingelstad.com/2005/fractions-and-life)
+Welcome to Labor Day weekend and for many families the last weekend before school starts again. This week I got to attend the parent session for Freshman orientation. It doesn't seem that long ago that it was the first day of kindergarten, and now they are talking about college counselors and when you might start taking the PSAT! [Time flies!](https://www.thingelstad.com/2005/fractions-and-life)
 
 There are still a couple of final things to check off the summer To Do list. We are planning on getting as many of them as we can.
 
@@ -110,13 +110,13 @@ The scale of this problem is big, but it cannot be ignored.
 
 ### [Deconstructing Google’s excuses on tracking protection](https://freedom-to-tinker.com/2019/08/23/deconstructing-googles-excuses-on-tracking-protection/)
 
-Last week the WebKit team published their position on trackers and blocking them, focusing on improving privacy for those using the web. Google came out with an oddly titled [response, Building a more private web](https://www.blog.google/products/chrome/building-a-more-private-web/amp/) , which [got a good Daring Fireball writeup](https://daringfireball.net/linked/2019/08/23/google-privacy-excuses) .
+Last week the WebKit team published their position on trackers and blocking them, focusing on improving privacy for those using the web. Google came out with an oddly titled response, [Building a more private web](https://www.blog.google/products/chrome/building-a-more-private-web/amp/), which got a good [Daring Fireball writeup](https://daringfireball.net/linked/2019/08/23/google-privacy-excuses).
 
 This look at the statements Google is making is thorough.
 
 > Google is trying to thread a needle here, implying that some level of tracking is consistent with both the original design intent for web technology and user privacy expectations. Neither is true.
 >
-> If the benchmark is original design intent, let’s be clear: cookies were not supposed to enable third-party tracking, and browsers were supposed to block third-party cookies. We know this because the authors of the original cookie [technical specification said so (RFC 2109](https://tools.ietf.org/html/rfc2109) , Section 4.3.5).
+> If the benchmark is original design intent, let’s be clear: cookies were not supposed to enable third-party tracking, and browsers were supposed to block third-party cookies. We know this because the authors of the original cookie technical specification said so ([RFC 2109](https://tools.ietf.org/html/rfc2109), Section 4.3.5).
 
 Google gets in tough spots when they have to address privacy. Everyone knows that they thrive on user data. Limiting the ability to collect user data directly, negatively, impacts they're revenue.
 
@@ -132,7 +132,7 @@ Northfield MN
 
 ### [Inno-Versity Presents: Greatness by David Marquet - YouTube](https://www.youtube.com/watch?v=psAXMqxwol8)
 
-This is the [author of Turn the Ship Around!](https://www.amazon.com/Turn-Ship-Around-Turning-Followers/dp/1591846404/) , which I've seen recommended many times but has never made it to the top of my reading list. This is a great 10 minute version of the concept with a well done video.
+This is the author of [Turn the Ship Around!](https://www.amazon.com/Turn-Ship-Around-Turning-Followers/dp/1591846404/), which I've seen recommended many times but has never made it to the top of my reading list. This is a great 10 minute version of the concept with a well done video.
 
 ### [GitHub has SOC 1 and SOC 2 Type 2 reports - The GitHub Blog](https://github.blog/2019-08-27-github-has-soc-1-and-soc-2-type-2-reports/)
 
@@ -181,7 +181,7 @@ I’m with DHH on this one. Best way I can think of, put your content on your ow
 - [Mario Kart Tour Coming to iOS September 25 - MacStories](https://www.macstories.net/news/mario-kart-tour-coming-to-ios-september-25/) www.macstories.net
 Mario Kart is one of my favorite Nintendo titles on nearly every platform. It will be fun to play this on iOS! 🎮
 - [SPS Commerce Acquires MAPADOC - MarketWatch](https://www.marketwatch.com/press-release/sps-commerce-acquires-mapadoc-2019-08-27-81843237?siteid=nbsh) www.marketwatch.com
-Team SPS gets bigger and [better! Also article on Star Tribune](http://www.startribune.com/minneapolis-based-sps-commerce-buys-longtime-business-partner-for-11-5-million/558485362/) . 🙌
+Team SPS gets bigger and better! Also [article on Star Tribune](http://www.startribune.com/minneapolis-based-sps-commerce-buys-longtime-business-partner-for-11-5-million/558485362/). 🙌
 - [Drive A Tank - Tank Driving, Car Crushing, Machine Gun Shooting](https://www.driveatank.com/) www.driveatank.com
 Who wants a tank? 🤠
 
@@ -189,7 +189,7 @@ Who wants a tank? 🤠
 
 ### [Sunday @ 5:51 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
-[Enjoying Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) ! 🍽🤝
+Enjoying [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/)! 🍽🤝
 
 ![](https://cdn.uploads.micro.blog/890/2019/3a0560a399.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/342afb16f2.jpg)
@@ -197,7 +197,7 @@ Who wants a tank? 🤠
 
 ### [Sunday @ 5:40 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
-Thank you to all the [organizations making Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) happen!
+Thank you to all the organizations making [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) happen!
 
 ### [Sunday @ 5:37 PM](https://www.thingelstad.com/2019/08/25/had-an-amazing.html)
 
@@ -209,7 +209,7 @@ Had an amazing coffee at the new Little Joy Coffee in Downtown Northfield. Amazi
 
 ### [Sunday @ 5:08 PM](https://www.thingelstad.com/2019/08/25/enjoying-northfield-shares.html)
 
-Having dinner with the city of Northfield! [Thanks to Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/) !
+Having dinner with the city of Northfield! Thanks to [Northfield Shares a Dinner](https://northfieldshares.org/news/northfield-shares-a-dinner/)!
 
 ### [Sunday @ 3:32 PM](https://www.thingelstad.com/2019/08/25/wiscopop-cherry-soda.html)
 
@@ -239,4 +239,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Do not overtax your powers.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

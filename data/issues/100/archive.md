@@ -68,7 +68,7 @@ links:
   domain: techcrunch.com
   heading_context: '[Apple cancels AirPower product, citing inability to meet its high standards for hardware | TechCrunch](https://techcrunch.com/2019/03/29/apple-cancels-airpower-product-citing-inability-to-meet-its-high-standards-for-hardware/)'
   section: Notable Links 📌
-word_count: 1609
+word_count: 1603
 ---
 Welcome to Issue #100 of the Weekly Thing! 🎉 I'm a little surprised that I've been putting this out every week now for one hundred weeks. I wasn't sure at all where this would go when I started it. I had some ideas of putting some new elements in and streamlining some things but just haven't had the time to make any of that happen. Maybe we'll wait for the two year anniversary. We'll see! 🎁
 
@@ -165,7 +165,7 @@ Very cool way to look at this data.
 
 ### [Thursday @ 7:49 PM](https://www.thingelstad.com/2019/04/04/i-had-no.html)
 
-I had no idea [about the San Antonio River Walk](https://www.thesanantonioriverwalk.com) and was blown away exploring it today. A great setting to walk, explore, and relax.
+I had no idea about the [San Antonio River Walk](https://www.thesanantonioriverwalk.com) and was blown away exploring it today. A great setting to walk, explore, and relax.
 
 ![](https://cdn.uploads.micro.blog/890/2019/96a0437602.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/da775f29d4.jpg)
@@ -174,7 +174,7 @@ I had no idea [about the San Antonio River Walk](https://www.thesanantonioriverw
 
 ### [Thursday @ 7:43 PM](https://www.thingelstad.com/2019/04/04/we-had-a.html)
 
-We had a good [time learning and exploring The Alamo](https://thealamo.org) today. So much history!
+We had a good time learning and exploring [The Alamo](https://thealamo.org) today. So much history!
 
 ![](https://cdn.uploads.micro.blog/890/2019/6ba2ad6508.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/a49ab9dfc6.jpg)
@@ -189,7 +189,7 @@ Tyler and I got to throw knives and axes today! 🤪
 
 ### [Wednesday @ 9:42 PM](https://www.thingelstad.com/2019/04/03/a-trip-to.html)
 
-A trip to Austin, TX seems like it should have live [music. 🎶 We saw Bob Mould](https://bobmould.com) [play at the Mohawk](https://www.mohawkaustin.com) tonight. Great show and cool venue!
+A trip to Austin, TX seems like it should have live music. 🎶 We saw [Bob Mould](https://bobmould.com) play at the [Mohawk](https://www.mohawkaustin.com) tonight. Great show and cool venue!
 
 ![](https://cdn.uploads.micro.blog/890/2019/a5680e4950.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/b76620b5dc.jpg)
@@ -201,7 +201,7 @@ A trip to Austin, TX seems like it should have live [music. 🎶 We saw Bob Moul
 
 ### [Wednesday @ 8:40 AM](https://www.thingelstad.com/2019/04/03/104013.html)
 
-Full fanboy mode [waiting in line at Franklin BBQ](https://franklinbbq.com) ! 😊 Brisket, ribs, and sausage on the way. 🤤 Couple of hours waiting in line.
+Full fanboy mode waiting in line at [Franklin BBQ](https://franklinbbq.com)! 😊 Brisket, ribs, and sausage on the way. 🤤 Couple of hours waiting in line.
 
 ### [Tuesday @ 2:45 PM](https://www.thingelstad.com/2019/04/02/lick-honest-ice.html)
 
@@ -211,7 +211,7 @@ Full fanboy mode [waiting in line at Franklin BBQ](https://franklinbbq.com) ! �
 
 ### [Tuesday @ 2:42 PM](https://www.thingelstad.com/2019/04/02/we-had-a.html)
 
-We had a fun time seeing Austin [on 2-wheels with Your Biker Gang](https://yourbikergang.com) today! Super cool electric bikes too!
+We had a fun time seeing Austin on 2-wheels with [Your Biker Gang](https://yourbikergang.com) today! Super cool electric bikes too!
 
 ![](https://cdn.uploads.micro.blog/890/2019/7d05a8a4b9.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/7e2213c1c8.jpg)
@@ -219,13 +219,13 @@ We had a fun time seeing Austin [on 2-wheels with Your Biker Gang](https://yourb
 
 ### [Monday @ 8:57 PM](https://www.thingelstad.com/2019/04/01/we-attempted-the.html)
 
-We attempted [the “Incoming Transmission” room at Perplexium](https://perplexiumlive.com/) in Austin. It was a really unique puzzle room. A lot of fun, but proved too difficult for us today. 🔐
+We attempted the “Incoming Transmission” room at [Perplexium](https://perplexiumlive.com/) in Austin. It was a really unique puzzle room. A lot of fun, but proved too difficult for us today. 🔐
 
 ![](https://cdn.uploads.micro.blog/890/2019/a8e6b53cbb.jpg)
 
 ### [Monday @ 8:52 PM](https://www.thingelstad.com/2019/04/01/final-piece-of.html)
 
-Final piece of “Magnolia Day” [in Waco was the Brazos Tours](https://brazostours.com/) “Fixer Upper Tour of Waco”. We visited [the 3 Little Pigs House (S3E12)](https://magnolia.com/our-show/episode-12-3-little-pigs-house/) , with a stop inside. [We also went met Jimmy Don](https://www.jdhirondesigns.com) , who does the iron work for Fixer Upper.
+Final piece of “Magnolia Day” in Waco was the [Brazos Tours](https://brazostours.com/) “Fixer Upper Tour of Waco”. We visited the [3 Little Pigs House (S3E12)](https://magnolia.com/our-show/episode-12-3-little-pigs-house/), with a stop inside. We also went met [Jimmy Don](https://www.jdhirondesigns.com), who does the iron work for Fixer Upper.
 
 ![](https://cdn.uploads.micro.blog/890/2019/7a739e66a2.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/b0bc082d00.jpg)
@@ -233,7 +233,7 @@ Final piece of “Magnolia Day” [in Waco was the Brazos Tours](https://brazost
 
 ### [Monday @ 8:42 PM](https://www.thingelstad.com/2019/04/01/we-continued-magnolia.html)
 
-We continued “Magnolia Day” in Waco with [a visit to the Magnolia Silos](https://magnolia.com/silos/) . Went in the morning and in the afternoon.
+We continued “Magnolia Day” in Waco with a visit to the [Magnolia Silos](https://magnolia.com/silos/). Went in the morning and in the afternoon.
 
 ![](https://cdn.uploads.micro.blog/890/2019/0681b11117.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/297219b47b.jpg)
@@ -242,7 +242,7 @@ We continued “Magnolia Day” in Waco with [a visit to the Magnolia Silos](htt
 
 ### [Monday @ 8:32 PM](https://www.thingelstad.com/2019/04/01/we-started-magnolia.html)
 
-We started “Magnolia Day” in Waco with [an early breakfast at Magnolia Table](https://magnolia.com/table/) . Good food, and a lot of it. 🍽🥓🍳
+We started “Magnolia Day” in Waco with an early breakfast at [Magnolia Table](https://magnolia.com/table/). Good food, and a lot of it. 🍽🥓🍳
 
 ![](https://cdn.uploads.micro.blog/890/2019/a9c910576d.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/98895f34d9.jpg)
@@ -257,7 +257,7 @@ We started “Magnolia Day” in Waco with [an early breakfast at Magnolia Table
 
 ### [Sunday @ 4:19 PM](https://www.thingelstad.com/2019/03/31/the-snakes-at.html)
 
-[The snakes at Cameron Park Zoo](http://www.cameronparkzoo.com) Cameron Park Zoo in Waco was great. So many snakes! I had no idea there were dozens of types of Rattle Snakes! 😬🐍
+The snakes at [Cameron Park Zoo](http://www.cameronparkzoo.com) Cameron Park Zoo in Waco was great. So many snakes! I had no idea there were dozens of types of Rattle Snakes! 😬🐍
 
 ![](https://cdn.uploads.micro.blog/890/2019/59c31cb050.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/7718a50013.jpg)
@@ -266,7 +266,7 @@ We started “Magnolia Day” in Waco with [an early breakfast at Magnolia Table
 
 ### [Sunday @ 4:13 PM](https://www.thingelstad.com/2019/03/31/we-had-a.html)
 
-We had a great [morning at the Cameron Park Zoo](http://www.cameronparkzoo.com) in Waco this morning. Impressive natural settings for the animals.
+We had a great morning at the [Cameron Park Zoo](http://www.cameronparkzoo.com) in Waco this morning. Impressive natural settings for the animals.
 
 ![](https://cdn.uploads.micro.blog/890/2019/de86f8977a.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/51eb9ae8a9.jpg)
@@ -292,4 +292,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will soon forget this.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

@@ -57,9 +57,9 @@ links:
   domain: securitydiscovery.com
   heading_context: '[800+ Million Emails Leaked Online by Email Verification Service - Security Discovery](https://securitydiscovery.com/800-million-emails-leaked-online-by-email-verification-service/)'
   section: Notable Links 📌
-word_count: 1173
+word_count: 1163
 ---
-This [week we got our Peloton Bike](https://www.onepeloton.com/bike) [and Tread](https://www.onepeloton.com/tread) delivered. We decided to update our home exercise equipment and Tammy and I both found the gear very impressive, and the live classes online very engaging. I’ve already gotten a couple of rides in and like it a lot. In some ways it’s a better spin class experience than a class in a studio! I love that you can see your performance live with everyone else taking the class. If you are on Peloton, connect with me — my username is jthingelstad!
+This week we got our [Peloton Bike](https://www.onepeloton.com/bike) and [Tread](https://www.onepeloton.com/tread) delivered. We decided to update our home exercise equipment and Tammy and I both found the gear very impressive, and the live classes online very engaging. I’ve already gotten a couple of rides in and like it a lot. In some ways it’s a better spin class experience than a class in a studio! I love that you can see your performance live with everyone else taking the class. If you are on Peloton, connect with me — my username is jthingelstad!
 
 ## Featured Links 🏅
 
@@ -123,7 +123,7 @@ I found out about this one thanks to a notice from HaveIBeenPwned. They had four
 
 https://minnestar.org
 
-[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know [that Minnebar is the largest BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
+[Minnestar](https://minnestar.org/) is the technology community for Minnesota. If you are passionate about technology you need to go to Minnebar and Minnedemo. Did you know that Minnebar is the largest [BarCamp](https://en.wikipedia.org/wiki/BarCamp) in North America and one of the largest in the world? Its also been going on for over 10 years? Minnedemo is the best place to hear about innovative tech and fun projects in the Twin Cities area. I am on the Minnestar board and I focus on Minnestar as one of the driving forces improving and expanding the technology community in the area. Minnestar is a 501c3 non-profit. [Become a Community Supporter today!](https://minnestar.donortools.com/)
 
 ## Yet More Links 🍞
 
@@ -131,7 +131,7 @@ https://minnestar.org
 Facebook can’t possibly deal with verifying political ads, but they sure were able to figure out ads that were negative about Facebook?
 - [Emma Haruka Iwao smashes pi world record with Google help - BBC News](https://www.bbc.com/news/technology-47524760)
 31 trillion digits. Wow! 🤓
-- Tesla launches new Supercharger with 1,000 mph charging, [Tesla launches new Supercharger with 1,000 mph charging, better efficiency, and more - Electrek](https://electrek.co/2019/03/06/tesla-supercharger-v3-kw-capacity-efficiency/)
+- [Tesla launches new Supercharger with 1,000 mph charging, better efficiency, and more - Electrek](https://electrek.co/2019/03/06/tesla-supercharger-v3-kw-capacity-efficiency/)
 This is an amazing amount of power! ⚡️
 - [Tempad – New Home for Notes](http://tempad.io/) tempad.io
 Yet another markdown note app, but completely free. Uses Google for sync.
@@ -172,7 +172,7 @@ Updated Tesla Model 3 to Firmware Build v9.0 2019.5.15 f5def7e (3/7/2019). Still
 
 ### [Saturday @ 8:44 PM](https://www.thingelstad.com/2019/03/09/watched-free-solo.html)
 
-[Watched Free Solo](https://www.rottentomatoes.com/m/free_solo/) tonight. Wow! [Alex Honnold](https://en.wikipedia.org/wiki/Alex_Honnold) is an amazing climber. My palms were sweating while I sat comfortably on the couch. 🧗‍♂️😳🎬
+Watched [Free Solo](https://www.rottentomatoes.com/m/free_solo/) tonight. Wow! [Alex Honnold](https://en.wikipedia.org/wiki/Alex_Honnold) is an amazing climber. My palms were sweating while I sat comfortably on the couch. 🧗‍♂️😳🎬
 
 ![](https://cdn.uploads.micro.blog/890/2019/149e30f1cd.jpg)
 
@@ -191,7 +191,7 @@ I had a great time checking out the fun and creative projects one of our #TeamSP
 
 ### [Saturday @ 8:33 AM](https://www.thingelstad.com/2019/03/09/tyler-and-i.html)
 
-Tyler and I are [cheering on FC Bayern vs Wolfsburg](https://fcbayern.com/en/matches/profis/bundesliga/2018-2019/fc-bayern-muenchen-vfl-wolfsburg-09-03-2018-matchday) ! ⚽️
+Tyler and I are cheering on [FC Bayern vs Wolfsburg](https://fcbayern.com/en/matches/profis/bundesliga/2018-2019/fc-bayern-muenchen-vfl-wolfsburg-09-03-2018-matchday)! ⚽️
 
 ![](https://cdn.uploads.micro.blog/890/2019/57477054f4.jpg)
 
@@ -201,4 +201,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 If you learn one useless thing every day, in a single year you'll learn 365 useless things.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

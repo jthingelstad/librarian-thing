@@ -93,7 +93,7 @@ links:
   domain: www.theregister.co.uk
   heading_context: '[GitLab reset --hard bad1dea: Biz U-turns, unbans office political chat, will vet customers • The Register](https://www.theregister.co.uk/2019/10/17/gitlab_reverse_ferret/)'
   section: Notable Links 📌
-word_count: 1905
+word_count: 1900
 ---
 Fall is officially here. This is the first Fall in our new house and I’m noting the intense volume of leaves that have fallen thus far, but even worse those that are still waiting to fall. The good news is that raking leaves, at least in our house, is a full family activity. The kids get into it, and if it’s a nice day it’s all very pleasant to do. That will be the plan for Sunday. I expect some piles to be made, some jumping to happen, and some delightful pictures to be taken. 🍂
 
@@ -105,7 +105,7 @@ Quantum computing has been talked about for well over a decade, but this is the 
 
 > We developed a new 54-qubit processor, named “Sycamore”, that is comprised of fast, high-fidelity quantum logic gates, in order to perform the benchmark testing. Our machine performed the target computation in 200 seconds, and from measurements in our experiment we determined that it would take the world’s fastest supercomputer 10,000 years to produce a similar output.
 
-10,000 years to 200 seconds? I had to do the math. That's 1,578,000,000 times faster. What does that mean, nearly all encrypted documents we have today are probably easily decrypted with brute force tactics. [Read more in this Nature article](https://www.nature.com/articles/s41586-019-1666-5) article.
+10,000 years to 200 seconds? I had to do the math. That's 1,578,000,000 times faster. What does that mean, nearly all encrypted documents we have today are probably easily decrypted with brute force tactics. Read more in this [Nature article](https://www.nature.com/articles/s41586-019-1666-5) article.
 
 ## My Weekly Photo 📷
 
@@ -147,13 +147,13 @@ So after creating no profits at all, the founder of WeWork leaves a billionaire.
 
 ### [Quitting Analytics](https://garrettdimon.com/2019/quitting-analytics/)
 
-[I did this myself in 2017](https://www.thingelstad.com/2017/removed-google-analytics) . I go back to intent and zoning. When I visit friends houses I don't want to think that their is a KPI being incremented. For me, the same is true for personal websites.
+[I did this myself in 2017](https://www.thingelstad.com/2017/removed-google-analytics). I go back to intent and zoning. When I visit friends houses I don't want to think that their is a KPI being incremented. For me, the same is true for personal websites.
 
 ### [Architectural Decision Records | adr.github.io](https://adr.github.io/)
 
 Interesting structure for architecture.
 
-> [An Architectural Decision (AD)](https://en.wikipedia.org/wiki/Architectural_decision) is a software design choice that addresses a functional or non-functional requirement that is architecturally significant. An [Architecturally Significant Requirement (ASR)](https://en.wikipedia.org/wiki/Architecturally_significant_requirements) is a requirement that has a measurable effect on a software system’s architecture and quality. An Architectural Decision Record (ADR) captures a single AD, such as often done when writing personal notes or meeting minutes; the collection of ADRs created and maintained in a project constitute its decision log. All these are within the topic of Architectural Knowledge Management (AKM).
+> An [Architectural Decision (AD)](https://en.wikipedia.org/wiki/Architectural_decision) is a software design choice that addresses a functional or non-functional requirement that is architecturally significant. An [Architecturally Significant Requirement (ASR)](https://en.wikipedia.org/wiki/Architecturally_significant_requirements) is a requirement that has a measurable effect on a software system’s architecture and quality. An Architectural Decision Record (ADR) captures a single AD, such as often done when writing personal notes or meeting minutes; the collection of ADRs created and maintained in a project constitute its decision log. All these are within the topic of Architectural Knowledge Management (AKM).
 
 I think it is very critical that you define how architecture is executed so that teams and architects know what to expect from each other.
 
@@ -187,7 +187,7 @@ If you are a fan of either Cal Newport or James Clear this will be an interestin
 
 ### [GitLab reset --hard bad1dea: Biz U-turns, unbans office political chat, will vet customers • The Register](https://www.theregister.co.uk/2019/10/17/gitlab_reverse_ferret/)
 
-This [is the followup to another article](https://www.theregister.co.uk/2019/10/16/gitlab_employees_gagged/) highlighting the change being made to policies at Gitlab. Just one day later another article and a reversal of the policy change highlighted in the first article. These matters are complicated and right or wrong, it seems like Gitlab's initial action was poorly planned and executed.
+This is the followup to [another article](https://www.theregister.co.uk/2019/10/16/gitlab_employees_gagged/) highlighting the change being made to policies at Gitlab. Just one day later another article and a reversal of the policy change highlighted in the first article. These matters are complicated and right or wrong, it seems like Gitlab's initial action was poorly planned and executed.
 
 ## Yet More Links 🍞
 
@@ -206,7 +206,7 @@ Interesting runtime. "An event-driven, portable runtime for building microservic
 
 ### [Thursday @ 10:27 PM](https://www.thingelstad.com/2019/10/24/tammy-and-i.html)
 
-[Tammy and I enjoyed Cabal](https://www.walkingshadow.org/cabal) tonight, from the Walking Shadow Theatre Company. Billed as a “Play with Puzzles”, it mixed actors, puzzle room concepts and an elaborate story. If you like puzzle rooms at all, this is highly recommended. 🎭🧩
+Tammy and I enjoyed [Cabal](https://www.walkingshadow.org/cabal) tonight, from the Walking Shadow Theatre Company. Billed as a “Play with Puzzles”, it mixed actors, puzzle room concepts and an elaborate story. If you like puzzle rooms at all, this is highly recommended. 🎭🧩
 
 ![](https://cdn.uploads.micro.blog/890/2019/1369283c05.jpg)
 
@@ -222,7 +222,7 @@ Game 2 of the World Series and there has already been so much action in the firs
 
 ### [Tuesday @ 11:39 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
-Mazie got to go on stage and [dance and sing with Michael Franti](https://michaelfranti.com) tonight! 🎶✌🏻🤟🏻
+Mazie got to go on stage and dance and sing with [Michael Franti](https://michaelfranti.com) tonight! 🎶✌🏻🤟🏻
 
 ### [Tuesday @ 11:37 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
@@ -230,7 +230,7 @@ Mazie got to go on stage and [dance and sing with Michael Franti](https://michae
 
 ### [Tuesday @ 11:28 PM](https://www.thingelstad.com/2019/10/22/232825.html)
 
-My Mom, Sister, and our family [all went to the Michael Franti](https://michaelfranti.com) show tonight! Amazing show! 🎶
+My Mom, Sister, and our family all went to the [Michael Franti](https://michaelfranti.com) show tonight! Amazing show! 🎶
 
 ### [Sunday @ 7:20 PM](https://www.thingelstad.com/2019/10/20/we-are-kitted.html)
 
@@ -240,26 +240,26 @@ We are kitted up and ready to cheer for the United in their first postseason gam
 
 ### [Saturday @ 2:20 PM](https://www.thingelstad.com/2019/10/19/212045.html)
 
-We had a fun quick trip to [my brother’s place on Pokegama Lake](https://www.dnr.state.mn.us/lakefind/lake.html?id=31053200) . Too late to be on the water, but we got a family selfie on the dock before heading out!
+We had a fun quick trip to my brother’s place on [Pokegama Lake](https://www.dnr.state.mn.us/lakefind/lake.html?id=31053200). Too late to be on the water, but we got a family selfie on the dock before heading out!
 
 ![](https://cdn.uploads.micro.blog/890/2019/26bd7c1700.jpg)
 
 ### [Saturday @ 1:17 PM](https://www.thingelstad.com/2019/10/19/some-bowling-today.html)
 
-Some [bowling today at Thunder Alley XL](https://thunderalleyxl.com) in Grand Rapids! I struggled more than I would like to admit to get over 100. 😬🎳
+Some bowling today at [Thunder Alley XL](https://thunderalleyxl.com) in Grand Rapids! I struggled more than I would like to admit to get over 100. 😬🎳
 
 ![](https://cdn.uploads.micro.blog/890/2019/cad62f87ee.jpg)
 
 ### [Saturday @ 11:15 AM](https://www.thingelstad.com/2019/10/19/we-checked-out.html)
 
-We checked out the US Army Corps of Engineers [work at the Pokegama Lake Dam](https://en.wikipedia.org/wiki/Pokegama_Lake_Dam) today, and did some hiking around the area. Nice place to hang out.
+We checked out the US Army Corps of Engineers work at the [Pokegama Lake Dam](https://en.wikipedia.org/wiki/Pokegama_Lake_Dam) today, and did some hiking around the area. Nice place to hang out.
 
 ![](https://cdn.uploads.micro.blog/890/2019/a1d57640ee.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/18d6656641.jpg)
 
 ### [Friday @ 11:08 PM](https://www.thingelstad.com/2019/10/19/210814.html)
 
-We had [a fun evening watching Queen Machine](https://www.queen-machine.dk) in Grand Rapids on their first US tour! 🎶
+We had a fun evening watching [Queen Machine](https://www.queen-machine.dk) in Grand Rapids on their first US tour! 🎶
 
 ![](https://cdn.uploads.micro.blog/890/2019/12b66076c7.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/c0b7957cb1.jpg)
@@ -268,7 +268,7 @@ We had [a fun evening watching Queen Machine](https://www.queen-machine.dk) in G
 
 ### [Friday @ 6:01 PM](https://www.thingelstad.com/2019/10/19/we-had-great.html)
 
-We had great pizza and equally [great beer at Rapids Brewing Co](https://rapidsbrewingco.com) . Some deliciously hoppy beers! 🍻
+We had great pizza and equally great beer at [Rapids Brewing Co](https://rapidsbrewingco.com). Some deliciously hoppy beers! 🍻
 
 ![](https://cdn.uploads.micro.blog/890/2019/fb6cd9463d.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/27063a0912.jpg)
@@ -277,7 +277,7 @@ We had great pizza and equally [great beer at Rapids Brewing Co](https://rapidsb
 
 ### [Friday @ 2:58 PM](https://www.thingelstad.com/2019/10/19/we-had-a.html)
 
-We had a nice morning [hiking around Golden Anniversary State Forest](https://www.dnr.state.mn.us/state_forests/forest.html?id=sft00022#homepage) . The light and fall leaves were pretty and inspired a lot of photographs.
+We had a nice morning hiking around [Golden Anniversary State Forest](https://www.dnr.state.mn.us/state_forests/forest.html?id=sft00022#homepage). The light and fall leaves were pretty and inspired a lot of photographs.
 
 ![](https://cdn.uploads.micro.blog/890/2019/24fe45337a.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/d9d3bf7359.jpg)
@@ -289,4 +289,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 You will pioneer the first Martian colony.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

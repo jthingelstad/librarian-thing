@@ -91,9 +91,9 @@ links:
   domain: changelog.com
   heading_context: '[Away from Keyboard #10: Maria Boland Ploessl found her home in technology](https://changelog.com/afk/10)'
   section: Notable Links 📌
-word_count: 1455
+word_count: 1448
 ---
-Welcome to the final Weekly Thing of 2018! We had a great Christmas. One of my favorite traditions is each family member getting a project that we do over Christmas break. The kids each got [big Lego projects: a Ferris Wheel](https://shop.lego.com/en-US/product/Ferris-Wheel-10247), [an Old Fishing Store](https://shop.lego.com/en-US/product/Old-Fishing-Store-21310). [Tammy got an Earth Puzzle](https://n-e-r-v-o-u-s.com/shop/product.php?code=368) that was much harder than I expected. [I'm assembling a UGears Steam Locomotive](https://ugears.online/collections/ugears_mechanical_models/products/460-steam-locomotive-with-tender-mechanical-model-advanced) ! Each person has their work area and gets plenty of time to get their project done. 🧩
+Welcome to the final Weekly Thing of 2018! We had a great Christmas. One of my favorite traditions is each family member getting a project that we do over Christmas break. The kids each got big Lego projects: a [Ferris Wheel](https://shop.lego.com/en-US/product/Ferris-Wheel-10247) and an [Old Fishing Store](https://shop.lego.com/en-US/product/Old-Fishing-Store-21310). Tammy got an [Earth Puzzle](https://n-e-r-v-o-u-s.com/shop/product.php?code=368) that was much harder than I expected. I'm assembling a [UGears Steam Locomotive](https://ugears.online/collections/ugears_mechanical_models/products/460-steam-locomotive-with-tender-mechanical-model-advanced)! Each person has their work area and gets plenty of time to get their project done. 🧩
 
 ## My Blog Posts ✍️
 
@@ -123,7 +123,7 @@ Cannon Lake, Minnesota
 
 ### [The Yoda of Silicon Valley - The New York Times](https://www.nytimes.com/2018/12/17/science/donald-knuth-computers-algorithms-programming.html)
 
-[I love that Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) got such an expansive writeup in the New York Times. He's a pioneer and someone that all of us in the computing field should admire. I have the first three volumes [of The Art of Computer Programming](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming) . I'll admit I've not read them, but I love that it is titled Art, as that is what programmers should strive to create. [Link from my friend Michael Rock](http://mrock911.com) .
+I love that [Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) got such an expansive writeup in the New York Times. He's a pioneer and someone that all of us in the computing field should admire. I have the first three volumes of [The Art of Computer Programming](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming). I'll admit I've not read them, but I love that it is titled Art, as that is what programmers should strive to create. Link from my friend [Michael Rock](http://mrock911.com).
 
 ### [How to Write a Novel With Ulysses, Part  I: Organization and the Writing Process | Ulysses Blog](https://ulysses.app/blog/2018/12/write-a-novel-with-ulysses-organization-and-the-writing-process/)
 
@@ -131,7 +131,7 @@ Interesting insight into how Gemmel organizes his books in Ulysses. Independent 
 
 ### [TED Talk on Getting Things Done for Teens - Getting Things Done®](https://gettingthingsdone.com/2018/12/ted-talk-on-getting-things-done-for-teens/)
 
-This talk doesn't actually [identify itself as GTD for Teens](https://gtdforteens.com) , but it is given by one of the authors of the book. As a Twin Cities resident I was also surprised that I had [no idea there was a TEDxEdina](http://tedxedina.com) event just a few miles from my house. I [also didn’t know that Mark Wallace](https://about.me/MarkBWallace#!) , one of the GTD for Teens authors and a speaker at this event lived in the Twin Cities! I watched this talk with my teenage daughter and it sort of interested her, but not enough for me to light a shared spark of GTD-ness yet. 🧐
+This talk doesn't actually identify itself as [GTD for Teens](https://gtdforteens.com), but it is given by one of the authors of the book. As a Twin Cities resident I was also surprised that I had no idea there was a [TEDxEdina](http://tedxedina.com) event just a few miles from my house. I also didn’t know that [Mark Wallace](https://about.me/MarkBWallace#!), one of the GTD for Teens authors and a speaker at this event lived in the Twin Cities! I watched this talk with my teenage daughter and it sort of interested her, but not enough for me to light a shared spark of GTD-ness yet. 🧐
 
 ### [8 Powerful Evening Habits That Will Prepare You For a Better Tomorrow](https://medium.com/personal-growth/practice-these-habits-after-6-p-m-and-your-life-will-never-be-the-same-3f1ca74f73c6)
 
@@ -163,40 +163,40 @@ I continue to believe that there is hidden insights locked away in our calendars
 
 ### [Ethical Hypocrisy and Social Networks – Leah Cunningham – Medium](https://medium.com/@cunningleah/ethical-hypocrisy-and-social-networks-5244258c901)
 
-[My friend Leah Cunningham](https://medium.com/@cunningleah) has decided she's done with Facebook properties, and shares why.
+My friend [Leah Cunningham](https://medium.com/@cunningleah) has decided she's done with Facebook properties, and shares why.
 
 ### [Away from Keyboard #10: Maria Boland Ploessl found her home in technology](https://changelog.com/afk/10)
 
-Fun [interview with the ED of Minnestar](https://minnestar.org) [, Maria Boland Ploessl](https://www.linkedin.com/in/mariabploessl/) about minnestar and her transition into parenthood.
+Fun interview with the ED of [Minnestar](https://minnestar.org), [Maria Boland Ploessl](https://www.linkedin.com/in/mariabploessl/) about minnestar and her transition into parenthood.
 
 ## Give Back 🎁
 
 https://letsencrypt.org
 
-[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent [years. Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
+[Let's Encrypt](https://letsencrypt.org) is a free, automated, and open certificate authority, run for the public’s benefit. All connections to web servers should be encrypted! The biggest challenge with encrypting the web historically has been the cost and hassle of getting an SSL certificate. Let's Encrypt has changed that entirely by being a free certificate authority. Let's Encrypt is possibly one of the most important things to happen on the web in recent years. [Donate to Let's Encrypt today!](https://letsencrypt.org/donate/)
 
 ## Yet More Links 🍞
 
 - [The Hidden Struggle to Save the Coffee Industry From Disaster](https://medium.com/s/thenewnew/the-fight-to-save-coffee-c80e4e17cd81) medium.com
 It turns out coffee is a giant monoculture, susceptible to many bad things. 😳
-- Python [gets a new governance model [LWN.net]](https://lwn.net/SubscriberLink/775105/5db16cfe82e78dc3/) lwn.net
-An interesting read to see how the Python language will [be governed now that the BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) has stepped aside.
+- [Python gets a new governance model [LWN.net]](https://lwn.net/SubscriberLink/775105/5db16cfe82e78dc3/) lwn.net
+An interesting read to see how the Python language will be governed now that the [BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) has stepped aside.
 - [16 (x4) Books We Read Winter 2018 – Andreessen Horowitz](https://a16z.com/2018/12/24/what-were-reading-winter-2018/) a16z.com
 Expansive book list. I find these fun to browse for inspiration.
 - [Minnesota United FC on Twitter: "DING DONG DING DONG 🔊 SOUND ON 🔊… "](https://twitter.com/MNUFC/status/1076233589480738818) twitter.com
-I really don't like linking to Twitter, but this video is fun and I can’t find it on the open web. I can’t wait to see [games in 2019 at Allianz Field](https://www.mnufc.com/stadium/) !
+I really don't like linking to Twitter, but this video is fun and I can’t find it on the open web. I can’t wait to see games in 2019 at [Allianz Field](https://www.mnufc.com/stadium/)!
 
 ## Microposts 🎈
 
 ### [Thursday @ 1:21 PM](https://www.thingelstad.com/2018/12/27/we-all-really.html)
 
-We [all really enjoyed My Neighbor Totoro](https://en.wikipedia.org/wiki/My_Neighbor_Totoro) on Christmas. Great Studio Ghibli film. 🎬
+We all really enjoyed [My Neighbor Totoro](https://en.wikipedia.org/wiki/My_Neighbor_Totoro) on Christmas. Great Studio Ghibli film. 🎬
 
 ![](https://cdn.uploads.micro.blog/890/2018/904ae81886.jpg)
 
 ### [Wednesday @ 2:05 PM](https://www.thingelstad.com/2018/12/26/we-played-photosynthesis.html)
 
-[We played Photosynthesis](http://www.blueorangegames.com/index.php/games/photosynthesis) for the first time and had a great time. Recommended game with a lot of strategy, but still playable by younger kids. 👍🏻
+We played [Photosynthesis](http://www.blueorangegames.com/index.php/games/photosynthesis) for the first time and had a great time. Recommended game with a lot of strategy, but still playable by younger kids. 👍🏻
 
 ![](https://cdn.uploads.micro.blog/890/2018/13177f3697.jpg)
 
@@ -208,7 +208,7 @@ Time for traditional Christmas Eve dinner off the grill! First, have to “botto
 
 ### [Sunday @ 8:14 PM](https://www.thingelstad.com/2018/12/23/surprised-the-kids.html)
 
-Surprised [the kids with a Home Free](http://homefreemusic.com) concert tonight, the last show on their Christmas Tour, at Treasure Island. 🎤🎼👨‍👩‍👧‍👦
+Surprised the kids with a [Home Free](http://homefreemusic.com) concert tonight, the last show on their Christmas Tour, at Treasure Island. 🎤🎼👨‍👩‍👧‍👦
 
 ![](https://cdn.uploads.micro.blog/890/2018/ddaea18d2e.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/4cbea54bf0.jpg)
@@ -217,7 +217,7 @@ Surprised [the kids with a Home Free](http://homefreemusic.com) concert tonight,
 
 ### [Sunday @ 6:03 PM](https://www.thingelstad.com/2018/12/23/went-to-kings.html)
 
-[Went to King’s Bar](http://www.kingsplacebar.com) [in Miesville](https://en.wikipedia.org/wiki/Miesville%2C_Minnesota) . Burger Flight: Homerun (Ham, Swiss Cheese, Lettuce, Tomato, Mayo), Dugout (Peanut Butter, Lettuce, Mayo), Slider (Fried Egg, American Cheese, Bacon), and Bases Loaded (Bacon, Cheddar Cheese, Swiss Cheese, Pepper Jack, Jalapeños, Sour Cream, Salsa)
+Went to [King’s Bar](http://www.kingsplacebar.com) in [Miesville](https://en.wikipedia.org/wiki/Miesville%2C_Minnesota). Burger Flight: Homerun (Ham, Swiss Cheese, Lettuce, Tomato, Mayo), Dugout (Peanut Butter, Lettuce, Mayo), Slider (Fried Egg, American Cheese, Bacon), and Bases Loaded (Bacon, Cheddar Cheese, Swiss Cheese, Pepper Jack, Jalapeños, Sour Cream, Salsa)
 
 ![](https://cdn.uploads.micro.blog/890/2018/ca35c8570e.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/5ffd97696f.jpg)
@@ -237,19 +237,19 @@ One of my favorite places to be.
 
 ### [Saturday @ 9:57 PM](https://www.thingelstad.com/2018/12/22/we-watched-the.html)
 
-[We watched The Christmas Chronicles](https://www.netflix.com/title/80199682) tonight and really enjoyed it. It would be a great movie for Christmas Eve! 🎅
+We watched [The Christmas Chronicles](https://www.netflix.com/title/80199682) tonight and really enjoyed it. It would be a great movie for Christmas Eve! 🎅
 
 ![](https://cdn.uploads.micro.blog/890/2018/ad26a4469d.jpg)
 
 ### [Saturday @ 8:54 AM](https://www.thingelstad.com/2018/12/22/we-saw-instant.html)
 
-[We saw Instant Family](https://www.rottentomatoes.com/m/instant_family) last night. Fun, family-focused movie. 🍿
+We saw [Instant Family](https://www.rottentomatoes.com/m/instant_family) last night. Fun, family-focused movie. 🍿
 
 ![](https://cdn.uploads.micro.blog/890/2018/deaabc3d90.jpg)
 
 ### [Friday @ 4:05 PM](https://www.thingelstad.com/2018/12/21/im-going-to.html)
 
-[I’m going to give Agenda](https://agenda.com) a solid workout to see if it’s a better solution for tracking work related notes and activities. Keep looking for something that works with the way I work, and this might be it.
+I’m going to give [Agenda](https://agenda.com) a solid workout to see if it’s a better solution for tracking work related notes and activities. Keep looking for something that works with the way I work, and this might be it.
 
 ## Fortune 🥠
 
@@ -257,4 +257,4 @@ You've made it all the way to the end! 👏 Here is your fortune for this week.
 
 Someone is speaking well of you.
 
-Thank you [for subscribing to the Weekly Thing](https://weekly.thingelstad.com/) !
+Thank you for subscribing to the [Weekly Thing](https://weekly.thingelstad.com/)!

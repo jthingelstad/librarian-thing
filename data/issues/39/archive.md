@@ -9,9 +9,9 @@ image: https://files.thingelstad.com/weekly-thing/39/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-3-2018/
 domains: []
 links: []
-word_count: 1698
+word_count: 1697
 ---
-I've been thinking 🤔 that making links easier to go through would be an improvement to the Weekly Thing, both for you the reader, and for me the author! I've had to manually deal with blockquotes that I put into the links (and sometimes miss some). I figured out how to move the links section to [some Python 🐍 code in Pythonista](http://omz-software.com/pythonista/)  and with that I got it to format the content better (yeah for me!) and even better I now put the links into groups by topics! This will make it easier for you the reader to see what you like, and importantly, skip what isn't interesting to you. 👍
+I've been thinking 🤔 that making links easier to go through would be an improvement to the Weekly Thing, both for you the reader, and for me the author! I've had to manually deal with blockquotes that I put into the links (and sometimes miss some). I figured out how to move the links section to some Python 🐍 code in [Pythonista](http://omz-software.com/pythonista/) and with that I got it to format the content better (yeah for me!) and even better I now put the links into groups by topics! This will make it easier for you the reader to see what you like, and importantly, skip what isn't interesting to you. 👍
 
 ---
 
@@ -19,7 +19,7 @@ I've been thinking 🤔 that making links easier to go through would be an impro
 
 ![](https://files.thingelstad.com/weekly-thing/39/cover.jpg)
 
-[The Kubbchucks](http://kubbchucks.planetkubb.com) made our 6th annual [appearance at the largest winter Kubb](https://en.wikipedia.org/wiki/Kubb) tournament in the world! We enjoyed a day of throwing wood on frozen Lake Calhoun!
+The [Kubbchucks](http://kubbchucks.planetkubb.com) made our 6th annual appearance at the largest winter [Kubb](https://en.wikipedia.org/wiki/Kubb) tournament in the world! We enjoyed a day of throwing wood on frozen Lake Calhoun!
 
 Jan 27, 2018 at 11:57 AM
 Lake Calhoun, Minneapolis, MN
@@ -72,7 +72,7 @@ This looks pretty handy. Small and lightweight, very easy to implement.
 
 ### [inessential: Why Micro.blog is Not Another App.net](http://inessential.com/2018/02/01/why_micro_blog_is_not_another_app_net)
 
-[I've been a Micro.blog user](https://micro.blog/jthingelstad) since launch [and that is where my microblog](https://www.thingelstad.com) is managed. I love this writeup on why micro.blog is architectural not just another social network. It’s actually something fundamentally different.
+I've been a [Micro.blog user](https://micro.blog/jthingelstad) since launch and that is where [my microblog](https://www.thingelstad.com) is managed. I love this writeup on why micro.blog is architectural not just another social network. It’s actually something fundamentally different.
 
 ### [With teen mental health deteriorating over five years, there's a likely culprit](https://theconversation.com/with-teen-mental-health-deteriorating-over-five-years-theres-a-likely-culprit-86996)
 
@@ -112,7 +112,7 @@ We've been doing some testing with this and the performance has been very impres
 
 ### [Principles of Chaos Engineering](http://principlesofchaos.org/)
 
-[Reminds me of the Agile Manifesto](http://agilemanifesto.org) , but for Chaos Engineering:
+Reminds me of the [Agile Manifesto](http://agilemanifesto.org), but for Chaos Engineering:
 
 > Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production.
 
@@ -172,25 +172,25 @@ I've just started into this book but I'm already pretty excited about it. This t
 
 https://archive.org
 
-[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for [history. Donate to Internet Archive today!](https://archive.org/donate/)
+[Internet Archive](https://archive.org) is a non-profit library of millions of free books, movies, software, music, websites, and more. I have been a supporter of the Internet Archive for many years and I think their mission is fabulous! The web is a major part of our culture and it the content that we put on it is sadly ephemeral. The Internet Archive is working hard to capture that information and keep it for history. [Donate to Internet Archive today!](https://archive.org/donate/)
 
 ---
 
-- The Cactus Blossoms at [the Turf Club. So good! 🎶](https://www.thingelstad.com/2018/01/29/the-cactus-blossomshttpthecactusblossomscom.html)
-- First run with the Sous Vide worked great! Perfectly done tenderloins that were incredibly flavorful! Now I know what [the steakhouses I like are doing!](https://www.thingelstad.com/2018/01/28/first-run-with.html)
-- First run with [the Sous Vide. Making beef tenderloin.](https://www.thingelstad.com/2018/01/28/first-run-with.html)
-- When you clean that black crud out of the bottom of your espresso machine’s portafilter it makes you pause a moment on what you are drinking — and [then you make another espresso. ☕️🤔](https://www.thingelstad.com/2018/01/28/when-you-clean.html)
-- Sunday morning project: Figured out how to connect Workflow and Pythonista and rewrote the links section of the Weekly Thing in Python [so I can structure it better.](https://www.thingelstad.com/2018/01/28/sunday-morning-project.html)
+- [The Cactus Blossoms at the Turf Club. So good! 🎶](https://www.thingelstad.com/2018/01/29/the-cactus-blossomshttpthecactusblossomscom.html)
+- [First run with the Sous Vide worked great! Perfectly done tenderloins that were incredibly flavorful! Now I know what the steakhouses I like are doing!](https://www.thingelstad.com/2018/01/28/first-run-with.html)
+- [First run with the Sous Vide. Making beef tenderloin.](https://www.thingelstad.com/2018/01/28/first-run-with.html)
+- [When you clean that black crud out of the bottom of your espresso machine’s portafilter it makes you pause a moment on what you are drinking — and then you make another espresso. ☕️🤔](https://www.thingelstad.com/2018/01/28/when-you-clean.html)
+- [Sunday morning project: Figured out how to connect Workflow and Pythonista and rewrote the links section of the Weekly Thing in Python so I can structure it better.](https://www.thingelstad.com/2018/01/28/sunday-morning-project.html)
 - [I win! 😊](https://www.thingelstad.com/2018/01/27/i-win.html)
 - [Ticket to Ride!](https://www.thingelstad.com/2018/01/27/ticket-to-ride.html)
-- Kubbchucks went 3-2 in morning round [robin. Onto afternoon round robin! 🤞🏻👍🏻](https://www.thingelstad.com/2018/01/27/kubbchucks-went-in.html)
+- [Kubbchucks went 3-2 in morning round robin. Onto afternoon round robin! 🤞🏻👍🏻](https://www.thingelstad.com/2018/01/27/kubbchucks-went-in.html)
 - [Kubb on frozen Lake Calhoun!](https://www.thingelstad.com/2018/01/27/kubb-on-frozen.html)
-- Winter Kubb [at its finest. Nice sunny day.](https://www.thingelstad.com/2018/01/27/winter-kubb-at.html)
-- Kubbchucks at our [6th Minnesota Kubb at the Loppet!](https://www.thingelstad.com/2018/01/27/kubbchucks-at-our.html)
-- Eric [Goplin kicking off Minnesota Kubb tournament!](https://www.thingelstad.com/2018/01/27/eric-goplin-kicking.html)
+- [Winter Kubb at its finest. Nice sunny day.](https://www.thingelstad.com/2018/01/27/winter-kubb-at.html)
+- [Kubbchucks at our 6th Minnesota Kubb at the Loppet!](https://www.thingelstad.com/2018/01/27/kubbchucks-at-our.html)
+- [Eric Goplin kicking off Minnesota Kubb tournament!](https://www.thingelstad.com/2018/01/27/eric-goplin-kicking.html)
 - [Winter Kubb basecamp!](https://www.thingelstad.com/2018/01/27/winter-kubb-basecamp.html)
-- Warming up [for a day of winter Kubb!](https://www.thingelstad.com/2018/01/27/warming-up-for.html)
-- Excited to head to the world’s largest winter Kubb tournament [at the Loppet today! Go Kubbchucks!](https://www.thingelstad.com/2018/01/27/excited-to-head.html)
+- [Warming up for a day of winter Kubb!](https://www.thingelstad.com/2018/01/27/warming-up-for.html)
+- [Excited to head to the world’s largest winter Kubb tournament at the Loppet today! Go Kubbchucks!](https://www.thingelstad.com/2018/01/27/excited-to-head.html)
 
 ## The end 🎬
 
