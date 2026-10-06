@@ -10,6 +10,7 @@ compared with `files.thingelstad.com/weekly-thing/<N>/cover.jpg`:
 
 - 105 are the issue's weekly photo and match its cover.
 - WT29's photo was already gone (404), as found in the round 2 repair.
-- WT32's EFF "Member 2017" badge exists only there. It is kept here as
-  `wt32-eff-member-2017.png` (200×200) so round 4 can restore it.
+- WT32's EFF "Member 2017" badge exists only there. It belongs to the nonprofit
+  spotlight, which Jamie does not want back in the archive (2026-10-06), so it is
+  not kept and goes with the account.
 - WT100's 150×40 `banner1.gif` is hosted by a different Mailchimp account, not Jamie's.
