@@ -1632,10 +1632,18 @@ await run('search_faq', { query: 'what is the weekly thing' });
   const tesla = await run('list_topics', { query: 'Tesla' });
   const topic = (tesla?.topics || []).find((entry) => entry.name.toLowerCase() === 'tesla');
   const uncapped = Boolean(corpora.graph?.entity_index_uncapped);
+  // An oracle, not a floor: archive repairs move the real count (WT44's
+  // doubled Tesla title took it from 25 to 24). The graph's index is every
+  // issue naming Tesla twice (tests/test_graph_entities.py checks that against
+  // the issues); the topic must count all of them, more than the 40-name sample.
+  const indexed = (corpora.graph?.entity_index?.tesla || []).length;
+  const sampled = Object.values(corpora.graph?.issues || {}).filter((entry) =>
+    (entry.entities || []).some((name) => name.toLowerCase() === 'tesla')
+  ).length;
   checkCorpus(
     'KA list_topics counts Tesla in every issue naming it twice',
-    topic?.issue_count >= 25,
-    JSON.stringify(topic)
+    indexed > sampled && topic?.issue_count === indexed,
+    `${JSON.stringify(topic)} index ${indexed} sample ${sampled}`
   );
   checkCorpus('KA the topic graph is uncapped', uncapped);
   check(
