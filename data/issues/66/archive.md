@@ -87,7 +87,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Here''s How America Uses Its Land](https://www.bloomberg.com/graphics/2018-us-land-use/)'
   section: Notable Links 📌
-word_count: 1807
+word_count: 1813
 ---
 We've [been enjoying exploring the Finger Lakes](https://www.fingerlakes.org) region of New York this week. We spent [the last few days with Ithaca](https://www.visitithaca.com) as our home base and ventured out to a number of places. The weather has been really hot, ☀️ which has put a damper on all the gorgeous gorge hiking that is in this region. Hiking in the upper 90's is just, well, not that much fun. 💦
 
@@ -121,7 +121,7 @@ This is a very well done guide to composing your photos. Some of the concepts I 
 
 I have a hard time understanding food ingredients that have been around for millennia that are all of a sudden bad. But this article does a good job highlighting how gluten in food has changed in recent years, which could be the cause for so many people having negative reactions to it.
 
-Some experts argue that without this traditional fermentation – the process by which parts of the grain begin to be broken down in the presence of lactic acid bacteria – many people simply can’t digest grains properly to absorb the desirable micronutrients they contain.
+> Some experts argue that without this traditional fermentation – the process by which parts of the grain begin to be broken down in the presence of lactic acid bacteria – many people simply can’t digest grains properly to absorb the desirable micronutrients they contain.
 
 Food is more complex than we ever give it credit for. 🍞
 
@@ -129,7 +129,7 @@ Food is more complex than we ever give it credit for. 🍞
 
 An initial study perceived cause and solution around gender issues in the workplace based on context.
 
-People who read or listened to the DIY messages were more likely to believe women have the power to solve the problem. That, on its own, may very well be good news. However, they were also more likely to believe that women are responsible for the problem — both for causing it, and for fixing it.
+> People who read or listened to the DIY messages were more likely to believe women have the power to solve the problem. That, on its own, may very well be good news. However, they were also more likely to believe that women are responsible for the problem — both for causing it, and for fixing it.
 
 Seems like one of those “damned if you do, damned if you don’t” issues.
 
@@ -145,7 +145,7 @@ I have a similar allergic reaction to cluttered desktops and hundreds of tabs. �
 
 Training program used by Navy pilots to get sleep.
 
-After six weeks of practice, 96 percent of pilots could fall asleep in two minutes or less. Even after drinking coffee, with machine gunfire being played in the background.
+> After six weeks of practice, 96 percent of pilots could fall asleep in two minutes or less. Even after drinking coffee, with machine gunfire being played in the background.
 
 I think the target audience for this training isn’t the average person. If you are a Navy pilot, you’ll do great. But there might be some good stuff to cherry pick for other people too.
 
@@ -157,7 +157,7 @@ Critical and deep review of OmniFocus 3. I agree with much of this review and my
 
 This is a great milestone for Let’s Encrypt!
 
-Let’s Encrypt is currently providing certificates for more than 115 million websites.
+> Let’s Encrypt is currently providing certificates for more than 115 million websites.
 
 That is a major dent in realizing the encrypted web. All of my sites use Let’s Encrypt certificates.
 
@@ -173,7 +173,7 @@ This is a very good reminder of the importance of speed in tech teams. I’ve se
 
 I like the broad framing of this as opposed to one thing - like diet or fitness alone.
 
-True self-care strengthens and deepens our connection with ourselves so we can understand how to meet our needs met from a mental, emotional, and physical standpoint.
+> True self-care strengthens and deepens our connection with ourselves so we can understand how to meet our needs met from a mental, emotional, and physical standpoint.
 
 There is only one of each of us. 👍🏻
 
@@ -181,7 +181,7 @@ There is only one of each of us. 👍🏻
 
 Another example of tech employees disagreeing with the direction there companies are going.
 
-Some analysts have drawn comparisons between the censorship project and Project Maven, a Google initiative to develop artificial intelligence for U.S. military drones. Project Maven sparked an internal revolt within the company, which led to Google canceling the contract. One of Google’s informal corporate principles is “don’t be evil” — a standard some of the company’s employees felt Project Maven violated.
+> Some analysts have drawn comparisons between the censorship project and Project Maven, a Google initiative to develop artificial intelligence for U.S. military drones. Project Maven sparked an internal revolt within the company, which led to Google canceling the contract. One of Google’s informal corporate principles is “don’t be evil” — a standard some of the company’s employees felt Project Maven violated.
 
 Further evidence supporting the need for an ethics model for tech.
 

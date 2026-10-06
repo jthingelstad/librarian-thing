@@ -101,7 +101,7 @@ links:
   domain: 512pixels.net
   heading_context: '[The One Where I Announce I’m Joining Mac Power Users – 512 Pixels](https://512pixels.net/2018/11/joining-mpu/)'
   section: Notable Links 📌
-word_count: 2067
+word_count: 2069
 ---
 So what is it like to be right in the thick of it when technology teams manage through maximum capacity events? There are many similarities to running financial publishing systems through significant market events, providing giant "social scale" to applications deployed to millions of people in minutes, as well as running the largest retail network in the world at the highest volume time of year. You need a great team, real-time performance data, proper procedures, and experience — amongst other things.
 
@@ -125,7 +125,7 @@ Good things to consider as your organization evolves and grows. Via [Juselly Fre
 
 Bruce Schneier is a security expert, not a politician, but for this summary of the paper he did provides interesting perspective.
 
-This framework not only helps us understand how different political systems are vulnerable and how they can be attacked, but also how to bolster security in democracies. First, we need to better defend the common political knowledge that democracies need to function. That is, we need to bolster public confidence in the institutions and systems that maintain a democracy. Second, we need to make it harder for outside political groups to cooperate with inside political groups and organize disinformation attacks, through measures like transparency in political funding and spending. And finally, we need to treat attacks on common political knowledge by insiders as being just as threatening as the same attacks by foreigners.
+> This framework not only helps us understand how different political systems are vulnerable and how they can be attacked, but also how to bolster security in democracies. First, we need to better defend the common political knowledge that democracies need to function. That is, we need to bolster public confidence in the institutions and systems that maintain a democracy. Second, we need to make it harder for outside political groups to cooperate with inside political groups and organize disinformation attacks, through measures like transparency in political funding and spending. And finally, we need to treat attacks on common political knowledge by insiders as being just as threatening as the same attacks by foreigners.
 
 It’s thought provoking to consider the attack surfaces of political systems in this way.
 
@@ -152,7 +152,7 @@ TITLE Boxing, 5452 Lyndale Ave S, Minneapolis MN 55419
 
 Amazon introduced this highlighting that it was a technology they built in-house and are now making available to the public. It looks interesting.
 
-Amazon QLDB is a new class of database that eliminates the need to engage in the complex development effort of building your own ledger-like applications. With QLDB, your data’s change history is immutable – it cannot be altered or deleted – and using cryptography, you can easily verify that there have been no unintended modifications to your application’s data.
+> Amazon QLDB is a new class of database that eliminates the need to engage in the complex development effort of building your own ledger-like applications. With QLDB, your data’s change history is immutable – it cannot be altered or deleted – and using cryptography, you can easily verify that there have been no unintended modifications to your application’s data.
 
 There is a [lot of overlap with Event Sourcing](https://www.martinfowler.com/eaaDev/EventSourcing.html) concepts, but I’m not sure it is applicable to that. This is marketed as providing the audit history trust of a blockchain, but not using decentralization.
 

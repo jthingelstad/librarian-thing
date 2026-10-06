@@ -75,7 +75,7 @@ links:
   domain: gettingthingsdone.com
   heading_context: '[Episode #54: David Allen on Someday/Maybe and Incubation Best Practices - Getting Things Done®](https://gettingthingsdone.com/2019/10/david-allen-on-someday-maybe-and-incubation-lists/)'
   section: Notable Links 📌
-word_count: 1650
+word_count: 1656
 ---
 Like clockwork cold weather arrived and I got a low-grade cold. Not the kind of cold that takes you out of commission. More the kind of cold that feels like the parking brake is half-way applied all the time, and makes you cough and sneeze, but not all the time. I'm trying to drown it out with a [barrage of vitamins. Premium Insurance Caps](https://www.hammernutrition.com/premium-insurance-caps?quantity=1&size=49) combined with Emergen-C. It was one of those weeks where I needed to be fully ON for a full raft of things on both the work and home calendars. I’m looking back now from Friday night and am happy that I successfully made it through. 🏁
 
@@ -87,9 +87,9 @@ Let's jump right into the links now, and there is a lot of micro posts at the en
 
 I enjoyed this read because I also am terrible at networking. When faced with a room of people mingling and having small-talk about whatever it is people have small-talk about, I tend to want to avoid it all.
 
-If you want to rapidly build your network, my advice is useless to you, because it takes lots of time — decades.
-
-But if you want to build a solid network, it may help. My advice is based on being curious, being helpful, and doing a good job. Even if you suck at networking, as I do, you need to do your job. These are just a few tips on how to do it in a way that will support you later in your career.
+> If you want to rapidly build your network, my advice is useless to you, because it takes lots of time — decades.
+>
+> But if you want to build a solid network, it may help. My advice is based on being curious, being helpful, and doing a good job. Even if you suck at networking, as I do, you need to do your job. These are just a few tips on how to do it in a way that will support you later in your career.
 
 I haven't been intentional about it, but I think I've been doing something similar to what he describers here.
 
@@ -97,7 +97,7 @@ I haven't been intentional about it, but I think I've been doing something simil
 
 I hadn't encountered this concept of "1,000 True Fans" before, but I really like it. It’s an interesting approach to a project, a hobby, or even a business.
 
-Building your audience this way is a commitment to showing up day after day, year after year, and being ok with the fact that you might not hit a home run, but instead you'll win through a lot of base hits. It might take you 1000 days to reach 1000 true fans.
+> Building your audience this way is a commitment to showing up day after day, year after year, and being ok with the fact that you might not hit a home run, but instead you'll win through a lot of base hits. It might take you 1000 days to reach 1000 true fans.
 
 This deserves a read and some thinking through.
 
@@ -123,7 +123,7 @@ The physical world works better because we have zoning — residential, commerci
 
 I use a bit of this calendar blocking technique myself. Depending on your role and the organization you are in defending your calendar, your time, can be critically important to your success.
 
-People seem to treat their diaries as though they have no say in them anymore, and they simply have to obey what is in there – even if someone else has put it there.
+> People seem to treat their diaries as though they have no say in them anymore, and they simply have to obey what is in there – even if someone else has put it there.
 
 To take this up a level, I recommend using Shortcuts (on iOS) to automate the creation of these blocks, rather than creating repeating events that become routinized and forgotten.
 
@@ -139,7 +139,7 @@ Interesting clarification. I've used the word refactor to just mean "larger than
 
 I do think a lot of developers are biased that XML is just "bloated and bad". This article makes a good point, it’s a different thing than JSON.
 
-Both XML and JSON can represent complex nested data structures, but they excel at different types of structures. JSON’s origins as a subset of JavaScript can be seen with how easily it represents key/value object data. XML, on the other hand, optimizes for document tree structures, by cleanly separating node data (attributes) from child data (elements).
+> Both XML and JSON can represent complex nested data structures, but they excel at different types of structures. JSON’s origins as a subset of JavaScript can be seen with how easily it represents key/value object data. XML, on the other hand, optimizes for document tree structures, by cleanly separating node data (attributes) from child data (elements).
 
 🤓
 

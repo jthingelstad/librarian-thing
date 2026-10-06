@@ -87,7 +87,7 @@ links:
   domain: brutalist-web.design
   heading_context: '[Brutalist Web Design](https://brutalist-web.design/)'
   section: Notable Links 📌
-word_count: 1784
+word_count: 1792
 ---
 It has been a busy (good!) return from a very relaxed holiday week. Through an odd sequence of events I'm going to two baseball games and two soccer games in a week! ⚾️⚽️⚾️⚽️🙌 No complaints as I enjoy both a lot.
 
@@ -119,7 +119,7 @@ Warsaw, MN
 
 I wonder how many AI services are augmented or in some cases just done by people.
 
-“Using a human to do the job lets you skip over a load of technical and business development challenges. It doesn’t scale, obviously, but it allows you to build something and skip the hard part early on,” said Gregory Koberger, CEO of ReadMe, who says he has come across a lot of “pseudo-AIs”.
+> “Using a human to do the job lets you skip over a load of technical and business development challenges. It doesn’t scale, obviously, but it allows you to build something and skip the hard part early on,” said Gregory Koberger, CEO of ReadMe, who says he has come across a lot of “pseudo-AIs”.
 
 Skipping the hard part could be a cost optimization to get validation quicker, or it could invalidate your entire business model.
 
@@ -127,10 +127,10 @@ Skipping the hard part could be a cost optimization to get validation quicker, o
 
 [New-ish book from Charles Betz](https://www.linkedin.com/in/charlestbetz/) , published in the open on the web.
 
-My answer would be that there is something different happening this time — digital delivery is becoming core, not context. The convergence of an abundance of computing resources, improving software development management, combined with a change in market focus from the supplier to the customer is changing the way we view Enterprise Architecture and IT management, and identifying the need to develop a digital workforce. The defining characteristics of a digital enterprise are becoming clear:
-- Products or services that are either delivered fully digitally (e.g., digital media or online banking), or where physical products and services are obtained by the customer by digital means (e.g., online car sharing services)
-- A "digital-first" culture, where the business models, plans, architectures, and implementation strategies start from an assumption of digital delivery
-- A workforce who is digitally savvy enough to execute a digital-first approach
+> My answer would be that there is something different happening this time — digital delivery is becoming core, not context. The convergence of an abundance of computing resources, improving software development management, combined with a change in market focus from the supplier to the customer is changing the way we view Enterprise Architecture and IT management, and identifying the need to develop a digital workforce. The defining characteristics of a digital enterprise are becoming clear:
+> - Products or services that are either delivered fully digitally (e.g., digital media or online banking), or where physical products and services are obtained by the customer by digital means (e.g., online car sharing services)
+> - A "digital-first" culture, where the business models, plans, architectures, and implementation strategies start from an assumption of digital delivery
+> - A workforce who is digitally savvy enough to execute a digital-first approach
 
 I met Charles once at the Chaos Day event here in Minneapolis. He has a comprehensive and deep view on technology.
 
@@ -142,7 +142,7 @@ This article [instantly made me think of Insights](https://www.insights.com/us/)
 
 More research that shows how precise identification cane be on metadata alone.
 
-We demonstrate that through the application of a supervised learning algorithm, we are able to identify any user in a group of 10,000 with approximately 96.7% accuracy. Moreover, if we broaden the scope of our search and consider the 10 most likely candidates we increase the accuracy of the model to 99.22%. We also found that data obfuscation is hard and ineffective for this type of data: even after perturbing 60% of the training data, it is still possible to classify users with an accuracy higher than 95%.
+> We demonstrate that through the application of a supervised learning algorithm, we are able to identify any user in a group of 10,000 with approximately 96.7% accuracy. Moreover, if we broaden the scope of our search and consider the 10 most likely candidates we increase the accuracy of the model to 99.22%. We also found that data obfuscation is hard and ineffective for this type of data: even after perturbing 60% of the training data, it is still possible to classify users with an accuracy higher than 95%.
 
 I still don't think this message is widely understood. When people are told that only metadata is kept on their activities, they assume some level of anonymity. You should assume none.
 
@@ -158,7 +158,7 @@ Some simple tactics for approaching business networking. This is something that 
 
 I love the conclusion in this overview.
 
-In fact, GraphQL vs REST is like comparing SQL technologies vs noSQL. There are certain applications where it makes sense to model complex entities in a SQL Db. Whereas other apps that only have “messages” as in high volume chat apps or analytics APIs where the only entity is an “event” may be more suited using something like Cassandra.
+> In fact, GraphQL vs REST is like comparing SQL technologies vs noSQL. There are certain applications where it makes sense to model complex entities in a SQL Db. Whereas other apps that only have “messages” as in high volume chat apps or analytics APIs where the only entity is an “event” may be more suited using something like Cassandra.
 
 We always do this in tech it seems, too much "versus" as opposed to it’s just different and serves a different solution. Again, pick the right tool for the job. 🔨
 
@@ -174,7 +174,7 @@ We all could use better ways of dealing with this little (or not so little) voic
 
 Some interesting data on the state of a number of technologies and the industry.
 
-Currents is a quarterly report on developer cloud trends that we created to share our knowledge with the broader community. For the fourth edition, we surveyed nearly 5,000 respondents from around the world about themselves, the tools they use and the challenges they face.
+> Currents is a quarterly report on developer cloud trends that we created to share our knowledge with the broader community. For the fourth edition, we surveyed nearly 5,000 respondents from around the world about themselves, the tools they use and the challenges they face.
 
 🤔
 

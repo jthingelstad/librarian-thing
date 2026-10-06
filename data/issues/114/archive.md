@@ -75,7 +75,7 @@ links:
   domain: pascalprecht.github.io
   heading_context: '[The Impact of Meditating every day - Pascal Precht''s Blog](https://pascalprecht.github.io/posts/meditating-every-day/)'
   section: Notable Links 📌
-word_count: 1333
+word_count: 1339
 ---
 I've been thinking lately about how great the summer has been and how quickly time just keeps on moving. I’m doing my best to take it all in and make the most of it all. Fall is in the air, the first day of school is just around the corner, and the last of the summer checklist awaits.
 
@@ -87,11 +87,11 @@ Have a great weekend and enjoy some fun links with your Saturday coffee! ☕️
 
 Want to know why I use Safari (WebKit) exclusively to browse the web? This is why.
 
-WebKit will do its best to prevent all covert tracking, and all cross-site tracking (even when it’s not covert). These goals apply to all types of tracking listed above, as well as tracking techniques currently unknown to us.
-
-If a particular tracking technique cannot be completely prevented without undue user harm, WebKit will limit the capability of using the technique. For example, limiting the time window for tracking or reducing the available bits of entropy — unique data points that may be used to identify a user or a user’s behavior.
-
-If even limiting the capability of a technique is not possible without undue user harm, WebKit will ask for the user’s informed consent to potential tracking.
+> WebKit will do its best to prevent all covert tracking, and all cross-site tracking (even when it’s not covert). These goals apply to all types of tracking listed above, as well as tracking techniques currently unknown to us.
+>
+> If a particular tracking technique cannot be completely prevented without undue user harm, WebKit will limit the capability of using the technique. For example, limiting the time window for tracking or reducing the available bits of entropy — unique data points that may be used to identify a user or a user’s behavior.
+>
+> If even limiting the capability of a technique is not possible without undue user harm, WebKit will ask for the user’s informed consent to potential tracking.
 
 Simple and clear. Aligned with the user and what they should get. 🤝
 
@@ -131,7 +131,7 @@ I don't think there would be a better buyer for Tumblr than Automattic.
 
 I so 💚 this!
 
-The dump truck, at 45 tons, ascends the 13-percent grade and takes on 65 tons of ore. With more than double the weight going back down the hill, the beast's regenerative braking system recaptures more than enough energy to refill the charge the eDumper used going up.
+> The dump truck, at 45 tons, ascends the 13-percent grade and takes on 65 tons of ore. With more than double the weight going back down the hill, the beast's regenerative braking system recaptures more than enough energy to refill the charge the eDumper used going up.
 
 It actually ends the day with more electricity than it started! ⚡️ And it's huge!
 

@@ -132,7 +132,7 @@ links:
   domain: www.buzzfeed.com
   heading_context: '[An Invisible Rating System At Your Favorite Chain Restaurant Is Costing Your Server](https://www.buzzfeed.com/carolineodonovan/ziosk-presto-tabletop-tablet-restaurant-rating-servers#.tqg28Jv8q)'
   section: Notable Links 📌
-word_count: 1879
+word_count: 1885
 ---
 I don't have a lot to update on this week, and there are no features or changes to the Weekly Thing for me to share and have a meta update around. 🤷‍♂️ Have a great weekend and enjoy the links below! ⬇️
 
@@ -166,7 +166,7 @@ Lake Harriet, 4869–4899 W Lake Harriet Pkwy, Minneapolis MN
 
 [Review of Jaron Lanier's](http://www.jaronlanier.com) new book [Ten Arguments For Deleting Your Social Media Accounts Right Now](https://www.indiebound.org/book/9781250196682) . The book itself does not get a glowing review, but it comes with a punch at the end.
 
-Only at the very end does Lanier venture into new territory. His argument, however, is a profound one. He worries that our reliance on big tech companies is ruining our capacity for spirituality, by turning us into robotic extensions of their machines.
+> Only at the very end does Lanier venture into new territory. His argument, however, is a profound one. He worries that our reliance on big tech companies is ruining our capacity for spirituality, by turning us into robotic extensions of their machines.
 
 If you are less versed in the debate about social media the book may be more novel.
 
@@ -182,7 +182,7 @@ Make your day, just watch the absolute genuine Paul McCartney. 🎧
 
 [Andreessen Horowitz](https://a16z.com) launches a new crypto focused fund.
 
-Today we are announcing the launch of a16z crypto, a $300M venture fund that will invest in crypto companies and protocols.
+> Today we are announcing the launch of a16z crypto, a $300M venture fund that will invest in crypto companies and protocols.
 
 💰
 
@@ -198,7 +198,7 @@ This is the thing that keeps people from disengaging with social media. It’s g
 
 An argument for using GraphQL for API development, and that it’s easier than REST.
 
-Here is the idea: If you have never heard about the REST architectural style constraints and their implication on the properties of the resulting distributed system and you do not want to (or can’t) educate yourself, use GraphQL.
+> Here is the idea: If you have never heard about the REST architectural style constraints and their implication on the properties of the resulting distributed system and you do not want to (or can’t) educate yourself, use GraphQL.
 
 🤔
 
@@ -214,7 +214,7 @@ Thorough guide to various options for getting rid of cable TV (or satellite TV).
 
 A grounded, reality-based view of the potential of machine learning and how we should be thinking about it in solutions.
 
-So, this is a good grounding way to think about ML today - it’s a step change in what we can do with computers, and that will be part of many different products for many different companies. Eventually, pretty much everything will have ML somewhere inside and no-one will care.
+> So, this is a good grounding way to think about ML today - it’s a step change in what we can do with computers, and that will be part of many different products for many different companies. Eventually, pretty much everything will have ML somewhere inside and no-one will care.
 
 I like the pragmatic views in this.
 
@@ -222,7 +222,7 @@ I like the pragmatic views in this.
 
 [The CEO of littlebits](https://littlebits.com/) , an immigrant and refuge, taking a position on the despicable separation of children from their parents at the border.
 
-History will judge us if we sit still and allow this to happen. Our kids will not forgive us if we don’t stand up for them. Our conscience will not rest if we allow something so basically human to appear partisan. We must speak out.
+> History will judge us if we sit still and allow this to happen. Our kids will not forgive us if we don’t stand up for them. Our conscience will not rest if we allow something so basically human to appear partisan. We must speak out.
 
 It’s good to see tech companies taking positions on important matters.
 
@@ -238,7 +238,7 @@ Tips for managing your to do list more efficiently. I do the "If/Then" on my lis
 
 Interesting machine analysis of "to do" lists. It surprises me that more research hasn't been done in this area, but understandably there is not a lot of data to pull out. To Do's are very short, so understanding intent could be hard.
 
-To-do lists are a popular medium for personal information management. As to-do tasks are increasingly tracked in electronic form with mobile and desk- top organizers, so does the potential for software support for the corresponding tasks by means of intelligent agents. While there has been work in the area of personal assistants for to-do tasks, no work has focused on classifying user intention and information extraction as we do. We show that our methods per- form well across two corpora that span sub-domains, one of which we released.
+> To-do lists are a popular medium for personal information management. As to-do tasks are increasingly tracked in electronic form with mobile and desk- top organizers, so does the potential for software support for the corresponding tasks by means of intelligent agents. While there has been work in the area of personal assistants for to-do tasks, no work has focused on classifying user intention and information extraction as we do. We show that our methods per- form well across two corpora that span sub-domains, one of which we released.
 
 This approach would also benefit from tuning over time. People tend to develop "shorthands" that they use in their To Do's and a system could learn those and tune to each person over time.
 

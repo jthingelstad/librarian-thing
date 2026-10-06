@@ -88,7 +88,7 @@ links:
   domain: pudding.cool
   heading_context: '[A People Map of the US](https://pudding.cool/2019/05/people-map/)'
   section: Notable Links 📌
-word_count: 1323
+word_count: 1327
 ---
 This week was the end of the school year for our kids. It was another year along in grade school for Tyler, but Mazie celebrated the significant milestone of moving on from Junior High and next year going on to the “big show,” aka, High School.
 
@@ -108,7 +108,7 @@ It was a special moment, one I’m thankful I was able to be part of. It was als
 
 Thompson's recap of the WWDC 2019 announcements is insightful. He gave a lot of attention to the new Sign In with Apple capability and the privacy components of it.
 
-This is the context for Sign In with Apple: developers can now let Apple handle identity instead of Facebook or Google. Furthermore, users creating accounts with Sign In with Apple have the option of using a unique email address per service, breaking that key link to their data profiles, wherever they are housed.
+> This is the context for Sign In with Apple: developers can now let Apple handle identity instead of Facebook or Google. Furthermore, users creating accounts with Sign In with Apple have the option of using a unique email address per service, breaking that key link to their data profiles, wherever they are housed.
 
 [I've been using Maskmail](https://www.maskmail.net) to create unique email addresses and one of the things that frustrates me is how many websites block services that allow you to generate random email addresses. One upside to Apple doing this is I don't see people trying to block them.
 
@@ -132,7 +132,7 @@ Good introduction and overview of GTD. I've been using GTD for 10+ years and pla
 
 When the biggest cloud providers in the world have issues it’s a good reminder on how hard it is to run technology platforms, at scale, continuously.
 
-In essence, the root cause of Sunday’s disruption was a configuration change that was intended for a small number of servers in a single region. The configuration was incorrectly applied to a larger number of servers across several neighboring regions, and it caused those regions to stop using more than half of their available network capacity.
+> In essence, the root cause of Sunday’s disruption was a configuration change that was intended for a small number of servers in a single region. The configuration was incorrectly applied to a larger number of servers across several neighboring regions, and it caused those regions to stop using more than half of their available network capacity.
 
 Sounds similar to other big outages, unintended consequences of a change or accidental scoping of a change. These changes come from expert administrators, so the machines follow the direction. I don't think it'll be that long before we build some skepticism into our platforms to not always trust even an expert administrators direction if the scope of that change is large.
 
@@ -164,7 +164,7 @@ We have had amazing success with Snowflake and it’s great to see that it is no
 
 This looks like a compelling DNS service.
 
-The first cloud-based private DNS service that gives you full control over what is allowed and what is blocked on the Internet.
+> The first cloud-based private DNS service that gives you full control over what is allowed and what is blocked on the Internet.
 
 [I’m still leaning towards using Pi-hole](https://pi-hole.net) .
 
@@ -176,7 +176,7 @@ This may have [convinced me to jump into Pi-hole](https://pi-hole.net) and bette
 
 This is really cool and fun to play with.
 
-A People Map of the US, where city names are replaced by their most Wikipedia’ed resident: people born in, lived in, or connected to a place.
+> A People Map of the US, where city names are replaced by their most Wikipedia’ed resident: people born in, lived in, or connected to a place.
 
 it’s very interesting to drill down to towns you know and see the names highlighted.
 

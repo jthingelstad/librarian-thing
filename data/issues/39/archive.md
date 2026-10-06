@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/39/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-3-2018/
 domains: []
 links: []
-word_count: 1682
+word_count: 1695
 ---
 I've been thinking 🤔 that making links easier to go through would be an improvement to the Weekly Thing, both for you the reader, and for me the author! I've had to manually deal with blockquotes that I put into the links (and sometimes miss some). I figured out how to move the links section to [some Python 🐍 code in Pythonista](http://omz-software.com/pythonista/)  and with that I got it to format the content better (yeah for me!) and even better I now put the links into groups by topics! This will make it easier for you the reader to see what you like, and importantly, skip what isn't interesting to you. 👍
 
@@ -28,13 +28,13 @@ Lake Calhoun, Minneapolis, MN
 
 Long article that goes into classifying the different types of network effects that businesses can achieve.
 
-Our three-year study, which we released recently, shows that nfx are responsible for 70% of the value created by tech companies since the Internet became a thing in 1994. Even though they are only a minority of companies, companies with nfx end up creating the lion’s share of the value.
+> Our three-year study, which we released recently, shows that nfx are responsible for 70% of the value created by tech companies since the Internet became a thing in 1994. Even though they are only a minority of companies, companies with nfx end up creating the lion’s share of the value.
 
 Understanding if you have a network effect is neat, but the type of network effect is critical to understanding how to take full advantage of it.
 
 ### [Old School Management Techniques That Still Matter | Robert Blogs Here](http://robertspeer.com/old-school-management-techniques-that-still-matter/)
 
-In response to my expert fatigue, I’ve compiled a list of my favorite old school management techniques. Included are the stories of the folks that told me about them.
+> In response to my expert fatigue, I’ve compiled a list of my favorite old school management techniques. Included are the stories of the folks that told me about them.
 
 Some good stuff in here to adopt and fold into your management practices.
 
@@ -42,7 +42,7 @@ Some good stuff in here to adopt and fold into your management practices.
 
 Interesting to see some analysis on being distracted in meetings and the tone it sets.
 
-This sends the signal, “It’s OK to not pay attention.” Managers that frequently send emails during meetings are, according to our analysis, are 2.2 times more likely to have direct reports who also multi-task in meetings.
+> This sends the signal, “It’s OK to not pay attention.” Managers that frequently send emails during meetings are, according to our analysis, are 2.2 times more likely to have direct reports who also multi-task in meetings.
 
 This makes a lot of sense. I try to stay focused and not get distracted in meetings, and this gives even more reason to make that a priority.
 
@@ -52,7 +52,7 @@ This makes a lot of sense. I try to stay focused and not get distracted in meeti
 
 I've been exploring meditation and through that have gotten some exposure to mental noting.
 
-In contrast to most thinking, noting is not discursive. It does not involve analysis or judgment. Rather, we simply give our current experience a one-word label. For example, upon hearing a sound we note ‘hearing’ without thinking further about the sound. Other common mental notes are ‘seeing’, ‘touching’, ‘feeling’, and ‘thinking’.
+> In contrast to most thinking, noting is not discursive. It does not involve analysis or judgment. Rather, we simply give our current experience a one-word label. For example, upon hearing a sound we note ‘hearing’ without thinking further about the sound. Other common mental notes are ‘seeing’, ‘touching’, ‘feeling’, and ‘thinking’.
 
 I've found this to be an interesting technique and even apply it to thoughts beyond meditation. I’m a novice to be sure at it but the concept is interesting. 🧘‍♂️
 
@@ -62,7 +62,7 @@ I've found this to be an interesting technique and even apply it to thoughts bey
 
 This looks pretty handy. Small and lightweight, very easy to implement.
 
-Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to take over your entire front-end—in fact, it's not concerned with rendering HTML at all. Instead, it's designed to augment your HTML with just enough behavior to make it shine.
+> Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to take over your entire front-end—in fact, it's not concerned with rendering HTML at all. Instead, it's designed to augment your HTML with just enough behavior to make it shine.
 
 ## Social Media
 
@@ -72,11 +72,11 @@ Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to tak
 
 ### [With teen mental health deteriorating over five years, there's a likely culprit](https://theconversation.com/with-teen-mental-health-deteriorating-over-five-years-theres-a-likely-culprit-86996)
 
-What happened so that so many more teens, in such a short period of time, would feel depressed, attempt suicide and commit suicide? After scouring several large surveys of teens for clues, I found that all of the possibilities traced back to a major change in teens’ lives: the sudden ascendance of the smartphone.
+> What happened so that so many more teens, in such a short period of time, would feel depressed, attempt suicide and commit suicide? After scouring several large surveys of teens for clues, I found that all of the possibilities traced back to a major change in teens’ lives: the sudden ascendance of the smartphone.
 
 Oh no. It is really hard to separate the smartphone and social media.
 
-Those who avoided Facebook reported feeling less depressed at the end of the week.
+> Those who avoided Facebook reported feeling less depressed at the end of the week.
 
 🤔
 
@@ -84,7 +84,7 @@ Those who avoided Facebook reported feeling less depressed at the end of the wee
 
 Hey look, more people quitting Twitter.
 
-After some reflection, I’ve concluded that even posting to Twitter is just providing content to a platform for hate and anger. I can’t fix that problem, but I can stop contributing to the platform. And so I will.
+> After some reflection, I’ve concluded that even posting to Twitter is just providing content to a platform for hate and anger. I can’t fix that problem, but I can stop contributing to the platform. And so I will.
 
 This is the argument that I can't square myself.
 
@@ -92,7 +92,7 @@ This is the argument that I can't square myself.
 
 A high-profile Twitter user signing off.
 
-I’m frequently approached by colleagues, usually women, who ask me about quitting Twitter with hushed titillation, as if I’ve escaped a cult or broken a particularly seductive taboo.
+> I’m frequently approached by colleagues, usually women, who ask me about quitting Twitter with hushed titillation, as if I’ve escaped a cult or broken a particularly seductive taboo.
 
 🤔
 
@@ -110,7 +110,7 @@ We've been doing some testing with this and the performance has been very impres
 
 [Reminds me of the Agile Manifesto](http://agilemanifesto.org) , but for Chaos Engineering:
 
-Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production.
+> Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production.
 
 ### [Above Avalon: Apple Watch Is a Bridge to the Future](https://www.aboveavalon.com/notes/2018/1/23/apple-watch-is-a-bridge-to-the-future)
 
@@ -120,7 +120,7 @@ Interesting theory on how Apple may be thinking about the Apple Watch and the we
 
 Yet another regular expression tool in your browser. This one has a cool visual aspect.
 
-The images generated by Regexper are commonly referred to as "Railroad Diagrams". These diagram are a straight-forward way to illustrate what can sometimes become very complicated processing in a regular expression, with nested looping and optional elements.
+> The images generated by Regexper are commonly referred to as "Railroad Diagrams". These diagram are a straight-forward way to illustrate what can sometimes become very complicated processing in a regular expression, with nested looping and optional elements.
 
 ## Culture
 
@@ -128,7 +128,7 @@ The images generated by Regexper are commonly referred to as "Railroad Diagrams"
 
 Wow, this is pretty interesting and seems like it would be useful.
 
-Visualizing user attitudes and behaviors in an empathy map helps UX teams align on a deep understanding of end users. The mapping process also reveals any holes in existing user data.
+> Visualizing user attitudes and behaviors in an empathy map helps UX teams align on a deep understanding of end users. The mapping process also reveals any holes in existing user data.
 
 In the DevOps movement there is a lot of discussion of empathy. I've personally put teams or projects together to specifically encourage developing empathy. A tool that you can use to map out empathy seems like it would be very useful.
 
@@ -144,7 +144,7 @@ In the DevOps movement there is a lot of discussion of empathy. I've personally 
 
 Very funny introduction to Minnesota for Super Bowl visitors from Surly.
 
-Welcome to Minnesota. You probably have a lot of questions. We don’t blame you. It’s cold (it’s been colder, as someone already told you) and there are giant piles of snow and people keep talking about “Juicy Lucy” and you don’t even know a Lucy. Here’s what we can tell you.
+> Welcome to Minnesota. You probably have a lot of questions. We don’t blame you. It’s cold (it’s been colder, as someone already told you) and there are giant piles of snow and people keep talking about “Juicy Lucy” and you don’t even know a Lucy. Here’s what we can tell you.
 
 ## Productivity
 

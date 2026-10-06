@@ -98,7 +98,7 @@ links:
   domain: 512pixels.net
   heading_context: '[Andrew Levitt Recreates Catalina Wallpaper – 512 Pixels](https://512pixels.net/2019/11/andrew-levitt-recreates-catalina-wallpaper/)'
   section: Notable Links 📌
-word_count: 2103
+word_count: 2122
 ---
 I spent this last week visiting our team in Kyiv, Ukraine. 🇺🇦 I was traveling with three others, two of whom had never been there before. We had some time on Sunday and we explored the city on foot for a while. It was great to see more of Kyiv. When people come to Kyiv they usually say it isn't what they were expecting. It’s a great European style city growing like crazy! Unofficially, some 5 million people.
 
@@ -108,7 +108,7 @@ I spent this last week visiting our team in Kyiv, Ukraine. 🇺🇦 I was travel
 
 Newport is taking a number of different threads here and putting them together well. The idea of deliberate practice was something I read about in Peak: Secrets [from the New Science of Expertise](https://www.goodreads.com/book/show/26312997-peak) and appreciated a lot.
 
-In fact, the more elite the player, the more pronounced the peaks. For the best of the best — the subset of the elites who the professors thought would go on to play in one of Germany’s two best professional orchestras — there was essentially no deviation from a rigid two-sessions a day schedule.
+> In fact, the more elite the player, the more pronounced the peaks. For the best of the best — the subset of the elites who the professors thought would go on to play in one of Germany’s two best professional orchestras — there was essentially no deviation from a rigid two-sessions a day schedule.
 
 It’s not the total duration that matters as much as the duration times the focus. Lots of time spent messing around will not move you forward.
 
@@ -133,7 +133,7 @@ I was just talking about competency and skills inventories with the leader of ou
 
 I can completely get behind this idea.
 
-But if we don’t ban ads outright, why ban targeting? Because everyone should see what political advertisers are doing. I don’t want political advertisers showing one message to Democrats and another to Republicans, or one to men and another to women, or one to people who clicked on a website about abortion and another to those who visited a site about guns.
+> But if we don’t ban ads outright, why ban targeting? Because everyone should see what political advertisers are doing. I don’t want political advertisers showing one message to Democrats and another to Republicans, or one to men and another to women, or one to people who clicked on a website about abortion and another to those who visited a site about guns.
 
 I agree with the thesis. You can go ahead and advertise whatever you want, but it needs to be in the open where a lot of people can see it. I like the idea of only targeting by geography. That makes sense for political messages. But you shouldn't be able to send some dark message to only your followers.
 
@@ -141,7 +141,7 @@ I agree with the thesis. You can go ahead and advertise whatever you want, but i
 
 I feel a connection with bison. You can see farmed bison pretty easily where I grew up in North Dakota. Their ruggedness and strength have always appealed to me. I often refer to them as my Spirit animal.
 
-Their actions change the landscape. In areas where bison graze, plants contain 50 to 90 percent more nutrients by the end of the summer. This not only provides extra nourishment for other grazers, but prolongs the growing season of the plants themselves.
+> Their actions change the landscape. In areas where bison graze, plants contain 50 to 90 percent more nutrients by the end of the summer. This not only provides extra nourishment for other grazers, but prolongs the growing season of the plants themselves.
 
 Amazing to hear how they impacted the land so positively as well.
 
@@ -161,7 +161,7 @@ This is a good step for Google to take, and I like that it puts some pressure on
 
 The history of coffee, and its spread around the world, is fascinating.
 
-In the coffee houses they were introduced to ideas that spelled trouble for the Ottoman state: rebellion, self-determination and the fallibility of the powerful.
+> In the coffee houses they were introduced to ideas that spelled trouble for the Ottoman state: rebellion, self-determination and the fallibility of the powerful.
 
 [I watched Black Coffee](https://www.imdb.com/title/tt0963976/) several years ago and it asserts a similar path for the French Revolution as well. ☕️
 
@@ -169,7 +169,7 @@ In the coffee houses they were introduced to ideas that spelled trouble for the 
 
 I'd agree with the leader here.
 
-Majorities think their personal data is less secure now, that data collection poses more risks than benefits, and believe it is not possible to go through daily life without being tracked.
+> Majorities think their personal data is less secure now, that data collection poses more risks than benefits, and believe it is not possible to go through daily life without being tracked.
 
 So basically I take from this article that American's went from first not caring about our privacy, to not understanding, to giving up.
 
@@ -177,11 +177,11 @@ So basically I take from this article that American's went from first not caring
 
 Good [overview from the author of Linkerd](https://linkerd.io/) .
 
-If you’re encountering the idea of service mesh for the first time, you can be forgiven if your first reaction is mild horror. The design of the service mesh means that not only does it add latency to your application, it also consumes resources and also introduces a whole bunch of machinery. One minute you’re installing a service mesh, the next you’re suddenly on the hook for operating hundreds or thousands of proxies. Why would anyone want to do this?
-
-There are two parts to the answer. The first is that the operational cost of deploying these proxies can be greatly reduced, thanks to some other changes that are happening in the ecosystem. Lots more on that later.
-
-The more important answer is because this design is actually a great way to introduce additional logic into the system. That’s not only because there are a ton of features you can add right there, but also because you can add them without changing the ecosystem. In fact, the entire service mesh model is predicated on this very insight: that, in a multi-service system, regardless of what individual services actually do, the traffic between them is an ideal insertion point for functionality.
+> If you’re encountering the idea of service mesh for the first time, you can be forgiven if your first reaction is mild horror. The design of the service mesh means that not only does it add latency to your application, it also consumes resources and also introduces a whole bunch of machinery. One minute you’re installing a service mesh, the next you’re suddenly on the hook for operating hundreds or thousands of proxies. Why would anyone want to do this?
+>
+> There are two parts to the answer. The first is that the operational cost of deploying these proxies can be greatly reduced, thanks to some other changes that are happening in the ecosystem. Lots more on that later.
+>
+> The more important answer is because this design is actually a great way to introduce additional logic into the system. That’s not only because there are a ton of features you can add right there, but also because you can add them without changing the ecosystem. In fact, the entire service mesh model is predicated on this very insight: that, in a multi-service system, regardless of what individual services actually do, the traffic between them is an ideal insertion point for functionality.
 
 Service mesh is on [a maximum in the hype cycle](https://en.wikipedia.org/wiki/Hype_cycle) .
 
@@ -197,9 +197,9 @@ An active community site to share Shortcuts. There are some great ready-to-use t
 
 How is it that even with HIPPA and other regulatory requirements in place this still happened?
 
-What AI algorithms were at work in real time as the data was being transferred across from hospital groups to the search giant? What was Google planning to do with the data they were being given access to? No-one seemed to know.
-
-Above all: why was the information being handed over in a form that had not been “de-identified” – the term the industry uses for removing all personal details so that a patient’s medical record could not be directly linked back to them? And why had no patients and doctors been told what was happening?
+> What AI algorithms were at work in real time as the data was being transferred across from hospital groups to the search giant? What was Google planning to do with the data they were being given access to? No-one seemed to know.
+>
+> Above all: why was the information being handed over in a form that had not been “de-identified” – the term the industry uses for removing all personal details so that a patient’s medical record could not be directly linked back to them? And why had no patients and doctors been told what was happening?
 
 Medical data isn't something I want Google to ever have their hands on.
 
@@ -217,15 +217,17 @@ Something about this makes me smile and grin. 😀
 
 Sounds great, and I’m having fun trying to virtually follow #KubeCon. Maybe next year I can join the fun!
 
-Packed house listening to [AuthN and AuthZ from the @Yelp](https://twitter.com/Yelp?ref_src=twsrc%5Etfw) team sharing their ServiceMesh security story. This is a great talk to think through security requirements you’re trying to solve for with your [mesh. I recommend the video! #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) [pic.twitter.com/O09hKm80G2](https://t.co/O09hKm80G2)
-### [— Andy Domeier (@AndyJD_) November 21, 2019](https://twitter.com/AndyJD_/status/1197594117695406080?ref_src=twsrc%5Etfw)
+> Packed house listening to [AuthN and AuthZ from the @Yelp](https://twitter.com/Yelp?ref_src=twsrc%5Etfw) team sharing their ServiceMesh security story. This is a great talk to think through security requirements you’re trying to solve for with your [mesh. I recommend the video! #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) [pic.twitter.com/O09hKm80G2](https://t.co/O09hKm80G2)
+>
+> [— Andy Domeier (@AndyJD_) November 21, 2019](https://twitter.com/AndyJD_/status/1197594117695406080?ref_src=twsrc%5Etfw)
 
 ### [Thursday @ 7:16 PM](https://www.thingelstad.com/2019/11/21/great-to-see.html)
 
 Great to see #TeamSPS wrapping up a fantastic trip to #KubeCon!
 
-It's incredibly hard to leave [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) in sunny San Diego. I wish it was here every year! [#TeamSPS](https://twitter.com/hashtag/TeamSPS?src=hash&ref_src=twsrc%5Etfw) had an awesome trip filled with tons of learning and new friends. Cheers to the continued [growth of a great community! pic.twitter.com/awKFrxse4w](https://t.co/awKFrxse4w)
-### [— Andy Domeier (@AndyJD_) November 22, 2019](https://twitter.com/AndyJD_/status/1197672951581040641?ref_src=twsrc%5Etfw)
+> It's incredibly hard to leave [#KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) in sunny San Diego. I wish it was here every year! [#TeamSPS](https://twitter.com/hashtag/TeamSPS?src=hash&ref_src=twsrc%5Etfw) had an awesome trip filled with tons of learning and new friends. Cheers to the continued [growth of a great community! pic.twitter.com/awKFrxse4w](https://t.co/awKFrxse4w)
+>
+> [— Andy Domeier (@AndyJD_) November 22, 2019](https://twitter.com/AndyJD_/status/1197672951581040641?ref_src=twsrc%5Etfw)
 
 ### [Thursday @ 3:10 PM](https://www.thingelstad.com/2019/11/21/international-business-travel.html)
 
@@ -253,8 +255,9 @@ Wrapped up another great trip in Kyiv with #TeamSPS Ukraine! 🇺🇦 Time to he
 
 Kubernetes on jets? Neat!
 
-I have to say, I’m [really blown away by the #DOD](https://twitter.com/hashtag/DOD?src=hash&ref_src=twsrc%5Etfw) [talk at #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) ! Really impressive to see the stacks they are using. "We don't run huge clusters, we run many little clusters, weapon systems, business systems, etc… " They are even running [#kubernetes](https://twitter.com/hashtag/kubernetes?src=hash&ref_src=twsrc%5Etfw) [#istio](https://twitter.com/hashtag/istio?src=hash&ref_src=twsrc%5Etfw) on jets! [pic.twitter.com/HwmTFi0Qrt](https://t.co/HwmTFi0Qrt)
-### [— Andy Domeier (@AndyJD_) November 19, 2019](https://twitter.com/AndyJD_/status/1196882449289998336?ref_src=twsrc%5Etfw)
+> I have to say, I’m [really blown away by the #DOD](https://twitter.com/hashtag/DOD?src=hash&ref_src=twsrc%5Etfw) [talk at #KubeCon](https://twitter.com/hashtag/KubeCon?src=hash&ref_src=twsrc%5Etfw) ! Really impressive to see the stacks they are using. "We don't run huge clusters, we run many little clusters, weapon systems, business systems, etc… " They are even running [#kubernetes](https://twitter.com/hashtag/kubernetes?src=hash&ref_src=twsrc%5Etfw) [#istio](https://twitter.com/hashtag/istio?src=hash&ref_src=twsrc%5Etfw) on jets! [pic.twitter.com/HwmTFi0Qrt](https://t.co/HwmTFi0Qrt)
+>
+> [— Andy Domeier (@AndyJD_) November 19, 2019](https://twitter.com/AndyJD_/status/1196882449289998336?ref_src=twsrc%5Etfw)
 
 ### [Tuesday @ 10:01 AM](https://www.thingelstad.com/2019/11/19/fantastic-growth-summit.html)
 

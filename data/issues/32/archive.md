@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/32/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-16-2017/
 domains: []
 links: []
-word_count: 2100
+word_count: 2123
 ---
 With this weeks vote by the FCC to eliminate net neutrality protections I want to turn your [attention to the Electronic Frontier Foundation](https://www.eff.org/) . I've been a member of the EFF for many years and I think their mission is getting more important, particularly since the government seems to not think this matters.
 
@@ -76,7 +76,9 @@ This has a good writeup on the Maker v. Manager subject that Paul Graham origina
 
 ### [Time Well Spent](http://www.timewellspent.io/)
 
-We are building a new organization dedicated to reversing the digital attention crisis and realigning technology with humanity's best interests. Sounds like a good idea!
+> We are building a new organization dedicated to reversing the digital attention crisis and realigning technology with humanity's best interests.
+
+Sounds like a good idea!
 
 ### [SEC.gov | Statement on Cryptocurrencies and Initial Coin Offerings](https://www.sec.gov/news/public-statement/statement-clayton-2017-12-11)
 
@@ -152,7 +154,9 @@ Datadog did some interesting aggregated statistics [on container practices insid
 
 ### [By the Time I Get to Phoenix - Wikipedia](https://en.wikipedia.org/wiki/By_the_Time_I_Get_to_Phoenix)
 
-This is fabulous story about [this song. Thanks to Steve Yaeger](https://twitter.com/SteveYaeger) for the introduction to this. 👍 However, the drive is actually possible, driving at an average of about 65 mph. If he leaves Los Angeles around midnight, he can drive the 373 miles to Phoenix in about six hours to arrive when she "rises" at 6:00 am. If she "stops at lunch" to "give him a call" at 12:30 p.m. when he is in Albuquerque, it gives him six-and-a-half hours to make the 420-mile drive. The drive from Albuquerque to the Oklahoma border is about 390 miles, giving her plenty of time to get home and go to sleep.
+This is fabulous story about [this song. Thanks to Steve Yaeger](https://twitter.com/SteveYaeger) for the introduction to this. 👍
+
+> However, the drive is actually possible, driving at an average of about 65 mph. If he leaves Los Angeles around midnight, he can drive the 373 miles to Phoenix in about six hours to arrive when she "rises" at 6:00 am. If she "stops at lunch" to "give him a call" at 12:30 p.m. when he is in Albuquerque, it gives him six-and-a-half hours to make the 420-mile drive. The drive from Albuquerque to the Oklahoma border is about 390 miles, giving her plenty of time to get home and go to sleep.
 
 ---
 

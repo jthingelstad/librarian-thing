@@ -74,7 +74,7 @@ links:
   domain: www.redbull.com
   heading_context: '[Red Bull Trans-Siberian Extreme](https://www.redbull.com/us-en/events/red-bull-trans-siberian-extreme)'
   section: Notable Links 📌
-word_count: 1362
+word_count: 1365
 ---
 This week has been challenging on a couple of fronts. [The news of David Hussman's passing](https://www.caringbridge.org/visit/davidhussman2/journal/view/id/5b798405ec1003404f0f1ee1) spread quickly this last weekend. 😢 I've [lost one other friend to cancer](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/) , and he also seemed to be doing better than expected for a long time, and then his health went downhill very quickly. I don't know if that is common with cancer, but it feels like it is tricking you.
 
@@ -94,7 +94,7 @@ The last time I saw my friend David Hussman we met at Red Wagon Pizza and enjoye
 
 The scale of this effort at Netflix is amazing.
 
-Every day more than 1 trillion events are written into a streaming ingestion pipeline, which is processed and written to a 100PB cloud-native data warehouse. And every day, our users run more than 150,000 jobs against this data, spanning everything from reporting and analysis to machine learning and recommendation algorithms.
+> Every day more than 1 trillion events are written into a streaming ingestion pipeline, which is processed and written to a 100PB cloud-native data warehouse. And every day, our users run more than 150,000 jobs against this data, spanning everything from reporting and analysis to machine learning and recommendation algorithms.
 
 [I haven't used Jupyter](http://jupyter.org) but it looks really compelling. I like how Netflix is using them for the exploration, as well as putting them into production pipelines.
 
@@ -120,7 +120,7 @@ There is some very good thinking here on how to bring agility to organizations.
 
 I have tried a surprisingly large number of iPad note taking apps to use with the Apple Pencil, and I agree with Reitz's conclusion.
 
-Apple Notes is hands-down the most well–designed, thought–through note taking app available for the iPad Pro. It is exceptionally well designed, and if you leave your preconceptions about what a note–taking app should do, I think you'll find yourself agreeing with me, once you give it a real try/chance.
+> Apple Notes is hands-down the most well–designed, thought–through note taking app available for the iPad Pro. It is exceptionally well designed, and if you leave your preconceptions about what a note–taking app should do, I think you'll find yourself agreeing with me, once you give it a real try/chance.
 
 He didn’t mention it in his writeup, but Notes also does limited handwriting recognition as well, which allows searching of notes if your handwriting is legible.
 
@@ -128,7 +128,7 @@ He didn’t mention it in his writeup, but Notes also does limited handwriting r
 
 What a great essay from Annie Mueller!
 
-Energy is the currency of the universe. You don’t do anything to deserve it and you’re free to spend it however you want. I just want you think about it. What do you want? Is that what you’re getting? What bargains have you made?
+> Energy is the currency of the universe. You don’t do anything to deserve it and you’re free to spend it however you want. I just want you think about it. What do you want? Is that what you’re getting? What bargains have you made?
 
 Energy is necessary for everything, just like time. Time without energy isn't worth much. 🤔
 

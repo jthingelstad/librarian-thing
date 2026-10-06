@@ -27,7 +27,7 @@ links:
   domain: journals.plos.org
   heading_context: '[How much is social media worth? Estimating the value of Facebook by paying users to stop using it](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0207101)'
   section: Notable Links 📌
-word_count: 1465
+word_count: 1471
 ---
 It's just a couple more days until Christmas and 2018 is now winding down. The Christmas Cards have been sent, the presents are ready, and we will be enjoying time with family and friends as we celebrate the holidays, enjoy our traditions, open presents and spend time together. That last one is particularly important. 🎁👨‍👩‍👧‍👦
 
@@ -37,7 +37,7 @@ It's just a couple more days until Christmas and 2018 is now winding down. The C
 
 An absolutely delightful article for Christmas on NORAD and Santa Claus… 🎄
 
-This year, 1,500 volunteers at Peterson Air Force Base in Colorado Springs will, once again, answer over 150,000 telephone calls and thousands of emails from children all over the world. And the NORAD Santa Tracker itself will receive over 20 million visits.
+> This year, 1,500 volunteers at Peterson Air Force Base in Colorado Springs will, once again, answer over 150,000 telephone calls and thousands of emails from children all over the world. And the NORAD Santa Tracker itself will receive over 20 million visits.
 
 [🎅 Via Chad Burdette](https://www.linkedin.com/in/strategyanddatawins/) .
 
@@ -45,7 +45,7 @@ This year, 1,500 volunteers at Peterson Air Force Base in Colorado Springs will,
 
 Insect colonies do some pretty incredible things:
 
-The Finnish myrmecologist Rainer Rosengren showed that when the ants emerge in the spring, an older ant goes out with a young one along the older ant’s habitual trail. The older ant dies and the younger ant adopts that trail as its own, thus leading the colony to remember, or reproduce, the previous year’s trails.
+> The Finnish myrmecologist Rainer Rosengren showed that when the ants emerge in the spring, an older ant goes out with a young one along the older ant’s habitual trail. The older ant dies and the younger ant adopts that trail as its own, thus leading the colony to remember, or reproduce, the previous year’s trails.
 
 [My book club](https://rwbook.club/) [read Ant Encounters](https://www.goodreads.com/book/show/8895494-ant-encounters) several years ago and it had several incredibly interesting insights into how ant colonies work and learn.
 
@@ -63,7 +63,7 @@ Red Rabbit, Minneapolis, MN
 
 ## Oh my…
 
-Though the populations sampled and the auction design differ across the experiments, we consistently find the average Facebook user would require more than $1000 to deactivate their account for one year.
+> Though the populations sampled and the auction design differ across the experiments, we consistently find the average Facebook user would require more than $1000 to deactivate their account for one year.
 
 🤦‍♂️
 
@@ -71,7 +71,7 @@ Though the populations sampled and the auction design differ across the experime
 
 This should surprise nobody.
 
-For years, Facebook gave some of the world’s largest technology companies more intrusive access to users’ personal data than it has disclosed, effectively exempting those business partners from its usual privacy rules, according to internal records and interviews.
+> For years, Facebook gave some of the world’s largest technology companies more intrusive access to users’ personal data than it has disclosed, effectively exempting those business partners from its usual privacy rules, according to internal records and interviews.
 
 Facebook is a surveillance engine, not a company or a social network. It’s goal is to surveil you and to profit from that. Preferably addict you as well.
 
@@ -91,7 +91,7 @@ Some acquisition news from SPS Commerce! 👍
 
 Instagram doesn't get the focus that Facebook does regarding potential misuse, but it should. And please remember, it’s all just Facebook since they bought Instagram.
 
-The new research also points to the previously underappreciated prominence of the IRA's use of Instagram. It notes that IRA posts on the photo-sharing platform received 187 million engagements, which dwarfed the 76.5 million engagements that IRA posts received on Facebook.
+> The new research also points to the previously underappreciated prominence of the IRA's use of Instagram. It notes that IRA posts on the photo-sharing platform received 187 million engagements, which dwarfed the 76.5 million engagements that IRA posts received on Facebook.
 
 That's pretty amazing engagement.
 
@@ -111,7 +111,7 @@ Tim Bray's [entire set of essays on Serverless](https://www.tbray.org/ongoing/Wh
 
 The headline here is intentionally overstated. Technology companies file patents constantly for stuff that they have no plan to make. With that said, the patent described here is straight out of some Orwellian surveillance state.
 
-Imagine if a neighborhood was set up with these doorbell cameras. Simply walking up to a friend’s house could result in your face, your fingerprint, or your voice being flagged as “suspicious” and delivered to a government database without your knowledge or consent. With Amazon selling the devices, operating the servers, and pushing the technology on law enforcement, the company is building all the pieces of a surveillance network, reaching from the government all the way to our front doors.
+> Imagine if a neighborhood was set up with these doorbell cameras. Simply walking up to a friend’s house could result in your face, your fingerprint, or your voice being flagged as “suspicious” and delivered to a government database without your knowledge or consent. With Amazon selling the devices, operating the servers, and pushing the technology on law enforcement, the company is building all the pieces of a surveillance network, reaching from the government all the way to our front doors.
 
 It’s not obvious to most people that a bunch of houses with fancy "smart doorbells" can result in a surveillance state, but it surely can.
 

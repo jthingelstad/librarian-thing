@@ -79,7 +79,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Developer Demos HomeKit’s New Integration with Smart TVs — MacStories](https://www.macstories.net/linked/developer-demos-homekits-new-integration-with-smart-tvs/)'
   section: Notable Links 📌
-word_count: 1720
+word_count: 1723
 ---
 We survived the deep freeze! 🥶 We had three days with the temperature between -27°F (-32.7°C) and -15°F (-26°C), for the high! Wind chills were something silly, like -50°F. I can't remember school ever being cancelled for four days in a row. I know it's particularly old man of me to say, but I don't think it was like that when I was a kid. 👴 The kids stayed home and got a bit of cabin fever. It reminded me when I was a kid in Minot, ND and we made the national news because the wind chill was -102°F! I think they cancelled school, that one day. Just sayin'... 👀
 
@@ -99,7 +99,7 @@ Hack the Gap hosted their 5th annual Hackathon for women and non-binary individu
 
 This is absolutely brilliant.
 
-Normally, human technicians spend hours working with amputees to manually adjust robotic limbs to work well with each person’s style of walking. By comparison, the reinforcement-learning technique automatically tuned a robotic knee, enabling the prosthetic wearers to walk smoothly on level ground within 10 minutes.
+> Normally, human technicians spend hours working with amputees to manually adjust robotic limbs to work well with each person’s style of walking. By comparison, the reinforcement-learning technique automatically tuned a robotic knee, enabling the prosthetic wearers to walk smoothly on level ground within 10 minutes.
 
 Use AI to get the computer to adapt to the human faster! 💙
 
@@ -145,7 +145,7 @@ There are a few people who subscribe to this newsletter via Stoop. I haven't tri
 
 I’m a proud supporter of the EFF.
 
-Zuckerberg ends his op-ed with a call for government regulation codifying the principles of "transparency, choice, and control." But in reality, Facebook is tirelessly fighting against laws that might do just that: it is actively battling to [undermine Illinois’ Biometric Information Privacy Act](https://www.eff.org/deeplinks/2018/12/eff-appellate-court-protect-biometric-privacy) in court, and the Internet Association, of which Facebook is a member, has asked California legislators to [weaken the California Consumer Privacy Act](https://www.eff.org/deeplinks/2018/12/facebooks-latest-scandal-shows-we-need-stronger-privacy-laws) , and is pushing for a national law only if it "preempts" and [rolls back those vital state protections](https://www.eff.org/deeplinks/2018/09/game-rigged-congress-invites-no-consumer-privacy-advocates-its-consumer-privacy) .
+> Zuckerberg ends his op-ed with a call for government regulation codifying the principles of "transparency, choice, and control." But in reality, Facebook is tirelessly fighting against laws that might do just that: it is actively battling to [undermine Illinois’ Biometric Information Privacy Act](https://www.eff.org/deeplinks/2018/12/eff-appellate-court-protect-biometric-privacy) in court, and the Internet Association, of which Facebook is a member, has asked California legislators to [weaken the California Consumer Privacy Act](https://www.eff.org/deeplinks/2018/12/facebooks-latest-scandal-shows-we-need-stronger-privacy-laws) , and is pushing for a national law only if it "preempts" and [rolls back those vital state protections](https://www.eff.org/deeplinks/2018/09/game-rigged-congress-invites-no-consumer-privacy-advocates-its-consumer-privacy) .
 
 Follow the money.
 

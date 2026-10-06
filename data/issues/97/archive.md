@@ -57,7 +57,7 @@ links:
   domain: securitydiscovery.com
   heading_context: '[800+ Million Emails Leaked Online by Email Verification Service - Security Discovery](https://securitydiscovery.com/800-million-emails-leaked-online-by-email-verification-service/)'
   section: Notable Links 📌
-word_count: 1167
+word_count: 1173
 ---
 This [week we got our Peloton Bike](https://www.onepeloton.com/bike) [and Tread](https://www.onepeloton.com/tread) delivered. We decided to update our home exercise equipment and Tammy and I both found the gear very impressive, and the live classes online very engaging. I’ve already gotten a couple of rides in and like it a lot. In some ways it’s a better spin class experience than a class in a studio! I love that you can see your performance live with everyone else taking the class. If you are on Peloton, connect with me — my username is jthingelstad!
 
@@ -67,15 +67,15 @@ This [week we got our Peloton Bike](https://www.onepeloton.com/bike) [and Tread]
 
 Interesting analysis of well-known business school MBA's and how CEOs with those credentials do in public companies.
 
-But regression results suggest a different result entirely. We tagged CEOs by the MBA programs they attended, formed monthly portfolios of companies broken down by the business school each CEO attended, and compared the returns of these portfolios to the broader market.
-
-We found no statistically significant alphas — despite testing every possible school with a reasonable sample size. MBA programs simply do not produce CEOs who are better at running companies, if performance is measured by stock price return.
+> But regression results suggest a different result entirely. We tagged CEOs by the MBA programs they attended, formed monthly portfolios of companies broken down by the business school each CEO attended, and compared the returns of these portfolios to the broader market.
+>
+> We found no statistically significant alphas — despite testing every possible school with a reasonable sample size. MBA programs simply do not produce CEOs who are better at running companies, if performance is measured by stock price return.
 
 What about bankers and consultants?
 
-Lastly, we looked at how CEOs who had previously worked at investment banks and elite consulting firms performed. If Jensen’s core thesis were true, we would expect CEOs with these elite credentials to outperform the market.
-
-We thus formed monthly portfolios for bankers and consultants. As we did with MBAs, we then ran industry-controlled Fama-French three-factor regressions. The result: Neither bankers nor consultants produced statistically significant alphas. We also back-tested portfolios designed to favor ex-bankers and consultants and found no significant edge (though consultants had a statistically insignificant edge on bankers).
+> Lastly, we looked at how CEOs who had previously worked at investment banks and elite consulting firms performed. If Jensen’s core thesis were true, we would expect CEOs with these elite credentials to outperform the market.
+>
+> We thus formed monthly portfolios for bankers and consultants. As we did with MBAs, we then ran industry-controlled Fama-French three-factor regressions. The result: Neither bankers nor consultants produced statistically significant alphas. We also back-tested portfolios designed to favor ex-bankers and consultants and found no significant edge (though consultants had a statistically insignificant edge on bankers).
 
 🤔
 

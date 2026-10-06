@@ -104,7 +104,7 @@ links:
   domain: arstechnica.com
   heading_context: '[This full video shows just how bonkers the VW Pikes Peak record was | Ars Technica](https://arstechnica.com/cars/2018/07/this-full-video-shows-just-how-bonkers-the-vw-pikes-peak-record-was/)'
   section: Notable Links 📌
-word_count: 2093
+word_count: 2098
 ---
 Tammy and I celebrated 16 years of marriage this week! 💍 We celebrated by going out for the evening, starting with a movie. [We saw Sorry To Bother You](https://www.imdb.com/title/tt5688932/) , which was fun, different and very original. 🎬 We had had [a great dinner at Italian Eatery](http://www.italianeatery.com) . 🍽 Their Bucatini is amazing! We finished our night out with [a puzzle room at Missing Pieces](https://www.missingpiecesmn.com) . [🔐 We did the Ruin Raiders](https://www.missingpiecesmn.com/home/#ruin-raiders) room, and it was just the two of us. If you've never done a puzzle room, I recommend trying one. With only two people sometimes the sheer number of locks and puzzles to solve can be a challenge. The room was perfect though. There was just enough difficulty in the puzzles to make it very fun, but not so hard as to be frustrating.
 
@@ -124,11 +124,11 @@ Good examples of how a little bit of metadata can be used to make highly accurat
 
 This is pretty amazing! Atlassian just gave up in the team chat space.
 
-As part of this partnership, Atlassian will discontinue Hipchat and Stride, and provide a migration path to Slack for all their customers. We are purchasing the IP for Hipchat Cloud and Stride to better support that path to Slack, while Atlassian is making a small, but symbolically important investment in our business.
+> As part of this partnership, Atlassian will discontinue Hipchat and Stride, and provide a migration path to Slack for all their customers. We are purchasing the IP for Hipchat Cloud and Stride to better support that path to Slack, while Atlassian is making a small, but symbolically important investment in our business.
 
 😲 This [Bloomberg article](https://www.bloomberg.com/news/articles/2018-07-26/slack-and-atlassian-team-up-to-take-on-microsoft-in-chat-software) has some of the details on how this went down. I was curious who approached who, and it was Atlassian that approached Slack.
 
-Taking out a competitor is good for Slack, said Butterfield: “There’s fewer choices for people.”
+> Taking out a competitor is good for Slack, said Butterfield: “There’s fewer choices for people.”
 
 Slack has more leverage to raise prices. 💰
 
@@ -170,7 +170,7 @@ I like how Meetup is extending and clarifying the traditional engineering ladder
 
 I’m surprised to see Google doing this so broadly.
 
-Google has not had any of its 85,000+ employees successfully phished on their work-related accounts since early 2017, when it began requiring all employees to use physical Security Keys in place of passwords and one-time codes, the company told KrebsOnSecurity.
+> Google has not had any of its 85,000+ employees successfully phished on their work-related accounts since early 2017, when it began requiring all employees to use physical Security Keys in place of passwords and one-time codes, the company told KrebsOnSecurity.
 
 It seems like there must be some other ways to login. After all, you cannot use a USB token on a mobile phone. 🧐
 
@@ -178,7 +178,7 @@ It seems like there must be some other ways to login. After all, you cannot use 
 
 A good introduction to the service mesh concept.
 
-The service mesh is a dedicated infrastructure layer for handling service-to-service communication in order to make it visible, manageable, and controlled. The exact details of its architecture vary between implementations, but generally speaking, every service mesh is implemented as a series (or a “mesh”) of interconnected network proxies designed to better manage service traffic.
+> The service mesh is a dedicated infrastructure layer for handling service-to-service communication in order to make it visible, manageable, and controlled. The exact details of its architecture vary between implementations, but generally speaking, every service mesh is implemented as a series (or a “mesh”) of interconnected network proxies designed to better manage service traffic.
 
 This is a very busy area as of late with micro-service adoption so high.
 
@@ -209,7 +209,7 @@ https://www.amazon.com/Measure-What-Matters-Google-Foundation/dp/0525536221/
 Measure What Matters: How Google, Bono, and the Gates Foundation Rock the World with OKRs ()
 by John Doerr
 
-Legendary venture capitalist John Doerr reveals how the goal-setting system of Objectives and Key Results (OKRs) has helped tech giants from Intel to Google achieve explosive growth—and how it can help any organization thrive.
+> Legendary venture capitalist John Doerr reveals how the goal-setting system of Objectives and Key Results (OKRs) has helped tech giants from Intel to Google achieve explosive growth—and how it can help any organization thrive.
 
 I'm halfway through this book and I'm having a hard time finishing because I want to take the concepts in it and go put them to work right away. I had heard of OKRs before but I never really dove into them and this book is a wonderful and deep overview of how to put them to work. I find the values and structure very compelling. If you are looking for tools to help align around objectives, at work or otherwise, this is a good model. As an aside, the audiobook for this is a treat as it's read by Doerr and he many of the other people quoted and referenced in the book do their own reading as well. 🎧
 

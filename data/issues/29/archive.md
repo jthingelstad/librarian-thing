@@ -154,7 +154,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)'
   section: Links 📌
-word_count: 2380
+word_count: 2389
 ---
 I want to welcome a bunch of new subscribers to the Weekly Thing -- [Hello! 👋 My friend David Hussman](https://twitter.com/davidhussman) [shared this](https://www.linkedin.com/feed/update/urn:li:activity:6337711918261825537) , and a bunch of new people signed up. 👍 Thank you for all for jumping in, and I hope you enjoy this as much as I enjoy sharing it. (Also, thank you, David!)
 
@@ -179,7 +179,11 @@ Minneapolis MN
 
 ### [CEOs Don’t Steer](https://www.ribbonfarm.com/2017/11/09/ceos-dont-steer/)
 
-Interesting and thought provoking article on the role of a CEO. The primary CEO function, and the trait the good ones are selected for, is to provide the gyroscopic stability required to keep a company vectored in the chosen direction. There is a lot that makes sense in this article, and a lot I’ve seen up close many times. 🤔
+Interesting and thought provoking article on the role of a CEO.
+
+> The primary CEO function, and the trait the good ones are selected for, is to provide the gyroscopic stability required to keep a company vectored in the chosen direction.
+
+There is a lot that makes sense in this article, and a lot I’ve seen up close many times. 🤔
 
 ### [DOES17 San Francisco - How Your Systems Keep Running Day After Day - John Allspaw - YouTube](https://www.youtube.com/watch?v=xA5U85LSk0M)
 
@@ -191,23 +195,41 @@ Very good talk by [John Allspaw](https://www.kitchensoap.com/about-me/) from [DO
 
 ### [Brilliant Jerks in Engineering](http://www.brendangregg.com/blog/2017-11-13/brilliant-jerks.html)
 
-I know a lot of managers in the technology field who would repeat the conclusion in this article. Early on in my career, I supported brilliant jerks of any type and thought they were worth it. I was wrong. I did that too. Always have to think about the team impact.
+I know a lot of managers in the technology field who would repeat the conclusion in this article.
+
+> Early on in my career, I supported brilliant jerks of any type and thought they were worth it. I was wrong.
+
+I did that too. Always have to think about the team impact.
 
 ### [AlphaGo Zero – How and Why it Works – Tim Wheeler](http://tim.hibal.org/blog/alpha-zero-how-and-why-it-works/)
 
-Interesting and approachable article reviewing how Alpha Go Zero taught itself how to play Go, and how these techniques can be used for a number of discrete games. The last paragraph put an interesting spin on the advances in AI. 😳 It is interesting to see how quickly the field of AI is progressing. Those who claim we will be able to see the robot overlords coming in time should take heed - these AI's will only be human-level for a brief instant before blasting past us into superhuman territories, never to look back.
+Interesting and approachable article reviewing how Alpha Go Zero taught itself how to play Go, and how these techniques can be used for a number of discrete games. The last paragraph put an interesting spin on the advances in AI. 😳
+
+> It is interesting to see how quickly the field of AI is progressing. Those who claim we will be able to see the robot overlords coming in time should take heed - these AI's will only be human-level for a brief instant before blasting past us into superhuman territories, never to look back.
 
 ### [Against Productivity – The Message – Medium](https://medium.com/message/against-productivity-b19f56b67da6)
 
-This is going to sound a little weird but this article [totally made me think of GTD](http://gettingthingsdone.com) and the concept of "mind like water". In many ways foolishness isn’t the opposite of wisdom, but its absence. Productivity is the opposite of wisdom. Humanity is a creature of time and imagination. From these things our fruits are born more than manufactured. Productivity is a quality of perfect robots. Stories, adventures and all new things still have to come from messy humans. It probably sounds confusing that an article condemning the focus on productivity reminds me of a productivity framework. However, the true goal of GTD is to give your mind space and time. Not to get more done, but to get more off your mind. To have a mind like water. This is a part of GTD that people tend to not focus on enough.
+This is going to sound a little weird but this article [totally made me think of GTD](http://gettingthingsdone.com) and the concept of "mind like water".
+
+> In many ways foolishness isn’t the opposite of wisdom, but its absence. Productivity is the opposite of wisdom. Humanity is a creature of time and imagination. From these things our fruits are born more than manufactured. Productivity is a quality of perfect robots. Stories, adventures and all new things still have to come from messy humans.
+
+It probably sounds confusing that an article condemning the focus on productivity reminds me of a productivity framework. However, the true goal of GTD is to give your mind space and time. Not to get more done, but to get more off your mind. To have a mind like water. This is a part of GTD that people tend to not focus on enough.
 
 ### [Bob Lutz: Kiss the good times goodbye](http://www.autonews.com/article/20171105/INDUSTRY_REDESIGNED/171109944/industry-redesigned-bob-lutz?X-IgnoreUserAgent=1)
 
-A vision piece describing the next 20 years of the automotive industry. Notable as it’s written by the former Vice Chairman and Head of Product Development for General Motors. The era of the human-driven automobile, its repair facilities, its dealerships, the media surrounding it — all will be gone in 20 years. 20 years seems too aggressive to me. But the end state is hard to argue.
+A vision piece describing the next 20 years of the automotive industry. Notable as it’s written by the former Vice Chairman and Head of Product Development for General Motors.
+
+> The era of the human-driven automobile, its repair facilities, its dealerships, the media surrounding it — all will be gone in 20 years.
+
+20 years seems too aggressive to me. But the end state is hard to argue.
 
 ### [Decision making under stress - Centre for Research and Evidence on Security Threats](https://crestresearch.ac.uk/comment/decision-making-stress/)
 
-Running technology platforms 24x7 means you have incidents, and stress, and decisions that must be made. Being aware and knowing how that impacts decisions is important knowledge to have. The research is clear: the best way to protect yourself from making poor decisions under stress is to train and prepare for it. Training enhances both skills and self-efficacy, enabling you to make better decisions and giving you the confidence to carry them out with minimal hesitation. Add to that sleep deprivation as another potential risk.
+Running technology platforms 24x7 means you have incidents, and stress, and decisions that must be made. Being aware and knowing how that impacts decisions is important knowledge to have.
+
+> The research is clear: the best way to protect yourself from making poor decisions under stress is to train and prepare for it. Training enhances both skills and self-efficacy, enabling you to make better decisions and giving you the confidence to carry them out with minimal hesitation.
+
+Add to that sleep deprivation as another potential risk.
 
 ### [User experience design for APIs](https://blog.keras.io/user-experience-design-for-apis.html)
 
@@ -255,8 +277,16 @@ Nice open source project to run your own DNS server at home that will blacklist 
 
 ### [“One Damn Slide After Another”: PowerPoint at Every Occasion for Speech : Computational Culture](http://computationalculture.net/2016/01/11/one-damn-slide-after-another-powerpoint-at-every-occasion-for-speech/)
 
-Wow! This is a tour de force on the evolution and use of slides and presentation software evolution. It's a long read but pretty interesting and importantly balanced. It is not a takedown of PowerPoint but instead a robust exploration of the act of presenting and persuading. This essay critically contextualizes PowerPoint. We argue that many of the stylistic conventions associated with slideware have long been part of business communications. Personal computing, however, scaled up the production of presentations. Doing so linked knowledge work with personal expression. The result has been the rise of presentation culture. In an information society, nearly everyone presents. Analyzing presentation software makes visible the largely under-appreciated reliance on performative authority in knowledge production. The conclusion brings it home. I've never thought of PowerPoint as a part of visual culture! PowerPoint is not a slide projector without a slide tray. It is not a
-neutral automation of existing processes. It is a part of visual culture, an increasingly everyday experience at every kind of occasion for speech. Worth reading. Even if you skim sections like I did. 😊
+Wow! This is a tour de force on the evolution and use of slides and presentation software evolution. It's a long read but pretty interesting and importantly balanced. It is not a takedown of PowerPoint but instead a robust exploration of the act of presenting and persuading.
+
+> This essay critically contextualizes PowerPoint. We argue that many of the stylistic conventions associated with slideware have long been part of business communications. Personal computing, however, scaled up the production of presentations. Doing so linked knowledge work with personal expression. The result has been the rise of presentation culture. In an information society, nearly everyone presents. Analyzing presentation software makes visible the largely under-appreciated reliance on performative authority in knowledge production.
+
+The conclusion brings it home. I've never thought of PowerPoint as a part of visual culture!
+
+> PowerPoint is not a slide projector without a slide tray. It is not a
+> neutral automation of existing processes. It is a part of visual culture, an increasingly everyday experience at every kind of occasion for speech.
+
+Worth reading. Even if you skim sections like I did. 😊
 
 ### [A Year of Tech Solidarity | Civicist](https://civichall.org/civicist/a-year-of-tech-solidarity/)
 

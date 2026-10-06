@@ -87,7 +87,7 @@ links:
   domain: www.tomsguide.com
   heading_context: '[Here''s the One iPhone XS Feature That Justifies an Upgrade](https://www.tomsguide.com/us/iphone-xs-smart-hdr,news-28203.html)'
   section: Notable Links 📌
-word_count: 1413
+word_count: 1419
 ---
 It’s one of my favorite times in Minnesota — fall! 🍂 I was [delighted to stop at Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
 
@@ -99,11 +99,11 @@ I’m going to keep this short this week. Mazie and I just got into Manhattan fo
 
 I know that feeling!
 
-Many of us have a constant neverending feeling that we’re always behind on what we need to get done.
+> Many of us have a constant neverending feeling that we’re always behind on what we need to get done.
 
 Okay, now you got my attention.
 
-And all of a sudden, you’re not behind on anything. Because what you’re doing right now is enough. And it’s all you have. Which is perfect, as it is.
+> And all of a sudden, you’re not behind on anything. Because what you’re doing right now is enough. And it’s all you have. Which is perfect, as it is.
 
 A very Zen view on contentment. There is a lot of truth here, particularly the part about us creating our own anxiety rushing to the next thing. 🤔
 
@@ -139,7 +139,7 @@ Fair and balanced article highlighting the good things that Google has done for 
 
 This Bloomberg [report on rogue chips from Supermicro](https://www.bloomberg.com/news/features/2018-10-04/the-big-hack-how-china-used-a-tiny-chip-to-infiltrate-america-s-top-companies) infiltrating Amazon and Apple is pretty amazing. Gruber’s take on it is a good summary.
 
-I see no way around it: either Bloomberg’s report is significantly wrong, at least as pertains to Amazon and Apple, or Apple and Amazon have issued blatantly false denials.
+> I see no way around it: either Bloomberg’s report is significantly wrong, at least as pertains to Amazon and Apple, or Apple and Amazon have issued blatantly false denials.
 
 Apple and Amazon both vehemently deny this report. [Apple even issued a second statement](https://www.apple.com/newsroom/2018/10/what-businessweek-got-wrong-about-apple/) about it. It’s hard to know what really happened, but it’s notable to me that espionage at this level is known, and will impact how we can build new technology for certain purposes.
 
@@ -155,7 +155,7 @@ Moving to version numbers for Wi-FI makes a lot of sense. I keep an eye on this 
 
 I started traveling to Ukraine twice a year right after the conflict with Russia began. I’ve always found it very jarring when I read coverage of all the fighting, and then go there and it seems completely normal in the capital. I’m not sure about the trends in this article, but I would like it if this were the case.
 
-Thanks to the war, and to their anger at its perpetrators, Ukrainians themselves are choosing to speak Ukrainian — more say they do every year. Thanks to the war, the different regions of this vast country are drawing more closely together
+> Thanks to the war, and to their anger at its perpetrators, Ukrainians themselves are choosing to speak Ukrainian — more say they do every year. Thanks to the war, the different regions of this vast country are drawing more closely together
 
 🇺🇦
 
@@ -163,7 +163,7 @@ Thanks to the war, and to their anger at its perpetrators, Ukrainians themselves
 
 Good clarifying post on the purpose and approach for mission, vision, strategy, etc. The last paragraph resonated with me.
 
-Interestingly, this post is an example of something even more paramount than having a mission: providing a common language for the team to use that everyone understands. Ensuring people use terms consistently isn’t just pedantry, it is potentially critical to scaling execution.
+> Interestingly, this post is an example of something even more paramount than having a mission: providing a common language for the team to use that everyone understands. Ensuring people use terms consistently isn’t just pedantry, it is potentially critical to scaling execution.
 
 This is so true. In a larger organization simply getting everyone talking using similar definitions is a big deal. The language and definitions behind it will fundamentally alter how people use these things.
 
@@ -179,7 +179,7 @@ This is a good list to keep around for reference. I’ve had many experiences ta
 
 I’ve been shooting with my iPhone XS for about two weeks now and I have to agree that of the capabilities of the new camera system, the Smart HDR capability is amazing.
 
-In short, the iPhone XS is the best iPhone by far at approximating what you'd see with your own eyes. And most of the time, isn't the ultimate goal of photography to capture something we've seen and keep it forever?
+> In short, the iPhone XS is the best iPhone by far at approximating what you'd see with your own eyes. And most of the time, isn't the ultimate goal of photography to capture something we've seen and keep it forever?
 
 I’ve had several pictures come off the phone that I’ve marveled at the natural exposure of the photo.
 

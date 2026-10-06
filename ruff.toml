@@ -1,6 +1,7 @@
 target-version = "py314"
 line-length = 100
-extend-exclude = ["venv"]
+# notes/ holds point-in-time audit snapshots, scripts included, kept as run.
+extend-exclude = ["venv", "notes"]
 
 [lint]
 select = ["E4", "E7", "E9", "F", "I"]

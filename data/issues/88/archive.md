@@ -93,7 +93,7 @@ links:
   domain: om.co
   heading_context: '[Links & Recommendations — On my Om](https://om.co/2019/01/06/links-recommendations/)'
   section: Notable Links 📌
-word_count: 1408
+word_count: 1407
 ---
 This is going to be a short intro this week as we are moving into our new house and everything is all over the place. I won't let that keep me from getting you amazing people your links on time though! Our stuff is in boxes 📦, and the government is shut down, but you will definitely get your links for your weekend enjoyment! 🙌 I will admit this weeks picture is a bit of a stretch though. 😅
 
@@ -105,7 +105,7 @@ I've also been playing around with a ([new to me](https://blot.thingelstad.com/2
 
 It is obvious that the telecommunications companies know your location when you have a mobile phone, but there is some trust that that data isn't being used for other purposes. We shouldn't trust.
 
-Microbilt buys access to location data from an aggregator called Zumigo and then sells it to a dizzying number of sectors, including landlords to scope out potential renters; motor vehicle salesmen, and others who are conducting credit checks. Armed with just a phone number, Microbilt’s “Mobile Device Verify” product can return a target’s full name and address, geolocate a phone in an individual instance, or operate as a continuous tracking service.
+> Microbilt buys access to location data from an aggregator called Zumigo and then sells it to a dizzying number of sectors, including landlords to scope out potential renters; motor vehicle salesmen, and others who are conducting credit checks. Armed with just a phone number, Microbilt’s “Mobile Device Verify” product can return a target’s full name and address, geolocate a phone in an individual instance, or operate as a continuous tracking service.
 
 This is a crisis of ethics. How is it justifiable to track your location and sell it to other commercial entities when there is no expectation that that is occurring. This has the additional issue that there is no way for the user to even know that it is or is not happening since it’s on the providers end.
 
@@ -167,7 +167,7 @@ I got these mindfulness aids for my birthday and have tried them a few times alr
 
 🧐
 
-Emoji continues to be one of my favorite work habits. As I wrote earlier, I initially resisted emoji. But the efficiency of the lightweight communication that occurs via emoji and emoji reactions can’t be denied. It also happens to be fun.
+> Emoji continues to be one of my favorite work habits. As I wrote earlier, I initially resisted emoji. But the efficiency of the lightweight communication that occurs via emoji and emoji reactions can’t be denied. It also happens to be fun.
 
 👍🏻
 

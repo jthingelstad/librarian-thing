@@ -121,7 +121,7 @@ links:
   domain: www.trapezemobile.com
   heading_context: '[How I Finally Hit 2000 on Lichess, and Improved my Chess Rating by 200 Points in 16 Days - Trapeze](https://www.trapezemobile.com/2019/01/10/how-i-finally-hit-2000-on-lichess-and-improved-my-chess-rating-by-200-points-in-16-days/)'
   section: Notable Links 📌
-word_count: 2091
+word_count: 2099
 ---
 Today we transitioned our move into full "looking forward" mode. We closed on the sale of the previous house and now will begin the deliberate process of settling into the new place. I'm glad we have the winter months to do that, and everything will be nicely in place once spring arrives!
 
@@ -133,9 +133,9 @@ Enjoy this weeks links! I think there are some really good ones in here. 🏅 I'
 
 Apple's Tim Cook making the case that we need Congressional action on privacy online. I like the idea, but I’m skeptical of it happening anytime soon.
 
-The trail disappears before you even know there is a trail. Right now, all of these secondary markets for your information exist in a shadow economy that’s largely unchecked—out of sight of consumers, regulators and lawmakers.
-
-Let’s be clear: you never signed up for that. We think every user should have the chance to say, “Wait a minute. That’s my information that you’re selling, and I didn’t consent.”
+> The trail disappears before you even know there is a trail. Right now, all of these secondary markets for your information exist in a shadow economy that’s largely unchecked—out of sight of consumers, regulators and lawmakers.
+>
+> Let’s be clear: you never signed up for that. We think every user should have the chance to say, “Wait a minute. That’s my information that you’re selling, and I didn’t consent.”
 
 In the meantime I will continue to run software to defend my privacy.
 
@@ -143,7 +143,7 @@ In the meantime I will continue to run software to defend my privacy.
 
 This is a must read to give some perspective to the experience that many women have on the Internet.
 
-And third, and most importantly, that sometimes being a woman on the internet can be a full-time job. As I mentioned before, my role as a Developer Advocate involves a lot content creation, face-to-face interaction, and requires me to have an online social presence. In the past, I’ve dealt with everything from men commenting on online videos of me saying I should “get a tan”, I’ve been DMed creepy messages on Twitter/LinkedIn/Instagram/etc. with messages like “hi”, “nice smile you got there”, and “your beautiful” (I usually respond “ *you’re ”, on that last one), and have even stumbled upon entire forum posts about me and how as a woman with a non-traditional background I’m unqualified to work in tech. Over the last three years, I have learned to brush it off and I almost always “never read the comments” if I know they’re negative (in fact, I have a necklace and pin of the mantra). But these things add up.
+> And third, and most importantly, that sometimes being a woman on the internet can be a full-time job. As I mentioned before, my role as a Developer Advocate involves a lot content creation, face-to-face interaction, and requires me to have an online social presence. In the past, I’ve dealt with everything from men commenting on online videos of me saying I should “get a tan”, I’ve been DMed creepy messages on Twitter/LinkedIn/Instagram/etc. with messages like “hi”, “nice smile you got there”, and “your beautiful” (I usually respond “ *you’re ”, on that last one), and have even stumbled upon entire forum posts about me and how as a woman with a non-traditional background I’m unqualified to work in tech. Over the last three years, I have learned to brush it off and I almost always “never read the comments” if I know they’re negative (in fact, I have a necklace and pin of the mantra). But these things add up.
 
 Awareness of this, followed by action by men on the Internet, is important. First step is being aware.
 
@@ -173,7 +173,7 @@ Last week I shared a link to the [article about carriers selling location data](
 
 I've been using an iPad for increasingly more of my stuff at the office for the last couple of years. This statement is so true!
 
-But moving to the iPad still involves some growing pains. The longer you've used a traditional computer, the harder an iPad transition can be.
+> But moving to the iPad still involves some growing pains. The longer you've used a traditional computer, the harder an iPad transition can be.
 
 I had to radically rethink how I approached many tasks to get it right on iOS. I will say though, there are now a decent number of things that I get great value out of on my iPad in iOS that I simply cannot do on macOS. Shortcuts is a big part of that.
 
@@ -193,9 +193,9 @@ Pamela Park is where we just moved, into one of these new developments. We are o
 
 More personal stories validating meditating and it’s benefits, particularly with the digital world.
 
-Then, about four months ago, I brute-forced it: I made meditation part of my morning routine and made myself stick with it. I started with 10 minutes a day, then built up to 15, 20, then 30. Eventually, something clicked, and the benefits became noticeable, and then remarkable.
-
-The best way I can describe the effect is to liken it to a software upgrade for my brain — an update designed to guard against the terrible way the online world takes over your time and your mind.
+> Then, about four months ago, I brute-forced it: I made meditation part of my morning routine and made myself stick with it. I started with 10 minutes a day, then built up to 15, 20, then 30. Eventually, something clicked, and the benefits became noticeable, and then remarkable.
+>
+> The best way I can describe the effect is to liken it to a software upgrade for my brain — an update designed to guard against the terrible way the online world takes over your time and your mind.
 
 🧘🏼‍♂️
 
@@ -235,7 +235,7 @@ I noticed this information showing up on my kids iPhones and I was really confus
 
 This happens to be a thing that I find "artful" as well. A well designed URL structure implies a well thought out architecture and makes it easier for developers, and in some rare cases uses, to understand the service.
 
-Most people don't give them much thought, in part because web browsers increasingly hide URLs away. But some URLs have special powers. Here are some that knock my socks off.
+> Most people don't give them much thought, in part because web browsers increasingly hide URLs away. But some URLs have special powers. Here are some that knock my socks off.
 
 🤩
 

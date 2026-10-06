@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/41/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-17-2018/
 domains: []
 links: []
-word_count: 1522
+word_count: 1528
 ---
 This past week has been a blur with my brother and his family visiting 👪, my son's birthday 🎂, Valentine's day 💖 and our annual company party 🎉! I’m looking forward to catching up on some things this weekend, including my to do list and some sleep. 💤
 
@@ -40,7 +40,7 @@ If you are writing software for usernames this is an interesting dive into edge 
 
 Some very good best practices to consider when designing how your applications logs. I love the human side of this call to action.
 
-Teach your code to communicate with your team, and you will reap the benefits for as long as the code lives!
+> Teach your code to communicate with your team, and you will reap the benefits for as long as the code lives!
 
 Teach and communicate. 💯
 
@@ -50,7 +50,7 @@ Teach and communicate. 💯
 
 I like what [Brent Simmons](http://inessential.com/) is doing with this project. I'm a big user of feed readers. I use [Feedbin](https://feedbin.com) along with [ReadKit](http://readkitapp.com) and [Unread](https://itunes.apple.com/us/app/unread-rss-reader/id1252376153?mt=8). Brent has [a history with readers having created](http://inessential.com/apps_ive_made) NetNewsWire in 2002. I also love the story behind the name. 💚
 
-But the name is a prayer for the open web — may it remain evergreen.
+> But the name is a prayer for the open web — may it remain evergreen.
 
 ## Privacy
 
@@ -64,7 +64,7 @@ You'd have to be absolutely bonkers to use Facebook as a VPN service. 🚫
 
 I’m not a fan of script typefaces typically but this one is very well done.
 
-Signato is a font constructed on the basis of the manuscript of the Act of Independence of Lithuania. It is a gift to all independent people celebrating the hundredth anniversary of the restoration of the State.
+> Signato is a font constructed on the basis of the manuscript of the Act of Independence of Lithuania. It is a gift to all independent people celebrating the hundredth anniversary of the restoration of the State.
 
 Also a really cool idea behind it.
 
@@ -78,7 +78,7 @@ Ugh. 🤦‍♂️ [AMP](https://www.ampproject.org) was a bad idea to start wit
 
 It’s not very clear what this is attempting to do, but I like the blurb.
 
-Solid (derived from "social linked data") is a proposed set of conventions and tools for building decentralized social applications based on Linked Data principles. Solid is modular and extensible and it relies as much as possible on existing W3C standards and protocols.
+> Solid (derived from "social linked data") is a proposed set of conventions and tools for building decentralized social applications based on Linked Data principles. Solid is modular and extensible and it relies as much as possible on existing W3C standards and protocols.
 
 [Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee) is involved.
 
@@ -110,7 +110,7 @@ Fun and insightful way to show the challenges of managing an American Shopping M
 
 I spend a lot of time reviewing roadmaps, identifying how roadmaps connect, exploring what they could be, etc. I have always found the serial, "waterfall-like" format, challenging but time operates in one arrow so why not. This exploration on an alternative, more agile approach, is intriguing.
 
-The system is called GIST after its main building blocks: Goals, Ideas, Step-projects, and Tasks. Each has a different planning horizon and frequency of change, and may use different tools to track, but together they constitute all the core planning any company and team needs to do.
+> The system is called GIST after its main building blocks: Goals, Ideas, Step-projects, and Tasks. Each has a different planning horizon and frequency of change, and may use different tools to track, but together they constitute all the core planning any company and team needs to do.
 
 ## Tech
 
@@ -118,7 +118,7 @@ The system is called GIST after its main building blocks: Goals, Ideas, Step-pro
 
 It’s happening! Ethics is coming to computer science curriculums!
 
-And at Stanford University, the academic heart of the industry, three professors and a research fellow are developing a computer science ethics course for next year. They hope several hundred students will enroll.
+> And at Stanford University, the academic heart of the industry, three professors and a research fellow are developing a computer science ethics course for next year. They hope several hundred students will enroll.
 
 This is a much needed facet for people that are developing the software that many people live inside of for significant parts of their days. 👏
 
@@ -134,7 +134,7 @@ This is a much needed facet for people that are developing the software that man
 
 What a great term! I've experienced this myself on many occasions!
 
-Meeting Blur. When the number of meetings exceeds your ability to remember what was said by whom, when, and where. Let’s forget for a moment why there are so many meetings2 and focus on your mental state. You’re a bright emotionally intelligent human. You walk into a meeting and have a credible mental profile of each human at the table. Why are they here? What do they want? How do they feel about the topic at hand? All of this information is front of mind and readily accessible.
+> Meeting Blur. When the number of meetings exceeds your ability to remember what was said by whom, when, and where. Let’s forget for a moment why there are so many meetings2 and focus on your mental state. You’re a bright emotionally intelligent human. You walk into a meeting and have a credible mental profile of each human at the table. Why are they here? What do they want? How do they feel about the topic at hand? All of this information is front of mind and readily accessible.
 
 For me, this is where my trusted GTD system can help. I've also tried to use a note taking system but I've yet to get the return on that that I would like.
 

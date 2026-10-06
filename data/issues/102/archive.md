@@ -96,7 +96,7 @@ links:
   domain: om.co
   heading_context: '[3 pieces of advice in Jeff Bezos’ Shareholder Letter – On my Om](https://om.co/2019/04/17/3-pieces-of-advice-in-jeff-bezos-shareholder-letter/)'
   section: Notable Links 📌
-word_count: 2069
+word_count: 2074
 ---
 Happy Easter Weekend to all of you! I hope the Easter Bunny brings you something great in your basket. 🐰 And Happy Earth Day coming up on Monday! 🌎 I am so excited for this weekend. It’s one of those first weekends where all the snow is gone, and it looks like it’s going to be absolutely gorgeous! ☀️
 
@@ -110,7 +110,7 @@ I hope you all have a great, relaxing and enjoyable holiday weekend! Now, let's 
 
 We seem to constantly learn that food is the ultimate analog. We try to decompose it into numbers and weights, chemicals and nutrients. But it’s fundamentally analog. It cannot be decomposed to bits and bytes. When we try to recompose it from units, it isn't the same thing, and our bodies know.
 
-When the researchers picked apart effects of individual micronutrients, they found that adequate intake of vitamin K and magnesium linked to a lower risk of all-cause mortality. Also, vitamin A, vitamin K, zinc, and copper were associated with a lower risk of death from cardiovascular disease. But these benefits were restricted to intake only from foods—not supplements.
+> When the researchers picked apart effects of individual micronutrients, they found that adequate intake of vitamin K and magnesium linked to a lower risk of all-cause mortality. Also, vitamin A, vitamin K, zinc, and copper were associated with a lower risk of death from cardiovascular disease. But these benefits were restricted to intake only from foods—not supplements.
 
 As Michael Pollan stated so succinctly: [Eat food. Not too much. Mostly plants.](https://michaelpollan.com/articles-archive/unhappy-meals/)
 
@@ -118,7 +118,7 @@ As Michael Pollan stated so succinctly: [Eat food. Not too much. Mostly plants.]
 
 I agree with the premise of this article. Talent in technology is in high-demand, and growing technology organizations will never be able to fill all their positions by going to the market for existing talent. Teams have to learn how to hire motivated learners and develop them.
 
-In the current market situation, every company needs to build a mentoring capacity. The most experienced developers should find time to grow less experienced colleagues through pair programming, continuous feedback, career advice.
+> In the current market situation, every company needs to build a mentoring capacity. The most experienced developers should find time to grow less experienced colleagues through pair programming, continuous feedback, career advice.
 
 All great technology organizations are learning organizations, and perhaps bringing in and developing future talent is the best example of that.
 
@@ -138,7 +138,7 @@ Allianz Field, 400 Snelling Ave N, Saint Paul, MN
 
 Oh my.
 
-Last October also witnessed the much-publicized deaths of travel bloggers Meenakshi Moorthy and Vishnu Viswanath, who apparently fell while taking a selfie at Yosemite’s Taft Point, a popular rock outcrop with an 800-foot drop. A month prior, Tomar Frankfurter, an 18-year-old from Jerusalem, also fell to his death in the park while reportedly taking a selfie at Nevada Fall. Last July, three stars of High on Life, a popular YouTube thrill-seeking adventure travel show, plummeted to their deaths at a waterfall near Squamish, British Columbia. And in late March, a man from Macau fell 1,000 feet to his death while attempting to take a selfie on the rim at Grand Canyon West.
+> Last October also witnessed the much-publicized deaths of travel bloggers Meenakshi Moorthy and Vishnu Viswanath, who apparently fell while taking a selfie at Yosemite’s Taft Point, a popular rock outcrop with an 800-foot drop. A month prior, Tomar Frankfurter, an 18-year-old from Jerusalem, also fell to his death in the park while reportedly taking a selfie at Nevada Fall. Last July, three stars of High on Life, a popular YouTube thrill-seeking adventure travel show, plummeted to their deaths at a waterfall near Squamish, British Columbia. And in late March, a man from Macau fell 1,000 feet to his death while attempting to take a selfie on the rim at Grand Canyon West.
 
 Stay safe out there! 📷🧗‍♂️
 
@@ -162,7 +162,7 @@ This is great design, and a very well done toolkit to enable supporters to embra
 
 There are definitely gender differences on privacy matters.
 
-Even well-meaning efforts at transparency don’t always work that way for women. Lyft’s car pool service shares the registered names of passengers with everyone else in the car. The first name of an incoming passenger flashes in lights across the dashboard, a feature intended to let riders know they are in the right car. A privacy researcher told me that she once jumped into a Lyft shared ride wearing a sweatshirt with her company’s logo. The next day, she received an email from a male passenger saying, “I found you!” Clearly, he had been able to use her first name and the name of her company to track her down online.
+> Even well-meaning efforts at transparency don’t always work that way for women. Lyft’s car pool service shares the registered names of passengers with everyone else in the car. The first name of an incoming passenger flashes in lights across the dashboard, a feature intended to let riders know they are in the right car. A privacy researcher told me that she once jumped into a Lyft shared ride wearing a sweatshirt with her company’s logo. The next day, she received an email from a male passenger saying, “I found you!” Clearly, he had been able to use her first name and the name of her company to track her down online.
 
 This is a good example where more gender diversity in technology would help.
 
@@ -182,7 +182,7 @@ A visual explainer on privacy matters. Introduces the unknown "other" uses for s
 
 What an amazing amount of money being invested.
 
-Here’s a deeply strange thing about Uber, which publicly filed for its IPO today: The company has lost $10 billion from operations, just since 2016, and while riders have paid $79.4 billion for rides, many drivers attest that they can barely scrape together a living. So no part of the operation is a high-margin business, and yet Uber keeps growing and growing and growing.
+> Here’s a deeply strange thing about Uber, which publicly filed for its IPO today: The company has lost $10 billion from operations, just since 2016, and while riders have paid $79.4 billion for rides, many drivers attest that they can barely scrape together a living. So no part of the operation is a high-margin business, and yet Uber keeps growing and growing and growing.
 
 If the end-game to real profit and margin for Uber is self-driving cars, one has to wonder if they can possibly lose that much money while those are being developed. I think it’s a long ways off.
 

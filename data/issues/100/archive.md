@@ -68,7 +68,7 @@ links:
   domain: techcrunch.com
   heading_context: '[Apple cancels AirPower product, citing inability to meet its high standards for hardware | TechCrunch](https://techcrunch.com/2019/03/29/apple-cancels-airpower-product-citing-inability-to-meet-its-high-standards-for-hardware/)'
   section: Notable Links 📌
-word_count: 1607
+word_count: 1609
 ---
 Welcome to Issue #100 of the Weekly Thing! 🎉 I'm a little surprised that I've been putting this out every week now for one hundred weeks. I wasn't sure at all where this would go when I started it. I had some ideas of putting some new elements in and streamlining some things but just haven't had the time to make any of that happen. Maybe we'll wait for the two year anniversary. We'll see! 🎁
 
@@ -112,7 +112,7 @@ I dig that this website runs on solar power and goes offline if it is out of bat
 
 Funny anecdotes here but mostly just something that I agree is absolutely true.
 
-But there's that other 90% that keeps nagging me. The part that simply will not change unless corporations do some dramatic work to focus on the major element in employee experience. Your boss is your employee experience. I am not alone in this assertion. Researchers in organizational development find this to be true.
+> But there's that other 90% that keeps nagging me. The part that simply will not change unless corporations do some dramatic work to focus on the major element in employee experience. Your boss is your employee experience. I am not alone in this assertion. Researchers in organizational development find this to be true.
 
 Important for everyone in organizations to consider.
 
@@ -128,7 +128,7 @@ I’m using Commento on my Link Blog because it aligns with my view on privacy. 
 
 Surveillance pushing data to other countries.
 
-Although, Iceland is somewhat following the laws of the European Economic Area, it has its own approach to privacy. For example, the Icelandic Data Protection Act encourages anonymity of user data. ISPs and content hosts are not held legally liable for the content that they host or transmit. According to Icelandic law, its not the domain name provider, but the registrant of an .is domain name that is responsible for ensuring the use of the domain is within the limits of the law (ISNIC). The government does not place any restrictions on anonymous communication and no registration is required when purchasing a SIM card.
+> Although, Iceland is somewhat following the laws of the European Economic Area, it has its own approach to privacy. For example, the Icelandic Data Protection Act encourages anonymity of user data. ISPs and content hosts are not held legally liable for the content that they host or transmit. According to Icelandic law, its not the domain name provider, but the registrant of an .is domain name that is responsible for ensuring the use of the domain is within the limits of the law (ISNIC). The government does not place any restrictions on anonymous communication and no registration is required when purchasing a SIM card.
 
 Iceland has been making strides to be a data haven for digital rights. I do wonder how they can have enough bandwidth for serious use though, given they are a remote island in a very difficult climate.
 

@@ -131,7 +131,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Larry Page Is a No-Show With Google Under a Harsh Spotlight - Bloomberg](https://www.bloomberg.com/news/features/2018-09-13/larry-page-is-a-no-show-with-google-under-a-harsh-spotlight)'
   section: Notable Links 📌
-word_count: 2577
+word_count: 2590
 ---
 Ok, this week got a bit heavy on all the announcements around the iPhone XS, Apple Watch Series 4 and iOS 12. I'm waiting for the iPhone XS to get delivered, and should have it in my hands very soon. Tammy and I both upgraded, and after reading the reviews I'm very interested to check out the camera capabilities. 📱
 
@@ -141,13 +141,13 @@ Ok, this week got a bit heavy on all the announcements around the iPhone XS, App
 
 The technology industry has an unusual amount of overly aggressive communication and criticism. Flame wars and such got their start somewhere. [Linus Torvalds](https://en.wikipedia.org/wiki/Linus_Torvalds), the creator of Linux and Git, two of the most important software products of our era, is legend for being a complete jerk to people. This about face and apology is significant.
 
-This week people in our community confronted me about my lifetime of not understanding emotions. My flippant attacks in emails have been both unprofessional and uncalled for. Especially at times when I made it personal. In my quest for a better patch, this made sense to me. I know now this was not OK and I am truly sorry.
+> This week people in our community confronted me about my lifetime of not understanding emotions. My flippant attacks in emails have been both unprofessional and uncalled for. Especially at times when I made it personal. In my quest for a better patch, this made sense to me. I know now this was not OK and I am truly sorry.
 
 This is a really big deal as Linus [is a role-model for many technologists](https://ds9a.nl/articles/posts/linus-communications/) . If he thinks it is appropriate to tear people apart over their code, maybe that would be a cool thing to do in a code review at the office! Hell no.
 
 I was [also pleased to see this commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a104f8b5867c682d994ffa7a74093c54469c11f) to adopt a proper Code of Conduct for Linux Kernel development. To give a sense of how deep Linus' views affect the Linux Kernel team before this Code of Conduct they had a Code of Conflict!
 
-The Code of Conflict is not achieving its implicit goal of fostering civility and the spirit of 'be excellent to each other'.
+> The Code of Conflict is not achieving its implicit goal of fostering civility and the spirit of 'be excellent to each other'.
 
 Glad to see these changes coming. 👏
 
@@ -159,7 +159,7 @@ I buy into this approach a lot. Tammy and I use YNAB to track our personal finan
 
 I have been saying this for a while. I think that Apple has clearly identified protecting user privacy as a long-term focus area and a place they can differentiate and compete against Google, Facebook and many others (except Microsoft, mostly).
 
-Apple’s devices and software–and the company’s ethos–are now steeped in user privacy protections that other tech companies would never dream of embracing. And this isn’t a stance Apple has only recently adopted. It is something that has been building for years at the company, starting under Steve Jobs’ leadership and rapidly accelerating under Tim Cook’s reign.
+> Apple’s devices and software–and the company’s ethos–are now steeped in user privacy protections that other tech companies would never dream of embracing. And this isn’t a stance Apple has only recently adopted. It is something that has been building for years at the company, starting under Steve Jobs’ leadership and rapidly accelerating under Tim Cook’s reign.
 
 This is why Apple was willing to take such a public position against the FBI when asked to bypass encryption.
 
@@ -185,7 +185,7 @@ A [good companion item to decision fatigue](https://en.wikipedia.org/wiki/Decisi
 
 This data is much more divided than I would have thought.
 
-Occupations are strongly sorted by ideology. Political scientist Adam Bonica has produced reliable and consistent estimates of ideological placement for a huge number of individuals, politicians, and organizations.
+> Occupations are strongly sorted by ideology. Political scientist Adam Bonica has produced reliable and consistent estimates of ideological placement for a huge number of individuals, politicians, and organizations.
 
 I wonder if these patterns were present much longer ago, 1950's for example.
 
@@ -205,11 +205,11 @@ Super condensed overview of a book that is on my reading list. 📚
 
 Gruber with a very focused review of the iPhone XS and the massive changes in the camera. This goes into some great detail, and I can’t wait to see my own results with the new XS.
 
-But there is one wow factor comparing the iPhone XS to last year’s iPhone X: photography. But the reasons don’t show up in Apple’s comparison spec list (even though some of them could). I’ve focused nearly the entirety of my testing on taking photos and videos side-by-side against my 10-month old iPhone X. Overall, I’m simply blown away by the iPhone XS’s results. Sometimes the difference is subtle but noticeable; sometimes the difference is between unusable and pretty good. The iPhone XS can capture still images and video that the iPhone X cannot.
+> But there is one wow factor comparing the iPhone XS to last year’s iPhone X: photography. But the reasons don’t show up in Apple’s comparison spec list (even though some of them could). I’ve focused nearly the entirety of my testing on taking photos and videos side-by-side against my 10-month old iPhone X. Overall, I’m simply blown away by the iPhone XS’s results. Sometimes the difference is subtle but noticeable; sometimes the difference is between unusable and pretty good. The iPhone XS can capture still images and video that the iPhone X cannot.
 
 Some further details on the changes in the camera mechanism.
 
-“32 percent larger sensor”, however, means something very specific, and it should perk up the ears of any photographer — even one who’s skeptical of Apple’s “computational photography” claims. You could sell an upgrade to the XS to iPhone X-owning photo enthusiasts just by telling them the sensor is so much larger.
+> “32 percent larger sensor”, however, means something very specific, and it should perk up the ears of any photographer — even one who’s skeptical of Apple’s “computational photography” claims. You could sell an upgrade to the XS to iPhone X-owning photo enthusiasts just by telling them the sensor is so much larger.
 
 Absolutely!
 
@@ -237,7 +237,7 @@ Very cool new app built for Siri Shortcuts in iOS 12. This is like the companion
 
 [In 2008 Apple acquired P.A. Semi](https://en.wikipedia.org/wiki/P.A._Semi) for [$278 million. Apple has also acquired](https://en.wikipedia.org/wiki/List_of_mergers_and_acquisitions_by_Apple) a handful of additional semiconductor companies and they are now one of, if not the, most advanced chip manufacturers in the world. The Neural Engines 5 trillion operations per second is enabling a local approach to machine learning that is very different than everyone else's.
 
-Core ML, Apple machine learning framework, apparently runs some nine times faster on the A12 Bionic, which should mean there's more performance on tap for developers to put AI abilities into their apps.
+> Core ML, Apple machine learning framework, apparently runs some nine times faster on the A12 Bionic, which should mean there's more performance on tap for developers to put AI abilities into their apps.
 
 That is also aligned with the core value of privacy and keeping things local.
 
@@ -257,9 +257,9 @@ Fabulous advice for thinking critically about your time. The links to related ar
 
 In our, in my opinion, over-connected world I often wonder if solitude is even a thing that exists.
 
-Loneliness is being alone — and not liking it. It’s a feeling.
-
-Solitude is being alone — and content. It’s a choice.
+> Loneliness is being alone — and not liking it. It’s a feeling.
+>
+> Solitude is being alone — and content. It’s a choice.
 
 We rarely have an opportunity to embrace that in our lives, unless we make it a priority to have it.
 
@@ -267,7 +267,7 @@ We rarely have an opportunity to embrace that in our lives, unless we make it a 
 
 This seems like an incredibly bad decision on Google's part.
 
-When the hearing before the Senate Intelligence Committee began on Sept. 5, a black leather chair reserved for him sat empty next to Dorsey and Sandberg. A place card marked “Google,” in front of a blank notepad and muted microphone, served as a blunt reminder of his absence.
+> When the hearing before the Senate Intelligence Committee began on Sept. 5, a black leather chair reserved for him sat empty next to Dorsey and Sandberg. A place card marked “Google,” in front of a blank notepad and muted microphone, served as a blunt reminder of his absence.
 
 Giving congress the ability to get pictures of an empty chair with Google's name in front of it was foolish.
 
@@ -278,7 +278,7 @@ https://www.amazon.com/Change-Your-Mind-Consciousness-Transcendence/dp/159420422
 How to Change Your Mind: What the New Science of Psychedelics Teaches Us About Consciousness, Dying, Addiction, Depression, and Transcendence ()
 by Michael Pollan
 
-A brilliant and brave investigation into the medical and scientific revolution taking place around psychedelic drugs--and the spellbinding story of his own life-changing psychedelic experiences
+> A brilliant and brave investigation into the medical and scientific revolution taking place around psychedelic drugs--and the spellbinding story of his own life-changing psychedelic experiences
 
 My book club is reading this and I'm enjoying it. I like Pollan's other work, and it's sort of nice to read something from him not about food. The history of psychedelics is pretty interesting. I had no idea about the therapeutic and medical uses of it before it become part of counter-culture.
 
@@ -296,7 +296,7 @@ https://itunes.apple.com/us/app/scriptable/id1405459188?mt=8&uo=4
 
 by Simon B. Støvring
 
-Scriptable is an automation tool that enables you to write scripts that integrates with native features of iOS such as files, calendars, reminders, documents and much more.
+> Scriptable is an automation tool that enables you to write scripts that integrates with native features of iOS such as files, calendars, reminders, documents and much more.
 
 This app is only for the geeks that want to extend automation on their iOS devices. It's incredibly powerful, giving you the full capability of JavaScript to extend and automate on your mobile device. It's like a developer version of Shortcuts, which is limited to it's visual interface. I have some Shortcuts that I "shell out" to Pythonista to use Python, that I could redo in Scriptable if I wanted. My dream would be something like Scriptable with a Python runtime. JavaScript still makes my head hurt too much.
 

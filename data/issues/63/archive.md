@@ -104,7 +104,7 @@ links:
   domain: www.deps.co
   heading_context: '[Google Cloud Platform - The Good, Bad, and Ugly (It''s Mostly Good) - Deps](https://www.deps.co/blog/google-cloud-platform-good-bad-ugly/)'
   section: Notable Links 📌
-word_count: 1748
+word_count: 1758
 ---
 I was reminded this week why I should be riding my bike 🚲 to work on a regular basis. I have [this great bike](http://defiantbicycles.com/shop-fulton/defiant-one) , and my commute to work is nearly all on bike trails along lakes and parkways in the city. 🏙 I get some fabulous views and it is a delightful route. SPS Tower 🏢 even has a gym in it where I can change and get ready for the day. But more important than all that, when I ride in I have more energy and am just happier. 😁 It is time to make this happen one day a week, and then maybe two.
 
@@ -118,7 +118,7 @@ I was reminded this week why I should be riding my bike 🚲 to work on a regula
 
 Everything in this post is awesome.
 
-Well, my leadership team and I soon learned that people hated our reviews. Folks who hadn't even been to one feared them by reputation. Why? We were overzealous about our own contributions and under-appreciative of the presenting team, which was disrespectful. Luckily, several regular attendees gave us that feedback and we were able to turn things around with what I call “The P Rules,” which I left written on our whiteboard for years.
+> Well, my leadership team and I soon learned that people hated our reviews. Folks who hadn't even been to one feared them by reputation. Why? We were overzealous about our own contributions and under-appreciative of the presenting team, which was disrespectful. Luckily, several regular attendees gave us that feedback and we were able to turn things around with what I call “The P Rules,” which I left written on our whiteboard for years.
 
 This is great advice for teams and for leaders.
 
@@ -140,7 +140,7 @@ I've never seen this kind of metrics model for tracking people coming into your 
 
 Nice to see ACM update it’s Code of Ethics. Amazing that it hadn't been updated in 26 years. Consider how much the world of computing has changed in 26 years.
 
-After a two-year process that included extensive input from computing professionals around the world, ACM, the Association for Computing Machinery, has updated its [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) . The revised Code of Ethics addresses the significant advances in computing technology and the growing pervasiveness of computing in all aspects of society since it was last updated in 1992.
+> After a two-year process that included extensive input from computing professionals around the world, ACM, the Association for Computing Machinery, has updated its [Code of Ethics and Professional Conduct](https://www.acm.org/about-acm/acm-code-of-ethics-and-professional-conduct) . The revised Code of Ethics addresses the significant advances in computing technology and the growing pervasiveness of computing in all aspects of society since it was last updated in 1992.
 
 I applaud the continuing discussion around ethics in computing. It’s nice to see privacy included in the code.
 
@@ -148,7 +148,7 @@ I applaud the continuing discussion around ethics in computing. It’s nice to s
 
 Kara Swisher interviewing Facebook's Mark Zuckerberg. Swisher is a tough interviewer. Zuckerberg has gotten a lot of training on how to keep on message.
 
-I think the interview gives a picture of an earnest and canny tech leader who is also grappling with the darker side of his creation. At one point, I asked him who was to blame and who should pay the price for the Cambridge Analytica controversy and he rightly named himself, as the person who invented Facebook. “Do you want me to fire myself on this podcast?” Zuckerberg joked. Spoiler alert: He did not.
+> I think the interview gives a picture of an earnest and canny tech leader who is also grappling with the darker side of his creation. At one point, I asked him who was to blame and who should pay the price for the Cambridge Analytica controversy and he rightly named himself, as the person who invented Facebook. “Do you want me to fire myself on this podcast?” Zuckerberg joked. Spoiler alert: He did not.
 
 Zuckerberg is very thoughtful. I’m not a fan of his service, but it was interesting to hear the discussion.
 
@@ -156,7 +156,7 @@ Zuckerberg is very thoughtful. I’m not a fan of his service, but it was intere
 
 Short and sweet.
 
-Losing friends because you’re not on Facebook is only a valid concern to the extent that your ‘friends on Facebook’ are not really friends at all.
+> Losing friends because you’re not on Facebook is only a valid concern to the extent that your ‘friends on Facebook’ are not really friends at all.
 
 👍
 
@@ -180,7 +180,7 @@ All the demos from Minnedemo 29 on one page!
 
 Have Postgres? Add water and you have a GraphQL interface.
 
-Hasura GraphQL Engine is a blazing-fast GraphQL server that gives you instant GraphQL APIs over Postgres. Hasura helps you build GraphQL apps backed by Postgres or incrementally move to GraphQL for existing applications using Postgres.
+> Hasura GraphQL Engine is a blazing-fast GraphQL server that gives you instant GraphQL APIs over Postgres. Hasura helps you build GraphQL apps backed by Postgres or incrementally move to GraphQL for existing applications using Postgres.
 
 There are a number of these solutions out there. I’m not sure they are good for real applications, but it would definitely be an easy way to concept something out.
 
@@ -196,7 +196,7 @@ Shopify sharing their internal best-practices on creating GraphQL interfaces. Th
 
 If you have heard of the CAP Theorem but aren’t sure what it is, this is a clear rundown.
 
-This guide will summarize Gilbert and Lynch's specification and proof of the CAP Theorem with pictures!
+> This guide will summarize Gilbert and Lynch's specification and proof of the CAP Theorem with pictures!
 
 The more you know! 🎓
 
@@ -204,7 +204,7 @@ The more you know! 🎓
 
 Matt Gemmel sharing regret and lessons learned from the most popular article on his blog.
 
-It’s not enough to be sure of your own intent (not that I even was, in this case, which makes it worse). You also have to consider the likely scenarios of use - or misuse - before putting something out into the world.
+> It’s not enough to be sure of your own intent (not that I even was, in this case, which makes it worse). You also have to consider the likely scenarios of use - or misuse - before putting something out into the world.
 
 Let’s be mindful of what we put in the world.
 
@@ -212,7 +212,7 @@ Let’s be mindful of what we put in the world.
 
 Good overview of how to think about team size. I’d agree with all of it.
 
-These questions were the gateway to the obscure art of organizational design. As I've gotten more exposure, I've come to believe the fundamental challenge of organizational design is sizing teams.
+> These questions were the gateway to the obscure art of organizational design. As I've gotten more exposure, I've come to believe the fundamental challenge of organizational design is sizing teams.
 
 I have come to learn there is a lot more to organizational design than just this, but it is one important aspect of it.
 
@@ -220,7 +220,7 @@ I have come to learn there is a lot more to organizational design than just this
 
 I take [melatonin very regularly via REM Caps](https://www.hammernutrition.com/rem-caps/) .
 
-Melatonin works on both systems. It has a weak “hypnotic” effect on Process S, making you immediately sleepier when you take it. It also has a stronger “chronobiotic” effect on the circadian rhythm, shifting what time of day your body considers sleep to be a good idea. Effective use of melatonin comes from understanding both these effects and using each where appropriate.
+> Melatonin works on both systems. It has a weak “hypnotic” effect on Process S, making you immediately sleepier when you take it. It also has a stronger “chronobiotic” effect on the circadian rhythm, shifting what time of day your body considers sleep to be a good idea. Effective use of melatonin comes from understanding both these effects and using each where appropriate.
 
 This read goes into more depth on the uses for melatonin.
 
@@ -228,7 +228,7 @@ This read goes into more depth on the uses for melatonin.
 
 Thorough comparison of GCP based on real-world usage.
 
-I haven’t seen too many experience reports on Google Cloud, so I wanted to share how I’ve found it, what went well, and what still needs improving. I’ve split my thoughts below into good, meh, bad, ugly, and opportunities for improvement. I have compared and contrasted with Amazon Web Services (AWS), the other hosting provider that I have the most experience with, and GCP’s biggest competitor.
+> I haven’t seen too many experience reports on Google Cloud, so I wanted to share how I’ve found it, what went well, and what still needs improving. I’ve split my thoughts below into good, meh, bad, ugly, and opportunities for improvement. I have compared and contrasted with Amazon Web Services (AWS), the other hosting provider that I have the most experience with, and GCP’s biggest competitor.
 
 Good overview.
 

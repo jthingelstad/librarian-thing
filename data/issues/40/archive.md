@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/40/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-10-2018/
 domains: []
 links: []
-word_count: 1603
+word_count: 1616
 ---
 It was pretty cool to watch the Super Bowl 🏈 last weekend with highlights of our fine city of Minneapolis. However, after weeks of increasing road closures 🚨 and security perimeters 👮 I'm pretty happy to see everyone head back to their home and let us get back to normal! 👋
 
@@ -42,11 +42,11 @@ Cabin, Warsaw MN
 
 Powerful writing from iA about engaging in the web and our digital platforms with more thought.
 
-The answer to the passive consumption of trash is the active formulation of questions, the active search for answers and the active work of putting complex knowledge and diffuse feelings into clear words.
+> The answer to the passive consumption of trash is the active formulation of questions, the active search for answers and the active work of putting complex knowledge and diffuse feelings into clear words.
 
 This article is a great read if only for the writing.
 
-Social Media is a mental prison where Facebook exists to make us believe that Google is still open.
+> Social Media is a mental prison where Facebook exists to make us believe that Google is still open.
 
 That made me laugh 😂 and think at the same time 🤔.
 
@@ -54,7 +54,7 @@ That made me laugh 😂 and think at the same time 🤔.
 
 I’m shocked that I had never read [this article. Sadly John Perry Barlow](https://en.wikipedia.org/wiki/John_Perry_Barlow) [, the founder of the EFF](https://www.eff.org) and the author of this declaration recently passed away. Cory [Doctorow has a very nice remembrance](https://boingboing.net/2018/02/07/walk-in-the-rain.html) of him. From Doctorow:
 
-Today, Barlow is dead, and his vision is vindicated: the risks Barlow foresaw (along with [other EFF founders like John Gilmore](https://en.wikipedia.org/wiki/John_Gilmore_%28activist%29) and [Mitch Kapor](https://en.wikipedia.org/wiki/Mitch_Kapor) ) are more imminent than ever; the organization that he started and the movement he kicked off has never been more badly needed.
+> Today, Barlow is dead, and his vision is vindicated: the risks Barlow foresaw (along with [other EFF founders like John Gilmore](https://en.wikipedia.org/wiki/John_Gilmore_%28activist%29) and [Mitch Kapor](https://en.wikipedia.org/wiki/Mitch_Kapor) ) are more imminent than ever; the organization that he started and the movement he kicked off has never been more badly needed.
 
 ---
 
@@ -62,11 +62,11 @@ Today, Barlow is dead, and his vision is vindicated: the risks Barlow foresaw (a
 
 The web has been consolidating to major corporations, losing sight of some of the original objectives.
 
-The Web has lost its spirit. The Web is no longer a distributed Web.
+> The Web has lost its spirit. The Web is no longer a distributed Web.
 
 There are however sprouts of new activity.
 
-There seems to be a weak undercurrent of old and young bloggers like us that feel sentimental or curious and want to bring back blogging. Blogging won’t save the world. But, hell, after two weeks now, we can confirm: it feels great to be back on the blogging line.
+> There seems to be a weak undercurrent of old and young bloggers like us that feel sentimental or curious and want to bring back blogging. Blogging won’t save the world. But, hell, after two weeks now, we can confirm: it feels great to be back on the blogging line.
 
 I have nothing against successful companies online, but there needs to be space for other things. Commercial areas are fine, but I also want parks. Industrial activity is needed, but we need residential areas too. This all applies to the web as well.
 
@@ -76,7 +76,7 @@ I have nothing against successful companies online, but there needs to be space 
 
 I've been thinking about mental focus and also meditation. This recent GTD podcast offered some great color on the topic.
 
-This talk will reveal just how much the thoughts we hold in our head have the potential to affect the types and qualities of action we take. From athletic performance to prepping for that next big meeting, what we think about while we act can affect how we act.
+> This talk will reveal just how much the thoughts we hold in our head have the potential to affect the types and qualities of action we take. From athletic performance to prepping for that next big meeting, what we think about while we act can affect how we act.
 
 [Plus David Allen](https://gettingthingsdone.com/meet-david/) is pretty funny in some of his talks.
 
@@ -90,7 +90,7 @@ This talk will reveal just how much the thoughts we hold in our head have the po
 
 Some interesting learning here on the deeper ways that you can use Kubernetes in your application architecture.
 
-Kubernetes offers a full set of distributed primitives (such as pods, services, controllers) that addresses the requirements and drives the design of our applications. These new primitives and the platform capabilities dictate the guiding design principles and design patterns we use to implement all future services.
+> Kubernetes offers a full set of distributed primitives (such as pods, services, controllers) that addresses the requirements and drives the design of our applications. These new primitives and the platform capabilities dictate the guiding design principles and design patterns we use to implement all future services.
 
 It also highlights the broad surface area of Kubernetes. The points on broad adoption across various platforms are also important to note.
 
@@ -110,7 +110,7 @@ A gaming device that is the size of a keychain? Yep! 🎮 This seems really sill
 
 If [you have watched King of Kong](http://www.imdb.com/title/tt0923752/) you know the story of Billy Mitchell. After some incredibly detailed analysis, it seems his records were faked.
 
-In light of the evidence presented here, I am removing Billy Mitchell's current score of 1,062,800 from the Donkey Kong Forum High Score List.
+> In light of the evidence presented here, I am removing Billy Mitchell's current score of 1,062,800 from the Donkey Kong Forum High Score List.
 
 The Internet is so great. If you find this story interesting, watch the movie! 🎬
 
@@ -140,7 +140,7 @@ An interesting take on how the future of "micro-transportation" may look. 🚲 H
 
 This was all amazing! What a feat for SpaceX.
 
-When Falcon Heavy lifts off, it will be the most powerful operational rocket in the world by a factor of two. With the ability to lift into orbit nearly 64 metric tons (141,000 lb)---a mass greater than a 737 jetliner loaded with passengers, crew, luggage and fuel--Falcon Heavy can lift more than twice the payload of the next closest operational vehicle, the Delta IV Heavy, at one-third the cost.
+> When Falcon Heavy lifts off, it will be the most powerful operational rocket in the world by a factor of two. With the ability to lift into orbit nearly 64 metric tons (141,000 lb)---a mass greater than a 737 jetliner loaded with passengers, crew, luggage and fuel--Falcon Heavy can lift more than twice the payload of the next closest operational vehicle, the Delta IV Heavy, at one-third the cost.
 
 Watching the two Falcon engines land nearly simultaneously made me think I was watching a science fiction movie!
 

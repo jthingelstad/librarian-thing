@@ -86,7 +86,7 @@ links:
   domain: www.cio.com
   heading_context: '[Scaled agile helps modernize Guardian''s operations | CIO](https://www.cio.com/article/3429176/scaled-agile-helps-modernize-guardians-operations.html)'
   section: Notable Links 📌
-word_count: 1254
+word_count: 1261
 ---
 I’m back! 😎 In #112 I shared that I was going to take a break for the month of July. When August came around, things were just a blur and I called an audible and decided to take a couple more weeks off. Now I’m back on the keys excited to reconnect with all of you! 🙌
 
@@ -118,7 +118,7 @@ Cloudflare has begun the process of filing to go public. I've been very impresse
 
 I like this perspective from Warren Ellis on his engagement with social platforms.
 
-I process a lot of stuff, and keep up with a lot of things, and a shift is required to allow for the career step-change. You can’t be dogmatic about anything. Situations tend to be fluid and dynamic, and you need to be able to flow and adjust in response.
+> I process a lot of stuff, and keep up with a lot of things, and a shift is required to allow for the career step-change. You can’t be dogmatic about anything. Situations tend to be fluid and dynamic, and you need to be able to flow and adjust in response.
 
 Those adjustments are a good thing.
 
@@ -134,9 +134,9 @@ Nice set of links to immediately drop you to the hidden, obfuscated pages to opt
 
 There is a lot of great content on YouTube, but this stuff is far too prevalent.
 
-As his time on the site grew, YouTube recommended videos from other far-right figures. One was a lawmaker named Jair Bolsonaro, then a marginal figure in national politics — but a star in YouTube’s far-right community in Brazil, where the platform has become more widely watched than all but one TV channel.
-
-Last year, he became President Bolsonaro.
+> As his time on the site grew, YouTube recommended videos from other far-right figures. One was a lawmaker named Jair Bolsonaro, then a marginal figure in national politics — but a star in YouTube’s far-right community in Brazil, where the platform has become more widely watched than all but one TV channel.
+>
+> Last year, he became President Bolsonaro.
 
 It lowers YouTube (Google's) revenue by blocking this stuff. I wouldn't expect much to happen.
 
@@ -148,7 +148,7 @@ Simple app to send emails when an item appears in an RSS feed. Cool tools like t
 
 Thorough read on the story behind Python, it’s introduction and rise in popularity. I don't do any professional coding, but I do goof around on things and I nearly always do that in Python.
 
-What Python offered, and still offers, is clear and unambiguous syntax, where indentations group code into blocks, making the code easier for developers to understand.
+> What Python offered, and still offers, is clear and unambiguous syntax, where indentations group code into blocks, making the code easier for developers to understand.
 
 It is a joy to use and very readable.
 
@@ -156,7 +156,7 @@ It is a joy to use and very readable.
 
 One of my most repeated references is "All great technology companies, are learning companies." You simply cannot be a great tech company without that learning foundation.
 
-Invest in your engineers’ learning. There is no way around the need for this to be an explicit investment by fast growing companies.
+> Invest in your engineers’ learning. There is no way around the need for this to be an explicit investment by fast growing companies.
 
 Yes, and twice on Sunday.
 
@@ -172,7 +172,7 @@ Don't go plugging your phone with so much personal information into some random 
 
 LinkedIn has adopted all of the addictive patterns of social media, to great affect. The site has continued to grow in every dimension of engagement.
 
-Considering its size and social footprint, LinkedIn has been a notably minor character in major narratives about the hazards of social media. The site hasn’t proved especially useful for mainstreaming disinformation, for example, nor is it an obvious staging ground for organized harassment campaigns. It is unique among its social media peers in that it has not spent the last five years in a state of wrenching crisis.
+> Considering its size and social footprint, LinkedIn has been a notably minor character in major narratives about the hazards of social media. The site hasn’t proved especially useful for mainstreaming disinformation, for example, nor is it an obvious staging ground for organized harassment campaigns. It is unique among its social media peers in that it has not spent the last five years in a state of wrenching crisis.
 
 But LinkedIn is very different since it is a "professional" or business network. it is a vertical network focused on a single dimension. You don't go there for news. The only thing it’s a battleground for is recruiters, not partisans.
 

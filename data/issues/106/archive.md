@@ -81,7 +81,7 @@ links:
   domain: nest.com
   heading_context: '[What’s happening at Nest? | Nest](https://nest.com/whats-happening/)'
   section: Notable Links 📌
-word_count: 2005
+word_count: 2016
 ---
 This last week was a crazy, busy week for me. The kind of week that required everything planned out and to go on autopilot from meeting to meeting and event to event. 📅 I’m pretty happy to be on the other side of it watching the Twins play baseball ⚾️ and putting together this weeks Thing!
 
@@ -91,7 +91,7 @@ This last week was a crazy, busy week for me. The kind of week that required eve
 
 Very well stated position on privacy from Pinboard's Maciej Cegłowski about privacy. I particularly like the enumerated goals for privacy legislation.
 
-The final, and paramount goal, of privacy regulation should be to preserve our liberty.
+> The final, and paramount goal, of privacy regulation should be to preserve our liberty.
 
 Well stated. 👏
 
@@ -99,15 +99,15 @@ Well stated. 👏
 
 I enjoyed reading this article from Paul Ford reflecting on the "magic" that we sometimes forget, and occasionally misuse, in the technology industry.
 
-And of course I rarely get to build software anymore. . I would like to. Something about the interior life of a computer remains infinitely interesting to me; it’s not romantic, but it is a romance. You flip a bunch of microscopic switches really fast and culture pours out.
+> And of course I rarely get to build software anymore. . I would like to. Something about the interior life of a computer remains infinitely interesting to me; it’s not romantic, but it is a romance. You flip a bunch of microscopic switches really fast and culture pours out.
 
 The emphasis is mine there. I simply loved that turn of phrase – that culture pours out. How delightful.
 
-And here I squirm and twist. Because—because we have judged you and found you wanting. Because you do not speak with a confident cadence, because you cannot show us how to balance a binary tree on a whiteboard, because you overlabored the difference between UI and UX, because you do not light up in the way that we light up when hearing about some obscure bug, some bad button, the latest bit of outrageousness on Hacker News. Because the things you learned are already, six months later, not exactly what we need. Because the industry is still overlorded by people like me, who were lucky enough to have learned the etiquette early, to even know there was an etiquette.
+> And here I squirm and twist. Because—because we have judged you and found you wanting. Because you do not speak with a confident cadence, because you cannot show us how to balance a binary tree on a whiteboard, because you overlabored the difference between UI and UX, because you do not light up in the way that we light up when hearing about some obscure bug, some bad button, the latest bit of outrageousness on Hacker News. Because the things you learned are already, six months later, not exactly what we need. Because the industry is still overlorded by people like me, who were lucky enough to have learned the etiquette early, to even know there was an etiquette.
 
 That is a great way to capture the lack of inclusion in technology culture. it’s completely spot on as well.
 
-A new computer is the blankest of canvases. You can fill it with files. You can make it into a web server. You can send and receive email, design a building, draw a picture, write 1,000 novels. You could have hundreds of users or one. It used to cost tens of thousands of dollars, and now it costs as much as a fancy bottle of wine.
+> A new computer is the blankest of canvases. You can fill it with files. You can make it into a web server. You can send and receive email, design a building, draw a picture, write 1,000 novels. You could have hundreds of users or one. It used to cost tens of thousands of dollars, and now it costs as much as a fancy bottle of wine.
 
 I loved this idea of a computer as a blank canvas as well. Really the entire article is a delight to read. Do yourself a favor and give it a read, particularly if you have always been drawn to computers.
 
@@ -125,9 +125,9 @@ Kitchen Window, 3028 Hennepin Ave, Minneapolis MN 55408
 
 This is a concept that Amazon particularly has highlighted as a good thing.
 
-What really happens? The loudest, most bombastic engineer states their case with certainty, and that shuts down discussion. Other people either assume the loudmouth knows best, or don’t want to stick out their neck and risk criticism and shame. This is especially true if the loudmouth is senior, or there is any other power differential.
-
-Diverse members of your team may be less likely to have experienced the collegial, open debate environment, and may feel uncertain of their position. This means you might not hear their ideas. Given the extensive research that shows diverse teams make smarter decisions, this is tragic.
+> What really happens? The loudest, most bombastic engineer states their case with certainty, and that shuts down discussion. Other people either assume the loudmouth knows best, or don’t want to stick out their neck and risk criticism and shame. This is especially true if the loudmouth is senior, or there is any other power differential.
+>
+> Diverse members of your team may be less likely to have experienced the collegial, open debate environment, and may feel uncertain of their position. This means you might not hear their ideas. Given the extensive research that shows diverse teams make smarter decisions, this is tragic.
 
 I think there is some truth to this.
 
@@ -143,7 +143,7 @@ For years I've used a script in AppleScript (https://developer.apple.com/library
 
 We need a name for services like this that provide some utility to a user, almost always for free, and then use the data provided to run a completely unrelated, often surveillance focused business on the other side. How about Doppelgänger (https://en.wikipedia.org/wiki/Doppelgänger) business?
 
-What isn’t obvious on Ever’s website or app — except for a brief reference that was added to the privacy policy after NBC News reached out to the company in April — is that the photos people share are used to train the company’s facial recognition system, and that Ever then offers to sell that technology to private companies, law enforcement and the military.
+> What isn’t obvious on Ever’s website or app — except for a brief reference that was added to the privacy policy after NBC News reached out to the company in April — is that the photos people share are used to train the company’s facial recognition system, and that Ever then offers to sell that technology to private companies, law enforcement and the military.
 
 The Ever AI screenshots in the article looks like a Doppelgänger of the Ever one.
 
@@ -159,7 +159,7 @@ Interesting data on trends around food and cooking. I certainly enjoy dining out
 
 I am a fan of this concept and have advocated for it in platforms for a while, particularly large and complicated platforms, which most are.
 
-Viewed from an implementation point of view, replacing all the database keys with links is a fairly simple change—the server converted the database foreign keys into URLs so the client didn't have to—but it significantly simplifies the API and reduces the coupling of the client and the server. Many URI templates that were essential for the first design are no longer required and can be removed from the API specification and documentation.
+> Viewed from an implementation point of view, replacing all the database keys with links is a fairly simple change—the server converted the database foreign keys into URLs so the client didn't have to—but it significantly simplifies the API and reduces the coupling of the client and the server. Many URI templates that were essential for the first design are no longer required and can be removed from the API specification and documentation.
 
 Think of your platform as a little web (lowercase w) of it’s own, and using links to establish the relationships. 🔗
 
@@ -167,7 +167,7 @@ Think of your platform as a little web (lowercase w) of it’s own, and using li
 
 This is a shocking statistic.
 
-In 2016, technology industry recruiter Speak With a Geek sent out 5,000 resumes with identical information to companies. One set of resumes included gendered names and biographical information, and the other set omitted those details. When those identifying aspects were removed from the resumes, 54 percent of the women received interview offers; when gendered names and other biographical information were provided, only 5 percent of them did.
+> In 2016, technology industry recruiter Speak With a Geek sent out 5,000 resumes with identical information to companies. One set of resumes included gendered names and biographical information, and the other set omitted those details. When those identifying aspects were removed from the resumes, 54 percent of the women received interview offers; when gendered names and other biographical information were provided, only 5 percent of them did.
 
 54% to 5% with no difference in the data itself? 😳
 
@@ -181,7 +181,7 @@ I've been wanting to read When: The Scientific Secrets of Perfect Timing (https:
 
 I was a Dropcam customer, and the product was great. Then that became Nest. And then Nest became Google. Now Google is completing the assimilation.
 
-We want to unify our efforts around third-party connected home devices under a single developer platform – a one-stop shop for both our developers and our customers to build a more helpful home. To accomplish this, we’ll be winding down Works with Nest on August 31, 2019, and delivering a single unified experience through the Works with Google Assistant program.
+> We want to unify our efforts around third-party connected home devices under a single developer platform – a one-stop shop for both our developers and our customers to build a more helpful home. To accomplish this, we’ll be winding down Works with Nest on August 31, 2019, and delivering a single unified experience through the Works with Google Assistant program.
 
 So from a data perspective this lowers the barriers to Google using the data from these devices to augment their profile of a user. 😠
 

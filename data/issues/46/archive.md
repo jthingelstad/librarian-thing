@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/46/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-46-mar-24-2018/
 domains: []
 links: []
-word_count: 1973
+word_count: 1987
 ---
 We officially welcomed the First Day of Spring 🌦 and with it above freezing temperatures. I've been watching the snow and ice recede, the days get longer and I'm starting to think about the ice coming off the lakes. Yeah, I'm a little eager.
 
@@ -46,7 +46,7 @@ spectrum.mit.edu
 
 Brief reminder of what true dialogue really is.
 
-Dialogue is essential to solve the large problems of a multicultural, global society, he adds. Finding a new way to talk, think, and act together makes it possible to talk across our differences and invent new directions for the future.
+> Dialogue is essential to solve the large problems of a multicultural, global society, he adds. Finding a new way to talk, think, and act together makes it possible to talk across our differences and invent new directions for the future.
 
 This topic reminded [me of The Most Human Human](https://www.amazon.com/Most-Human-Talking-Computers-Teaches/dp/0385533063/) , which is a very fun read.
 
@@ -55,7 +55,7 @@ www.linkedin.com
 
 Impressive and well thought out list of 12 key drivers that push technology forward.
 
-Even those of us who have been deeply immersed in the tech world for a long time can miss the driving forces that shape its impact. So here, we’ll identify some key principles that can help us understand technology’s place in culture.
+> Even those of us who have been deeply immersed in the tech world for a long time can miss the driving forces that shape its impact. So here, we’ll identify some key principles that can help us understand technology’s place in culture.
 
 I wonder how many of these would be surprises to most people. 🤔
 
@@ -64,7 +64,7 @@ medium.com
 
 What do we make of the trend that those that know the most about technology, and the people that build many of the privacy stealing social platforms, take great efforts to protect their privacy?
 
-Here’s exactly what we should make of it… They are right.
+> Here’s exactly what we should make of it… They are right.
 
 Yes, they are.
 
@@ -78,7 +78,7 @@ www.vox.com
 
 I've been blocking all Facebook properties for years, so I don't need to be convinced, but this is a solid breakdown.
 
-And therein lies the problem for Facebook. Not only is the product bad, but the company is in a deep state of denial about it. Mark Zuckerberg and other top leaders believe they are making the world a better place. The labor market for the kind of talented engineers that Facebook needs to hire is robust enough that you can’t compete on the basis of money alone — they need to believe that Facebook is a decent, honorable place to work. But in fact, Facebook is bad. And it probably can’t be fixed.
+> And therein lies the problem for Facebook. Not only is the product bad, but the company is in a deep state of denial about it. Mark Zuckerberg and other top leaders believe they are making the world a better place. The labor market for the kind of talented engineers that Facebook needs to hire is robust enough that you can’t compete on the basis of money alone — they need to believe that Facebook is a decent, honorable place to work. But in fact, Facebook is bad. And it probably can’t be fixed.
 
 Convinced yet?
 
@@ -87,7 +87,7 @@ eve-lang.com
 
 New languages are always fun to read about.
 
-Eve is a programming language and IDE based on years of research into building a human-first programming platform. From code embedded in documents to a language without order, it presents an alternative take on what programming could be - one that focuses on us instead of the machine.
+> Eve is a programming language and IDE based on years of research into building a human-first programming platform. From code embedded in documents to a language without order, it presents an alternative take on what programming could be - one that focuses on us instead of the machine.
 
 The "code" here looks bonkers to me. 🤷‍♂️
 
@@ -101,7 +101,7 @@ urlcanary.com
 
 What an interesting idea!
 
-You'll create a special URL which you'll then embed in your secret place. If a thief steals your secret and accesses the URL, we'll immediately send you an alert so that you'll know the secret has been stolen, and you'll learn the IP address and User-Agent of the attacker.
+> You'll create a special URL which you'll then embed in your secret place. If a thief steals your secret and accesses the URL, we'll immediately send you an alert so that you'll know the secret has been stolen, and you'll learn the IP address and User-Agent of the attacker.
 
 Cool.
 
@@ -110,7 +110,7 @@ www.grubstreet.com
 
 [Mark Bittman](http://markbittman.com) [and David Katz](http://davidkatzmd.com) on food.
 
-Ask us anything at all about diet and nutrition and we will give you an answer that is grounded in real scientific consensus, with no “healthy-ish” chit-chat, nary a mention of “wellness,” and no goal other than to cut through all the noise and help everyone see how simple it is to eat well.
+> Ask us anything at all about diet and nutrition and we will give you an answer that is grounded in real scientific consensus, with no “healthy-ish” chit-chat, nary a mention of “wellness,” and no goal other than to cut through all the noise and help everyone see how simple it is to eat well.
 
 Incredibly wide-ranging Q&A.
 
@@ -119,7 +119,7 @@ getoutline.org
 
 Google deserves some credit for the work they are doing to help news and journalism activities online.
 
-Journalists need safe access to information to research issues, communicate with sources, and report the news. Outline lets news organizations easily provide their network safer access to the open internet.
+> Journalists need safe access to information to research issues, communicate with sources, and report the news. Outline lets news organizations easily provide their network safer access to the open internet.
 
 👏
 
@@ -133,7 +133,7 @@ Facebook Has [Lost the Plot – 500ish Words](https://500ish.com/foot-in-mouthbo
 
 Overview of all of the missteps Facebook has had recently.
 
-Seemingly not an hour goes by these days that I don’t open Techmeme and see some ridiculous headline related to the latest Facebook faux pas. At best, the mistakes are eye-roll-inducing. At worst, they’re jaw-droppingly awful. And there are plenty in between which are just some combination of boneheaded, cringe-worthy, tactless, or tasteless.
+> Seemingly not an hour goes by these days that I don’t open Techmeme and see some ridiculous headline related to the latest Facebook faux pas. At best, the mistakes are eye-roll-inducing. At worst, they’re jaw-droppingly awful. And there are plenty in between which are just some combination of boneheaded, cringe-worthy, tactless, or tasteless.
 
 I would suggest that their frequency of issues is because they have no grounding ethics or principles. They lurch from issue to issue with no "true north" regarding their customers, their users and their principles. Just stumbling around.
 
@@ -142,9 +142,9 @@ www.braintreepayments.com
 
 Interesting overview of how Braintree evaluated and ultimately chose to use GraphQL for their published API's.
 
-The previously mentioned benefits would be enough to make a reasonable case for adopting GraphQL on their own. Our biggest surprise, however, was how perfectly suited GraphQL is for powering an orchestration layer.
-
-GraphQL forces you to cleanly separate logic for retrieving data from logic that composes this data and presents it to the user. You write code for the former and your GraphQL framework handles the latter.
+> The previously mentioned benefits would be enough to make a reasonable case for adopting GraphQL on their own. Our biggest surprise, however, was how perfectly suited GraphQL is for powering an orchestration layer.
+>
+> GraphQL forces you to cleanly separate logic for retrieving data from logic that composes this data and presents it to the user. You write code for the former and your GraphQL framework handles the latter.
 
 Also highlights challenges they had. Good read.
 
@@ -163,7 +163,7 @@ mrpandey.github.io
 
 Learn all about graph theory!
 
-D3 Graph Theory is project aimed at anyone who wants to learn graph theory. It provides quick and interactive introduction to the subject. The visuals used in the project makes it an effective learning tool.
+> D3 Graph Theory is project aimed at anyone who wants to learn graph theory. It provides quick and interactive introduction to the subject. The visuals used in the project makes it an effective learning tool.
 
 Well done, step-by-step way to understand a complex topic.
 
@@ -187,7 +187,7 @@ redisgraph.io
 
 I have [a lot of admiration for Redis](https://redislabs.com) and the solutions around it. I did some light coding with Redis and it is very easy to understand and use. This new module system to make Redis more extensible sounds interesting. Here is a graph database built in Redis.
 
-RedisGraph is a graph database developed from scratch on top of Redis, using the new Redis Modules API to extend Redis with new commands and capabilities. Its main features include: - Simple, fast indexing and querying - Data stored in RAM, using memory-efficient custom data structures - On disk persistence - Tabular result sets - Simple and popular graph query language (Cypher) - Data Filtering, Aggregation and ordering
+> RedisGraph is a graph database developed from scratch on top of Redis, using the new Redis Modules API to extend Redis with new commands and capabilities. Its main features include: - Simple, fast indexing and querying - Data stored in RAM, using memory-efficient custom data structures - On disk persistence - Tabular result sets - Simple and popular graph query language (Cypher) - Data Filtering, Aggregation and ordering
 
 ## Health
 

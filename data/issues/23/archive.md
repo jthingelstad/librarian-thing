@@ -153,7 +153,7 @@ links:
   domain: securitytxt.org
   heading_context: '[security.txt](https://securitytxt.org/)'
   section: Links 📌
-word_count: 2161
+word_count: 2165
 ---
 Big change this week – and hopefully you don't notice! I decided to move the Weekly Thing from TinyLetter to MailChimp. TinyLetter is a simple platform and was a great place to experiment and try things but I heard from a number of people that the Weekly Thing was going in there spam folders. I also had a couple of instances of failed delivery. MailChimp is a bit more complicated, but seems much more powerful. I can also now send the Weekly Thing from my domain so I hope that that will improve deliverability.
 
@@ -198,7 +198,9 @@ I like to give Perl code a hard time because so much of it is so sloppy. However
 
 ### [The Importance of Thinking Time — MyProductiveMac](http://www.myproductivemac.com/blog/the-importance-of-thinking-time11102017)
 
-In the realm of actively managing your schedule this is an important aspect to consider scheduling. That’s it, nothing else. Make sure you know when you’re going to take the opportunity to down tools, take a break and just - think. Just - be.
+In the realm of actively managing your schedule this is an important aspect to consider scheduling.
+
+> That’s it, nothing else. Make sure you know when you’re going to take the opportunity to down tools, take a break and just - think. Just - be.
 
 ### [Behind the Magic: How we built the ARKit Sudoku Solver](https://blog.prototypr.io/behind-the-magic-how-we-built-the-arkit-sudoku-solver-e586e5b685b0)
 
@@ -218,11 +220,19 @@ Interesting writeup on injecting formulas into CSV data to affect the behavior o
 
 ### [What Sephora Knows About Women in Tech That Silicon Valley Doesn’t - WSJ](https://www.wsj.com/articles/what-sephora-knows-about-women-in-tech-that-silicon-valley-doesnt-1507539600)
 
-[Highlighting how Sephora](https://www.sephora.com) has defied technology trends regarding gender diversity in technology. This reference to EEOC data is sobering: Women hold 23% of roles in the technical ranks at the top 75 Silicon Valley companies, according to the U.S. Equal Employment Opportunity Commission. A report from the commission attributes the scarcity of women in those roles to inhospitable work cultures, isolation, a “firefighting” work style, long hours and a lack of advancement. Take a look at the 'Industry Pipeline' graphs and note that the only industries with lower representation of women than tech is ‘automative and industrial manufacturing’ and ‘energy and basic materials’. There is a lot of room to improve! Thanks [@anna_picchetti](https://twitter.com/anna_picchetti) for the link!
+[Highlighting how Sephora](https://www.sephora.com) has defied technology trends regarding gender diversity in technology. This reference to EEOC data is sobering:
+
+> Women hold 23% of roles in the technical ranks at the top 75 Silicon Valley companies, according to the U.S. Equal Employment Opportunity Commission. A report from the commission attributes the scarcity of women in those roles to inhospitable work cultures, isolation, a “firefighting” work style, long hours and a lack of advancement.
+
+Take a look at the 'Industry Pipeline' graphs and note that the only industries with lower representation of women than tech is ‘automative and industrial manufacturing’ and ‘energy and basic materials’. There is a lot of room to improve! Thanks [@anna_picchetti](https://twitter.com/anna_picchetti) for the link!
 
 ### [The Value of Optimizing for Resilience - DZone Performance](https://dzone.com/articles/the-value-of-optimising-for-resilience)
 
-Good read and I like this term resilience better than survivability, which is what I typically use to describe these qualities. I also like the concept that this is built into the services but also the teams behind them. If the checkout team adopted Defensive Architecture techniques they could combine a [Circuit Breaker](https://www.martinfowler.com/bliki/CircuitBreaker.html), a [Bulkhead](https://www.amazon.co.uk/dp/1680502395/) , and a Feature Toggle in anticipation of registration errors. If the registration service struggled under load the Circuit Breaker would regulate registration requests to allow a percentage to succeed, and the Bulkhead would warn the checkout frontend to skip registration for some customers. Great terms and concepts to consider in system and team design! 👍
+Good read and I like this term resilience better than survivability, which is what I typically use to describe these qualities. I also like the concept that this is built into the services but also the teams behind them.
+
+> If the checkout team adopted Defensive Architecture techniques they could combine a [Circuit Breaker](https://www.martinfowler.com/bliki/CircuitBreaker.html), a [Bulkhead](https://www.amazon.co.uk/dp/1680502395/) , and a Feature Toggle in anticipation of registration errors. If the registration service struggled under load the Circuit Breaker would regulate registration requests to allow a percentage to succeed, and the Bulkhead would warn the checkout frontend to skip registration for some customers.
+
+Great terms and concepts to consider in system and team design! 👍
 
 ### [MenuetOS](http://www.menuetos.net/)
 
@@ -238,7 +248,11 @@ It is fun to see experimentation in new web browsers and [what they include by d
 
 ### [Silicon Valley | Asymco](http://www.asymco.com/2017/10/02/silicon-valley/)
 
-Wait, what? Currently Apple ships more microprocessors than Intel. I guess that makes sense when you consider all the iPhones walking the world but still that statement is striking. Nobody things of Apple as a semiconductor company. 🤔
+Wait, what?
+
+> Currently Apple ships more microprocessors than Intel.
+
+I guess that makes sense when you consider all the iPhones walking the world but still that statement is striking. Nobody things of Apple as a semiconductor company. 🤔
 
 ### [Blockchains: How They Work and Why They’ll Change the World - IEEE Spectrum](https://spectrum.ieee.org/computing/networks/blockchains-how-they-work-and-why-theyll-change-the-world)
 

@@ -127,7 +127,7 @@ links:
   domain: en.wikipedia.org
   heading_context: '[“Don’t be evil.”](https://en.wikipedia.org/wiki/Don%27t_be_evil)'
   section: Notable Links 📌
-word_count: 2636
+word_count: 2648
 ---
 This week has had a mournful undercurrent for me after we [said goodbye to our dog Chase](https://www.thingelstad.com/2018/goodbye-chase/) . I've never gone through this with a dog before. 😢 These four-legged friends can occupy a big place in our hearts.
 
@@ -151,7 +151,7 @@ Like Ben Brooks I use [1Blocker X](https://1blocker.com) on all of my iOS and ma
 
 The potential to have your Apple Watch be like a "Doctor on your wrist" is pretty amazing.
 
-Sooner than people think, virtually all home and outpatient diagnostics will be performed by consumer devices such as the Apple Watch, mobile phones, fitness trackers, etc. that have either become FDA cleared as medical devices or have apps that have received FDA clearance. Consumer devices will morph into medical grade devices, with some painful and well publicized mistakes along the way.
+> Sooner than people think, virtually all home and outpatient diagnostics will be performed by consumer devices such as the Apple Watch, mobile phones, fitness trackers, etc. that have either become FDA cleared as medical devices or have apps that have received FDA clearance. Consumer devices will morph into medical grade devices, with some painful and well publicized mistakes along the way.
 
 This helps reinforce why Apple has strategically positioned itself on the side of privacy. There is a huge market for this type of capability, but even someone that is happy to let Facebook and Google mine all their email, web searches and private photos, may be very resistant to giving their heart rate, blood pressure and weight to exploitive platforms.
 
@@ -170,9 +170,9 @@ Lyndale Park Rose Garden, 1500 E Lake Harriet Blvd, Minneapolis MN 55409
 
 [I've been using Namecheap](https://www.namecheap.com) for years as my registrar. I find them reliable and easy to use. Cloudflare has a great reputation and their entry into the registrar service may get me to move.
 
-Here's the promise of the Cloudflare Registrar: we'll follow the best possible security practices and offer you the best possible price. What do we mean by that? From the security side, we promise we'll allow you to enable two-factor authentication, we’ll lock your domain registration by default, and automatically enable best-practice security services like DNSSEC.
-
-From the price side it’s even simpler: we promise to never charge you anything more than the wholesale price each TLD charges. That’s true the first year and it’s true every subsequent year. If you register your domain with Cloudflare Registrar you’ll always pay the wholesale price with no markup.
+> Here's the promise of the Cloudflare Registrar: we'll follow the best possible security practices and offer you the best possible price. What do we mean by that? From the security side, we promise we'll allow you to enable two-factor authentication, we’ll lock your domain registration by default, and automatically enable best-practice security services like DNSSEC.
+>
+> From the price side it’s even simpler: we promise to never charge you anything more than the wholesale price each TLD charges. That’s true the first year and it’s true every subsequent year. If you register your domain with Cloudflare Registrar you’ll always pay the wholesale price with no markup.
 
 Cool that they are also allowing people to get earlier access if they make [a donation to Girls Who Code](https://girlswhocode.com/) !
 
@@ -180,11 +180,11 @@ Cool that they are also allowing people to get earlier access if they make [a do
 
 Another in the endless series of findings on how Facebook uses your data to target you.
 
-I was helping him test the theory by targeting him in a way Facebook had previously told me wouldn’t work. I directed the ad to display to a Facebook account connected to the landline number for Alan Mislove’s office, a number Mislove has never provided to Facebook. He saw the ad within hours.
+> I was helping him test the theory by targeting him in a way Facebook had previously told me wouldn’t work. I directed the ad to display to a Facebook account connected to the landline number for Alan Mislove’s office, a number Mislove has never provided to Facebook. He saw the ad within hours.
 
 They are even doing this with data you give them for security purposes.
 
-They found that when a user gives Facebook a phone number for two-factor authentication or in order to receive alerts about new log-ins to a user’s account, that phone number became targetable by an advertiser within a couple of weeks.
+> They found that when a user gives Facebook a phone number for two-factor authentication or in order to receive alerts about new log-ins to a user’s account, that phone number became targetable by an advertiser within a couple of weeks.
 
 [The EFF highlighted](https://www.eff.org/deeplinks/2018/09/you-gave-facebook-your-number-security-they-used-it-ads) this terrible use of security information for advertising targeting as well.
 
@@ -196,7 +196,7 @@ Right now this is just an alternative [front-end to have i been pwned?](https://
 
 What a cool project -- making a very low-tech, carbon neutral website. "This is a solar-powered website, which means it sometimes goes offline." The website shows its current battery level.
 
-Our new web design addresses both these issues. Thanks to a low-tech web design, we managed to decrease the average page size of the blog by a factor of five compared to the old design – all while making the website visually more attractive (and mobile-friendly). Secondly, our new website runs 100% on solar power, not just in words, but in reality: it has its own energy storage and will go off-line during longer periods of cloudy weather.
+> Our new web design addresses both these issues. Thanks to a low-tech web design, we managed to decrease the average page size of the blog by a factor of five compared to the old design – all while making the website visually more attractive (and mobile-friendly). Secondly, our new website runs 100% on solar power, not just in words, but in reality: it has its own energy storage and will go off-line during longer periods of cloudy weather.
 
 😎
 
@@ -205,7 +205,7 @@ www.forbes.com
 
 The inside scoop on WhatsApp founders break with Facebook.
 
-His motto at WhatsApp had been “No ads, no games, no gimmicks”—a direct contrast with a parent company that derived 98% of its revenue from advertising. Another motto had been “Take the time to get it right,” a stark contrast to “Move fast and break things.”
+> His motto at WhatsApp had been “No ads, no games, no gimmicks”—a direct contrast with a parent company that derived 98% of its revenue from advertising. Another motto had been “Take the time to get it right,” a stark contrast to “Move fast and break things.”
 
 Aren't ads, games and gimmicks pretty much all Facebook is? All about the 💰.
 
@@ -213,9 +213,9 @@ Aren't ads, games and gimmicks pretty much all Facebook is? All about the 💰.
 
 Insightful analysis by Ben Thompson on Instagram's founders departures from Facebook.
 
-Or Systrom and Instagram could offload all of those responsibilities to Facebook and continue being “extraordinary product leaders”, and pocket $1 billion to boot (and, to be fair to Systrom and team, that understates their gains; that $1 billion included $700 million in Facebook stock, which today is worth nearly $4 billion). It is a defensible choice (for Instagram anyways; not for the regulators that approved the deal), but the implication is that, title notwithstanding, Systrom was never the CEO of Instagram; to be a CEO is to have a company that can stand on its own.
-
-The difference from Zuckerberg — Instagram’s real CEO — is stark. Facebook launched in February, 2004, and sold its first ad two months later. True, “Facebook Flyers” bear little resemblance to the News Feed ads that power the company today, but Zuckerberg’s immediate instinct to build not just a product but a company is notable.
+> Or Systrom and Instagram could offload all of those responsibilities to Facebook and continue being “extraordinary product leaders”, and pocket $1 billion to boot (and, to be fair to Systrom and team, that understates their gains; that $1 billion included $700 million in Facebook stock, which today is worth nearly $4 billion). It is a defensible choice (for Instagram anyways; not for the regulators that approved the deal), but the implication is that, title notwithstanding, Systrom was never the CEO of Instagram; to be a CEO is to have a company that can stand on its own.
+>
+> The difference from Zuckerberg — Instagram’s real CEO — is stark. Facebook launched in February, 2004, and sold its first ad two months later. True, “Facebook Flyers” bear little resemblance to the News Feed ads that power the company today, but Zuckerberg’s immediate instinct to build not just a product but a company is notable.
 
 Wether it is Instagram or WhatsApp, the founders that sold those companies were made extraordinarily wealthy. They should not be surprised when the company that made them that wealthy takes the products in exactly the direction that was supremely obvious they would — advertising and mining private data.
 
@@ -263,7 +263,7 @@ I like this position, computer security is just security, and it’s really easy
 
 ### [“Don’t be evil.”](https://en.wikipedia.org/wiki/Don%27t_be_evil)
 
-The memo, authored by a Google engineer who was asked to work on the project, disclosed that the search system, codenamed Dragonfly, would require users to log in to perform searches, track their location — and share the resulting history with a Chinese partner who would have “unilateral access” to the data.
+> The memo, authored by a Google engineer who was asked to work on the project, disclosed that the search system, codenamed Dragonfly, would require users to log in to perform searches, track their location — and share the resulting history with a Chinese partner who would have “unilateral access” to the data.
 
 👎
 

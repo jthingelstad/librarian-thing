@@ -97,7 +97,7 @@ links:
   domain: blogs.windows.com
   heading_context: '[Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)'
   section: Notable Links 📌
-word_count: 2170
+word_count: 2177
 ---
 I’m writing this sitting on the floor of an empty room that will likely be the office in our new home. We closed today and are celebrating with takeout dinner in an empty house and thinking about how things will be laid out. We aren't moving until January.
 
@@ -111,7 +111,7 @@ It seems even more fitting coming at the end of the year. I’m excited about wh
 
 Everything in this is so true.
 
-The average person checks email 77 times a day, sends and receives more than 122 email messages a day, and spends 28 percent or more of their workweek managing a constant influx of email.
+> The average person checks email 77 times a day, sends and receives more than 122 email messages a day, and spends 28 percent or more of their workweek managing a constant influx of email.
 
 That is a ton of time, and even more when you consider the mental distraction of it all. I find this problem to be very difficult to solve though. Particularly in the workplace people have gotten used to sending emails and expecting immediate awareness. Any time you send an email "Are you coming to this meeting?" you reinforce that in your culture. To some extent, the adoption of messaging in business has been a welcome reprieve from this but not enough.
 
@@ -121,7 +121,7 @@ Personally I use Sanebox to keep emails in different bins, so I can check them o
 
 The results of AlphaZero are amazing. It’s shocking how quickly it developed winning strategies only using basic rules and playing games against itself and other algorithms.
 
-However, it was the style in which AlphaZero plays these games that players may find most fascinating. In Chess, for example, AlphaZero independently discovered and played common human motifs during its self-play training such as openings, king safety and pawn structure. But, being self-taught and therefore unconstrained by conventional wisdom about the game, it also developed its own intuitions and strategies adding a new and expansive set of exciting and novel ideas that augment centuries of thinking about chess strategy.
+> However, it was the style in which AlphaZero plays these games that players may find most fascinating. In Chess, for example, AlphaZero independently discovered and played common human motifs during its self-play training such as openings, king safety and pawn structure. But, being self-taught and therefore unconstrained by conventional wisdom about the game, it also developed its own intuitions and strategies adding a new and expansive set of exciting and novel ideas that augment centuries of thinking about chess strategy.
 
 I like how this article positions that human players will be able to develop new tactics and strategies by working with AlphaZero. That hybrid human plus algorithm approach will be common in a number of areas in the future, and already is in many. Before readers assume this means AlphaZero can do anything, remember that games are closed-systems with extremely specific rulesets. The world we all occupy is nothing like that.
 
@@ -139,7 +139,7 @@ State Theater, 19 N 8th St, Minneapolis MN
 
 Another recap, this time from Netflix, on the successes of using GraphQL.
 
-We have been running GraphQL on NodeJS for about 6 months, and it has proven to significantly increase our development velocity and overall page load performance.
+> We have been running GraphQL on NodeJS for about 6 months, and it has proven to significantly increase our development velocity and overall page load performance.
 
 They share some good learnings from the transition.
 
@@ -147,7 +147,7 @@ They share some good learnings from the transition.
 
 Crypto-currency boat cruise? No thanks.
 
-I understand why people might want to hire a boat and stuff it with investors: to make money. This cruise measures its takings in old-school pounds and dollars. None of the ship’s bars take bitcoin—fittingly, the only thing you can do with it here is gamble. What I don’t understand is why anyone thought this would make the whole thing look less like a Ponzi scheme with a sleazy post-cyberpunk aesthetic.
+> I understand why people might want to hire a boat and stuff it with investors: to make money. This cruise measures its takings in old-school pounds and dollars. None of the ship’s bars take bitcoin—fittingly, the only thing you can do with it here is gamble. What I don’t understand is why anyone thought this would make the whole thing look less like a Ponzi scheme with a sleazy post-cyberpunk aesthetic.
 
 😳
 
@@ -155,7 +155,7 @@ I understand why people might want to hire a boat and stuff it with investors: t
 
 I like Thompson's take on current affairs.
 
-This, then, is the state of technology in 2018: the enterprise market is thriving, and the consumer market is stagnant, dominated by the “innovations” that a few large behemoths deign to develop for consumers (and probably by ripping off a smaller company). Meanwhile a backlash is brewing on both sides of the political spectrum, but with no immediately viable outlet through competition or antitrust action, the politics surrounding technology simply becomes ever more rancid.
+> This, then, is the state of technology in 2018: the enterprise market is thriving, and the consumer market is stagnant, dominated by the “innovations” that a few large behemoths deign to develop for consumers (and probably by ripping off a smaller company). Meanwhile a backlash is brewing on both sides of the political spectrum, but with no immediately viable outlet through competition or antitrust action, the politics surrounding technology simply becomes ever more rancid.
 
 The stagnation is a real thing. We don't have many new service and apps coming to market in the last year. The giants of the industry haven't left much for the rest of the market.
 
@@ -187,7 +187,7 @@ GitHub has become part of many automated systems inside of companies. Extending 
 
 This seems like a perfect Minnesota thing.
 
-The Men’s Sheds motto: “Men don’t talk face-to-face. They talk shoulder-to-shoulder.”
+> The Men’s Sheds motto: “Men don’t talk face-to-face. They talk shoulder-to-shoulder.”
 
 Actually, isn't this just ice fishing but without the fishing? 😁
 
@@ -195,7 +195,7 @@ Actually, isn't this just ice fishing but without the fishing? 😁
 
 Interesting analogy from Cal Newport. Is the open web more of a market based system? I can see the logic behind that, and it does make sense.
 
-As any serious blog consumer can attest, a carefully curated blog feed, covering niches that matter to your life, can provide substantially more value than the collectivist ping-ponging of likes and memes that make up so much of social media interaction.
+> As any serious blog consumer can attest, a carefully curated blog feed, covering niches that matter to your life, can provide substantially more value than the collectivist ping-ponging of likes and memes that make up so much of social media interaction.
 
 This is why I don't get any of my incoming information via social media. None of the links I highlight come from social media.
 

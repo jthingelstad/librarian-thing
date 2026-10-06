@@ -134,7 +134,7 @@ links:
   domain: calnewport.com
   heading_context: '[Beyond Digital Ethics - Study Hacks - Cal Newport](http://calnewport.com/blog/2018/08/09/beyond-digital-ethics/)'
   section: Notable Links 📌
-word_count: 1978
+word_count: 1979
 ---
 I've always loved waterfalls, and this last weekend we got to finish our summer vacation by visiting one of the big ones — Niagara Falls! We started in the morning with a ride on the Maid of the Mist 🛥 before the lines were bad. We ventured on foot into Canada 🇨🇦 to explore the other side of Niagara and get the better view of the Horseshoe Falls. We quickly realized that it was complete mayhem on the Canadian side of the falls with minigolf, wax museums and tourist traps on every corner. We went on the Journey Behind the Falls and got to stand in a tunnel just 20 or 30 feet behind the falls and be immensely impressed, 😲 and scared, of the power of the falls. We retreated to the US 🇺🇸 and explored further, ending with the fireworks display at 10pm. 🎆 Niagara Falls was amazing, awe inspiring, and a bit scary to see that much power. What in the world were these people that got in barrels and went over the falls thinking!?
 
@@ -164,7 +164,7 @@ Horseshoe Falls, Niagara Falls, US/Canada
 
 Modern supply chains are amazing in their effectiveness, but transparency inside them is not a design objective.
 
-We call them “supply chains,” but that image is misleading. They really look more like a network of waterways, with thousands of tiny tributaries made up of sub-suppliers trickling into larger rivers of assembly, production, and distribution.
+> We call them “supply chains,” but that image is misleading. They really look more like a network of waterways, with thousands of tiny tributaries made up of sub-suppliers trickling into larger rivers of assembly, production, and distribution.
 
 The parallels between supply-chain design and service oriented architecture are surprising. Modularity, interchangeability, limited dependencies. Supply-chains are in many ways a physical manifestation of that type of architecture.
 
@@ -184,7 +184,7 @@ I like this and agree with it entirely. I suspect the same is true in any discip
 
 I have been running health checks for decades. [BigCharts server is happy](http://bigcharts.marketwatch.com/up2.aspx) is the first. [MarketWatch is also happy](https://www.marketwatch.com/up2.aspx).
 
-The “health” of a process is a spectrum. What we’re really interested in is the quality-of-service — such as how long it takes for a process to return the result of a given unit of work and the accuracy of the result.
+> The “health” of a process is a spectrum. What we’re really interested in is the quality-of-service — such as how long it takes for a process to return the result of a given unit of work and the accuracy of the result.
 
 Getting more precise with checks, not simple up and down, is definitely a good improvement.
 

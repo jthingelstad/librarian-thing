@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/48/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-48-apr-7-2018/
 domains: []
 links: []
-word_count: 2165
+word_count: 2169
 ---
 It was "Spring" Break this week, and I put Spring in parenthesis due to significantly below average temperatures here for the last week. ❄️ We split our week away between the Wisconsin Dells 💦 and Chicago 🎭. We had a great time doing water park things in the Dells and then seeing museums and culture in Chicago.
 
@@ -38,7 +38,7 @@ www.bloomberg.com
 
 Wow — 5.9 million different versions of ads? That is incredible.
 
-Trump ran 5.9 million different versions of ads during the presidential campaign and rapidly tested them to spread those that generated the most Facebook engagement, according to the paper. Clinton ran 66,000 different kinds of ads in the same period.
+> Trump ran 5.9 million different versions of ads during the presidential campaign and rapidly tested them to spread those that generated the most Facebook engagement, according to the paper. Clinton ran 66,000 different kinds of ads in the same period.
 
 Independent of the politics, you should assume that whatever advertising message you are getting on the Internet you may be the only one getting it, and it may be targeted to take advantage of specific information known only about you. Also, run [an ad blocker. I use 1Blocker](https://1blocker.com) .
 
@@ -130,7 +130,7 @@ www.psychologytoday.com
 
 Making friends takes time. It’s interesting to see it quantified to such a granular level.
 
-He found that it took about 50 hours of interaction to move from acquaintance to casual friend, about 90 hours to move from casual friend to friend, and more than 200 hours to qualify as a best friend.
+> He found that it took about 50 hours of interaction to move from acquaintance to casual friend, about 90 hours to move from casual friend to friend, and more than 200 hours to qualify as a best friend.
 
 Now you know why it was so easy to make friends when you were in the college dorm with nothing else to do.
 
@@ -148,7 +148,7 @@ hbr.org
 
 This is an important read. 👓
 
-Absentee leaders are people in leadership roles who are psychologically absent from them. They were promoted into management, and enjoy the privileges and rewards of a leadership role, but avoid meaningful involvement with their teams.
+> Absentee leaders are people in leadership roles who are psychologically absent from them. They were promoted into management, and enjoy the privileges and rewards of a leadership role, but avoid meaningful involvement with their teams.
 
 This is why you your personal engagement as a leader is so important. If you are not engaged, you cannot possibly be a leader. If you ever feel disconnected from the mission of your work, as a leader you should step aside.
 
@@ -159,7 +159,7 @@ feedbase.io
 
 I love this idea. Feed discovery is one of the bigger challenges of the open web. 👍
 
-Welcome to feedBase, which as its name implies, a database of feeds. I'm asking people who read my blog to upload their OPML subscription lists, so we can mash them together and produce a graph of users and feeds that you can walk, learn from, and discover new feeds to subscribe to.
+> Welcome to feedBase, which as its name implies, a database of feeds. I'm asking people who read my blog to upload their OPML subscription lists, so we can mash them together and produce a graph of users and feeds that you can walk, learn from, and discover new feeds to subscribe to.
 
 I [signed up and uploaded my OPML](http://feedbase.io/?username=thingles) to see how it works. I like this, but think it is probably a bigger project than Winer may be envisioning.
 

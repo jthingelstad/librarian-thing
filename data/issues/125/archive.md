@@ -86,7 +86,7 @@ links:
   domain: www.fastcompany.com
   heading_context: '[The first map of America''s food supply chain is mind-boggling](https://www.fastcompany.com/90422553/the-first-map-of-americas-food-supply-chain-is-mind-boggling)'
   section: Notable Links 📌
-word_count: 1869
+word_count: 1875
 ---
 Does it make sense when you are squeezing in, without enough time and just "getting it done", for something that you are trying to do to bring yourself more calm and presence? I find myself at the end of the day having not completed my daily meditation. I've even gotten in bed, realized I hadn't meditated yet, gotten up and done a 10-minute guided meditation, and then returned to bed. That's totally normal right?
 
@@ -100,7 +100,7 @@ I will keep doing it though, to keep the routine and the habit. I've done this 2
 
 [When I read Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep) it introduced me to the different types of non-REM sleep. This new research shows a bit more about what those other four stages of sleep do.
 
-What she discovered was that during non-REM sleep, large, slow waves of cerebrospinal fluid were washing over the brain. The EEG readings helped show why. During non-REM sleep, neurons start to synchronize, turning on and off at the same time. “First you would see this electrical wave where all the neurons would go quiet,” says Lewis. Because the neurons had all momentarily stopped firing, they didn’t need as much oxygen. That meant less blood would flow to the brain. But Lewis’s team also observed that cerebrospinal fluid would then rush in, filling in the space left behind.
+> What she discovered was that during non-REM sleep, large, slow waves of cerebrospinal fluid were washing over the brain. The EEG readings helped show why. During non-REM sleep, neurons start to synchronize, turning on and off at the same time. “First you would see this electrical wave where all the neurons would go quiet,” says Lewis. Because the neurons had all momentarily stopped firing, they didn’t need as much oxygen. That meant less blood would flow to the brain. But Lewis’s team also observed that cerebrospinal fluid would then rush in, filling in the space left behind.
 
 There is a lot of important and poorly understood things that happen when we sleep. Of course I’m typing this comment late at night, when I should be drifting off to sleep instead. 😬😴
 
@@ -124,7 +124,7 @@ Using shared filesystems for distributed systems is pretty common, and it works 
 
 Innovation in cloud platforms as well as some resurgence of more esoteric languages have brought functional programming more popularity. It’s a good reminder that this isn't just another language, this is another way of thinking.
 
-Learning functional programming is different. It’s more than some extra concepts that slot in with what you already know. No, functional programming is a whole new way to think about programming. If you come from an OOP or imperative background, it turns a lot of received wisdom on its head. Things that you thought were bad ideas turn out to be good ideas. Things that you thought were convenient and clever turn out to be problematic. Or plain impossible.
+> Learning functional programming is different. It’s more than some extra concepts that slot in with what you already know. No, functional programming is a whole new way to think about programming. If you come from an OOP or imperative background, it turns a lot of received wisdom on its head. Things that you thought were bad ideas turn out to be good ideas. Things that you thought were convenient and clever turn out to be problematic. Or plain impossible.
 
 Beware, there be dragons there. 🐉
 
@@ -132,7 +132,7 @@ Beware, there be dragons there. 🐉
 
 I suspect that there are multiple effects of the mobile and social waves that negatively impact people, and I truly do believe one of them is that our brains are always occupied. Solitude is an amazing thing, and something we take away from ourselves regularly. I have often wondered if this isn't part of the surge in people meditating over the last few years.
 
-To fill every moment of solitude with a droning hum of twitter timelines and pull-to-refresh swipes reduces the nobility of our social nature.
+> To fill every moment of solitude with a droning hum of twitter timelines and pull-to-refresh swipes reduces the nobility of our social nature.
 
 Indeed. 🧘‍♂️
 
@@ -148,7 +148,7 @@ Emails trying to find dates to get together with a group drive me bonkers. I've 
 
 The concept behind this book is interesting to me.
 
-The idea behind the book is to ask what would it be like to live in a city administered using the business model of Amazon (or Apple, IKEA, Pornhub, Spotify, Tinder, Uber, and more), or a city where critical public services are delivered by these companies?
+> The idea behind the book is to ask what would it be like to live in a city administered using the business model of Amazon (or Apple, IKEA, Pornhub, Spotify, Tinder, Uber, and more), or a city where critical public services are delivered by these companies?
 
 I feel the answer to this is very much know. Cities do not have the same goals as companies. Why would you run them the same.
 
@@ -164,7 +164,7 @@ For years I've ignored all this technical innovation going on in the barbecue wo
 
 I call BS on all of these apps. The marketing angles for services like NextDoor are all about preying on your fear. Add Ring to that as well.
 
-People have always been curious about crime, fearful for their safety, and yearned for community. But today, technology can supercharge these feelings, and sometimes helps people give into their worst inclinations. Privileged (often white) users are defining safety by excluding those who are already disenfranchised (usually people of color). At the same time, the platforms and devices grant tech companies and law enforcement new ways to build their networks of surveillance.
+> People have always been curious about crime, fearful for their safety, and yearned for community. But today, technology can supercharge these feelings, and sometimes helps people give into their worst inclinations. Privileged (often white) users are defining safety by excluding those who are already disenfranchised (usually people of color). At the same time, the platforms and devices grant tech companies and law enforcement new ways to build their networks of surveillance.
 
 Do yourself a huge favor, and delete your Nextdoor account if you have one. I tried it for a while, and after noting how they amplify fear in their messaging and use cases decided I had enough.
 
@@ -172,7 +172,7 @@ Do yourself a huge favor, and delete your Nextdoor account if you have one. I tr
 
 This sounds like science fiction.
 
-The Halo system, once engaged either automatically or by a passenger, gains immediate situational awareness and assumes control of all systems necessary to bring you and your passengers safely to the best suited runway. During all phases of flight it communicates with passengers and appropriate air traffic control facilities regarding the new flight plan route and estimated time until landing. Halo continually monitors all aircraft system parameters and real-time external inputs as if the pilot were at the controls. It takes into account runway size and orientation, wind, time, fuel range, glide path and considers weather conditions and terrain en route to the nearest suitable runway. Once Halo has landed the aircraft, the braking system will activate and will bring the aircraft to a full and complete stop. Finally, the engine will shut down and instructions will be provided on how to exit the aircraft.
+> The Halo system, once engaged either automatically or by a passenger, gains immediate situational awareness and assumes control of all systems necessary to bring you and your passengers safely to the best suited runway. During all phases of flight it communicates with passengers and appropriate air traffic control facilities regarding the new flight plan route and estimated time until landing. Halo continually monitors all aircraft system parameters and real-time external inputs as if the pilot were at the controls. It takes into account runway size and orientation, wind, time, fuel range, glide path and considers weather conditions and terrain en route to the nearest suitable runway. Once Halo has landed the aircraft, the braking system will activate and will bring the aircraft to a full and complete stop. Finally, the engine will shut down and instructions will be provided on how to exit the aircraft.
 
 That is amazing. It’s odd to me that self-driving airplanes is in so many ways an easier problem than self-driving cars.
 

@@ -75,7 +75,7 @@ links:
   domain: time.com
   heading_context: '[I Mentored Mark Zuckerberg. But I Can''t Stay Silent | Time](http://time.com/5505441/mark-zuckerberg-mentor-facebook-downfall/)'
   section: Notable Links 📌
-word_count: 1167
+word_count: 1171
 ---
 Hello from the Bold, and Frozen, North! ❄️ We are looking at several days with the thermometer never getting into positive numbers. 🥶 There should be plenty of opportunities to curate some fun links by the fire. 🔥
 
@@ -113,7 +113,7 @@ This is an interesting product. It’s a single purpose tool, which makes me won
 
 Sort of a funny read from the Department of Defense helping it’s buyers not get duped by shenanigans around agile.
 
-The Board’s document says its goal is to help program executives and acquisition professionals to spot projects “that are simply waterfall or spiral development in agile clothing.” One attempted hybrid of Waterfall and Agile development has been dubbed “water-Scrum-fall,” but the document warns against imposters trying to claim this is agile development, using the sardonic moniker “agile-scrum-fall”.
+> The Board’s document says its goal is to help program executives and acquisition professionals to spot projects “that are simply waterfall or spiral development in agile clothing.” One attempted hybrid of Waterfall and Agile development has been dubbed “water-Scrum-fall,” but the document warns against imposters trying to claim this is agile development, using the sardonic moniker “agile-scrum-fall”.
 
 🤣
 
@@ -129,7 +129,7 @@ A number of good things to consider in your recruiting for technology profession
 
 I like this advice.
 
-Pause. Don’t be so busy. Take stock. Why are you doing those things? Because you like doing them? Because you’re good at them? Or because it’s the best way to move the team forward?
+> Pause. Don’t be so busy. Take stock. Why are you doing those things? Because you like doing them? Because you’re good at them? Or because it’s the best way to move the team forward?
 
 This would be a good thing to include in your regular reflections.
 
@@ -137,7 +137,7 @@ This would be a good thing to include in your regular reflections.
 
 We've watched a few episodes of Tidying Up, it’s a fun diversion. I will admit it is also inspirational to go through that closet you've been ignoring.
 
-Another weird thing has been happening, says Susan, who works the front desk: People have been thanking their objects before giving them away. She rolls her eyes.
+> Another weird thing has been happening, says Susan, who works the front desk: People have been thanking their objects before giving them away. She rolls her eyes.
 
 It’s pretty amazing that could be driving a surge in donations.
 
@@ -145,7 +145,7 @@ It’s pretty amazing that could be driving a surge in donations.
 
 The technology industry has to be one of the most severely acronym'd industries out there.
 
-Abbreviations, initialisms, acronyms, and neologisms are jargon. You want to keep the density of jargon in your writing low to make it as readable as possible. Writing full of unfamiliar jargon is a struggle to parse, and perpetuates the curse of knowledge.
+> Abbreviations, initialisms, acronyms, and neologisms are jargon. You want to keep the density of jargon in your writing low to make it as readable as possible. Writing full of unfamiliar jargon is a struggle to parse, and perpetuates the curse of knowledge.
 
 It would do us well to use less of them.
 

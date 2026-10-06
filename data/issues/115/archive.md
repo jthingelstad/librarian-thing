@@ -80,7 +80,7 @@ links:
   domain: www.jonathanturner.org
   heading_context: '[Introducing nushell](http://www.jonathanturner.org/2019/08/introducing-nushell.html)'
   section: Notable Links 📌
-word_count: 1473
+word_count: 1484
 ---
 Welcome to Labor Day weekend and for many families the last weekend before school starts again. This week I got to attend the parent session for Freshman orientation. It doesn't seem that long ago that it was the first day of kindergarten, and now they are talking about college counselors and when you might [start taking the PSAT! Time flies!](https://www.thingelstad.com/2005/fractions-and-life)
 
@@ -92,7 +92,7 @@ There are still a couple of final things to check off the summer To Do list. We 
 
 Good insights and data from Automattic, the makers of WordPress, and what they learned about how women navigate the technology industry. I found this highlight interesting:
 
-Respondents read job descriptions almost exclusively for red flags; for instance, they search for language encouraging all relevant employees (not just women) to take parental leave.
+> Respondents read job descriptions almost exclusively for red flags; for instance, they search for language encouraging all relevant employees (not just women) to take parental leave.
 
 I've highlighted other articles in the past that showed changing the style of job postings had a radical impact on the pool of candidates that companies got.
 
@@ -100,11 +100,11 @@ I've highlighted other articles in the past that showed changing the style of jo
 
 Men working in the technology industry, especially those in leadership roles, need to read articles like this that share the experience that women in technology have. This article is even more troubling as it is focused on internships!
 
-More than half of the respondents said they either had a negative experience while applying for engineering internships or knew another woman who had a negative experience, such as being subjected to gender-biased interview questions and inappropriate remarks, or observing a noticeable lack of diversity when they interacted with company representatives during the interview process.
-
-Although the survey did not explicitly ask about sexual harassment and discrimination, respondents raised both issues in written responses at the end of the survey. They described instances where a male interviewer flirted with them during the interview, sent an unsolicited photo of himself, asked if they had a significant other, or made sexual remarks in their presence. The respondents also reported feeling dismissed or demeaned because of their gender. One respondent was asked why she would want to go into tech as a woman; in another instance, a male interviewer laughed when the candidate said she saw herself becoming a software engineer in five years.
-
-The inappropriate behavior they describe is alarming considering that the average age of the respondents was 19 and, for the most part, they’re describing interactions with grown men who have some control over their access to opportunity.
+> More than half of the respondents said they either had a negative experience while applying for engineering internships or knew another woman who had a negative experience, such as being subjected to gender-biased interview questions and inappropriate remarks, or observing a noticeable lack of diversity when they interacted with company representatives during the interview process.
+>
+> Although the survey did not explicitly ask about sexual harassment and discrimination, respondents raised both issues in written responses at the end of the survey. They described instances where a male interviewer flirted with them during the interview, sent an unsolicited photo of himself, asked if they had a significant other, or made sexual remarks in their presence. The respondents also reported feeling dismissed or demeaned because of their gender. One respondent was asked why she would want to go into tech as a woman; in another instance, a male interviewer laughed when the candidate said she saw herself becoming a software engineer in five years.
+>
+> The inappropriate behavior they describe is alarming considering that the average age of the respondents was 19 and, for the most part, they’re describing interactions with grown men who have some control over their access to opportunity.
 
 The scale of this problem is big, but it cannot be ignored.
 
@@ -114,9 +114,9 @@ Last week the WebKit team published their position on trackers and blocking them
 
 This look at the statements Google is making is thorough.
 
-Google is trying to thread a needle here, implying that some level of tracking is consistent with both the original design intent for web technology and user privacy expectations. Neither is true.
-
-If the benchmark is original design intent, let’s be clear: cookies were not supposed to enable third-party tracking, and browsers were supposed to block third-party cookies. We know this because the authors of the original cookie [technical specification said so (RFC 2109](https://tools.ietf.org/html/rfc2109) , Section 4.3.5).
+> Google is trying to thread a needle here, implying that some level of tracking is consistent with both the original design intent for web technology and user privacy expectations. Neither is true.
+>
+> If the benchmark is original design intent, let’s be clear: cookies were not supposed to enable third-party tracking, and browsers were supposed to block third-party cookies. We know this because the authors of the original cookie [technical specification said so (RFC 2109](https://tools.ietf.org/html/rfc2109) , Section 4.3.5).
 
 Google gets in tough spots when they have to address privacy. Everyone knows that they thrive on user data. Limiting the ability to collect user data directly, negatively, impacts they're revenue.
 
@@ -142,7 +142,7 @@ A few years back I went looking for GitHub's certifications and was pretty surpr
 
 When you start looking at where your activity is tracked, it seems like there is no end of it.
 
-What I learned: The card data business is booming for advertisers, for aiding investors and for helping retailers and banks encourage more spending. And there are many ways a card swipe can be exploited that don’t always require a transaction being “sold” or “shared” in a way that fully identifies you. Data can be aggregated, anonymized, hashed or pseudonymized (given a new name), or used to target you without ever technically changing hands.
+> What I learned: The card data business is booming for advertisers, for aiding investors and for helping retailers and banks encourage more spending. And there are many ways a card swipe can be exploited that don’t always require a transaction being “sold” or “shared” in a way that fully identifies you. Data can be aggregated, anonymized, hashed or pseudonymized (given a new name), or used to target you without ever technically changing hands.
 
 🤨
 
@@ -158,7 +158,7 @@ I feel like I’m wired in on nearly every way of making and drinking coffee, bu
 
 Good practical suggestions here. But you could probably just anchor on the very first sentence.
 
-You want to manage up – but what you really mean is that you simply want to work well with your boss.
+> You want to manage up – but what you really mean is that you simply want to work well with your boss.
 
 👍
 

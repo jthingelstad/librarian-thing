@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/50/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-50-apr-21-2018/
 domains: []
 links: []
-word_count: 2408
+word_count: 2414
 ---
 The Weekly Thing was highlighted in [the April 13th issue of Noticing](https://mailchi.mp/kottke/blogging-is-not-dead-edition-2575912502?e=b093041ae3) , the new newsletter from kottke.org, along with a number of other blogs and newsletters. 🙌 It was awesome to be included, and it resulted in a bunch of new subscribers discovering the Weekly Thing! To all the new folks here, welcome to this weekly summary of new content, apps, books and many other "things" of interest! 👍 Grab a coffee ☕️ and look around a bit.
 
@@ -41,7 +41,7 @@ www.linkedin.com
 
 I have had [the pleasure of meeting Peter Stern](https://www.linkedin.com/in/iampeter/) on a few occasions. We first met when he was CTO of Datek, which was one of the early firms to bring trading to the masses, and also one of the first customers of BigCharts. Even after Peter and team sold Datek to Ameritrade, I had the great pleasure of having dinner with him in New York. Peter has a mind that devours any topic in front of it. This letter he wrote for his daughter recommending the book Sapiens by Yuval Noah Harari is a strong recommendation, but not just of this book.
 
-History, philosophy, religion, biology, economics, linguistics, law, evolutionary biology, behavioral economics, topics I don’t even know how to explain. Tens of thousands of pages I read. Many of these books were unrewarding and were left on a stoop before you were born or simply tossed. The ones that are worth reading still line our bookshelves, with a few exceptions. Some books were really good, but your mother found their titles upsetting, awkward, or difficult to explain to guests. Those also got left on stoops. Sorry about that. You can ask me about them if you really want to know.
+> History, philosophy, religion, biology, economics, linguistics, law, evolutionary biology, behavioral economics, topics I don’t even know how to explain. Tens of thousands of pages I read. Many of these books were unrewarding and were left on a stoop before you were born or simply tossed. The ones that are worth reading still line our bookshelves, with a few exceptions. Some books were really good, but your mother found their titles upsetting, awkward, or difficult to explain to guests. Those also got left on stoops. Sorry about that. You can ask me about them if you really want to know.
 
 This is a recommendation to be a lifelong learner and to always be curious.
 
@@ -50,11 +50,11 @@ www.sec.gov
 
 Bezos annual shareholder letters aren't as well known as Buffet's Berkshire Hathaway ones, but they are very spirited and go back to Amazon's core values. This Prime milestone is amazing.
 
-13 years post-launch, we have exceeded 100 million paid Prime members globally. In 2017 Amazon shipped more than five billion items with Prime worldwide, and more new members joined Prime than in any previous year – both worldwide and in the U.S.
+> 13 years post-launch, we have exceeded 100 million paid Prime members globally. In 2017 Amazon shipped more than five billion items with Prime worldwide, and more new members joined Prime than in any previous year – both worldwide and in the U.S.
 
 Also on AWS:
 
-AWS has also accelerated its pace of innovation – especially in new areas such as machine learning and artificial intelligence, Internet of Things, and serverless computing. In 2017, AWS announced more than 1,400 significant services and features…
+> AWS has also accelerated its pace of innovation – especially in new areas such as machine learning and artificial intelligence, Internet of Things, and serverless computing. In 2017, AWS announced more than 1,400 significant services and features…
 
 I’m amazed that the pace of change at AWS is increasing as it has scaled up. I think it may be the first example in existence of a software platform that moved faster as it got larger.
 
@@ -65,11 +65,11 @@ Interesting article that highlights Palantir, a company that originally started 
 
 This tidbit was amazing to me, but made sense when I thought about it for a while. Combine municipal camera systems with this facial data from drivers license and you can monitor people at scale.
 
-Tapping databases of driver’s license and ID photos, law enforcement agencies can now identify more than half the population of U.S. adults.
+> Tapping databases of driver’s license and ID photos, law enforcement agencies can now identify more than half the population of U.S. adults.
 
 We are dealing with systems that will change how we behave -- constantly being surveilled.
 
-JPMorgan’s experience remains instructive. “The world changed when it became clear everyone could be targeted using Palantir,” says a former JPMorgan cyber expert who worked with Cavicchia at one point on the insider threat team. “Nefarious ideas became trivial to implement; everyone’s a suspect, so we monitored everything. It was a pretty terrible feeling.”
+> JPMorgan’s experience remains instructive. “The world changed when it became clear everyone could be targeted using Palantir,” says a former JPMorgan cyber expert who worked with Cavicchia at one point on the insider threat team. “Nefarious ideas became trivial to implement; everyone’s a suspect, so we monitored everything. It was a pretty terrible feeling.”
 
 I've read a bit about how companies are using video feeds along with machine learning to monitor employees. I’m guessing that is all very entry level and basic compared to what state of the art is.
 
@@ -94,7 +94,7 @@ medium.com
 
 Another major piece of software open sourced by Netflix.
 
-Over the last three years, Titus evolved initially from supporting batch use cases, to running services applications (both internal, and ultimately critical customer-facing). Through that evolution, container use at Netflix has grown from thousands of containers launched per week to as many as three million containers launched per week in April 2018. Titus hosts thousands of applications globally over seven regionally isolated stacks across tens of thousands of EC2 virtual machines. The open-sourcing of Titus shares the resulting technology assembled through three years of production learnings in container management and execution.
+> Over the last three years, Titus evolved initially from supporting batch use cases, to running services applications (both internal, and ultimately critical customer-facing). Through that evolution, container use at Netflix has grown from thousands of containers launched per week to as many as three million containers launched per week in April 2018. Titus hosts thousands of applications globally over seven regionally isolated stacks across tens of thousands of EC2 virtual machines. The open-sourcing of Titus shares the resulting technology assembled through three years of production learnings in container management and execution.
 
 🤔
 

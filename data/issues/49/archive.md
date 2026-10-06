@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/49/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-49-apr-14-2018/
 domains: []
 links: []
-word_count: 1722
+word_count: 1729
 ---
 Those of us in Northern climates have grown sick of winter, and it feels like we must have done something wrong to have this exceptionally cold April. To add insult to injury we are being treated to, what one hopes will be, a final barrage of several or more inches of snow. ❄️ Uncle already!
 
@@ -50,7 +50,7 @@ www.bloomberg.com
 
 Remember, Instagram == Facebook.
 
-Most Instagram users are unaware of all this. The service is widely seen as an escape from Facebook, so Instagram has to tread carefully to protect the app’s reputation.
+> Most Instagram users are unaware of all this. The service is widely seen as an escape from Facebook, so Instagram has to tread carefully to protect the app’s reputation.
 
 If your concern with Facebook is privacy, Instagram isn't a place to solve that. If your issue with Facebook is something else than maybe it’s fine. I'd recommend using something like micro.blog to publish your own photos.
 
@@ -59,7 +59,7 @@ jamesshelley.com
 
 Thoughtful writing on opting out of social media entirely.
 
-I’m out. There are many things I hope to do while I am alive… trying to convince somebody’s advertising algorithm to pay attention to me is not one of those things. Multiply this conviction by the sense that spending time on social media is a suboptimal use of time that comes at the expense of things I truly care about and leaving seems evermore desirable. Just one life to live: I refuse to be a collateral pawn in someone else’s attention war.
+> I’m out. There are many things I hope to do while I am alive… trying to convince somebody’s advertising algorithm to pay attention to me is not one of those things. Multiply this conviction by the sense that spending time on social media is a suboptimal use of time that comes at the expense of things I truly care about and leaving seems evermore desirable. Just one life to live: I refuse to be a collateral pawn in someone else’s attention war.
 
 🤔
 
@@ -77,7 +77,7 @@ pitchfork.com
 
 I so distinctly remember getting this CD when I was in college and being instantly transfixed by it. 🎶
 
-Cash is listening. He thinks Rubin wears clothes that “would have done a wino proud,” but he likes his individualism, and he knows that his own back is against the wall. So he goes to the hills above the Sunset Strip. He sits down in Rubin’s living room and plays songs that mean something to him, just him and his guitar, and Rubin rolls the tape. In three days, they’ve got north of 30 songs. Cowboy songs, folk songs, and old songs figure heavily. You know, songs about God, murder, trains, and everything else that makes America.
+> Cash is listening. He thinks Rubin wears clothes that “would have done a wino proud,” but he likes his individualism, and he knows that his own back is against the wall. So he goes to the hills above the Sunset Strip. He sits down in Rubin’s living room and plays songs that mean something to him, just him and his guitar, and Rubin rolls the tape. In three days, they’ve got north of 30 songs. Cowboy songs, folk songs, and old songs figure heavily. You know, songs about God, murder, trains, and everything else that makes America.
 
 I loved reading the back story on this. I think the amazing thing about the Cash / Rubin collaboration is it cemented Johnny Cash concretely in multiple generations. How many artists ever do that? Not many.
 
@@ -98,14 +98,14 @@ jsjaspreet.com
 
 Highlights on things to watch out for when using GraphQL.
 
-For me personally, the thing that astounds me about GraphQL isn't just the awesome technical solutions it enables, but also the organizational impact of a more decoupled environment where teams can develop independently of one another and focus more on upholding public contracts rather than knowing too much about internal implementations.
+> For me personally, the thing that astounds me about GraphQL isn't just the awesome technical solutions it enables, but also the organizational impact of a more decoupled environment where teams can develop independently of one another and focus more on upholding public contracts rather than knowing too much about internal implementations.
 
 Thank you for [making 10 years of GitHub possible](https://github.com/ten)
 github.com
 
 This is a fun reflection on the first 10 years of GitHub.
 
-For 10 years, you’ve shared, tinkered, and built on GitHub from all around the world. Before we head into the next decade, we’ve collected some of our favorite moments and milestones—just a few of the ways you’ve pushed software forward.
+> For 10 years, you’ve shared, tinkered, and built on GitHub from all around the world. Before we head into the next decade, we’ve collected some of our favorite moments and milestones—just a few of the ways you’ve pushed software forward.
 
 The impact that GitHub has had on open-source, and coding practices in general is amazing. There are many services that exist [today that would not if git](https://git-scm.com) and GitHub were not created. Let's hope that GitHub stays in good hands.
 
@@ -114,7 +114,7 @@ databaseflow.com
 
 Interesting to see this providing GraphQL endpoints to databases.
 
-Database Flow is an open source self-hosted SQL client, GraphQL server, and charting application that works with your database. Visualize schemas, query plans, charts, and results. You can run Database Flow locally for your own use, or install to a shared server for the whole team.
+> Database Flow is an open source self-hosted SQL client, GraphQL server, and charting application that works with your database. Visualize schemas, query plans, charts, and results. You can run Database Flow locally for your own use, or install to a shared server for the whole team.
 
 Cool.
 
@@ -151,7 +151,7 @@ toolsandtoys.net
 
 ☕️ Very nice overview of coffee fundamentals.
 
-I thought I’d put together a “back to basics” guide on coffee brewing. We’ve certainly covered this topic in a number of ways, so think of this guide as a compilation/remix of all that information.
+> I thought I’d put together a “back to basics” guide on coffee brewing. We’ve certainly covered this topic in a number of ways, so think of this guide as a compilation/remix of all that information.
 
 I would agree with everything in here. It doesn't address the next level topics on espresso, but this is a good starter for doing coffee well.
 

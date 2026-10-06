@@ -75,7 +75,7 @@ links:
   domain: www.cunningleah.com
   heading_context: '[Leah Cunningham](http://www.cunningleah.com/)'
   section: Notable Links 📌
-word_count: 1385
+word_count: 1388
 ---
 We are in that really fun time as parents where our kids are old enough to stay up until midnight on New Years Eve, and happily also think it's fun to do that with their parents. I was reading various blog posts leading up to New Years about resolutions and various self-improvement ideas for the year ahead. Reflections on the past year and such. New Years Eve was a good reminder to chill out and just have fun as I joined the kids in screaming and shouting in elation as the clock tipped over into 2019. 🎉 It's good to step back and just welcome in the New Year with a bunch of whooping and hollering! Happy 2019 to everyone! 🍾
 
@@ -103,7 +103,7 @@ Dec 30, 2018 at 5:11 PM
 
 Well, Fred Wilson gets tight to the point.
 
-I believe and have been telling those around me that I think 2019 will be a “doozy.” I think we will see major dislocations in the leadership of the United States, a bear market in stocks, a weakening economy, a number of issues with the global economy including a messy Brexit and a sluggish China.
+> I believe and have been telling those around me that I think 2019 will be a “doozy.” I think we will see major dislocations in the leadership of the United States, a bear market in stocks, a weakening economy, a number of issues with the global economy including a messy Brexit and a sluggish China.
 
 Yikes. 😳
 
@@ -127,7 +127,7 @@ More thoughts on Serverless architectures, this time on costs. Bray's point is v
 
 This is a shocking valuation in such a short period of time.
 
-The deal values Juul at $38 billion, a similar market capitalization to that of Target, MetLife, Delta Air Lines, and Ford. Fifteen hundred Juul employees split a $2 billion dividend as a result, becoming instant millionaires overnight.
+> The deal values Juul at $38 billion, a similar market capitalization to that of Target, MetLife, Delta Air Lines, and Ford. Fifteen hundred Juul employees split a $2 billion dividend as a result, becoming instant millionaires overnight.
 
 All being built by addicting people, mostly kids, to nicotine and encouraging them to do something that is bad for them. Maybe Facebook should have bought Juul?
 
@@ -135,7 +135,7 @@ All being built by addicting people, mostly kids, to nicotine and encouraging th
 
 Interesting background data on how chores and allowances encourage behaviors.
 
-He advises that allowance be used as a means of showing children how to save, give, and spend on things they care about. Kids should do chores, he writes, “for the same reason we do—because the chores need to be done, and not with the expectation of compensation … Allowance ought to stand on its own, not as a wage but as a teaching tool.”
+> He advises that allowance be used as a means of showing children how to save, give, and spend on things they care about. Kids should do chores, he writes, “for the same reason we do—because the chores need to be done, and not with the expectation of compensation … Allowance ought to stand on its own, not as a wage but as a teaching tool.”
 
 In our family the kids get an allowance just on schedule, it’s not tied to chores. Chores are things you do because your part of the family and we all chip in.
 

@@ -151,7 +151,7 @@ links:
   domain: graphics.reuters.com
   heading_context: '[A Reuters Visual Guide: Blockchain explained](http://graphics.reuters.com/TECHNOLOGY-BLOCKCHAIN/010070P11GN/index.html)'
   section: Notable Links 📌
-word_count: 2999
+word_count: 3007
 ---
 We have been having a wonderful week staying at our cabin and having mulitple groups of friends and family down. We've had a lot of time on the pontoon, [tubing and enjoying the new lillypad](http://www.thingelstad.com/2018/06/30/the-lilypad-is.html) . For those that are not familiar, this lillypad is 6' by 16' and floats on the top of the lake. It can hold over 1,000 pounds and kids have a great time climbing on it, jumping off, and playing king of the hill. I'm still learning how to wrestle it back out of the water. 💧 We had another stupendous display of fireworks. There are a lot of people on Cannon Lake that set off giant fireworks displays on the 4th of July. I hope all of you living the US had a great 4th of July 🇺🇸, and our friends to the north a great Canada Day! 🇨🇦
 
@@ -163,17 +163,17 @@ I've been reading a lot about SAFe and I know a number of people that are intrig
 
 He highlights that many organizations, in his view, have yet to truly embrace the most important part of agile.
 
-So then – and still today – in most companies, the stakeholders still provide the teams with roadmaps of what features and projects the stakeholders think best. Even though the teams use Agile methods, the teams are not empowered and accountable in the sense I’m describing. They are there to implement.
+> So then – and still today – in most companies, the stakeholders still provide the teams with roadmaps of what features and projects the stakeholders think best. Even though the teams use Agile methods, the teams are not empowered and accountable in the sense I’m describing. They are there to implement.
 
 Honestly, I would agree with that assertion.
 
-A couple years ago I wrote about [the root causes of product failure](http://www.svpg.com/product-fail) in product companies and I identified ten key attributes of Waterfall and project-mindset. I went through and compared this list with SAFe, and literally all ten problems exist in SAFe. Indeed, I would argue that all ten problems are inherent in that process.
+> A couple years ago I wrote about [the root causes of product failure](http://www.svpg.com/product-fail) in product companies and I identified ten key attributes of Waterfall and project-mindset. I went through and compared this list with SAFe, and literally all ten problems exist in SAFe. Indeed, I would argue that all ten problems are inherent in that process.
 
 He does give that there are three areas where SAFe may work well, and I note that one of them is a "big regarding-platforming event". I wonder if this goes back to product versus project organizations?
 
 I strongly endorse his view that tools are not agnostic of culture.
 
-But it’s critical to realize that most tools are not agnostic. Their creators are trying to facilitate a certain way of thinking or working. You need to ensure that’s how you want to think or work.
+> But it’s critical to realize that most tools are not agnostic. Their creators are trying to facilitate a certain way of thinking or working. You need to ensure that’s how you want to think or work.
 
 Both of these articles are worthy reads to make sure that you see all sides of this agile discussion.
 
@@ -181,7 +181,7 @@ Both of these articles are worthy reads to make sure that you see all sides of t
 
 Amazingly deep article on all aspects of Apple's upcoming "reboot" of their Maps effort. Maps have gotten better since the alarmingly poor launch, but that improvement hasn't been able to deal with a fundamental issue of poor data on the bottom.
 
-Decision made, Apple plowed ahead, building a product that relied on a patchwork of data from partners like TomTom, OpenStreetMap and other geo data brokers. The result was underwhelming.
+> Decision made, Apple plowed ahead, building a product that relied on a patchwork of data from partners like TomTom, OpenStreetMap and other geo data brokers. The result was underwhelming.
 
 I've always felt this decision was odd for Apple and driven by missing the importance of map data early on. They had to partner so they could get to market, after relying for so many years on Google's maps. But Apple's path has always been to own all parts of the stack. The iPhone is Apple hardware, software and Apple everywhere in between. Maps was a mashup of different data.
 
@@ -215,7 +215,7 @@ This reminds me how [one of my book club friends](http://tomeri.org) reads. It a
 
 I love it when Josh Marshall of Talking Points Memo turns to the topic of being a digital publisher.
 
-The first should be obvious: you can’t build businesses around a company as unreliable and poorly run as Facebook. Only a year ago, when I would talk to big money players in the digital media world, there was a consistent refrain: social video on Facebook, that’s the whole game. That struck me as crazy at the time, given everything we were seeing in the industry. And it was crazy. There’s no news publisher entitlement to Facebook traffic. And Facebook is a highly unreliable company. We’ve seen this pattern repeat itself a number of times over the course of company’s history: its scale allows it to create whole industries around it depending on its latest plan or product or gambit. But again and again, with little warning it abandons and destroys those businesses.
+> The first should be obvious: you can’t build businesses around a company as unreliable and poorly run as Facebook. Only a year ago, when I would talk to big money players in the digital media world, there was a consistent refrain: social video on Facebook, that’s the whole game. That struck me as crazy at the time, given everything we were seeing in the industry. And it was crazy. There’s no news publisher entitlement to Facebook traffic. And Facebook is a highly unreliable company. We’ve seen this pattern repeat itself a number of times over the course of company’s history: its scale allows it to create whole industries around it depending on its latest plan or product or gambit. But again and again, with little warning it abandons and destroys those businesses.
 
 Wether [Facebook is a platform or not](https://stratechery.com/2018/the-bill-gates-line/) , it does not have the maturity and long-term view needed to run a platform that supports a vibrant ecosystem over the long term.
 
@@ -223,7 +223,7 @@ Wether [Facebook is a platform or not](https://stratechery.com/2018/the-bill-gat
 
 Much has been written about Amazon's processes for making new products. This writeup from Amazon CTO Werner Vogels is brief and to the point on the process.
 
-The Working Backwards product definition process is all about is fleshing out the concept and achieving clarity of thought about what we will ultimately go off and build.
+> The Working Backwards product definition process is all about is fleshing out the concept and achieving clarity of thought about what we will ultimately go off and build.
 
 There is a lot to like here. I tend to think the best processes and frameworks for product management push for clarity and insuring that all the connective components of a product are thought out. It’s not hard to identify 3 or 4 big features. The hard work comes in figuring out how it all connects together.
 
@@ -239,7 +239,7 @@ How is it that this list doesn't include ops? Anyway, I like the distinction bet
 
 I absolutely love that this is a thing!
 
-This is a radically new event championing bottom-up, developer-driven ethics. How can we make technologists the last bastion of defence against unethical products? After all, we design, write and deploy them.
+> This is a radically new event championing bottom-up, developer-driven ethics. How can we make technologists the last bastion of defence against unethical products? After all, we design, write and deploy them.
 
 I’m hoping they share videos from the sessions. I’m very pleased to see this conversation happening. 🏆
 
@@ -290,7 +290,7 @@ I like checklists a lot. The pragmatism of a list of less, more and none is a co
 
 I believe there is a lot of truth to this thought. I often refer to social media as spray foam for the mind. It fills all the little gaps with stuff, instead of some solitude or plain boredom.
 
-We ignore the fact that never facing this nothingness is the same as never facing ourselves. And never facing ourselves is why we feel lonely and anxious in spite of being so intimately connected to everything else around us.
+> We ignore the fact that never facing this nothingness is the same as never facing ourselves. And never facing ourselves is why we feel lonely and anxious in spite of being so intimately connected to everything else around us.
 
 This but is like a gateway to Buddhist practices. If you face yourself, you need to figure out what self is.
 

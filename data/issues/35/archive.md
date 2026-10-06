@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/35/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-6-2018/
 domains: []
 links: []
-word_count: 1570
+word_count: 1583
 ---
 😬 I hope you all had a great New Years and a fabulous start to 2018! For me the New Year has kicked off with a bang! 🚀 This week has been a blur of various activities on all fronts. I celebrated my birthday 🎂 with fun and presents. I’m eager to put my new sous vide cooker to work and make some delicious eats!
 
@@ -38,11 +38,15 @@ I enjoyed this podcast and it spoke to me as I’m one of those people that cons
 
 ### ['Kernel memory leaking' Intel processor design flaw forces Linux, Windows redesign • The Register](https://www.theregister.co.uk/2018/01/02/intel_cpu_design_flaw/)
 
-This reads like a detective novel and dives into some interesting things about how modern CPU's work and what they do in silicon to protect different memory spaces. This looks like a pretty nasty issue but we won't know the real extent of it until the embargo is removed. The aside on the name option for the fix made me chuckle: The fix is to separate the kernel's memory completely from user processes using what's called Kernel Page Table Isolation, or KPTI. At one point, Forcefully Unmap Complete Kernel With Interrupt Trampolines, aka FUCKWIT, was mulled by the Linux kernel team, giving you an idea of how annoying this has been for the developers.
+This reads like a detective novel and dives into some interesting things about how modern CPU's work and what they do in silicon to protect different memory spaces. This looks like a pretty nasty issue but we won't know the real extent of it until the embargo is removed. The aside on the name option for the fix made me chuckle:
+
+> The fix is to separate the kernel's memory completely from user processes using what's called Kernel Page Table Isolation, or KPTI. At one point, Forcefully Unmap Complete Kernel With Interrupt Trampolines, aka FUCKWIT, was mulled by the Linux kernel team, giving you an idea of how annoying this has been for the developers.
 
 ### [Simulating Chutes & Ladders in Python | Pythonic Perambulations](https://jakevdp.github.io/blog/2017/12/18/simulating-chutes-and-ladders/)
 
-Oh the fun you can have playing with some Python code and a simple game. If you've been subjected to many games of Chutes & Ladders this will give you some new ways to appreciate the game. 😅 With two players, this translates to a 1% chance that the game will go 72 moves without either of the players winning. Assuming roughly 20 seconds per round, that is about 24 minutes of play time, though from personal experience I can say it feels roughly twenty times that long.
+Oh the fun you can have playing with some Python code and a simple game. If you've been subjected to many games of Chutes & Ladders this will give you some new ways to appreciate the game. 😅
+
+> With two players, this translates to a 1% chance that the game will go 72 moves without either of the players winning. Assuming roughly 20 seconds per round, that is about 24 minutes of play time, though from personal experience I can say it feels roughly twenty times that long.
 
 ### [How cloud speed helps SQL Server DBAs | Blog | Microsoft Azure](https://azure.microsoft.com/en-us/blog/how-cloud-speed-helps-sql-server-dbas/)
 
@@ -58,7 +62,9 @@ Ad this to the list of reasons for why you absolutely should be running protecti
 
 ### [Spamnesty - Home](https://spa.mnesty.com/)
 
-Lovely! 👏 I like how they show the transcripts of previous discussions. Spamnesty is a way to waste spammers' time. If you get a spam email, simply forward it to [sp@mnesty.com](mailto:sp@mnesty.com) , and Spamnesty will strip your email address, pretend it's a real person and reply to the email. Just remember to strip out any personal information from the body of the email, as it will be used so the reply looks more legitimate.
+Lovely! 👏 I like how they show the transcripts of previous discussions.
+
+> Spamnesty is a way to waste spammers' time. If you get a spam email, simply forward it to [sp@mnesty.com](mailto:sp@mnesty.com) , and Spamnesty will strip your email address, pretend it's a real person and reply to the email. Just remember to strip out any personal information from the body of the email, as it will be used so the reply looks more legitimate.
 
 ### [Sense: Track energy use in real time](https://sense.com/product.html)
 
@@ -74,7 +80,11 @@ Terpstra is a developer and power-user and I always find I learn or discover som
 
 ### [To Serve Man, with Software](https://blog.codinghorror.com/to-serve-man-with-software/)
 
-Great post and reflections from Jeff Atwood. His thoughts reflect many of the people building things in tech. I think it’s a good thing that people are becoming more introspective on the systems that they create, and asking questions about the value they are bringing. Software is easy to change, but people … aren't. So in the new year, as software developers, let's make a resolution to focus on the part we can change, and keep asking ourselves one very important question: how can our software help people become the best version of themselves? File this into that area of computer ethics that should become part of computer science curriculums.
+Great post and reflections from Jeff Atwood. His thoughts reflect many of the people building things in tech. I think it’s a good thing that people are becoming more introspective on the systems that they create, and asking questions about the value they are bringing.
+
+> Software is easy to change, but people … aren't. So in the new year, as software developers, let's make a resolution to focus on the part we can change, and keep asking ourselves one very important question: how can our software help people become the best version of themselves?
+
+File this into that area of computer ethics that should become part of computer science curriculums.
 
 ### [Life Stack – AnomaLily.net](http://anomalily.net/life-stack/)
 

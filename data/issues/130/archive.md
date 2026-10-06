@@ -103,7 +103,7 @@ links:
   domain: www.theguardian.com
   heading_context: '[Uncovered: reality of how smartphones turned election news into chaos | Politics | The Guardian](https://www.theguardian.com/politics/2019/dec/05/uncovered-reality-of-how-smartphones-turned-election-news-into-chaos)'
   section: Notable Links 📌
-word_count: 1828
+word_count: 1832
 ---
 Welcome to Weekly Thing #130 and the final issue for 2019! I’m going to be taking my winter break and will be back on January 18th of 2020 (wow!) with Weekly Thing #131. I want to Thank You all for subscribing and playing along with me every week. Putting a summer and winter break into the schedule is a good way for me to make it sustainable for the long haul. It’s fun for me to go back to the [first one from May 13, 2017](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how much it’s changed. I have some thoughts of using this winter break to take the automation out for a tuneup and make it better, and I may make some changes to the layout and sections of the Weekly Thing. Stay tuned! 👍
 
@@ -123,11 +123,11 @@ I have never used Tiktok, and I don't plan to start ever. This article is an int
 
 Great article highlighting the value of extending or enhancing time that you get from products. Galloway then goes into the horrible tradeoff that a company like Facebook makes in that bargain.
 
-Movies and HBO saved some time, but were relatively expensive. And then came Google, Facebook, and Netflix. I’ll get a year back (time spent not watching ads) in exchange for $4,680 spent on Netflix. How to even think of doing research without Google? Would I have to go to a library and log on to Lexis/Nexis? It’s hard to imagine how much time and life Google has created.
+> Movies and HBO saved some time, but were relatively expensive. And then came Google, Facebook, and Netflix. I’ll get a year back (time spent not watching ads) in exchange for $4,680 spent on Netflix. How to even think of doing research without Google? Would I have to go to a library and log on to Lexis/Nexis? It’s hard to imagine how much time and life Google has created.
 
 ## And…
 
-Facebook is now squarely in the red and a net negative for society. The social network held the promise of enhancing our time here, via connection, and has delivered on much of that. However, most time enhancement has been negated, as the social network is depressing our teens and endangering our most precious asset, girls. Teen [suicide has skyrocketed — up 77%](https://www.thecoddling.com/better-mental-health) for [older teen girls and up 151%](https://www.thecoddling.com/better-mental-health) for younger [teens (research by colleague Jonathan Haidt](http://thecoddling.com/) ).
+> Facebook is now squarely in the red and a net negative for society. The social network held the promise of enhancing our time here, via connection, and has delivered on much of that. However, most time enhancement has been negated, as the social network is depressing our teens and endangering our most precious asset, girls. Teen [suicide has skyrocketed — up 77%](https://www.thecoddling.com/better-mental-health) for [older teen girls and up 151%](https://www.thecoddling.com/better-mental-health) for younger [teens (research by colleague Jonathan Haidt](http://thecoddling.com/) ).
 
 Good time for a New Years evaluation to delete Facebook and remove it from your life?
 
@@ -151,7 +151,7 @@ Love this project. In a world where I had unlimited free time I'd bite off a big
 
 I’m not a Tim Ferriss devotee, but I find his stuff interesting, and I like that he's returning to writing.
 
-Equally important, those early years of regular writing helped me to think more clearly and to hone a craft I deeply revere. For me, to write is to become more human. To the extent that I’m sane, writing helped keep me in that lane.
+> Equally important, those early years of regular writing helped me to think more clearly and to hone a craft I deeply revere. For me, to write is to become more human. To the extent that I’m sane, writing helped keep me in that lane.
 
 I strongly agree with him. It’s easy to have thoughts and jabber on about them. It’s much harder, and intellectually rewarding, to actually form sentences and paragraphs.
 
@@ -179,7 +179,7 @@ A ton of recommendations for different communications inside of a company. It se
 
 I find JSON-LD interesting. JSON is super interesting, but it lacks semantics. That is where JSON-LD comes in.
 
-[JSON-LD](https://www.w3.org/2018/json-ld-wg/) [is a specification](https://w3c.github.io/json-ld-syntax/) being developed in [the World Wide Web Consortium (W3C](https://www.w3.org/) ) as a media type application/ld+json. This means you can still parse it as a plain-ol’ JSON document, but there are some additional conventions that add meaning to the content.
+> [JSON-LD](https://www.w3.org/2018/json-ld-wg/) [is a specification](https://w3c.github.io/json-ld-syntax/) being developed in [the World Wide Web Consortium (W3C](https://www.w3.org/) ) as a media type application/ld+json. This means you can still parse it as a plain-ol’ JSON document, but there are some additional conventions that add meaning to the content.
 
 This might bring some of the good parts of XML to the JSON world.
 

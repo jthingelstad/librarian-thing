@@ -68,7 +68,7 @@ links:
   domain: jvns.ca
   heading_context: '[What''s a senior engineer''s job? - Julia Evans](https://jvns.ca/blog/senior-engineer/)'
   section: Notable Links 📌
-word_count: 1716
+word_count: 1722
 ---
 You could call this the New York issue of the Weekly Thing. For years I’ve told my kids that when they turn 13 I will take them on a trip, just Dad and them, to New York City to see the sights. Mazie is 13 so we boarded our flight to Newark on Friday and spent the weekend seeing NYC in all of it’s grandeur. 👨‍👧
 
@@ -84,9 +84,9 @@ I also want to welcome a group of subscribers that discovered the Weekly Thing v
 
 This article highlights some of the amazing safety aspects of the Tesla Model 3.
 
-So basically, when Tesla says its Model 3 has the “lowest probability of injury” ever tested by NHTSA, it means that the overall VSS score (which represents the “relative risk of injury with respect to a baseline of 15 percent”) of 0.38 is lower than that of any car ever tested.
-
-That’s impressive, any way you slice it.
+> So basically, when Tesla says its Model 3 has the “lowest probability of injury” ever tested by NHTSA, it means that the overall VSS score (which represents the “relative risk of injury with respect to a baseline of 15 percent”) of 0.38 is lower than that of any car ever tested.
+>
+> That’s impressive, any way you slice it.
 
 Lowest ever is very impressive!
 
@@ -94,9 +94,9 @@ Lowest ever is very impressive!
 
 It’s about time that technology workers factor the outcome of their work into their decision to work on it.
 
-Across the technology industry, rank-and-file employees are demanding greater insight into how their companies are deploying the technology that they built. At Google, Amazon, Microsoft and Salesforce, as well as at tech start-ups, engineers and technologists are increasingly asking whether the products they are working on are being used for surveillance in places like China or for military projects in the United States or elsewhere.
-
-That’s a change from the past, when Silicon Valley workers typically developed products with little questioning about the social costs.
+> Across the technology industry, rank-and-file employees are demanding greater insight into how their companies are deploying the technology that they built. At Google, Amazon, Microsoft and Salesforce, as well as at tech start-ups, engineers and technologists are increasingly asking whether the products they are working on are being used for surveillance in places like China or for military projects in the United States or elsewhere.
+>
+> That’s a change from the past, when Silicon Valley workers typically developed products with little questioning about the social costs.
 
 This is a good thing.
 

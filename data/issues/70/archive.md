@@ -87,7 +87,7 @@ links:
   domain: auth0.com
   heading_context: '[Auth0 Architecture: Running In Multiple Cloud Providers And Regions](https://auth0.com/blog/auth0-architecture-running-in-multiple-cloud-providers-and-regions/)'
   section: Notable Links 📌
-word_count: 1443
+word_count: 1445
 ---
 I'm ready to put this year's Fall allergy season into the Guinness Book of World Records. 🏆 Even with loratadine and pseudoephedrine I've been struggling with watery eyes, congestion and itching. I've been having to tell people that while they are very important to me, in fact, I am not crying upon seeing them. 😂
 
@@ -99,7 +99,7 @@ The kids told me a joke this week that I'm still chuckling when I think about. N
 
 This is how I tend to think about this type of team driven work in a product backlog. I like the name "sustainability tasks" and also agree with the sentiment that these may or may not appear in a backlog.
 
-Putting regular sustainability tasks into a calendar would just create noise. Putting sustainability tasks into a product roadmap has the same effect. Having a budget removes the pressure to plan, prioritise or estimate such tasks, and avoids the need to compare them to features that bring immediate value.
+> Putting regular sustainability tasks into a calendar would just create noise. Putting sustainability tasks into a product roadmap has the same effect. Having a budget removes the pressure to plan, prioritise or estimate such tasks, and avoids the need to compare them to features that bring immediate value.
 
 Allocating budget and thinking about sustainability as an investment criteria works well, and gives you a more direct way to think about that work. You may even change that investment rate from time to time.
 
@@ -177,7 +177,7 @@ https://itunes.apple.com/us/app/libby-by-overdrive/id1076402606?mt=8&uo=4
 
 by OverDrive, Inc.
 
-Meet Libby. Did you know your local library has thousands of ebooks and audiobooks? You can borrow them, instantly, for free, using just the device in your hand.
+> Meet Libby. Did you know your local library has thousands of ebooks and audiobooks? You can borrow them, instantly, for free, using just the device in your hand.
 
 I found this app via another newsletter and think it's just great! I've had a nearly unused Hennepin County Library card for a while. I installed this app, punched in my Library Card information and instantly had access via a great interface to so many books. It integrates perfectly with putting books on hold and then puts the ebook on your phone immediatley when available. If you don't have a library card, this app is good enough that you should make a trip and get one.
 

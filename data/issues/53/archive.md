@@ -99,7 +99,7 @@ links:
   domain: medium.com
   heading_context: '[Three-day no-meeting schedule for engineers – Pinterest Engineering – Medium](https://medium.com/@Pinterest_Engineering/three-day-no-meeting-schedule-for-engineers-fca9f857a567)'
   section: Notable Links 📌
-word_count: 1791
+word_count: 1799
 ---
 I'm kicking off year two of the Weekly Thing with a significantly refined style. 🛀🏻 This is only the 4th refinement of the display and I'm hoping it's the last of signifance. I'm familiar with ZURB's Foundation framework from another project, so I [decided to use Foundation for Email](https://foundation.zurb.com/emails.html) . I think I got it all right, but dealing with HTML in email clients is very challenging. If you get this and it looks broken, please let me know with a reply. 🤞 I also decided to put a fortune at the very end. 🥠
 
@@ -109,15 +109,15 @@ I'm kicking off year two of the Weekly Thing with a significantly refined style.
 
 This is a powerful and comprehensive essay targeted at Facebook, but applies to all social media. The description given below is a great definition of the [addictive software patterns I've written about](https://www.thingelstad.com/2018/identify-addictive-application-patterns/) .
 
-These gadgets are designed to create a “supernormal stimulus,” that is, a stimulus that produces a stronger than natural response. We can even internalize the supernormal stimulus—an example is the “phantom vibrate” we sometimes feel in our pocket when no vibration occurs. In the case of social media, the supernormal stimulus is used to exploit our response to novelty in order to elicit a behavior that works in the interests of the social media provider.
+> These gadgets are designed to create a “supernormal stimulus,” that is, a stimulus that produces a stronger than natural response. We can even internalize the supernormal stimulus—an example is the “phantom vibrate” we sometimes feel in our pocket when no vibration occurs. In the case of social media, the supernormal stimulus is used to exploit our response to novelty in order to elicit a behavior that works in the interests of the social media provider.
 
 I found this characterization of sharing jarring, and insightful.
 
-Over time, these platforms transform us all into unpaid advertising agencies. We promote goods, services, lifestyles and desires to our friends, weaponizing images to generate feelings of jealousy and FOMO amongst our peers during those idle moments when they feel most bored.
+> Over time, these platforms transform us all into unpaid advertising agencies. We promote goods, services, lifestyles and desires to our friends, weaponizing images to generate feelings of jealousy and FOMO amongst our peers during those idle moments when they feel most bored.
 
 This might be one of the most succinct characterizations of the end-state of social media platforms.
 
-As a result, we end up building relationships to the platform — not to each other.
+> As a result, we end up building relationships to the platform — not to each other.
 
 This is a long but well written thought piece on social platforms, and a very complete index of reasons to disengage from Facebook.
 
@@ -129,7 +129,7 @@ In depth interview with Jony Ive and the creation story of the Apple Watch. The 
 
 This is exactly me. 🤦‍♂️
 
-Full disclosure: I don’t do morning routines. The only thing I do every day is groggily roll over in bed when my alarm goes off and check my email. According to everything I’ve ever read on the subject, it’s just about the worst thing you can do for your productivity–and I was starting to feel like those articles were right.
+> Full disclosure: I don’t do morning routines. The only thing I do every day is groggily roll over in bed when my alarm goes off and check my email. According to everything I’ve ever read on the subject, it’s just about the worst thing you can do for your productivity–and I was starting to feel like those articles were right.
 
 I've done that for 15 years or longer. I've done that for as long as I can remember waking up. And like the author, I know that isn't a good thing. Good read to encourage considering a change of habit.🤔
 
@@ -162,7 +162,7 @@ I’m a big proponent of open office spaces, but have not considered potential g
 
 The EFF calls out Facebooks use of AI in it’s targeting systems. It’s notable that everything written here could be applied to Google as well.
 
-The concern that you’re being surveilled persists, essentially, because you are being surveilled…
+> The concern that you’re being surveilled persists, essentially, because you are being surveilled…
 
 Good call to action for running your own tools [to defend against this pervasive surveillance](http://crackedlabs.org/en/corporate-surveillance) .
 
@@ -170,7 +170,7 @@ Good call to action for running your own tools [to defend against this pervasive
 
 This seems like a way to keep an entire array of security vectors away from iOS devices:
 
-The functionality of USB Restricted Mode is actually very simple. Once the iPhone or iPad is updated to the latest version of iOS supporting the feature, the device will disable the USB data connection over the Lightning port one week after the device has been last unlocked.
+> The functionality of USB Restricted Mode is actually very simple. Once the iPhone or iPad is updated to the latest version of iOS supporting the feature, the device will disable the USB data connection over the Lightning port one week after the device has been last unlocked.
 
 Big win for securing and protecting your data. 👏
 
@@ -210,7 +210,7 @@ http://www.amazon.com/dp/1250103509/?tag=thingelstad01-20
 
 by Kim Scott
 
-Radical Candor is packed with illuminating truths, insightful advice, and practical suggestions, all illustrated with engaging (and often funny) stories from Kim Scott’s own experiences at places like Apple, Google, and various start-ups.
+> Radical Candor is packed with illuminating truths, insightful advice, and practical suggestions, all illustrated with engaging (and often funny) stories from Kim Scott’s own experiences at places like Apple, Google, and various start-ups.
 
 This book is making the rounds at a lot of companies, including ours. I just bought copies of it for all of the leaders in my team and we are reading it and discussing as a group.
 
@@ -228,7 +228,7 @@ https://itunes.apple.com/us/app/id1164801111?at=1001lxyE&ct=thingelstad_com
 
 by Tantsissa
 
-Automatically track your sleep from your Apple Watch. No buttons to press. Even the Watch app is optional! Just sleep!
+> Automatically track your sleep from your Apple Watch. No buttons to press. Even the Watch app is optional! Just sleep!
 
 After reading Why We Sleep I wanted to see if I could get some more information on my sleep. It turns out that my iPhone and Apple Watch, along with this application, can do just that.
 

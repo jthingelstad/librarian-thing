@@ -128,7 +128,7 @@ links:
   domain: withoutbullshit.com
   heading_context: '[Travis Kalanick wrote an awesome letter to Uber employees. They never saw it. - without bullshit](https://withoutbullshit.com/blog/travis-kalanick-wrote-an-awesome-letter-to-uber-employees-they-never-saw-it)'
   section: Notable Links 📌
-word_count: 1996
+word_count: 2003
 ---
 I've been progressing from a full on hobble on Tuesday, to a notable limp on Wednesday, then mostly walking fine today. On Monday night I was kicking the soccer ball with Tyler. He was in goal and I was making shots so he could be the World's Best Goalkeeper. We were waiting for Mazie to finish Piano practice. Anyway, I tried to put a shot in the upper-corner of the net and went too low with my kick, caught the ground, rotated my knee too much and felt a shot of pain and a pop in my knee. The pain was quickly followed by hoping nobody witnessed my buffoonery. This is just one of life's reminders that you're middle-aged and if you don't use it, your gonna lose it. I was worried I may have hurt the knee more, but today the only thing that caused me any real difficulty was going down stairs. I suspect that will be fine in a couple more days.
 
@@ -144,7 +144,7 @@ This week Apple had their annual iPhone event with a bunch of new announcements.
 
 A year is a long enough time to get real perspective and see more than just the initial changes.
 
-I don’t see myself ever going back to social media. I don’t see the point of it, and after leaving for a while, and getting a good outside look, it seems like an abusive relationship – millions of workers generating data for tech-giants to crunch through and make money off of.
+> I don’t see myself ever going back to social media. I don’t see the point of it, and after leaving for a while, and getting a good outside look, it seems like an abusive relationship – millions of workers generating data for tech-giants to crunch through and make money off of.
 
 A good read on what it’s like outside of the bubble.
 
@@ -152,9 +152,9 @@ A good read on what it’s like outside of the bubble.
 
 I know a lot of people that feel like they inadvertently spend too much time on their phones.
 
-Over the years, though, that pride has worn off. My phone, once a source of liberation — I could check my email without having to go home, which meant I could spend more time out doing things — eventually became a weight that tied me down. Instead of making me better at my job, it started preventing what Cal Newport calls “deep work” — focused, dedicated, creative time. Instead of helping me have fun, it was making me miserable.
-
-So recently, I’ve been thinking a lot about how to use it less. About how to get the benefits from the technology without all the downsides.
+> Over the years, though, that pride has worn off. My phone, once a source of liberation — I could check my email without having to go home, which meant I could spend more time out doing things — eventually became a weight that tied me down. Instead of making me better at my job, it started preventing what Cal Newport calls “deep work” — focused, dedicated, creative time. Instead of helping me have fun, it was making me miserable.
+>
+> So recently, I’ve been thinking a lot about how to use it less. About how to get the benefits from the technology without all the downsides.
 
 I have done some of these things for a long time, others I would not recommend. All are good food for thought.
 
@@ -178,7 +178,7 @@ New offering from Stripe for companies. Getting a message from your credit card 
 
 I've done a lot to protect my privacy using tools on my web browsers, but DNS is very hard to protect. Think of DNS like the phone book for the internet, and right now every time you look you an entry, anyone in your network can see what you are looking up. This is a gold mine for companies like Comcast to watch what websites you visit and sell that data.
 
-Alongside technologies like TLS 1.3 and encrypted SNI, DoH has the potential to provide tremendous privacy protections. But many Internet service providers and participants in the standardization process have expressed strong concerns about the development of the protocol. The UK Internet Service Providers Association even went so far as to call Mozilla an “Internet Villain” for its role in developing DoH.
+> Alongside technologies like TLS 1.3 and encrypted SNI, DoH has the potential to provide tremendous privacy protections. But many Internet service providers and participants in the standardization process have expressed strong concerns about the development of the protocol. The UK Internet Service Providers Association even went so far as to call Mozilla an “Internet Villain” for its role in developing DoH.
 
 I've considered bringing [DNS into my house with Pi-hole](https://pi-hole.net) , but even better would be encrypted DNS requests.
 
@@ -198,7 +198,7 @@ Very few companies have Agile practices embedded through every facet of their or
 
 Streaming systems are very popular right now, but many of them have challenges around once-only delivery and transactional ordering. Waltz seems to solve that.
 
-Waltz is similar to existing log systems like Kafka in that it accepts/persists/propagates transaction data produced/consumed by many services. However, unlike other systems, Waltz provides a machinery that facilitates a serializable consistency in distributed applications. It detects conflicting transactions before they are committed to the log. Waltz is regarded as the single source of truth rather than the database, and it enables a highly reliable log-centric system architecture.
+> Waltz is similar to existing log systems like Kafka in that it accepts/persists/propagates transaction data produced/consumed by many services. However, unlike other systems, Waltz provides a machinery that facilitates a serializable consistency in distributed applications. It detects conflicting transactions before they are committed to the log. Waltz is regarded as the single source of truth rather than the database, and it enables a highly reliable log-centric system architecture.
 
 Definitely a highly focused service, but for certain solutions this would be a big deal.
 
@@ -206,7 +206,7 @@ Definitely a highly focused service, but for certain solutions this would be a b
 
 Ben Thompson continues to elucidate on one of the biggest companies in the world, Apple, and it’s very intentional shift to more services revenue.
 
-To that end, how long until there is a variant of the iPhone Upgrade Program that is simply an all-up Apple subscription? Pay one monthly fee, and get everything Apple has to offer. Indeed, nothing would show that Apple is a Services company more than making the iPhone itself a service, at least as far as the customer relationship goes. You might even say it is innovative.
+> To that end, how long until there is a variant of the iPhone Upgrade Program that is simply an all-up Apple subscription? Pay one monthly fee, and get everything Apple has to offer. Indeed, nothing would show that Apple is a Services company more than making the iPhone itself a service, at least as far as the customer relationship goes. You might even say it is innovative.
 
 Outside of the gear and software itself, it seems that Apple is making a very intentional shift in services revenue, something it had nearly none of not that long ago.
 

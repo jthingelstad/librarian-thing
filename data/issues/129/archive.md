@@ -86,7 +86,7 @@ links:
   domain: anonaddy.com
   heading_context: '[Free, Open-source Anonymous Email Forwarding - AnonAddy](https://anonaddy.com/)'
   section: Notable Links 📌
-word_count: 1738
+word_count: 1749
 ---
 What an awesome week it's been. Cyberweek 2019 is in the books! It's been a week of getting up really early, doubling my regular coffee intake, [and working with our great team](https://www.thingelstad.com/2019/12/05/technology-is-a.html) ! Every year has its own feel, a fingerprint of sorts, with stories that will be told for years ahead. I love the comradery that comes with such focus and dedication across a team on a shared objective!
 
@@ -96,11 +96,11 @@ What an awesome week it's been. Cyberweek 2019 is in the books! It's been a week
 
 Nice background on the design philosophy of Python.
 
-Python’s readability is not just typographic, but conceptual. Van Rossum thinks Python may be closer to our visual understanding of the structures that we are representing in code than other languages because, “Python makes that structure mandatory.”
+> Python’s readability is not just typographic, but conceptual. Van Rossum thinks Python may be closer to our visual understanding of the structures that we are representing in code than other languages because, “Python makes that structure mandatory.”
 
 I like that take on indentation and the "Why?" behind it. This little snippet from the article made me chuckle.
 
-As Thompson writes, “When you meet a coder, you’re meeting someone whose core daily experience is of unending failure and grinding frustration.”
+> As Thompson writes, “When you meet a coder, you’re meeting someone whose core daily experience is of unending failure and grinding frustration.”
 
 😂
 
@@ -118,8 +118,8 @@ Nov 30, 2019 at 2:44 PM
 
 [My colleague Dan Juckniess](https://www.linkedin.com/in/dan-juckniess-68920a10/) shared this [Fenwick High School](https://www.fenwickfriars.com/) commencement speech with me after telling me the quote that he found so powerful in it.
 
-Whatever your doing, is what you’ll get better at.
-Go to the bar every night and drink, guess what you’ll get better at.
+> Whatever your doing, is what you’ll get better at.
+> Go to the bar every night and drink, guess what you’ll get better at.
 
 Very powerful message.
 
@@ -135,7 +135,7 @@ I travel to our office in Kyiv twice a year and learned early on about the Ukrai
 
 I do not like anything about Ring. This first in a series of articles talks about the origin of Ring. I didn’t realize it was on Shark Tank!
 
-At its core, Ring is a marketing company that realized it could make money by selling fear.
+> At its core, Ring is a marketing company that realized it could make money by selling fear.
 
 Violating other peoples privacy, and enabling surveillance, is despicable.
 
@@ -143,7 +143,7 @@ Violating other peoples privacy, and enabling surveillance, is despicable.
 
 Roleplaying is a very useful way for managers to work through tough messages. I like this perspective on why you should take the time to do it.
 
-Practicing difficult conversations and feedback helps you be a better manager, but the real reason you should do it is to fully support the person on the receiving end. It’s your job to help them be successful!
+> Practicing difficult conversations and feedback helps you be a better manager, but the real reason you should do it is to fully support the person on the receiving end. It’s your job to help them be successful!
 
 Some very good suggestions here.
 
@@ -151,7 +151,7 @@ Some very good suggestions here.
 
 This seems to simplify much of the complexity of building API’s and get you going right away.
 
-HTTP APIs simplify the API building experience for the most common features needed to build serverless applications or to proxy requests to HTTP endpoints. They come with standard API Gateway functionality such as throttling, metrics, and logging capabilities. In addition, you can secure your APIs using OIDC and OAuth 2 out of box, quickly build web applications using a simple CORS experience, and get started immediately with automatic deployment and simple create workflows.
+> HTTP APIs simplify the API building experience for the most common features needed to build serverless applications or to proxy requests to HTTP endpoints. They come with standard API Gateway functionality such as throttling, metrics, and logging capabilities. In addition, you can secure your APIs using OIDC and OAuth 2 out of box, quickly build web applications using a simple CORS experience, and get started immediately with automatic deployment and simple create workflows.
 
 Impressive.
 
@@ -163,9 +163,9 @@ I recently discovered this podcast and this episode resonated strongly with me. 
 
 Total PR puff piece.
 
-He’s not evil.
-
-But Facebook is. And we need to hold him responsible for that.
+> He’s not evil.
+>
+> But Facebook is. And we need to hold him responsible for that.
 
 Yes.
 
@@ -173,7 +173,7 @@ Yes.
 
 I like this argument for using an iPad more.
 
-Something really fascinating happens when people open a laptop: they get to work. They check email, they have a million tabs, tons of apps showing progress on many tasks/projects, they have tabs for social networks, half in progress projects abound. People do stuff. They are sucked in — unlikely to step away anytime soon. However, when I see people use an iPad they use it for one thing — the thing they grabbed it to do — and then they go back to life.
+> Something really fascinating happens when people open a laptop: they get to work. They check email, they have a million tabs, tons of apps showing progress on many tasks/projects, they have tabs for social networks, half in progress projects abound. People do stuff. They are sucked in — unlikely to step away anytime soon. However, when I see people use an iPad they use it for one thing — the thing they grabbed it to do — and then they go back to life.
 
 I think there is some truth to that. This goes to the "context" of a computing device. For me I find the iPad a more focused device. Perhaps it is the lack of multiple windows? I am consistently increasing the volume of things that I do on my iPad.
 

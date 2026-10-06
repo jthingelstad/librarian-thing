@@ -98,7 +98,7 @@ links:
   domain: olivierforget.net
   heading_context: '[What it''s Like to View a SpaceX Falcon Heavy Launch](https://olivierforget.net/blog/2019/viewing-spacex-falcon-heavy-launch/)'
   section: Notable Links 📌
-word_count: 1782
+word_count: 1793
 ---
 We got really lucky when we moved in January, as there was almost no snow on the ground. Shortly after we moved, the walloping started with snowstorm after snowstorm. 🌨 Moving in the winter feels a little like a partial move. You move into your house, but you don't really see the yard or explore the outside spaces. It’s all frozen and covered in snow! As Spring has now arrived, I feel like we have thawed and can now finish the rest of the moving process, explore the yard, and get familiar with the rest of the space. 🗺
 
@@ -110,11 +110,11 @@ This is a big weekend! Tammy, my lovely co-pilot in this awesome journey of life
 
 This is a pretty amazing article by Hiten Shah, a co-founder of KISSmetrics. He walks through how they found market fit, saw tremendous engagement, and then failed to execute.
 
-We were ahead of the market by 3 years. Yes, 3 full years. In 2010, we had moved the entire analytics category to the point that competitors wouldn’t close the gap until 2013.
-
-We had a billion dollar opportunity sitting right in front of us. Without a shred of doubt, I believe we could have turned KISSmetrics into a billion dollar startup. It was ours to lose.
-
-That’s exactly what we did, we lost it.
+> We were ahead of the market by 3 years. Yes, 3 full years. In 2010, we had moved the entire analytics category to the point that competitors wouldn’t close the gap until 2013.
+>
+> We had a billion dollar opportunity sitting right in front of us. Without a shred of doubt, I believe we could have turned KISSmetrics into a billion dollar startup. It was ours to lose.
+>
+> That’s exactly what we did, we lost it.
 
 Not an easy thing to write, but the kind of thing you can learn from.
 
@@ -122,15 +122,15 @@ Not an easy thing to write, but the kind of thing you can learn from.
 
 This is a fantastic read on the Boeing 737 Max situation.
 
-I’ll say it again: In the 737 Max, the engine nacelles themselves can, at high angles of attack, work as a wing and produce lift. And the lift they produce is well ahead of the wing’s center of lift, meaning the nacelles will cause the 737 Max at a high angle of attack to go to a higher angle of attack. This is aerodynamic malpractice of the worst kind.
+> I’ll say it again: In the 737 Max, the engine nacelles themselves can, at high angles of attack, work as a wing and produce lift. And the lift they produce is well ahead of the wing’s center of lift, meaning the nacelles will cause the 737 Max at a high angle of attack to go to a higher angle of attack. This is aerodynamic malpractice of the worst kind.
 
 It is very interesting to hear from someone who knows this space what the 737 Max was trying to achieve in it’s design.
 
-In a pinch, a human pilot could just look out the windshield to confirm visually and directly that, no, the aircraft is not pitched up dangerously. That’s the ultimate check and should go directly to the pilot’s ultimate sovereignty. Unfortunately, the current implementation of MCAS denies that sovereignty. It denies the pilots the ability to respond to what’s before their own eyes.
+> In a pinch, a human pilot could just look out the windshield to confirm visually and directly that, no, the aircraft is not pitched up dangerously. That’s the ultimate check and should go directly to the pilot’s ultimate sovereignty. Unfortunately, the current implementation of MCAS denies that sovereignty. It denies the pilots the ability to respond to what’s before their own eyes.
 
 So Boeing essentially had unworkable hardware and said "Hey, we'll fix it in the software!". But then the software doesn't let the pilot work the way all other planes let them work.
 
-So Boeing produced a dynamically unstable airframe, the 737 Max. That is big strike No. 1. Boeing then tried to mask the 737’s dynamic instability with a software system. Big strike No. 2. Finally, the software relied on systems known for their propensity to fail (angle-of-attack indicators) and did not appear to include even rudimentary provisions to cross-check the outputs of the angle-of-attack sensor against other sensors, or even the other angle-of-attack sensor. Big strike No. 3.
+> So Boeing produced a dynamically unstable airframe, the 737 Max. That is big strike No. 1. Boeing then tried to mask the 737’s dynamic instability with a software system. Big strike No. 2. Finally, the software relied on systems known for their propensity to fail (angle-of-attack indicators) and did not appear to include even rudimentary provisions to cross-check the outputs of the angle-of-attack sensor against other sensors, or even the other angle-of-attack sensor. Big strike No. 3.
 
 Anyone writing software that can mean life and death should make sure to learn from this situation.
 
@@ -148,7 +148,7 @@ Cannon Lake, Minnesota
 
 Another great writeup from Ben Thompson looking at Uber's S-1.
 
-However, if I bought individual stocks (I don’t per my ethics policy), I would be out: this S-1 is so devoid of meaningful information (despite its length) that it makes me wonder what, if anything, Uber is trying to hide. If I am going to be taken for a ride I want at least some idea of where I am going — isn’t that the point of Uber in the first place?
+> However, if I bought individual stocks (I don’t per my ethics policy), I would be out: this S-1 is so devoid of meaningful information (despite its length) that it makes me wonder what, if anything, Uber is trying to hide. If I am going to be taken for a ride I want at least some idea of where I am going — isn’t that the point of Uber in the first place?
 
 He raises some interesting questions.
 
@@ -188,7 +188,7 @@ Now that is a large bill! It is interesting that a company with the resources of
 
 Mocking API endpoints is a great way to get projects moving quickly.
 
-MockIt was designed and developed to help developers get off the ground faster, and give developers a quick way to create APIS for their applications whilst “real” ones are being worked on.
+> MockIt was designed and developed to help developers get off the ground faster, and give developers a quick way to create APIS for their applications whilst “real” ones are being worked on.
 
 Cool to see an open source version of this you can run on your own.
 
@@ -204,7 +204,7 @@ I’m worried about the future for Eero so I read this with a bit more interest.
 
 Someday I hope to see a real rocket take off in person. I loved reading this recap of this persons visit to see the Falcon Heavy launch.
 
-The roar sounds just like just what it is: an immense amount of energy unleashed all at once. It builds gradually in intensity while dropping in pitch (due to the Doppler effect.) It’s a roar that you can feel in your chest
+> The roar sounds just like just what it is: an immense amount of energy unleashed all at once. It builds gradually in intensity while dropping in pitch (due to the Doppler effect.) It’s a roar that you can feel in your chest
 
 Sounds amazing. 🚀
 

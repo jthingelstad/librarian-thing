@@ -92,7 +92,7 @@ links:
   domain: logrocket.com
   heading_context: '[Stop building websites with infinite scroll!](https://logrocket.com/blog/infinite-scroll/)'
   section: Notable Links 📌
-word_count: 2009
+word_count: 2021
 ---
 For the last two years our family has been wrestling with the idea of moving to a new house. 🏡 Tammy has felt for a while that she wanted a change of scenery. The rest of us haven't been as eager to go along. This is the first time that we have considered moving now that the kids are old enough to have an opinion of their own. We've found the additional complications of their friends and the neighborhood to be challenging to get our heads around.
 
@@ -116,7 +116,7 @@ Cook [references Steve Jobs' talking about privacy](https://www.youtube.com/watc
 
 This is more than just an intro to Shortcuts on iOS 12. There is a complete history of user space programming tools from Apple over the years, going back to HyperCard. Skip the history part if you just want to read about Shortcuts.
 
-Shortcuts, the app, is my favorite thing to happen to the iPhone since the camera got decent. I truly feel that my relationship to my iPhone has fundamentally changed, because I can now build things on it that make it do things that only I would ever want. Useful things, but also fun things. Complex things and simple things.
+> Shortcuts, the app, is my favorite thing to happen to the iPhone since the camera got decent. I truly feel that my relationship to my iPhone has fundamentally changed, because I can now build things on it that make it do things that only I would ever want. Useful things, but also fun things. Complex things and simple things.
 
 I’ve built incredible stuff with Shortcuts and am continuing to do more. My Weekly Thing newsletter is entirely built with Shortcuts and various API’s and a little Python thrown in for fun. It is worth the effort to learn Shortcuts. They are very approachable.
 
@@ -138,11 +138,11 @@ These very dark shots are amazing. The fact that this is all done handheld is ha
 
 Cool article and introduces an idea of going from Implementor, to Solver, to Finder as an engineer. I haven't heard this terminology used but I really like it!
 
-As an Implementer, you’re an inexperienced programmer, and your tasks are defined by someone else: you just implement small, well-specified chunks of code…
-
-As you become more experienced, you become a Solver: are able to come up with solutions to less well-defined problems…
-
-Eventually you become a Finder: you begin identifying problems on your own and figuring out their underlying causes…
+> As an Implementer, you’re an inexperienced programmer, and your tasks are defined by someone else: you just implement small, well-specified chunks of code…
+>
+> As you become more experienced, you become a Solver: are able to come up with solutions to less well-defined problems…
+>
+> Eventually you become a Finder: you begin identifying problems on your own and figuring out their underlying causes…
 
 That seems very compelling and valuable to frame the career advancement of engineers.
 
@@ -150,7 +150,7 @@ That seems very compelling and valuable to frame the career advancement of engin
 
 Review of the Pixel 3, but also a reflection on the obsessive compulsion we have with our phones.
 
-My neck hurts. I am never not looking down. When I am not looking at my phone, I become slightly anxious. And then, when I do actually look at it, I become even more so. It reminds me of how I once felt about cigarettes. I experience the world with a meticulously crafted, tiny computer slab between me and it. I am an asshole. But so, maybe, are you?
+> My neck hurts. I am never not looking down. When I am not looking at my phone, I become slightly anxious. And then, when I do actually look at it, I become even more so. It reminds me of how I once felt about cigarettes. I experience the world with a meticulously crafted, tiny computer slab between me and it. I am an asshole. But so, maybe, are you?
 
 🤨
 
@@ -158,7 +158,7 @@ My neck hurts. I am never not looking down. When I am not looking at my phone, I
 
 This is a great example document.
 
-A major problem that young researchers face is their inability to write good research papers. This document serves as a guideline on how to write a good technical paper.
+> A major problem that young researchers face is their inability to write good research papers. This document serves as a guideline on how to write a good technical paper.
 
 [Technical papers and white papers](https://en.wikipedia.org/wiki/White_paper) have been confused with marketing organizations taking over white papers as a form of advertising. It’s good to see a robust discussion of a straight technical paper.
 
@@ -166,7 +166,7 @@ A major problem that young researchers face is their inability to write good res
 
 Nice overview of the startup activity happening here in the Twin Cities.
 
-The number of tech businesses in Minnesota has grown exponentially since 2010, adding more than 500 startups since 2015 alone. Following the charge, venture capitalists now invest more than $200 million in the region annually.
+> The number of tech businesses in Minnesota has grown exponentially since 2010, adding more than 500 startups since 2015 alone. Following the charge, venture capitalists now invest more than $200 million in the region annually.
 
 I [was very glad to see Minnestar](https://minnestar.org) mentioned along with a quote from our executive director!
 
@@ -174,7 +174,7 @@ I [was very glad to see Minnestar](https://minnestar.org) mentioned along with a
 
 Interesting idea of insuring that the org chart is clearly articulated and known, as a way to insure that communications are happening right.
 
-An org chart should also effectively describe, at a high level, how the product is organized and also who is responsible for what. An org chart should be legible.
+> An org chart should also effectively describe, at a high level, how the product is organized and also who is responsible for what. An org chart should be legible.
 
 Interesting idea to bring this into a 1:1 discussion.
 
@@ -202,7 +202,7 @@ Good stats from this service. I think there is a lot more to do with calendar da
 
 A thorough analysis of why infinite scroll is problematic.
 
-Infinite scroll can be disorienting, uncontrollable, and can cause your users stress.
+> Infinite scroll can be disorienting, uncontrollable, and can cause your users stress.
 
 It misses one of my points on infinite scroll that it represents an attempt to trick and addict users.
 
@@ -213,7 +213,7 @@ https://www.amazon.com/Life-After-Google-Blockchain-Economy/dp/1621575764/ref=mp
 Life After Google: The Fall of Big Data and the Rise of the Blockchain Economy ()
 by George Gilder
 
-The Age of Google, built on big data and machine intelligence, has been an awesome era. But it’s coming to an end. In Life after Google, George Gilder—the peerless visionary of technology and culture—explains why Silicon Valley is suffering a nervous breakdown and what to expect as the post-Google age dawns.
+> The Age of Google, built on big data and machine intelligence, has been an awesome era. But it’s coming to an end. In Life after Google, George Gilder—the peerless visionary of technology and culture—explains why Silicon Valley is suffering a nervous breakdown and what to expect as the post-Google age dawns.
 
 My nook club read for this month. I’m almost done and the book is thought provoking, but I find the writing to be overly colorful at times. The authors dislike of certain institutions and processes is also front and center. It seems to position blockchain as the future for everything, but I’m left not seeing how all the dots are connected in the argument.
 

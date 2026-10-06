@@ -103,7 +103,7 @@ links:
   domain: engineering.shopify.com
   heading_context: '[How to Write Fast Code in Ruby on Rails – Shopify Engineering](https://engineering.shopify.com/blogs/engineering/write-fast-code-ruby-rails)'
   section: Notable Links 📌
-word_count: 2334
+word_count: 2344
 ---
 I’m writing from the shore of Pokegama Lake at my brother’s cabin. It’s a crisp autumn day, and there are more leaves on the ground than on the trees. We are enjoying a little MEA break, one of the annual traditions for Minnesota families. The docks are mostly empty of boats now, waiting for the crew to come down the shoreline and put them all in for the winter. This is perfect weather for campfires and smores.
 
@@ -117,7 +117,7 @@ Tammy also completed our family yearbook for 2018, and it arrived this week. Sin
 
 Governments, particularly the US Government, has been fighting encryption for years. It wasn't a concern early on, until encryption got strong enough that the government couldn't break it. This goes all the way back to 1991 when [the government alleged that Phil Zimmerman](https://en.wikipedia.org/wiki/Phil_Zimmermann) , the creator of PGP, broke the law.
 
-The true explanation for why the US, UK and Australian governments want to do away with end-to-end encryption is less about public safety than it is about power: E2EE gives control to individuals and the devices they use to send, receive and encrypt communications, not to the companies and carriers that route them. This, then, would require government surveillance to become more targeted and methodical, rather than indiscriminate and universal.
+> The true explanation for why the US, UK and Australian governments want to do away with end-to-end encryption is less about public safety than it is about power: E2EE gives control to individuals and the devices they use to send, receive and encrypt communications, not to the companies and carriers that route them. This, then, would require government surveillance to become more targeted and methodical, rather than indiscriminate and universal.
 
 If this worries you, like it does me, I recommend joining me [in supporting the Electronic Frontier Foundation](https://www.eff.org) . 👍
 
@@ -143,7 +143,7 @@ I tend to agree with this articles approach. These three focus areas make sense 
 
 This is a great article and highlights many of the awesome things that strong technologists can do for an organization without ever being a manager.
 
-Despite the obstacles, and having seen the majority of my peers switch paths to become a people manager, I have deliberately chosen to stay on the engineer track and try to cultivate it to my needs. My motivation is mostly about continuing to do work that I love. I enjoy the creativity of engineering work: I love solving a problem from initial paper scribbles all the way through to shipped product and knowing “I made that.” As a strategic technical leader, I enjoy having meaningful influence right at the start of that process. I love being parachuted into a situation, figuring out which problems even need to be solved, and then figuring out a solution that will address them.
+> Despite the obstacles, and having seen the majority of my peers switch paths to become a people manager, I have deliberately chosen to stay on the engineer track and try to cultivate it to my needs. My motivation is mostly about continuing to do work that I love. I enjoy the creativity of engineering work: I love solving a problem from initial paper scribbles all the way through to shipped product and knowing “I made that.” As a strategic technical leader, I enjoy having meaningful influence right at the start of that process. I love being parachuted into a situation, figuring out which problems even need to be solved, and then figuring out a solution that will address them.
 
 This is a topic I have conversations about frequently. There are awesome opportunities in technology that do not require people to take on management responsibilities. As such, the only reason you should take a management path is that you truly, really, enjoy it and wish to pursue that. There are so many ways to continue to add value as you grow a career in tech.
 
@@ -151,13 +151,13 @@ This is a topic I have conversations about frequently. There are awesome opportu
 
 This view of Googles offering is intriguing, but the big problem I see is the surveillance-based business model.
 
-Google has a business model problem. Yes, per the previous point, being a continuous presence in people’s lives will bring in even more data for ever more finely targeted advertisements, but there is no place for advertising in ambient computing generally.
+> Google has a business model problem. Yes, per the previous point, being a continuous presence in people’s lives will bring in even more data for ever more finely targeted advertisements, but there is no place for advertising in ambient computing generally.
 
 Thompson goes on to highlight that they could just use the huge margins from search and advertising to pay for this without a business model. It’s amazing how similar Google is to Microsoft of the past. Microsoft could fund anything with Windows and Office, and I don't think that was really helpful for them.
 
 Also, I completely agree with Thompson's assertion that they need to make their events better.
 
-One thing Google can absolutely work on is their messaging: I found yesterday’s presentation dreadfully boring, and only picked up on what Google was trying to convey on a second viewing.
+> One thing Google can absolutely work on is their messaging: I found yesterday’s presentation dreadfully boring, and only picked up on what Google was trying to convey on a second viewing.
 
 😴
 
@@ -169,7 +169,7 @@ Main thing to highlight here, is even with all the investment that a company lik
 
 Less of a [scientific read than Why We Sleep](https://www.goodreads.com/book/show/34466963-why-we-sleep) . I found the callouts to bright light in the morning interesting.
 
-Exposure to bright, morning light was particularly powerful: those exposed to it between 8 a.m. and noon took an average of 18 minutes to fall asleep at night, compared to 45 minutes in the low light exposure group; they also slept for around 20 minutes longer and experienced fewer sleep disturbances. These associations were stronger during winter, when people may have had less opportunity to receive natural light during their journey to work.
+> Exposure to bright, morning light was particularly powerful: those exposed to it between 8 a.m. and noon took an average of 18 minutes to fall asleep at night, compared to 45 minutes in the low light exposure group; they also slept for around 20 minutes longer and experienced fewer sleep disturbances. These associations were stronger during winter, when people may have had less opportunity to receive natural light during their journey to work.
 
 I think I might want to read this book.
 
@@ -177,9 +177,9 @@ I think I might want to read this book.
 
 Insightful read from Shopify about composing monolithic architectures.
 
-The best time to refactor and re-architect is as late as possible, as you are constantly learning more about your system and business domain as you build. Designing a complex system of microservices before you have domain expertise is a risky move that too many software projects fall into. According to Martin Fowler, “almost all the cases where I’ve heard of a system that was built as a microservice system from scratch, it has ended in serious trouble… you shouldn’t start a new project with microservices, even if you’re sure your application will be big enough to make it worthwhile”.
-
-Good software architecture is a constantly evolving task and the correct solution for your app absolutely depends on what scale you’re operating at. Monoliths, modular monoliths, and Service Oriented Architecture fall along an evolutionary scale as your application increases in complexity. Each architecture will be appropriate for a different sized team/app and will be separated by periods of pain and suffering. When you do start experiencing many of the pain points highlighted in this article, that’s when you know you’ve outgrown the current solution and it’s time to move onto the next.
+> The best time to refactor and re-architect is as late as possible, as you are constantly learning more about your system and business domain as you build. Designing a complex system of microservices before you have domain expertise is a risky move that too many software projects fall into. According to Martin Fowler, “almost all the cases where I’ve heard of a system that was built as a microservice system from scratch, it has ended in serious trouble… you shouldn’t start a new project with microservices, even if you’re sure your application will be big enough to make it worthwhile”.
+>
+> Good software architecture is a constantly evolving task and the correct solution for your app absolutely depends on what scale you’re operating at. Monoliths, modular monoliths, and Service Oriented Architecture fall along an evolutionary scale as your application increases in complexity. Each architecture will be appropriate for a different sized team/app and will be separated by periods of pain and suffering. When you do start experiencing many of the pain points highlighted in this article, that’s when you know you’ve outgrown the current solution and it’s time to move onto the next.
 
 This whole article is filled with a lot of pragmatism.
 
@@ -207,7 +207,7 @@ Newer podcast specifically focused on Women in Technology and related topics. Ch
 
 More vertical integration in retail.
 
-The nearly 400,000 square-foot plant in Fremont will employ 950 workers. The plant will take 45 weeks to ramp up to full production. Once it's at full speed, the plant will process about 100 million chickens a year, or 40% of Costco's annual chicken needs.
+> The nearly 400,000 square-foot plant in Fremont will employ 950 workers. The plant will take 45 weeks to ramp up to full production. Once it's at full speed, the plant will process about 100 million chickens a year, or 40% of Costco's annual chicken needs.
 
 Incredible demand for chicken.
 
@@ -215,7 +215,7 @@ Incredible demand for chicken.
 
 I was blown away that someone on Substack makes $500,000/yr in subscriptions. Wow.
 
-Users can now build audiences at scale and turn their passions into livelihoods, whether that’s playing video games or producing video content. This has huge implications for entrepreneurship and what we’ll think of as a “job” in the future.
+> Users can now build audiences at scale and turn their passions into livelihoods, whether that’s playing video games or producing video content. This has huge implications for entrepreneurship and what we’ll think of as a “job” in the future.
 
 This article is all a bit overstated, as one might expect from a venture firm, but the core concepts are interesting. I don't think it’s defining the future of jobs, but it might make it easier to create a lot of small service-based companies, solopreneurs.
 

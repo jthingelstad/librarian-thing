@@ -68,7 +68,7 @@ links:
   domain: www.vanityfair.com
   heading_context: '[WeWork Is Unloading Adam Neumann''s Cronies—and His Private Jet | Vanity Fair](https://www.vanityfair.com/news/2019/09/wework-adam-neumann-layoffs-private-jet)'
   section: Notable Links 📌
-word_count: 1396
+word_count: 1408
 ---
 I seem to be on a run lately where I’m running pretty late into my cut off time to get the Weekly Thing out to everyone. ⏳ Summer is behind us but we've jumped right into back to school, fall sports, and a regularly busy season at the office.
 
@@ -84,13 +84,13 @@ I hope you all are having a great beginning to Fall and have a spectacular weeke
 
 I've had Andy Grove's High Output Management on my book list for a while but I haven't yet read it. This article is an interesting summarization of part of it.
 
-To paraphrase the book, the job of an executive is: to define and enforce culture and values for their whole organization, and to ratify good decisions.
-
-That's all.
-
-Not to decide. Not to break ties. Not to set strategy. Not to be the expert on every, or any topic. Just to sit in the room while the right people make good decisions in alignment with their values. And if they do, to endorse it. And if they don't, to send them back to try again.
-
-There's even an algorithm for this.
+> To paraphrase the book, the job of an executive is: to define and enforce culture and values for their whole organization, and to ratify good decisions.
+>
+> That's all.
+>
+> Not to decide. Not to break ties. Not to set strategy. Not to be the expert on every, or any topic. Just to sit in the room while the right people make good decisions in alignment with their values. And if they do, to endorse it. And if they don't, to send them back to try again.
+>
+> There's even an algorithm for this.
 
 Good writeup, and the epilogue, doubilogue, all the way to quadrilogue are good too.
 
@@ -108,7 +108,7 @@ Sep 28, 2019 at 5:22 PM
 
 There is a lot of social fatigue out there.
 
-I grow weary when I think of this as the new normal for what is considered to be a fruitful personal life. Social media is no longer a mere public extension of our private socialization; it has become a replacement for it.
+> I grow weary when I think of this as the new normal for what is considered to be a fruitful personal life. Social media is no longer a mere public extension of our private socialization; it has become a replacement for it.
 
 I suspect that is part of that fatigue.
 
@@ -140,7 +140,7 @@ Apple continues to make pretty big changes in the tvOS environment. Multi-user b
 
 Reducing friction to all parts of a business can yield tremendous results.
 
-Most self-serve first products start being used by small customers (typically entrepreneurs or developers) that are overlooked by the incumbents since they are too hard (for said incumbents) to acquire and cost-effectively serve. This initial footprint serves as the beachhead for the company, helping it developing strong customer loyalty and word-of-mouth acquisition through great experiences, as well as a much lower cost to serve them. In some ways, it serves as the base camp for the assault on the incumbents’ bread and butter, financed by the profitable low end customer base. As the company inexorably acquires larger customers and creeps upmarket, the lower cost of customer acquisition — powered by word-of-mouth — coupled with higher customer loyalty and retention and lower cost of serving the customer, makes it an extremely formidable competitor for incumbents to compete with. This is the definition of disruption.
+> Most self-serve first products start being used by small customers (typically entrepreneurs or developers) that are overlooked by the incumbents since they are too hard (for said incumbents) to acquire and cost-effectively serve. This initial footprint serves as the beachhead for the company, helping it developing strong customer loyalty and word-of-mouth acquisition through great experiences, as well as a much lower cost to serve them. In some ways, it serves as the base camp for the assault on the incumbents’ bread and butter, financed by the profitable low end customer base. As the company inexorably acquires larger customers and creeps upmarket, the lower cost of customer acquisition — powered by word-of-mouth — coupled with higher customer loyalty and retention and lower cost of serving the customer, makes it an extremely formidable competitor for incumbents to compete with. This is the definition of disruption.
 
 This is a solid playbook for many markets.
 
@@ -148,15 +148,15 @@ This is a solid playbook for many markets.
 
 Maybe I should stop reading all the crazy stuff coming out of WeWork, but this is just too good.
 
-A group of 10-plus staffers referred to internally as the “oval office” will also be exiting the company, according to the Journal, including several friends who worked on Neumann's personal deals.
+> A group of 10-plus staffers referred to internally as the “oval office” will also be exiting the company, according to the Journal, including several friends who worked on Neumann's personal deals.
 
 and then…
 
-One of the biggest hallmarks of Neumann's WeWork legacy set to leave the company in his wake, though, is the former CEO's $60 million private jet, which the post-Neumann WeWork is now planning to sell.
+> One of the biggest hallmarks of Neumann's WeWork legacy set to leave the company in his wake, though, is the former CEO's $60 million private jet, which the post-Neumann WeWork is now planning to sell.
 
 oh, and you don't think there is more…
 
-Neumann spent even more money by renovating the jet, adding two bedrooms and Apple TVs—complete with shows and movies that staff members spent “three days straight” downloading—to the private jet, which the then-CEO frequently used as a meeting space. “I know of instances where people got on the plane, flew across the country, and flew commercial home,” one executive told Business Insider.
+> Neumann spent even more money by renovating the jet, adding two bedrooms and Apple TVs—complete with shows and movies that staff members spent “three days straight” downloading—to the private jet, which the then-CEO frequently used as a meeting space. “I know of instances where people got on the plane, flew across the country, and flew commercial home,” one executive told Business Insider.
 
 Wow. Just wow.
 

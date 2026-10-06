@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/37/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-20-2018/
 domains: []
 links: []
-word_count: 1097
+word_count: 1115
 ---
 I’m not a big football 🏈 fan, but you'd have to be a zombie 🧟‍♂️ to not be excited about the Minnesota Vikings amazing win last Sunday! The newly named SPS Tower is in downtown Minneapolis, and with the upcoming Super Bowl we are planning for a bit of chaos. If the Vikings can make their way to that game, it will be an entirely different level of chaos. 🤞 Cross your fingers for this weekends game and hopefully making history!
 
@@ -74,7 +74,7 @@ Very good writeup comparing current CloudFoundry and Kubernetes. I've been tryin
 
 [Compelling article by Bruce Schneier](https://www.schneier.com) arguing the increasing threats we face in the security space.
 
-The market can’t fix this because neither the buyer nor the seller cares. The owners of the webcams and DVRs used in the denial-of-service attacks don’t care. Their devices were cheap to buy, they still work, and they don’t know any of the victims of the attacks. The sellers of those devices don’t care: They’re now selling newer and better models, and the original buyers only cared about price and features. There is no market solution, because the insecurity is what economists call an externality: It’s an effect of the purchasing decision that affects other people. Think of it kind of like invisible pollution.
+> The market can’t fix this because neither the buyer nor the seller cares. The owners of the webcams and DVRs used in the denial-of-service attacks don’t care. Their devices were cheap to buy, they still work, and they don’t know any of the victims of the attacks. The sellers of those devices don’t care: They’re now selling newer and better models, and the original buyers only cared about price and features. There is no market solution, because the insecurity is what economists call an externality: It’s an effect of the purchasing decision that affects other people. Think of it kind of like invisible pollution.
 
 His argument is an interesting one and I think he's right. There are parts of the technology market where the buyer does care about security, but by device count that is far from a majority. I also appreciate his call to not connect things to the Internet just because. Realize there is risk associated with that.
 

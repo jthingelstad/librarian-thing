@@ -56,7 +56,7 @@ links:
   domain: blog.jessfraz.com
   heading_context: '[Jessie Frazelle''s Blog: Defining a Distinguished Engineer](https://blog.jessfraz.com/post/defining-a-distinguished-enginner/)'
   section: Notable Links 📌
-word_count: 1175
+word_count: 1183
 ---
 More travel this week! ✈️ I've been visiting #TeamSPS in Little Falls New Jersey! It’s been great to be here and see everyone, and far too long since I've visited. No board game night on this trip, next time! I've definitely been on planes a lot lately, and I’m only about halfway through. We are heading to Texas 🌵 for Spring Break this weekend. We'll be in Austin, San Antonio and Waco! Yes, barbecue is on the agenda! 🔥
 
@@ -72,11 +72,11 @@ A lot of good details answered here on how the Apple Card will work. [MacStories
 
 I know I've fallen into this trap many, many times. I see others do it a good amount as well. I have a feeling in technology disciplines this might happen more frequently than others.
 
-What you’ll notice when you ask these questions is that most employees already have an answer (or several answers!) to a given problem. But they were uncomfortable with it, or they were worried about getting it “wrong.”
-
-Part of asking the questions isn’t just to help them think through the problem more clearly, but also to help them realize they know more than they think, they’re more capable than they think, and that they’ve mitigated the risks better than anticipated.
-
-Your job as a leader isn’t to just help clarify thought process – but to give confidence in their thinking.
+> What you’ll notice when you ask these questions is that most employees already have an answer (or several answers!) to a given problem. But they were uncomfortable with it, or they were worried about getting it “wrong.”
+>
+> Part of asking the questions isn’t just to help them think through the problem more clearly, but also to help them realize they know more than they think, they’re more capable than they think, and that they’ve mitigated the risks better than anticipated.
+>
+> Your job as a leader isn’t to just help clarify thought process – but to give confidence in their thinking.
 
 The questions suggested here are a good set to start with, but the more fundamental concept is rethinking how you engage in problem solving as a leader.
 
@@ -84,7 +84,7 @@ The questions suggested here are a good set to start with, but the more fundamen
 
 Exercising is good for the noodle as well.
 
-These structural changes in the brain generally take at least a few weeks to develop but lead to long-lasting improvements in regions of the brain associated with cognitive tasks, like working memory. “A lot of intervention studies that are out there show that aerobic exercise increases neurogenesis in the hippocampus, for example” says Giesbrecht. “The hippocampus is really critical for memory.”
+> These structural changes in the brain generally take at least a few weeks to develop but lead to long-lasting improvements in regions of the brain associated with cognitive tasks, like working memory. “A lot of intervention studies that are out there show that aerobic exercise increases neurogenesis in the hippocampus, for example” says Giesbrecht. “The hippocampus is really critical for memory.”
 
 🏃‍♂️
 
@@ -110,7 +110,7 @@ Drafts has been a powerful tool for me on my mobile, and I've been using the bet
 
 This article does a good job of highlighting what privacy concerns look like from different perspectives.
 
-On a more basic level, infringing on people’s privacy for your own purposes is exploitative. The assignment reflects the logic of digital platforms, which treats people’s data as raw material to be extracted and put to one’s own uses. While this extraction is currently legal, it is a “norm” inflicted upon us by platforms such as Google, Facebook, and Amazon. This kind of extraction is surveillance, and whether it is done online or in the “real world,” it intrudes upon people’s rights to move about in public in relative obscurity if they so wish.
+> On a more basic level, infringing on people’s privacy for your own purposes is exploitative. The assignment reflects the logic of digital platforms, which treats people’s data as raw material to be extracted and put to one’s own uses. While this extraction is currently legal, it is a “norm” inflicted upon us by platforms such as Google, Facebook, and Amazon. This kind of extraction is surveillance, and whether it is done online or in the “real world,” it intrudes upon people’s rights to move about in public in relative obscurity if they so wish.
 
 The author introduces the idea of "luxury surveillance", where you are being watched with at least a partial intent to help you. I think we should also consider the idea that there is a surveillance that is forced onto people if they don't have the technical understanding to counter it.
 
@@ -118,7 +118,7 @@ The author introduces the idea of "luxury surveillance", where you are being wat
 
 As someone that writes a blog, a newsletter and comments on links regularly I enjoyed this read the lesson it contains.
 
-When you understand that nobody wants to read your shit, your mind becomes powerfully concentrated. You begin to understand that writing/reading is, above all, a transaction. The reader donates his time and attention, which are supremely valuable commodities. In return, you the writer, must give him something worthy of his gift to you.
+> When you understand that nobody wants to read your shit, your mind becomes powerfully concentrated. You begin to understand that writing/reading is, above all, a transaction. The reader donates his time and attention, which are supremely valuable commodities. In return, you the writer, must give him something worthy of his gift to you.
 
 Channel your inner Hemingway. ✍️
 

@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/43/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-43-mar-3-2018/
 domains: []
 links: []
-word_count: 2037
+word_count: 2043
 ---
 I was able to transition the Weekly Thing to this new custom template without breaking everyone’s email experience! 🙌 I can now happily continue to make small tweaks to improve the experience. 🔧 My brief experiment with serif fonts only lasted one issue though.
 
@@ -41,7 +41,7 @@ www.wired.com
 
 I’m continuously surprised why GitHub is [so frequently the target of DDoS](https://en.wikipedia.org/wiki/Denial-of-service_attack) attacks, but this is an amazing timeline:
 
-GitHub briefly struggled with intermittent outages as a digital system assessed the situation. Within 10 minutes it had automatically called for help from its DDoS mitigation service, Akamai Prolexic. Prolexic took over as an intermediary, routing all the traffic coming into and out of GitHub, and sent the data through its scrubbing centers to weed out and block malicious packets. After eight minutes, attackers relented and the assault dropped off.
+> GitHub briefly struggled with intermittent outages as a digital system assessed the situation. Within 10 minutes it had automatically called for help from its DDoS mitigation service, Akamai Prolexic. Prolexic took over as an intermediary, routing all the traffic coming into and out of GitHub, and sent the data through its scrubbing centers to weed out and block malicious packets. After eight minutes, attackers relented and the assault dropped off.
 
 That is an impressive, automated response to such a significant event. 👏
 
@@ -69,7 +69,7 @@ www.berkshirehathaway.com
 
 Warren Buffett's shareholder letter is always a great read. Nea
 
-The $65 billion gain is nonetheless real – rest assured of that. But only $36 billion came from Berkshire’s operations. The remaining $29 billion was delivered to us in December when Congress rewrote the U.S. Tax Code.
+> The $65 billion gain is nonetheless real – rest assured of that. But only $36 billion came from Berkshire’s operations. The remaining $29 billion was delivered to us in December when Congress rewrote the U.S. Tax Code.
 
 44% of their gain was a result of the tax overhaul. The read on his 10-year "bet" against managed funds is very good (news flash, the index fund won). Plus bonus points for quoting Kipling.
 
@@ -83,7 +83,7 @@ blog.intercom.com
 
 Solid set of practices from Intercom on how they do customer onboarding. This is a huge area of focus for SaaS companies, particularly B2C ones.
 
-As your business grows and gets different types of customers, your onboarding will need to adapt. You’ll never be “finished” working on onboarding. And even your most loyal and active customers need to be continually onboarded to new areas of your product.
+> As your business grows and gets different types of customers, your onboarding will need to adapt. You’ll never be “finished” working on onboarding. And even your most loyal and active customers need to be continually onboarded to new areas of your product.
 
 You have to adapt these plays in the B2B market but the thinking behind this is what I would attempt to model. 🤔
 
@@ -111,7 +111,7 @@ tomcritchlow.com
 
 I like this thought about how to approach blogging.
 
-Small b blogging is writing things that you link back to and reference time and time again. Ideas that can evolve and grow as your thinking and audience grows.
+> Small b blogging is writing things that you link back to and reference time and time again. Ideas that can evolve and grow as your thinking and audience grows.
 
 Personally I think of my blogging activity as being as much or more for me as a way to clarify my thoughts and share learning, and if others dig it that is cool too.
 
@@ -122,7 +122,7 @@ medium.com
 
 [I've read Nassim Nicholas Taleb](http://www.fooledbyrandomness.com) ['s Antifragile](https://www.amazon.com/Antifragile-Things-That-Disorder-Incerto/dp/1400067820/) but this essay on applying anti fragile concepts to your life is interesting:
 
-An antifragile way of life is all about finding a way to gain from the inevitable disorder of life. To not only bounce back when things don’t go as planned, but to get stronger, smarter, and better at continuing as a result of running into this disorder.
+> An antifragile way of life is all about finding a way to gain from the inevitable disorder of life. To not only bounce back when things don’t go as planned, but to get stronger, smarter, and better at continuing as a result of running into this disorder.
 
 Thought provoking. 🤔
 
@@ -143,7 +143,7 @@ robertovitillo.com
 
 The first I heard of differential privacy was when Apple started to use the term to describe how they use advanced data techniques to make smart recommendations without reducing privacy. This paper is filled with more math than I can follow, but it explains a bit more about what differential privacy really is.
 
-Differential privacy formalizes the idea that a query should not reveal whether any one person is present in a dataset, much less what their data are. Imagine two otherwise identical datasets, one with your information in it, and one without it. Differential Privacy ensures that the probability that a query will produce a given result is nearly the same whether it’s conducted on the first or second dataset.
+> Differential privacy formalizes the idea that a query should not reveal whether any one person is present in a dataset, much less what their data are. Imagine two otherwise identical datasets, one with your information in it, and one without it. Differential Privacy ensures that the probability that a query will produce a given result is nearly the same whether it’s conducted on the first or second dataset.
 
 If your working on systems that collect user data and also want to protect privacy this would be a good read.
 

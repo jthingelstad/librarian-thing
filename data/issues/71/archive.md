@@ -121,7 +121,7 @@ links:
   domain: www.troyhunt.com
   heading_context: '[Troy Hunt: Serverless to the Max: Doing Big Things for Small Dollars with Cloudflare Workers and Azure Functions](https://www.troyhunt.com/serverless-to-the-max-doing-big-things-for-small-dollars-with-cloudflare-workers-and-azure-functions/)'
   section: Notable Links 📌
-word_count: 1905
+word_count: 1911
 ---
 This last weekend Tammy and I were planning a weekend away for just the two of us in Indianapolis. Why Indianapolis? [Brandi Carlile](https://www.brandicarlile.com) was playing there, and why not! However, given our dog Chase's health, we decided to stay home and still have the kids spend the weekend with Grandma! We saw three movies in three days, and enjoyed a nice "staycation" with bike rides and nice dinners! It's been a while since we went to an 11am matinée! 🎬 See the micro posts at the end if you are curious which movies we saw.
 
@@ -135,11 +135,11 @@ Newport's post makes me feel good about the time I spend optimizing and defining
 
 This headline caught my attention, and it’s actually using gene drive technology.
 
-Teams in three African countries — Burkina Faso, Mali, and Uganda — are building the groundwork to eventually let loose “gene drive” mosquitoes, which would contain a mutation that would significantly and quickly reduce the mosquito population. Genetically engineered mosquitoes have already been released in places like Brazil and the Cayman Islands, though animals with gene drives have never been released in the wild.
+> Teams in three African countries — Burkina Faso, Mali, and Uganda — are building the groundwork to eventually let loose “gene drive” mosquitoes, which would contain a mutation that would significantly and quickly reduce the mosquito population. Genetically engineered mosquitoes have already been released in places like Brazil and the Cayman Islands, though animals with gene drives have never been released in the wild.
 
 That immediately reminded me of one of the most memorable passages from A Crack in Creation, the story of CRISPR.
 
-CRISPR gene drives, by contrast, are self-sustaining; since the mode of inheritance appears to outsmart natural selection, the modified insects propagate and pass on their defective traits indefinitely. This thoroughness is what makes gene drives so powerful—and so alarming. It's been estimated that, had a fruit fly escaped the San Diego lab during the first gene drive experiments, it would have spread genes encoding CRISPR, along with the yellow-body trait, to between 20 and 50 percent of all fruit flies worldwide.
+> CRISPR gene drives, by contrast, are self-sustaining; since the mode of inheritance appears to outsmart natural selection, the modified insects propagate and pass on their defective traits indefinitely. This thoroughness is what makes gene drives so powerful—and so alarming. It's been estimated that, had a fruit fly escaped the San Diego lab during the first gene drive experiments, it would have spread genes encoding CRISPR, along with the yellow-body trait, to between 20 and 50 percent of all fruit flies worldwide.
 
 This population of mosquitos being released are 99% male, so there shouldn't be any risk.
 
@@ -189,7 +189,7 @@ Good overview of the new iPhones announced this week. Tammy and I ordered the iP
 
 This post [makes me want to send Feedbin](https://feedbin.com/) some more money on top of my annual subscription fee. I love the work that Ben has done here to protect his customers from invasive tracking while reading feeds. I love his item on Google Analytics:
 
-I thought about replacing Google Analytics with Matomo, but I came to the same conclusion that it didn’t provide anything I need in order to run Feedbin. Better to not collect that data at all.
+> I thought about replacing Google Analytics with Matomo, but I came to the same conclusion that it didn’t provide anything I need in order to run Feedbin. Better to not collect that data at all.
 
 Hat's off! 👏
 
@@ -201,7 +201,7 @@ This is a great example of innovation enabled with API's. I've been a YNAB user 
 
 Forwarded [to me from my friend Nick](https://www.linkedin.com/in/nick-swenson-976b7337/) . I like this way of thinking about learning topics.
 
-… if we don't do our own contemplation and commentary, we abdicate a good deal of our involvement in our own learning, and we shift from being fires to vessels.
+> … if we don't do our own contemplation and commentary, we abdicate a good deal of our involvement in our own learning, and we shift from being fires to vessels.
 
 I like the qualification of speeds (quick, slow) to various aspects of the process.
 
@@ -213,7 +213,7 @@ Wait, you can track a user around the internet using TLS session resumption!? �
 
 I've been stunned at how many organizations have just discovered Agile in the last few years. Good guidance in the intro:
 
-The three main challenges we should focus on are: fighting the Agile Industrial Complex and its habit of imposing process upon teams, raising the importance of technical excellence, and organizing our teams around products (rather than projects).
+> The three main challenges we should focus on are: fighting the Agile Industrial Complex and its habit of imposing process upon teams, raising the importance of technical excellence, and organizing our teams around products (rather than projects).
 
 👍
 
@@ -233,7 +233,7 @@ This is fun to play with, although I have no idea what it would be useful for.
 
 Deep overview of how Troy Hunt designed Have I Been Pwned? to be very cost efficient to run.
 
-It's costing me 2.6c per day to support 141M monthly queries of 517M records.
+> It's costing me 2.6c per day to support 141M monthly queries of 517M records.
 
 That is amazing! The service is using Cloudflare Workers to push a lot of cached requests off of Azure. He calculates that without Cloudflare it would cost $9.19/day to run. Both of those amounts are amazing.
 

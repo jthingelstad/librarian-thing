@@ -69,7 +69,7 @@ links:
   domain: timharford.com
   heading_context: '[Tim Harford — Article — What we get wrong about meetings – and how to make them worth attending](http://timharford.com/2019/08/what-we-get-wrong-about-meetings-and-how-to-make-them-worth-attending/)'
   section: Notable Links 📌
-word_count: 1432
+word_count: 1437
 ---
 This week marked the beginning of another school year, and with that another opportunity for me to do my Dad routine for the first day. I made [Nordic Waffles](https://nordicwaffles.com) , one of our family favorites, for the kids to enjoy a delicious breakfast. Whipped cream, chocolate chips, Nutella, Jam, and even good old Pure Maple Syrup were on the offering to put on the waffles. Everyone got firsts and seconds. 🍽
 
@@ -85,7 +85,7 @@ The news this week has me wondering again if there is a phenomenon where each ge
 
 This is a fun read on the early history of Unix. Consider the 50 years of Unix in two ways. it’s truly amazing that every smartphone you see is powered by a Unix-based system that started 50 years ago, that the technology has lasted that long. On the other hand, consider that it’s taken five decades for the combined intelligence of software developers to create a Unix kernel that is as stable as what we have today.
 
-The rest has quite literally made tech history. By the late 1970s, a copy of the operating system found its way out to the University of California at Berkeley, and in the early 1980s, programmers there adapted it to run on PCs. Their version of Unix, the Berkeley Software Distribution (BSD), was picked up by developers at NeXT, the company Steve Jobs founded after leaving Apple in 1985. When Apple purchased NeXT in 1996, BSD became the starting point for OS X and iOS.
+> The rest has quite literally made tech history. By the late 1970s, a copy of the operating system found its way out to the University of California at Berkeley, and in the early 1980s, programmers there adapted it to run on PCs. Their version of Unix, the Berkeley Software Distribution (BSD), was picked up by developers at NeXT, the company Steve Jobs founded after leaving Apple in 1985. When Apple purchased NeXT in 1996, BSD became the starting point for OS X and iOS.
 
 Writing an operating system is not for the faint of heart.
 
@@ -103,7 +103,7 @@ Aug 31, 2019 at 8:04 PM
 
 A rant of sort on many aspects of modern business environments and tools, with a call to action around writing with clarity.
 
-The best way to capture the necessary mindset is that of Minimum Viable Bureaucracy: we need to make our tools and processes work for us, with a minimum amount of fuss for the maximum amount of benefit, without any illusions that the technology will simply do it for us. It can even save your bacon when the shit hits the fan.
+> The best way to capture the necessary mindset is that of Minimum Viable Bureaucracy: we need to make our tools and processes work for us, with a minimum amount of fuss for the maximum amount of benefit, without any illusions that the technology will simply do it for us. It can even save your bacon when the shit hits the fan.
 
 Wikis deserve a lot more credit than people give them.
 
@@ -119,7 +119,7 @@ This is one of the most insidious forms of spamming that I see. Easy to follow d
 
 I have made significant investments in Canon camera gear. Expensive lenses, powerful bodies, etc. It’s hard to see any path for this gear outside of the very specific needs of professional shooters.
 
-I have a five-year old camera, and I can’t conceive of a convincing reason to get a new one. The one I own was very good at the start of its life, it cost me a lot of money, and I suspect it has a long life ahead of it. And to be clear, I am extremely fond of my camera. I find absolutely no joy in the demise of the standalone camera.
+> I have a five-year old camera, and I can’t conceive of a convincing reason to get a new one. The one I own was very good at the start of its life, it cost me a lot of money, and I suspect it has a long life ahead of it. And to be clear, I am extremely fond of my camera. I find absolutely no joy in the demise of the standalone camera.
 
 When someone that put up the money for a Leica is saying that, camera companies must realize they are in a no win spot.
 
@@ -135,7 +135,7 @@ This idea of multiple "levels" of journaling is worthwhile. I often think level 
 
 Not getting to that project, or that thing you want to do?
 
-You’re not lazy. You’re not bored. You’re not unmotivated. What you are — what all of us are — is afraid. And the best advice for overcoming fear is the bland three-word sentence Nike turned into the most successful marketing slogan of all time (after slightly tweaking a serial killer’s last words): Just do it.
+> You’re not lazy. You’re not bored. You’re not unmotivated. What you are — what all of us are — is afraid. And the best advice for overcoming fear is the bland three-word sentence Nike turned into the most successful marketing slogan of all time (after slightly tweaking a serial killer’s last words): Just do it.
 
 This reminds me a lot of what [Pressfield](https://stevenpressfield.com) calls ["the resistance"](https://en.wikipedia.org/wiki/Resistance_(creativity))
 
@@ -147,7 +147,7 @@ I use my calendar along with some custom Shortcut scripts and Toggl to track my 
 
 A short essay on meetings.
 
-A good meeting is a good meeting less because of what happens at the time, but because of what came before — and most importantly, what comes after.
+> A good meeting is a good meeting less because of what happens at the time, but because of what came before — and most importantly, what comes after.
 
 This is very true.
 

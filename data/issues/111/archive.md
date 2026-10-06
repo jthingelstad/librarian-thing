@@ -120,7 +120,7 @@ links:
   domain: blog.dropbox.com
   heading_context: '[Meet the new Dropbox | Dropbox Blog](https://blog.dropbox.com/topics/product-tips/new-dropbox)'
   section: Notable Links 📌
-word_count: 2920
+word_count: 2932
 ---
 Our summer has started off with a bang! 💥 Our daughter celebrated her Golden Birthday 🥳 this year, and just two days later we had a great Father's Day. Then the next day my wife Tammy took our daughter on her Golden Birthday trip! We've adopted two traditions around birthdays. The first is that when each kid turns 13 I take them on a long weekend to New York to see the Big City! 🛩 The other is that on their Golden Birthdays Tammy takes them on a big birthday trip. They have been [having a blast in Mackinac Island](https://www.mackinacisland.org) .
 
@@ -134,13 +134,13 @@ This week I also finished replacing our home [network with brand new Ubiquity Un
 
 This article connects the analytical approaches used in highly data-driven sports like baseball, with a quantitative approach to understanding what makes people successful in their jobs. This specifically dives into a large team at Microsoft where people expressed dissatisfaction with work-life balance. The exploration of instinctive reasons for this proved wrong. Through survey data they found some good reminders (emphasis added).
 
-One of their findings was that people who worked extremely long work weeks were not necessarily more effective than those who put in a more normal 40 to 50 hours. In particular, when managers put in lots of evening and weekend hours, their employees started matching the behavior and became less engaged in their jobs, according to surveys. Another finding was that one of the strongest predictors of success for middle managers was that they held frequent one-on-one meetings with the people who reported directly to them. Third: People who made lots of contacts across departments tended to have longer, better careers within the company. There was even an element of contagion, in that managers with broad networks passed their habits on to their employees.
+> One of their findings was that people who worked extremely long work weeks were not necessarily more effective than those who put in a more normal 40 to 50 hours. In particular, when managers put in lots of evening and weekend hours, their employees started matching the behavior and became less engaged in their jobs, according to surveys. Another finding was that one of the strongest predictors of success for middle managers was that they held frequent one-on-one meetings with the people who reported directly to them. Third: People who made lots of contacts across departments tended to have longer, better careers within the company. There was even an element of contagion, in that managers with broad networks passed their habits on to their employees.
 
 The more interesting data came when they looked at data that quantified the teams experiences (emphasis added).
 
-The two kept iterating until something emerged in the data. People in Mr. Ostrum’s division were spending an awful lot of time in meetings: an average of 27 hours a week. That wasn’t so much more than the typical team at Microsoft. But what really distinguished those teams with low satisfaction scores from the rest was that their meetings tended to include a lot of people — 10 or 20 bodies arrayed around a conference table coordinating plans, as opposed to two or three people brainstorming ideas.
-
-The issue wasn’t that people had to fly to China or make late-night calls. People who had taken jobs requiring that sort of commitment seemed to accept these things as part of the deal. The issue was that their managers were clogging their schedules with overcrowded meetings, reducing available hours for tasks that rewarded more focused concentration — thinking deeply about trying to solve a problem.
+> The two kept iterating until something emerged in the data. People in Mr. Ostrum’s division were spending an awful lot of time in meetings: an average of 27 hours a week. That wasn’t so much more than the typical team at Microsoft. But what really distinguished those teams with low satisfaction scores from the rest was that their meetings tended to include a lot of people — 10 or 20 bodies arrayed around a conference table coordinating plans, as opposed to two or three people brainstorming ideas.
+>
+> The issue wasn’t that people had to fly to China or make late-night calls. People who had taken jobs requiring that sort of commitment seemed to accept these things as part of the deal. The issue was that their managers were clogging their schedules with overcrowded meetings, reducing available hours for tasks that rewarded more focused concentration — thinking deeply about trying to solve a problem.
 
 I have my own bespoke system for tracking calendar analytics. I track a handful of dimensions on the data in addition to just frequency and scheduled v. unscheduled time. I track wether I scheduled the meeting or if someone else did, to get a sense of how much of my time I am directing. I also track special flags for meetings with just one other person, a one-on-one meeting, as well as a flag for large meetings with a lot of attendees. Most recently I've also started attaching an emoji to each event to gauge a qualitative rating of the meeting. I'm now using that data to both correlate my own level of excitement about various parts of my work as well as insure that I'm putting my most precious resource, time, towards my most important objectives.
 
@@ -148,11 +148,11 @@ I have my own bespoke system for tracking calendar analytics. I track a handful 
 
 Over the years I worked with many journalists and nearly all of them bristled at the word content. One once argued with me that I should just go all the way and call it "data". People who exercise a craft, do that in the theme of that craft, not arbitrary buckets of bits like content.
 
-A photographer who says that he is creating “content” for his YouTube channel is nothing more than a marketer churning out fodder to fill the proverbial Internet airwaves with marketing noise.
+> A photographer who says that he is creating “content” for his YouTube channel is nothing more than a marketer churning out fodder to fill the proverbial Internet airwaves with marketing noise.
 
 I love how Om looks at his personal website. I feel similarly.
 
-Like in my apartment, on my blog, I am king. My first decree was to eschew any and all analytics. I don’t want to be driven by “views,” or what Google deems worthy of rank. I write what pleases me, not some algorithm. Walking away from quantification of my creativity was an act of taking back control.
+> Like in my apartment, on my blog, I am king. My first decree was to eschew any and all analytics. I don’t want to be driven by “views,” or what Google deems worthy of rank. I write what pleases me, not some algorithm. Walking away from quantification of my creativity was an act of taking back control.
 
 I’m glad to see I’m in [such great company having removed analytics](https://www.thingelstad.com/2017/removed-google-analytics) from my website, and I also disable all [link tracking on the Weekly Thing](https://weekly.thingelstad.com) .
 
@@ -160,7 +160,7 @@ I’m glad to see I’m in [such great company having removed analytics](https:/
 
 [I like how Maciej Cegłowski](https://idlewords.com/about.htm) frames the privacy topic (and a number of other topics for that matter). I've wished that the Internet had a form of "zoning" in this regard. In everyday life we make a number of assumptions about our privacy informed by our surroundings. When in a restaurant or store, I don't assume I have any privacy. When in a park, I do assume I have privacy.
 
-Our discourse around privacy needs to expand to address foundational questions about the role of automation: To what extent is living in a surveillance-saturated world compatible with pluralism and democracy? What are the consequences of raising a generation of children whose every action feeds into a corporate database? What does it mean to be manipulated from an early age by machine learning algorithms that adaptively learn to shape our behavior?
+> Our discourse around privacy needs to expand to address foundational questions about the role of automation: To what extent is living in a surveillance-saturated world compatible with pluralism and democracy? What are the consequences of raising a generation of children whose every action feeds into a corporate database? What does it mean to be manipulated from an early age by machine learning algorithms that adaptively learn to shape our behavior?
 
 It would be nice if you could understand your privacy situation based on your surroundings in the digital world.
 
@@ -192,7 +192,7 @@ I don't have any news apps on my phone, because they are all far too focused on 
 
 Interesting for Facebook to be getting into this space and betting so big on it. It would be good if it validates cryptocurrencies, but I have no trust for Facebook to run such a system with my money. I’m also pretty suspicious about the involvement of all these other organizations.
 
-These collaborators, each of which pitched in $10 million for the privilege of joining the network, are the so-called “Founding Members” of the Libra Association, a Switzerland-based not-for-profit that will oversee the development of the Libra network. A Byzantine system of “governance”—with each node participating in regular votes on key proposals—is intended to hold them accountable.
+> These collaborators, each of which pitched in $10 million for the privilege of joining the network, are the so-called “Founding Members” of the Libra Association, a Switzerland-based not-for-profit that will oversee the development of the Libra network. A Byzantine system of “governance”—with each node participating in regular votes on key proposals—is intended to hold them accountable.
 
 What are they getting out of this? I'll wait and see. If it requires a Facebook account, I won't be using it.
 
@@ -220,7 +220,7 @@ Cool, innovative approach to a calendar user experience. I like the event creati
 
 I like this article explaining the "why" for PagerDuty and supporting Pride Month with their logo.
 
-To highlight Pride at PagerDuty is to celebrate all people and to shine a light on those in the world who cannot simply be themselves. We change our logo for Pride Month each year because we want to show that we are a welcoming and safe space, and that we support all people.
+> To highlight Pride at PagerDuty is to celebrate all people and to shine a light on those in the world who cannot simply be themselves. We change our logo for Pride Month each year because we want to show that we are a welcoming and safe space, and that we support all people.
 
 🏳️‍🌈👏
 
@@ -244,9 +244,9 @@ The over-caffeinated job description is a bit of the sign of the times. I have a
 
 I've owned Birkenstock's for as long as I can remember. Each pair last several years. I even get them re-corked sometimes. I love the ethos they are espousing here:
 
-“It was never about function for them, just logos,” Klaus Baumann, Birkenstock’s chief sales officer, speaking about Supreme, which regularly draws long lines of consumers outside of its store every week on Thursday when it “drops” new products, including collaborations. “These were not product people.”
-
-Birkenstock’s management is seemingly unimpressed by such antics.
+> “It was never about function for them, just logos,” Klaus Baumann, Birkenstock’s chief sales officer, speaking about Supreme, which regularly draws long lines of consumers outside of its store every week on Thursday when it “drops” new products, including collaborations. “These were not product people.”
+>
+> Birkenstock’s management is seemingly unimpressed by such antics.
 
 "These were not product people." Love that. [Via Five Things on Friday #300](https://us8.campaign-archive.com/?u=a84512488c22cce34b03cbcaa&id=3574e85eaa) .
 

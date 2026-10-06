@@ -92,7 +92,7 @@ links:
   domain: www.vanityfair.com
   heading_context: '[“You Don’t Bring Bad News to the Cult Leader”: Inside the Fall of WeWork | Vanity Fair](https://www.vanityfair.com/news/2019/11/inside-the-fall-of-wework)'
   section: Notable Links 📌
-word_count: 2075
+word_count: 2080
 ---
 For everyone in the United States 🇺🇸 I hope you all had as great of a Thanksgiving as I was lucky to have! We celebrated in the morning with Tammy's family, and in the evening with my family. This year was the first year that I roasted the turkey! 🦃 I've done plenty of cooking for larger groups, but being in charge of the star of the show for the "Big Show" made me a bit anxious. 😬 Adding in the complexities of taking the cooked turkey to another house made it a little trickier, but all came out just fine! 🚙 For those that dont know, doing the turkey with the brine, the stuffing, roasting, and carving is a lot of work and takes a good chunk of time. I think a brisket is easier!
 
@@ -142,7 +142,7 @@ It’s hard for me to believe that an effort like this is going to have a real i
 
 This looks really interesting. Synchronization is a huge pain to write, and rewrite, all the time.
 
-The Braid Protocol is a set of extensions to HTTP, which transform it from a state transfer protocol into a state synchronization protocol. When a resource is changed by one client or server, all other clients and [servers update. Braid supports Operational Transform](https://en.wikipedia.org/wiki/Operational_transformation) [and CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) at web URLs, enabling peer-to-peer, offline-capable web applications.
+> The Braid Protocol is a set of extensions to HTTP, which transform it from a state transfer protocol into a state synchronization protocol. When a resource is changed by one client or server, all other clients and [servers update. Braid supports Operational Transform](https://en.wikipedia.org/wiki/Operational_transformation) [and CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) at web URLs, enabling peer-to-peer, offline-capable web applications.
 
 It would be pretty amazing if Braid became as well-supported as REST.
 
@@ -150,7 +150,7 @@ It would be pretty amazing if Braid became as well-supported as REST.
 
 Stellar article that gives some great insight into what drives, motivates, and frustrates software engineers.
 
-And here’s the real crux of the problem: software engineers aren’t builders. Software engineers are creators. Building is what you do when you buy a piece of furniture from Ikea and get it home. The instructions are laid out and if you go step by step, you’ll get that comically small table you wanted. Creating is a different process, it’s birthing something without direction or instruction. It’s starting with a blank canvas and painting a masterpiece. Software engineers don’t get into coding because they want someone to tell them what to do, they get into it because they discovered they could create something useful. Every single software engineer fell in love with coding because she made a small, useful program early on and was hooked.
+> And here’s the real crux of the problem: software engineers aren’t builders. Software engineers are creators. Building is what you do when you buy a piece of furniture from Ikea and get it home. The instructions are laid out and if you go step by step, you’ll get that comically small table you wanted. Creating is a different process, it’s birthing something without direction or instruction. It’s starting with a blank canvas and painting a masterpiece. Software engineers don’t get into coding because they want someone to tell them what to do, they get into it because they discovered they could create something useful. Every single software engineer fell in love with coding because she made a small, useful program early on and was hooked.
 
 If you have ever wondered what makes software engineers tick, this will fill you in. 👍
 
@@ -182,11 +182,11 @@ All the stuff that makes that package arrive at your door. Moving activities out
 
 More piling on to Facebook and Google.
 
-[Surveillance Giants](https://www.amnesty.org/en/documents/pol30/1404/2019/en/) lays out how the surveillance-based business model of Facebook and Google is inherently incompatible with the right to privacy and poses a systemic threat to a range of other rights including freedom of opinion and expression, freedom of thought, and the right to equality and non-discrimination.
+> [Surveillance Giants](https://www.amnesty.org/en/documents/pol30/1404/2019/en/) lays out how the surveillance-based business model of Facebook and Google is inherently incompatible with the right to privacy and poses a systemic threat to a range of other rights including freedom of opinion and expression, freedom of thought, and the right to equality and non-discrimination.
 
 This article brings in the idea of a "public square".
 
-While other Big Tech companies – including Apple, Amazon and Microsoft – have accrued significant power in other areas, it is the platforms owned by Facebook and Google that have become fundamental to how people engage and interact with each other – effectively a new global public square.
+> While other Big Tech companies – including Apple, Amazon and Microsoft – have accrued significant power in other areas, it is the platforms owned by Facebook and Google that have become fundamental to how people engage and interact with each other – effectively a new global public square.
 
 This is foundational to my issue with these platforms. They present themselves as the public square, but they are anything but. With that said though, I don't think the right answer is to force them to be a public square. They are private companies and can do as they wish for their shareholders. However, they should have strict rules and regulations, and even more importantly, their users should know they are more like a shopping mall, and nothing at all like a public square. Facebook isn't a church or a park. You have no right to do anything there that they don't want you to, and you have as much right to privacy as you do when you are walking around any other business.
 

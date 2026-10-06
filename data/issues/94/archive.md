@@ -105,7 +105,7 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · Tech Office Sketches](https://www.tbray.org/ongoing/When/201x/2019/02/15/Walking-Around-the-Office)'
   section: Notable Links 📌
-word_count: 1463
+word_count: 1467
 ---
 This week we broke the all-time record for February snowfall! ❄️ It’s fairly easy to tell with the giant piles of snow everywhere you look. I’m busy putting together some last minute things for Tyler’s birthday breakfast that we are hosting tomorrow (Nordic Waffles!) so I’m going to leave it short this week and get straight to the links! 👉
 
@@ -133,7 +133,7 @@ Stephen Wolfram gives an exhaustive inventory of his personal gear. Wow, just wo
 
 [Jean-Louis Gassée](https://en.wikipedia.org/wiki/Jean-Louis_Gassée) has been writing some very fun retrospectives of his time in tech. If you remember [BeOS](https://en.wikipedia.org/wiki/BeOS) [and the BeBox](https://en.wikipedia.org/wiki/BeBox) this is a fun read. I also found this [little inside baseball look at NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) and Apple's acquisition of NeXT fun.
 
-Later, I learned another version of the story from a NeXT and Apple insider. By 1996, Jobs had given up on NeXTSTEP and had focused the company on WebObjects, a set of tools and building blocks aimed at the design and implementation of high-performance, feature-rich websites. But the noise from the Apple-Be conversations attracted the attention of Avie Tevanian, VP of software at NeXT, who urged Jobs to dust off NeXTSTEP and whip up a demo. The master persuader convinced Gil Amelio to pay the price Apple didn’t want to pay for Be: $429M for NeXT.
+> Later, I learned another version of the story from a NeXT and Apple insider. By 1996, Jobs had given up on NeXTSTEP and had focused the company on WebObjects, a set of tools and building blocks aimed at the design and implementation of high-performance, feature-rich websites. But the noise from the Apple-Be conversations attracted the attention of Avie Tevanian, VP of software at NeXT, who urged Jobs to dust off NeXTSTEP and whip up a demo. The master persuader convinced Gil Amelio to pay the price Apple didn’t want to pay for Be: $429M for NeXT.
 
 It’s unlikely Apple acquiring BeOS would have been transformational, but maybe. The leadership behind NeXTSTEP was very transformational for Apple.
 
@@ -177,7 +177,7 @@ Interesting way that Google is rolling this out charging very high amounts to re
 
 This is written about startups and founders, but I think it easily applies to a lot of contexts.
 
-But more than anything, writing the weekly email is a tool for the founder to collect themselves, get grounded for the week ahead, and articulate what they and the company are doing and why.
+> But more than anything, writing the weekly email is a tool for the founder to collect themselves, get grounded for the week ahead, and articulate what they and the company are doing and why.
 
 I've been doing this with the Weekly Thing. I've had a pause on the Tech Weekly, which is for our technology team at SPS for the last couple months and I’m planning on retooling it and get it going again.
 
@@ -185,7 +185,7 @@ I've been doing this with the Weekly Thing. I've had a pause on the Tech Weekly,
 
 This is very cool.
 
-In February 2019, in celebration of the thirtieth anniversary of the development of WorldWideWeb, a group of developers and designers convened at CERN to rebuild the original browser within a contemporary browser, allowing users around the world to experience the rather humble origins of this transformative technology.
+> In February 2019, in celebration of the thirtieth anniversary of the development of WorldWideWeb, a group of developers and designers convened at CERN to rebuild the original browser within a contemporary browser, allowing users around the world to experience the rather humble origins of this transformative technology.
 
 You can experience the web as it was in the very beginning!
 
@@ -193,7 +193,7 @@ You can experience the web as it was in the very beginning!
 
 This is an interesting angle of privacy that I hadn't considered.
 
-The answer is: no, actually, not necessarily; not if there are enough of them; not if the commodification of privacy begins to affect us all. Privacy is like voting. An individual’s privacy, like an individual’s vote, is usually largely irrelevant to anyone but themselves … but the accumulation of individual privacy or lack thereof, like the accumulation of individual votes, is enormously consequential.
+> The answer is: no, actually, not necessarily; not if there are enough of them; not if the commodification of privacy begins to affect us all. Privacy is like voting. An individual’s privacy, like an individual’s vote, is usually largely irrelevant to anyone but themselves … but the accumulation of individual privacy or lack thereof, like the accumulation of individual votes, is enormously consequential.
 
 🤔
 

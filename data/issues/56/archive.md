@@ -129,7 +129,7 @@ links:
   domain: om.co
   heading_context: '[We are all trapped in the “Feed” — Om on Tech](https://om.co/2018/05/26/we-are-all-trapped-in-the-feed/)'
   section: Notable Links 📌
-word_count: 2234
+word_count: 2236
 ---
 Weekly Thing is now privacy enhanced. By default, MailChimp tracks when people open newsletters and what links you click on. Most of the people that read this know that I value my privacy, and I don't like the idea of being watched. So, in [accordance with not being a hypocrite](https://www.thingelstad.com/2017/removed-google-analytics/) , I've disabled those features. I'm not sure if MailChimp will honor them both, it may still put tracking code on the links, but I know it will not track opens. Enjoy reading with more privacy. 😎
 
@@ -145,7 +145,7 @@ My thoughts on the topic of Humble Leadership, particularly as it relates to lea
 
 Capital spending by cloud providers is a reasonably good metric for their growth and investment in the future.
 
-As I keep repeating, CAPEX is both a prerequisite to play in the big boy cloud and confirmation of customer success. Both IBM and Oracle are tens of billions of dollars in cloud infrastructure CAPEX behind Amazon, Google, and Microsoft.
+> As I keep repeating, CAPEX is both a prerequisite to play in the big boy cloud and confirmation of customer success. Both IBM and Oracle are tens of billions of dollars in cloud infrastructure CAPEX behind Amazon, Google, and Microsoft.
 
 The amount that major cloud providers spend on capital is amazing. This article looks at the next rung of cloud providers to see how they compare.
 
@@ -168,11 +168,11 @@ This is all worth a couple of times through.
 
 This is a long article from Krebs but it’s a great read on the real world activity happening behind net neutrality. Additionally, I feel like legislative activity in this area shows the most direct line to lobbying and money-driven votes.
 
-So the carriers are already reneging on their promise to customers that they won’t share location data without customer consent or a court order. But where does that leave us on net neutrality? The answer is that the major wireless carriers are already doing what was expressly prohibited under the FCC’s net neutrality rules: Favoring their own content over competitors, and letting companies gain more favorable access by paying more.
+> So the carriers are already reneging on their promise to customers that they won’t share location data without customer consent or a court order. But where does that leave us on net neutrality? The answer is that the major wireless carriers are already doing what was expressly prohibited under the FCC’s net neutrality rules: Favoring their own content over competitors, and letting companies gain more favorable access by paying more.
 
 The data that we transmit when we use our mobile devices and broadband services is immensely valuable in the market. Unless legally blocked, this data will be sold. And the sellers and buyers have no interest in your privacy or anything else about protecting you. This is the same argument I often make online with free websites like Facebook. Here I find it more appalling because we all pay, in some cases a lot, for these services! We should have an expectation of privacy.
 
-When I first saw a Carnegie Mellon University researcher show me last week that he could look up the near-exact location of any mobile number in the United States, I sincerely believed the public would be amazed and horrified at the idea that mobile providers are sharing this real-time data with third party companies, and at the fact that those third parties in turn weren’t doing anything to prevent the abuse of their own systems.
+> When I first saw a Carnegie Mellon University researcher show me last week that he could look up the near-exact location of any mobile number in the United States, I sincerely believed the public would be amazed and horrified at the idea that mobile providers are sharing this real-time data with third party companies, and at the fact that those third parties in turn weren’t doing anything to prevent the abuse of their own systems.
 
 So the tinfoil hat people saying that our mobile phones are being used to track us everywhere are right. And it turns out most people seem to not care or not understand.
 
@@ -219,7 +219,7 @@ The last two of these resonated with me. It’s a good topic to think about and 
 
 What Eero is doing here seems really interesting.
 
-To recap, we’ve added a public key infrastructure to every eero network capable of operating in isolation from the global internet’s TLS system.
+> To recap, we’ve added a public key infrastructure to every eero network capable of operating in isolation from the global internet’s TLS system.
 
 That PKI infrastructure on your wireless routers could support improved security for a number of things in your home. It will be fun to see where they go with this.
 
@@ -247,7 +247,7 @@ Bill Gates reads a lot, and he regularly recommends books. Quartz put them all i
 
 China creating an "extra-legal" system to punish people outside of the typical legal system. This is empowered by connected data.
 
-Since the debtor list was first created, state-media reports repeatedly described it as the first step toward creating a China-wide social credit score, expected in 2020.
+> Since the debtor list was first created, state-media reports repeatedly described it as the first step toward creating a China-wide social credit score, expected in 2020.
 
 It seems so obvious to include data taken from citizens online activity that it’s hard to believe it wouldn't be in this system already. 👀
 
@@ -259,7 +259,7 @@ This is a very approachable article explaining how the digital camera on your ph
 
 Nice utility that will take your Python and format it in a very precise way.
 
-Black is the uncompromising Python code formatter. By using it, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
+> Black is the uncompromising Python code formatter. By using it, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
 
 I like almost all of it but I find the closing bracket "dedenting" odd.
 

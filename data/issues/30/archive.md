@@ -110,7 +110,7 @@ links:
   domain: blog.veitheller.de
   heading_context: '[Carp | Veit''s Blog](http://blog.veitheller.de/Carp.html)'
   section: Links 📌
-word_count: 1774
+word_count: 1777
 ---
 This week marked the official start of the Christmas 🎄 shopping season and a lot of you all went to stores and websites and bought things. I know because we were on high alert ⚡️ at work to make sure all of that stuff worked as it should, which we did very well!
 
@@ -153,7 +153,11 @@ Practical advice in a number of areas to protect yourself against surveillance. 
 
 ### [ongoing by Tim Bray · Unapocalyptic Software](https://www.tbray.org/ongoing/When/201x/2017/11/27/Software-Reality)
 
-I love this writeup by Tim Bray on what software development is actually like. It’s like this: You sit down to improve a piece of software, make a couple of changes, and suddenly a lot of unit tests are failing, leaving ugly red trails on your screen. (In fact, if you made changes and didn’t break unit tests, you worry that something’s wrong.) But then you dig into them one by one, and after not too long, it’s all back to green; which is really a good feeling. Fun read, and very accurate.
+I love this writeup by Tim Bray on what software development is actually like.
+
+> It’s like this: You sit down to improve a piece of software, make a couple of changes, and suddenly a lot of unit tests are failing, leaving ugly red trails on your screen. (In fact, if you made changes and didn’t break unit tests, you worry that something’s wrong.) But then you dig into them one by one, and after not too long, it’s all back to green; which is really a good feeling.
+
+Fun read, and very accurate.
 
 ### [Illimat](https://www.illimat.com/)
 
@@ -173,7 +177,9 @@ This documentary looks pretty interesting. I like the focus of the intersection 
 
 ### [Joplin - an open source note taking and to-do application with synchronisation capabilities](http://joplin.cozic.net/)
 
-[A FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software) option for managing notes and to do's. Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in Markdown format.
+[A FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software) option for managing notes and to do's.
+
+> Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in Markdown format.
 
 ### [macOS High Sierra 'root' security bug: Stop and do this NOW | iMore](https://m.imore.com/macos-has-root-bug)
 
@@ -193,7 +199,9 @@ New major release of one of my favorite mind mapping tools (the other is [iThoug
 
 ### [Chaos Toolkit](http://chaostoolkit.org/)
 
-Nice to see more general tooling coming to the chaos engineering space. The Chaos Toolkit aims at simplifying your journey through the Principles of Chaos Engineering and more generally considers that you should embrace continuously observing and poking your system to empower your team in face of adversity.
+Nice to see more general tooling coming to the chaos engineering space.
+
+> The Chaos Toolkit aims at simplifying your journey through the Principles of Chaos Engineering and more generally considers that you should embrace continuously observing and poking your system to empower your team in face of adversity.
 
 ### [Sugar industry accused of hiding evidence of sucrose's negative health effects 50 years ago | The Independent](http://www.independent.co.uk/life-style/health-and-families/sugar-industry-sucrose-health-effects-negative-hide-evidence-cover-up-50-years-ago-a8069161.html)
 

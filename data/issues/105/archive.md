@@ -68,7 +68,7 @@ links:
   domain: search.creativecommons.org
   heading_context: '[CC Search](https://search.creativecommons.org/)'
   section: Notable Links 📌
-word_count: 1130
+word_count: 1022
 ---
 I've now officially published the Weekly Thing for two years. 😲 It’s pretty cool to go back [and look at Weekly Thing #1](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how far this effort has come! Thank you all for subscribing, and if you know of others that you think would like it please send [them to the Weekly Thing website](https://weekly.thingelstad.com) and they can subscribe.
 
@@ -80,7 +80,7 @@ Now onto the links this week. A little less than normal. 🤷🏼‍♂️
 
 I like to read about how leaders use one-on-one meetings and this is an excellent, and simple one.
 
-If done effectively, these one-on-ones are an opportunity to show my team that I care about them, their professional success, and their overall happiness. It gives them an opportunity to step back and think about what they need to be successful, and to hold me accountable to setting them up for this success.
+> If done effectively, these one-on-ones are an opportunity to show my team that I care about them, their professional success, and their overall happiness. It gives them an opportunity to step back and think about what they need to be successful, and to hold me accountable to setting them up for this success.
 
 Mathilde Collin writes about three distinct types of one-on-ones, with various structure and objectives. This looks amazing, and definitely requires good preparation ahead of time. I’m going to try and cherry pick some things from this. 👏
 
@@ -122,7 +122,7 @@ Some really good prompting questions, particularly for technology teams, about y
 
 Some solid thoughts and practices on how to create a desirable team culture.
 
-Every day, people are looking for signals in their environment about what is the norm. As a leader, it is part of your job to set the example for those around you.
+> Every day, people are looking for signals in their environment about what is the norm. As a leader, it is part of your job to set the example for those around you.
 
 So very true! 👍
 

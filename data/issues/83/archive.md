@@ -92,7 +92,7 @@ links:
   domain: www.vieler-photography.com
   heading_context: '[Dogs Catching Treats - Vieler Photography - Fotos Frei Schnauze](https://www.vieler-photography.com/portfolio/snapshots/)'
   section: Notable Links 📌
-word_count: 1455
+word_count: 1460
 ---
 I've been putting a fortune at the very bottom of the Weekly Thing for a while now. It's a surprise for those that read all the way to the end! 🎁 I was using a service for that that was mostly fine but occasionally gave bad fortunes 😒 that I would replace. Last week I didn't catch a bad one, so I rebuilt the fortune process and it now is part of my editorial selection. Better fortunes from now on! 🎉
 
@@ -102,7 +102,7 @@ I've been putting a fortune at the very bottom of the Weekly Thing for a while n
 
 Everything you ever thought Facebook might do with your data that you don't want them to, they are doing. The end of this article hits it right:
 
-No matter how Zuckerberg slices it, your data is at the center of Facebook’s business. Based on these documents, it seems that Facebook sucked up as much data as possible through “reciprocity” agreements with other apps, and shared it with insufficient regard to consequences for users. Then, after rolling back its permissive data-sharing APIs, the company apparently used privileged access to user data either as a lever to get what it wanted from other companies or as a weapon against its competitors. You are, and always have been, Facebook’s most valuable product.
+> No matter how Zuckerberg slices it, your data is at the center of Facebook’s business. Based on these documents, it seems that Facebook sucked up as much data as possible through “reciprocity” agreements with other apps, and shared it with insufficient regard to consequences for users. Then, after rolling back its permissive data-sharing APIs, the company apparently used privileged access to user data either as a lever to get what it wanted from other companies or as a weapon against its competitors. You are, and always have been, Facebook’s most valuable product.
 
 I continue to happily live in an Internet, with my 1Blocker setup, that doesn't include any Facebook properties. They simply cannot be trusted with any data, and they have the most of it.
 
@@ -110,7 +110,7 @@ I continue to happily live in an Internet, with my 1Blocker setup, that doesn't 
 
 [Article from Jon Kabat-Zinn](https://en.wikipedia.org/wiki/Jon_Kabat-Zinn) , one of the leaders of mindfulness practices.
 
-Precisely because if we are overloaded to the point of being overwhelmed, it is likely that we will be so agitated, so distraught, so self-preoccupied that we won’t be able to meet anybody or any situation from a place of ease within the fullness of our own being in that moment, and that includes, most importantly, even an authentic meeting of ourselves and those we most care about.
+> Precisely because if we are overloaded to the point of being overwhelmed, it is likely that we will be so agitated, so distraught, so self-preoccupied that we won’t be able to meet anybody or any situation from a place of ease within the fullness of our own being in that moment, and that includes, most importantly, even an authentic meeting of ourselves and those we most care about.
 
 This is worth reading a few times, just to make sure it sinks in. [Via Leah Cunningham](https://www.linkedin.com/feed/update/urn:li:activity:6474770166122102784) .
 
@@ -132,7 +132,7 @@ Very thorough and detailed overview of how Stripe builds out their technology te
 
 Very approachable read on how Kubernetes handles internal communication.
 
-Event-driven design has many more advantages and can address a lot of problems in distributed systems (back-pressure, queuing, retries, scale-out, etc.). However, it’s not a new idea. Not at all! For example, relational databases work the same way (transaction log). The database is said to be the (stale) cache of the immutable log 😄.
+> Event-driven design has many more advantages and can address a lot of problems in distributed systems (back-pressure, queuing, retries, scale-out, etc.). However, it’s not a new idea. Not at all! For example, relational databases work the same way (transaction log). The database is said to be the (stale) cache of the immutable log 😄.
 
 Neat! 🤓
 
@@ -164,7 +164,7 @@ Writing letters to yourself on your birthday, or commemorating the year and look
 
 The state of Chess at the highest level is amazing.
 
-The result is human chess that increasingly resembles computer chess. Chess.com has developed a metric, Computer Aggregated Precision Score (CAPS), which compares a player’s moves to those of a top engine. Mr Carlsen scores higher than any other champion; his moves parallel those of the engine’s more than 85% of the time, and his overall choices are better than 98% as effective as those of the computer.
+> The result is human chess that increasingly resembles computer chess. Chess.com has developed a metric, Computer Aggregated Precision Score (CAPS), which compares a player’s moves to those of a top engine. Mr Carlsen scores higher than any other champion; his moves parallel those of the engine’s more than 85% of the time, and his overall choices are better than 98% as effective as those of the computer.
 
 These players are literal human computers. ♟
 
@@ -172,7 +172,7 @@ These players are literal human computers. ♟
 
 This is a giant and deep breach.
 
-Marriott said the breach involved unauthorized access to a database containing guest information tied to reservations made at Starwood properties on or before Sept. 10, 2018, and that its ongoing investigation suggests the perpetrators had been inside the company’s networks since 2014.
+> Marriott said the breach involved unauthorized access to a database containing guest information tied to reservations made at Starwood properties on or before Sept. 10, 2018, and that its ongoing investigation suggests the perpetrators had been inside the company’s networks since 2014.
 
 Four years is an incredibly long time for an attacker to have access. 😳
 

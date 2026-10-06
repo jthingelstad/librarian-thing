@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/44/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-44-mar-10-2018/
 domains: []
 links: []
-word_count: 1776
+word_count: 1782
 ---
 Hello from India! 🇮🇳 After many years, I've finally made my first trip to India. I've been here meeting with our partners. The agenda has been very busy. Seven flights 🛫 Minneapolis (MSP) → Paris (CDG) → Delhi (DEL) → Hyderabad (HYD) → Pune (PNQ) → Delhi (DEL) → Amsterdam (AMS) → Minneapolis (MSP) 🛬 in nine days is a new record for me. 🏆 Overall I felt pretty good, even with all the travel, and managed the jet lag without too much impact.
 
@@ -31,7 +31,7 @@ www.internationalwomensday.com
 
 Nice to see this event getting more attention.
 
-Now, more than ever, there's a strong call-to-action to press forward and progress gender parity. There's a strong call to Press for Progress motivating and uniting friends, colleagues and whole communities to think, act and be gender inclusive.
+> Now, more than ever, there's a strong call-to-action to press forward and progress gender parity. There's a strong call to Press for Progress motivating and uniting friends, colleagues and whole communities to think, act and be gender inclusive.
 
 👍
 
@@ -40,7 +40,7 @@ www.wired.com
 
 I'd like to go back and read the original paper [Puncturing the pipeline: Do technology companies alienate women in recruiting sessions?](http://journals.sagepub.com/doi/abs/10.1177/0306312718756766) but had to due with this Wired writeup for now.
 
-In an attempt to appear approachable, presenters often made comments that disparaged women or depicted them as sexualized objects rather than talented technical colleagues. For example, in one session, a man mentioned the “better gender ratio” at the company’s Los Angeles office compared with its Silicon Valley office. “I had no girlfriends at [University Name], but now I’m married,” he said, suggesting that the better odds had helped get him hitched.
+> In an attempt to appear approachable, presenters often made comments that disparaged women or depicted them as sexualized objects rather than talented technical colleagues. For example, in one session, a man mentioned the “better gender ratio” at the company’s Los Angeles office compared with its Silicon Valley office. “I had no girlfriends at [University Name], but now I’m married,” he said, suggesting that the better odds had helped get him hitched.
 
 🤦‍♂️ There is so much work to do on this issue.
 
@@ -54,7 +54,7 @@ qz.com
 
 Another study suggesting that the increase of time spent in the digital world correlates strongly with unhappiness.
 
-Every year, teens are asked about their general happiness, in addition to how they spend their time. We found that teens who spent more time seeing their friends in person, exercising, playing sports, attending religious services, reading or even doing homework were happier. However, teens who spent more time on the internet, playing computer games, on social media, texting, using video chat or watching TV were less happy.
+> Every year, teens are asked about their general happiness, in addition to how they spend their time. We found that teens who spent more time seeing their friends in person, exercising, playing sports, attending religious services, reading or even doing homework were happier. However, teens who spent more time on the internet, playing computer games, on social media, texting, using video chat or watching TV were less happy.
 
 Should it surprise us that humans, perhaps the most social of creatures, don't get satisfied socially through text messages and whatever app you are using today? Nope.
 
@@ -73,14 +73,14 @@ Seems like a [cheaper and easier version of CloudHealth](https://www.cloudhealth
 [Rundeck - Job Scheduler and Orchestration](http://rundeck.org/)
 rundeck.org
 
-Turn your operations procedures into self-service jobs. Safely give others the control and visibility they need.
+> Turn your operations procedures into self-service jobs. Safely give others the control and visibility they need.
 
 [Workato](https://www.workato.com/)
 www.workato.com
 
 I hand't heard of this app until a recent meeting where a team was highlighting how they use it.
 
-Workato is the fabric with which you can weave a very intelligent nervous system for your modern enterprise. Recipes are automated workflows that connect apps to complete tasks composed by you based on a combination of apps, triggers and actions.
+> Workato is the fabric with which you can weave a very intelligent nervous system for your modern enterprise. Recipes are automated workflows that connect apps to complete tasks composed by you based on a combination of apps, triggers and actions.
 
 The fluffy language aside, it seems like a useful tool.
 
@@ -111,7 +111,7 @@ blogs.scientificamerican.com
 
 It’s human nature to want to associate your successes with skill and active choice (and often our misses with bad luck), but data suggests that luck, or random chance, may have more to do with success.
 
-The researchers argue that the following factors are all important in giving people more chances of success: a stimulating environment rich in opportunities, a good education, intensive training, and an efficient strategy for the distribution of funds and resources.
+> The researchers argue that the following factors are all important in giving people more chances of success: a stimulating environment rich in opportunities, a good education, intensive training, and an efficient strategy for the distribution of funds and resources.
 
 This made [me thing of Fooled by Randomness](https://en.wikipedia.org/wiki/Fooled_by_Randomness) as I read it. I highly recommend that book. It forever changed how I look at track records.
 

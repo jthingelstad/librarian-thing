@@ -79,7 +79,7 @@ links:
   domain: www.defmacro.org
   heading_context: '[44 engineering management lessons | defmacro](https://www.defmacro.org/2014/10/03/engman.html)'
   section: Notable Links 📌
-word_count: 1404
+word_count: 1406
 ---
 Welcome to Weekly Thing #112!
 
@@ -123,7 +123,7 @@ Making the case that driving to continuous improvement of objectives and key res
 
 Ben Thompson with a thorough article about Facebook's Libra and the trade-offs in it's design, as well as where Facebook would win.
 
-To put it another way, Libra has the potential to significantly decrease friction when it comes to the movement of money; of course this potential is hardly limited to Libra — the reduction in friction is one of the selling points of digital currencies generally — but by virtue of being supported by Facebook, particularly the Calibra wallet that will be both a standalone app and also built into Facebook Messenger and WhatsApp, accessing Libra will likely be much simpler than accessing other cryptocurrencies. When it comes to decreasing friction, simplifying the user experience matters just as much as eliminating intermediary institutions.
+> To put it another way, Libra has the potential to significantly decrease friction when it comes to the movement of money; of course this potential is hardly limited to Libra — the reduction in friction is one of the selling points of digital currencies generally — but by virtue of being supported by Facebook, particularly the Calibra wallet that will be both a standalone app and also built into Facebook Messenger and WhatsApp, accessing Libra will likely be much simpler than accessing other cryptocurrencies. When it comes to decreasing friction, simplifying the user experience matters just as much as eliminating intermediary institutions.
 
 Good read if you are interested in this new thing that Facebook is going after.
 
@@ -131,7 +131,7 @@ Good read if you are interested in this new thing that Facebook is going after.
 
 Great post from Cloudflare about a large scale routing issue that impacted some big sites on the Internet. it is amazing how much impact a small error like this can have.
 
-Today at 10:30UTC, the Internet had a small heart attack. A small company in Northern Pennsylvania became a preferred path of many Internet routes through Verizon (AS701), a major Internet transit provider. This was the equivalent of Waze routing an entire freeway down a neighborhood street — resulting in many websites on Cloudflare, and many other providers, to be unavailable from large parts of the Internet. This should never have happened because Verizon should never have forwarded those routes to the rest of the Internet. To understand why, read on.
+> Today at 10:30UTC, the Internet had a small heart attack. A small company in Northern Pennsylvania became a preferred path of many Internet routes through Verizon (AS701), a major Internet transit provider. This was the equivalent of Waze routing an entire freeway down a neighborhood street — resulting in many websites on Cloudflare, and many other providers, to be unavailable from large parts of the Internet. This should never have happened because Verizon should never have forwarded those routes to the rest of the Internet. To understand why, read on.
 
 Yikes. 😬
 

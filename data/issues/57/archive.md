@@ -114,7 +114,7 @@ links:
   domain: www.pewinternet.org
   heading_context: '[Teens, Social Media & Technology 2018 | Pew Research Center](http://www.pewinternet.org/2018/05/31/teens-social-media-technology-2018/)'
   section: Notable Links 📌
-word_count: 2092
+word_count: 2097
 ---
 With much fanfare and anticipation the school year has ended, and with it summer has officially started! 🏁 Now is the time to take a moment to savor it all. In a blink it will be fall, the kids will be heading back to school and it will have felt like 5 minutes. I'm hoping to soak in the summer a bit more this year.
 
@@ -130,11 +130,11 @@ I was on a panel this week at the DevOps meetup and got to speak to a number of 
 
 This article is written from the position of a psychology professor understanding students, but it caught my attention and [make me remember Do The Work](https://www.goodreads.com/book/show/10645233-do-the-work) by Steven Pressfield as well.
 
-If a person’s behavior doesn’t make sense to you, it is because you are missing a part of their context. It’s that simple. I’m so grateful to Kim and their writing for making me aware of this fact. No psychology class, at any level, taught me that. But now that it is a lens that I have, I find myself applying it to all kinds of behaviors that are mistaken for signs of moral failure — and I’ve yet to find one that can’t be explained and empathized with.
+> If a person’s behavior doesn’t make sense to you, it is because you are missing a part of their context. It’s that simple. I’m so grateful to Kim and their writing for making me aware of this fact. No psychology class, at any level, taught me that. But now that it is a lens that I have, I find myself applying it to all kinds of behaviors that are mistaken for signs of moral failure — and I’ve yet to find one that can’t be explained and empathized with.
 
 I read this in the context of leadership and it is a good reminder that as a leader and manager you need to start with the assumption that people are trying to do the right thing. Most people want to do the right thing and be successful.
 
-People do not choose to fail or disappoint. No one wants to feel incapable, apathetic, or ineffective. If you look at a person’s action (or inaction) and see only laziness, you are missing key details. There is always an explanation. There are always barriers. Just because you can’t see them, or don’t view them as legitimate, doesn’t mean they’re not there. Look harder.
+> People do not choose to fail or disappoint. No one wants to feel incapable, apathetic, or ineffective. If you look at a person’s action (or inaction) and see only laziness, you are missing key details. There is always an explanation. There are always barriers. Just because you can’t see them, or don’t view them as legitimate, doesn’t mean they’re not there. Look harder.
 
 This is a great call to action for leaders. If you see a lack of progress, what might you be missing that is inhibiting that progress?
 
@@ -142,7 +142,7 @@ This is a great call to action for leaders. If you see a lack of progress, what 
 
 This is an impressive program that Disney is running to get more women into technology roles.
 
-The CODE in CODE: Rosie stands for Creating Opportunities for Diverse Engineers. The “Rosie” part references Rosie the Riveter, the symbol of World War II’s working women; an internal CODE Rosie logo even depicts Minnie Mouse in Rosie’s iconic rolled-up-sleeve pose. In particular, the program pays tribute to the “Rosies” who programmed the U.S. Army’s pioneering ENIAC computer back in the 1940s.
+> The CODE in CODE: Rosie stands for Creating Opportunities for Diverse Engineers. The “Rosie” part references Rosie the Riveter, the symbol of World War II’s working women; an internal CODE Rosie logo even depicts Minnie Mouse in Rosie’s iconic rolled-up-sleeve pose. In particular, the program pays tribute to the “Rosies” who programmed the U.S. Army’s pioneering ENIAC computer back in the 1940s.
 
 It is impressive in its scope and I admire the approach. A program like this could make a difference. 🤔
 
@@ -162,7 +162,7 @@ Cannon Lake, Minnesota
 
 I liked the structure and specificity in this how-to guide.
 
-“Working groups” is a hand-wavy term that can mean a lot of things; I use this term to describe a small group of people who come together with a common goal/deliverable, acting as representatives of the larger organization.
+> “Working groups” is a hand-wavy term that can mean a lot of things; I use this term to describe a small group of people who come together with a common goal/deliverable, acting as representatives of the larger organization.
 
 Planning this part of a working group is necessary to be successful in the outcome.
 
@@ -240,7 +240,7 @@ https://itunes.apple.com/us/app/omnifocus-3/id1346190318?mt=8&uo=4
 
 by The Omni Group
 
-Use OmniFocus to accomplish more every day. Create projects and tasks, organize them with tags, focus on what you can do right now — and get stuff done.
+> Use OmniFocus to accomplish more every day. Create projects and tasks, organize them with tags, focus on what you can do right now — and get stuff done.
 
 I've been using OmniFocus since it came out on macOS. It continues to be my most frequently used, and trusted appliactions. I've been enjoying the changes in this new version. I think the team at Omni Software hit the mark making this very powerful tool simultaneously more powerful, and easier to use.
 

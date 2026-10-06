@@ -105,7 +105,7 @@ links:
   domain: www.sonyaellenmann.com
   heading_context: '[Survivorship Bias and Startup Hype](https://www.sonyaellenmann.com/2018/06/survivorship-bias-and-startup-hype.html)'
   section: Notable Links 📌
-word_count: 1550
+word_count: 1555
 ---
 #59 • Jun 23, 2018
 
@@ -121,7 +121,7 @@ Fabulous podcast! 🎧 I first read [Tom Peters](http://tompeters.com) "Re-imagi
 
 Innovation needs a framework. Throwing hackathons at problems has a high likelihood of backfiring with frustration on adoption and outcomes.
 
-As organizations have moved from – individual innovators working alone, to adopting innovation tools and activities, to teaching teams about evidence-based innovation – our most important realization has been this: Having skills/tools and activities are critical building blocks but by themselves are insufficient to build a program that delivers results that matter to leadership. It’s only when senior leaders see how an innovation process can deliver stuff that matters – at speed—that they take action to change the processes and procedures that get in the way.
+> As organizations have moved from – individual innovators working alone, to adopting innovation tools and activities, to teaching teams about evidence-based innovation – our most important realization has been this: Having skills/tools and activities are critical building blocks but by themselves are insufficient to build a program that delivers results that matter to leadership. It’s only when senior leaders see how an innovation process can deliver stuff that matters – at speed—that they take action to change the processes and procedures that get in the way.
 
 This framework for thinking about innovation and it’s components is interesting.
 
@@ -139,7 +139,7 @@ Bayfield, WI
 
 I do think that platforms can help their users have a healthier relationship, but Cal's point in this is also true.
 
-But something about this growing digital wellness movement makes me uneasy, and I think I’ve finally put my finger on the source of my concern: it’s infantilizing.
+> But something about this growing digital wellness movement makes me uneasy, and I think I’ve finally put my finger on the source of my concern: it’s infantilizing.
 
 We need both.
 
@@ -159,7 +159,7 @@ Cool news from You Need a Budget!, [YNAB API](https://api.youneedabudget.com). W
 
 Snapshot of the exceedingly difficult talent environment for companies in the Twin Cities area.
 
-The Twin Cities added 3,300 technology jobs last year, up 1.6 percent to 199,200. The area is one of the nation’s 15 largest tech-employment hubs, according to the Computing Technology Industry Association (CompTIA). These jobs typically pay seasoned workers $75,000 to $100,000 or more a year.
+> The Twin Cities added 3,300 technology jobs last year, up 1.6 percent to 199,200. The area is one of the nation’s 15 largest tech-employment hubs, according to the Computing Technology Industry Association (CompTIA). These jobs typically pay seasoned workers $75,000 to $100,000 or more a year.
 
 [Nice photo of Mynul Khan](https://www.linkedin.com/in/mynulkhan/) , CEO of Field Nation.
 
@@ -191,7 +191,7 @@ This is geeky and neat, but it immediately made me wonder about a lot of nefario
 
 We need more ethics discussion in technology, and this framework applied to data is an interesting example.
 
-Data ethics is an emerging branch of applied ethics which describes the value judgements and approaches we make when generating, analysing and disseminating data. This includes a sound knowledge of data protection law and other relevant legislation, and the appropriate use of new technologies. It requires a holistic approach incorporating good practice in computing techniques, ethics and information assurance.
+> Data ethics is an emerging branch of applied ethics which describes the value judgements and approaches we make when generating, analysing and disseminating data. This includes a sound knowledge of data protection law and other relevant legislation, and the appropriate use of new technologies. It requires a holistic approach incorporating good practice in computing techniques, ethics and information assurance.
 
 I'd love to see some companies share their approach for the same thing.
 
@@ -199,7 +199,7 @@ I'd love to see some companies share their approach for the same thing.
 
 Data visualization in your terminal? Sure!
 
-Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported.
+> Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported.
 
 I can see how this would be handy at times, particularly in scripts.
 

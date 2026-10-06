@@ -109,7 +109,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Automate Your Context - 2018 Monitorama - YouTube](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927)'
   section: Notable Links 📌
-word_count: 1963
+word_count: 1971
 ---
 Hello from Bayfield, Wisconsin! We [are here to see Brandi Carlile](http://brandicarlile.com) [play at the Big Top Chautauqua](https://www.bigtop.org) . 🎶 It looks like the other thing we'll be doing is getting rained on. ☔️ No trip to Bayfield would be complete without [a visit to the Candy Shoppe](https://www.tripadvisor.com/Restaurant_Review-g60721-d3316141-Reviews-Candy_Shoppe-Bayfield_Wisconsin.html) as well for some delicious wine bread. 🤤
 
@@ -119,11 +119,11 @@ Hello from Bayfield, Wisconsin! We [are here to see Brandi Carlile](http://brand
 
 Some very practical and useful suggestions for giving and receiving candid feedback.
 
-Your goal in life is to make feedback in all directions no big deal. You and your team never start in this state, they earn it. They start with small spoken observations that slowly turn into more useful feedback. They watch to see if each other are listening to the feedback and eventually acting on it.3 Once everyone has seen that feedback is both shared and acted on, they begin to feel more comfortable sharing large, more complex, and harder feedback. Why? Trust.
+> Your goal in life is to make feedback in all directions no big deal. You and your team never start in this state, they earn it. They start with small spoken observations that slowly turn into more useful feedback. They watch to see if each other are listening to the feedback and eventually acting on it.3 Once everyone has seen that feedback is both shared and acted on, they begin to feel more comfortable sharing large, more complex, and harder feedback. Why? Trust.
 
 This sentiment definitely resonated with me.
 
-We exacerbate the problem because we don’t want to say the hard thing because we have the same voice in our head telling them, “It would be hard for me to hear this, so I don’t want to say it.”
+> We exacerbate the problem because we don’t want to say the hard thing because we have the same voice in our head telling them, “It would be hard for me to hear this, so I don’t want to say it.”
 
 It’s hard to give and get candid feedback. I tend to think we all feel we are better at it than we are. Leaders particularly have to focus on this all the time.
 
@@ -131,7 +131,7 @@ It’s hard to give and get candid feedback. I tend to think we all feel we are 
 
 In a recent dialog about privacy I was asked "Why do you care so much about privacy?" and I my argument kept going back to "because it’s my right", which wasn't doing it for the person I was talking to. This article, and this argument, resonated with me.
 
-Possibly the discussion is using the wrong vocabulary. “Privacy” is an odd name for the good that is being threatened by commercial exploitation and state surveillance. Privacy implies “It’s nobody’s business,” and that is not really what Roe v. Wade is about, or what the E.U. regulations are about, or even what Katz and Carpenter are about. The real issue is the one that Pollak and Martin, in their suit against the District of Columbia in the Muzak case, said it was: liberty. This means the freedom to choose what to do with your body, or who can see your personal information, or who can monitor your movements and record your calls—who gets to surveil your life and on what grounds.
+> Possibly the discussion is using the wrong vocabulary. “Privacy” is an odd name for the good that is being threatened by commercial exploitation and state surveillance. Privacy implies “It’s nobody’s business,” and that is not really what Roe v. Wade is about, or what the E.U. regulations are about, or even what Katz and Carpenter are about. The real issue is the one that Pollak and Martin, in their suit against the District of Columbia in the Muzak case, said it was: liberty. This means the freedom to choose what to do with your body, or who can see your personal information, or who can monitor your movements and record your calls—who gets to surveil your life and on what grounds.
 
 I care about my privacy because I care about my liberty!
 
@@ -157,7 +157,7 @@ The more I hear from Tim Cook, CEO of Apple, the more impressed I am with him.
 
 I used to bite my nails, at times badly. Very clearly correlated with stress. I kicked the habit only three years ago or so.
 
-“Ironically, nail biters may be more perfectionist and more prone to be dissatisfied with themselves and their performance,” O’Connor said. “This may trigger biting.”
+> “Ironically, nail biters may be more perfectionist and more prone to be dissatisfied with themselves and their performance,” O’Connor said. “This may trigger biting.”
 
 No comment. 🙃
 
@@ -165,7 +165,7 @@ No comment. 🙃
 
 We all have stuff that we don't want to do but need to do, and if your like me you tend to procrastinate those items. I like the suggestions here.
 
-Thankfully, these predictions are frequently wrong. All you need to do is reverse engineer your thought patterns. Here are some strategies I find useful for tricking myself into doing what I need to do.
+> Thankfully, these predictions are frequently wrong. All you need to do is reverse engineer your thought patterns. Here are some strategies I find useful for tricking myself into doing what I need to do.
 
 I also like the style of this website with the highlighting in the post.
 
@@ -173,7 +173,7 @@ I also like the style of this website with the highlighting in the post.
 
 Viticci is one of the most advanced Workflow users I know. It was by looking at his use cases that I realized I could do so much more with Workflow. Now that I've built capability on it I was very glad to see this:
 
-In conversations I had last week, it appears that Apple's goal is to offer full compatibility with existing workflows previously created in the Workflow app. My understanding is that Apple is very much aware of the fact that a sizable portion of the pro/prosumer community relies on Workflow to enhance their iOS experience in key ways; they don't want to change that relationship for the worse.
+> In conversations I had last week, it appears that Apple's goal is to offer full compatibility with existing workflows previously created in the Workflow app. My understanding is that Apple is very much aware of the fact that a sizable portion of the pro/prosumer community relies on Workflow to enhance their iOS experience in key ways; they don't want to change that relationship for the worse.
 
 If your curious to know as much as possible on the Siri Shortcuts, Shortcuts app evolution this is the definitive read.
 
@@ -201,7 +201,7 @@ I think of scrum master as a role, not a job, and this is a good starting point 
 
 Thoughtful reasoning for using GraphQL as your API structure of choice.
 
-A vanilla installation of GraphiQL is a more powerful integration tool for users than what 99% of REST providers have, and it’s available automatically, and for free.
+> A vanilla installation of GraphiQL is a more powerful integration tool for users than what 99% of REST providers have, and it’s available automatically, and for free.
 
 I’m not sure if this happens in other industries, but this does seem to argue for a REST v. GraphQL. Does it have to be versus? It would seem likely that we could suggest REST is better for what it does, representational state transfer, and GraphQL would be best for what it does, deal with connected data?
 
@@ -226,7 +226,7 @@ A very good illustration of what depression feels like from my friend Patrick Rh
 Collapse: How Societies Choose to Fail or Succeed: Revised Edition ()
 by Jared Diamond
 
-In Jared Diamond’s follow-up to the Pulitzer-Prize winning Guns, Germs and Steel, the author explores how climate change, the population explosion and political discord create the conditions for the collapse of civilization.
+> In Jared Diamond’s follow-up to the Pulitzer-Prize winning Guns, Germs and Steel, the author explores how climate change, the population explosion and political discord create the conditions for the collapse of civilization.
 
 My book club is going back to Jared Diamond for a third time. Looking forward to this read, hopefully as a guide of what not to do.
 

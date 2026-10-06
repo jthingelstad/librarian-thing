@@ -93,7 +93,7 @@ links:
   domain: www.theregister.co.uk
   heading_context: '[GitLab reset --hard bad1dea: Biz U-turns, unbans office political chat, will vet customers • The Register](https://www.theregister.co.uk/2019/10/17/gitlab_reverse_ferret/)'
   section: Notable Links 📌
-word_count: 1899
+word_count: 1905
 ---
 Fall is officially here. This is the first Fall in our new house and I’m noting the intense volume of leaves that have fallen thus far, but even worse those that are still waiting to fall. The good news is that raking leaves, at least in our house, is a full family activity. The kids get into it, and if it’s a nice day it’s all very pleasant to do. That will be the plan for Sunday. I expect some piles to be made, some jumping to happen, and some delightful pictures to be taken. 🍂
 
@@ -103,7 +103,7 @@ Fall is officially here. This is the first Fall in our new house and I’m notin
 
 Quantum computing has been talked about for well over a decade, but this is the first time we are seeing something real.
 
-We developed a new 54-qubit processor, named “Sycamore”, that is comprised of fast, high-fidelity quantum logic gates, in order to perform the benchmark testing. Our machine performed the target computation in 200 seconds, and from measurements in our experiment we determined that it would take the world’s fastest supercomputer 10,000 years to produce a similar output.
+> We developed a new 54-qubit processor, named “Sycamore”, that is comprised of fast, high-fidelity quantum logic gates, in order to perform the benchmark testing. Our machine performed the target computation in 200 seconds, and from measurements in our experiment we determined that it would take the world’s fastest supercomputer 10,000 years to produce a similar output.
 
 10,000 years to 200 seconds? I had to do the math. That's 1,578,000,000 times faster. What does that mean, nearly all encrypted documents we have today are probably easily decrypted with brute force tactics. [Read more in this Nature article](https://www.nature.com/articles/s41586-019-1666-5) article.
 
@@ -125,7 +125,7 @@ This is an amazingly detailed agreement to walk through with your kid before the
 
 What an interesting idea, and a little disconcerting.
 
-With Formulaic Naming, Wayfair is transitioning to a structured solution for naming based on other questions we already ask our suppliers about their products. Once we have this structured information, we can pursue Dynamic Naming, where the product name will vary based on where the name is displayed and the customer who is viewing the product.
+> With Formulaic Naming, Wayfair is transitioning to a structured solution for naming based on other questions we already ask our suppliers about their products. Once we have this structured information, we can pursue Dynamic Naming, where the product name will vary based on where the name is displayed and the customer who is viewing the product.
 
 So when you buy the Cleaver Cedar Sofa and your friend that you recommend it to may not see that a product of that name doesn't even exist? Interesting ideas.
 
@@ -133,7 +133,7 @@ So when you buy the Cleaver Cedar Sofa and your friend that you recommend it to 
 
 Being vulnerable is one of many ways to show you are human, and it lets people relate to you as a leader. It’s not comfortable since many leaders, myself included, are not comfortable in that position or feel like it’s not okay.
 
-“Group cooperation is created by small, frequently repeated moments of vulnerability,” he explains. “Of these, none carries more power than the moment when a leader signals vulnerability.” It’s paramount for people to know that it’s safe to tell the truth here.
+> “Group cooperation is created by small, frequently repeated moments of vulnerability,” he explains. “Of these, none carries more power than the moment when a leader signals vulnerability.” It’s paramount for people to know that it’s safe to tell the truth here.
 
 I've tried to get more comfortable being vulnerable, knowing that it helps the culture and team I work with.
 
@@ -141,7 +141,7 @@ I've tried to get more comfortable being vulnerable, knowing that it helps the c
 
 This would be the definition of a Golden Parachute.
 
-SoftBank Group Corp.’s proposed rescue package of WeWork involves Neumann selling about $1 billion of stock and getting a $185 million consulting fee from the Japanese firm even as the deal values the struggling office-sharing company at $8 billion, according to people familiar with the transaction. That’s down from an estimated $47 billion at the start of the year. Neumann will leave the company’s board though he still can assign two seats.
+> SoftBank Group Corp.’s proposed rescue package of WeWork involves Neumann selling about $1 billion of stock and getting a $185 million consulting fee from the Japanese firm even as the deal values the struggling office-sharing company at $8 billion, according to people familiar with the transaction. That’s down from an estimated $47 billion at the start of the year. Neumann will leave the company’s board though he still can assign two seats.
 
 So after creating no profits at all, the founder of WeWork leaves a billionaire. This is wrong.
 
@@ -153,7 +153,7 @@ So after creating no profits at all, the founder of WeWork leaves a billionaire.
 
 Interesting structure for architecture.
 
-[An Architectural Decision (AD)](https://en.wikipedia.org/wiki/Architectural_decision) is a software design choice that addresses a functional or non-functional requirement that is architecturally significant. An [Architecturally Significant Requirement (ASR)](https://en.wikipedia.org/wiki/Architecturally_significant_requirements) is a requirement that has a measurable effect on a software system’s architecture and quality. An Architectural Decision Record (ADR) captures a single AD, such as often done when writing personal notes or meeting minutes; the collection of ADRs created and maintained in a project constitute its decision log. All these are within the topic of Architectural Knowledge Management (AKM).
+> [An Architectural Decision (AD)](https://en.wikipedia.org/wiki/Architectural_decision) is a software design choice that addresses a functional or non-functional requirement that is architecturally significant. An [Architecturally Significant Requirement (ASR)](https://en.wikipedia.org/wiki/Architecturally_significant_requirements) is a requirement that has a measurable effect on a software system’s architecture and quality. An Architectural Decision Record (ADR) captures a single AD, such as often done when writing personal notes or meeting minutes; the collection of ADRs created and maintained in a project constitute its decision log. All these are within the topic of Architectural Knowledge Management (AKM).
 
 I think it is very critical that you define how architecture is executed so that teams and architects know what to expect from each other.
 
@@ -169,7 +169,7 @@ Wide ranging reaction to Zuckerberg's framing of Facebook, or generally social m
 
 There is so much truth to this. I like the vision and mission of the Free Software Foundation, but under Stallman's "leadership", it has ignored the internet.
 
-That’s because Stallman’s world was and still is, stuck in the 80s: computers are physical devices that users can own and keep in their homes. For that use case, the four freedoms, the definition of source code and installation tooling introduced in GPLv3 made a lot of sense. Nothing else seemed to matter to him. The decision for the Linux kernel not to adopt GPLv3 wasn’t considered a problem and it was often downplayed by FSF leadership.
+> That’s because Stallman’s world was and still is, stuck in the 80s: computers are physical devices that users can own and keep in their homes. For that use case, the four freedoms, the definition of source code and installation tooling introduced in GPLv3 made a lot of sense. Nothing else seemed to matter to him. The decision for the Linux kernel not to adopt GPLv3 wasn’t considered a problem and it was often downplayed by FSF leadership.
 
 I [shared my story of meeting Stallman](https://links.thingelstad.com/2019/09/richard-stallman-and-the-fall-of-the-clueless-nerd-wired) before and he really didn’t see the Internet as a thing that mattered. Mostly this was because he wouldn't use it? He famously is the person who used an emacs, email, bash script thing to pull web pages when he needed information. That's crazy. The real Free Software challenge has moved online and Stallman was still thinking about a open BIOS.
 

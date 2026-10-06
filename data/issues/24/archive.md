@@ -156,7 +156,7 @@ links:
   domain: www.macstories.net
   heading_context: '[More Great Shelf Apps to Boost iPad Productivity – MacStories](https://www.macstories.net/reviews/more-great-shelf-apps-to-boost-ipad-productivity/)'
   section: Links 📌
-word_count: 2398
+word_count: 2405
 ---
 We are away this weekend hanging out with the 19 members of the extended Olson Family clan — Tammy's side of the family. We've done this weekend away as a family for 14 years now. There were only 10 people at the first one, and now grandchildren have filled the ranks to 19. The relevance of getting away as an extended family has grown as everyone's schedules get busier and the opportunities to gather get more difficult.
 
@@ -207,12 +207,27 @@ I joined Twitter in December 2006, user #82,903. I can personally attest to the 
 
 ### [Software architecture is failing – Alex Hudson](https://www.alexhudson.com/2017/10/14/software-architecture-failing/)
 
-I 💙 nearly everything in this article. I think one of the most important things for tech teams is to stay close to the problem they are solving and along with that stay close to their users. I remember when I was at MarketWatch we were building software for the news team and it was okay. Then we took those same developers and put them in the newsroom! A huge positive change in value delivery followed immediately. I’ve seen this repeated many times. Talking about how technical teams make decisions, I often see a complete lack of understanding how to relate the business issues their organisation faces to the technical strategy. Regularly, I don’t see a technical strategy at all. The team may have made a decision like “We’re 100% microservices!”, but when I ask them they cannot give a good reason that relates to the business in a direct way. This is absolutely spot on! A well-articulated technical vision should match the business vision directly, especially in a tech company.
-There should be total and complete alignment between your business and technology strategy in a tech company. I think we’re often getting the build/buy decision wrong. Software development should be the tool of last resort: “we’re building this because it doesn’t exist in the form we need it”. I want to hear from more tech leaders about how they solved a problem without building the software, and tactics for avoiding development. I often look at work teams are doing and ask “is this differentiating?” If it isn’t you should buy it, if it is build it and be amazing at it. Make it your strategic more! If you feel it isn’t differentiating but you still need to build it do so with extreme caution and be miserly. You may be right, but you may not be too.
+I 💙 nearly everything in this article. I think one of the most important things for tech teams is to stay close to the problem they are solving and along with that stay close to their users. I remember when I was at MarketWatch we were building software for the news team and it was okay. Then we took those same developers and put them in the newsroom! A huge positive change in value delivery followed immediately. I’ve seen this repeated many times.
+
+> Talking about how technical teams make decisions, I often see a complete lack of understanding how to relate the business issues their organisation faces to the technical strategy. Regularly, I don’t see a technical strategy at all. The team may have made a decision like “We’re 100% microservices!”, but when I ask them they cannot give a good reason that relates to the business in a direct way.
+
+This is absolutely spot on!
+
+> A well-articulated technical vision should match the business vision directly, especially in a tech company.
+
+There should be total and complete alignment between your business and technology strategy in a tech company.
+
+> I think we’re often getting the build/buy decision wrong. Software development should be the tool of last resort: “we’re building this because it doesn’t exist in the form we need it”. I want to hear from more tech leaders about how they solved a problem without building the software, and tactics for avoiding development.
+
+I often look at work teams are doing and ask “is this differentiating?” If it isn’t you should buy it, if it is build it and be amazing at it. Make it your strategic more! If you feel it isn’t differentiating but you still need to build it do so with extreme caution and be miserly. You may be right, but you may not be too.
 
 ### [Why I’m Using Bitmarks on my Products « bunnie's blog](https://www.bunniestudios.com/blog/?p=4981)
 
-[I hadn't heard of Bitmark](https://bitmark.com) but it’s an interesting use of a blockchain for a non-currency use case. Most people are familiar with blockchains through Bitcoin. Bitcoin uses the blockchain as a public ledger to prevent double-spending of the same virtual coin. This same public ledger can be applied to physical hardware products through a bitmark. Products that have been bitmarked can have their provenance tracked back to the factory using the public ledger, thus hampering cloning and warranty fraud – the physical equivalent of double-spending a Bitcoin. This seems like a good solution to this problem.
+[I hadn't heard of Bitmark](https://bitmark.com) but it’s an interesting use of a blockchain for a non-currency use case.
+
+> Most people are familiar with blockchains through Bitcoin. Bitcoin uses the blockchain as a public ledger to prevent double-spending of the same virtual coin. This same public ledger can be applied to physical hardware products through a bitmark. Products that have been bitmarked can have their provenance tracked back to the factory using the public ledger, thus hampering cloning and warranty fraud – the physical equivalent of double-spending a Bitcoin.
+
+This seems like a good solution to this problem.
 
 ### [How to set up world-class continuous deployment using free hosted tools](https://simonwillison.net/2017/Oct/17/free-continuous-deployment/)
 
@@ -228,15 +243,25 @@ I am an extensive user of my contacts system so this macOS app appealed to me ri
 
 ### [ProseMirror 1.0](http://marijnhaverbeke.nl/blog/prosemirror-1.html)
 
-I wish this would have existed when I was dealing with content management solutions for news organizations. It looks like a compelling solution. Most importantly, ProseMirror is agnostic to the actual document shape, making it possible to build applications on top of this library that in the past would have required a fully custom editor implementation.
+I wish this would have existed when I was dealing with content management solutions for news organizations. It looks like a compelling solution.
+
+> Most importantly, ProseMirror is agnostic to the actual document shape, making it possible to build applications on top of this library that in the past would have required a fully custom editor implementation.
 
 ### [The GRAKN.AI Ontology: Simplicity and Maintainability](https://blog.grakn.ai/the-grakn-ai-ontology-simplicity-and-maintainability-ab78340f5ff6)
 
-Interesting tech to power reasoning systems. This excerpt caught my eye: RDF & OWL are for semantic web (not databases) and logicians (not software engineers). And GRAKN.AI, as you may expect, is for databases and software engineers. [I’ve read a bit about RDF](https://en.wikipedia.org/wiki/RDFa) [and OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language) and agree it’s hard for an engineer to grok. This [article is vendor-written to support GRAKN.AI](https://grakn.ai/) but still an interesting read.
+Interesting tech to power reasoning systems. This excerpt caught my eye:
+
+> RDF & OWL are for semantic web (not databases) and logicians (not software engineers). And GRAKN.AI, as you may expect, is for databases and software engineers.
+
+[I’ve read a bit about RDF](https://en.wikipedia.org/wiki/RDFa) [and OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language) and agree it’s hard for an engineer to grok. This [article is vendor-written to support GRAKN.AI](https://grakn.ai/) but still an interesting read.
 
 ### [Want to see something crazy? Open this link on your phone with WiFi turned off.](https://medium.com/@philipn/want-to-see-something-crazy-open-this-link-on-your-phone-with-wifi-turned-off-9e0adb00d024)
 
-It seems like everyone is selling any and all data they collect on us. But what these services show us is even more alarming: US telcos appear to be selling direct, non-anonymized, real-time access to consumer telephone data to third party services — not just federal law enforcement officials — who are then selling access to that data. I thought FCC regulations didn’t allow telecom companies to do this, but clearly that isn’t the case. Regulation is needed here. Sadly I don’t expect it to happen since the money and politics are all on the other side of the argument.
+It seems like everyone is selling any and all data they collect on us.
+
+> But what these services show us is even more alarming: US telcos appear to be selling direct, non-anonymized, real-time access to consumer telephone data to third party services — not just federal law enforcement officials — who are then selling access to that data.
+
+I thought FCC regulations didn’t allow telecom companies to do this, but clearly that isn’t the case. Regulation is needed here. Sadly I don’t expect it to happen since the money and politics are all on the other side of the argument.
 
 ### [The Python Graph Gallery – Visualizing data – with Python](https://python-graph-gallery.com/)
 

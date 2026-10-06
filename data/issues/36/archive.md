@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/36/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-13-2018/
 domains: []
 links: []
-word_count: 1937
+word_count: 1966
 ---
 I had a very special week! I got to spend most of it focusing on professional improvement. 🕴🏻 It was a great opportunity and I took full advantage of it. Every year I try to find a couple of areas to make significant improvements in. Last year it was in managing my time better and making improvements in my GTD practice. This year I’m still framing up my focus areas but I like where it is going.
 
@@ -38,7 +38,9 @@ Infrastructure cost management in the cloud is a difficult beast to wrestle.
 
 ### [Apache Airflow (incubating) Documentation — Airflow Documentation](https://airflow.incubator.apache.org/)
 
-This looks really interesting and would be worth keeping an eye on. I like that it’s in the Apache world. Use airflow to author workflows as directed acyclic graphs (DAGs) of tasks. The airflow scheduler executes your tasks on an array of workers while following the specified dependencies. Rich command line utilities make performing complex surgeries on DAGs a snap. The rich user interface makes it easy to visualize pipelines running in production, monitor progress, and troubleshoot issues when needed.
+This looks really interesting and would be worth keeping an eye on. I like that it’s in the Apache world.
+
+> Use airflow to author workflows as directed acyclic graphs (DAGs) of tasks. The airflow scheduler executes your tasks on an array of workers while following the specified dependencies. Rich command line utilities make performing complex surgeries on DAGs a snap. The rich user interface makes it easy to visualize pipelines running in production, monitor progress, and troubleshoot issues when needed.
 
 ### [Tesla Model 3: The First Serious Review - The Drive](http://www.thedrive.com/new-cars/17280/tesla-model-3-the-first-serious-review)
 
@@ -50,7 +52,11 @@ Tesla Model 3 review. Looking forward to driving one! Tons of pictures and a lot
 
 ### [The T2 chip makes the iMac Pro the start of a Mac revolution | Macworld](https://www.macworld.com/article/3245764/macs/the-t2-chip-makes-the-imac-pro-the-start-of-a-mac-revolution.html)
 
-Interesting article about how this new T2 chip in the iMac Pro is handling a significant amount of non-CPU and non-GPU work. On most Macs, there are discrete controllers for audio, system management and disk drives. But the T2 handles all these tasks. The T2 is responsible for controlling the iMac Pro’s stereo speakers, internal microphones, and dual cooling fans, all by itself. The two-stage boot process is interesting and I think a first.
+Interesting article about how this new T2 chip in the iMac Pro is handling a significant amount of non-CPU and non-GPU work.
+
+> On most Macs, there are discrete controllers for audio, system management and disk drives. But the T2 handles all these tasks. The T2 is responsible for controlling the iMac Pro’s stereo speakers, internal microphones, and dual cooling fans, all by itself.
+
+The two-stage boot process is interesting and I think a first.
 
 ### [The Tesla Model 3 Makes The Future Feel Normal](https://jalopnik.com/the-tesla-model-3-makes-the-future-feel-normal-1821684820)
 
@@ -62,11 +68,17 @@ A while back I spent a chunk of time thinking about how open source software pri
 
 ### [Learning to operate Kubernetes reliably](https://stripe.com/blog/operating-kubernetes)
 
-[Julia Evans](https://www.jvns.ca) with a very good overview [of how they have deployed Kubernetes](https://kubernetes.io) at Stripe. Her words of caution are true for many technology patterns: If you’re considering Kubernetes, keep in mind: don’t use Kubernetes just because other companies are using it. Setting up a reliable cluster takes a huge amount of time, and the business case for using it isn’t always obvious. Invest your time in a smart way.
+[Julia Evans](https://www.jvns.ca) with a very good overview [of how they have deployed Kubernetes](https://kubernetes.io) at Stripe. Her words of caution are true for many technology patterns:
+
+> If you’re considering Kubernetes, keep in mind: don’t use Kubernetes just because other companies are using it. Setting up a reliable cluster takes a huge amount of time, and the business case for using it isn’t always obvious. Invest your time in a smart way.
 
 ### [Birdcage liners – Joel on Software](https://www.joelonsoftware.com/2018/01/12/birdcage-liners/)
 
-[Joel Spolsky](https://en.wikipedia.org/wiki/Joel_Spolsky) weighs in on writing software with ethics and meaning. As software developers and designers, we have a responsibility to the world to think these things through carefully and design software that makes the world better, or, at least, no worse than it started out. 👏
+[Joel Spolsky](https://en.wikipedia.org/wiki/Joel_Spolsky) weighs in on writing software with ethics and meaning.
+
+> As software developers and designers, we have a responsibility to the world to think these things through carefully and design software that makes the world better, or, at least, no worse than it started out.
+
+👏
 
 ### [Legends of the Ancient Web](http://idlewords.com/talks/ancient_web.htm)
 
@@ -78,7 +90,11 @@ Am I supposed to feel bad that privacy features in Safari are putting a dent in 
 
 ### [Cory Doctorow: Persuasion, Adaptation, and the Arms Race for Your Attention – Locus Online](http://locusmag.com/2018/01/cory-doctorow-persuasion-adaptation-and-the-arms-race-for-your-attention/)
 
-Doctorow with some perspective and framing for the attention economy. He posits this as a constant arms race with the predator and prey. There is a war for your attention, and like all adversarial scenarios, the sides develop new countermeasures and then new tactics to overcome those countermeasures. The predator carves the prey, the prey carves the predator. I would encourage us all to ask an important question in the attention war. Is this useful? Be honest with yourself. How useful is something to your objectives. Of course this begs the question that you have to know your objectives, which is another topic entirely.
+Doctorow with some perspective and framing for the attention economy. He posits this as a constant arms race with the predator and prey.
+
+> There is a war for your attention, and like all adversarial scenarios, the sides develop new countermeasures and then new tactics to overcome those countermeasures. The predator carves the prey, the prey carves the predator.
+
+I would encourage us all to ask an important question in the attention war. Is this useful? Be honest with yourself. How useful is something to your objectives. Of course this begs the question that you have to know your objectives, which is another topic entirely.
 
 ### [The Strange Brands in Your Instagram Feed - The Atlantic](https://www.theatlantic.com/technology/archive/2018/01/the-strange-brands-in-your-instagram-feed/550136/)
 
@@ -86,7 +102,11 @@ Interesting read on how easy it is to set yourself up as a retail brand and star
 
 ### [One Player's 21,000 Hole Quest to Beat the Seemingly Endless 'Desert Golf' - Waypoint](https://waypoint.vice.com/en_us/article/a3nnv4/one-players-21000-hole-quest-to-beat-the-seemingly-endless-desert-golf)
 
-Yet another reason I 💛 the Internet. This guy has some serious focus. “It's straight up impossible,” Yagnow told me, pointing to the 2,599 attempts he made, trying to bend the hole to his will. 2,599 attempts at a single hole! No way did this only take 300 to 400 hours.
+Yet another reason I 💛 the Internet. This guy has some serious focus.
+
+> “It's straight up impossible,” Yagnow told me, pointing to the 2,599 attempts he made, trying to bend the hole to his will.
+
+2,599 attempts at a single hole! No way did this only take 300 to 400 hours.
 
 ### [Get Slack-style emoji everywhere with Rocket](https://sixcolors.com/post/2018/01/get-slack-style-emoji-everywhere-with-rocket/)
 
@@ -106,7 +126,11 @@ If you want to go deep on Emoji's this is the place to do it! 👩‍🏫
 
 ### [California Legislature to Hear EFF’s License Plate Cover Bill | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2018/01/california-senate-hear-effs-license-plate-cover-bill)
 
-What? Across the country, private companies are deploying vehicles mounted with automated license plate readers (ALPRs) to drive up and down streets to document the travel patterns of everyday drivers. These systems take photos of every license plate they see, tag them with time and location, and upload them to a central database. I run blocking software on my computer to protect my privacy, but I didn't realize that the fact that I have a garage is also a privacy tool! I have read in the past about cities using license plate readers and city wide camera systems to track people, but I had no idea this was happening in the private sector too. There seems to be an obvious sabotage opportunity here to have a magnetic license plate cover that is unreadable or deceptive to these systems that you can use while not driving. 🤔
+What?
+
+> Across the country, private companies are deploying vehicles mounted with automated license plate readers (ALPRs) to drive up and down streets to document the travel patterns of everyday drivers. These systems take photos of every license plate they see, tag them with time and location, and upload them to a central database.
+
+I run blocking software on my computer to protect my privacy, but I didn't realize that the fact that I have a garage is also a privacy tool! I have read in the past about cities using license plate readers and city wide camera systems to track people, but I had no idea this was happening in the private sector too. There seems to be an obvious sabotage opportunity here to have a magnetic license plate cover that is unreadable or deceptive to these systems that you can use while not driving. 🤔
 
 ### [Book: Principles by Ray Dalio - Feld Thoughts](https://www.feld.com/archives/2018/01/book-principles-ray-dalio.html)
 
@@ -114,7 +138,11 @@ This book has been on my wishlist for a long time and I recently got a copy. Loo
 
 ### [Q&A: Edward Snowden on rights, privacy, secrets and leaks in conversation with Jimmy Wales – Wikitribune](https://www.wikitribune.com/story/2018/01/05/free_speech/qa-edward-snowden-on-rights-privacy-secrets-and-leaks-in-conversation-with-jimmy-wales/26810/)
 
-Good interview with Snowden. I appreciate reading and hearing his opinions on these topics. I particularly like his view on protecting privacy. Privacy is the fountainhead of all other rights. Privacy is where rights are derived from, because privacy is the right to the self. Privacy is the right to a free mind. Privacy is the ability to have something, anything, for yourself, for you. It pains me a bit when [Julian Assange](https://en.wikipedia.org/wiki/Julian_Assange) and Snowden are bucketed together. I believe Assange is a crypto anarchist. Snowden I believe is actually operating on a defined set of ethics and trying to fix something that he clearly saw as wrong.
+Good interview with Snowden. I appreciate reading and hearing his opinions on these topics. I particularly like his view on protecting privacy.
+
+> Privacy is the fountainhead of all other rights. Privacy is where rights are derived from, because privacy is the right to the self. Privacy is the right to a free mind. Privacy is the ability to have something, anything, for yourself, for you.
+
+It pains me a bit when [Julian Assange](https://en.wikipedia.org/wiki/Julian_Assange) and Snowden are bucketed together. I believe Assange is a crypto anarchist. Snowden I believe is actually operating on a defined set of ethics and trying to fix something that he clearly saw as wrong.
 
 ---
 

@@ -63,7 +63,7 @@ links:
   domain: www.newyorker.com
   heading_context: '[Can “Indie” Social Media Save Us? | The New Yorker](https://www.newyorker.com/tech/annals-of-technology/can-indie-social-media-save-us)'
   section: Notable Links 📌
-word_count: 1621
+word_count: 1629
 ---
 It’s Memorial Day weekend in Minnesota! For Minnesotans this marks the official end of our long winter months, and the true beginning of the summer. The actual weather may not agree with us, but that doesn't matter. It’s time to [declare summer! I’m writing this outside](https://www.thingelstad.com/2019/05/24/nice-spot-to.html) and it is sublime. My main plan for the weekend is to get some more practice sessions on the flat top grill. I need to work on my short order cook skills! 🍳
 
@@ -77,9 +77,9 @@ If you are in the US of A I hope you have a fabulous holiday weekend! 🇺🇸
 
 This article captures very well the way I think about Tesla. It’s all about the software.
 
-Turning to mainstream, legacy car companies, we have to ask what they know about software — and do they even care? The Engine Control Unit, the computer that controls ignition and fuel injection, comes from a vendor like Robert Bosch (my autokorrekt wants to write “ogre botch”); the gearbox controller from ZF (as in toothed gears, Zahnrad Fabrik) or Japan’s Aisin; and the entertainment/navigation module from Panasonic and others. And they all use bundled software. To conventional automakers, software is a sourced component, often from the lowest bidder, a hard-to-control annoyance.
-
-It’s a situation that’s reminiscent of the early days of cell phones. Motorola and Nokia had software because they had to, they even boasted about being good at it, only to be displaced by competitors who loved software, namely Google’s Android and Apple’s iOS.
+> Turning to mainstream, legacy car companies, we have to ask what they know about software — and do they even care? The Engine Control Unit, the computer that controls ignition and fuel injection, comes from a vendor like Robert Bosch (my autokorrekt wants to write “ogre botch”); the gearbox controller from ZF (as in toothed gears, Zahnrad Fabrik) or Japan’s Aisin; and the entertainment/navigation module from Panasonic and others. And they all use bundled software. To conventional automakers, software is a sourced component, often from the lowest bidder, a hard-to-control annoyance.
+>
+> It’s a situation that’s reminiscent of the early days of cell phones. Motorola and Nokia had software because they had to, they even boasted about being good at it, only to be displaced by competitors who loved software, namely Google’s Android and Apple’s iOS.
 
 I've told many friends that driving my Tesla Model 3 feels a lot using an early iPhone. The dashboard's emptiness harkens back to the ridicule of the first iPhone, that "it doesn't even have a keyboard!" Yeah, there is no speedometer in the middle of the steering wheel. The car can become completely different with a software update. Just today I got a new software push that changes dramatically some of the on screen displays.
 
@@ -99,7 +99,7 @@ IDS Center, 80 South 8th St, Minneapolis, MN
 
 Just having data doesn't mean anything if you don't have a use and have structured the data in a way to provide strategic benefit.
 
-None of this is to suggest data is pointless! But it does need more thoughtful consideration than leaping from “we have lots of data” to “therefore we have long-term defensibility”. Because data moats clearly don’t last (or automatically happen) through data collection alone, carefully thinking about the strategies that map onto the data journey can help you compete with — and more intentionally and proactively keep up with — a data advantage. It’s way better to plan for it than being blindsided when an asymptote or point of diminishing returns suddenly hits your company.
+> None of this is to suggest data is pointless! But it does need more thoughtful consideration than leaping from “we have lots of data” to “therefore we have long-term defensibility”. Because data moats clearly don’t last (or automatically happen) through data collection alone, carefully thinking about the strategies that map onto the data journey can help you compete with — and more intentionally and proactively keep up with — a data advantage. It’s way better to plan for it than being blindsided when an asymptote or point of diminishing returns suddenly hits your company.
 
 Having a data strategy is probably a good place to start.
 
@@ -115,7 +115,7 @@ This looks super fun, and Panic is a top-tier company that makes great products.
 
 This is absolutely bananas. 🐍
 
-In the video, Friede holds the head of a Papua New Guinea taipan, one of the world’s most potently venomous snakes, against his forearm. Blood is already dripping from fang marks on his right arm, left there moments earlier by a ten-foot-long black mamba. Now the taipan bites. An attack from either snake can stop a person’s heart in a couple of hours. Other symptoms, including drooping eyelids and paralysis of the tongue, develop in seconds. But Friede calmly puts the snake back in its cage and says to the camera, “I love it. I love it. I love it.”
+> In the video, Friede holds the head of a Papua New Guinea taipan, one of the world’s most potently venomous snakes, against his forearm. Blood is already dripping from fang marks on his right arm, left there moments earlier by a ten-foot-long black mamba. Now the taipan bites. An attack from either snake can stop a person’s heart in a couple of hours. Other symptoms, including drooping eyelids and paralysis of the tongue, develop in seconds. But Friede calmly puts the snake back in its cage and says to the camera, “I love it. I love it. I love it.”
 
 😲
 
@@ -127,7 +127,7 @@ It surprises me that people would be surprised that Google would index the email
 
 This is spot on. I’m guessing it’s bad form to quote another articles quote, but…
 
-“I am taking a long break because every tweet had begun to feel like a peep of steam through my whistle — Listen to me! Listen to me! — which reduced the boiler pressure I needed to write another novel.”
+> “I am taking a long break because every tweet had begun to feel like a peep of steam through my whistle — Listen to me! Listen to me! — which reduced the boiler pressure I needed to write another novel.”
 
 Blurting out little bits of stuff has exactly this effect for me of letting out the steam. I debate often removing those outlets to force the urge to author to build up to something more substantial.
 
@@ -135,7 +135,7 @@ Blurting out little bits of stuff has exactly this effect for me of letting out 
 
 The emotions that Laing describe in this article are very close to what I feel from Twitter, but certainly not as strong as she describes.
 
-A 2014 study by Dutch neurologists suggests that when people see an accident, they can’t at first empathise, let alone reflect, make decisions or act, because they are bombarded by an instantaneous flight/freeze/fight response, which has to wear off before they can think in more helpful ways. It seems to me now that being on Twitter was like watching a perpetual car crash.
+> A 2014 study by Dutch neurologists suggests that when people see an accident, they can’t at first empathise, let alone reflect, make decisions or act, because they are bombarded by an instantaneous flight/freeze/fight response, which has to wear off before they can think in more helpful ways. It seems to me now that being on Twitter was like watching a perpetual car crash.
 
 Ever since I've stopped following any profiles and only use Twitter to syndicate to, I've not had this problem, which is great.
 
@@ -143,7 +143,7 @@ Ever since I've stopped following any profiles and only use Twitter to syndicate
 
 Nice writeup by Cal Newport about IndieWeb solutions. I like that he highlights my own microblogging platform of choice, micro.blog! He's skeptical they can have the scale of the surveillance networks out there today.
 
-Despite its advantages, however, I suspect that the IndieWeb will not succeed in replacing existing social-media platforms at their current scale. For one thing, the IndieWeb lacks the carefully engineered addictiveness that helped fuel the rise of services like Facebook, Twitter, and Instagram. This addictiveness has kept people returning to their devices even when they know there are better uses for their time; remove the addiction, and you might lose the users.
+> Despite its advantages, however, I suspect that the IndieWeb will not succeed in replacing existing social-media platforms at their current scale. For one thing, the IndieWeb lacks the carefully engineered addictiveness that helped fuel the rise of services like Facebook, Twitter, and Instagram. This addictiveness has kept people returning to their devices even when they know there are better uses for their time; remove the addiction, and you might lose the users.
 
 I totally agree, but I also don't think the goal is to be that scale. These services are human scale, and that is part of what makes them great.
 

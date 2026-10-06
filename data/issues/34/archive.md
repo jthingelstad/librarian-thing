@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/34/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-30-2017/
 domains: []
 links: []
-word_count: 2024
+word_count: 2047
 ---
 I hope you all have been having a wonderful Christmas and New Years and are getting some time away to rest and relax. I’m sure you're wondering how my first attempt at Glorified Rice turned out? It was pretty good! I learned I didn't need to make a double batch, and I needed a little more crushed pineapple.
 
@@ -78,11 +78,19 @@ I like articles from folks that know a craft and can share some of how the sausa
 
 ### [Lanier’s Social Medium Ultimatum | James Shelley](https://jamesshelley.com/2017/12/22/laniers-social-medium-ultimatum/)
 
-I love [this call out from Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier) : People have to take responsibility to become literate in a new way if they are going to use the technology at all. So if you just can’t find it in yourselves to delete all your social media accounts, then you must take it upon yourself to really learn how it works. Learn how the addiction cycle works. Learn how the manipulation works. Become aware of it. We have to become much smarter customers and users of these services.
+I love [this call out from Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier) :
+
+> People have to take responsibility to become literate in a new way if they are going to use the technology at all. So if you just can’t find it in yourselves to delete all your social media accounts, then you must take it upon yourself to really learn how it works. Learn how the addiction cycle works. Learn how the manipulation works. Become aware of it.
+
+We have to become much smarter customers and users of these services.
 
 ### [Computer latency: 1977-2017](https://danluu.com/input-lag/)
 
-What a great project filled with delightful sentences like: At 144 Hz, each frame takes 7 ms. A change to the screen will have 0 ms to 7 ms of extra latency as it waits for the next frame boundary before getting rendered (on average,we expect half of the maximum latency, or 3.5 ms). On top of that, even though my display at home advertises a 1 ms switching time, it actually appears to take 10 ms to fully change color once the display has started changing color. When we add up the latency from waiting for the next frame to the latency of an actual color change, we get an expected latency of 7/2 + 10 = 13.5ms I've never been bothered by latency from key to display on any of my computers, but it’s curious to see that the latency has gone up with complexity. I do notice this whenever I use an Android device. Touch devices drive the latency demand higher in my opinion since your finger is there and your brain and eyes want to see the reaction with as close to no latency as possible. For me Android has a frustrating amount of latency.
+What a great project filled with delightful sentences like:
+
+> At 144 Hz, each frame takes 7 ms. A change to the screen will have 0 ms to 7 ms of extra latency as it waits for the next frame boundary before getting rendered (on average,we expect half of the maximum latency, or 3.5 ms). On top of that, even though my display at home advertises a 1 ms switching time, it actually appears to take 10 ms to fully change color once the display has started changing color. When we add up the latency from waiting for the next frame to the latency of an actual color change, we get an expected latency of 7/2 + 10 = 13.5ms
+
+I've never been bothered by latency from key to display on any of my computers, but it’s curious to see that the latency has gone up with complexity. I do notice this whenever I use an Android device. Touch devices drive the latency demand higher in my opinion since your finger is there and your brain and eyes want to see the reaction with as close to no latency as possible. For me Android has a frustrating amount of latency.
 
 ### [Ten years in, nobody has come up with a use for blockchain](https://hackernoon.com/ten-years-in-nobody-has-come-up-with-a-use-case-for-blockchain-ee98c180100)
 

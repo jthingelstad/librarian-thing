@@ -104,7 +104,7 @@ links:
   domain: www.amazon.com
   heading_context: '[Lutron Caseta Wireless Smart Lighting Dimmer Switch (2 count) Starter Kit - Amazon.com](https://www.amazon.com/dp/B01M3XJUAD?tag=klf-20)'
   section: Notable Links 📌
-word_count: 2128
+word_count: 2135
 ---
 Minneapolis Public Schools started the 2018-19 school year this Monday, and with it the kids went off to school and summer break officially came to a close. 🏁 Summer flew by this year! There was so much going on. It was fabulous, and maybe 10% into the over-scheduled zone, but that's just fine. In our neighborhood the first day of school is a community event. Parents and kids walking to bus stops, or forming walking busses to take kids to school while photos are taken at various moments. The whole thing put a smile on my face, even as the kids were bemoaning the return of homework. 🚌
 
@@ -114,7 +114,7 @@ Minneapolis Public Schools started the 2018-19 school year this Monday, and with
 
 There is much truth in this article, even though it’s a little hard for me to like it.
 
-What's more, consumers simply do not care. Users use. Only a small percentage have the technical sophistication to understand why they may want to preferentially use decentralized applications for technical reasons. Saying "It's like X, but decentralized", does not resonate, especially when the services are not as good. We had decentralized Slack way before Slack...yet there's Slack. You know it's bad when GitHub managed to recentralize an inherently distributed system like git.
+> What's more, consumers simply do not care. Users use. Only a small percentage have the technical sophistication to understand why they may want to preferentially use decentralized applications for technical reasons. Saying "It's like X, but decentralized", does not resonate, especially when the services are not as good. We had decentralized Slack way before Slack...yet there's Slack. You know it's bad when GitHub managed to recentralize an inherently distributed system like git.
 
 Unfortunately you could say the exact same paragraph and replace "centralized" with "private".
 
@@ -124,7 +124,7 @@ This article reminded me of one of my most memorable conversations I had with [a
 
 The gendered nature of the term "guys" was brought to [my attention first by Bridget Kromhout](https://bridgetkromhout.com) . At the time I honestly didn’t really hear what she was saying, but the matter stuck with me and over the last few years I've largely removed "guys" as a reference to a group of people. I think this is important, especially in industries like tech with such large gender imbalances.
 
-I also heard that guys could grate on women working at male-heavy companies. In tech in particular, some told me they saw the word as yet another symptom of a female-minimizing industry. “There are a lot of guys in tech and ‘guys’ is used all the time in my work and social environments by both men and women, but since it doesn't resonate with me anymore, I do feel like I'm not part of the group,” says Amy Chong, a 29-year-old user-experience researcher in San Francisco.
+> I also heard that guys could grate on women working at male-heavy companies. In tech in particular, some told me they saw the word as yet another symptom of a female-minimizing industry. “There are a lot of guys in tech and ‘guys’ is used all the time in my work and social environments by both men and women, but since it doesn't resonate with me anymore, I do feel like I'm not part of the group,” says Amy Chong, a 29-year-old user-experience researcher in San Francisco.
 
 Per the article I don't like using the term "folks". Perhaps it is because I’m from the midwest, but I have the perception that it feels too folksy. I tend to just say sentences differently, so that I can use terms like "everyone" instead. Sometimes I get tripped up, but that is pretty rare these days.
 
@@ -144,7 +144,7 @@ Minnesota Zoo, Apple Valley, MN
 
 Dunbar’s number proven again!
 
-Study after study confirms that most people have about five intimate friends, 15 close friends, 50 general friends and 150 acquaintances.
+> Study after study confirms that most people have about five intimate friends, 15 close friends, 50 general friends and 150 acquaintances.
 
 This should be termed a law at this point.
 
@@ -164,7 +164,7 @@ I have met some "Rick's" in my days and I can attest to the positive outcomes of
 
 Rosenthal's opinion on Chaos is authoritative, and he clarifies how it is not antifragility.
 
-Antifragile is a confused concept that ignores a wealth of knowledge we have about building and operating resilient systems. Chaos Engineering, by contrast, is a well-defined, pragmatic discipline for navigating complex systems. In my mind, they are quite far apart.
+> Antifragile is a confused concept that ignores a wealth of knowledge we have about building and operating resilient systems. Chaos Engineering, by contrast, is a well-defined, pragmatic discipline for navigating complex systems. In my mind, they are quite far apart.
 
 He's also no fan of Taleb's book.
 
@@ -176,7 +176,7 @@ He's also no fan of Taleb's book.
 
 This is a great way to think about time and commitments. I need to make this a poster as a reminder.
 
-“Yes” and “No” are not right and wrong, good and bad. They’re left and right, up and down. Learn to see the words “Yes” and “No” as directional, not emotional.
+> “Yes” and “No” are not right and wrong, good and bad. They’re left and right, up and down. Learn to see the words “Yes” and “No” as directional, not emotional.
 
 Yes!
 
@@ -184,7 +184,7 @@ Yes!
 
 The capabilities related to complex schemas and microservice orchestration are the most compelling justifications for GraphQL. If I were doing more with mobile, I can see how the mobile use case is very helpful. I agree wholeheartedly on the assessment that REST v. GraphQL is a silly debate.
 
-GraphQL and REST are both very different things, GraphQL is a language and a technology, REST is an architecture pattern.
+> GraphQL and REST are both very different things, GraphQL is a language and a technology, REST is an architecture pattern.
 
 Yes.
 
@@ -219,7 +219,7 @@ https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0060839872/ref=
 Zen and the Art of Motorcycle Maintenance: An Inquiry Into Values ()
 by Robert M Pirsig
 
-A penetrating examination of how we live and how to live better A narration of a summer motorcycle trip undertaken by a father and his son, Zen and the Art of Motorcycle Maintenance becomes a personal and philosophical odyssey into fundamental questions on how to live.
+> A penetrating examination of how we live and how to live better A narration of a summer motorcycle trip undertaken by a father and his son, Zen and the Art of Motorcycle Maintenance becomes a personal and philosophical odyssey into fundamental questions on how to live.
 
 [When I was at David Hussman](https://www.thingelstad.com/2018/goodbye-to-my-friend-david-hussman/) 's memorial one of the speakers shared that David's favorite book was Zen and the Art of Motorcycle Maintenance. I've heard much about it, but I've never read it. I figured it was time to read it (or, listen to it since I am using the audiobook) and I'm enjoying it thoroughly. 🏍
 

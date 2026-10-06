@@ -93,7 +93,7 @@ links:
   domain: www.tbray.org
   heading_context: '[ongoing by Tim Bray · On Cash](https://www.tbray.org/ongoing/When/201x/2018/10/11/On-Cash)'
   section: Notable Links 📌
-word_count: 1934
+word_count: 1939
 ---
 I just got [back from seeing the Foo Fighters](https://foofighters.com) play one of the final shows of their Concrete and Gold tour. I’ve seen the Foo’s play a few times now and it’s always a treat to see them. Every time I'm struck by how much they just love music. [Dave Grohl](https://en.wikipedia.org/wiki/Dave_Grohl) seems like someone that is all consumed and in love with his craft. [Taylor Hawkins](https://en.wikipedia.org/wiki/Taylor_Hawkins) has a grin ear-to-ear every time he’s on stage. Seeing them tonight you got the sense that they would have liked to have just kept playing. Once I saw them play for over 2 hours straight and we’re ready to keep going. The passion they have for what they do is incredible.
 
@@ -107,7 +107,7 @@ Seeing the Foo’s is a fabulous Rock & Roll show. It’s also an example of pur
 
 I've talked to a lot of friends that have tried several or even dozens of productivity systems.
 
-First things first: Take some comfort in the fact that you definitely aren’t alone. Many of us hop around and test the waters of various systems for getting our work done.
+> First things first: Take some comfort in the fact that you definitely aren’t alone. Many of us hop around and test the waters of various systems for getting our work done.
 
 One of the best things I ever did was decide to commit to [GTD](https://www.gettingthingsdone.com) as a long-term investment as well as [OmniFocus](https://www.omnigroup.com/omnifocus) and not look around at other options. I felt that expertise and depth in one was more important than trying dozens of options fiddling with what might be best.
 
@@ -115,7 +115,7 @@ One of the best things I ever did was decide to commit to [GTD](https://www.gett
 
 This is an important and interesting question. When I read the headline the immediate thought in my head was "Yes!". The study goes into more detail and gets deeper into the impact it would have on reporting.
 
-“Our results indicate that the routinization of Twitter into news production affects news judgment,” the researchers write. “For journalists who incorporate Twitter into their reporting routines, and those with fewer years of experience, Twitter has become so normalized that tweets were deemed equally newsworthy as headlines appearing to be from the AP wire. This may have negative implications.” Among those implications, they argue, is that journalists can get caught up in a kind of pack mentality in which a story is seen as important because other journalists on Twitter are talking about it, rather than because it is newsworthy.
+> “Our results indicate that the routinization of Twitter into news production affects news judgment,” the researchers write. “For journalists who incorporate Twitter into their reporting routines, and those with fewer years of experience, Twitter has become so normalized that tweets were deemed equally newsworthy as headlines appearing to be from the AP wire. This may have negative implications.” Among those implications, they argue, is that journalists can get caught up in a kind of pack mentality in which a story is seen as important because other journalists on Twitter are talking about it, rather than because it is newsworthy.
 
 The "firehose" feed of Twitter is something that some people find uninteresting, but there are some people and professions that I think find it highly addictive and compelling. Watching an AP news feed, or a financial ticker, feels and looks a lot like watching the Twitter timeline. I count myself in the group of people that find that addictive. I tend to think journalists as a group would too.
 
@@ -137,7 +137,7 @@ I don't think I've had some recommend an article from the City Pages since colle
 
 Hiring engineers is a tricky thing, and it’s great to see people sharing their processes for evaluating candidates to help others get better as well.
 
-This document is an attempt to pull together accumulated best practices; while it shouldn’t be inferred to be overly prescriptive, where it is rigid, there is often a painful lesson behind it.
+> This document is an attempt to pull together accumulated best practices; while it shouldn’t be inferred to be overly prescriptive, where it is rigid, there is often a painful lesson behind it.
 
 Worthwhile set of concepts.
 
@@ -153,7 +153,7 @@ It’s great to see Adobe bringing such a critical power-user application to the
 
 I absolutely love that Facebook themselves had to correct publications on this clarification.
 
-But Facebook has since reached out to change its answer: Portal doesn’t have ads, but data about who you call and data about which apps you use on Portal can be used to target you with ads on other Facebook-owned properties.
+> But Facebook has since reached out to change its answer: Portal doesn’t have ads, but data about who you call and data about which apps you use on Portal can be used to target you with ads on other Facebook-owned properties.
 
 So when you give your photos to Google and Facebook they mine brands and objects from them to advertise to you. WIth this Portal surveillance device they can watch the activity in your house to then shove things in between cat pictures on Instagram. Don't buy one of these. And also, ditch Facebook Messenger too.
 
@@ -161,7 +161,7 @@ So when you give your photos to Google and Facebook they mine brands and objects
 
 I found this via [David Brooks Rich White Civil War](https://www.nytimes.com/2018/10/15/opinion/politics-race-white-tribalism.html) column.
 
-But this can change. A majority of Americans, whom we’ve called the "Exhausted Majority," are fed up by America’s polarization. They know we have more in common than that which divides us: our belief in freedom, equality, and the pursuit of the American dream. They share a deep sense of gratitude that they are citizens of the United States. They want to move past our differences.
+> But this can change. A majority of Americans, whom we’ve called the "Exhausted Majority," are fed up by America’s polarization. They know we have more in common than that which divides us: our belief in freedom, equality, and the pursuit of the American dream. They share a deep sense of gratitude that they are citizens of the United States. They want to move past our differences.
 
 This data on segments of Americans is interesting and well presented. It does make me wonder if this exists independent of the marketing and propaganda of politicians, or if this is the desired outcome of those programs to slice up America into groups that can be marketed to.
 

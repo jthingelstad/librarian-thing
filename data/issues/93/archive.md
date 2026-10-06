@@ -62,7 +62,7 @@ links:
   domain: www.fastcompany.com
   heading_context: '[Executive coach: 7 secrets to lasting career satisfaction](https://www.fastcompany.com/90296030/executive-coach-7-secrets-to-finding-lasting-career-satisfaction)'
   section: Notable Links 📌
-word_count: 1130
+word_count: 1131
 ---
 I'm slowly creeping up on issue #100 of the Weekly Thing! Just 7 more and we'll hit that fun milestone! 🎉 I've been contemplating some tweaks and refinements of this weekly cornucopia of content. I'd like to ask you, the most awesome reader ever, to take a moment for two things.
 
@@ -118,7 +118,7 @@ If you find buildings and architecture interesting this is an amazing look at th
 
 These ARPU numbers are amazing.
 
-For each dollar of digital ad growth between 2011–2018, Google took $1.00, Facebook $3.70, while the NYT took only 32 cents.
+> For each dollar of digital ad growth between 2011–2018, Google took $1.00, Facebook $3.70, while the NYT took only 32 cents.
 
 😯
 

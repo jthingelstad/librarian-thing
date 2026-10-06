@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/52/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-52-may-5-2018/
 domains: []
 links: []
-word_count: 2276
+word_count: 2280
 ---
 This issue marks the first year of the Weekly Thing! 👏 I am enjoying this project, and I've heard from many of you who subscribe that you have found it valuable too! 👌
 
@@ -31,7 +31,7 @@ www.theguardian.com
 
 The headline is a bit overstated, but this is a little peak into how Nintendo approaches creating new game experiences.
 
-“We have the software team and the hardware team working very closely together,” elaborates Takahashi.
+> “We have the software team and the hardware team working very closely together,” elaborates Takahashi.
 
 I think you could write a near clone of this article for Apple. I love the hiring emphasis to focus on people that have put continued diligence on a project over years, independent of the outcome.
 
@@ -63,7 +63,7 @@ krebsonsecurity.com
 
 Services that offer both private and public functions can easily leak private information out.
 
-KrebsOnSecurity spent the past week using Google to discover unprotected personal Trello boards that listed employer passwords and other sensitive data.
+> KrebsOnSecurity spent the past week using Google to discover unprotected personal Trello boards that listed employer passwords and other sensitive data.
 
 The Uber example is not rare. A solution to this is to write small jobs to insure compliance with your security and governance processes.
 
@@ -77,7 +77,7 @@ www.imore.com
 
 New subscription service from Amazon.
 
-After signing up for the service, you'll create a profile for your child to ensure they get the books best suited for them. Books you're offered are based on your kid's age, and all of the titles are handpicked by Amazon Books editors.
+> After signing up for the service, you'll create a profile for your child to ensure they get the books best suited for them. Books you're offered are based on your kid's age, and all of the titles are handpicked by Amazon Books editors.
 
 Once Amazon knows your kids and their ages (plus whatever other data) they can also market you with all sorts of other parent purchases.
 
@@ -126,7 +126,7 @@ ocean.sagepub.com
 
 Pretty accurate description of some of the promises of the Internet and the reality.
 
-This great leveler of opportunity has resulted in some of the most overweening monopolies the world has ever seen. This medium of unfettered self-expression has delivered oppressive surveillance and invasions of privacy of a kind that were previously the sole preserve of police states. This enabler of a better informed, more engaged citizenry has instead come to be seen as subverting democracy itself.
+> This great leveler of opportunity has resulted in some of the most overweening monopolies the world has ever seen. This medium of unfettered self-expression has delivered oppressive surveillance and invasions of privacy of a kind that were previously the sole preserve of police states. This enabler of a better informed, more engaged citizenry has instead come to be seen as subverting democracy itself.
 
 This article advocates to being more social science to the technology of the internet. It certainly can’t help, but it’s hard to see how that is going to address the advertising biased attention economy.
 

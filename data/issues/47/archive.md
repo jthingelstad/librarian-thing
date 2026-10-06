@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/47/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-47-mar-31-2018/
 domains: []
 links: []
-word_count: 1201
+word_count: 1203
 ---
 It is Spring Break Season 🍃 and it seems like everyone is heading away for a week, including us. We are on our way to Chicago, with a stopover in the Wisconsin Dells. We'll [be going from waterslides to Hamilton](https://www.broadwayinchicago.com/show/hamilton-an-american-musical/) this week. 😎
 
@@ -34,7 +34,7 @@ medium.com
 
 Anil Dash with a look at the components of the web that we've forgotten about over time.
 
-At a time when millions are losing trust in the the web’s biggest sites, it’s worth revisiting the idea that the web was supposed to be made out of countless little sites. Here’s a look at the neglected technologies that were supposed to make it possible.
+> At a time when millions are losing trust in the the web’s biggest sites, it’s worth revisiting the idea that the web was supposed to be made out of countless little sites. Here’s a look at the neglected technologies that were supposed to make it possible.
 
 Simple core concepts that we should embrace.
 
@@ -142,7 +142,7 @@ www.youtube.com
 
 I hadn't ever heard this Steve Jobs comment on privacy.
 
-Privacy means people know what their signing up for, in plain english, and repeatedly.
+> Privacy means people know what their signing up for, in plain english, and repeatedly.
 
 Plain, simple, easy. And I totally agree.
 

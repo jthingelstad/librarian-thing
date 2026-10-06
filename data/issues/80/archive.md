@@ -81,7 +81,7 @@ links:
   domain: joshholtsclaw.com
   heading_context: '[The Graphic Art of Incredibles 2 — Josh Holtsclaw](http://joshholtsclaw.com/blog/2018/3/5/the-graphic-art-of-incredibles-2)'
   section: Notable Links 📌
-word_count: 2019
+word_count: 2022
 ---
 [I've been traveling in Kiev](https://en.wikipedia.org/wiki/Kiev) , Ukraine this week. As I queued at passport control, I counted up my stamps and noted that this is my ninth time to Ukraine. We have a technology office here that I visit twice a year to check in with the team. I commonly get asked by people back home about traveling here, thinking from the news in the US that it must be a very difficult place to go to. It isn't. The conflict with Russia has been roiling ever since I started to come here. My first time to Ukraine was [during the protests in Independence Square](https://en.wikipedia.org/wiki/Maidan_Nezalezhnosti) , on that trip [our final destination was to Kharkiv](https://en.wikipedia.org/wiki/Kharkiv) , on the eastern side of Ukraine. We moved our office to Kiev shortly thereafter.
 
@@ -97,7 +97,7 @@ I've not explored the history of Ukraine as much as I would like, but it's a dif
 
 I think people have heard this advice before but it’s worth repeating, as it still catches everyone off guard.
 
-What I wish I knew was that if you’re an early company employee, it’s not likely that the skills you have on day one are the skills needed as the company scales to the next level. This sentence is worth reading multiple times as no one – not the person who hired you, the VC’s or your peers -is going to tell you when you’re hired that the company will likely outgrow you.
+> What I wish I knew was that if you’re an early company employee, it’s not likely that the skills you have on day one are the skills needed as the company scales to the next level. This sentence is worth reading multiple times as no one – not the person who hired you, the VC’s or your peers -is going to tell you when you’re hired that the company will likely outgrow you.
 
 If you want to read a whole book on this topic pick up The Leadership Pipeline where it highlights that you need to be very thoughtful when you move into a new role, specifically on what you are going to stop doing, so you can be successful. By the way, sometimes the stuff you may need to stop doing is stuff you really like.
 
@@ -107,7 +107,7 @@ I’ve personally done an annual inventory every year for the last twenty years 
 
 There have been a number of articles where people have gotten their personal data from Facebook or Twitter and shown the shocking level of detail in the data. This article is even more interesting because it is looking at Quantcast and the data it collects.
 
-My Quantcast data, for instance, gives an eerily specific insight into my work life at Privacy International. From my browsing history alone, companies like Quantcast don’t just know that I work on technology, security, and privacy – my news interests reveal what exactly it is that I am working on at any point in time. My Quantcast data even reveals that I have a personal blog on Tumblr.
+> My Quantcast data, for instance, gives an eerily specific insight into my work life at Privacy International. From my browsing history alone, companies like Quantcast don’t just know that I work on technology, security, and privacy – my news interests reveal what exactly it is that I am working on at any point in time. My Quantcast data even reveals that I have a personal blog on Tumblr.
 
 There are hundreds of firms like this that sit behind every website you visit and track incredible amounts of data on everything you do. I would highlight that every URL can then be mined to generate even more insight into you.
 
@@ -147,7 +147,7 @@ This looks like a simple, fast, and easy solution for doing polls, so you can [a
 
 These images are really cool!
 
-Jigsaw puzzle companies tend to use the same cut patterns for multiple puzzles. This makes the pieces interchangeable, and I sometimes find that I can combine portions from two or more puzzles to make a surreal picture that the publisher never imagined.
+> Jigsaw puzzle companies tend to use the same cut patterns for multiple puzzles. This makes the pieces interchangeable, and I sometimes find that I can combine portions from two or more puzzles to make a surreal picture that the publisher never imagined.
 
 Impressive! 🧩
 

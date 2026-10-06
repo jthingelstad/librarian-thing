@@ -92,7 +92,7 @@ links:
   domain: www.wsj.com
   heading_context: '[You Give Apps Sensitive Personal Information. Then They Tell Facebook. - WSJ](https://www.wsj.com/articles/you-give-apps-sensitive-personal-information-then-they-tell-facebook-11550851636)'
   section: Notable Links 📌
-word_count: 1560
+word_count: 1570
 ---
 This is one of those weeks where I’m pretty behind. I just got done going through my queue of links and getting things all spiffed up! We have family in town for the weekend and a ton of fun stuff planned. I can’t wait! So this is going to be quick and get on with the rest of the weeks links! 🏃‍♂️
 
@@ -120,7 +120,7 @@ This photo app looks interesting for long exposure shots. I've been very impress
 
 I've seen [Allison Liuzzi](https://www.linkedin.com/in/allison-liuzzi-6564aa159/) of Compass present some very good demographic data for the State of Minnesota. I finally went to their website and they have a ton of data available.
 
-By tracking and analyzing trends in topics that affect our quality of life, Compass gives everyone in our state – policymakers, business and community leaders, and concerned individuals who live and work here – a common foundation to act on issues to improve our communities.
+> By tracking and analyzing trends in topics that affect our quality of life, Compass gives everyone in our state – policymakers, business and community leaders, and concerned individuals who live and work here – a common foundation to act on issues to improve our communities.
 
 Wealth of data here. Good resource.
 
@@ -144,7 +144,7 @@ Don't let your kids publish videos on YouTube, don't publish videos of them on Y
 
 I totally thought this was an April fools joke, and then…
 
-I’ll use the ten years of Redis as an excuse to release something I played a bit in the previous days, thinking to use it for the 1st April fool: but such date is far and I want to talk to you about this project now… So, happy birthday Redis! Here it’s your present: a Gopher protocol implementation.
+> I’ll use the ten years of Redis as an excuse to release something I played a bit in the previous days, thinking to use it for the 1st April fool: but such date is far and I want to talk to you about this project now… So, happy birthday Redis! Here it’s your present: a Gopher protocol implementation.
 
 I 💚 Redis and it’s fun to see this. Made me think I would like to make a Gopher version of my website. 😍
 
@@ -164,7 +164,7 @@ This is a solid set of recommendations, easy to parse [and follow. Good stuff. V
 
 Compelling recap of the HQ2 process that Amazon has being going through.
 
-From the start, the entire HQ2 optics have been terrible. When the world’s wealthiest man happens to run the world’s most most valuable company goes looking for a new place to call home, perhaps compelling self-flagellation by states and local officials to win his business . . . well, let’s just say that is not the greatest look.
+> From the start, the entire HQ2 optics have been terrible. When the world’s wealthiest man happens to run the world’s most most valuable company goes looking for a new place to call home, perhaps compelling self-flagellation by states and local officials to win his business . . . well, let’s just say that is not the greatest look.
 
 [Totally agree. Via Daring Fireball](https://daringfireball.net/linked/2019/02/25/ritholtz-amazon-hq2) .
 
@@ -176,13 +176,13 @@ This is a very scary ransomware story. If you are in charge of a bunch of comput
 
 These are profound violations of trust and privacy.
 
-In the Journal’s testing, Instant Heart Rate: HR Monitor, the most popular heart-rate app on Apple’s iOS, made by California-based Azumio Inc., sent a user’s heart rate to Facebook immediately after it was recorded.
-
-Flo Health Inc.’s Flo Period & Ovulation Tracker, which claims 25 million active users, told Facebook when a user was having her period or informed the app of an intention to get pregnant, the tests showed.
-
-Real-estate app Realtor.com, owned by Move Inc., a subsidiary of Wall Street Journal parent News Corp , sent the social network the location and price of listings that a user viewed, noting which ones were marked as favorites, the tests showed.
-
-None of those apps provided users any apparent way to stop that information from being sent to Facebook.
+> In the Journal’s testing, Instant Heart Rate: HR Monitor, the most popular heart-rate app on Apple’s iOS, made by California-based Azumio Inc., sent a user’s heart rate to Facebook immediately after it was recorded.
+>
+> Flo Health Inc.’s Flo Period & Ovulation Tracker, which claims 25 million active users, told Facebook when a user was having her period or informed the app of an intention to get pregnant, the tests showed.
+>
+> Real-estate app Realtor.com, owned by Move Inc., a subsidiary of Wall Street Journal parent News Corp , sent the social network the location and price of listings that a user viewed, noting which ones were marked as favorites, the tests showed.
+>
+> None of those apps provided users any apparent way to stop that information from being sent to Facebook.
 
 [Via Daring Fireball](https://daringfireball.net/linked/2019/02/22/facebook-apps-data) .
 

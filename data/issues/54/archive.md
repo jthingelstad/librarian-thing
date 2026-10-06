@@ -99,7 +99,7 @@ links:
   domain: www.principles.com
   heading_context: '[Principles by Ray Dalio](https://www.principles.com/principles-for-success/)'
   section: Notable Links 📌
-word_count: 1797
+word_count: 1800
 ---
 This was one of those weeks that goes by so fast it was hard to even see the blurred images as they went by. The week started with recognizing the Mom's, onto a very busy week of activities, and I [took off today with my brother](http://ikeating.micro.blog) for a weekend in Chicago! This weeks intro is going to be a little light so I can get some sleep. 😴
 
@@ -117,7 +117,7 @@ This is amazing! 🤟 My metal residency lies squarely in Thrash Metal according
 
 A call to consider GraphQL in a bigger-picture context.
 
-It lets you model the resources and processes provided by a server as a domain-specific language (DSL). Clients can use it to send scripts written in your DSL to the server to process and respond to as a batch.
+> It lets you model the resources and processes provided by a server as a domain-specific language (DSL). Clients can use it to send scripts written in your DSL to the server to process and respond to as a batch.
 
 I hadn't considered the connections the author is making here, but they seem valid and extend the way you can build on GraphQL in very novel ways.
 
@@ -146,7 +146,7 @@ I really like Day One and this article has some great use cases for how to use D
 
 If you use Safari on macOS and are bugged with certain websites blocking default behavior, this is a fix.
 
-StopTheMadness is a Safari extension for Mac that stops web sites from making Safari harder to use. Some web sites disable Mac user interface features in Safari that you normally expect to work.
+> StopTheMadness is a Safari extension for Mac that stops web sites from making Safari harder to use. Some web sites disable Mac user interface features in Safari that you normally expect to work.
 
 Purchased and installed. ✔
 
@@ -158,7 +158,7 @@ A good essay on gaming, family and kids. I liked the perspective and agree with 
 
 This newsletter caught my eye. The first few issues have impressed me with how well they are executed.
 
-Morning Cup of Coding is a daily programming newsletter featuring long form technical articles of all fields of software engineering.
+> Morning Cup of Coding is a daily programming newsletter featuring long form technical articles of all fields of software engineering.
 
 Subscribed! 📩
 

@@ -68,7 +68,7 @@ links:
   domain: weblog.rogueamoeba.com
   heading_context: '[Rogue Amoeba - The Design of Loopback 2](https://weblog.rogueamoeba.com/2019/01/02/the-design-of-loopback-2/)'
   section: Notable Links 📌
-word_count: 1559
+word_count: 1564
 ---
 It's been a busy week and I’m annoyed that I seem to have caught a new cold, right as I was recovering from the previous one. Let's get right to links and other fun stuff! 👉
 
@@ -92,11 +92,11 @@ The Kubbchucks played our 8th annual Minnesota Kubb Winter Tournament this weeke
 
 Facebook paying $100,000 for this service is laughable, and should mostly serve as further assurance that Facebook doesn't see value in solving this problem. It’s also crazy to me that Snopes highlights that there is no API and there isn't an easy way to flag content. Clearly Facebook knows how to make API's and how to make user experiences easy, at least when they want to.
 
-“With a manual system and a closed system — it’s impossible to keep on top of that stuff,” Green told Poynter in a phone interview. “Do you need fact-checkers to stop and do all this manual work? Or should fake websites just be reported through other means and supply a body of evidence that these people shouldn’t be on your platform because of their nefarious activity?”
+> “With a manual system and a closed system — it’s impossible to keep on top of that stuff,” Green told Poynter in a phone interview. “Do you need fact-checkers to stop and do all this manual work? Or should fake websites just be reported through other means and supply a body of evidence that these people shouldn’t be on your platform because of their nefarious activity?”
 
 I like this focus on engaging directly with their actual customers.
 
-“It’s hard for me to concern myself with making Facebook successful when it’s so hard just for Snopes to be successful,” Green said. “Our community isn’t just on Facebook. We prioritize our readers first.”
+> “It’s hard for me to concern myself with making Facebook successful when it’s so hard just for Snopes to be successful,” Green said. “Our community isn’t just on Facebook. We prioritize our readers first.”
 
 Honestly, Facebook doesn't lack resources to solve this problem.
 
@@ -118,7 +118,7 @@ I’m a fan of Vitamix blenders. We have two of them! I had no idea that they we
 
 Craig Mod sharing some perspective on the recent rise in newsletters. This newsletter, the Weekly Thing, is part of that rise. I have found some, but not all, of the particular and unique aspects of newsletter writing that is described here. I do love the “unmediated” aspect of email. There isn’t a spot for a company in the middle to profit from it (the reason I’m circumspect of ventures like Stoop).
 
-These newsletters are the most backed up pieces of writing in history, copies in millions of inboxes, on millions of hard drives and servers, far more than any blog post. More robust than an Internet Archive container. LOCKSS to the max. These might be the most durable copies yet of ourselves. They’re everywhere but privately so, hidden, piggybacking on the most accessible, oldest networked publishing platform in the world.
+> These newsletters are the most backed up pieces of writing in history, copies in millions of inboxes, on millions of hard drives and servers, far more than any blog post. More robust than an Internet Archive container. LOCKSS to the max. These might be the most durable copies yet of ourselves. They’re everywhere but privately so, hidden, piggybacking on the most accessible, oldest networked publishing platform in the world.
 
 Long live email! 📧
 
@@ -142,7 +142,7 @@ My friend Patrick Rhone outlines his approach to creating websites. Focused on b
 
 This isn’t the first time that large amounts of cryptocurrency have been lost.
 
-Canadian crypto exchange QuadrigaCX says it cannot repay most of $190 million in client holdings after its 30-year-old founder Gerald Cotten, the only person who knew the passwords to its “cold storage,” unexpectedly died in India in December 2018, Coindesk reported on Friday.
+> Canadian crypto exchange QuadrigaCX says it cannot repay most of $190 million in client holdings after its 30-year-old founder Gerald Cotten, the only person who knew the passwords to its “cold storage,” unexpectedly died in India in December 2018, Coindesk reported on Friday.
 
 I wonder how much inflation bitcoin has had due to lost currency. 💸
 

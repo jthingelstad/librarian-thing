@@ -109,7 +109,7 @@ links:
   domain: www.matthewcassinelli.com
   heading_context: '[Announcing my Shortcuts Library, featuring 150 Siri Shortcuts to use with iOS 13 - Matthew Cassinelli](https://www.matthewcassinelli.com/ios-13-siri-shortcuts-library/)'
   section: Notable Links 📌
-word_count: 1381
+word_count: 1387
 ---
 👋
 
@@ -125,7 +125,7 @@ word_count: 1381
 
 It took me years of practicing GTD to get the "mind like water" mentality. I’m not able to stay there all the time, but when I’m most in tune with my system I can.
 
-Although it’s often seen as a complicated time management system, GTD, according to Allen, is really about creating mental space. “You can’t manage time,” he says. “Time just is. That’s not the big issue. The big issue is really space. When people say they need time management, it’s usually because something is feeling out of control or inappropriately focused.”
+> Although it’s often seen as a complicated time management system, GTD, according to Allen, is really about creating mental space. “You can’t manage time,” he says. “Time just is. That’s not the big issue. The big issue is really space. When people say they need time management, it’s usually because something is feeling out of control or inappropriately focused.”
 
 🕴
 
@@ -155,10 +155,10 @@ This is actually HCL employees unionizing, not Google employees, the the headlin
 
 Very [strong endorsement for The Disruption Mindset](https://charleneli.com/disruption-mindset/) .
 
-According to Charlene, the three elements of disruptive transformation are:
-1. A strategy inspired by future customers to make big gulp decisions.
-2. Leadership that creates a movement of disruptors.
-3. A culture that thrives with disruption
+> According to Charlene, the three elements of disruptive transformation are:
+> 1. A strategy inspired by future customers to make big gulp decisions.
+> 2. Leadership that creates a movement of disruptors.
+> 3. A culture that thrives with disruption
 
 I’m in! Order placed! 📚
 
@@ -198,7 +198,7 @@ Want more on the mess that is We Work? Here's more! 😳
 
 25 points highlighting the mess at We Work.
 
-WeWork will never ever, in its short history, generate a profit, let alone the tens of billions in revenues necessary to generate anywhere near the $3 billion in earnings required to (even then generously) value the company at £47 billion.
+> WeWork will never ever, in its short history, generate a profit, let alone the tens of billions in revenues necessary to generate anywhere near the $3 billion in earnings required to (even then generously) value the company at £47 billion.
 
 [Adam Neumann is no longer CEO](https://www.bloomberg.com/news/articles/2019-09-24/wework-ex-ceo-to-staff-too-much-focus-has-been-placed-on-me) . I wonder if the damage can be repaired. They lost 2/3rds of their value in the run to the IPO. 💰⤵️🕳
 

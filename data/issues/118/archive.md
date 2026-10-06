@@ -108,7 +108,7 @@ links:
   domain: conversionxl.com
   heading_context: '[I''ve Built Multiple Growth Teams. Here''s Why I Won''t Do It Again. | CXL](https://conversionxl.com/blog/dont-build-growth-teams/)'
   section: Notable Links 📌
-word_count: 2390
+word_count: 2404
 ---
 This week publishing the Weekly Thing caught up on me. I just finished putting all the notes together for the links and it’s late on a Friday night. You'll have to wait for next week for my pithy introduction. ⤵️
 
@@ -118,13 +118,13 @@ This week publishing the Weekly Thing caught up on me. I just finished putting a
 
 I ran across [this article to Remove Richard Stallman](https://medium.com/@selamie/remove-richard-stallman-fec6ec210794) over last weekend. Stallman's statements in this email are reprehensible. [Four days later an Appendix A](https://medium.com/@selamie/remove-richard-stallman-appendix-a-a7e41e784f88) was added to it. That [same day Stallman resigned from MIT](https://www.stallman.org/archives/2019-jul-oct.html#16_September_2019_(Resignation)) and also [resigned from the Free Software Foundation](https://www.fsf.org/news/richard-m-stallman-resigns) . VICE [has a writeup on this all](https://www.vice.com/en_us/article/mbm74x/computer-scientist-richard-stallman-resigns-from-mit-over-epstein-comments) , [but this piece from Steven Levy](https://www.stevenlevy.com) , who wrote [one of my favorite books, Hackers](https://www.stevenlevy.com/index.php/books/hackers) , that introduces Stallman at the end, frames the whole thing up.
 
-Yesterday RMS resigned from MIT and the Free Software Foundation he founded. For those who have followed his free-software movement, Stallman leaving MIT is like the big dome on Massachusetts Avenue itself getting an eviction notice. But after decades of tone-deaf comportment and complaints now emerging from women about his behavior, Stallman’s time was up.
+> Yesterday RMS resigned from MIT and the Free Software Foundation he founded. For those who have followed his free-software movement, Stallman leaving MIT is like the big dome on Massachusetts Avenue itself getting an eviction notice. But after decades of tone-deaf comportment and complaints now emerging from women about his behavior, Stallman’s time was up.
 
 His time was up. I actually met Stallman once and had lunch with him. My [friend and former professor John Riedl](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl) was asked to have lunch with Stallman when he was speaking at the University of Minnesota in the early 2000's. He asked me to join them. The lunch was not great. Stallman isn't terribly pleasant, and dissected language and questions in a way that was very off-putting. I asked him a lot about the Internet, and after a couple of questions he looked at me and said "You know, computers can do things without being on the Internet.". Okay then.
 
 Back to the point of this article though. This all happened fast, all the better. But hopefully that doesn't let our industry sweep under the rug some self-examination that should be happening here.
 
-There are tragic threads to this Stallman story. His inability to understand the hurt that comes from insensitivity led to his expulsion from the world he knew and loved. I worry what will happen next for him. But the greater tragedy is how long it took for such behavior to become disqualifying. While Stallman is uniquely Stallman, he was also a representative of a culture that failed to welcome the women who could have led hacking, and computing, to even greater heights. Stallman is now more alone than I found him 35 years ago. But do not call him the last of his kind. More will fall as the reckoning continues.
+> There are tragic threads to this Stallman story. His inability to understand the hurt that comes from insensitivity led to his expulsion from the world he knew and loved. I worry what will happen next for him. But the greater tragedy is how long it took for such behavior to become disqualifying. While Stallman is uniquely Stallman, he was also a representative of a culture that failed to welcome the women who could have led hacking, and computing, to even greater heights. Stallman is now more alone than I found him 35 years ago. But do not call him the last of his kind. More will fall as the reckoning continues.
 
 That is a powerful statement, and one that is worth reflecting on. Think of other thought leaders in technology space that are routinely offensive and insulting.
 
@@ -146,7 +146,7 @@ Sep 18, 2019 at 12:01 PM
 
 I love to see Om Malik guest writing in Wired on the new A13 chip. Just read this real slow for a moment.
 
-By the time Santhanam was done talking, all I could think of were the numbers. Apple’s new chip contains 8.5 billion transistors. Also, there are six CPU cores: Two high-performance cores running at 2.66 GHz (called Lightning), and four efficiency cores (called Thunder). It has a quad-core graphics processor, an LTE modem, an Apple-designed image processor, and an octa-core neural engine for machine intelligence functions that can run over five trillion operations per second.
+> By the time Santhanam was done talking, all I could think of were the numbers. Apple’s new chip contains 8.5 billion transistors. Also, there are six CPU cores: Two high-performance cores running at 2.66 GHz (called Lightning), and four efficiency cores (called Thunder). It has a quad-core graphics processor, an LTE modem, an Apple-designed image processor, and an octa-core neural engine for machine intelligence functions that can run over five trillion operations per second.
 
 That's on a thing that runs on a battery in your pocket for 18 hours! It’s impossible to really fathom how far this stuff has come.
 
@@ -158,7 +158,7 @@ I don't know how long Viticci has been holed up writing this massive iOS and iPa
 
 Time to refill the popcorn. 🍿 I feel like we are still just getting to the surface of what is at the heart of WeWork.
 
-He relishes trips in private jets. Last year, We bought one for more than $60 million, people familiar with the sale said. Mr. Neumann has borrowed more than $740 million against his stock and has sold multiple hundred million dollars of shares, people familiar with those sales say, eliciting widespread criticism from analysts and Silicon Valley investors. These share sales weren’t disclosed in the IPO prospectus.
+> He relishes trips in private jets. Last year, We bought one for more than $60 million, people familiar with the sale said. Mr. Neumann has borrowed more than $740 million against his stock and has sold multiple hundred million dollars of shares, people familiar with those sales say, eliciting widespread criticism from analysts and Silicon Valley investors. These share sales weren’t disclosed in the IPO prospectus.
 
 Where there is smoke… 🔥
 
@@ -166,7 +166,7 @@ Where there is smoke… 🔥
 
 Talking about the camera in the new iPhone 11 Pro is the wrong way to understand it. Austin Mann again shoots some amazing pro level shots with the new system.
 
-No matter what iPhone you are using now, if you are serious about shooting photos with your iPhone, this is a year to upgrade. Apple had some serious catching up to do and as a result, this year has brought a tremendous leap in camera capability. Night mode and the Ultra Wide lens will change how we tell stories and express ourselves as artists using our iPhones. Now is a really good time to jump in.
+> No matter what iPhone you are using now, if you are serious about shooting photos with your iPhone, this is a year to upgrade. Apple had some serious catching up to do and as a result, this year has brought a tremendous leap in camera capability. Night mode and the Ultra Wide lens will change how we tell stories and express ourselves as artists using our iPhones. Now is a really good time to jump in.
 
 The photo geek in me is aching. 😳
 
@@ -174,7 +174,7 @@ The photo geek in me is aching. 😳
 
 I like reading when watch magazines write reviews of the Apple Watch, because their perspective is entirely different. I really enjoy fine watches, but I find it very beneficial to have the capabilities of the Apple Watch. Luckily the Apple Watch is a pretty fine watch. However, as long as I've had it I've always been bothered that you cannot subtly check the time with a glance. It takes a somewhat exaggerated movement to wake up the watches display.
 
-As I started wearing the watch around, I found the always-on screen a bit disorienting a first. After years of expecting there to be a shiny black void, I suddenly had something staring back at me even when I wasn't paying it deliberate attention. In a funny way, after the initial weirdness wore off, it actually made the Series 5 feel more natural and comfortable. As someone who's most often wearing an analog watch of some kind or another, I'm very used to more subtle time-checking gestures and to always having my watch's hands and dial visible. Even beyond the functionality, this makes the Series 5 feel more like a watch than any previous Apple Watch.
+> As I started wearing the watch around, I found the always-on screen a bit disorienting a first. After years of expecting there to be a shiny black void, I suddenly had something staring back at me even when I wasn't paying it deliberate attention. In a funny way, after the initial weirdness wore off, it actually made the Series 5 feel more natural and comfortable. As someone who's most often wearing an analog watch of some kind or another, I'm very used to more subtle time-checking gestures and to always having my watch's hands and dial visible. Even beyond the functionality, this makes the Series 5 feel more like a watch than any previous Apple Watch.
 
 I’m super happy to hear this. Need to place that order… ⌚️
 
@@ -182,7 +182,7 @@ I’m super happy to hear this. Need to place that order… ⌚️
 
 That always on display is a big deal.
 
-To me, the always-on display is the Apple Watch’s retina display moment — once you see it, you can’t go back.
+> To me, the always-on display is the Apple Watch’s retina display moment — once you see it, you can’t go back.
 
 👍
 
@@ -198,7 +198,7 @@ Tons of details and very good review of the new iPhone 11 and 11 Pro. It’s ama
 
 Some great details on the new cameras in the iPhone 11.
 
-We got new sensors! The biggest notable change across the board this year is what we already teased: the max ISO of the sensors has gone up significantly. The Wide camera’s maximum ISO sensitivity is up 33%; the telephoto 42%!
+> We got new sensors! The biggest notable change across the board this year is what we already teased: the max ISO of the sensors has gone up significantly. The Wide camera’s maximum ISO sensitivity is up 33%; the telephoto 42%!
 
 This new iPhone is going to capture some phenomenal photos. 📷
 
@@ -206,7 +206,7 @@ This new iPhone is going to capture some phenomenal photos. 📷
 
 This is one of those things that we don’t think about as much as other things, but is definitely a thing to be more self-aware about.
 
-Another source say, “175 billion items of clothing are made every year. 50 billion go straight to landfill, and another 50 billion go to landfill after not selling.” In 2018, H&M, a Swedish fast-fashion giant burned $4.3 billion worth of inventory.
+> Another source say, “175 billion items of clothing are made every year. 50 billion go straight to landfill, and another 50 billion go to landfill after not selling.” In 2018, H&M, a Swedish fast-fashion giant burned $4.3 billion worth of inventory.
 
 That is shocking. Over 50% of clothing items made are simply discarded! 🔥👕
 
@@ -222,7 +222,7 @@ I've subscribed to Watley's Five Things on [Friday newsletter and in Issue #303]
 
 There is a lot of truth to this.
 
-But underlying each interview question is really a broader picture the interviewer is trying to fill out. Recruiters really want to know if you are going to use your knowledge effectively to enhance the mission of the organization.
+> But underlying each interview question is really a broader picture the interviewer is trying to fill out. Recruiters really want to know if you are going to use your knowledge effectively to enhance the mission of the organization.
 
 Add this to the argument that job descriptions that highlight geniuses that work alone to output amazing value are often misleading. Curiosity, application, and learning. Repeat.
 
@@ -230,7 +230,7 @@ Add this to the argument that job descriptions that highlight geniuses that work
 
 The union drive at Kickstarter continues to move along, and get uglier. I never had read the origin story of this, why did a union push even start?
 
-What happened over the next seven days rattled the Kickstarter staff. After the Breitbart article, the project had to be reviewed by Kickstarter’s Trust and Safety team, which audits whether disputed content violates the company’s community guidelines or is making other users unsafe. Because it was satirical, Always Punch Nazis may not have been a clear-cut case. According to multiple current and former employees, the Trust and Safety team initially decided not to act against Always Punch Nazis. But then management overruled the team, saying that Always Punch Nazis had to come down.
+> What happened over the next seven days rattled the Kickstarter staff. After the Breitbart article, the project had to be reviewed by Kickstarter’s Trust and Safety team, which audits whether disputed content violates the company’s community guidelines or is making other users unsafe. Because it was satirical, Always Punch Nazis may not have been a clear-cut case. According to multiple current and former employees, the Trust and Safety team initially decided not to act against Always Punch Nazis. But then management overruled the team, saying that Always Punch Nazis had to come down.
 
 I can’t remember ever hearing of a tech company anywhere remotely like Kickstarter having a union workforce. This seems like a very tough situation for both sides.
 
@@ -238,9 +238,9 @@ I can’t remember ever hearing of a tech company anywhere remotely like Kicksta
 
 Interesting observations from someone that has built growth teams at some high growth companies.
 
-This thing crushed sign-up conversions. After a year of testing, we had this page almost perfectly optimized. The headline, the URL box, the call-to-action (CTA) button copy, the secondary CTA toward the bottom, even the random stock-photo dude. This page converted triple the number of signups compared to more generic SaaS homepages.
-
-The thing is, multiple executives hated this page. I had to defend it regularly to keep it live. After I left, the homepage immediately changed to something more generic.
+> This thing crushed sign-up conversions. After a year of testing, we had this page almost perfectly optimized. The headline, the URL box, the call-to-action (CTA) button copy, the secondary CTA toward the bottom, even the random stock-photo dude. This page converted triple the number of signups compared to more generic SaaS homepages.
+>
+> The thing is, multiple executives hated this page. I had to defend it regularly to keep it live. After I left, the homepage immediately changed to something more generic.
 
 A good read in general.
 

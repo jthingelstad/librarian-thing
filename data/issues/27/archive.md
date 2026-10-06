@@ -134,7 +134,7 @@ links:
   domain: om.co
   heading_context: '[iPhone X: Some Early Impressions – Om Malik](https://om.co/2017/11/03/iphone-x-some-early-impressions/)'
   section: Links 📌
-word_count: 2228
+word_count: 2231
 ---
 First thing, there is no photo this week. 😞 I only put photos in the Weekly Thing that are from that week and this week I didn’t capture anything. I could put some pictures I took from a couple events this week, but that would just be filling a slot. Another tactical thing I’m thinking about is better ways to show links in the Weekly Thing than just a list. Maybe highlighting a Top 3 or even putting in categories. Watch that space for some experiments. 👨‍🔬
 
@@ -172,7 +172,11 @@ Very nice Python library to provide easier to use objects backed by [Redis](http
 
 ### [How Facebook Figures Out Everyone You've Ever Met](https://gizmodo.com/how-facebook-figures-out-everyone-youve-ever-met-1819822691)
 
-There is an aspect of social networks, particularly big ones like Facebook, that most people don't think of at all – the information you are giving up on your friends and family. Most think they are trading their privacy for value, but in reality you are also trading your friends and families. Behind the Facebook profile you’ve built for yourself is another one, a shadow profile, built from the inboxes and smartphones of other Facebook users. Contact information you’ve never given the network gets associated with your account, making it easier for Facebook to more completely map your social connections. You think you are "off" social media and never created a profile? No way. If any of the people you ever email or chat with are on social media you are. And you are connected to them. This activity is some of the worst to me because you do not know it is happening and there is no way to opt out.
+There is an aspect of social networks, particularly big ones like Facebook, that most people don't think of at all – the information you are giving up on your friends and family. Most think they are trading their privacy for value, but in reality you are also trading your friends and families.
+
+> Behind the Facebook profile you’ve built for yourself is another one, a shadow profile, built from the inboxes and smartphones of other Facebook users. Contact information you’ve never given the network gets associated with your account, making it easier for Facebook to more completely map your social connections.
+
+You think you are "off" social media and never created a profile? No way. If any of the people you ever email or chat with are on social media you are. And you are connected to them. This activity is some of the worst to me because you do not know it is happening and there is no way to opt out.
 
 ### [The Booming Japanese Rent-a-Friend Business - The Atlantic](https://www.theatlantic.com/health/archive/2017/11/paying-for-fake-friends-and-family/545060/)
 
@@ -184,7 +188,11 @@ In the category of shiny objects I like to check out icon libraries are close to
 
 ### [Sean Parker unloads on Facebook "exploiting" human weakness](https://www.axios.com/sean-parker-unloads-on-facebook-2508036343.html)
 
-[Sean Parker](https://en.wikipedia.org/wiki/Sean_Parker) was the first President of Facebook and was there for the origin. He's now become a "conscientious objector" to social media. "The thought process that went into building these applications, Facebook being the first of them, ... was all about: 'How do we consume as much of your time and conscious attention as possible?'" When I see things like this I wonder how different is this than the tobacco industry? Tobacco is naturally addicting, but social media was designed to be addicting knowing the feedback cycles of the brain. In one case the companies got lucky with tobacco, in another Facebook designed a product with every intent to create addiction. Is there a big difference? Which is worse? It’s also notable how many tech leaders and innovators have turned off social media over recent years. Many have opted out entirely, others have clearly determined it a PR channel that they use for a specific objective.
+[Sean Parker](https://en.wikipedia.org/wiki/Sean_Parker) was the first President of Facebook and was there for the origin. He's now become a "conscientious objector" to social media.
+
+> "The thought process that went into building these applications, Facebook being the first of them, ... was all about: 'How do we consume as much of your time and conscious attention as possible?'"
+
+When I see things like this I wonder how different is this than the tobacco industry? Tobacco is naturally addicting, but social media was designed to be addicting knowing the feedback cycles of the brain. In one case the companies got lucky with tobacco, in another Facebook designed a product with every intent to create addiction. Is there a big difference? Which is worse? It’s also notable how many tech leaders and innovators have turned off social media over recent years. Many have opted out entirely, others have clearly determined it a PR channel that they use for a specific objective.
 
 ### [Al Franken Just Gave the Speech Big Tech Has Been Dreading](https://www.wired.com/story/al-franken-just-gave-the-speech-big-tech-has-been-dreading/amp)
 
@@ -216,7 +224,9 @@ Some more initial reactions on iPhone X, this time from David Sparks. Curious to
 
 ### [The Existential Terror of Battle Royale —Coding Horror](https://blog.codinghorror.com/the-existential-terror-of-battle-royale/)
 
-I don't do a lot of multiplayer gaming but reading this got me caught up with how evolved the world of gaming has gotten. This made [me think of the Hunger Games](https://en.wikipedia.org/wiki/The_Hunger_Games) . I didn't intend for this to happen, but to me, the Battle Royale game mode perfectly captures the zeitgeist of the current moment, and matches my current state of mind to a disturbing degree. It's an absolutely terrifying experience of every human for themselves, winner takes all, with impossible odds. There are moments it can be thrilling, even inspiring, but mostly it's harsh and unforgiving.
+I don't do a lot of multiplayer gaming but reading this got me caught up with how evolved the world of gaming has gotten. This made [me think of the Hunger Games](https://en.wikipedia.org/wiki/The_Hunger_Games) .
+
+> I didn't intend for this to happen, but to me, the Battle Royale game mode perfectly captures the zeitgeist of the current moment, and matches my current state of mind to a disturbing degree. It's an absolutely terrifying experience of every human for themselves, winner takes all, with impossible odds. There are moments it can be thrilling, even inspiring, but mostly it's harsh and unforgiving.
 
 ### [Grammarly Keyboard for iOS — Tools and Toys](http://toolsandtoys.net/grammarly-keyboard-for-ios/)
 

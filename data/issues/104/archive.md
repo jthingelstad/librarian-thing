@@ -51,7 +51,7 @@ links:
   domain: kottke.org
   heading_context: '[Perfectly Normal, How Autism Feels From the Inside](https://kottke.org/19/04/perfectly-normal-how-autism-feels-from-the-inside)'
   section: Notable Links 📌
-word_count: 1057
+word_count: 1059
 ---
 It’s late, and I got a late start getting the newsletter together. Let's jump straight to the links, and have a great weekend! 😎
 
@@ -71,7 +71,7 @@ Great highlights and fun facts about this years Minnebar! It was a great event, 
 
 I’m no fan of where Ring (owned by Amazon) is trying to take these tools.
 
-Ring already has an app called Neighbors that, judging by its marketing, encourages people living in bucolic suburbs with wrought iron gates to feel like they’re in the last un-zombified neighborhood in The Walking Dead.
+> Ring already has an app called Neighbors that, judging by its marketing, encourages people living in bucolic suburbs with wrought iron gates to feel like they’re in the last un-zombified neighborhood in The Walking Dead.
 
 This isn't the kind of environment I want to be in. We used to worry about Surveillance State, and then Surveillance Companies. Now with a bunch of ring doorbells we can surveil each other!
 
@@ -79,7 +79,7 @@ This isn't the kind of environment I want to be in. We used to worry about Surve
 
 Yeah, right, sure. Please nobody believe that Facebook is going to really change their view on your data.
 
-“Now look, I get that a lot of people aren’t sure we’re serious about this,” Zuckerberg said at F8. “We don’t exactly have the strongest reputation on privacy right now, to put it lightly. But I’m committed to doing this well and starting a new chapter for our product.”
+> “Now look, I get that a lot of people aren’t sure we’re serious about this,” Zuckerberg said at F8. “We don’t exactly have the strongest reputation on privacy right now, to put it lightly. But I’m committed to doing this well and starting a new chapter for our product.”
 
 Keep in mind that if Facebook can convince you it is private, that will encourage you to share even more detailed and private information, so they can monetize you even more! It’s a huge win for them. And you can be sure that that data will then be sold out to data markets as well.
 

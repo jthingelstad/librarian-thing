@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/45/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-45-mar-17-2018/
 domains: []
 links: []
-word_count: 1443
+word_count: 1448
 ---
 I returned from my India 🇮🇳 travels on Sunday afternoon, and then began to experience the worst jet lag ✈️, and pure exhaustion, I've ever had. 😴 It took until Thursday for me to stabalize back into something resembling a normal routine. I had a good trip, and will definitely be back, probably in the Fall.
 
@@ -36,11 +36,11 @@ honeycomb.io
 
 This is an exceptionally true sentiment…
 
-As the size and sprawl and complexity of our systems skyrockets, many of us are finding that the most valuable skill sets sit at the intersection of two or more disciplines.
+> As the size and sprawl and complexity of our systems skyrockets, many of us are finding that the most valuable skill sets sit at the intersection of two or more disciplines.
 
 … and more …
 
-You don’t need to know how to do everything under the sun. You do need to have respect for all the other disciplines that enhance your own and make your job possible, and vice versa.
+> You don’t need to know how to do everything under the sun. You do need to have respect for all the other disciplines that enhance your own and make your job possible, and vice versa.
 
 This is absolutely the write way to think of being on a technology team.
 
@@ -64,7 +64,7 @@ www.twitrss.me
 
 If you have a need to use RSS to access Twitter.
 
-Way back in the mists of time twitter used to have RSS feeds. It was great and people used them. I even made a twitter RSS getter form for my website so you could locate your feed. But in June 2013 they killed the RSS feeds.
+> Way back in the mists of time twitter used to have RSS feeds. It was great and people used them. I even made a twitter RSS getter form for my website so you could locate your feed. But in June 2013 they killed the RSS feeds.
 
 Handy. And in Perl!
 
@@ -97,7 +97,7 @@ www.economist.com
 
 The world lost a bright star with the passing of Stephen Hawking. This obituary ends poetically:
 
-No philosophy that puts humanity anywhere near the centre of things can cope with facts like these. All that remains is to huddle together in the face of the overwhelmingness of reality. Yet the sight of one huddled man in a wheelchair constantly probing, boldly and even cheekily demonstrating the infinite reach of the human mind, gave people some hope to grasp, as he always wished it would.
+> No philosophy that puts humanity anywhere near the centre of things can cope with facts like these. All that remains is to huddle together in the face of the overwhelmingness of reality. Yet the sight of one huddled man in a wheelchair constantly probing, boldly and even cheekily demonstrating the infinite reach of the human mind, gave people some hope to grasp, as he always wished it would.
 
 He definitely gave that hope to millions of people.
 
@@ -115,7 +115,7 @@ www.washingtonpost.com
 
 Large amounts of debt, and declining brand value.
 
-“The liquidation of Toys R Us is the unfortunate but inevitable conclusion of a retailer that lost its way,” Neil Saunders, managing director of the research firm GlobalData Retail, wrote in an email. “Even during recent store closeouts, Toys R Us failed to create any sense of excitement. The brand lost relevance, customers and ultimately sales.”
+> “The liquidation of Toys R Us is the unfortunate but inevitable conclusion of a retailer that lost its way,” Neil Saunders, managing director of the research firm GlobalData Retail, wrote in an email. “Even during recent store closeouts, Toys R Us failed to create any sense of excitement. The brand lost relevance, customers and ultimately sales.”
 
 Probably the $7.9 billion in debt was impossible to get around.
 

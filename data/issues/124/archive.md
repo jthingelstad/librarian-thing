@@ -99,7 +99,7 @@ links:
   domain: jules.thegrommet.com
   heading_context: '[For Fathers of Daughters | Jules Pieri](https://jules.thegrommet.com/2018/10/10/for-fathers-of-daughters/)'
   section: Notable Links 📌
-word_count: 2184
+word_count: 2195
 ---
 What a week! So much raking last week and yet there are more leaves to deal with. 🍂 We watched an immense World Series. ⚾️ Tyler and I were both cheering for the Astros, but the series was filled with so much excitement. It was also amazing to witness the first time World Series where the home team never won a game. How weird is that! 😩
 
@@ -113,11 +113,11 @@ I’m trying out a new section of links in the Weekly Thing! Sometimes I find st
 
 I think this is a very good, pragmatic perspective.
 
-If you are trying to drive organizational transformation with procurement alone you’re in for disappointment. Tools cannot fix a broken culture. You can’t buy your way out of a culture issue. Tools can’t save you if you’re ignoring underlying issues like internal power struggles, lack of trust across teams, siloed communication, etc. There are no silver bullets.
-
-[…]
-
-Tools can be critical to changing people’s mindset. It’s hard to practice the right behaviors without the right foundational toolset. Tools can enable new ways of working and collaborating.
+> If you are trying to drive organizational transformation with procurement alone you’re in for disappointment. Tools cannot fix a broken culture. You can’t buy your way out of a culture issue. Tools can’t save you if you’re ignoring underlying issues like internal power struggles, lack of trust across teams, siloed communication, etc. There are no silver bullets.
+>
+> […]
+>
+> Tools can be critical to changing people’s mindset. It’s hard to practice the right behaviors without the right foundational toolset. Tools can enable new ways of working and collaborating.
 
 Not all changes you wish to affect in an organization are the same. Changes that are more "complicated", have tended in my experience to require both a cultural transition and can, at times, require tooling to facilitate that change.
 
@@ -137,7 +137,7 @@ Cannon Lake, MN
 
 Most technologists dislike the idea of working with XML, and nearly always prefer JSON. The core of this article is accurate, and comparing XML and JSON is really a misguided comparison.
 
-From time to time someone will do something really strange and compare XML and JSON, proving that they understand neither. XML is a document markup language; JSON is a structured data format, and to compare the two is to compare apples and oranges.
+> From time to time someone will do something really strange and compare XML and JSON, proving that they understand neither. XML is a document markup language; JSON is a structured data format, and to compare the two is to compare apples and oranges.
 
 🍎🍊
 
@@ -161,7 +161,7 @@ I use 1Blocker through Safari on all of my computers and devices. I pretty much 
 
 Exquisitely detailed examination of the camera capabilities of the new iPhone 11 Pro and it’s computational photography capabilities.
 
-With these huge improvements in processing, the iPhone 11 is the first iPhone that legitimately challenges a dedicated camera.
+> With these huge improvements in processing, the iPhone 11 is the first iPhone that legitimately challenges a dedicated camera.
 
 The test shots show the capabilities and limitations very well. I love seeing these advances in camera technology. 📷
 
@@ -173,7 +173,7 @@ These look great, and I badly needed to replace my first generation AirPods afte
 
 I enjoy my Peloton spin bike a lot.
 
-The company loaned me one over the summer, and I’ve been taking classes. I was arrogant at first: I’ve been going to SoulCycle for years. I figured it would be cake, that I’d soar calmly to the top of the leaderboard and then gently dry my brow. But Peloton classes are really hard!
+> The company loaned me one over the summer, and I’ve been taking classes. I was arrogant at first: I’ve been going to SoulCycle for years. I figured it would be cake, that I’d soar calmly to the top of the leaderboard and then gently dry my brow. But Peloton classes are really hard!
 
 I can say with total confidence that the hardest spinning sessions I've ever had have been on my own, on the Peloton, usually in a live streaming class with an eye towards the leaderboard. 💦
 
@@ -189,9 +189,9 @@ Some solid suggestions on mental tricks to play with your to do list. This isn't
 
 This is a good overview on approaching skip level meetings.
 
-For you as a manager, the purpose of a skip level meeting is to get out of your good news cocoon: How are folks on the team really feeling about the work, the culture, and the team around them. What could be better? What needs to be resolved? It’s valuable, sacred time what you truly won’t get any where else.
-
-Skip level meetings are dually beneficial for the employee, as well. It’s an opportunity for them to get aligned and centered around the vision – and ask you valuable questions that helps them with their own work.
+> For you as a manager, the purpose of a skip level meeting is to get out of your good news cocoon: How are folks on the team really feeling about the work, the culture, and the team around them. What could be better? What needs to be resolved? It’s valuable, sacred time what you truly won’t get any where else.
+>
+> Skip level meetings are dually beneficial for the employee, as well. It’s an opportunity for them to get aligned and centered around the vision – and ask you valuable questions that helps them with their own work.
 
 By far the thing I like the most here is the list of things you don't do. I do skip level 1:1s, and should do them even more, and it’s critical that you not interfere with or get in the way of the work the direct manager is doing.
 

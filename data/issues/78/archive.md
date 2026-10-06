@@ -79,7 +79,7 @@ links:
   domain: www.youtube.com
   heading_context: '[What Engineers Found When They Tore Apart Tesla''s Model 3](https://www.youtube.com/watch?v=Lj1a8rdX6DU)'
   section: Notable Links 📌
-word_count: 1455
+word_count: 1458
 ---
 Last week the moving train 🚂 was going and now it has fully left the station and is chugging down the tracks at a good clip! We signed the purchase agreement and have a close date for the new house. We won't be moving until January, but will close in the middle of December. Now job #1 is to sell our current house! Know anyone that wants a great house in South Minneapolis? 🤩
 
@@ -93,7 +93,7 @@ A quick [report on the Tesla Model 3](https://www.tesla.com/model3) after a few 
 
 This is such a hard issue. I feel very conflicted about it. I used to spend a lot of time on my Apple //c back in the day, but what you could do was so different. Now I find my son sitting on his iPad and in reality all he's doing is watching TV. No brain stimulation.
 
-“I try to tell him somebody wrote code to make you feel this way — I’m trying to help him understand how things are made, the values that are going into things and what people are doing to create that feeling,” Mr. Lilly said. “And he’s like, ‘I just want to spend my 20 bucks to get my Fortnite skins.’”
+> “I try to tell him somebody wrote code to make you feel this way — I’m trying to help him understand how things are made, the values that are going into things and what people are doing to create that feeling,” Mr. Lilly said. “And he’s like, ‘I just want to spend my 20 bucks to get my Fortnite skins.’”
 
 It is perhaps too nuanced, but I think you have to move beyond just "screen time" and really look at the activity. What is your child doing on the device? Are they programming? Diving into the tarpits of social media disgust? Watching TV mindlessly? Reading a book? Reading the largest encyclopedia in the world? Learning how to build a robot?
 
@@ -131,7 +131,7 @@ The new iPad Pro's look amazing. I do the majority of my computing on an 11" iPa
 
 Some great analysis of IBM's position with Red Hat.
 
-This is the bet: while in the 1990s the complexity of the Internet made it difficult for businesses to go online, providing an opening for IBM to sell solutions, today IBM argues the reduction of cloud computing to three centralized providers makes businesses reluctant to commit to any one of them. IBM is betting it can again provide the solution, combining with Red Hat to build products that will seamlessly bridge private data centers and all of the public clouds.
+> This is the bet: while in the 1990s the complexity of the Internet made it difficult for businesses to go online, providing an opening for IBM to sell solutions, today IBM argues the reduction of cloud computing to three centralized providers makes businesses reluctant to commit to any one of them. IBM is betting it can again provide the solution, combining with Red Hat to build products that will seamlessly bridge private data centers and all of the public clouds.
 
 Thompson has a great take on this.
 
@@ -143,7 +143,7 @@ A deep dive into the culture and memes of Silicon Valley.
 
 This whole article is concerning. It shouldn't be this easy to get these devices and dissect them for flaws.
 
-If getting voting machines delivered to my door was shockingly easy, getting inside them proved to be simpler still. The tamper-proof screws didn’t work, all the computing equipment was still intact, and the hard drives had not been wiped. The information I found on the drives, including candidates, precincts, and the number of votes cast on the machine, were not encrypted. Worse, the “Property Of” government labels were still attached, meaning someone had sold government property filled with voter information and location data online, at a low cost, with no consequences. It would be the equivalent of buying a surplus police car with the logos still on it.
+> If getting voting machines delivered to my door was shockingly easy, getting inside them proved to be simpler still. The tamper-proof screws didn’t work, all the computing equipment was still intact, and the hard drives had not been wiped. The information I found on the drives, including candidates, precincts, and the number of votes cast on the machine, were not encrypted. Worse, the “Property Of” government labels were still attached, meaning someone had sold government property filled with voter information and location data online, at a low cost, with no consequences. It would be the equivalent of buying a surplus police car with the logos still on it.
 
 Eek.
 

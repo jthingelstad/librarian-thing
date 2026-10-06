@@ -80,7 +80,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Privacy on iPhone — Private Side - YouTube](https://www.youtube.com/watch?v=A_6uV9A12ok&app=desktop)'
   section: Notable Links 📌
-word_count: 1973
+word_count: 1980
 ---
 I spent this week in Australia visiting our office in Melbourne. 🇦🇺 After you get over the 24 hours of travel to get there, the city greets you with all sorts of cool stuff. I had a really great time. While I was there I got to take in Round 1 of the 2019 Australian Football League, or [as everyone there calls it, Footy](https://en.wikipedia.org/wiki/Australian_rules_football) . I was a bit in awe as [we entered the Melbourne Cricket Grounds](https://en.wikipedia.org/wiki/Melbourne_Cricket_Ground) . The size of the field is just enormous! The game took a bit to understand, but it started making sense after some locals answered some particularly simple questions. Footy reminded me of merging Soccer ⚽️ and American Football 🏈, and splashing in some Basketball 🏀 concepts for fun. There were 84,000 excited Australian Footy fans cheering on the start of the season. [Victoria is the heart of Footy](https://en.wikipedia.org/wiki/Victoria_(Australia)#Sport), and [this Richmond v Carlton game](https://www.richmondfc.com.au/video/2019-03-21/round-1-highlights) was a highly anticipated start to the season, even as Richmond ran away with the score.
 
@@ -92,7 +92,7 @@ I don't often take in sports events when I travel, but it sure was a great way t
 
 I've read so much on food, and it’s very clear that we have this false sense of understanding of how food works. [Michael Pollan](https://michaelpollan.com/) describes this well in "In Defense of Food". This article does a good job of breaking down the false illusion that precise calorie metrics give us.
 
-The calorie system, says Camacho, lets food producers off the hook: “They can say, ‘We’re not responsible for the unhealthy products we sell, we just have to list the calories and leave it to you to manage your own weight’.” Camacho and other calorie dissidents argue that sugar and highly processed carbohydrates play havoc with people’s hormonal systems. Higher insulin levels mean more energy is converted into fat tissues leaving less available to fuel the rest of the body. That in turn drives hunger and overeating. In other words the constant hunger and fatigue suffered by Camacho and other dieters may be symptoms of being overweight, rather than the cause of the problem. Yet much of the food industry defends the status quo too. To change how we assess the energy and health values of food would undermine the business model of many companies.
+> The calorie system, says Camacho, lets food producers off the hook: “They can say, ‘We’re not responsible for the unhealthy products we sell, we just have to list the calories and leave it to you to manage your own weight’.” Camacho and other calorie dissidents argue that sugar and highly processed carbohydrates play havoc with people’s hormonal systems. Higher insulin levels mean more energy is converted into fat tissues leaving less available to fuel the rest of the body. That in turn drives hunger and overeating. In other words the constant hunger and fatigue suffered by Camacho and other dieters may be symptoms of being overweight, rather than the cause of the problem. Yet much of the food industry defends the status quo too. To change how we assess the energy and health values of food would undermine the business model of many companies.
 
 Maybe not rely on those labels so much.
 
@@ -100,7 +100,7 @@ Maybe not rely on those labels so much.
 
 I’ve read a few articles on the issues with recycling now that China has set lower limits for contamination. When you read this it sounds a lot like the entire economic system of recycling is broken.
 
-Prompting this nationwide reckoning is China, which until January 2018 had been a big buyer of recyclable material collected in the United States. That stopped when Chinese officials determined that too much trash was mixed in with recyclable materials like cardboard and certain plastics. After that, Thailand and India started to accept more imported scrap, but even they are imposing new restrictions.
+> Prompting this nationwide reckoning is China, which until January 2018 had been a big buyer of recyclable material collected in the United States. That stopped when Chinese officials determined that too much trash was mixed in with recyclable materials like cardboard and certain plastics. After that, Thailand and India started to accept more imported scrap, but even they are imposing new restrictions.
 
 If recycling is “upside down” we need to get more serious about the sources, particularly for plastic.
 
@@ -120,7 +120,7 @@ Healesville Sanctuary, Badger Creek VIC 3777, Australia
 
 Solid overview of numerous issues related to our modern food system.
 
-… it’s becoming abundantly clear that the way most of us currently eat is not sustainable – either for the planet or for human health.
+> … it’s becoming abundantly clear that the way most of us currently eat is not sustainable – either for the planet or for human health.
 
 [Having just read Growing a Revolution](https://www.goodreads.com/book/show/36236132-growing-a-revolution) , these topics hit a strong note with me.
 
@@ -128,7 +128,7 @@ Solid overview of numerous issues related to our modern food system.
 
 You could definitely put this in the bucket of 'Hey, people make mistakes'. I would be surprised if Facebook engineers intentionally stored passwords in plain text, but this data wasn't just sitting on a server somewhere.
 
-The Facebook source said the investigation so far indicates between 200 million and 600 million Facebook users may have had their account passwords stored in plain text and searchable by more than 20,000 Facebook employees. The source said Facebook is still trying to determine how many passwords were exposed and for how long, but so far the inquiry has uncovered archives with plain text user passwords in them dating back to 2012.
+> The Facebook source said the investigation so far indicates between 200 million and 600 million Facebook users may have had their account passwords stored in plain text and searchable by more than 20,000 Facebook employees. The source said Facebook is still trying to determine how many passwords were exposed and for how long, but so far the inquiry has uncovered archives with plain text user passwords in them dating back to 2012.
 
 The article says "logs showed some 2,000 engineers" accessed this data. How is it that nobody reported this? It’s much more concerning to me that none of these 2,000 engineers seemed to see this as a problem.
 
@@ -136,7 +136,7 @@ The article says "logs showed some 2,000 engineers" accessed this data. How is i
 
 Things change, and we all have to decline things, sometimes frequently. This is a good reminder to think about how you do that.
 
-One of the largest human fears is rejection. We are not normally conscious of the strong tie. It comes out in less obvious ways. A gracious decline can reduce or even eliminate the rejection emotion if the message affirms the desire to meet at a future time.
+> One of the largest human fears is rejection. We are not normally conscious of the strong tie. It comes out in less obvious ways. A gracious decline can reduce or even eliminate the rejection emotion if the message affirms the desire to meet at a future time.
 
 Think about the person on the other side of the screen. It might help avoid problems or frustration.
 
@@ -144,11 +144,11 @@ Think about the person on the other side of the screen. It might help avoid prob
 
 This is one of those counter-intuitive revelations. When [I read Thinking Fast and Slow](https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow) it was filled with this kind of stuff.
 
-… a growing body of research in psychology and neuroscience suggests that believing in meritocracy makes people more selfish, less self-critical, and even more prone to acting in discriminatory ways.
+> … a growing body of research in psychology and neuroscience suggests that believing in meritocracy makes people more selfish, less self-critical, and even more prone to acting in discriminatory ways.
 
 Totally the opposite of what one would desire to happen.
 
-They found that, in companies that explicitly held meritocracy as a core value, managers assigned greater rewards to male employees over female employees with identical performance evaluations. This preference disappeared where meritocracy was not explicitly adopted as a value.
+> They found that, in companies that explicitly held meritocracy as a core value, managers assigned greater rewards to male employees over female employees with identical performance evaluations. This preference disappeared where meritocracy was not explicitly adopted as a value.
 
 That is surprising.
 
@@ -156,7 +156,7 @@ That is surprising.
 
 This is amazing!
 
-WordPress now powers over 1/3rd of the top 10 million sites on the web according to W3Techs.
+> WordPress now powers over 1/3rd of the top 10 million sites on the web according to W3Techs.
 
 I could nitpick about WordPress but this is an amazing achievement and I’m glad so many sites are using software with a good ethos. 🙌
 
@@ -168,7 +168,7 @@ This made me do a triple-take. Kickstarter is already a B-Corp. I can’t say I 
 
 I fully expect cloud-based multiplayer gaming is going to be a huge deal. 🎮
 
-When we designed the Stadia controller, we listened to gamers about what they wanted in a controller. First, we made sure to develop a direct connection from Stadia controller to our data center through Wi-Fi for the best possible gaming performance. The controller also includes a button for instant capture, saving and sharing gameplay in up to 4k of stunning resolution. And it comes equipped with a Google Assistant button and built-in microphone.
+> When we designed the Stadia controller, we listened to gamers about what they wanted in a controller. First, we made sure to develop a direct connection from Stadia controller to our data center through Wi-Fi for the best possible gaming performance. The controller also includes a button for instant capture, saving and sharing gameplay in up to 4k of stunning resolution. And it comes equipped with a Google Assistant button and built-in microphone.
 
 The whole thing is the controller. I don’t get how they are dealing with latency though. Milliseconds matter in games, and WiFi is full of it. Not to mention speed-of-light limitations in moving packets from data centers. 🤔
 

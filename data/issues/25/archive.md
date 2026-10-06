@@ -135,7 +135,7 @@ links:
   domain: www.macdrifter.com
   heading_context: '[Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)'
   section: Links 📌
-word_count: 1606
+word_count: 1609
 ---
 It dawned on me this week that I could write some short scripts and fix the hundreds (and now I realize thousands!) of photos that haven't been [linked right on my blog archive](https://www.thingelstad.com/archive/)  ever since I moved to my new setup. After fixing the images, which worked in all but some edge cases, I was perusing my archive to check on the images. I also remembered why I like blogging. ✍🏻
 
@@ -152,11 +152,15 @@ Oct 27, 2017 at 5:07 PM
 
 ### [The Uncanny Resurrection of Dungeons & Dragons | The New Yorker](https://www.newyorker.com/culture/cultural-comment/the-uncanny-resurrection-of-dungeons-and-dragons)
 
-I played D&D when I was a kid, the original version of the game. I was a bit young though and only knew a couple other kids who were into it again. I played again in college and had many long, long evenings with campaigns. I always play a Wizard. Usually good. Then, a fifth edition of D. & D. rules came out, in 2014, and, somehow, the culture was receptive again to bags of holding and silver-haired drow. People started buying up these volumes in droves. “More people are interested in D&D than we thought,” the game’s lead developer, Mike Mearls, said, as print runs repeatedly sold out. “Who are these people? What do they want?”
+I played D&D when I was a kid, the original version of the game. I was a bit young though and only knew a couple other kids who were into it again. I played again in college and had many long, long evenings with campaigns. I always play a Wizard. Usually good.
+
+> Then, a fifth edition of D. & D. rules came out, in 2014, and, somehow, the culture was receptive again to bags of holding and silver-haired drow. People started buying up these volumes in droves. “More people are interested in D&D than we thought,” the game’s lead developer, Mike Mearls, said, as print runs repeatedly sold out. “Who are these people? What do they want?”
 
 ### [The Rising Stakes in SaaS](http://tomtunguz.com/rising-table-stakes-in-saas/)
 
-Interesting read on the maturation of the SaaS market. The table stakes in SaaS are rising. But it’s not the MRR milestones or the payback period benchmarks that have changed. They may have increased slightly. Instead, the competitive differentiation ante is much greater.
+Interesting read on the maturation of the SaaS market.
+
+> The table stakes in SaaS are rising. But it’s not the MRR milestones or the payback period benchmarks that have changed. They may have increased slightly. Instead, the competitive differentiation ante is much greater.
 
 ### [Facebook's arrogant and patronizing statement about changes to the News Feed - without bullshit](https://withoutbullshit.com/blog/facebooks-arrogant-patronizing-statement-changes-news-feed)
 
@@ -192,7 +196,11 @@ Nice to see [eero come out with a KRACK](https://en.wikipedia.org/wiki/KRACK) fi
 
 ### [Dramatiq: simple task processing](https://dramatiq.io/)
 
-Compelling task processing system for Python that uses decorators on functions to turn them into distributed tasks. These systems are usually a mile deep and complex but this looks very nice on the [surface. Read the about the motivation](https://dramatiq.io/motivation.html) . If you’re used to either of those or if you’ve ever had to use Celery in anger, Dramatiq might just be the tool for you. [When I was still building WikiApiary](https://wikiapiary.com/wiki/Main_Page) I tried to use Celery and it was too high of a requirement for me.
+Compelling task processing system for Python that uses decorators on functions to turn them into distributed tasks. These systems are usually a mile deep and complex but this looks very nice on the [surface. Read the about the motivation](https://dramatiq.io/motivation.html) .
+
+> If you’re used to either of those or if you’ve ever had to use Celery in anger, Dramatiq might just be the tool for you.
+
+[When I was still building WikiApiary](https://wikiapiary.com/wiki/Main_Page) I tried to use Celery and it was too high of a requirement for me.
 
 ### [Reaching people on the internet - The Oatmeal](http://theoatmeal.com/comics/reaching_people)
 

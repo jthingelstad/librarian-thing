@@ -87,7 +87,7 @@ links:
   domain: www.mentimeter.com
   heading_context: '[Interactive presentation software - Mentimeter](https://www.mentimeter.com/)'
   section: Notable Links 📌
-word_count: 1860
+word_count: 1871
 ---
 I've been continuing my focus on developing a meditation practice, and have crossed over 100 consecutive days meditating. I've been using [Headspace](https://www.headspace.com) and I like the daily meditation which allows me to only answer one question, how many minutes do I want to meditate?
 
@@ -101,7 +101,7 @@ It seems simple but it connects you to your physical self in a very important wa
 
 I've been exploring board opportunities for a while and feel strongly that a CTO/CIO is of growing importance for boards. This piece hits it spot on.
 
-CIOs have a breadth and depth of understanding of their companies and industries that give them an exceptionally valuable ability to contribute to the broader boardroom agenda. Adept at business case building to justify their budgets they also naturally execute in a team-based environment with other executives. Digital and technology savvy, strategic and operational business aptitude, governance aware, team-oriented, risk versed, well rounded, deeper and broader than a CFO or CEO, CIOs need to be on every corporate board.
+> CIOs have a breadth and depth of understanding of their companies and industries that give them an exceptionally valuable ability to contribute to the broader boardroom agenda. Adept at business case building to justify their budgets they also naturally execute in a team-based environment with other executives. Digital and technology savvy, strategic and operational business aptitude, governance aware, team-oriented, risk versed, well rounded, deeper and broader than a CFO or CEO, CIOs need to be on every corporate board.
 
 I expect that in coming years having a CTO/CIO on the board will be considered absolutely necessary.
 
@@ -131,7 +131,7 @@ I’m so happy to welcome these new members to the Minnestar board! 💚
 
 Bray knows a lot about writing great software, and I like his rounded view on queues.
 
-The proportion of services I work on where queues are absolutely necessary rounds to 100%. And if you look at our customers, lots of them manage to get away without queues (good for them!) but a really huge number totally depend on them. And I don’t think that’s because the customers are stupid.
+> The proportion of services I work on where queues are absolutely necessary rounds to 100%. And if you look at our customers, lots of them manage to get away without queues (good for them!) but a really huge number totally depend on them. And I don’t think that’s because the customers are stupid.
 
 I've been on the wrong end of queues many times. It’s a massive problem when you have a production queue that is backed up and you have to somehow get the data off and moving safely. I've probably been dealing with queues for 25 years at this point. But all in, they have a very valid place in systems. Just like everything in software though, they are not magical. 🦄
 
@@ -139,7 +139,7 @@ I've been on the wrong end of queues many times. It’s a massive problem when y
 
 I enjoy Tom Peters writing on leadership and business. His "personal brand" message is often taken the wrong way.
 
-Yes. You give a shit, and it shows. You build your brand as a leader, not by making great speeches to thousands of people, but in conversation after conversation, one by one by one, making a small difference each time. That’s the best aspiration you can hope for, in most jobs, and probably the longest lasting.
+> Yes. You give a shit, and it shows. You build your brand as a leader, not by making great speeches to thousands of people, but in conversation after conversation, one by one by one, making a small difference each time. That’s the best aspiration you can hope for, in most jobs, and probably the longest lasting.
 
 Be authentic and genuine! 🤝
 
@@ -147,7 +147,7 @@ Be authentic and genuine! 🤝
 
 We've been adopting OKR's in our team at SPS and I think there are some substantial benefits from having it. This article highlights a level that I don't think would make a lot of sense. Tying spring backlog items to OKR's seems like an odd thing.
 
-Shouldn’t we be using the OKRs to drive coming up with ideas in the first place instead of just wedging them in afterwards?
+> Shouldn’t we be using the OKRs to drive coming up with ideas in the first place instead of just wedging them in afterwards?
 
 Yes. That is how it should work.
 
@@ -159,9 +159,9 @@ I can totally relate to this post from Zeldman and his feelings around learning 
 
 This is a very dense article, and has some interesting thoughts on getting leverage from data.
 
-So what is the answer to the failure modes and characteristics we discussed above? In my opinion a paradigm shift is necessary. A paradigm shift at the intersection of techniques that have been instrumental in building modern distributed architecture at scale; Techniques that the tech industry at large has adopted at an accelerated rate and that have created successful outcomes.
-
-I suggest that the next enterprise data platform architecture is in the convergence of Distributed Domain Driven Architecture, Self-serve Platform Design, and Product Thinking with Data.
+> So what is the answer to the failure modes and characteristics we discussed above? In my opinion a paradigm shift is necessary. A paradigm shift at the intersection of techniques that have been instrumental in building modern distributed architecture at scale; Techniques that the tech industry at large has adopted at an accelerated rate and that have created successful outcomes.
+>
+> I suggest that the next enterprise data platform architecture is in the convergence of Distributed Domain Driven Architecture, Self-serve Platform Design, and Product Thinking with Data.
 
 I think I'd have to read this a couple of times along with some others to really grok it. 🤯
 
@@ -174,9 +174,9 @@ www.highcaffeinecontent.com
 
 Next week Apple WWDC 2019 will likely begin the transition to an entirely new UI framework for macOS. This article does a good job putting that in context and looking at the last time that happened, when NeXT OPENSTEP was in the mix.
 
-In 2007, Apple got the chance for a complete do-over of Mac OS X with a modern architecture optimized for touchscreen devices with powerful GPUs, but with thermal, resource, and battery constraints. That do-over was, of course, iPhone OS. […]
-
-With macOS 10.15, UIKit is finally coming back to the Mac to serve as a top-tier native application development framework alongside AppKit. This is the start of Apple's next transition, and just like last time, it's almost unfathomably difficult to see how these two completely different architectures will cooperate and find common ground.
+> In 2007, Apple got the chance for a complete do-over of Mac OS X with a modern architecture optimized for touchscreen devices with powerful GPUs, but with thermal, resource, and battery constraints. That do-over was, of course, iPhone OS. […]
+>
+> With macOS 10.15, UIKit is finally coming back to the Mac to serve as a top-tier native application development framework alongside AppKit. This is the start of Apple's next transition, and just like last time, it's almost unfathomably difficult to see how these two completely different architectures will cooperate and find common ground.
 
 I think this will be a fun ride. 🎢
 
@@ -192,7 +192,7 @@ OMG this is so amazing and awesome! I [experienced the magic of Franklin Barbecu
 
 This looks like a solid tool
 
-Mentimeter is an easy-to-use presentation software used by more than 25 million people. With Mentimeter you can create fun and interactive presentations. We help you make your events, presentations, lectures, and workshops innovative and memorable.
+> Mentimeter is an easy-to-use presentation software used by more than 25 million people. With Mentimeter you can create fun and interactive presentations. We help you make your events, presentations, lectures, and workshops innovative and memorable.
 
 [Thanks Paul Birkbeck](https://www.linkedin.com/in/paulbirkbeck/) .
 

@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/42/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-42-feb-24-2018/
 domains: []
 links: []
-word_count: 1785
+word_count: 1794
 ---
 I am a bit more excited than usual to send this issue of the Weekly Thing. When I moved to MailChimp I picked one of the default templates. It was okay, but there was a lot I didn’t like about it. Over the last couple weeks I built my own template up that has the capabilities I want and this issue (#42 by the way!) is the first to [use it! See my blog post](https://www.thingelstad.com/2018/weekly-thing-enhancements/) for more on these changes. 🙌
 
@@ -37,14 +37,14 @@ om.co
 
 Om's written about tech for longer than most people and I completely agree with his view of Facebook's DNA. The last line says it all:
 
-Facebook is about making money by keeping us addicted to Facebook. It always has been — and that’s why all of our angst and headlines are not going to change a damn thing.
+> Facebook is about making money by keeping us addicted to Facebook. It always has been — and that’s why all of our angst and headlines are not going to change a damn thing.
 
 [Quitting Twitter](https://www.jordanmerrick.com/posts/quitting-twitter)
 www.jordanmerrick.com
 
 Another person reflecting on opting out of Twitter.
 
-Quitting Twitter has been a genuine quality of life improvement for me. It's as though a dark, heavy cloud of negativity has lifted, and I no longer get worked up about whatever might be the trending shitstorm du jour. I feel more focused and positive, and generally in much better mental health.
+> Quitting Twitter has been a genuine quality of life improvement for me. It's as though a dark, heavy cloud of negativity has lifted, and I no longer get worked up about whatever might be the trending shitstorm du jour. I feel more focused and positive, and generally in much better mental health.
 
 🤔
 
@@ -73,7 +73,7 @@ Interesting tool to create a visual diagram of the virtual networks in your AWS 
 Apache OpenWhisk is [a serverless, open source cloud platform](https://openwhisk.apache.org/)
 openwhisk.apache.org
 
-Apache OpenWhisk (Incubating) is a serverless, open source cloud platform that executes functions in response to events at any scale.
+> Apache OpenWhisk (Incubating) is a serverless, open source cloud platform that executes functions in response to events at any scale.
 
 Great to see Apache getting into the serverless space with an open source solution.
 
@@ -82,7 +82,7 @@ medium.com
 
 Detailed write up from Chris Dixon connecting decentralization with blockchain.
 
-The lesson is that when you compare centralized and decentralized systems you need to consider them dynamically, as processes, instead of statically, as rigid products. Centralized systems often start out fully baked, but only get better at the rate at which employees at the sponsoring company improve them. Decentralized systems start out half-baked but, under the right conditions, grow exponentially as they attract new contributors.
+> The lesson is that when you compare centralized and decentralized systems you need to consider them dynamically, as processes, instead of statically, as rigid products. Centralized systems often start out fully baked, but only get better at the rate at which employees at the sponsoring company improve them. Decentralized systems start out half-baked but, under the right conditions, grow exponentially as they attract new contributors.
 
 I wish I understood better how the blockchain tech would power these apps. I think it’s also possible we can get a decentralized solution on the existing Internet still as well.
 
@@ -112,14 +112,14 @@ stripe.com
 
 If you are not [familiar with Software as a Service](https://en.wikipedia.org/wiki/Software_as_a_service) business models and how SaaS companies work this primer from Stripe covers on all the main concepts.
 
-… we’ll take you through a whirlwind tour of the state of play of SaaS businesses. You should gain a better understanding of the SaaS business model, be able to anticipate whether to sell your product on a low-touch or high-touch model, and be able to evaluate its health and start improving it.
+> … we’ll take you through a whirlwind tour of the state of play of SaaS businesses. You should gain a better understanding of the SaaS business model, be able to anticipate whether to sell your product on a low-touch or high-touch model, and be able to evaluate its health and start improving it.
 
 5 [Ways to Close the Strategy-to-Execution Gap](https://hbr.org/2015/12/5-ways-to-close-the-strategy-to-execution-gap)
 hbr.org
 
 Some things to think about connecting your companies strategy to execution.
 
-The companies’ executives eschew conventional wisdom, not for the sake of nonconformity in itself, but because they are focused on the fundamental questions about a company’s strategy, such as: Who do we want to be? What is our chosen value proposition? And they’re just as focused on fundamental questions of execution: What can we do amazingly well that no one else can? What other capabilities do we need to develop? How will we blueprint, build, and scale those capabilities — and put them to use?
+> The companies’ executives eschew conventional wisdom, not for the sake of nonconformity in itself, but because they are focused on the fundamental questions about a company’s strategy, such as: Who do we want to be? What is our chosen value proposition? And they’re just as focused on fundamental questions of execution: What can we do amazingly well that no one else can? What other capabilities do we need to develop? How will we blueprint, build, and scale those capabilities — and put them to use?
 
 [Thanks to Juselly French](https://www.linkedin.com/in/jusellyfrench/) for the link.
 
@@ -128,7 +128,7 @@ The companies’ executives eschew conventional wisdom, not for the sake of nonc
 [The Hyper-Scheduling Experiment — MacSparky](https://www.macsparky.com/blog/2018/2/the-hyper-scheduling-experiment)
 www.macsparky.com
 
-For the last month, I have been conducting an experiment with more deliberate scheduling of my time. For lack of a better word, I have been calling it hyper-scheduling.
+> For the last month, I have been conducting an experiment with more deliberate scheduling of my time. For lack of a better word, I have been calling it hyper-scheduling.
 
 I've tried scheduling with this level of precision and it doesn't work at all for me. But there are a number of other people that I know who swear by this.
 
@@ -149,12 +149,12 @@ www.teamten.com
 
 Interesting observations on the size of a codebase and the difficulty for programmers to manage it.
 
-At DreamWorks we had 950 programs for animators to use, and a line count showed that the larger ones all hovered around 20,000 to 25,000 lines. Beyond that it was just too much effort to add features.
+> At DreamWorks we had 950 programs for animators to use, and a line count showed that the larger ones all hovered around 20,000 to 25,000 lines. Beyond that it was just too much effort to add features.
 
 [Hyrum's Law](http://www.hyrumslaw.com/)
 www.hyrumslaw.com
 
-Taken to its logical extreme, this leads to the following observation, colloquially referred to as “The Law of Implicit Interfaces”: Given enough use, there is no such thing as a private implementation.
+> Taken to its logical extreme, this leads to the following observation, colloquially referred to as “The Law of Implicit Interfaces”: Given enough use, there is no such thing as a private implementation.
 
 If you have enough consumers you can’t change anything. This is why eBay's website can’t be changed.
 

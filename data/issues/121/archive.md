@@ -93,7 +93,7 @@ links:
   domain: stacksense.io
   heading_context: '[Multi Cloud Happens But Not Necessarily By Design | StackSense](https://stacksense.io/krishnan/thought-leadership/multi-cloud-happens-but-not-necessarily-by-design/)'
   section: Notable Links 📌
-word_count: 1881
+word_count: 1887
 ---
 This week I got to attend three different technology events that all highlighted great things about the Twin Cities technology scene.
 
@@ -117,7 +117,7 @@ We made a quick stop today at a fairly busy store in South Minneapolis and when 
 
 There is a lot here as an overview of an entire writing process. Even though it’s a lot, I think it’s a good read for those that, like me, want to write better. I particularly like the beginning:
 
-Writing is essentially a robust tool that enables us to clarify and communicate our thoughts. While writing, you are forcing yourself to think critically and exercise parts of your brain that are typically on auto-pilot. As Einstein once said, “If you can't explain it simply, you don't understand it well enough.” In attempting to formulate a written piece, you are going through the exercise of transforming vague ideas into clarified concepts externally, but also internally.
+> Writing is essentially a robust tool that enables us to clarify and communicate our thoughts. While writing, you are forcing yourself to think critically and exercise parts of your brain that are typically on auto-pilot. As Einstein once said, “If you can't explain it simply, you don't understand it well enough.” In attempting to formulate a written piece, you are going through the exercise of transforming vague ideas into clarified concepts externally, but also internally.
 
 To me this is the barrier. I'll get a headline or topic in mind, but I need to create the space to clarify my thoughts. It’s not the writing that is difficult, it’s the thinking.
 
@@ -137,9 +137,9 @@ Target Field, Minneapolis MN
 
 There is a lot to chew on here.
 
-When teams only communicate their conclusions—the features they’ll implement, the projects they’ll execute, and the initiatives they’ll deliver—managers focus their feedback on those conclusions.
-
-This keeps us solidly in the world of micromanaging outputs.
+> When teams only communicate their conclusions—the features they’ll implement, the projects they’ll execute, and the initiatives they’ll deliver—managers focus their feedback on those conclusions.
+>
+> This keeps us solidly in the world of micromanaging outputs.
 
 I love this delineation of outputs and outcomes. The structures shared in this writeup to illustrate the product and opportunity space a product team is working on seem very interesting.
 
@@ -175,7 +175,7 @@ Automation platforms like Zapier are pretty cool, and it’s neat to see a new o
 
 Wow, I must say I wasn't expecting this but it’s good to see. Richard Stallman quickly resigned or was dismissed from MIT and the Free Software Foundation, but he remained in his leadership role at GNU. Now we have GNU maintainers signing a petition that he should be removed there too.
 
-Yet, we must also acknowledge that Stallman’s behavior over the years has undermined a core value of the GNU project: the empowerment of all computer users. GNU is not fulfilling its mission when the behavior of its leader alienates a large part of those we want to reach out to.
+> Yet, we must also acknowledge that Stallman’s behavior over the years has undermined a core value of the GNU project: the empowerment of all computer users. GNU is not fulfilling its mission when the behavior of its leader alienates a large part of those we want to reach out to.
 
 It’s good to see people thinking broader than just the code or specific single focus area that people contribute to our community.
 
@@ -191,7 +191,7 @@ Not sure this is a tour I would want to take. Chernobyl isn't that far from wher
 
 An interesting, open-ended article about the "big things" that are likely to be shaping the future.
 
-Demographics, inequality, and information access will have a huge impact on the coming decades. How those Big Things end is a story yet to be told. But when it’s told we’ll have a better idea of where it began.
+> Demographics, inequality, and information access will have a huge impact on the coming decades. How those Big Things end is a story yet to be told. But when it’s told we’ll have a better idea of where it began.
 
 🤔
 

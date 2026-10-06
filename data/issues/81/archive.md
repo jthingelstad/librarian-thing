@@ -125,7 +125,7 @@ links:
   domain: www.macstories.net
   heading_context: '[Shortcuts Archive – MacStories](https://www.macstories.net/shortcuts/)'
   section: Notable Links 📌
-word_count: 2207
+word_count: 2213
 ---
 Thanksgiving is here and we officially kick-off the holiday season! I hope you all had a fabulous Thanksgiving filled with good food, friends and warm conversation. My Thanksgiving was a bit questionable this year. I got sick with something after leaving Kiev. 🤢 I made it home feeling not so great, and then spent the weekend and early part of the week gradually getting better. The delights of travel! ✈️ I got just well enough to have Thanksgiving dinner.
 
@@ -141,11 +141,11 @@ The next week is a monster week for the retail industry, and a big week at work 
 
 I like a lot of what Zapier is doing, and this analysis of their search strategy is superb.
 
-Rather than trying to pitch users on the value of integrating tools, Zapier realized early on that people were already looking for specific integrations. To capture this existing intent, Zapier decided to make the app partners in their integration ecosystem the stars of their marketing and piggyback on their success.
+> Rather than trying to pitch users on the value of integrating tools, Zapier realized early on that people were already looking for specific integrations. To capture this existing intent, Zapier decided to make the app partners in their integration ecosystem the stars of their marketing and piggyback on their success.
 
 I’ve found these landing pages many times from various searches. It’s impressive how well they thought the process through beyond discovery, all the way to initial value!
 
-After creating login credentials, Zapier doesn’t waste that user intent by dropping new users into a central dashboard or control panel. Instead, users are dropped right into the integration set-up flow where they can get the integration from the CTA up and running.
+> After creating login credentials, Zapier doesn’t waste that user intent by dropping new users into a central dashboard or control panel. Instead, users are dropped right into the integration set-up flow where they can get the integration from the CTA up and running.
 
 Very impressive and good results. Plus the strategy gets stronger with more connectors!
 
@@ -153,7 +153,7 @@ Very impressive and good results. Plus the strategy gets stronger with more conn
 
 This article is a great reflection on how our devices have changed certain events.
 
-People were visibly enjoying the opening band, at least in part because that band no longer compete with the entire internet for the crowd’s attention. Even the crowd’s milling around and chatting between acts was so much more lively. People were either talking to their neighbors, or taking in the room. And everyone taking in the room was taking in the same room. It felt great.
+> People were visibly enjoying the opening band, at least in part because that band no longer compete with the entire internet for the crowd’s attention. Even the crowd’s milling around and chatting between acts was so much more lively. People were either talking to their neighbors, or taking in the room. And everyone taking in the room was taking in the same room. It felt great.
 
 I had heard that Jack White did this for his shows and I have want to go just to experience it, plus the music is great.
 
@@ -175,7 +175,7 @@ This is a fabulous set of learnings for anyone to think about in their career.
 
 I’ve never jumped on this bandwagon. I’ve always felt that it was a bit presumptuous, and had the wrong polarity. Your job as a leader is to adapt to your people, not to expect your people to adapt to you.
 
-If you want to build trust, you do that by showing up, talking to your team both individually and as a team, and behaving in an ethical, reliable manner. Over, and over, and over again. You don’t get it from writing a doc about how you deserve their trust.
+> If you want to build trust, you do that by showing up, talking to your team both individually and as a team, and behaving in an ethical, reliable manner. Over, and over, and over again. You don’t get it from writing a doc about how you deserve their trust.
 
 I’ll pass on this.
 
@@ -199,7 +199,7 @@ Immensely powerful shortcut from Viticci. This looks like a great addition to Sh
 
 I’ve heard startup teams announce that they are pivoting as if it was the next natural step in their plan. That’s never made sense to me. A pivot is recognizing that the original path doesn’t work, and pivoting to a new path.
 
-So my view is if you’ve failed, accept it, announce it, and deal with it. Shut the business down, give back the cash, and rip up the cap table. Then do whatever you want to do next. If it is another startup, do it from scratch and keep as much of it as you can. If it is something else, well then do that too.
+> So my view is if you’ve failed, accept it, announce it, and deal with it. Shut the business down, give back the cash, and rip up the cap table. Then do whatever you want to do next. If it is another startup, do it from scratch and keep as much of it as you can. If it is something else, well then do that too.
 
 I’m surprised Wilson doesn’t highlight to me the main reason people pivot instead of doing what he suggests — to avoid failure. If you pivot, sure there are some downsides, but you didn’t fail, you pivoted. Neat! Do it a couple more times and still, no failure. If you actually do what is suggested here you have to acknowledge the thing you are avoiding at all costs.
 
@@ -243,7 +243,7 @@ There are a number of open source status page options, but this one looks more c
 
 Good direction for managers seeking to move into bigger roles. This part about feedback is critical.
 
-So many line managers think that they are temporarily embarrassed CTOs, and don’t realize that they are lacking in many critical skills. If you bristle at every bit of corrective feedback, if you have an outsized ego that everyone can see, or even if you simply never actually act on the feedback that you get, you’re not going to be top of the list when the opportunities come about.
+> So many line managers think that they are temporarily embarrassed CTOs, and don’t realize that they are lacking in many critical skills. If you bristle at every bit of corrective feedback, if you have an outsized ego that everyone can see, or even if you simply never actually act on the feedback that you get, you’re not going to be top of the list when the opportunities come about.
 
 If the above isn’t happening, you never move ahead because you don’t learn from feedback.
 

@@ -98,7 +98,7 @@ links:
   domain: www.technologyreview.com
   heading_context: '[10 Breakthrough Technologies 2019, curated by Bill Gates - MIT Technology Review](https://www.technologyreview.com/lists/technologies/2019/)'
   section: Notable Links 📌
-word_count: 1820
+word_count: 1825
 ---
 It’s been another week filled with much activity. I made a quick trip to Toronto this week to visit TeamSPS there. 🛩 It was a great trip and I got time to connect with a bunch of people, including over board games. 🎲 It also is going to kick off a pretty sustained burst of travel for me in the coming weeks. I’m bracing for several flights coming up. I’ve gotten back to my meditation practice and I’m reminded how impactful that is. I’ve also recommitted myself to keeping a gratitude journal. Both of those habits are at record long streaks right now. Gotta keep the streak going! 👍🏻
 
@@ -112,11 +112,11 @@ This review is much more sedate than the one I would write, something like "It�
 
 This might be one of the best takes I've ever read to understand dynamics in social networks. The fundamental idea of "social capital" and "network utility" and how they play together is a very interesting.
 
-What ties many of these explanations together is social capital theory, and how we analyze social networks should include a study of a social network's accumulation of social capital assets and the nature and structure of its status games. In other words, how do such companies capitalize, either consciously or not, on the fact that people are status-seeking monkeys, always trying to seek more of it in the most efficient way possible?
+> What ties many of these explanations together is social capital theory, and how we analyze social networks should include a study of a social network's accumulation of social capital assets and the nature and structure of its status games. In other words, how do such companies capitalize, either consciously or not, on the fact that people are status-seeking monkeys, always trying to seek more of it in the most efficient way possible?
 
 This calls out the Facebook News Feed as a sea change in how social capital is accumulated.
 
-It's difficult to overstate what a momentous sea change it was for hundreds of millions, and eventually billions, of humans who had grown up competing for status in small tribes, to suddenly be dropped into a talent show competing against EVERY PERSON THEY HAD EVER MET.
+> It's difficult to overstate what a momentous sea change it was for hundreds of millions, and eventually billions, of humans who had grown up competing for status in small tribes, to suddenly be dropped into a talent show competing against EVERY PERSON THEY HAD EVER MET.
 
 As I read this I kept thinking of LinkedIn. LinkedIn is largely a utility network. However, in recent years they have gotten into the news feed game and added a lot of "like" functionality. They have added a bunch of features that are clearly ways to build "social capital". And, notably, their user metrics shot up as soon as they did that stuff.
 
@@ -154,7 +154,7 @@ I like the basic concept here that the "lock in" cost of a solution is more comp
 
 Fun read on the planning and background, and sometimes serendipity, that go into some amazing photographs. Many people have no idea of the amount of planning that has to go into getting shots like this.
 
-Also, many locals shoot the Milky Way there. The fact is that this shot was technically not that hard. It is not a single shot but was rather a panorama to get the whole valley in the frame. I planned the alignment and the shot, and “just” needed the volcano to erupt. The planning and the whole trip was the most difficult, but being there was simply executing and enjoying the spectacle unfolding in front of my eyes.
+> Also, many locals shoot the Milky Way there. The fact is that this shot was technically not that hard. It is not a single shot but was rather a panorama to get the whole valley in the frame. I planned the alignment and the shot, and “just” needed the volcano to erupt. The planning and the whole trip was the most difficult, but being there was simply executing and enjoying the spectacle unfolding in front of my eyes.
 
 Neat. 📷
 
@@ -170,7 +170,7 @@ I like the 2nd recommendation in here of having other people estimate for you. I
 
 I like how much Fournier focuses on the "integrator" role of managers in a growing company.
 
-Fournier emphasizes that managers will need to develop strong peer relationships to stay connected with everything that’s going on in their growing organization. Equally important, she says, is developing relationships with higher-level directors or executives. These relationships will allow you to be more efficient in communicating and getting work done, while also building trust for your team.
+> Fournier emphasizes that managers will need to develop strong peer relationships to stay connected with everything that’s going on in their growing organization. Equally important, she says, is developing relationships with higher-level directors or executives. These relationships will allow you to be more efficient in communicating and getting work done, while also building trust for your team.
 
 Very true.
 
@@ -178,7 +178,7 @@ Very true.
 
 My view on meditation is very similar to how Gates positions this.
 
-I now see that meditation is simply exercise for the mind, similar to the way we exercise our muscles when we play sports. For me, it has nothing to do with faith or mysticism. It’s about taking a few minutes out of my day, learning how to pay attention to the thoughts in my head, and gaining a little bit of distance from them.
+> I now see that meditation is simply exercise for the mind, similar to the way we exercise our muscles when we play sports. For me, it has nothing to do with faith or mysticism. It’s about taking a few minutes out of my day, learning how to pay attention to the thoughts in my head, and gaining a little bit of distance from them.
 
 [Via Patrick Rhone](https://www.patrickrhone.net/5499-2/) .
 

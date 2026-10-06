@@ -117,7 +117,7 @@ links:
   domain: www.justinobeirne.com
   heading_context: '[Apple’s New Map](https://www.justinobeirne.com/new-apple-maps/)'
   section: Notable Links 📌
-word_count: 2401
+word_count: 2410
 ---
 I've been having [a lot of fun with Shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) the last couple of weeks. I've found some great ways to make routine things easier. [I've also reinvigorated my project templates](https://www.thingelstad.com/2017/using-project-templates/) , just in time to use many of my annual holiday templates. I realized that my attempt to create a "generic" Shortcut that could run any template was limiting. I continue to store my templates in TaskPaper format to make them easy to edit, but the power comes in the Shortcut. I've made the project templates even more powerful having them block time on my calendar for the project, and even create draft emails that are ready to finish and send for the project.
 
@@ -131,7 +131,7 @@ It takes a bit to get Shortcuts, but when you do you can find a lot of ways to a
 
 This is a good assessment of many of the angles of an on-call rotation in a technology team. I agree with the conclusions, and also agree with the premise that all team members for a service or set of services should be in the on-call rotation.
 
-Teams where the people creating the software help support the software achieve better quality through aligned incentives and increased awareness.
+> Teams where the people creating the software help support the software achieve better quality through aligned incentives and increased awareness.
 
 I like that this article calls out the elephant in the room, that there is a general culture in many organizations that developers are "above" being on-call. That is crap and needs to be dispelled whenever it is brought up. If anything, I would highlight that there are a lot of developers are just aren't all that great at being on-call. The skill argument should go the other way. Great operations engineers know how their software behaves, and they know how to push it and make it do what they want. Often the developers that wrote it have no clue. Also, the general stress and pressure of incidents is something that you need to have the stomach for.
 
@@ -139,15 +139,15 @@ I like that this article calls out the elephant in the room, that there is a gen
 
 Frank Chimero is typically an enjoyable read and this doesn't let you down.
 
-I wonder if I have twenty years of experience making websites, or if it is really five years of experience, repeated four times. If you’ve been working in the technology industry a while, please tell me this sounds familiar to you.
+> I wonder if I have twenty years of experience making websites, or if it is really five years of experience, repeated four times. If you’ve been working in the technology industry a while, please tell me this sounds familiar to you.
 
 People will say that technology has a fashion thing. This is what they are referring to.
 
-It seems there are fewer and fewer notable websites built with this approach each year. So, I thought it would be useful remind everyone that the easiest and cheapest strategy for dealing with complexity is not to invent something to manage it, but to avoid the complexity altogether with a more clever plan.
+> It seems there are fewer and fewer notable websites built with this approach each year. So, I thought it would be useful remind everyone that the easiest and cheapest strategy for dealing with complexity is not to invent something to manage it, but to avoid the complexity altogether with a more clever plan.
 
 This is what experience brings. Early in their career technologists pile on complexity to solve any problem. After years of supporting those Towers of Babel, simpler solutions tend to look more appealing.
 
-Last month, I had to install a package manager to install a package manager. That’s when I closed my laptop and slowly backed away from it.
+> Last month, I had to install a package manager to install a package manager. That’s when I closed my laptop and slowly backed away from it.
 
 🤦‍♂️
 
@@ -155,7 +155,7 @@ Last month, I had to install a package manager to install a package manager. Tha
 
 This article is the biggest part of why I won’t use Chrome.
 
-Google is the biggest browser company in the world. It’s also the biggest search engine, mobile operating system, video host, and email service. But most importantly, it’s the biggest server of digital ads. Google controls 42% of the digital advertising market, significantly more than Facebook, its largest rival, and vastly more than anyone else. Its tracking codes appear on three quarters of the top million sites on the web. 86% of Alphabet’s revenue (Google’s parent company) comes from advertising. That means all of Alphabet has a vested interest in helping track people and serve them ads, even when that puts the company at odds with its users.
+> Google is the biggest browser company in the world. It’s also the biggest search engine, mobile operating system, video host, and email service. But most importantly, it’s the biggest server of digital ads. Google controls 42% of the digital advertising market, significantly more than Facebook, its largest rival, and vastly more than anyone else. Its tracking codes appear on three quarters of the top million sites on the web. 86% of Alphabet’s revenue (Google’s parent company) comes from advertising. That means all of Alphabet has a vested interest in helping track people and serve them ads, even when that puts the company at odds with its users.
 
 Remember, Google was the last browser to support Do Not Track years ago. Nothing has changed regarding Googles incentives. If you value privacy, I don’t see how you can use Chrome.
 
@@ -185,7 +185,7 @@ I love this real world experience with the new iPad Pro. It’s amazing that he�
 
 Some further details and specifications on the A12X chip in the new iPad Pro.
 
-The iPad Pro outperforms every MacBook Pro we tested except for the most recent, most powerful 15-inch MacBook Pro with an 8th generation Intel Core i9 CPU. Generally, these laptops cost three times as much as the iPad Pro.
+> The iPad Pro outperforms every MacBook Pro we tested except for the most recent, most powerful 15-inch MacBook Pro with an 8th generation Intel Core i9 CPU. Generally, these laptops cost three times as much as the iPad Pro.
 
 Apple’s position with custom silicon is super interesting. There has been rumor of them ditching Intel at some point. I think that might actually happen.
 
@@ -201,7 +201,7 @@ This is very long and detailed, but it’s very insightful for anyone building a
 
 it’s nice to see employees at one of the biggest technology companies in the world organizing and getting a voice on matters like this.
 
-More than 20,000 Google employees and contractors in Google offices located in 50 cities worldwide walked out for real change at 11:10am local time protesting sexual harassment, misconduct, lack of transparency, and a workplace culture that doesn’t work for everyone.
+> More than 20,000 Google employees and contractors in Google offices located in 50 cities worldwide walked out for real change at 11:10am local time protesting sexual harassment, misconduct, lack of transparency, and a workplace culture that doesn’t work for everyone.
 
 It’s a good trend.
 
@@ -217,7 +217,7 @@ These 2018 iPad Pros look utterly amazing. I can’t wait to get mine.
 
 This is a good overview of the design goals of Lua and some insight into how Lua approaches a variety of programming concepts.
 
-Lua has a unique set of design goals that prioritize simplicity, portability, and embedding. The Lua core is based on three well-known, proven concepts—associative arrays, first-class functions, and coroutines—all implemented with no artificial restrictions. On top of these components, Lua follows the motto "mechanisms instead of policies," meaning Lua's design aims to offer basic mechanisms to allow programmers to implement more complex features.
+> Lua has a unique set of design goals that prioritize simplicity, portability, and embedding. The Lua core is based on three well-known, proven concepts—associative arrays, first-class functions, and coroutines—all implemented with no artificial restrictions. On top of these components, Lua follows the motto "mechanisms instead of policies," meaning Lua's design aims to offer basic mechanisms to allow programmers to implement more complex features.
 
 I find Lua interesting. I wish there was a good iOS implementation to play with.
 
@@ -243,7 +243,7 @@ I would call these go-to-market mistakes more than sales mistakes, but it’s go
 
 I had the original Apple Watch and upgraded to the Series 3 with LTE a year ago. The Series 4 looks amazing with it’s larger screen, but the speed is the real winner.
 
-Did I mention the Series 4 is fast? Series 3 was pretty fast. Series 4 is fast in a way that you never think about it; things just work, fast.
+> Did I mention the Series 4 is fast? Series 3 was pretty fast. Series 4 is fast in a way that you never think about it; things just work, fast.
 
 if you haven't had a smart watch before it might seem odd that you need so much speed for one, but any delay at all is a big usability challenge for a smart watch. I’m trying to hold off and skip the Series 4, but it’s tempting given how good this new Apple Watch seems to do.
 

@@ -86,7 +86,7 @@ links:
   domain: thesweetsetup.com
   heading_context: '[How to make journaling in Day One even better with automation – The Sweet Setup](https://thesweetsetup.com/make-journaling-day-one-even-better-automation/)'
   section: Notable Links 📌
-word_count: 1585
+word_count: 1592
 ---
 Summer is officially here! Somehow I managed to go to two baseball games this week. ⚾️ The kids are counting the days until school gets out. 🗓 And the entire state of Minnesota seems to have scattered to cabins around lakes to celebrate Memorial Day and with it our first temperatures well into the 90's. ☀️
 
@@ -98,7 +98,7 @@ I hope you all have a moment to take some time this weekend to really disconnect
 
 Federico Viticci writes is one of my favorite tech authors, and this post has plenty of that, but it’s also a reflection on how he has changed his life after a cancer diagnosis a few years ago.
 
-It's important to me because I can't squander this opportunity. Because life isn't like an arcade – you can't put more coins in to continue – yet somehow I was given the chance for a do-over and I failed to appreciate it at first. Now I have to make sure I can return the favor with positivity and stories that can help others.
+> It's important to me because I can't squander this opportunity. Because life isn't like an arcade – you can't put more coins in to continue – yet somehow I was given the chance for a do-over and I failed to appreciate it at first. Now I have to make sure I can return the favor with positivity and stories that can help others.
 
 This is a great article on its own, but is also a treasure trove of resources for people who want to use technology to make their lives better.
 
@@ -106,7 +106,7 @@ This is a great article on its own, but is also a treasure trove of resources fo
 
 I can attest to feeling this and know many friends, particularly technologists, who do as well. I've referred to this as "digital fatigue" in the past.
 
-The destruction of our inner selves via the wired world is an even more recent, and more subtle, phenomenon. The loss of slowness, of time for reflection and contemplation, of privacy and solitude, of silence, of the ability to sit quietly in a chair for fifteen minutes without external stimulation — all have happened quickly and almost invisibly.
+> The destruction of our inner selves via the wired world is an even more recent, and more subtle, phenomenon. The loss of slowness, of time for reflection and contemplation, of privacy and solitude, of silence, of the ability to sit quietly in a chair for fifteen minutes without external stimulation — all have happened quickly and almost invisibly.
 
 I believe this is part of the reason people are seeking out practices like meditation in seemingly larger numbers than the past.
 
@@ -134,7 +134,7 @@ Target Field, Minneapolis, MN
 
 A thorough writeup on the authors experience building software used for defense purposes, and the ethical and moral dilemmas associated with it.
 
-Don’t get distracted by deadlines and feature requests. Think about the consequences of what you’re building. Build in safeguards to prevent misuse, or don’t build it at all because it’s too dangerous.
+> Don’t get distracted by deadlines and feature requests. Think about the consequences of what you’re building. Build in safeguards to prevent misuse, or don’t build it at all because it’s too dangerous.
 
 Technologists need to consider this as we continue to build ever more powerful capabilities.
 
@@ -150,7 +150,7 @@ Refining your interviewing process is a constant process. Some interesting obser
 
 Not much depth, but interesting highlights of Xero's migration to AWS.
 
-Xero also thanked the AWS migration for improving its gross margin by 81 percent.
+> Xero also thanked the AWS migration for improving its gross margin by 81 percent.
 
 Significant improvements and additional functionality unlocked as well.
 
@@ -162,7 +162,7 @@ I use many of the apps mentioned in this article - including Day One, Bear and U
 
 I think the author is on to something here thinking of emails a bit like a virtual meeting.
 
-At any given moment, upwards of 50 to 75 percent of the email in my inbox (beyond the spammy stuff or newsletters) are actually to-dos from other people.
+> At any given moment, upwards of 50 to 75 percent of the email in my inbox (beyond the spammy stuff or newsletters) are actually to-dos from other people.
 
 The critical issue with all asynchronous communications systems is that they allow tasks to come into you without block. Meetings are limited to time and space, you cannot receive a to do outside of the meeting time. Email however has infinite scale ability to receive work, regardless of your time.
 
@@ -184,7 +184,7 @@ Using automation tools like Workflow can take friction out of journaling. I've t
 
 by Yuval Noah Harari
 
-From a renowned historian comes a groundbreaking narrative of humanity’s creation and evolution—a #1 international bestseller—that explores the ways in which biology and history have defined us and enhanced our understanding of what it means to be “human.”
+> From a renowned historian comes a groundbreaking narrative of humanity’s creation and evolution—a #1 international bestseller—that explores the ways in which biology and history have defined us and enhanced our understanding of what it means to be “human.”
 
 My book club is reading Sapiens and I’ve really enjoyed every bit of this book so far.
 
@@ -200,7 +200,7 @@ https://creativecommons.org
 
 by Telephone Science Corporation
 
-Nomorobo blocks annoying robocalls, telemarketers, spam texts, and phone scammers from calling your phone. Bring peace and quiet back to your life.
+> Nomorobo blocks annoying robocalls, telemarketers, spam texts, and phone scammers from calling your phone. Bring peace and quiet back to your life.
 
 I started getting a ridiculous number of robocalls to my mobile and NoMoRobo has been great at making this annoyance go away. The $18/year subscription is great value for never having a robocall or telemarketer ever making my phone ring.
 

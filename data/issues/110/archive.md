@@ -67,7 +67,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[The Making of a YouTube Radical - The New York Times](https://www.nytimes.com/interactive/2019/06/08/technology/youtube-radical.html)'
   section: Notable Links 📌
-word_count: 1273
+word_count: 1276
 ---
 School is out, camps have started, and summer is now officially in full swing! This week was an absolute blur, and it's my daughters birthday this weekend so I'm keeping it short and we are going to get right to the links this week! Oh, and to all the Dads out there, have a great Fathers Day! 🤜🤛
 
@@ -77,7 +77,7 @@ School is out, camps have started, and summer is now officially in full swing! T
 
 This has some great visualization of various privacy policies. It's telling how companies that tend to have a pro-privacy bend like Craigslist and Duck Duck Go are readable in a couple minutes with high-school level education. Facebook requires 18 minutes and a college level education. CNN and Hulu require you to be a legal professional to understand them. Airbnb is in a world of its own.
 
-Airbnb’s privacy policy, on the other hand, is particularly inscrutable. It’s full of long, jargon-laden sentences that obscure Airbnb’s data practices and provides cover to use data in expansive ways. For example, here is how Airbnb justifies collecting users’ personal information. Vague language like “adequate performance” and “legitimate interest” allows for a wide range of interpretation, providing flexibility for Airbnb to defend its data practices in a lawsuit while making it harder for users to understand what is being done with their data.
+> Airbnb’s privacy policy, on the other hand, is particularly inscrutable. It’s full of long, jargon-laden sentences that obscure Airbnb’s data practices and provides cover to use data in expansive ways. For example, here is how Airbnb justifies collecting users’ personal information. Vague language like “adequate performance” and “legitimate interest” allows for a wide range of interpretation, providing flexibility for Airbnb to defend its data practices in a lawsuit while making it harder for users to understand what is being done with their data.
 
 This is where services such [as Terms of Service; Didn't Read](https://tosdr.org) should be able to help crowdsource these intentionally obfuscated documents and turn them into something that normal people can understand. However, these services, like many in the pro-privacy space, aren't exactly taking off like wildfire.
 
@@ -117,7 +117,7 @@ This bums me out. [Make: Magazine](https://makezine.com) and Maker Faire's are r
 
 Call to action on what to do to protect privacy online.
 
-Not to be outdone, another startup projected a map of San Francisco with a red line tracking a real, anonymous person throughout their day. He challenged us to infer what we could about her. She left the house at 7 a.m. Went to Starbucks. Went to a school. Went to a yoga studio. Went back to the school. She was a mother with at least one child, and we knew where she lived. We knew this because this woman’s cell phone was tracking her every move. As does every other cell phone, including the one in your pocket right now.
+> Not to be outdone, another startup projected a map of San Francisco with a red line tracking a real, anonymous person throughout their day. He challenged us to infer what we could about her. She left the house at 7 a.m. Went to Starbucks. Went to a school. Went to a yoga studio. Went back to the school. She was a mother with at least one child, and we knew where she lived. We knew this because this woman’s cell phone was tracking her every move. As does every other cell phone, including the one in your pocket right now.
 
 I like the four steps that are outlined to give people the control they deserve.
 
@@ -133,7 +133,7 @@ This is a big deal and a major get for Salesforce. A while back Salesforce tried
 
 This is a pretty incredible, detailed walk-through of how following a series of videos on YouTube changed this individuals outlook. So much of this content is not visible to most people.
 
-Perhaps this shouldn’t be a surprise. Our political culture is now built largely on shapeshifting internet platforms, which have made flipping partisan allegiances as easy as changing hairstyles. It’s possible that vulnerable young men like Mr. Cain will drift away from radical groups as they grow up and find stability elsewhere. It’s also possible that this kind of whiplash polarization is here to stay as political factions gain and lose traction online.
+> Perhaps this shouldn’t be a surprise. Our political culture is now built largely on shapeshifting internet platforms, which have made flipping partisan allegiances as easy as changing hairstyles. It’s possible that vulnerable young men like Mr. Cain will drift away from radical groups as they grow up and find stability elsewhere. It’s also possible that this kind of whiplash polarization is here to stay as political factions gain and lose traction online.
 
 I honestly tend to avoid YouTube. I've found the whole platform to be a bit of a mess.
 

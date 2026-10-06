@@ -92,7 +92,7 @@ links:
   domain: www.digitalcommonwealth.org
   heading_context: '[M. C. Escher (1898-1972). Prints and Drawings - Digital Commonwealth](https://www.digitalcommonwealth.org/collections/commonwealth:3r076r52x)'
   section: Notable Links 📌
-word_count: 1284
+word_count: 1289
 ---
 We are starting a week of [vacation 😎 in the Finger Lakes](https://en.wikipedia.org/wiki/Finger_Lakes) region of New York! We are flying into Syracuse and staying in Ithaca for most of the week. We are going to see Niagara Falls, which I have wanted to see for a long time! I love waterfalls and that is the big one! 🙌
 
@@ -104,7 +104,7 @@ If you have recommendations of things to do in the area send me a reply! 💌
 
 A great overview of the mess of junk put in most websites.
 
-So, with an internet connection faster than I could have thought possible in the late 1990s, what’s the score now? A story at the Hill took over nine seconds to load; at Politico, seventeen seconds; at CNN, over thirty seconds. This is the bullshit web.
+> So, with an internet connection faster than I could have thought possible in the late 1990s, what’s the score now? A story at the Hill took over nine seconds to load; at Politico, seventeen seconds; at CNN, over thirty seconds. This is the bullshit web.
 
 My personal sites have none of this. And this is why you must run software like 1Blocker. It’s not just about ads, it’s about all this bullshit.
 
@@ -122,7 +122,7 @@ Target Field, Minneapolis, MN
 
 You are the product.
 
-But the imperative to “connect people” lacks the one ingredient essential for being a good citizen: Treating individual human beings as sacrosanct. To Facebook, the world is not made up of individuals, but of connections between them.
+> But the imperative to “connect people” lacks the one ingredient essential for being a good citizen: Treating individual human beings as sacrosanct. To Facebook, the world is not made up of individuals, but of connections between them.
 
 Facebook makes a lot of revenue on those connections. What is the cost to everyone else?
 
@@ -130,7 +130,7 @@ Facebook makes a lot of revenue on those connections. What is the cost to everyo
 
 A practical definition of what makes up a company's culture:
 
-I’ve been working in HR for over twenty years, and the best companies I’ve worked with have recognized that there are three elements to a culture: behaviors, systems, and practices, all guided by an overarching set of values. A great culture is what you get when all three of these are aligned, and line up with the organization’s espoused values. When gaps start to appear, that’s when you start to see problems — and see great employees leave.
+> I’ve been working in HR for over twenty years, and the best companies I’ve worked with have recognized that there are three elements to a culture: behaviors, systems, and practices, all guided by an overarching set of values. A great culture is what you get when all three of these are aligned, and line up with the organization’s espoused values. When gaps start to appear, that’s when you start to see problems — and see great employees leave.
 
 This could work as a good checklist of items to assess if you do have gaps between stated values and actual actions.
 
@@ -146,7 +146,7 @@ Record places that you have been. This concept has been tried before but this im
 
 I love this.
 
-To drive strategy execution, leaders should instead set goals that are FAST — frequently discussed, ambitious, specific, and transparent.
+> To drive strategy execution, leaders should instead set goals that are FAST — frequently discussed, ambitious, specific, and transparent.
 
 That also sounds very similar to an effective OKR.
 
@@ -178,7 +178,7 @@ Comprehensive video describing how Google implements their OKR framework.
 
 A good reminder from Seth Godin to focus on value.
 
-Busy is not your job. Busy doesn’t get you what you seek. Busy isn’t the point. Value creation is.
+> Busy is not your job. Busy doesn’t get you what you seek. Busy isn’t the point. Value creation is.
 
 Measure it. 💯
 
