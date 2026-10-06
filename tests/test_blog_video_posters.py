@@ -110,7 +110,8 @@ class VideoPosterTests(unittest.TestCase):
             for item in corpus["media"]
             if item.get("video_url") and item.get("media_kind") != "video"
         ]
-        self.assertEqual(len([item for item in posters if item.get("microblog_id")]), 111)
+        # 112 since the Beastbox demo video from Minnedemo (2026-10-01).
+        self.assertEqual(len([item for item in posters if item.get("microblog_id")]), 112)
         self.assertEqual(len([item for item in posters if item.get("page_id")]), 5)
         videos = [item for item in corpus["media"] if item.get("media_kind") == "video"]
         self.assertEqual(
