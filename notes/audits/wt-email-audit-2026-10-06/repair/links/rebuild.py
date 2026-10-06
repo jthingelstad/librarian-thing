@@ -180,7 +180,7 @@ def plan_issue(n):
     promo, sec = set(), None
     for ln, line in enumerate(lines):
         if line.startswith('## '): sec = line
-        if sec and ('Promotion' in sec or 'Now Reading' in sec): promo.add(ln)  # and the "Now Reading" line
+        if sec and ('🎁' in sec or 'Promotion' in sec or 'Give Back' in sec or 'Now Reading' in sec): promo.add(ln)  # the nonprofit spotlight (Promotion, then Give Back) and Now Reading
     for ln, line in enumerate(lines):
         if ln in promo: continue
         if not line.strip() or line.lstrip().startswith(('![', '<', '---', '|')): continue

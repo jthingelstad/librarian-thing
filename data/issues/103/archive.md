@@ -98,7 +98,7 @@ links:
   domain: olivierforget.net
   heading_context: '[What it''s Like to View a SpaceX Falcon Heavy Launch](https://olivierforget.net/blog/2019/viewing-spacex-falcon-heavy-launch/)'
   section: Notable Links 📌
-word_count: 1789
+word_count: 1790
 ---
 We got really lucky when we moved in January, as there was almost no snow on the ground. Shortly after we moved, the walloping started with snowstorm after snowstorm. 🌨 Moving in the winter feels a little like a partial move. You move into your house, but you don't really see the yard or explore the outside spaces. It’s all frozen and covered in snow! As Spring has now arrived, I feel like we have thawed and can now finish the rest of the moving process, explore the yard, and get familiar with the rest of the space. 🗺
 
@@ -212,7 +212,7 @@ Sounds amazing. 🚀
 
 https://www.hackthegap.com
 
-The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 

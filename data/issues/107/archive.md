@@ -63,7 +63,7 @@ links:
   domain: www.newyorker.com
   heading_context: '[Can “Indie” Social Media Save Us? | The New Yorker](https://www.newyorker.com/tech/annals-of-technology/can-indie-social-media-save-us)'
   section: Notable Links 📌
-word_count: 1623
+word_count: 1624
 ---
 It’s Memorial Day weekend in Minnesota! For Minnesotans this marks the official end of our long winter months, and the true beginning of the summer. The actual weather may not agree with us, but that doesn't matter. It’s time to declare summer! I’m [writing this outside](https://www.thingelstad.com/2019/05/24/nice-spot-to.html) and it is sublime. My main plan for the weekend is to get some more practice sessions on the flat top grill. I need to work on my short order cook skills! 🍳
 
@@ -151,7 +151,7 @@ I totally agree, but I also don't think the goal is to be that scale. These serv
 
 https://www.eff.org
 
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
+[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

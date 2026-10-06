@@ -121,7 +121,7 @@ links:
   domain: www.trapezemobile.com
   heading_context: '[How I Finally Hit 2000 on Lichess, and Improved my Chess Rating by 200 Points in 16 Days - Trapeze](https://www.trapezemobile.com/2019/01/10/how-i-finally-hit-2000-on-lichess-and-improved-my-chess-rating-by-200-points-in-16-days/)'
   section: Notable Links 📌
-word_count: 2092
+word_count: 2093
 ---
 Today we transitioned our move into full "looking forward" mode. We closed on the sale of the previous house and now will begin the deliberate process of settling into the new place. I'm glad we have the winter months to do that, and everything will be nicely in place once spring arrives!
 
@@ -247,7 +247,7 @@ I would like to be better at Chess. Some interesting ideas here for how to do th
 
 https://www.hackthegap.com
 
-The mission of [Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I serve on the board of [Minnestar](https://minnestar.org) with [Jenna Pederson](https://twitter.com/jennapederson), one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
+[The mission of Hack the Gap](https://www.hackthegap.com/) is to amplify the voices and cultivate talents of underserved people in our community. I [serve on the board of Minnestar](https://minnestar.org) [with Jenna Pederson](https://twitter.com/jennapederson) , one of the founders of Hack the Gap, and I love what this organization is focusing on. Gender diversity in tech is a real problem and it’s far too often brushed off as some endemic issue that cannot be solved. That isn't the case at all. Hack the Gap is creating a way for people to get into the technology industry and breaking down barriers. [Donate to Hack the Gap today!](https://secure.squarespace.com/commerce/donate?donatePageId=5829347e1b631bf14c24e1a3)
 
 ## Yet More Links 🍞
 

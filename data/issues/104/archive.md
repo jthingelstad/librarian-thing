@@ -51,7 +51,7 @@ links:
   domain: kottke.org
   heading_context: '[Perfectly Normal, How Autism Feels From the Inside](https://kottke.org/19/04/perfectly-normal-how-autism-feels-from-the-inside)'
   section: Notable Links 📌
-word_count: 1055
+word_count: 1056
 ---
 It’s late, and I got a late start getting the newsletter together. Let's jump straight to the links, and have a great weekend! 😎
 
@@ -99,7 +99,7 @@ A peek into life with autism.
 
 https://wikimediafoundation.org/wiki/Home
 
-The [Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference projects in the world, including [Wikipedia](https://www.wikipedia.org), a top-ten internet property. [Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
+[The Wikimedia Foundation, Inc.](https://wikimediafoundation.org/wiki/Home) is a nonprofit charitable organization dedicated to encouraging the growth, development and distribution of free, multilingual, educational content, and to providing the full content of these wiki-based projects to the public free of charge. The Wikimedia Foundation operates some of the largest collaboratively edited reference [projects in the world, including Wikipedia](https://www.wikipedia.org) , a top-ten [internet property. Donate to Wikimedia today!](https://donate.wikimedia.org/w/index.php?title=Special:LandingPage&uselang=&country=US)
 
 ## Yet More Links 🍞
 

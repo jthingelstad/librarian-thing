@@ -96,7 +96,7 @@ links:
   domain: om.co
   heading_context: '[3 pieces of advice in Jeff Bezos’ Shareholder Letter – On my Om](https://om.co/2019/04/17/3-pieces-of-advice-in-jeff-bezos-shareholder-letter/)'
   section: Notable Links 📌
-word_count: 2042
+word_count: 2043
 ---
 Happy Easter Weekend to all of you! I hope the Easter Bunny brings you something great in your basket. 🐰 And Happy Earth Day coming up on Monday! 🌎 I am so excited for this weekend. It’s one of those first weekends where all the snow is gone, and it looks like it’s going to be absolutely gorgeous! ☀️
 
@@ -201,7 +201,7 @@ Summary of some key highlights from [Jeff Bezos Shareholder letter](https://blog
 
 https://www.eff.org
 
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
+[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

@@ -93,7 +93,7 @@ links:
   domain: blog.usejournal.com
   heading_context: '[Writing Docs at Amazon – Noteworthy - The Journal Blog](https://blog.usejournal.com/writing-docs-at-amazon-e025808616bd)'
   section: Notable Links 📌
-word_count: 1960
+word_count: 1961
 ---
 I’m wrapping up four weeks of travel and I’m pretty excited to get home and rest up a bit. All of it has been great, both business as well as our vacation sliced into the middle, but you never truly relax on the road and I’m definitely feeling it. I’m unusually excited to have a weekend to kick back a bit, and get some solid sleep in my own bed. I think I’ll get a haircut too. I’m also happy to say that I’m actually missing my Peloton spin bike. I’m looking forward to getting a couple of classes in this weekend.
 
@@ -205,7 +205,7 @@ While written as a guide for doing this at Amazon, it all applies to doing the s
 
 https://www.eff.org
 
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
+[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

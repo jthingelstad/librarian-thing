@@ -92,7 +92,7 @@ links:
   domain: logrocket.com
   heading_context: '[Stop building websites with infinite scroll!](https://logrocket.com/blog/infinite-scroll/)'
   section: Notable Links 📌
-word_count: 2016
+word_count: 2017
 ---
 For the last two years our family has been wrestling with the idea of moving to a new house. 🏡 Tammy has felt for a while that she wanted a change of scenery. The rest of us haven't been as eager to go along. This is the first time that we have considered moving now that the kids are old enough to have an opinion of their own. We've found the additional complications of their friends and the neighborhood to be challenging to get our heads around.
 
@@ -221,7 +221,7 @@ My nook club read for this month. I’m almost done and the book is thought prov
 
 https://www.eff.org
 
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
+[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 

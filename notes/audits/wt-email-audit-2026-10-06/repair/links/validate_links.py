@@ -18,6 +18,7 @@ import collections, difflib, json, re, subprocess, sys, urllib.parse
 sys.path.insert(0, '/tmp/wtq/r3')
 from common import A, soup_of
 import os
+BASE = os.environ.get('WTQ_BASE', 'HEAD')
 LT = os.environ.get('WTQ_LT', '/Users/otto/Projects/thingelstad.com/librarian-thing')
 PREFIX = re.compile(r'^(\s{0,3}(#{1,6}|>+|[-*+]|\d+\.)\s+|>\s?)*')
 fails = collections.defaultdict(list)
@@ -31,7 +32,7 @@ def body_of(text): return text[text.index('---', 3) + 3:]
 nums = [int(a) for a in sys.argv[1:] if a.isdigit()] or list(range(23, 131))
 stats = collections.Counter()
 for n in nums:
-    old_t = subprocess.run(['git', '-C', LT, 'show', f'HEAD:data/issues/{n}/archive.md'], capture_output=True, text=True).stdout
+    old_t = subprocess.run(['git', '-C', LT, 'show', f'{BASE}:data/issues/{n}/archive.md'], capture_output=True, text=True).stdout
     new_t = open(f'{LT}/data/issues/{n}/archive.md', encoding='utf-8').read()
     fm = lambda t: re.sub(r'(?m)^word_count: \d+$', '', t[:t.index('---', 3)])
     if fm(old_t) != fm(new_t): fails[n].append('L0 front matter changed beyond word_count')
@@ -41,7 +42,7 @@ for n in nums:
     sec = None
     for i, l in enumerate(old):
         if l.startswith('## '): sec = l
-        if sec and ('Promotion' in sec or 'Now Reading' in sec) and i in idx: fails[n].append(f'L0 line {i} is in a {sec!r} section, which must stay as it is')
+        if sec and ('🎁' in sec or 'Promotion' in sec or 'Give Back' in sec or 'Now Reading' in sec) and i in idx: fails[n].append(f'L0 line {i} is in a {sec!r} section, which must stay as it is')
     if not idx: continue
     s = soup_of(n)
     E = norm_words(s.get_text(' ')); e_words = set(E)

@@ -74,7 +74,7 @@ links:
   domain: www.redbull.com
   heading_context: '[Red Bull Trans-Siberian Extreme](https://www.redbull.com/us-en/events/red-bull-trans-siberian-extreme)'
   section: Notable Links 📌
-word_count: 1360
+word_count: 1361
 ---
 This week has been challenging on a couple of fronts. The news of [David Hussman's passing](https://www.caringbridge.org/visit/davidhussman2/journal/view/id/5b798405ec1003404f0f1ee1) spread quickly this last weekend. 😢 I've [lost one other friend to cancer](https://www.thingelstad.com/2013/goodbye-to-my-friend-john-riedl/), and he also seemed to be doing better than expected for a long time, and then his health went downhill very quickly. I don't know if that is common with cancer, but it feels like it is tricking you.
 
@@ -160,7 +160,7 @@ I had not heard of this event and it is a monster “15 stages over the course o
 
 https://www.eff.org
 
-The [Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also recently launched solutions like [Privacy Badger](https://www.eff.org/privacybadger) and the critically important [Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate)!
+[The Electronic Frontier Foundation](https://www.eff.org) is the leading nonprofit organization defending civil liberties in the digital world. I have been a member of the EFF for years. Not only is the EFF working hard to protect you on the Internet they have also [recently launched solutions like Privacy Badger](https://www.eff.org/privacybadger) [and the critically important Let's Encrypt](https://letsencrypt.org) service to make encrypting web servers free to anyone. [Support the EFF with a donation](https://supporters.eff.org/donate) !
 
 ## Yet More Links 🍞
 
