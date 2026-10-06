@@ -582,7 +582,7 @@ Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails
 - Placement follows the email in WT23–52. WT97 and WT109 follow the WT53–130 convention (photo right under the heading), which every surviving section in that era uses.
 - WT39–41 get back the "Photo 📷" heading. WT32–38's "Photog" headings are corrected to the emails' "Photo".
 - The covers of WT31 (a waterfall) and WT32 (an EFF member badge) were different pictures, so the email photos replaced them on S3. The old versions are kept, CloudFront was invalidated, and the vision descriptions were redone (`describe_media.py --url`).
-- WT29's photo is gone everywhere (dead MailChimp URL, no archive copy), so it stays without one. Its dead cover URL and WT27's App Store "Placeholder" image are cleared to `''`, as WT1 is.
+- WT29's photo was gone everywhere (dead MailChimp URL, no archive copy). Jamie found the original on 2026-10-06 (the Christmas 2000 Santa ornament, 2576 px); it is back as the Photog photo and cover at `files.thingelstad.com/weekly-thing/29/cover.jpg`, 800 px like its neighbours, with no metadata. Its dead cover URL and WT27's App Store "Placeholder" image are cleared to `''`, as WT1 is.
 - Left as found: WT97's "Dreaming of summer." line (the email's alt, flattened into text at import) and WT36's "thick" (the email says "think").
 
 **Round 3, links: content, not format** (`repair/links/`). 1,134 lines in 108 issues match the emails' content again. Jamie, 2026-10-06: "you're not restoring the format, you're restoring the content".

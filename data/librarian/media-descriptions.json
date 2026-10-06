@@ -12372,6 +12372,11 @@
   "description": "A historic theater marquee displays \"The Decemberists\" concert at 7 PM on 5.19. The neon \"Palace\" sign glows above the brick building facade.",
   "model": "claude-haiku-4-5"
  },
+ "https://files.thingelstad.com/weekly-thing/29/cover.jpg": {
+  "described_at": "2026-10-06T19:46:15Z",
+  "description": "A glass Santa Claus ornament hanging on an evergreen Christmas tree with lit lights. The ornament is dated 2000 and features Santa in red and white clothing holding a gift bag.",
+  "model": "claude-haiku-4-5"
+ },
  "https://files.thingelstad.com/weekly-thing/290/cover.jpg": {
   "described_at": "2026-09-05T10:10:23Z",
   "description": "Vibrant purple phlox flowers bloom along a shaded garden path lined with green foliage and tree canopy overhead on a sunny day.",

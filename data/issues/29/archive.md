@@ -5,7 +5,7 @@ subject: Weekly Thing for November 25, 2017
 publish_date: '2017-11-25T13:00:00Z'
 slug: weekly-thing-for-november-25-2017
 description: AlphaGo Zero, brilliant jerks in engineering, net neutrality repeal, Uber data breach, pingfs ICMP storage, Pi-hole, products over projects.
-image: ''
+image: https://files.thingelstad.com/weekly-thing/29/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-november-25-2017/
 domains:
 - arstechnica.com
@@ -169,6 +169,8 @@ Heads up, there are a lot of links this week. 😳
 Ran into a deer crossing the road. Everyone was okay but shooken up. Not sure what happened to the deer.
 
 ## Photog 📷
+
+![](https://files.thingelstad.com/weekly-thing/29/cover.jpg)
 
 The holiday season is now officially here with the Christmas Tree 🎄 going up and the wonderful ornaments from the years going up, told with stories for the kids.
 
