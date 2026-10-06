@@ -1473,7 +1473,11 @@ def build_corpus(
         # canonical (Jamie, 2026-09-30), so readers can collapse the two.
         # An entry no blog post matched copies nothing (WT352's did, and its
         # None broke the sort in blog_photo).
-        copied = {entry["copy_of_microblog_id"] for entry in journal_entries if entry["copy_of_microblog_id"]}
+        copied = {
+            entry["copy_of_microblog_id"]
+            for entry in journal_entries
+            if entry["copy_of_microblog_id"]
+        }
         for item in media[issue_media_from:]:
             original = post_index.blog_photo(item["url"], copied)
             if original:
