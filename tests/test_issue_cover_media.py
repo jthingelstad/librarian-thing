@@ -63,7 +63,8 @@ class IssueCoverTests(unittest.TestCase):
         }
         self.assertIn("350", covers)
         self.assertIn("351", covers)
-        self.assertEqual(len(covers), 36)
+        self.assertIn("352", covers)
+        self.assertEqual(len(covers), 37)
         self.assertFalse({str(n) for n in range(3, 23)} & covers)
 
 

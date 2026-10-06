@@ -1471,7 +1471,9 @@ def build_corpus(
         all_references.extend(journal_references)
         # A photo that is also a blog post's photo points at it, the blog copy
         # canonical (Jamie, 2026-09-30), so readers can collapse the two.
-        copied = {entry["copy_of_microblog_id"] for entry in journal_entries}
+        # An entry no blog post matched copies nothing (WT352's did, and its
+        # None broke the sort in blog_photo).
+        copied = {entry["copy_of_microblog_id"] for entry in journal_entries if entry["copy_of_microblog_id"]}
         for item in media[issue_media_from:]:
             original = post_index.blog_photo(item["url"], copied)
             if original:
