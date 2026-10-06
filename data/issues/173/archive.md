@@ -250,7 +250,7 @@ I like the anecdotes that he shared.
 
 ### [Planetary - Social media for humans, not algorithms.](https://www.planetary.social/)
 
-Planetary [has just launched](https://mailchi.mp/9d453992186b/planetary-launched-decentralized-community-controlled-social-media?e=ba279e5488) and looks like the very first [Scuttlebutt](https://scuttlebutt.nz) decentralized social network client that is easy-to-use for regular folk. I've been intrigued by Scuttlebutt since I first ran into it being used by people that sail a lot and are only rarely online. Scuttlebutt can work in these disconnected environments. I installed Planetary to try it but I would want to use [micro.blog](https://micro.blog) to syndicate content to it, and [that isn't happening soon](https://micro.blog/jthingelstad/10986234).
+Planetary [has just launched](https://mailchi.mp/9d453992186b/planetary-launched-decentralized-community-controlled-social-media) and looks like the very first [Scuttlebutt](https://scuttlebutt.nz) decentralized social network client that is easy-to-use for regular folk. I've been intrigued by Scuttlebutt since I first ran into it being used by people that sail a lot and are only rarely online. Scuttlebutt can work in these disconnected environments. I installed Planetary to try it but I would want to use [micro.blog](https://micro.blog) to syndicate content to it, and [that isn't happening soon](https://micro.blog/jthingelstad/10986234).
 
 ---
 
