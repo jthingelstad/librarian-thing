@@ -209,8 +209,6 @@ Chat requests run through a tool-using Claude Sonnet 4.6 loop capped by `MAX_TOO
 
 Registry-internal, no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`.
 
-The signed-in chat (not guests, `/mcp` or `/tools`) also binds Claude's own web search, the Anthropic API server tool, since 2026-10-07. It is not part of the published surface: it has no spec and no handler here, and the MCP version did not change. Searches show as "Searching the web..." activity rows, enter the tool trace as `web_search`, and the pages an answer cites join its citations as `external_page` sources.
-
 All lexical filtering runs through the canonical matcher (`shared/matcher.mts`); semantics, the alias table, and per-tool coverage are specified in `apps/librarian/MATCHER.md`. Match reasons and evidence attribute the exact span found; `first`/`latest` come only from strict (exact/phrase) hits. Since MCP 1.5.1:
 - A `list_topics` cluster label matches only when it is named whole.
 - A domain filter matches the domain or a subdomain.
