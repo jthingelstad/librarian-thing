@@ -180,8 +180,12 @@ jobs:
             weekly_corpus=true
           fi
 
+          # data/issues/ too: each post's also_in_issues and linked_from_issues
+          # come from the issues, and the gate checks them against the new
+          # Weekly Thing corpus.
           blog_corpus=false
           if has_change \
+            '^data/issues/' \
             '^data/blog/' \
             '^data/librarian/media-descriptions\.json$' \
             '^data/librarian/blog-abstracts\.json$' \
