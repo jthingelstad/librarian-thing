@@ -199,7 +199,7 @@ links:
   domain: ens.domains
   heading_context: null
   section: Briefly
-word_count: 4119
+word_count: 4115
 ---
 Good morning! ☕️
 
@@ -452,10 +452,6 @@ Realized we had some big usability issues in our donation tracking sheets for da
 I’ve had a blast learning [Clash Royale](https://supercell.com/en/games/clashroyale/) with [Tyler](https://tyler.thingelstad.com). They just announced a [bunch of changes to “the economy”](https://royaleapi.com/blog/level-16-and-economy-changes-2025-q4) which meant I needed to use my **Book of Cards**. I decided to “pay to win” and level up my **Witch** and **Cannon** to get maximum benefit from the books. Play Clash Royale? [Let’s connect](https://link.clashroyale.com/invite/friend/en?tag=20JJJ2CCRU&token=nd6etsya&platform=iOS).
 
 ![](https://files.thingelstad.com/weekly-thing/332/journal/0fbd8f13a8.png)
-
----
-
-## Supporting Membership
 
 ---
 

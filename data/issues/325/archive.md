@@ -188,7 +188,7 @@ links:
   domain: www.programmax.net
   heading_context: null
   section: Briefly
-word_count: 3278
+word_count: 3274
 ---
 Good morning! ☕️
 
@@ -409,10 +409,6 @@ Tyler got [Dayne St. Clair](https://www.mnufc.com/players/dayne-st-clair/)'s sig
 We saw [F1: The Movie](https://www.f1themovie.com) tonight and I thought it was awesome. Great summer movie with a predictable story but still thrilling and exciting! I loved the race scenes -- which were plenty. Brad Pitt was great as was the rest of the cast. Recommended!
 
 ![A person in a racing suit stands beside a Formula 1 car against a vibrant sunset backdrop, with promotional text for an F1 movie.](https://files.thingelstad.com/weekly-thing/325/journal/mv5bowriothkm2ytyzi4ns00owviltk0odmtmjnlndyyzwq3mznjxkeyxkfqcgc.-v1-fmjpg-u.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

@@ -199,7 +199,7 @@ links:
   domain: www.reuters.com
   heading_context: null
   section: Briefly
-word_count: 2767
+word_count: 2763
 ---
 Good morning! ☕️
 
@@ -360,10 +360,6 @@ Started with 8 gallons of wax and 60 candles later…
 Making [Things 4 Good](https://www.thingelstad.com/candles/) candles!
 
 ![](https://files.thingelstad.com/weekly-thing/331/journal/c4ba469b50.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

@@ -188,9 +188,9 @@ I hope this is a way for people to go back to topics and reflect on them more. M
 
 This may be the first of many Yearly Things that you can collect over time. 🤔
 
-<buttondown-button align="center" href="https://www.lulu.com/shop/jamie-thingelstad/yearly-thing-2025/paperback/product-84w66ey.html">Paperback on Lulu</buttondown-button>
+[Paperback on Lulu](https://www.lulu.com/shop/jamie-thingelstad/yearly-thing-2025/paperback/product-84w66ey.html)
 
-<buttondown-button align="center" href="https://jthingelstad.gumroad.com/l/yearly-thing-2025">eBook on Gumroad</buttondown-button>
+[eBook on Gumroad](https://jthingelstad.gumroad.com/l/yearly-thing-2025)
 
 ![A futuristic-style book cover titled Yearly Thing 2025 features wind turbines against a cloudy sky.](https://files.thingelstad.com/weekly-thing/338/journal/5b1cabc144.jpg)
 

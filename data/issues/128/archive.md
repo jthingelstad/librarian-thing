@@ -160,7 +160,7 @@ Amazingly detailed and specific skill development framework for engineers.
 
 ### [Yes! and… How to be effective in the theatre of work](https://tomcritchlow.com/2019/11/18/yes-and/)
 
-Article is mostly about the book [Impro - Improvisation and the Theatre](https://www.amazon.com/Impro-Improvisation-Theatre-Keith-Johnstone/dp/0878301178), which thanks to this article is now on my wish list, and how it applies to improving your capabilities at work. This article is particularly serendipitous for me. We just had our all-company meeting at [John Sweeney gave the keynote](https://www.thingelstad.com/2019/11/12/john-sweeney-gave.html). Sweeney is with Brave New Workshop, an improve theatre, and they have an entire side of their business [consulting with companies](https://www.bravenewworkshop.com/creativeoutreach/)! Might learning improve be a good next step in my own development? 🤪
+Article is mostly about the book [Impro - Improvisation and the Theatre](https://www.amazon.com/Impro-Improvisation-Theatre-Keith-Johnstone/dp/0878301178), which thanks to this article is now on my wish list, and how it applies to improving your capabilities at work. This article is particularly serendipitous for me. We just had our all-company meeting at [John Sweeney gave the keynote](https://www.thingelstad.com/2019/11/12/growth-summit.html). Sweeney is with Brave New Workshop, an improve theatre, and they have an entire side of their business [consulting with companies](https://www.bravenewworkshop.com/creativeoutreach/)! Might learning improve be a good next step in my own development? 🤪
 
 ### [Data General's Tom West dies • The Register](https://www.theregister.co.uk/2011/05/24/tom_west_obit/)
 

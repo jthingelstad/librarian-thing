@@ -191,7 +191,7 @@ Interesting new service [Sarahah](https://www.sarahah.com) provides a way for in
 This looks very useful for people building serverless apps on Lambda. Putting the code in a container is definitely nice, but the ability to simulate invokes from other AWS services is a big win too!
 
 ## Microblog updates 🎈
-- [Created a Sarahah profile where people can send me anonymous feedback or comments. 🤞🏻](http://www.thingelstad.com/2017/08/18/created-a-sarahah.html)
+- Created a Sarahah profile where people can send me anonymous feedback or comments. 🤞🏻
 - [Would be cool if there was a Homebrew Website Club in Minneapolis… 🤔](http://www.thingelstad.com/2017/08/18/would-be-cool.html)
 - [Gateway Arch in St. Louis.](http://www.thingelstad.com/2017/08/18/gateway-arch-in.html)
 - [Overheard at restaurant “We still use Lotus Notes Sametime!” 🤔😏😄](http://www.thingelstad.com/2017/08/18/overheard-at-restaurant.html)
@@ -203,10 +203,10 @@ This looks very useful for people building serverless apps on Lambda. Putting th
 - [Coldplay! Lasers! 🤘🏻](https://www.thingelstad.com/2017/08/12/coldplay-at-us.html)
 - [Coldplay off to awesome start! 👏🏻🎶](https://www.thingelstad.com/2017/08/12/coldplay-at-us.html)
 - [Found our seats and ready for Coldplay to take the stage. First time at US Bank Stadium too! 👍🏻](https://www.thingelstad.com/2017/08/12/coldplay-at-us.html)
-- [Just reset my micro.blog GitHub mirror in hopes of purging the failed Twitter import.](http://www.thingelstad.com/2017/08/12/just-reset-my.html)
+- Just reset my micro.blog GitHub mirror in hopes of purging the failed Twitter import.
 - [Tyler and I took the Pokemon Go Plus for a spin today and it definitely levels up your play.](http://www.thingelstad.com/2017/08/12/tyler-and-i.html)
 - [Espresso in rocket demitasse.](http://www.thingelstad.com/2017/08/12/espresso-in-rocket.html)
-- [Pretty excited for a Saturday to just relax and do small projects around the house.](http://www.thingelstad.com/2017/08/12/pretty-excited-for.html)
+- Pretty excited for a Saturday to just relax and do small projects around the house.
 
 ## The end 🎬
 

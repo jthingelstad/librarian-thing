@@ -222,7 +222,7 @@ Interesting writeup on injecting formulas into CSV data to affect the behavior o
 
 ### [What Sephora Knows About Women in Tech That Silicon Valley Doesn’t - WSJ](https://www.wsj.com/articles/what-sephora-knows-about-women-in-tech-that-silicon-valley-doesnt-1507539600)
 
-[Highlighting how Sephora](https://www.sephora.com) has defied technology trends regarding gender diversity in technology. This reference to EEOC data is sobering:
+Highlighting how [Sephora](https://www.sephora.com) has defied technology trends regarding gender diversity in technology. This reference to EEOC data is sobering:
 
 > Women hold 23% of roles in the technical ranks at the top 75 Silicon Valley companies, according to the U.S. Equal Employment Opportunity Commission. A report from the commission attributes the scarcity of women in those roles to inhospitable work cultures, isolation, a “firefighting” work style, long hours and a lack of advancement.
 
@@ -282,8 +282,6 @@ This seems like a good idea. I don't know that anyone would ever need to notify 
 
 ## Featured App 📱
 
-https://itunes.apple.com/us/app/through-the-ages/id966245474?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Through the Ages](https://itunes.apple.com/us/app/through-the-ages/id966245474?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 ## by Czech Games Edition
@@ -310,7 +308,7 @@ $9.99 5/5 stars
 - Sold out game for MN United tonight! ⚽️ North rising! [→](https://www.thingelstad.com/2017/10/07/211407.html)
 - Huge applause 👏🏻 for the 4-time WNBA Champion Minnesota Lynx 🏀 at MN United ⚽️ halftime! [→](https://www.thingelstad.com/2017/10/07/211407.html)
 - MN UFC corner kick — scarves flying! ⚽️ [→](https://www.thingelstad.com/2017/10/07/211407.html)
-- MN UFC!!! ⚽️ MN UFC!!! ⚽️ MN UFC!!! ⚽️ [→](http://www.thingelstad.com/2017/10/07/mn-ufc-mn.html)
+- MN UFC!!! ⚽️ MN UFC!!! ⚽️ MN UFC!!! ⚽️ [→](https://www.thingelstad.com/2017/10/07/211407.html)
 - Mazie and I closing out the MN United ⚽️ home season! [→](https://www.thingelstad.com/2017/10/07/211407.html)
 - After being late to MN United game, U of MN parking screwed up and my reserved parking lot was sold out! Added even more delay. 😡 [→](https://www.thingelstad.com/2017/10/07/193329.html)
 - Forgot about I-35W being closed and missed first 20 mins of MN United ⚽️ game! 😳 [→](https://www.thingelstad.com/2017/10/07/193329.html)

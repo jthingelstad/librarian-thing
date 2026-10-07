@@ -221,10 +221,10 @@ $2.99 4.5/5 stars
 - [Got my Series 3 Apple Watch today! Way faster than original. Have LTE setup too! ⌚️](http://www.thingelstad.com/2017/09/29/got-my-series.html)
 - [Setup iCloud Family Sharing for storage. Nice to have that option now!](http://www.thingelstad.com/2017/09/29/setup-icloud-family.html)
 - [Gave another copy of Getting Things Done to a #TeamSPS member. One of my favorite things to do!](http://www.thingelstad.com/2017/09/29/gave-another-copy.html)
-- [I added search to my link blog! It uses Lunr.js and is all client side. It takes a bit to load with 9,000 links to index, but is very fast once loaded. Give it a try and let me know what you think. The search as you type method is fun to discover things.](http://www.thingelstad.com/2017/09/28/search-added-to.html)
+- I added search to my link blog! It uses Lunr.js and is all client side. It takes a bit to load with 9,000 links to index, but is very fast once loaded. Give it a try and let me know what you think. The search as you type method is fun to discover things.
 - [Goodbye JPEG. Hello HEIF!](http://www.thingelstad.com/2017/09/27/goodbye-jpeg-hello.html)
 - [Fun book club meeting tonight discussing How to Live: Or A Life of Montaigne in One Question and Twenty Attempts at an Answer. 📚](http://www.thingelstad.com/2017/09/26/fun-book-club.html)
-- [Deleted Sarahah account. In several weeks, I got one valid message that was appreciated, and dozens of bot messages.](http://www.thingelstad.com/2017/09/24/deleted-sarahahhttpswwwsarahahcom-account.html)
+- Deleted Sarahah account. In several weeks, I got one valid message that was appreciated, and dozens of bot messages.
 - [One of Chase’s favorite spots.](http://www.thingelstad.com/2017/09/24/one-of-chases.html)
 - [Good morning Minnesota! ☕️](http://www.thingelstad.com/2017/09/24/good-morning-minnesota.html)
 - [At cabin, kids in bed, Vodskey Moscow Mules, cribbage, tunes. 👍🏻](http://www.thingelstad.com/2017/09/23/at-cabin-kids.html)

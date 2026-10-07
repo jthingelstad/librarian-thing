@@ -186,7 +186,7 @@ Detailed and well-written overview of this powerful architectural pattern.
 
 ### [Available on MasterClass: "Aaron Franklin Teaches Texas-Style BBQ" — Tools and Toys](http://toolsandtoys.net/aaron-franklin-texas-style-bbq-masterclass/)
 
-OMG this is so amazing and awesome! I [experienced the magic of Franklin Barbecue](https://www.thingelstad.com/2019/04/03/full-fanboy-mode.html) and this series of classes with Aaron Franklin are exceedingly well done. I've also got a bit of a '[man crush](https://www.urbandictionary.com/define.php?term=mancrush)' on Franklin. I'd love to hang out for a day of smoking BBQ with him. I'd even bring the beer! 😍🍻
+OMG this is so amazing and awesome! I [experienced the magic of Franklin Barbecue](https://www.thingelstad.com/2019/04/03/104013.html) and this series of classes with Aaron Franklin are exceedingly well done. I've also got a bit of a '[man crush](https://www.urbandictionary.com/define.php?term=mancrush)' on Franklin. I'd love to hang out for a day of smoking BBQ with him. I'd even bring the beer! 😍🍻
 
 ### [Interactive presentation software - Mentimeter](https://www.mentimeter.com/)
 
@@ -257,7 +257,7 @@ Cue WONDERWALL! Loons win 1-0! 🙌🎶⚽️ #MNUFC #MINvHOU
 ![](https://cdn.uploads.micro.blog/890/2019/6e876ef97b.jpg)
 ![](https://cdn.uploads.micro.blog/890/2019/391196fb69.jpg)
 
-### [Saturday @ 8:56 PM](https://www.thingelstad.com/2019/05/25/beautiful-game-mnufc.html)
+### [Saturday @ 8:56 PM](https://www.thingelstad.com/2019/05/25/minnesota-united-v.html)
 
 Beautiful Game! ⚽️ #MNUFC #MINvHOU
 

@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/34/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-december-30-2017/
 domains: []
 links: []
-word_count: 1966
+word_count: 1965
 ---
 I hope you all have been having a wonderful Christmas and New Years and are getting some time away to rest and relax. I’m sure you're wondering how my first attempt at Glorified Rice turned out? It was pretty good! I learned I didn't need to make a double batch, and I needed a little more crushed pineapple.
 
@@ -80,7 +80,7 @@ I like articles from folks that know a craft and can share some of how the sausa
 
 ### [Lanier’s Social Medium Ultimatum | James Shelley](https://jamesshelley.com/2017/12/22/laniers-social-medium-ultimatum/)
 
-I love [this call out from Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier) :
+I love this call out from [Jaron Lanier](https://en.wikipedia.org/wiki/Jaron_Lanier):
 
 > People have to take responsibility to become literate in a new way if they are going to use the technology at all. So if you just can’t find it in yourselves to delete all your social media accounts, then you must take it upon yourself to really learn how it works. Learn how the addiction cycle works. Learn how the manipulation works. Become aware of it.
 
@@ -133,8 +133,6 @@ The [Foo Fighters](http://foofighters.com) are so awesome, and now I find myself
 ---
 
 ## Now Reading 📚
-
-http://www.amazon.com/dp/162672315X/?tag=thingelstad01-20
 
 ### [Tetris: The Games People Play](http://www.amazon.com/dp/162672315X/?tag=thingelstad01-20)
 

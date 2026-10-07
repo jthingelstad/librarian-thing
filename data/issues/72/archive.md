@@ -131,7 +131,7 @@ links:
   domain: www.bloomberg.com
   heading_context: '[Larry Page Is a No-Show With Google Under a Harsh Spotlight - Bloomberg](https://www.bloomberg.com/news/features/2018-09-13/larry-page-is-a-no-show-with-google-under-a-harsh-spotlight)'
   section: Notable Links 📌
-word_count: 2479
+word_count: 2478
 ---
 Ok, this week got a bit heavy on all the announcements around the iPhone XS, Apple Watch Series 4 and iOS 12. I'm waiting for the iPhone XS to get delivered, and should have it in my hands very soon. Tammy and I both upgraded, and after reading the reviews I'm very interested to check out the camera capabilities. 📱
 
@@ -273,9 +273,7 @@ Giving congress the ability to get pictures of an empty chair with Google's name
 
 ## Now Reading 📚
 
-https://www.amazon.com/Change-Your-Mind-Consciousness-Transcendence/dp/1594204225/ref=sr_1_4?s=books&ie=UTF8&qid=1537551430&sr=1-4&keywords=how+to+change+your+mind
-
-How to Change Your Mind: What the New Science of Psychedelics Teaches Us About Consciousness, Dying, Addiction, Depression, and Transcendence ()
+[How to Change Your Mind: What the New Science of Psychedelics Teaches Us About Consciousness, Dying, Addiction, Depression, and Transcendence](https://www.amazon.com/Change-Your-Mind-Consciousness-Transcendence/dp/1594204225/ref=sr_1_4?s=books&ie=UTF8&qid=1537551430&sr=1-4&keywords=how+to+change+your+mind)
 by Michael Pollan
 
 > A brilliant and brave investigation into the medical and scientific revolution taking place around psychedelic drugs--and the spellbinding story of his own life-changing psychedelic experiences
@@ -283,8 +281,6 @@ by Michael Pollan
 My book club is reading this and I'm enjoying it. I like Pollan's other work, and it's sort of nice to read something from him not about food. The history of psychedelics is pretty interesting. I had no idea about the therapeutic and medical uses of it before it become part of counter-culture.
 
 ## Highlighted iOS App 📱
-
-https://itunes.apple.com/us/app/scriptable/id1405459188?mt=8&uo=4
 
 ### [Scriptable](https://itunes.apple.com/us/app/scriptable/id1405459188?mt=8&uo=4)
 

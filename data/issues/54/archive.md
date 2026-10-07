@@ -99,7 +99,7 @@ links:
   domain: www.principles.com
   heading_context: '[Principles by Ray Dalio](https://www.principles.com/principles-for-success/)'
   section: Notable Links 📌
-word_count: 1715
+word_count: 1714
 ---
 This was one of those weeks that goes by so fast it was hard to even see the blurred images as they went by. The week started with recognizing the Mom's, onto a very busy week of activities, and I took off today with [my brother](http://ikeating.micro.blog) for a weekend in Chicago! This weeks intro is going to be a little light so I can get some sleep. 😴
 
@@ -244,7 +244,7 @@ Another great #TeamSPS #SPSTechJam! Wonderful topics, great speakers and an amaz
 
 ### [Wednesday @ 4:07 PM](https://www.thingelstad.com/2018/05/16/sps-techjam.html)
 
-[“At SPS it might be Kube](https://kubernetes.io) [or Kubb](https://en.wikipedia.org/wiki/Kubb) [!” Kelly Hamm](https://www.linkedin.com/in/hammkelly/) [at SumoLogic](https://www.sumologic.com) knows #TeamSPS — and thanks for the Kubb set!
+“At SPS it might be [Kube](https://kubernetes.io) or [Kubb](https://en.wikipedia.org/wiki/Kubb)!” [Kelly Hamm](https://www.linkedin.com/in/hammkelly/) at [SumoLogic](https://www.sumologic.com) knows #TeamSPS — and thanks for the Kubb set!
 
 ![](https://cdn.uploads.micro.blog/890/2018/ced5a31b43.jpg)
 

@@ -175,7 +175,7 @@ This is one of the most profound areas where our lawmakers are failing to do the
 ### [Getting Tesla Model Y](https://www.thingelstad.com/2024/03/03/getting-tesla-model.html)
 Mar 3, 2024 at 9:10 AM
 
-Yesterday we purchased a **2024 Tesla Model Y**! This will be my primary car [replacing the Mazda CX-9](https://www.thingelstad.com/2021/07/24/mazda-cx-carbon.html). [Our Model 3](https://www.thingelstad.com/2018/10/01/picked-up-my.html) has become Tammy’s primary car since the pandemic when she started driving it more. Before then the Model 3 was always with me at the office. 😊
+Yesterday we purchased a **2024 Tesla Model Y**! This will be my primary car [replacing the Mazda CX-9](https://www.thingelstad.com/2021/07/24/mazda-cx-carbon.html). [Our Model 3](https://www.thingelstad.com/2018/10/01/picked-up-my-tesla-model.html) has become Tammy’s primary car since the pandemic when she started driving it more. Before then the Model 3 was always with me at the office. 😊
 
 We test drove the Model Y, Model S, and Model X. I find the Model 3 to be uncomfortable to get in and out of and the Model S was nearly identical. We all loved the Model X but the price jump is huge -- you can buy two Model Y’s for the price. Additionally, with our small South Minneapolis garage I was very doubtful the Model X doors would work.
 

@@ -392,7 +392,7 @@ Incredibly nice weather today. We got to do a November family bike ride!
 
 ![](https://www.thingelstad.com/uploads/2020/6f54b9b052.jpg)
 
-[Friday @ 7:09 AM](https://www.thingelstad.com/2020/11/06/dave-has-a.html)
+Friday @ 7:09 AM
 
 [Dave](http://slowperc.blogspot.com/) has a good plan for today.
 

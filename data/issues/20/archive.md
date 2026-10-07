@@ -334,7 +334,7 @@ I looked into [Hugo](https://gohugo.io) a while back and was very impressed, but
 ## Microblog updates 🎈
 - [Wow! Words & Music by Dan Wilson tonight was magical. So good! 🎶](http://www.thingelstad.com/2017/09/22/wow-words-music.html)
 - [Rachel Ries did a very nice opening set for Dan Wilson at the Fitzgerald. 🎶](https://www.thingelstad.com/2017/09/22/wow-words-music.html)
-- [Let’s share 🎶 activity on Apple Music. Connect to my profile.](http://www.thingelstad.com/2017/09/19/lets-share-activity.html)
+- Let’s share 🎶 activity on Apple Music. Connect to my profile.
 - [Trying out the Siri face in watchOS 4. Curious to see how it adapts and responds.](http://www.thingelstad.com/2017/09/19/trying-out-the.html)
 - [Updated iPhone and iPad to iOS 11. Now the slow, slow process of watchOS 4 upgrade.](http://www.thingelstad.com/2017/09/19/updated-iphone-and.html)
 - [Good morning! Espresso crema… ☕️](http://www.thingelstad.com/2017/09/19/good-morning-espresso.html)
@@ -349,8 +349,8 @@ I looked into [Hugo](https://gohugo.io) a while back and was very impressed, but
 - [Clouds and Water.](https://www.thingelstad.com/2017/09/16/163546.html)
 - [Fall sailing. ⛵️](https://www.thingelstad.com/2017/09/16/161257.html)
 - [Sailboat on Cannon Lake. Not a typical sight.](https://www.thingelstad.com/2017/09/16/161257.html)
-- [Fresh haircut! 👌🏼](http://www.thingelstad.com/2017/09/16/fresh-haircut.html)
-- [Building Link Thing, a Jekyll website with 9,000 posts, is just slow. No matter what.](http://www.thingelstad.com/2017/09/16/building-link-thinghttplinksthingelstadcom.html)
+- Fresh haircut! 👌🏼
+- Building Link Thing, a Jekyll website with 9,000 posts, is just slow. No matter what.
 - [Moved two small static sites to Netlify and am very impressed. Powerful and easy. Plus opens Hugo as an option.](http://www.thingelstad.com/2017/09/16/moved-two-small.html)
 
 ## The end 🎬

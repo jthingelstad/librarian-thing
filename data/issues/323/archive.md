@@ -180,7 +180,7 @@ links:
   domain: www.databricks.com
   heading_context: null
   section: Briefly
-word_count: 2878
+word_count: 2874
 ---
 Good morning! 🫡
 
@@ -330,10 +330,6 @@ I an unabashed fan of emoji and think it is super interesting to see how they ar
 > The table is shaped by three things: the categories the emoji are placed in; the relative popularity of each emoji, which is used to order the categories; and the “sentiment” of each emoji, which is used to order the emoji within each category.
 
 Lovely. ☺️
-
----
-
-## Supporting Membership
 
 ---
 

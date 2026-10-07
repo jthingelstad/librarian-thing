@@ -175,7 +175,7 @@ links:
   domain: www.juliensauctions.com
   heading_context: null
   section: Briefly
-word_count: 3790
+word_count: 3786
 ---
 Good morning! 👋
 
@@ -293,10 +293,6 @@ In the late 90's before we created BigCharts and got a successful company up and
 But it turns out that if you scale the crap out of this it is different. Increase by dozens of orders of magnitude the data set, the compute, the storage — you get a very different thing on the other end. And that same challenge of not really knowing what is going on at the core is still there too. Why does this model work better than the other? Shrug.
 
 I’m far out of my skis on this topic. It is notable to me that extreme scale can result in just something very different. Don't brains have the same thing in the extreme? Increase the number of neurons by several orders of magnitude and at some point you get different outcomes? We don't really know, but I agree with the author that this stuff is "weird", and it is also rather amazing.
-
----
-
-## Supporting Membership
 
 ---
 

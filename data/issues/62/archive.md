@@ -87,7 +87,7 @@ links:
   domain: brutalist-web.design
   heading_context: '[Brutalist Web Design](https://brutalist-web.design/)'
   section: Notable Links 📌
-word_count: 1680
+word_count: 1675
 ---
 It has been a busy (good!) return from a very relaxed holiday week. Through an odd sequence of events I'm going to two baseball games and two soccer games in a week! ⚾️⚽️⚾️⚽️🙌 No complaints as I enjoy both a lot.
 
@@ -109,7 +109,6 @@ I thoroughly enjoyed this article both for the content and the history covered, 
 
 The corn is definitely "knee high before the 4th of July"!
 
-Cornfield with barn in background.
 Jul 6, 2018 at 2:51 PM
 Warsaw, MN
 

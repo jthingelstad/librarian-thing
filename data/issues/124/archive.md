@@ -99,7 +99,7 @@ links:
   domain: jules.thegrommet.com
   heading_context: '[For Fathers of Daughters | Jules Pieri](https://jules.thegrommet.com/2018/10/10/for-fathers-of-daughters/)'
   section: Notable Links 📌
-word_count: 2190
+word_count: 2189
 ---
 What a week! So much raking last week and yet there are more leaves to deal with. 🍂 We watched an immense World Series. ⚾️ Tyler and I were both cheering for the Astros, but the series was filled with so much excitement. It was also amazing to witness the first time World Series where the home team never won a game. How weird is that! 😩
 
@@ -143,7 +143,7 @@ Most technologists dislike the idea of working with XML, and nearly always prefe
 
 ### [Thank you, Guido | Dropbox Blog](https://blog.dropbox.com/topics/company/thank-you--guido)
 
-A very sincere and heartfelt thank you to [the former Benevolent Dictator for Life](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) [(BDFL) of Python, Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum) , as he retires from Dropbox. Dropbox was pretty lucky to get someone of his background on their team, and reading how much Dropbox uses Python I suspect it was hugely beneficial to him to work with the language he created operating at such scale!
+A very sincere and heartfelt thank you to the former [Benevolent Dictator for Life](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) (BDFL) of Python, [Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum), as he retires from Dropbox. Dropbox was pretty lucky to get someone of his background on their team, and reading how much Dropbox uses Python I suspect it was hugely beneficial to him to work with the language he created operating at such scale!
 
 ### [5 things Rob Pike attributes to Go's success —The Changelog](https://changelog.com/posts/5-things-rob-pike-attributes-to-gos-success)
 

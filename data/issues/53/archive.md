@@ -204,8 +204,6 @@ Another data point on the [Manager v. Maker time](http://paulgraham.com/makerssc
 
 ## Now Reading 📚
 
-http://www.amazon.com/dp/1250103509/?tag=thingelstad01-20
-
 ### [Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity](http://www.amazon.com/dp/1250103509/?tag=thingelstad01-20)
 
 by Kim Scott
@@ -215,8 +213,6 @@ by Kim Scott
 This book is making the rounds at a lot of companies, including ours. I just bought copies of it for all of the leaders in my team and we are reading it and discussing as a group.
 
 ## Highlighted iOS App 📱
-
-https://itunes.apple.com/us/app/id1164801111?at=1001lxyE&ct=thingelstad_com
 
 ### [AutoSleep Tracker for Watch](https://itunes.apple.com/us/app/id1164801111?at=1001lxyE&ct=thingelstad_com)
 

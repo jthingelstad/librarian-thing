@@ -205,7 +205,7 @@ links:
   domain: creepylink.com
   heading_context: null
   section: Briefly
-word_count: 3579
+word_count: 3575
 ---
 Hello there! 👋
 
@@ -427,10 +427,6 @@ At our very first Minnesota Gophers basketball game in the Barn Lofts! 🏀
 POAP [7552077](https://collectors.poap.xyz/token/7552077) at **[You've met Jamie Thingelstad in Winter 2026](https://poap.gallery/drops/222977)**.
 
 ![](https://files.thingelstad.com/weekly-thing/337/journal/40d18fab-15a7-43c0-bca2-2717686a062d.png)
-
----
-
-## Supporting Membership
 
 ---
 

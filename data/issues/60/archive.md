@@ -132,7 +132,7 @@ links:
   domain: www.buzzfeed.com
   heading_context: '[An Invisible Rating System At Your Favorite Chain Restaurant Is Costing Your Server](https://www.buzzfeed.com/carolineodonovan/ziosk-presto-tabletop-tablet-restaurant-rating-servers#.tqg28Jv8q)'
   section: Notable Links 📌
-word_count: 1770
+word_count: 1762
 ---
 I don't have a lot to update on this week, and there are no features or changes to the Weekly Thing for me to share and have a meta update around. 🤷‍♂️ Have a great weekend and enjoy the links below! ⬇️
 
@@ -156,7 +156,6 @@ An in-depth background on Nintendo. I find Nintendo a very interesting company w
 
 When you walk around Lake Harriet in South Minneapolis there is this tree on the south end of the lake that has a fairy house built in the bottom of it. It's such an awesome idea and it adds a little bit of magic 🎩 to your walk.
 
-Fairy house in the base of a tree.
 Jun 24, 2018 at 8:03 PM
 Lake Harriet, 4869–4899 W Lake Harriet Pkwy, Minneapolis MN
 

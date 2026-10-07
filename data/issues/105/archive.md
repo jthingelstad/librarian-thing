@@ -145,7 +145,7 @@ Super geeky deep dive into the JPG format.
 
 ## Microposts 🎈
 
-### [Thursday @ 1:37 PM](https://www.thingelstad.com/2019/05/09/133747.html)
+### [Thursday @ 1:37 PM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
@@ -157,7 +157,7 @@ Great talks at Tech Jam 2019, and incredible breadth. How about a lightning talk
 
 ![](https://cdn.uploads.micro.blog/890/2019/4a7389ee18.jpg)
 
-### [Thursday @ 12:32 PM](https://www.thingelstad.com/2019/05/09/sps-tech-jam.html)
+### [Thursday @ 12:32 PM](https://www.thingelstad.com/2019/05/09/080643.html)
 
 SPS Tech Jam 2019! #TeamSPS #SPSTechJam
 
@@ -222,7 +222,7 @@ Seconds before Minnesota United GOAL! 1-0 #MNUFC
 
 ![](https://cdn.uploads.micro.blog/890/2019/5644a0700d.jpg)
 
-### [Saturday @ 7:15 PM](https://www.thingelstad.com/2019/05/04/minnesota-united-v.html)
+### [Saturday @ 7:15 PM](https://www.thingelstad.com/2019/05/04/191509.html)
 
 Minnesota United v Seattle Sounders! ⚽️ #MNUFC
 

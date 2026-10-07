@@ -126,7 +126,7 @@ links:
   domain: rss.social
   heading_context: null
   section: Briefly
-word_count: 2847
+word_count: 2843
 ---
 Hello there! 👏
 
@@ -170,9 +170,9 @@ This may be the first of many Yearly Things that you can collect over time. 🤔
 
 _PS: Unfortunately I don't know who purchases the paperback on Lulu. If you do, please send me an email letting me know and I will send you the POAP claim code!_
 
-<buttondown-button align="center" href="https://www.lulu.com/shop/jamie-thingelstad/yearly-thing-2025/paperback/product-84w66ey.html">Paperback on Lulu</buttondown-button>
+[Paperback on Lulu](https://www.lulu.com/shop/jamie-thingelstad/yearly-thing-2025/paperback/product-84w66ey.html)
 
-<buttondown-button align="center" href="https://jthingelstad.gumroad.com/l/yearly-thing-2025">eBook on Gumroad</buttondown-button>
+[eBook on Gumroad](https://jthingelstad.gumroad.com/l/yearly-thing-2025)
 
 ![A futuristic-style book cover titled Yearly Thing 2025 features wind turbines against a cloudy sky.](https://files.thingelstad.com/weekly-thing/338/journal/5b1cabc144.jpg)
 
@@ -264,10 +264,6 @@ And who are the "programmers"?
 > While writing the constitution, we sought feedback from various external experts (as well as asking for input from prior iterations of Claude). We'll likely continue to do so for future versions of the document, from experts in law, philosophy, theology, psychology, and a wide range of other disciplines. Over time, we hope that an external community can arise to critique documents like this, encouraging us and others to be increasingly thoughtful.
 
 Super interesting approach and structure. You can [read the full Constitution](https://www.anthropic.com/constitution) for the complete picture. Truly wild stuff.
-
----
-
-## Supporting Membership
 
 ---
 

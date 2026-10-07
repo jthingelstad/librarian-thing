@@ -165,7 +165,7 @@ links:
   domain: github.com
   heading_context: '[profiling: An interactive continuous Python profiler.](https://github.com/what-studio/profiling)'
   section: Links 📌
-word_count: 1915
+word_count: 1914
 ---
 I hope you all had a great Halloween! 🎃 We had the coldest one in over ten years and not surprisingly for the first time in years we still had candy 🍫 left at the end of the night. Mazie and her friends filled a pillowcase each with treats. Tyler and I went out until we couldn't feel our fingers and toes anymore. One of my favorites in our neighborhood is the [Mixed-Up-Holiday house](http://www.thingelstad.com/2017/10/31/mixed-up-holiday.html) that puts out decorations for several holidays, except Halloween. It’s very funny and in addition to the candy for the kids they have beer-to-go 🍺 for the parents!
 
@@ -222,7 +222,7 @@ Yet another charting library. 📊 I should collect these like trading cards. Ma
 
 ### [Seeing Myself in #MNTech – Jenna – Medium](https://medium.com/@jennapederson/seeing-myself-in-mntech-7ff7520f8874)
 
-Love this perspective and highlight from my [fellow Minnestar board member Jenna Pederson](http://jennapederson.com) . For me this is the highlight: > We did not sit back and wait for more women, people of color, or those from underrepresented groups to come to us. We. Went. To. Them. We actively spent time focusing on our presenter line up. The first step for technology communities is to realize we have a problem. The next step is to do something about it, and I really like the pragmatic and thoughtful approach that Jenna, and others through her encouragement, have taken. This is how real change will happen, over time. 👏
+Love this perspective and highlight from my fellow [Minnestar](https://minnestar.org) board member [Jenna Pederson](http://jennapederson.com). For me this is the highlight: > We did not sit back and wait for more women, people of color, or those from underrepresented groups to come to us. We. Went. To. Them. We actively spent time focusing on our presenter line up. The first step for technology communities is to realize we have a problem. The next step is to do something about it, and I really like the pragmatic and thoughtful approach that Jenna, and others through her encouragement, have taken. This is how real change will happen, over time. 👏
 
 ### [Vim After 15 Years | Ian Langworth’s Things of Variable Interest](https://statico.github.io/vim3.html)
 
@@ -285,8 +285,6 @@ Designing a game to help people learn your SaaS platforms API and capabilities s
 Very easy to use profiler to understand what is happening in your Python code. Can also do live profiling of long running processes. Very cool.
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/carcassonne/id375295479?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [Carcassonne](https://itunes.apple.com/us/app/carcassonne/id375295479?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

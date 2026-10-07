@@ -1,0 +1,12 @@
+{
+  "_why": "Links in round 7's issues (WT1-130) whose words are not a link's words in the sent email, each reviewed 2026-10-07 and left on purpose. anchors.py fails on any mismatch not listed here, so a fix that is reverted or never applied shows up.",
+  "121|https://apps.apple.com/us/app/id1449776813": "Title; the email's copy starts with an invisible left-to-right mark.",
+  "43|http://blog.benjamin-encz.de/post/flavors-of-engineering-management/": "Title; the email nests a second link inside it.",
+  "52|https://www.infoq.com/presentations/netflix-incident-management": "Title; the email writes [video] in square brackets.",
+  "52|https://encrypt.me": "The email misspells it Enrypt.me; the archive's spelling stays.",
+  "72|https://en.wikipedia.org/wiki/Linus_Torvalds": "A link in the archive's later text that the email does not have; not round 7's to change.",
+  "76|https://www.youtube.com/watch?v=qNxfPAF1frM": "The archive keeps straight quotes inside the anchor; the email has curly quotes outside it.",
+  "77|https://www.nytimes.com/2018/10/25/technology/google-sexual-harassment-andy-rubin.html": "Title; curly vs straight quotes around Father of Android.",
+  "82|https://aws.training/machinelearning": "The email's markup is broken (a literal ](url) in the text); the archive has the intended link.",
+  "98|https://www.afar.com/magazine/8-ways-to-order-a-coffee-in-australia-and-get-what-you-actually-want": "The archive keeps straight quotes inside the anchor; the email has curly quotes outside it."
+}

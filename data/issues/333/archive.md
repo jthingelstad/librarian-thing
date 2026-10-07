@@ -140,7 +140,7 @@ links:
   domain: www.nytimes.com
   heading_context: null
   section: Briefly
-word_count: 5252
+word_count: 5248
 ---
 Good morning, or mostly!? ☕️
 
@@ -480,10 +480,6 @@ Selfie with [Joel Crandall](https://www.linkedin.com/in/joel-d-crandall/), CEO o
 ![](https://files.thingelstad.com/weekly-thing/333/journal/09e8220e5b.jpg)
 
 ![](https://files.thingelstad.com/weekly-thing/333/journal/ae9b77e4fc.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

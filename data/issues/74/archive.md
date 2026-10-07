@@ -87,7 +87,7 @@ links:
   domain: www.tomsguide.com
   heading_context: '[Here''s the One iPhone XS Feature That Justifies an Upgrade](https://www.tomsguide.com/us/iphone-xs-smart-hdr,news-28203.html)'
   section: Notable Links 📌
-word_count: 1331
+word_count: 1324
 ---
 It’s one of my favorite times in Minnesota — fall! 🍂 I was delighted to stop at [Fireside Orchard](http://www.firesideorchard.com) and find the Honeycrisp Apples are now ready. 🍎 Allergies are starting to subside, but sadly it’s time to take in the boat and prepare for the upcoming winter.
 
@@ -192,7 +192,7 @@ I’ve dealt with water issues at our cabin twice now. I think I need a couple o
 Sure seems easier to use than addresses, although much less human usable.
 - [FreshRSS, a free, self-hostable aggregator…](https://freshrss.org/) freshrss.org
 It makes me happy to see open source RSS projects. I'll still stick with Feedbin though.
-- [The design and implementation of modern column-oriented The design and implementation of modern column-oriented database systems](https://blog.acolyer.org/2018/09/26/the-design-and-implementation-of-modern-column-oriented-database-systems/) blog.acolyer.org
+- [The design and implementation of modern column-oriented database systems](https://blog.acolyer.org/2018/09/26/the-design-and-implementation-of-modern-column-oriented-database-systems/) blog.acolyer.org
 Dive into how modern databases store column data. 🗜
 - [SEC charges Tesla CEO Elon Musk with fraud](https://www.cnbc.com/2018/09/27/tesla-falls-4percent-on-report-elon-musk-sued-by-sec.html) www.cnbc.com
 Yikes! 😬 Don’t mess with the SEC!

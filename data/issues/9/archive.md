@@ -304,7 +304,7 @@ My Book Club picked this for our next meeting and I’m very interested to learn
 - [The Small Glories starting the Winnipeg Folk Festival on the main stage.](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
 - [Great spot for the Winnipeg Folk Festival main stage tonight. Brandi Carlile our highlight tonight!](https://www.thingelstad.com/2017/07/06/winnipeg-folk-festival.html)
 - [Bicycle as installation art. In Grand Forks, ND.](http://www.thingelstad.com/2017/07/05/bicycle-as-installation.html)
-- [I send a weekly newsletter with commentary on links I’ve found interesting, plus bonus content! Interested? Subscribe at weekly.thingelstad.com.](http://www.thingelstad.com/2017/07/05/i-send-a.html)
+- I send a weekly newsletter with commentary on links I’ve found interesting, plus bonus content! Interested? Subscribe at weekly.thingelstad.com.
 - [Driving to Winnipeg Folk Festival today to start the third segment of summer vacation!](http://www.thingelstad.com/2017/07/05/driving-to-winnipeg.html)
 - [If you’re looking for a solid content blocker for Safari I’m liking Better for iOS and Better for macOS](http://www.thingelstad.com/2017/07/04/if-youre-looking.html)
 - [Time to unwrap these little presents! 🎁 Big Green Egg livin’.](http://www.thingelstad.com/2017/07/04/time-to-unwrap.html)

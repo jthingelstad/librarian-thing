@@ -289,7 +289,7 @@ Apr 21, 2024 at 8:05 AM
 
 Today was a particularly fun session of [blog gardening](https://www.thingelstad.com/2023/09/04/blog-gardening.html):
 
-- Realized that we walked the High Line in New York exactly 11 years apart and didn't know it, [first in 2012](https://www.thingelstad.com/2012/04/21/walking-high-line.html) and [then in 2013](https://www.thingelstad.com/2023/04/21/gorgeous-day-to.html).
+- Realized that we walked the High Line in New York exactly 11 years apart and didn't know it, [first in 2012](https://www.thingelstad.com/2012/04/21/walking-the-high-line-awesome.html) and [then in 2013](https://www.thingelstad.com/2023/04/21/gorgeous-day-to-enjoy-a.html).
 - Shared 1-year anniversary of [a milestone](https://www.thingelstad.com/2023/04/21/ringing-the-closing.html) with SPS team.
 - Reminded of the [Cherry Blossoms in Kyiv](https://www.thingelstad.com/2018/04/21/cherry-blossoms-in.html).
 - Linked all five High Line blog posts together.

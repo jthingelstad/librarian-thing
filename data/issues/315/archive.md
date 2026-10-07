@@ -129,7 +129,7 @@ links:
   domain: www.theresistornetwork.com
   heading_context: null
   section: Briefly
-word_count: 2619
+word_count: 2615
 ---
 <em>Shifting sands of technology from search engine monopolies to virtual reality breakthroughs and privacy challenges.</em>
 
@@ -209,10 +209,6 @@ There are a number of reasons I run Safari but one of them is the software stack
 ### [Introducing 4o Image Generation | OpenAI](https://openai.com/index/introducing-4o-image-generation/)
 
 This new image generation from OpenAI is a huge upgrade. DALL-E was an interesting toy, but it struggled to do anything that was all that useful. And its inability to deal with text at all was a huge issue for many of my use cases. Using 4o with some of my tests has been incredible. I've had it make some POAP images and the text was spot on and it understood the visual need much better. This is worth giving a serious look.
-
----
-
-## Supporting Membership
 
 ---
 

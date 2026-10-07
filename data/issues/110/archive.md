@@ -67,7 +67,7 @@ links:
   domain: www.nytimes.com
   heading_context: '[The Making of a YouTube Radical - The New York Times](https://www.nytimes.com/interactive/2019/06/08/technology/youtube-radical.html)'
   section: Notable Links 📌
-word_count: 1177
+word_count: 1168
 ---
 School is out, camps have started, and summer is now officially in full swing! This week was an absolute blur, and it's my daughters birthday this weekend so I'm keeping it short and we are going to get right to the links this week! Oh, and to all the Dads out there, have a great Fathers Day! 🤜🤛
 
@@ -87,7 +87,6 @@ This is where services such as [Terms of Service; Didn't Read](https://tosdr.org
 
 Giant slip-n-slide in Newton Sledding Hill in South Minneapolis celebrating a hot summers day! ☀️💦
 
-Giant slip-n-slide in Newton Sledding Hill in South Minneapolis.
 Jun 8, 2019 at 4:03 PM
 Newton Sledding Hill, Minneapolis MN
 

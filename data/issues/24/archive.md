@@ -156,7 +156,7 @@ links:
   domain: www.macstories.net
   heading_context: '[More Great Shelf Apps to Boost iPad Productivity – MacStories](https://www.macstories.net/reviews/more-great-shelf-apps-to-boost-ipad-productivity/)'
   section: Links 📌
-word_count: 2323
+word_count: 2321
 ---
 We are away this weekend hanging out with the 19 members of the extended Olson Family clan — Tammy's side of the family. We've done this weekend away as a family for 14 years now. There were only 10 people at the first one, and now grandchildren have filled the ranks to 19. The relevance of getting away as an extended family has grown as everyone's schedules get busier and the opportunities to gather get more difficult.
 
@@ -225,7 +225,7 @@ I often look at work teams are doing and ask “is this differentiating?” If i
 
 ### [Why I’m Using Bitmarks on my Products « bunnie's blog](https://www.bunniestudios.com/blog/?p=4981)
 
-[I hadn't heard of Bitmark](https://bitmark.com) but it’s an interesting use of a blockchain for a non-currency use case.
+I hadn't heard of [Bitmark](https://bitmark.com) but it’s an interesting use of a blockchain for a non-currency use case.
 
 > Most people are familiar with blockchains through Bitcoin. Bitcoin uses the blockchain as a public ledger to prevent double-spending of the same virtual coin. This same public ledger can be applied to physical hardware products through a bitmark. Products that have been bitmarked can have their provenance tracked back to the factory using the public ledger, thus hampering cloning and warranty fraud – the physical equivalent of double-spending a Bitcoin.
 
@@ -255,7 +255,7 @@ Interesting tech to power reasoning systems. This excerpt caught my eye:
 
 > RDF & OWL are for semantic web (not databases) and logicians (not software engineers). And GRAKN.AI, as you may expect, is for databases and software engineers.
 
-[I’ve read a bit about RDF](https://en.wikipedia.org/wiki/RDFa) [and OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language) and agree it’s hard for an engineer to grok. This [article is vendor-written to support GRAKN.AI](https://grakn.ai/) but still an interesting read.
+I’ve read a bit about [RDF](https://en.wikipedia.org/wiki/RDFa) and [OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language) and agree it’s hard for an engineer to grok. This article is vendor-written to support [GRAKN.AI](https://grakn.ai/) but still an interesting read.
 
 ### [Want to see something crazy? Open this link on your phone with WiFi turned off.](https://medium.com/@philipn/want-to-see-something-crazy-open-this-link-on-your-phone-with-wifi-turned-off-9e0adb00d024)
 
@@ -287,7 +287,7 @@ I recently decided to take the plunge and get Copied on all of my iOS and macOS 
 
 ### [Micro.blog for Mac](http://help.micro.blog/2017/mac-version/)
 
-First public beta of the micro.blog Mac app is now out. I’m still enjoying [using micro.blog and publishing Micro Thing](https://www.thingelstad.com/) ! 👏
+First public beta of the [micro.blog](https://micro.blog) Mac app is now out. I’m still enjoying using micro.blog and publishing [Micro Thing](https://www.thingelstad.com/)! 👏
 
 ### [iCalendar.org Validator](https://icalendar.org/validator.html)
 
@@ -302,8 +302,6 @@ If you find yourself writing an ICS or iCalendar feed by hand this will come in 
 I’m still getting used to the new drag & drop capabilities in iOS 11. I've learned a lot from looking at how others use it and I grabbed Yoink as well as Copied after reading this post.
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/copied/id1015767349?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [Copied](https://itunes.apple.com/us/app/copied/id1015767349?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
@@ -336,7 +334,7 @@ Free 4.5/5 stars
 - What’s better than using AirPods for music? Using a single AirPod to make calls or listen to an audio book. [→](http://www.thingelstad.com/2017/10/17/whats-better-than.html)
 - I’ve posted more than most users on micro.blog’s discover tab. Definitely isn’t based on post frequency. 🤔 [→](http://www.thingelstad.com/2017/10/16/ive-posted-more.html)
 - Obligatory post from the freshly released micro.blog Mac app! 👏 [→](http://www.thingelstad.com/2017/10/16/obligatory-post-from.html)
-- I added ICS/iCal feed support to Link Thing — just because. Link to subscribe on feeds page. [→](http://www.thingelstad.com/2017/10/15/i-added-icsical.html)
+- I added ICS/iCal feed support to Link Thing — just because. Link to subscribe on feeds page.
 - Safari on iOS 11 previews an ICS file when you open it? Nice! 👏🏻 Has it always done this? [→](http://www.thingelstad.com/2017/10/15/safari-on-ios.html)
 - I stumbled on this link from Feb 2007 when I started looking into Getting Things Done. Over 10 years later and I’m still practicing, and improving, GTD practices. This is one of my decade projects that I expect to continuously get value from. [→](http://www.thingelstad.com/2017/10/15/decade-of-gtd.html)
 - Tree person says our 100+ year old elm tree has “structural failure”. Haven’t come to terms with taking it down yet. ☹️ [→](http://www.thingelstad.com/2017/10/15/tree-person-says.html)

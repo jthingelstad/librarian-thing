@@ -131,7 +131,7 @@ links:
   domain: openai.com
   heading_context: null
   section: Briefly
-word_count: 2542
+word_count: 2538
 ---
 Good morning! ☕️
 
@@ -245,10 +245,6 @@ The finitude of life is what makes life, life.
 > What I'm realizing is that both of these are the same thing. Being fully yourself requires accepting limits - who you are, how much time you have. You can't be everything to everyone, and you can't be forever. The constraint is part of what makes you, you. Choices that cost nothing aren't really choices.
 
 The fact that there is a "last time" of something is what makes it special.
-
----
-
-## Supporting Membership
 
 ---
 

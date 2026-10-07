@@ -181,7 +181,7 @@ This documentary looks pretty interesting. I like the focus of the intersection 
 
 ### [Joplin - an open source note taking and to-do application with synchronisation capabilities](http://joplin.cozic.net/)
 
-[A FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software) option for managing notes and to do's.
+A [FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software) option for managing notes and to do's.
 
 > Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in Markdown format.
 
@@ -220,8 +220,6 @@ A new entrant into the Password (Secret) Manager space. I've been a [1Password](
 I find it fun to read through takes on various computer languages. There are so many languages and the vast majority never got any traction. A thorough blog post reviewing a language is sort of like a vacation to another country to explore it’s traditions and taste the flavors and importantly come back home shortly after. I had never heard of [Carp](https://github.com/carp-lang/Carp) but this is a thorough review of it. A Lisp language that compiles down to C to then be compiled natively.
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/mindnode-5/id1218718027?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [MindNode 5](https://itunes.apple.com/us/app/mindnode-5/id1218718027?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

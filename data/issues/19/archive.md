@@ -287,7 +287,7 @@ When the Apple Watch first came out there was a lot of hoping for an LTE version
 Great [TEDxFargo](http://tedxfargo.com) talk from [Phil Soran](https://www.linkedin.com/in/phil-soran-a802616a/), successful tech entrepreneur and also an [SPS Commerce](https://www.spscommerce.com) board member. His culture view of *positive aggressive* culture is great. I like naming the culture and having explicit discussions about it.
 
 ## Microblog updates 🎈
-- [Tried an idea I had to make Jekyll generate faster for my link blog. Thought using a built-in property (tags) instead of a custom one would be way faster. Profile showed it was actually two times slower. Sometimes computers are confusing. 🤓](http://www.thingelstad.com/2017/09/15/tried-an-idea.html)
+- Tried an idea I had to make Jekyll generate faster for my link blog. Thought using a built-in property (tags) instead of a custom one would be way faster. Profile showed it was actually two times slower. Sometimes computers are confusing. 🤓
 - [I got the new micro.blog iOS app and I really dig how @manton has implemented subject lines and longer posts in a microblogging platform. The title bar appearing after the body gets to a certain length is a very elegant solution. I still like the idea of having a main blog separate from the fragments on my microblog, but it’s great seeing this evolve in interesting ways.](http://www.thingelstad.com/2017/09/15/microblog-now-with.html)
 - [Got my friend @mrock911 setup on a solid Eero network tonight, plus some network debugging.](http://www.thingelstad.com/2017/09/15/got-my-friend.html)
 - [Stainless Steel Series 3 Apple Watch with cellular ordered! Will use stainless steel band from Series 1.](http://www.thingelstad.com/2017/09/15/stainless-steel-series.html)

@@ -87,7 +87,7 @@ links:
   domain: corporate-innovation.co
   heading_context: null
   section: Briefly
-word_count: 3014
+word_count: 3010
 ---
 Good morning! ☕️
 
@@ -203,10 +203,6 @@ _Sadly the rest of the article is only for paid subscribers, but just that first
 ### [Introducing ChatGPT Pulse | OpenAI](https://openai.com/index/introducing-chatgpt-pulse/)
 
 I used this for the first couple of times this week and it is surprisingly good. I was able to give it some nudges for different things I wanted to know and it worked well. It was telling how good ChatGPT could figure out my interests from the collected interactions I've had with it.
-
----
-
-## Supporting Membership
 
 ---
 

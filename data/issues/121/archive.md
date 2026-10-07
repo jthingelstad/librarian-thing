@@ -185,7 +185,7 @@ Not sure this is a tour I would want to take. Chernobyl isn't that far from wher
 
 ### [Solid State: Minnesota's High Tech History - Twin Cities PBS](https://www.tpt.org/solid-state/)
 
-[I was at the premier](https://www.thingelstad.com/2019/10/08/151356.html) of this movie. It is an interesting look at the minicomputer market that thrived in Minnesota. I learned some new things, like Control Data was the first company to sell peripherals for other companies minicomputers. What did Minnesota miss? By all counts we completely missed the microcomputer movement here.
+I [was at the premier](https://www.thingelstad.com/2019/10/08/151356.html) of this movie. It is an interesting look at the minicomputer market that thrived in Minnesota. I learned some new things, like Control Data was the first company to sell peripherals for other companies minicomputers. What did Minnesota miss? By all counts we completely missed the microcomputer movement here.
 
 ### [Three Big Things: The Most Important Forces Shaping the World · Collaborative Fund](https://www.collaborativefund.com/blog/three-big-things-the-most-important-forces-shaping-the-world/)
 

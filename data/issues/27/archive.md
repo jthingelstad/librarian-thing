@@ -134,11 +134,11 @@ links:
   domain: om.co
   heading_context: '[iPhone X: Some Early Impressions – Om Malik](https://om.co/2017/11/03/iphone-x-some-early-impressions/)'
   section: Links 📌
-word_count: 2131
+word_count: 2130
 ---
 First thing, there is no photo this week. 😞 I only put photos in the Weekly Thing that are from that week and this week I didn’t capture anything. I could put some pictures I took from a couple events this week, but that would just be filling a slot. Another tactical thing I’m thinking about is better ways to show links in the Weekly Thing than just a list. Maybe highlighting a Top 3 or even putting in categories. Watch that space for some experiments. 👨‍🔬
 
-This week I did make a [simple website for the Weekly Thing](https://weekly.thingelstad.com)  with a very easy to share URL of weekly.thingelstad.com. If you know people that would enjoy the weekly thing please send them that link. Thank you! 👏
+This week I did make a simple [website for the Weekly Thing](https://weekly.thingelstad.com) with a very easy to share URL of weekly.thingelstad.com. If you know people that would enjoy the weekly thing please send them that link. Thank you! 👏
 
 ## Links 📌
 
@@ -224,7 +224,7 @@ Some more initial reactions on iPhone X, this time from David Sparks. Curious to
 
 ### [The Existential Terror of Battle Royale —Coding Horror](https://blog.codinghorror.com/the-existential-terror-of-battle-royale/)
 
-I don't do a lot of multiplayer gaming but reading this got me caught up with how evolved the world of gaming has gotten. This made [me think of the Hunger Games](https://en.wikipedia.org/wiki/The_Hunger_Games) .
+I don't do a lot of multiplayer gaming but reading this got me caught up with how evolved the world of gaming has gotten. This made me think of the [Hunger Games](https://en.wikipedia.org/wiki/The_Hunger_Games).
 
 > I didn't intend for this to happen, but to me, the Battle Royale game mode perfectly captures the zeitgeist of the current moment, and matches my current state of mind to a disturbing degree. It's an absolutely terrifying experience of every human for themselves, winner takes all, with impossible odds. There are moments it can be thrilling, even inspiring, but mostly it's harsh and unforgiving.
 
@@ -238,19 +238,15 @@ Some great first-hand observations from Om Malik on his early impressions of the
 
 ## Now Reading 📚
 
-http://www.amazon.com/dp/0451228731/?tag=thingelstad01-20
-
 ### [Daemon](http://www.amazon.com/dp/0451228731/?tag=thingelstad01-20)
 
 by Daniel Suarez
 
 Daemons: computer programs that silently run in the background, waiting for a specific event or time to execute. They power almost every service. They make our networked world possible. But they also make it vulnerable...
 
-This book has been on my list for years and [I’m excited that my book club](https://rwbook.club) picked it this month!
+This book has been on my list for years and I’m excited that [my book club](https://rwbook.club) picked it this month!
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/forest-by-seekrtech/id866450515?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [Forest by Seekrtech](https://itunes.apple.com/us/app/forest-by-seekrtech/id866450515?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

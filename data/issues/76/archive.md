@@ -183,7 +183,7 @@ Nice to see another web-based, easy-to-use encrypted email service. This one has
 
 ### [About static site generators](https://fvsch.com/static-site-generators/)
 
-An assessment of static site generators and the somewhat miserable landscape of authoring tools. I agree with the central push of this piece. I keep finding that static site generators introduce far too much friction into my writing process. One may note that my [microblog](https://www.thingelstad.com) and [linkblog](https://links.thingelstad.com) are both very active while my [blog](https://www.thingelstad.com) is pretty quiet. That is almost entirely because writing for Jekyll, the static site generator I use, is too hard. Tools like [Forestry](https://forestry.io) offer some hope to make this better, but the configuration is still orders of magnitude too hard.
+An assessment of static site generators and the somewhat miserable landscape of authoring tools. I agree with the central push of this piece. I keep finding that static site generators introduce far too much friction into my writing process. One may note that [my microblog](https://www.thingelstad.com) and [linkblog](https://links.thingelstad.com) are both very active while [my blog](https://www.thingelstad.com) is pretty quiet. That is almost entirely because writing for Jekyll, the static site generator I use, is too hard. Tools like [Forestry](https://forestry.io) offer some hope to make this better, but the configuration is still orders of magnitude too hard.
 
 ### [ongoing by Tim Bray · On Cash](https://www.tbray.org/ongoing/When/201x/2018/10/11/On-Cash)
 

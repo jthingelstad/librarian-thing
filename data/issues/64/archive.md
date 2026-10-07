@@ -104,7 +104,7 @@ links:
   domain: arstechnica.com
   heading_context: '[This full video shows just how bonkers the VW Pikes Peak record was | Ars Technica](https://arstechnica.com/cars/2018/07/this-full-video-shows-just-how-bonkers-the-vw-pikes-peak-record-was/)'
   section: Notable Links 📌
-word_count: 1983
+word_count: 1982
 ---
 Tammy and I celebrated 16 years of marriage this week! 💍 We celebrated by going out for the evening, starting with a movie. We saw [Sorry To Bother You](https://www.imdb.com/title/tt5688932/), which was fun, different and very original. 🎬 We had had a great dinner at [Italian Eatery](http://www.italianeatery.com). 🍽 Their Bucatini is amazing! We finished our night out with a puzzle room at [Missing Pieces](https://www.missingpiecesmn.com). 🔐 We did the [Ruin Raiders](https://www.missingpiecesmn.com/home/#ruin-raiders) room, and it was just the two of us. If you've never done a puzzle room, I recommend trying one. With only two people sometimes the sheer number of locks and puzzles to solve can be a challenge. The room was perfect though. There was just enough difficulty in the puzzles to make it very fun, but not so hard as to be frustrating.
 
@@ -204,9 +204,7 @@ I loved watching this amazing, custom-built electric race car set a new record u
 
 ## Now Reading 📚
 
-https://www.amazon.com/Measure-What-Matters-Google-Foundation/dp/0525536221/
-
-Measure What Matters: How Google, Bono, and the Gates Foundation Rock the World with OKRs ()
+[Measure What Matters: How Google, Bono, and the Gates Foundation Rock the World with OKRs](https://www.amazon.com/Measure-What-Matters-Google-Foundation/dp/0525536221/)
 by John Doerr
 
 > Legendary venture capitalist John Doerr reveals how the goal-setting system of Objectives and Key Results (OKRs) has helped tech giants from Intel to Google achieve explosive growth—and how it can help any organization thrive.

@@ -158,8 +158,6 @@ Half of this 2018 roadmap for Omni Group is about the future of OmniFocus! 💚 
 
 ---
 
-http://www.amazon.com/dp/1439195455/?tag=thingelstad01-20
-
 ### [Why Buddhism is True: The Science and Philosophy of Meditation and Enlightenment](http://www.amazon.com/dp/1439195455/?tag=thingelstad01-20)
 
 ## by Robert Wright
@@ -175,16 +173,16 @@ I've just started into this book but I'm already pretty excited about it. This t
 - [First run with the Sous Vide. Making beef tenderloin.](https://www.thingelstad.com/2018/01/28/first-run-with.html)
 - [When you clean that black crud out of the bottom of your espresso machine’s portafilter it makes you pause a moment on what you are drinking — and then you make another espresso. ☕️🤔](https://www.thingelstad.com/2018/01/28/when-you-clean.html)
 - [Sunday morning project: Figured out how to connect Workflow and Pythonista and rewrote the links section of the Weekly Thing in Python so I can structure it better.](https://www.thingelstad.com/2018/01/28/sunday-morning-project.html)
-- [I win! 😊](https://www.thingelstad.com/2018/01/27/i-win.html)
-- [Ticket to Ride!](https://www.thingelstad.com/2018/01/27/ticket-to-ride.html)
-- [Kubbchucks went 3-2 in morning round robin. Onto afternoon round robin! 🤞🏻👍🏻](https://www.thingelstad.com/2018/01/27/kubbchucks-went-in.html)
-- [Kubb on frozen Lake Calhoun!](https://www.thingelstad.com/2018/01/27/kubb-on-frozen.html)
-- [Winter Kubb at its finest. Nice sunny day.](https://www.thingelstad.com/2018/01/27/winter-kubb-at.html)
-- [Kubbchucks at our 6th Minnesota Kubb at the Loppet!](https://www.thingelstad.com/2018/01/27/kubbchucks-at-our.html)
-- [Eric Goplin kicking off Minnesota Kubb tournament!](https://www.thingelstad.com/2018/01/27/eric-goplin-kicking.html)
-- [Winter Kubb basecamp!](https://www.thingelstad.com/2018/01/27/winter-kubb-basecamp.html)
-- [Warming up for a day of winter Kubb!](https://www.thingelstad.com/2018/01/27/warming-up-for.html)
-- [Excited to head to the world’s largest winter Kubb tournament at the Loppet today! Go Kubbchucks!](https://www.thingelstad.com/2018/01/27/excited-to-head.html)
+- [I win! 😊](https://www.thingelstad.com/2018/01/27/183307.html)
+- [Ticket to Ride!](https://www.thingelstad.com/2018/01/27/183307.html)
+- [Kubbchucks went 3-2 in morning round robin. Onto afternoon round robin! 🤞🏻👍🏻](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Kubb on frozen Lake Calhoun!](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Winter Kubb at its finest. Nice sunny day.](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Kubbchucks at our 6th Minnesota Kubb at the Loppet!](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Eric Goplin kicking off Minnesota Kubb tournament!](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Winter Kubb basecamp!](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Warming up for a day of winter Kubb!](https://www.thingelstad.com/2018/01/27/074734.html)
+- [Excited to head to the world’s largest winter Kubb tournament at the Loppet today! Go Kubbchucks!](https://www.thingelstad.com/2018/01/27/074734.html)
 
 ## The end 🎬
 

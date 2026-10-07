@@ -151,7 +151,7 @@ links:
   domain: graphics.reuters.com
   heading_context: '[A Reuters Visual Guide: Blockchain explained](http://graphics.reuters.com/TECHNOLOGY-BLOCKCHAIN/010070P11GN/index.html)'
   section: Notable Links 📌
-word_count: 2898
+word_count: 2897
 ---
 We have been having a wonderful week staying at our cabin and having mulitple groups of friends and family down. We've had a lot of time on the pontoon, tubing and enjoying the [new lillypad](http://www.thingelstad.com/2018/06/30/the-lilypad-is.html). For those that are not familiar, this lillypad is 6' by 16' and floats on the top of the lake. It can hold over 1,000 pounds and kids have a great time climbing on it, jumping off, and playing king of the hill. I'm still learning how to wrestle it back out of the water. 💧 We had another stupendous display of fireworks. There are a lot of people on Cannon Lake that set off giant fireworks displays on the 4th of July. I hope all of you living the US had a great 4th of July 🇺🇸, and our friends to the north a great Canada Day! 🇨🇦
 
@@ -391,7 +391,7 @@ Berry picking! 🤤
 
 ### [Sunday @ 9:18 AM](https://www.thingelstad.com/2018/07/01/rainy-morning-playing.html)
 
-Rainy [morning 🌧, playing The Magic Labyrinth](https://en.wikipedia.org/wiki/The_Magic_Labyrinth_(board_game)) . 🎲 Fun game.
+Rainy morning 🌧, playing [The Magic Labyrinth](https://en.wikipedia.org/wiki/The_Magic_Labyrinth_(board_game)). 🎲 Fun game.
 
 ![](https://cdn.uploads.micro.blog/890/2018/76c16f1af7.jpg)
 

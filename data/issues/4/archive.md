@@ -158,7 +158,7 @@ links:
   domain: www.thoughtworks.com
   heading_context: '[Platform Tech Strategy: The Three Layers | ThoughtWorks](https://www.thoughtworks.com/insights/blog/platform-tech-strategy-three-layers)'
   section: Links 📌
-word_count: 1508
+word_count: 1507
 ---
 No new sections to the Weekly Thing this week, I think the format is pretty well settled and I’m planning this week to more broadly spread the word about this. I need a better subscribe page on my main website for it. Feedback is still desired, just reply to this email if you have suggestions or just want to say hello!
 
@@ -282,7 +282,7 @@ Nice improvements in a very solid drawing app for the iPad Pro.
 - Walked around the block in an attempt to close my activity rings. Stubbornly stuck with 1 minute to go. [→](http://www.thingelstad.com/2017/06/02/walked-around-the.html)
 - Minnehaha Creek. [→](http://www.thingelstad.com/2017/06/02/minnehaha-creek-img.html)
 - Fidget spinner thing happened. [→](http://www.thingelstad.com/2017/06/01/fidget-spinner-thing.html)
-- Backed Turing Tumble on Kickstarter! Looks like a really fun game to play and learn with kids! [→](http://www.thingelstad.com/2017/05/30/backed-turing-tumble.html)
+- Backed Turing Tumble on Kickstarter! Looks like a really fun game to play and learn with kids!
 - Lost my leather coin purse. Good thing I inventoried some replacements. [→](http://www.thingelstad.com/2017/05/30/lost-my-leather.html)
 - Holiday weekend. Mandatory grilling. Big Green Egg for the win! 🍔 [→](http://www.thingelstad.com/2017/05/29/holiday-weekend-mandatory.html)
 - Some cold fishing for crappies this morning off the dock. [→](http://www.thingelstad.com/2017/05/29/some-cold-fishing.html)

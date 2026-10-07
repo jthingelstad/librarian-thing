@@ -150,8 +150,6 @@ Plain, simple, easy. And I totally agree.
 
 ## Reading 📚
 
-http://www.amazon.com/dp/1501144316/?tag=thingelstad01-20
-
 ### [Why We Sleep: Unlocking the Power of Sleep and Dreams](http://www.amazon.com/dp/1501144316/?tag=thingelstad01-20)
 
 by Matthew Walker PhD
@@ -181,7 +179,7 @@ At [Martina](https://www.martinarestaurant.com) for our first Gnocchi Night. Del
 ![](https://cdn.uploads.micro.blog/890/2018/cf839eee9c.jpg)
 ![](https://cdn.uploads.micro.blog/890/2018/b2a230ecb6.jpg)
 
-[Thursday @ 1:12 PM](https://www.thingelstad.com/2018/03/29/just-registered-for.html)
+Thursday @ 1:12 PM
 
 Just registered for [Minnebar 13](https://minnestar.org/minnebar/) – nice and easy as a [community supporter](https://minnestar.org/community/community-supporters/)! 🏅😊👍
 
@@ -201,7 +199,7 @@ Great start to Season 5 of [Silicon Valley](https://www.hbo.com/silicon-valley).
 
 I’ve gone from being ambivalent about OmniFocus 3 tags, to now constantly thinking about how they will help me. Waiting… ⏱
 
-[Saturday @ 8:34 PM](https://www.thingelstad.com/2018/03/24/got-sick-today.html)
+Saturday @ 8:34 PM
 
 Got sick today and taken down. 🤢 Hoping for better day tomorrow. 😴
 

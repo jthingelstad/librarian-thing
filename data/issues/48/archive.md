@@ -177,8 +177,6 @@ I’ve never left the feed reader world and am a very happy user of Feedbin. Thi
 
 ## App 📱
 
-https://itunes.apple.com/us/app/id953286746?at=1001lxyE&ct=thingelstad_com
-
 ### [Darkroom – Photo Editor](https://itunes.apple.com/us/app/id953286746?at=1001lxyE&ct=thingelstad_com)
 
 by Bergen Co.

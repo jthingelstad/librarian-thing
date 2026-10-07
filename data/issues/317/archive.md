@@ -218,7 +218,7 @@ links:
   domain: www.runpyxl.com
   heading_context: null
   section: Briefly
-word_count: 4455
+word_count: 4451
 ---
 Good Morning! ☕️
 
@@ -522,10 +522,6 @@ I had Siri read me a long email while walking and it was like stepping back to o
 ![](https://files.thingelstad.com/weekly-thing/317/journal/9ba363de8c.jpg)
 
 ![](https://files.thingelstad.com/weekly-thing/317/journal/e9351ff5f0.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

@@ -103,7 +103,7 @@ links:
   domain: pubs.aip.org
   heading_context: null
   section: Briefly
-word_count: 3038
+word_count: 3034
 ---
 Good morning! ☕️
 
@@ -334,10 +334,6 @@ Also see [2021](https://www.thingelstad.com/2021/11/25/happy-thanksgiving-from.h
 Turkey's ready!
 
 ![](https://files.thingelstad.com/weekly-thing/334/journal/7ca4364241.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

@@ -242,7 +242,7 @@ We are going to St. Louis later this summer to experience the total eclipse this
 - [Our view for the week. Lake Michigan looks great. Just after sunset.](https://www.thingelstad.com/2017/06/24/our-cottage-on.html)
 - [Cairns on the Lake Michigan shoreline near where we are staying this week.](https://www.thingelstad.com/2017/06/24/our-cottage-on.html)
 - [Our cottage on the shore of Lake Michigan for the week. Very pleasant here.](https://www.thingelstad.com/2017/06/24/our-cottage-on.html)
-- [Going iPad only on this vacation! 🚫💻](http://www.thingelstad.com/2017/06/24/going-ipad-only.html)
+- Going iPad only on this vacation! 🚫💻
 
 ## The end 🎬
 

@@ -122,7 +122,7 @@ links:
   domain: capacities.io
   heading_context: null
   section: Briefly
-word_count: 2237
+word_count: 2233
 ---
 Good morning! ☕️
 
@@ -294,10 +294,6 @@ The result is incredible. It has one error on the “Delete” step and how that
 [Dec 3, 2025 at 9:28 PM](https://www.thingelstad.com/2025/12/03/it-was-cool-to-be.html)
 
 It was cool to be featured [on Buttondown’s customer stories](https://buttondown.com/blog/jamie-thingelstad) about how I use it for the [Weekly Thing](https://weekly.thingelstad.com).
-
----
-
-## Supporting Membership
 
 ---
 

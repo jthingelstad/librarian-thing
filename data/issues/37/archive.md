@@ -46,7 +46,7 @@ What a cool idea from Nintendo and an innovative way to use a small, portable ga
 
 ### [My Raspberry Pi Kubernetes Cluster](https://chrisshort.net/my-raspberry-pi-kubernetes-cluster/)
 
-[A home-built Raspberry Pi](https://www.raspberrypi.org) [Kubernetes](https://kubernetes.io) cluster for $400 that you can run at home with very little power consumption and no noise. Awesome! I kind of want to build one of these even though I have no idea what I would use it for! 👏
+A home-built [Raspberry Pi](https://www.raspberrypi.org) [Kubernetes](https://kubernetes.io) cluster for $400 that you can run at home with very little power consumption and no noise. Awesome! I kind of want to build one of these even though I have no idea what I would use it for! 👏
 
 ### [Here's The Vikings' Unbelievable Last-Second, Game-Winning Touchdown Over The Saints - Digg](http://digg.com/2018/vikings-keenum-diggs-touchdown-video)
 
@@ -84,8 +84,6 @@ His argument is an interesting one and I think he's right. There are parts of th
 
 ## Featured App 📱
 
-https://itunes.apple.com/us/app/rise-nutrition-weight-loss-coach/id794278760?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Rise - Nutrition & Weight Loss Coach](https://itunes.apple.com/us/app/rise-nutrition-weight-loss-coach/id794278760?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Rise Labs, Inc.
@@ -103,8 +101,8 @@ Free 4/5 stars
 - [Gas pumps with screens blaring advertising should be required by law to have always present off buttons.](https://www.thingelstad.com/2018/01/19/gas-pumps-with.html)
 - [I have been impressed with the Anki Cozmo — its amazing how much character this little robot has! 🤖](https://www.thingelstad.com/2018/01/14/i-have-been.html)
 - [Getting the whole family shoveling the snow makes it very quick! 🌨🌨🌨](https://www.thingelstad.com/2018/01/14/getting-the-whole.html)
-- [Vikings! 🏈 That was an amazing play!](https://www.thingelstad.com/2018/01/14/vikings-that-was.html)
-- [Nice start by the Vikings! 🏈](https://www.thingelstad.com/2018/01/14/nice-start-by.html)
+- Vikings! 🏈 That was an amazing play!
+- Nice start by the Vikings! 🏈
 - [Espresso crema.](https://www.thingelstad.com/2018/01/14/espresso-crema.html)
 - [New light hung! 💡 This is about the extent of my handyman skills. 👷🏻‍♂️](https://www.thingelstad.com/2018/01/14/new-light-hung.html)
 - [Pleased with my first go at Nordic Waffles! Tasted delicious. Kids liked them too. May cut the cardamom back a touch next time.](https://www.thingelstad.com/2018/01/14/073400.html)

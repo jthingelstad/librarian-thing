@@ -424,14 +424,25 @@ class RealJournalCopyTests(unittest.TestCase):
             (skull["copy_of_microblog_id"], skull["matched_by"]), ("1267487", "permalink")
         )
         # QA2 I2-7: lines of a photo series micro.blog merged into one post.
-        for number, url, post in [
-            (105, f"{BASE}/2019/05/09/133747.html", "1318870"),
-            (105, f"{BASE}/2019/05/09/sps-tech-jam.html", "1318870"),
-            (105, f"{BASE}/2019/05/04/minnesota-united-v.html", "1316384"),
-            (108, f"{BASE}/2019/05/25/beautiful-game-mnufc.html", "1182817"),
-            (125, f"{BASE}/2019/11/03/152728.html", "1437903"),
+        # Since the 2026-10-07 repair (round 7) the issue links the merged
+        # post for every line, so they match by permalink, as WT1 does.
+        for number, dead, url, post in [
+            (105, "2019/05/09/133747.html", "2019/05/09/080643.html", "1318870"),
+            (105, "2019/05/09/sps-tech-jam.html", "2019/05/09/080643.html", "1318870"),
+            (105, "2019/05/04/minnesota-united-v.html", "2019/05/04/191509.html", "1316384"),
+            (
+                108,
+                "2019/05/25/beautiful-game-mnufc.html",
+                "2019/05/25/minnesota-united-v.html",
+                "1182817",
+            ),
+            (125, "2019/11/03/152728.html", "2019/11/03/160928.html", "1437903"),
         ]:
-            self.assertEqual(entries[(number, url)]["copy_of_microblog_id"], post, url)
+            entry = entries[(number, f"{BASE}/{url}")]
+            self.assertEqual(
+                (entry["copy_of_microblog_id"], entry["matched_by"]), (post, "permalink"), url
+            )
+            self.assertNotIn((number, f"{BASE}/{dead}"), entries)
         # QA2 I2-1: a copy is a post from the issue's week, [previous issue
         # - 3 days, this issue + 1 day] (Jamie, 2026-10-01); everything else
         # the Journal links is a reference.

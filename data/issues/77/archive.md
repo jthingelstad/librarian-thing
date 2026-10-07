@@ -92,7 +92,7 @@ links:
   domain: logrocket.com
   heading_context: '[Stop building websites with infinite scroll!](https://logrocket.com/blog/infinite-scroll/)'
   section: Notable Links 📌
-word_count: 1943
+word_count: 1948
 ---
 For the last two years our family has been wrestling with the idea of moving to a new house. 🏡 Tammy has felt for a while that she wanted a change of scenery. The rest of us haven't been as eager to go along. This is the first time that we have considered moving now that the kids are old enough to have an opinion of their own. We've found the additional complications of their friends and the neighborhood to be challenging to get our heads around.
 
@@ -126,6 +126,7 @@ I’ve built incredible stuff with Shortcuts and am continuing to do more. My We
 
 During blustery fall days the autumn leaves cling to the trees, flapping in the wind. You can hear them crinkle as they blur into a rusty orange pile on the ground. 🍁
 
+Oct 20, 2018 at 12:40 PM
 300 Eagle Dr, Park Rapids MN
 
 ## Notable Links 📌
@@ -208,9 +209,7 @@ It misses one of my points on infinite scroll that it represents an attempt to t
 
 ## Now Reading 📚
 
-https://www.amazon.com/Life-After-Google-Blockchain-Economy/dp/1621575764/ref=mp_s_a_1_1?ie=UTF8&qid=1540609086&sr=8-1π=AC_SX236_SY340_QL65&keywords=life+after+google+george+gilder&dpPl=1&dpID=51Xy6y7I-JL&ref=plSrch
-
-Life After Google: The Fall of Big Data and the Rise of the Blockchain Economy ()
+[Life After Google: The Fall of Big Data and the Rise of the Blockchain Economy](https://www.amazon.com/Life-After-Google-Blockchain-Economy/dp/1621575764/ref=mp_s_a_1_1?ie=UTF8&qid=1540609086&sr=8-1π=AC_SX236_SY340_QL65&keywords=life+after+google+george+gilder&dpPl=1&dpID=51Xy6y7I-JL&ref=plSrch)
 by George Gilder
 
 > The Age of Google, built on big data and machine intelligence, has been an awesome era. But it’s coming to an end. In Life after Google, George Gilder—the peerless visionary of technology and culture—explains why Silicon Valley is suffering a nervous breakdown and what to expect as the post-Google age dawns.
@@ -260,7 +259,7 @@ Kubb, king of lawn games. Still love this painted set I won at the [US National 
 
 ### [Saturday @ 4:54 PM](https://www.thingelstad.com/2018/10/20/165400.html)
 
-[Fun (and chilly!) day playing Kubb](https://en.wikipedia.org/wiki/Kubb) and [Mölkky](https://en.wikipedia.org/wiki/M%C3%B6lkky) at the Olson Family Weekend!
+Fun (and chilly!) day playing [Kubb](https://en.wikipedia.org/wiki/Kubb) and [Mölkky](https://en.wikipedia.org/wiki/M%C3%B6lkky) at the Olson Family Weekend!
 
 ![](https://www.thingelstad.com/uploads/2018/325b7c16c2.jpg)
 

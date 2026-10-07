@@ -54,7 +54,7 @@ Remember, Instagram == Facebook.
 
 > Most Instagram users are unaware of all this. The service is widely seen as an escape from Facebook, so Instagram has to tread carefully to protect the app’s reputation.
 
-If your concern with Facebook is privacy, Instagram isn't a place to solve that. If your issue with Facebook is something else than maybe it’s fine. I'd recommend using something like micro.blog to publish your own photos.
+If your concern with Facebook is privacy, Instagram isn't a place to solve that. If your issue with Facebook is something else than maybe it’s fine. I'd recommend using something like [micro.blog](https://micro.blog) to publish your own photos.
 
 [Farewell Social Media | James Shelley](https://jamesshelley.com/2018/04/10/farewell-social-media/)
 jamesshelley.com
@@ -158,8 +158,6 @@ toolsandtoys.net
 I would agree with everything in here. It doesn't address the next level topics on espresso, but this is a good starter for doing coffee well.
 
 ## App 📱
-
-https://itunes.apple.com/us/app/id479943969?at=1001lxyE&ct=thingelstad_com
 
 ### [TETRIS® Premium](https://itunes.apple.com/us/app/id479943969?at=1001lxyE&ct=thingelstad_com)
 

@@ -189,8 +189,6 @@ I was very interested to read this. I've been an OmniFocus user since it was in 
 
 ## App 📱
 
-https://itunes.apple.com/us/app/still-mind-meditation-timer/id1070999873?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Still Mind - Meditation Timer](https://itunes.apple.com/us/app/still-mind-meditation-timer/id1070999873?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by 1092599.com

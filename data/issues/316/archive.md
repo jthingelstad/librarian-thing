@@ -132,7 +132,7 @@ links:
   domain: microsoft.design
   heading_context: null
   section: Briefly
-word_count: 2549
+word_count: 2545
 ---
 Good morning! ☕️
 
@@ -358,10 +358,6 @@ Finished **1.68 mile walk** in **55 minutes** (32.74 min/mile). Casual stroll af
 I Love Warsaw Sign. [📍](http://maps.apple.com/?ll=52.232921,20.984637)
 
 ![](https://files.thingelstad.com/weekly-thing/316/journal/image-20250417-212517-1d84c5f0.jpg)
-
----
-
-## Supporting Membership
 
 ---
 

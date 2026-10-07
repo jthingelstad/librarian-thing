@@ -224,8 +224,6 @@ Learning and fun. 😂🌈
 
 ## Featured App 📱
 
-https://itunes.apple.com/us/app/toggl/id1291898086?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Toggl](https://itunes.apple.com/us/app/toggl/id1291898086?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Toggl
@@ -244,7 +242,7 @@ Free 1.5/5 stars
 - [Trying Dropmix for first time! Pretty cool — a musical trip!](https://www.thingelstad.com/2018/01/25/trying-dropmixhttpsdropmixhasbrocomenus-for.html)
 - [Three new board members joining the Minnestar board! Great to have more talented people driving this organization forward! 👏](https://www.thingelstad.com/2018/01/23/three-new-board.html)
 - [School cancelled tomorrow. Kids are filled with excitement. 😊 I remember that feeling…](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
-- [My Micro Monday recommendation is @eli for great links and fun photos! 🙌🏻👏🏻](https://www.thingelstad.com/2018/01/22/my-micro-monday.html)
+- My Micro Monday recommendation is @eli for great links and fun photos! 🙌🏻👏🏻
 - [Let it snow. ❄️](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
 - [Two hours running snow blower. I’m done for tonight. We’ll see what we wake up to in the morning. The snow is still coming down heavy.](https://www.thingelstad.com/2018/01/22/a-lot-of.html)
 - [A lot of snow coming down in Minneapolis! ❄️](https://www.thingelstad.com/2018/01/22/a-lot-of.html)

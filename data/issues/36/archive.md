@@ -70,7 +70,7 @@ A while back I spent a chunk of time thinking about how open source software pri
 
 ### [Learning to operate Kubernetes reliably](https://stripe.com/blog/operating-kubernetes)
 
-[Julia Evans](https://www.jvns.ca) with a very good overview [of how they have deployed Kubernetes](https://kubernetes.io) at Stripe. Her words of caution are true for many technology patterns:
+[Julia Evans](https://www.jvns.ca) with a very good overview of how they have deployed [Kubernetes](https://kubernetes.io) at Stripe. Her words of caution are true for many technology patterns:
 
 > If you’re considering Kubernetes, keep in mind: don’t use Kubernetes just because other companies are using it. Setting up a reliable cluster takes a huge amount of time, and the business case for using it isn’t always obvious. Invest your time in a smart way.
 
@@ -150,8 +150,6 @@ It pains me a bit when [Julian Assange](https://en.wikipedia.org/wiki/Julian_Ass
 
 ## Now Reading 📚
 
-http://www.amazon.com/dp/0062265423/?tag=thingelstad01-20
-
 ### [10% Happier: How I Tamed the Voice in My Head, Reduced Stress Without Losing My Edge, and Found Self-Help That Actually Works--A True Story](http://www.amazon.com/dp/0062265423/?tag=thingelstad01-20)
 
 by Dan Harris
@@ -163,8 +161,6 @@ I was recently given this audiobook and enjoyed it a lot. I've been contemplatin
 ---
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [Headspace: Meditation](https://itunes.apple.com/us/app/headspace-meditation/id493145008?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/41/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-february-17-2018/
 domains: []
 links: []
-word_count: 1460
+word_count: 1459
 ---
 This past week has been a blur with my brother and his family visiting 👪, my son's birthday 🎂, Valentine's day 💖 and our annual company party 🎉! I’m looking forward to catching up on some things this weekend, including my to do list and some sleep. 💤
 
@@ -52,7 +52,7 @@ Teach and communicate. 💯
 
 ### [Evergreen](https://ranchero.com/evergreen/)
 
-I like what [Brent Simmons](http://inessential.com/) is doing with this project. I'm a big user of feed readers. I use [Feedbin](https://feedbin.com) along with [ReadKit](http://readkitapp.com) and [Unread](https://itunes.apple.com/us/app/unread-rss-reader/id1252376153?mt=8). Brent has [a history with readers having created](http://inessential.com/apps_ive_made) NetNewsWire in 2002. I also love the story behind the name. 💚
+I like what [Brent Simmons](http://inessential.com/) is doing with this project. I'm a big user of feed readers. I use [Feedbin](https://feedbin.com) along with [ReadKit](http://readkitapp.com) and [Unread](https://itunes.apple.com/us/app/unread-rss-reader/id1252376153?mt=8). Brent has a history with readers [having created](http://inessential.com/apps_ive_made) NetNewsWire in 2002. I also love the story behind the name. 💚
 
 > But the name is a prayer for the open web — may it remain evergreen.
 
@@ -92,7 +92,7 @@ Notable that [Tim Berners-Lee](https://en.wikipedia.org/wiki/Tim_Berners-Lee) is
 
 ### [Let's Encrypt Hits 50 Million Active Certificates and Counting | Electronic Frontier Foundation](https://www.eff.org/deeplinks/2018/02/lets-encrypt-hits-50-million-active-certificates-and-counting)
 
-The web has 50 million more secure HTTPS endpoints now in part thanks to Let's Encrypt. I continue to believe Let's Encrypt is one of the best things to happen online in the last couple of years. My sites are secured with free certificates from [Let's Encrypt](https://letsencrypt.org). You should [support this](https://supporters.eff.org/donate) , even if you aren't publishing content. Securing web sites is important for your privacy and security! 🔐
+The web has 50 million more secure HTTPS endpoints now in part thanks to Let's Encrypt. I continue to believe Let's Encrypt is one of the best things to happen online in the last couple of years. My sites are secured with free certificates from [Let's Encrypt](https://letsencrypt.org). [You should support this](https://supporters.eff.org/donate), even if you aren't publishing content. Securing web sites is important for your privacy and security! 🔐
 
 ## Apps
 
@@ -144,8 +144,6 @@ For me, this is where my trusted GTD system can help. I've also tried to use a n
 
 ---
 
-https://itunes.apple.com/us/app/omnioutliner-3/id1174101450?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [OmniOutliner 3](https://itunes.apple.com/us/app/omnioutliner-3/id1174101450?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by The Omni Group
@@ -158,7 +156,7 @@ Free 4.5/5 stars
 
 ---
 
-- [Now I sort of want one of these Loog Pro Electric guitars. 😊](https://www.thingelstad.com/2018/02/12/now-i-sort.html)
+- [Now I sort of want one of these Loog Pro Electric guitars. 😊](https://www.thingelstad.com/2018/02/12/we-got-tyler.html)
 - [We got Tyler a Loog Pro Electric Red guitar and little Fender Mini Amp for birthday. 🎸🎂 Huge hit! 😊👍🏻](https://www.thingelstad.com/2018/02/12/we-got-tyler.html)
 - [Espresso. 🤤☕️](https://www.thingelstad.com/2018/02/11/espresso.html)
 - [Looks like Adobe has put Lightroom out of it’s misery. I’m going to have to rethink my entire photo collection. Ugh.](https://www.thingelstad.com/2018/02/11/looks-like-adobe.html)

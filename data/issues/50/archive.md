@@ -9,9 +9,9 @@ image: https://files.thingelstad.com/weekly-thing/50/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-50-apr-21-2018/
 domains: []
 links: []
-word_count: 2342
+word_count: 2340
 ---
-The Weekly Thing was highlighted in [the April 13th issue of Noticing](https://mailchi.mp/kottke/blogging-is-not-dead-edition-2575912502) , the new newsletter from kottke.org, along with a number of other blogs and newsletters. 🙌 It was awesome to be included, and it resulted in a bunch of new subscribers discovering the Weekly Thing! To all the new folks here, welcome to this weekly summary of new content, apps, books and many other "things" of interest! 👍 Grab a coffee ☕️ and look around a bit.
+The Weekly Thing was highlighted in the [April 13th issue of Noticing](https://mailchi.mp/kottke/blogging-is-not-dead-edition-2575912502), the new newsletter from kottke.org, along with a number of other blogs and newsletters. 🙌 It was awesome to be included, and it resulted in a bunch of new subscribers discovering the Weekly Thing! To all the new folks here, welcome to this weekly summary of new content, apps, books and many other "things" of interest! 👍 Grab a coffee ☕️ and look around a bit.
 
 I'm trying something new this week with the links. ⚡️ When I first started publishing the Weekly Thing I shared all links with commentary. Later I started putting them in groups based on content. This week I'm trying something new with three sections of links. Featured links 🏅 are a handful of links that I really liked in the week and am highlighting above everything else. The Links 📌 are in a list with commentary, and I've removed the groupings. Too often groups only had a single link. Breadcrumbs 🍞 shows links that were of interest to me but these are just a list. I hope this gives people that would like a couple things to focus on the featured links, and those that want to dive into all the deep tracks can dig in as far as they want. I would love to hear if you find this useful. 😎
 
@@ -118,7 +118,7 @@ Oh great, another vector that Facebook can use to monetize you, based on things 
 [Opinion | Don't Fix Facebook. Replace It. - The New York Times](https://www.nytimes.com/2018/04/03/opinion/facebook-fix-replace.html)
 www.nytimes.com
 
-This article caught my attention because the author is [Tim Wu](https://en.wikipedia.org/wiki/Tim_Wu), who wrote [The Master Switch](https://www.amazon.com/Master-Switch-Rise-Information-Empires/dp/0307390993/) , which is still one of my favorite books to understand net neutrality and the attempts over many years to achieve vertically integrated media companies.
+This article caught my attention because the author is [Tim Wu](https://en.wikipedia.org/wiki/Tim_Wu), who wrote [The Master Switch](https://www.amazon.com/Master-Switch-Rise-Information-Empires/dp/0307390993/), which is still one of my favorite books to understand net neutrality and the attempts over many years to achieve vertically integrated media companies.
 
 [The Diary of a Settler of Catan - McSweeney's Internet Tendency](https://www.mcsweeneys.net/articles/the-diary-of-a-settler-of-catan)
 www.mcsweeneys.net
@@ -177,8 +177,6 @@ Additional links of interest from this week.
 - [Data Lords: The Real Story of Big Data, Facebook and the Future of News – Talking Points Memo](https://talkingpointsmemo.com/edblog/data-lords-the-real-story-of-big-data-facebook-and-the-future-of-news)
 
 ## App 📱
-
-https://itunes.apple.com/us/app/id1365531024?at=1001lxyE&ct=thingelstad_com
 
 ### [1Blocker X](https://itunes.apple.com/us/app/id1365531024?at=1001lxyE&ct=thingelstad_com)
 
@@ -294,7 +292,7 @@ Well over a foot of snow to deal this morning. Heavy too with the warm temperatu
 
 ![](https://cdn.uploads.micro.blog/890/2018/4653590610.jpg)
 
-[Sunday @ 1:03 AM](https://www.thingelstad.com/2018/04/15/my-friend-dangrigsbyhttpsmicroblogdangrigsby.html)
+Sunday @ 1:03 AM
 
 My friend [@dangrigsby](https://micro.blog/dangrigsby) is newly on micro.blog — you should [follow him](https://micro.blog/dangrigsby)! 👍
 

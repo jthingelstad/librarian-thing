@@ -175,7 +175,7 @@ links:
   domain: cardstock.run
   heading_context: null
   section: Briefly
-word_count: 3930
+word_count: 3926
 ---
 Hey there! 👋
 
@@ -503,10 +503,6 @@ Manton Reece [@manton](https://micro.blog/manton) shared [he’s pausing bloggin
 [Jun 19, 2025 at 12:43 PM](https://www.thingelstad.com/2025/06/19/as-ai-agents-continue-to.html)
 
 As AI Agents continue to grow in capability it seems likely that we will want them to have financial resources to take action with. AI Agents will need an account balance, micropayments, and immediate settlement which are all feasible today with crypto. Digital money for digital agents. 🤔
-
----
-
-## Supporting Membership
 
 ---
 

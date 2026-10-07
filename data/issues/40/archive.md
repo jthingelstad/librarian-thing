@@ -152,11 +152,9 @@ Watching the two Falcon engines land nearly simultaneously made me think I was w
 
 ### [A GraphQL Primer: Why We Need A New Kind Of API (Part 1) — Smashing Magazine](https://www.smashingmagazine.com/2018/01/graphql-primer-new-api-part-1/)
 
-Good introduction to the problem that [GraphQL](http://graphql.org) is solving and the history of [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call), [SOAP](https://en.wikipedia.org/wiki/SOAP), and [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) thus far. I continue to think GraphQL has high applicability to many application. Interestingly I think that REST and GraphQL may find a reason to co-exist for a long time. [Make sure to read part 2](https://www.smashingmagazine.com/2018/01/graphql-primer-new-api-part-2/) of this as well.
+Good introduction to the problem that [GraphQL](http://graphql.org) is solving and the history of [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call), [SOAP](https://en.wikipedia.org/wiki/SOAP), and [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) thus far. I continue to think GraphQL has high applicability to many application. Interestingly I think that REST and GraphQL may find a reason to co-exist for a long time. Make sure to read [part 2](https://www.smashingmagazine.com/2018/01/graphql-primer-new-api-part-2/) of this as well.
 
 ---
-
-https://itunes.apple.com/us/app/openterm/id1323205755?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [OpenTerm](https://itunes.apple.com/us/app/openterm/id1323205755?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

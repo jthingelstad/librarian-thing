@@ -97,7 +97,7 @@ links:
   domain: blogs.windows.com
   heading_context: '[Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)'
   section: Notable Links 📌
-word_count: 2067
+word_count: 2065
 ---
 I’m writing this sitting on the floor of an empty room that will likely be the office in our new home. We closed today and are celebrating with takeout dinner in an empty house and thinking about how things will be laid out. We aren't moving until January.
 
@@ -201,7 +201,7 @@ This is why I don't get any of my incoming information via social media. None of
 
 ### [Glengarry Glen Christmas: Elf Motivation - SNL - YouTube](https://www.youtube.com/watch?v=J_vSirIJEsY)
 
-I’m a [huge fan of Glengarry Glen Ross](https://en.wikipedia.org/wiki/Glengarry_Glen_Ross_(film)) . I've probably seen that movie 30 or more times. Not just the scenes that everyone talks about, but the whole movie. It [turned me on to David Mamet](https://en.wikipedia.org/wiki/David_Mamet) [and his amazing dialogue](https://en.wikipedia.org/wiki/David_Mamet#) . This Christmas version of it is absolutely hilarious, and done by Alec Baldwin himself. Point of trivia, this scene with Alec Baldwin is one of the most quoted of the entire movie, and it didn’t exist in the original play. It was added for the movie rendition to give additional punch.
+I’m a huge fan of [Glengarry Glen Ross](https://en.wikipedia.org/wiki/Glengarry_Glen_Ross_(film)). I've probably seen that movie 30 or more times. Not just the scenes that everyone talks about, but the whole movie. It turned me on to [David Mamet](https://en.wikipedia.org/wiki/David_Mamet) and his [amazing dialogue](https://en.wikipedia.org/wiki/David_Mamet#). This Christmas version of it is absolutely hilarious, and done by Alec Baldwin himself. Point of trivia, this scene with Alec Baldwin is one of the most quoted of the entire movie, and it didn’t exist in the original play. It was added for the movie rendition to give additional punch.
 
 ### [Microsoft Edge: Making the web better through more open source collaboration - Windows Experience BlogWindows Experience Blog](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/)
 

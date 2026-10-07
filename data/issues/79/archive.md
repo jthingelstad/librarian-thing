@@ -269,7 +269,7 @@ This looks like a CSS framework I could actually use.
 
 ## Microposts 🎈
 
-### [Wednesday @ 8:45 PM](https://www.thingelstad.com/2018/11/07/thanks-to-microblog.html)
+### Wednesday @ 8:45 PM
 
 Thanks to micro.blog new [ActivityPub support](https://www.manton.org/2018/11/07/microblog-mastodon.html), Mastadon users should be able to follow me at @jamie@micro.thingelstad.com.
 

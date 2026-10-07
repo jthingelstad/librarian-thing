@@ -193,8 +193,6 @@ Amazing photographs. Underwater photography is still pretty esoteric since so fe
 
 ## App 📱
 
-https://itunes.apple.com/us/app/altos-odyssey/id1182456409?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Alto's Odyssey](https://itunes.apple.com/us/app/altos-odyssey/id1182456409?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Snowman

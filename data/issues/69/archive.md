@@ -104,7 +104,7 @@ links:
   domain: www.amazon.com
   heading_context: '[Lutron Caseta Wireless Smart Lighting Dimmer Switch (2 count) Starter Kit - Amazon.com](https://www.amazon.com/dp/B01M3XJUAD?tag=klf-20)'
   section: Notable Links 📌
-word_count: 2044
+word_count: 2042
 ---
 Minneapolis Public Schools started the 2018-19 school year this Monday, and with it the kids went off to school and summer break officially came to a close. 🏁 Summer flew by this year! There was so much going on. It was fabulous, and maybe 10% into the over-scheduled zone, but that's just fine. In our neighborhood the first day of school is a community event. Parents and kids walking to bus stops, or forming walking busses to take kids to school while photos are taken at various moments. The whole thing put a smile on my face, even as the kids were bemoaning the return of homework. 🚌
 
@@ -214,14 +214,12 @@ I didn’t realize that there were HomeKit compatible switches like this that yo
 
 ## Now Reading 📚
 
-https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0060839872/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1535727916&sr=8-1
-
-Zen and the Art of Motorcycle Maintenance: An Inquiry Into Values ()
+[Zen and the Art of Motorcycle Maintenance: An Inquiry Into Values](https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0060839872/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1535727916&sr=8-1)
 by Robert M Pirsig
 
 > A penetrating examination of how we live and how to live better A narration of a summer motorcycle trip undertaken by a father and his son, Zen and the Art of Motorcycle Maintenance becomes a personal and philosophical odyssey into fundamental questions on how to live.
 
-[When I was at David Hussman](https://www.thingelstad.com/2018/goodbye-to-my-friend-david-hussman/) 's memorial one of the speakers shared that David's favorite book was Zen and the Art of Motorcycle Maintenance. I've heard much about it, but I've never read it. I figured it was time to read it (or, listen to it since I am using the audiobook) and I'm enjoying it thoroughly. 🏍
+When I was at [David Hussman](https://www.thingelstad.com/2018/goodbye-to-my-friend-david-hussman/)'s memorial one of the speakers shared that David's favorite book was Zen and the Art of Motorcycle Maintenance. I've heard much about it, but I've never read it. I figured it was time to read it (or, listen to it since I am using the audiobook) and I'm enjoying it thoroughly. 🏍
 
 ## Yet More Links 🍞
 

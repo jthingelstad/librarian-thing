@@ -9,7 +9,7 @@ image: https://files.thingelstad.com/weekly-thing/52/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-52-may-5-2018/
 domains: []
 links: []
-word_count: 2195
+word_count: 2194
 ---
 This issue marks the first year of the Weekly Thing! 👏 I am enjoying this project, and I've heard from many of you who subscribe that you have found it valuable too! 👌
 
@@ -121,7 +121,7 @@ After reading [A Crack in Creation](http://www.acrackincreation.com) I continue 
 [The Best VPN Service: Reviews by Wirecutter | A New York Times Company](https://thewirecutter.com/reviews/best-vpn-service/)
 thewirecutter.com
 
-[VPN](https://en.wikipedia.org/wiki/Virtual_private_network) services used to be the domain business alone but with more focus on privacy, less trust of the providers that bring us our connectivity, and more security issues I know a lot of people are buying their own VPN services. This is the most comprehensive and researched view of VPN services I've seen to date. I personally use [Encrypt.me](https://encrypt.me) which [is bundled in with Eero Plus](https://eero.com/plus) , but I have had a number of issues with it.
+[VPN](https://en.wikipedia.org/wiki/Virtual_private_network) services used to be the domain business alone but with more focus on privacy, less trust of the providers that bring us our connectivity, and more security issues I know a lot of people are buying their own VPN services. This is the most comprehensive and researched view of VPN services I've seen to date. I personally use [Encrypt.me](https://encrypt.me) which is bundled in with [Eero Plus](https://eero.com/plus), but I have had a number of issues with it.
 
 [Humans broke the internet, understanding them better might help fix it — SAGE Ocean | Big Data, New Tech, Social Science](https://ocean.sagepub.com/blog/2018/4/19/humans-broke-the-internet-understanding-them-better-might-help-fix-it)
 ocean.sagepub.com
@@ -138,8 +138,6 @@ kickstarter.engineering
 This is one of the most approachable descriptions of Event Sourcing and the key concepts behind it I have ever read. The animated diagrams help as well. Kickstarter’s specific implementation is very Rails and ActiveRecord heavy, but shows a lightweight application of the concepts.
 
 ## App 📱
-
-https://itunes.apple.com/us/app/id1236254471?at=1001lxyE&ct=thingelstad_com
 
 ### [Drafts 5: Capture ‣‣ Act](https://itunes.apple.com/us/app/id1236254471?at=1001lxyE&ct=thingelstad_com)
 

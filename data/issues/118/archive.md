@@ -108,7 +108,7 @@ links:
   domain: conversionxl.com
   heading_context: '[I''ve Built Multiple Growth Teams. Here''s Why I Won''t Do It Again. | CXL](https://conversionxl.com/blog/dont-build-growth-teams/)'
   section: Notable Links 📌
-word_count: 2400
+word_count: 2396
 ---
 This week publishing the Weekly Thing caught up on me. I just finished putting all the notes together for the links and it’s late on a Friday night. You'll have to wait for next week for my pithy introduction. ⤵️
 
@@ -116,7 +116,7 @@ This week publishing the Weekly Thing caught up on me. I just finished putting a
 
 ### [Richard Stallman and the Fall of the Clueless Nerd | WIRED](https://www.wired.com/story/richard-stallman-and-the-fall-of-the-clueless-nerd/)
 
-I ran across [this article to Remove Richard Stallman](https://medium.com/@selamie/remove-richard-stallman-fec6ec210794) over last weekend. Stallman's statements in this email are reprehensible. [Four days later an Appendix A](https://medium.com/@selamie/remove-richard-stallman-appendix-a-a7e41e784f88) was added to it. That [same day Stallman resigned from MIT](https://www.stallman.org/archives/2019-jul-oct.html#16_September_2019_(Resignation)) and also [resigned from the Free Software Foundation](https://www.fsf.org/news/richard-m-stallman-resigns) . VICE [has a writeup on this all](https://www.vice.com/en_us/article/mbm74x/computer-scientist-richard-stallman-resigns-from-mit-over-epstein-comments) , [but this piece from Steven Levy](https://www.stevenlevy.com) , who wrote [one of my favorite books, Hackers](https://www.stevenlevy.com/index.php/books/hackers) , that introduces Stallman at the end, frames the whole thing up.
+I ran across this article to [Remove Richard Stallman](https://medium.com/@selamie/remove-richard-stallman-fec6ec210794) over last weekend. Stallman's statements in this email are reprehensible. Four days later an [Appendix A](https://medium.com/@selamie/remove-richard-stallman-appendix-a-a7e41e784f88) was added to it. That same day [Stallman resigned from MIT](https://www.stallman.org/archives/2019-jul-oct.html#16_September_2019_(Resignation)) and also [resigned from the Free Software Foundation](https://www.fsf.org/news/richard-m-stallman-resigns). [VICE has a writeup on this all](https://www.vice.com/en_us/article/mbm74x/computer-scientist-richard-stallman-resigns-from-mit-over-epstein-comments), but this piece from [Steven Levy](https://www.stevenlevy.com), who wrote one of my favorite books, [Hackers](https://www.stevenlevy.com/index.php/books/hackers), that introduces Stallman at the end, frames the whole thing up.
 
 > Yesterday RMS resigned from MIT and the Free Software Foundation he founded. For those who have followed his free-software movement, Stallman leaving MIT is like the big dome on Massachusetts Avenue itself getting an eviction notice. But after decades of tone-deaf comportment and complaints now emerging from women about his behavior, Stallman’s time was up.
 

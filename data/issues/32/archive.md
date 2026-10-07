@@ -156,15 +156,13 @@ Datadog did some interesting aggregated statistics on container practices inside
 
 ### [By the Time I Get to Phoenix - Wikipedia](https://en.wikipedia.org/wiki/By_the_Time_I_Get_to_Phoenix)
 
-This is fabulous story about [this song. Thanks to Steve Yaeger](https://twitter.com/SteveYaeger) for the introduction to this. 👍
+This is fabulous story about this song. Thanks to [Steve Yaeger](https://twitter.com/SteveYaeger) for the introduction to this. 👍
 
 > However, the drive is actually possible, driving at an average of about 65 mph. If he leaves Los Angeles around midnight, he can drive the 373 miles to Phoenix in about six hours to arrive when she "rises" at 6:00 am. If she "stops at lunch" to "give him a call" at 12:30 p.m. when he is in Albuquerque, it gives him six-and-a-half hours to make the 420-mile drive. The drive from Albuquerque to the Oklahoma border is about 390 miles, giving her plenty of time to get home and go to sleep.
 
 ---
 
 ## Now Reading 📚
-
-http://www.amazon.com/dp/0451231899/?tag=thingelstad01-20
 
 ### [Freedom (TM)](http://www.amazon.com/dp/0451231899/?tag=thingelstad01-20)
 
@@ -177,8 +175,6 @@ After reading Daemon and it’s cliffhanger ending I had to move on to Freedom r
 ---
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/working-copy-enterprise/id965019520?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [Working Copy Enterprise](https://itunes.apple.com/us/app/working-copy-enterprise/id965019520?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
@@ -196,7 +192,7 @@ $14.99 5/5 stars
 
 - [Proud member of the EFF! Donate now!](http://www.thingelstad.com/2017/12/12/proud-member-of.html)
 - [Somebody thought these red sunglasses with flashing lights were a good idea? 😕](http://www.thingelstad.com/2017/12/12/somebody-thought-these.html)
-- [Spent a lot of time in this while (sick) { sleep(); } loop today.](http://www.thingelstad.com/2017/12/11/spent-a-lot.html)
+- Spent a lot of time in this while (sick) { sleep(); } loop today.
 - [Earned the botanist badge in Forest! 🌳🌳🌳](http://www.thingelstad.com/2017/12/10/earned-the-botanist.html)
 
 ## The end 🎬

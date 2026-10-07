@@ -86,7 +86,7 @@ links:
   domain: www.fastcompany.com
   heading_context: '[The first map of America''s food supply chain is mind-boggling](https://www.fastcompany.com/90422553/the-first-map-of-americas-food-supply-chain-is-mind-boggling)'
   section: Notable Links 📌
-word_count: 1871
+word_count: 1864
 ---
 Does it make sense when you are squeezing in, without enough time and just "getting it done", for something that you are trying to do to bring yourself more calm and presence? I find myself at the end of the day having not completed my daily meditation. I've even gotten in bed, realized I hadn't meditated yet, gotten up and done a 10-minute guided meditation, and then returned to bed. That's totally normal right?
 
@@ -110,7 +110,6 @@ There is a lot of important and poorly understood things that happen when we sle
 
 This is one of my favorite nighttime views of Minneapolis. I decided to drive by with daylight savings making things darker much sooner and see how my iPhone does with such a difficult shot. The answer is not very well.
 
-Downtown Minneapolis at night from Lake Calhoun.
 Nov 7, 2019 at 8:25 PM
 3431–3599 W Calhoun Pkwy, Minneapolis MN 55408
 
@@ -198,7 +197,7 @@ Looks like we are a new show at the Brave New Workshop! 🤩
 
 ![](https://cdn.uploads.micro.blog/890/2019/ec3e67effd.jpg)
 
-### [Sunday @ 3:27 PM](https://www.thingelstad.com/2019/11/03/152728.html)
+### [Sunday @ 3:27 PM](https://www.thingelstad.com/2019/11/03/160928.html)
 
 ⚾️💥🤩
 

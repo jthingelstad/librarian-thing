@@ -287,7 +287,7 @@ Read that part above over and over, and over, until it really sinks in because i
 
 It was great to attend the [Minnesota Aspirations in Computing](https://www.aspirations.org/aspirations-community/minnesota) Award Ceremony tonight held online. The accomplishments of these young women are incredibly impressive. It is an honor that [SPS Commerce](https://www.spscommerce.com) is one of the sponsors of the program, and [we are hosting multiple interns this summer](https://twitter.com/pattonamyj/status/1263278692052144129) from the program, as we have for multiple years before. A big shout out to [Amy Patton](https://www.linkedin.com/in/amyjpatton/) of #TeamSPS who has put so much into this program, as well as many others! "Photos" of Erin Mitchell (Keynote), John Bartucz (Educator Honoree), Afiya Ward (State Winner), [Amy Patton](https://twitter.com/pattonamyj/) (Intern Program), Stuti Arora (Intern Speaker), and [Russell Fraenkel](https://www.linkedin.com/in/russell-fraenkel-44456a15/) (Committee Member).
 
-Also, [2019 Award Ceremony](https://www.thingelstad.com/2019/04/17/the-minnesota-aspirations.html) and [2016 Award Ceremony](https://www.thingelstad.com/2016/04/19/proud-that-spscommerce.html).
+Also, [2019 Award Ceremony](https://www.thingelstad.com/2019/04/17/minnesota-aspirations-in.html) and [2016 Award Ceremony](https://www.thingelstad.com/2016/04/19/proud-that-spscommerce.html).
 
 ![](https://www.thingelstad.com/uploads/2020/8b22342592.jpg)
 

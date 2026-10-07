@@ -376,7 +376,7 @@ $4.99 4/5 stars
 ## Microblog updates 🎈
 - [My book club is reading A Crack in Creation this month. Looks like a good read! 📚](http://www.thingelstad.com/2017/10/02/my-book-club.html)
 - [Signed up for the Xcel Energy Smart Thermostat program.](http://www.thingelstad.com/2017/10/01/signed-up-for.html)
-- [Just made my 67th loan on Kiva!](http://www.thingelstad.com/2017/10/01/just-made-my.html)
+- Just made my 67th loan on Kiva!
 - [🚀☕️](http://www.thingelstad.com/2017/10/01/202329.html)
 - [Had a fun time cheering the runners on at the Twin Cities Marathon this morning. 👏🏻🏃🏼‍♀️👏🏻🏃🏼👏🏻](http://www.thingelstad.com/2017/10/01/had-a-fun.html)
 - [I coached Tyler’s soccer game today and left my iPhone in the car thanks to my Apple Watch with LTE. 👍🏻😊⚽️](http://www.thingelstad.com/2017/09/30/i-coached-tylers.html)

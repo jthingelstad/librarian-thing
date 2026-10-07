@@ -154,9 +154,9 @@ links:
   domain: www.youtube.com
   heading_context: '[Your personality and your brain | Scott Schwefel | TEDxBrookings - YouTube](https://www.youtube.com/watch?v=8pq_tCgDkT4)'
   section: Links 📌
-word_count: 2291
+word_count: 2290
 ---
-I want to welcome a bunch of new subscribers to the Weekly Thing -- [Hello! 👋 My friend David Hussman](https://twitter.com/davidhussman) [shared this](https://www.linkedin.com/feed/update/urn:li:activity:6337711918261825537) , and a bunch of new people signed up. 👍 Thank you for all for jumping in, and I hope you enjoy this as much as I enjoy sharing it. (Also, thank you, David!)
+I want to welcome a bunch of new subscribers to the Weekly Thing -- Hello! 👋 My friend [David Hussman](https://twitter.com/davidhussman) [shared this](https://www.linkedin.com/feed/update/urn:li:activity:6337711918261825537), and a bunch of new people signed up. 👍 Thank you for all for jumping in, and I hope you enjoy this as much as I enjoy sharing it. (Also, thank you, David!)
 
 We finished a great Thanksgiving this week! 🦃 We had a great time with family and ate our fill of all the traditional eats. By the way, I learned that "Alexa" will also frequently answer to "Lefse"! 🤭 We've kicked into full tradition mode as of Friday and put our tree up and did our annual watching of Elf. I hope you all are having a great start to the holidays as well! 🥂
 
@@ -211,7 +211,7 @@ Interesting and approachable article reviewing how Alpha Go Zero taught itself h
 
 ### [Against Productivity – The Message – Medium](https://medium.com/message/against-productivity-b19f56b67da6)
 
-This is going to sound a little weird but this article [totally made me think of GTD](http://gettingthingsdone.com) and the concept of "mind like water".
+This is going to sound a little weird but this article totally made me think of [GTD](http://gettingthingsdone.com) and the concept of "mind like water".
 
 > In many ways foolishness isn’t the opposite of wisdom, but its absence. Productivity is the opposite of wisdom. Humanity is a creature of time and imagination. From these things our fruits are born more than manufactured. Productivity is a quality of perfect robots. Stories, adventures and all new things still have to come from messy humans.
 
@@ -311,8 +311,6 @@ Well thought through list of Christmas presents for people that like a certain k
 I’m a big fan of [Insights Discovery](https://www.insights.com/products/insights-discovery) and an equally big fan of [Scott Schwefel](http://scottschwefel.com). I met Scott when we were both on the [CaringBridge](https://www.caringbridge.org) board and got exposed to the Insights program in an offsite we did with that board. I've brought more than a hundred people through the program at SPS and I find it an immensely valuable training and tool. I didn’t know that Scott did this [TEDx](https://www.ted.com/about/programs-initiatives/tedx-program) talk. He's a great presenter with equally great content. 👏🏻🏆
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/sleeptown/id1210251567?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [SleepTown](https://itunes.apple.com/us/app/sleeptown/id1210251567?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

@@ -135,7 +135,7 @@ links:
   domain: www.macdrifter.com
   heading_context: '[Feedbin as a Multi-Device Reader](http://www.macdrifter.com/2017/10/feedbin-as-a-multi-device-reader.html)'
   section: Links 📌
-word_count: 1512
+word_count: 1511
 ---
 It dawned on me this week that I could write some short scripts and fix the hundreds (and now I realize thousands!) of photos that haven't been linked right on my [blog archive](https://www.thingelstad.com/archive/) ever since I moved to my new setup. After fixing the images, which worked in all but some edge cases, I was perusing my archive to check on the images. I also remembered why I like blogging. ✍🏻
 
@@ -198,11 +198,11 @@ I use [Pinboard](https://pinboard.in/) to save my links (and power [Link Thing](
 
 ### [Dramatiq: simple task processing](https://dramatiq.io/)
 
-Compelling task processing system for Python that uses decorators on functions to turn them into distributed tasks. These systems are usually a mile deep and complex but this looks very nice on the [surface. Read the about the motivation](https://dramatiq.io/motivation.html) .
+Compelling task processing system for Python that uses decorators on functions to turn them into distributed tasks. These systems are usually a mile deep and complex but this looks very nice on the surface. Read the about the [motivation](https://dramatiq.io/motivation.html).
 
 > If you’re used to either of those or if you’ve ever had to use Celery in anger, Dramatiq might just be the tool for you.
 
-[When I was still building WikiApiary](https://wikiapiary.com/wiki/Main_Page) I tried to use Celery and it was too high of a requirement for me.
+When I was still building [WikiApiary](https://wikiapiary.com/wiki/Main_Page) I tried to use Celery and it was too high of a requirement for me.
 
 ### [Reaching people on the internet - The Oatmeal](http://theoatmeal.com/comics/reaching_people)
 
@@ -245,8 +245,6 @@ Excellent writeup on approaching a large-scale monolithic application and beginn
 I've been a [Feedbin](https://feedbin.com) user for years now and highly recommend them. One of the best $30 a year I spend. If you have never experienced using a feed reader I would highly recommend giving it a try. This post doesn't highlight it but I also liked that [Feedbin added JSON Feed support](https://feedbin.com/blog/2017/05/22/feedbin-supports-json-feed/) right away.
 
 ## Featured App 📱
-
-https://itunes.apple.com/us/app/frost/id1234617736?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
 
 ### [FROST](https://itunes.apple.com/us/app/frost/id1234617736?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 

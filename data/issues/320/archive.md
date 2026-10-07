@@ -217,7 +217,7 @@ links:
   domain: www.anthropic.com
   heading_context: null
   section: Briefly
-word_count: 3694
+word_count: 3690
 ---
 Hello and welcome to Summer! It is Memorial Day weekend and here in Minnesota that is the official beginning of warm weather, biking and hiking, summer cabins, pools, grilling, and boating. Whichever of those things you like to partake in. Time to soak in as much time outside with friends and family as we can. ☀️
 
@@ -342,10 +342,6 @@ There are a lot of metaphors for software. One I use often is that software isn'
 In this model I would suggest the code is actually a liability. The asset that we have is the design thinking, solutioning, domain understanding that went into it. As long as we have that asset we can modify the code, the liability, to continue to evolve. Less code? Less liability.
 
 The backdrop to Ayre's post and my own commentary is the role that AI is increasingly playing in coding. The code part is a small but critical part of the solution. And as Ayre and others have pointed out, the limit there is time and AI enhanced development tools are going to help people in this craft to do more with the time we have.
-
----
-
-## Supporting Membership
 
 ---
 

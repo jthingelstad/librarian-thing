@@ -109,7 +109,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Automate Your Context - 2018 Monitorama - YouTube](https://www.youtube.com/watch?v=1YITF2_Yba8&t=8927)'
   section: Notable Links 📌
-word_count: 1894
+word_count: 1893
 ---
 Hello from Bayfield, Wisconsin! We are here to see [Brandi Carlile](http://brandicarlile.com) play at the [Big Top Chautauqua](https://www.bigtop.org). 🎶 It looks like the other thing we'll be doing is getting rained on. ☔️ No trip to Bayfield would be complete without a visit to the [Candy Shoppe](https://www.tripadvisor.com/Restaurant_Review-g60721-d3316141-Reviews-Candy_Shoppe-Bayfield_Wisconsin.html) as well for some delicious wine bread. 🤤
 
@@ -223,7 +223,7 @@ A very good illustration of what depression feels like from my friend Patrick Rh
 
 ## Now Reading 📚
 
-Collapse: How Societies Choose to Fail or Succeed: Revised Edition ()
+Collapse: How Societies Choose to Fail or Succeed: Revised Edition
 by Jared Diamond
 
 > In Jared Diamond’s follow-up to the Pulitzer-Prize winning Guns, Germs and Steel, the author explores how climate change, the population explosion and political discord create the conditions for the collapse of civilization.

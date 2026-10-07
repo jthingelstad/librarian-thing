@@ -245,8 +245,6 @@ Interesting article theorizing on a possible connection between economic growth 
 
 ## Featured App 📱
 
-https://itunes.apple.com/us/app/encrypt-me/id473835722?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Encrypt.me](https://itunes.apple.com/us/app/encrypt-me/id473835722?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Cloak Holdings LLC

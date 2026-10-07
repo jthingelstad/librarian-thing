@@ -144,8 +144,6 @@ I encourage being mindful about the information you are consuming. We watch what
 
 ## App 📱
 
-https://itunes.apple.com/us/app/workflow/id915249334?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Workflow](https://itunes.apple.com/us/app/workflow/id915249334?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Apple

@@ -9,11 +9,11 @@ image: https://files.thingelstad.com/weekly-thing/35/cover.jpg
 absolute_url: https://buttondown.com/weekly-thing/archive/weekly-thing-for-january-6-2018/
 domains: []
 links: []
-word_count: 1482
+word_count: 1481
 ---
 😬 I hope you all had a great New Years and a fabulous start to 2018! For me the New Year has kicked off with a bang! 🚀 This week has been a blur of various activities on all fronts. I celebrated my birthday 🎂 with fun and presents. I’m eager to put my new sous vide cooker to work and make some delicious eats!
 
-I also kicked off the new year by taking [Shawn Blanc's Focus Course](https://thefocuscourse.com) . 🧘‍♂️ There are a few things I’m thinking about working on in 2018 and establishing more focus is one of them. I decided to take it along with some friends that were also interested. I’m enjoying the course so far! 🤞
+I also kicked off the new year by taking [Shawn Blanc](https://shawnblanc.net)'s [Focus Course](https://thefocuscourse.com). 🧘‍♂️ There are a few things I’m thinking about working on in 2018 and establishing more focus is one of them. I decided to take it along with some friends that were also interested. I’m enjoying the course so far! 🤞
 
 ---
 
@@ -70,7 +70,7 @@ Lovely! 👏 I like how they show the transcripts of previous discussions.
 
 ### [Sense: Track energy use in real time](https://sense.com/product.html)
 
-I [shared my frustration with the reporting](https://www.thingelstad.com/2017/12/29/i-want-to.html) that my power company provides and [Luke Samaha](https://www.linkedin.com/in/lukesamaha/) [pointed me to](https://twitter.com/LukeSamaha/status/947135160323059712) Sense. This looks like a pretty amazing device and some great data. I like the premise of identifying the changes and then having the user annotate what happened. Wish it cost half as much though.
+I shared my [frustration with the reporting](https://www.thingelstad.com/2017/12/29/i-want-to.html) that my power company provides and [Luke Samaha](https://www.linkedin.com/in/lukesamaha/) [pointed me to](https://twitter.com/LukeSamaha/status/947135160323059712) Sense. This looks like a pretty amazing device and some great data. I like the premise of identifying the changes and then having the user annotate what happened. Wish it cost half as much though.
 
 ### [Encryption Lava Lamps – San Francisco, California - Atlas Obscura](https://www.atlasobscura.com/places/encryption-lava-lamps)
 

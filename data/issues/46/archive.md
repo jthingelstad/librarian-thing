@@ -214,8 +214,6 @@ Endearing exploration of the routines of Ichiro. If you build your existence aro
 
 ## App 📱
 
-https://itunes.apple.com/us/app/happy-scale/id532430574?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com
-
 ### [Happy Scale](https://itunes.apple.com/us/app/happy-scale/id532430574?mt=8&uo=4&at=1001lxyE&ct=thingelstad_com)
 
 by Front Pocket Software LLC

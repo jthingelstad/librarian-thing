@@ -370,7 +370,7 @@ Was great to run into this amazing group of [Minnestar](https://minnestar.org) s
 ### [Minnedemo 40](https://www.thingelstad.com/2024/09/19/minnedemo.html)
 Sep 19, 2024 at 9:45 PM
 
-The 40th installment of [Minnedemo](https://minnestar.org/minnedemo/) had me wondering about the first one -- I was there for [Holiday Minnedemo in October of 2006](https://www.thingelstad.com/2006/10/14/holiday-minnedemo.html)! I have a lot of [Minnedemo blog posts](https://www.thingelstad.com/search/?q=minnedemo). 🤩
+The 40th installment of [Minnedemo](https://minnestar.org/minnedemo/) had me wondering about the first one -- I was there for [Holiday Minnedemo in October of 2006](https://www.thingelstad.com/2006/10/13/holiday-minnedemo.html)! I have a lot of [Minnedemo blog posts](https://www.thingelstad.com/search/?q=minnedemo). 🤩
 
 ### HabitAware
 

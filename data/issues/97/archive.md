@@ -57,7 +57,7 @@ links:
   domain: securitydiscovery.com
   heading_context: '[800+ Million Emails Leaked Online by Email Verification Service - Security Discovery](https://securitydiscovery.com/800-million-emails-leaked-online-by-email-verification-service/)'
   section: Notable Links 📌
-word_count: 1055
+word_count: 1052
 ---
 This week we got our [Peloton Bike](https://www.onepeloton.com/bike) and [Tread](https://www.onepeloton.com/tread) delivered. We decided to update our home exercise equipment and Tammy and I both found the gear very impressive, and the live classes online very engaging. I’ve already gotten a couple of rides in and like it a lot. In some ways it’s a better spin class experience than a class in a studio! I love that you can see your performance live with everyone else taking the class. If you are on Peloton, connect with me — my username is jthingelstad!
 
@@ -85,7 +85,6 @@ What about bankers and consultants?
 
 We went to the lake this last weekend and I found myself playing Fishin’ in the Dark as we pulled in, and dreaming of summer, sunshine, and open water.
 
-Dreaming of summer.
 Mar 9, 2019 at 2:33 PM
 Cannon Lake, MN
 

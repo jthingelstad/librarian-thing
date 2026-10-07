@@ -158,7 +158,7 @@ Detailed hardware analysis from James Hamilton of AWS on the new custom ASIC tha
 
 ### [The Greatest Coach | Silicon Valley Product Group](https://svpg.com/the-greatest-coach/)
 
-I've read a [number of remembrances of Bill Campbell](https://en.wikipedia.org/wiki/William_Campbell_(business_executive)) and [this review of Trillion Dollar Coach](https://www.trilliondollarcoach.com) has put the book at the top of my reading list! 📚
+I've read a number of remembrances of [Bill Campbell](https://en.wikipedia.org/wiki/William_Campbell_(business_executive)) and this review of [Trillion Dollar Coach](https://www.trilliondollarcoach.com) has put the book at the top of my reading list! 📚
 
 ### [Apruve Announces New Board Member](https://www.prweb.com/releases/apruve_announces_new_board_member/prweb16248811.htm)
 

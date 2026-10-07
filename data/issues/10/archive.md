@@ -209,7 +209,7 @@ The web has (sadly) evolved to a place that you need to defend yourself against 
 - [It was great to see so many friendly new and familiar faces at #minnedemo tonight! I ❤️ our tech community!](http://www.thingelstad.com/2017/07/13/it-was-great.html)
 - [Look up! 👀](http://www.thingelstad.com/2017/07/13/look-up.html)
 - [minnedemo](http://www.thingelstad.com/2017/07/13/minnedemo.html)
-- [Excited for another great #minnedemo tonight!](http://www.thingelstad.com/2017/07/13/excited-for-another.html)
+- Excited for another great #minnedemo tonight!
 - [Love my presenter page on the new @minnestar website!](http://www.thingelstad.com/2017/07/11/love-my-presenter.html)
 - [Signing off from the 2017 Winnipeg Folk Festival! Will be back!](https://www.thingelstad.com/2017/07/08/winnipeg-folk-festival.html)
 - [Peter Yarrow leading a workshop and the crowd in a rendition of Blowin’ in the Wind. I’ll take that for my finale!](https://www.thingelstad.com/2017/07/08/winnipeg-folk-festival.html)

@@ -101,7 +101,7 @@ links:
   domain: 512pixels.net
   heading_context: '[The One Where I Announce I’m Joining Mac Power Users – 512 Pixels](https://512pixels.net/2018/11/joining-mpu/)'
   section: Notable Links 📌
-word_count: 1986
+word_count: 1985
 ---
 So what is it like to be right in the thick of it when technology teams manage through maximum capacity events? There are many similarities to running financial publishing systems through significant market events, providing giant "social scale" to applications deployed to millions of people in minutes, as well as running the largest retail network in the world at the highest volume time of year. You need a great team, real-time performance data, proper procedures, and experience — amongst other things.
 
@@ -231,7 +231,7 @@ Amazon [Quantum Ledger Database](https://aws.amazon.com/qldb/) and [Managed Bloc
 
 ### [Wednesday @ 11:02 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
-[AWS re:Invent house band playing Blackbird](https://en.wikipedia.org/wiki/Blackbird_(Beatles_song)) from The Beatles went from just being bad to actually making me angry. 😡
+AWS re:Invent house band playing [Blackbird](https://en.wikipedia.org/wiki/Blackbird_(Beatles_song)) from The Beatles went from just being bad to actually making me angry. 😡
 
 ### [Wednesday @ 10:59 AM](https://www.thingelstad.com/2018/11/28/104016.html)
 
@@ -263,7 +263,7 @@ We tried the brand new, just opened today, [Final Frontier](https://www.missingp
 
 ### [Friday @ 7:24 PM](https://www.thingelstad.com/2018/11/23/cotton-headed-ninny.html)
 
-Cotton Headed [Ninny Muggins! Christmas tradition, watching Elf](https://en.wikipedia.org/wiki/Elf_(film)) ! 🎬🎄
+Cotton Headed Ninny Muggins! Christmas tradition, watching [Elf](https://en.wikipedia.org/wiki/Elf_(film))! 🎬🎄
 
 ## Fortune 🥠
 

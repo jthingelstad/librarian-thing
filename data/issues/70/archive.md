@@ -87,7 +87,7 @@ links:
   domain: auth0.com
   heading_context: '[Auth0 Architecture: Running In Multiple Cloud Providers And Regions](https://auth0.com/blog/auth0-architecture-running-in-multiple-cloud-providers-and-regions/)'
   section: Notable Links 📌
-word_count: 1335
+word_count: 1329
 ---
 I'm ready to put this year's Fall allergy season into the Guinness Book of World Records. 🏆 Even with loratadine and pseudoephedrine I've been struggling with watery eyes, congestion and itching. I've been having to tell people that while they are very important to me, in fact, I am not crying upon seeing them. 😂
 
@@ -113,7 +113,6 @@ This article captures part of the intrigue I have about Tesla, and what got me t
 
 Fairy House at [Minnesota Renaissance Festival](http://www.renaissancefest.com). The door is about 3 feet tall.
 
-Fairy House at Minnesota Renaissance Festival.
 Sep 3, 2018 at 1:00 PM
 Renaissance Festival, Shakopee, MN
 
@@ -164,8 +163,6 @@ Nice set of slides highlighting the Product Ownership role. I like that this tou
 They increased availability, performance and reduced cost by consolidating on one cloud provider. This is an interesting argument about regionality within a single provider versus multi-cloud. There are big tradeoffs there.
 
 ## Highlighted iOS App 📱
-
-https://itunes.apple.com/us/app/libby-by-overdrive/id1076402606?mt=8&uo=4
 
 ### [Libby, by OverDrive](https://itunes.apple.com/us/app/libby-by-overdrive/id1076402606?mt=8&uo=4)
 
@@ -229,7 +226,7 @@ Only two episodes in, and I’m already very into [Succession](https://www.hbo.c
 
 ### [Friday @ 8:53 PM](https://www.thingelstad.com/2018/08/31/we-are-enjoying.html)
 
-[We are enjoying Making It](https://en.wikipedia.org/wiki/Making_It_(TV_series)) for family TV. 👍🏻🔨👨‍👩‍👧‍👦
+We are enjoying [Making It](https://en.wikipedia.org/wiki/Making_It_(TV_series)) for family TV. 👍🏻🔨👨‍👩‍👧‍👦
 
 ![](https://www.thingelstad.com/uploads/2018/0067532003.jpg)
 

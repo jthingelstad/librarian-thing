@@ -198,7 +198,7 @@ Free 4.5/5 stars
 - [Big crowd for Beck. 🎶](https://www.thingelstad.com/2017/09/08/u-at-us.html)
 - [Beck opening up show tonight!](https://www.thingelstad.com/2017/09/08/u-at-us.html)
 - [Had a great time serving #TeamSPS lunch outside today! 🍔🌭🍪](http://www.thingelstad.com/2017/09/07/had-a-great.html)
-- [For fun put my Pinboard archive into a Jekyll site, instant linkblog! Interesting experiments to try.](http://www.thingelstad.com/2017/09/06/for-fun-put.html)
+- For fun put my Pinboard archive into a Jekyll site, instant linkblog! Interesting experiments to try.
 - [Had the henna artist play freehand with embellishing my permanent tribal tattoo. 👍🏻](https://www.thingelstad.com/2017/09/04/115802.html)
 - [Kids and I got our henna tattoos!](https://www.thingelstad.com/2017/09/04/115802.html)
 - [Great day for the Minnesota Renaissance Festival!](https://www.thingelstad.com/2017/09/04/115802.html)

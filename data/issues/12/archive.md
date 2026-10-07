@@ -244,7 +244,7 @@ Free 4.5/5 stars
 - [Dusty’s – time for a dago!](http://www.thingelstad.com/2017/07/26/dustys-time-for.html)
 - [B-Squad softball.](http://www.thingelstad.com/2017/07/26/bsquad-softball.html)
 - [For those that saw the kitten item from this weekend, the Humane society put it to sleep. We were too late for it. ☹️](http://www.thingelstad.com/2017/07/25/for-those-that.html)
-- [Sad to be missing #devopsdays MSP. From the Tweets it looks like a great went, as usual! Huge thank you to the organizers!](http://www.thingelstad.com/2017/07/25/sad-to-be.html)
+- Sad to be missing #devopsdays MSP. From the Tweets it looks like a great went, as usual! Huge thank you to the organizers!
 - [The lost kitten we found wasn’t doing well. We surrendered him to the MN Humane Society. Hoping he gets better. 🤞](http://www.thingelstad.com/2017/07/23/the-lost-kitten.html)
 - [Look up! 👀🇺🇸](http://www.thingelstad.com/2017/07/23/look-up.html)
 - [Time to wrap pork butt and finish with Apple cider on Big Green Egg. 🔥](http://www.thingelstad.com/2017/07/23/time-to-wrap.html)
