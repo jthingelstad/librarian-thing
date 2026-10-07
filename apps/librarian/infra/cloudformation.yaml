@@ -38,35 +38,6 @@ Parameters:
       S3 key for the Another Thing podcast corpus. The stream Lambda
       lazy-loads it only when a request's scope includes podcast or all.
       Uploaded on its own cadence by pipeline/deploy/upload_podcast_corpus.py.
-  ButtondownApiKey:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-  SessionSecret:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-  ThingyWebOriginToken:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-    Default: ""
-    Description: >
-      Marker the thingy.thingelstad.com CloudFront distribution stamps as
-      X-Thingy-Origin on its /api/* origin requests. Cookie-based web
-      sessions are honored only when this matches; empty disables cookie
-      auth entirely (Bearer unaffected).
-  LibrarianRetrieveSecret:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-    Description: >
-      Shared secret for trusted service-to-service calls to the critical
-      Librarian retrieval endpoint.
   LogLevel:
     Type: String
     Default: INFO
@@ -80,20 +51,6 @@ Parameters:
     Default: 30
     MinValue: 1
     Description: Maximum auth attempts per client identity per hour.
-  FastmailJmapToken:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-    Default: ""
-    Description: Fastmail JMAP API token used to send Thingy magic-link emails.
-  BraveSearchApiKey:
-    Type: String
-    NoEcho: true
-    AllowedPattern: '^[^"\\]*$'
-    ConstraintDescription: must not contain a double quote or a backslash.
-    Default: ""
-    Description: Brave Search API key for the web_search tool. Empty disables web search.
   ThingyMagicLinkFromEmail:
     Type: String
     Default: thingy@thingelstad.com
@@ -178,32 +135,12 @@ Resources:
         PasswordLength: 48
         ExcludePunctuation: true
 
-  # The Lambdas' credentials, read once per cold start
-  # (shared/runtime-secrets.mts) so none of them sits in a function's
-  # configuration as plaintext. The stack writes it from the deploy
-  # parameters (their AllowedPattern keeps the JSON well formed); the golden
-  # credential comes from its own generated secret by dynamic reference,
-  # secret to secret. The Anthropic API key is the same pattern from a
-  # secret Jamie keeps by hand (weekly-thing-librarian-anthropic, key
-  # "value"); the deploy fails if that secret is missing. CloudFormation
-  # resolves it only when this resource changes, so after rotating the key,
-  # redeploy with a change here (or edit the runtime secret to match).
-  LibrarianRuntimeSecret:
-    Type: AWS::SecretsManager::Secret
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties:
-      Name: weekly-thing-librarian-runtime
-      Description: Runtime credentials for the Librarian Lambdas, written by the stack from its deploy parameters.
-      SecretString: !Sub >-
-        {"BUTTONDOWN_API_KEY":"${ButtondownApiKey}",
-        "SESSION_SECRET":"${SessionSecret}",
-        "THINGY_WEB_ORIGIN_TOKEN":"${ThingyWebOriginToken}",
-        "FASTMAIL_JMAP_TOKEN":"${FastmailJmapToken}",
-        "LIBRARIAN_RETRIEVE_SECRET":"${LibrarianRetrieveSecret}",
-        "BRAVE_SEARCH_API_KEY":"${BraveSearchApiKey}",
-        "LIBRARIAN_GOLDEN_RETRIEVE_SECRET":"{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}",
-        "ANTHROPIC_API_KEY":"{{resolve:secretsmanager:weekly-thing-librarian-anthropic:SecretString:value}}"}
+  # The Lambdas' credentials live in weekly-thing-librarian-runtime, a
+  # Secrets Manager secret Jamie keeps by hand: a JSON object of env-style
+  # names, read once per cold start (shared/runtime-secrets.mts lists them).
+  # The stack never writes it and no deploy carries a credential, so a key
+  # is rotated by editing the secret; new containers pick it up. The stack
+  # created it and let it go on 2026-10-07 (DeletionPolicy Retain).
 
   LibrarianFunctionRole:
     Type: AWS::IAM::Role
@@ -294,7 +231,7 @@ Resources:
                 Resource: "*"
               - Effect: Allow
                 Action: secretsmanager:GetSecretValue
-                Resource: !Ref LibrarianRuntimeSecret
+                Resource: !Sub arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:weekly-thing-librarian-runtime-??????
 
   LibrarianFunction:
     Type: AWS::Lambda::Function
@@ -314,7 +251,7 @@ Resources:
           CORPUS_BUCKET: !Ref CorpusBucket
           CORPUS_KEY: !Ref CorpusKey
           GRAPH_KEY: !Ref GraphKey
-          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
@@ -348,7 +285,7 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
-          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           # Anthropic API model ids (2026-10). The models are the same 4.6
           # generation Bedrock served; moving to the 5 family is its own
@@ -387,7 +324,7 @@ Resources:
           TABLE_NAME: !Ref LibrarianTable
           LOG_LEVEL: !Ref LogLevel
           # The reviewer's Anthropic API key comes from the runtime secret.
-          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           # Anthropic API model ids (2026-10). The models are the same 4.6
           # generation Bedrock served; moving to the 5 family is its own
           # change (Opus 5.5 always thinks and needs its effort set).
@@ -1049,7 +986,7 @@ Resources:
       AlarmActions:
         - !Ref LibrarianAlarmTopic
 
-  # A dead archive tool (S3 corpus, rerank region, Brave key) degrades
+  # A dead archive tool (S3 corpus, rerank region) degrades
   # every answer while the loop works around it - the handled-failures
   # alarm never fires for this.
   LibrarianToolFailuresMetricFilter:

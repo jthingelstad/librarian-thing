@@ -75,7 +75,7 @@ test('view_photo returns image blocks plus an honest text summary', async () => 
   const summary = JSON.parse(content.at(-1).text);
   assert.equal(summary.shown.length, 1);
   assert.equal(summary.refused.length, 1);
-  assert.match(summary.server_version, /^2\.5\.0\+tools\./);
+  assert.match(summary.server_version, /^2\.5\.1\+tools\./);
 });
 
 test('view_photo with nothing viewable is an error result, not a silent success', async () => {
@@ -150,7 +150,6 @@ test('view_photo is published for the chat loop but stays off MCP/web launch lis
 });
 
 test('the MCP declaration derives from the published spec - no drift', async () => {
-  process.env.BRAVE_SEARCH_API_KEY = '';
   const { mcpToolDeclarations } = await import('../dist/shared/mcp.mjs');
   const decl = mcpToolDeclarations(['view_photo'])[0];
   assert.equal(decl.name, 'view_photo');

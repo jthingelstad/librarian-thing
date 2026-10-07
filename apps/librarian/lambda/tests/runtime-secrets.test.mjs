@@ -11,16 +11,17 @@ import {
   runtimeSecretValues
 } from '../dist/shared/runtime-secrets.mjs';
 
-const ARN = 'arn:aws:secretsmanager:us-east-1:111122223333:secret:weekly-thing-librarian-runtime-AbCdEf';
+const SECRET_ID = 'weekly-thing-librarian-runtime';
 const SECRET = {
   BUTTONDOWN_API_KEY: 'bd-value',
   SESSION_SECRET: 'session-value',
   THINGY_WEB_ORIGIN_TOKEN: 'origin-value',
   FASTMAIL_JMAP_TOKEN: 'jmap-value',
   LIBRARIAN_RETRIEVE_SECRET: 'retrieve-value',
-  BRAVE_SEARCH_API_KEY: '',
   LIBRARIAN_GOLDEN_RETRIEVE_SECRET: 'golden-value',
-  ANTHROPIC_API_KEY: 'anthropic-value',
+  ANTHROPIC_API_KEY: '',
+  // A retired name left in the secret is ignored.
+  BRAVE_SEARCH_API_KEY: '',
   UNRELATED: 'ignored'
 };
 
@@ -40,7 +41,7 @@ function fakeClient(answers) {
 // Run with a clean slate of the managed variables, restored afterwards.
 async function withEnv(env, run) {
   const saved = {};
-  for (const key of [...RUNTIME_SECRET_KEYS, 'LIBRARIAN_RUNTIME_SECRET_ARN']) {
+  for (const key of [...RUNTIME_SECRET_KEYS, 'LIBRARIAN_RUNTIME_SECRET_ID']) {
     saved[key] = process.env[key];
     delete process.env[key];
   }
@@ -61,7 +62,7 @@ async function withEnv(env, run) {
   }
 }
 
-test('without a secret ARN the loader does nothing (local runs and tests)', async () => {
+test('without a secret id the loader does nothing (local runs and tests)', async () => {
   await withEnv({}, async () => {
     const client = fakeClient([]);
     await loadRuntimeSecrets(client);
@@ -70,14 +71,15 @@ test('without a secret ARN the loader does nothing (local runs and tests)', asyn
 });
 
 test('the secret fills process.env once, and the log names keys but never values', async () => {
-  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN }, async (lines) => {
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID }, async (lines) => {
     const client = fakeClient([JSON.stringify(SECRET)]);
     await loadRuntimeSecrets(client);
     await loadRuntimeSecrets(client);
     assert.equal(client.calls.length, 1, 'one read per cold start');
-    assert.equal(client.calls[0].SecretId, ARN);
+    assert.equal(client.calls[0].SecretId, SECRET_ID);
     for (const key of RUNTIME_SECRET_KEYS) assert.equal(process.env[key], SECRET[key], key);
     assert.equal(process.env.UNRELATED, undefined, 'only the known names are taken');
+    assert.equal(process.env.BRAVE_SEARCH_API_KEY, undefined, 'a retired name is not taken');
     const logged = lines.join('\n');
     assert.match(logged, /runtime_secrets_loaded/);
     assert.match(logged, /BUTTONDOWN_API_KEY/);
@@ -85,12 +87,23 @@ test('the secret fills process.env once, and the log names keys but never values
       assert.equal(logged.includes(value), false, `the log must not carry ${value}`);
     }
     const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_loaded')));
-    assert.deepEqual(event.empty, ['BRAVE_SEARCH_API_KEY']);
+    assert.deepEqual(event.empty, ['ANTHROPIC_API_KEY']);
+    assert.deepEqual(event.missing, []);
+  });
+});
+
+test('a name the secret lacks is logged as missing', async () => {
+  const { FASTMAIL_JMAP_TOKEN, ...partial } = SECRET;
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID }, async (lines) => {
+    await loadRuntimeSecrets(fakeClient([JSON.stringify(partial)]));
+    const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_loaded')));
+    assert.deepEqual(event.missing, ['FASTMAIL_JMAP_TOKEN']);
+    assert.equal(lines.join('\n').includes(FASTMAIL_JMAP_TOKEN), false);
   });
 });
 
 test('a failed read refuses and the next call retries', async () => {
-  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN }, async () => {
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID }, async () => {
     const client = fakeClient([new Error('AccessDeniedException'), JSON.stringify(SECRET)]);
     await assert.rejects(loadRuntimeSecrets(client), /Runtime credentials are unavailable/);
     assert.equal(process.env.SESSION_SECRET, undefined);
@@ -101,7 +114,7 @@ test('a failed read refuses and the next call retries', async () => {
 });
 
 test('a failed read refuses even when a value is already in the environment', async () => {
-  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ARN: ARN, SESSION_SECRET: 'stale' }, async (lines) => {
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID, SESSION_SECRET: 'stale' }, async (lines) => {
     const client = fakeClient([new Error('AccessDeniedException')]);
     await assert.rejects(loadRuntimeSecrets(client), /Runtime credentials are unavailable/);
     assert.match(lines.join('\n'), /runtime_secrets_load_failed/);

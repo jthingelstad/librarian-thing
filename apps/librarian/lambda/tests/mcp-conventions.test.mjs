@@ -30,9 +30,7 @@ import {
 import { toolTitle } from '../dist/shared/prompts.mjs';
 import { primeCorpusCachesForTests } from '../dist/shared/retrieval.mjs';
 
-process.env.BRAVE_SEARCH_API_KEY = 'test-key-for-declarations';
 const declarations = mcpToolDeclarations();
-delete process.env.BRAVE_SEARCH_API_KEY;
 
 // A type-correct value for each required argument (compare_eras requires
 // two year ranges; find_evidence a list of claims).
@@ -75,10 +73,7 @@ test('every limit declares minimum, maximum and default, matching TOOL_LIMITS', 
   }
 });
 
-test('a limit above its maximum is refused before quota, for every tool', (t) => {
-  // web_search's schema is only visible once a Brave key is configured.
-  process.env.BRAVE_SEARCH_API_KEY = 'test-key-for-declarations';
-  t.after(() => delete process.env.BRAVE_SEARCH_API_KEY);
+test('a limit above its maximum is refused before quota, for every tool', () => {
   for (const tool of declarations) {
     for (const [key, schema] of limitProperties(tool)) {
       const required = requiredArguments(tool);
@@ -379,7 +374,7 @@ test('a successful result conforms to its outputSchema and uses only 2.0 shapes'
     covered.add(name);
   }
   const retrieval = new Set(['search_faq', 'search_archive', 'compare_eras', 'find_evidence', 'media_search']);
-  const live = new Set(['fetch_page', 'web_search']);
+  const live = new Set(['fetch_page']);
   for (const tool of declarations) {
     if (tool.name === 'view_photo' || retrieval.has(tool.name) || live.has(tool.name)) continue;
     assert.ok(covered.has(tool.name), `${tool.name} is exercised offline`);
@@ -444,9 +439,7 @@ test('year is shorthand for year_range [year, year] wherever year_range is taken
 });
 
 test('MCP text names Jamie, never a pronoun, and never mentions the app', () => {
-  process.env.BRAVE_SEARCH_API_KEY = 'test-key-for-declarations';
   const all = mcpToolDeclarations([...MCP_LAUNCH_TOOLS, 'view_photo']);
-  delete process.env.BRAVE_SEARCH_API_KEY;
   for (const tool of all) {
     const text = JSON.stringify({ description: tool.description, inputSchema: tool.inputSchema });
     assert.doesNotMatch(text, /\b(he|him|his|she|her|hers)\b/i, `${tool.name} uses a pronoun`);

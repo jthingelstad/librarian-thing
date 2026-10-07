@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import os
 import re
-import secrets
 import shutil
 import subprocess
 import sys
@@ -117,13 +116,6 @@ def smoke_test_model(model_id: str, label: str = "model") -> None:
 def smoke_test_thingy_models(models: dict[str, str]) -> None:
     for label, model_id in models.items():
         smoke_test_model(model_id, label)
-
-
-def require_env(name: str) -> str:
-    value = os.environ.get(name)
-    if not value:
-        raise RuntimeError(f"{name} is required")
-    return value
 
 
 def run(args: list[str], cwd: Path = REPO) -> None:
@@ -333,12 +325,6 @@ def deploy_stack(
     blog_corpus_key: str,
     podcast_corpus_key: str,
     allowed_origin: str,
-    buttondown_api_key: str,
-    session_secret: str | None,
-    librarian_retrieve_secret: str | None,
-    fastmail_jmap_token: str | None,
-    brave_search_api_key: str | None,
-    thingy_web_origin_token: str | None,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
     stream_custom_domain_name: str,
@@ -346,79 +332,17 @@ def deploy_stack(
     log_level: str,
     auth_rate_limit_max: str,
     cloudformation_role_arn: str | None,
-) -> tuple[dict[str, str], bool]:
+) -> dict[str, str]:
     cloudformation = boto3.client("cloudformation")
     body = TEMPLATE.read_text(encoding="utf-8")
 
-    exists = True
-    existing_parameter_keys: set[str] = set()
+    # Credentials are not parameters: the Lambdas read them from the
+    # hand-kept weekly-thing-librarian-runtime secret, so a deploy carries none.
     try:
-        stack = cloudformation.describe_stacks(StackName=stack_name)["Stacks"][0]
-        existing_parameter_keys = {
-            str(param.get("ParameterKey"))
-            for param in stack.get("Parameters", [])
-            if param.get("ParameterKey")
-        }
+        cloudformation.describe_stacks(StackName=stack_name)
+        exists = True
     except cloudformation.exceptions.ClientError:
         exists = False
-
-    generated_session_secret = False
-    session_parameter: dict[str, str | bool]
-    if session_secret:
-        session_parameter = {"ParameterKey": "SessionSecret", "ParameterValue": session_secret}
-    elif exists:
-        session_parameter = {"ParameterKey": "SessionSecret", "UsePreviousValue": True}
-    else:
-        session_parameter = {
-            "ParameterKey": "SessionSecret",
-            "ParameterValue": secrets.token_urlsafe(48),
-        }
-        generated_session_secret = True
-
-    retrieve_parameter: dict[str, str | bool]
-    if librarian_retrieve_secret:
-        retrieve_parameter = {
-            "ParameterKey": "LibrarianRetrieveSecret",
-            "ParameterValue": librarian_retrieve_secret,
-        }
-    elif exists and "LibrarianRetrieveSecret" in existing_parameter_keys:
-        retrieve_parameter = {
-            "ParameterKey": "LibrarianRetrieveSecret",
-            "UsePreviousValue": True,
-        }
-    else:
-        raise RuntimeError("LIBRARIAN_RETRIEVE_SECRET is required")
-
-    if fastmail_jmap_token:
-        fastmail_parameter = {
-            "ParameterKey": "FastmailJmapToken",
-            "ParameterValue": fastmail_jmap_token,
-        }
-    elif exists and "FastmailJmapToken" in existing_parameter_keys:
-        fastmail_parameter = {"ParameterKey": "FastmailJmapToken", "UsePreviousValue": True}
-    else:
-        fastmail_parameter = {"ParameterKey": "FastmailJmapToken", "ParameterValue": ""}
-
-    origin_token_parameter: dict[str, str | bool]
-    if thingy_web_origin_token:
-        origin_token_parameter = {
-            "ParameterKey": "ThingyWebOriginToken",
-            "ParameterValue": thingy_web_origin_token,
-        }
-    elif exists and "ThingyWebOriginToken" in existing_parameter_keys:
-        origin_token_parameter = {"ParameterKey": "ThingyWebOriginToken", "UsePreviousValue": True}
-    else:
-        origin_token_parameter = {"ParameterKey": "ThingyWebOriginToken", "ParameterValue": ""}
-
-    if brave_search_api_key:
-        brave_parameter = {
-            "ParameterKey": "BraveSearchApiKey",
-            "ParameterValue": brave_search_api_key,
-        }
-    elif exists and "BraveSearchApiKey" in existing_parameter_keys:
-        brave_parameter = {"ParameterKey": "BraveSearchApiKey", "UsePreviousValue": True}
-    else:
-        brave_parameter = {"ParameterKey": "BraveSearchApiKey", "ParameterValue": ""}
 
     parameters = [
         {"ParameterKey": "AllowedOrigin", "ParameterValue": allowed_origin},
@@ -430,12 +354,6 @@ def deploy_stack(
         {"ParameterKey": "GraphKey", "ParameterValue": graph_key},
         {"ParameterKey": "BlogCorpusKey", "ParameterValue": blog_corpus_key},
         {"ParameterKey": "PodcastCorpusKey", "ParameterValue": podcast_corpus_key},
-        {"ParameterKey": "ButtondownApiKey", "ParameterValue": buttondown_api_key},
-        session_parameter,
-        retrieve_parameter,
-        fastmail_parameter,
-        origin_token_parameter,
-        brave_parameter,
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
         {
@@ -465,7 +383,7 @@ def deploy_stack(
             waiter_name = "stack_update_complete"
         except cloudformation.exceptions.ClientError as exc:
             if "No updates are to be performed" in str(exc):
-                return stack_outputs(cloudformation, stack_name), generated_session_secret
+                return stack_outputs(cloudformation, stack_name)
             raise
     else:
         cloudformation.create_stack(
@@ -491,7 +409,7 @@ def deploy_stack(
         except Exception as inner:
             print(f"Could not fetch stack events: {inner}")
         raise
-    return stack_outputs(cloudformation, stack_name), generated_session_secret
+    return stack_outputs(cloudformation, stack_name)
 
 
 def stack_output(cloudformation, stack_name: str, key: str) -> str:
@@ -688,17 +606,7 @@ def main() -> int:
     if not args.skip_corpus_upload:
         upload_librarian_corpora(args, bucket)
 
-    session_secret = os.environ.get("LIBRARIAN_SESSION_SECRET")
-    thingy_web_origin_token = os.environ.get("THINGY_WEB_ORIGIN_TOKEN") or None
-    librarian_retrieve_secret = os.environ.get("LIBRARIAN_RETRIEVE_SECRET") or None
-    fastmail_jmap_token = (
-        os.environ.get("FASTMAIL_JMAP_TOKEN")
-        or os.environ.get("THINGY_FASTMAIL_JMAP_TOKEN")
-        or os.environ.get("THINGY_JMAP_TOKEN")
-        or None
-    )
-    brave_search_api_key = os.environ.get("BRAVE_SEARCH_API_KEY") or None
-    outputs, generated_session_secret = deploy_stack(
+    outputs = deploy_stack(
         stack_name=args.stack_name,
         bucket=bucket,
         code_key=code_key,
@@ -708,12 +616,6 @@ def main() -> int:
         blog_corpus_key=args.blog_corpus_key,
         podcast_corpus_key=args.podcast_corpus_key,
         allowed_origin=args.allowed_origin,
-        buttondown_api_key=require_env("BUTTONDOWN_API_KEY"),
-        session_secret=session_secret,
-        librarian_retrieve_secret=librarian_retrieve_secret,
-        fastmail_jmap_token=fastmail_jmap_token,
-        brave_search_api_key=brave_search_api_key,
-        thingy_web_origin_token=thingy_web_origin_token,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
         stream_custom_domain_name=args.stream_custom_domain_name,
@@ -731,10 +633,6 @@ def main() -> int:
             "LIBRARIAN_STREAM_URL": outputs.get("LibrarianStreamUrl", ""),
         }
     )
-    if generated_session_secret:
-        print(
-            "Generated an initial session secret for this stack. Future updates will reuse it unless LIBRARIAN_SESSION_SECRET is set."
-        )
     return 0
 
 

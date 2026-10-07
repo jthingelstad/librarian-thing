@@ -24,12 +24,9 @@ test('the MCP surface carries no build fingerprint', () => {
 });
 
 test('the MCP surface declares the tools exactly as tools/list does', () => {
-  // web_search is declared only with a search key; the artifact carries it
-  // marked conditional.
   const declared = mcpToolDeclarations([...MCP_LAUNCH_TOOLS, VIEW_PHOTO_TOOL]);
-  const exported = surface.tools.filter((tool) => !tool.conditional);
   assert.deepEqual(
-    exported.map((tool) => tool.name),
+    surface.tools.map((tool) => tool.name),
     declared.map((tool) => tool.name)
   );
   for (const tool of declared) {
@@ -38,7 +35,6 @@ test('the MCP surface declares the tools exactly as tools/list does', () => {
       assert.deepEqual(entry[key], tool[key], `${tool.name}.${key} is stale: run npm run mcp-surface:export`);
     }
   }
-  assert.ok(surface.tools.find((tool) => tool.name === 'web_search')?.conditional);
 });
 
 test('every tool says which doors offer it', () => {

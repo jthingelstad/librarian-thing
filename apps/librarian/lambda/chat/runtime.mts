@@ -594,7 +594,7 @@ async function streamAgentAnswer(
   if (allowedToolNames && !allowedToolNames.has('fetch_page')) {
     systemBlocks.push({
       type: 'text',
-      text: 'Live-web tools (fetch_page, web_search) are NOT bound in this session. If the reader shares an external URL or asks about the live web, say plainly that you cannot open external pages here and offer the closest archive angle.'
+      text: 'The live-web tool (fetch_page) is NOT bound in this session. If the reader shares an external URL or asks about the live web, say plainly that you cannot open external pages here and offer the closest archive angle.'
     });
   }
   for (let turn = 0; turn <= turnLimit; turn += 1) {

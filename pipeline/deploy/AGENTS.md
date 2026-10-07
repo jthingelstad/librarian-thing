@@ -53,7 +53,7 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 3. **Package both Lambda bundles** (`auth/` + `chat/`) — separate npm install + zip per bundle. Bundles ship independently because the auth Lambda is REST and the chat Lambda is response-streamed Function URL.
 4. **Upload zips** to `s3://{bucket}/code/{auth,chat}-lambda/<unix-ts>.zip`. Timestamp keys so CloudFormation always sees a new version.
 5. **Optional**: all corpus uploaders run — Weekly Thing corpus + graph, blog corpus, podcast corpus.
-6. **CloudFormation update-stack** with the new code keys + secrets from `.env`: `SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`.
+6. **CloudFormation update-stack** with the new code keys and settings. No credentials: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 7. **30-day log retention** on the auto-created log groups (`configure_log_retention`).
 8. **Update `.env`** with the latest stack outputs: `LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`.
 
@@ -68,14 +68,11 @@ Use `make librarian-corpora-upload` when code is unchanged and only the three S3
 
 ## Secrets
 
-Pulled from the repo-root `.env`. Required:
-
-| Var | Source | What for |
-|---|---|---|
-| `BUTTONDOWN_API_KEY` | account secrets | Auth Lambda's subscriber verification |
-| `LIBRARIAN_SESSION_SECRET` | (auto-generated if missing) | HMAC signing for session JWTs |
-| `LIBRARIAN_RETRIEVE_SECRET` | shared secret | trusted `/retrieve` service auth |
-| AWS deployment credentials | GitHub OIDC | Temporary per-run credentials; no local AWS session needed |
+A deploy needs no credentials (2026-10-07). The Lambdas' keys live in the
+`weekly-thing-librarian-runtime` secret, which Jamie keeps by hand in the
+Secrets Manager console; see "Env vars set in CloudFormation" in
+`apps/librarian/AGENTS.md`. AWS deployment credentials come from GitHub OIDC
+in CI (temporary per run).
 
 The CloudFormation stack uses the scoped `weekly-thing-librarian-cloudformation` service role. CI also needs scoped corpus reads, Bedrock invocation, bucket-security inspection, and log setup. See `iam/README.md` for source policies and legacy local-consumer retirement.
 

@@ -24,7 +24,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
-7. Run the Claude agent loop (Anthropic Messages API, streamed) with tool use against the 25-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 21 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set) and - minus the two outbound-network tools - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`), argument validation before quota (`validateToolArguments`) and result renderer (`renderToolCallResult`: `isError` + `code` on errors, compact JSON cut structurally to `MCP_RESULT_MAX_CHARS` = 48,000; limits live in `TOOL_LIMITS`, which `tests/mcp-conventions.test.mjs` holds to the specs), `/mcp` under a 300/hr rate limit, with audit rows stamped `surface: 'mcp' | 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and its registered `client_name` (read once per client per warm container), and `/tools` rows carry no client. The chat loop holds its own calls to the same door rules: `validateToolArguments` refuses an undeclared or out-of-schema argument as a `bad_request` naming `accepted_arguments`, and every `{error}` result reaches the model through `toolErrorRecord` with a `code` and one `next` step (results stay uncapped there; model context is cheap). Four tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
+7. Run the Claude agent loop (Anthropic Messages API, streamed) with tool use against the 25-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 21 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP and - minus the outbound-network `fetch_page` - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`), argument validation before quota (`validateToolArguments`) and result renderer (`renderToolCallResult`: `isError` + `code` on errors, compact JSON cut structurally to `MCP_RESULT_MAX_CHARS` = 48,000; limits live in `TOOL_LIMITS`, which `tests/mcp-conventions.test.mjs` holds to the specs), `/mcp` under a 300/hr rate limit, with audit rows stamped `surface: 'mcp' | 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and its registered `client_name` (read once per client per warm container), and `/tools` rows carry no client. The chat loop holds its own calls to the same door rules: `validateToolArguments` refuses an undeclared or out-of-schema argument as a `bad_request` naming `accepted_arguments`, and every `{error}` result reaches the model through `toolErrorRecord` with a `code` and one `next` step (results stay uncapped there; model context is cheap). Four tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
 8. Stream answer deltas, archive-work status, final citations, and the done event's receipt ({duration_ms, total_tokens, tool_steps}, contract 4.8) via SSE; record the turn to DynamoDB; bump the per-user profile counters. A `share_token` in the body (contract 4.7) seeds the context with a shared conversation's active chain - the guest lane and a signed-in first turn both use it, and the reader context marks the seeded turns as another reader's.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
@@ -99,7 +99,7 @@ Deploy steps:
 2. Package the shared auth/eval artifact and the separate streaming chat artifact.
 3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
-5. CloudFormation `update-stack` with the new code keys + credential parameters (`SESSION_SECRET`, `LIBRARIAN_RETRIEVE_SECRET`, `BUTTONDOWN_API_KEY`, `THINGY_WEB_ORIGIN_TOKEN`, ...), which the stack writes into the `weekly-thing-librarian-runtime` secret.
+5. CloudFormation `update-stack` with the new code keys and settings. No credential travels with a deploy: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
@@ -120,25 +120,31 @@ Python tests don't cover this directory — the Lambda is pure Node.
 
 These are set at deploy time from `.env`, written into the Lambda environment by CloudFormation. Don't try to read them from `process.env` outside the Lambda.
 
-**Credentials are the exception (2026-10-01).** `BUTTONDOWN_API_KEY`,
-`SESSION_SECRET`, `THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`,
-`LIBRARIAN_RETRIEVE_SECRET`, `BRAVE_SEARCH_API_KEY`,
+**Credentials are the exception.** `BUTTONDOWN_API_KEY`, `SESSION_SECRET`,
+`THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`, `LIBRARIAN_RETRIEVE_SECRET`,
 `LIBRARIAN_GOLDEN_RETRIEVE_SECRET` and `ANTHROPIC_API_KEY` live in one Secrets
 Manager secret, `weekly-thing-librarian-runtime` (a JSON object of those
-names). The stack writes it from its NoEcho parameters (the golden value and
-the Anthropic key by dynamic reference; the Anthropic key's source,
-`weekly-thing-librarian-anthropic`, is kept by hand), and the functions, the
-eval reviewer included, get only `LIBRARIAN_RUNTIME_SECRET_ARN`. Never add a
-key to the runtime secret by hand: the next deploy rewrites it. `loadRuntimeSecrets()`
+names), and Secrets Manager is their source of truth (2026-10-07). Jamie keeps
+the secret by hand in the console: the stack does not own it, no deploy
+writes it, and no `.env` file or GitHub secret feeds it. Rotate a key by
+editing the secret; containers started afterwards read the new value (force
+it with any function update). The functions, the eval reviewer included, get
+only `LIBRARIAN_RUNTIME_SECRET_ID`. Two values have a deliberate second copy:
+`THINGY_WEB_ORIGIN_TOKEN` is also the `WebOriginToken` parameter of the Thingy
+CloudFront stack (CloudFront cannot read Secrets Manager), and
+`LIBRARIAN_RETRIEVE_SECRET` is in the `.env` of WT Builder, AT Builder and
+this repo (local scripts). `LIBRARIAN_GOLDEN_RETRIEVE_SECRET` is a copy of the
+stack-generated `weekly-thing-librarian-golden-retrieval`, which never
+regenerates. Rotating any of these means changing every copy. `loadRuntimeSecrets()`
 (`shared/runtime-secrets.mts`) reads it once per cold start into `process.env`
 before the handler runs, so the readers below are unchanged. It logs
-`runtime_secrets_loaded` with key names only and fails closed: no secret and no
+`runtime_secrets_loaded` with key names only (`keys`, `empty`, and `missing`
+for a name the secret lacks) and fails closed: no secret and no
 value already present is a 503, never an unkeyed run (an empty
 `THINGY_WEB_ORIGIN_TOKEN` would switch the origin check off). Do not put a
 `{{resolve:secretsmanager}}` reference in a function's `Environment`: it is
-resolved into plaintext configuration. A new credential goes into the secret's
-`!Sub` JSON, `RUNTIME_SECRET_KEYS`, and an `AllowedPattern` that keeps `"` and
-`\` out. The runtime boundary allows reading this secret only
+resolved into plaintext configuration. A new credential goes into the secret (by hand) and
+`RUNTIME_SECRET_KEYS`. The runtime boundary allows reading this secret only
 (`pipeline/deploy/iam/runtime-boundary.json`, applied with `setup-oidc.sh`).
 
 | Var | Used by | Notes |
@@ -161,11 +167,10 @@ resolved into plaintext configuration. A new credential goes into the secret's
 | `THINGY_FAST_MODEL` | all | `claude-haiku-4-5`; small structured/background work (preflight, welcome, thank-you, the eval reviewer) |
 | `THINGY_PREMIUM_MODEL` | all | `claude-opus-5-5`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
 | `THINGY_EFFORT` | stream | Optional; effort for the chat agent on the 5.5 models (`low`/`medium`/`high`/`xhigh`/`max`), default `medium` |
-| `ANTHROPIC_API_KEY` | all | From the runtime secret, which the stack fills from the hand-kept `weekly-thing-librarian-anthropic` secret (key `value`) |
+| `ANTHROPIC_API_KEY` | all | From the runtime secret |
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
-| `BRAVE_SEARCH_API_KEY` | stream | Optional; enables the `web_search` tool (spec binds only when set) |
 | `LIBRARIAN_SOURCE_REVISION` | stream | Set by CFN to `StreamCodeKey`; stamped onto tool traces |
 | `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `WEB_TOOLS_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 200 per reader per day (doubled for supporting members, owner exempt) |
 | `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm`. Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
@@ -296,8 +301,8 @@ upload script embeds into `.candidate/` with `--stage`, the "Corpus gate"
 step evals those candidates (`EVAL_CORPUS_FALLBACK=s3` reads the live copy of
 any corpus not rebuilt), and only then does `--upload-staged` ship the exact
 files it checked. A corpus that fails never reaches S3. Tool responses carry `server_version`
-(`2.5.0+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
-a stale tools/list. 2.5.0 (2026-10-01) carries Jamie's answers to the round-2
+(`2.5.1+tools.<prompt fingerprint>`), the cache key MCP clients use to detect
+a stale tools/list. 2.5.1 (2026-10-07) removes the never-configured `web_search`; 2.5.0 (2026-10-01) carries Jamie's answers to the round-2
 QA questions (`linked_from_issues`, per-passage Journal dedupe, related means
 three shared distinctive terms) and the round-3 corpus fixes; 2.4.0 (2026-10-01) adds Jamie's micro.blog Pages to the
 blog source (see "Pages" below); 2.3.0 (2026-10-01) is the second QA pass: Weekly Thing audio editions (`has_audio`, chapter starts on passages), and the round-2 completeness fixes; 2.2.0 (2026-10-01) carries Jamie's answers to the QA questions (Chicago days, editorial links, the blog post canonical over its Journal copy, whole-source reads with `offset`); 2.1.0 (2026-09-30) pages every list with `offset` and counts what it leaves out; 2.0.0 is the breaking consistency pass (id-only

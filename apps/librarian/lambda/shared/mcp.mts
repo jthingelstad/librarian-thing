@@ -8,7 +8,7 @@
  * auth, rate limiting, and quota live in the runtime caller; this module is
  * pure protocol given a context and an invoke function.
  */
-import { PAGED_LISTS, mcpToolSpecs, webSearchConfigured } from './archive-tools.mjs';
+import { PAGED_LISTS, mcpToolSpecs } from './archive-tools.mjs';
 import { PromptArgumentError, getPrompt, promptList } from './mcp-prompts.mjs';
 import {
   RESOURCE_TEMPLATES,
@@ -43,20 +43,19 @@ export const MCP_LAUNCH_TOOLS = [
   'currently_history',
   'top_references',
   'on_this_day',
-  'fetch_page',
-  'web_search'
+  'fetch_page'
 ];
 
 // The tools that reach past the archive to the live web. Every tool reads
 // and nothing writes (readOnlyHint), and the MCP default for openWorldHint
 // is true, so the closed-archive tools say false out loud.
-const LIVE_WEB_TOOLS = new Set(['fetch_page', 'web_search']);
+const LIVE_WEB_TOOLS = new Set(['fetch_page']);
 
 // Browser-facing subset served by the /tools route for the WebMCP page
-// module: everything except the outbound-network tools - a page-hosted agent
+// module: everything except the outbound-network tool - a page-hosted agent
 // has its own web access, and asking this Lambda to fetch arbitrary URLs on
 // a page agent's behalf is a different risk posture than reading the archive.
-export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page' && name !== 'web_search');
+export const WEB_TOOLS = MCP_LAUNCH_TOOLS.filter((name) => name !== 'fetch_page');
 
 // Tools 2.0.0 folded into others. A client with a cached tools/list still
 // calls them; the answer names the replacement instead of "Unknown tool".
@@ -157,7 +156,7 @@ export interface McpContext {
 }
 
 export function mcpToolDeclarations(names: string[] = MCP_LAUNCH_TOOLS) {
-  const wanted = new Set(names.filter((name) => name !== 'web_search' || webSearchConfigured()));
+  const wanted = new Set(names);
   return (mcpToolSpecs() as ToolSpecEntry[])
     .filter((entry) => Boolean(entry.toolSpec?.name && wanted.has(entry.toolSpec.name)))
     .map(({ toolSpec, mcp }) => {
@@ -786,8 +785,7 @@ export async function handleMcpMessage(
         return { statusCode: 200, payload: rpcResult(id, { content: [{ type: 'text', text }], isError: true }) };
       }
     }
-    // Only what tools/list declares is callable: web_search without its key
-    // is neither listed nor callable.
+    // Only what tools/list declares is callable.
     if (!mcpToolDeclarations().some((tool) => tool.name === name)) {
       if (RETIRED_TOOLS[name]) {
         const text = JSON.stringify({
