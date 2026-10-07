@@ -174,7 +174,7 @@ three-layer eval (matcher fixtures, response invariants, known answers with
 a committed recall baseline in `lambda/eval/baseline.json`) runs on every
 deploy and blocks it on failure. Tool responses carry `server_version`
 (`1.1.0+tools.<fingerprint>`) so clients can detect a stale cached
-tools/list. Live-web reach: `fetch_page` (SSRF-guarded, first-party aware).
+tools/list. Live reach: `fetch_page`, which reads only Jamie's own sites (www, weekly, another, thingy), for posts too new to be in the archive.
 Per-reader daily quotas: chat 50, MCP tool calls 500, share links 20/hr
 (doubled for supporting members; owner exempt).
 

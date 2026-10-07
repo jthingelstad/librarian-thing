@@ -95,7 +95,7 @@ export function promptFingerprint(): string {
 //        Projects, Open Loop); librarian://page/{id}; a page is undated
 //        (publish_date null, updated = its last edit), so date-anchored
 //        tools leave it out; links into a page resolve to target_page_id.
-export const MCP_SERVER_VERSION = '2.5.1';
+export const MCP_SERVER_VERSION = '2.6.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;
