@@ -638,6 +638,11 @@ Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails
 - Front matter and links.json change only in word_count (`regen_meta.py`). No curated link changed. The journal-copy test now expects WT105/108/125's merged posts by permalink, as WT1's.
 - `validate.py` works from git and allows only these kinds of change, reading what may go from the old body alone: alt text repeated as a line, a bare line whose URL links the next, the heading and one rule, arrows, the doubled title, WT77's date. Links may only be lost if dead and only added if the new post is live and dated within a day, a bare line's URL, a button's, or one of the four. It also fails on new trailing or double spaces. `anchors.py` checks all 3,133 links in the round's issues ≤130 against the sent emails. Every one carries a link's words from its email, except nine reviewed leftovers in `anchors-left.json`: quote-mark styling, an email typo, broken email markup. So a fix that is reverted or never made fails. `mutate.py` plants 23 faults; all are caught. An independent review found the WT294 and WT23 relinks (first unlinked) and the three captions above; nothing else.
 
+**Round 8, the last three captions** (`repair/round8/`). Approved by Jamie 2026-10-07: "remove the repeated alt-text caption lines in WT98, WT117 and WT130 and re-render those issues' audio".
+
+- Each issue's weekly photo had its alt text repeated as a line above the date ("Koala at the Healesville Sanctuary in Australia.", "Symmetric Stairs.", "Little KLM houses filled with booze."). In each sent email it is only the photo's alt text; the prose that uses the same words stays.
+- `validate.py` works from git: only these three issues' files change, each body loses exactly one line, that line is an image's alt text directly above a date line, the photo keeps its alt, and front matter and links.json differ only in a recounted word_count. Five planted faults are all caught.
+
 ## Closing check, 2026-10-07
 
 Jamie asked for confidence that the one-time assessment and the audio cleanup are done, and approved four read-only checks: rerun the audit, account for every remaining difference, a blind second comparison, and a listening check of every served render. They found round 7's work. After round 7 the archive stands as below.

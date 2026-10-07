@@ -80,7 +80,7 @@ links:
   domain: www.youtube.com
   heading_context: '[Privacy on iPhone — Private Side - YouTube](https://www.youtube.com/watch?v=A_6uV9A12ok&app=desktop)'
   section: Notable Links 📌
-word_count: 1893
+word_count: 1886
 ---
 I spent this week in Australia visiting our office in Melbourne. 🇦🇺 After you get over the 24 hours of travel to get there, the city greets you with all sorts of cool stuff. I had a really great time. While I was there I got to take in Round 1 of the 2019 Australian Football League, or as everyone there calls it, [Footy](https://en.wikipedia.org/wiki/Australian_rules_football). I was a bit in awe as we entered the [Melbourne Cricket Grounds](https://en.wikipedia.org/wiki/Melbourne_Cricket_Ground). The size of the field is just enormous! The game took a bit to understand, but it started making sense after some locals answered some particularly simple questions. Footy reminded me of merging Soccer ⚽️ and American Football 🏈, and splashing in some Basketball 🏀 concepts for fun. There were 84,000 excited Australian Footy fans cheering on the start of the season. [Victoria is the heart of Footy](https://en.wikipedia.org/wiki/Victoria_(Australia)#Sport), and this [Richmond v Carlton game](https://www.richmondfc.com.au/video/2019-03-21/round-1-highlights) was a highly anticipated start to the season, even as Richmond ran away with the score.
 
@@ -110,7 +110,6 @@ If recycling is “upside down” we need to get more serious about the sources,
 
 I got to meet this cuddly Koala at the Healesville Sanctuary in Australia. He looked like a real-life teddy bear.
 
-Koala at the Healesville Sanctuary in Australia.
 Mar 20, 2019 at 10:15 PM
 Healesville Sanctuary, Badger Creek VIC 3777, Australia
 

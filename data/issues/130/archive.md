@@ -103,7 +103,7 @@ links:
   domain: www.theguardian.com
   heading_context: '[Uncovered: reality of how smartphones turned election news into chaos | Politics | The Guardian](https://www.theguardian.com/politics/2019/dec/05/uncovered-reality-of-how-smartphones-turned-election-news-into-chaos)'
   section: Notable Links 📌
-word_count: 1825
+word_count: 1819
 ---
 Welcome to Weekly Thing #130 and the final issue for 2019! I’m going to be taking my winter break and will be back on January 18th of 2020 (wow!) with Weekly Thing #131. I want to Thank You all for subscribing and playing along with me every week. Putting a summer and winter break into the schedule is a good way for me to make it sustainable for the long haul. It’s fun for me to go back to the first one from [May 13, 2017](https://tinyletter.com/thingelstad/letters/weekly-thing-for-may-13-2017-1) and see how much it’s changed. I have some thoughts of using this winter break to take the automation out for a tuneup and make it better, and I may make some changes to the layout and sections of the Weekly Thing. Stay tuned! 👍
 
@@ -137,7 +137,6 @@ Good time for a New Years evaluation to delete Facebook and remove it from your 
 
 So I try hard to get a photo every week to share, but this week I had nothing that I felt I could even pinch hit with. So, excuse this picture from the Amsterdam airport a few weeks ago of all the little KLM houses filled with booze.
 
-Little KLM houses filled with booze.
 Nov 17, 2019 at 1:48 AM
 Amsterdam Airport Schiphol, Netherlands
 

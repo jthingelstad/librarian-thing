@@ -128,7 +128,7 @@ links:
   domain: withoutbullshit.com
   heading_context: '[Travis Kalanick wrote an awesome letter to Uber employees. They never saw it. - without bullshit](https://withoutbullshit.com/blog/travis-kalanick-wrote-an-awesome-letter-to-uber-employees-they-never-saw-it)'
   section: Notable Links 📌
-word_count: 2000
+word_count: 1998
 ---
 I've been progressing from a full on hobble on Tuesday, to a notable limp on Wednesday, then mostly walking fine today. On Monday night I was kicking the soccer ball with Tyler. He was in goal and I was making shots so he could be the World's Best Goalkeeper. We were waiting for Mazie to finish Piano practice. Anyway, I tried to put a shot in the upper-corner of the net and went too low with my kick, caught the ground, rotated my knee too much and felt a shot of pain and a pop in my knee. The pain was quickly followed by hoping nobody witnessed my buffoonery. This is just one of life's reminders that you're middle-aged and if you don't use it, your gonna lose it. I was worried I may have hurt the knee more, but today the only thing that caused me any real difficulty was going down stairs. I suspect that will be fine in a couple more days.
 
@@ -164,7 +164,6 @@ I have done some of these things for a long time, others I would not recommend. 
 
 Symmetric Stairs. You could also consider this what happens when you don’t see much photo worthy during a week, and then you realize it’s that time for the newsletter and you haven’t captured something yet. 🙄
 
-Symmetric Stairs.
 Sep 13, 2019 at 3:02 PM
 801 Marquette Ave, Minneapolis MN 55402
 
