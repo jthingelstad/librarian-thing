@@ -14,15 +14,11 @@ import {
 } from '../shared/aws-clients.mjs';
 import {
   CACHE_BREAKPOINT,
-  WEB_SEARCH_TOOL,
   agentInferenceConfig,
   anthropic,
   anthropicTools,
   messageText,
-  streamMessage,
-  webSearchActivity,
-  webSearchEnabled,
-  withWebSearch
+  streamMessage
 } from '../shared/anthropic.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
 import {
@@ -580,17 +576,11 @@ async function streamAgentAnswer(
   type ToolHandler = (input?: JsonRecord, context?: JsonRecord) => unknown | Promise<unknown>;
   const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
   const allowedToolNames = Array.isArray(options.toolNames) ? new Set(options.toolNames.map(String)) : null;
-  const archiveTools = anthropicTools(
+  const activeTools = anthropicTools(
     (availableToolSpecs() as Array<{ toolSpec?: { name?: string } }>).filter(
       (tool) => !tool.toolSpec || !allowedToolNames || allowedToolNames.has(String(tool.toolSpec.name || ''))
     )
   );
-  // Claude's own web search runs on Anthropic's servers, so it has no
-  // handler here. A restricted tool list (the guest lane) binds it only
-  // when it names it, and WEB_TOOLS does not.
-  const webSearchBound = webSearchEnabled() && (!allowedToolNames || allowedToolNames.has(WEB_SEARCH_TOOL));
-  const activeTools = webSearchBound ? withWebSearch(archiveTools, modelId) : archiveTools;
-  let webSearchRequests = 0;
   // The static system prompt is cached; per-request blocks go after the
   // breakpoint so they don't bust the static prompt's prefix cache.
   const systemBlocks: Anthropic.Beta.BetaTextBlockParam[] = [
@@ -607,25 +597,17 @@ async function streamAgentAnswer(
       text: 'The live-web tool (fetch_page) is NOT bound in this session. If the reader shares an external URL or asks about the live web, say plainly that you cannot open external pages here and offer the closest archive angle.'
     });
   }
-  if (!webSearchBound) {
-    systemBlocks.push({
-      type: 'text',
-      text: 'Web search is NOT available in this session. Answer from the archive; if the reader needs something current from the web, say plainly that you cannot search the web here.'
-    });
-  }
   for (let turn = 0; turn <= turnLimit; turn += 1) {
     // The reader disconnected at the client deadline - stop the work, not
     // just the writes, or the loop burns model turns nobody will see.
     if (shouldStopWriting()) break;
     const streamAnswerDeltas = toolResults.length > 0;
-    // A rolling breakpoint on the newest user message's last block caches
-    // the whole growing prefix (system prompt + conversation + tool results)
+    // A rolling breakpoint on the newest message's last block caches the
+    // whole growing prefix (system prompt + conversation + tool results)
     // between loop turns and between conversation turns - without it every
-    // model call re-paid for the full history. After a pause_turn the newest
-    // message is the paused assistant turn, which goes back untouched.
-    const breakpointIndex = messages.findLastIndex((entry) => entry.role === 'user');
+    // model call re-paid for the full history.
     const messagesForRequest = messages.map((entry, index) =>
-      index === breakpointIndex ? withCacheBreakpoint(entry) : entry
+      index === messages.length - 1 ? withCacheBreakpoint(entry) : entry
     );
     const result = await streamMessage(
       {
@@ -641,25 +623,13 @@ async function streamAgentAnswer(
               if (shouldStopWriting()) return;
               writeSse(responseStream, 'answer_delta', { delta });
             }
-          : undefined,
-        onServerToolUse: (name) => {
-          if (name !== WEB_SEARCH_TOOL || shouldStopWriting()) return;
-          writeSse(responseStream, 'status', {
-            kind: 'tool',
-            tool_name: WEB_SEARCH_TOOL,
-            message: 'Searching the web...'
-          });
-        }
+          : undefined
       }
     );
     const message = result.message;
     accumulateUsage(usageTotals, result.usage);
-    webSearchRequests += Number(result.usage?.server_tool_use?.web_search_requests) || 0;
     stopReason = result.stopReason || stopReason;
     messages.push({ role: 'assistant', content: message.content });
-    // The server paused a long web search turn. The paused turn, sent back
-    // as it is with no new user message, resumes it.
-    if (stopReason === 'pause_turn') continue;
     const toolUses = message.content.filter(
       (block): block is Anthropic.Beta.BetaToolUseBlock => block.type === 'tool_use'
     );
@@ -776,26 +746,6 @@ async function streamAgentAnswer(
       content: resultBlocks
     });
   }
-  // Web searches join the trace, and the pages the answer cites join the
-  // citations: an answer that leans on the web shows where it came from.
-  // Read across every assistant turn, since a search the model asked for
-  // alongside an archive tool runs on the following call.
-  const web = webSearchActivity(
-    messages.flatMap((entry) => (entry.role === 'assistant' && Array.isArray(entry.content) ? entry.content : []))
-  );
-  for (const search of web.searches) {
-    toolTrace.calls.push({
-      name: WEB_SEARCH_TOOL,
-      input: { query: search.query },
-      ok: search.ok,
-      duration_ms: 0,
-      result: search.ok ? { result_count: search.results } : { error: search.error }
-    });
-  }
-  const webSourceRecords = web.sources.map((source) => ({
-    source: { url: source.url, subject: source.title || source.url, source_kind: 'external_page' }
-  }));
-  if (stopReason === 'pause_turn') stopReason = 'tool_use';
   if (!answer) {
     if (stopReason === 'tool_use') {
       stopReason = 'tool_use_exhausted';
@@ -816,7 +766,7 @@ async function streamAgentAnswer(
   }
   if (!shouldStopWriting()) writeSse(responseStream, 'answer', { answer });
   const citations = prioritizeCitationsForAnswer(
-    collectToolCitations([...toolResults, ...webSourceRecords] as typeof toolResults),
+    collectToolCitations(toolResults),
     answer,
     await weeklyIssueCatalog(),
     evidencedIssueNumbers(toolResults)
@@ -829,9 +779,6 @@ async function streamAgentAnswer(
     scope,
     mode,
     tool_turns: toolResults.length,
-    web_search_bound: webSearchBound,
-    web_search_requests: webSearchRequests,
-    web_sources_cited: web.sources.length,
     citation_count: citations.length,
     duration_ms: Math.round(performance.now() - start),
     answer_chars: answer.length,
