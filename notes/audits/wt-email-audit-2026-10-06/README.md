@@ -637,3 +637,26 @@ Jamie approved the repair on 2026-10-06: "repair WT23–130 from the sent emails
 - Not changed, for Jamie to decide: WT98, WT117 and WT130 each repeat a photo's alt text as a line above its date, the same pattern as the seven, outside the issues named. WT4's "Backed Turing Tumble" micropost was deleted; a longer post that day covers it, but its words are not in it, so the link goes.
 - Front matter and links.json change only in word_count (`regen_meta.py`). No curated link changed. The journal-copy test now expects WT105/108/125's merged posts by permalink, as WT1's.
 - `validate.py` works from git and allows only these kinds of change, reading what may go from the old body alone: alt text repeated as a line, a bare line whose URL links the next, the heading and one rule, arrows, the doubled title, WT77's date. Links may only be lost if dead and only added if the new post is live and dated within a day, a bare line's URL, a button's, or one of the four. It also fails on new trailing or double spaces. `anchors.py` checks all 3,133 links in the round's issues ≤130 against the sent emails. Every one carries a link's words from its email, except nine reviewed leftovers in `anchors-left.json`: quote-mark styling, an email typo, broken email markup. So a fix that is reverted or never made fails. `mutate.py` plants 23 faults; all are caught. An independent review found the WT294 and WT23 relinks (first unlinked) and the three captions above; nothing else.
+
+## Closing check, 2026-10-07
+
+Jamie asked for confidence that the one-time assessment and the audio cleanup are done, and approved four read-only checks: rerun the audit, account for every remaining difference, a blind second comparison, and a listening check of every served render. They found round 7's work. After round 7 the archive stands as below.
+
+**The audit rerun** (`audit.py` and the scripts above, pointed at the repaired archive):
+
+| Signal | 10-06 | Before round 7 | After round 7 |
+|---|---|---|---|
+| Quotes shown as plain prose | 528 | 1 | 1 |
+| Links on different words from the email | 1,042 | 71 | 31 |
+| Missing photos | 367 | 11 | 11 |
+| Bare URL lines | | 64 | 27 |
+| Email anchors missing from the archive | | 10 | 9 |
+| Email anchors present but unlinked | | 170 | 176 |
+
+Every remaining difference was read against its email, and no words are lost. What is left is format this repair chose not to restore (micropost arrows, antirez site labels, WT74's " | site" suffix, WT191), the removed nonprofit sections, email footers and appeals, YouTube thumbnails, typo fixes and WT56/58's header links. The unlinked count rose by six because round 7 unlinked deleted posts.
+
+**The blind comparison.** Fifteen issues chosen at random were compared against their emails by a separate script, rendered through the site's markdown, without the audit's code. It found what the audit could not see, because the audit compares linked words, not link targets or rendering: the dead blog permalinks, WT339's buttons, the empty Supporting Membership heading and the WT60 caption. Each was measured across the whole archive and fixed in round 7 (B, D, C, the captions). The micropost links it flagged in WT15, 95, 100 and 102 are the email's dead links: in all 273 such cases the archive points to the live merged post.
+
+**Listening.** All 352 served audio editions have been heard by `wt-builder/backfill/assess.py` (mlx-whisper against the script): 234 when they were rendered, the 118 the repair re-rendered again from the served file, and round 7's 13 after it. Medians run 0.84–0.98. The one low score, WT51 at 0.30, is whisper looping on "End quote"; the windows at 202, 224, 520 and 550 s decoded on their own match the script.
+
+**What this cannot check.** In WT23–55 every email link is a Mailchimp tracking redirect, which was never followed, so those link targets are the archive's and cannot be compared. External links were not checked for rot. Some live micro.blog posts still link the old dead slugs (2024-09-19-minnedemo, 2007-03-23-minnebar, the 2012 High Line post); fixing those belongs on micro.blog, the blog's source of authority.
