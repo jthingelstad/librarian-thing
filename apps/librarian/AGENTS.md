@@ -157,9 +157,10 @@ resolved into plaintext configuration. A new credential goes into the secret's
 | `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
-| `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-4-6` (Anthropic API id); main chat/default persona work |
+| `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-5-5` (Anthropic API id); main chat/default persona work |
 | `THINGY_FAST_MODEL` | all | `claude-haiku-4-5`; small structured/background work (preflight, welcome, thank-you, the eval reviewer) |
-| `THINGY_PREMIUM_MODEL` | all | `claude-opus-4-6`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
+| `THINGY_PREMIUM_MODEL` | all | `claude-opus-5-5`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
+| `THINGY_EFFORT` | stream | Optional; effort for the chat agent on the 5.5 models (`low`/`medium`/`high`/`xhigh`/`max`), default `medium` |
 | `ANTHROPIC_API_KEY` | all | From the runtime secret, which the stack fills from the hand-kept `weekly-thing-librarian-anthropic` secret (key `value`) |
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
@@ -176,7 +177,8 @@ resolved into plaintext configuration. A new credential goes into the secret's
 
 - **Rerank lives in us-west-2 only.** The rest of the stack is us-east-1. `BedrockAgentRuntimeClient` is constructed with explicit `region: 'us-west-2'` override. Don't move it.
 - **Embedding model is Cohere v3** at 1024 dimensions. Bumping to v4 would invalidate the entire embedded corpus — re-embed cost is $1-2 + ~3 minutes. Plan for it; don't drift accidentally.
-- **Thingy models.** Default is Sonnet 4.6 for main chat/persona work (readers and guests), fast is Haiku 4.5 for structured/background work, and premium is Opus 4.6 for supporting members and the owner (entitlement-routed in the chat loop). Moving to the 5 family is not a bare env flip: Opus 5.5 always thinks (text between tool calls comes back as thinking blocks) and needs its effort set. The deploy checks all three ids are Anthropic API ids before CloudFormation runs.
+- **Thingy models (2026-10).** Default is Sonnet 5.5 for main chat/persona work (readers and guests), premium is Opus 5.5 for supporting members and the owner (entitlement-routed in the chat loop), and fast stays Haiku 4.5 for structured/background work - the newest Haiku. The deploy checks all three ids are Anthropic API ids before CloudFormation runs.
+- **The 5.5 models always think.** `agentInferenceConfig()` in `shared/anthropic.mts` sends them adaptive thinking, `output_config.effort` (`THINGY_EFFORT`, default `medium`), and `max_tokens` 16000, because the budget covers thinking as well as the answer. The notes they write between tool calls come back as thinking blocks, empty unless `thinking.display` is `updates`, a beta (`thinking-display-updates-2026-08-18`), so the chat loop runs on `client.beta.messages` and streams those notes the way it streamed text before. The answer is the text blocks only. Thinking blocks go back unchanged and the turn's messages stay append-only: these models reject a thinking block whose earlier conversation changed (moving a `cache_control` breakpoint does not count). Each chat request rebuilds its conversation from stored text, so no thinking block crosses requests or models. Older ids (`claude-sonnet-4-6` and the rest) get the old request shape, so rolling back is an env change.
 - **The Claude 5 family rejects sampling params.** `modelAcceptsSamplingParams()` in `shared/aws-clients.mts` gates `temperature` out for sonnet-5/opus-5/opus-4.7/opus-4.8/fable - sending it is a 400, not a no-op. Every Claude call site uses the same gate.
 
 ## OAuth authorization server (for the live MCP surface)
