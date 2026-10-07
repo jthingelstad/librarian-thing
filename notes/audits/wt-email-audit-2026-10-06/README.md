@@ -9,6 +9,8 @@ Read-only audit, 2026-10-06. Sources: 356 sent `.eml` files in `/tmp/wteml/wt-ex
 - TinyLetter WT1-22 (just repaired) are clean apart from WT22, which still has 8 unrendered quotes. Buttondown WT131-347 and WT Builder WT348-352 are clean: every non-boilerplate sentence, link, heading, photo and blockquote in the email is in the archive. The only differences are email-only blocks the archive deliberately leaves out (polls, membership and fundraising appeals, POAP claim links, ChatGPT intros, "previous issues" lists).
 - The known "swallowed heading" pattern (one line holding many `### `/`>` items) no longer exists anywhere in data/issues. WT13 was the last one and is fixed. The nearest thing left is 11 "glued quote" lines in WT18, 19, 26, 31 and 33, where a comment and a ` > quote` share one line. Those are faithful to the emails, which had the literal `>` too.
 
+**Where the emails are kept.** The original export, `wt-export-eml.zip` (356 `.eml` files, 9,174,694 bytes, MD5 `79c698f8c5d9a32d522225fd35ea3874`, SHA-256 `584388ca8b2b693b20c7e9fe4f2ae803c9af880586b076326af1e73535f5e2d6`), is stored unchanged at `s3://weekly-thing-librarian/sources/wt-export-eml.zip` (uploaded 2026-10-07, Jamie's approval). That bucket is private and versioned. The emails stay out of git: they are Jamie's received copies, carrying Jamie's address and personal one-click unsubscribe links (the Buttondown ones still work), and this repo is public. To use them, download the zip and unzip it anywhere; the scripts here read the unzipped folder.
+
 ## Inventory
 
 | Item | Count / issues |
