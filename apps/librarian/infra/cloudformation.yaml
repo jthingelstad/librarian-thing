@@ -322,9 +322,9 @@ Resources:
           # Anthropic API model ids (2026-10). The models are the same 4.6
           # generation Bedrock served; moving to the 5 family is its own
           # change (Opus 5.5 always thinks and needs its effort set).
-          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-4-5"
-          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
+          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
       Handler: auth/handler.handler
       MemorySize: 1024
       Role: !GetAtt LibrarianFunctionRole.Arn
@@ -353,9 +353,9 @@ Resources:
           # Anthropic API model ids (2026-10). The models are the same 4.6
           # generation Bedrock served; moving to the 5 family is its own
           # change (Opus 5.5 always thinks and needs its effort set).
-          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-4-5"
-          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
+          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"
@@ -391,9 +391,9 @@ Resources:
           # Anthropic API model ids (2026-10). The models are the same 4.6
           # generation Bedrock served; moving to the 5 family is its own
           # change (Opus 5.5 always thinks and needs its effort set).
-          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-4-5"
-          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
+          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
       Handler: eval/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1

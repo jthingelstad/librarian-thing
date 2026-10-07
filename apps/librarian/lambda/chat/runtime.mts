@@ -12,7 +12,14 @@ import {
   premiumModel,
   rerankModel
 } from '../shared/aws-clients.mjs';
-import { CACHE_BREAKPOINT, anthropic, anthropicTools, messageText, streamMessage } from '../shared/anthropic.mjs';
+import {
+  CACHE_BREAKPOINT,
+  agentInferenceConfig,
+  anthropic,
+  anthropicTools,
+  messageText,
+  streamMessage
+} from '../shared/anthropic.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
 import {
   TOOL_TRACE_SCHEMA_VERSION,
@@ -384,14 +391,6 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
   }
 }
 
-function commandInferenceConfig(modelId: string) {
-  return {
-    max_tokens: Number(process.env.BEDROCK_MAX_OUTPUT_TOKENS || '2500'),
-    // The 5-family rejects sampling params with a 400.
-    ...(modelAcceptsSamplingParams(modelId) ? { temperature: Number(process.env.BEDROCK_TEMPERATURE || '0.45') } : {})
-  };
-}
-
 function chatSlowNoticeMs() {
   const value = Number(process.env.CHAT_SLOW_NOTICE_MS || DEFAULT_CHAT_SLOW_NOTICE_MS);
   return Number.isFinite(value) && value > 0 ? value : DEFAULT_CHAT_SLOW_NOTICE_MS;
@@ -522,7 +521,9 @@ function compactTraceValue(value: unknown, maxChars = 1200) {
 
 // A copy of the message with a cache breakpoint on its last block. The
 // stored history stays unmarked, so only the newest message carries one.
-function withCacheBreakpoint(entry: Anthropic.MessageParam): Anthropic.MessageParam {
+// Moving a breakpoint is not an edit to the history, so it never invalidates
+// the thinking blocks the 5.5 models check against what came before them.
+function withCacheBreakpoint(entry: Anthropic.Beta.BetaMessageParam): Anthropic.Beta.BetaMessageParam {
   if (typeof entry.content === 'string') {
     return { ...entry, content: [{ type: 'text', text: entry.content, cache_control: CACHE_BREAKPOINT }] };
   }
@@ -545,7 +546,10 @@ async function streamAgentAnswer(
   const readerContext = String(options.readerContext || '').trim();
   const agentQuestion = agentQuestionForPreflight(question, options.preflight);
   const shouldStopWriting = () => Boolean(options.deadlineExceeded?.());
-  const messages: Anthropic.MessageParam[] = [
+  // Append-only within the turn: the assistant content goes back exactly as
+  // it arrived, thinking blocks included, because the 5.5 models reject a
+  // thinking block whose earlier conversation has changed.
+  const messages: Anthropic.Beta.BetaMessageParam[] = [
     {
       role: 'user',
       content: [
@@ -579,7 +583,7 @@ async function streamAgentAnswer(
   );
   // The static system prompt is cached; per-request blocks go after the
   // breakpoint so they don't bust the static prompt's prefix cache.
-  const systemBlocks: Anthropic.TextBlockParam[] = [
+  const systemBlocks: Anthropic.Beta.BetaTextBlockParam[] = [
     { type: 'text', text: AGENT_SYSTEM_PROMPT, cache_control: CACHE_BREAKPOINT }
   ];
   // Active scope varies per request, so it goes after the breakpoint as its
@@ -611,7 +615,7 @@ async function streamAgentAnswer(
         system: systemBlocks,
         messages: messagesForRequest,
         tools: activeTools,
-        ...commandInferenceConfig(modelId)
+        ...agentInferenceConfig(modelId)
       },
       {
         onTextDelta: streamAnswerDeltas
@@ -626,7 +630,9 @@ async function streamAgentAnswer(
     accumulateUsage(usageTotals, result.usage);
     stopReason = result.stopReason || stopReason;
     messages.push({ role: 'assistant', content: message.content });
-    const toolUses = message.content.filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use');
+    const toolUses = message.content.filter(
+      (block): block is Anthropic.Beta.BetaToolUseBlock => block.type === 'tool_use'
+    );
     // A refusal can stop a tool_use block mid-input: never run that turn's
     // tools. Whatever text came before it is the answer; with none, the
     // fallback below speaks.
@@ -637,15 +643,17 @@ async function streamAgentAnswer(
     // This turn's narration already streamed as answer deltas; without a
     // break the next turn's text glues straight onto its last sentence
     // ("...for RSS content.Great - WT48 has..."). Close the paragraph.
-    if (streamAnswerDeltas && result.text.trim() && !shouldStopWriting()) {
+    if (streamAnswerDeltas && result.narration && !shouldStopWriting()) {
       writeSse(responseStream, 'answer_delta', { delta: '\n\n' });
     }
     // When the interstitial prose just streamed into the ANSWER as
     // deltas, repeating it as activity-row commentary shows the same
     // sentences twice (observed in production). Commentary only labels
     // the rows when the text did not reach the answer body.
-    const commentary = streamAnswerDeltas && result.text.trim() ? '' : activityCommentaryText(result.text);
-    const resultBlocks: Anthropic.ToolResultBlockParam[] = [];
+    // On the 5.5 models most of that prose arrives as progress notes
+    // (thinking blocks), so narration carries both.
+    const commentary = streamAnswerDeltas && result.narration ? '' : activityCommentaryText(result.narration);
+    const resultBlocks: Anthropic.Beta.BetaToolResultBlockParam[] = [];
     for (const [index, toolUse] of toolUses.entries()) {
       const toolName = String(toolUse.name || 'unknown_tool');
       const toolUseId = String(toolUse.id || '');
@@ -671,7 +679,7 @@ async function streamAgentAnswer(
       // Thingy's eyes: view_photo hands the model real image blocks so the
       // model SEES the photos; the trace, citations, and DynamoDB get the
       // metadata summary only - base64 never enters evidence.
-      let imageBlocks: Anthropic.ImageBlockParam[] = [];
+      let imageBlocks: Anthropic.Beta.BetaImageBlockParam[] = [];
       const toolStart = performance.now();
       let ok = true;
       try {

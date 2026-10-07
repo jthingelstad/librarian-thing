@@ -13,12 +13,12 @@ export const s3 = new S3Client({});
 
 // Thingy's models are Anthropic API ids (shared/anthropic.mts); only the
 // Cohere embed and rerank models below still run on Bedrock.
-export const DEFAULT_THINGY_MODEL = 'claude-sonnet-4-6';
+export const DEFAULT_THINGY_MODEL = 'claude-sonnet-5-5';
 export const FAST_THINGY_MODEL = 'claude-haiku-4-5';
 // Supporters and the owner get the Opus tier (Jamie's call, 2026-09-02).
 // THINGY_ADVANCED_MODEL, the old third slot, was a Dispatch-era artifact
 // that no code path ever invoked; premium replaces it with a real route.
-export const PREMIUM_THINGY_MODEL = 'claude-opus-4-6';
+export const PREMIUM_THINGY_MODEL = 'claude-opus-5-5';
 
 export function thingyDefaultModel() {
   return process.env.THINGY_DEFAULT_MODEL || DEFAULT_THINGY_MODEL;
@@ -41,6 +41,13 @@ export function agentModel() {
 // temperature on this.
 export function modelAcceptsSamplingParams(modelId: string) {
   return !/(sonnet-5|opus-5|opus-4-7|opus-4-8|fable)/.test(modelId);
+}
+
+// Sonnet 5.5, Opus 5.5 and Fable 5.1 always think, take an effort level, and
+// return the notes they write between tool calls as thinking blocks
+// (chat/runtime.mts asks for those notes back). Older models get none of it.
+export function modelWritesProgressUpdates(modelId: string) {
+  return /(sonnet-5-5|opus-5-5|fable-5-1)/.test(modelId);
 }
 
 export function embeddingModel() {
