@@ -137,6 +137,15 @@
       ]
     },
     {
+      "Sid": "LibrarianAnthropicKeyRead",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetSecretValue"
+      ],
+      "Resource": "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-anthropic-*"
+    },
+    {
       "Sid": "SubscribeDigestSchedule",
       "Effect": "Allow",
       "Action": [

@@ -394,7 +394,7 @@ export function boundToolTrace(trace: unknown, maxChars: number): JsonRecord {
   };
 }
 
-// --- Cumulative Bedrock usage --------------------------------------------
+// --- Cumulative model usage ----------------------------------------------
 
 export interface UsageTotals extends JsonRecord {
   bedrock_calls: number;
@@ -416,19 +416,25 @@ export function emptyUsageTotals(): UsageTotals {
   };
 }
 
-// Accumulate one Bedrock response's usage block. Tolerates missing blocks
-// and missing fields; totals fall back to input+output when the model
-// omits totalTokens.
+// Accumulate one model response's usage block (Anthropic Messages API
+// field names). Tolerates missing blocks and missing fields. input_tokens
+// counts only the uncached input, so the total adds the cache reads and
+// writes back in - the same sum Bedrock's totalTokens reported, so turn
+// rows stay comparable across the 2026-10 move. bedrock_calls keeps its
+// stored name: it counts model calls, and turn rows and the admin review
+// already read it.
 export function accumulateUsage(totals: UsageTotals, usage: unknown): UsageTotals {
   const record = objectValue(usage);
   if (!Object.keys(record).length) return totals;
-  const input = Number(record.inputTokens) || 0;
-  const output = Number(record.outputTokens) || 0;
+  const input = Number(record.input_tokens) || 0;
+  const output = Number(record.output_tokens) || 0;
+  const cacheRead = Number(record.cache_read_input_tokens) || 0;
+  const cacheWrite = Number(record.cache_creation_input_tokens) || 0;
   totals.bedrock_calls += 1;
   totals.input_tokens += input;
   totals.output_tokens += output;
-  totals.total_tokens += Number(record.totalTokens) || input + output;
-  totals.cache_read_input_tokens += Number(record.cacheReadInputTokens) || 0;
-  totals.cache_write_input_tokens += Number(record.cacheWriteInputTokens) || 0;
+  totals.total_tokens += input + output + cacheRead + cacheWrite;
+  totals.cache_read_input_tokens += cacheRead;
+  totals.cache_write_input_tokens += cacheWrite;
   return totals;
 }

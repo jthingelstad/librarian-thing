@@ -38,7 +38,9 @@ exceptional local operation requiring valid AWS credentials.
   be reflected here before a model rollout. The runtime boundary allows
   `secretsmanager:GetSecretValue` on `weekly-thing-librarian-runtime` only
   (the Lambdas' credentials); the CloudFormation service role may create and
-  update that secret and the golden-retrieval one, never read other secrets.
+  update that secret and the golden-retrieval one, and read (never write)
+  `weekly-thing-librarian-anthropic`, the hand-kept Anthropic API key the stack
+  copies into the runtime secret; it reads no other secrets.
 - `github-trust.json`: exact repository/main subjects, including GitHub's
   immutable-ID form, and audience `sts.amazonaws.com`.
 

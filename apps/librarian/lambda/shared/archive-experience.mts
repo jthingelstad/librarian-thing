@@ -2,9 +2,8 @@
 // newly loaded chat. This module once also built Archive Sparks, Thingy
 // Trails, and Curiosity Maps; those surfaces were retired 2026-08-29 in the
 // streamline to a pure chat experience (see git history).
-import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
-import type { Message } from '@aws-sdk/client-bedrock-runtime';
-import { bedrock, fastModel, modelAcceptsSamplingParams } from './aws-clients.mjs';
+import { anthropic, messageText } from './anthropic.mjs';
+import { fastModel, modelAcceptsSamplingParams } from './aws-clients.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
 import { normalizeScope } from './scope.mjs';
 
@@ -48,18 +47,10 @@ function logEvent(level: string, message: string, fields: Record<string, unknown
   sharedLogEvent(level, message, fields, SERVICE_NAME);
 }
 
-function bedrockMessageText(message: Message | undefined) {
-  const parts: string[] = [];
-  for (const content of message?.content || []) {
-    if (content.text) parts.push(content.text);
-  }
-  return parts.join('\n').trim();
-}
-
 function welcomeInferenceConfig() {
   return {
-    maxTokens: Number(process.env.BEDROCK_WELCOME_MAX_TOKENS || '450'),
-    // The 5-family rejects sampling params with a ValidationException.
+    max_tokens: Number(process.env.BEDROCK_WELCOME_MAX_TOKENS || '450'),
+    // The 5-family rejects sampling params with a 400.
     ...(modelAcceptsSamplingParams(fastModel())
       ? { temperature: Number(process.env.BEDROCK_WELCOME_TEMPERATURE || '0.7') }
       : {})
@@ -154,20 +145,13 @@ export function parseWelcomeSetOutput(raw: string) {
 
 export async function generateWelcomeSet({ conversations = [], scope, grounding = [] }: WelcomeInput) {
   const start = performance.now();
-  const response = await bedrock.send(
-    new ConverseCommand({
-      modelId: fastModel(),
-      system: [{ text: WELCOME_SYSTEM_PROMPT }],
-      messages: [
-        {
-          role: 'user',
-          content: [{ text: welcomeSetPrompt({ conversations, scope, grounding }) }]
-        }
-      ],
-      inferenceConfig: welcomeInferenceConfig()
-    })
-  );
-  const set = parseWelcomeSetOutput(bedrockMessageText(response.output?.message));
+  const response = await anthropic().messages.create({
+    model: fastModel(),
+    system: WELCOME_SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: welcomeSetPrompt({ conversations, scope, grounding }) }],
+    ...welcomeInferenceConfig()
+  });
+  const set = parseWelcomeSetOutput(messageText(response));
   logEvent('info', 'welcome_set_generated', {
     model: fastModel(),
     conversation_count: (conversations || []).length,
@@ -175,7 +159,7 @@ export async function generateWelcomeSet({ conversations = [], scope, grounding 
     greeting_line_count: set.greeting_lines.length,
     suggestion_count: set.suggestions.length,
     duration_ms: Math.round(performance.now() - start),
-    output_tokens: response.usage?.outputTokens
+    output_tokens: response.usage?.output_tokens
   });
   return set;
 }

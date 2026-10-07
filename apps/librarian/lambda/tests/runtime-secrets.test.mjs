@@ -20,6 +20,7 @@ const SECRET = {
   LIBRARIAN_RETRIEVE_SECRET: 'retrieve-value',
   BRAVE_SEARCH_API_KEY: '',
   LIBRARIAN_GOLDEN_RETRIEVE_SECRET: 'golden-value',
+  ANTHROPIC_API_KEY: 'anthropic-value',
   UNRELATED: 'ignored'
 };
 

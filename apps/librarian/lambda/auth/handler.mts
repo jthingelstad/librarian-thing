@@ -1,6 +1,6 @@
-import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
 import { DeleteItemCommand, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { bedrock, dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
+import { dynamodb, agentModel, fastModel, modelAcceptsSamplingParams } from '../shared/aws-clients.mjs';
+import { CACHE_BREAKPOINT, anthropic, messageText } from '../shared/anthropic.mjs';
 import {
   createSubscriber,
   buttondownErrorFields,
@@ -80,10 +80,6 @@ const ALLOWED_SOURCES = new Set(['thingy', 'site', 'hero', 'mid1', 'mid2', 'foot
 
 type JsonRecord = Record<string, unknown>;
 
-function objectValue(value: unknown): JsonRecord {
-  return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonRecord) : {};
-}
-
 function errorName(error: unknown) {
   return error instanceof Error ? error.constructor.name : 'Error';
 }
@@ -142,30 +138,18 @@ async function recordSessionForSub(sessionId: string, sub: unknown, expiresAt: n
   });
 }
 
-function bedrockMessageText(message: unknown) {
-  const content = objectValue(message).content;
-  return (Array.isArray(content) ? content : [])
-    .map((part) => String(objectValue(part).text || ''))
-    .filter(Boolean)
-    .join('\n')
-    .trim();
-}
-
 async function generatePremiumThankYou() {
   const start = performance.now();
   const model = fastModel();
-  const response = await bedrock.send(
-    new ConverseCommand({
-      modelId: model,
-      system: [{ text: premiumThankYouSystemPrompt() }, { cachePoint: { type: 'default' } }],
-      messages: [{ role: 'user', content: [{ text: 'Generate a fresh thank-you under 28 words.' }] }],
-      inferenceConfig: { maxTokens: 120, temperature: 0.7 }
-    })
-  );
-  const text = bedrockMessageText(response.output?.message || {})
-    .replace(/\s+/g, ' ')
-    .trim();
-  if (!text || text.length > 220) throw new Error('Bedrock returned invalid premium thank-you');
+  const response = await anthropic().messages.create({
+    model,
+    system: [{ type: 'text', text: premiumThankYouSystemPrompt(), cache_control: CACHE_BREAKPOINT }],
+    messages: [{ role: 'user', content: 'Generate a fresh thank-you under 28 words.' }],
+    max_tokens: 120,
+    ...(modelAcceptsSamplingParams(model) ? { temperature: 0.7 } : {})
+  });
+  const text = messageText(response).replace(/\s+/g, ' ').trim();
+  if (!text || text.length > 220) throw new Error('Model returned invalid premium thank-you');
   logEvent('info', 'premium_thank_you_generated', {
     model,
     duration_ms: Math.round(performance.now() - start),

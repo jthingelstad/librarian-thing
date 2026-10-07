@@ -42,7 +42,6 @@ import {
   normalizeConversationMode
 } from '../dist/shared/conversation-modes.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../dist/shared/feedback.mjs';
-import { readConverseStream } from '../dist/shared/bedrock-stream.mjs';
 import {
   PREFLIGHT_SYSTEM_PROMPT,
   normalizePreflightDecision,
@@ -856,52 +855,6 @@ test('feedback helpers accept only expected reactions and request ids', () => {
   assert.equal(validFeedbackRequestId('request:local.test_1'), 'request:local.test_1');
   assert.equal(validFeedbackRequestId('conversation#bad'), '');
   assert.equal(validFeedbackRequestId(''), '');
-});
-
-test('Bedrock converse stream reader emits incremental text deltas', async () => {
-  const deltas = [];
-  const result = await readConverseStream(
-    {
-      stream: [
-        { messageStart: { role: 'assistant' } },
-        { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'First ' } } },
-        { contentBlockDelta: { contentBlockIndex: 0, delta: { text: 'second.' } } },
-        { messageStop: { stopReason: 'end_turn' } },
-        { metadata: { usage: { outputTokens: 3 } } }
-      ]
-    },
-    { onTextDelta: (delta) => deltas.push(delta) }
-  );
-
-  assert.deepEqual(deltas, ['First ', 'second.']);
-  assert.equal(result.text, 'First second.');
-  assert.deepEqual(result.message.content, [{ text: 'First second.' }]);
-  assert.equal(result.stopReason, 'end_turn');
-  assert.equal(result.usage.outputTokens, 3);
-});
-
-test('Bedrock converse stream reader reconstructs streamed tool use input', async () => {
-  const result = await readConverseStream({
-    stream: [
-      { messageStart: { role: 'assistant' } },
-      {
-        contentBlockStart: {
-          contentBlockIndex: 0,
-          start: { toolUse: { toolUseId: 'tool-1', name: 'search_archive' } }
-        }
-      },
-      { contentBlockDelta: { contentBlockIndex: 0, delta: { toolUse: { input: '{"query":"' } } } },
-      { contentBlockDelta: { contentBlockIndex: 0, delta: { toolUse: { input: 'RSS"}' } } } },
-      { messageStop: { stopReason: 'tool_use' } }
-    ]
-  });
-
-  assert.deepEqual(result.message.content, [
-    {
-      toolUse: { toolUseId: 'tool-1', name: 'search_archive', input: { query: 'RSS' } }
-    }
-  ]);
-  assert.equal(result.stopReason, 'tool_use');
 });
 
 // The Fastmail account is shared by several agents: only the top-level Sent

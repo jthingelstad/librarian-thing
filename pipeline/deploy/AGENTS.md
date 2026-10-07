@@ -48,7 +48,7 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 
 ## `aws.py` flow
 
-1. **Smoke-test the Thingy model buckets** via minimal `InvokeModel` calls against `THINGY_DEFAULT_MODEL`, `THINGY_FAST_MODEL`, and `THINGY_ADVANCED_MODEL`. Refuses to deploy if any configured model isn't accessible from this account. Pass `--skip-smoke-test` to override.
+1. **Check the Thingy model ids** (`THINGY_DEFAULT_MODEL`, `THINGY_FAST_MODEL`, `THINGY_PREMIUM_MODEL`). Thingy calls the Anthropic API since 2026-10, so each must be an Anthropic API id (`claude-...`); a Bedrock id refuses the deploy. CI holds no Anthropic key, so there the check is the id's shape; with `ANTHROPIC_API_KEY` set (a local deploy) it also looks each model up (`GET /v1/models/{id}`, no tokens spent). Pass `--skip-smoke-test` to override.
 2. **Verify private bucket security** (`verify_private_bucket(bucket)`). Administrator-only `--bootstrap-bucket` creates or hardens it. Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
 3. **Package both Lambda bundles** (`auth/` + `chat/`) — separate npm install + zip per bundle. Bundles ship independently because the auth Lambda is REST and the chat Lambda is response-streamed Function URL.
 4. **Upload zips** to `s3://{bucket}/code/{auth,chat}-lambda/<unix-ts>.zip`. Timestamp keys so CloudFormation always sees a new version.
@@ -96,6 +96,6 @@ Lives at `apps/librarian/infra/cloudformation.yaml`. Three Lambdas (auth + strea
 ## Conventions
 
 - **`--skip-corpus-upload` is the default for code changes.** (Memory: `reference_librarian_deploy_flags.md`.)
-- **Don't disable the smoke test casually.** The Bedrock model access check at deploy time prevents the most common "deployed but immediately broken" failure mode.
+- **Don't disable the smoke test casually.** The model id check stops a Bedrock id (or a typo) from shipping. The Anthropic API key itself reaches the stack from the hand-kept `weekly-thing-librarian-anthropic` secret, and a missing secret fails the CloudFormation update.
 - **Stack name is `weekly-thing-librarian`** (`STACK_NAME` in `aws.py`). Don't rename without coordinating with `.env`-referenced outputs.
 - **Log retention is 30 days.** Bedrock invocation logs go to a separate longer-retention destination via `bedrock_logging.py`.

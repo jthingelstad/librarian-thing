@@ -9,7 +9,7 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 Three Lambdas in `infra/cloudformation.yaml`:
 
 - **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/share/unshare/delete, the public GET /share/{token} snapshot, and profile updates. Memory 1024 MB, timeout 35s.
-- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history; without a valid session it falls through to the guest lane - `handleGuestChat`: no persistence/memory/profile, client-supplied sanitized history, WEB_TOOLS only, IP-keyed rate limit + strict per-visitor and global daily quotas), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools plus `view_photo` — an MCP-only tool outside the registry (`shared/photo-view.mts`) that returns archive photos as image content blocks so MCP clients render them inline and get vision over them; allowlisted archive hosts only, max 3 per call, base64 never enters audit rows or the Bedrock loop — per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
+- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history; without a valid session it falls through to the guest lane - `handleGuestChat`: no persistence/memory/profile, client-supplied sanitized history, WEB_TOOLS only, IP-keyed rate limit + strict per-visitor and global daily quotas), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools plus `view_photo` — an MCP-only tool outside the registry (`shared/photo-view.mts`) that returns archive photos as image content blocks so MCP clients render them inline and get vision over them; allowlisted archive hosts only, max 3 per call, base64 never enters audit rows or the chat loop's evidence — per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
 All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
@@ -24,7 +24,7 @@ All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` help
 4. Load the relevant server-side conversation turns and the basic user profile (preferred name, turn count).
 5. Load scoped corpus artifacts from S3 (cached on warm starts).
 6. Run prompt preflight for privacy/scope handling.
-7. Run the Bedrock Converse agent loop with tool use against the 25-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 21 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set) and - minus the two outbound-network tools - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`), argument validation before quota (`validateToolArguments`) and result renderer (`renderToolCallResult`: `isError` + `code` on errors, compact JSON cut structurally to `MCP_RESULT_MAX_CHARS` = 48,000; limits live in `TOOL_LIMITS`, which `tests/mcp-conventions.test.mjs` holds to the specs), `/mcp` under a 300/hr rate limit, with audit rows stamped `surface: 'mcp' | 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and its registered `client_name` (read once per client per warm container), and `/tools` rows carry no client. The chat loop holds its own calls to the same door rules: `validateToolArguments` refuses an undeclared or out-of-schema argument as a `bad_request` naming `accepted_arguments`, and every `{error}` result reaches the model through `toolErrorRecord` with a `code` and one `next` step (results stay uncapped there; Bedrock context is cheap). Four tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
+7. Run the Claude agent loop (Anthropic Messages API, streamed) with tool use against the 25-tool `ARCHIVE_TOOLS` registry (`shared/archive-tools.mts`); 21 tools carry published specs (`prompts/tool-specs.json`) and display titles (`prompts/tool-titles.json`), and the same set is exposed over MCP (`web_search` binds only when `BRAVE_SEARCH_API_KEY` is set) and - minus the two outbound-network tools - over `/tools` for the WebMCP page module; both external doors share one audited invoker (`archiveToolInvoker`), argument validation before quota (`validateToolArguments`) and result renderer (`renderToolCallResult`: `isError` + `code` on errors, compact JSON cut structurally to `MCP_RESULT_MAX_CHARS` = 48,000; limits live in `TOOL_LIMITS`, which `tests/mcp-conventions.test.mjs` holds to the specs), `/mcp` under a 300/hr rate limit, with audit rows stamped `surface: 'mcp' | 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and its registered `client_name` (read once per client per warm container), and `/tools` rows carry no client. The chat loop holds its own calls to the same door rules: `validateToolArguments` refuses an undeclared or out-of-schema argument as a `bad_request` naming `accepted_arguments`, and every `{error}` result reaches the model through `toolErrorRecord` with a `code` and one `next` step (results stay uncapped there; model context is cheap). Four tools are registry-internal with no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`. All lexical filtering goes through the canonical matcher (`shared/matcher.mts`, spec in [`MATCHER.md`](MATCHER.md)).
 8. Stream answer deltas, archive-work status, final citations, and the done event's receipt ({duration_ms, total_tokens, tool_steps}, contract 4.8) via SSE; record the turn to DynamoDB; bump the per-user profile counters. A `share_token` in the body (contract 4.7) seeds the context with a shared conversation's active chain - the guest lane and a signed-in first turn both use it, and the reader context marks the seeded turns as another reader's.
 
 The retrieval pipeline lives in `lambda/shared/retrieval.mts`:
@@ -107,7 +107,7 @@ CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step
 
 ## Tests
 
-`lambda/tests/*.test.mjs` — Node tests for shared modules (`session`, `conversations`, `attribution`, FAQ search, Bedrock stream parsing, etc.). No end-to-end handler invocation tests — handlers depend on Bedrock + S3 + DynamoDB mocks that don't exist yet.
+`lambda/tests/*.test.mjs` — Node tests for shared modules (`session`, `conversations`, `attribution`, FAQ search, the Anthropic tool binding and stream wrapper, etc.). No end-to-end handler invocation tests — handlers depend on Anthropic + Bedrock + S3 + DynamoDB mocks that don't exist yet.
 
 ```bash
 npm --prefix apps/librarian/lambda test
@@ -122,11 +122,14 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 
 **Credentials are the exception (2026-10-01).** `BUTTONDOWN_API_KEY`,
 `SESSION_SECRET`, `THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`,
-`LIBRARIAN_RETRIEVE_SECRET`, `BRAVE_SEARCH_API_KEY` and
-`LIBRARIAN_GOLDEN_RETRIEVE_SECRET` live in one Secrets Manager secret,
-`weekly-thing-librarian-runtime` (a JSON object of those names). The stack
-writes it from its NoEcho parameters (the golden value by dynamic reference),
-and the functions get only `LIBRARIAN_RUNTIME_SECRET_ARN`. `loadRuntimeSecrets()`
+`LIBRARIAN_RETRIEVE_SECRET`, `BRAVE_SEARCH_API_KEY`,
+`LIBRARIAN_GOLDEN_RETRIEVE_SECRET` and `ANTHROPIC_API_KEY` live in one Secrets
+Manager secret, `weekly-thing-librarian-runtime` (a JSON object of those
+names). The stack writes it from its NoEcho parameters (the golden value and
+the Anthropic key by dynamic reference; the Anthropic key's source,
+`weekly-thing-librarian-anthropic`, is kept by hand), and the functions, the
+eval reviewer included, get only `LIBRARIAN_RUNTIME_SECRET_ARN`. Never add a
+key to the runtime secret by hand: the next deploy rewrites it. `loadRuntimeSecrets()`
 (`shared/runtime-secrets.mts`) reads it once per cold start into `process.env`
 before the handler runs, so the readers below are unchanged. It logs
 `runtime_secrets_loaded` with key names only and fails closed: no secret and no
@@ -154,9 +157,10 @@ resolved into plaintext configuration. A new credential goes into the secret's
 | `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
-| `THINGY_DEFAULT_MODEL` | all | `us.anthropic.claude-sonnet-4-6` (interim; flip to `claude-sonnet-5` when the AWS support case provisions 5-gen backend quotas - agreements already ACTIVE); main chat/default persona work |
-| `THINGY_FAST_MODEL` | all | `us.anthropic.claude-haiku-4-5-20251001-v1:0`; small structured/background work |
-| `THINGY_PREMIUM_MODEL` | all | `us.anthropic.claude-opus-4-6-v1` (interim; flip to `claude-opus-5` with the same support case); chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
+| `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-4-6` (Anthropic API id); main chat/default persona work |
+| `THINGY_FAST_MODEL` | all | `claude-haiku-4-5`; small structured/background work (preflight, welcome, thank-you, the eval reviewer) |
+| `THINGY_PREMIUM_MODEL` | all | `claude-opus-4-6`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
+| `ANTHROPIC_API_KEY` | all | From the runtime secret, which the stack fills from the hand-kept `weekly-thing-librarian-anthropic` secret (key `value`) |
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
@@ -166,12 +170,14 @@ resolved into plaintext configuration. A new credential goes into the secret's
 | `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm`. Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
 | `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |
 
-## Bedrock model gotchas
+## Model gotchas
+
+- **Claude runs on the Anthropic API, Cohere on Bedrock (2026-10).** Bedrock would not offer the account the newer Claude models, so every Claude call (the chat loop, preflight, welcome, the thank-you, the eval reviewer) goes through `@anthropic-ai/sdk` via `shared/anthropic.mts`. The client is built on first use because `ANTHROPIC_API_KEY` arrives with the runtime secret. `prompts/tool-specs.json` keeps its published Converse shape for the MCP surface and evals; `anthropicTools()` binds it for the chat, turning the `cachePoint` entry into `cache_control` on the tool before it. A request carries three cache breakpoints: that tool, the static system prompt, and the newest message. The Bedrock Claude grants in the stack stay until the move has settled, so a revert needs no IAM change.
 
 - **Rerank lives in us-west-2 only.** The rest of the stack is us-east-1. `BedrockAgentRuntimeClient` is constructed with explicit `region: 'us-west-2'` override. Don't move it.
 - **Embedding model is Cohere v3** at 1024 dimensions. Bumping to v4 would invalidate the entire embedded corpus — re-embed cost is $1-2 + ~3 minutes. Plan for it; don't drift accidentally.
-- **Thingy models** use cross-region inference profiles. Default is Sonnet 4.6 for main chat/persona work (readers and guests), fast is Haiku 4.5 for structured/background work, and premium is Opus 4.6 for supporting members and the owner (entitlement-routed in the chat loop). The 5-generation upgrade (Sonnet 5 default, Opus 5 premium) is a two-value CFN env flip once the AWS support case clears the 403 - marketplace agreements are already ACTIVE. The deploy smoke test checks all three before CloudFormation runs.
-- **The Claude 5 family rejects sampling params.** `modelAcceptsSamplingParams()` in `shared/aws-clients.mts` gates `temperature` out of inferenceConfig for sonnet-5/opus-5/opus-4.7/opus-4.8/fable - sending it is a ValidationException, not a no-op. New Converse call sites must use the same gate.
+- **Thingy models.** Default is Sonnet 4.6 for main chat/persona work (readers and guests), fast is Haiku 4.5 for structured/background work, and premium is Opus 4.6 for supporting members and the owner (entitlement-routed in the chat loop). Moving to the 5 family is not a bare env flip: Opus 5.5 always thinks (text between tool calls comes back as thinking blocks) and needs its effort set. The deploy checks all three ids are Anthropic API ids before CloudFormation runs.
+- **The Claude 5 family rejects sampling params.** `modelAcceptsSamplingParams()` in `shared/aws-clients.mts` gates `temperature` out for sonnet-5/opus-5/opus-4.7/opus-4.8/fable - sending it is a 400, not a no-op. Every Claude call site uses the same gate.
 
 ## OAuth authorization server (for the live MCP surface)
 

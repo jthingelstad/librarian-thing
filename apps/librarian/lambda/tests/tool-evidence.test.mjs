@@ -383,17 +383,18 @@ test('boundToolTrace preserves order and skeletonizes largest calls first', () =
   assert.ok(JSON.stringify(bounded).length <= 700 + 200);
 });
 
-test('usage accumulates across every Bedrock turn including cache metrics', () => {
+test('usage accumulates across every model turn including cache metrics', () => {
   const totals = emptyUsageTotals();
-  accumulateUsage(totals, { inputTokens: 1000, outputTokens: 50, totalTokens: 1050, cacheReadInputTokens: 800 });
-  accumulateUsage(totals, { inputTokens: 2000, outputTokens: 300, cacheWriteInputTokens: 1500 });
+  accumulateUsage(totals, { input_tokens: 6, output_tokens: 1227, cache_read_input_tokens: 71415 });
+  accumulateUsage(totals, { input_tokens: 4, output_tokens: 300, cache_creation_input_tokens: 29850 });
   accumulateUsage(totals, undefined);
   assert.equal(totals.bedrock_calls, 2);
-  assert.equal(totals.input_tokens, 3000);
-  assert.equal(totals.output_tokens, 350);
-  assert.equal(totals.total_tokens, 1050 + 2300);
-  assert.equal(totals.cache_read_input_tokens, 800);
-  assert.equal(totals.cache_write_input_tokens, 1500);
+  assert.equal(totals.input_tokens, 10);
+  assert.equal(totals.output_tokens, 1527);
+  // The total counts cached input too, as Bedrock's totalTokens did.
+  assert.equal(totals.total_tokens, 6 + 1227 + 71415 + 4 + 300 + 29850);
+  assert.equal(totals.cache_read_input_tokens, 71415);
+  assert.equal(totals.cache_write_input_tokens, 29850);
 });
 
 test('the whole-trace bound is absolute under adversarial input', () => {

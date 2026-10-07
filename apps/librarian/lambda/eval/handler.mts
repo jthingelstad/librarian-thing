@@ -1,8 +1,9 @@
-import { ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
 import { GetItemCommand, QueryCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import type { AttributeValue, ScanCommandOutput } from '@aws-sdk/client-dynamodb';
 import type { DynamoDBStreamEvent } from 'aws-lambda';
-import { bedrock, dynamodb, fastModel } from '../shared/aws-clients.mjs';
+import { dynamodb, fastModel, modelAcceptsSamplingParams } from '../shared/aws-clients.mjs';
+import { CACHE_BREAKPOINT, anthropic, messageText } from '../shared/anthropic.mjs';
+import { loadRuntimeSecrets } from '../shared/runtime-secrets.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { turnForPrompt } from '../shared/eval-transcript.mjs';
 import {
@@ -46,15 +47,6 @@ function envBool(name: string, defaultValue = false) {
 function subscriberHashFromUserPk(pk: unknown) {
   const text = String(pk || '');
   return text.startsWith('user#') ? text.slice('user#'.length) : '';
-}
-
-function bedrockMessageText(message: unknown) {
-  const content = objectValue(message).content;
-  return (Array.isArray(content) ? content : [])
-    .map((part) => String(objectValue(part).text || ''))
-    .filter(Boolean)
-    .join('\n')
-    .trim();
 }
 
 function parseJsonPayload(text: unknown): JsonRecord | null {
@@ -154,40 +146,32 @@ Be specific, do not manufacture criticism, and treat lines labeled Runtime/Prefl
 async function evaluateConversation({ conversation, turns }: { conversation: ConversationSummary; turns: EvalTurn[] }) {
   const transcript = turns.map((turn, index) => turnForPrompt(turn, index)).join('\n\n');
   const model = fastModel();
-  const response = await bedrock.send(
-    new ConverseCommand({
-      modelId: model,
-      system: [{ text: evalSystemPrompt() }, { cachePoint: { type: 'default' } }],
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              text: [
-                `Conversation id: ${conversation.id}`,
-                `Current title: ${conversation.title}`,
-                `Scope: ${conversation.scope}`,
-                `Mode: ${conversation.mode || 'thingy'}`,
-                `Turn count: ${turns.length}`,
-                '',
-                transcript
-              ].join('\n')
-            }
-          ]
-        }
-      ],
-      inferenceConfig: {
-        maxTokens: Number(process.env.BEDROCK_EVAL_MAX_TOKENS || '1100'),
-        temperature: Number(process.env.BEDROCK_EVAL_TEMPERATURE || '0.1')
+  const response = await anthropic().messages.create({
+    model,
+    system: [{ type: 'text', text: evalSystemPrompt(), cache_control: CACHE_BREAKPOINT }],
+    messages: [
+      {
+        role: 'user',
+        content: [
+          `Conversation id: ${conversation.id}`,
+          `Current title: ${conversation.title}`,
+          `Scope: ${conversation.scope}`,
+          `Mode: ${conversation.mode || 'thingy'}`,
+          `Turn count: ${turns.length}`,
+          '',
+          transcript
+        ].join('\n')
       }
-    })
-  );
-  const parsed = parseJsonPayload(bedrockMessageText(response.output?.message || {}));
+    ],
+    max_tokens: Number(process.env.BEDROCK_EVAL_MAX_TOKENS || '1100'),
+    ...(modelAcceptsSamplingParams(model) ? { temperature: Number(process.env.BEDROCK_EVAL_TEMPERATURE || '0.1') } : {})
+  });
+  const parsed = parseJsonPayload(messageText(response));
   const normalized = normalizeEvalPayload(parsed || {});
   return {
     ...normalized,
     model,
-    usage: { outputTokens: response.usage?.outputTokens || 0 }
+    usage: { output_tokens: response.usage?.output_tokens || 0 }
   };
 }
 
@@ -344,6 +328,9 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
   const start = performance.now();
   const tableName = process.env.TABLE_NAME;
   if (!tableName) throw new Error('TABLE_NAME is required');
+  // The Anthropic API key arrives with the runtime secret. A failed read
+  // throws, and the stream batch retries.
+  await loadRuntimeSecrets();
   const candidates = await dueConversations({ tableName, event });
   let reviewed = 0;
   let skipped = 0;
@@ -375,7 +362,7 @@ export async function handler(event: DynamoDBStreamEvent = { Records: [] }) {
           subscriber_hash: subscriberHash,
           quality: result.assessment.quality,
           flags: result.assessment.flags,
-          output_tokens: result.usage?.outputTokens
+          output_tokens: result.usage?.output_tokens
         });
       }
     } catch (error) {

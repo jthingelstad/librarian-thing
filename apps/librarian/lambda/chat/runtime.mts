@@ -1,19 +1,10 @@
 import crypto from 'node:crypto';
 import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { ConverseCommand, ConverseStreamCommand } from '@aws-sdk/client-bedrock-runtime';
-import type {
-  ContentBlock,
-  Message,
-  SystemContentBlock,
-  Tool,
-  ToolResultBlock,
-  ToolResultContentBlock
-} from '@aws-sdk/client-bedrock-runtime';
+import type Anthropic from '@anthropic-ai/sdk';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import {
   agentModel,
-  bedrock,
   dynamodb,
   embeddingModel,
   fastModel,
@@ -21,7 +12,7 @@ import {
   premiumModel,
   rerankModel
 } from '../shared/aws-clients.mjs';
-import { readConverseStream } from '../shared/bedrock-stream.mjs';
+import { CACHE_BREAKPOINT, anthropic, anthropicTools, messageText, streamMessage } from '../shared/anthropic.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
 import {
   TOOL_TRACE_SCHEMA_VERSION,
@@ -88,7 +79,7 @@ import {
 } from '../shared/mcp.mjs';
 import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { touchMcpConnection } from '../shared/mcp-connections.mjs';
-import { converseImageFormat, fetchPhotos } from '../shared/photo-view.mjs';
+import { fetchPhotos, imageMediaType } from '../shared/photo-view.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
 import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
@@ -124,7 +115,6 @@ type Claims = Record<string, unknown>;
 type ChatHistory = Parameters<typeof conversationContext>[0];
 type ResponseStream = Writable;
 type PreflightDecision = ReturnType<typeof normalizePreflightDecision>;
-type BedrockJson = NonNullable<Extract<NonNullable<ToolResultBlock['content']>[number], { json?: unknown }>['json']>;
 
 interface AgentStreamOptions {
   scope?: unknown;
@@ -323,14 +313,6 @@ async function resolveRequestedConversationMode({
   return { ok: true, mode, entitlements, conversation: existing };
 }
 
-function bedrockMessageText(message: Message | undefined) {
-  const parts: string[] = [];
-  for (const content of message?.content || []) {
-    if ('text' in content && content.text) parts.push(content.text);
-  }
-  return parts.join('\n').trim();
-}
-
 function writeSse(stream: ResponseStream, event: string, data: unknown) {
   stream.write(`event: ${event}\n`);
   stream.write(`data: ${JSON.stringify(data)}\n\n`);
@@ -404,8 +386,8 @@ function toolActivityCommentary(name: string, input: unknown = {}) {
 
 function commandInferenceConfig(modelId: string) {
   return {
-    maxTokens: Number(process.env.BEDROCK_MAX_OUTPUT_TOKENS || '2500'),
-    // The 5-family rejects sampling params with a ValidationException.
+    max_tokens: Number(process.env.BEDROCK_MAX_OUTPUT_TOKENS || '2500'),
+    // The 5-family rejects sampling params with a 400.
     ...(modelAcceptsSamplingParams(modelId) ? { temperature: Number(process.env.BEDROCK_TEMPERATURE || '0.45') } : {})
   };
 }
@@ -422,8 +404,10 @@ function chatDeadlineMs() {
 
 function preflightInferenceConfig() {
   return {
-    maxTokens: Number(process.env.BEDROCK_PREFLIGHT_MAX_TOKENS || '650'),
-    temperature: Number(process.env.BEDROCK_PREFLIGHT_TEMPERATURE || '0')
+    max_tokens: Number(process.env.BEDROCK_PREFLIGHT_MAX_TOKENS || '650'),
+    ...(modelAcceptsSamplingParams(fastModel())
+      ? { temperature: Number(process.env.BEDROCK_PREFLIGHT_TEMPERATURE || '0') }
+      : {})
   };
 }
 
@@ -462,24 +446,16 @@ async function evaluatePromptPreflight(
   }
   const start = performance.now();
   try {
-    const response = await bedrock.send(
-      new ConverseCommand({
-        modelId: fastModel(),
-        system: [{ text: PREFLIGHT_SYSTEM_PROMPT }],
-        messages: [
-          {
-            role: 'user',
-            content: [{ text: preflightUserPrompt(question, scope, history, context) }]
-          }
-        ],
-        inferenceConfig: preflightInferenceConfig()
-      })
-    );
-    const message = response.output?.message;
-    const text = bedrockMessageText(message);
+    const response = await anthropic().messages.create({
+      model: fastModel(),
+      system: PREFLIGHT_SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: preflightUserPrompt(question, scope, history, context) }],
+      ...preflightInferenceConfig()
+    });
+    const text = messageText(response);
     const parsed = parsePreflightJson(text);
     const preflight = normalizePreflightDecision(parsed || {}, question);
-    // Bedrock usage rides along so preflight-direct turns can persist real
+    // Model usage rides along so preflight-direct turns can persist real
     // token metrics; preflightDynamoItem allow-lists fields, so this never
     // reaches storage through the preflight record itself.
     (preflight as JsonRecord).usage = response.usage;
@@ -488,7 +464,7 @@ async function evaluatePromptPreflight(
       category: preflight.category,
       mode: normalizeConversationMode(context.mode),
       duration_ms: Math.round(performance.now() - start),
-      output_tokens: response.usage?.outputTokens
+      output_tokens: response.usage?.output_tokens
     });
     return preflight;
   } catch (error) {
@@ -544,7 +520,19 @@ function compactTraceValue(value: unknown, maxChars = 1200) {
   }
 }
 
-async function streamBedrockAgentAnswer(
+// A copy of the message with a cache breakpoint on its last block. The
+// stored history stays unmarked, so only the newest message carries one.
+function withCacheBreakpoint(entry: Anthropic.MessageParam): Anthropic.MessageParam {
+  if (typeof entry.content === 'string') {
+    return { ...entry, content: [{ type: 'text', text: entry.content, cache_control: CACHE_BREAKPOINT }] };
+  }
+  const content = [...entry.content];
+  const last = content.at(-1);
+  if (last) content[content.length - 1] = { ...last, cache_control: CACHE_BREAKPOINT } as typeof last;
+  return { ...entry, content };
+}
+
+async function streamAgentAnswer(
   question: string,
   history: ChatHistory,
   responseStream: ResponseStream,
@@ -557,11 +545,12 @@ async function streamBedrockAgentAnswer(
   const readerContext = String(options.readerContext || '').trim();
   const agentQuestion = agentQuestionForPreflight(question, options.preflight);
   const shouldStopWriting = () => Boolean(options.deadlineExceeded?.());
-  const messages: Message[] = [
+  const messages: Anthropic.MessageParam[] = [
     {
       role: 'user',
       content: [
         {
+          type: 'text',
           text: agentUserPrompt({
             conversation_context: conversationContext(history),
             reader_context: readerContext || 'No reader-local context supplied.',
@@ -574,7 +563,7 @@ async function streamBedrockAgentAnswer(
   const toolResults: JsonRecord[] = [];
   const toolTrace: ToolTrace = stampedToolTrace();
   let answer = '';
-  // Usage accumulates across EVERY Bedrock turn of the loop - a 7-turn
+  // Usage accumulates across EVERY model turn of the loop - a 7-turn
   // research run previously recorded only the final call's tokens.
   const usageTotals = emptyUsageTotals();
   let stopReason = '';
@@ -583,64 +572,66 @@ async function streamBedrockAgentAnswer(
   type ToolHandler = (input?: JsonRecord, context?: JsonRecord) => unknown | Promise<unknown>;
   const toolHandlers = ARCHIVE_TOOLS as Record<string, ToolHandler>;
   const allowedToolNames = Array.isArray(options.toolNames) ? new Set(options.toolNames.map(String)) : null;
-  const activeToolSpecs = (availableToolSpecs() as Tool[]).filter(
-    (tool) => !tool.toolSpec || !allowedToolNames || allowedToolNames.has(String(tool.toolSpec.name || ''))
+  const activeTools = anthropicTools(
+    (availableToolSpecs() as Array<{ toolSpec?: { name?: string } }>).filter(
+      (tool) => !tool.toolSpec || !allowedToolNames || allowedToolNames.has(String(tool.toolSpec.name || ''))
+    )
   );
   // The static system prompt is cached; per-request blocks go after the
-  // cachePoint so they don't bust the static prompt's prefix cache.
-  const systemBlocks: SystemContentBlock[] = [{ text: AGENT_SYSTEM_PROMPT }, { cachePoint: { type: 'default' } }];
-  // Active scope varies per request, so it goes after the cachePoint as its
+  // breakpoint so they don't bust the static prompt's prefix cache.
+  const systemBlocks: Anthropic.TextBlockParam[] = [
+    { type: 'text', text: AGENT_SYSTEM_PROMPT, cache_control: CACHE_BREAKPOINT }
+  ];
+  // Active scope varies per request, so it goes after the breakpoint as its
   // own block — it tells the agent which corpus it may speak from without
   // busting the static prompt's prefix cache.
-  systemBlocks.push({ text: scopePromptLine(scope) });
-  systemBlocks.push({ text: conversationModePrompt(mode) });
+  systemBlocks.push({ type: 'text', text: scopePromptLine(scope) });
+  systemBlocks.push({ type: 'text', text: conversationModePrompt(mode) });
   if (allowedToolNames && !allowedToolNames.has('fetch_page')) {
     systemBlocks.push({
+      type: 'text',
       text: 'Live-web tools (fetch_page, web_search) are NOT bound in this session. If the reader shares an external URL or asks about the live web, say plainly that you cannot open external pages here and offer the closest archive angle.'
     });
   }
   for (let turn = 0; turn <= turnLimit; turn += 1) {
     // The reader disconnected at the client deadline - stop the work, not
-    // just the writes, or the loop burns Bedrock turns nobody will see.
+    // just the writes, or the loop burns model turns nobody will see.
     if (shouldStopWriting()) break;
     const streamAnswerDeltas = toolResults.length > 0;
-    // A rolling cachePoint on the newest message caches the whole growing
-    // prefix (system prompt + conversation + tool results) between loop
-    // turns and between conversation turns - without it every Bedrock call
-    // re-paid for the full history.
+    // A rolling breakpoint on the newest message's last block caches the
+    // whole growing prefix (system prompt + conversation + tool results)
+    // between loop turns and between conversation turns - without it every
+    // model call re-paid for the full history.
     const messagesForRequest = messages.map((entry, index) =>
-      index === messages.length - 1
-        ? { ...entry, content: [...(entry.content || []), { cachePoint: { type: 'default' as const } }] }
-        : entry
+      index === messages.length - 1 ? withCacheBreakpoint(entry) : entry
     );
-    const response = await bedrock.send(
-      new ConverseStreamCommand({
-        modelId,
+    const result = await streamMessage(
+      {
+        model: modelId,
         system: systemBlocks,
         messages: messagesForRequest,
-        toolConfig: {
-          tools: activeToolSpecs
-        },
-        inferenceConfig: commandInferenceConfig(modelId)
-      })
+        tools: activeTools,
+        ...commandInferenceConfig(modelId)
+      },
+      {
+        onTextDelta: streamAnswerDeltas
+          ? (delta) => {
+              if (shouldStopWriting()) return;
+              writeSse(responseStream, 'answer_delta', { delta });
+            }
+          : undefined
+      }
     );
-    const result = await readConverseStream(response, {
-      onTextDelta: streamAnswerDeltas
-        ? (delta) => {
-            if (shouldStopWriting()) return;
-            writeSse(responseStream, 'answer_delta', { delta });
-          }
-        : undefined
-    });
     const message = result.message;
     accumulateUsage(usageTotals, result.usage);
     stopReason = result.stopReason || stopReason;
-    messages.push(message);
-    const toolUses = (message.content || []).flatMap((block) =>
-      'toolUse' in block && block.toolUse ? [block.toolUse] : []
-    );
-    if (!toolUses.length) {
-      answer = bedrockMessageText(message) || result.text;
+    messages.push({ role: 'assistant', content: message.content });
+    const toolUses = message.content.filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use');
+    // A refusal can stop a tool_use block mid-input: never run that turn's
+    // tools. Whatever text came before it is the answer; with none, the
+    // fallback below speaks.
+    if (!toolUses.length || stopReason === 'refusal') {
+      answer = result.text;
       break;
     }
     // This turn's narration already streamed as answer deltas; without a
@@ -654,10 +645,10 @@ async function streamBedrockAgentAnswer(
     // sentences twice (observed in production). Commentary only labels
     // the rows when the text did not reach the answer body.
     const commentary = streamAnswerDeltas && result.text.trim() ? '' : activityCommentaryText(result.text);
-    const resultBlocks: ContentBlock[] = [];
+    const resultBlocks: Anthropic.ToolResultBlockParam[] = [];
     for (const [index, toolUse] of toolUses.entries()) {
       const toolName = String(toolUse.name || 'unknown_tool');
-      const toolUseId = String(toolUse.toolUseId || '');
+      const toolUseId = String(toolUse.id || '');
       const toolInput = objectValue(toolUse.input);
       const toolNote = toolActivityCommentary(toolName, toolInput);
       const visibleNote = [index === 0 ? commentary : '', toolNote].filter(Boolean).join(' ');
@@ -677,10 +668,10 @@ async function streamBedrockAgentAnswer(
         toolName === VIEW_PHOTO_TOOL && (!allowedToolNames || allowedToolNames.has(VIEW_PHOTO_TOOL));
       const argumentProblems = handler || viewPhotoBound ? validateToolArguments(toolName, toolInput) : [];
       let result: JsonRecord;
-      // Thingy's eyes: view_photo hands Converse real image blocks so the
+      // Thingy's eyes: view_photo hands the model real image blocks so the
       // model SEES the photos; the trace, citations, and DynamoDB get the
       // metadata summary only - base64 never enters evidence.
-      let imageBlocks: ToolResultContentBlock[] = [];
+      let imageBlocks: Anthropic.ImageBlockParam[] = [];
       const toolStart = performance.now();
       let ok = true;
       try {
@@ -692,10 +683,8 @@ async function streamBedrockAgentAnswer(
             ? { shown: photos.map(({ url, bytes, mimeType }) => ({ url, bytes, mime_type: mimeType })), refused }
             : { error: 'No photos could be viewed.', refused };
           imageBlocks = photos.map((photo) => ({
-            image: {
-              format: converseImageFormat(photo.mimeType),
-              source: { bytes: Buffer.from(photo.dataBase64, 'base64') }
-            }
+            type: 'image' as const,
+            source: { type: 'base64' as const, media_type: imageMediaType(photo.mimeType), data: photo.dataBase64 }
           }));
         } else {
           result = handler
@@ -738,7 +727,11 @@ async function streamBedrockAgentAnswer(
         result: summarizeToolEvidence(result)
       });
       toolResults.push(result);
-      resultBlocks.push({ toolResult: { toolUseId, content: [...imageBlocks, { json: result as BedrockJson }] } });
+      resultBlocks.push({
+        type: 'tool_result',
+        tool_use_id: toolUseId,
+        content: [...imageBlocks, { type: 'text', text: JSON.stringify(result) }]
+      });
     }
     messages.push({
       role: 'user',
@@ -826,10 +819,10 @@ function forwardingShape(event: LibrarianHttpEvent) {
 }
 
 function preflightReceipt(preflight: unknown, start: number) {
-  const usage = ((preflight as JsonRecord).usage || {}) as JsonRecord;
+  const usage = accumulateUsage(emptyUsageTotals(), (preflight as JsonRecord).usage);
   return {
     duration_ms: Math.round(performance.now() - start),
-    total_tokens: Number(usage.totalTokens || 0),
+    total_tokens: usage.total_tokens,
     tool_steps: 0
   };
 }
@@ -1244,7 +1237,7 @@ interface GuestChatContext {
 // conversations demo the real product. No conversation persistence, no
 // memory, no profile, no email; history is client-supplied and sanitized;
 // tools are WEB_TOOLS (archive-read only, no outbound network). Three
-// stacked guards bound the unauthenticated Bedrock spend: the hourly IP
+// stacked guards bound the unauthenticated model spend: the hourly IP
 // rate limit, a per-visitor strict daily quota, and a global fail-closed
 // circuit breaker. Kill switch: THINGY_GUEST_CHAT=off.
 // Guest suggestion chips: one corpus-grounded set per UTC day, generated
@@ -1506,7 +1499,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }, deadlineMs);
   let result;
   try {
-    result = await streamBedrockAgentAnswer(question, history, stream, {
+    result = await streamAgentAnswer(question, history, stream, {
       readerContext,
       scope,
       mode: 'thingy',
@@ -2088,7 +2081,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     ).id;
     let result;
     try {
-      result = await streamBedrockAgentAnswer(question, history, stream, {
+      result = await streamAgentAnswer(question, history, stream, {
         readerContext,
         scope,
         mode: modeAccess.mode,
