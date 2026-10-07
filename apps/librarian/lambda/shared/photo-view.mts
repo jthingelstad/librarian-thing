@@ -95,10 +95,10 @@ export function imageUrlRefusal(value: unknown): string | null {
   return 'not an archive image host';
 }
 
-/** Bedrock Converse image-block format for a sniffed mime type. */
-export function converseImageFormat(mimeType: string): 'jpeg' | 'png' | 'gif' | 'webp' {
+/** Anthropic image-block media type for a sniffed mime type. */
+export function imageMediaType(mimeType: string): 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' {
   const subtype = mimeType.split('/')[1];
-  return subtype === 'png' || subtype === 'gif' || subtype === 'webp' ? subtype : 'jpeg';
+  return subtype === 'png' || subtype === 'gif' || subtype === 'webp' ? `image/${subtype}` : 'image/jpeg';
 }
 
 export interface FetchedPhoto {

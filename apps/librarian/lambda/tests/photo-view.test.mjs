@@ -129,12 +129,13 @@ test('the resize proxy URL is built from the original, fit-resize form', async (
   );
 });
 
-test('converse image format maps sniffed mime types', async () => {
-  const { converseImageFormat } = await import('../dist/shared/photo-view.mjs');
-  assert.equal(converseImageFormat('image/jpeg'), 'jpeg');
-  assert.equal(converseImageFormat('image/png'), 'png');
-  assert.equal(converseImageFormat('image/webp'), 'webp');
-  assert.equal(converseImageFormat('image/gif'), 'gif');
+test('image media type maps sniffed mime types', async () => {
+  const { imageMediaType } = await import('../dist/shared/photo-view.mjs');
+  assert.equal(imageMediaType('image/jpeg'), 'image/jpeg');
+  assert.equal(imageMediaType('image/png'), 'image/png');
+  assert.equal(imageMediaType('image/webp'), 'image/webp');
+  assert.equal(imageMediaType('image/gif'), 'image/gif');
+  assert.equal(imageMediaType('image/heic'), 'image/jpeg');
 });
 
 test('view_photo is published for the chat loop but stays off MCP/web launch lists', async () => {

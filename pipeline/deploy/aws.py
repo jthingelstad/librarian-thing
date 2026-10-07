@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import re
 import secrets
@@ -11,6 +10,8 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 import zipfile
 from pathlib import Path
 
@@ -76,29 +77,38 @@ def thingy_models_from_template() -> dict[str, str]:
     return models
 
 
+ANTHROPIC_MODEL_ID = re.compile(r"^claude-[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
 def smoke_test_model(model_id: str, label: str = "model") -> None:
-    print(f"Smoke testing Bedrock InvokeModel for {label} {model_id}...")
-    region = os.environ.get("AWS_DEFAULT_REGION") or os.environ.get("AWS_REGION") or "us-east-1"
-    client = boto3.client("bedrock-runtime", region_name=region)
-    body = json.dumps(
-        {
-            "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens": 5,
-            "messages": [{"role": "user", "content": "ping"}],
-        }
+    """Check a Thingy model id before CloudFormation runs.
+
+    Thingy calls the Anthropic API (2026-10), so a Bedrock id here is a
+    mistake: refuse it. The CI deploy holds no Anthropic key, so the check
+    is the id's shape; with ANTHROPIC_API_KEY set (a local deploy) it also
+    looks the model up, a free read that spends no tokens.
+    """
+    print(f"Checking Anthropic model id for {label} {model_id}...")
+    if not ANTHROPIC_MODEL_ID.match(model_id):
+        raise RuntimeError(
+            f"{label} {model_id!r} is not an Anthropic API model id (e.g. claude-sonnet-4-6). "
+            "Re-run with --skip-smoke-test to override."
+        )
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        print("  OK (shape only; no ANTHROPIC_API_KEY to look it up)")
+        return
+    request = urllib.request.Request(
+        f"https://api.anthropic.com/v1/models/{model_id}",
+        headers={"x-api-key": api_key, "anthropic-version": "2023-06-01"},
     )
     try:
-        client.invoke_model(modelId=model_id, contentType="application/json", body=body)
-    except ClientError as exc:
-        code = exc.response.get("Error", {}).get("Code", "")
-        if code == "ValidationException":
+        with urllib.request.urlopen(request, timeout=15):
+            pass
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
             raise RuntimeError(
-                f"Bedrock rejected model id {model_id!r}. Verify the inference profile exists "
-                f"with `aws bedrock list-inference-profiles`. Re-run with --skip-smoke-test to override."
-            ) from exc
-        if code == "AccessDeniedException":
-            raise RuntimeError(
-                f"Caller lacks bedrock:InvokeModel for {model_id!r}. Check IAM on the deploying identity."
+                f"The Anthropic API does not know model {model_id!r}. Re-run with --skip-smoke-test to override."
             ) from exc
         raise
     print("  OK")

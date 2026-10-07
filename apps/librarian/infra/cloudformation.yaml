@@ -183,7 +183,11 @@ Resources:
   # configuration as plaintext. The stack writes it from the deploy
   # parameters (their AllowedPattern keeps the JSON well formed); the golden
   # credential comes from its own generated secret by dynamic reference,
-  # secret to secret.
+  # secret to secret. The Anthropic API key is the same pattern from a
+  # secret Jamie keeps by hand (weekly-thing-librarian-anthropic, key
+  # "value"); the deploy fails if that secret is missing. CloudFormation
+  # resolves it only when this resource changes, so after rotating the key,
+  # redeploy with a change here (or edit the runtime secret to match).
   LibrarianRuntimeSecret:
     Type: AWS::SecretsManager::Secret
     DeletionPolicy: Retain
@@ -198,7 +202,8 @@ Resources:
         "FASTMAIL_JMAP_TOKEN":"${FastmailJmapToken}",
         "LIBRARIAN_RETRIEVE_SECRET":"${LibrarianRetrieveSecret}",
         "BRAVE_SEARCH_API_KEY":"${BraveSearchApiKey}",
-        "LIBRARIAN_GOLDEN_RETRIEVE_SECRET":"{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}"}
+        "LIBRARIAN_GOLDEN_RETRIEVE_SECRET":"{{resolve:secretsmanager:${LibrarianGoldenRetrieveSecret}:SecretString:value}}",
+        "ANTHROPIC_API_KEY":"{{resolve:secretsmanager:weekly-thing-librarian-anthropic:SecretString:value}}"}
 
   LibrarianFunctionRole:
     Type: AWS::IAM::Role
@@ -257,6 +262,9 @@ Resources:
                   - s3:DeleteObject
                 Resource:
                   - !Sub arn:aws:s3:::${CorpusBucket}/artifacts/dispatches/*
+              # The Claude entries are unused since the 2026-10 move to the
+              # Anthropic API; they stay until it has settled, so a revert
+              # needs no IAM change. Cohere embed and rerank still use theirs.
               - Effect: Allow
                 Action:
                   - bedrock:InvokeModel
@@ -311,14 +319,12 @@ Resources:
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
           THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
-          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
-          # TPM quota provisioning (AWS support case; known gate for the newest
-          # generation on low-usage accounts). Flip these two values to
-          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
-          # 403 clears - the code needs no other change.
-          THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
-          THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          # Anthropic API model ids (2026-10). The models are the same 4.6
+          # generation Bedrock served; moving to the 5 family is its own
+          # change (Opus 5.5 always thinks and needs its effort set).
+          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
       Handler: auth/handler.handler
       MemorySize: 1024
       Role: !GetAtt LibrarianFunctionRole.Arn
@@ -344,14 +350,12 @@ Resources:
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
           LOG_LEVEL: !Ref LogLevel
-          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
-          # TPM quota provisioning (AWS support case; known gate for the newest
-          # generation on low-usage accounts). Flip these two values to
-          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
-          # 403 clears - the code needs no other change.
-          THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
-          THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          # Anthropic API model ids (2026-10). The models are the same 4.6
+          # generation Bedrock served; moving to the 5 family is its own
+          # change (Opus 5.5 always thinks and needs its effort set).
+          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"
@@ -382,14 +386,14 @@ Resources:
         Variables:
           TABLE_NAME: !Ref LibrarianTable
           LOG_LEVEL: !Ref LogLevel
-          # Sonnet 5 / Opus 5 agreements are ACTIVE but the account awaits backend
-          # TPM quota provisioning (AWS support case; known gate for the newest
-          # generation on low-usage accounts). Flip these two values to
-          # us.anthropic.claude-sonnet-5 / us.anthropic.claude-opus-5 when the
-          # 403 clears - the code needs no other change.
-          THINGY_DEFAULT_MODEL: "us.anthropic.claude-sonnet-4-6"
-          THINGY_FAST_MODEL: "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-          THINGY_PREMIUM_MODEL: "us.anthropic.claude-opus-4-6-v1"
+          # The reviewer's Anthropic API key comes from the runtime secret.
+          LIBRARIAN_RUNTIME_SECRET_ARN: !Ref LibrarianRuntimeSecret
+          # Anthropic API model ids (2026-10). The models are the same 4.6
+          # generation Bedrock served; moving to the 5 family is its own
+          # change (Opus 5.5 always thinks and needs its effort set).
+          THINGY_DEFAULT_MODEL: "claude-sonnet-4-6"
+          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_PREMIUM_MODEL: "claude-opus-4-6"
       Handler: eval/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1
