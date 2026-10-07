@@ -28,14 +28,12 @@ test('initialize negotiates a supported protocol version', () => {
   assert.equal(initializeResult().serverInfo.name, 'librarian');
   // The version is the tool-surface cache key: it must change when the
   // packaged prompt/spec set changes, and be stable within one build.
-  assert.match(initializeResult().serverInfo.version, /^2\.5\.0\+tools\.[0-9a-f]{12}$/);
+  assert.match(initializeResult().serverInfo.version, /^2\.5\.1\+tools\.[0-9a-f]{12}$/);
   assert.equal(initializeResult().serverInfo.version, initializeResult().serverInfo.version);
 });
 
 test('tools/list exposes exactly the launch tools with JSON schemas', async () => {
-  // web_search only appears once a Brave key is configured.
-  delete process.env.BRAVE_SEARCH_API_KEY;
-  const expected = MCP_LAUNCH_TOOLS.filter((name) => name !== 'web_search');
+  const expected = MCP_LAUNCH_TOOLS;
   const declarations = mcpToolDeclarations();
   assert.deepEqual(declarations.map((tool) => tool.name).sort(), [...expected].sort());
   for (const tool of declarations) {
@@ -45,11 +43,6 @@ test('tools/list exposes exactly the launch tools with JSON schemas', async () =
   const reply = await handleMcpMessage({ jsonrpc: '2.0', id: 1, method: 'tools/list' }, context());
   assert.equal(reply.statusCode, 200);
   assert.equal(reply.payload.result.tools.length, expected.length);
-
-  process.env.BRAVE_SEARCH_API_KEY = 'test-key';
-  const withKey = mcpToolDeclarations().map((tool) => tool.name);
-  assert.ok(withKey.includes('web_search'));
-  delete process.env.BRAVE_SEARCH_API_KEY;
 });
 
 test('tools/call invokes the registry handler and wraps text content', async () => {
@@ -290,8 +283,7 @@ test('a retired tool names its replacement instead of "Unknown tool"', async () 
   }
 });
 
-test('web_search without its key is neither listed nor callable', async () => {
-  delete process.env.BRAVE_SEARCH_API_KEY;
+test('a removed tool is neither listed nor callable', async () => {
   let spent = 0;
   const reply = await handleMcpMessage(
     { jsonrpc: '2.0', id: 21, method: 'tools/call', params: { name: 'web_search', arguments: { query: 'x' } } },

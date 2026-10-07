@@ -34,9 +34,7 @@ if (!existsSync(resolve(dist, 'shared/mcp.mjs'))) {
 }
 
 // The surface as code defaults declare it, not as this shell's environment
-// would bend it. web_search is declared only when a search key is set; a
-// placeholder (never a real key) makes its declaration exportable, and the
-// artifact marks it conditional.
+// would bend it.
 for (const name of [
   'CHAT_DAILY_QUOTA',
   'MCP_DAILY_QUOTA',
@@ -49,7 +47,6 @@ for (const name of [
 ]) {
   delete process.env[name];
 }
-process.env.BRAVE_SEARCH_API_KEY = 'export-placeholder-not-a-key';
 
 const load = (path) => import(resolve(dist, path));
 const mcp = await load('shared/mcp.mjs');
@@ -93,9 +90,6 @@ const tools = declarations.map((tool) => {
   return {
     ...tool,
     ...(chatDescription && chatDescription !== tool.description ? { chat_description: chatDescription } : {}),
-    ...(tool.name === 'web_search'
-      ? { conditional: 'Declared and callable only when the deployment configures a web search key.' }
-      : {}),
     ...(archiveTools.PAGED_LISTS[tool.name] ? { paged_list: archiveTools.PAGED_LISTS[tool.name] } : {}),
     doors: doorsFor(tool.name)
   };

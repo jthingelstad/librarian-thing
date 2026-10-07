@@ -75,7 +75,7 @@ changes, and the production workflow then uploads the updated corpus artifacts.
 | POST | `/chat` | session token (bearer or `__Host-thingy_session` cookie) | SSE-streamed agent answer with tool use and server-side history |
 | POST | `/welcome` | session token (bearer or cookie) | Agentic contextual welcome for authenticated users |
 | POST | `/mcp` | OAuth bearer token (`archive:read`) | MCP streamable HTTP endpoint binding the archive tool registry |
-| POST | `/tools` | session token (bearer or cookie) | WebMCP page-tool door: `list`/`call` over the archive-read tools (no fetch_page/web_search), own `web_tools` quota; reached by the Thingy web app same-origin as `/api/tools` |
+| POST | `/tools` | session token (bearer or cookie) | WebMCP page-tool door: `list`/`call` over the archive-read tools (no fetch_page), own `web_tools` quota; reached by the Thingy web app same-origin as `/api/tools` |
 | POST | `/retrieve` | retrieval secret (body) | JSON hybrid retrieval — top-K archive passages, used by `wt-builder` |
 | POST | `/feedback` | session token (bearer or cookie) | Per-answer reactions plus optional comments |
 | POST | `/auth` | none / session token | Sign-in codes, subscriber checks/subscribe, session refresh, profile updates |
@@ -153,7 +153,7 @@ budget, or OAuth lifetime; `verify` fails while the artifact is stale.
 
 ## Environment
 
-Env vars are set in CloudFormation at deploy time from the repo-root `.env`. The full list (with deploy-side handling) is in [`AGENTS.md`](AGENTS.md). The headline secrets:
+Settings are set in CloudFormation at deploy time. Credentials are not: they live in the `weekly-thing-librarian-runtime` secret, which Jamie keeps by hand in Secrets Manager, and the Lambdas read it at cold start. The full list is in [`AGENTS.md`](AGENTS.md). The headline secrets:
 
 - `SESSION_SECRET` — HMAC signing key for session tokens
 - `LIBRARIAN_RETRIEVE_SECRET` — shared secret for trusted `/retrieve` clients
@@ -174,8 +174,7 @@ three-layer eval (matcher fixtures, response invariants, known answers with
 a committed recall baseline in `lambda/eval/baseline.json`) runs on every
 deploy and blocks it on failure. Tool responses carry `server_version`
 (`1.1.0+tools.<fingerprint>`) so clients can detect a stale cached
-tools/list. Live-web reach: `fetch_page` (SSRF-guarded, first-party aware)
-always; `web_search` only when `BRAVE_SEARCH_API_KEY` is configured.
+tools/list. Live-web reach: `fetch_page` (SSRF-guarded, first-party aware).
 Per-reader daily quotas: chat 50, MCP tool calls 500, share links 20/hr
 (doubled for supporting members; owner exempt).
 

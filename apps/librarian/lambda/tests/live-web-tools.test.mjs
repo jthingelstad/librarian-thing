@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ARCHIVE_TOOLS, availableToolSpecs, webSearchConfigured } from '../dist/shared/archive-tools.mjs';
+import { ARCHIVE_TOOLS, availableToolSpecs } from '../dist/shared/archive-tools.mjs';
 
 const fetchPage = ARCHIVE_TOOLS.fetch_page;
-const webSearch = ARCHIVE_TOOLS.web_search;
 
 test('fetch_page rejects unsafe urls without touching the network', async () => {
   for (const url of [
@@ -21,20 +20,8 @@ test('fetch_page rejects unsafe urls without touching the network', async () => 
   }
 });
 
-test('web_search without a key reports unconfigured instead of failing oddly', async () => {
-  delete process.env.BRAVE_SEARCH_API_KEY;
-  const result = await webSearch({ query: 'anything' });
-  assert.match(result.error, /not configured/);
-  assert.equal(webSearchConfigured(), false);
-});
-
-test('availableToolSpecs hides web_search until a key exists', () => {
-  delete process.env.BRAVE_SEARCH_API_KEY;
-  const withoutKey = availableToolSpecs().map((spec) => spec.toolSpec?.name);
-  assert.ok(!withoutKey.includes('web_search'));
-  assert.ok(withoutKey.includes('fetch_page'));
-  process.env.BRAVE_SEARCH_API_KEY = 'test-key';
-  const withKey = availableToolSpecs().map((spec) => spec.toolSpec?.name);
-  assert.ok(withKey.includes('web_search'));
-  delete process.env.BRAVE_SEARCH_API_KEY;
+test('the chat binds fetch_page and no web search tool', () => {
+  const names = availableToolSpecs().map((spec) => spec.toolSpec?.name);
+  assert.ok(names.includes('fetch_page'));
+  assert.ok(!names.includes('web_search'));
 });

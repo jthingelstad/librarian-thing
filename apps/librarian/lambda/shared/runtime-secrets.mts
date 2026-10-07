@@ -4,7 +4,8 @@ import { errorFields, logEvent } from './logging.mjs';
 // The Lambdas' credentials live in one Secrets Manager secret
 // (weekly-thing-librarian-runtime, a JSON object of env-style names) instead
 // of the function configuration, where they would sit in plaintext for
-// anyone who can read it. Each cold start reads the secret once and places
+// anyone who can read it. Jamie keeps the secret by hand; no deploy writes
+// it. Each cold start reads the secret once and places
 // the values in process.env, so every reader of BUTTONDOWN_API_KEY,
 // SESSION_SECRET and the rest keeps working unchanged; the values exist only
 // in this process's memory.
@@ -19,7 +20,6 @@ export const RUNTIME_SECRET_KEYS = [
   'THINGY_WEB_ORIGIN_TOKEN',
   'FASTMAIL_JMAP_TOKEN',
   'LIBRARIAN_RETRIEVE_SECRET',
-  'BRAVE_SEARCH_API_KEY',
   'LIBRARIAN_GOLDEN_RETRIEVE_SECRET',
   'ANTHROPIC_API_KEY'
 ] as const;
@@ -47,22 +47,24 @@ async function load(secretId: string, secrets: SecretsClient) {
   const response = await secrets.send(new GetSecretValueCommand({ SecretId: secretId }));
   const values = runtimeSecretValues(response.SecretString);
   for (const [key, value] of Object.entries(values)) process.env[key] = value;
-  // Names only, never values.
+  // Names only, never values. A name the hand-kept secret lacks is logged as
+  // missing, so a slip in the console shows up here.
   logEvent('info', 'runtime_secrets_loaded', {
     keys: Object.keys(values).sort(),
     empty: Object.keys(values)
       .filter((key) => !values[key])
-      .sort()
+      .sort(),
+    missing: RUNTIME_SECRET_KEYS.filter((key) => !(key in values)).sort()
   });
 }
 
 /**
  * Make sure the runtime secret is in process.env before a handler runs.
- * A no-op when LIBRARIAN_RUNTIME_SECRET_ARN is unset (local runs and tests,
+ * A no-op when LIBRARIAN_RUNTIME_SECRET_ID is unset (local runs and tests,
  * which set the variables directly).
  */
 export async function loadRuntimeSecrets(secrets?: SecretsClient) {
-  const secretId = String(process.env.LIBRARIAN_RUNTIME_SECRET_ARN || '').trim();
+  const secretId = String(process.env.LIBRARIAN_RUNTIME_SECRET_ID || '').trim();
   if (!secretId) return;
   if (!loaded) {
     const secretsClient = secrets || (client ||= new SecretsManagerClient({}));

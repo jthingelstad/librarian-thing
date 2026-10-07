@@ -126,16 +126,11 @@ test('initialize declares tools, resources and prompts', () => {
   assert.match(instructions, /\[WT351\]\(url\)/);
 });
 
-test('every tool is read-only; only the live-web tools are open-world; schemas are closed', () => {
-  process.env.BRAVE_SEARCH_API_KEY = 'test-key';
-  try {
-    for (const tool of mcpToolDeclarations()) {
-      assert.equal(tool.annotations.readOnlyHint, true, tool.name);
-      assert.equal(tool.annotations.openWorldHint, ['fetch_page', 'web_search'].includes(tool.name), tool.name);
-      assert.equal(tool.inputSchema.additionalProperties, false, tool.name);
-    }
-  } finally {
-    delete process.env.BRAVE_SEARCH_API_KEY;
+test('every tool is read-only; only the live-web tool is open-world; schemas are closed', () => {
+  for (const tool of mcpToolDeclarations()) {
+    assert.equal(tool.annotations.readOnlyHint, true, tool.name);
+    assert.equal(tool.annotations.openWorldHint, tool.name === 'fetch_page', tool.name);
+    assert.equal(tool.inputSchema.additionalProperties, false, tool.name);
   }
 });
 

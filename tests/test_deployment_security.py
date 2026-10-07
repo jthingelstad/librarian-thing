@@ -138,13 +138,11 @@ def test_template_runtime_permissions_fit_reviewed_boundaries():
     )
     values = {
         "AWS::AccountId": "999153317627",
+        "AWS::Partition": "aws",
         "AWS::Region": "us-east-1",
         "LibrarianTable.Arn": table,
         "LibrarianTable.StreamArn": table + "/stream/test",
         "LibrarianEvalDlq.Arn": "arn:aws:sqs:us-east-1:999153317627:weekly-thing-librarian-eval-dlq",
-        "LibrarianRuntimeSecret": (
-            "arn:aws:secretsmanager:us-east-1:999153317627:secret:weekly-thing-librarian-runtime-AbCdEf"
-        ),
         "CorpusBucket": "weekly-thing-librarian",
         "CorpusKey": "artifacts/corpus.json",
         "GraphKey": "artifacts/graph.json",

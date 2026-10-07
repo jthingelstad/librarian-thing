@@ -62,23 +62,19 @@ During a direct local deployment, the deploy script writes the CloudFormation `L
 
 ## Required Secrets
 
-CloudFormation parameters:
-
-- `ButtondownApiKey`
-- `SessionSecret`
-- `CorpusBucket`
-
-The credential parameters (`ButtondownApiKey`, `SessionSecret`,
-`ThingyWebOriginToken`, `LibrarianRetrieveSecret`, `FastmailJmapToken`,
-`BraveSearchApiKey`) come from this repo's GitHub Actions secrets. The stack
-writes them, with the golden-retrieval secret, into one JSON secret,
-`weekly-thing-librarian-runtime`, and the Lambdas read it at cold start
+The Lambdas' credentials (`BUTTONDOWN_API_KEY`, `SESSION_SECRET`,
+`THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`, `LIBRARIAN_RETRIEVE_SECRET`,
+`LIBRARIAN_GOLDEN_RETRIEVE_SECRET`, `ANTHROPIC_API_KEY`) live in one JSON
+secret, `weekly-thing-librarian-runtime`, which Jamie keeps by hand in the
+Secrets Manager console. It is their source of truth (2026-10-07): the stack
+does not own it, no deploy carries a credential, and no GitHub secret or
+`.env` value feeds it. The Lambdas read it at cold start
 (`shared/runtime-secrets.mts`); they are not in the function configuration.
-The parameters may not contain `"` or `\`, which would break the JSON.
+`apps/librarian/AGENTS.md` lists the values that keep a deliberate second copy
+elsewhere.
 
 Local `.env` values used by upload/build scripts:
 
-- `BUTTONDOWN_API_KEY`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_SESSION_TOKEN` (only if using temporary credentials)
@@ -100,11 +96,9 @@ Local `.env` values used by upload/build scripts:
 - `BEDROCK_RERANK_REGION` (optional; defaults to `us-west-2`, where the Bedrock Rerank API exposes Cohere Rerank 3.5)
 - `LIBRARIAN_LOG_LEVEL` (optional; defaults to `INFO`)
 - `LIBRARIAN_AUTH_RATE_LIMIT_MAX` (optional; defaults to 30 auth attempts per client identity per hour)
-- `LIBRARIAN_RETRIEVE_SECRET` for trusted service-to-service retrieval.
-- `FASTMAIL_JMAP_TOKEN` / `THINGY_FASTMAIL_JMAP_TOKEN` / `THINGY_JMAP_TOKEN` for magic-link email.
+- `LIBRARIAN_RETRIEVE_SECRET` for local scripts that call `/retrieve` (`quality-bench.mjs`, `golden-retrieval.mjs`); a copy of the runtime secret's value.
 - `THINGY_MAGIC_LINK_FROM_EMAIL` and `THINGY_MAGIC_LINK_BASE_URL` for login email construction.
 - `LIBRARIAN_USER_MEMORY_TTL_DAYS` (optional; defaults to 365 days.)
-- `BRAVE_SEARCH_API_KEY` (optional; enables the `web_search` tool — the tool's schema binds in chat and MCP only when this is set)
 - `CHAT_DAILY_QUOTA` / `MCP_DAILY_QUOTA` (optional; per-reader daily pools, defaults 50 / 500)
 - `THINGY_GUEST_CHAT` / `GUEST_DAILY_QUOTA` / `GUEST_GLOBAL_DAILY_QUOTA` (guest chat lane, 2026-09: kill switch plus per-visitor 3/day and global 100/day fail-closed caps; the global cap is the cost circuit breaker with its own CloudWatch alarm)
 
@@ -211,7 +205,7 @@ Chat requests run through a tool-using Claude Sonnet 4.6 loop capped by `MAX_TOO
 - `source_neighborhood`, `archive_gems`, `find_evidence` (the passages bearing on one to four claims; no verdict)
 - `media_search` (photo index), `currently_history` (Currently entries), `top_references` (domain aggregation)
 - `on_this_day` (what was published on this calendar day in past years, all three corpora; America/Chicago "today")
-- `fetch_page` (live public pages, SSRF-guarded) and `web_search` (Brave; binds only when `BRAVE_SEARCH_API_KEY` is set)
+- `fetch_page` (live public pages, SSRF-guarded)
 
 Registry-internal, no published spec: `get_issue`, `get_section`, `domain_history`, `list_issues`.
 
@@ -254,6 +248,9 @@ Corpus build, 2026-10-01 (the QA pass's ingest fixes; every corpus upload now pa
 - Each Journal entry is tied to the post it copies, by permalink and otherwise by date and text. Chunks carry `journal_posts: [{url, copy_of_microblog_id, canonical_url, matched_by}]`, paired in order with `journal_post_urls` and then the chunk's unlinked entries. Issues carry `journal_entries`, and the corpus reports `journal_copy_stats` and `journal_unmatched` (28 entries have no post left). A copy must come from the issue's week, from three days before the previous issue to the day after this one; a Journal link to a post outside it is a reference, listed in the issue's `journal_references` and counted in `journal_copy_stats.references` (324), and the blog corpus stores each post's `also_in_issues` and `linked_from_issues` with their pair counts in `appearance_stats`. The Lambda splits an older blog corpus the same way when it loads.
 - A Weekly Thing photo that reprints a blog photo carries `copy_of_microblog_id` and `canonical_url`, matched by URL, by micro.blog upload name, or for WT Builder issues by recomputing its rehost name (`wt_builder_rehost_url`, a contract with wt-builder `images.ts`).
 - Issue covers and blog video poster stills are media. A media `context` reads as prose. Links come from one scanner, and a doubled scheme no longer gives a link the domain `https`. Currently and Now Reading entries keep their whole text, and graph entities and topics read the whole issue.
+
+MCP 2.5.1 (2026-10-07):
+- `web_search` is gone. It searched the web through the Brave Search API and was declared only when a Brave key was configured; none ever was, so no deployment listed it. The published surface no longer carries it, and a call to it is an unknown tool.
 
 MCP 2.5.0 (2026-10-01, contract 4.16.0; Jamie's answers to the round-2 QA questions, and the round-3 corpus fixes):
 - Appearances: a blog post's `also_in_issues` names only the issues whose Journal reprinted it (a copy from the issue's own week, [previous issue - 3 days, this issue + 1 day]); the new `linked_from_issues` names the issues that link it without reprinting it (a Notable pick, a link in prose, a Journal reference to an older post). Every issue that named a post is in exactly one list: 4,158 pairs became 3,646 reprints and 512 links. `list_content` takes `has_linked_from_issues` and `linked_from_issue`; `corpus_stats` reports `posts_with_linked_from_issues_count` and `issues_linking_count`.
@@ -365,8 +362,8 @@ curl -sS -i -X OPTIONS https://jcvud66qqpq53frvno5stoqntm0zqntw.lambda-url.us-ea
 The Thingy web app deploys from its own repo (`thingy.thingelstad.com`, S3 + CloudFront since 2026-09-01) after frontend changes; nothing in this repo deploys it.
 
 
-The `/mcp` endpoint serves MCP streamable HTTP (stateless, protocol 2025-06-18/2025-03-26) from the stream Lambda. It is for Jamie and for readers; the reader-facing setup (claude.ai, ChatGPT, Claude Code, any MCP client) and fair-use limits are on `thingy.thingelstad.com/connect/` (thingy web `web/connect/index.html`), which should change whenever the tools, limits or sign-in do. It binds every published tool above (21; `web_search` only when configured) plus the MCP-only `view_photo` (up to 3 archive photos per call as image content blocks, allowlisted hosts) with human display titles; auth is a Librarian OAuth bearer token with the `archive:read` scope; each tools/call spends one unit of the per-user daily mcp quota (`MCP_DAILY_QUOTA`, default 500, doubled for supporting members), independent of the chat pool (`CHAT_DAILY_QUOTA`, default 50), under a 300/hr rate limit. Arguments are checked against the declared schema before any quota is spent: an unknown argument, a limit outside its declared range, a text over its `maxLength`, a bad enum, an inverted `year_range` or `year` with `year_range` is a `bad_request` naming the accepted arguments. A tool that cannot answer returns `isError: true` with a `code` (`bad_request`, `not_found`, `not_configured`, `upstream_error`, `too_large`, `internal_error`) and one `next` step. Results are compact JSON cut to 48,000 characters structurally (trailing list items first, added to the `truncated` block a tool already set), so they always parse, and go out as `structuredContent` too, conforming to each tool's `outputSchema`; every success leads with an `applied` echo of the window, limit and mode used. Source ids (`wt-351`, `blog-<microblog id>`, `page-<page id>`, `ep-<n>`) that any tool emits are accepted by `get_source` and `source_neighborhood` as `id`. Every MCP tool response and `corpus_stats` carry `server_version` (`2.5.0+tools.<prompt fingerprint>`), the cache key clients use to detect a stale tools/list; `initialize` declares `tools.listChanged: true`, `resources` and `prompts`. Every tool is annotated `readOnlyHint: true`, with `openWorldHint` true only on `fetch_page` and `web_search`, and every input schema says `additionalProperties: false`. Urls in results go out absolute (`/archive/351/` becomes `https://weekly.thingelstad.com/archive/351/`). Resources (1.6.0): `librarian://wt/{n}`, `librarian://blog/{id}` and `librarian://page/{id}` (2.4.0) are one source as markdown; `librarian://topic/{slug}` is a topic's catalogue card plus its lens timeline; `librarian://year/{yyyy}` is `corpus_stats` for that year; `librarian://on-this-day/{mm-dd}` is `on_this_day`. `resources/list` offers the 12 newest issues and costs nothing; each `resources/read` spends one quota unit and is audited as `resource:<kind>`; an unknown URI is `-32602`, a missing source `-32002`. Prompts: `thinking_over_time`, `year_in_review`, `reading_path`, `this_week_in_past_years`, `research_brief`.
+The `/mcp` endpoint serves MCP streamable HTTP (stateless, protocol 2025-06-18/2025-03-26) from the stream Lambda. It is for Jamie and for readers; the reader-facing setup (claude.ai, ChatGPT, Claude Code, any MCP client) and fair-use limits are on `thingy.thingelstad.com/connect/` (thingy web `web/connect/index.html`), which should change whenever the tools, limits or sign-in do. It binds every published tool above (20) plus the MCP-only `view_photo` (up to 3 archive photos per call as image content blocks, allowlisted hosts) with human display titles; auth is a Librarian OAuth bearer token with the `archive:read` scope; each tools/call spends one unit of the per-user daily mcp quota (`MCP_DAILY_QUOTA`, default 500, doubled for supporting members), independent of the chat pool (`CHAT_DAILY_QUOTA`, default 50), under a 300/hr rate limit. Arguments are checked against the declared schema before any quota is spent: an unknown argument, a limit outside its declared range, a text over its `maxLength`, a bad enum, an inverted `year_range` or `year` with `year_range` is a `bad_request` naming the accepted arguments. A tool that cannot answer returns `isError: true` with a `code` (`bad_request`, `not_found`, `not_configured`, `upstream_error`, `too_large`, `internal_error`) and one `next` step. Results are compact JSON cut to 48,000 characters structurally (trailing list items first, added to the `truncated` block a tool already set), so they always parse, and go out as `structuredContent` too, conforming to each tool's `outputSchema`; every success leads with an `applied` echo of the window, limit and mode used. Source ids (`wt-351`, `blog-<microblog id>`, `page-<page id>`, `ep-<n>`) that any tool emits are accepted by `get_source` and `source_neighborhood` as `id`. Every MCP tool response and `corpus_stats` carry `server_version` (`2.5.1+tools.<prompt fingerprint>`), the cache key clients use to detect a stale tools/list; `initialize` declares `tools.listChanged: true`, `resources` and `prompts`. Every tool is annotated `readOnlyHint: true`, with `openWorldHint` true only on `fetch_page`, and every input schema says `additionalProperties: false`. Urls in results go out absolute (`/archive/351/` becomes `https://weekly.thingelstad.com/archive/351/`). Resources (1.6.0): `librarian://wt/{n}`, `librarian://blog/{id}` and `librarian://page/{id}` (2.4.0) are one source as markdown; `librarian://topic/{slug}` is a topic's catalogue card plus its lens timeline; `librarian://year/{yyyy}` is `corpus_stats` for that year; `librarian://on-this-day/{mm-dd}` is `on_this_day`. `resources/list` offers the 12 newest issues and costs nothing; each `resources/read` spends one quota unit and is audited as `resource:<kind>`; an unknown URI is `-32602`, a missing source `-32002`. Prompts: `thinking_over_time`, `year_in_review`, `reading_path`, `this_week_in_past_years`, `research_brief`.
 
-The `/tools` endpoint (2026-09) is the WebMCP page-tool door on the same stream Lambda: house-style JSON actions (`list`, `call`) over `WEB_TOOLS` (the MCP set minus the outbound-network tools), authenticated like the other web surfaces (`resolveSessionToken`: HttpOnly session cookie via the thingy distribution, or Bearer), with its own daily pool (`WEB_TOOLS_DAILY_QUOTA`, default 200) and a 120/hr rate limit. It shares the audited invoker, argument validation and result serializer with `/mcp` (audit rows carry `surface: 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and registered `client_name`; rows live 45 days), and is deliberately unreachable via librarian.thingelstad.com - the web app calls it same-origin as `/api/tools`.
+The `/tools` endpoint (2026-09) is the WebMCP page-tool door on the same stream Lambda: house-style JSON actions (`list`, `call`) over `WEB_TOOLS` (the MCP set minus the outbound-network `fetch_page`), authenticated like the other web surfaces (`resolveSessionToken`: HttpOnly session cookie via the thingy distribution, or Bearer), with its own daily pool (`WEB_TOOLS_DAILY_QUOTA`, default 200) and a 120/hr rate limit. It shares the audited invoker, argument validation and result serializer with `/mcp` (audit rows carry `surface: 'web'` and `server_version`; `/mcp` rows also carry the OAuth `client_id` and registered `client_name`; rows live 45 days), and is deliberately unreachable via librarian.thingelstad.com - the web app calls it same-origin as `/api/tools`.
 
 Deploys are gated by a three-layer eval (`lambda/tests/matcher.test.mjs`, `lambda/scripts/eval-tools.mjs` invariants and known answers against the real corpora, and the committed recall baseline `lambda/eval/baseline.json`); a failing check blocks the deploy. Accept a reviewed recall change with `node scripts/eval-tools.mjs --update-baseline`. Corpus uploads pass the same eval first: CI embeds each rebuilt corpus into `.candidate/` (`upload_*.py --stage`), evals the candidates beside the live copies of the rest (`EVAL_CORPUS_DIR=.candidate EVAL_CORPUS_FALLBACK=s3`), and uploads with `--upload-staged` only if it passes.

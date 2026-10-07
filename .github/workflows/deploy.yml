@@ -338,13 +338,11 @@ jobs:
       - name: Deploy Thingy Lambda
         if: steps.changes.outputs.lambda == 'true'
         run: uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
+        # No credentials: the Lambdas read them from the hand-kept
+        # weekly-thing-librarian-runtime secret.
         env:
-          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
-          LIBRARIAN_RETRIEVE_SECRET: ${{ secrets.LIBRARIAN_RETRIEVE_SECRET }}
           LIBRARIAN_CLOUDFORMATION_ROLE_ARN: arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation
-          LIBRARIAN_SESSION_SECRET: ${{ secrets.LIBRARIAN_SESSION_SECRET }}
-          THINGY_WEB_ORIGIN_TOKEN: ${{ secrets.THINGY_WEB_ORIGIN_TOKEN }}
 
       # The one cross-repo push: the topic graph, to the render surface.
       # Everything else the old site handoff shipped is WT Builder's to send.

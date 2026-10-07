@@ -5,10 +5,9 @@ const { MCP_LAUNCH_TOOLS, MCP_RESULT_MAX_CHARS, WEB_TOOLS, renderToolResultText,
   await import('../dist/shared/mcp.mjs');
 const { DEFAULT_WEB_TOOLS_DAILY_QUOTA, webToolsDailyQuota } = await import('../dist/shared/quota.mjs');
 
-test('the web tool surface is the MCP surface minus the outbound-network tools', () => {
+test('the web tool surface is the MCP surface minus the outbound-network tool', () => {
   assert.ok(!WEB_TOOLS.includes('fetch_page'));
-  assert.ok(!WEB_TOOLS.includes('web_search'));
-  assert.equal(WEB_TOOLS.length, MCP_LAUNCH_TOOLS.length - 2);
+  assert.equal(WEB_TOOLS.length, MCP_LAUNCH_TOOLS.length - 1);
   for (const name of WEB_TOOLS) assert.ok(MCP_LAUNCH_TOOLS.includes(name));
 });
 
