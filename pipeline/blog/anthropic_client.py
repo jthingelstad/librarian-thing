@@ -20,7 +20,7 @@ REPO = Path(__file__).resolve().parents[4]
 MODELS = {
     "sonnet": "claude-sonnet-5",
     "opus": "claude-opus-4-7",
-    "haiku": "claude-haiku-4-5-20251001",
+    "haiku": "claude-haiku-5-5",
 }
 
 # Anthropic API pricing — USD per million tokens. Kept here (rather than
@@ -31,10 +31,21 @@ MODELS = {
 # lookups on historical agent_runs (pre-Sonnet-5) still resolve.
 # NOTE: the claude-sonnet-5 rates mirror 4.6 as a provisional placeholder —
 # confirm against Anthropic's pricing page and correct if they differ.
+# claude-haiku-5-5 (2026-10-08) is priced for prompts up to 100K tokens;
+# past that it is $0.50 in / $2.50 out / $0.05 cache read / $0.625 cache
+# write, which this flat table does not model. It also counts about 30% more
+# tokens than Haiku 4.5 for the same text. The Haiku 4.5 row stays so
+# historical runs still price.
 RATES_USD_PER_MTOK: dict[str, dict[str, float]] = {
     "claude-sonnet-5": {"input": 3.00, "output": 15.00, "cache_read": 0.30, "cache_create": 3.75},
     "claude-sonnet-4-6": {"input": 3.00, "output": 15.00, "cache_read": 0.30, "cache_create": 3.75},
     "claude-opus-4-7": {"input": 15.00, "output": 75.00, "cache_read": 1.50, "cache_create": 18.75},
+    "claude-haiku-5-5": {
+        "input": 0.10,
+        "output": 0.50,
+        "cache_read": 0.01,
+        "cache_create": 0.125,
+    },
     "claude-haiku-4-5-20251001": {
         "input": 1.00,
         "output": 5.00,

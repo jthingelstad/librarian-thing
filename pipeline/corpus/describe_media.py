@@ -24,7 +24,9 @@ or unusual files (a 7 MB TIFF served as image/jpeg, a HEIC) with a bare 400.
 `--retry-errors` fetches each failed image itself, converts anything the API
 won't take (HEIC, WebP, TIFF, longer than 1,568 px, over 5 MB) to JPEG, and
 sends it inline. What still fails gets a precise error: fetch_404,
-fetch_403, fetch_error, decode_error or api_400. Because nothing here sends
+fetch_403, fetch_error, decode_error or api_400. A safety refusal is
+recorded as `refusal`, and a reply whose thinking used the whole budget
+before any text as `max_tokens`. Because nothing here sends
 the API a URL, this mode also takes the images the normal pass never tried:
 http:// ones (fetched over https first) and hosts outside the allowlist.
 Their sidecar key stays the URL exactly as the corpus has it.
@@ -63,7 +65,13 @@ from librarian_core.corpus import build_blog_corpus, build_corpus
 ROOT = Path(__file__).resolve().parents[2]
 SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
 
-MODEL = "claude-haiku-4-5"
+# Haiku 5.5 (2026-10-08). It thinks by default and the thinking counts
+# against max_tokens, so the 30-word answer gets low effort and a budget well
+# above the old 120. It takes no temperature/top_p/top_k. Entries already in
+# the sidecar keep the model they were described with.
+MODEL = "claude-haiku-5-5"
+EFFORT = "low"
+MAX_TOKENS = 2000
 CONCURRENCY = 8
 
 # What the API takes inline without complaint: these formats, at most this
@@ -187,7 +195,8 @@ def inline_source(url: str) -> dict:
 def describe(client: anthropic.Anthropic, url: str, source: dict | None = None) -> dict:
     response = client.messages.create(
         model=MODEL,
-        max_tokens=120,
+        max_tokens=MAX_TOKENS,
+        output_config={"effort": EFFORT},
         messages=[
             {
                 "role": "user",
@@ -198,9 +207,14 @@ def describe(client: anthropic.Anthropic, url: str, source: dict | None = None) 
             }
         ],
     )
+    if response.stop_reason == "refusal":
+        raise ImageFailure("refusal")
+    # Text blocks only: a thinking block comes first.
     text = " ".join(
         block.text.strip() for block in response.content if block.type == "text"
     ).strip()
+    if not text and response.stop_reason == "max_tokens":
+        raise ImageFailure("max_tokens")
     # Defense in depth: strip any markdown heading the model slips in.
     text = re.sub(r"^#+\s*[^\n]*\n+", "", text).replace("\n", " ").strip()
     if not text:

@@ -159,3 +159,54 @@ class CollectUrlsTest(unittest.TestCase):
                 "https://www.thingelstad.com/uploads/2025/still.png",
             ],
         )
+
+
+def _block(kind: str, text: str = "") -> unittest.mock.Mock:
+    block = unittest.mock.Mock(type=kind)
+    if kind == "text":
+        block.text = text
+    else:
+        block.thinking = ""
+    return block
+
+
+def _client(stop_reason: str, *blocks) -> unittest.mock.Mock:
+    client = unittest.mock.Mock()
+    client.messages.create.return_value = unittest.mock.Mock(
+        stop_reason=stop_reason, content=list(blocks)
+    )
+    return client
+
+
+class DescribeTest(unittest.TestCase):
+    """Haiku 5.5: effort set, no sampling params, text read by block type."""
+
+    URL = "https://www.thingelstad.com/uploads/2025/a.jpg"
+
+    def test_request_sets_effort_and_room_for_thinking(self):
+        client = _client("end_turn", _block("text", "A red barn."))
+        describe_media.describe(client, self.URL)
+        kwargs = client.messages.create.call_args.kwargs
+        self.assertEqual(kwargs["model"], "claude-haiku-5-5")
+        self.assertEqual(kwargs["output_config"], {"effort": "low"})
+        self.assertGreater(kwargs["max_tokens"], 120)
+        for key in ("temperature", "top_p", "top_k", "thinking"):
+            self.assertNotIn(key, kwargs)
+
+    def test_text_after_a_thinking_block(self):
+        client = _client("end_turn", _block("thinking"), _block("text", "A red barn in snow."))
+        entry = describe_media.describe(client, self.URL)
+        self.assertEqual(entry["description"], "A red barn in snow.")
+        self.assertEqual(entry["model"], "claude-haiku-5-5")
+
+    def test_refusal_is_recorded_as_its_own_error(self):
+        client = _client("refusal", _block("text", "partial"))
+        with self.assertRaises(describe_media.ImageFailure) as caught:
+            describe_media.describe(client, self.URL)
+        self.assertEqual(caught.exception.code, "refusal")
+
+    def test_thinking_that_uses_the_budget_is_recorded(self):
+        client = _client("max_tokens", _block("thinking"))
+        with self.assertRaises(describe_media.ImageFailure) as caught:
+            describe_media.describe(client, self.URL)
+        self.assertEqual(caught.exception.code, "max_tokens")

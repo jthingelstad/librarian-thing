@@ -89,7 +89,7 @@ Local `.env` values used by upload/build scripts:
 - `LIBRARIAN_API_URL` (written by deploy; the Thingy web repo reads its copy from its own CI variables)
 - `LIBRARIAN_STREAM_URL` (written by deploy; same)
 - `THINGY_DEFAULT_MODEL` (optional; defaults to `us.anthropic.claude-sonnet-4-6`, the US Bedrock inference profile for Claude Sonnet 4.6)
-- `THINGY_FAST_MODEL` (optional; defaults to `us.anthropic.claude-haiku-4-5-20251001-v1:0`, used for small structured/background work)
+- `THINGY_FAST_MODEL` (optional; defaults to `claude-haiku-5-5`, an Anthropic API id, used for small structured/background work)
 - `THINGY_PREMIUM_MODEL` (CloudFormation sets `us.anthropic.claude-opus-4-6-v1` for high-synthesis work; code fallback remains Sonnet)
 - `BEDROCK_EMBEDDING_MODEL` (optional; defaults to `cohere.embed-english-v3`)
 - `BEDROCK_RERANK_MODEL` (optional; defaults to `cohere.rerank-v3-5:0`)

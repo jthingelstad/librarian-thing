@@ -1,6 +1,6 @@
 import { DeleteItemCommand, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { dynamodb, agentModel, fastModel, modelAcceptsSamplingParams } from '../shared/aws-clients.mjs';
-import { CACHE_BREAKPOINT, anthropic, messageText } from '../shared/anthropic.mjs';
+import { dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
+import { CACHE_BREAKPOINT, anthropic, oneShotInferenceConfig, oneShotText } from '../shared/anthropic.mjs';
 import {
   createSubscriber,
   buttondownErrorFields,
@@ -145,10 +145,11 @@ async function generatePremiumThankYou() {
     model,
     system: [{ type: 'text', text: premiumThankYouSystemPrompt(), cache_control: CACHE_BREAKPOINT }],
     messages: [{ role: 'user', content: 'Generate a fresh thank-you under 28 words.' }],
-    max_tokens: 120,
-    ...(modelAcceptsSamplingParams(model) ? { temperature: 0.7 } : {})
+    // One sentence under 28 words: low effort, and 2000 leaves room for the
+    // thinking on top of the old 120-token text budget.
+    ...oneShotInferenceConfig(model, { maxTokens: 120, thinkingMaxTokens: 2000, temperature: 0.7, effort: 'low' })
   });
-  const text = messageText(response).replace(/\s+/g, ' ').trim();
+  const text = oneShotText(response, { call: 'premium_thank_you', model, log: logEvent }).replace(/\s+/g, ' ').trim();
   if (!text || text.length > 220) throw new Error('Model returned invalid premium thank-you');
   logEvent('info', 'premium_thank_you_generated', {
     model,

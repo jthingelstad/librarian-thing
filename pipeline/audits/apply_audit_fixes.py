@@ -45,11 +45,16 @@ AUDIT_PATH = REPO / "notes" / "audits" / "llm-audit.json"
 BODIES_DIR = REPO / "data" / "issues"
 TMP = REPO / "tmp"
 
-HAIKU = "claude-haiku-4-5-20251001"
-HAIKU_INPUT = 1.0  # $/Mt
-HAIKU_OUTPUT = 5.0
-HAIKU_CACHE_READ = 0.10
-HAIKU_CACHE_WRITE = 1.25
+# Haiku 5.5 (2026-10-08): it thinks by default (thinking counts against
+# max_tokens), takes an effort level, and takes no temperature. Prices are
+# the up-to-100K-token tier; longer prompts cost five times as much.
+HAIKU = "claude-haiku-5-5"
+HAIKU_EFFORT = "low"
+HAIKU_MAX_TOKENS = 4000
+HAIKU_INPUT = 0.10  # $/Mt
+HAIKU_OUTPUT = 0.50
+HAIKU_CACHE_READ = 0.01
+HAIKU_CACHE_WRITE = 0.125
 
 sys.stdout.reconfigure(line_buffering=True)
 load_dotenv(REPO / ".env")
@@ -114,7 +119,8 @@ def extract_fix(client: anthropic.Anthropic, issue: int, finding: dict) -> tuple
     try:
         resp = client.messages.parse(
             model=HAIKU,
-            max_tokens=600,
+            max_tokens=HAIKU_MAX_TOKENS,
+            output_config={"effort": HAIKU_EFFORT},
             system=[
                 {"type": "text", "text": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}
             ],
@@ -123,6 +129,8 @@ def extract_fix(client: anthropic.Anthropic, issue: int, finding: dict) -> tuple
         )
     except Exception as exc:  # noqa: BLE001
         return None, {"error": f"{exc.__class__.__name__}: {exc}"}
+    if resp.stop_reason == "refusal" or resp.parsed_output is None:
+        return None, {"error": f"no structured fix (stop_reason {resp.stop_reason})"}
     duration = round(time.monotonic() - t0, 2)
     fresh = (
         resp.usage.input_tokens

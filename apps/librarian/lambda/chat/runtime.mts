@@ -3,21 +3,14 @@ import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import type Anthropic from '@anthropic-ai/sdk';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import {
-  agentModel,
-  dynamodb,
-  embeddingModel,
-  fastModel,
-  modelAcceptsSamplingParams,
-  premiumModel,
-  rerankModel
-} from '../shared/aws-clients.mjs';
+import { agentModel, dynamodb, embeddingModel, fastModel, premiumModel, rerankModel } from '../shared/aws-clients.mjs';
 import {
   CACHE_BREAKPOINT,
   agentInferenceConfig,
   anthropic,
   anthropicTools,
-  messageText,
+  oneShotInferenceConfig,
+  oneShotText,
   streamMessage
 } from '../shared/anthropic.mjs';
 import { sanitizeAnswerProse } from '../shared/answer-sanitizer.mjs';
@@ -401,13 +394,18 @@ function chatDeadlineMs() {
   return Number.isFinite(value) && value > 0 ? value : DEFAULT_CHAT_DEADLINE_MS;
 }
 
+// Preflight runs before every chat turn, so a thinking model gets low effort:
+// a classification with a short JSON answer. 4000 leaves room for the
+// thinking on top of the old 650-token text budget.
 function preflightInferenceConfig() {
-  return {
-    max_tokens: Number(process.env.BEDROCK_PREFLIGHT_MAX_TOKENS || '650'),
-    ...(modelAcceptsSamplingParams(fastModel())
-      ? { temperature: Number(process.env.BEDROCK_PREFLIGHT_TEMPERATURE || '0') }
-      : {})
-  };
+  return oneShotInferenceConfig(fastModel(), {
+    maxTokens: 650,
+    thinkingMaxTokens: 4000,
+    maxTokensEnv: 'BEDROCK_PREFLIGHT_MAX_TOKENS',
+    temperature: 0,
+    temperatureEnv: 'BEDROCK_PREFLIGHT_TEMPERATURE',
+    effort: 'low'
+  });
 }
 
 function preflightUserPrompt(
@@ -451,7 +449,7 @@ async function evaluatePromptPreflight(
       messages: [{ role: 'user', content: preflightUserPrompt(question, scope, history, context) }],
       ...preflightInferenceConfig()
     });
-    const text = messageText(response);
+    const text = oneShotText(response, { call: 'preflight', model: fastModel(), log: logEvent });
     const parsed = parsePreflightJson(text);
     const preflight = normalizePreflightDecision(parsed || {}, question);
     // Model usage rides along so preflight-direct turns can persist real

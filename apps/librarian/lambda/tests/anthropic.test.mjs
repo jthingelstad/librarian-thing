@@ -2,12 +2,20 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   PROGRESS_UPDATES_BETA,
+  UnusableModelResponseError,
   agentInferenceConfig,
   anthropicTools,
   messageText,
+  oneShotInferenceConfig,
+  oneShotText,
   streamMessage
 } from '../dist/shared/anthropic.mjs';
-import { modelAcceptsSamplingParams, modelWritesProgressUpdates } from '../dist/shared/aws-clients.mjs';
+import {
+  FAST_THINGY_MODEL,
+  fastModel,
+  modelAcceptsSamplingParams,
+  modelWritesProgressUpdates
+} from '../dist/shared/aws-clients.mjs';
 import { availableToolSpecs } from '../dist/shared/archive-tools.mjs';
 
 test('tool specs bind as Anthropic tools with the breakpoint where the cachePoint stood', () => {
@@ -211,4 +219,134 @@ test('the client refuses to start without an API key', async () => {
   } finally {
     if (saved !== undefined) process.env.ANTHROPIC_API_KEY = saved;
   }
+});
+
+test('sampling params go only to the older models that take them', () => {
+  for (const model of [
+    'claude-haiku-4-5',
+    'claude-haiku-4-5-20251001',
+    'us.anthropic.claude-haiku-4-5-20251001-v1:0',
+    'claude-sonnet-4-6',
+    'claude-sonnet-4-5-20250929',
+    'claude-sonnet-4-20250514',
+    'anthropic.claude-sonnet-4-20250514-v1:0',
+    'claude-opus-4-6',
+    'claude-opus-4-1-20250805',
+    'claude-3-5-haiku-20241022'
+  ]) {
+    assert.equal(modelAcceptsSamplingParams(model), true, model);
+  }
+  // Haiku 5.5 is a 400 on any temperature/top_p/top_k, and so is an id the
+  // allowlist has never seen: a new model must not get a temperature.
+  for (const model of [
+    'claude-haiku-5-5',
+    'claude-sonnet-5',
+    'claude-sonnet-5-5',
+    'claude-opus-5-5',
+    'claude-opus-4-7',
+    'claude-opus-4-8',
+    'claude-fable-5-1',
+    'claude-haiku-6',
+    'claude-sonnet-4-9',
+    ''
+  ]) {
+    assert.equal(modelAcceptsSamplingParams(model), false, model);
+  }
+});
+
+const ONE_SHOT = {
+  maxTokens: 650,
+  thinkingMaxTokens: 4000,
+  maxTokensEnv: 'TEST_ONE_SHOT_MAX_TOKENS',
+  temperature: 0,
+  temperatureEnv: 'TEST_ONE_SHOT_TEMPERATURE',
+  effort: 'low'
+};
+
+test('the fast model is Haiku 5.5 and its one-shot calls carry effort and no sampling params', () => {
+  const saved = process.env.THINGY_FAST_MODEL;
+  delete process.env.THINGY_FAST_MODEL;
+  try {
+    assert.equal(FAST_THINGY_MODEL, 'claude-haiku-5-5');
+    assert.equal(fastModel(), 'claude-haiku-5-5');
+    const config = oneShotInferenceConfig(fastModel(), ONE_SHOT);
+    assert.deepEqual(config, { max_tokens: 4000, output_config: { effort: 'low' } });
+    for (const key of ['temperature', 'top_p', 'top_k', 'thinking']) assert.equal(key in config, false, key);
+  } finally {
+    if (saved !== undefined) process.env.THINGY_FAST_MODEL = saved;
+  }
+});
+
+test('one-shot settings keep the old shape on Haiku 4.5 and honor the env overrides', () => {
+  assert.deepEqual(oneShotInferenceConfig('claude-haiku-4-5', ONE_SHOT), { max_tokens: 650, temperature: 0 });
+  process.env.TEST_ONE_SHOT_MAX_TOKENS = '9000';
+  process.env.TEST_ONE_SHOT_TEMPERATURE = '0.3';
+  try {
+    assert.deepEqual(oneShotInferenceConfig('claude-haiku-4-5', ONE_SHOT), { max_tokens: 9000, temperature: 0.3 });
+    assert.deepEqual(oneShotInferenceConfig('claude-haiku-5-5', ONE_SHOT), {
+      max_tokens: 9000,
+      output_config: { effort: 'low' }
+    });
+  } finally {
+    delete process.env.TEST_ONE_SHOT_MAX_TOKENS;
+    delete process.env.TEST_ONE_SHOT_TEMPERATURE;
+  }
+  assert.deepEqual(oneShotInferenceConfig('claude-haiku-5-5', { ...ONE_SHOT, effort: 'medium' }).output_config, {
+    effort: 'medium'
+  });
+});
+
+test('one-shot text is read from text blocks when a thinking block comes first', () => {
+  const response = {
+    content: [
+      { type: 'thinking', thinking: '', signature: 'sig' },
+      { type: 'text', text: '{"action":"pass"}' }
+    ],
+    stop_reason: 'end_turn'
+  };
+  assert.equal(oneShotText(response, { call: 'preflight', model: 'claude-haiku-5-5' }), '{"action":"pass"}');
+  // Truncated text is still text: the caller's parser decides what it is worth.
+  assert.equal(
+    oneShotText(
+      {
+        content: [
+          { type: 'thinking', thinking: '' },
+          { type: 'text', text: '{"act' }
+        ],
+        stop_reason: 'max_tokens'
+      },
+      { call: 'preflight', model: 'claude-haiku-5-5' }
+    ),
+    '{"act'
+  );
+});
+
+test('a refusal or a max_tokens stop with no text throws onto the caller failure path, with a log line', () => {
+  const logged = [];
+  const log = (level, message, fields) => logged.push({ level, message, ...fields });
+  const context = { call: 'eval_review', model: 'claude-haiku-5-5', log };
+  assert.throws(
+    () =>
+      oneShotText(
+        {
+          content: [{ type: 'thinking', thinking: '' }],
+          stop_reason: 'max_tokens',
+          usage: { output_tokens: 8000 }
+        },
+        context
+      ),
+    (error) => error instanceof UnusableModelResponseError && error.stopReason === 'max_tokens'
+  );
+  assert.throws(
+    () => oneShotText({ content: [{ type: 'text', text: 'partial' }], stop_reason: 'refusal' }, context),
+    (error) => error instanceof UnusableModelResponseError && error.stopReason === 'refusal'
+  );
+  assert.deepEqual(
+    logged.map(({ level, message, call, stop_reason }) => ({ level, message, call, stop_reason })),
+    [
+      { level: 'warning', message: 'model_response_unusable', call: 'eval_review', stop_reason: 'max_tokens' },
+      { level: 'warning', message: 'model_response_unusable', call: 'eval_review', stop_reason: 'refusal' }
+    ]
+  );
+  assert.equal(logged[0].output_tokens, 8000);
 });

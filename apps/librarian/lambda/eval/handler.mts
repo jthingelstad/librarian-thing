@@ -1,8 +1,8 @@
 import { GetItemCommand, QueryCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import type { AttributeValue, ScanCommandOutput } from '@aws-sdk/client-dynamodb';
 import type { DynamoDBStreamEvent } from 'aws-lambda';
-import { dynamodb, fastModel, modelAcceptsSamplingParams } from '../shared/aws-clients.mjs';
-import { CACHE_BREAKPOINT, anthropic, messageText } from '../shared/anthropic.mjs';
+import { dynamodb, fastModel } from '../shared/aws-clients.mjs';
+import { CACHE_BREAKPOINT, anthropic, oneShotInferenceConfig, oneShotText } from '../shared/anthropic.mjs';
 import { loadRuntimeSecrets } from '../shared/runtime-secrets.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { turnForPrompt } from '../shared/eval-transcript.mjs';
@@ -163,10 +163,19 @@ async function evaluateConversation({ conversation, turns }: { conversation: Con
         ].join('\n')
       }
     ],
-    max_tokens: Number(process.env.BEDROCK_EVAL_MAX_TOKENS || '1100'),
-    ...(modelAcceptsSamplingParams(model) ? { temperature: Number(process.env.BEDROCK_EVAL_TEMPERATURE || '0.1') } : {})
+    // The reviewer judges a whole transcript, so it keeps medium effort (the
+    // default); 8000 leaves room for that thinking on top of the old
+    // 1100-token budget for the JSON verdict.
+    ...oneShotInferenceConfig(model, {
+      maxTokens: 1100,
+      thinkingMaxTokens: 8000,
+      maxTokensEnv: 'BEDROCK_EVAL_MAX_TOKENS',
+      temperature: 0.1,
+      temperatureEnv: 'BEDROCK_EVAL_TEMPERATURE',
+      effort: 'medium'
+    })
   });
-  const parsed = parseJsonPayload(messageText(response));
+  const parsed = parseJsonPayload(oneShotText(response, { call: 'eval_review', model, log: logEvent }));
   const normalized = normalizeEvalPayload(parsed || {});
   return {
     ...normalized,
