@@ -80,7 +80,7 @@ The CloudFormation stack uses the scoped `weekly-thing-librarian-cloudformation`
 
 - **Embed model** (`cohere.embed-english-v3`): **us-east-1**.
 - **Rerank model** (`cohere.rerank-v3-5:0`): **us-west-2** — only region with the rerank model. The Lambda's `BedrockAgentRuntimeClient` is constructed with explicit `region: 'us-west-2'` override.
-- **Claude models** run on the Anthropic API, not Bedrock (2026-10): `THINGY_DEFAULT_MODEL` `claude-sonnet-5-5`, `THINGY_FAST_MODEL` `claude-haiku-4-5`, `THINGY_PREMIUM_MODEL` `claude-opus-5-5`, set in the stack. See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) "Model gotchas".
+- **Claude models** run on the Anthropic API, not Bedrock (2026-10): `THINGY_DEFAULT_MODEL` `claude-sonnet-5-5`, `THINGY_FAST_MODEL` `claude-haiku-5-5`, `THINGY_PREMIUM_MODEL` `claude-opus-5-5`, set in the stack. See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) "Model gotchas".
 
 Don't move the rerank region.
 

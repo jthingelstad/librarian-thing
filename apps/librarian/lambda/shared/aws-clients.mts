@@ -14,7 +14,7 @@ export const s3 = new S3Client({});
 // Thingy's models are Anthropic API ids (shared/anthropic.mts); only the
 // Cohere embed and rerank models below still run on Bedrock.
 export const DEFAULT_THINGY_MODEL = 'claude-sonnet-5-5';
-export const FAST_THINGY_MODEL = 'claude-haiku-4-5';
+export const FAST_THINGY_MODEL = 'claude-haiku-5-5';
 // Supporters and the owner get the Opus tier (Jamie's call, 2026-09-02).
 // THINGY_ADVANCED_MODEL, the old third slot, was a Dispatch-era artifact
 // that no code path ever invoked; premium replaces it with a real route.
@@ -36,11 +36,16 @@ export function agentModel() {
   return thingyDefaultModel();
 }
 
-// The Claude 5 family (and Opus 4.7/4.8) rejects sampling parameters -
-// sending temperature to those models is a 400, not a no-op. Gate every
+// Sampling parameters (temperature, top_p, top_k) are an allowlist of the
+// older generations that still take them: Claude 3, Haiku 4.5, and Sonnet and
+// Opus 4 through 4.6. The Claude 5 family (Haiku 5.5 included), Opus 4.7/4.8
+// and Fable return a 400 for them, and an id not named here is treated the
+// same way, so a new model never gets a temperature by accident. Gate every
 // temperature on this.
+const SAMPLING_MODEL_RE = /claude-3|haiku-4-5|(?:sonnet|opus)-4(?:-[0-6])?(?:-\d{8}|-v\d|$)/;
+
 export function modelAcceptsSamplingParams(modelId: string) {
-  return !/(sonnet-5|opus-5|opus-4-7|opus-4-8|fable)/.test(modelId);
+  return SAMPLING_MODEL_RE.test(String(modelId || ''));
 }
 
 // Sonnet 5.5, Opus 5.5 and Fable 5.1 always think, take an effort level, and

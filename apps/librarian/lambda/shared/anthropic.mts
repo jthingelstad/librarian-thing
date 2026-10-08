@@ -94,6 +94,76 @@ export function agentInferenceConfig(modelId: string) {
   };
 }
 
+export type Effort = (typeof AGENT_EFFORTS)[number];
+
+export interface OneShotOptions {
+  // The text-sized budget the older models were tuned to.
+  maxTokens: number;
+  // The budget for models that think first. Thinking tokens count against
+  // max_tokens, so the old text budget could end the call on max_tokens
+  // after a thinking block and before any text.
+  thinkingMaxTokens: number;
+  // Env var that overrides the budget for either shape.
+  maxTokensEnv?: string;
+  temperature: number;
+  temperatureEnv?: string;
+  effort: Effort;
+}
+
+// Request settings for a one-shot call (preflight, welcome set, premium
+// thank-you, eval reviewer). Models on the sampling allowlist keep the old
+// shape: a text-sized budget and a temperature. Every other model (Haiku 5.5
+// and on) thinks by default, returns a 400 for sampling params, and takes an
+// effort level, so it gets an explicit effort and a budget with room for the
+// thinking. Its thinking stays on the default (adaptive).
+export function oneShotInferenceConfig(modelId: string, options: OneShotOptions) {
+  const override = options.maxTokensEnv ? Number(process.env[options.maxTokensEnv] || '') : 0;
+  if (modelAcceptsSamplingParams(modelId)) {
+    const temperature = options.temperatureEnv
+      ? Number(process.env[options.temperatureEnv] || String(options.temperature))
+      : options.temperature;
+    return { max_tokens: override || options.maxTokens, temperature };
+  }
+  return { max_tokens: override || options.thinkingMaxTokens, output_config: { effort: options.effort } };
+}
+
+// A one-shot response with nothing usable in it: a safety refusal, or a
+// max_tokens stop that thinking used up before any text. Thrown so each
+// caller's existing failure path takes it (preflight passes through, the
+// thank-you falls back to its fixed line, no welcome set is stored, the eval
+// counts a failure and leaves the row for the next pass).
+export class UnusableModelResponseError extends Error {
+  stopReason: string;
+  constructor(stopReason: string) {
+    super(`Model response unusable (stop_reason ${stopReason})`);
+    this.name = 'UnusableModelResponseError';
+    this.stopReason = stopReason;
+  }
+}
+
+type LogFn = (level: string, message: string, fields?: Record<string, unknown>) => void;
+
+// The text of a one-shot response, read from text blocks only (a thinking
+// block may come first). Throws UnusableModelResponseError, after a log line
+// naming the call, on a refusal or a max_tokens stop with no text.
+export function oneShotText(
+  response: { content?: readonly unknown[]; stop_reason?: string | null; usage?: { output_tokens?: number } },
+  context: { call: string; model: string; log?: LogFn }
+) {
+  const text = messageText(response);
+  const stopReason = String(response.stop_reason || '');
+  if (stopReason === 'refusal' || (stopReason === 'max_tokens' && !text)) {
+    context.log?.('warning', 'model_response_unusable', {
+      call: context.call,
+      model: context.model,
+      stop_reason: stopReason,
+      output_tokens: response.usage?.output_tokens
+    });
+    throw new UnusableModelResponseError(stopReason);
+  }
+  return text;
+}
+
 export interface StreamedTurn {
   message: Anthropic.Beta.BetaMessage;
   // Text blocks only: on the last turn, the answer.

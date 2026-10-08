@@ -2,8 +2,8 @@
 // newly loaded chat. This module once also built Archive Sparks, Thingy
 // Trails, and Curiosity Maps; those surfaces were retired 2026-08-29 in the
 // streamline to a pure chat experience (see git history).
-import { anthropic, messageText } from './anthropic.mjs';
-import { fastModel, modelAcceptsSamplingParams } from './aws-clients.mjs';
+import { anthropic, oneShotInferenceConfig, oneShotText } from './anthropic.mjs';
+import { fastModel } from './aws-clients.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
 import { normalizeScope } from './scope.mjs';
 
@@ -47,14 +47,17 @@ function logEvent(level: string, message: string, fields: Record<string, unknown
   sharedLogEvent(level, message, fields, SERVICE_NAME);
 }
 
+// Two short JSON lines of greetings and suggestions: low effort, and 4000
+// leaves room for the thinking on top of the old 450-token text budget.
 function welcomeInferenceConfig() {
-  return {
-    max_tokens: Number(process.env.BEDROCK_WELCOME_MAX_TOKENS || '450'),
-    // The 5-family rejects sampling params with a 400.
-    ...(modelAcceptsSamplingParams(fastModel())
-      ? { temperature: Number(process.env.BEDROCK_WELCOME_TEMPERATURE || '0.7') }
-      : {})
-  };
+  return oneShotInferenceConfig(fastModel(), {
+    maxTokens: 450,
+    thinkingMaxTokens: 4000,
+    maxTokensEnv: 'BEDROCK_WELCOME_MAX_TOKENS',
+    temperature: 0.7,
+    temperatureEnv: 'BEDROCK_WELCOME_TEMPERATURE',
+    effort: 'low'
+  });
 }
 
 function groundingLines(grounding: GroundingPassage[] = []) {
@@ -151,7 +154,7 @@ export async function generateWelcomeSet({ conversations = [], scope, grounding 
     messages: [{ role: 'user', content: welcomeSetPrompt({ conversations, scope, grounding }) }],
     ...welcomeInferenceConfig()
   });
-  const set = parseWelcomeSetOutput(messageText(response));
+  const set = parseWelcomeSetOutput(oneShotText(response, { call: 'welcome_set', model: fastModel(), log: logEvent }));
   logEvent('info', 'welcome_set_generated', {
     model: fastModel(),
     conversation_count: (conversations || []).length,

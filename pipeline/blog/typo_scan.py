@@ -169,16 +169,21 @@ def scan_typos(body: str, *, model: str, client: Any) -> dict[str, Any]:
     """One LLM call: simple typos as strict JSON. On parse failure records the raw
     text rather than raising, so one bad post can't abort the run. Returns the
     findings dict plus token usage for the spend total."""
+    # Haiku 5.5 thinks by default and the thinking counts against max_tokens,
+    # so the budget leaves room for it on top of the short JSON answer.
     resp = client.messages.create(
         model=anthropic_client.MODELS[model],
-        max_tokens=1024,
+        max_tokens=anthropic_client.MAX_OUTPUT_TOKENS,
         messages=[{"role": "user", "content": _LLM_PROMPT.format(body=body)}],
     )
+    # Text blocks only: a thinking block may come first.
     text = "".join(b.text for b in resp.content if b.type == "text")
     usage = {
         "input_tokens": getattr(resp.usage, "input_tokens", 0) or 0,
         "output_tokens": getattr(resp.usage, "output_tokens", 0) or 0,
     }
+    if resp.stop_reason == "refusal":
+        return {"typos": [], "parse_error": "refusal", "usage": usage}
     try:
         parsed = _parse_json_object(text)
         return {"typos": parsed.get("typos") or [], "usage": usage}

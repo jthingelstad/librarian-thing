@@ -256,11 +256,11 @@ Resources:
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
           THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
-          # Anthropic API model ids (2026-10). The models are the same 4.6
-          # generation Bedrock served; moving to the 5 family is its own
-          # change (Opus 5.5 always thinks and needs its effort set).
+          # Anthropic API model ids (2026-10), all on the 5 family: they
+          # think, take an effort level, and refuse sampling params. Haiku
+          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
-          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
       Handler: auth/handler.handler
       MemorySize: 1024
@@ -287,11 +287,11 @@ Resources:
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
-          # Anthropic API model ids (2026-10). The models are the same 4.6
-          # generation Bedrock served; moving to the 5 family is its own
-          # change (Opus 5.5 always thinks and needs its effort set).
+          # Anthropic API model ids (2026-10), all on the 5 family: they
+          # think, take an effort level, and refuse sampling params. Haiku
+          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
-          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
@@ -325,11 +325,11 @@ Resources:
           LOG_LEVEL: !Ref LogLevel
           # The reviewer's Anthropic API key comes from the runtime secret.
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
-          # Anthropic API model ids (2026-10). The models are the same 4.6
-          # generation Bedrock served; moving to the 5 family is its own
-          # change (Opus 5.5 always thinks and needs its effort set).
+          # Anthropic API model ids (2026-10), all on the 5 family: they
+          # think, take an effort level, and refuse sampling params. Haiku
+          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
-          THINGY_FAST_MODEL: "claude-haiku-4-5"
+          THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
       Handler: eval/handler.handler
       MemorySize: 1024
