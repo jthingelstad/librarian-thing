@@ -1,0 +1,165 @@
+{
+  "notable_links": [
+    {
+      "text": "Introducing Claude Haiku 5.5 Anthropic",
+      "url": "https://www.anthropic.com/claude-haiku-5-5",
+      "domain": "www.anthropic.com",
+      "heading_context": "[Introducing Claude Haiku 5.5 Anthropic](https://www.anthropic.com/claude-haiku-5-5)",
+      "section": "Notable"
+    },
+    {
+      "text": "We’re going to need default hard budget caps on pretty much everything",
+      "url": "https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/",
+      "domain": "simonwillison.net",
+      "heading_context": "[We’re going to need default hard budget caps on pretty much everything](https://simonwillison.net/2026/Oct/3/default-hard-budget-caps/)",
+      "section": "Notable"
+    },
+    {
+      "text": "Introducing zkAPI: private usage credits for any API",
+      "url": "https://blog.ethereum.org/en/2026/10/01/introducing-zkapi",
+      "domain": "blog.ethereum.org",
+      "heading_context": "[Introducing zkAPI: private usage credits for any API](https://blog.ethereum.org/en/2026/10/01/introducing-zkapi)",
+      "section": "Notable"
+    },
+    {
+      "text": "On the Rumored M8 Ultra AI Servers",
+      "url": "https://www.macsparky.com/blog/2026/10/on-the-rumored-m8-ultra-ai-servers/",
+      "domain": "www.macsparky.com",
+      "heading_context": "[On the Rumored M8 Ultra AI Servers](https://www.macsparky.com/blog/2026/10/on-the-rumored-m8-ultra-ai-servers/)",
+      "section": "Notable"
+    },
+    {
+      "text": "Tufte's Razor · An interactive guide to the data-ink ratio",
+      "url": "https://tuftesrazor.scienceux.org/",
+      "domain": "tuftesrazor.scienceux.org",
+      "heading_context": "[Tufte's Razor · An interactive guide to the data-ink ratio](https://tuftesrazor.scienceux.org/)",
+      "section": "Notable"
+    }
+  ],
+  "briefly_links": [
+    {
+      "text": "AI is changing developer work. Here are three skills to strengthen.",
+      "url": "https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/",
+      "domain": "github.blog",
+      "heading_context": "[AI is changing developer work. Here are three skills to strengthen.](https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "If You Understand These 5 Platform Engineering Terms, You’re Ahead of 90%",
+      "url": "https://medium.com/@f8010/if-you-understand-these-5-platform-engineering-terms-youre-ahead-of-90-28804c69cb33",
+      "domain": "medium.com",
+      "heading_context": "[If You Understand These 5 Platform Engineering Terms, You’re Ahead of 90%](https://medium.com/@f8010/if-you-understand-these-5-platform-engineering-terms-youre-ahead-of-90-28804c69cb33)",
+      "section": "Briefly"
+    },
+    {
+      "text": "We want you to build the next Git platform on Cloudflare",
+      "url": "https://blog.cloudflare.com/next-git-platform-on-cloudflare/",
+      "domain": "blog.cloudflare.com",
+      "heading_context": "[We want you to build the next Git platform on Cloudflare](https://blog.cloudflare.com/next-git-platform-on-cloudflare/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "“you said no mcp!” | earendil",
+      "url": "https://earendil.com/posts/you-said-no-mcp/",
+      "domain": "earendil.com",
+      "heading_context": "[“you said no mcp!” | earendil](https://earendil.com/posts/you-said-no-mcp/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Pi 1.0 | Earendil",
+      "url": "https://earendil.com/posts/pi-1-0/",
+      "domain": "earendil.com",
+      "heading_context": "[Pi 1.0 | Earendil](https://earendil.com/posts/pi-1-0/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Jev and DuckDB: Plain-English Conditions in SQL",
+      "url": "https://duckdb.org/2026/09/29/jev",
+      "domain": "duckdb.org",
+      "heading_context": "[Jev and DuckDB: Plain-English Conditions in SQL](https://duckdb.org/2026/09/29/jev)",
+      "section": "Briefly"
+    },
+    {
+      "text": "OpenAI silences familiar voices",
+      "url": "https://sixcolors.com/post/2026/10/openai-silences-familiar-voices/",
+      "domain": "sixcolors.com",
+      "heading_context": "[OpenAI silences familiar voices](https://sixcolors.com/post/2026/10/openai-silences-familiar-voices/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "The future of independence is interdependence",
+      "url": "https://onlys.ky/independence-is-interdependence/",
+      "domain": "onlys.ky",
+      "heading_context": "[The future of independence is interdependence](https://onlys.ky/independence-is-interdependence/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "The Death and Life of the Average Memecoin",
+      "url": "https://coinmetrics.substack.com/p/state-of-the-network-issue-384",
+      "domain": "coinmetrics.substack.com",
+      "heading_context": "[The Death and Life of the Average Memecoin](https://coinmetrics.substack.com/p/state-of-the-network-issue-384)",
+      "section": "Briefly"
+    },
+    {
+      "text": "How to set up SPF, DKIM, and DMARC for your sending domain",
+      "url": "https://mailfully.com/blog/spf-dkim-dmarc-setup",
+      "domain": "mailfully.com",
+      "heading_context": "[How to set up SPF, DKIM, and DMARC for your sending domain](https://mailfully.com/blog/spf-dkim-dmarc-setup)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Birchfeed",
+      "url": "https://birchfeed.app/",
+      "domain": "birchfeed.app",
+      "heading_context": "[Birchfeed](https://birchfeed.app/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Anti-Patterns in Software Blogging · Refactoring English",
+      "url": "https://refactoringenglish.com/blog/anti-patterns-software-blogging/",
+      "domain": "refactoringenglish.com",
+      "heading_context": "[Anti-Patterns in Software Blogging · Refactoring English](https://refactoringenglish.com/blog/anti-patterns-software-blogging/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "BIGWORDS.PAGE: Turn any screen into a sign",
+      "url": "https://bigwords.page/",
+      "domain": "bigwords.page",
+      "heading_context": "[BIGWORDS.PAGE: Turn any screen into a sign](https://bigwords.page/)",
+      "section": "Briefly"
+    },
+    {
+      "text": "Mandelnaut — Making Fractal Wallpapers",
+      "url": "https://techmatt.github.io/fractals/explorer/?v=4&m=tia&x=-0.45967408885417793&y=0.5943812187724744&w=0.05&p=commons_Kalles_Fraktaler_adventurous-forest_00024_1.17e222&panel=atlas",
+      "domain": "techmatt.github.io",
+      "heading_context": "[Mandelnaut — Making Fractal Wallpapers](https://techmatt.github.io/fractals/explorer/?v=4&m=tia&x=-0.45967408885417793&y=0.5943812187724744&w=0.05&p=commons_Kalles_Fraktaler_adventurous-forest_00024_1.17e222&panel=atlas)",
+      "section": "Briefly"
+    }
+  ],
+  "domains": [
+    "bigwords.page",
+    "birchfeed.app",
+    "blog.cloudflare.com",
+    "blog.ethereum.org",
+    "brew.sh",
+    "coinmetrics.substack.com",
+    "duckdb.org",
+    "earendil.com",
+    "github.blog",
+    "github.com",
+    "mailfully.com",
+    "medium.com",
+    "notes.yourversionnumber.com",
+    "onlys.ky",
+    "playactivate.com",
+    "refactoringenglish.com",
+    "simonwillison.net",
+    "sixcolors.com",
+    "techmatt.github.io",
+    "tuftesrazor.scienceux.org",
+    "www.anthropic.com",
+    "www.brkthrough.com",
+    "www.macsparky.com"
+  ],
+  "word_count": 2746
+}
