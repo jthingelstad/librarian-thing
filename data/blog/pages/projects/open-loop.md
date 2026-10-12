@@ -2,7 +2,7 @@
 page_id: 57850
 url: "https://www.thingelstad.com/projects/open-loop/"
 title: "Open Loop"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-07T19:00:53+00:00"
 post_kind: page
 categories: []
 ---
@@ -18,3 +18,9 @@ In 2012 [Garrick van Buren](https://garrickvanburen.com) and I did a 9 episode p
 - [Open Loop #6 - Loppet 2013](/projects/open-loop/6-loppet-2013)
 - [Open Loop #7 - Turtle Turtle Turtle](/projects/open-loop/7-turtle-turtle-turtle)
 - [Open Loop #8 - Don't Eat the Cupcake](/projects/open-loop/8-dont-eat-the-cupcake)
+
+### Listen in your podcast player
+
+The show is finished and no new episodes are coming, but all nine are available as a podcast feed, with speaker-labelled transcripts. Add this feed URL to your podcast player:
+
+<https://files.thingelstad.com/projects/openloop/podcast.xml>

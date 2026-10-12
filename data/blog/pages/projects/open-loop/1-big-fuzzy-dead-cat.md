@@ -2,7 +2,7 @@
 page_id: 57866
 url: "https://www.thingelstad.com/projects/open-loop/1-big-fuzzy-dead-cat/"
 title: "Open Loop #1 - Big Fuzzy Dead Cat"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-07T19:00:13+00:00"
 post_kind: page
 categories: []
 ---
@@ -28,506 +28,912 @@ categories: []
 
 ### Transcript
 
-_Here is an AI generated transcript of this episode. This has not been edited or checked for accuracy, yet._
+_Speaker-labelled transcript, machine transcribed and cleaned up with AI in October 2026. It may still have mistakes. Also as [WebVTT](https://files.thingelstad.com/projects/openloop/transcripts/openloop-1.vtt) and [JSON](https://files.thingelstad.com/projects/openloop/transcripts/openloop-1.json)._
 
-Sometimes um, sometimes software developers decide that that they don't want to go right to one They do like 0.1.
+**Garrick:** Sometimes software developers decide that they don't wanna go right to one.
 
-Yeah alpha And pre pre alpha and ask for your email address and stuff like that like them Like them like me.
+**Jamie:** They do like zero point one.
 
-I don't have a product yet I'm trying to I've got an I've got a landing page and I'm collecting email addresses This is open loop one Welcome back to the second episode with Garrick Jamie.
+**Garrick:** Yeah.
 
-Hi, Jamie So we recorded the first open loop over Skype and a lot of people didn't even know that because we have amazing equipment but this open loop we're recording in person and It's a little weird.
+**Jamie:** Alpha.
 
-Jamie asked me to go to the other side of the room.
+**Garrick:** And pre, pre-alpha. And ask for your email address and stuff like that.
 
-So Garrett's relocating It's probably good though, I know Mike's don't pick up each other Yeah, really good because we don't have like, you know, we don't have like an audio booth.
+**Jamie:** Like them.
 
-We're not sitting in a radio station All these are things that will probably do for the next episode, right?
+**Garrick:** Like them. But like me, I don't have the product yet. I'm trying to — I've got a landing page, and I'm collecting email addresses, like me.
 
-We have to get on NPR Yeah, they need it.
+**Jamie:** This is Open Loop one. Welcome back to this second episode with Garrick and
 
-They need a show like this.
+**Garrick:** Hi.
 
-Absolutely.
+**Jamie:** Jamie.
 
-We get great feedback from people who listen to open loop zero They thought that it was quite fun So thanks for joining again.
+**Garrick:** Hi, Jamie.
 
-I know I listen three or four times.
+**Jamie:** So we recorded the first Open Loop over Skype, and a lot of people didn't even know that because we have amazing equipment. But this Open Loop we're recording in person, and it's a little weird.
 
-I listened four times And I know somebody else who listen twice and I thought it was a little weird that I listed multiple times But I'm assured that that's just normal Nothing wrong with that and some people ask us why we started with zero.
+**Garrick:** And Jamie asked me to go to the other side of the room.
 
-I thought we did address that though Like we said in the last episode I like to start at zero because shakes off any sort of pretense about one most computer languages in array start at zero Lots, right?
+**Jamie:** So Garrick's relocating. It's probably good though that our mics don't pick up each other, you know,
 
-Yeah, which everybody ridicules ones to start at one.
+**Garrick:** Yeah, it's probably good.
 
-Yeah, I think PHP starts at one No, it doesn't You know for as much as I I Dislike PHP.
+**Jamie:** because we don't have like, you know, we don't have like an audio booth, we're not sitting in a radio station. All of these are things that we'll probably do for the next episode, but yeah.
 
-I'm still in it way too much.
+**Garrick:** Right, we have to get on NPR. They need a show like this.
 
-It's the people's language.
+**Jamie:** Absolutely. We get great feedback from people who listen to Open Loop Zero. They thought that it was quite fun. So thanks for joining again.
 
-Garak.
+**Garrick:** I know I listened three or four times.
 
-Don't ever forget that People's hypertext protocol.
+**Jamie:** I listened four times and I know somebody else who listened twice. And I thought it was a little weird that I listened multiple times, but I'm assured that that's just normal. Nothing wrong with that. And some people ask us why we start with zero. I thought we did address that though.
 
-Is that what it's that's what it's that's what it's for.
+**Garrick:** Like we said in the last episode, I like to start at zero because it shakes off any sort of pretence about one. Most computer languages, an array starts at zero. Lots, yeah,
 
-It powers the people's web You know, that's the thing.
+**Jamie:** Oh, right. And everybody ridicules the ones that start at one.
 
-I say PHP is the people's language.
+**Garrick:** Yeah.
 
-I didn't know that there's more I would suggest that more websites are running behind PHP than any other language on the Internet and certainly more open source websites are running on PHP than anything else and Monuments like Wikipedia run on PHP and WordPress which powers something like 10% of the web runs on PHP So you add all that up and you get a lot of PHP to prove your point I downloaded the the latest version of our cloud which is a open source competitor to Dropbox But this one sits on a server someplace and you Connect to it and it's got calendaring and mail and all sorts of nice stuff and it seems like a really nice Open source group where crack the thing open PHP all PHP PHP in my school and I cursed and I thought well, this is what we got So we talk about the beer suck about the beer I made this beer this is tell me about it this is my Chase seriously Let's go sour rye it's probably 75% pale ale and 25% rye and it's 100% bread of my seas Was that that's the that's the sour funky wet horse smell you have And just a little bit of one line that hops to to soften that I thought that was my dog.
+**Jamie:** I think PHP starts at one. No, it doesn't. I'm not sure.
 
-No, it's actually the beer It's got nice bubbles.
+**Garrick:** I don't know. You know, for as much as I dislike PHP, I'm still in it way too much.
 
-So what do you think about these sours?
+**Jamie:** That's the people's language, Garrick. Don't ever forget that.
 
-They seem like you know, it seems like it seems like all of a sudden like a year ago.
+**Garrick:** People's hypertext protocol, is that what it's
 
-So early started being in a sour Sours are they hipster?
+**Jamie:** That's what it's for. It powers the people's web.
 
-I think they're they're a direct counter to the the trend of super happy Oh I'm a huge fan of super happy and here's a counter.
+**Garrick:** Ah.
 
-Yeah.
+**Jamie:** You know, that's a thing I say, PHP is
 
-Yeah, because you can't do happy with the sour the Chemicals in the super happy actually prevent the the sour yeast from from fermenting really?
+**Garrick:** Yep.
 
-Yeah It's just incompatible incompatible And ideally you put like super old aged hops in the sour just to give it a little crispness.
+**Jamie:** the people's language.
 
-I Like I like the crispness.
+**Garrick:** I didn't know that.
 
-I've had another sour that you made and I like the crispness That's a big fan of that and I think that sours go really well on a hot day Yes, that's what I was and you're right if this was chilled a little bit more might be very refreshing today.
+**Jamie:** There is more — I would suggest that more websites are running behind PHP than any other language on the internet, and certainly more open source websites are running on PHP than anything else. And monuments like Wikipedia run on PHP, and WordPress, which powers something like ten percent of the web, runs on PHP. So you add all that up and you get a lot of PHP.
 
-Yeah You brew a lot of beer.
+**Garrick:** To prove your point, I downloaded the latest version of ownCloud, which is an open source competitor to Dropbox. But this one sits on a server someplace and you connect to it and it's got calendaring and mail and all sorts of nice stuff. And it seems like a really nice open source group, crack the thing open: PHP.
 
-I do I've been all in small batches.
+**Jamie:** All PHP.
 
-Yeah, five six gallons And how long you been doing it a couple years now a couple years You're like seriously and regularly now and you had a whole podcast.
+**Garrick:** PHP, and my school, and I cursed and I thought, well, this is what we got.
 
-Did you have a whole podcast?
+**Jamie:** Should we talk about the beer?
 
-It was about beer podcast.
+**Garrick:** Let's talk about the beer. I made this beer. This is
 
-I was about coffee.
+**Jamie:** Tell me about it.
 
-It's about coffee Yeah, eight pounds coming eight pounds of raw beans on their way.
+**Garrick:** this is my, this
 
-Are you gonna do that in your in your grill?
+**Jamie:** Chase, seriously, go upstairs. Come on. Let's go. Let's start that again.
 
-Well, yeah awesome So Garrett got a grill recently and I he sent me that he got the roasting Attachment so that he can roast his own green beans Which is a it is a barrier that I have not I have intentionally not wanted to cross into the home roasting Yes, because you know, I just you know, who knows what who knows what happens after that?
+**Garrick:** This is mine and my sour rye. It's probably seventy-five percent pale ale and twenty-five percent rye, and it's one hundred percent Brettanomyces.
 
-Well, I like this beer I gotta tell you I've had the first step.
+**Jamie:** What's that?
 
-I think it would be better if it was if it was nice and cold Yeah, and the first step and it was a little questionable but as with every sour that I've had it it gets better with more sips and This is the first beer of all the beer I have ever ever made When I bottled this Jen gave me a high-five Really?
+**Garrick:** You just have — that's the sour funky wet horse smell you have, and just a little bit of went lime and hops to soften that whole
 
-Yeah Wow High-five from your wife.
+**Jamie:** I thought that was my dog.
 
-That's impressive.
+**Garrick:** No, it's actually the beer. It's got nice bubbles.
 
-Yeah, she liked it.
+**Jamie:** So what do you think about these sours? They seem like, you know, it seems like all of a sudden like a year ago Surly started being in a sour. Sours, are they hipster?
 
-She liked it Does she like beer?
+**Garrick:** I think they're a direct counter to the trend of super hoppy and
 
-No, right, right Like sours, but she likes this.
+**Jamie:** Oh, I'm a huge fan of super hoppy.
 
-It's very light.
+**Garrick:** and here's a direct
 
-It's very subtle I've been quite pleased and what I think is interesting you had my sour cider.
+**Jamie:** Yeah.
 
-Yes.
+**Garrick:** counter.
 
-I really like that Yeah, that was the exact same exact same yeast but different stuff going on an ingredient.
+**Jamie:** Yeah.
 
-Yeah Yeah, no, I like that sour that sour cider.
+**Garrick:** Yeah, because you can't do hoppy with the sour. The chemicals in the super hoppy actually prevent the sour yeast from fermenting.
 
-I liked a lot cool And I think we're gonna do a beer on every episode, right?
+**Jamie:** Really?
 
-I think we should it's a good way to start I do want to stop for a moment say why we're why we're recording together in person Why are we?
+**Garrick:** Yeah.
 
-Because I was gonna be in your neighborhood anyway, and it seemed like a good thing to do I'm I'm why are you in my neighborhood?
+**Jamie:** It's just incompatible.
 
-I'm heading over to the northern room with a fantastic new northern brewer, Minneapolis headquarters to take one of the classes on Beer recipe design and which class?
+**Garrick:** Incompatible, and
 
-Belgian strong Yes, and look I look forward to drinking some of those beers, yes, I'm very excited I've had a couple and I've never been able to quite get the numbers Right, and so I'm hoping this will help.
+**Jamie:** Wow.
 
-Well, I enjoy this beer I enjoy all the beers that you make and and then you know what?
+**Garrick:** ideally you put like super old aged hops in the sour just to give it a little crispness.
 
-I'm a big I only give you the ones that I think that you might enjoy as well So there's perhaps a little survivor bias and right are there a bunch of beers that you make that you don't drink You just like I bottle the bottle the pale a Pale recipe that I've been sitting on for a while At the same time that about this one and I crack that one open the other day and my first sip was good God, I have to dump all of this That's gonna happen though.
+**Jamie:** I like the crispness. I've had another sour that you made and I like the crispness. I'm a big fan of that, and I think that sours go really well on a hot day.
 
-It's gonna happen if that's not happening.
+**Garrick:** Yes, that's what I was — and you're right, if this was chilled a little bit more, might be very refreshing today.
 
-You're not doing it right over the past few weeks taking a look at all the hobbies whether it be homebrewing or or or programming or coffee roasting or or any of these things and I've sort of noticed that there's a or even even Podcasting.
+**Jamie:** Yeah. You brew a lot of beer.
 
-Mm-hmm, right all of them have a handful of attributes that I think are all similar and in the primary one is Hey, I I think I can do this.
+**Garrick:** I do. I've been trying.
 
-Mm-hmm, right very simple ingredients and bread baking I did two loaves of bread this morning.
+**Jamie:** All in small batches.
 
-Are you still doing the bread?
+**Garrick:** Yeah, five, six gallons.
 
-I didn't know you were doing the bread So you did that like years ago.
+**Jamie:** And how long have you been doing it?
 
-Yeah, you were doing bread every Every weekend I do a couple of loaves and that's one of the things that triggered it Like I've got four or five ingredients here.
+**Garrick:** A couple years now. A couple years like seriously and regularly now.
 
-Just mix them up.
+**Jamie:** And you had a whole podcast. Didn't you have a whole podcast that was about beer or
 
-These are like these like frontier hobbies Living in the suburb of a major metropolitan area you you'd think I you would be drinking beer and eating bread and podcasting with you I think we're gonna have to get out of beer Right.
+**Garrick:** A podcast that was about coffee.
 
-Yeah.
+**Jamie:** It was about coffee.
 
-Okay, Bryn Hilder's gift, Minnesota farmhouse juniper ale from Rolling Stone Rolling Stone, Minnesota everything they do is So delicious.
+**Garrick:** We've got eight pounds coming. Eight pounds of raw beans on their way.
 
-This is ridiculously opinionated.
+**Jamie:** Are you going to do that in your, in your grill roaster?
 
-Yeah, I mean it this beer is Not a beer that you should I mean you don't take it lightly.
+**Garrick:** In my grill, yeah.
 
-I'm very surprised.
+**Jamie:** Awesome. Awesome. So Garrick got a grill recently and he sent me that he got the roasting attachment so that he can roast his own green beans. which is a barrier that I have not — I have intentionally not wanted to cross into the home roasting because,
 
-I like it a lot.
+**Garrick:** Yes.
 
-Mm-hmm This is very I don't even know what a juniper berry tastes like but it's delicious in beer Jammy Jelly taste it is.
+**Jamie:** you know, who knows what happens after that. Well, I like this beer, I gotta tell you, I had the first sip, I think it would be better if it was nice and cold.
 
-Yeah, I have too many hobbies.
+**Garrick:** Yeah.
 
-What about that?
+**Jamie:** I had the first sip and I was a little questionable, but as with every sour that I've had, it gets better with more sips. And
 
-What do I have in too many hobbies?
+**Garrick:** This is the first beer of our of all the beer I have ever made. When I bottled this, Jen gave me a high five.
 
-Can you have too many?
+**Jamie:** Really?
 
-I think you can I think you can too.
+**Garrick:** Yeah.
 
-I had too many so I decided to reduce and I actually don't - so photography cooking reading miscellaneous geekery so blogs Wikis, but that goes in the miscellaneous bucket.
+**Jamie:** Wow. High five from your wife, that's impressive. She
 
-Well, no not in the miscellaneous.
+**Garrick:** Yeah.
 
-It's the geekery bucket is miscellaneous I like how you listed reading Because you have to look at it as time, right?
+**Jamie:** liked it.
 
-So anything that uses time and reading takes time and I think I think Reading something that I don't do enough of and so, you know, I think of it as a hobby As a way to give a priority to make sure that I'm reading.
+**Garrick:** She liked it.
 
-Is there a reading Section in your on the focus.
+**Jamie:** Does she like beer?
 
-Yes.
+**Garrick:** She doesn't like beer. No.
 
-There is a reading section reading context and there's a reading project and I read what are in these contexts and projects Well, I so I read I read with purpose because in part is like a book a book has to be read on on a date And time but I actually will put in a project or put in a test as read this book and then I'll put in Subtasks for each chapter Wow, and then I there of course sequential tasks they can't be done they need to be done in order and then I can I actually have a Perspective and I'm gonna focus that is my reading list that shows me all the books I'm currently reading and the next chapter that needs to be read You didn't list.
+**Jamie:** Right.
 
-I'm gonna focus in one of your hobbies As GTD a hobby, I don't know my wife would say that GTD Would be a hobby I think but I don't think GTD is a hobby And I'm not overly crazy about that I mean I do I do like on the focus a lot and I'm thinking about putting together an on focus meetup, right?
+**Garrick:** Right. She doesn't like sours.
 
-That currently will have myself and Patrick Rohn in attendance.
+**Jamie:** But she likes this.
 
-I think that's fine.
+**Garrick:** She said — yeah.
 
-There's probably enough to get started, right?
+**Jamie:** It's very light. It's very subtle.
 
-But I do like that software.
+**Garrick:** I've been quite pleased. And what I think is interesting — you had my sour cider.
 
-I use it a lot Probably the most frequently used software I use outside of a male client a male client web browser on your focus That's probably all stuff more than like terminal or text.
+**Jamie:** Yes, I really like that, that was
 
-Those are difficult terminal and probably not but text at it for sure I I am impressed and Unexpectedly surprised by that So one of the things I was thinking about hobbies Is that I said that I have all these websites and there is this I've shared this story before but One of my hobbies that continues to be a site that I run but it's not a major focus is a site called roadside math and roadside math Is a site dedicated to road signs that have mathematical significance.
+**Garrick:** Yes. Yeah. And this is the exact same, exact same yeast.
 
-So there's a some licorice.
+**Jamie:** But different stuff going in.
 
-I'm picking up in this beer So a little bit a little anise.
+**Garrick:** Different ingredients.
 
-Yeah Some of them are extraordinarily esoteric there's one sign in particular where the guy he was a math student and he took a picture of a of a of a gantry Which for those in the know is the metal structure that holds a collection of signs?
+**Jamie:** Yeah.
 
-So in roadside math rules a gantry forms a unique collection of signs So the math must have you guys to span all signs on Wow So if you if you have two signs connected by gantry, they're a single sign You must include all of them and he's found a gantry that had like seven signs and then he he did An equation and he sent me a scan of his workbook For it where he had worked the math up to make it all work.
+**Garrick:** Yeah.
 
-I Think you know, it's probably a brilliant brilliant individual but Roadside math is on its second incarnation.
+**Jamie:** No, I like that sour cider, I liked a lot.
 
-Yes, the third actually third No, they have the first one was actually launched using dot text if you remember the Windows ASP blogging engine the Ran on Microsoft SQL Server Windows ASP.
+**Garrick:** Cool.
 
-You've come a long way.
+**Jamie:** And I think we're gonna do a beer on every episode, right?
 
-Yeah And then I migrated that to WordPress and then I took it out of WordPress and then put it into MediaWiki semantic media, okay, of course Yeah, well and the problem was that roadside math was a hobby that died of its own success The problem was that when I first launched it I had a couple of signs I had one sign that I had for years seen and it was the Reason the Genesis of the site and hence its name is Genesis and it's a sign that says Melrose is three miles away.
+**Garrick:** I think we should.
 
-St.
+**Jamie:** It's a good way to start all this stuff.
 
-Cloud and 33 miles I might not be St.
+**Garrick:** I do wanna — I wanna stop for a moment and say why we're why we're recording together in person.
 
-Cloud and then Minneapolis 99 miles and whenever I saw that sign I said 3 times 33 is 99 and it seems so blatantly obvious and I thought everybody that drives by that sign must see that Because how could you not see that?
+**Jamie:** Why are we?
 
-No, how many other signs?
+**Garrick:** Because I was gonna be in your neighbourhood anyway, and it seemed like a good thing to do. I'm
 
-Had that so many turns out must be so I was talking to my friend Jim and he said well You should do a website and so that day I did a website Because that's kind of how I do things launch the site and now have over 200 signs from five continents Spanning, you know, there's a sign in Africa a couple in Israel one in China all over the place And the problem was that it took me 10 minutes to post a sign and all of a sudden I had this huge backlog And I couldn't get it done so actually a wiki is the right way to do it and But you know, I wonder if almost that website wasn't a website of the web of a different era because it it's never gotten the kind of traction that it had then and in some ways it was like a website that fit into like the era of web rings and Geocities the web of now seems less interested in that Amateur right?
+**Jamie:** And why are you in my neighbourhood?
 
-I mean, that's the right way to think of it, right?
+**Garrick:** I'm heading over to the Northern Brewer, the fantastic new Northern Brewer Minneapolis headquarters, to take one of their classes on beer recipe design.
 
-like it's an amateur website and the web is a bit more pro now and Yeah, I pro you mean more like junior high yes and With this podcast we're attempting to keep it amateur It actually led directly to something that I did professionally when we made this product that we launched at market watch Which was the first ever internet scale real-time publish and subscribe Financial quote engine and it was actually built on these JavaScript techniques that I first discovered while trying to figure out how to show mathematical formulas on the web and the pattern that I discovered for that led to the pattern that We used for live quotes and in fact is now just a very common pattern where you put divs and target them with with JavaScript so I Would say at least 50% of my professional work It came out of my experience just Monkeying around because it seemed interesting at the hobby level So now this is interesting as you and I like one of the first times we met you use the word project and I think we've talked about how I I Was hesitant of the word project because I wanted to say well, that's a thing like a business or something Right, and you would say no that you would describe it as a project and I'd be like, well, what is it?
+**Jamie:** And which class?
 
-What are you trying to do?
+**Garrick:** Belgian strong.
 
-And you're like, well, it's a project what's wrong with you?
+**Jamie:** Ooh.
 
-And I and I kept on I say well then that's a hobby right like but no and that's not a no No, and because what's the difference in your project in a hobby project leaves open the opportunity for commercial success or commercial viability it is it is That says hmm just just maybe there's a dollar sign if I get far enough down this road In this direction, and I think a hobby has no intention of that Right.
+**Garrick:** Yes.
 
-I have no intention of collecting dollar signs From beer, you're not gonna form a brewery and I also don't have any intention of collecting dollar signs against Kubb Right.
+**Jamie:** And I look forward to drinking some of those beers.
 
-No, that's a good point That's actually something I've went to great lengths with planet Kubb is to make sure that people know that that's not some, you know wolf in sheep's clothing attempting to Monetize the Kubb universe.
+**Garrick:** Yes, I'm very excited. I've had a couple and I've never been able to quite get the numbers right, and so I'm hoping this will help.
 
-Yeah, which twelve people And if you're out there with plans to monetize the Kubb universe you might wanna yeah, and I think the things that Where I've said Yeah, I think there's something here.
+**Jamie:** Well, I enjoy this beer, I enjoy all the beers that you make, and then you know what, I'm a big fan.
 
-They've all led to something maybe not as big or as lucrative as I would have hoped but Tens of thousands of dollars now see what I have liked about In the time we've known each other.
+**Garrick:** I only give you the ones that I think that you might enjoy as well.
 
-I've started to use that word project as well And even though at first, you know, I wasn't a huge fan But what I like about it is it gives you the space to just try stuff Yeah, and you know whether that's you know, a weird thing that I have because of grammar And for many people they could just try things and not have to call it a certain thing But I find that it's a great way to kind of you know Remove and just say like well, I'm just trying stuff and then that's With no intention and with no intention nor Really forethought necessarily where it'll go.
+**Jamie:** So there's perhaps a little survivor bias, and
 
-Yeah, and I think I think that's a good thing.
+**Garrick:** Right.
 
-Like I really um Sometimes people will say like well, you know what you're putting time into this and where is I?
+**Jamie:** are there a bunch of beers that you make that you don't drink? That you just, like
 
-What I've generally learned is that?
+**Garrick:** I bottled a, I bottled a pale. a pale recipe that I've been sitting on for a while. At the same time that I bottled this one, and I cracked that one open the other day and my first sip was, good God, I have to dump all of this.
 
-Through that play is where I figure out where I want to go.
+**Jamie:** That's gonna happen though.
 
-And so if you take all that play away Which is interesting because I'm that play word.
+**Garrick:** It's gonna happen.
 
-We don't that's not a word we use often particularly in tech I read a great book on that actually is a book called play is about the importance of play For people's creativity and and it's really interesting.
+**Jamie:** If that's not happening, you're not doing it right.
 
-That was the the whole John Cleese 20 plus minute thing.
+**Garrick:** Over the past few, I don't know, weeks, take a look at all the hobbies, whether it be home brewing or programming or coffee roasting or any of these things. And I've sort of noticed that there's — or even podcasting. Right? All of them have a handful of attributes that I think are all similar, and the primary one is, hey, I think I can do this. Right, very simple ingredients. And bread baking — I did two loaves of bread this morning.
 
-I still watch this video, right?
+**Jamie:** Are you still doing the bread?
 
-So his whole premise was there are five elements that you need to That that without these you can't even have the hope of being creative One is a space Two and three are both time one the time to do it and the commitment to spend the time doing it and then it's permission to do it and The last one is humor and playfulness.
+**Garrick:** Yeah.
 
-Mm-hmm Right.
+**Jamie:** I didn't know you were doing the breads still. You did that like years ago.
 
-So without those you're not going to get any sort of creative solution.
+**Garrick:** Yeah.
 
-Mm-hmm, but I The thing that sticks with me is dedicating the space and time So one of your hobbies is one of your hobbies comics.
+**Jamie:** You were doing bread.
 
-The comics are a good question.
+**Garrick:** Every weekend I do a couple of loaves. And that's one of the things that triggered it, like I've got four or five ingredients here. Just mix 'em up, these with time.
 
-I don't know what those are They're good there.
+**Jamie:** Are these like frontier hobbies?
 
-Thank you This is one side Benefit of us doing this in person is that I get to look at my laptop and click on things like I'm in the control Station I got if I had a headset on right then I would you know, that'd be the only way to make it even better It may be a maybe a glass panel between yes.
+**Garrick:** It sits right. If I wasn't living in the suburb of a major metropolitan area, you'd think I would be
 
-Yes.
+**Jamie:** Right. You would be drinking beer and eating bread.
 
-Yes What I found interesting is since I've been doing so much long-form writing in typewriter Almost no long-form writing in WordPress.
+**Garrick:** and podcasting with you.
 
-Mm-hmm typewriter doesn't really handle images all that well I've been drawing more comics and put them in the WordPress and I've always wanted to do that I've wanted to do that for like five years but it was always annoying it was always annoying because Trying to get an index card onto a web page you just tape it on the monitor you just tape it on the monitor Try and drive traffic exactly drive traffic to your monitor Last year so late last year doxy this portable scanner company came out with the doxy go it's portable It's portable.
+**Jamie:** That sounds great. I think we're going to have to get another beer.
 
-It's about three inches by three inches by 12 inches little tiny Like a bar like a bar.
+**Garrick:** Go for it.
 
-Yeah.
+**Jamie:** Right?
 
-Yeah that you slide a piece of paper into here's the brilliant part They did this firm upgrade a couple of months ago What makes them compatible with I fi?
+**Garrick:** Yeah.
 
-Oh The little SD card.
+**Jamie:** Okay. Brynhildr's Gift? Minnesota Farmhouse Juniper Ale. From Rollingstone, Minnesota.
 
-Why yeah, which we had lying around because we couldn't yeah, we tried it out in a couple of cameras and it just either didn't work in the camera or Offered a capability we didn't want turns out we don't want every single photo to go to Facebook No, really?
+**Garrick:** Everything they do is so delicious.
 
-Yeah Yeah, what are you what are you hiding what are you covering up is there bad for something illicit Only the best photos So I took the I thought plugged it into the doxy go and Now wherever I am I can just start scanning stuff and it goes on the internet Well, it can go to the internet.
+**Jamie:** This is ridiculously opinionated.
 
-What I have it do is I have it dump into my laptop So you only have any wires?
+**Garrick:** Yeah.
 
-I don't have any wires now just goes in and I extract it out of Preview or whatever it goes into and then I send it to WordPress and it works slick and it's like a two-minute process Nice.
+**Jamie:** I mean, this beer is not a beer that you should — I mean, you don't take it lightly. I'm very surprised, I like it a lot.
 
-Yeah, see now what I hadn't I hadn't researched this but when you said like this scanner, I have a Fuji scan snap Document scanner and I love the same function.
+**Garrick:** This is very fine in that
 
-Yeah, but this is portable super small.
+**Jamie:** I don't even know what a juniper berry tastes like, but it's delicious in beer.
 
-Yeah It's probably bigger smaller than the blue the microphone but probably the same size is the microphone Same height, but it's where big fuzzy dead cat on it.
+**Garrick:** Jammy, jelly-y taste.
 
-No Did you see the helicopter cat no, yeah, so here's what I love all you need to all you need know Dutch artist Loves his cat so much But died right died and he turned it into a remote-control helicopter.
+**Jamie:** It is, yeah. I have too many hobbies. What about that? What about having too many hobbies? Can you have too many? I think you can.
 
-Okay, that's weird You know, I am totally fine with every picture of a pot every cover image of the podcast being your microphone In various spots, yeah spots and different hats How much was the doc seat?
+**Garrick:** I think you can too.
 
-That's not bad runs on batteries Yeah, rechargeable batteries Wow Yeah, every time it doesn't scan it just plug it in for a little while and then I scan later It sits it sits underneath my monitor so I can just grab it and run stuff through it.
+**Jamie:** I had too many, so I decided to reduce. And I actually...
 
-That's a nice thing It's I'm gonna say it's the third best tech purchase I've ever had Should I tell the story about Planet Kubb?
+**Garrick:** What did you whittle down to?
 
-So Planet Kubb We started playing Kubb and then I started wanting to know more about Kubb and I particularly was curious to know what was going on In the blog universe and all that and I found a couple of places, you know, the guys in Des Moines Davi and those guys are blogging it up down there.
+**Jamie:** So photography, cooking, reading, miscellaneous geekery. So blogs, wikis.
 
-I Started thinking like well G is sure would be nice if there was one place you know a place where you can see what was going on and Kubb and Kind of like you do with like a planet feed like planet KTE and planet planet whatever there's planet sites for everything And so I looked and see if there's planet Kubb calm and it was available.
+**Garrick:** But that goes in the miscellaneous bucket.
 
-So I bought it I actually I believe I bought it on the bus Because you know how you have that when you search for a domain name and then you see it and it's like it's available And then you are you are sure that in the next 14 seconds Somebody is gonna buy it.
+**Jamie:** Well, no, not in the miscellaneous, it's the geekery bucket is miscellaneous.
 
-You have to buy it right then.
+**Garrick:** I like how you listed reading.
 
-Yes.
+**Jamie:** Because you have to look at it as time, right? So anything that uses time, and reading takes time. And I think reading, something that I don't do enough of, and so, you know, I think of it as a hobby as a way to give a priority to make sure that I'm reading.
 
-I mean, yes, so I bought it And and then launched planet Kubb which is powered by the Python based planet aggregator raw dog Scours and you you put you put bootstrap in front.
+**Garrick:** Is there a reading section in your OmniFocus?
 
-I built.
+**Jamie:** Yes. There is a reading section, a reading context, and there's a reading project, and I read,
 
-Yeah I built a really bad custom theme for raw dog that uses bootstrap and I'd really love to find somebody that would love to build a custom theme for a planet Kubb because I could use a much better one But it's actually gone really well.
+**Garrick:** Tell me about, what are in these contexts and projects?
 
-I love it.
+**Jamie:** Well, so I read with purpose, in part because, like, a book club book has to be read on a day and time, but I actually will put in a project or put in a task, says read this book, and then I'll put in sub-tasks for each chapter. There are, of course, sequential tasks that need to be done in order, and then I actually have a perspective in OmniFocus that is my reading list that shows me all the books I'm currently reading and the next chapter that needs to be read.
 
-It's a great side.
+**Garrick:** You didn't list OmniFocus as one of your hobbies.
 
-It's especially as a Pointer into YouTube right because it searches YouTube on like 17 different angles and then puts it all together And it's been interesting I've learned like it took put some stuff in took it out took it all the wiki stuff out because it doesn't make any sense It looks weird I think you could put it back in but you have to have to build some custom stuff in the theme to make sure that It was handled right?
+**Jamie:** No. Is GTD a hobby? I don't know. My wife would say that GTD would be a hobby, I think, but I don't think of GTD as a hobby. And I'm not overly crazy about the — I mean, I do like OmniFocus a lot and I'm thinking about putting together an OmniFocus meetup
 
-You could just say like there was an edit And but it's it's gone well, and there's a lot of people who go to the site It's and it's fun and then we built ask planet Kubb, right?
+**Garrick:** Right.
 
-Which was is that questions about Kubb strategy?
+**Jamie:** that currently will have myself and Patrick Rhone in attendance.
 
-It's the number one place For Q&A in the Kubb community, I mean it's a low bar, but we just need more than one But ask planet coups been fun and then we have the planet Kubb wiki wiki dot planet Kubb calm which is done around Tournaments and geolocation clubs and love teams.
+**Garrick:** I think that's fine.
 
-Yeah, I like it a lot I mean my goal is I really want to get other Kubb websites because almost every Kubb site has a schedule You know Sam and I all have independent and that what I'd really like to do is give them a JSON feed from the planet Kubb wiki and The JSON has a schedule.
+**Jamie:** That's probably enough to get started,
 
-Yeah, so it's just it's there and then if an event gets added it just gets added You don't have to keep it up to date But then Dobby from Des Moines said hey We should have a place to chat We have to it's getting close to nationals.
+**Garrick:** Yeah. Yeah.
 
-We need some smack-talk exactly We didn't know what that meant if that meant like IRC or that meant something else, right?
+**Jamie:** right? But I do like that software. I use it a lot. Probably the most frequently used software I use outside of my mail client. Mail client, web browser, OmniFocus.
 
-You just you just called an audible.
+**Garrick:** Okay.
 
-Yeah, so just rather than talking about it.
+**Jamie:** That's probably how it all stacks up.
 
-I just did it.
+**Garrick:** Well, more than like terminal or text editor.
 
-Yeah So I think it was actually within 24 hours of him asking for that I Put pitch dot planet coup calm.
+**Jamie:** Well, those are difficult. Terminal, probably not. But text editor, for sure.
 
-I love the name.
+**Garrick:** I am impressed and unexpectedly surprised by that.
 
-It's fun name.
+**Jamie:** So one of the things that I was thinking about with hobby is is that I said that I have all these websites, and there is this — I've shared this story before, but one of my hobbies that continues to be a site that I run, but it's not a major focus, is this site called Road Sign Math. And Road Sign Math is a site dedicated to road signs that have mathematical significance. So
 
-Yeah, and so it's the planet Kubb pitch the pitch being the name of a the field that you play coupon and It's been fun and we're using WordPress with p2 and I got to tell you both of us.
+**Garrick:** There's some licorice I'm picking up in this beer. Just a little bit of
 
-We've been impressed with p2 The last time I looked at p2 was probably you know, one dot one or something.
+**Jamie:** A little anise, yeah.
 
-It was it was cool I like the concept but it lacked.
+**Garrick:** Yeah.
 
-Well, actually, I don't know that it lacked anything I didn't have a community to bring to it.
+**Jamie:** Some of them are extraordinarily esoteric. There's one sign in particular where the guy is a math student and he took a picture of a gantry. Which, for those in the know, is the metal structure that holds a collection of signs. And in Road Sign Math rules, a gantry forms a unique collection of signs, so the math has to span all signs on
 
-Yes, and so without a community to bring the p2 It just doesn't really make sense.
+**Garrick:** Wow.
 
-I'm so clear once you put more than two people right?
+**Jamie:** the gantry. So if you have two signs connected by a gantry, they're a single sign and you must include all of them. And he found this gantry that had like seven signs and then he did an equation and he sent me a scan of his his workbook for it, where he had worked the math out to make it all work. I think, you know, he's probably a brilliant, brilliant individual. But, well,
 
-You're like, wow Yeah, yeah, and it's cool is the you know when people comment in p2 it shows up.
+**Garrick:** Yeah, Road Sign Math is on its second incarnation.
 
-You don't have to reload the page It's it's really dynamic really slick really easy And there's even some p2 specific extensions that I put That who's online one.
+**Jamie:** Yes, the third actually.
 
-That's that's nice.
+**Garrick:** Third.
 
-Yeah Something you typically see in forums But the pitch is kind of the place to just hang out and chat with your coup fans And I'm not syndicating any of that on planet coupe yet I'm gonna though and I add announcements and now that'll allow me to get some stuff over to the main Website but planet coupes.
+**Jamie:** No, yeah, the first one was actually launched using .Text, if you remember the Windows ASP blogging engine, the ran on Microsoft SQL Server, Windows ASP.
 
-There's a good example of a hobby, right?
+**Garrick:** You've come a long way.
 
-You know, we have a logo We're making stickers to give away at nationals.
+**Jamie:** Yeah, and then I migrated that to WordPress, and then I took it out of WordPress and then put it into MediaWiki, Semantic MediaWiki of course.
 
-I mean, there's a lot of effort that goes into it It all feels real good and it's fun.
+**Garrick:** Did it ever I only know the MediaWiki version. Was there a long time between the WordPress and MediaWiki versions?
 
-Yeah, and if and if we were trying to make seven dollars out of it It would not feel as fun.
+**Jamie:** Yeah. Well, and the problem was that Road Sign Math was a hobby that died of its own success. The problem was that when I first launched it, I had a couple of signs. I had one sign that I had for years seen and it was the reason, the genesis of the site, and hence its name is Genesis, and it's a sign that says Melrose is 3 miles away, St. Cloud in 33 miles — I might not be St. Cloud — and then Minneapolis 99 miles. And whenever I saw that sign I said, 3 times 33 is 99, and it seems so blatantly obvious, and I thought everybody that drives by that sign must see that, because how could you not see that? And then I thought, how many other signs have that.
 
-No Question that came up when when the Kubb Chuck's were playing their lunch Game on Friday.
+**Garrick:** So many, turns out.
 
-Okay, so this is not on ask planet.
+**Jamie:** Must be. So I was talking to my friend Jim and he said, well, you should do a website. And so that day I did a website, 'cause that's kinda how I do things. Launched the site, and now I have over 200 signs from five continents, spanning, you know, there's a sign in Africa, a couple in Israel, one in China, all over the place. And the problem was that it took me ten minutes to post a sign, and all of a sudden I had this huge backlog and I couldn't get it done. So actually a wiki is the right way to do it. But, you know, I wonder if almost that website wasn't a website of a different era. Because it's never gotten the kind of traction that it had then. And in some ways it was like a website that fit into the era of web rings and GeoCities. The web of now seems less interested in that. Amateur, right? Maybe that's the right way to think of it, right? Like it's an amateur website and the web is a bit more pro now. And
 
-Kubb.
+**Garrick:** If by pro you mean more like junior high.
 
-You weren't you were I wasn't there I was on this came up and asked when I could question came up I think Nope, it didn't but I think you might so You you miss you you're thrown coup you're thrown coupes in you're in casting and You throw a coup for the second time out of bounds, oh, yeah, right, right So there's a penalty placement penalty.
+**Jamie:** Yeah. Yes. And with this podcast, we're attempting to keep it amateur. Oh my God.
 
-Yes Where is the ideal penalty placement that that's the question that came up on Friday?
+**Garrick:** We are just that radio station in your high school. We are nothing more than that.
 
-This come up on Friday because this came up when we were playing at Cuban coffee - exactly We talked about it and it has not been on a spike.
+**Jamie:** It actually led directly to something that I did professionally when we made this product that we launched at MarketWatch, which was the first ever internet scale, real time, publish and subscribe financial quote engine. And it was actually built on these JavaScript techniques that I first discovered while trying to figure out how to show mathematical formulas on the web. And the pattern that I discovered for that led to the pattern that we used for live quotes, and in fact is now just a very common pattern where you put divs and target them with JavaScript. So.
 
-Oh, I don't believe I don't think anybody's asked this question No, it's a good question because I think there's a very good thing is One baton length behind the king.
+**Garrick:** I would say at least fifty percent of my professional work came out of my experience just monkeying around, 'cause it seemed interesting at the hobby level.
 
-It's the king Yeah, and I don't think and that's where I thought - and you'll you'll get the if they miss that you'll get the advantage But I think it's too obvious.
+**Jamie:** See, now this is interesting, is you and I, like one of the first times we met or the one, you use the word project, and I think we've talked about how I was hesitant of the word project because I wanted to say, well, that's a thing like a business or something,
 
-Well, they miss it.
+**Garrick:** Right.
 
-You know if they hit the king you'll win, right?
+**Jamie:** and you would say no, that you would describe it as a project, and I'd be like, well, what is it, what are you trying to do? And you're like, well, it's a project, what's wrong with you? And I kept wanting to say, well then that's a hobby, right? Right, and like, but no, and that's not a
 
-And that's why you put it there But when we're talking to Eric Goplin Point that this that when you're playing good teams, it's not a good place to put it, right?
+**Garrick:** No, no. And because
 
-That good teams won't hit the king and it's a relatively short toss.
+**Jamie:** So what's the difference between a project and a hobby?
 
-It's what four feet.
+**Garrick:** Project leaves open the opportunity for commercial success or commercial liability. It is that says, hmm, just maybe there's a dollar sign if I get far enough down this road in this direction. And I think a hobby has no intention of that.
 
-There are four meters one foot, right and So he was saying essentially put it on the baseline Yep in the far corner as far away as possible downside is if they miss it, that's your advantage Right.
+**Jamie:** Right.
 
-I mean I if you're playing a really good team, I don't think there's a Probably isn't gonna matter if you're playing a Chad from Wisconsin.
+**Garrick:** I have no intention of collecting dollar signs.
 
-It doesn't matter.
+**Jamie:** From beer. You're not gonna form a brewery.
 
-You put it on the moon No If you're but if you're playing a moderately good team I think they're gonna hit it behind the king and I think I'd go baseline and if I was Honestly, if I was playing backyard, I'd put it right behind the king.
+**Garrick:** And I also don't have any intention of collecting dollar signs against Kubb.
 
-That's just the kind of person I am Which is why I practice my king shot We're gonna put this on last planet Kubb because this question has not been asked Kubb nation magazine and magazine supplement the drilling self said Drilling the most important throw of your game is drilling.
+**Jamie:** Right. No, that's a good point.
 
-Yeah, I think that's a really close second to actually the eight meter I think I'm what I am entirely with you if you don't have an eight meter throw.
+**Garrick:** Right.
 
-No drilling is the defensive game?
+**Jamie:** That's actually something I've gone to great lengths with Planet Kubb, is to make sure that people know that that's not some, you know, wolf in sheep's clothing attempting to monetize the Kubb universe,
 
-Yes, you know just like in football.
+**Garrick:** Yeah, I did.
 
-You're not gonna win a game with a good defensive line.
+**Jamie:** which
 
-You lose them.
+**Garrick:** But it's like twelve people who won't buy it.
 
-Mm-hmm But you got you still got a score.
+**Jamie:** Exactly. And if you're out there with plans to monetize the Kubb universe, you might wanna
 
-And so if you can't hit their baselines, I mean you drill great all day You know, yeah Yeah, I'm with you But but if you're missing the eight meter shots, especially in this situation where the penalty coups are gonna go on the baseline You got to have an eight meter shot So should we just make this podcast the Kubb podcast?
+**Garrick:** Yeah, and I think the things where I've said, yeah, I think there's something here, they've all led to something, maybe not as big or as lucrative as I would have hoped, but tens of thousands of dollars.
 
-Kubb beer we just need fire What makes good news what is news that I Want in my life?
+**Jamie:** See, what I have liked about In the time we've known each other I've started to use that word project as well, and even though at first, you know, I wasn't a huge fan, but what I like about it is that it gives you the space to just try stuff.
 
-Mm-hmm and I start think what well, it's got it.
+**Garrick:** Yeah.
 
-There's some relevance.
+**Jamie:** And, you know, whether that's, you know, a weird thing that I have because of grammar and for many people they could just try things and not have to call it a certain thing, but I find that it's a great way to kind of, you know, remove and just say like, well, I'm just trying stuff. And then that's with no intention, and with no intention nor really forethought necessarily where it'll go.
 
-There's some Importance there's there's something I can relate to there's something that impacts my life.
+**Garrick:** Yeah. Yeah, exactly.
 
-Mm-hmm What are things like this?
+**Jamie:** And I think that's a good thing. Like, sometimes people will say like, well, you know, you're putting time into this and where is that — and what I've generally learned is that through that play is where I figure out where I want to go. And so If you take all that play away, which is interesting because that play word, we don't — that's not a word we use often, particularly in tech. I read a great book on that actually, there's a book called Play, it's about the importance of play for people's creativity, and it's really interesting.
 
-things that improve my life things that provide sort of a baseline of utility and Where I grew up those things that had a baseline of utility were co-ops.
+**Garrick:** That was the whole John Cleese twenty plus minute thing.
 
-Mm-hmm The electric electric co-op the food co-op telephone.
+**Jamie:** I still haven't watched this video.
 
-Yes, the dairy farmers had a had a milk co-op Right and we don't really have it my grandmother gets her internet through a co-op fantastic My health insurance is through a co-op your health insurance is there a co-op?
+**Garrick:** Right, so his whole premise was there are five elements that you need to that without these you can't even have the hope of being creative. One is a space. Two and three are both time. One, the time to do it and the commitment to spend the time doing it. And then it's the permission to do it. And the last one is humor and playfulness. All right, so without those you're not gonna get any sort of creative solution. But the thing that sticks with me is dedicating the space and time.
 
-Mm-hmm Wow I mean, you know news is something that we both have thought a lot about and have friends that work in I've worked in that industry.
+**Jamie:** So one of your hobbies is— is one of your hobbies comics?
 
-You've done work in that industry and it you know, it's Certainly has been turned upside down from the internet.
+**Garrick:** The comics are a good question. I don't know what those are.
 
-And the question is, you know, isn't Twitter just news and you know If if the purpose of news particularly these of you breaking news is just bringing the information that just happened That can be done a lot of different ways and and that's happening It still doesn't answer the question like the bigger question of kind of where news on the web makes sense And how does it make sense and I agree with you that it's all about that and of having an impact like there's got to be Something important and that's where Twitter in my opinion falls on and Twitter is actually great for like plane crashes in Hudson That's great, right things that are interesting, right, right Yeah, maybe not relevant and here's where I think the co-op starts to make a little more starts to be interesting as well is Co-op if co-op members were also publishers.
+**Jamie:** They're good.
 
-Yes.
+**Garrick:** They're— thank you.
 
-I like this idea a lot.
+**Jamie:** This is one side benefit of us doing this in person is that I get to look at my laptop and click on things like I'm in the control station. Like, I guess if I had a headset on,
 
-Yeah, I like this a lot Go expand on this.
+**Garrick:** Right.
 
-Let's say that your neighborhood had a news co-op which Incented the members the co-op members to publish what was happening on their block Hmm right or in their area to have an idea of what was going on in their world.
+**Jamie:** then that would, you know, that would be the only way to make it even better.
 
-That's just a small microcosm example Chances are it's highly relevant to where you live and important to your family's day-to-day life What's gonna get published within that?
+**Garrick:** And maybe a— maybe a glass panel between us.
 
-Mm-hmm.
+**Jamie:** Yes, yes, yes.
 
-I think of the last summer when a giant Like 12 inch gas main burst.
+**Garrick:** What I found interesting is since I've been doing so much long-form writing in Typewriter, almost no long-form writing in WordPress. Typewriter doesn't really handle images all that well. I've been drawing more comics and put them in the WordPress. And I've always wanted to do that. I've wanted to do that for like five years. But it was always annoying. It was always annoying because trying to get an index card onto a web page.
 
-Mm-hmm the other side of my block, right?
+**Jamie:** Or you just tape it on the monitor.
 
-Mm-hmm There was one paragraph in the broadcast news and that was about it because it didn't impact the entire Metro But you know three four blocks of my neighborhood were evacuated very impacted.
+**Garrick:** You just tape it on the monitor and try and drive traffic.
 
-Yeah.
+**Jamie:** Exactly.
 
-Yeah We went to the other side of the Metro and weren't sure like well, how do we know when it's safe to come back?
+**Garrick:** Right? Drive traffic to your monitor.
 
-A news co-op might be able to help solve this problem.
+**Jamie:** Oh.
 
-It's interesting because wiki media has the news They call that wiki news, right I think we're wiki news falls down as it makes it too hard if you're starting the conversation In kind of a newer news around we're gonna allow people to write articles You're already wrong because writing an article is way too difficult.
+**Garrick:** Last year or so, late last year, Doxie, this portable scanner company, came out with a Doxie Go. It's portable. It's about three inches by three inches by twelve inches. The little tiny—
 
-Yes if you're able to somehow Allow people to work together to put together Timelines of events and and and things that are happening.
+**Jamie:** It's like a bar.
 
-I think that could work and I think the wiki model is the right Yeah, I think the wiki model is right.
+**Garrick:** Like a bar,
 
-I think the wiki model is right the majority of the wiki editor engagement is Typophics spell-checking very very small gestures of improvement and I was at a couple of Wikipedia pages recently and at the top there were like two or three bars and each one of them says This one might not meet Wikipedia standards in this way.
+**Jamie:** Yeah.
 
-Please help this one might not be Wikipedia standards in this way, please help and I'm like wow, they've they've started to signal The small gestures of improvement that an individual article could make and I think in that sense it starts to say We have the story that is important to you.
+**Garrick:** yeah, that you slide a piece of paper into. Here's the brilliant part. They did this firmware upgrade a couple of months ago. Which makes them compatible with Eye-Fi.
 
-Here's how we think it could be improved.
+**Jamie:** Oh.
 
-Please help improve this And if we start to build against smaller gestures rather than oh my goodness structuring this article writing from scratch is way too difficult But but clarifying or or being more adding specific details I like the metaphor of the grain of sand like I like like the idea that in this in this news ecosystem You're shoving in programmatically entirely automatically you're sending in this These nuggets of information that you have you built robots to do this work because it doesn't it can be Algorithmic or drive but then that gives the genesis of the thing that somebody can then work off of Different people will find different parts of it interesting.
+**Garrick:** The little SD card Wi-Fi thing, yeah,
 
-It's different than what patch is doing.
+**Jamie:** Yeah.
 
-I like what patch is doing I think of patch more as like a multi author WordPress site, you know, it's it's not it's not something unique What is not it's not an approach that's unique According to the label of this beer.
+**Garrick:** which we had lying around because we couldn't— yeah, we tried it out in a couple of cameras and it just either didn't work in the camera or offered a capability we didn't want. Turns out we don't want every single photo to go to Facebook.
 
-We're drinking from all vault It's a bottle fermented which means if you want to start being a yeast farmer just take this bottle Take the last the last quarter inch there.
+**Jamie:** No, really?
 
-I could be my very own yeast farmer.
+**Garrick:** Yeah. Yeah, so
 
-Yes All right.
+**Jamie:** What are you hiding? What are you covering up? Is there something illicit? Are we gonna—
 
-We'll be back next week with more yeast
+**Garrick:** Bad photos, bad photos. Only the best photos go to Facebook. So I took the Eye-Fi, plugged it into the Doxie Go. And now wherever I am, I can just start scanning stuff.
+
+**Jamie:** And it goes on the internet.
+
+**Garrick:** Well, it can go to the internet. What I have it do is I have it dump into my laptop.
+
+**Jamie:** So you don't even have any wires.
+
+**Garrick:** I don't have any wires.
+
+**Jamie:** No.
+
+**Garrick:** It just goes in and I extract it out of Preview or whatever it goes into, and then I send it up to WordPress and it works slick and it's like a two-minute process.
+
+**Jamie:** Nice.
+
+**Garrick:** Yeah.
+
+**Jamie:** See, now I hadn't researched this, but when you said like the scanner, I have a Fuji ScanSnap document scanner.
+
+**Garrick:** The same— the same function, yeah, but this is super small.
+
+**Jamie:** And I love— yeah, but this is portable.
+
+**Garrick:** Yeah, it's probably smaller.
+
+**Jamie:** Yeah. Bigger than— smaller than the Blue— the microphone.
+
+**Garrick:** It's probably about the same size as the microphone, same height, but square.
+
+**Jamie:** Does it have a big fuzzy dead cat on it?
+
+**Garrick:** No. The dead cat is awesome. Did you see the helicopter cat? Yeah, so here's what I love. All you need to know: Dutch artist loves his cat so much,
+
+**Jamie:** It died, right?
+
+**Garrick:** Died, and he turned it into a remote control helicopter.
+
+**Jamie:** Okay, that's weird.
+
+**Garrick:** You know, I am totally fine with every picture of our— every cover image of the podcast being your microphone.
+
+**Jamie:** In various spots. Yeah.
+
+**Garrick:** In various spots and different hats.
+
+**Jamie:** How much was the Doxie? Is that expensive?
+
+**Garrick:** One ninety-nine.
+
+**Jamie:** That's not bad. Runs on batteries?
+
+**Garrick:** Yeah. Rechargeable batteries.
+
+**Jamie:** Wow.
+
+**Garrick:** Yeah, every time it doesn't scan I just plug it in for a little while and then I scan later. It sits underneath my monitor so I can just grab it and run stuff through it.
+
+**Jamie:** That's a nice thing.
+
+**Garrick:** I'm gonna say it's the third best tech purchase I've ever had.
+
+**Jamie:** Should I tell the story about Planet Kubb and why it exists?
+
+**Garrick:** Yeah, tell the story. Yes.
+
+**Jamie:** So Planet Kubb— We started playing Kubb, and then I started wanting to know more about Kubb. And I particularly was curious to know what was going on in the blog universe and all that. And I found a couple of places, you know, the guys in Des Moines, Dobie and those guys, they're blogging it up down there. I started thinking like, well gee, it sure would be nice if there was one place, you know, a place where you can see what was going on in Kubb, kind of like you do with like a planet feed, like Planet KDE and Planet— Planet Whatever, there's planet sites for everything. And so I looked and see if there was planetkubb.com and it was available. So I bought it. I actually, I believe I bought it on the bus. Because you know how you have that when you search for a domain
+
+**Garrick:** Yes.
+
+**Jamie:** name and then you see it and it's like it's available, and then you— you are sure that in the next fourteen seconds somebody is gonna buy it. You have to buy it right then.
+
+**Garrick:** You're like, I have one. Yes.
+
+**Jamie:** I mean—
+
+**Garrick:** Yes.
+
+**Jamie:** So I bought it. And then launched Planet Kubb, which is powered by the the Python-based planet aggregator, rawdog, scours
+
+**Garrick:** And you put Bootstrap in front of it.
+
+**Jamie:** Yeah, I built a really bad custom theme for rawdog that uses Bootstrap, and I'd really love to find somebody that would love to build a custom theme for Planet, because I could use a bunch better one. But it's actually gone really well.
+
+**Garrick:** Yes, I love it too. It's especially— as a pointer into YouTube.
+
+**Jamie:** I love it. It's a great site. Right, because it searches YouTube on like seventeen different angles, and then puts it all together.
+
+**Garrick:** Yeah.
+
+**Jamie:** And it's been interesting, I've learned— like it took, put some stuff in, took it out, took all the wiki stuff out, because it doesn't make any sense. Looks weird.
+
+**Garrick:** Looks weird.
+
+**Jamie:** I think you could put it back in, but you have to build some custom stuff in the theme to make sure that it was handled right. You could just say like there was an edit. And it's gone well, and there's a lot of people who go to the sites and it's fun. And then we built Ask Planet Kubb,
+
+**Garrick:** Right.
+
+**Jamie:** which was— is the
+
+**Garrick:** You've got questions about Kubb, strategy.
+
+**Jamie:** It's the number one place for Q&A in the community.
+
+**Garrick:** Absolutely.
+
+**Jamie:** I mean, it's a low bar, but
+
+**Garrick:** Right. Right, we just need more than one place.
+
+**Jamie:** Exactly.
+
+**Garrick:** More than one place, I'm sorry.
+
+**Jamie:** Exactly. But Ask Planet Kubb has been fun. And then we have the Planet Kubb Wiki.
+
+**Garrick:** Yes.
+
+**Jamie:** planetkubb.com
+
+**Garrick:** Which— you know, the magic you've done around tournaments and geolocations and clubs, all that stuff, yeah.
+
+**Jamie:** which is Clubs and teams. I like it a lot. And my goal is I really want to get other Kubb websites, because almost every Kubb site has a schedule. You know what I'm sayin'? And they all have independent— and what I'd really like to do is give them a JSON feed from the Planet Kubb Wiki. And the
+
+**Garrick:** JSON. So everyone has the same schedule.
+
+**Jamie:** feed is easy enough. Yeah. It's just— it's there, and then if an event gets added, it just gets added, you don't have to keep it up to date. But then Dobie from Des Moines said, hey, we should have a place to chat.
+
+**Garrick:** We have to. It's getting close to nationals. We need some smack talk.
+
+**Jamie:** Exactly. We didn't know what that meant, if that meant like IRC or that meant something else.
+
+**Garrick:** Right. So you just called an audible.
+
+**Jamie:** Yeah, so rather than talking about it, I just did it.
+
+**Garrick:** Yeah.
+
+**Jamie:** So I think it was actually within 24 hours of him asking for that, I put up pitch.planetkubb.com.
+
+**Garrick:** Love the name.
+
+**Jamie:** It's a fun name. And so it's the Planet Kubb Pitch, the pitch being the name of the field that you play Kubb on. And it's been fun, and we're using WordPress with P2, and I gotta tell you, both of us have been impressed with
+
+**Garrick:** Very impressed.
+
+**Jamie:** what P2 has done. The last time I looked at P2 was probably, you know, one dot one or something. It was cool, I liked the concept, but it lacked— Well, actually I don't know that it lacked anything. I didn't have a community to bring to it.
+
+**Garrick:** Yes.
+
+**Jamie:** And so without a community to bring to P2, it just doesn't really make sense.
+
+**Garrick:** It becomes so clear once you put more than two people against it, you're like, wow.
+
+**Jamie:** Right. Yeah.
+
+**Garrick:** Yeah.
+
+**Jamie:** And it's cool because when people comment in P2, it shows up, you don't have to reload the page, it's really dynamic, really slick, really easy, and there's even some P2-specific extensions that I that I put— The who's online one.
+
+**Garrick:** Okay.
+
+**Jamie:** That's all. That's nice.
+
+**Garrick:** Yeah.
+
+**Jamie:** Something you'd typically see in forums. But the pitch is kind of the place to just hang out and chat with your Kubb fans, and I'm not syndicating any of that on Planet Kubb yet. I'm gonna, though. I'm gonna add announcements and that'll allow me to get some stuff over to the main website. But Planet Kubb's a good example of a hobby.
+
+**Garrick:** Right.
+
+**Jamie:** You know, we have a logo, we're making stickers to give away at the nationals. I mean, there's a lot of effort that goes into it.
+
+**Garrick:** Yet it all feels real good.
+
+**Jamie:** And it's fun, yeah. And if we were trying to make seven dollars out of it, it would not feel this fun.
+
+**Garrick:** No. Question that came up when the Kubbchucks were playing their lunchtime Kubb game on Friday afternoon.
+
+**Jamie:** Okay, so this is not on Ask Planet Kubb.
+
+**Garrick:** You weren't able to—
+
+**Jamie:** I wasn't there, I was on business.
+
+**Garrick:** This is how this came up. An Ask Kubb question came up. I think. Nope, it didn't. But I think you might remember. So you've thrown your kubbs in your inkast and you throw a kubb for the second time out of bounds.
+
+**Jamie:** Oh okay, right.
+
+**Garrick:** Right.
+
+**Jamie:** So there's a penalty placement.
+
+**Garrick:** Penalty, yes. Where is the ideal penalty placement? That's the question that came up on Friday.
+
+**Jamie:** That does come up, 'cause this came up when we were playing at Kubb & Koffee too.
+
+**Garrick:** Exactly.
+
+**Jamie:** We talked about it then. And it has not been on Ask Planet Kubb, I don't believe. I don't think anybody's asked this question.
+
+**Garrick:** I think it's a good question. No, it's a good question. 'Cause I think the instinct is—
+
+**Jamie:** It is a very good question.
+
+**Garrick:** One baton length behind the king.
+
+**Jamie:** It's the king, yeah.
+
+**Garrick:** And I don't think—
+
+**Jamie:** And that's where I thought too.
+
+**Garrick:** And you'll get the— if they miss that you'll get the advantage. But I think it's too obvious.
+
+**Jamie:** Well, if they miss it— if they hit the king you'll win.
+
+**Garrick:** Right, and that's why you put it there.
+
+**Jamie:** But when we were talking to Eric Goplin,
+
+**Garrick:** Minnesota Kubb.
+
+**Jamie:** he made the point that that when you're playing good teams,
+
+**Garrick:** Yes.
+
+**Jamie:** it's not a good place to put it.
+
+**Garrick:** Right.
+
+**Jamie:** That good teams won't miss the king. And it's a relatively short toss. It's what, four feet
+
+**Garrick:** Yes.
+
+**Jamie:** or four meters one foot.
+
+**Garrick:** Yes.
+
+**Jamie:** Right. And so he was saying essentially put it on the baseline.
+
+**Garrick:** Yep.
+
+**Jamie:** In the far corner, as far away as possible.
+
+**Garrick:** The downside is if they miss it, that's your advantage.
+
+**Jamie:** Right. I mean, if you're playing a really good team, I don't think it probably isn't gonna matter. If you're playing a Chad from Wisconsin,
+
+**Garrick:** Right. It doesn't matter.
+
+**Jamie:** it doesn't matter. You put it on the moon. That doesn't matter.
+
+**Garrick:** Right. You're not gonna get that advantage.
+
+**Jamie:** No. But if you're playing a moderately good team, I think they're gonna hit it behind the king, and I think that your baseline— and if I was playing, I honestly, if I was playing backyard I'd put it right behind the king because that's just the kind of person I am.
+
+**Garrick:** Which is why I practice my king shot.
+
+**Jamie:** We're gonna put this on Ask Planet Kubb, 'cause this
+
+**Garrick:** I appreciate that.
+
+**Jamie:** question has not been asked.
+
+**Garrick:** Kubb Nation magazine, and magazine supplement
+
+**Jamie:** The drilling supplement.
+
+**Garrick:** said drilling the most important throw of your game.
+
+**Jamie:** It's drilling, yeah.
+
+**Garrick:** I think that's a really close second to actually the eight meter.
+
+**Jamie:** I am entirely with you. If you don't have an eight meter throw,
+
+**Garrick:** No.
+
+**Jamie:** drilling is the defensive game.
+
+**Garrick:** Yes.
+
+**Jamie:** You know, just like in football, you're not going to win a game with a good defensive line. You lose them, but you still got to score.
+
+**Garrick:** Right.
+
+**Jamie:** And so if you can't hit their baselines, I mean, you drill great all day. Yeah.
+
+**Garrick:** Yeah.
+
+**Jamie:** Yeah, I'm with you.
+
+**Garrick:** But if you're missing the eight meter shots, especially in this situation where the penalty kubbs are gonna go on the baseline, you gotta have an eight meter shot.
+
+**Jamie:** So should we just make this podcast the Kubb podcast?
+
+**Garrick:** Kubb, beer, we just need fire. What makes good news? What is news that I want in my life. And I started thinking, well, there's some relevance, there's some importance, there's something I can relate to, there's something that impacts my life. What are things like this? Things that improve my life, things that provide sort of a baseline of utility. And where I grew up, those things that had a baseline of utility were co-ops.
+
+**Jamie:** The electric co-op.
+
+**Garrick:** The electric co-op. The food co-op.
+
+**Jamie:** Telephone.
+
+**Garrick:** Yes, the dairy farmers had a milk co-op. Right. And we don't really have that
+
+**Jamie:** My grandmother gets her internet through a co-op.
+
+**Garrick:** Fantastic. My health insurance is through a co-op.
+
+**Jamie:** Your health insurance is through a co-op?
+
+**Garrick:** Mm-hmm.
+
+**Jamie:** Wow. I mean, it is just something that we both have thought a lot about and have friends that work in, I've worked in that industry, you've done work in that industry. And you know, it certainly has been turned upside down from the internet, and the question is, you know, isn't Twitter just news? And if the purpose of news, particularly vis-a-vis breaking news, is just bring me information that just happened, that can be done a lot of different ways, and that's happening. It still doesn't answer the bigger question of kind of where news on the web makes sense and how does it make sense. And I agree with you that it's all about that and having an impact, like there's got to be something important. And that's where Twitter in my opinion falls down. And Twitter's actually great for like plane crashes and Hudson, that's great.
+
+**Garrick:** Right. Things that are interesting.
+
+**Jamie:** Right.
+
+**Garrick:** Right.
+
+**Jamie:** Yeah.
+
+**Garrick:** Maybe not relevant. And here's where I think the co-op starts to be interesting. Co-op, if co-op members were also publishers.
+
+**Jamie:** Yes. I like this idea a lot.
+
+**Garrick:** Yeah.
+
+**Jamie:** I like this a lot. Go, expand on this.
+
+**Garrick:** Let's say that your neighborhood had a news co-op which incented the co-op members to publish what was happening on their block. Right, or in their area. They have an idea of what was going on in their world. That's just a small microcosm example. Chances are it's highly relevant to where you live and important to your family's day-to-day life. And what's gonna get published within that. You know, I think of last summer when a giant like twelve inch gas main burst at the other side of my block, right. There was one paragraph in the broadcast news and that was about it, because it didn't impact the entire metro, but you know, three, four blocks of my neighborhood were evacuated.
+
+**Jamie:** Very impacted,
+
+**Garrick:** Yes, yeah.
+
+**Jamie:** Yeah.
+
+**Garrick:** We went to the other side of the metro and weren't sure, like, well, how do we know when it's safe to come back. A news crawl might be able to help solve this problem.
+
+**Jamie:** Mm-hmm. Oh, then it's interesting, because Wikimedia has the news—what do they call it—WikiNews.
+
+**Garrick:** Right.
+
+**Jamie:** I think where WikiNews falls down is it makes it too hard. If you're starting the conversation in kind of a new era of news around, we're gonna allow people to write articles, you're already wrong, because writing an article is way too difficult.
+
+**Garrick:** Yes.
+
+**Jamie:** If you're able to somehow allow people to work together to put together timelines of events and things that are happening, I think that could work. But I think the wiki model is the right—
+
+**Garrick:** Yes.
+
+**Jamie:** I think the wiki model is right.
+
+**Garrick:** The majority of the wiki editor engagement is typo fixes or grammatical fixing, spell checking,
+
+**Jamie:** Or spell checking, yeah.
+
+**Garrick:** very, very small gestures of improvement. And I was at a couple of Wikipedia pages recently and at the top there were like two or three bars. And each one of them says, this one might not meet Wikipedia standards in this way, please help. This one might not meet Wikipedia standards in this way, please help. And I'm like, wow, they've started to signal the small gestures of improvement that in itself that an individual article can make.
+
+**Jamie:** Mm-hmm.
+
+**Garrick:** And I think in that sense, it starts to say, we have the story that is important to you, here's how we think it could be improved, please help
+
+**Jamie:** Mm-hmm.
+
+**Garrick:** improve this. And if we start to build against smaller gestures rather than, oh my goodness, structuring this article and just writing from scratch is way too difficult. But clarifying or
+
+**Jamie:** Yeah.
+
+**Garrick:** adding specific details.
+
+**Jamie:** I like the metaphor of the grain of sand. I like the idea that in this news ecosystem you're shoving in, programmatically, highly automatically, you're sending in these nuggets of information.
+
+**Garrick:** Yeah.
+
+**Jamie:** Then you've built robots to do this work
+
+**Garrick:** Yeah.
+
+**Jamie:** because it is, it doesn't—it can be algorithmically derived. But then that gives the genesis of the thing that somebody can then work off of. Different people will find different parts of it interesting,
+
+**Garrick:** Yes.
+
+**Jamie:** and it's different than what Patch is doing. I like what Patch is doing. I think of Patch more as like a multi-author WordPress site.
+
+**Garrick:** Right.
+
+**Jamie:** You know, it's not something unique.
+
+**Garrick:** Mm-hmm.
+
+**Jamie:** It's not an approach that's unique.
+
+**Garrick:** According to the label of this beer we're drinking, from Olvalde, it's bottle fermented, which means if you want to start being a yeast farmer,
+
+**Jamie:** Just take this bottle.
+
+**Garrick:** you take that last quarter inch there.
+
+**Jamie:** I could be my very own yeast farmer.
+
+**Garrick:** Yes.
+
+**Jamie:** All right, we'll be back next week with more yeast.

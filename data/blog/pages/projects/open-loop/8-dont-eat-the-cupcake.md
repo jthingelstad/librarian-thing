@@ -2,7 +2,7 @@
 page_id: 57873
 url: "https://www.thingelstad.com/projects/open-loop/8-dont-eat-the-cupcake/"
 title: "Open Loop #8 - Don't Eat the Cupcake"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-07T19:00:23+00:00"
 post_kind: page
 categories: []
 ---
@@ -24,434 +24,730 @@ categories: []
 
 ### Transcript
 
-_Here is an AI generated transcript of this episode. This has not been edited or checked for accuracy, yet._
+_Speaker-labelled transcript, machine transcribed and cleaned up with AI in October 2026. It may still have mistakes. Also as [WebVTT](https://files.thingelstad.com/projects/openloop/transcripts/openloop-8.vtt) and [JSON](https://files.thingelstad.com/projects/openloop/transcripts/openloop-8.json)._
 
-And my beer's not ideal. - No. - Yeah. - That sounds worse. - So I don't even know how this ended up in my fridge, but it's in my fridge, so I'm drinking it, 'cause that's the only way it'll not be in my fridge.
+**Jamie:** And my beer is not ideal.
 
-But it's a, I don't know, I haven't had any yet, but it's a Guinness, but it's not, I don't think, I thought this was just Guinness, but it's Guinness Black Lager. - Oh, sure. - That's not Guinness. - No, it's not Guinness. - So it's, this is Guinness trying to do something else? - This is Guinness trying to sell black and tans. - What? - Yeah. - Out of a bottle? - No, no, you get like a three pack of each. - Oh, oh, so this is them selling the, well, but it's dark. - I know. (laughing) - It doesn't make any sense. - It's got roasted barley. - Yeah. (laughing) - Is there a beer that doesn't have roasted barley? - Anything that's not dark. - Okay. - Yeah, I mean, yeah.
+**Garrick:** No, that sounds worse.
 
-Even, yeah, that's the easy answer. - It's okay, it's not bad.
+**Jamie:** So I don't even know how this ended up in my fridge, but it's in my fridge, so I'm drinking it because that's the only way it'll not be in my fridge. But I don't know, I haven't had any yet, but it's a Guinness, but it's not — I thought this was just Guinness, but it's Guinness Black Lager.
 
-It's not exciting, what are you drinking? - Founders Dirty Bastard. - I had that the other day. - Yeah. - I, where was I?
+**Garrick:** Oh, sure.
 
-We went to a restaurant, Spoon River, at Brenda's place. - Yeah, nice. - And they were, I asked what their seasonal beer was, they listed one, and they said something about a dirty old bastard, and I said, "I don't want that."
+**Jamie:** That's not Guinness. No.
 
-And then they said, "Oh, it's Founders."
+**Garrick:** It's not Guinness.
 
-And I said, "Well then, I'll have that." (laughing) - Why didn't you say so? - Yeah, I mean, you didn't say it was Founders.
+**Jamie:** So this is Guinness trying to do something else?
 
-I mean, if you say it's Founders, then that's a different thing, that's entirely different.
+**Garrick:** This is Guinness trying to sell black and tans.
 
-I thought it was pretty good. - Yes.
+**Jamie:** What?
 
-Yes, I decided that.
+**Garrick:** Yeah.
 
-Oh, I've got this, I have a plan for a strong Scotch Ale sometime, as soon as it stops being winter. - Someday. - Someday, and I thought I should have some idea of what I'm making. - Why do you have to wait for it to now be winter? - I have to be able to get seven gallons of water to boil outside. - Why can't you just do that in your kitchen? - Have you... (laughing) - It'd take a while, you're saying? - It would be faster outside. - So what do you think of that beer? - It's nice.
+**Jamie:** Out of a bottle?
 
-It's a little, so here's the weird thing about the style guidelines, which I'm reading as I'm tasting.
+**Garrick:** No, no, you get like a three pack of each.
 
-It's well within the ABV in the gravity, and maybe a little light, at least this sample seems a little light on the malt.
+**Jamie:** Oh, so this is them selling the — well, but it's dark. I know. It doesn't make any sense. It's got roasted barley.
 
-But the hops, or the IBUs, are like twice, twice the max of the style guidelines, and it's listed as the fourth best commercial example. - Huh, that's weird. - That is weird.
+**Garrick:** Yeah.
 
-Do you think the beer judging stuff will make you enjoy beer more or less? - Oh, more. - You don't think you'll be like, "Oh, but the IBUs were too high." - Have I told you my theory?
+**Jamie:** Is there beer that doesn't have roasted barley?
 
-This is the magic that I got out of my class, that I... - No, tell me the theory. - Yeah, so I think beer is one of the only things that will tell you its entire story, if you pay attention. - Like how it's made? - It will tell you its recipe, it will tell you its fermentation, it will tell you how it was stored, it will tell you its entire story. - A lot of people that I know that are like photographer types, will highlight, and I think you probably have this at some point in the long distant past, but as they got more and more into it, there was a point where it became not as fun. - Sure. - And you don't think that would happen with beer.
+**Garrick:** Anything that's not dark?
 
-You know why it won't? - Why won't it? - 'Cause it's got alcohol in it. (laughing) You don't get drunk taking pictures. - Gotta fix that.
+**Jamie:** Okay.
 
-Have to fix that.
+**Garrick:** Yeah, I mean, yeah. Even, yeah. That's the easy answer.
 
-So I did a day and a half of beer judging this past weekend, and I'm really starting to enjoy how the organizers structure the categories, how they sequence the categories might be more accurate.
+**Jamie:** It's okay. It's not bad. It's not exciting. What are you drinking?
 
-So there were just under 700 beers, and I judged like 40. - Okay, wow.
+**Garrick:** Founders Dirty Bastard.
 
-At first I thought you were gonna say you did 700. - No. - Okay. - Like 40. - So you can-- - Describe this.
+**Jamie:** I had that the other day.
 
-So when you're judging these beers, what does that mean if you judge 40 beers? - That means you're at a table, and the table's held, and you're paired with somebody.
+**Garrick:** Yeah.
 
-So you're paired with somebody who is-- - It's like a buddy system. - Yeah, so I'm a young judge or a newbie judge, and so I was always paired with somebody who's more experienced, national, grandmaster, something like that, right?
+**Jamie:** I, where was I? We went to a restaurant, Spoon River. At Brenda's, you know, place,
 
-At least one rank better than me.
+**Garrick:** Yeah,
 
-Each table had a category, so each, like I had Stouts or German Wheats was another category that I judged. - Can you request a category? - Yeah, you can.
+**Jamie:** and
 
-And whoever does the, and then you're labeled a jerk. (laughing) - Pain in the ass. - Right? - You're not day hard. (laughing) - Just judge your damn beer. - So you're at the table, and you're paired with another judge, and the steward brings by a beer, and all you have is the main category, the subcategory, and it's like entry number.
+**Garrick:** nice.
 
-And then you have a score sheet in front of you, so you crack it open, you pour a little ounce or two sample of the beer for you and your other judge, and then you go through the process of smelling it, and tasting it, and looking at it. - How many judges are at this? - How many judges are at this?
+**Jamie:** I asked what their seasonal beer was. They listed one and they said something about a dirty old bastard. And I said, I don't want that. And then they said, oh, it's Founders. And I said, well, then I'll have that. So
 
-Let's see. - You did 40 beers of 700, so there's what, at least 20? - Yeah, at least 20. - 20 groups, right? - 20 groups of pairs, so at least 40, yeah.
+**Garrick:** Why didn't you say so?
 
-Which 40's about right.
+**Jamie:** Yeah, I mean, you didn't say it was Founders. I mean, if you say it's Founders, then that's a different thing. That's entirely different. I thought it was pretty good.
 
-There was probably 40 judges. - And what was the event? - Round one of the 2013 National Homebrew Competition. - And so was this judging beers in this region, like in Minnesota, or? - So in this sort of upper Midwest region, yeah. - Okay, yeah. - And you get about 10 minutes to judge a beer, and come up with a number between 13 and 50. - 10 minutes for each beer? - Yeah. - On an ounce or two? - Yeah. - Wow. - And come up with a number, and be within, this contest was be within five of your other judge. - What does that mean? - That means if I scored a beer a 30, the other judge I'm with can score as low as a 25, or as high as a 35. - So what if they don't, what if he's a 20? - Yeah, then we have to have a conversation. - Oh, then you talk about it. - Right. - So it's like secret, and then you reveal, and it's like, you know what that's like?
+**Garrick:** Yes. Yes, I decided that. Well, I've got this, I have a plan for a strong Scotch ale sometime as soon as, you know, it stops being winter.
 
-That's like scrum planning. - Yeah, oh yeah, like estimating. - Yeah, yeah. - Yeah, totally, totally. (laughing) - Exactly, except you're not drunk. - Well, right, 'cause you're usually drunk when you do scrum planning. (laughing) It would make it go so much smoother. - So much easier.
+**Jamie:** Someday.
 
-So you have to be within five, but then if you're not, you just debate and arm wrestle, and then get within five. - Yeah, exactly, yeah. - Okay, so it's not like you're invalidated. - No, no, usually it's like, you know, it was times where I was like, well, you know, there's, I've judged enough beers to know when I'm missing something.
+**Garrick:** Someday. And I thought I should have some idea of what I'm making.
 
-And it's those points where I'm really flexible on my score, and I sort of look to the other judge to say, did you pick up something, 'cause I obviously missed something, and then we'll sort, 'cause it's usually gonna be a massive fault that I don't yet have, that I'm not yet able to define. - So would you, so I can imagine that wine judges, right, would be like, you know, there'd be somebody who'd be like, I only do reds. - Right. - And they wouldn't even drink whites, 'cause their palate is whatever.
+**Jamie:** Why do you have to wait for it to not be winter?
 
-So do you have that with beer?
+**Garrick:** I have to be able to get seven gallons of water to boil outside.
 
-Guys that would just like, I only do this type of beer? - For sure you could, and you know-- - You'd like specialize in that. - I don't know if you could do that in a contest, in a beer judging contest, because most of the ranges are pretty wide.
+**Jamie:** Why can't you just do that in your kitchen?
 
-You would be, you know, maybe you could specialize in light lagers. - Right. - But-- - But this is, so in a beer contest, this is like a dog, like this is like a dog competition, right?
+**Garrick:** Have you seen... You...
 
-Like there's a reference black lab. - Yes. - Right, so there's a reference everything, and then you're, how close are you to that? - Exactly. - So perfection is that. - Totally, totally abides by Sturgeon's Law.
+**Jamie:** It'd take a while, you're saying.
 
-Where only 10% of the stuff is, you know, good. - Oh, right. - Right. - So do you have to, were there beers that you were just like, this is gross? - Yeah, yeah, this is a German wheat beer that is not cloudy and has no head.
+**Garrick:** It wouldn't... It would be faster outside.
 
-This is not a German wheat beer.
+**Jamie:** So what do you think of that beer?
 
-But that's what they answered it as, that's what you're judging it against, that's your job. - But were any of them just bad? - Oh, yeah, some of them were, hmm, this is asparagus and onions. (laughing) - How does that get in there?
+**Garrick:** It's nice. It's a little... So here's the weird thing about the style guidelines, which I'm reading as I'm tasting. It's well within the ABV in the gravity and maybe a little light, at least this sample seems a little light on the malt. But the hops, or the IBUs, are like twice the max of the style guidelines, and it's listed as the fourth best commercial example.
 
-Seriously. - I put together a little diagram of common faults and what their causes are, because one of the, one of your functions as a judge is to say, these are the characteristics I'm picking up, and this is what causes them, in terms of the fault side of things.
+**Jamie:** Huh.
 
-Here are some suggestions for remedying that.
+**Garrick:** It's weird.
 
-And I didn't have vegetal on that list.
+**Jamie:** That is weird. Do you think all the beer judging stuff will make you enjoy beer more or less?
 
-So I had to go back and figure out, okay, what is vegetal?
+**Garrick:** Oh, more.
 
-Group it with everything else, it's unhappy yeast.
+**Jamie:** You don't think you'd be like, oh, but you know, the IBUs were too high?
 
-It's really unhappy yeast. - What was the, was there one beer, can you even talk about it, or was there one beer that you were just like, that was amazing? - Yeah, it was amazing.
+**Garrick:** Have I told you my theory? This is the magic that I got out of my class that I...
 
-There was a bourbon barrel coffee stout that was amazing.
+**Jamie:** No, tell me the theory.
 
-Everything was evenly balanced, it smelled amazing, it tasted amazing, it was-- - A bourbon barrel coffee stout. - Yes. - That's too many things. - Yes, and it wasn't the only one I had, but it was the only one that was yummy. - That sounds like a lot. - It was a lot. - Yeah, but it came together. - It came together beautifully. - So is there another one of these, or is this like the deal, and then now it goes someplace else? - I think now it goes to someplace else.
+**Garrick:** Yeah, so I think beer is one of the only things... that will tell you its entire story, if you pay attention.
 
-But there's another one in May, and then there's-- - You gotta pay to do this, or what?
+**Jamie:** Like how it's made?
 
-They pay you, or how's that, or nobody pays anybody?
+**Garrick:** It will tell you its recipe, it will tell you its fermentation, it will tell you how it was stored, it will tell you its entire story. Yeah.
 
-Where does it work? - The entrance pay. - So they pay to be judged.
+**Jamie:** A lot of people that I know that are like photographer types will highlight — and I think you probably have this at some point in the long distant past — but that as they got more and more into it, there was a point where it became not as fun.
 
-And then you volunteer your time to do the judging. - I get paid in experience points. - In points. - Yeah. - They should pay you in bitcoins. (laughing) - So yeah, so hopefully, one of the reasons that I did this is, this particular contest at this particular time is that it was enough sessions that it could bump me up to the next level. - Right. - So I could, which means at some point I'll be on the other side of the table, which would be kinda cool. - Oh, okay, right, right, okay. - Yeah. - Yeah, 'cause you missed mini bar. - I totally missed mini bar. - Mini bar eight.
+**Garrick:** Sure.
 
-It hurts, it's like missing Christmas. - I know.
+**Jamie:** You don't think that would happen with beer? You know why it won't?
 
-That's not the first one you missed, is it? - No, this is my second one I've missed. - All right.
+**Garrick:** Why won't it?
 
-I still have a perfect record, I've never missed one.
+**Jamie:** Because it's got alcohol in it. You don't get drunk taking pictures.
 
-I don't know, I think I get a shirt or something for that. - And a pin. (laughing) - I should.
+**Garrick:** Gotta fix that. Have to fix that. So I did a day and a half of beer judging this past weekend, and I'm really starting to enjoy how the organizers structure the categories — how they sequence the categories might be more accurate, right? So there were 700, just under 700 beers, and I judged like 40.
 
-Should be a pin.
+**Jamie:** Okay, wow, at first I thought you were going to say you did 700.
 
-Maybe at the 10th mini bar we'll do that.
+**Garrick:** No, like
 
-Have special pins made for people that have been to every one. - Yes, yes, yes. - I think that's a good idea.
+**Jamie:** Okay.
 
-Well, so since you weren't there, let me tell you, it was awesome.
+**Garrick:** 40. So you can divide.
 
-As always.
+**Jamie:** So describe this. So when you're judging these beers, what does that mean if you judge 40 beers?
 
-But it was, you know, there were a couple of things that were new awesome about it.
+**Garrick:** That means you're at a table and the table's held — you're paired with somebody, so you're
 
-So one of those was that I felt like there were more people there.
+**Jamie:** It's a buddy system.
 
-I mean, the same, like we've been kind of at this plateau, not because there's not more demand, but because the facility really can't accommodate a ton more people and the style of event that mini bar is can also-- - Best Buy headquarters? - Yeah. - And also, you know, I mean, I don't know if you can do it on conference like mini bar with 4,000 people.
+**Garrick:** paired with somebody who is yeah, a buddy. So I'm a young judge or a newbie judge, and so I was always paired with somebody who's more experienced — national, grandmaster, something like that, right? At least one rank up better than me. Each table had a category. So like I had stouts, or German wheats was another category that I judged.
 
-And so, you know, there's only so many people.
+**Jamie:** Can you request a category?
 
-But I think we had a better show up rate.
+**Garrick:** Yeah, you can,
 
-Because I think the organization-- - Was it crowded outside? - Well, it was terrible.
+**Jamie:** Okay.
 
-Yeah, the weather was an absolute, it was a mini bar miracle 'cause the weather was cold and rainy and sucked.
+**Garrick:** and whoever does the — and then you're labeled a jerk, right?
 
-And the other, and people did a better job canceling their tickets who couldn't come.
+**Jamie:** Pain in the ass.
 
-So more tickets got cycled back through, which helped.
+**Garrick:** You just made my day hard.
 
-And then there were, like, I thought the sessions were well done.
+**Jamie:** Just judge your damn beer.
 
-There was a wide variety, more variety than, like, I think in other years I've seen, you know, there are a couple, two or three things that get kind of all of the attention, but there was a bit more variety.
+**Garrick:** So you're at the table and you're paired with another judge, and the steward brings by a beer, and all you have is the main category, the subcategory, and its like entry number. And then you have a score sheet in front of you. So you crack it open, you pour a little ounce or two sample of the beer for you and your other judge, and then you go through the process of smelling it and tasting it and looking at it and all those things.
 
-There were a lot more women this year.
+**Jamie:** How many judges are at this?
 
-Like, that was, and I'm not sure why that was.
+**Garrick:** How many judges are at this? Let's see.
 
-Like, we did do some specific outreach, but there were notably more women this year than there have been in previous years, which is really good.
+**Jamie:** I mean, you did 40 beers at 700, so it was at least 20.
 
-And we had pizza again, which was a nice upside.
+**Garrick:** Yeah,
 
-Geeks don't like fancy food. - Those sound like all good things. - Yeah, yeah.
+**Jamie:** It was
 
-And a number of the sessions had just kind of, you know, people falling out the rooms.
+**Garrick:** at least 20.
 
-I mean, they were so oversubscribed.
+**Jamie:** 20 groups, right?
 
-So, none of mine, but other people did. (laughing) So, yeah, it was great.
+**Garrick:** 20 groups of pairs, so at least 40. Yeah, which 40 is about right. There was probably 40 judges.
 
-It was great. - Well, congratulations. - Yeah, it was fun. - And you had a huge session on doing amazing things with MediaWiki. - I had a moderately well-attended session on building ridiculously advanced websites with MediaWiki where I used WikiApiary, which, oh, so long ago, the last time we did one of these open loop sessions I talked about, and that was fun.
+**Jamie:** And what was the event?
 
-You know, it was hard.
+**Garrick:** Round one of the 2013 National Homebrew Competition.
 
-The sessions this year were 40 minutes. - It's so tight. - It's really fast.
+**Jamie:** And so was this judging beers in this region, like in Minnesota?
 
-And particularly if you're gonna engage the room, right?
+**Garrick:** So in this sort of upper Midwest region, yeah. Yeah. And you get about 10 minutes to judge a beer and come up with a number between 13 and 50.
 
-It's just not a lot of time.
+**Jamie:** 10 minutes for each beer on
 
-So, yeah, I did a session on how to build really advanced websites with MediaWiki that I think was pretty good.
+**Garrick:** Yeah.
 
-Got some good feedback on.
+**Jamie:** an ounce or two? Wow.
 
-And WikiApiary, by the way, I mean, you know, 'cause you've looked at it from time to time, but I mean, it's doing very, very well.
+**Garrick:** And come up with a number and be within — this contest was be within five of your other judge.
 
-I mean, the last time we talked about it, I had just put it together, really.
+**Jamie:** What does that mean?
 
-And since then, now it's linked to from, one of the big things that happened is that the MediaWiki.org site, the main MediaWiki site, which hosts the kind of repository of all extensions, now links to WikiApiary to show version and usage information.
+**Garrick:** That means if I scored a beer a 30, the other judge I'm with can score as low as a 25 or as high as a 35.
 
-And that drives a bunch of traffic.
+**Jamie:** But then so what if they don't? What if he says a 20?
 
-And like every day, two or three new people who have wikis sign up and add their own wikis or claim a wiki that's already in there and continues to get additional kind of features.
+**Garrick:** Yeah, then we have to have a conversation.
 
-And that's fun.
+**Jamie:** Then you talk about it. So it's like secret and then you reveal, and it's like — you know what that's like? That's like, you know, scrum planning.
 
-It's serving a unmet need in the MediaWiki ecosystem.
+**Garrick:** Yeah? Oh yeah, like estimating, right?
 
-And doing it well, so. - That's fantastic, yeah.
+**Jamie:** Yeah.
 
-Nice success getting linked to off the MediaWiki extension site. - Yeah, and, oh, and then the thing I just added was, I'm actually doing a little clustering and grouping.
+**Garrick:** Yeah, totally, totally. Exactly. Except you're not drunk.
 
-I guess it's not clustering, it's identifying relationships.
+**Jamie:** Well, right, because you're usually drunk when you do scrum planning.
 
-So now, when you look at an extension, it'll do the, kind of like Amazon, people who bought this also bought this.
+**Garrick:** It would make it go so much smoother.
 
-It'll say, like, wikis that use this extension also use these extensions, which is a pretty cool feature to facilitate discovery.
+**Jamie:** So much easier. So you have to be within five, but then if you're not, you just debate and arm wrestle and then get within five. Okay.
 
-So yeah, it's continuing to plug along, doing cool stuff. - Great to hear. - And it's got me writing Python that's non-trivial. - Hey, I just went through the Python for Kids. - Oh yeah, we had that a while ago, didn't you? - No, just picked it up. - Oh, I got it. - Okay. - I'm-- - I thought, or maybe I'm gonna, like, learn Python the hard way or whatever. - Yeah, I have that one.
+**Garrick:** Yeah, exactly. Yeah.
 
-I don't know if I've even cracked that one open.
+**Jamie:** So
 
-I'm a little afraid of it. - It's hard. - Yeah, the hard way. - Exactly. - But the Python for Kids is fun.
+**Garrick:** Can you...
 
-You make a game.
+**Jamie:** it's not like you're invalidated. Okay.
 
-But the biggest win is that it seems to have a turtle in it that makes sense, which has been one of my quests as of late, is to find a-- - You love these turtles. - I have such fond memories of messing around with the turtle as a kid. - Yeah. - And it was on an Apple IIe, and it's probably easier to find a turtle than an Apple IIe these days. (laughing) - Did you ever go to the Minnesota Science Museum, Minnesota, when you were a kid, and when they had a real turtle that you could program? - No. - Yeah, they did. - No, really? - Yeah, a little turtle on a grid.
+**Garrick:** No, no. Usually it's like, you know, it was times where like, well, you know, I've judged enough beers to know when I'm missing something. And it's those points where I'm really flexible on my score, and I sort of look to the other judge to say, you know, did you pick up something? Because I obviously missed something. And then we'll sort — because it's usually going to be a massive fault that I don't yet have, that I'm not yet able to define.
 
-I don't know what was running it, but you could sit there and then program, move forward this many, then turn, then do this, and then you'd hit run, and it would run and do it. - Nice. - It was pretty cool. - Very cool. - So is this Python turtle graphical? - Yeah. - What modules are you using? - Turtle. - Of course. - Yeah, import turtle, right there at the top. - And that's it.
+**Jamie:** So would you like — so I can imagine that like wine judges, right, would be like, you know, there'd be like somebody to be like, I only do reds, and
 
-I mean, that's actually how you write almost every Python application, by the way.
+**Garrick:** Right.
 
-That's pretty much how you do it.
+**Jamie:** they wouldn't even drink whites because their palate is
 
-You just say, import do everything now, and then you say, I equals do everything now. - Yeah, that's what it looked like, right there. - Yeah. - It was weird coming from Ruby, 'cause we've been working on the Hackity Hack turtle, and there's a lot of parentheses in there. - Yeah, yeah.
+**Garrick:** Yeah.
 
-So there was this comic that was on the net I found the other day that just made me laugh.
+**Jamie:** whatever. So do you have that with beer, like guys that would just be like, I only do this type of beer, you'd
 
-It was exactly that.
+**Garrick:** For sure you could, and you might.
 
-It was like doing your homework in different programming languages, and the Python one, the response was, you can't just say import. (laughing) - Right, right, yeah, 'cause, you know. (laughing) Import and require, seems like, at least with require, there's a level of work that still needs to be done. - Exactly, no, not with Python. (laughing) So are you teaching the kids how to write some code? - Yeah, we're working on it.
+**Jamie:** like specialize in that.
 
-Plates work through some turtle stuff, and what they've both enjoyed so far a lot is this Blocky.
+**Garrick:** I don't know if you could do that in a contest, in a beer judging contest, because most of the ranges are pretty wide. You would be — you might, you know, maybe you could specialize in light lagers, but
 
-Especially, well, the Blocky has a turtle in it, too, which is-- - This is the website that you sent me. - Oh, the website I sent you, yeah.
+**Jamie:** But this is — so in beer contests, this is like a dog competition, right? Like there's a reference black lab, right? So there's a reference everything.
 
-But really what they've enjoyed most is solving these mazes. - So share how those work. - Instead of having to type out turn 90, it has a block, a little graphical block that you can drag and drop that says turn left.
+**Garrick:** Yes.
 
-Or, and it has a little pull down, and you can change it to turn right, but there's also a turn right block.
+**Jamie:** And then you're, how close are you to that?
 
-And the idea with Blocky is that instead of having to write out code, you just, you can read what the block says and drag and drop it in the order you want.
+**Garrick:** Exactly.
 
-Which for, my thing has been, I want the kids to understand how to make computers do stuff, but I'd like them to learn how to write their name first.
+**Jamie:** So perfection is that.
 
-Or I can be able to write with their hands before they learn how to type.
+**Garrick:** Totally. Totally abides by Sturgeon's law.
 
-And so this Blocky drag and drop stuff they can do, and they don't need to get worried about, concerned about typing slowly and finding the keys.
+**Jamie:** Yeah, okay.
 
-Most of the times I would be typing out the turtle stuff, and then I found this Blocky, we can just drag and drop and we can do that together, that works out pretty well.
+**Garrick:** Where only 10% of the stuff is good, right?
 
-You sort of attach them, they're like jigsaw, the blocks are like jigsaw puzzle pieces that you snap together. - Yeah, they kind of click together, yeah. - And then you hit run program and it goes through that sequence of jigsaw puzzles, pieces.
+**Jamie:** Oh, right. So were there beers that you're just like, this is gross?
 
-The maze side of it, there's a little like Google Maps, Street View guy, a little Google Map pointer.
+**Garrick:** Yeah, yeah. This is a German wheat beer that is not cloudy and has no head. This is not a German wheat beer. But that's what they entered it as, that's what you're judging it against. That's your job.
 
-And your job is to get the guy to the pointer through this maze, it's a grid, right?
+**Jamie:** But were any of them just bad?
 
-And putting together these blocks of turn left, turn right, move forward, if path turns this direction, do X else do Y, putting those sequences in, there's a repeat loop. - So there's conditionals and looping. - Yep, exactly, exactly.
+**Garrick:** Oh yeah, some of them were. Some of them were, hmm, this is asparagus and onions. How does that get in there? I mean... I mean, seriously, I put together a little diagram of common faults and what their causes are, because one of your functions as a judge is to say, these are the characteristics I'm picking up and this is what causes them in terms of the fault side of things. Here are some suggestions for remedying that. And I didn't have vegetal on that list. So I had to go back and figure out, okay, what is vegetal? Group it with everything else. It's unhappy yeast. It's really unhappy yeast.
 
-So you can put these all together.
+**Jamie:** Well, was there one beer, can you even talk about it, or was there one beer that you were just like, that was amazing?
 
-And I've walked through, both kids have asked for it separately over the past week.
+**Garrick:** Yeah, it was amazing. I mean, there was a... bourbon barrel coffee stout that was amazing. Everything was evenly balanced, it smelled amazing, it tasted amazing. It was, yes.
 
-And yesterday we went through level one to 10, me and the two kids, two big kids together.
+**Jamie:** A bourbon barrel coffee stout. That's too many things.
 
-And then after I put Waverly to bed, Cooper went to work through the whole thing himself. - Very cool. - There was a couple that he was struggling with and his blocks weren't as efficient as they could be, doesn't really matter, but he was able to get almost all but two to work on his own. - They weren't as efficient as they, you should tell them there's bonus points for refactoring.
+**Garrick:** Yes, and it wasn't the only one I had, but it was the only one that was yummy.
 
-If you can refactor that algorithm, you get an extra star.
+**Jamie:** That sounds like a lot, yeah.
 
-That's really neat. - Yeah, it's really fun. - Why do you think they used the Google Maps? - I think 'cause it was easy to find. - I thought that was weird.
+**Garrick:** It was a lot.
 
-Do you think they paid a license fee for that? - So Cooper and I went through the Python for Kids book tonight and they had a turtle in there.
+**Jamie:** But, together.
 
-And then so we talked and then talked about conditional statements.
+**Garrick:** It came— was a lot. It came together beautifully.
 
-And we talked about the if statements, conditional statements in Blocky.
+**Jamie:** So do you— is there another one of these, or is this like the deal and then now it goes to someplace else?
 
-And he talked about loops and we talked about the repeat and tills that were in Blocky and he seemed to get the difference. - Cool.
+**Garrick:** I think now it goes to someplace else, but there's another one in May and then there's, you know, a bunch of other.
 
-Have you done Lauren Mibson, that book, Lauren Mibson? - Yeah, yeah, yeah. - Did you tell me about that? - I may have, I may have.
+**Jamie:** You gotta pay to do this, or what, they pay you? Or how's that, or nobody pays anybody? How does it work?
 
-That was a fun book.
+**Garrick:** The entrants pay.
 
-My favorite is, at one point Cooper stood in the middle of the hallway and started asking his siblings for their password. - That's awesome. - So yeah, good. - Have you finished that book? - Yes. - All right, so I'm still, I'm halfway through.
+**Jamie:** So they pay to be judged, and then you volunteer your time to do the judging.
 
-What's the name of it?
+**Garrick:** Exactly. I get paid in experience points.
 
-It's Willpower-- - Willpower Instinct. - The Willpower Instinct.
+**Jamie:** Points.
 
-But I wanna talk about the very first chapter. - Yeah, yeah, yeah. - Which we talked about a little bit.
+**Garrick:** Yeah.
 
-But in the very first chapter, so this book is about, how would you describe it?
+**Jamie:** They should pay you in Bitcoins.
 
-It's about understanding how to manage willpower, maybe?
+**Garrick:** So yeah, so hopefully, you know, one of the reasons that I did this particular contest at this particular time is that it was enough sessions that it could bump me up to the next level, so
 
-Or understanding what willpower is?
+**Jamie:** Right.
 
-It feels like it's tools for you to know better. - How to deal with yourself. - Yeah, and it reminds me a lot of thinking fast and slow.
+**Garrick:** I could, you know, which means at some point I'll be on the other side of the table, which would be kind of cool.
 
-But with the difference being that thinking fast and slow was more specific to understanding decision making, whereas I guess willpower is also about decision making, but it feels a bit different. - I have read and been evangelizing the power of full engagement, which is all about self-managing your energy.
+**Jamie:** Oh, okay. Right, right. Okay.
 
-And the tools, which is all about paying attention to who you want to be and what your long-term goals are.
+**Garrick:** Yeah, I mean,
 
-And the Willpower Instinct felt like the third in that series. - So did you find it complementary to that other reading? - Absolutely. - Okay. - There was much overlap on Willpower Instinct to both of those other two books. - Well, would you still wanna read all three, or would you be like, no, I'm good with this one? - No, I think you should read all three.
+**Jamie:** Yeah, because you missed Minnebar— Minnebar 8.
 
-Yeah, 'cause they have different approaches, and they go deep on different sides of things.
+**Garrick:** Totally missed Minnebar, and I was like, oh It hurts. It's like missing Christmas.
 
-So the power of full engagement is all about daily routine and making sure that you make time for recovery.
+**Jamie:** I know. That's not the first one you missed, is it?
 
-And the tools is all about continually checking yourself and making sure you're doing the things that will help you achieve long-term success.
+**Garrick:** No, this is my second one I've missed.
 
-This feels like the Willpower Instinct is much more immediate and tactical, like emergency room.
+**Jamie:** All right. I still have a perfect record. I've never missed one. I don't know. I think I get a shirt or something for that. I don't know.
 
-Like, I need a, like, how do I fix this now?
+**Garrick:** Get a pin. Get a pin. Get a pin.
 
-Here's nine strategies that could help you right now. - Like as you're at the brink. - Exactly.
+**Jamie:** I should. It should be a pin. Maybe at the 10th Minnebar we'll do that. Have special pins made for people that have been to every one.
 
-Like, okay, you are about to jump off a cliff.
+**Garrick:** Yes! Yes! Yes!
 
-Hold on. - Yeah, stop. - Stop, try this. - Yes.
+**Jamie:** I think that's a good idea. They were, well, so since you weren't there, let me tell you, it was awesome. as always.
 
-Don't eat the cupcake. - Yeah, don't eat.
+**Garrick:** Yeah.
 
-Don't think of the cupcake.
+**Jamie:** but it was, you know, there were a couple of things that were new, awesome about it. So one of those was that I felt like there were more people there. I mean, the same— like, we've been kind of at this plateau, not because there's not more demand, but because the facility really can't accommodate a ton more people, and the style of event that Minnebar is can also
 
-Oh, you're not there yet, sorry. - Yeah.
+**Garrick:** Best Buy headquarters?
 
-Remember you're married. - Right, right.
+**Jamie:** Yeah.
 
-Simple things. - So I'm like halfway through it, so I don't know the end.
+**Garrick:** Yeah.
 
-I will be done shortly though, 'cause my book club meeting is next week, so I will be done.
+**Jamie:** And also, you know, I mean, I don't know if you can do a conference like Minnebar with 4,000 people. And so, you know, there's only so many people, but I think we had a better show-up rate, because I think the reservation
 
-But the first chapter, so the very first chapter was about meditation. - Yes. - And which kind of, so I have to say, so I have a little bit of history with meditation.
+**Garrick:** Was traffic outside?
 
-Tammy and I took a class, I don't know when that was, three, four years ago, maybe longer.
+**Jamie:** Terrible, yeah. The weather was an absolute— it was a Minnebar miracle, because the weather was cold and rainy and sucked. And people did a better job canceling their tickets who couldn't come.
 
-You know, I think it was longer than that, maybe five or six.
+**Garrick:** Hmm.
 
-Anyways, it was in the warehouse district, of course, 'cause I mean, if you're gonna take a meditation class, it's gonna be in a warehouse district or in uptown.
+**Jamie:** So more tickets got cycled back through. which helped. And then there were, like, I thought the sessions were well done. There was a wide variety, more variety than I think in other years I've seen. Yeah, there are a couple, two or three things that get kind of all of the attention, but there is a bit more variety. There are a lot more women this year. Like, that was— and I'm not sure why that was. Like, we did do some specific outreach, but but there were notably more women this year than there have been in previous years, which is really good. And we had pizza again, which was a nice upside. Geeks don't like fancy food. So Yeah,
 
-So ours was in the warehouse district.
+**Garrick:** Still, those sound like all good things.
 
-And hardest thing I have ever, I mean, I've done some reasonably difficult things, and that was so hard. - Yes. - I could not even believe it.
+**Jamie:** yeah. Yeah, I And a number of the sessions had just kind of, you know, people falling out the rooms. I mean, they were so oversubscribed. So, none of mine, but other people did. So it was great. It was great.
 
-The only time I successfully meditated was when I fell asleep.
+**Garrick:** Well, congratulations.
 
-And I did every time we went.
+**Jamie:** Yeah, it was fun. So
 
-'Cause at one point in the class, you'd meditate, and you do all these different types of meditation, and then at the end, there was this type of meditation where you lay down, and I just remember, you should say lay down, and then you start with your fingers, and it says relax your fingers, then relax your hand.
+**Garrick:** Good, good, great. And you had a huge session on doing amazing things with MediaWiki.
 
-I never got to my shoulder. - I had a PE credit in college. - Doing that? - Yeah. (laughing) I was able to fulfill my college PE requirement with a class on relaxation.
+**Jamie:** I'm almost done with this one. I had a moderately well-attended session on building ridiculously advanced websites with MediaWiki, where I used WikiApiary, which also long ago, the last time we did one of these Open Loop sessions, I talked about. And that was fun. You know, it was hard, the sessions this year were 40 minutes and
 
-And that's what we did. - That's brilliant. (laughing) - I got my 45 minute nap in. - So, but the thing that blew me away was in this first chapter of the Will Powers thing is that it actually, she describes in there a really specific benefit of meditation that is more like, hey, if you run every day, this will happen.
+**Garrick:** It's so tight.
 
-And she was like, if you meditate on a regular basis, this will happen in your brain, which just kinda, it was the most relevant call to action I saw and why I would wanna actually work through this and make this happen. - After a lot of trial and error, it has been a regular meditation, which I'm looking at my calendar, and I've probably, it's sort of regular every other day, or I miss a day here and there, but every day, every other day, somewhere in there. - That you've been meditating. - Yeah, for 20 minutes. - 15, 20 minutes. - Yep. - First thing in the morning? - Nope. - Different times? - Different times.
+**Jamie:** it's really fast. Yeah, in particularly if you're going to engage the room, right? It's just not a lot of time, so So yeah, I did a session on how to build really advanced websites with MediaWiki that I think was pretty good, got some good feedback on. And WikiApiary, by the way, I mean, you know, because you've looked at it from time to time, but it's doing very, very well. I mean, the last time we talked about it, I had just put it together really. And since then, now it's linked to from One of the big things they're having is that the mediawiki.org site, the main MediaWiki site which hosts the kind of repository of all extensions, now links to WikiApiary to show version and usage information, and that drives a bunch of traffic. And like every day two or three new people who have wikis sign up and add their own wikis or claim a wiki that's already in there. there, and continues to get, you know, additional kind of features, and that's fun. It's serving an unmet need in the MediaWiki ecosystem and doing it well, so yeah
 
-When I do it, it is because I don't know what else to do.
+**Garrick:** That's fantastic. Nice success getting linked to off the MediaWiki extension site.
 
-Right, I feel like I'm being pulled in so many directions, I don't have clear focus. - Wait a second, don't you just go to Twitter then? - Right. (laughing) - Exactly. - Exactly, right, so behaviors that I'm trying to change.
+**Jamie:** Yeah, and Oh, and then the thing I just added was I'm actually doing a little... clustering and grouping— I guess it's not clustering, it's identifying relationships. So now when you look at an extension, it'll do the kind of like Amazon, people who bought this also bought this. It'll say, like, wikis that use this extension also use these extensions, which is a pretty cool feature to facilitate discovery. So yeah, it's continuing to plug along. Doing cool stuff.
 
-So instead of destroying an afternoon on Hacker News or Facebook, I walk away from the computer and close my eyes and focus on my breathing for 20 minutes.
+**Garrick:** Hey, great to hear.
 
-It's worked better, what comes after has been more productive after that 20 minute meditation than a cup of coffee, than a nap, than almost anything else. - Wow. - Either meditate or write three pages longhand.
+**Jamie:** And it's got me writing Python that's non-trivial.
 
-If I don't do either of those, I am guaranteed to have a shitty day.
+**Garrick:** Hey, I just went through the Python for Kids.
 
-Guaranteed.
+**Jamie:** Oh yeah, which— it's just a while ago, didn't you?
 
-Like I didn't do that on Sunday, shitty day.
+**Garrick:** Yeah, no, just picked it up.
 
-So I see, so for the last three weeks I've been getting up and spinning most mornings or lifting weights.
+**Jamie:** Oh, okay. I thought, well, maybe I'm thinking of like Learning Python the Hard Way or whatever.
 
-Which is, as I know, but forget often, is a great way to start the day even when I don't want to do it.
+**Garrick:** Yeah, I have that one. I don't know if I've even cracked that one open. I'm a little afraid of it.
 
-It definitely gets you in the right place.
+**Jamie:** It's hard. Yeah, the hard way. Exactly.
 
-But I do find lifting weights first thing in the morning really hard because my brain isn't in the right spot for that.
+**Garrick:** But the Python for Kids is fun. You make a game. But the biggest win is that it seems to have a turtle in it that makes sense, which has been one of my quests as of late, is to find a...
 
-One of the things I like about spinning is at least how I do it is, it's in a dark room, I don't need my glasses, somebody's yelling at me what to do, all I need to do is follow those instructions. (laughing) I don't need to really think. - Yeah, I did it at home on my own.
+**Jamie:** You love these— you love these turtles.
 
-So that mainly means I put on the Foo Fighters really loud and then go. - That works well too, same thing.
+**Garrick:** I have such fond memories of messing around with a turtle as a kid.
 
-But I have thought of getting up even earlier, like at five or 5.30 and doing, trying to fit meditation in as well. - That works out pretty well for me. - I worry that I would fall back asleep, but even if I'm sitting up. - It's been close.
+**Jamie:** Yeah.
 
-It's been close.
+**Garrick:** And it was on an Apple IIe, and it's, you know, probably easier to find a turtle than an Apple IIe these days.
 
-'Cause that's what I've been trying to do, get up at 5.30, 20 minute meditation.
+**Jamie:** did you ever go to the Science Museum of Minnesota when you were a kid? And when they had, like, a real turtle that you could program? Yeah.
 
-For me anyway, it's 20 minutes and I'm like, okay, let's go, let's do this.
+**Garrick:** No.
 
-I am more alert than I would have been otherwise. - You know, when I was riding a lot and when I went down to Texas and rode all week, we rode 100 miles every day.
+**Jamie:** They did, yeah.
 
-And I'm even in my best of shape and at my lightest, I am way too big of a guy to go up hills.
+**Garrick:** Not really.
 
-But occasionally you gotta go up a hill.
+**Jamie:** A little turtle on like a grid, you know. I mean, I don't know what was running it, but you could sit there and then program, you know, move forward this many, then turn and do this, and then you'd hit run and it would run and do it. It's
 
-And I was going up this hill and this guy that rode all the time was next to me and he's like, I was breathing pretty hard, and he's like, you need to just stop breathing.
+**Garrick:** Nice.
 
-And I was like, are you insane?
+**Jamie:** pretty cool.
 
-Are you looking at me?
+**Garrick:** Very cool.
 
-I'm gonna die over here.
+**Jamie:** Very cool. So is this Python turtle graphical?
 
-And he's like, no, when you get in that situation, you need to hold your breath for a count of five.
+**Garrick:** Yeah.
 
-'Cause your body is freaking out and that's causing your brain to freak out.
+**Jamie:** What modules is it using?
 
-And if you exert your brain over your body and tell it, no, we'll breathe in a few seconds here, it relaxes you and gets you back under control.
+**Garrick:** Yeah, yeah. Turtle.
 
-And I'll be damned if it didn't work. - The breathing technique for meditation is applicable in I think almost any stressful situation.
+**Jamie:** Of course.
 
-And I think that's the biggest thing that came out of willpower.
+**Garrick:** Yeah, import turtle, right there at the top.
 
-For me it was, oh, hey, I can even use this technique in more places than I was anyway. - Yeah, like when your kids are screaming at you. - Yeah, just breathe. - Just breathe. - Just breathe, just breathe. - What was your biggest takeaway from the Willpower Walk without, hopefully you don't spoil it.
+**Jamie:** And that's it. I mean, that's actually how you write almost every Python application, by the way. That's pretty much how you do it. You just say import do everything now, and then you say i equals do everything now.
 
-I don't think you could spoil that book.
+**Garrick:** Yeah, that's what it looked like right there.
 
-Having read it all. - Just breathe. - Just breathe. - In and out, focus on your breathing. - Yeah. - I think she closes with that. - Really? - Yeah. - That's the call to action. - The call to action is just focus on your breathing.
+**Jamie:** Yeah, there was a, yeah.
 
-I find, like I said, I'm in the middle, but it's really interesting.
+**Garrick:** It was weird coming from Ruby, because we've been working on the Hackety Hack turtle, and there's a lot of parentheses in Python.
 
-I've had a couple of really kind of interesting thoughts around the supposition that what happens if you have a large society that is all systematically deprived of its willpower?
+**Jamie:** Yeah.
 
-It made me think about things like how some things have trended not so well in recent years.
+**Garrick:** Yeah.
 
-I've never heard anybody suggest that perhaps environmental aspects have changed that have, without us really knowing, changed how we manage our willpower or what willpower we have left, which has resulted in kind of systematically less optimal decisions. - Totally agree with that.
+**Jamie:** So there was this comic that was on the net I found the other day that just made me laugh. It was exactly that. It was like doing your homework in different programming languages. And the Python one, the response was, you can't just say import.
 
-Absolutely, 100%, yes. - I mean. - Here's what I thought was super interesting.
+**Garrick:** Right, right. Yeah, because, you know, between import and require, it just seems like, you know, at least with require there's a level of work that still needs to be done.
 
-Are you, the bit about the news and the panic and the fear instilling TV and the compulsive eaters, are you that? - Nope, not there, not there. - I was thinking about that, and I was thinking how much I really dislike the giant flat screen TVs at the gym that are tuned into Fox and CNN and Care 11 and-- - I gotta agree with that, that's horrible. - It's horrible, but it's right in front of the bikes and the treadmills.
+**Jamie:** Exactly. No, no. Not with Python. So are you teaching the kids how to write some code?
 
-And after reading the willpower book and that section about TV, I thought, oh, this is fine. - Why is it fine? - Her argument is that if you are exposing yourself to this sort of panic-inducing media, you're going to reach for the nearest thing that can provide comfort and release to that stress. - You're already on a treadmill and a bike. - Right, pedal partner. - Right, it's, oh, I go to the gym now and I think, eh, it's probably fine.
+**Garrick:** Yeah, we're working on it. We worked through some turtle stuff. And what they've both enjoyed so far a lot is this Blockly, especially, well, the Blockly has a turtle in it too,
 
-I can't see it anyway, I don't have my glasses on, it's probably fine. - It's just more inducement, right? - Exactly. - All right, it's been too long since we did this.
+**Jamie:** This is the website that you sent me.
 
-We'll do another one soon. - Let's do that. - I mean, the coupe season is starting up. - Hey, by the way, you just triggered the record. 30, what, 52 minutes of recording before the word coupe came up.
+**Garrick:** which is... I sent you. But really what they've enjoyed most is solving these mazes.
 
-Shocking, shocking.
+**Jamie:** So share how those work.
+
+**Garrick:** So instead of having to type out turn 90, it has a block, a little graphical block that you can drag and drop that says turn left. Or it has a little pull down and you can change it to turn right, but there's also a turn right block. And the idea with Blockly is that instead of having to write out code, you just... You can read what the block says and drag and drop it in the order you want, which, for my thing, has been I want the kids to understand how to make computers do stuff, but I'd like them to learn how to write their name first. Or I can be able to write with their hands before they learn how to type. And so this Blockly drag and drop stuff they can do, and they don't need to get worried about, you know, concerned about, you know, typing, being slowly and finding the keys.
+
+**Jamie:** Right.
+
+**Garrick:** Most of the times I would be typing out the turtle stuff, and then I found this Blockly, we can just drag and drop and can do that together. That works out pretty well. You sort of attach them, they're like jigsaw— the blocks are like jigsaw puzzle pieces that you snap together, and
+
+**Jamie:** Yeah, they kind of click together, yeah.
+
+**Garrick:** then you hit run program and it goes through that sequence of jigsaw puzzle pieces. The maze side of it, there's a little like Google Maps street view guy, a little Google Map pointer. And your job is to get the guy to the pointer through this maze, which is a grid, right? And putting together these blocks of turn left, turn right, move forward, if path. Turns this direction, do X, else do Y. But
+
+**Jamie:** So there's conditionals and looping.
+
+**Garrick:** it's those sequences, and there's even— there's a repeat loop. Yep. Exactly, exactly. So you can put these all together, and I've walked through— both kids have asked for it separately over the past week, and yesterday we went through level one, one to ten, me and the two kids, two big kids together, and then after I put Waverly to bed, Cooper went, worked through the whole thing himself.
+
+**Jamie:** Very cool.
+
+**Garrick:** There was a couple that he was struggling with, and his blocks weren't as efficient as they could be, doesn't really matter, but he was able to get almost them all but two to work on his own.
+
+**Jamie:** They weren't as efficient as they... You should tell them there's bonus points for refactoring. If you can refactor that algorithm, you get an extra star. That's really neat.
+
+**Garrick:** Yeah, it's really fun, and
+
+**Jamie:** why do you think they use the Google Maps? I thought
+
+**Garrick:** I think because it was easy to find, so
+
+**Jamie:** that was weird. Do you think they paid a license fee for that?
+
+**Garrick:** We went— Cooper and I went through the Python for Kids book tonight, and they had a turtle in there, and then so we talked, and then talked about you know, conditional statements, and we talked about the if statements, conditional statements in Blockly, and talked about loops, and we talked about the repeat untils that were in Blockly, and he seemed to get the difference. Yeah.
+
+**Jamie:** Cool.
+
+**Garrick:** Yeah.
+
+**Jamie:** Have you done Lauren Ipsum, that book, Lauren Ipsum?
+
+**Garrick:** Yeah, yeah.
+
+**Jamie:** Did you tell me about that?
+
+**Garrick:** I may have, I may have. That
+
+**Jamie:** Yeah.
+
+**Garrick:** was a fun book. My
+
+**Jamie:** Yeah.
+
+**Garrick:** favorite is at one point, Cooper stood in the middle of the hallway and started asking his siblings for their password.
+
+**Jamie:** That's awesome.
+
+**Garrick:** So yeah, good.
+
+**Jamie:** You, have you finished that book?
+
+**Garrick:** Yes!
+
+**Jamie:** All right. So I'm still, I'm halfway through.
+
+**Garrick:** Oh, it's... Power Instinct.
+
+**Jamie:** What's the name? It's Willpower, The Willpower Instinct. But I want to talk about the very first chapter, which
+
+**Garrick:** Yeah, yeah, yeah.
+
+**Jamie:** we talked about a little bit. But in the very first chapter— so this book is about— what, how would you describe it? It's about understanding how to manage willpower, maybe. Or understanding what willpower is. It feels like it's tools for
+
+**Garrick:** Yes.
+
+**Jamie:** you to know better. It reminds me a lot of Thinking, Fast and Slow,
+
+**Garrick:** How to deal with yourself.
+
+**Jamie:** but the difference between— Thinking, Fast and Slow was more specific to understanding decision making, whereas I guess willpower is also about decision making, but it feels a bit different.
+
+**Garrick:** I have read and been evangelizing The Power of Full Engagement, which is all about... self-managing your energy, and
+
+**Jamie:** Mm-hmm.
+
+**Garrick:** The Tools, which is all about paying attention to who you want to be and what your long-term goals are. And this, The Willpower Instinct, felt like the third in that series.
+
+**Jamie:** So did you find that complimentary to that other reading, or
+
+**Garrick:** Absolutely.
+
+**Jamie:** Okay.
+
+**Garrick:** There was much overlap on to Willpower Instinct to both of those other two books.
+
+**Jamie:** Well, would you still want— would you want to read all three, or would you be
+
+**Garrick:** I think you should read all three.
+
+**Jamie:** like, no, I'm good with this one? Hmm. All right.
+
+**Garrick:** Because they have different approaches and they go deep on different sides of things. So The Power of Full Engagement is all about daily routine and making sure that you make time for recovery. And The Tools is all about continually checking yourself and making sure you're doing the things that will help you achieve long-term success.
+
+**Jamie:** Mm.
+
+**Garrick:** This feels like— The Willpower Instinct is much more immediate and tactical, like emergency room, like I need a— like how do I fix this now? Here's nine strategies that could help you right now.
+
+**Jamie:** Like as you're at the brink, right?
+
+**Garrick:** Exactly. Like, okay, you are about to jump off a cliff. Hold on.
+
+**Jamie:** Yeah, stop, don't eat the cupcake. Yeah.
+
+**Garrick:** Stop. Try this. Yes. Yeah, don't think of the cupcake. Oh, you're not there yet. Sorry. Yeah.
+
+**Jamie:** Remember you're married. Yeah.
+
+**Garrick:** Right!
+
+**Jamie:** Yeah.
+
+**Garrick:** Right! It's simple things.
+
+**Jamie:** So I'm like halfway through it, so I don't know the end. I will be done shortly though, because my book club meeting is next week, so I will be done. But out of the first chapter— so the very first chapter was about meditation. And which kind of— so I have to say, I have a little bit of history with meditation.
+
+**Garrick:** Yes.
+
+**Jamie:** Jen and I took a class. I don't know when that was,
+
+**Garrick:** Hmm?
+
+**Jamie:** three, four years ago, maybe longer, you know, I think it was longer than that, maybe five or six. Anyways, it was in the warehouse district, of course, because, I mean, if you're going to take a meditation class, it's going to be in a warehouse district or in uptown, so ours was in the warehouse district, and hardest thing I have ever— I mean, I've done some reasonably difficult things. And that was so hard.
+
+**Garrick:** Yes.
+
+**Jamie:** I could not even believe it. The only time I successfully meditated was when I fell asleep.
+
+**Garrick:** Oh.
+
+**Jamie:** And I did every time we went, because at one point in the class you would meditate, and you do like all these different types of meditation, and then at the end there was this type of meditation where you lay down. And I just remember, you'd lay down and then you start with your fingers and it says like, relax your fingers, then relax your hand.
+
+**Garrick:** So I did a...
+
+**Jamie:** I never got to my shoulder.
+
+**Garrick:** I had a P.E. credit in college that I needed to fulfill.
+
+**Jamie:** Doing that?
+
+**Garrick:** Yeah. I was able to fulfill my college P.E. requirement with a class on relaxation. That— that's what we did.
+
+**Jamie:** That's brilliant.
+
+**Garrick:** Yeah. I got my 45-minute nap in.
+
+**Jamie:** So, but the thing that blew me away was in this first chapter of The Willpower Instinct is that it actually, she describes in there a really specific benefit of meditation that is more like, hey, if you run every day, this will happen. She was like, if you meditate on a regular basis, this will happen in your brain, which just kind of, it was the most relevant call to action I saw and like why I would want to actually work through this and make this happen.
+
+**Garrick:** After a lot of trial and error, it has been a regular meditation, which I'm looking at my calendar and I've probably this sort of regular every other day, or I miss a day here and there, but you know, every day, every other day, somewhere in there.
+
+**Jamie:** That you've been meditating.
+
+**Garrick:** Yeah, for 20 minutes.
+
+**Jamie:** 15, 20 minutes.
+
+**Garrick:** Yep.
+
+**Jamie:** First thing in the morning?
+
+**Garrick:** Nope.
+
+**Jamie:** When?
+
+**Garrick:** But different
+
+**Jamie:** Times?
+
+**Garrick:** times. When I do it, it is because I don't know what else to do, right? Like, I feel like I'm being pulled in so many directions. I don't have clear focus.
+
+**Jamie:** Wait a second. Don't you just go to Twitter then?
+
+**Garrick:** Right.
+
+**Jamie:** Exactly.
+
+**Garrick:** Exactly. Right. So behaviors that I'm trying to change. So instead of destroying an afternoon on Hacker News or Facebook, I walk away from the computer and close my eyes and focus on my breathing for 20 minutes. It's worked better. You know, what comes after has been more productive after that 20-minute meditation than a cup of coffee, than a nap, than almost anything else. Either
+
+**Jamie:** Wow.
+
+**Garrick:** meditate or write three pages longhand. If I don't do either of those, I am guaranteed to have a shitty day. Guaranteed. Like, I didn't do that on Sunday. Shitty day.
+
+**Jamie:** So I see. So for the last three weeks I've been getting up and spinning most mornings or
+
+**Garrick:** Nice.
+
+**Jamie:** lifting weights, which is, as I know but forget often, is a great way to start the day. Even when I don't want to do it, it definitely gets in the right place. But I do find lifting weights first thing in the morning really hard because my brain isn't in the right spot for
+
+**Garrick:** Yes.
+
+**Jamie:** that.
+
+**Garrick:** One of the things I like about spinning is, at least how I do it, is it's in a dark room, I don't need my glasses, somebody's yelling at me what to do, all I need to do is follow those instructions. I don't need to really think.
+
+**Jamie:** I did it at home on my own, so that mainly means I put on the Foo Fighters really loud and then, you know, go.
+
+**Garrick:** That works, that works well too.
+
+**Jamie:** Same, same thing.
+
+**Garrick:** Yeah. Yeah. Yeah.
+
+**Jamie:** But I have thought of getting up even earlier, like at five or 5.30, and doing, trying to fit meditation in as well. But you
+
+**Garrick:** That works out pretty well for me.
+
+**Jamie:** don't just follow— see, I would, I worry that I would fall back asleep. I mean, even if I'm sitting up, but I mean, it's
+
+**Garrick:** It's been
+
+**Jamie:** like
+
+**Garrick:** close. It's been close. Because that's what I've been trying to do, like get up at 5.30, 20-minute meditation, for me anyway. It's 20 minutes and I'm like, okay, let's go. Let's do this. I am bike. I am more alert than I would have been otherwise.
+
+**Jamie:** You know, when I used to, when I was riding a lot and when I went down to Texas and rode Hell Week, where you rode, you know, 100 miles every day, and even in my best of shape and at my lightest, I am way too big of a guy to go up hills. But occasionally you got to go up a hill. And I was going up this hill and this guy that rode all the time was next to me and he's like— I was breathing pretty hard and he's like, you need to just stop breathing. And I was like, are you insane? Are you looking at me? I'm going to die over here. And he's like, no, when you get in that situation, you need to hold your breath for a count of five because your body is freaking out and that's causing your brain to freak out.
+
+**Garrick:** Yes.
+
+**Jamie:** And if you exert your brain over your body and tell it, no, we'll breathe in a few seconds here, it relaxes you and gets you back under control. And I'll be damned if it doesn't.
+
+**Garrick:** And if it didn't work. The breathing technique for meditation is applicable in, I think, almost any stressful situation. And I think that's the biggest thing that came out of Willpower. For me it was, oh, hey, I can even use this technique in more places than I was anyway.
+
+**Jamie:** Like when your kids are screaming at you.
+
+**Garrick:** Yeah, just breathe.
+
+**Jamie:** Just breathe.
+
+**Garrick:** Just breathe. Just breathe.
+
+**Jamie:** What was your biggest takeaway from the Willpower book? Without— hopefully you don't spoil it. I don't think you could spoil that book without having read it all.
+
+**Garrick:** Just breathe.
+
+**Jamie:** Just breathe.
+
+**Garrick:** In and out. Focus on your breathing.
+
+**Jamie:** Yeah.
+
+**Garrick:** I think she closes with that.
+
+**Jamie:** Really? Yeah. That's the call to action.
+
+**Garrick:** The call to action is just focus on your breathing.
+
+**Jamie:** I find, like I said, I'm in the middle, but... It's really interesting. I've had a couple of really kind of interesting thoughts around the supposition that what happens if you have a large society that is all systematically deprived of its willpower? It made me think about things like how some things have trended not so well in recent years. I've never heard anybody suggest that perhaps environmental aspects have changed that have... without us really knowing, changed how we manage our willpower, what willpower we have left, which has resulted in kind of systematically less optimal decisions.
+
+**Garrick:** Totally agree with that. Absolutely.
+
+**Jamie:** I mean
+
+**Garrick:** 100%. Yes. Here's what I thought was super interesting. Are you the bit about the the news and the panic and the fear-instilling
+
+**Jamie:** All right.
+
+**Garrick:** TV and the compulsive eaters? Are you that
+
+**Jamie:** No,
+
+**Garrick:** established?
+
+**Jamie:** no, no, not there,
+
+**Garrick:** Okay.
+
+**Jamie:** not there.
+
+**Garrick:** I was thinking about that and I was thinking how much I really dislike the giant the giant flat screen TVs at the gym that are tuned into Fox and CNN and
+
+**Jamie:** Oh, I
+
+**Garrick:** Kare 11 and it's
+
+**Jamie:** gotta agree. That's horrible.
+
+**Garrick:** horrible, but it's right in front of the bikes and the treadmills. And after reading the Willpower book and that section about TV, I thought, oh, this is fine.
+
+**Jamie:** Why is it fine?
+
+**Garrick:** Her argument is that if you are exposing yourself to this sort of panic-inducing media, you're going to reach for the nearest thing that can provide comfort and release to that stress. You're already on a treadmill, on a bike. Right. Pedal harder. Right. And it's like I go to the gym now and I think it's probably fine. I can't see it anyway. I don't have my glasses on. It's probably fine.
+
+**Jamie:** It's just more inducement, right?
+
+**Garrick:** Exactly.
+
+**Jamie:** All right. It's been too long since we did this. We'll do another one soon.
+
+**Garrick:** Let's do that. I mean, Kubb season is starting up.
+
+**Jamie:** Hey, by the way, you just triggered the record. 52 minutes of recording before the word Kubb came up. Shocking. Shocking.

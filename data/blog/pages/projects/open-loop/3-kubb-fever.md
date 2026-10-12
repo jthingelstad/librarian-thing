@@ -2,7 +2,7 @@
 page_id: 57868
 url: "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/"
 title: "Open Loop #3 - Kubb Fever"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-07T19:00:16+00:00"
 post_kind: page
 categories: []
 ---
@@ -31,1704 +31,862 @@ categories: []
 
 ### Transcript
 
-_Here is an AI generated transcript of this episode. This has not been edited or checked for accuracy, yet._
+_Speaker-labelled transcript, machine transcribed and cleaned up with AI in October 2026. It may still have mistakes. Also as [WebVTT](https://files.thingelstad.com/projects/openloop/transcripts/openloop-3.vtt) and [JSON](https://files.thingelstad.com/projects/openloop/transcripts/openloop-3.json)._
 
-Hey, Garrick, do you know how long it's been since we did an Open Loop?
+**Jamie:** Hey, Garrick, do you know how long it's been since we did an Open Loop?
 
-Way too long.
+**Garrick:** Way too long.
 
-A month.
+**Jamie:** A month.
 
-A month?
+**Garrick:** A month.
 
-Yes, a month.
+**Jamie:** Yes, a month. It's the 20th of July today, and the last time we did an Open Loop, it was the 20th of June. Just our third episode, we had a month break.
 
-It's the 20th of July today, and the last time we did an Open Loop, it was the 20th of June.
+**Garrick:** I wanted summer.
 
-Oh.
+**Jamie:** Yeah, but it was like 8 million degrees.
 
-Just our third episode, we had a month break.
+**Garrick:** Yeah, it was way too hot to record a podcast.
 
-One at summer.
+**Jamie:** Exactly. You can't record podcasts in that kind of heat. It's bad for your microphone. We also played a lot of Kubb.
 
-Yeah, but it was like 8 million degrees.
+**Garrick:** Oh, we played a lot of Kubb.
 
-Yeah, it was way too hot to record a podcast.
+**Jamie:** Can we talk about that lunch Kubb when it was like 120 degrees?
 
-Exactly.
+**Garrick:** The one at Cancer Park?
 
-You can't record podcasts in that kind of heat.
+**Jamie:** Yes.
 
-It's bad for your microphone.
+**Garrick:** You, me, and Jake?
 
-We also played a lot of KOOB.
+**Jamie:** Yes. The game of Kubb where I seriously, I, my shirt was so wet when I came back from playing Kubb at lunch that, I mean, two hours later I was still damp.
 
-Oh, we played a lot of KOOB.
+**Garrick:** It was a hot day, and it was a long game. Long games.
 
-Can we talk about that lunch KOOB when it was like 120 degrees?
+**Jamie:** They were long games. They weren't that long, though. We've come to learn. All right.
 
-The one at Cancer Park?
+**Garrick:** What's an hour, really?
 
-Yes.
+**Jamie:** What's an hour? I mean, an hour, that's just, that's nothing.
 
-You, me, and Jake?
+**Garrick:** Yeah, that's like a half marathon. I'm training for this half marathon.
 
-Yes.
+**Jamie:** Mm-hmm.
 
-The game of KOOB where I seriously, I, my shirt was so wet when I came back from playing KOOB at lunch that, I mean, two hours later, I was still damp.
+**Garrick:** And along the way, you know, the training program has you doing 5Ks and moving up from there. And along the way through that, one of the 5K runs is going to coincide with the annual Village Fest 5K community run.
 
-It was a hot day, and it was a long game.
+**Jamie:** Okay.
 
-Long games.
+**Garrick:** And I've run that a few times since we've been here. And, you know, I've never had any expectation of actually doing well and
 
-They were long games.
+**Jamie:** Okay.
 
-They weren't that long, though, we've come to learn.
+**Garrick:** I similarly have no expectation of doing well in this half marathon that I'm training for, yet last weekend
 
-All right.
+**Jamie:** You had lots of expectations of doing well.
 
-What's an hour?
+**Garrick:** expectations of at least playing competently. I should have just thrown those out the window.
 
-I mean, an hour, that's just, that's nothing.
+**Jamie:** We did play confidently. We had high hopes.
 
-Yeah, that's like a half marathon.
+**Garrick:** We had high hopes of being able to hit an 8 meter.
 
-I'm training for this half marathon.
+**Jamie:** All right, by the way, this is going to be the Kubb episode of Open Loop. We've talked about Kubb in the last three episodes. We've just gotten back from the U.S. 2012 Kubb National Championships, and we decided we're going to just talk about Kubb this whole time. With one exception, we're going to talk about a beer too, right?
 
-And along the way, you know, the training program has you doing 5Ks and moving up from there.
+**Garrick:** We talk about a beer, yeah.
 
-And along the way through that, one of the 5K runs is going to coincide with the annual Village Fest 5K community run.
+**Jamie:** Yeah, and we're not drinking the same beer tonight. You have no idea what beer I'm drinking, and I have no idea what beer you're drinking. I think we should try to guess.
 
-And I've run that a few times since we've been here.
+**Garrick:** Yes. You think we should try to guess?
 
-And you know, I've never had any expectation of actually doing well.
+**Jamie:** Not the specific beer. That's way too hard. But I'm going to go first and I'm going to say that you are drinking something. I'm going to say it's something dark.
 
-I similarly have no expectation of doing well in this half marathon that I'm training for.
+**Garrick:** It's something dark.
 
-Yet, last weekend.
+**Jamie:** Yes. Is it?
 
-You had lots of expectations of doing well.
+**Garrick:** No.
 
-Expectations of at least playing competently.
+**Jamie:** Damn. Didn't even get the first one. Are you drinking one of your beers?
 
-I should have just thrown those out the window.
+**Garrick:** Drinking one of my beers.
 
-We did play competently.
+**Jamie:** Are you drinking a cider?
 
-We had high hopes.
+**Garrick:** No.
 
-We had high hopes of being able to hit an 8 meter.
+**Jamie:** Or not a cider, but a...
 
-By the way, this is going to be the Kubb episode of Open Loop.
+**Garrick:** I'm drinking my amber.
 
-We've talked about Kubb in the last three episodes.
+**Jamie:** Nice.
 
-We've just gotten back from the US 2012 Kubb National Championships.
+**Garrick:** It's the bottle that you have with an A on it.
 
-And we decided we're going to just talk about Kubb this whole time.
+**Jamie:** So I could be drinking that beer.
 
-With one exception, we're going to talk about a beer too, right?
+**Garrick:** Could be, but you don't need to be.
 
-We're going to talk about a beer, yeah.
+**Jamie:** Okay. I will give you a hint about
 
-Yeah.
+**Garrick:** Great.
 
-And we're not drinking the same beer tonight.
+**Jamie:** the beer that I'm drinking. I looked at my fridge, our friend Jake Freiberg, fellow kubber, he often will say in reference to something that he sees that that's Minnesota Kubb style. And so, for example... When there's a picture of a couple guys winning a Kubb tournament and they're wearing, for example, just like a white undershirt, that's Minnesota Kubb style.
 
-You have no idea what beer I'm drinking and I have no idea what beer you're drinking.
+**Garrick:** Okay.
 
-I think we should try to guess.
+**Jamie:** So with that, what beer am I drinking?
 
-You think we should try to guess?
+**Garrick:** You know, the first one that comes to mind, I don't think you would drink.
 
-Not the specific beer.
+**Jamie:** What's that?
 
-That's way too hard.
+**Garrick:** I would say with that description, I would say Fulton's Lonely Blonde.
 
-But I'm going to go first and I'm going to say that you are drinking something, I'm going to say it's something dark.
+**Jamie:** Oh, dude, that's way too highbrow. Way too highbrow. Way, way too... No, no, no. Try again.
 
-It's something dark.
+**Garrick:** The only other one is Summit IPA.
 
-Yes.
+**Jamie:** Yeah, I'm gonna tell you, Grain Belt Nordeast.
 
-Is it?
+**Garrick:** Oh, jeez.
 
-No.
+**Jamie:** See?
 
-Damn.
+**Garrick:** See, that would be badminton in my book.
 
-Didn't even get the first one.
+**Jamie:** Badminton, don't they have horses or something?
 
-Are you drinking one of your beers?
+**Garrick:** For badminton? That's what horses do. They swim.
 
-I'm drinking one of my beers.
+**Jamie:** Anyways, I'm having a Nordeast. We don't need to talk about the Nordeast, but I do want to hear a little bit about your amber. How's it going?
 
-Are you drinking a cider?
+**Garrick:** This amber is the first beer that I started when I was doing all grain brewing. And this is my second round with it a year later. It's still not there yet. I keep learning from it. It's a fine beer.
 
-No.
+**Jamie:** So Kubb, we
 
-Not a cider.
+**Garrick:** Kubb!
 
-I'm drinking my Amber.
+**Jamie:** haven't talked about why it is that we like it so much.
 
-Nice.
+**Garrick:** There are discrete parts and skills within Kubb that I think are unexpected, and I think it's one of the reasons I like them.
 
-It's the bottle that you have with an A on it.
+**Jamie:** Like what?
 
-So I could be drinking that beer.
+**Garrick:** One, there's the 8-meter throw. And if you don't have an 8-meter throw, you can't move the game forward, period, right? But there's also the inkasting, which is throwing something that is not a baton, that means square block, right? You're throwing a square block and trying to be good, trying to hit a target with a square block, which is kind of a really weird skill. I mean, it reminds me of like Hayward Lumberjack Days. And then the second skill is, or the third skill is throwing short. Throwing at that cluster, that was inkast, right? So rather than for one, you're going for lots, which is a different technique.
 
-Could be.
+**Jamie:** Power. Yeah, power and a little finesse too in that one.
 
-But you don't need to be.
+**Garrick:** Three very different skills. And I mean, in golf you have different distances and different clubs, but you don't necessarily have as diverse a skill need, right?
 
-Okay.
+**Jamie:** Mm-hmm.
 
-I will give you a hint about the beer that I'm drinking.
+**Garrick:** I'm thinking about this while I'm running. I'm thinking all I need right now is the wooden pieces and I could play Kubb. You don't need gear.
 
-I looked at my fridge.
+**Jamie:** Which is a little bit surprising for me because, you know, the more gear the better for me. But it is, the simplicity of it is, it masks the complexity though. I mean, there's so much to the game, so much strategy to the game that isn't apparent when you just pick it up, but it scales. I think that's what's kind of fun about Kubb is that it scales from that very first kind of backyard game all the way up to like very aggressive championship game in a tournament.
 
-Our friend Jake Freberg, fellow Kubbr, he often will say in reference to something that he sees that that's Minnesota Kubb style.
+**Garrick:** Nothing is added to
 
-And so for example, when there's a picture of a couple guys winning a Kubb tournament and they're wearing, for example, just like a white undershirt, that's Minnesota Kubb style.
+**Jamie:** Right.
 
-So with that, what beer am I drinking?
+**Garrick:** do that scaling. It just is what it is.
 
-You know, the first one that comes to mind, I don't think you would drink.
+**Jamie:** Yeah, it's the same game.
 
-What's that?
+**Garrick:** There are a few things that can scale that widely and not change dramatically. So we're doing our best to try and change that.
 
-I would say with that description, I would say Fulton's Lonely and Blonde.
+**Jamie:** Exactly.
 
-Oh, dude, that's way too high, bro.
+**Garrick:** Because it's not like you're going to be using the Kubb, playing a Kubb notation in your backyard game, you know.
 
-Way too high.
+**Jamie:** No, that would be a little odd.
 
-Way, way, way too.
+**Garrick:** But, you know, maybe, maybe at a Kubb & Koffee.
 
-No, no, no.
+**Jamie:** Oh, I think at a Kubb & Koffee you would. I think at a team practice you would.
 
-The only other one is Summit's IPA.
+**Garrick:** For sure.
 
-I'm going to tell you.
+**Jamie:** Because it'd be, that's, you know, you're going to use the notation to see how the team is doing and where you need to improve, you know, how to move your game forward. We've been playing Kubb for what, six months now? We have our team, the Kubbchucks. The Kubbchucks entered into the national championship that's held at Eau Claire every year. So last Saturday we spent all day, and
 
-Grain Belt Northeast.
+**Garrick:** All day.
 
-Oh, geez.
+**Jamie:** I mean all day, playing Kubb. We played Kubb for seven, seven and a half hours. We were outside for 10 hours. It was a hot day. And man, was I just toast at the end of that.
 
-That would be badminton in my book.
+**Garrick:** Totally, completely. That was one of the hardest days I have ever had.
 
-Badminton?
+**Jamie:** Yeah. I got done with that day and I looked in the mirror and I seriously was like, I think I aged 10 years out there on those pitches. And I just felt really exhausted. We had a tough draw in the tournament. We were in Group E, and
 
-Don't they have horses or something?
+**Garrick:** Mm-hmm.
 
-For badminton?
+**Jamie:** we played three teams, the Blue Footed Footies, right?
 
-That's what horses do to swim.
+**Garrick:** Kubbies.
 
-Anyways, I'm having a Northeast.
+**Jamie:** Kubbies, the Swedish Ice Kubbs, and then the infamous Tad Kubbler.
 
-We don't need to talk about the Northeast, but I do want to hear a little bit about your Amber.
+**Garrick:** Yes. I love those guys. I really love those guys.
 
-How's it going?
+**Jamie:** Yeah, they're awesome. We see them a lot, so we're biased. I just think they're just a ton of fun, and Eric is just like couldn't be a nicer guy. Cole is a trip and just like, I just love to just chat with Cole and hear stories. And Anders seems like super cool as well, a little quiet, but super cool.
 
-This Amber is the first beer that I started when I was doing all grain brewing.
+**Garrick:** At the Tuesday night friendlies, I play Eric, I play Anders. We played Cole a little while ago. In the friendly, one-on-one, it's a... I have a blast. I just have a great time. And then in the tournament, three-on-three killed us.
 
-And this is my second round with it a year later.
+**Jamie:** Oh, terrible.
 
-It's still not there yet.
+**Garrick:** Just killed us.
 
-I keep learning from it.
+**Jamie:** Yeah.
 
-It's a fine beer.
+**Garrick:** Part of it's completely my fault. But, you know, so big old fat... You know, one of the things I've been thinking about in the notation is this notion of errors, right? That whole game just got a big fat E on it.
 
-So Koob.
+**Jamie:** You know, I thought a lot about error. In the very first kind of revision to the notation, I actually considered putting an E in the notation. And I didn't, because it requires judgment. And, you know, just like in baseball, I mean, an error is assigned. Yeah, I don't know baseball well. Now, maybe there's some binary stuff that says like, if this happens it's an error, but I think there's also a little bit of judgment where somebody says like, okay, yeah, no, that was an error. So that's the only reason why I didn't put it in there.
 
-Koob!
+**Garrick:** That's fine. I think errors can be sussed out from the rest of the annotation, but anyway. Anyway,
 
-We haven't talked about why it is that we like it so much.
+**Jamie:** Yeah.
 
-There are discrete parts and skills within Koob that I think are unexpected.
+**Garrick:** we go back to our play. So maybe let's talk about the structure of the tournaments, because I am really liking the structure that I've seen of the two tournaments that we've played in.
 
-And I think that's one of the reasons I like them.
+**Jamie:** Right. Well, we start with the round robin.
 
-Like what?
+**Garrick:** It's four teams all playing each other.
 
-One, there's the eight meter throw.
+**Jamie:** Yeah. And it's a necessary phase, because there's no way to qualify the teams that are coming into the tournament, because most of these teams don't even exist before the tournament. I mean, there's a decent number of recreational players that are coming there, they're just there to try playing kubb in a competitive manner. And so, you know, there's no way to seed people. So that's where your round robin comes into play.
 
-And if you don't have an eight meter throw, you can't move a game forward, period.
+**Garrick:** Right. And, you know, I think the Blue Footed Kubbies were something of sort of equivalent to us at our last tournament,
 
-But there's also the in-casting, which is throwing something that is not a baton.
+**Jamie:** Dude.
 
-That is square block.
+**Garrick:** like not quite exactly sure how all of this works, but super enthusiastic.
 
-You're throwing a square block and trying to hit a target with a square block, which is kind of a really weird skill.
+**Jamie:** The Blue Footed Kubbies were us. And yeah, they totally were. They even did the same, like, hey, now the kubb goes out, right? No, no, the kubb doesn't go out. Let me teach you, young man, the kubbs never go out. So they were the first team that we played, and I was super pleased with the game, because I felt that we... I thought we did a fine job. We had some nerves. We weren't hitting as good as we typically do, but you know, we did okay. I felt okay going into the next round. I actually felt like, all right, good, that's exactly what should have happened. We didn't give them a game, right? We won two matches, two games to none. Yeah.
 
-I mean, it reminds me of like Hayward Lumberjack days.
+**Garrick:** Should have happened, yes.
 
-And then the second skill is, or the third skill is throwing short.
+**Jamie:** And off we go. And then we hit the Swedish Ice Kubbs. We took the first game.
 
-Throwing at that cluster that was in-cast, right?
+**Garrick:** We took the first game.
 
-So rather than for one, you're going for lots.
+**Jamie:** The first game went exactly as it was supposed to go. It lasted, what, ten minutes? It wasn't that long. We played, you know, with confidence, and it went very well.
 
-It's a different technique.
+**Garrick:** Yes.
 
-Power.
+**Jamie:** And it was like, okay, good. You know, now we'll just take another one. We'll get a little rest. We'll take our licks with Tad Kubbler, but, you know, we'll come in good. Then we played the second game.
 
-Yeah, power and a little finesse too in that one.
+**Garrick:** Completely different story, for like an hour. Yep. And they won.
 
-Three very different skills.
+**Jamie:** And they won. Is it the third game that we couldn't hit anything, or was it the second game?
 
-And I mean, in golf you have different distances and different clubs, but you don't necessarily have as diverse a skill need, right?
+**Garrick:** I think it was the second game that we just couldn't hit anything.
 
-I'm thinking about this while I'm running and thinking all I need right now is the wooden pieces and I could play koop.
+**Jamie:** Threw 40 batons at their baseline, didn't hit a thing. At least, I mean, you can't... no.
 
-You don't need gear.
+**Garrick:** You can't win like that.
 
-Which is a little bit surprising for me because the more gear, the better for me.
+**Jamie:** You can't win like that. You should just stop, just hit the king. It's just terrible. I mean, we were so cold. It was, I mean, and we're getting in our own heads. Both you and I were getting in our heads. Jake was maybe a little bit in his head, maybe a little less though.
 
-But the simplicity of it is it masks the complexity though.
+**Garrick:** You know, you're in a tournament setting, things just fall the opposite way that you expect them to. All those things, you just dig yourself into a hole.
 
-I mean, there's so much to the game, so much strategy to the game that isn't apparent when you just pick it up.
+**Jamie:** Yeah.
 
-It scales.
+**Garrick:** You're like, I got to hit this, and then you miss, and it doesn't help, you just get deeper.
 
-I think that's what's kind of fun about koop is that it scales from that very first kind of backyard game all the way up to like very aggressive championship game in a tournament.
+**Jamie:** So we lose that match. And we played too long. An hour and a half to lose a match. I'm not sure that they were just a family out having fun.
 
-Nothing is added to do that scaling.
+**Garrick:** I think so.
 
-It just is what it is.
+**Jamie:** Well, they were there on Sunday.
 
-Yeah, it's the same game.
+**Garrick:** Yeah, they were there on Sunday.
 
-There are a few things that can scale that widely and not change dramatically.
+**Jamie:** So, I mean, maybe they were just checking things out, but, you know, a lot of people weren't there on Sunday. They were there on Sunday.
 
-So we're doing our best to try and change that.
+**Garrick:** They were there on Sunday, and
 
-Exactly.
+**Jamie:** So what else?
 
-Because it's not like you're going to be using the planet koop notation in your backyard game.
+**Garrick:** You know, I talked to the guy afterwards. He was from somewhere, they were from somewhere in Wisconsin.
 
-No, that would be a little odd.
+**Jamie:** Yeah, and you know what, they were at the Culver's we went to.
 
-But maybe at a koop and coffee.
+**Garrick:** You know what, they were from Chippewa Falls. They were?
 
-I think at a koop and coffee you would.
+**Jamie:** Mm-hmm.
 
-I think at a team practice you would.
+**Garrick:** Crazy.
 
-For sure.
+**Jamie:** I didn't notice at the time. We were walking out and there's a guy and he obviously recognized me and he was like, hey, and I was like, I have no idea who this is. And I recognized like a little bit after that, wait a second, mustache. That was that dude. That was the dad.
 
-Because you're going to use the notation to see how the team is doing and where you need to improve how to move your game forward.
+**Garrick:** Crazy.
 
-We've been playing koop for what, six months now.
+**Jamie:** Yeah.
 
-We have our team, the koop chucks.
+**Garrick:** Altoona. They're from Altoona.
 
-The koop chucks entered into the national championship that's held at Eau Claire every year.
+**Jamie:** Yeah. So that was terrible.
 
-So last Saturday we spent all day, and I mean all day, playing koop.
+**Garrick:** Yeah, it was terrible. And then we just got smoked by Tad Kubbler, but we sort of knew that was going to happen.
 
-We played koop for seven, seven and a half hours.
+**Jamie:** Yeah, we knew
 
-We were outside for ten hours.
+**Garrick:** How can it not?
 
-It was a hot day.
+**Jamie:** that was going to happen. But honestly, three turns. I mean, we lost our first game against seven. Three turns, I mean, that was... yeah.
 
-And man, I just toast at the end of that.
+**Garrick:** That was ridiculous. I mean, you know what I should have done, here's my second throw on that kubb, I should have walked to the other side of the pitch, or the other, right, and just toss the kubb at the king.
 
-Totally.
+**Jamie:** Oh, yeah.
 
-Completely.
+**Garrick:** Instead, worst placement of a penalty kubb for guys who can't hit an 8 meter ever.
 
-That was one of the hardest days I have ever had.
+**Jamie:** So, so that game's on Planet Kubb. We'll put a link to it so people can take a look at it, but it's terrible. Three turns, we lose. Tad Kubbler completely just spanks us. You know, they were nice guys about it and everything, but they were, yeah, it was tough. So then we come out of it.
 
-I got done with that day, and I looked in the mirror and I seriously was like, I think I aged ten years out there on those pitches.
+**Garrick:** I mean, they tied for fifth last year, and Eric runs the Minnesota Kubb tournament, and, and, and, you know, all these ands just mean experience. Months and
 
-I just felt really exhausted.
+**Jamie:** Yeah, yeah.
 
-We had a tough draw in the tournament.
+**Garrick:** we've been playing for six months.
 
-We were in group B, and we played three teams.
+**Jamie:** So hope and ambition doesn't equal experience.
 
-The blue footed footies, right?
+**Garrick:** No, no matter what my intern says.
 
-The blue footed koopies.
+**Jamie:** We went through it, and we made it through the quarterfinals. We came out of the quarterfinals, what, we came out of the quarterfinals 1 and 2, and we, you know, in hindsight, I think we really narrowly escaped the consolation bracket.
 
-Koopies.
+**Garrick:** Very narrowly escaped it.
 
-The Swedish Ice Koops, and then the infamous Tad Kubler.
+**Jamie:** Had to, consolation bracket. Yes, had to.
 
-Yes.
+**Garrick:** Yes.
 
-And I love those guys.
+**Jamie:** But we got into the, we played into the championship bracket. We had to play the Engineers.
 
-I really love those guys.
+**Garrick:** So that game lasted a gazillion hours.
 
-They're awesome.
+**Jamie:** Two hours, 20 minutes for
 
-We see them a lot, so we're biased.
+**Garrick:** Two hours, 20 minutes?
 
-But I just think they're just a ton of fun.
+**Jamie:** a match of three.
 
-And Eric couldn't be a nicer guy.
+**Garrick:** Yeah.
 
-Cole is a trip.
+**Jamie:** We played great kubb. It was great.
 
-I just love to chat with Cole and hear stories.
+**Garrick:** Great kubb. I think each round, each game we had 10 kubbs out, and
 
-And Anders seems super cool as well.
+**Jamie:** Yeah.
 
-Little quiet, but super cool.
+**Garrick:** I love the notion that if you get 10 kubbs out, now you've got a kubb game.
 
-At the Tuesday Night Friendlies, I play Eric, I play Anders.
+**Jamie:** Yeah. Now we've got a kubb game here.
 
-We played Cole a little while ago.
+**Garrick:** Yeah, Eric Anderson, the organizer, came by like three times saying, guys, seriously.
 
-In the Friendlies, in one-on-one, I have a blast.
+**Jamie:** Where you at?
 
-I just have a great time.
+**Garrick:** Oh, yeah.
 
-And then in the tournament, three-on-three killed us.
+**Jamie:** We're going to have to hurry this up. We have to call it.
 
-Oh.
+**Garrick:** I don't want to put a time limit on you guys, but you should be done by now.
 
-Just killed us.
+**Jamie:** Yeah. And we weren't. That is where we finally kind of came up to, I decided that I would not drill again the rest of the tournament. You would do all the drilling. And we, you know, Jake is always in the middle, interestingly enough, right? Jake stayed in the middle playing cleanup.
 
-Terrible.
+**Garrick:** Yep.
 
-Part of it is completely my fault.
+**Jamie:** And then I moved to the kind of attacker, which was weird because that wasn't what I thought I should do, but, you know, I kind of liked it. I didn't mind it at all.
 
-But, you know, so big ol' fat-- you know, one of the things I've been thinking about in the notation is this notion of errors, right?
+**Garrick:** Good. Yeah.
 
-That whole game just got a big fat E on it.
+**Jamie:** I didn't mind that at all.
 
-You know, I thought a lot about error.
+**Garrick:** That inkasting for that long,
 
-In the very first kind of revision of the notation, I actually considered putting an E in the notation.
+**Jamie:** Yeah.
 
-And I didn't because it requires judgment.
+**Garrick:** that is, that is work.
 
-And just like in baseball, I mean, an error is assigned.
+**Jamie:** You're tired. Yeah.
 
-Yeah, I don't know baseball well enough.
+**Garrick:** And so I'm glad that Jake stepped in from time to time and you stepped in from time to time to take those first hits off the inkast.
 
-Maybe there's some binary stuff that says, like, if this happens, it's an error.
+**Jamie:** Yeah.
 
-But I think there's also a little bit of judgment where somebody says, like, OK, yeah, no, that was an error.
+**Garrick:** Because I just didn't have it in me. After I just throw one more thing, I just don't get it in me.
 
-So that's the only reason why I didn't put it in there.
+**Jamie:** Yeah. That's where the specialty play comes in, because I think if it's a tight grouping, particularly if you have an advantage line, I can put a pretty good amount of power on that. I'll come in there and take that. But otherwise, I kind of like being at the end. I did. So we played that game and we won. So then we got into the round of 32. We played the Good, Bad, and the Ugly.
 
-That's fine.
+**Garrick:** Held our own? Held our own for a good... hours?
 
-I think errors can be sussed out from the rest of the notation.
+**Jamie:** Solid. Solid game. Hour and 40 minutes.
 
-But anyway, if we go back to our play-- so maybe let's talk about the structure of the tournaments because I am really liking the structure that I've seen of the two tournaments that we've played in.
+**Garrick:** We were there.
 
-Right.
+**Jamie:** Had a lot of spectators at the end, which was super cool.
 
-Well, we started with the round robin.
+**Garrick:** Yeah, it was nice to see the guys from the Knockerheads coming by, and Tad Kubbler came by to watch the game for a while. That was fantastic.
 
-It's four teams all playing each other.
+**Jamie:** Yeah, and they were cheering on, and that's when we got the, oh no, it was actually at the other game, didn't we, that the let's go, Kubbchucks.
 
-And it's a necessary phase because there's no way to qualify the teams that are coming into the tournament because most of these teams don't even exist before the tournament.
+**Garrick:** Yeah,
 
-I mean, there's a decent number of recreational players that are coming there that are just there to try playing cube in a competitive manner.
+**Jamie:** That's
 
-And so there's no way to seed people.
+**Garrick:** Yeah.
 
-So that's where your round robin comes into play.
+**Jamie:** the obvious. That game, we did good, we did okay. We lost. Yeah, we lost. It would have been great to move on, but we lost. And those guys then lost in the next round.
 
-Right.
+**Garrick:** Yes. Yes. I think the next round was the Kubbsicles anyway.
 
-And I think of the blue-footed Kubbys were something of sort of equivalent to us at our last tournament.
+**Jamie:** Yeah, I think the Good, Bad, and Ugly played the Kubbsicles.
 
-Like, I'm not quite exactly sure how this works, but super enthusiastic.
+**Garrick:** Yes. And we would have just been smoked. We would have been done then for sure.
 
-The blue-footed Kubbys were us.
+**Jamie:** The Kubbsicles lost one game. It wasn't against them. It was against Kubbs. Kubbs. No. I can't remember. They did lose one game. I don't remember who. So that's our first Nationals appearance.
 
-And yeah, they totally were.
+**Garrick:** I would very much make it analogous to running a marathon or a triathlon or your inaugural appearance at the Tour de France.
 
-They even did the same like, hey, now the cube goes out, right?
+**Jamie:** Yeah.
 
-No, no, the cube doesn't go out.
+**Garrick:** You don't know what you've walked into, and it's going to take you a while to look back and say, yeah, that was fun.
 
-Let me teach you, young man.
+**Jamie:** And you know what, we gotta take a moment here to just say, I mean, Eric Anderson, he just — I couldn't say enough good things.
 
-The cubes never go out.
+**Garrick:** That was amazing, amazing work. No.
 
-So they were the first team that we played.
+**Jamie:** I mean, the tournament was awesome.
 
-And I was super pleased with the game because I felt that we-- I thought we did a fine job.
+**Garrick:** Organized like this was —
 
-We had some nerves.
+**Jamie:** Yeah.
 
-We weren't hitting as good as we typically do.
+**Garrick:** I'm sure that he was continually wanting to make sure everything went right, and I'm sure it did.
 
-But we did OK.
+**Jamie:** I thought, you know, I particularly liked — I liked that in the round robin they had the pieces of paper and you knew what teams you were supposed to play in what order.
 
-I felt OK going into the next round.
+**Garrick:** Yes.
 
-I actually felt like, all right, good.
+**Jamie:** And in general I liked the pieces of paper. I liked writing down the outcome of the match and then carrying that in and turning it into the people keeping track of the bracket. They
 
-That's exactly what should have happened.
+**Garrick:** We all have our special skills.
 
-We didn't give them a game.
+**Jamie:** That's right. That's right. Like double checking that everything's written right on that piece of paper. Or we would have been in the consolation bracket for sure. When we got done, Garrick put us as losing our first match instead of winning it. Luckily I checked, changed it. What I should have done is fix that Swedish Ice Kubbs one, if you know what I mean.
 
-We won two matches, two games to none.
+**Garrick:** Oh, yeah.
 
-Should have happened, yes.
+**Jamie:** Anyways, so it was super fun. I had a great time, and we're going back. We're definitely going back. We've got another tournament this year. We're gonna do the Dallas six-person tournament, right?
 
-Yeah.
+**Garrick:** Absolutely. I got buy-in from Jim today, and
 
-And off we go.
+**Jamie:** Oh, good. So we're...
 
-Off we go.
+**Garrick:** what, you know, he's thinking Jake, because the ages would be more —
 
-And then we hit the Swedish Ice Cubes.
+**Jamie:** Oh, so we're thinking the kids?
 
-We took the first game.
+**Garrick:** Thinking the kids, yeah.
 
-The first game went exactly as it was supposed to go.
+**Jamie:** I think we do it. If we can make that work, I think that'd be great. We go and play with our children, it'd be fun.
 
-It lasted, what, 10 minutes?
+**Garrick:** And you know, I wouldn't have even considered that, considered that until I saw the Ringers, that
 
-It wasn't that long.
+**Jamie:** Right. Talk about that.
 
-We played with confidence.
+**Garrick:** was amazing. So it's the Ringers
 
-And it went very well.
+**Jamie:** You were moved.
 
-And I was like, OK, good.
+**Garrick:** are Aaron Ellringer, his father, his son, and their nephew. And so, four-man team, the kids are 9 and 11 or something like that, and they've got one baton, the adults have two batons, but the kids are taking the lead. Or the kids have first right of refusal on the lead. So
 
-That's it.
+**Jamie:** No, those kids weren't messing around.
 
-Now we'll just take another one.
+**Garrick:** No, they weren't. And they were hitting great eight meters, knocking out penalty kubbs, just calm as cucumbers, just great shots, and they look like they're having great fun, you know, piggyback rides between turns and just hanging out and like And if you walk in with that — I know Aaron plays world-class kubb,
 
-We'll get a little rest.
+**Jamie:** Yeah, yeah.
 
-We'll take our licks with Tad Kubler.
+**Garrick:** but at this tournament, he's playing with his family, and they're making great shots, and they're having great fun, and that's got to be so much better. I was scoring them on Sunday, which means they made it into the quarterfinals. You're making the quarterfinals with your kids.
 
-But we'll come in good.
+**Jamie:** Yeah.
 
-Then we played the second game.
+**Garrick:** That's a fantastic weekend.
 
-Completely.
+**Jamie:** Well, and I tell you, I mean, on the night before, on Saturday, you know, that kid comes up there and takes that king shot with the sixth baton. He misses. They go again. And he just walks out there, no hesitation, and knocks that king down.
 
-Completely different story.
+**Garrick:** Yeah.
 
-For like an hour.
+**Jamie:** I mean, everybody, who didn't cheer? Everybody cheered.
 
-And they won.
+**Garrick:** Yeah.
 
-And they won.
+**Jamie:** Everybody was just ecstatic. Just, yeah, little, a little tear, little tear.
 
-Is it the third game that we couldn't hit anything?
+**Garrick:** Absolutely.
 
-Or was it the second game?
+**Jamie:** You gotta admit.
 
-I think it was the second game that we just couldn't hit anything.
+**Garrick:** That fun and camaraderie is the only reason you would do six person.
 
-We threw 40 batons at their baseline.
+**Jamie:** Yeah. Yeah.
 
-Yeah.
+**Garrick:** Right. Although, I mean, I'm just going to have a blast with these people I'm hanging out with today.
 
-Didn't hit a thing.
+**Jamie:** Yeah. But at the World Championships, they do six, and I don't think that's just, well, fun.
 
-At least.
+**Garrick:** I will have to have an experience at a six-person tournament to really understand the strategy that goes into the
 
-I mean, you can't-- You can't win like that.
+**Jamie:** Right.
 
-No, you can't win like that.
+**Garrick:** things that have been magical to me about kubb just don't exist in a six-person team.
 
-You should just stop.
+**Jamie:** Well, we've got to go to Rome.
 
-Just hit the cake.
+**Garrick:** We got to go to Rome.
 
-Just-- it's just terrible.
+**Jamie:** So Kubbchucks are going to be back, and next year I think we set our goal: one more round, maybe two more rounds. That's our goal. Yeah.
 
-I mean, we were so cold.
+**Garrick:** Yeah. I had so much fun on Sunday scoring the games. And I got as nervous in some of those games just scoring, just watching, just keeping track of what's going on, as I did actually playing the day before. I don't know. I don't know that I need to. I'd be okay.
 
-It was-- I mean-- and we were getting in our own heads.
+**Jamie:** Just doing that and
 
-Yes.
+**Garrick:** Maybe next year we just place well on Saturday, and then
 
-Both you and I were getting in our heads.
+**Jamie:** then watch, yeah.
 
-Jim was maybe a little bit in his head.
+**Garrick:** a year after we try to get to Sunday. Yeah.
 
-Maybe a little less, though.
+**Jamie:** So you mentioned scoring a couple times, so should we talk about that?
 
-You know, you're in a tournament setting, things just fall the opposite way that you expect them to.
+**Garrick:** I really like this. This to me is a useful contribution
 
-One of those things, you just dig yourself into a hole.
+**Jamie:** Definitely.
 
-Yeah.
+**Garrick:** to the world of Kubbadians, and I'm really excited about it. It's fast. You can do it for... recorded games. I think both of us have tried to score during, like, watching a game on YouTube.
 
-You're like, I got to hit this.
+**Jamie:** Yep.
 
-And then you miss.
+**Garrick:** You can do it during a live game, you can do it during practice if you want. I don't recommend it.
 
-Yeah.
+**Jamie:** Yep. Throws your game off.
 
-And it doesn't help.
+**Garrick:** Throws your game off. But it's fast, and I think it's very expressive, and I think it's very powerful. And less so in just what you're writing down, but more so in what you can extract from what you write down. Right? Yeah.
 
-You just get-- you just get deeper.
+**Jamie:** Yeah, yeah.
 
-So we lose that match.
+**Garrick:** So there's a link on the Open Loop for this Planet Kubb notation, and Jamie and I have been working on this for a while now, I think almost from the very beginning. We wanted a way to describe games, and I think we've pretty much nailed it. Just a handful of letters out of the alphabet combined with some numbers, you know, because you need numbers. And you get something that you can very much describe a turn. Maybe not, you know, nine-year-old Colton takes the king, but can if you want to.
 
-And we played too long.
+**Jamie:** Yeah?
 
-We went an hour and a half to lose a match.
+**Garrick:** So, yeah.
 
-I'm not sure that they were just a family out having fun.
+**Jamie:** Put that in the notes. So we've been trying to figure out — I mean, we're not the first people to try this, a lot of people have tried this. You know, I want to score a game, or I want to... And "score" is a little bit of a miss. It's
 
-I think so.
+**Garrick:** Yeah.
 
-Well, they were there on Sunday.
+**Jamie:** it's not the greatest word, because it makes you think you're saying, you know, well, this team's got 12 points and this team's got 18 points, and that's really not — it's really about scoring like you would score a baseball game, where you score where the runners are and who advances who, and how many RBIs did this person get, you know. And that's really kind of what you do with it and what the score sheet's all about. I mean, you can put that into the computer and get all sorts of interesting statistics, but at no point does it ever generate an actual score. Maybe at some point in the future it would.
 
-Yeah, we were there on Sunday.
+**Garrick:** What's the word, dictating or annotating
 
-So I mean, maybe they were just checking things out.
+**Jamie:** Yeah.
 
-But you know, a lot of people weren't there on Sunday.
+**Garrick:** or those
 
-They were there on Sunday.
+**Jamie:** It's like, right.
 
-And you know what else?
+**Garrick:** are, I think, probably more accurate verbs than scoring, but I think Thanks, Corina. easy
 
-I talked to the guy afterwards.
+**Jamie:** And I think
 
-He was from somewhere-- they were from somewhere in Wisconsin.
+**Garrick:** to understand.
 
-Yeah, and you know what?
+**Jamie:** the key here is to really focus, crazy focused, on the notation, because the notation to me is the bedrock. If you get that right, then, I mean, you could have 17 different score sheets, and you could put it in any number of different computer programs that would churn interesting things, or you could just store it in text files, for all that really matters. But if you don't get the notation right, you can't express the game. And so we had a pretty good set of notation going into Nationals, and then we expanded it when we were at Nationals.
 
-You know what?
+**Garrick:** Because what came out of Nationals when you and I were scoring the games was really the expressiveness that was lacking on the inkasting.
 
-They were from Chippewa Falls.
+**Jamie:** Yeah, and then what was so fun is it just totally happened organically. I was scoring that game and I'm like, huh. I'm really not doing anything during this phase of the game. And so... But yet there's activity happening in the game, so I should probably be capturing that in some way. And so I just drew these, this little two additional boxes and said, okay, well, there's kubb throws and then there's re-throws and penalty kubbs. And I do think that not capturing penalty kubbs is something you just — you have to capture a penalty kubb. That led to kind of a, you know, some debate that you and I did afterwards to figure out the best solution. And now I think we've got — I think we've got a really solid kind of notation system that follows the phases of the game. So we've got the throwing, the phase, the inkasting phase, and we've got the baton throwing phase, the kubb throwing phase and the baton throwing phase. And they each have shared grammar, but they also have the notation that allows you to record the differences in what happens in those phases.
 
-They were at the Culvers we went to.
+**Garrick:** And any particular players against all of those things? And multiples if you need to.
 
-They were?
+**Jamie:** Yeah. And the great thing about the — I mean, the way that the notation works, you know, you can handle any number. I mean, technically if you had 10 people, 10 inkasters throwing in kubbs, you could record that, all 10 of them, if you wanted to. I don't know if you can do that, but something tells me you could. But you can definitely have, like in world championships in Rome where everybody has to throw the kubbs in, then there's no problem notating that. I've yet to find a thing that a baton can do that doesn't get captured by the notation. So I think we have a bedrock for notation. And what's so fun about that, and I think, for example, I'm gonna put this on the wiki soon, is just show, like, here's how the notation can just be put into a text file if you just wanna, you know, keep your games around. Sure, you can put it on the Planet Kubb wiki and put in all these fields, but there's also just, you know, hey, if you just want to store this locally on your computer, this is a great way to do that as well.
 
-Mm-hmm.
+**Garrick:** And you've also done a great job of including what the regexes are on the computer side to be able to parse this.
 
-Crazy.
+**Jamie:** Right. Yeah. Yeah, I have a little Python too with a regex to parse it. And I'm gonna do one level deeper. I'm gonna parse not only the notation but then actually each action, and put that as example code so that people can, you know, if they want to write their own code to kind of turn the game into whatever, they
 
-I can't-- I didn't notice at the time.
+**Garrick:** Yeah.
 
-We were walking out, and there's a guy.
+**Jamie:** can do that. The notation I think at this point needs a little bit of time to rest. And then it needs a documentation phase that is pretty thorough. Like,
 
-And he obviously recognized me.
+**Garrick:** Right.
 
-And he was like, hey.
+**Jamie:** I think the documentation is okay, but it needs to be a discussion of, like, the grammar of the notation and a little bit better examples. But I think the notation is solid.
 
-And I was like, I have no idea who this is.
+**Garrick:** I agree. I think both the notation and the score sheet, I'm very comfortable declaring as version one,
 
-And I recognized, like, a little bit after that, wait a second, mustache.
+**Jamie:** Yeah.
 
-That was that dude.
+**Garrick:** which means they are, until we learn about scenarios that these things don't capture, it's good.
 
-That was the dad.
+**Jamie:** Yeah. The other thing is there could be any number of different score sheets, and
 
-Crazy.
+**Garrick:** Absolutely.
 
-Yeah.
+**Jamie:** so, you know, we had
 
-Altoona.
+**Garrick:** We didn't have that beforehand, right?
 
-They're from Altoona.
+**Jamie:** Exactly.
 
-Yeah, so that was terrible.
+**Garrick:** And when we look at what the guys down in DMK were doing,
 
-Yeah, it was terrible.
+**Jamie:** Right.
 
-And then we just got smoked by Tad Kuba.
+**Garrick:** it wasn't that far off.
 
-But we sort of knew that was going to happen.
+**Jamie:** Right, I mean it's very similar. Yeah. And, you know, I gotta say this, so, you know, I think one of the things that is right with the notation is that it ignores things that can be ignored. Like, I find it interesting that one of the things that people want to capture oftentimes is like, okay, well, you threw a baton, you hit a baseline. Which baseline?
 
-[LAUGHTER] How can it not?
+**Garrick:** Right.
 
-We knew that was going to happen.
+**Jamie:** And the Planet Kubb notation has no designation that just says you hit a baseline. And in reality, it doesn't really matter.
 
-But honestly, three turns-- I mean, we lost our first game against them in three turns.
+**Garrick:** Right.
 
-I mean, that was-- That was ridiculous.
+**Jamie:** And in fact, it doesn't matter when you hit fields. And it's also just it's just confusing, because there's no way to — I mean, like, how do you identify, oh, the one second from the left, you know? I mean, there's no way to actually — which actually isn't — I want to name the baseline kubbs. I think they should all have names.
 
-I mean, you know what I should have done?
+**Garrick:** They should all have names like Dave and Stephen, Janice.
 
-Here's my second throw on that cube.
+**Jamie:** Well, I mean, like in chess you would say that, yeah,
 
-Yeah.
+**Garrick:** Yeah, I was just going to say, in chess, you know which rook it is.
 
-I should have walked to the other side of the pitch.
+**Jamie:** You'd say the king's rook or the queen's rook, and so like I want to be able to say just the name and say that everybody knows which kubb that is, and
 
-Yeah.
+**Garrick:** It only matters on the baseline, which is weird, right? As soon as that kubb is a field kubb, it's not like he's the king's rook anymore.
 
-And just tossed the cube at the king.
+**Jamie:** He's just, yeah, yeah, yeah. He's not special. Just a block of wood.
 
-[LAUGHTER] Oh, yeah.
+**Garrick:** Just a block of wood. Oh golly.
 
-Instead, worst placement of a penalty cube for guys who can't hit an 8-meter ever.
+**Jamie:** So then we also have the score sheet, and the score sheet went through a revision after Nationals too. It's solid.
 
-Yeah.
+**Garrick:** It is solid. It is so much better than what we walked into Nationals with.
 
-So that game's on Planet Cube.
+**Jamie:** Yeah, and there may be at some point some electronic device that we use to capture games, but I'm telling you, I'm going to have a hard time finding something that's faster than a clipboard with a couple of little clips and then a a pen. I mean, I could go really fast with that, yeah.
 
-We'll put a link to it so people can take a look at it.
+**Garrick:** Yeah. What I think is so fantastic about the score sheet is how humbly it started on that day that we talked about earlier at the park. I wrote essentially a printed out spreadsheet and said, okay guys, I got a score sheet. Let's do this.
 
-But it's terrible.
+**Jamie:** And then I had to, like, do stuff.
 
-Three turns, we lose.
+**Garrick:** And then you had to do stuff, and you're like three turns and you're like, this is crap, this doesn't work at all. So the biggest changes I think that came out of Nationals that you mentioned are our box for re-throws and a box for penalties. And then a little bit after that came, you know, based on some suggestions from the Ask Planet Kubb community, was some way to specify significance of advantage line.
 
-And Tad Kubler completely just spanks us.
+**Jamie:** Right. Which was — I feel like that's the last niggling thing, is exactly how to do that. People have tried to make a score sheet. That's been tried, and every score sheet of course has to have a notation. I think one of the things that smartly was done here is that the notation actually preceded the score sheet. And a lot of times people just try, like, let's make a score sheet and then figure out how to write in it. And instead they said, how do you notate a game, and then how would you make a score sheet that would accommodate that notation? And then the third thing that nobody's done to my knowledge is actually create software that you could put that notation into and actually save it on the internet for others to see and generate information out of it. And that's kind of the final piece that was super fun to put together. And is the most poorly developed thus far. But I mean,
 
-And they were nice guys about it and everything.
+**Garrick:** Right.
 
-But they were-- yeah, it was tough.
+**Jamie:** yeah, that just
 
-So then we come out of it-- I mean, they tied for fifth last year.
+**Garrick:** Yep.
 
-And Eric runs the Minnesota Coup Tournament.
+**Jamie:** There's plenty of time to work on that.
 
-And all of these "ands" just mean experience.
+**Garrick:** Right. And once you have the notation you can read through, as rough as those games are, there is some commonality between them, and the score sheet and the notation is consistent across that entire stream.
 
-Yeah.
+**Jamie:** Right.
 
-And we've been playing for six months.
+**Garrick:** You can watch the game on the YouTube if you want to follow along.
 
-Yeah.
+**Jamie:** Yep.
 
-So hope and ambition doesn't equal experience.
+**Garrick:** So it's it's very early for the game template stuff, but you know, if you know how to read these stats, and they're not difficult, it's
 
-No.
+**Jamie:** It's all there, and
 
-[LAUGHTER] No matter what my intern says.
+**Garrick:** all there, right.
 
-We went through it.
+**Jamie:** the thing that I am working towards ultimately is I want to have a kubb player card. I want to have just like a baseball card. I want to have a picture of Josh Fetters, it says Dobby on it, says driller, and I want his critical stats. It's the team he's affiliated with. I want all that. I want it on a baseball card. Maybe someday we'll print it on an actual baseball card.
 
-And we made it through the quarterfinals.
+**Garrick:** Right, right on. Hey, that's what Moo.com is for.
 
-We came out of the quarterfinals-- what?
+**Jamie:** I don't know. Exactly. And so when we get there, I mean, I think that is — I want to keep pushing on it, because I think that I can tell and you can tell and some others can tell that there's a lot there, but it's not immediately obvious. And I think that the more obvious that the richness of that information is, the more likelihood is that people will adopt the notation. And you
 
-We came out of the quarterfinals 1 and 2.
+**Garrick:** Yes.
 
-And in hindsight, I think we really narrowly escaped the consolation bracket.
+**Jamie:** know, because it is a virtuous circle. You know, you're not going to notate a game
 
-Very narrowly escaped the consolation bracket.
+**Garrick:** You've got — you're starting to. You're starting to build in some game state stuff into the wiki template that reads the notation.
 
-Had to.
+**Jamie:** Yeah.
 
-Yes.
+**Garrick:** So we can, again, we've been talking this whole time about how from this very simple notation, very complex states of the game can be expressed, and very complex notions can be expressed, and stats can be sucked out of it.
 
-Had to.
+**Jamie:** Right.
 
-Yes.
+**Garrick:** just from a couple of numbers and letters. And one of the things that I found so enjoyable with the notation as it stands is you asked me to make up some fake games, some wrong games, some games that shouldn't exist. And
 
-But we played into the championship bracket.
+**Jamie:** Yeah.
 
-We had to play the engineers.
+**Garrick:** being familiar with this notation, it was a joy, just wrote it out like, oh, and then this would happen, and this would happen, and this shouldn't happen, so I'm going to write that down, and then this would happen, this would happen.
 
-So that game lasted a gazillion hours.
+**Jamie:** You just wrote it out.
 
-Two hours, 20 minutes.
+**Garrick:** Suddenly, wrong game.
 
-Two hours, 20 minutes?
+**Jamie:** Yeah.
 
-For a match of three.
+**Garrick:** Yeah.
 
-Yeah.
+**Jamie:** And you could just read it.
 
-We played-- we played great Coup.
+**Garrick:** You could just read it.
 
-It was great.
+**Jamie:** Yeah.
 
-Great Coup.
+**Garrick:** And you could see like, yeah, that's ridiculous. That would never happen.
 
-I think each round, each game, we had 10 Coups out.
+**Jamie:** Well, I mean, I started realizing that even at the tournament, I started talking to people using the notation. And they had no idea. But I'd say like, oh, that's a 4F.
 
-And I love the notion that if you get 10 Coups out, now you've got a Coup game.
+**Garrick:** Right.
 
-Yeah.
+**Jamie:** Now
 
-Now I've got a game of Coup here.
+**Garrick:** Yeah.
 
-Yeah.
+**Jamie:** yeah, it's like, well no, it's a quad, that's what most people would say, but yeah, I'm gonna call it a 4F. Yeah, or like, you know, our own Kubbchucks, they got a 2FB.
 
-Eric Anderson, the organizer, I came by like three times saying, guys, seriously.
+**Garrick:** We did.
 
-Where you at?
+**Jamie:** Two fields colliding into a baton or into a baseline.
 
-We're going to have to hurry this up.
+**Garrick:** Brilliant.
 
-We have to call it.
+**Jamie:** Yeah. So I'm super excited, and I think everybody in the kubb community has been super receptive to it. I really hope that we can — I think that my objective for the rest of the season is we're going to play some kubb, we're going to have some fun. We're going to continue to work on the notation and the score I think actually the score sheet's done. I think the notation needs documentation. I'm going to continue working on the templates and really get it ready for next year. And with the objective being that we get some tournaments, like I'd really like to see some tournaments actually adopt the
 
-I don't want to put a time limit on you guys, but you should be done by now.
+**Garrick:** Yes.
 
-Yeah.
+**Jamie:** Planet Kubb notation for maybe even just their final game, or maybe it's the, you know, semifinals and finals. Yeah, but just adopt the notation as a way to kind of show the best of what happened at your tournament and
 
-And we weren't.
+**Garrick:** Be able to communicate that to the worldwide community.
 
-We weren't.
+**Jamie:** then put that. Yeah. And I mean, if we can get it over the pond — and that's already happening on Ask Planet Kubb, we've got, you know, we've got people overseas that are looking at this and really interested in it, so if we could get, you know — and that was actually one of the things, is that any musician in the world can look at a score of music and play it and understand what's going on. And that's what, you know, it doesn't matter if I can speak the same language as this other team, I can see what they're doing and I can know what their game is like.
 
-And that is where we finally kind of came up to-- I decided that I would not drill again the rest of the tournament.
+**Garrick:** Yes. I wonder, you know, we had spent — because our games ran so long with the Engineers, I think, especially — there was a moment where we had a conversation with Eric about how do you determine where the tie should be broken, right?
 
-You would do all the drilling.
+**Jamie:** Right.
 
-And we-- you know, Jim is always in the middle, interestingly enough.
+**Garrick:** And I think that the score sheet can help with that.
 
-Right?
+**Jamie:** Yeah, I think you're right. It could. Yeah.
 
-Jim stayed in the middle playing cleanup.
+**Garrick:** Yeah.
 
-Yep.
+**Jamie:** Rather than just looking at the number of baselines.
 
-And then I moved to the kind of attacker, which was weird, because that wasn't what I thought I should do.
+**Garrick:** More grain than just number of baselines. Oh, you've hit these doubles. You've got these number of baselines down.
 
-But you know, I kind of liked it.
+**Jamie:** Right.
 
-I didn't mind it at all.
+**Garrick:** You have, this team just has a slightly stronger game.
 
-Good.
+**Jamie:** Yeah.
 
-Yeah.
+**Garrick:** Yeah. Time's out. They win.
 
-I didn't mind that at all.
+**Jamie:** Yeah, I actually have been — so I've been going just inside my head, I've been thinking about points being assigned to certain actions, and then those points accumulate. And the problem is, I think that you could easily get to a position where a team would actually have more points but lose. And maybe that's not a problem, but, you know, because you could argue, if you think of There would be an analogy to that in boxing. I mean, in boxing there's a point for every throw, you know, every punch landed and all that. And you might still get knocked out. But if you don't get knocked out, you would win. So that's an interesting kind of parallel.
 
-Good.
+**Garrick:** A few months ago, I think before we started diving into the scores and the notation so far, I remember reading a post over on DMK from Dave about how to set up inkast kubbs more defensively.
 
-That in-casting for that long, that is-- You're tired.
+**Jamie:** Right. Can I just say shout out to Josh Brothers Dave?
 
-That is work.
+**Garrick:** Absolutely.
 
-And so I'm glad that Jim stepped in from time to time, and you stepped in from time to time to take those first hits off the in-cast.
+**Jamie:** He's awesome.
 
-Yeah.
+**Garrick:** Great, great. Cool, great man. I mean, huge, really appreciate his support this past weekend. Great
 
-Because I didn't have it in me.
+**Jamie:** Yeah. Great guy.
 
-After I throw one more thing, I just don't got it in me.
+**Garrick:** guy. And I remember reading that post and thinking, wow, you know, for such a seemingly simple act, there's an entire world here.
 
-Yeah.
+**Jamie:** Yeah.
 
-That's where the specialty play comes in, because I think if it's a tight grouping, particularly if you have an advantage line, I can put a pretty good amount of power on that.
+**Garrick:** And that's one of the things I like about the Kubb is everywhere you go, there's an entire world.
 
-I'll come in there and take that.
+**Jamie:** When I ripped that right open, then I went on Ask Planet Kubb and I said, hey, what if there was a one minute time limit to setting up kubbs? And oh, boy. Done. Oh, boy.
 
-But if it-- yeah, but otherwise, I kind of liked being at the end.
+**Garrick:** Yeah. And if there's another thing that I can say that I'm grateful for in the Kubb community, it's there are very strong opinions and
 
-I did.
+**Jamie:** Yeah.
 
-So we played that game, and we won.
+**Garrick:** they are not shy about sharing them.
 
-So then we got into the round of 32.
+**Jamie:** Absolutely.
 
-Yep.
+**Garrick:** That's terribly helpful.
 
-We played the good, bad, and the ugly.
+**Jamie:** Yes.
 
-Held our own.
+**Garrick:** Okay, so we don't go that direction.
 
-Held our own for a couple of hours.
+**Jamie:** Yeah.
 
-Solid.
+**Garrick:** Totally fine, just wanted to know.
 
-Solid game.
+**Jamie:** Yeah. Yep. I honestly was a little surprised at the consistently negative reaction in my comment of, hey, how about if the finals game went five games, best of five? I
 
-Hour and 40 minutes.
+**Garrick:** Yeah, right.
 
-We had a lot of spectators at the end, which was super cool.
+**Jamie:** mean, nobody liked that. I mean, I just, like, universally panned, and I was like, well,
 
-Yeah, it was nice to see the guys from the Knockerheads coming by, and Tad Kubler came by to watch the game for a while.
+**Garrick:** But hey, now we have numbers against that and we know.
 
-That was fantastic.
+**Jamie:** Exactly. I didn't think it was that bad of an idea. It's like, well, we'll just get into another game of great Kubb.
 
-Yeah, and they were cheering on, and that's when we got the-- oh, no, it was actually at the other game, didn't we?
+**Garrick:** Right.
 
-The "Let's go, Kubb Chucks."
+**Jamie:** Now, I mean, granted, I mean, that does mean it could take seven hours, but yeah.
 
-Yeah.
+**Garrick:** Two equal, what was Jim saying? Two equally matched teams will play Kubb indefinitely.
 
-That's Dobby's.
+**Jamie:** Yeah.
 
-Yeah.
+**Garrick:** I completely believe that.
 
-That game, we did good.
+**Jamie:** So we need to get a Kubb & Koffee on the schedule.
 
-We did OK.
+**Garrick:** Yes.
 
-We lost.
+**Jamie:** And we need to invite a larger group of people to play Kubb. And hopefully the Tuesday Kubb friendlies will be resuming quickly. I assume there wasn't one this week.
 
-It would have been great to move on, but we lost.
+**Garrick:** I don't know. Those guys are — I could assume, I don't know. I just didn't have the — yeah,
 
-And those guys then lost in the next round.
+**Jamie:** I just couldn't do it. Just didn't have the brain power. And then we're going to keep on kubbin', as I say, kubbin'.
 
-Yes.
+**Garrick:** I also want to put a big shout out before we head out to Aaron Elringer.
 
-I think the next round was the Koopsicles anyway.
+**Jamie:** Oh my god. Yeah, Aaron is awesome.
 
-Yeah, I think the good, bad, and ugly played the Koopsicles.
+**Garrick:** Aaron is awesome. Yeah, great story, great Kubb player, just generous.
 
-Yes.
+**Jamie:** You know, and you know what I'm going to say? I told a few people this because I had some questions about, hey, what was it like at this big tournament? And I've generally found that Kubb players are just a friendly group.
 
-And we would have just been smoked.
+**Garrick:** Yeah.
 
-We would have been done then for sure.
+**Jamie:** Yeah, by and large. I mean, not everybody, not to the person, you know, but, you know, particularly the competitive teams — actually, like, the competitive teams that have game, like, everybody was cool, right? I mean, and it was so fun to go there having now spent some more time with everybody online, and we had our Planet Kubb signs up and we had We had our Kubbchucks shirt on, and we're getting random shout-outs for Kubbchucks, and it was just — I really felt like it was just a really warm welcome, and it reminded me a lot of when you go to like very century bike rides, where you're going to go out and ride your bike for 100 miles. Everybody who's going to ride their bike for 100 miles is — they're just good people and they're fun to talk to and
 
-The Koopsicles lost one game.
+**Garrick:** Right. I think that's — I would make that, you know, there's a certain sort of bizarre behavior, subculture, random thing, and if you're there, gonna do it, everyone's gonna be like, hey, we got another one, of
 
-It wasn't against them.
+**Jamie:** Exactly.
 
-It was against--it was against Kupits.
+**Garrick:** course you're gonna be friendly, right?
 
-No.
+**Jamie:** Jump into the boat with us.
 
-I can't remember.
+**Garrick:** It's confirmation bias, yeah.
 
-They did lose one game.
+**Jamie:** Yeah, we're here on the crazy island. Welcome.
 
-I don't remember who.
+**Garrick:** Welcome, welcome to the crazy island, glad you could join us today.
 
-So that's our first Nationals appearance.
-
-I would very much make it analogous to running a marathon or a triathlon or your inaugural appearance at the Tour de France. [laughs] Yeah.
-
-You don't know what you've walked into, and it's going to take you a while to look back and say, "Yeah, that was fun."
-
-And you know what?
-
-We've got to take a moment here to just say, I mean, Eric Anderson-- That was amazing.
-
-Amazing work.
-
-I couldn't say enough good things.
-
-No.
-
-I mean, the tournament was awesome.
-
-Organized.
-
-Yeah.
-
-Like this was--I'm sure that he was continually wanting to make sure everything went right, and I'm sure it did.
-
-You know, I particularly liked that in the round robin they had the pieces of paper, and you knew what teams you were supposed to play in what order.
-
-Yes.
-
-And in general, I liked the pieces of paper.
-
-I liked writing down the outcome of the match and then carrying that in and turning it into the people keeping track of the bracket.
-
-We all have our special skills. [laughs] That's right.
-
-Like double-checking that everything's written right on that piece of paper.
-
-Or we would have been in the consolation bracket for sure.
-
-When we got done, Garrick put us as losing our first match instead of winning it.
-
-Luckily, I checked, changed it.
-
-What I should have done is fixed that Swedish Ice Cubes one, if you know what I mean.
-
-Oh, yeah. [laughs] Anyways, so it was super fun.
-
-I had a great time, and we're going back.
-
-We're definitely going back.
-
-We've got another tournament this year.
-
-We're going to the Dallas six-person tournament, right?
-
-Absolutely.
-
-I got buy-in from Jim today.
-
-Oh, good.
-
-You know what he's thinking?
-
-Huh?
-
-He's thinking Jake.
-
-Oh.
-
-Because the ages would be more-- So we're thinking the kids?
-
-Thinking the kids?
-
-I think we'll do it.
-
-If we can make that work, I think that would be great.
-
-We go and play with our children.
-
-It would be fun.
-
-You know, I wouldn't have even considered that until I saw the ringers.
-
-Right.
-
-Talk about that.
-
-That was amazing.
-
-You were moved.
-
-The ringers are Aaron Elringer, his father, his son, and their nephew.
-
-So a four-man team.
-
-The kids are 9 and 11 or something like that, and they've got one baton.
-
-The adults have two batons.
-
-But the kids are taking the lead.
-
-The kids have first right of refusal on the lead.
-
-Those kids weren't messing around.
-
-No, they weren't, and they were hitting great eight meters, knocking on penalty cubes, just calm as cucumbers.
-
-Yeah.
-
-Just great shots, and they looked like they were having great fun.
-
-You know, piggyback rides between turns and just hanging out.
-
-And if you walk in with that, I know Aaron plays world-class cube.
-
-Yeah.
-
-But at this tournament, he's playing with his family.
-
-Yeah.
-
-And they're making great shots, and they're having great fun, and that's got to be so much better.
-
-I was scoring them on Sunday, which means they made it into the quarterfinals.
-
-You make it into the quarterfinals with your kids.
-
-Yeah.
-
-That's a fantastic weekend.
-
-Well, and I tell you, I mean, on the night before on Saturday, you know, that kid comes up there and takes that king shot with the sixth baton.
-
-He misses.
-
-They go again.
-
-He just walks up there, no hesitation, and knocks that king down.
-
-Yeah.
-
-I mean, everybody--who didn't cheer?
-
-Everybody cheered.
-
-Everybody was just ecstatic.
-
-Just, you know, a little tear, a little tear.
-
-Absolutely.
-
-That sort of--the fun and camaraderie is the only reason you would do six-person.
-
-Yeah.
-
-Right?
-
-Yeah.
-
-I'm just going to have a blast with these people I'm hanging out with today.
-
-Yeah.
-
-But at the World Championships, they do six, and I don't think that's just about fun.
-
-I will have to have an experience at a six-person tournament to really understand the strategy that goes into-- Right. --the things that have been magical to me about Coupe just don't exist in a six-person team.
-
-Right.
-
-Well, we've got to go to Rome.
-
-We've got to go to Rome.
-
-Coupe Chucks are going to be back, and next year, I think we set our goal, one more round, maybe two more rounds.
-
-That's our goal.
-
-Yeah.
-
-I had so much fun on Sunday scoring the games.
-
-Yeah.
-
-And I got as nervous in some of those games just scoring, just watching, just keeping track of what's going on as I did actually playing the day before.
-
-Right.
-
-I don't know.
-
-I don't know that I need to-- I'd be okay-- Just doing that. --maybe next year we just place well on Saturday and-- And then watch. --the year after we try to get to Sunday.
-
-Yeah.
-
-So you mentioned scoring a couple times, so should we talk about that?
-
-I really like this.
-
-This to me is a useful contribution-- Definitely. --to the worldwide Coupe audience, and I'm really excited about it.
-
-It's fast.
-
-You can do it for recorded games.
-
-I think both of us have tried to score during--like watching a game on YouTube.
-
-Yep.
-
-You can do it during a live game.
-
-Yep.
-
-You can do it during practice if you want.
-
-I don't recommend it.
-
-Yep.
-
-It throws your game off.
-
-It throws your game off.
-
-But it's fast, and I think it's very expressive, and I think it's very powerful.
-
-Yeah.
-
-And less so in how it--just what you're writing down, but more so in what you can extract from what you write down.
-
-Right.
-
-Right?
-
-Yeah.
-
-So there's a link on the Open Loop for this Planet Coupe notation.
-
-Jamie and I have been working on this for a while now.
-
-I think almost from the very beginning we wanted a way to describe games.
-
-Yeah.
-
-And I think we've pretty much nailed it.
-
-Just a handful of letters out of the alphabet combined with some numbers, because you need numbers.
-
-And you get something that you can very much describe a turn.
-
-Maybe not nine-year-old Colton takes the king, but you can if you want to.
-
-Yeah.
-
-You can put that in the notes.
-
-Yeah.
-
-So we've been trying to figure out--and we're not the first people to try this.
-
-A lot of people have tried this.
-
-I want a score game, and score is a little bit of a missed--it's not the greatest word, because it makes you think you're saying, "Well, this team's got 12 points, and this team's got 18 points," and that's really not.
-
-It's really about scoring it like you would score a baseball game where you score where the runners are and who advances who and how many RBIs did this person get.
-
-Yeah, and that's really kind of what you do with it and what the score sheet's all about.
-
-I mean, you can put that into the computer and get all sorts of interesting statistics, but at no point does it ever generate an actual score.
-
-Maybe at some point in the future it would.
-
-So we're dictating or annotating?
-
-Yeah.
-
-Those are, I think, probably more accurate verbs than scoring, but I think scoring is--you don't understand.
-
-And I think the key here is to really focus--crazy focused on the notation, because the notation to me is the bedrock.
-
-If you get that right, then--I mean, you could have 17 different score sheets, and you could put it in any number of different computer programs that would churn interesting things, or you could just store it in text files for all that really matters, but if you don't get the notation right, you can't express the game.
-
-And so we had a pretty good set of notation going into nationals, and then we expanded it when we were at nationals.
-
-Because what came out of nationals when you and I were scoring the games was really the expressiveness that was lacking on the in-casting.
-
-Yeah, and then what was so fun is it just totally happened organically.
-
-I was scoring that game, and I'm like, "Huh.
-
-I'm really not doing anything during this phase of the game."
-
-And so--but yet there's activity happening in the game, so I should probably be capturing that in some way.
-
-And so I just drew this little two additional boxes and said, "Okay, well, there's coup throws, and then there's re-throws, and penalty coups."
-
-And I do think that not capturing penalty coups is something-- you have to capture a penalty coup.
-
-That led to some debate that you and I did afterwards to figure out the best solution, and now I think we've got a really solid kind of notation system that follows the phases of the game.
-
-So we've got the throwing--the phase--the in-casting phase, and we've got the baton-throwing phase, the coup-throwing phase and the baton-throwing phase.
-
-And they each have shared grammar, but they also have the notation that allows you to record the differences in what happens in those phases.
-
-And you can do players against all of those things, multiples if you need to.
-
-Yeah.
-
-And the great thing about the--I mean, the way that the notation works, you can handle any number--I mean, technically, if you had 10 people, 10 in-cast arrays throwing in coups, you could record that, all 10 of them, if you wanted to.
-
-I don't know if you can do that, but something tells me you could.
-
-But you can definitely have, like in World Championships in Rome, where everybody has to throw coups in.
-
-There's no problem notating that.
-
-I've yet to find a thing that a baton can do that doesn't get captured by the notation.
-
-So I think we have a bedrock for notation.
-
-And what's so fun about that--and I think, for example, I'm going to put this on the wiki soon--is just show, like, here's how the notation can just be put into a text file if you just want to keep your games around.
-
-Sure, you can put it on the PlanetCube wiki and put it in all these fields, but there's also just, hey, if you just want to store this locally on your computer, this is a great way to do that as well.
-
-And you've also done a great job of including what the regexes are on the computer side to be able to parse this.
-
-Yeah, I'm going to take--I have a little Python with a regex to parse it, and I'm going to do one level deeper.
-
-I'm going to parse not only the notation but then actually each action and put that as example code so that people can-- if they want to write their own code to kind of turn the game into whatever, they can do that.
-
-The notation, I think, at this point needs a little bit of time to rest, and then it needs a documentation phase that is pretty thorough.
-
-I think the documentation is okay, but there needs to be a discussion of the grammar of the notation and a little bit better examples, but I think the notation is solid.
-
-I agree.
-
-I think both the notation and the score sheet, I'm very comfortable declaring as version 1, which means they are--until we learn about scenarios that these things don't capture, it's good.
-
-The other thing is there could be any number of different score sheets.
-
-Absolutely.
-
-And we had it-- And it were beforehand, right?
-
-Exactly.
-
-When we look at what the guys down in DMK were doing, it wasn't that far off.
-
-Right.
-
-I mean, it's very similar.
-
-Yeah.
-
-I got to say this.
-
-I think one of the things that is right with the notation is that it ignores things that can be ignored.
-
-I find it interesting that one of the things that people want to capture, oftentimes, is like, okay, well, you threw a baton and you hit a baseline.
-
-Which baseline?
-
-Right.
-
-And the PlanetCube notation has no designation.
-
-It just says you hit a baseline.
-
-And in reality, it doesn't really matter.
-
-Right.
-
-In fact, it doesn't matter when you hit fields.
-
-And it's also just confusing because there's no way-- I mean, like how do you identify the one second from the left?
-
-I mean, there's no way to actually just-- which actually is--I want to name the baseline cubes.
-
-I think they should all have names.
-
-They could all have names like Dave and Stephen.
-
-Well, I mean-- Janice.
-
-Like in chess, you would say-- I was just going to say, in chess, you know which rook it is.
-
-Yeah, you'd say the king's rook or the queen's rook.
-
-And so, like I want to be able to say just the name and everybody knows which cube that is.
-
-It only matters on the baseline, which is weird, right?
-
-As soon as that cube is a field cube-- Then he's just--yeah.
-
-It's not like he's the king's rook anymore.
-
-Yeah, he's not special.
-
-Yeah.
-
-Just a block of wood.
-
-Just a block of wood.
-
-Oh, golly.
-
-So then we also have the score sheet.
-
-And the score sheet went through a revision after Nationals too.
-
-It's solid.
-
-It is solid.
-
-It is so much better than what we walked into Nationals with.
-
-And there may be at some point some electronic device that we use to capture games, but I'm telling you, I'm going to have a hard time finding something that's faster than a clipboard with a couple of clips and a pen.
-
-I mean, I could go really fast with that.
-
-Yeah.
-
-What I think is so fantastic about the score sheet is how humbly it started on that day that we talked about earlier at Cancer Park.
-
-Essentially a printed out spreadsheet and said, "Okay, guys, I got a score sheet.
-
-Let's do this."
-
-And then I had to do stuff.
-
-And then you had to do stuff.
-
-And you're like three turns, and you're like, "This is crap.
-
-This doesn't work at all."
-
-The biggest changes I think that came out of Nationals that you mentioned are a box for re-throws and a box for penalties.
-
-And then a little bit after that came, based on some suggestions from the AskPlanetKubb community, was some way to specify significance of advantage line.
-
-Right.
-
-Which I feel like that's the last niggling thing is exactly how to do that.
-
-People have tried to make a score sheet.
-
-That's been tried.
-
-And every score sheet, of course, has to have a notation.
-
-I think one of the things that smartly was done here is that the notation actually preceded the score sheet.
-
-Yes.
-
-A lot of times people just try, like, "Let's make a score sheet and then figure out how to write in it."
-
-And instead they said, "How do you notate a game?"
-
-And then, "How would you make a score sheet that would accommodate that notation?"
-
-And then the third thing that nobody has done, to my knowledge, is actually create software that you could put that notation into and actually save it on the Internet for others to see and generate information out of it.
-
-And that's kind of the final piece that was super fun to put together.
-
-And it is the most poorly developed thus far.
-
-Right.
-
-There's plenty of time to work on that.
-
-Right.
-
-And once you have the notation, you can read through it.
-
-As rough as those games are, there is some commonality between them and the score sheet, and the notation is consistent across the entire stream.
-
-Right.
-
-You can watch the game on YouTube if you want to follow along.
-
-So it's very early for the game template stuff, but if you know how to read these stats and they're not difficult.
-
-It's all there.
-
-And the thing that I'm working towards ultimately is I want to have a Kubb player card.
-
-I want to have a--just like a baseball card, I want to have a picture of Josh Feathers that says "Dobby" on it.
-
-It says "Driller," and I want his critical stats, the team he's affiliated with.
-
-I want all that.
-
-I want it on a baseball card.
-
-Maybe someday we'll print it on an actual baseball card.
-
-I don't know.
-
-Right on.
-
-That's what Moo.com is for.
-
-Exactly.
-
-And so when we get there--I mean, I think that is--I want to keep pushing on it because I think that I can tell and you can tell and some others can tell that there's a lot there, but it's not immediately obvious.
-
-And I think that the more obvious the richness of that information is, the more likelihood that people will adopt the notation.
-
-Because it is a virtual circle.
-
-You're not going to note to you the game.
-
-You're starting to build in some game state stuff into the wiki template that reads the notation.
-
-So we can--again, we've been talking this whole time about how from this very simple notation, very complex states of the game can be expressed and very complex notions can be expressed and stats can be sucked out of it.
-
-Right.
-
-Just from a couple of numbers and letters.
-
-And one of the things that I found so enjoyable with the notation as it stands is you asked me to make up some fake games, some wrong games, some games that shouldn't exist.
-
-Yeah.
-
-And being familiar with this notation, it was a joy.
-
-You just wrote it out.
-
-Just wrote it out like, "Oh, and then this would happen and this would happen and then this shouldn't happen so I'm going to write that down and then this would happen and this would happen."
-
-Suddenly, wrong game.
-
-Yeah.
-
-And you could just read it.
-
-You could just read it.
-
-Yeah.
-
-And you could see, like, yeah, that's ridiculous.
-
-That would never happen.
-
-Well, I mean, I started realizing that even at the tournament I started talking to people using the notation.
-
-And they had no idea.
-
-But I'd say, like, "Oh, that's a 4f."
-
-Right.
-
-Yeah.
-
-It's like, well, no, it's a quad.
-
-That's what most people would say.
-
-But, yeah, I'm going to call it a 4f.
-
-Or, like, our own Kuchuks, they got a 2fb.
-
-We did.
-
-Two fields colliding into a baton.
-
-Or into a baseline.
-
-Brilliant.
-
-Yeah.
-
-So I am super excited.
-
-I think, you know, everybody in the KU community has been super receptive to it.
-
-I really hope that we can--I think that my objective is for the rest of the season is we're going to play some KU, we're going to have some fun.
-
-We're going to continue to work on the notation and the score--you know, I think actually the score sheet is done.
-
-I think the notation needs documentation.
-
-I'm going to continue working on the templates and really get it ready for next year.
-
-And with the objective being that we get some tournaments, like, I'd really like to see some tournaments actually adopt the Planet KU notation for maybe even just their final game or maybe it's the final, you know, semifinals and finals.
-
-Yeah, but just adopt the notation as a way to kind of show the best of what happened at your tournament.
-
-Yes.
-
-And be able to communicate that to the worldwide community.
-
-Yeah.
-
-And I mean, if we can get it over the pond, and that's already happening on AskPlanetKU, we've got people overseas that are looking at this and really interested in it.
-
-So if we could get--you know, that was actually one of the things.
-
-Any musician in the world can look at a score of music and play it and understand what's going on.
-
-But, you know, it doesn't matter if I can speak the same language as this other team.
-
-I can see what they're doing and I can know what their game is like.
-
-Yes.
-
-I wonder--you know, we had spent--because our games ran so long with the engineers, I think especially, there was a moment where we had a conversation with Eric about how do you determine where the tie should be broken.
-
-Right.
-
-And I think that the score sheet can help with that.
-
-Yeah, I think you're right.
-
-It could, yeah.
-
-Rather than just looking at the number of baselines.
-
-More granular than just number of baselines.
-
-Oh, you've hit these doubles, you've got these number of baselines down.
-
-You've got--you have--this team just has a slightly stronger game.
-
-Yeah.
-
-Times out, they win.
-
-Yeah, I actually have been--so I've been going--just inside my head, I've been thinking about points being assigned to certain actions and then those points accumulate and that--the problem is I think that you could easily get to a position where a team would actually have more points but lose.
-
-And maybe that's not a problem but it--because you could argue if you think of--there would be an analogy to that in boxing.
-
-I mean in boxing, there's a point for every throw, every punch landed and all that and you might still get knocked out.
-
-But if you don't get knocked out, you would win.
-
-So that's an interesting kind of parallel.
-
-A few months ago, I think before we started diving into the scores and the notation so far, I remember reading a post over from--a DMK from Dobby about how to set up--how to set up in-cast Kubbs more defensively.
-
-Right.
-
-And can I just say shout out to Josh Feathers, Dobby.
-
-He's awesome.
-
-Absolutely.
-
-He's awesome.
-
-Absolutely.
-
-Great man.
-
-I mean huge--really appreciate his support this past weekend.
-
-Yeah.
-
-Great guy.
-
-And I remember reading that post and thinking, "Wow.
-
-For such a simple--a seemingly simple act, there's an entire world here."
-
-Yeah.
-
-And that's one of the things I like about the Kubb is everywhere you go, there's an entire world.
-
-When I read that right open, didn't I?
-
-I went on AskPlanetKubb and I said, "Hey, what if there was a one-minute time limit to setting up Kubbs?"
-
-And oh boy.
-
-Done.
-
-Oh boy.
-
-Yeah.
-
-And if there's another thing that I can say that I'm grateful for in the Kubb community is there are very strong opinions and they're not shy about sharing them.
-
-Absolutely.
-
-That's terribly helpful.
-
-Yes.
-
-Okay.
-
-So we don't go that direction.
-
-Totally fine.
-
-Just wanted to know.
-
-Yeah.
-
-Yep.
-
-And I honestly was a little surprised at the consistently negative reaction of my comment of, "Hey, how about if the finals game went five games?"
-
-Best of five.
-
-Yeah.
-
-I mean nobody liked it.
-
-I mean it's just universally panned.
-
-And I was like, "Well."
-
-But hey, now we have numbers against that and we know.
-
-Exactly.
-
-I didn't think it was that bad of an idea.
-
-I was like, "Well, we'll just get another game of great Kubb."
-
-Right.
-
-I mean granted, I mean that does mean it could take seven hours.
-
-But.
-
-Two equal.
-
-What was Jim was saying?
-
-Two equally matched teams will play Kubb indefinitely?
-
-Yeah.
-
-I completely believe that.
-
-So we need to get a Kubb and coffee on the schedule.
-
-Yes.
-
-And we need to invite a larger group of people to play Kubb.
-
-And hopefully the Tuesday Kubb friendlies will be resuming quickly.
-
-I assume there wasn't one this week.
-
-I don't know.
-
-Those guys are.
-
-I could assume.
-
-I don't know.
-
-I didn't even.
-
-I just didn't have the.
-
-Yeah.
-
-I just couldn't do it.
-
-Just didn't have the brain power.
-
-And then we're going to keep on Kubb on, as they say.
-
-Kubb on.
-
-I also want to give a big shout out before we head out to Aaron Elringer.
-
-Oh my God.
-
-Yeah.
-
-Aaron is awesome.
-
-Yeah.
-
-Great story.
-
-Great Kubb player.
-
-Just generous.
-
-You know what I'm going to say?
-
-I told a few people this because I had some questions about, hey, what was it like at this big tournament?
-
-And I've generally found that Kubb players, they're just a friendly group.
-
-Yeah.
-
-By and large.
-
-I mean, not everybody.
-
-Not to the person.
-
-But particularly the competitive teams.
-
-Actually, the competitive teams that have game, everybody was cool.
-
-Right?
-
-Yes.
-
-I mean, and it was so fun to go there having now spent some more time with everybody online.
-
-And we had our Planet Kubb signs up.
-
-And we had our Kubb Chuck shirt on.
-
-And we're getting random shout outs for Kubb Chucks.
-
-And it was just, I really felt like it was just a really warm welcome.
-
-And it reminded me a lot of when you go to very century bike rides where you're going to go out and ride your bike for 100 miles.
-
-Everybody who's going to ride their bike for 100 miles, they're just good people.
-
-And they're fun to talk to.
-
-Right.
-
-I think that's, I would make that, you know, there's a certain sort of bizarre behavior, subculture, random thing.
-
-And if you're there going to do it, everyone's going to be like, "Hey, we got another one."
-
-Exactly.
-
-Of course you're going to be friendly.
-
-Jump into the boat with us.
-
-It's confirmation bias.
-
-Yeah, we're here on the crazy island.
-
-Welcome.
-
-Welcome to the crazy island.
-
-Glad you could join us today.
-
-This is Kubb fever.
-
-We got the fever too. the fever too.
+**Jamie:** This is Kubb fever. We got the fever too.

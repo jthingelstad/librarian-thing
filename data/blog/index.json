@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-06T04:32:37+00:00",
-  "highest_id": 6038500,
+  "generated_at": "2026-10-12T20:17:38+00:00",
+  "highest_id": 6043763,
   "page_count": 123,
   "pages": {
     "1017901": {
@@ -318,7 +318,7 @@
     "57850": {
       "path": "pages/projects/open-loop.md",
       "title": "Open Loop",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:53+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/"
     },
     "57851": {
@@ -336,55 +336,55 @@
     "57854": {
       "path": "pages/projects/open-loop/0-but-no-shoes.md",
       "title": "Open Loop #0 - But No Shoes",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T18:58:58+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/0-but-no-shoes/"
     },
     "57866": {
       "path": "pages/projects/open-loop/1-big-fuzzy-dead-cat.md",
       "title": "Open Loop #1 - Big Fuzzy Dead Cat",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:13+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/1-big-fuzzy-dead-cat/"
     },
     "57867": {
       "path": "pages/projects/open-loop/2-what-am-i-editing-anyway.md",
       "title": "Open Loop #2 - What am I Editing Anyway?",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:14+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/2-what-am-i-editing-anyway/"
     },
     "57868": {
       "path": "pages/projects/open-loop/3-kubb-fever.md",
       "title": "Open Loop #3 - Kubb Fever",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:16+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/"
     },
     "57869": {
       "path": "pages/projects/open-loop/4-enough-win-for-everyone.md",
       "title": "Open Loop #4 - Enough Win for Everyone",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:17+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/4-enough-win-for-everyone/"
     },
     "57870": {
       "path": "pages/projects/open-loop/5-i-know-its-terribly-useful.md",
       "title": "Open Loop #5 - I Know It's Terribly Useful",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:19+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/5-i-know-its-terribly-useful/"
     },
     "57871": {
       "path": "pages/projects/open-loop/6-loppet-2013.md",
       "title": "Open Loop #6 - Loppet 2013",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:20+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/6-loppet-2013/"
     },
     "57872": {
       "path": "pages/projects/open-loop/7-turtle-turtle-turtle.md",
       "title": "Open Loop #7 - Turtle Turtle Turtle",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:21+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/7-turtle-turtle-turtle/"
     },
     "57873": {
       "path": "pages/projects/open-loop/8-dont-eat-the-cupcake.md",
       "title": "Open Loop #8 - Don't Eat the Cupcake",
-      "updated": "2025-12-06T18:37:30+00:00",
+      "updated": "2026-10-07T19:00:23+00:00",
       "url": "https://www.thingelstad.com/projects/open-loop/8-dont-eat-the-cupcake/"
     },
     "57874": {
@@ -1159,7 +1159,7 @@
       "url": "https://www.thingelstad.com/pagefind/"
     }
   },
-  "post_count": 10450,
+  "post_count": 10461,
   "posts": {
     "1003356": {
       "path": "posts/2019/12/2019-12-22-big-crowd-at.md",
@@ -44588,6 +44588,72 @@
       "published": "2026-10-05T02:17:36+00:00",
       "title": "",
       "url": "https://www.thingelstad.com/2026/10/04/i-was-inspired-by-the.html"
+    },
+    "6041363": {
+      "path": "posts/2026/10/2026-10-07-thingy-my-digital-librarian-got.md",
+      "published": "2026-10-07T23:11:44+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/07/thingy-my-digital-librarian-got.html"
+    },
+    "6042226": {
+      "path": "posts/2026/10/2026-10-08-in-i-wrote-about-your.md",
+      "published": "2026-10-09T00:55:35+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/08/in-i-wrote-about-your.html"
+    },
+    "6042996": {
+      "path": "posts/2026/10/2026-10-10-a-world-that-doesnt-need.md",
+      "published": "2026-10-10T13:01:44+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/10/a-world-that-doesnt-need.html"
+    },
+    "6043233": {
+      "path": "posts/2026/10/2026-10-03-today-is-that-sad-day.md",
+      "published": "2026-10-03T16:30:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/03/today-is-that-sad-day.html"
+    },
+    "6043234": {
+      "path": "posts/2026/10/2026-10-03-we-went-to-brkthrough-tonight.md",
+      "published": "2026-10-04T02:30:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/03/we-went-to-brkthrough-tonight.html"
+    },
+    "6043235": {
+      "path": "posts/2026/10/2026-10-06-we-got-to-watch-the.md",
+      "published": "2026-10-07T03:00:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/06/we-got-to-watch-the.html"
+    },
+    "6043236": {
+      "path": "posts/2026/10/2026-10-05-mb-with-mcp-support.md",
+      "published": "2026-10-06T02:30:00+00:00",
+      "title": "mb 2.0 with MCP support",
+      "url": "https://www.thingelstad.com/2026/10/05/mb-with-mcp-support.html"
+    },
+    "6043264": {
+      "path": "posts/2026/10/2026-10-03-my-newest-mcp-experiment-was.md",
+      "published": "2026-10-03T17:00:00+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/03/my-newest-mcp-experiment-was.html"
+    },
+    "6043267": {
+      "path": "posts/2026/10/2026-10-06-weekly-thing-archive-improved.md",
+      "published": "2026-10-07T02:30:00+00:00",
+      "title": "Weekly Thing Archive Improved",
+      "url": "https://www.thingelstad.com/2026/10/06/weekly-thing-archive-improved.html"
+    },
+    "6043453": {
+      "path": "posts/2026/10/2026-10-11-wt-release-notes-for-every.md",
+      "published": "2026-10-11T12:27:58+00:00",
+      "title": "WT353 — Release Notes for Every Day",
+      "url": "https://www.thingelstad.com/2026/10/11/wt-release-notes-for-every.html"
+    },
+    "6043763": {
+      "path": "posts/2026/10/2026-10-11-my-maker-space-is-now.md",
+      "published": "2026-10-11T21:11:55+00:00",
+      "title": "",
+      "url": "https://www.thingelstad.com/2026/10/11/my-maker-space-is-now.html"
     },
     "653561": {
       "path": "posts/2018/07/2018-07-20-clocks.md",

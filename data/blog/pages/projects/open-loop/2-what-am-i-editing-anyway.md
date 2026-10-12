@@ -2,7 +2,7 @@
 page_id: 57867
 url: "https://www.thingelstad.com/projects/open-loop/2-what-am-i-editing-anyway/"
 title: "Open Loop #2 - What am I Editing Anyway?"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-07T19:00:14+00:00"
 post_kind: page
 categories: []
 ---
@@ -28,320 +28,492 @@ categories: []
 
 ### Transcript
 
-_Here is an AI generated transcript of this episode. This has not been edited or checked for accuracy, yet._
+_Speaker-labelled transcript, machine transcribed and cleaned up with AI in October 2026. It may still have mistakes. Also as [WebVTT](https://files.thingelstad.com/projects/openloop/transcripts/openloop-2.vtt) and [JSON](https://files.thingelstad.com/projects/openloop/transcripts/openloop-2.json)._
 
-What can open up to I have this arrogant bastard?
+**Jamie:** What can Open Loop do?
 
-Don't talk about me that way and right underneath there right underneath right at the bottom.
+**Garrick:** I have this Arrogant Bastard and
 
-It says You're not worthy and so I've been a little intimidated by this thing Well, right I had to run all the way across town to get it for reason one And then it's just been mocking me all day long What are you drinking the oaked?
+**Jamie:** Don't talk about me that way.
 
-arrogant bastard Which I think I think it means I'm just a little bit more arrogant.
+**Garrick:** Right underneath there, right underneath, right at the bottom it says you're not worthy. And so I've been a little intimidated by this thing, where I had to run all the way across town to get it for reason one, and then it's just been mocking me all day long. What are you drinking?
 
-I think so, too Yeah, I have a backstory to this beer Love it.
+**Jamie:** The Oaked Arrogant Bastard. Which I think means—
 
-Do you know why this do you know I have this beer?
+**Garrick:** The oak taunted me.
 
-I had a big gathering It was for my birthday, you know, you were there.
+**Jamie:** I think it means I'm just a little bit more arrogant.
 
-It's fantastic.
+**Garrick:** I think so, too.
 
-Everybody bought beer One of my friends who'll rename remain nameless Brought this because he said that it reminded him of me Aged aged oat arrogant bastard I Took it as a mighty convo I You know, I'm a suck.
+**Jamie:** You know, I have a backstory to this beer.
 
-I'm a sucker for the stories and I would love to have that story on the back of of this beer bottle instead I have a six-point type and What it's like a whole tome.
+**Garrick:** Love it.
 
-It's it's like Chronicles of Narnia back there.
+**Jamie:** Do you know why I have this beer? I had a big gathering, it was for my birthday, you know, you were there, and
 
-That is the Wow, yeah, I mean that this starts with the definition of arrogance, which is a little arrogant and Then it just goes on Yeah, I mean if that might be five point I mean it's tiny In all honesty, it's a reason why I don't drink as much stone as perhaps I should All of their beers have this really small huge story on the back that right there Brewed by the stone brewing company, San Diego.
+**Garrick:** It's fantastic.
 
-This is the farthest of all of the open loops.
+**Jamie:** everybody brought beer. One of my friends, who will remain nameless, brought this because he said that it reminded him of me. Aged, aged, oaked, arrogant bastard. I took it as a mighty compliment.
 
-This is the farthest beer the beer farthest away from us and It's so close and what does yours say the arrogant bastard would would you Know it just says I'm not worthy.
+**Garrick:** You know, I'm a sucker for stories, and I would love to have that story on the back of this beer bottle. Instead I have six-point type and what—it's like a whole tome. It's like Chronicles of Narnia back there.
 
-Well, no on the back under the six-point type No, wow, that must be just for the oak.
+**Jamie:** Here, that is the—wow. Yeah, I mean, it starts with a definition of arrogance, which is a little arrogant, and then it just goes on. Yeah.
 
-Yeah, probably But the finest barley most aggressive hops clearest water and a proprietary yeast strain and abundant arrogance You know, I think that's maybe what my my homebrews have been missing arrogance arrogance.
+**Garrick:** Yeah, and
 
-Yeah, they're far far far too approachable Far too nice.
+**Jamie:** I mean, that might be five point, I mean.
 
-Yes Yes, it's a so what do you do you like it?
+**Garrick:** It's tiny. In all honesty, it's a reason why I don't drink as much Stone as perhaps I should. All of their beers have this really small, huge story on the back that...
 
-I Really like the nose quite a bit like the nose and yeah, I like it.
+**Jamie:** Right there. Brewed by the Stone Brewing Company. San Diego. This is the farthest of all of the Open Loops. This is the farthest beer, the beer farthest away from us.
 
-I like it.
+**Garrick:** And it's so close.
 
-I like it Do you like it I do We're not drinking the exact same beer, but I think it's okay.
+**Jamie:** And what, does yours say "the arrogant bastard would, would you?"
 
-I think that I think the oat, you know It's a little hard Is it I mean I probably would we could probably switch and you would probably like this one better and I would probably like that One better.
+**Garrick:** No, it just says I'm not worthy.
 
-I'm gonna imagine that it's got a little a Little more depth.
+**Jamie:** Well, no, on the back, under the six-point type.
 
-Yeah.
+**Garrick:** No.
 
-Yeah, it does.
+**Jamie:** Wow, that must be just for the oaked.
 
-I mean it's it's really it's it's quite good.
+**Garrick:** Yeah, probably.
 
-It's tasty Hey, I wouldn't want it on a hot day But I have a really important question for you.
+**Jamie:** Yeah, the arrogant bastard would.
 
-Yes.
+**Garrick:** Nothing but the finest barley, most aggressive hops, clearest water, and a proprietary yeast strain, and abundant arrogance. You know, I think that's maybe what my homebrews have been missing.
 
-What color is it?
+**Jamie:** Arrogance. Yeah.
 
-It's a really dark amber Yeah, yeah, I'm going brown brown mm-hmm full-on for the oak brown, okay, it's good beer Minus the typography worth worth tracking down and This sits in a seven point two.
+**Garrick:** Arrogance.
 
-I'm assuming the oak is about the same.
+**Jamie:** They're far, far too approachable, far too nice. It's
 
-Yes.
+**Garrick:** Yes. Yes.
 
-It is seven point two.
+**Jamie:** So what do you—do you like it?
 
-Thanks Yeah, so just a little more depth then.
+**Garrick:** I really like the nose. Quite a bit, like the nose. And yeah, I like it. I like it. I like it. Do you like it?
 
-Well what one day a while ago At breakfast at the breakfast table I was we were talking about what names of groups of animals are called And so I go, you know who's gonna know this Wikipedia is gonna know this Right, so we pull up the there's a whole page on what you know, the plural form of animals are Yeah, it's fantastic right and so I Whipped up a blog post and You know listed my favorite top nine nouns for a group of animals and number one on that An apocalypse of snakes Oh, that's nice.
+**Jamie:** I do. We're not drinking the exact same beer, but I think it's okay. I think that—I think the oak, you know, it's a little hard. I mean, I probably would—we could probably switch and you would probably like this one better and I would probably like that one better. Yeah.
 
-Yeah, you know, what's what's even better about it is This is I just happened to catch the Wikipedia entry before that was edited out The next day it was gone.
+**Garrick:** I'm going to imagine that it's got a little more depth.
 
-Well, what is it?
+**Jamie:** Yeah, it does. I mean, it's really—it's quite good, it's tasty. I wouldn't want it on a hot day. But I have a really important question for you.
 
-What is what is a group of snakes?
+**Garrick:** Yes.
 
-Yeah, it's not an apocalypse.
+**Jamie:** What color is it?
 
-It's not an apocalypse.
+**Garrick:** It's a really dark amber.
 
-It should be it should be That's way better than whatever it is.
+**Jamie:** Yeah.
 
-I don't even know what it is, but it's better It's probably like a hive or a pit a nest or a bed a pit Mm-hmm apocalypse I also I also like a tower of giraffes And I a cream of turkeys that's brilliant Are those the real ones and yeah, well so this I just I'm checking it under turkey under cream It says citation needed but it doesn't say citation needed for rafter of turkey.
+**Garrick:** Yeah.
 
-So I don't know how they're You know You got to look that up at Encyclopedia Botanica, that's right a cabinet of yaks That one doesn't need a citation it's just there it's just there That's a little uneven a wisdom of wombats.
+**Jamie:** I'm going brown.
 
-That's just in there.
+**Garrick:** Brown?
 
-That's fake Whatever Those are some of my favorite Wikipedia pages actually the pages that are lists of things Absolutely.
+**Jamie:** Mm-hmm. Full-on, for the oak? Brown.
 
-There's I mean there is a shocking number of them and and they they are just they're brilliant You know power of power of media wiki, right?
+**Garrick:** Okay.
 
-Huge fan because it all seems like I don't know what sort of magical extension you need to build this sweet table with links and You need lots of pain and suffering to build a sweet table That's the worst thing in media wiki that there is building a table it's like the most convoluted wiki text ever I'm looking at some I'm looking at the the term for This event, what am I editing?
+**Jamie:** It's a good beer. Minus the typography.
 
-Generic terms, what am I editing?
+**Garrick:** Worth tracking down. And this sits in at a 7.2. I'm assuming the oak is about the same.
 
-Editing anyway, I don't know just hit save The table for the generic term of animals is is really like there's a lot of pipes and a lot of brackets Yeah, that's a table.
+**Jamie:** Yes, it is 7.2, yeah.
 
-You know, there's a lot of discussion well, so there's there's a couple interesting things with Wikipedia right now, one of them is We've talked about it before but semantic media wiki the extension that I look I find so useful there's been a decent amount of discussion about putting semantic media wiki on Wikipedia and If you were to do that, you know, you could know wouldn't that be brilliant.
+**Garrick:** Thanks. Yeah. So just a little more depth then. Well, one day a while ago at the breakfast table, we were talking about what names of groups of animals are called. And so I go, you know, who's gonna know this? Wikipedia's gonna know this. Right. So we pull up—there's a whole page on what, you know, the plural form of animals are.
 
-I mean you could actually query it I can't believe it's not already Well, so a lot of which you said it's just so so so much legacy.
+**Jamie:** Oh, of course.
 
-Yeah.
+**Garrick:** Yeah,
 
-Well a lot of wikipedians feel that it is that there'd be performance problems and So, you know, they haven't done it but in in kind of a parallel universe to that is this wiki data initiative where you know, they're they're working to make you know, you know because um Wikimedia runs Commons, which is a place for image assets and other, you know graphics and what-have-you to be shared across any Wikipedia site and in fact be shared across anywhere and it's it's one of these like aha's when you look at the Commons where One of the things that the Commons does is every single photo that gets uploaded to Flickr with creative Commons licensing is is copied into Media wiki or sorry wikimedia Commons and then every other Media wiki install in the known universe can say anytime an image is referenced search Commons for that image so on my wiki I could say well if I put apple.jpg and I don't have an image called apple.jpg It will ask Commons.
+**Jamie:** Yeah.
 
-Hey, do you have an image called apple.jpg?
+**Garrick:** it's fantastic. Right. And so I whipped up a blog post and, you know, listed my favorite top nine nouns for a group of animals. And number one on that: an apocalypse of snakes.
 
-And if it does it'll actually not just reference it'll copy it to my local wiki and then have it there right there And it's actually copied with all the metadata to say like hey this image came from the Commons So like on my on wiki nosh that one that I I have kind of in in kind of you know alpha With all that food information.
+**Jamie:** Oh, that's nice.
 
-I just turned Commons on so if I you know got bananas I just say banana JPEG and you know, there's 800 pictures of bananas and boom I got a banana and it just works and it was one of those things that first kind of was this aha moment of like how media wiki does such a great job of Leveraging other instances of media wiki to kind of make this kind of you know, the sum is greater than the parts Situation is it reciprocal then to any any wiki any wiki can Be available for Commons.
+**Garrick:** Yeah, you know what's even better about it? Is I just happened to catch the Wikipedia entry before that was edited out.
 
-So like if you had one and I had one we could set each other up It's just a few lines in the config to make that available It's it's an array.
+**Jamie:** Is it?
 
-So grab from any of these or is it?
+**Garrick:** The next day, it was gone.
 
-Grab from you please in this order.
+**Jamie:** Well, what is it?
 
-No you yeah, you can specify Multiple endpoints.
+**Garrick:** What is a group of snakes?
 
-I'm not real sure how it determines order I think it's actually an array and I think it just goes through in an order what wiki data is doing is they're they're taking in essence a media wiki install with a slew of new extensions and they're creating a data Commons and And looking at it the same way where they're where you'll have you'll be able to reference the data That's in wiki data on any other media wiki and pull things like, you know What's the population of this country or how many?
+**Jamie:** Yeah, it's not an apocalypse.
 
-Giraffes are there in Africa all this kind of stuff and it'll be editable Actually, it'll be editable not in wiki text.
+**Garrick:** It's not an apocalypse. It should be.
 
-It'll be editable in data structure, so It's pretty cool that multiple Commons issue it ties into a notion that comes back now and again is this this idea of less of a client-server approach and more of a peer-to-peer approach to web serving or web data web internet based information And this idea that I could say that we could link these wikis together and they could Help each other out and they could help out other wikis because the network of them Become stronger as they get more and more information and are tied together seems far more exciting to me then Just always pull in from Wikipedia.
+**Jamie:** It should be. That's way better than whatever it is. I don't even know what it is, but it's better. It's probably like a hive or a
 
-Well, that's actually one of the things that one of the things that Wikipedia does that's pretty cool Is they every?
+**Garrick:** Is it a pit, a nest, or a bed?
 
-Pretty sure it's every day if they actually run a dump of all of Wikipedia and then make that publicly available so, you know at any point you can run your own Wikipedia you just grab that file and Import it into a media wiki and boom.
+**Jamie:** Pit.
 
-You've got Wikipedia You know when we think about how we keep content on the web and how does that live for a very long time?
+**Garrick:** Apocalypse.
 
-You know, it's this great strategy of essentially saying we'll make copies of it till the end of time make it everywhere If it's everywhere, it can't be erased from everywhere all at once right, one of the things that I have been thinking about doing with Both my WordPress sites as well as my media wiki sites is well why don't I just run every night, you know just a cron job that dumps those things to a disk and puts them in a public spot and and And then makes it so that anybody, you know, just advertise.
+**Jamie:** Yeah, I'm going with the apocalypse from now on.
 
-Hey if you want to come come and copy my blog Come and copy my my wikis With the intent being that you know, if I ever lost all that data or something drastic went wrong It's still there You know what?
+**Garrick:** I also like a tower of giraffes. And a cream of turkeys.
 
-It reminds me of is it reminds me of Dune the kind of the beginning of doing is that the human race is is Threatened to extinction and so the last members of the human race to ensure the survival of humanity scatter themselves to the far reaches of the universe with the intent that some of those populations of people will then multiply and Reconvene society and and and that the human race will survive and so it's just you know It's just kind of scatter it everywhere thing that I like and you know, I've both Use archive.org at times and it and I mean archive.org is cool, but it's only one thing One of the things that makes me so unconflicted about our kind of or I guess I can't programmatically dump stuff to it Yeah, you can't tell it.
+**Jamie:** That's brilliant. I love it. Are those the real ones?
 
-Hey, go.
+**Garrick:** And yeah, well, so this—I'm just checking under turkey, under cream, it says citation needed. But it doesn't say citation needed for rafter of turkey. So I don't know how they're a
 
-Here's a new thing.
+**Jamie:** Oh, you know, you gotta look that up in Encyclopedia Britannica.
 
-Yeah, I just have to hope yeah that it captures something Yeah, oh and one of the things I got me so excited about couch DB was That it had this notion of replication baked in easy replication baked in that I could just say here's the JSON file for My entire blog for my entire whatever and if you capture this you've got everything you're talking about the syndicated blog stuff, right?
+**Garrick:** That's right. A cabinet of yaks. That one doesn't need a citation.
 
-Yeah, yeah, I still think that's it.
+**Jamie:** It's just there.
 
-I mean so the the idea What if I could put in?
+**Garrick:** It's just there.
 
-any number of DNS entries for my blog and I was using some new blogging package that allowed not only for you to subscribe to my blog But but specifically to syndicate it in its entirety.
+**Jamie:** That's a little uneven.
 
-Mm-hmm.
+**Garrick:** A wisdom of wombats, that's just in there. That's fake. Whatever.
 
-And when I would write something you would copy that Locally and then I could have five a records, you know one on One for every continent what have you and and in fact, I could even have more Replicants and I might have 30 blogs that are syndicating But they're not in a in a I don't consider them an authoritative so I won't send traffic to them Mm-hmm, and I do I still think that's a I mean, that's what's one direction that next-generation Blogging platforms or content platforms in general to take I think that's a really compelling Idea on a bunch of different levels kind of on the big level the idea that you know Somebody's writing content that other organizations governments what have you don't like it be exceptionally difficult If everybody in the you know thousands and thousands of people said hey, I'm gonna host that content How would you shut that off?
+**Jamie:** Those are some of my favorite Wikipedia pages, actually, the pages that are lists of things.
 
-I mean, it's so hard Having your syndication partners serve it Authoritatively.
+**Garrick:** Absolutely.
 
-Yes, and not simply be a copy but actually be the real thing And you know, I mean the to me the big part that makes that work is you put public key cryptography behind it So, you know the way that the way that we agree to share that is through, you know key signing and I signed my blog post So when I send it you can't edit it if you do edit it, you know the signature becomes invalid and I take you out of my my distribution relationship, I May be tremendously scalable just ridiculously scale.
+**Jamie:** I mean, there is a shocking number of them, and they are just, they're brilliant, you know?
 
-Yeah, you're not worried about one server going down You're worried about all the servers going down and the likelihood of that is much much lower, right?
+**Garrick:** Power of MediaWiki, right?
 
-All this ethereal content.
+**Jamie:** Oh, yeah. Huge fan.
 
-I mean it all just lives on Servers and you know, I see it with my my link wiki content that is gone some of it I don't care.
+**Garrick:** Because it all seems like—I don't know what sort of magical extension you need to build a sweet table with links and
 
-It's just really not all that important, but some of it I do and and Dave Weiner's talked about this at length the other hole What am I what's gonna happen to my blog when I'm no longer here?
+**Jamie:** You need lots of pain and suffering to build a sweet table. That's the worst thing in MediaWiki that there is, is building a table. It's like the most convoluted wiki text ever.
 
-Well, this is where I like the idea of what Wikipedia does with a nightly dump and this is where I think archive.org is fundamentally kind of limited is that you know, it can only see what you present and unfortunately, not only does that mean that they can't do a perfect job of Archiving your information.
+**Garrick:** I'm looking at the term for this event: what am I editing, generic terms.
 
-They also cannot It's also just very expensive for them to archive all of it because they're duplicating so much And so here's how this service should work.
+**Jamie:** What am I editing? What am I editing anyway? I don't know, just hit save.
 
-I should be able to sign up for something where they define Software packages that it will take so for example, we could say like we will archive WordPress and by archiving WordPress What we'll do is we'll actually take a dump of your WordPress date back up and Store it and then we'll keep copies for however long and if that ever needs to be turned into a blog You know, it's easy enough to hydrate that and you just do that on a Now you can't get everything But you can get a lot more than you used to be able to you could get a ton and there's no reason you could Actually set it up so that I could upload a like, you know, if if it didn't support You know software package X I could say here's a backup file from software package X You don't currently have a way to deal with this but maybe in the future you will right cryogenically freezing websites bingo Yeah, we we don't have a way to thaw you yet.
+**Garrick:** The table for the generic term of animals is really—like, there's a lot of pipes and a lot of brackets.
 
-Yeah, but we'll freeze you exactly.
+**Jamie:** Yeah, that's a table. You know, there's a lot of discussion—well, so there's a couple interesting things with Wikipedia right now. One of them is, we've talked about it before, but Semantic MediaWiki, the extension that I find useful. There's been a decent amount of discussion about putting Semantic MediaWiki on Wikipedia. And if you were to do that, you know, you could—oh, wouldn't that be brilliant? I mean, you could actually query it.
 
-I think Bingo love it Love it.
+**Garrick:** I can't believe it's not already.
 
-So this is kind of related to that other thing that we were talking about the slow web You know riffing off of slow food, you know, the article made me think of how How awkward that is with email sometimes like you email somebody they email you back, you know, there aren't emails you reply again They don't reply You're like what happened for years?
+**Jamie:** Well, so a lot of Wikipedians feel
 
-I've thought like I really wish there were an email proxy that would just variably delay my email for anywhere between 12 and 36 hours It's on my list of projects good.
+**Garrick:** It's just that it's just so much legacy.
 
-Yeah, I would like that Yeah, I mean, I think the point of the slow web kind of article was that it was pushing us to make sure that there is Real value.
+**Jamie:** that it is—that there would be performance problems. And so, you know, they haven't done it. But in kind of a parallel universe to that is this Wikidata initiative where, you know, they're working to make, you know. You know, because, Wikimedia runs Commons, which is a place for image assets and other, you know, graphics and what have you, to be shared across any Wikipedia site, and in fact to be shared across anywhere. And it's one of these like ahas when you look at the Commons, where one of the things that the Commons does is every single photo that gets uploaded to Flickr with Creative Commons licensing is copied into MediaWiki—or sorry, Wikimedia Commons—and then every other MediaWiki install in the known universe can say, anytime an image is referenced, search Commons for that image. So on my wiki I could say, well, if I put apple.jpg and I don't have an image called apple.jpg, it will ask Commons, hey, do you have an image called apple.jpg? And if it does, it'll actually not just reference it, it'll copy it to my local wiki and then have it there right there. And it's actually copied with all the metadata to say like, hey, this image came from the Commons. So like on my—on Wikinaught, that one that I have kind of in alpha with all that food information, I just turned Commons on, so if I, you know, got bananas, I just say banana.jpg and, you know, there's 800 pictures of bananas, and boom, I got a banana and it just works. And it was one of those things that first kind of was this aha moment of like how MediaWiki does such a great job of leveraging other instances of MediaWiki to kind of make this, you know, the sum is greater than the parts situation.
 
-Yes beyond the popcorn of Real time immediacy.
+**Garrick:** Is it reciprocal then too?
 
-Yes, and in and in fact at times Delay things To push the value curve up.
+**Jamie:** Any wiki can be available for Commons. So like if you had one and I had one, we could set each other up. It's just a few lines in the config to make that available.
 
-Yes.
+**Garrick:** It's an array, so grab from any of these, or is it grab from these in this order?
 
-I like that.
+**Jamie:** No, yeah, you can specify multiple endpoints. I'm not real sure how it determines order. I think it's actually an array and I think it just goes through in an order. What Wikidata is doing is they're taking in essence a MediaWiki install with a slew of new extensions and they're creating a data commons.
 
-You know the example of that.
+**Garrick:** Mm-hmm.
 
-I've done this.
+**Jamie:** And looking at it the same way, where you'll be able to reference the data that's in Wikidata on any other MediaWiki and pull things like, you know, what's the population of this country, or how many giraffes are there in Africa, all this kind of stuff. And it'll be editable, actually. It'll be editable not in wikitext, it'll be editable in in a data structure. So it's pretty cool.
 
-Yes And how when you email in the things you've done they don't appear right away They'll appear soon But and I think that's great because I'd email it and then I'd load up the website and hit refresh And really is it there is it there to get there and the fact that they take that away is actually kind of a nice thing Which which ties into my notion that My notion that more and more things if I just interacted with with them via email that would be fine You know one of the very last wider magazines that I ever read had this feature article with One of the etiquette people the dear Abbey's.
+**Garrick:** That multiple Commons issue ties into a notion that comes back now and again, is this idea of less of a client-server approach and more of a peer-to-peer approach to web serving or web data, web internet-based information. And this idea that I could say that we could link these wikis together and they could help each other out and they could help out other wikis, because the network of them becomes stronger as they get more and more information and are tied together, seems far more exciting to me than just always pull in from Wikipedia.
 
-All right and There was a big two-page spread and I remember On one side of the spread said we have laws so we don't kill each other in on the other side It said we have etiquette so we don't drive each other crazy Love that as As Kubb chucks on our Friday lunches and our on our Cuban coffees we are developing an etiquette in a culture say more To me it seems most polite For the incaster To throw the to throw his batons at what he just did.
+**Jamie:** Well, and that's actually one of the things that Wikipedia does that's pretty cool, is they — pretty sure it's every day — they actually run a dump of all of Wikipedia and then make that publicly available. So, you know, at any point you can run your own Wikipedia. You just grab that file and import it into a MediaWiki and boom, you've got Wikipedia. You know, when we think about how we keep content on the web and how does that live for a very long time, yes, this great strategy of essentially saying we'll make copies of it till the end of time, make it everywhere. If it's everywhere, it can't be erased from everywhere all at once.
 
-Oh, yeah, right What's it?
+**Garrick:** Right.
 
-It's either polite or it's a you broke it you fix it Yeah, exactly exactly and and it didn't seem like everybody at the meetup tonight had that same Part of culture I'd like to know if the statistics like I would suggest that you have a higher likelihood of hitting him because you just threw him I Mean doesn't it make sense?
+**Jamie:** One of the things that I have been thinking about doing with both my WordPress sites as well as my MediaWiki sites is, well, why don't I just run every night just a cron job that dumps those things to a disk and puts them in a public spot, and then makes it so that anybody can just advertise, hey, if you want to come and copy my blog,
 
-Yes Yes, yeah, well, you know the other thing I like is what you and I did the last time which I don't know I mean, maybe you got debated a little bit but you know, we did the triple bogey for the Kubb being out Yes to you know with this specific intent that we want to Encourage aggressive play for practice, right?
+**Garrick:** Mm-hmm.
 
-Well, I did that I did that tonight in my in my game with Eric Yeah, he had two outs and I'm like no actually he didn't he had one out and then one just a really bad throw Yeah, and I said, you know what three throw that one.
+**Jamie:** come and copy my wikis, with the intent being that, you know, if I ever lost all that data or something drastic went wrong, it's still there. You know what it reminds me of? It reminds me of Dune. The beginning of Dune is that the human race is threatened to extinction, and so the last members of the human race, to ensure the survival of humanity, scatter themselves to the far reaches of the universe with the intent that some of those populations of people will then multiply and reconvene society, and that the human race will survive. And so it's just kind of scatter it everywhere, thing that I like. And you and I have both used archive.org at times and
 
-That's ridiculous.
+**Garrick:** One of the things that makes me so conflicted about archive.org is I can't programmatically dump stuff to it.
 
-I'm not gonna let you like that's Yeah, he's like really This is a friendly said suck.
+**Jamie:** it's — and I mean archive.org is cool, but it's only one thing. Yeah, you can't tell it, hey, go. Here's a new thing.
 
-This is a friendly we should be playing most of ground Every time and all the games I played tonight.
+**Garrick:** Yeah, I just have to hope that it captures something. Oh, and one of the things that got me so excited about CouchDB was that it had this notion of replication baked in, easy replication baked in, that I could just say here's the JSON file for my entire blog, for my entire whatever, and if you capture this, you've got everything.
 
-Yeah advantage line.
+**Jamie:** You're talking about the syndicated blog stuff, right?
 
-That's what did it.
+**Garrick:** Yeah.
 
-Oh, yeah.
+**Jamie:** Yeah, and I still think that's a — I mean, so the idea, what if I could put in any number of DNS entries for my blog, and I was using some new blogging package that allowed not only for you to subscribe to my blog, but specifically to syndicate it in its entirety, and
 
-Yeah Yeah, the first team to get the advantage line I think is huge and it's just gigantic So, you know we had our office flood and Which sucks?
+**Garrick:** Mm.
 
-I don't recommend that you have your office flood This pipe burst on the sixth floor and it flooded the bottom six floors of the building including ours and we didn't lose any equipment, but there was a lot of damage to walls and carpet and so we had you know, we got about 25 people and we need a place to go so I called the guys over at Coco and For those that aren't in the know that Coco is a co-working and collaboration space They've been around in st.
+**Jamie:** when I would write something, you would copy that locally, and
 
-Paul for a while now, right like a couple years or more a couple years.
+**Garrick:** Mm-hmm.
 
-Yeah, and I They were missing there.
+**Jamie:** then I could have five A records, you know, one for every continent, what have you. And in fact I could even have more replicants, and I might have 30 blogs that are syndicating, but I don't consider them authoritative so I won't send traffic to them. And I still think that's a — I mean, that's one direction that next generation blogging platforms or content platforms in general could take. I think that's a really compelling idea on a bunch of different levels. Kind of on the big level, the idea that, you know, if somebody's writing content that other organizations, governments, what have you, don't like, it'd be exceptionally difficult if everybody in the, you know, thousands and thousands of people said, hey, I'm gonna host that content. How would you shut that off? I mean, it would be so hard. Having your syndication partners serve it authoritatively
 
-I held an event there right after they started it when they were fantastic hosts amazing hosts and I worked for the I've worked with the guys on projects and I love them Yeah, and they so now they have this space in Minneapolis in the Grand Exchange building and I tell you it's a it's a awesome Space and it's a perfect fit for them because you go in there and it's just have you been in there?
+**Garrick:** Yes. Yes.
 
-It's monumental it's just like the ceilings are They got to be 30 feet high and it's the old trading, you know It's the old trading floor for the Grand Exchange and it's also a historical site so it's it's actually it's this really interesting thing because I Was talking to Kyle there that the space is managed by the Historical Society So they can't they can't come in there and just start ripping stuff apart Like it has to be maintained in a certain kind of structure and like they can't be putting screws everywhere and they can't take down all of the trading boards and so it's it's like almost just a perfect fit for cocoa because you know your average company wouldn't want all that kind of stuff in there had the flood and We worked out a coffee shots for a couple days and that was not the best And so I'm gonna call the guys at cocoa and said hey, can we bring our team there?
+**Jamie:** and not simply be a copy, but actually be the real thing. And, you know, I mean, to me the big part that makes that work is you put public key cryptography behind it. So the way that we agree to share that is through, you know, key signing, and
 
-we had the flood and We need a place to be and so we've been there now two and a half weeks and we're gonna be there another three weeks No way.
+**Garrick:** Mm-hmm.
 
-Yeah, we're actually gonna bring a bunch of our equipment over and I think this is an Excellent use case for cocoa.
+**Jamie:** I sign my blog post, so when I send it you can't edit it. If you do edit it, you know, the signature becomes invalid and I take you out of my distribution relationship. It may be tremendously scalable, just ridiculously scalable.
 
-It's to me.
+**Garrick:** Yeah, you're not worried about one server going down. You're worried about all the servers going down, and the likelihood of that is much, much lower.
 
-It's far makes far more sense than the room to desk It's a great opportunity for us and I'm I'm super excited.
+**Jamie:** All this ethereal content, I mean, it all just lives on servers. And, you know, I see it with my link wiki content that is gone. Some of it I don't care, it's just really not all that important, but some of it I do. And And Dave Winer's talked about this at length, you know, the whole, what's going to happen to my blog when I'm no longer here? Well, this is where I like the idea of what Wikipedia does with a nightly dump. And this is where I think archive.org is fundamentally kind of limited, is that, you know, it can only see what you present. And unfortunately, not only does that mean that they can't do a perfect job of archiving your information, they also cannot — it's also just very expensive for them to archive all of it,
 
-I mean, I don't want her, you know I wouldn't want our space to get flooded.
+**Garrick:** Mm-hmm.
 
-I'm happy that we're able to Leverage a place like cocoa and able to support them as an organization and I think that they are just doing amazing stuff I mean, I don't know.
+**Jamie:** because they're duplicating so much. And so here's how this service would work.
 
-I mean, I know a decent amount of what's going on in other Geographies and I don't know of anything like what those guys are doing at cocoa in other places And nothing that that scale I mean, you know different venture firms will have like co-working space They share what their portfolio companies but nothing for the kind of general unwashed masses Cocoa does and I mean, it's cheap hot coffee.
+**Garrick:** Mm-hmm.
 
-It's not good coffee It's I mean, I'm not gonna talk about the coffee there's coffee And a place to work it's been a real great thing for our team I'm finding it interesting that there are some companies who have a presence there.
+**Jamie:** I should be able to sign up for something where they define software packages that it will take. So for example, we could say like, we will archive WordPress, and by archiving WordPress what we'll do is we'll actually take a dump of your WordPress backup and store it, and then we'll keep copies for however long. And if that ever needs to be turned into a blog, you know, it's easy enough to hydrate that. And you just do that on a — now, you can't get everything, but
 
-They don't really use it Yeah, yes, you know and they're kind of I think in some I think some of them it's they're happy to support the space And they want to have they want their name in front of people and it's almost a form of advertising Absolutely.
+**Garrick:** You can get a lot more than you used to be able to.
 
-I get that impression for sure.
+**Jamie:** you could get a ton. And there's no reason you could actually set it up so that I could upload a — like, you know, if it didn't support software package X, I could say here's a backup file from software package X. You don't currently have a way to deal with this, but maybe in the future you will. Right?
 
-I think it's fine.
+**Garrick:** Cryogenically freezing websites.
 
-Although it's a little inefficient I wonder if it wouldn't be better to just have like some kind of a way to I mean, you know You could totally sell sponsorships or whatever.
+**Jamie:** Bingo. Yeah.
 
-Today's coffee is sponsored by yeah.
+**Garrick:** We don't have a way to thaw you yet,
 
-Yeah, it'd have to be better coffee It would be if I was sponsoring it.
+**Jamie:** Yet.
 
-Maybe I should do that.
+**Garrick:** but
 
-There you go I love the vibe.
+**Jamie:** Yeah.
 
-It feels really good.
+**Garrick:** we'll freeze you.
 
-There's energy like, you know, you go places and just you know Sometimes you just know and I've been really amazed.
+**Jamie:** Exactly. I think it — bingo.
 
-It's it's busy I mean, there are a lot of people there but not in a bad way.
+**Garrick:** Love it. Love it.
 
-It's not like a it's so super distracting I mean, there's a lot of space so it's fine It's it's going really really well and the and just in the short time.
+**Jamie:** So this is kind of related to that other thing that we were talking about. This slow web. You know, riffing off of slow food. The article made me think of how awkward that is with email sometimes. Like you email somebody, they email you back, you know they're on email, so you reply again, they don't reply, you're like, well, what happened? For years I've thought, like, I really wish there were an email proxy that would just variably delay my email for anywhere between 12 and 36 hours.
 
-Are you guys in the tent?
+**Garrick:** It's on my list of projects.
 
-I've been in the tent Yeah, you do your daily stand-ups in the tent?
+**Jamie:** Good. I would like that.
 
-Yeah, we do our stand-ups in the classroom, ah Yeah The you know today they had somebody there from the governor's office Who was in they had the other day?
+**Garrick:** Yeah.
 
-I was there and Minnesota Public Radio had somebody and doing a piece and you know They did a little interview with me and stuff and they just totally ad hoc, right?
+**Jamie:** I mean, I think the point of this slow web kind of article was that it was pushing us to make sure that there is real value beyond
 
-part that I'm really sick we're excited about is it feels like this thing that makes for a vibrant ecosystem, which is just is companies and Entrepreneurs and digital folks kind of shoved into a small space bouncing off of each other Oh as a place like if I were gonna write the American novel would not do it a cocoa Yeah, it would be distracted and and it's not like but if I'm gonna have an idea that I want to Bounce off some really smart people and I want to be in a place where I don't feel Like I'm the only one in the universe that's in this spot trying to figure this out You really couldn't be in a better spot So two things I had this conversation with one of my favorite guys in town Chuck Olson Mm-hmm, and he and he comes by to he shoots a lot of a lot of his video interviews at Coco I mean because it's an amazing space for for doing that, right, right He said he says I love coming here to shoot the video and I love it so much that I thought about You know having a membership or I would just be here And he says but I couldn't do the editing here And I'm like Chuck I know exactly what you mean I can't I Can't do the work.
+**Garrick:** Yes.
 
-I need to do in that space But for everything else when I'm not in heads-down work mode I can do it here Right and for the bouncing the ideas off.
+**Jamie:** the popcorn of real-time immediacy.
 
-It's amazing for that and for the connections in the spontaneity.
+**Garrick:** Yes.
 
-There's a part of a breakthrough idea that requires Unintended interjection Mm-hmm, and I think Coco is fantastic for that No, I mean, I think they could fix.
+**Jamie:** And in fact, at times delay things to push the value curve up.
 
-I think that they could make it both.
+**Garrick:** Yes.
 
-I think it's just honestly, it's a matter of zoning and And the right kind of set up for the space.
+**Jamie:** I like that. You know, the example of that,
 
-Yeah.
+**Garrick:** I Done This, yes.
 
-Yeah, I think if they had another annex Right, you know so they got they already have this where like when you walk in and that's the social space Well, have you been to the the the st.
+**Jamie:** I Done This, and how when you email in the things you've done, they don't appear right away. They'll appear soon, but — and I think that's great, because I'd email it and then I'd load up the website and hit refresh and be like, is it there, is it there, did it get there? And the fact that they take that away is actually kind of a nice thing.
 
-Paul location?
+**Garrick:** Which ties into my notion that more and more things, if I just interacted with them via email, that would be fine. You know, one of the very last Wired magazines that I ever read had this feature article with one of the etiquette people, the Dear Abbys, and
 
-I have not okay it's Much more private or at least semi private.
+**Jamie:** Oh, right.
 
-I hear it's a lot less nice It is a lot less nice Yeah, but it has private workspaces.
+**Garrick:** there was a big two-page spread, and I remember on one side of the spread it said, we have laws so we don't kill each other, and on the other side it said, we have etiquette so we don't drive each other crazy. I love that. As Kubbchucks, on our Friday lunches and on our Kubb & Koffees, we are developing an etiquette and a culture.
 
-Yes, and there are whole sections that you can say I have this entire section No one else is around me Now doesn't that work then?
+**Jamie:** Say more.
 
-That works right to me that's what's the difference between that and my basement office Well, yeah, I know and this is this is the conflict I've always had with this Yeah, our office is 4,500 square feet.
+**Garrick:** To me, it seems most polite for the inkaster to throw his batons at what he just did.
 
-Mm-hmm, and we have our whole team in four rows of Desks.
+**Jamie:** Oh, yeah.
 
-Mm-hmm.
+**Garrick:** Right?
 
-I mean, it's a space that's probably 800 square feet probably.
+**Jamie:** Yeah. Well, it's either polite, or it's a you broke it, you fix it.
 
-Yeah, I really like what they're doing there I think that and I think that that's the kind of thing that's why I volunteer With mini star helping anyway, I can with that stuff.
+**Garrick:** Yeah, exactly. Exactly.
 
-It's the slow web, but it's for like slow startup It's not the incubator that's gonna do a thing next month It's the trends that over a five or ten year period Will get the flywheel going and yes things really start to happen Yes, I look at that and I just think like like how how lucky we are To have something like that and it's interesting seeing everything else going into that building You know MHTA is going into that building right next to Coco a couple a couple other Companies like tech companies are also opening space in there I mean, it's you know Coco is turning in to be this like anchor that other people are kind of coming there because they're there just great.
+**Jamie:** I'd like to know if the statistics,
 
-Absolutely That's the anchor of the episode right there Bingo bingo
+**Garrick:** And it didn't seem like everybody at the meetup tonight had that same part of culture.
+
+**Jamie:** like I would suggest that you have a higher likelihood of hitting them because you just threw them. I mean, doesn't that make sense?
+
+**Garrick:** Yes. Yes.
+
+**Jamie:** Yeah. Well, you know, the other thing I like is what you and I did the last time, which, I don't know, I mean, maybe you got debated a little bit, but, you know, we did the triple bogey for the kubb being out to,
+
+**Garrick:** Yes.
+
+**Jamie:** you know, with this specific intent that we want to encourage aggressive play for practice.
+
+**Garrick:** Right.
+
+**Jamie:** I think that's a good — I mean, they
+
+**Garrick:** I think so. Well, I did that tonight in my game with Eric.
+
+**Jamie:** Yeah, yeah.
+
+**Garrick:** He had two outs, and I'm like, no. Actually, he had one out and then just a really bad throw. And I said, you know what? Rethrow that one. That's ridiculous. I'm not going to let you. That's horrible.
+
+**Jamie:** What did he say about that? Did he think that was —
+
+**Garrick:** He was like, yeah. He was like, really?
+
+**Jamie:** He said, sucker.
+
+**Garrick:** This is a friendly. We should be playing Monstagram. Brando. Every time in all the games I played tonight,
+
+**Jamie:** Yeah.
+
+**Garrick:** advantage line. That's what did it.
+
+**Jamie:** Oh, yeah.
+
+**Garrick:** Yeah.
+
+**Jamie:** The first team to get the advantage line, I think, is huge. I mean, it's just gigantic. So, you know, we had our office flood, which sucks. I don't recommend that you have your office flood. A pipe burst on the sixth floor and it flooded the bottom six floors of the building, including ours, and we didn't lose any equipment, but there was a lot of damage to walls and carpet and so. We have about 25 people and we need a place to go, so I called the guys over at CoCo. And for those that aren't in the know, CoCo is a coworking and collaboration space. They've been around in St. Paul for a while now, right? Like a couple years or more.
+
+**Garrick:** A couple of years.
+
+**Jamie:** Yeah.
+
+**Garrick:** Yeah, and they were nice enough.
+
+**Jamie:** You did that thing there.
+
+**Garrick:** I held an event there right after they started it, when they were fantastic hosts, amazing hosts. And I worked with the guys on projects and I love them.
+
+**Jamie:** And so now they have this space in Minneapolis in the Grain Exchange building. And I tell you, it's an awesome space. And it's a perfect fit for them because you go in there and it's just — have you been in there? It's monumental. It's just like the ceilings. are, they gotta be thirty feet high. And it's the old trading, you know, it's the old trading floor for the Grain Exchange, and it's also a historical site. So it's actually this really interesting thing, because I was talking to Kyle there, that the space is managed by the historical society, so they can't come in there and just start ripping stuff apart. Like, it has to be maintained in a certain kind of structure, and they can't be putting screws everywhere, and they can't take down all of the trading boards. And so it's like almost just a perfect fit for CoCo, because, you know, your average company wouldn't want all that kind of stuff in there. We had the flood and we worked out of coffee shops for a couple days and that was not the best. And so then we called the guys at CoCo and said, hey, can we bring our team there? We had the flood and we need a place to be. And so we've been there now two and a half weeks and we're going to be there another three weeks.
+
+**Garrick:** No way.
+
+**Jamie:** Yeah, we're actually going to bring a bunch of our equipment over.
+
+**Garrick:** And I think this is an excellent use case for CoCo. To me it makes far more sense than the rent-a-desk.
+
+**Jamie:** It's a great opportunity for us and I'm super excited. I mean, I don't want our space to get flooded. I'm happy that we're able to leverage a place like CoCo and able to support them as an organization. And I think that they are just doing amazing stuff. I mean, I don't know. I mean, I know a decent amount of what's going on in other geographies, and I don't know of anything like what those guys are doing at CoCo in other places.
+
+**Garrick:** Mm-hmm.
+
+**Jamie:** And nothing at that scale. I mean, you know, different venture firms will have like coworking space they share with their portfolio companies, but nothing for the kind of general unwashed masses that CoCo does. And I mean, it's cheap, hot coffee — it's not good coffee.
+
+**Garrick:** Mm.
+
+**Jamie:** It's — I mean, I'm not gonna talk about the coffee. There's coffee and
+
+**Garrick:** Mm-hmm.
+
+**Jamie:** a place to work. It's been a real great thing for our team. I'm finding it interesting that there are some companies who have a presence there, they don't really use it.
+
+**Garrick:** Yes.
+
+**Jamie:** And they're kind of, I think in some of them, they're happy to support the space and they want their name in front of people and it's almost a form of advertising.
+
+**Garrick:** Absolutely. I get that impression for sure.
+
+**Jamie:** I think it's fine, although it's a little inefficient. I wonder if it wouldn't be better to just have like... some kind of a way to — I mean, you know, you could totally sell sponsorships or whatever.
+
+**Garrick:** Today's coffee is sponsored by,
+
+**Jamie:** Yeah, yeah, it'd have to be better coffee.
+
+**Garrick:** It would be if I was sponsoring it.
+
+**Jamie:** Maybe I— there you go, there you go.
+
+**Garrick:** I should do that. I should go talk to him about that.
+
+**Jamie:** I love the vibe. It feels really good. There's energy. Like, you know, you go places and just, you know, sometimes you just know. And I've been really amazed. It's busy. I mean, there are a lot of people there. But not in a bad way. It's not like, hey, it's so super distracting. I mean, there's a lot of space. So it's fine. It's going really, really well. And just in the short time we've been there.
+
+**Garrick:** Have you guys been in the tent?
+
+**Jamie:** I've been in the tent.
+
+**Garrick:** Yeah, you do your daily stand-ups in the tent?
+
+**Jamie:** Yeah, we do our stand-ups in the classroom.
+
+**Garrick:** Ah.
+
+**Jamie:** Yeah. You know, today they had somebody there from the governor's office who was in. They had — the other day I was there and Minnesota Public Radio had somebody in doing a piece, and, you know, they did a little interview with me and stuff, and they just, totally ad hoc. The part that I'm really super excited about is it feels like this thing that makes for a vibrant ecosystem, which is just, is companies and entrepreneurs and digital folks kind of shoved into a small space bouncing off of each other.
+
+**Garrick:** Oh.
+
+**Jamie:** As a place, like if I were going to write the American novel, would not do it at CoCo, you know, it would be — I'd be distracted. And it's not like, but if I'm gonna have an idea that I want to bounce off some really smart people and I want to be in a place where I don't feel like I'm the only one in the universe that's in this spot trying to figure this out, you really couldn't be in a better spot. Yeah.
+
+**Garrick:** So two things, I had this conversation with one of my favorite guys in town, Chuck Olson, and he comes by, he shoots a lot of his video interviews at CoCo, I mean, because it's an amazing space for doing that, right?
+
+**Jamie:** Right.
+
+**Garrick:** He says, I love coming here to shoot the video and I love it so much that I thought about having a membership where I would just be here. And he says, but I couldn't do the editing here. And I'm like, Chuck, I know exactly what you mean. I can't do the work I need to do in that space.
+
+**Jamie:** Mm-hmm.
+
+**Garrick:** But for everything else, when I'm not in heads-down work mode, I can do it here.
+
+**Jamie:** Mm-hmm.
+
+**Garrick:** Right. And for the bouncing ideas off, it's amazing for that. And for the connections and the spontaneity, there's... a part of a breakthrough idea that requires unintended interjection. And I think CoCo is fantastic for that.
+
+**Jamie:** Now, I mean, I think they could fix, I think that they could make it both. I think it's just, honestly, it's a matter of zoning and the right kind of setup for the space.
+
+**Garrick:** Yeah.
+
+**Jamie:** Yeah, I think if they had another annex.
+
+**Garrick:** Right.
+
+**Jamie:** You know, so they already have this where, like, when you walk in and that's the social space.
+
+**Garrick:** Well, have you been to the St. Paul location?
+
+**Jamie:** I have not.
+
+**Garrick:** Oh, okay. It's much more private, or at least semi-private.
+
+**Jamie:** I hear it's a lot less nice.
+
+**Garrick:** It is a lot less nice. Yeah, but it is also, yes,
+
+**Jamie:** But it has private workspaces?
+
+**Garrick:** and there are whole sections that you can say, I have this entire section and no one else is around me.
+
+**Jamie:** Now doesn't that work then? That works, right?
+
+**Garrick:** To me, that's — what's the difference between that and my basement office?
+
+**Jamie:** Wow.
+
+**Garrick:** Yeah, I know. And this is the conflict I've always had with this.
+
+**Jamie:** You know, our office is 4,500 square feet and we have our whole team in four rows of desks. I mean, it's a space that's probably 800 square feet probably. I really like what they're doing there. I think that — and I think that that's the kind of thing. That's why volunteer with Minnestar, help in any way I can with that stuff. It's the slow web, but it's for like slow startup. It's not the incubator that's gonna do a thing next month. It's the trends that over a five or ten year period will get the flywheel going and
+
+**Garrick:** Yes.
+
+**Jamie:** you see things really start to happen.
+
+**Garrick:** Yes.
+
+**Jamie:** And I look at that and I just think like, how lucky we are. To have something like that. And it's interesting seeing everything else going into that building. You know, MHTA
+
+**Garrick:** Absolutely.
+
+**Jamie:** is going into that building right next to CoCo. A couple other companies, like tech companies, are also opening space in there. I mean, it's, you know, CoCo is turning into be this like anchor that other people are kind of coming there because they're there, which is great. Really great.
+
+**Garrick:** That's the anchor of the episode right there.
+
+**Jamie:** Bingo.
+
+**Garrick:** Bingo.
