@@ -254,3 +254,24 @@ def test_bucket_bootstrap_keeps_logs_and_old_builds_one_month(monkeypatch) -> No
     # The replaced rule goes; rules this code does not own stay.
     assert "transition-bedrock-invocation-logs" not in rules
     assert "someone-elses-rule" in rules
+
+
+def test_digest_handled_failure_still_feeds_subscription_alarm():
+    template = yaml.load(
+        (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
+    )
+    resources = template["Resources"]
+    filters = [
+        resource["Properties"]
+        for resource in resources.values()
+        if resource["Type"] == "AWS::Logs::MetricFilter"
+        and resource["Properties"]["LogGroupName"] == "LibrarianDigestLogGroup"
+    ]
+    assert any("subscribe_digest_blocked_list_failed" in f["FilterPattern"] for f in filters)
+    metric = next(
+        f for f in filters if "subscribe_digest_blocked_list_failed" in f["FilterPattern"]
+    )
+    transformation = metric["MetricTransformations"][0]
+    alarm = resources["LibrarianSubscribeFailuresAlarm"]["Properties"]
+    assert transformation["MetricNamespace"] == alarm["Namespace"]
+    assert transformation["MetricName"] == alarm["MetricName"]
