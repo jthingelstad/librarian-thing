@@ -129,3 +129,45 @@ test('reader disconnect cancels request-local work', async () => {
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(signal.aborted, true);
 });
+
+test('actual native route layers retain contract refusals and bearerless MCP challenge without AWS calls', async () => {
+  const { handleAuthRequest } = await import('../dist/auth/handler.mjs');
+  const { handleStreamRequest } = await import('../dist/chat/runtime.mjs');
+  const { dynamodb, s3 } = await import('../dist/shared/aws-clients.mjs');
+  const previousSecretId = process.env.LIBRARIAN_RUNTIME_SECRET_ID;
+  delete process.env.LIBRARIAN_RUNTIME_SECRET_ID;
+  const priorDynamo = dynamodb.send,
+    priorS3 = s3.send;
+  dynamodb.send = s3.send = async () => {
+    throw new Error('Unexpected AWS access');
+  };
+  try {
+    const auth = makeServer({ auth: handleAuthRequest }, 35);
+    const archive = makeServer({ archive: handleStreamRequest }, 300);
+    const health = await archive.request('/health');
+    assert.equal(health.status, 200);
+    assert.equal((await health.json()).ok, true);
+    const metadata = await auth.request('/.well-known/oauth-authorization-server');
+    assert.equal(metadata.status, 200);
+    assert.equal((await metadata.json()).issuer, 'https://librarian.thingelstad.com');
+    for (const app of [auth, archive]) {
+      const refused = await app.request('/health', { headers: { 'x-librarian-contract-version': '999.0.0' } });
+      assert.equal(refused.status, 409);
+      assert.equal(refused.headers.get('cache-control'), 'no-store');
+      await refused.text();
+    }
+    const mcp = await archive.request('/mcp', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{}'
+    });
+    assert.equal(mcp.status, 401);
+    assert.match(mcp.headers.get('www-authenticate'), /Bearer/);
+    await mcp.text();
+  } finally {
+    dynamodb.send = priorDynamo;
+    s3.send = priorS3;
+    if (previousSecretId === undefined) delete process.env.LIBRARIAN_RUNTIME_SECRET_ID;
+    else process.env.LIBRARIAN_RUNTIME_SECRET_ID = previousSecretId;
+  }
+});

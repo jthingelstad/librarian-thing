@@ -93,7 +93,7 @@ test('chat runtime imports with the Lambda response-stream shim', async () => {
 
   const runtime = await import('../dist/chat/runtime.mjs');
 
-  assert.equal(typeof runtime.handler, 'function');
+  assert.equal(typeof runtime.handleStreamRequest, 'function');
 });
 
 test('retrieve auth uses the neutral deployment secret and keeps the request alias', async () => {

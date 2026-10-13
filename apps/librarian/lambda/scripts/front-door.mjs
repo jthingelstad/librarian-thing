@@ -10,7 +10,8 @@ const ID = 'E18I2CIBERFMB7';
 const digest = (config) => createHash('sha256').update(JSON.stringify(config)).digest('hex');
 export function nativeConfig(config, outputs, mode) {
   const next = structuredClone(config);
-  if (!next.Aliases.Items.includes('librarian.thingelstad.com')) throw new Error('Wrong distribution');
+  if (!Array.isArray(next.Aliases.Items) || !next.Aliases.Items.some((alias) => alias === 'librarian.thingelstad.com'))
+    throw new Error('Wrong distribution');
   for (const origin of next.Origins.Items) {
     const isAuth = origin.Id === 'LibrarianApiGatewayOrigin';
     const isArchive = origin.Id === 'LibrarianStreamFunctionUrlOrigin';

@@ -861,7 +861,7 @@ function streamFromResponse(responseStream: ResponseStream, _event: LibrarianHtt
 }
 
 function jsonResponseStream(responseStream: ResponseStream, statusCode: number, headers: Record<string, string> = {}) {
-  return awslambda.HttpResponseStream.from(responseStream, {
+  return responseWithHeaders(responseStream, {
     statusCode,
     headers: {
       'content-type': 'application/json; charset=utf-8',
@@ -2231,5 +2231,3 @@ function responseWithHeaders(
   }
   return awslambda.HttpResponseStream.from(stream, metadata);
 }
-export const handler =
-  typeof awslambda === 'undefined' ? handleStreamRequest : awslambda.streamifyResponse(handleStreamRequest);
