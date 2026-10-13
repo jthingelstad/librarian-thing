@@ -2,7 +2,7 @@ import { InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
 import { RerankCommand } from '@aws-sdk/client-bedrock-agent-runtime';
 import type { RerankSource } from '@aws-sdk/client-bedrock-agent-runtime';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { gunzipSync } from 'node:zlib';
+import { readCorpusJson, singleFlight } from './corpus-loader.mjs';
 import { bedrock, bedrockAgentRuntime, embeddingModel, rerankModel, s3 } from './aws-clients.mjs';
 import { errorFields, logEvent as sharedLogEvent, truthyEnv } from './logging.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
@@ -31,7 +31,7 @@ export interface CorpusChunk {
   linked_from_issues?: unknown;
   text?: string;
   summary?: string;
-  embedding?: number[];
+  embedding?: number[] | Float64Array;
   age_label?: string;
   retrieval_reason?: string;
   retrieval_modes?: string[];
@@ -202,16 +202,22 @@ function rerankModelArn() {
   return `arn:aws:bedrock:${region}::foundation-model/${model}`;
 }
 
-// Corpus artifacts upload gzip-compressed (ContentEncoding: gzip) since
-// 2026-08; sniff the magic bytes so plain objects keep working too.
-async function bodyToJsonString(body: { transformToByteArray: () => Promise<Uint8Array> }) {
-  const bytes = await body.transformToByteArray();
-  const buffer = Buffer.from(bytes);
-  if (buffer.length > 2 && buffer[0] === 0x1f && buffer[1] === 0x8b) return gunzipSync(buffer).toString('utf8');
-  return buffer.toString('utf8');
+const loadOnce = singleFlight();
+
+async function bodyToJson(body: unknown) {
+  if (body && typeof body === 'object' && Symbol.asyncIterator in body) {
+    return readCorpusJson(body as AsyncIterable<Uint8Array>);
+  }
+  // Small SDK fakes in existing tests. Real S3 bodies are async iterables.
+  const bytes = await (body as { transformToByteArray: () => Promise<Uint8Array> }).transformToByteArray();
+  return readCorpusJson(
+    (async function* () {
+      yield bytes;
+    })()
+  );
 }
 
-export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
+async function loadCorpusUnshared(kind = 'weekly_thing'): Promise<Corpus> {
   if (kind === 'blog') return loadBlogCorpus();
   if (kind === 'podcast') return loadPodcastCorpus();
   if (corpusCache) return corpusCache;
@@ -221,7 +227,7 @@ export async function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
   const start = performance.now();
   const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
   if (!response.Body) throw new Error('Corpus object body is empty');
-  corpusCache = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
+  corpusCache = (await bodyToJson(response.Body)) as Corpus;
   sectionNamesCache = undefined;
   withBlogAppearances(blogCorpusCache, corpusCache);
   logEvent('info', 'corpus_loaded', {
@@ -257,7 +263,7 @@ async function loadOptionalCorpus({
   try {
     const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     if (!response.Body) throw new Error(`${kind} corpus object body is empty`);
-    const loaded = JSON.parse(await bodyToJsonString(response.Body)) as Corpus;
+    const loaded = (await bodyToJson(response.Body)) as Corpus;
     setCache(kind === 'blog' ? withBlogIdentity(loaded)! : loaded);
     sectionNamesCache = undefined;
     logEvent('info', 'corpus_loaded', {
@@ -282,7 +288,7 @@ async function loadOptionalCorpus({
 // Optional non-WT corpora load lazily and cache separately from the WT corpus.
 // When an env key is unset, return an empty corpus so source-specific requests
 // degrade to no hits.
-async function loadBlogCorpus() {
+async function loadBlogCorpusUnshared() {
   const blog = await loadOptionalCorpus({
     kind: 'blog',
     envKey: 'BLOG_CORPUS_KEY',
@@ -301,7 +307,7 @@ async function loadBlogCorpus() {
   return withBlogAppearances(blog, corpusCache) || blog;
 }
 
-async function loadPodcastCorpus() {
+async function loadPodcastCorpusUnshared() {
   return loadOptionalCorpus({
     kind: 'podcast',
     envKey: 'PODCAST_CORPUS_KEY',
@@ -314,7 +320,7 @@ async function loadPodcastCorpus() {
   });
 }
 
-export async function loadGraph(): Promise<Record<string, unknown>> {
+async function loadGraphUnshared(): Promise<Record<string, unknown>> {
   if (graphCache) return graphCache;
   const bucket = process.env.CORPUS_BUCKET;
   const key = process.env.GRAPH_KEY || 'librarian/graph.json';
@@ -325,7 +331,7 @@ export async function loadGraph(): Promise<Record<string, unknown>> {
   try {
     const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
     if (!response.Body) throw new Error('Graph object body is empty');
-    graphCache = JSON.parse(await bodyToJsonString(response.Body)) as Record<string, unknown>;
+    graphCache = (await bodyToJson(response.Body)) as Record<string, unknown>;
     const issues =
       graphCache.issues && typeof graphCache.issues === 'object' && !Array.isArray(graphCache.issues)
         ? graphCache.issues
@@ -368,13 +374,14 @@ function buildLexicalIndex(corpus: Corpus): CorpusChunk[] {
       vector.set(term, weight);
       norm += weight * weight;
     }
+    delete (chunk as CorpusChunk)._terms;
     chunk._vector = vector;
     chunk._norm = Math.sqrt(norm) || 1;
   }
   return indexed;
 }
 
-async function indexedChunks(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
+async function indexedChunksUnshared(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
   if (kind === 'blog') {
     if (!blogIndexedCache) blogIndexedCache = buildLexicalIndex(await loadCorpus('blog'));
     return blogIndexedCache;
@@ -387,7 +394,7 @@ async function indexedChunks(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
   return indexedCache;
 }
 
-function cosine(left: number[] | undefined, right: number[] | undefined) {
+function cosine(left: ArrayLike<number> | undefined, right: ArrayLike<number> | undefined) {
   if (!left?.length || !right?.length || left.length !== right.length) return 0;
   let dot = 0;
   let leftNorm = 0;
@@ -1371,4 +1378,21 @@ function showsCopiedWords(copy: CorpusChunk, shown: CorpusChunk[]) {
     const share = inAny(passages.map((passage) => passage.text));
     return share > 0 && inAny(onPage.map((passage) => passage.text)) * 2 >= share;
   });
+}
+
+export function loadCorpus(kind = 'weekly_thing'): Promise<Corpus> {
+  return loadOnce('corpus:' + kind, () => loadCorpusUnshared(kind));
+}
+function loadBlogCorpus(): Promise<Corpus> {
+  return loadOnce('blog', loadBlogCorpusUnshared);
+}
+function loadPodcastCorpus(): Promise<Corpus> {
+  return loadOnce('podcast', loadPodcastCorpusUnshared);
+}
+export function loadGraph(): Promise<Record<string, unknown>> {
+  return loadOnce('graph', loadGraphUnshared);
+}
+
+function indexedChunks(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
+  return loadOnce('index:' + kind, () => indexedChunksUnshared(kind));
 }

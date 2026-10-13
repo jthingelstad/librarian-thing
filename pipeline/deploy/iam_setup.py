@@ -24,6 +24,7 @@ BOUNDARIES = {
     "BedrockEvaluationRole": ("WeeklyThingLibrarianEvaluationBoundary", "evaluation-boundary"),
 }
 DEPLOY_POLICY = "WeeklyThingLibrarianDeployScoped"
+NATIVE_CFN_POLICY = "WeeklyThingLibrarianNativeCloudFormation"
 # The account tag standard (projects-sysadmin docs/AWS-TAGS.md) for IAM made here,
 # outside the stack.
 TAGS = [
@@ -436,6 +437,9 @@ def apply(session: boto3.Session, snapshot_dir: Path) -> None:
             RoleName=CFN_ROLE, PolicyName=name, PolicyDocument=json.dumps(document(name))
         )
 
+    native_arn = put_managed(iam, NATIVE_CFN_POLICY, document("native-cloudformation"))
+    iam.attach_role_policy(RoleName=CFN_ROLE, PolicyArn=native_arn)
+
     arn = put_managed(iam, DEPLOY_POLICY, document("deploy"))
     iam.attach_role_policy(RoleName=DEPLOY_ROLE, PolicyArn=arn)
     # The same policy also caps any accidentally reattached legacy permissions.
@@ -462,7 +466,9 @@ def verify(session: boto3.Session) -> None:
     assert deployed["boundary"]["PermissionsBoundaryArn"] == POLICY_PREFIX + DEPLOY_POLICY
     cfn = role_snapshot(iam, CFN_ROLE)
     assert cfn["trust"] == CFN_TRUST, "CloudFormation trust drift"
-    assert not cfn["attached"], "Unexpected CloudFormation managed policy"
+    assert cfn["attached"] == {
+        POLICY_PREFIX + NATIVE_CFN_POLICY: document("native-cloudformation")
+    }, "Native CloudFormation policy drift"
     assert cfn["inline"] == {
         name: document(name) for name in ("cloudformation", "cloudformation-iam")
     }, "CloudFormation policy drift"

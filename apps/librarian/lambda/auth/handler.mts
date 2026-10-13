@@ -1034,13 +1034,10 @@ function healthHandler(event: LibrarianHttpEvent) {
   );
 }
 
-export async function handler(event: LibrarianHttpEvent, context: { awsRequestId?: string } = {}) {
-  // The scheduled task rides the same function: EventBridge invokes it once
-  // a day with `{ task: 'subscribe_digest' }` and no HTTP shape at all.
-  if ((event as { task?: unknown }).task === 'subscribe_digest') {
-    await loadRuntimeSecrets();
-    return await runSubscribeDigest();
-  }
+export async function handleAuthRequest(
+  event: LibrarianHttpEvent,
+  context: { awsRequestId?: string } = {}
+): Promise<LibrarianHttpResponse> {
   try {
     await loadRuntimeSecrets();
   } catch {
@@ -1143,4 +1140,12 @@ export async function handler(event: LibrarianHttpEvent, context: { awsRequestId
     'weekly-thing-librarian-auth'
   );
   return response;
+}
+
+export async function handler(event: LibrarianHttpEvent, context: { awsRequestId?: string } = {}) {
+  if ((event as { task?: unknown }).task === 'subscribe_digest') {
+    await loadRuntimeSecrets();
+    return runSubscribeDigest();
+  }
+  return handleAuthRequest(event, context);
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { onlyJournalPassages } from './golden-checks.mjs';
 // Golden-question harness for the live /retrieve endpoint. Run it before and
 // after any retrieval, chunking, or embedding change to see whether quality
 // moved. Invariant-style expectations (filters respected, proper nouns found,
@@ -46,9 +47,9 @@ const GOLDEN = [
       passages.length > 0 && passages.every((p) => Number(p.issue_year) >= 2019 && Number(p.issue_year) <= 2020)
   },
   {
-    name: 'section filter returns only Journal chunks',
+    name: 'section filter returns only the Journal family',
     request: { query: 'family life', filters: { section: 'journal' } },
-    check: (passages) => passages.length > 0 && passages.every((p) => /journal/i.test(String(p.section || '')))
+    check: onlyJournalPassages
   },
   {
     name: 'blog scope returns blog sources',

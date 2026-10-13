@@ -68,7 +68,44 @@ Parameters:
     Default: ""
     Description: Optional us-east-1 ACM certificate ARN for StreamCustomDomainName.
 
+  NativeWebEnabled:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['false', 'true']
+  NativeBuildId:
+    Type: String
+    Default: 'disabled'
+  NativeAuthCodeKey:
+    Type: String
+    Default: 'disabled'
+  NativeAuthCodeVersion:
+    Type: String
+    Default: ''
+  NativeAuthLiveRevision:
+    Type: String
+    Default: ''
+  NativeAuthRollbackRevision:
+    Type: String
+    Default: ''
+  NativeArchiveCodeKey:
+    Type: String
+    Default: 'disabled'
+  NativeArchiveCodeVersion:
+    Type: String
+    Default: ''
+  NativeArchiveLiveRevision:
+    Type: String
+    Default: ''
+  NativeArchiveRollbackRevision:
+    Type: String
+    Default: ''
+
 Conditions:
+  HasNativeArchiveRollbackRevision: !Not [!Equals [!Ref NativeArchiveRollbackRevision, '']]
+  HasNativeArchiveLiveRevision: !Not [!Equals [!Ref NativeArchiveLiveRevision, '']]
+  HasNativeAuthRollbackRevision: !Not [!Equals [!Ref NativeAuthRollbackRevision, '']]
+  HasNativeAuthLiveRevision: !Not [!Equals [!Ref NativeAuthLiveRevision, '']]
+  NativeWebActive: !Equals [!Ref NativeWebEnabled, 'true']
   HasStreamCustomDomainName: !Not [!Equals [!Ref StreamCustomDomainName, ""]]
   HasStreamCertificateArn: !Not [!Equals [!Ref StreamCertificateArn, ""]]
   CreateLibrarianStreamDistribution: !And
@@ -623,14 +660,14 @@ Resources:
       State: ENABLED
       Targets:
         - Id: subscribe-digest
-          Arn: !GetAtt LibrarianFunction.Arn
+          Arn: !GetAtt LibrarianDigestFunction.Arn
           Input: '{"task":"subscribe_digest"}'
 
   LibrarianSubscribeDigestPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref LibrarianFunction
+      FunctionName: !Ref LibrarianDigestFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt LibrarianSubscribeDigestRule.Arn
 
@@ -1133,16 +1170,607 @@ Resources:
         - !Ref LibrarianAlarmTopic
 
 
+  NativeSourceBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-web-source-${AWS::AccountId}-${AWS::Region}'
+      VersioningConfiguration: { Status: Enabled }
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
+      OwnershipControls: { Rules: [{ ObjectOwnership: BucketOwnerEnforced }] }
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  NativeSourcePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref NativeSourceBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: [s3:GetObject, s3:GetObjectVersion]
+            Resource: !Sub '${NativeSourceBucket.Arn}/native/*'
+            Condition:
+              StringEquals: { 'aws:SourceAccount': !Ref AWS::AccountId }
+              ArnLike:
+                'aws:SourceArn': !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:web-function/${AWS::StackName}-web-*/revision/*'
+          - Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource: [!GetAtt NativeSourceBucket.Arn, !Sub '${NativeSourceBucket.Arn}/*']
+            Condition: { Bool: { 'aws:SecureTransport': 'false' } }
+
+  NativeAuthLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}-web-auth'
+      RetentionInDays: 30
+  NativeAuthFunction:
+    Type: AWS::Lambda::WebFunction
+    Condition: NativeWebActive
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-auth'
+  NativeAuthRevision:
+    Type: AWS::Lambda::WebFunctionRevision
+    Condition: NativeWebActive
+    DependsOn: [NativeAuthFunction, NativeSourcePolicy]
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-auth'
+      Description: !Ref NativeBuildId
+      BuildConfig:
+        CodeConfig:
+          S3Object:
+            Bucket: !Ref NativeSourceBucket
+            Key: !Ref NativeAuthCodeKey
+            VersionId: !Ref NativeAuthCodeVersion
+        RuntimeConfig: { Runtime: nodejs24.x }
+      ServiceConfig:
+        ExecutionRoleArn: !GetAtt LibrarianFunctionRole.Arn
+        TimeoutSeconds: 35
+        MaxConcurrencyPerEnvironment: 8
+        TelemetryConfig:
+          LoggingConfig:
+            LogGroup: !Ref NativeAuthLogs
+            ApplicationLogLevel: INFO
+            SystemLogLevel: INFO
+        EnvironmentVariables:
+          ALLOWED_ORIGIN: !Join [",", !Ref AllowedOrigin]
+          TABLE_NAME: !Ref LibrarianTable
+          CORPUS_BUCKET: !Ref CorpusBucket
+          CORPUS_KEY: !Ref CorpusKey
+          GRAPH_KEY: !Ref GraphKey
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
+          LOG_LEVEL: !Ref LogLevel
+          AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
+          THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
+          THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
+          # Anthropic API model ids (2026-10), all on the 5 family: they
+          # think, take an effort level, and refuse sampling params. Haiku
+          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
+          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
+          THINGY_FAST_MODEL: "claude-haiku-5-5"
+          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
+          LIBRARIAN_NATIVE_HTTP: '1'
+          LIBRARIAN_SOURCE_REVISION: !Ref NativeBuildId
+
+  NativeAuthLiveEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeAuthFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-auth'
+      EndpointName: live
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !If [HasNativeAuthLiveRevision, !Ref NativeAuthLiveRevision, !GetAtt NativeAuthRevision.RevisionId]
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 2 }
+      ThrottleConfig: { RateLimit: 100 }
+
+  NativeAuthRollbackEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeAuthFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-auth'
+      EndpointName: rollback
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !If [HasNativeAuthRollbackRevision, !Ref NativeAuthRollbackRevision, !GetAtt NativeAuthRevision.RevisionId]
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 2 }
+      ThrottleConfig: { RateLimit: 0 }
+
+  NativeArchiveLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}-web-archive'
+      RetentionInDays: 30
+  NativeArchiveFunction:
+    Type: AWS::Lambda::WebFunction
+    Condition: NativeWebActive
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-archive'
+  NativeArchiveRevision:
+    Type: AWS::Lambda::WebFunctionRevision
+    Condition: NativeWebActive
+    DependsOn: [NativeArchiveFunction, NativeSourcePolicy]
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-archive'
+      Description: !Ref NativeBuildId
+      BuildConfig:
+        CodeConfig:
+          S3Object:
+            Bucket: !Ref NativeSourceBucket
+            Key: !Ref NativeArchiveCodeKey
+            VersionId: !Ref NativeArchiveCodeVersion
+        RuntimeConfig: { Runtime: nodejs24.x }
+      ServiceConfig:
+        ExecutionRoleArn: !GetAtt LibrarianFunctionRole.Arn
+        TimeoutSeconds: 300
+        MaxConcurrencyPerEnvironment: 1
+        TelemetryConfig:
+          LoggingConfig:
+            LogGroup: !Ref NativeArchiveLogs
+            ApplicationLogLevel: INFO
+            SystemLogLevel: INFO
+        EnvironmentVariables:
+          ALLOWED_ORIGIN: !Join [",", !Ref AllowedOrigin]
+          TABLE_NAME: !Ref LibrarianTable
+          CORPUS_BUCKET: !Ref CorpusBucket
+          CORPUS_KEY: !Ref CorpusKey
+          GRAPH_KEY: !Ref GraphKey
+          BLOG_CORPUS_KEY: !Ref BlogCorpusKey
+          PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
+          LOG_LEVEL: !Ref LogLevel
+          # Anthropic API model ids (2026-10), all on the 5 family: they
+          # think, take an effort level, and refuse sampling params. Haiku
+          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
+          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
+          THINGY_FAST_MODEL: "claude-haiku-5-5"
+          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
+          BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
+          BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
+          BEDROCK_RERANK_REGION: "us-west-2"
+          # Deployed-revision stamp for recorded turns; the timestamped code
+          # key already uniquely names each deployed artifact.
+          LIBRARIAN_SOURCE_REVISION: !Ref NativeBuildId
+          # Guest chat lane (2026-09): per-visitor taste + global fail-closed
+          # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
+          THINGY_GUEST_CHAT: "on"
+          GUEST_DAILY_QUOTA: "3"
+          GUEST_GLOBAL_DAILY_QUOTA: "25"
+          LIBRARIAN_NATIVE_HTTP: '1'
+
+  NativeArchiveLiveEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeArchiveFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-archive'
+      EndpointName: live
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !If [HasNativeArchiveLiveRevision, !Ref NativeArchiveLiveRevision, !GetAtt NativeArchiveRevision.RevisionId]
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 5 }
+      ThrottleConfig: { RateLimit: 100 }
+
+  NativeArchiveRollbackEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeArchiveFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-archive'
+      EndpointName: rollback
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !If [HasNativeArchiveRollbackRevision, !Ref NativeArchiveRollbackRevision, !GetAtt NativeArchiveRevision.RevisionId]
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 2 }
+      ThrottleConfig: { RateLimit: 0 }
+
+  NativeAuthCandidateEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeAuthFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-auth'
+      EndpointName: candidate
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !GetAtt NativeAuthRevision.RevisionId
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 2 }
+      ThrottleConfig: { RateLimit: 100 }
+
+  NativeArchiveCandidateEndpoint:
+    Type: AWS::Lambda::WebFunctionEndpoint
+    Condition: NativeWebActive
+    DependsOn: NativeArchiveFunction
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-web-archive'
+      EndpointName: candidate
+      EndpointType: HomeRegion
+      AuthType: IamAuth
+      RevisionWeights:
+        - RevisionId: !GetAtt NativeArchiveRevision.RevisionId
+          Weight: 100
+      ScalingConfig: { MaxEnvironments: 2 }
+      ThrottleConfig: { RateLimit: 100 }
+
+  LibrarianDigestFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures: [arm64]
+      Code: { S3Bucket: !Ref CodeBucket, S3Key: !Ref CodeKey }
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref LibrarianTable
+          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
+          LOG_LEVEL: !Ref LogLevel
+          THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
+      Handler: digest/handler.handler
+      MemorySize: 1024
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt LibrarianFunctionRole.Arn
+      Runtime: nodejs24.x
+      Timeout: 35
+
+  NativeAuthErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-auth-errors'
+      Namespace: AWS/Lambda/Web
+      MetricName: HTTPResponseStatusClass5XX
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
+        - { Name: EndpointName, Value: live }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeAuthCapacityAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-auth-capacity'
+      Namespace: AWS/Lambda/Web/Usage
+      MetricName: EndpointActiveEnvironmentThrottles
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
+        - { Name: EndpointName, Value: live }
+        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeAuthRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-auth-rate'
+      Namespace: AWS/Lambda/Web/Usage
+      MetricName: EndpointRequestThrottles
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
+        - { Name: EndpointName, Value: live }
+        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeArchiveErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-archive-errors'
+      Namespace: AWS/Lambda/Web
+      MetricName: HTTPResponseStatusClass5XX
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
+        - { Name: EndpointName, Value: live }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeArchiveCapacityAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-archive-capacity'
+      Namespace: AWS/Lambda/Web/Usage
+      MetricName: EndpointActiveEnvironmentThrottles
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
+        - { Name: EndpointName, Value: live }
+        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeArchiveRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-web-archive-rate'
+      Namespace: AWS/Lambda/Web/Usage
+      MetricName: EndpointRequestThrottles
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
+        - { Name: EndpointName, Value: live }
+        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
+  NativeLibrarianSubscribeFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeAuthLogs
+      FilterPattern: '?"buttondown_subscriber_create_failed" ?"buttondown_lookup_failed" ?"buttondown_subscriber_reminder_failed" ?"buttondown_subscriber_resubscribe_failed" ?"subscribe_ledger_write_failed" ?"subscribe_digest_blocked_list_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianSubscribeFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianOauthFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeAuthLogs
+      FilterPattern: '?"oauth_token_pkce_failed" ?"oauth_token_code_binding_mismatch" ?"oauth_refresh_client_mismatch" ?"oauth_register_rejected" ?"oauth_token_code_rejected" ?"oauth_register_global_capped" ?"oauth_register_rate_limited" ?"oauth_token_rate_limited"'
+      MetricTransformations:
+        - MetricName: LibrarianOauthAuthFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianStreamFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeArchiveLogs
+      FilterPattern: '?"request_failed" ?"retrieve_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianStreamHandledFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianChatRejectionsMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeArchiveLogs
+      FilterPattern: '"chat_request_rejected"'
+      MetricTransformations:
+        - MetricName: LibrarianChatRejections
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianGuestBreakerMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeArchiveLogs
+      FilterPattern: '"guest_global_quota_exhausted"'
+      MetricTransformations:
+        - MetricName: LibrarianGuestBreakerTrips
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianGuestOriginMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeArchiveLogs
+      FilterPattern: '"guest_origin_required"'
+      MetricTransformations:
+        - MetricName: LibrarianGuestOriginRejections
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianToolFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeArchiveLogs
+      FilterPattern: '"tool_call_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianToolFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianAuthAbuseMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeAuthLogs
+      FilterPattern: '?"auth_rate_limited" ?"auth_magic_link_rate_limited" ?"auth_code_attempts_exhausted" ?"auth_code_rate_limited"'
+      MetricTransformations:
+        - MetricName: LibrarianAuthAbuseRejections
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeLibrarianButtondownFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Condition: NativeWebActive
+    Properties:
+      LogGroupName: !Ref NativeAuthLogs
+      FilterPattern: '?"buttondown_lookup_failed" ?"buttondown_subscriber_create_failed" ?"auth_refresh_reverify_failed" ?"oauth_authorize_buttondown_lookup_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianButtondownFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
+  NativeExternalOriginAccess:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: librarian-native-external
+        OriginAccessControlOriginType: lambda
+        SigningBehavior: always-amz-auth
+        SigningProtocol: sigv4
+  NativeExternalCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: librarian-native-external
+        MinTTL: 0
+        DefaultTTL: 0
+        MaxTTL: 1
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: false
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig: { HeaderBehavior: whitelist, Headers: [Authorization] }
+          CookiesConfig: { CookieBehavior: none }
+          QueryStringsConfig: { QueryStringBehavior: none }
+  NativeExternalRequestPolicy:
+    Type: AWS::CloudFront::OriginRequestPolicy
+    Properties:
+      OriginRequestPolicyConfig:
+        Name: librarian-native-external
+        HeadersConfig:
+          HeaderBehavior: whitelist
+          Headers: [Origin, Content-Type, Accept, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
+        CookiesConfig: { CookieBehavior: none }
+        QueryStringsConfig: { QueryStringBehavior: all }
+  NativeOAuthQueryFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: librarian-native-oauth-query
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Normalize OAuth query spaces before native origin signing
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          if (request.uri !== "/authorize") return request;
+          var query = [];
+          var changed = false;
+          Object.keys(request.querystring).forEach(function (key) {
+            var field = request.querystring[key];
+            var values = field.multiValue || [field];
+            var name = key.replace(/\+/g, '%20');
+            if (name !== key) changed = true;
+            values.forEach(function (entry) {
+              var value = entry.value.replace(/\+/g, '%20');
+              if (value !== entry.value) changed = true;
+              query.push(name + '=' + value);
+            });
+          });
+          if (changed) request.querystring = query.join('&');
+          return request;
+        }
+
+  LibrarianDigestLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${LibrarianDigestFunction}'
+      RetentionInDays: 30
+  LibrarianDigestErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-digest-errors'
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions: [{ Name: FunctionName, Value: !Ref LibrarianDigestFunction }]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
 Outputs:
+  NativeSourceBucketName:
+    Value: !Ref NativeSourceBucket
+  NativeAuthFunctionName:
+    Condition: NativeWebActive
+    Value: !Sub '${AWS::StackName}-web-auth'
+  NativeAuthCandidateRevision:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeAuthRevision.RevisionId
+  NativeAuthLiveDomain:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeAuthLiveEndpoint.DomainName
+  NativeAuthLiveArn:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeAuthLiveEndpoint.EndpointArn
+  NativeArchiveFunctionName:
+    Condition: NativeWebActive
+    Value: !Sub '${AWS::StackName}-web-archive'
+  NativeArchiveCandidateRevision:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeArchiveRevision.RevisionId
+  NativeArchiveLiveDomain:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeArchiveLiveEndpoint.DomainName
+  NativeArchiveLiveArn:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeArchiveLiveEndpoint.EndpointArn
   LibrarianApiUrl:
     Description: Base URL for the Archive Librarian API.
-    Value: !Sub https://${LibrarianApi}.execute-api.${AWS::Region}.amazonaws.com
+    Value: !If [NativeWebActive, https://librarian.thingelstad.com, !Sub "https://${LibrarianApi}.execute-api.${AWS::Region}.amazonaws.com"]
   LibrarianStreamUrl:
     Description: Streaming URL for the Archive Librarian chat API.
     Value: !If
-      - CreateLibrarianStreamDistribution
-      - !Sub https://${StreamCustomDomainName}
-      - !GetAtt LibrarianStreamFunctionUrl.FunctionUrl
+      - NativeWebActive
+      - https://librarian.thingelstad.com
+      - !If
+        - CreateLibrarianStreamDistribution
+        - !Sub https://${StreamCustomDomainName}
+        - !GetAtt LibrarianStreamFunctionUrl.FunctionUrl
   LibrarianRawStreamUrl:
     Description: Raw Lambda Function URL for the Archive Librarian chat API.
     Value: !GetAtt LibrarianStreamFunctionUrl.FunctionUrl
@@ -1156,3 +1784,23 @@ Outputs:
   LibrarianGoldenRetrieveSecretArn:
     Description: ARN of the generated credential used exclusively by the live retrieval golden harness.
     Value: !Ref LibrarianGoldenRetrieveSecret
+
+  NativeAuthCandidateDomain:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeAuthCandidateEndpoint.DomainName
+
+  NativeArchiveCandidateDomain:
+    Condition: NativeWebActive
+    Value: !GetAtt NativeArchiveCandidateEndpoint.DomainName
+
+  NativeExternalOriginAccess:
+    Value: !GetAtt NativeExternalOriginAccess.Id
+
+  NativeExternalCachePolicy:
+    Value: !GetAtt NativeExternalCachePolicy.Id
+
+  NativeExternalRequestPolicy:
+    Value: !GetAtt NativeExternalRequestPolicy.Id
+
+  NativeExternalOAuthFunction:
+    Value: !GetAtt NativeOAuthQueryFunction.FunctionMetadata.FunctionARN

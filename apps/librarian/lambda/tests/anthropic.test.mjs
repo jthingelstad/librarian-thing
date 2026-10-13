@@ -86,14 +86,14 @@ function fakeClient(message, events = []) {
           calls.push(params);
           const listeners = [];
           return {
+            async *[Symbol.asyncIterator]() {
+              for (const [index, delta] of events) yield { type: 'content_block_delta', index, delta };
+            },
             on(event, listener) {
               if (event === 'streamEvent') listeners.push(listener);
               return this;
             },
             async finalMessage() {
-              for (const [index, delta] of events) {
-                for (const listener of listeners) listener({ type: 'content_block_delta', index, delta });
-              }
               return message;
             }
           };

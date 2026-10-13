@@ -1,6 +1,9 @@
 import { LIBRARIAN_CONTRACT_VERSION } from './librarian-contract.mjs';
 
 export interface LibrarianHttpEvent {
+  method?: string;
+  requestId?: string;
+  native?: boolean;
   headers?: Record<string, unknown> | null;
   // API Gateway HTTP API v2 and Lambda Function URLs deliver request cookies
   // here as "name=value" entries, never in the headers map.
@@ -118,7 +121,7 @@ export function htmlResponse(
 }
 
 export function methodAndPath(event?: LibrarianHttpEvent | null) {
-  const method = (event?.requestContext?.http?.method || event?.httpMethod || 'GET').toUpperCase();
+  const method = (event?.method || event?.requestContext?.http?.method || event?.httpMethod || 'GET').toUpperCase();
   const path = (event?.rawPath || event?.path || '/').replace(/\/$/, '') || '/';
   return { method, path };
 }
@@ -126,7 +129,7 @@ export function methodAndPath(event?: LibrarianHttpEvent | null) {
 export function eventSummary(event?: LibrarianHttpEvent | null, context?: LibrarianRequestContext | null) {
   const { method, path } = methodAndPath(event);
   return {
-    request_id: context?.awsRequestId || event?.requestContext?.requestId || '',
+    request_id: context?.awsRequestId || event?.requestId || event?.requestContext?.requestId || '',
     method,
     path,
     origin: normalizeHeaders(event?.headers || {}).origin
@@ -144,6 +147,11 @@ export function eventSummary(event?: LibrarianHttpEvent | null, context?: Librar
 const IPV4_OR_6 = /^[0-9a-fA-F.:]+$/;
 
 export function clientSourceIp(event?: LibrarianHttpEvent | null) {
+  if (event?.native) {
+    const address = String(normalizeHeaders(event.headers || {})['cloudfront-viewer-address'] || '');
+    const ip = address.slice(0, address.lastIndexOf(':')).replace(/^\[|\]$/g, '');
+    return IPV4_OR_6.test(ip) ? ip : '';
+  }
   const forwarded = String(normalizeHeaders(event?.headers || {})['x-forwarded-for'] || '');
   if (forwarded) {
     const entries = forwarded.split(',').map((entry) => entry.trim());

@@ -1,0 +1,139 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "NativeWebFunctions",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateWebFunction",
+        "lambda:GetWebFunction",
+        "lambda:DeleteWebFunction",
+        "lambda:CreateWebFunctionRevision",
+        "lambda:GetWebFunctionRevision",
+        "lambda:DeleteWebFunctionRevision",
+        "lambda:ListWebFunctionRevisions",
+        "lambda:CreateWebFunctionEndpoint",
+        "lambda:GetWebFunctionEndpoint",
+        "lambda:UpdateWebFunctionEndpoint",
+        "lambda:DeleteWebFunctionEndpoint",
+        "lambda:ListWebFunctionEndpoints",
+        "lambda:TagResource",
+        "lambda:UntagResource",
+        "lambda:ListTags"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth/*",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive/*"
+      ]
+    },
+    {
+      "Sid": "NativeSourceBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:PutBucketPolicy",
+        "s3:GetBucketPolicy",
+        "s3:DeleteBucketPolicy",
+        "s3:PutBucketVersioning",
+        "s3:GetBucketVersioning",
+        "s3:PutEncryptionConfiguration",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:PutBucketOwnershipControls",
+        "s3:GetBucketOwnershipControls",
+        "s3:PutBucketTagging",
+        "s3:GetBucketTagging",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetBucketAcl"
+      ],
+      "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1"
+    },
+    {
+      "Sid": "NativeSourceRead",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1/native/*"
+    },
+    {
+      "Sid": "NativeLogGroups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:DescribeLogGroups",
+        "logs:PutRetentionPolicy",
+        "logs:DeleteLogGroup",
+        "logs:TagResource",
+        "logs:UntagResource",
+        "logs:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:999153317627:log-group:/aws/lambda/weekly-thing-librarian-*"
+    },
+    {
+      "Sid": "InspectNativeSourceBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetAccelerateConfiguration",
+        "s3:GetBucketAbac",
+        "s3:GetAnalyticsConfiguration",
+        "s3:GetBucketCORS",
+        "s3:GetEncryptionConfiguration",
+        "s3:GetIntelligentTieringConfiguration",
+        "s3:GetInventoryConfiguration",
+        "s3:GetLifecycleConfiguration",
+        "s3:GetBucketLogging",
+        "s3:GetBucketMetadataTableConfiguration",
+        "s3:GetMetricsConfiguration",
+        "s3:GetBucketNotification",
+        "s3:GetBucketObjectLockConfiguration",
+        "s3:GetBucketOwnershipControls",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetReplicationConfiguration",
+        "s3:GetBucketTagging",
+        "s3:GetBucketVersioning",
+        "s3:GetBucketWebsite",
+        "s3:GetBucketLocation",
+        "s3:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1"
+    },
+    {
+      "Sid": "NativeCloudFrontPolicies",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:CreateOriginAccessControl",
+        "cloudfront:GetOriginAccessControl",
+        "cloudfront:GetOriginAccessControlConfig",
+        "cloudfront:UpdateOriginAccessControl",
+        "cloudfront:DeleteOriginAccessControl",
+        "cloudfront:CreateCachePolicy",
+        "cloudfront:GetCachePolicy",
+        "cloudfront:GetCachePolicyConfig",
+        "cloudfront:UpdateCachePolicy",
+        "cloudfront:DeleteCachePolicy",
+        "cloudfront:CreateOriginRequestPolicy",
+        "cloudfront:GetOriginRequestPolicy",
+        "cloudfront:GetOriginRequestPolicyConfig",
+        "cloudfront:UpdateOriginRequestPolicy",
+        "cloudfront:DeleteOriginRequestPolicy",
+        "cloudfront:CreateFunction",
+        "cloudfront:GetFunction",
+        "cloudfront:DescribeFunction",
+        "cloudfront:UpdateFunction",
+        "cloudfront:PublishFunction",
+        "cloudfront:DeleteFunction",
+        "cloudfront:TagResource",
+        "cloudfront:UntagResource",
+        "cloudfront:ListTagsForResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

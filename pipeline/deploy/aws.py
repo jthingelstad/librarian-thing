@@ -15,6 +15,7 @@ import zipfile
 from pathlib import Path
 
 import boto3
+import yaml
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
@@ -141,7 +142,7 @@ def copy_lambda_source(build_dir: Path) -> None:
         shutil.copy2(LAMBDA_DIR / name, build_dir / name)
     run(["npm", "ci", "--omit=dev", "--no-audit", "--no-fund"], cwd=build_dir)
 
-    for name in ("auth", "chat", "eval", "shared", "prompts"):
+    for name in ("auth", "chat", "eval", "digest", "web", "shared", "prompts"):
         shutil.copytree(LAMBDA_DIST_DIR / name, build_dir / name, dirs_exist_ok=True)
 
 
@@ -332,6 +333,7 @@ def deploy_stack(
     log_level: str,
     auth_rate_limit_max: str,
     cloudformation_role_arn: str | None,
+    native_parameters: list[dict] | None = None,
 ) -> dict[str, str]:
     cloudformation = boto3.client("cloudformation")
     body = TEMPLATE.read_text(encoding="utf-8")
@@ -339,7 +341,8 @@ def deploy_stack(
     # Credentials are not parameters: the Lambdas read them from the
     # hand-kept weekly-thing-librarian-runtime secret, so a deploy carries none.
     try:
-        cloudformation.describe_stacks(StackName=stack_name)
+        existing = cloudformation.describe_stacks(StackName=stack_name)["Stacks"][0]
+        previous_keys = {p["ParameterKey"] for p in existing.get("Parameters", [])}
         exists = True
     except cloudformation.exceptions.ClientError:
         exists = False
@@ -364,6 +367,14 @@ def deploy_stack(
         {"ParameterKey": "StreamCustomDomainName", "ParameterValue": stream_custom_domain_name},
         {"ParameterKey": "StreamCertificateArn", "ParameterValue": stream_certificate_arn},
     ]
+    # Preserve every native setting on legacy code/corpus deployments. Omitting
+    # a parameter resets it to its template default and can disable compute.
+    supplied = {entry["ParameterKey"] for entry in native_parameters or []}
+    if exists:
+        for key in yaml.safe_load(body.split("Conditions:")[0])["Parameters"]:
+            if key.startswith("Native") and key not in supplied and key in previous_keys:
+                parameters.append({"ParameterKey": key, "UsePreviousValue": True})
+    parameters.extend(native_parameters or [])
     stack_options = {
         "TemplateBody": body,
         "Parameters": parameters,
@@ -522,6 +533,9 @@ def upload_librarian_corpora(args: argparse.Namespace, bucket: str) -> None:
 
 
 def main() -> int:
+    sys.path.insert(0, str(REPO))
+    from pipeline.deploy.native_release import prepare, promotion, run_owner
+
     load_dotenv()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--stack-name", default=STACK_NAME)
@@ -574,6 +588,16 @@ def main() -> int:
         "--stream-certificate-arn", default=os.environ.get("LIBRARIAN_STREAM_CERTIFICATE_ARN", "")
     )
     parser.add_argument("--skip-corpus-upload", action="store_true")
+    parser.add_argument(
+        "--native",
+        action="store_true",
+        help="Create native candidates; existing native releases update automatically",
+    )
+    parser.add_argument(
+        "--native-prepare-only",
+        action="store_true",
+        help="Keep the current live revision while preparing a candidate",
+    )
     parser.add_argument("--skip-bucket-bootstrap", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument(
         "--bootstrap-bucket",
@@ -606,6 +630,18 @@ def main() -> int:
     if not args.skip_corpus_upload:
         upload_librarian_corpora(args, bucket)
 
+    current = boto3.client("cloudformation").describe_stacks(StackName=args.stack_name)["Stacks"][0]
+    current_outputs = {o["OutputKey"]: o["OutputValue"] for o in current.get("Outputs", [])}
+    native_active = any(
+        p["ParameterKey"] == "NativeWebEnabled" and p["ParameterValue"] == "true"
+        for p in current["Parameters"]
+    )
+    pins = run_owner("snapshot", current_outputs, REPO) if native_active else {}
+    native = (
+        prepare(boto3.client("s3"), current_outputs, pins, BUILD_DIR, REPO, zip_build_dir)
+        if args.native or native_active
+        else None
+    )
     outputs = deploy_stack(
         stack_name=args.stack_name,
         bucket=bucket,
@@ -623,7 +659,34 @@ def main() -> int:
         log_level=args.log_level.upper(),
         auth_rate_limit_max=str(args.auth_rate_limit_max),
         cloudformation_role_arn=args.cloudformation_role_arn,
+        native_parameters=native,
     )
+    if native:
+        run_owner("grant", outputs, REPO)
+        run_owner("probe", outputs, REPO)
+        if not args.native_prepare_only:
+            # Preserve every non-routing parameter from the candidate deployment.
+            cloudformation = boto3.client("cloudformation")
+            promoted = promotion(outputs, pins)
+            supplied = {p["ParameterKey"] for p in promoted}
+            stack = cloudformation.describe_stacks(StackName=args.stack_name)["Stacks"][0]
+            parameters = [
+                {"ParameterKey": p["ParameterKey"], "UsePreviousValue": True}
+                for p in stack["Parameters"]
+                if p["ParameterKey"] not in supplied
+            ] + promoted
+            cloudformation.update_stack(
+                StackName=args.stack_name,
+                UsePreviousTemplate=True,
+                Parameters=parameters,
+                Capabilities=["CAPABILITY_IAM"],
+                RoleARN=args.cloudformation_role_arn,
+            )
+            cloudformation.get_waiter("stack_update_complete").wait(StackName=args.stack_name)
+            outputs = stack_outputs(cloudformation, args.stack_name)
+            actual = run_owner("snapshot", outputs, REPO)
+            if any(actual[p["ParameterKey"]] != p["ParameterValue"] for p in promoted):
+                raise RuntimeError("Native promotion readback differs")
     for key, value in sorted(outputs.items()):
         print(f"{key}={value}")
     configure_log_retention(args.stack_name)
