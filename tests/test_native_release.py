@@ -1,5 +1,6 @@
 """Native release selection and parameter-preservation regression gates."""
 
+import hashlib
 import importlib.util
 from pathlib import Path
 from unittest.mock import Mock
@@ -10,6 +11,29 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("native_aws_deploy", ROOT / "pipeline/deploy/aws.py")
 deploy = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(deploy)
+
+
+def test_small_template_uses_inline_body_without_upload(monkeypatch):
+    client = Mock()
+    monkeypatch.setattr(deploy.boto3, "client", lambda _name: client)
+    assert deploy.stack_template("a" * 51_200, "weekly-thing-librarian") == {
+        "TemplateBody": "a" * 51_200
+    }
+    client.put_object.assert_not_called()
+
+
+def test_large_template_uploads_exact_utf8_to_private_content_addressed_key(monkeypatch):
+    client = Mock()
+    monkeypatch.setattr(deploy.boto3, "client", lambda _name: client)
+    body = "é" * 25_601
+    data = body.encode("utf-8")
+    key = f"code/templates/{hashlib.sha256(data).hexdigest()}.yaml"
+    assert deploy.stack_template(body, "weekly-thing-librarian") == {
+        "TemplateURL": f"https://weekly-thing-librarian.s3.us-east-1.amazonaws.com/{key}"
+    }
+    client.put_object.assert_called_once_with(
+        Bucket="weekly-thing-librarian", Key=key, Body=data, ContentType="application/x-yaml"
+    )
 
 
 def test_promotion_keeps_the_previous_live_revision_protected():
@@ -57,6 +81,10 @@ def test_legacy_deploy_preserves_native_settings_and_accepts_first_bootstrap(mon
             cloudformation_role_arn="arn:example:role/cfn",
         )
         parameters = client.update_stack.call_args.kwargs["Parameters"]
+        assert "TemplateBody" not in client.update_stack.call_args.kwargs
+        assert client.update_stack.call_args.kwargs["TemplateURL"].startswith(
+            "https://weekly-thing-librarian.s3.us-east-1.amazonaws.com/code/templates/"
+        )
         native = [p for p in parameters if p["ParameterKey"].startswith("Native")]
         assert native == [
             {"ParameterKey": p["ParameterKey"], "UsePreviousValue": True} for p in previous

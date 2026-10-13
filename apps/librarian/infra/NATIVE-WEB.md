@@ -15,6 +15,11 @@ archive ceiling is one request per environment and five environments.
 
 ## Source and promotion
 
+The expanded CloudFormation template exceeds the inline API limit. The deployer
+uploads it under `code/templates/<content-sha256>.yaml` in the existing private
+artifact bucket and supplies its S3 URL; the execution role's existing artifact
+read grant covers it. Small templates still use the inline path.
+
 `NativeSourceBucket` retains versioned immutable code. It has no expiration
 rules. Never delete referenced code versions or remove Lambda's source read
 access. `native_release.py` records exact source VersionIds. A corpus change

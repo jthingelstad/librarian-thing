@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import re
 import shutil
@@ -315,6 +316,20 @@ def verify_private_bucket(bucket: str) -> None:
         raise RuntimeError("Librarian bucket must use AES256 encryption; repair as administrator")
 
 
+def stack_template(body: str, bucket: str) -> dict[str, str]:
+    """Use the private code bucket above CloudFormation's 51,200-byte inline limit."""
+    data = body.encode("utf-8")
+    if len(data) <= 51_200:
+        return {"TemplateBody": body}
+    key = f"code/templates/{hashlib.sha256(data).hexdigest()}.yaml"
+    boto3.client("s3").put_object(
+        Bucket=bucket, Key=key, Body=data, ContentType="application/x-yaml"
+    )
+    # Content-addressed templates use the existing artifact permissions. The
+    # CloudFormation execution role reads them; no public or presigned URL.
+    return {"TemplateURL": f"https://{bucket}.s3.us-east-1.amazonaws.com/{key}"}
+
+
 def deploy_stack(
     *,
     stack_name: str,
@@ -376,7 +391,7 @@ def deploy_stack(
                 parameters.append({"ParameterKey": key, "UsePreviousValue": True})
     parameters.extend(native_parameters or [])
     stack_options = {
-        "TemplateBody": body,
+        **stack_template(body, bucket),
         "Parameters": parameters,
         "Capabilities": ["CAPABILITY_IAM"],
         # The full set: UpdateStack replaces the stack's tags, dropping retired keys.
