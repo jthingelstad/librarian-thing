@@ -1732,6 +1732,16 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions: [!Ref LibrarianAlarmTopic]
 
+  LibrarianDigestHandledFailuresMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref LibrarianDigestLogGroup
+      FilterPattern: '"subscribe_digest_blocked_list_failed"'
+      MetricTransformations:
+        - MetricName: LibrarianSubscribeFailures
+          MetricNamespace: WeeklyThingLibrarian
+          MetricValue: "1"
+
 Outputs:
   NativeSourceBucketName:
     Value: !Ref NativeSourceBucket

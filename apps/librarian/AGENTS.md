@@ -12,17 +12,25 @@ The legacy HTTP doors remain the routing rollback until the natural watch closes
 Preserve native pin parameters on every deploy; `pipeline/deploy/native_release.py`
 and the sole endpoint-policy writer implement preparation and promotion.
 
-## Architecture: three Lambdas, one CloudFormation stack
+## Architecture: native HTTP and Event workers, one CloudFormation stack
 
 The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this monorepo is Python — that's intentional: the Lambda needs the AWS SDK v3 + response-streaming primitives, both of which are smoother in Node.
 
-Three Lambdas in `infra/cloudformation.yaml`:
+The native auth/archive servers call the same route functions as the legacy
+handlers described below. Auth allows eight requests per environment and two
+environments; archive starts at one request per environment and five environments.
+Both have the fixed Web Function memory allocation; their timeouts are 35s and
+300s. The evaluator stays an Event Function. `LibrarianDigestFunction`
+(`lambda/digest/handler.mts`) handles the existing daily subscription schedule.
+
+Legacy routing rollback and evaluator functions in `infra/cloudformation.yaml`:
 
 - **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/share/unshare/delete, the public GET /share/{token} snapshot, and profile updates. Memory 1024 MB, timeout 35s.
 - **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history; without a valid session it falls through to the guest lane - `handleGuestChat`: no persistence/memory/profile, client-supplied sanitized history, WEB_TOOLS only, IP-keyed rate limit + strict per-visitor and global daily quotas), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools plus `view_photo` — an MCP-only tool outside the registry (`shared/photo-view.mts`) that returns archive photos as image content blocks so MCP clients render them inline and get vision over them; allowlisted archive hosts only, max 3 per call, base64 never enters audit rows or the chat loop's evidence — per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
-All Lambdas share the same IAM role (`LibrarianFunctionRole`) and `shared/` helpers. The two deployment artifacts also include the `prompts/` directory.
+All functions share the same IAM role (`LibrarianFunctionRole`) and `shared/`
+helpers. Both Event and native packages include the `prompts/` directory.
 
 ### The `/chat` agent loop
 
@@ -70,8 +78,8 @@ The site's form calls this before anything reaches Buttondown. Since
   `needs_jamie`** with a sentence telling the reader to email Jamie — never a
   502, which made the site re-post the raw form to Buttondown and its
   dead-end page (Patrick, 2026-09-20).
-- **The morning digest.** `LibrarianSubscribeDigestRule` invokes this Lambda
-  daily at 12:00 UTC with `{task: "subscribe_digest"}`; it mails Jamie every
+- **The morning digest.** `LibrarianSubscribeDigestRule` runs
+  daily at 12:00 UTC, targeting the separate `LibrarianDigestFunction`; it mails Jamie every
   attempt of the last day that did not end on the list, plus subscribers the
   firewall accepted-as-blocked, or nothing on a clean day
   (`shared/subscribe-digest.mts`, via JMAP from the magic-link sender).
@@ -117,7 +125,10 @@ CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step
 
 ## Tests
 
-`lambda/tests/*.test.mjs` — Node tests for shared modules (`session`, `conversations`, `attribution`, FAQ search, the Anthropic tool binding and stream wrapper, etc.). No end-to-end handler invocation tests — handlers depend on Anthropic + Bedrock + S3 + DynamoDB mocks that don't exist yet.
+`lambda/tests/*.test.mjs` — Node tests for shared modules and native HTTP handling.
+The native core integration tests call the actual auth/archive route functions
+with SDK fakes; HTTP tests cover cookies, query strings, contract/refusal headers,
+SSE cancellation and request isolation without reader records or model traffic.
 
 ```bash
 npm --prefix apps/librarian/lambda test
