@@ -209,6 +209,7 @@ jobs:
           if has_change \
             '^apps/librarian/' \
             '^pipeline/deploy/aws\.py$' \
+            '^pipeline/deploy/native_release\.py$' \
             '^pipeline/deploy/iam/' \
             '^.github/workflows/deploy\.yml$'; then
             lambda=true

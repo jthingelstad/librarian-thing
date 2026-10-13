@@ -48,7 +48,8 @@
         "s3:PutBucketTagging",
         "s3:GetBucketTagging",
         "s3:ListBucket",
-        "s3:GetBucketLocation"
+        "s3:GetBucketLocation",
+        "s3:GetBucketAcl"
       ],
       "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1"
     },
