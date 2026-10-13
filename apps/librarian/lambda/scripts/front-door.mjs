@@ -7,7 +7,35 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 const ID = 'E18I2CIBERFMB7';
-const digest = (config) => createHash('sha256').update(JSON.stringify(config)).digest('hex');
+const canonical = (value) =>
+  Array.isArray(value)
+    ? value.map(canonical)
+    : value && typeof value === 'object'
+      ? Object.fromEntries(
+          Object.keys(value)
+            .sort()
+            .map((key) => [key, canonical(value[key])])
+        )
+      : value;
+export const configurationHash = (config) =>
+  createHash('sha256')
+    .update(JSON.stringify(canonical(config)))
+    .digest('hex');
+const digest = configurationHash;
+export function verifyPriorConfig(prior, current, outputs) {
+  if (!prior) return;
+  if (prior.appliedHash) {
+    const hash =
+      prior.hashFormat === 'canonical-json-v1'
+        ? digest(current)
+        : createHash('sha256').update(JSON.stringify(current)).digest('hex');
+    if (hash !== prior.appliedHash) throw new Error('Distribution changed outside this release; refusing');
+  } else {
+    const intended = prior.mode === 'rollback' ? prior.original : nativeConfig(prior.original, outputs, prior.mode);
+    if (digest(current) !== digest(intended))
+      throw new Error('Unverified prior update differs from its intent; refusing');
+  }
+}
 export function nativeConfig(config, outputs, mode) {
   const next = structuredClone(config);
   if (!Array.isArray(next.Aliases.Items) || !next.Aliases.Items.some((alias) => alias === 'librarian.thingelstad.com'))
@@ -50,15 +78,15 @@ async function main() {
   mkdirSync(receiptDir, { recursive: true, mode: 0o700 });
   const path = resolve(receiptDir, 'librarian-distribution.json');
   const prior = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
-  if (prior && prior.appliedHash && digest(current.DistributionConfig) !== prior.appliedHash)
-    throw new Error('Distribution changed outside this release; refusing');
   if (!prior && mode === 'rollback') throw new Error('No owned rollback receipt');
   const outputs = JSON.parse(readFileSync(outputFile, 'utf8'));
+  verifyPriorConfig(prior, current.DistributionConfig, outputs);
   const desired = mode === 'rollback' ? prior.original : nativeConfig(current.DistributionConfig, outputs, mode);
   const receipt = {
     original: prior?.original || current.DistributionConfig,
     priorETag: current.ETag,
     mode,
+    hashFormat: 'canonical-json-v1',
     intendedHash: digest(desired)
   };
   writeFileSync(path, JSON.stringify(receipt), { mode: 0o600 });
