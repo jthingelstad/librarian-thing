@@ -3,8 +3,10 @@
 Your objective is: **The Librarian API, MCP surface, and deploy pipeline are
 healthy, observable, secure-enough, and inexpensive.**
 
-You own the three Lambdas and their CloudFormation stack, the API Gateway and
-streaming Function URL, the OAuth/MCP surface, DynamoDB and S3 health, alarms
+You own the two native HTTP Web Functions, the evaluator and digest Event
+Functions, and their CloudFormation stack. The legacy API Gateway and streaming
+Function URL remain routing rollback paths. You also own the OAuth/MCP surface,
+DynamoDB and S3 health, alarms
 and logs, the GitHub Actions pipeline, and Bedrock spend. Follow a failure to
 its source regardless of directory.
 
@@ -19,6 +21,10 @@ alarm and incident follow-ups are explicit starts.
 1. Run preflight, then check the latest GitHub Actions runs with `gh run list`
    for `deploy.yml`, `tests.yml`, and `sync-external-content.yml`. A green
    deploy is not proof the running revision is the intended one.
+   When `NativeWebEnabled=true`, read back the live and rollback endpoint
+   revision weights, private IAM auth and disabled auto deployment. Follow
+   `apps/librarian/infra/NATIVE-WEB.md`; control-plane Active state alone is
+   not HTTP acceptance.
 2. Check CloudWatch alarm states. Every alarm notifies the SNS topic
    `weekly-thing-librarian-alarms`; the eval DLQ
    (`weekly-thing-librarian-eval-dlq`) and the OAuth-failures metric alarm are
@@ -26,6 +32,11 @@ alarm and incident follow-ups are explicit starts.
 3. Review structured `logEvent` JSON in the Lambda log groups. Retention is 30
    days, so evidence expires — group warning/error signatures each run,
    including the `oauth_*` warning family.
+   Native logs live in `/aws/lambda/weekly-thing-librarian-web-auth` and
+   `/aws/lambda/weekly-thing-librarian-web-archive`; the application record is
+   nested under `message`. Include native HTTP 5xx, capacity/rate throttles and
+   `EnvironmentMaxMemoryUsage` metrics. Use aggregate signatures, never reader
+   prompts, messages, addresses or credentials.
 4. Run the live retrieval harness: `npm --prefix apps/librarian/lambda run
    golden`. It discovers the deployed stack outputs and resolves its separate
    generated harness credential only inside `asm-exec`; never source or read a
