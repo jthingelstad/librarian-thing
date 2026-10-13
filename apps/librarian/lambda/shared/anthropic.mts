@@ -190,21 +190,25 @@ function narrationText(message: { content?: readonly unknown[] }) {
 // text and tool_use blocks) comes back at the end, to be passed back unchanged.
 export async function streamMessage(
   params: Parameters<Anthropic['beta']['messages']['stream']>[0],
-  options: { onTextDelta?: (delta: string) => void; client?: Pick<Anthropic, 'beta'> } = {}
+  options: {
+    onTextDelta?: (delta: string) => void | Promise<void>;
+    signal?: AbortSignal;
+    client?: Pick<Anthropic, 'beta'>;
+  } = {}
 ): Promise<StreamedTurn> {
-  const stream = (options.client || anthropic()).beta.messages.stream(params);
+  const stream = (options.client || anthropic()).beta.messages.stream(params, { signal: options.signal });
   const onTextDelta = options.onTextDelta;
   if (onTextDelta) {
     let blockIndex = -1;
-    stream.on('streamEvent', (event) => {
-      if (event.type !== 'content_block_delta') return;
+    for await (const event of stream) {
+      if (event.type !== 'content_block_delta') continue;
       const delta = event.delta;
       const piece = delta.type === 'text_delta' ? delta.text : delta.type === 'thinking_delta' ? delta.thinking : '';
-      if (!piece) return;
-      if (blockIndex >= 0 && event.index !== blockIndex) onTextDelta('\n\n');
+      if (!piece) continue;
+      if (blockIndex >= 0 && event.index !== blockIndex) await onTextDelta('\n\n');
       blockIndex = event.index;
-      onTextDelta(piece);
-    });
+      await onTextDelta(piece);
+    }
   }
   const message = await stream.finalMessage();
   return {

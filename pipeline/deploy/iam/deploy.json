@@ -99,6 +99,52 @@
         "logs:TagLogGroup"
       ],
       "Resource": "arn:aws:logs:us-east-1:999153317627:log-group:/aws/lambda/weekly-thing-librarian-*"
+    },
+    {
+      "Sid": "NativeSourceObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1/native/*"
+    },
+    {
+      "Sid": "NativeSourceInspect",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketVersioning"
+      ],
+      "Resource": "arn:aws:s3:::weekly-thing-librarian-web-source-999153317627-us-east-1"
+    },
+    {
+      "Sid": "NativePolicyOwner",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetResourcePolicy",
+        "lambda:PutResourcePolicy",
+        "lambda:GetWebFunctionEndpoint",
+        "lambda:GetWebFunctionRevision"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth/*",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive/*"
+      ]
+    },
+    {
+      "Sid": "NativeHealthProbe",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeWebFunctionEndpoint"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth/endpoint/candidate",
+        "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive/endpoint/candidate"
+      ]
     }
   ]
 }

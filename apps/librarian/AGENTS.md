@@ -2,6 +2,16 @@
 
 Operational notes for the Thingy Lambda stack. Human-facing overview lives in [`README.md`](README.md). The full runtime guide (env vars, IAM cleanup plan, retrieval architecture in depth, Tinylytics events, deployment checklist) is at [`../../reference/librarian.md`](../../reference/librarian.md). This file is the "what to keep in mind when editing here" memory.
 
+## Native HTTP migration
+
+The native release model is documented in [`infra/NATIVE-WEB.md`](infra/NATIVE-WEB.md).
+Two Node HTTP servers (`lambda/web/`) serve the existing auth/archive routes;
+`NativeWebEnabled` creates their private candidates, live endpoints and protected
+rollback revisions. The evaluator and the separate daily digest stay event-driven.
+The legacy HTTP doors remain the routing rollback until the natural watch closes.
+Preserve native pin parameters on every deploy; `pipeline/deploy/native_release.py`
+and the sole endpoint-policy writer implement preparation and promotion.
+
 ## Architecture: three Lambdas, one CloudFormation stack
 
 The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this monorepo is Python — that's intentional: the Lambda needs the AWS SDK v3 + response-streaming primitives, both of which are smoother in Node.

@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import type Anthropic from '@anthropic-ai/sdk';
+import { once } from 'node:events';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import { agentModel, dynamodb, embeddingModel, fastModel, premiumModel, rerankModel } from '../shared/aws-clients.mjs';
@@ -113,7 +114,10 @@ const RATE_LIMIT_MAX = 20;
 type JsonRecord = Record<string, unknown>;
 type Claims = Record<string, unknown>;
 type ChatHistory = Parameters<typeof conversationContext>[0];
-type ResponseStream = Writable;
+type ResponseStream = Writable & {
+  start?: (status: number, headers: Record<string, string>) => void;
+  signal?: AbortSignal;
+};
 type PreflightDecision = ReturnType<typeof normalizePreflightDecision>;
 
 interface AgentStreamOptions {
@@ -313,9 +317,10 @@ async function resolveRequestedConversationMode({
   return { ok: true, mode, entitlements, conversation: existing };
 }
 
-function writeSse(stream: ResponseStream, event: string, data: unknown) {
-  stream.write(`event: ${event}\n`);
-  stream.write(`data: ${JSON.stringify(data)}\n\n`);
+async function writeSse(stream: ResponseStream, event: string, data: unknown) {
+  if (stream.destroyed || stream.writableEnded) return;
+  if (!stream.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`))
+    await once(stream, 'drain', { signal: stream.signal });
 }
 
 function activityCommentaryText(value: unknown) {
@@ -543,7 +548,8 @@ async function streamAgentAnswer(
   const modelId = String(options.model || agentModel());
   const readerContext = String(options.readerContext || '').trim();
   const agentQuestion = agentQuestionForPreflight(question, options.preflight);
-  const shouldStopWriting = () => Boolean(options.deadlineExceeded?.());
+  const shouldStopWriting = () =>
+    responseStream.destroyed || Boolean(responseStream.signal?.aborted || options.deadlineExceeded?.());
   // Append-only within the turn: the assistant content goes back exactly as
   // it arrived, thinking blocks included, because the 5.5 models reject a
   // thinking block whose earlier conversation has changed.
@@ -616,10 +622,11 @@ async function streamAgentAnswer(
         ...agentInferenceConfig(modelId)
       },
       {
+        signal: responseStream.signal,
         onTextDelta: streamAnswerDeltas
-          ? (delta) => {
+          ? async (delta) => {
               if (shouldStopWriting()) return;
-              writeSse(responseStream, 'answer_delta', { delta });
+              await writeSse(responseStream, 'answer_delta', { delta });
             }
           : undefined
       }
@@ -642,7 +649,7 @@ async function streamAgentAnswer(
     // break the next turn's text glues straight onto its last sentence
     // ("...for RSS content.Great - WT48 has..."). Close the paragraph.
     if (streamAnswerDeltas && result.narration && !shouldStopWriting()) {
-      writeSse(responseStream, 'answer_delta', { delta: '\n\n' });
+      await writeSse(responseStream, 'answer_delta', { delta: '\n\n' });
     }
     // When the interstitial prose just streamed into the ANSWER as
     // deltas, repeating it as activity-row commentary shows the same
@@ -659,7 +666,7 @@ async function streamAgentAnswer(
       const toolNote = toolActivityCommentary(toolName, toolInput);
       const visibleNote = [index === 0 ? commentary : '', toolNote].filter(Boolean).join(' ');
       if (!shouldStopWriting()) {
-        writeSse(responseStream, 'status', {
+        await writeSse(responseStream, 'status', {
           kind: 'tool',
           tool_name: toolName,
           message: `Checking ${toolTitle(toolName)}...`,
@@ -716,7 +723,7 @@ async function streamAgentAnswer(
         // Surface the failure as its own activity row (the client styles
         // ✗-prefixed lines in the error tone, like a failed command).
         if (!shouldStopWriting()) {
-          writeSse(responseStream, 'status', {
+          await writeSse(responseStream, 'status', {
             kind: 'tool',
             tool_name: toolName,
             message: `${toolTitle(toolName)} didn't answer - trying another door.`
@@ -762,7 +769,7 @@ async function streamAgentAnswer(
   if (stopReason === 'max_tokens' && answer) {
     answer = `${answer}\n\n*This answer hit its length limit - ask me to continue and I will pick up where it cut off.*`;
   }
-  if (!shouldStopWriting()) writeSse(responseStream, 'answer', { answer });
+  if (!shouldStopWriting()) await writeSse(responseStream, 'answer', { answer });
   const citations = prioritizeCitationsForAnswer(
     collectToolCitations(toolResults),
     answer,
@@ -842,7 +849,7 @@ function turnReceipt(result: { metrics?: Record<string, unknown>; toolTrace?: { 
   };
 }
 function streamFromResponse(responseStream: ResponseStream, _event: LibrarianHttpEvent, statusCode: number) {
-  return awslambda.HttpResponseStream.from(responseStream, {
+  return responseWithHeaders(responseStream, {
     statusCode,
     headers: {
       'content-type': 'text/event-stream; charset=utf-8',
@@ -1321,36 +1328,44 @@ async function handleGuestWelcome({
   ) => void;
 }) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
-    rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
+    await rejectStream(
+      401,
+      'session_invalid',
+      'That needs a signed-in reader - sign in free at thingy.thingelstad.com.'
+    );
     return;
   }
   // Same origin gate as guest chat: direct Function-URL callers can forge
   // X-Forwarded-For to mint unlimited fresh rate-limit identities, and on
   // cache-miss days each call runs a paid retrieval (audit F2).
   if (!guestOriginOk(event)) {
-    rejectStream(401, 'guest_origin_required', 'Please use thingy.thingelstad.com to ask Thingy as a guest.');
+    await rejectStream(401, 'guest_origin_required', 'Please use thingy.thingelstad.com to ask Thingy as a guest.');
     return;
   }
   const ip = clientSourceIp(event);
   const guestId = ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 32) : '';
   if (!guestId || !(await checkRateLimit(`guestwelcome#${guestId}`, GUEST_RATE_LIMIT_MAX))) {
-    rejectStream(429, 'guest_rate_limited', 'Try again in a bit.');
+    await rejectStream(429, 'guest_rate_limited', 'Try again in a bit.');
     return;
   }
   const welcomeSet = await loadOrGenerateGuestWelcomeSet();
-  writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION, guest: true });
+  await writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION, guest: true });
   if (welcomeSet.suggestions.length || welcomeSet.greeting_lines.length) {
-    writeSse(stream, 'suggestions', {
+    await writeSse(stream, 'suggestions', {
       suggestions: welcomeSet.suggestions,
       greeting_lines: welcomeSet.greeting_lines
     });
   }
-  writeSse(stream, 'done', { request_id: requestId, guest: true });
+  await writeSse(stream, 'done', { request_id: requestId, guest: true });
 }
 
 async function handleGuestChat({ event, body, stream, requestId, start, rejectStream }: GuestChatContext) {
   if (String(process.env.THINGY_GUEST_CHAT || 'on').toLowerCase() === 'off') {
-    rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
+    await rejectStream(
+      401,
+      'session_invalid',
+      'That needs a signed-in reader - sign in free at thingy.thingelstad.com.'
+    );
     return;
   }
   // Guests only exist inside the web app; every real browser reaches us
@@ -1358,7 +1373,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   // Direct-to-Lambda scripted traffic (the 2026-09-02 fleet) fails here
   // before any quota or rate-limit spend.
   if (!guestOriginOk(event)) {
-    rejectStream(
+    await rejectStream(
       401,
       'guest_origin_required',
       'Please use thingy.thingelstad.com to ask Thingy as a guest.',
@@ -1369,21 +1384,21 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   }
   const question = String(body.message || '').trim();
   if (!question) {
-    rejectStream(400, 'empty_question', 'Ask me something first.');
+    await rejectStream(400, 'empty_question', 'Ask me something first.');
     return;
   }
   if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
-    rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
+    await rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
     return;
   }
   const ip = clientSourceIp(event);
   if (!ip) {
-    rejectStream(401, 'guest_no_ip', 'Please sign in at thingy.thingelstad.com to use Thingy.');
+    await rejectStream(401, 'guest_no_ip', 'Please sign in at thingy.thingelstad.com to use Thingy.');
     return;
   }
   const guestId = crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 32);
   if (!(await checkRateLimit(`guestchat#${guestId}`, GUEST_RATE_LIMIT_MAX))) {
-    rejectStream(
+    await rejectStream(
       429,
       'guest_rate_limited',
       'Guest questions are moving too fast. Try again in a bit, or sign in.',
@@ -1399,7 +1414,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   // breaker doesn't also burn one of their three questions.
   const perVisitor = await consumeDailyQuotaStrict('guest', guestId, guestDailyQuota());
   if (!perVisitor.allowed) {
-    rejectStream(
+    await rejectStream(
       429,
       'guest_daily_quota',
       "You've used today's guest questions. Sign in - free for Weekly Thing readers - to keep going.",
@@ -1411,7 +1426,7 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   const globalPool = await consumeDailyQuotaStrict('guest', 'global', guestGlobalDailyQuota());
   if (!globalPool.allowed) {
     await refundDailyQuota('guest', guestId);
-    rejectStream(
+    await rejectStream(
       429,
       'guest_global_quota_exhausted',
       'Guest questions are done for today. Sign in - free for Weekly Thing readers - to keep asking.',
@@ -1453,20 +1468,20 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   ]
     .filter(Boolean)
     .join(' ');
-  writeSse(stream, 'meta', {
+  await writeSse(stream, 'meta', {
     request_id: requestId,
     mode: 'thingy',
     guest: true,
     guest_remaining: guestRemaining,
     contract_version: LIBRARIAN_CONTRACT_VERSION
   });
-  writeSse(stream, 'status', { message: 'Reading your question...' });
+  await writeSse(stream, 'status', { message: 'Reading your question...' });
   const preflight = await evaluatePromptPreflight(question, scope, history, { readerContext, mode: 'thingy' });
   if (preflight.action === 'direct') {
     preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
-    writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
-    writeSse(stream, 'citations', { citations: [] });
-    writeSse(stream, 'done', {
+    await writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
+    await writeSse(stream, 'citations', { citations: [] });
+    await writeSse(stream, 'done', {
       request_id: requestId,
       mode: 'thingy',
       guest: true,
@@ -1483,13 +1498,13 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     });
     return;
   }
-  writeSse(stream, 'status', { message: 'Investigating the archive...' });
+  await writeSse(stream, 'status', { message: 'Investigating the archive...' });
   let deadlineExceeded = false;
   const deadlineMs = chatDeadlineMs();
-  const deadlineTimer = setTimeout(() => {
+  const deadlineTimer = setTimeout(async () => {
     deadlineExceeded = true;
     try {
-      writeSse(stream, 'error', {
+      await writeSse(stream, 'error', {
         error: 'Thingy got lost in the stacks on that one. Try a narrower angle.',
         request_id: requestId
       });
@@ -1520,8 +1535,8 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
     clearTimeout(deadlineTimer);
   }
   if (deadlineExceeded) return;
-  writeSse(stream, 'citations', { citations: result.citations });
-  writeSse(stream, 'done', {
+  await writeSse(stream, 'citations', { citations: result.citations });
+  await writeSse(stream, 'done', {
     request_id: requestId,
     mode: 'thingy',
     guest: true,
@@ -1538,7 +1553,11 @@ async function handleGuestChat({ event, body, stream, requestId, start, rejectSt
   });
 }
 
-export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (event, responseStream, context) => {
+export async function handleStreamRequest(
+  event: LibrarianHttpEvent,
+  responseStream: ResponseStream,
+  context: { awsRequestId?: string } = {}
+) {
   const start = performance.now();
   const requestId = context?.awsRequestId || event.requestContext?.requestId || crypto.randomUUID();
   const { method, path } = methodAndPath(event);
@@ -1756,7 +1775,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
   // CloudWatch (the chat_request_rejected metric filter matches them).
   let outcomeStatus = isStreamRoute ? 200 : 404;
   let outcomeReason = '';
-  const rejectStream = (
+  const rejectStream = async (
     statusCode: number,
     reason: string,
     message: unknown,
@@ -1772,11 +1791,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       reason,
       ...logFields
     });
-    writeSse(stream, 'error', { error: message, request_id: requestId, ...extra });
+    await writeSse(stream, 'error', { error: message, request_id: requestId, ...extra });
   };
   try {
     if (!isStreamRoute) {
-      rejectStream(404, 'not_found', 'Not found.');
+      await rejectStream(404, 'not_found', 'Not found.');
       return;
     }
 
@@ -1794,7 +1813,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         await handleGuestWelcome({ event, stream, requestId, rejectStream });
         return;
       }
-      rejectStream(401, 'session_invalid', 'That needs a signed-in reader - sign in free at thingy.thingelstad.com.');
+      await rejectStream(
+        401,
+        'session_invalid',
+        'That needs a signed-in reader - sign in free at thingy.thingelstad.com.'
+      );
       return;
     }
     subscriberHash = String(payload.sub || '');
@@ -1807,13 +1830,13 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         conversationId: ''
       });
       if (!modeAccess.ok) {
-        rejectStream(403, 'mode_denied', modeAccess.error);
+        await rejectStream(403, 'mode_denied', modeAccess.error);
         return;
       }
       if (
         !(await checkRateLimit(`welcome#${String(payload.sub)}`, Number(process.env.RATE_LIMIT_MAX || RATE_LIMIT_MAX)))
       ) {
-        rejectStream(
+        await rejectStream(
           429,
           'rate_limited',
           "That's a lot of questions in one hour - give Thingy a few minutes to catch up."
@@ -1826,11 +1849,11 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       // per-call model cost on the hit path), and answers instantly from
       // the precomputed set. Post-turn refreshes keep the set current; the
       // inline generation below only runs for a reader with no fresh set.
-      writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
+      await writeSse(stream, 'meta', { request_id: requestId, contract_version: LIBRARIAN_CONTRACT_VERSION });
       let welcomeSet = await readReaderWelcomeSet(subscriberHash);
       let welcomeSource = 'stored';
       if (!welcomeSetFresh(welcomeSet)) {
-        writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
+        await writeSse(stream, 'status', { message: 'Thingy is getting oriented...' });
         welcomeSource = 'inline';
         try {
           welcomeSet = await refreshReaderWelcomeSet({ subscriberHash, force: true });
@@ -1840,12 +1863,12 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         }
       }
       if (welcomeSet && (welcomeSet.suggestions.length || welcomeSet.greeting_lines.length)) {
-        writeSse(stream, 'suggestions', {
+        await writeSse(stream, 'suggestions', {
           suggestions: welcomeSet.suggestions,
           greeting_lines: welcomeSet.greeting_lines
         });
       }
-      writeSse(stream, 'done', { request_id: requestId, mode: modeAccess.mode });
+      await writeSse(stream, 'done', { request_id: requestId, mode: modeAccess.mode });
       logEvent('info', 'welcome_completed', {
         subscriber_hash: subscriberHash,
         mode: modeAccess.mode,
@@ -1884,7 +1907,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       conversationId: requestedConversationId
     });
     if (!modeAccess.ok) {
-      rejectStream(403, 'mode_denied', modeAccess.error);
+      await rejectStream(403, 'mode_denied', modeAccess.error);
       return;
     }
     let history = await loadUserConversationHistory({
@@ -1924,15 +1947,15 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       }
     }
     if (!question) {
-      rejectStream(400, 'empty_question', 'Ask me something first.');
+      await rejectStream(400, 'empty_question', 'Ask me something first.');
       return;
     }
     if (question.length > Number(process.env.MAX_QUESTION_CHARS || '1200')) {
-      rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
+      await rejectStream(400, 'question_too_long', "That's a long one - trim it down a bit.");
       return;
     }
     if (!(await checkRateLimit(String(payload.sub)))) {
-      rejectStream(
+      await rejectStream(
         429,
         'rate_limited',
         "That's a lot of questions in one hour - give Thingy a few minutes to catch up."
@@ -1948,7 +1971,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       );
       const quota = await consumeDailyQuota('chat', subscriberHash, chatMax);
       if (!quota.allowed) {
-        rejectStream(
+        await rejectStream(
           429,
           'daily_quota_exceeded',
           "You've reached today's conversation limit. It resets at midnight UTC - see you tomorrow!"
@@ -1971,13 +1994,13 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       readerContext = readerContextPrompt(body.client_context, effectiveUserProfile);
     }
 
-    writeSse(stream, 'meta', {
+    await writeSse(stream, 'meta', {
       request_id: requestId,
       conversation_id: conversationId,
       mode: modeAccess.mode,
       contract_version: LIBRARIAN_CONTRACT_VERSION
     });
-    writeSse(stream, 'status', { message: 'Reading your question...' });
+    await writeSse(stream, 'status', { message: 'Reading your question...' });
     const preflight = await evaluatePromptPreflight(question, scope, history, {
       readerContext,
       mode: modeAccess.mode
@@ -1985,8 +2008,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     if (preflight.action === 'direct') {
       preflight.direct_answer = sanitizeAnswerProse(preflight.direct_answer);
       const citations: Citation[] = [];
-      writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
-      writeSse(stream, 'citations', { citations });
+      await writeSse(stream, 'answer_delta', { delta: preflight.direct_answer });
+      await writeSse(stream, 'citations', { citations });
       const conversation = await recordUserConversationTurn({
         dynamodb,
         tableName: process.env.TABLE_NAME,
@@ -2012,7 +2035,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         },
         logEvent
       });
-      writeSse(stream, 'done', {
+      await writeSse(stream, 'done', {
         request_id: requestId,
         conversation_id: conversationId,
         // Persistence failure returns null; the contract types conversation
@@ -2040,14 +2063,14 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       return;
     }
 
-    writeSse(stream, 'status', { message: 'Investigating the archive...' });
+    await writeSse(stream, 'status', { message: 'Investigating the archive...' });
     let deadlineExceeded = false;
     const deadlineMs = chatDeadlineMs();
     const slowNoticeMs = Math.min(chatSlowNoticeMs(), Math.max(1000, deadlineMs - 1000));
-    const slowNoticeTimer = setTimeout(() => {
+    const slowNoticeTimer = setTimeout(async () => {
       if (deadlineExceeded) return;
       try {
-        writeSse(stream, 'status', {
+        await writeSse(stream, 'status', {
           message: 'Still digging - this one goes deep...'
         });
       } catch {}
@@ -2060,10 +2083,10 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         deadline_ms: deadlineMs
       });
     }, slowNoticeMs);
-    const deadlineTimer = setTimeout(() => {
+    const deadlineTimer = setTimeout(async () => {
       deadlineExceeded = true;
       try {
-        writeSse(stream, 'error', {
+        await writeSse(stream, 'error', {
           error: 'Thingy got lost in the stacks on that one. Try a narrower angle.',
           request_id: requestId
         });
@@ -2148,8 +2171,8 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
       metrics: result.metrics,
       logEvent
     });
-    writeSse(stream, 'citations', { citations });
-    writeSse(stream, 'done', {
+    await writeSse(stream, 'citations', { citations });
+    await writeSse(stream, 'done', {
       request_id: requestId,
       conversation_id: conversationId,
       ...(conversation ? { conversation } : {}),
@@ -2183,7 +2206,7 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
         subscriber_hash: subscriberHash
       })
     );
-    writeSse(stream, 'error', {
+    await writeSse(stream, 'error', {
       error: "Thingy couldn't put an answer together just now. Ask again.",
       request_id: requestId
     });
@@ -2196,4 +2219,17 @@ export const handler = awslambda.streamifyResponse<LibrarianHttpEvent>(async (ev
     });
     stream.end();
   }
-});
+}
+
+function responseWithHeaders(
+  stream: ResponseStream,
+  metadata: { statusCode: number; headers: Record<string, string> }
+): ResponseStream {
+  if (stream.start) {
+    stream.start(metadata.statusCode, metadata.headers);
+    return stream;
+  }
+  return awslambda.HttpResponseStream.from(stream, metadata);
+}
+export const handler =
+  typeof awslambda === 'undefined' ? handleStreamRequest : awslambda.streamifyResponse(handleStreamRequest);

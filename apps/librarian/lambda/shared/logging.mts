@@ -15,15 +15,15 @@ export function logEvent(
   fields: LogFields = {},
   service = process.env.LIBRARIAN_SERVICE_NAME || 'weekly-thing-librarian'
 ) {
-  console.log(
-    JSON.stringify({
-      level,
-      message,
-      service,
-      timestamp: Math.floor(Date.now() / 1000),
-      ...Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined && value !== null))
-    })
-  );
+  const record = {
+    level,
+    message,
+    service,
+    timestamp: Math.floor(Date.now() / 1000),
+    ...Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined && value !== null))
+  };
+  if (process.env.LIBRARIAN_NATIVE_HTTP === '1') console.info(record);
+  else console.log(JSON.stringify(record));
 }
 
 function sanitizeErrorMessage(message: unknown) {

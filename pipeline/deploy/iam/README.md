@@ -17,6 +17,16 @@ acceptance. Commit and push first: GitHub deploys remote `main`, never uncommitt
 local files. Direct `uv run --locked python pipeline/deploy/aws.py` remains an
 exceptional local operation requiring valid AWS credentials.
 
+## Native HTTP grants
+
+`native-cloudformation.json` is installed as `WeeklyThingLibrarianNativeCloudFormation`
+on the existing CloudFormation role. It contains native compute, retained source
+bucket, native log-group and edge-policy lifecycle only. It is separate because
+adding it to the existing inline policies exceeds the role's 10 KiB limit.
+The OIDC policy adds immutable-source upload, the sole endpoint-policy writer and
+candidate health invocation. Existing stateful resources and trust stay unchanged.
+See `apps/librarian/infra/NATIVE-WEB.md` for release ordering and rollback.
+
 ## Authority
 
 - `deploy.json`: private `code/*` and four corpus/graph objects, bucket-security

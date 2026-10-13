@@ -84,7 +84,15 @@ def test_deploy_cannot_manage_iam_or_bucket_security():
     actions = {action for statement in statements for action in statement["Action"]}
     assert {action for action in actions if action.startswith("iam:")} == {"iam:PassRole"}
     assert not any(action.startswith("dynamodb:") for action in actions)
-    assert not any(action.startswith("lambda:") for action in actions)
+    assert {action for action in actions if action.startswith("lambda:")} == {
+        "lambda:GetResourcePolicy",
+        "lambda:PutResourcePolicy",
+        "lambda:GetWebFunctionEndpoint",
+        "lambda:InvokeWebFunctionEndpoint",
+        "lambda:GetWebFunctionRevision",
+    }
+    native = next(statement for statement in statements if statement["Sid"] == "NativePolicyOwner")
+    assert all("web-function/weekly-thing-librarian-web-" in arn for arn in native["Resource"])
     assert not any(action.startswith("s3:PutBucket") for action in actions)
     assert not any(action.endswith("*") for action in actions)
     update = next(
