@@ -128,11 +128,21 @@ export function methodAndPath(event?: LibrarianHttpEvent | null) {
 
 export function eventSummary(event?: LibrarianHttpEvent | null, context?: LibrarianRequestContext | null) {
   const { method, path } = methodAndPath(event);
+  const headers = normalizeHeaders(event?.headers || {});
   return {
     request_id: context?.awsRequestId || event?.requestId || event?.requestContext?.requestId || '',
     method,
     path,
-    origin: normalizeHeaders(event?.headers || {}).origin
+    origin: headers.origin,
+    // Identify lingering uptime probes during HTTP-door retirement. Keep this
+    // bounded and health-only; no reader request headers enter application logs.
+    ...(method === 'GET' && path === '/health'
+      ? {
+          health_user_agent: String(headers['user-agent'] || '')
+            .replace(/[\r\n]/g, ' ')
+            .slice(0, 200)
+        }
+      : {})
   };
 }
 

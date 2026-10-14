@@ -1,6 +1,23 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { clientSourceIp } from '../dist/shared/http.mjs';
+import { clientSourceIp, eventSummary } from '../dist/shared/http.mjs';
+
+test('health probes expose only a bounded user agent for caller migration', () => {
+  const headers = { 'User-Agent': 'Uptime monitor\r\n' + 'x'.repeat(250), Authorization: 'private' };
+  const summary = eventSummary({ headers, rawPath: '/health', requestContext: { http: { method: 'GET' } } });
+  assert.equal(summary.health_user_agent.length, 200);
+  assert.ok(summary.health_user_agent.startsWith('Uptime monitor  '));
+  assert.ok(!JSON.stringify(summary).includes('private'));
+  for (const [method, path] of [
+    ['POST', '/health'],
+    ['POST', '/auth'],
+    ['GET', '/share/token']
+  ]) {
+    assert.ok(
+      !Object.hasOwn(eventSummary({ headers, rawPath: path, requestContext: { http: { method } } }), 'health_user_agent')
+    );
+  }
+});
 
 // R2-04: behind CloudFront the connection sourceIp is the POP egress
 // address; the viewer is the LAST X-Forwarded-For entry (CloudFront
