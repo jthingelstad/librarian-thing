@@ -8,7 +8,7 @@ The native release model is documented in [`infra/NATIVE-WEB.md`](infra/NATIVE-W
 Two Node HTTP servers (`lambda/web/`) serve the existing auth/archive routes;
 `NativeWebEnabled` creates their private candidates, live endpoints and protected
 rollback revisions. The evaluator and the separate daily digest stay event-driven.
-The legacy HTTP doors remain the routing rollback until the natural watch closes.
+HTTP is native-only. API Gateway, the legacy auth/stream Event Functions and the raw Function URL were retired on 2026-10-13. Rollback uses protected native revisions.
 Preserve native pin parameters on every deploy; `pipeline/deploy/native_release.py`
 and the sole endpoint-policy writer implement preparation and promotion.
 
@@ -23,10 +23,10 @@ Both have the fixed Web Function memory allocation; their timeouts are 35s and
 300s. The evaluator stays an Event Function. `LibrarianDigestFunction`
 (`lambda/digest/handler.mts`) handles the existing daily subscription schedule.
 
-Legacy routing rollback and evaluator functions in `infra/cloudformation.yaml`:
+HTTP servers and evaluator in `infra/cloudformation.yaml`:
 
-- **`LibrarianFunction`** (`lambda/auth/handler.mts`) — REST API behind API Gateway. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/share/unshare/delete, the public GET /share/{token} snapshot, and profile updates. Memory 1024 MB, timeout 35s.
-- **`LibrarianStreamFunction`** (`lambda/chat/handler.mts` → `runtime.mts`) — Function URL with `RESPONSE_STREAM`. Handles `/chat` (SSE-streamed agent loop with server-side history; without a valid session it falls through to the guest lane - `handleGuestChat`: no persistence/memory/profile, client-supplied sanitized history, WEB_TOOLS only, IP-keyed rate limit + strict per-visitor and global daily quotas), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools plus `view_photo` — an MCP-only tool outside the registry (`shared/photo-view.mts`) that returns archive photos as image content blocks so MCP clients render them inline and get vision over them; allowlisted archive hosts only, max 3 per call, base64 never enters audit rows or the chat loop's evidence — per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). Memory 3008 MB, timeout 300s, ReservedConcurrentExecutions = 5.
+- **`NativeAuthFunction`** (`lambda/web/auth.mts` → `lambda/auth/handler.mts`) — private native HTTP server. Handles Buttondown subscriber lookup, Fastmail/JMAP magic-link login, HMAC session mint/redeem, user conversation list/get/create/rename/share/unshare/delete, the public GET /share/{token} snapshot, and profile updates. Eight requests per environment, two environments, timeout 35s.
+- **`NativeArchiveFunction`** (`lambda/web/archive.mts` → `lambda/chat/runtime.mts`) — private native HTTP server with SSE streaming. Handles `/chat` (SSE-streamed agent loop with server-side history; without a valid session it falls through to the guest lane - `handleGuestChat`: no persistence/memory/profile, client-supplied sanitized history, WEB_TOOLS only, IP-keyed rate limit + strict per-visitor and global daily quotas), `/welcome`, `/feedback`, `/retrieve` (hybrid JSON-only retrieval for wt-builder), `/mcp` (MCP streamable HTTP in stateless mode: OAuth bearer auth via validateAccessToken, the ARCHIVE_TOOLS registry as MCP tools plus `view_photo` — an MCP-only tool outside the registry (`shared/photo-view.mts`) that returns archive photos as image content blocks so MCP clients render them inline and get vision over them; allowlisted archive hosts only, max 3 per call, base64 never enters audit rows or the chat loop's evidence — per-user daily mcp quota pool), and `/tools` (the WebMCP page-tool door: house-style list/call actions over WEB_TOOLS - the MCP set minus fetch_page/web_search - session-authenticated via resolveSessionToken, per-user daily web_tools quota, reached by the web app same-origin as /api/tools; deliberately not routed on librarian.thingelstad.com). One request per environment, five environments, timeout 300s.
 - **`LibrarianEvalFunction`** (`lambda/eval/handler.mts`) — DynamoDB Stream consumer. Reviews server-side conversations out of band and writes summary/quality/flags back to canonical conversation rows. Memory 1024 MB, timeout 180s, ReservedConcurrentExecutions = 1.
 
 All functions share the same IAM role (`LibrarianFunctionRole`) and `shared/`
@@ -114,8 +114,8 @@ The `--skip-corpus-upload` flag is the **default for any code-only change**. Ful
 Deploy steps:
 
 1. Smoke-test the three Thingy model buckets — refuses to deploy if any configured default/fast/advanced model isn't invokable from this account.
-2. Package the shared auth/eval artifact and the separate streaming chat artifact.
-3. Upload zip to `s3://weekly-thing-librarian/code/{auth,chat}-lambda/<ts>.zip`.
+2. Package the shared modules for the evaluator/digest Event Functions and both native HTTP servers.
+3. Upload the Event worker bundle under `code/auth-lambda/` and versioned immutable native bundles to `NativeSourceBucket`.
 4. If not `--skip-corpus-upload`: upload all three API corpora — Weekly Thing corpus + graph, blog corpus, and podcast corpus.
 5. CloudFormation `update-stack` with the new code keys and settings. No credential travels with a deploy: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 6. Configure 30-day log retention on the auto-created log groups.

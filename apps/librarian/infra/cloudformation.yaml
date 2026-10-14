@@ -11,9 +11,6 @@ Parameters:
   CodeKey:
     Type: String
     Description: S3 key for the packaged Lambda code.
-  StreamCodeKey:
-    Type: String
-    Description: S3 key for the packaged streaming Lambda code.
   CorpusBucket:
     Type: String
     Description: S3 bucket containing the embedded librarian corpus JSON.
@@ -28,14 +25,14 @@ Parameters:
     Default: artifacts/blog_corpus.json
     Description: >
       S3 key for the thingelstad.com blog corpus (separate from the Weekly
-      Thing corpus). The stream Lambda lazy-loads it only when a request's
+      Thing corpus). The native archive lazy-loads it only when a request's
       scope includes blog, both, or all. Uploaded on its own cadence by
       pipeline/deploy/upload_blog_corpus.py, not the WT deploy.
   PodcastCorpusKey:
     Type: String
     Default: artifacts/podcast_corpus.json
     Description: >
-      S3 key for the Another Thing podcast corpus. The stream Lambda
+      S3 key for the Another Thing podcast corpus. The native archive
       lazy-loads it only when a request's scope includes podcast or all.
       Uploaded on its own cadence by pipeline/deploy/upload_podcast_corpus.py.
   LogLevel:
@@ -59,15 +56,6 @@ Parameters:
     Type: String
     Default: https://thingy.thingelstad.com/
     Description: Public Thingy URL used when building sign-in magic links.
-  StreamCustomDomainName:
-    Type: String
-    Default: ""
-    Description: Optional stable custom domain for the streaming Lambda URL.
-  StreamCertificateArn:
-    Type: String
-    Default: ""
-    Description: Optional us-east-1 ACM certificate ARN for StreamCustomDomainName.
-
   NativeWebEnabled:
     Type: String
     Default: 'false'
@@ -106,12 +94,6 @@ Conditions:
   HasNativeAuthRollbackRevision: !Not [!Equals [!Ref NativeAuthRollbackRevision, '']]
   HasNativeAuthLiveRevision: !Not [!Equals [!Ref NativeAuthLiveRevision, '']]
   NativeWebActive: !Equals [!Ref NativeWebEnabled, 'true']
-  HasStreamCustomDomainName: !Not [!Equals [!Ref StreamCustomDomainName, ""]]
-  HasStreamCertificateArn: !Not [!Equals [!Ref StreamCertificateArn, ""]]
-  CreateLibrarianStreamDistribution: !And
-    - !Condition HasStreamCustomDomainName
-    - !Condition HasStreamCertificateArn
-
 Resources:
   LibrarianTable:
     Type: AWS::DynamoDB::Table
@@ -270,84 +252,6 @@ Resources:
                 Action: secretsmanager:GetSecretValue
                 Resource: !Sub arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:weekly-thing-librarian-runtime-??????
 
-  LibrarianFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Architectures:
-        - arm64
-      # Security audit M3: bound a burst's blast radius like the stream
-      # (5) and eval (1) Lambdas already do.
-      ReservedConcurrentExecutions: 10
-      Code:
-        S3Bucket: !Ref CodeBucket
-        S3Key: !Ref CodeKey
-      Environment:
-        Variables:
-          ALLOWED_ORIGIN: !Join [",", !Ref AllowedOrigin]
-          TABLE_NAME: !Ref LibrarianTable
-          CORPUS_BUCKET: !Ref CorpusBucket
-          CORPUS_KEY: !Ref CorpusKey
-          GRAPH_KEY: !Ref GraphKey
-          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
-          LOG_LEVEL: !Ref LogLevel
-          AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
-          THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
-          THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
-          # Anthropic API model ids (2026-10), all on the 5 family: they
-          # think, take an effort level, and refuse sampling params. Haiku
-          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
-          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
-          THINGY_FAST_MODEL: "claude-haiku-5-5"
-          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
-      Handler: auth/handler.handler
-      MemorySize: 1024
-      Role: !GetAtt LibrarianFunctionRole.Arn
-      Runtime: nodejs24.x
-      Timeout: 35
-
-  LibrarianStreamFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Architectures:
-        - arm64
-      Code:
-        S3Bucket: !Ref CodeBucket
-        S3Key: !Ref StreamCodeKey
-      Environment:
-        Variables:
-          ALLOWED_ORIGIN: !Join [",", !Ref AllowedOrigin]
-          TABLE_NAME: !Ref LibrarianTable
-          CORPUS_BUCKET: !Ref CorpusBucket
-          CORPUS_KEY: !Ref CorpusKey
-          GRAPH_KEY: !Ref GraphKey
-          BLOG_CORPUS_KEY: !Ref BlogCorpusKey
-          PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
-          LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
-          LOG_LEVEL: !Ref LogLevel
-          # Anthropic API model ids (2026-10), all on the 5 family: they
-          # think, take an effort level, and refuse sampling params. Haiku
-          # 5.5 replaced Haiku 4.5 as the fast model on 2026-10-08.
-          THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
-          THINGY_FAST_MODEL: "claude-haiku-5-5"
-          THINGY_PREMIUM_MODEL: "claude-opus-5-5"
-          BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
-          BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
-          BEDROCK_RERANK_REGION: "us-west-2"
-          # Deployed-revision stamp for recorded turns; the timestamped code
-          # key already uniquely names each deployed artifact.
-          LIBRARIAN_SOURCE_REVISION: !Ref StreamCodeKey
-          # Guest chat lane (2026-09): per-visitor taste + global fail-closed
-          # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
-          THINGY_GUEST_CHAT: "on"
-          GUEST_DAILY_QUOTA: "3"
-          GUEST_GLOBAL_DAILY_QUOTA: "25"
-      Handler: chat/handler.handler
-      MemorySize: 3008
-      ReservedConcurrentExecutions: 5
-      Role: !GetAtt LibrarianFunctionRole.Arn
-      Runtime: nodejs24.x
-      Timeout: 300
-
   LibrarianEvalFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -399,258 +303,6 @@ Resources:
         OnFailure:
           Destination: !GetAtt LibrarianEvalDlq.Arn
 
-  LibrarianStreamFunctionUrl:
-    Type: AWS::Lambda::Url
-    Properties:
-      AuthType: NONE
-      Cors:
-        AllowHeaders:
-          - content-type
-          - authorization
-          - x-librarian-contract-version
-        AllowMethods:
-          - GET
-          - POST
-        AllowOrigins: !Ref AllowedOrigin
-        ExposeHeaders:
-          - x-librarian-contract-version
-          - x-request-id
-      InvokeMode: RESPONSE_STREAM
-      TargetFunctionArn: !Ref LibrarianStreamFunction
-
-  LibrarianStreamInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunctionUrl
-      FunctionName: !Ref LibrarianStreamFunction
-      FunctionUrlAuthType: NONE
-      Principal: "*"
-
-  LibrarianStreamInvokeFunctionPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !Ref LibrarianStreamFunction
-      InvokedViaFunctionUrl: true
-      Principal: "*"
-
-  LibrarianStreamDistribution:
-    Type: AWS::CloudFront::Distribution
-    Condition: CreateLibrarianStreamDistribution
-    Properties:
-      DistributionConfig:
-        Aliases:
-          - !Ref StreamCustomDomainName
-        Comment: Thingy Librarian streaming Lambda URL
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - DELETE
-            - GET
-            - HEAD
-            - OPTIONS
-            - PATCH
-            - POST
-            - PUT
-          CachedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-          Compress: false
-          DefaultTTL: 0
-          ForwardedValues:
-            # Load-bearing: this third-party door (OAuth/MCP) forwards no
-            # cookies and omits X-Thingy-Origin from the header whitelist, so
-            # cookie-based web sessions are structurally impossible here even
-            # though the same Lambda serves the first-party thingy path.
-            Cookies:
-              Forward: none
-            Headers:
-              - Accept
-              - Access-Control-Request-Headers
-              - Access-Control-Request-Method
-              - Authorization
-              - Content-Type
-              - X-Librarian-Contract-Version
-              - Origin
-            QueryString: true
-          MaxTTL: 0
-          MinTTL: 0
-          TargetOriginId: LibrarianStreamFunctionUrlOrigin
-          ViewerProtocolPolicy: https-only
-        Enabled: true
-        HttpVersion: http2
-        IPV6Enabled: true
-        Origins:
-          - CustomOriginConfig:
-              HTTPSPort: 443
-              OriginProtocolPolicy: https-only
-              OriginSSLProtocols:
-                - TLSv1.2
-            DomainName:
-              !Select [
-                2,
-                !Split ["/", !GetAtt LibrarianStreamFunctionUrl.FunctionUrl],
-              ]
-            Id: LibrarianStreamFunctionUrlOrigin
-        PriceClass: PriceClass_100
-        ViewerCertificate:
-          AcmCertificateArn: !Ref StreamCertificateArn
-          MinimumProtocolVersion: TLSv1.2_2021
-          SslSupportMethod: sni-only
-
-  LibrarianApi:
-    Type: AWS::ApiGatewayV2::Api
-    Properties:
-      Name: weekly-thing-librarian
-      ProtocolType: HTTP
-      CorsConfiguration:
-        AllowHeaders:
-          - content-type
-          - authorization
-          - x-librarian-contract-version
-        AllowMethods:
-          - GET
-          - OPTIONS
-          - POST
-        AllowOrigins: !Ref AllowedOrigin
-        ExposeHeaders:
-          - x-librarian-contract-version
-          - x-request-id
-
-  LibrarianIntegration:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref LibrarianApi
-      IntegrationType: AWS_PROXY
-      IntegrationUri: !GetAtt LibrarianFunction.Arn
-      PayloadFormatVersion: "2.0"
-
-  AuthRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /auth
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  ConversationsRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /conversations
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  MemoryRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /memory
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  ShareViewRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /share/{token}
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  HealthRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /health
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  RootRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  FaviconRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /favicon.ico
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  TouchIconRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /apple-touch-icon.png
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthAuthorizeGetRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /authorize
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthAuthorizePostRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /authorize
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthTokenRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /token
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthRegisterRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: POST /register
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthAuthorizationServerMetadataRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /.well-known/oauth-authorization-server
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  OauthProtectedResourceMetadataRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref LibrarianApi
-      RouteKey: GET /.well-known/oauth-protected-resource
-      Target: !Sub integrations/${LibrarianIntegration}
-
-  LibrarianStage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      ApiId: !Ref LibrarianApi
-      StageName: $default
-      AutoDeploy: true
-      # Security audit M3: without stage throttling a burst invokes the
-      # auth Lambda (and Buttondown/Fastmail) at account-default rps.
-      # Generous for this traffic; the Lambda's own hourly limits sit
-      # underneath.
-      DefaultRouteSettings:
-        ThrottlingBurstLimit: 50
-        ThrottlingRateLimit: 20
-
-  LibrarianInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !Ref LibrarianFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LibrarianApi}/*/*/*
-
-  # The subscribe digest: once a day, 07:00 Central (12:00 UTC in CDT,
-  # 13:00 in CST - the hour drifts with daylight time, and that is fine for
-  # a morning email), the auth Lambda is invoked with {task: subscribe_digest}
-  # and mails Jamie every subscribe attempt of the last day that did not end
-  # with a reader on the list. Nothing is sent on a clean day
-  # (shared/subscribe-digest.mts; Jamie, 2026-09-20).
   LibrarianSubscribeDigestRule:
     Type: AWS::Events::Rule
     Properties:
@@ -682,16 +334,6 @@ Resources:
   # in the hours something matched, and the alarms (TreatMissingData
   # notBreaching) fire exactly as before. A metric here exists to back an
   # alarm; there is no dashboard, since no one reads CloudWatch by hand.
-  LibrarianSubscribeFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
-      FilterPattern: '?"buttondown_subscriber_create_failed" ?"buttondown_lookup_failed" ?"buttondown_subscriber_reminder_failed" ?"buttondown_subscriber_resubscribe_failed" ?"subscribe_ledger_write_failed" ?"subscribe_digest_blocked_list_failed"'
-      MetricTransformations:
-        - MetricName: LibrarianSubscribeFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianSubscribeFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -769,16 +411,6 @@ Resources:
   # OAuth abuse and failure visibility: token/register rejections are 4xx
   # responses, invisible to the Lambda Errors metric. A log metric filter
   # counts the structured warning events the OAuth routes emit.
-  LibrarianOauthFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
-      FilterPattern: '?"oauth_token_pkce_failed" ?"oauth_token_code_binding_mismatch" ?"oauth_refresh_client_mismatch" ?"oauth_register_rejected" ?"oauth_token_code_rejected" ?"oauth_register_global_capped" ?"oauth_register_rate_limited" ?"oauth_token_rate_limited"'
-      MetricTransformations:
-        - MetricName: LibrarianOauthAuthFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianOauthFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -795,22 +427,12 @@ Resources:
       AlarmActions:
         - !Ref LibrarianAlarmTopic
 
-  # The stream Lambda handles its own exceptions (the SSE catch answers the
+  # The native archive handles its own exceptions (the SSE catch answers the
   # reader and returns normally), so the built-in Lambda Errors metric stays
   # at zero even when every chat turn is failing. These filters count the
   # structured terminal events the runtime emits instead: request_failed /
   # retrieve_failed for server-side failures, and chat_request_rejected for
   # handled rejections (session_invalid, mode_denied, rate limits, quota).
-  LibrarianStreamFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '?"request_failed" ?"retrieve_failed"'
-      MetricTransformations:
-        - MetricName: LibrarianStreamHandledFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianStreamFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -826,16 +448,6 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions:
         - !Ref LibrarianAlarmTopic
-
-  LibrarianChatRejectionsMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"chat_request_rejected"'
-      MetricTransformations:
-        - MetricName: LibrarianChatRejections
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
 
   LibrarianChatRejectionsAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -856,79 +468,12 @@ Resources:
   # The guest circuit breaker tripping is worth knowing about the day it
   # happens - either Thingy is having a moment (raise the cap) or someone
   # is farming the guest lane (leave it, or flip THINGY_GUEST_CHAT off).
-  LibrarianGuestBreakerMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"guest_global_quota_exhausted"'
-      MetricTransformations:
-        - MetricName: LibrarianGuestBreakerTrips
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianGuestBreakerAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmDescription: The Thingy guest-chat global daily circuit breaker tripped.
       Namespace: WeeklyThingLibrarian
       MetricName: LibrarianGuestBreakerTrips
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  LibrarianAuthErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy auth Lambda has errors.
-      Namespace: AWS/Lambda
-      MetricName: Errors
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianFunction
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  LibrarianStreamErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy stream Lambda has errors.
-      Namespace: AWS/Lambda
-      MetricName: Errors
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianStreamFunction
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  LibrarianStreamThrottlesAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy stream Lambda is throttling.
-      Namespace: AWS/Lambda
-      MetricName: Throttles
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianStreamFunction
       Statistic: Sum
       Period: 300
       EvaluationPeriods: 1
@@ -997,16 +542,6 @@ Resources:
 
   # The 2026-09-02 crawler fleet's tell: direct-to-origin guest traffic
   # bouncing off the origin-marker gate. Distinct from quota noise.
-  LibrarianGuestOriginMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"guest_origin_required"'
-      MetricTransformations:
-        - MetricName: LibrarianGuestOriginRejections
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianGuestOriginAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -1026,16 +561,6 @@ Resources:
   # A dead archive tool (S3 corpus, rerank region) degrades
   # every answer while the loop works around it - the handled-failures
   # alarm never fires for this.
-  LibrarianToolFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianStreamFunction}
-      FilterPattern: '"tool_call_failed"'
-      MetricTransformations:
-        - MetricName: LibrarianToolFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianToolFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -1054,16 +579,6 @@ Resources:
 
   # Credential-stuffing / email-bombing against /auth is all 4xx -
   # invisible to Lambda Errors. Count the auth-side abuse rejections.
-  LibrarianAuthAbuseMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
-      FilterPattern: '?"auth_rate_limited" ?"auth_magic_link_rate_limited" ?"auth_code_attempts_exhausted" ?"auth_code_rate_limited"'
-      MetricTransformations:
-        - MetricName: LibrarianAuthAbuseRejections
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianAuthAbuseAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -1081,16 +596,6 @@ Resources:
         - !Ref LibrarianAlarmTopic
 
   # A Buttondown outage silently degrades sign-in and entitlement checks.
-  LibrarianButtondownFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${LibrarianFunction}
-      FilterPattern: '?"buttondown_lookup_failed" ?"buttondown_subscriber_create_failed" ?"auth_refresh_reverify_failed" ?"oauth_authorize_buttondown_lookup_failed"'
-      MetricTransformations:
-        - MetricName: LibrarianButtondownFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   LibrarianButtondownFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -1131,45 +636,6 @@ Resources:
 
   # Stream duration creep toward the 300s cap is invisible until it
   # becomes timeouts; the app deadline is 180s.
-  LibrarianStreamDurationAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy stream Lambda p95 duration is creeping toward its timeout.
-      Namespace: AWS/Lambda
-      MetricName: Duration
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianStreamFunction
-      ExtendedStatistic: p95
-      Period: 300
-      EvaluationPeriods: 3
-      DatapointsToAlarm: 2
-      Threshold: 150000
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  LibrarianAuthThrottlesAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: The Thingy auth Lambda is being throttled.
-      Namespace: AWS/Lambda
-      MetricName: Throttles
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianFunction
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-
   NativeSourceBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
@@ -1771,23 +1237,10 @@ Outputs:
     Value: !GetAtt NativeArchiveLiveEndpoint.EndpointArn
   LibrarianApiUrl:
     Description: Base URL for the Archive Librarian API.
-    Value: !If [NativeWebActive, https://librarian.thingelstad.com, !Sub "https://${LibrarianApi}.execute-api.${AWS::Region}.amazonaws.com"]
+    Value: https://librarian.thingelstad.com
   LibrarianStreamUrl:
     Description: Streaming URL for the Archive Librarian chat API.
-    Value: !If
-      - NativeWebActive
-      - https://librarian.thingelstad.com
-      - !If
-        - CreateLibrarianStreamDistribution
-        - !Sub https://${StreamCustomDomainName}
-        - !GetAtt LibrarianStreamFunctionUrl.FunctionUrl
-  LibrarianRawStreamUrl:
-    Description: Raw Lambda Function URL for the Archive Librarian chat API.
-    Value: !GetAtt LibrarianStreamFunctionUrl.FunctionUrl
-  LibrarianStreamDistributionDomainName:
-    Condition: CreateLibrarianStreamDistribution
-    Description: CloudFront distribution hostname for the Archive Librarian chat API.
-    Value: !GetAtt LibrarianStreamDistribution.DomainName
+    Value: https://librarian.thingelstad.com
   BedrockEvalRoleArn:
     Description: IAM role ARN used by on-demand Bedrock Model Evaluation jobs.
     Value: !GetAtt BedrockEvaluationRole.Arn

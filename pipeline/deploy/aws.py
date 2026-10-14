@@ -26,12 +26,9 @@ TEMPLATE = REPO / "apps" / "librarian" / "infra" / "cloudformation.yaml"
 LAMBDA_DIR = REPO / "apps" / "librarian" / "lambda"
 LAMBDA_DIST_DIR = LAMBDA_DIR / "dist"
 BUILD_DIR = REPO / "tmp" / "librarian_lambda"
-STREAM_BUILD_DIR = REPO / "tmp" / "librarian_chat_lambda"
 ZIP_PATH = REPO / "tmp" / "librarian_lambda.zip"
-STREAM_ZIP_PATH = REPO / "tmp" / "librarian_chat_lambda.zip"
 DEFAULT_LIBRARIAN_BUCKET = "weekly-thing-librarian"
 PRIVATE_CODE_PREFIX = "code/auth-lambda"
-PRIVATE_STREAM_CODE_PREFIX = "code/chat-lambda"
 PRIVATE_CORPUS_KEY = "artifacts/corpus.json"
 PRIVATE_GRAPH_KEY = "artifacts/graph.json"
 PRIVATE_BLOG_CORPUS_KEY = "artifacts/blog_corpus.json"
@@ -160,11 +157,6 @@ def zip_build_dir(build_dir: Path, zip_path: Path) -> None:
 def package_lambda() -> None:
     copy_lambda_source(BUILD_DIR)
     zip_build_dir(BUILD_DIR, ZIP_PATH)
-
-
-def package_stream_lambda() -> None:
-    copy_lambda_source(STREAM_BUILD_DIR)
-    zip_build_dir(STREAM_BUILD_DIR, STREAM_ZIP_PATH)
 
 
 def upload_file(bucket: str, key: str, path: Path, content_type: str) -> None:
@@ -335,7 +327,6 @@ def deploy_stack(
     stack_name: str,
     bucket: str,
     code_key: str,
-    stream_code_key: str,
     corpus_key: str,
     graph_key: str,
     blog_corpus_key: str,
@@ -343,8 +334,6 @@ def deploy_stack(
     allowed_origin: str,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
-    stream_custom_domain_name: str,
-    stream_certificate_arn: str,
     log_level: str,
     auth_rate_limit_max: str,
     cloudformation_role_arn: str | None,
@@ -366,7 +355,6 @@ def deploy_stack(
         {"ParameterKey": "AllowedOrigin", "ParameterValue": allowed_origin},
         {"ParameterKey": "CodeBucket", "ParameterValue": bucket},
         {"ParameterKey": "CodeKey", "ParameterValue": code_key},
-        {"ParameterKey": "StreamCodeKey", "ParameterValue": stream_code_key},
         {"ParameterKey": "CorpusBucket", "ParameterValue": bucket},
         {"ParameterKey": "CorpusKey", "ParameterValue": corpus_key},
         {"ParameterKey": "GraphKey", "ParameterValue": graph_key},
@@ -379,10 +367,8 @@ def deploy_stack(
             "ParameterValue": thingy_magic_link_from_email,
         },
         {"ParameterKey": "ThingyMagicLinkBaseUrl", "ParameterValue": thingy_magic_link_base_url},
-        {"ParameterKey": "StreamCustomDomainName", "ParameterValue": stream_custom_domain_name},
-        {"ParameterKey": "StreamCertificateArn", "ParameterValue": stream_certificate_arn},
     ]
-    # Preserve every native setting on legacy code/corpus deployments. Omitting
+    # Preserve every native setting on routine code/corpus deployments. Omitting
     # a parameter resets it to its template default and can disable compute.
     supplied = {entry["ParameterKey"] for entry in native_parameters or []}
     if exists:
@@ -464,7 +450,9 @@ def configure_log_retention(stack_name: str, days: int = 30) -> None:
     session = boto3.session.Session()
     region = session.region_name or os.environ.get("AWS_DEFAULT_REGION") or "us-east-1"
     account_id = boto3.client("sts").get_caller_identity()["Account"]
-    for logical_id in ("LibrarianFunction", "LibrarianStreamFunction", "LibrarianEvalFunction"):
+    # Native and digest log groups are owned by CloudFormation. Only the
+    # evaluator's auto-created group needs this setup after HTTP retirement.
+    for logical_id in ("LibrarianEvalFunction",):
         function_name = stack_resource_physical_id(cloudformation, stack_name, logical_id)
         if not function_name:
             continue
@@ -595,13 +583,6 @@ def main() -> int:
         # already forces /signin/ onto emailed links regardless.
         default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/"),
     )
-    parser.add_argument(
-        "--stream-custom-domain-name",
-        default=os.environ.get("LIBRARIAN_STREAM_CUSTOM_DOMAIN_NAME", ""),
-    )
-    parser.add_argument(
-        "--stream-certificate-arn", default=os.environ.get("LIBRARIAN_STREAM_CERTIFICATE_ARN", "")
-    )
     parser.add_argument("--skip-corpus-upload", action="store_true")
     parser.add_argument(
         "--native",
@@ -634,13 +615,9 @@ def main() -> int:
     verify_private_bucket(bucket)
 
     package_lambda()
-    package_stream_lambda()
     code_key = f"{PRIVATE_CODE_PREFIX}/{int(time.time())}.zip"
-    stream_code_key = f"{PRIVATE_STREAM_CODE_PREFIX}/{int(time.time())}.zip"
     upload_file(bucket, code_key, ZIP_PATH, "application/zip")
     print(f"Uploaded Lambda package to s3://{bucket}/{code_key}")
-    upload_file(bucket, stream_code_key, STREAM_ZIP_PATH, "application/zip")
-    print(f"Uploaded streaming Lambda package to s3://{bucket}/{stream_code_key}")
 
     if not args.skip_corpus_upload:
         upload_librarian_corpora(args, bucket)
@@ -661,7 +638,6 @@ def main() -> int:
         stack_name=args.stack_name,
         bucket=bucket,
         code_key=code_key,
-        stream_code_key=stream_code_key,
         corpus_key=args.corpus_key,
         graph_key=args.graph_key,
         blog_corpus_key=args.blog_corpus_key,
@@ -669,8 +645,6 @@ def main() -> int:
         allowed_origin=args.allowed_origin,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
-        stream_custom_domain_name=args.stream_custom_domain_name,
-        stream_certificate_arn=args.stream_certificate_arn,
         log_level=args.log_level.upper(),
         auth_rate_limit_max=str(args.auth_rate_limit_max),
         cloudformation_role_arn=args.cloudformation_role_arn,

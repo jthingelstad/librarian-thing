@@ -14,7 +14,7 @@ The previous Python eval pipeline under `pipeline/eval/` was removed. Conversati
 
 ## AWS Runtime
 
-The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and auth health checks run behind API Gateway/Lambda. Streaming chat and stream health checks run through a Lambda Function URL with response streaming enabled. It uses:
+The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and archive HTTP routes run on private native Lambda Web Functions behind CloudFront. The evaluator and daily digest remain Event Functions. API Gateway and the old HTTP Event Functions/Function URL are retired. It uses:
 
 - Buttondown API for subscriber lookup.
 - Amazon Bedrock Claude Sonnet 4.6 for premium messages and the agent loop.
@@ -192,7 +192,7 @@ The reader UI lets users upvote/downvote responses and optionally explain downvo
 
 `GET /health` is available as a cheap smoke-test endpoint. It verifies API Gateway and Lambda routing without calling Buttondown, Bedrock, DynamoDB, or S3.
 
-`POST /feedback` is served by the streaming Lambda Function URL and requires a valid session token. It accepts `request_id`, `reaction` (`up` or `down`), and optional `comment`, then updates the matching turn when it belongs to the same subscriber hash.
+`POST /feedback` is served by the native archive Web Function and requires a valid session token. It accepts `request_id`, `reaction` (`up` or `down`), and optional `comment`, then updates the matching turn when it belongs to the same subscriber hash.
 
 Thingy uses hybrid retrieval. Every query runs two engines over the scoped corpora — TF-IDF lexical scoring and cosine similarity over the pre-embedded chunks — with year/section filters applied inside each engine's scan, not as a post-filter. The two ranked lists are merged by reciprocal-rank fusion into a pool of up to 100 candidates, which is reranked once with Cohere Rerank 3.5 through the Bedrock Agent Runtime rerank API. Results carry age labels so answers can weigh recency; if the embedding call fails, fusion degrades gracefully to lexical-only.
 
@@ -291,7 +291,7 @@ MCP 2.3.0 (2026-10-01, the second QA pass: Weekly Thing audio editions and the r
 
 Corpus build, 2026-10-01 (second pass): Journal clock labels ("Saturday @ 7:16 PM") no longer run into the next line as graph entities, which had made "PM We" and 26 more clock phrases into topics with public pages.
 
-Thingy uses magic-link auth, rate limits, server-side history, and DynamoDB logging. Tool status is emitted over the streaming Function URL as `status` events, and the UI keeps the archive work visible/collapsible after completion.
+Thingy uses magic-link auth, rate limits, server-side history, and DynamoDB logging. Tool status is emitted over the native archive Web Function as `status` events, and the UI keeps the archive work visible/collapsible after completion.
 
 The graph artifact is built offline from the corpus and archive front matter. It stores per-issue entities, recurring tropes/stances, and top-K similar issues from issue-level embedding averages. `pipeline/graph/build.py --use-bedrock-extraction` can use Sonnet for entity/trope extraction; the default heuristic mode is available for cheap local refreshes.
 
@@ -348,18 +348,18 @@ New external publishing content has its own ingest step before corpus upload:
 
 Those commits trigger the production workflow, which rebuilds and uploads the updated corpus artifacts. A newly published blog post will not reach Thingy unless this sync workflow runs successfully with `MICROBLOG_API_KEY` configured.
 
-The deploy script packages both Lambda entrypoints from one Node source tree:
+The deploy script packages native HTTP servers and Event workers from one Node source tree:
 
-- `apps/librarian/lambda/auth/`: API Gateway Lambda for Buttondown auth and auth health checks.
-- `apps/librarian/lambda/chat/`: Lambda Function URL for streaming chat and stream health checks.
-- `apps/librarian/lambda/eval/`: DynamoDB Stream evaluator packaged with the auth bundle.
-- `apps/librarian/lambda/shared/` and `apps/librarian/lambda/prompts/`: shared code and editable prompt files included in both packages.
+- `apps/librarian/lambda/auth/`: Shared auth route logic used by the native auth HTTP server.
+- `apps/librarian/lambda/chat/`: Shared streaming route logic used by the native archive HTTP server.
+- `apps/librarian/lambda/eval/`: DynamoDB Stream evaluator in the Event worker bundle.
+- `apps/librarian/lambda/shared/` and `apps/librarian/lambda/prompts/`: shared code and editable prompt files included in native and Event packages.
 
 After deploy:
 
 ```sh
-curl -sS -i https://k0yklt9vg3.execute-api.us-east-1.amazonaws.com/health
-curl -sS -i -X OPTIONS https://jcvud66qqpq53frvno5stoqntm0zqntw.lambda-url.us-east-1.on.aws/
+curl -sS -i https://librarian.thingelstad.com/health
+curl -sS -i -X OPTIONS https://librarian.thingelstad.com/
 ```
 
 The Thingy web app deploys from its own repo (`thingy.thingelstad.com`, S3 + CloudFront since 2026-09-01) after frontend changes; nothing in this repo deploys it.

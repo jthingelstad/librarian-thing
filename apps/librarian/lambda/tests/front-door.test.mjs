@@ -33,7 +33,7 @@ const reorder = (value) =>
       : value;
 
 test('SDK object-key normalization preserves the distribution hash', () => {
-  const config = nativeConfig(original, outputs, 'auth');
+  const config = nativeConfig(original, outputs);
   assert.equal(configurationHash(config), configurationHash(reorder(config)));
 });
 
@@ -47,9 +47,21 @@ test('origin edits and ordered route changes remain different', () => {
 });
 
 test('a pending receipt resumes only after its full intended config is verified', () => {
-  const prior = { original, mode: 'auth' };
-  const current = reorder(nativeConfig(original, outputs, 'auth'));
+  const prior = { original, mode: 'native' };
+  const current = reorder(nativeConfig(original, outputs));
   assert.doesNotThrow(() => verifyPriorConfig(prior, current, outputs));
   current.Origins.Items[0].DomainName = 'unowned.example.test';
   assert.throws(() => verifyPriorConfig(prior, current, outputs), /differs from its intent/);
+});
+
+test('both origins use native endpoints and retired routing modes are refused', () => {
+  const current = nativeConfig(original, outputs);
+  assert.deepEqual(
+    current.Origins.Items.map((origin) => origin.DomainName),
+    [outputs.NativeAuthLiveDomain, outputs.NativeArchiveLiveDomain]
+  );
+  for (const mode of ['auth', 'legacy', 'rollback']) {
+    assert.throws(() => nativeConfig(original, outputs, mode), /Legacy routing is retired/);
+    assert.throws(() => verifyPriorConfig({ original, mode }, current, outputs), /Legacy routing is retired/);
+  }
 });

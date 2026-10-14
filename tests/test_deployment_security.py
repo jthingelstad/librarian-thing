@@ -126,6 +126,16 @@ def test_cloudformation_cannot_change_itself_or_remove_boundaries():
     )
 
 
+def test_retired_http_services_have_no_cloudformation_grants():
+    for statement in policy("cloudformation")["Statement"]:
+        actions = statement["Action"]
+        if isinstance(actions, str):
+            actions = [actions]
+        assert not any(
+            action.startswith("apigateway:") or "FunctionUrl" in action for action in actions
+        )
+
+
 def test_oidc_trust_accepts_only_this_repository_main():
     statement = policy("github-trust")["Statement"][0]
     equals = statement["Condition"]["StringEquals"]

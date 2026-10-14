@@ -15,8 +15,7 @@ archive ceiling is one request per environment and five environments.
 
 ## Source and promotion
 
-The expanded CloudFormation template exceeds the inline API limit. The deployer
-uploads it under `code/templates/<content-sha256>.yaml` in the existing private
+For templates exceeding the inline API limit, the deployer uploads them under `code/templates/<content-sha256>.yaml` in the existing private
 artifact bucket and supplies its S3 URL; the execution role's existing artifact
 read grant covers it. Small templates still use the inline path.
 
@@ -47,28 +46,27 @@ upload, endpoint-policy ownership and candidate health invocation only. No deplo
 reads, writes or rotates application secrets; runtime Secrets Manager loading
 is unchanged.
 
-## First cutover and rollback
+## Native-only routing and rollback
 
-Thingy's stack owns its distribution. Set `NativeRouting=auth` first, then
-`native`, with the native endpoint domains. Subsequent deploys preserve these
-parameters. `legacy` restores both original origins. Keep its origin marker,
+Thingy's stack owns its distribution. `NativeAuthDomain` and `NativeArchiveDomain`
+are required on creation and preserved on updates. Both origins always use the
+native live endpoints; there is no legacy routing selector. Keep its origin marker,
 HttpOnly cookie and contract-header requirements. Native origins use regional
 SigV4 OAC with `always-amz-auth`, explicit Authorization forwarding and no-store
 responses. Trusted viewer addresses replace the final X-Forwarded-For proxy hop.
 
 The existing Librarian distribution is manually managed. `front-door.mjs` owns
 its release changes with ETag compare-and-swap and a private original-config
-receipt. Its `auth`, `native` and `rollback` commands preserve the hostname and
-route inventory. External requests forward no cookies or X-Thingy-Origin, and
+receipt. Its sole `native` command preserves the hostname and route inventory.
+Legacy `auth`/`rollback` modes are refused. External requests forward no cookies or X-Thingy-Origin, and
 `/tools` remains outside this door. The authorization query function normalizes
 form-encoded spaces while preserving literal pluses and repeated values.
 
-For an application rollback, preserve current artifact parameters and set live
-revision IDs to the protected previous IDs through CloudFormation. For a routing
-rollback, set Thingy's `NativeRouting=legacy` and run the external writer's
-`rollback` command with its saved receipt. Wait for distribution deployment and
-read both public surfaces back. Keep legacy compute until callers and a natural
-watch confirm the cutover; WT Builder uses the stable Librarian hostname.
+For a rollback, preserve current artifact parameters and set live revision IDs
+to the protected previous native IDs through CloudFormation, then read both
+public surfaces back. API Gateway, the legacy HTTP Event Functions and raw
+Function URL were retired on 2026-10-13 at Jamie's direction. The evaluator and
+digest remain Event Functions; WT Builder uses the stable Librarian hostname.
 
 ## Acceptance
 

@@ -7,14 +7,11 @@
       "Action": [
         "lambda:AddPermission",
         "lambda:CreateFunction",
-        "lambda:CreateFunctionUrlConfig",
         "lambda:DeleteFunction",
         "lambda:DeleteFunctionConcurrency",
-        "lambda:DeleteFunctionUrlConfig",
         "lambda:GetFunction",
         "lambda:GetFunctionConcurrency",
         "lambda:GetFunctionConfiguration",
-        "lambda:GetFunctionUrlConfig",
         "lambda:GetPolicy",
         "lambda:ListTags",
         "lambda:PutFunctionConcurrency",
@@ -23,7 +20,6 @@
         "lambda:UntagResource",
         "lambda:UpdateFunctionCode",
         "lambda:UpdateFunctionConfiguration",
-        "lambda:UpdateFunctionUrlConfig",
         "lambda:GetRuntimeManagementConfig",
         "lambda:GetFunctionRecursionConfig",
         "lambda:GetFunctionCodeSigningConfig"
@@ -63,31 +59,6 @@
         "dynamodb:GetResourcePolicy"
       ],
       "Resource": "arn:aws:dynamodb:us-east-1:999153317627:table/weekly-thing-librarian-LibrarianTable-*"
-    },
-    {
-      "Sid": "ExistingHttpApi",
-      "Effect": "Allow",
-      "Action": [
-        "apigateway:DELETE",
-        "apigateway:GET",
-        "apigateway:PATCH",
-        "apigateway:POST",
-        "apigateway:PUT"
-      ],
-      "Resource": [
-        "arn:aws:apigateway:us-east-1::/apis/k0yklt9vg3",
-        "arn:aws:apigateway:us-east-1::/apis/k0yklt9vg3/*"
-      ]
-    },
-    {
-      "Sid": "ApiTags",
-      "Effect": "Allow",
-      "Action": [
-        "apigateway:GET",
-        "apigateway:PUT",
-        "apigateway:DELETE"
-      ],
-      "Resource": "arn:aws:apigateway:us-east-1::/tags/arn%3Aaws%3Aapigateway%3Aus-east-1%3A%3A%2Fapis%2Fk0yklt9vg3"
     },
     {
       "Sid": "CodeRead",

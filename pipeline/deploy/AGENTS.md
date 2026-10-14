@@ -6,7 +6,7 @@ AWS deploy tooling for the Thingy Lambda stack. No README — this directory is 
 
 | Script | What it does |
 |---|---|
-| `aws.py` | Packages the two Lambda bundles, optionally uploads all Librarian corpora, uploads code to S3, then runs CloudFormation update-stack with the new code keys + secrets from `.env`. **The canonical deploy entrypoint.** |
+| `aws.py` | Packages the Event worker/shared bundle and both immutable native HTTP bundles, optionally uploads corpora, then updates CloudFormation without carrying application secrets. **The canonical deploy entrypoint.** |
 | `upload_corpus.py` | Builds the Weekly Thing corpus + graph from `data/issues/*/archive.md`, embeds via Bedrock Cohere, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_blog_corpus.py` | Builds the thingelstad.com blog corpus from `data/blog/posts`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_podcast_corpus.py` | Builds the Another Thing podcast corpus from `data/podcast/another-thing/episodes`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
@@ -50,8 +50,8 @@ CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when pro
 
 1. **Check the Thingy model ids** (`THINGY_DEFAULT_MODEL`, `THINGY_FAST_MODEL`, `THINGY_PREMIUM_MODEL`). Thingy calls the Anthropic API since 2026-10, so each must be an Anthropic API id (`claude-...`); a Bedrock id refuses the deploy. CI holds no Anthropic key, so there the check is the id's shape; with `ANTHROPIC_API_KEY` set (a local deploy) it also looks each model up (`GET /v1/models/{id}`, no tokens spent). Pass `--skip-smoke-test` to override.
 2. **Verify private bucket security** (`verify_private_bucket(bucket)`). Administrator-only `--bootstrap-bucket` creates or hardens it. Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
-3. **Package both Lambda bundles** (`auth/` + `chat/`) — separate npm install + zip per bundle. Bundles ship independently because the auth Lambda is REST and the chat Lambda is response-streamed Function URL.
-4. **Upload zips** to `s3://{bucket}/code/{auth,chat}-lambda/<unix-ts>.zip`. Timestamp keys so CloudFormation always sees a new version.
+3. **Package shared modules and Event workers**, then create two native root entries (`web/auth.mjs`, `web/archive.mjs`) in versioned immutable bundles.
+4. **Upload the Event worker zip** under `code/auth-lambda/` and immutable native bundles to the versioned source bucket. Snapshot live/rollback pins, probe candidates, then promote explicitly.
 5. **Optional**: all corpus uploaders run — Weekly Thing corpus + graph, blog corpus, podcast corpus.
 6. **CloudFormation update-stack** with the new code keys and settings. No credentials: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 7. **30-day log retention** on the auto-created log groups (`configure_log_retention`).
@@ -86,7 +86,7 @@ Don't move the rerank region.
 
 ## CloudFormation template
 
-Lives at `apps/librarian/infra/cloudformation.yaml`. Three Lambdas (auth + stream + eval), API Gateway (REST), Lambda Function URL (Stream, RESPONSE_STREAM mode), DynamoDB (canonical conversations + rate limits + user memory, with Streams enabled for eval), IAM role + policies, CloudWatch log groups, Bedrock IAM policies for embed/rerank/invoke, and a DynamoDB Stream event source mapping for the eval Lambda. See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) for the runtime side of what's deployed.
+Lives at `apps/librarian/infra/cloudformation.yaml`. Two native HTTP Web Functions (auth/archive), two Event Functions (eval/digest), DynamoDB (canonical conversations + rate limits + user memory, with Streams enabled for eval), IAM role + policies, CloudWatch log groups, Bedrock IAM policies for embed/rerank/invoke, and a DynamoDB Stream event source mapping for the eval Lambda. See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) for the runtime side of what's deployed.
 
 ## Conventions
 

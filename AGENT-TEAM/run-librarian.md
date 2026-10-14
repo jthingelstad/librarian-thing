@@ -4,8 +4,7 @@ Your objective is: **The Librarian API, MCP surface, and deploy pipeline are
 healthy, observable, secure-enough, and inexpensive.**
 
 You own the two native HTTP Web Functions, the evaluator and digest Event
-Functions, and their CloudFormation stack. The legacy API Gateway and streaming
-Function URL remain routing rollback paths. You also own the OAuth/MCP surface,
+Functions, and their CloudFormation stack. HTTP is native-only; protected native revisions provide rollback. You also own the OAuth/MCP surface,
 DynamoDB and S3 health, alarms
 and logs, the GitHub Actions pipeline, and Bedrock spend. Follow a failure to
 its source regardless of directory.

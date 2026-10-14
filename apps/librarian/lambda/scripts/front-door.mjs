@@ -31,19 +31,20 @@ export function verifyPriorConfig(prior, current, outputs) {
         : createHash('sha256').update(JSON.stringify(current)).digest('hex');
     if (hash !== prior.appliedHash) throw new Error('Distribution changed outside this release; refusing');
   } else {
-    const intended = prior.mode === 'rollback' ? prior.original : nativeConfig(prior.original, outputs, prior.mode);
+    const intended = nativeConfig(prior.original, outputs, prior.mode);
     if (digest(current) !== digest(intended))
       throw new Error('Unverified prior update differs from its intent; refusing');
   }
 }
-export function nativeConfig(config, outputs, mode) {
+export function nativeConfig(config, outputs, mode = 'native') {
+  if (mode !== 'native') throw new Error('Legacy routing is retired; expected native');
   const next = structuredClone(config);
   if (!Array.isArray(next.Aliases.Items) || !next.Aliases.Items.some((alias) => alias === 'librarian.thingelstad.com'))
     throw new Error('Wrong distribution');
   for (const origin of next.Origins.Items) {
     const isAuth = origin.Id === 'LibrarianApiGatewayOrigin';
     const isArchive = origin.Id === 'LibrarianStreamFunctionUrlOrigin';
-    if (isAuth || (isArchive && mode === 'native')) {
+    if (isAuth || isArchive) {
       origin.DomainName = outputs[`Native${isAuth ? 'Auth' : 'Archive'}LiveDomain`];
       if (!origin.DomainName?.endsWith('.lambda-web.us-east-1.on.aws')) throw new Error('Invalid native origin domain');
       origin.OriginAccessControlId = outputs.NativeExternalOriginAccess;
@@ -52,7 +53,7 @@ export function nativeConfig(config, outputs, mode) {
   for (const behavior of [next.DefaultCacheBehavior, ...next.CacheBehaviors.Items]) {
     if (
       behavior.TargetOriginId === 'LibrarianApiGatewayOrigin' ||
-      (mode === 'native' && behavior.TargetOriginId === 'LibrarianStreamFunctionUrlOrigin')
+      behavior.TargetOriginId === 'LibrarianStreamFunctionUrlOrigin'
     ) {
       delete behavior.ForwardedValues;
       delete behavior.MinTTL;
@@ -71,17 +72,16 @@ export function nativeConfig(config, outputs, mode) {
 }
 async function main() {
   const [mode, outputFile, receiptDir] = process.argv.slice(2);
-  if (!['auth', 'native', 'rollback'].includes(mode) || !receiptDir)
-    throw new Error('Expected auth|native|rollback outputs.json private-receipt-dir');
+  if (mode !== 'native' || !receiptDir)
+    throw new Error('Expected native outputs.json private-receipt-dir; legacy routing is retired');
   const cloudfront = new CloudFrontClient({ region: 'us-east-1', maxAttempts: 1 });
   const current = await cloudfront.send(new GetDistributionConfigCommand({ Id: ID }));
   mkdirSync(receiptDir, { recursive: true, mode: 0o700 });
   const path = resolve(receiptDir, 'librarian-distribution.json');
   const prior = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
-  if (!prior && mode === 'rollback') throw new Error('No owned rollback receipt');
   const outputs = JSON.parse(readFileSync(outputFile, 'utf8'));
   verifyPriorConfig(prior, current.DistributionConfig, outputs);
-  const desired = mode === 'rollback' ? prior.original : nativeConfig(current.DistributionConfig, outputs, mode);
+  const desired = nativeConfig(current.DistributionConfig, outputs, mode);
   const receipt = {
     original: prior?.original || current.DistributionConfig,
     priorETag: current.ETag,

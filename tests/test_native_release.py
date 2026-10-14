@@ -5,6 +5,8 @@ import importlib.util
 from pathlib import Path
 from unittest.mock import Mock
 
+import yaml
+
 from pipeline.deploy.native_release import promotion
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,7 +53,7 @@ def test_promotion_keeps_the_previous_live_revision_protected():
     }
 
 
-def test_legacy_deploy_preserves_native_settings_and_accepts_first_bootstrap(monkeypatch):
+def test_routine_deploy_preserves_native_settings_and_accepts_first_bootstrap(monkeypatch):
     for previous in (
         [],
         [
@@ -66,7 +68,6 @@ def test_legacy_deploy_preserves_native_settings_and_accepts_first_bootstrap(mon
             stack_name="weekly-thing-librarian",
             bucket="weekly-thing-librarian",
             code_key="code/auth",
-            stream_code_key="code/chat",
             corpus_key="artifacts/corpus.json",
             graph_key="artifacts/graph.json",
             blog_corpus_key="artifacts/blog_corpus.json",
@@ -74,18 +75,66 @@ def test_legacy_deploy_preserves_native_settings_and_accepts_first_bootstrap(mon
             allowed_origin="https://thingy.thingelstad.com",
             thingy_magic_link_from_email="thingy@example.test",
             thingy_magic_link_base_url="https://thingy.thingelstad.com",
-            stream_custom_domain_name="",
-            stream_certificate_arn="",
             log_level="INFO",
             auth_rate_limit_max="30",
             cloudformation_role_arn="arn:example:role/cfn",
         )
         parameters = client.update_stack.call_args.kwargs["Parameters"]
-        assert "TemplateBody" not in client.update_stack.call_args.kwargs
-        assert client.update_stack.call_args.kwargs["TemplateURL"].startswith(
-            "https://weekly-thing-librarian.s3.us-east-1.amazonaws.com/code/templates/"
+        assert {"StreamCodeKey", "StreamCustomDomainName", "StreamCertificateArn"}.isdisjoint(
+            p["ParameterKey"] for p in parameters
         )
         native = [p for p in parameters if p["ParameterKey"].startswith("Native")]
         assert native == [
             {"ParameterKey": p["ParameterKey"], "UsePreviousValue": True} for p in previous
         ]
+
+
+def test_http_retirement_preserves_native_functions_and_event_workers():
+    template = yaml.load(deploy.TEMPLATE.read_text(), Loader=yaml.BaseLoader)
+    resources = template["Resources"]
+    event_functions = {
+        name for name, resource in resources.items() if resource["Type"] == "AWS::Lambda::Function"
+    }
+    assert event_functions == {"LibrarianEvalFunction", "LibrarianDigestFunction"}
+    assert not any(
+        resource["Type"].startswith("AWS::ApiGateway") or resource["Type"] == "AWS::Lambda::Url"
+        for resource in resources.values()
+    )
+    assert {
+        "NativeAuthFunction",
+        "NativeArchiveFunction",
+        "NativeAuthRollbackEndpoint",
+        "NativeArchiveRollbackEndpoint",
+        "LibrarianTable",
+        "NativeSourceBucket",
+        "LibrarianEvalEventSource",
+        "LibrarianSubscribeDigestRule",
+    } <= resources.keys()
+    for resource in resources.values():
+        if resource["Type"] == "AWS::Logs::MetricFilter":
+            assert resource["Properties"]["LogGroupName"] in {
+                "NativeAuthLogs",
+                "NativeArchiveLogs",
+                "LibrarianDigestLogGroup",
+            }
+    assert "LibrarianRawStreamUrl" not in template["Outputs"]
+    for name in ("LibrarianApiUrl", "LibrarianStreamUrl"):
+        assert template["Outputs"][name]["Value"] == "https://librarian.thingelstad.com"
+
+
+def test_log_setup_does_not_resolve_deleted_http_functions(monkeypatch):
+    cloudformation, logs, sts = Mock(), Mock(), Mock()
+
+    def resource(*, StackName, LogicalResourceId):
+        assert LogicalResourceId == "LibrarianEvalFunction"
+        return {"StackResourceDetail": {"PhysicalResourceId": "eval-worker"}}
+
+    cloudformation.describe_stack_resource.side_effect = resource
+    sts.get_caller_identity.return_value = {"Account": "999153317627"}
+    clients = {"cloudformation": cloudformation, "logs": logs, "sts": sts}
+    monkeypatch.setattr(deploy.boto3, "client", lambda name: clients[name])
+    monkeypatch.setattr(deploy.boto3.session, "Session", lambda: Mock(region_name="us-east-1"))
+    deploy.configure_log_retention("weekly-thing-librarian")
+    logs.put_retention_policy.assert_called_once_with(
+        logGroupName="/aws/lambda/eval-worker", retentionInDays=30
+    )
