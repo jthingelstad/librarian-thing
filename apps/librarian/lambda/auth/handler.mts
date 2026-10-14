@@ -722,11 +722,20 @@ const TURNSTILE_SURFACE: Record<string, TurnstileSurface> = {
 
 /**
  * Buttondown answers a firewalled create with 2xx and files the address as
- * blocked. The reader is told the same as anyone (check your inbox); the
- * ledger records the truth so the digest stops counting it as a reader.
+ * blocked. No confirmation mail goes out, so the reader is told the truth
+ * (Jamie, 2026-10-14: "recorded as suspicious and will be reviewed but is
+ * not yet subscribed") and the ledger records `blocked`; Jamie reviews the
+ * digest's firewall list and unblocks the real ones in Buttondown.
  */
 function firewalled(subscriber: unknown) {
   return String((subscriber as { type?: unknown } | null)?.type || '').toLowerCase() === 'blocked';
+}
+
+const UNDER_REVIEW_MESSAGE =
+  'This email address was flagged as suspicious and has been recorded for review. It isn’t subscribed yet. If it’s yours, email jamie@thingelstad.com.';
+
+function underReview(event: LibrarianHttpEvent) {
+  return jsonResponse(200, { status: 'needs_jamie', subscriber_status: 'blocked', error: UNDER_REVIEW_MESSAGE }, event);
 }
 
 function turnstileRefusal(event: LibrarianHttpEvent) {
@@ -915,14 +924,7 @@ async function authHandler(event: LibrarianHttpEvent) {
         // Already caught by the firewall and waiting for Jamie's review.
         logEvent('info', 'auth_subscribe_already_blocked', { email_hash: hashedEmail });
         await recordOutcome(ledger, 'blocked', { detail: 'already blocked' });
-        return jsonResponse(
-          200,
-          {
-            status: 'resubscribe_unavailable',
-            error: 'That email can’t be re-added automatically — please reach out to Jamie directly.'
-          },
-          event
-        );
+        return underReview(event);
       }
       if (existingType !== 'unsubscribed') {
         // disabled / undeliverable states cannot be revived over the API.
@@ -973,8 +975,10 @@ async function authHandler(event: LibrarianHttpEvent) {
         email_hash: hashedEmail,
         subscriber_status: status,
         subscriber_source: source,
-        campaign_ref: attribution?.ref || null
+        campaign_ref: attribution?.ref || null,
+        firewalled: firewalled(subscriber)
       });
+      if (firewalled(subscriber)) return underReview(event);
       return jsonResponse(
         200,
         {
@@ -1080,8 +1084,26 @@ async function authHandler(event: LibrarianHttpEvent) {
     return jsonResponse(200, { status, message: 'Please confirm your email before using Thingy.' }, event);
   }
   if (status === 'inactive') {
-    logEvent('info', 'auth_subscriber_inactive', { email_hash: hashedEmail });
+    logEvent('info', 'auth_subscriber_inactive', { email_hash: hashedEmail, firewalled: firewalled(subscriber) });
+    // A firewalled address was never a reader: say it is under review rather
+    // than offering a resubscribe that can only end in the same answer.
+    if (firewalled(subscriber)) {
+      return jsonResponse(403, { status, under_review: true, error: UNDER_REVIEW_MESSAGE }, event);
+    }
     return jsonResponse(403, { status, error: 'That subscription is not active.' }, event);
+  }
+  if (source !== 'thingy') {
+    // The Weekly Thing forms ask only "is this address subscribed?" and
+    // answer `active` with "you're already subscribed" (members: on to
+    // checkout). Only Thingy signs in. From June to 2026-10-14 every
+    // subscriber who typed their address into a weekly form, and every
+    // returning visitor to /members/, was mailed a Thingy sign-in link.
+    logEvent('info', 'auth_subscriber_status_only', {
+      email_hash: hashedEmail,
+      subscriber_status: status,
+      subscriber_source: source
+    });
+    return jsonResponse(200, { status, message: 'That email is already subscribed to the Weekly Thing.' }, event);
   }
   try {
     return await sendLoginMagicLink({

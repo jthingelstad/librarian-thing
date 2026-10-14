@@ -91,9 +91,21 @@ The site's form calls this before anything reaches Buttondown. Since
   The ledger records `blocked` (it said `subscribed` before, and the digest
   counted those as readers), and `subscriberStatus` maps `blocked` to
   `inactive`, so a firewalled address is never sent a Thingy sign-in. The
+  reader is told the truth (Jamie, 2026-10-14): subscribe answers
+  `needs_jamie` and check a 403 `under_review`, both saying the address was
+  flagged as suspicious, is recorded for review and isn't subscribed yet. The
   digest splits firewall catches into "through our form" (with each row's
   Turnstile result) and "straight to Buttondown" (bots; a `+tag@domain`
   run of three or more is one line).
+
+### `check` signs in only for Thingy (2026-10-14)
+
+`/auth` `check` sends a sign-in link only when `source` is `thingy`. From
+any other source (the Weekly Thing forms) it answers the subscriber status
+(`active` / `premium`) and mails nothing. Until 2026-10-14 it mailed a
+Thingy sign-in link to every subscriber who typed their address into a
+weekly form and to every returning `/members/` visitor (that page checks a
+remembered address on load).
 
 ### Turnstile on the email-sending actions (2026-10-14)
 
