@@ -21,7 +21,8 @@ export const RUNTIME_SECRET_KEYS = [
   'FASTMAIL_JMAP_TOKEN',
   'LIBRARIAN_RETRIEVE_SECRET',
   'LIBRARIAN_GOLDEN_RETRIEVE_SECRET',
-  'ANTHROPIC_API_KEY'
+  'ANTHROPIC_API_KEY',
+  'TURNSTILE_SECRET_KEY'
 ] as const;
 
 type SecretsClient = Pick<SecretsManagerClient, 'send'>;

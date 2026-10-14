@@ -86,6 +86,48 @@ The site's form calls this before anything reaches Buttondown. Since
 - **Our-side failures alarm.** `LibrarianSubscribeFailuresAlarm` counts
   lookup/create/reminder/ledger failures (not suppressions) and goes to the
   ops queue within the hour.
+- **Firewalled is not subscribed (2026-10-14).** Buttondown answers a create
+  its firewall catches with 2xx and files the address as `type: blocked`.
+  The ledger records `blocked` (it said `subscribed` before, and the digest
+  counted those as readers), and `subscriberStatus` maps `blocked` to
+  `inactive`, so a firewalled address is never sent a Thingy sign-in. The
+  digest splits firewall catches into "through our form" (with each row's
+  Turnstile result) and "straight to Buttondown" (bots; a `+tag@domain`
+  run of three or more is one line).
+
+### Turnstile on the email-sending actions (2026-10-14)
+
+Subscription bombing: bots type victims' real addresses into the form so
+our confirmation mail lands in their inboxes. Every public action that
+mails a typed address checks a Cloudflare Turnstile token first
+(`shared/turnstile.mts`): `/auth` `subscribe`, `resend_confirmation` and
+`check`, and the MCP `/authorize` email step. The token arrives as
+`turnstile_token` (JSON) or `cf-turnstile-response` (the widget's form
+field); the widget `thingelstad.com sign-in and subscribe` (site key
+`0x4AAAAAAFWqGqZVkNAWfIQn`, public, managed mode) lists weekly, thingy and
+librarian .thingelstad.com. Its secret is `TURNSTILE_SECRET_KEY` in the
+runtime secret; it was made with the `cf` CLI on Otto.
+
+- **Mode** is `DEFAULT_TURNSTILE_MODE` (`observe`), overridable with
+  `TURNSTILE_MODE` (`off` / `observe` / `enforce`). Observe checks, records
+  and never refuses. Enforce refuses a missing or failed token (403
+  `turnstile_failed`, a sentence pointing at Jamie's email); a Cloudflare
+  outage, a rejected secret or no secret always goes ahead.
+- **One token, one address, five minutes.** Tokens are single-use at
+  Cloudflare and the forms check and then subscribe, so the verdict is kept
+  in the table (`turnstile#<sha256 of token>`, bound to the email hash, three
+  uses). A token presented for another address fails.
+- **Evidence.** The ledger row carries `turnstile`; `turnstile#stats` /
+  `<Central day>` counts `<surface>_<result>`; the digest prints yesterday's
+  tally and lists subscribes that went ahead without passing.
+- **Limits beside it.** Subscribe and resend are capped per address
+  (`SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX`, 5/hour) on top of the per-IP `/auth`
+  cap; the MCP email step is capped per IP (20/hour) on top of the
+  per-address code cap.
+- The pages load Cloudflare's script only when someone starts typing an
+  email (weekly forms, Thingy sign-in); the MCP email-step page loads it
+  with the page and is the only OAuth page whose CSP allows
+  `challenges.cloudflare.com`. Tests: `lambda/tests/turnstile.test.mjs`.
 
 ## Deploy
 
@@ -143,7 +185,7 @@ These are set at deploy time from `.env`, written into the Lambda environment by
 
 **Credentials are the exception.** `BUTTONDOWN_API_KEY`, `SESSION_SECRET`,
 `THINGY_WEB_ORIGIN_TOKEN`, `FASTMAIL_JMAP_TOKEN`, `LIBRARIAN_RETRIEVE_SECRET`,
-`LIBRARIAN_GOLDEN_RETRIEVE_SECRET` and `ANTHROPIC_API_KEY` live in one Secrets
+`LIBRARIAN_GOLDEN_RETRIEVE_SECRET`, `ANTHROPIC_API_KEY` and `TURNSTILE_SECRET_KEY` live in one Secrets
 Manager secret, `weekly-thing-librarian-runtime` (a JSON object of those
 names), and Secrets Manager is their source of truth (2026-10-07). Jamie keeps
 the secret by hand in the console: the stack does not own it, no deploy
@@ -184,6 +226,9 @@ resolved into plaintext configuration. A new credential goes into the secret (by
 | `THINGY_TINYLYTICS_EMAIL_SITE_UID` | auth | Optional Tinylytics site UID override for email tracking pixels; defaults to Thingy's public site UID |
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
+| `SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX` | auth | Optional; hourly subscribe + resend cap per address, default 5 |
+| `TURNSTILE_MODE` | auth | Optional; `off` / `observe` / `enforce`, default `DEFAULT_TURNSTILE_MODE` in `shared/turnstile.mts` (`observe`) |
+| `TURNSTILE_SECRET_KEY` | auth | From the runtime secret; without it every check records `unconfigured` and goes ahead |
 | `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-5-5` (Anthropic API id); main chat/default persona work |
 | `THINGY_FAST_MODEL` | all | `claude-haiku-5-5` (2026-10-08, was `claude-haiku-4-5`); small structured/background work (preflight, welcome, thank-you, the eval reviewer) |
 | `THINGY_PREMIUM_MODEL` | all | `claude-opus-5-5`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |

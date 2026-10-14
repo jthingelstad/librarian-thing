@@ -25,6 +25,8 @@ import {
 } from '../shared/magic-login.mjs';
 import type { MagicRedeemResult, Subscriber } from '../shared/magic-login.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
+import { checkTurnstile, turnstileTokenFrom } from '../shared/turnstile.mjs';
+import type { TurnstileSurface } from '../shared/turnstile.mjs';
 import {
   chatDailyQuota,
   mcpDailyQuota,
@@ -709,6 +711,36 @@ async function verifyMagicCode(event: LibrarianHttpEvent, body: JsonRecord, star
   return magicRedeemResponse(result, event, start);
 }
 
+// Subscribe + resend confirmations per address per hour (rate-limit.mts window).
+const SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX = 5;
+
+const TURNSTILE_SURFACE: Record<string, TurnstileSurface> = {
+  subscribe: 'subscribe',
+  resend_confirmation: 'resend',
+  check: 'check'
+};
+
+/**
+ * Buttondown answers a firewalled create with 2xx and files the address as
+ * blocked. The reader is told the same as anyone (check your inbox); the
+ * ledger records the truth so the digest stops counting it as a reader.
+ */
+function firewalled(subscriber: unknown) {
+  return String((subscriber as { type?: unknown } | null)?.type || '').toLowerCase() === 'blocked';
+}
+
+function turnstileRefusal(event: LibrarianHttpEvent) {
+  return jsonResponse(
+    403,
+    {
+      status: 'turnstile_failed',
+      error:
+        'We couldn’t confirm this request came from a person. Reload the page and try again, or email jamie@thingelstad.com.'
+    },
+    event
+  );
+}
+
 async function authHandler(event: LibrarianHttpEvent) {
   const start = performance.now();
   const body = parseBody(event);
@@ -780,11 +812,41 @@ async function authHandler(event: LibrarianHttpEvent) {
     return jsonResponse(400, { error: 'Enter a valid email address.' }, event);
   }
 
+  // Subscribe and resend mail Buttondown's confirmation to whatever address
+  // was typed, and each repeat for an unconfirmed address is another email
+  // to that inbox. The IP limit above does nothing against a bot spread
+  // over many IPs aiming at one victim, so the address has its own.
+  if (action === 'subscribe' || action === 'resend_confirmation') {
+    const addressLimit = Number(process.env.SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX || SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX);
+    if (!(await checkRateLimit(`subscribe#address:${hashedEmail}`, addressLimit))) {
+      logEvent('warning', 'auth_subscribe_address_rate_limited', { email_hash: hashedEmail, action });
+      return jsonResponse(429, { error: 'Too many attempts for that address. Please try again in an hour.' }, event);
+    }
+  }
+
+  // Every action below can send mail to the typed address, so a person must
+  // have asked (shared/turnstile.mts). Observe mode records and never refuses.
+  const turnstile = await checkTurnstile({
+    token: turnstileTokenFrom(body),
+    event,
+    emailHash: hashedEmail || '',
+    surface: TURNSTILE_SURFACE[action] || 'check'
+  });
+
   if (action === 'subscribe') {
     // The address is in the ledger before Buttondown hears about it, so a
     // reader who asked to subscribe is never lost to whatever happens next
     // (shared/subscribe-ledger.mts).
-    const ledger = await recordAttempt({ email, source, campaign_ref: attribution?.ref });
+    const ledger = await recordAttempt({
+      email,
+      source,
+      campaign_ref: attribution?.ref,
+      turnstile: turnstile.result
+    });
+    if (!turnstile.allowed) {
+      await recordOutcome(ledger, 'turnstile_refused', { detail: turnstile.codes.join(',') });
+      return turnstileRefusal(event);
+    }
 
     // The address may already exist — a previously-unsubscribed reader
     // coming back, or someone re-entering a live address. Creating over an
@@ -849,6 +911,19 @@ async function authHandler(event: LibrarianHttpEvent) {
 
     if (existingStatus === 'inactive') {
       const existingType = String(existing?.type || '').toLowerCase();
+      if (existingType === 'blocked') {
+        // Already caught by the firewall and waiting for Jamie's review.
+        logEvent('info', 'auth_subscribe_already_blocked', { email_hash: hashedEmail });
+        await recordOutcome(ledger, 'blocked', { detail: 'already blocked' });
+        return jsonResponse(
+          200,
+          {
+            status: 'resubscribe_unavailable',
+            error: 'That email can’t be re-added automatically — please reach out to Jamie directly.'
+          },
+          event
+        );
+      }
       if (existingType !== 'unsubscribed') {
         // disabled / undeliverable states cannot be revived over the API.
         logEvent('warning', 'auth_resubscribe_unavailable', { email_hash: hashedEmail, subscriber_type: existingType });
@@ -913,7 +988,7 @@ async function authHandler(event: LibrarianHttpEvent) {
 
     try {
       const subscriber = await createSubscriber(email, event, source, attribution);
-      await recordOutcome(ledger, 'subscribed');
+      await recordOutcome(ledger, firewalled(subscriber) ? 'blocked' : 'subscribed');
       return subscribed(subscriber, false);
     } catch (error) {
       if (!isSuppressedError(error)) {
@@ -937,7 +1012,7 @@ async function authHandler(event: LibrarianHttpEvent) {
       // being bounced to Buttondown's dead-end page (Patrick, 2026-09-20).
       try {
         const subscriber = await createSubscriber(email, event, source, attribution, { revive: true });
-        await recordOutcome(ledger, 'resubscribed', buttondownErrorFields(error));
+        await recordOutcome(ledger, firewalled(subscriber) ? 'blocked' : 'resubscribed', buttondownErrorFields(error));
         return subscribed(subscriber, true);
       } catch (retryError) {
         logEvent('warning', 'auth_subscribe_needs_jamie', {
@@ -959,6 +1034,8 @@ async function authHandler(event: LibrarianHttpEvent) {
       }
     }
   }
+
+  if (!turnstile.allowed) return turnstileRefusal(event);
 
   if (action === 'resend_confirmation') {
     try {

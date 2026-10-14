@@ -93,23 +93,31 @@ export function parseBody(event?: LibrarianHttpEvent | null): Record<string, unk
 
 // HTML responses for the OAuth authorize pages. Deliberately no CORS headers:
 // the authorization endpoint is a top-level browser navigation, not an API.
+// Chrome enforces form-action against the REDIRECT CHAIN of a form
+// submission. Include HTTPS callbacks plus the two loopback HTTP origins
+// accepted by validRedirectUri; otherwise consent succeeds server-side but
+// local MCP clients never receive the one-time code. The real control on
+// redirect targets is the server-side exact redirect_uri validation against
+// the registered client.
+const PAGE_CSP =
+  "default-src 'none'; style-src 'unsafe-inline'; img-src https://thingy.thingelstad.com; form-action 'self' https: http://localhost:* http://127.0.0.1:*; base-uri 'none'; frame-ancestors 'none'";
+const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
+
 export function htmlResponse(
   statusCode: number,
   html: string,
-  headers: Record<string, string> = {}
+  headers: Record<string, string> = {},
+  options: { turnstile?: boolean } = {}
 ): LibrarianHttpResponse {
   return {
     statusCode,
     headers: {
       'content-type': 'text/html; charset=utf-8',
-      'content-security-policy':
-        // Chrome enforces form-action against the REDIRECT CHAIN of a form
-        // submission. Include HTTPS callbacks plus the two loopback HTTP
-        // origins accepted by validRedirectUri; otherwise consent succeeds
-        // server-side but local MCP clients never receive the one-time code.
-        // The real control on redirect targets is the server-side exact
-        // redirect_uri validation against the registered client.
-        "default-src 'none'; style-src 'unsafe-inline'; img-src https://thingy.thingelstad.com; form-action 'self' https: http://localhost:* http://127.0.0.1:*; base-uri 'none'; frame-ancestors 'none'",
+      // Only the page that sends a sign-in code loads Cloudflare Turnstile
+      // (its script and its challenge iframe).
+      'content-security-policy': options.turnstile
+        ? `${PAGE_CSP}; script-src ${TURNSTILE_ORIGIN}; frame-src ${TURNSTILE_ORIGIN}`
+        : PAGE_CSP,
       'referrer-policy': 'no-referrer',
       'x-content-type-options': 'nosniff',
       'x-frame-options': 'DENY',

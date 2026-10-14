@@ -33,12 +33,20 @@ export type LedgerOutcome =
   | 'resubscribed'
   | 'resubscribe_unavailable'
   | 'suppressed'
+  | 'blocked'
+  | 'turnstile_refused'
   | 'lookup_failed'
   | 'create_failed'
   | 'reminder_failed';
 
 /** Final outcomes that need a person: the reader wanted in and the API could not do it. */
 export const NEEDS_JAMIE: ReadonlySet<LedgerOutcome> = new Set(['suppressed', 'resubscribe_unavailable']);
+/**
+ * Buttondown's firewall took the address but filed it as blocked: its API
+ * answers 2xx, so before 2026-10-14 these were recorded as `subscribed`
+ * and the digest counted them as readers. Jamie reviews them by hand.
+ */
+export const BLOCKED: ReadonlySet<LedgerOutcome> = new Set(['blocked']);
 /** Outcomes that were the machinery's fault and may clear on their own. */
 export const TRANSIENT: ReadonlySet<LedgerOutcome> = new Set([
   'lookup_failed',
@@ -56,6 +64,8 @@ export interface LedgerRow {
   outcome: LedgerOutcome;
   buttondown_code?: string;
   detail?: string;
+  /** The Turnstile result for the request (shared/turnstile.mts). */
+  turnstile?: string;
 }
 
 export interface LedgerKey {
@@ -75,6 +85,7 @@ export async function recordAttempt(input: {
   email: unknown;
   source: unknown;
   campaign_ref?: unknown;
+  turnstile?: string;
 }): Promise<LedgerKey | null> {
   const table = tableName();
   if (!table) return null;
@@ -90,6 +101,7 @@ export async function recordAttempt(input: {
     ttl: N(Math.floor(Date.now() / 1000) + LEDGER_TTL_DAYS * 86_400)
   };
   if (input.campaign_ref) item.campaign_ref = S(input.campaign_ref);
+  if (input.turnstile) item.turnstile = S(input.turnstile);
   try {
     await dynamodb.send(new PutItemCommand({ TableName: table, Item: item }));
     return key;
@@ -159,7 +171,8 @@ export async function listAttemptsSince(sinceIso: string): Promise<LedgerRow[]> 
         campaign_ref: item.campaign_ref?.S,
         outcome: (item.outcome?.S || 'pending') as LedgerOutcome,
         buttondown_code: item.buttondown_code?.S,
-        detail: item.detail?.S
+        detail: item.detail?.S,
+        turnstile: item.turnstile?.S
       });
     }
     startKey = page.LastEvaluatedKey;

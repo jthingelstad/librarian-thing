@@ -20,6 +20,7 @@ const SECRET = {
   LIBRARIAN_RETRIEVE_SECRET: 'retrieve-value',
   LIBRARIAN_GOLDEN_RETRIEVE_SECRET: 'golden-value',
   ANTHROPIC_API_KEY: '',
+  TURNSTILE_SECRET_KEY: 'turnstile-value',
   // A retired name left in the secret is ignored.
   BRAVE_SEARCH_API_KEY: '',
   UNRELATED: 'ignored'

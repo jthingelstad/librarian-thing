@@ -74,7 +74,12 @@
 // also_in_issues names the issues whose Journal reprinted the post,
 // linked_from_issues the issues that link it without reprinting it (Jamie,
 // 2026-10-01; additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.16.0';
+// 4.17.0: /auth subscribe, resend_confirmation and check take an optional
+// turnstile_token (Cloudflare Turnstile, shared/turnstile.mts); one token
+// serves the same address for five minutes. A refused request answers 403
+// {status: 'turnstile_failed', error}. Observe mode until enforced: a missing
+// token is recorded and the request goes ahead (2026-10-14; additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.17.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).

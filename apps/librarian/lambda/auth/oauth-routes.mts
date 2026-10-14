@@ -30,6 +30,7 @@ import {
   verifyPkce
 } from '../shared/oauth-store.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
+import { checkTurnstile, turnstileSiteKey, turnstileTokenFrom } from '../shared/turnstile.mjs';
 import { consumeDailyQuotaStrict } from '../shared/quota.mjs';
 import { emailHash, normalizeEmail } from '../shared/session.mjs';
 
@@ -299,9 +300,13 @@ ${errorMessage ? `<p class="error">${escapeHtml(errorMessage)}</p>` : ''}
 ${hiddenPendingField(pendingId)}
 <input type="hidden" name="step" value="email">
 <input type="email" name="email" placeholder="you@example.com" autocomplete="email" value="${escapeHtml(rememberedEmail)}" required autofocus>
+<div class="cf-turnstile" data-sitekey="${escapeHtml(turnstileSiteKey())}" data-action="mcp-signin" data-appearance="interaction-only" data-refresh-expired="auto"></div>
 <button type="submit">Email me a code</button>
-</form>`;
-  return htmlResponse(200, pageHtml('Sign in to Thingy', inner));
+</form>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>`;
+  // Turnstile renders into .cf-turnstile and adds cf-turnstile-response to
+  // the form; it shows itself only when Cloudflare wants a click.
+  return htmlResponse(200, pageHtml('Sign in to Thingy', inner), {}, { turnstile: true });
 }
 
 function codeStepPage(pendingId: string, email: string, errorMessage = '') {
@@ -366,6 +371,10 @@ async function loadValidatedClient(clientId: unknown, redirectUri: unknown) {
 }
 
 const AUTHORIZE_RATE_LIMIT_MAX = 30;
+// The email step sends a code. A pending row can be re-posted with a new
+// address each time, so the per-address cap alone left one IP free to mail
+// any number of readers.
+const AUTHORIZE_EMAIL_RATE_LIMIT_MAX = 20;
 
 // A client a reader registered from Thingy's account panel authorizes that
 // reader only: its id is pasted into one person's app, and deleting it there
@@ -433,6 +442,23 @@ async function handleEmailStep(
   const email = normalizeEmail(body.email);
   if (!EMAIL_RE.test(email)) {
     return emailStepPage(pending.id, client.clientName, 'Enter a valid email address.');
+  }
+  if (!(await checkRateLimit(`oauth#email:${clientIdentityHash(event)}`, AUTHORIZE_EMAIL_RATE_LIMIT_MAX))) {
+    return emailStepPage(pending.id, client.clientName, 'Too many sign-in attempts. Please wait a bit and try again.');
+  }
+  const turnstile = await checkTurnstile({
+    token: turnstileTokenFrom(body),
+    event,
+    emailHash: emailHash(email),
+    surface: 'mcp_signin'
+  });
+  if (!turnstile.allowed) {
+    return emailStepPage(
+      pending.id,
+      client.clientName,
+      'We couldn’t confirm this request came from a person. Try again, or email jamie@thingelstad.com.',
+      email
+    );
   }
   let subscriber;
   try {
