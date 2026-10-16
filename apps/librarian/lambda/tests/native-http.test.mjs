@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { makeServer } from '../dist/web/server.mjs';
 import { clientSourceIp } from '../dist/shared/http.mjs';
+import { sessionCookie } from '../dist/shared/web-session.mjs';
 test('native request-local records preserve cookies, raw OAuth query and bearer identity', async () => {
   const seen = [];
   const app = makeServer(
@@ -22,7 +23,7 @@ test('native request-local records preserve cookies, raw OAuth query and bearer 
   const responses = await Promise.all(
     ['one', 'two'].map((id) =>
       app.request('/authorize?scope=archive%3Aread+offline_access&x=%2B&x=two', {
-        headers: { authorization: 'Bearer ' + id, cookie: '__Host-thingy_session=fixture' }
+        headers: { authorization: 'Bearer ' + id, cookie: 'other=1; __Host-thingy_session=fixture' }
       })
     )
   );
@@ -31,6 +32,8 @@ test('native request-local records preserve cookies, raw OAuth query and bearer 
     { bearer: 'Bearer two' }
   ]);
   assert.ok(seen.every((req) => req.rawQueryString.includes('x=%2B&x=two')));
+  assert.ok(seen.every((req) => req.cookies.includes('__Host-thingy_session=fixture')));
+  assert.equal(sessionCookie(seen[0]), 'fixture');
   assert.equal(responses[0].headers.get('cache-control'), 'no-store');
   assert.match(responses[0].headers.get('set-cookie'), /Secure; HttpOnly/);
 });

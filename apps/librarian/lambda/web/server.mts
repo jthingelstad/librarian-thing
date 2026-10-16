@@ -39,6 +39,12 @@ export function makeServer(dispatch: { auth: Auth } | { archive: Archive }, time
       method: c.req.method,
       path: url.pathname,
       headers: Object.fromEntries(c.req.raw.headers),
+      // The session code reads cookies as "name=value" entries (the API
+      // Gateway shape), so split the Cookie header into that list.
+      cookies: (c.req.header('cookie') || '')
+        .split(';')
+        .map((entry) => entry.trim())
+        .filter(Boolean),
       rawQueryString: url.search.slice(1),
       queryStringParameters: Object.fromEntries(url.searchParams),
       body: ['GET', 'HEAD'].includes(c.req.method) ? '' : await c.req.text()
