@@ -59,7 +59,11 @@ The existing Librarian distribution is manually managed. `front-door.mjs` owns
 its release changes with ETag compare-and-swap and a private original-config
 receipt. Its sole `native` command preserves the hostname and route inventory.
 Legacy `auth`/`rollback` modes are refused. External requests forward no cookies or X-Thingy-Origin, and
-`/tools` remains outside this door. The authorization query function normalizes
+`/tools` remains outside this door. The one exception is the `/authorize` behavior the writer adds
+in front of the default: `NativeAuthorizeRequestPolicy` forwards exactly `thingy_email`, the
+remembered sign-in email, so the page can prefill it and the consent response's Set-Cookie reaches
+the browser (CloudFront strips Set-Cookie where no cookie is forwarded). It never forwards the web
+session cookie. The authorization query function normalizes
 form-encoded spaces while preserving literal pluses and repeated values.
 
 For a rollback, preserve current artifact parameters and set live revision IDs

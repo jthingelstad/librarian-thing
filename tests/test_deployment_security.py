@@ -285,3 +285,35 @@ def test_digest_handled_failure_still_feeds_subscription_alarm():
     alarm = resources["LibrarianSubscribeFailuresAlarm"]["Properties"]
     assert transformation["MetricNamespace"] == alarm["Namespace"]
     assert transformation["MetricName"] == alarm["MetricName"]
+
+
+def test_only_the_authorize_policy_forwards_a_cookie_and_only_thingy_email():
+    template = yaml.load(
+        (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
+    )
+    policies = {
+        name: resource["Properties"]["OriginRequestPolicyConfig"]
+        for name, resource in template["Resources"].items()
+        if resource["Type"] == "AWS::CloudFront::OriginRequestPolicy"
+    }
+    authorize = policies.pop("NativeAuthorizeRequestPolicy")
+    # The /authorize sign-in page prefills from thingy_email; the web session
+    # cookie (__Host-thingy_session) must never reach librarian.thingelstad.com.
+    assert authorize["CookiesConfig"] == {
+        "CookieBehavior": "whitelist",
+        "Cookies": ["thingy_email"],
+    }
+    external = policies["NativeExternalRequestPolicy"]
+    assert authorize["HeadersConfig"] == external["HeadersConfig"]
+    assert authorize["QueryStringsConfig"] == external["QueryStringsConfig"]
+    for config in policies.values():
+        assert config["CookiesConfig"] == {"CookieBehavior": "none"}
+    caches = [
+        resource["Properties"]["CachePolicyConfig"]
+        for resource in template["Resources"].values()
+        if resource["Type"] == "AWS::CloudFront::CachePolicy"
+    ]
+    for cache in caches:
+        assert cache["ParametersInCacheKeyAndForwardedToOrigin"]["CookiesConfig"] == {
+            "CookieBehavior": "none"
+        }

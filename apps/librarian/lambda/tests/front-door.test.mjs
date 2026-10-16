@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { configurationHash, nativeConfig, verifyPriorConfig } from '../scripts/front-door.mjs';
+import { AUTHORIZE_PATH, configurationHash, nativeConfig, verifyPriorConfig } from '../scripts/front-door.mjs';
 
 const original = {
   Aliases: { Items: ['librarian.thingelstad.com'] },
@@ -19,6 +19,7 @@ const outputs = {
   NativeExternalOriginAccess: 'native-oac',
   NativeExternalCachePolicy: 'native-cache',
   NativeExternalRequestPolicy: 'native-request',
+  NativeAuthorizeRequestPolicy: 'native-authorize-request',
   NativeExternalOAuthFunction: 'native-oauth-function'
 };
 const reorder = (value) =>
@@ -64,4 +65,39 @@ test('both origins use native endpoints and retired routing modes are refused', 
     assert.throws(() => nativeConfig(original, outputs, mode), /Legacy routing is retired/);
     assert.throws(() => verifyPriorConfig({ original, mode }, current, outputs), /Legacy routing is retired/);
   }
+});
+
+test('/authorize gets its own behavior forwarding the remembered-email cookie, and nothing else changes', () => {
+  const withStream = structuredClone(original);
+  withStream.CacheBehaviors = {
+    Quantity: 2,
+    Items: [
+      { PathPattern: '/chat', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin' },
+      { PathPattern: '/mcp', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin' }
+    ]
+  };
+  const config = nativeConfig(withStream, outputs);
+  const [authorize, ...rest] = config.CacheBehaviors.Items;
+  assert.equal(config.CacheBehaviors.Quantity, 3);
+  assert.equal(authorize.PathPattern, AUTHORIZE_PATH);
+  assert.equal(authorize.TargetOriginId, 'LibrarianApiGatewayOrigin');
+  assert.equal(authorize.OriginRequestPolicyId, outputs.NativeAuthorizeRequestPolicy);
+  assert.equal(authorize.CachePolicyId, outputs.NativeExternalCachePolicy);
+  assert.deepEqual(authorize.FunctionAssociations, config.DefaultCacheBehavior.FunctionAssociations);
+  // Every other behavior, the default included, stays cookie-free.
+  for (const behavior of [config.DefaultCacheBehavior, ...rest]) {
+    assert.equal(behavior.OriginRequestPolicyId, outputs.NativeExternalRequestPolicy);
+  }
+  assert.deepEqual(
+    rest.map((behavior) => behavior.PathPattern),
+    ['/chat', '/mcp']
+  );
+  // Re-applying to an already-native config is a no-op (one /authorize, same hash).
+  const again = nativeConfig(config, outputs);
+  assert.equal(again.CacheBehaviors.Items.filter((b) => b.PathPattern === AUTHORIZE_PATH).length, 1);
+  assert.equal(configurationHash(again), configurationHash(config));
+  assert.throws(
+    () => nativeConfig(withStream, { ...outputs, NativeAuthorizeRequestPolicy: undefined }),
+    /NativeAuthorizeRequestPolicy/
+  );
 });

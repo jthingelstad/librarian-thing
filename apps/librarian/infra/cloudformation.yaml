@@ -1147,6 +1147,19 @@ Resources:
           Headers: [Origin, Content-Type, Accept, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
         CookiesConfig: { CookieBehavior: none }
         QueryStringsConfig: { QueryStringBehavior: all }
+  # The /authorize behavior alone: the external policy plus the one cookie the
+  # sign-in page reads (the remembered, verified email). Forwarding a cookie is
+  # also what lets the consent response's Set-Cookie reach the browser.
+  NativeAuthorizeRequestPolicy:
+    Type: AWS::CloudFront::OriginRequestPolicy
+    Properties:
+      OriginRequestPolicyConfig:
+        Name: librarian-native-authorize
+        HeadersConfig:
+          HeaderBehavior: whitelist
+          Headers: [Origin, Content-Type, Accept, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
+        CookiesConfig: { CookieBehavior: whitelist, Cookies: [thingy_email] }
+        QueryStringsConfig: { QueryStringBehavior: all }
   NativeOAuthQueryFunction:
     Type: AWS::CloudFront::Function
     Properties:
@@ -1264,6 +1277,9 @@ Outputs:
 
   NativeExternalRequestPolicy:
     Value: !GetAtt NativeExternalRequestPolicy.Id
+
+  NativeAuthorizeRequestPolicy:
+    Value: !GetAtt NativeAuthorizeRequestPolicy.Id
 
   NativeExternalOAuthFunction:
     Value: !GetAtt NativeOAuthQueryFunction.FunctionMetadata.FunctionARN

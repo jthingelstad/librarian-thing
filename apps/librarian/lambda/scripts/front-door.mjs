@@ -7,6 +7,7 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 const ID = 'E18I2CIBERFMB7';
+export const AUTHORIZE_PATH = '/authorize';
 const canonical = (value) =>
   Array.isArray(value)
     ? value.map(canonical)
@@ -68,6 +69,17 @@ export function nativeConfig(config, outputs, mode = 'native') {
     Quantity: 1,
     Items: [{ EventType: 'viewer-request', FunctionARN: outputs.NativeExternalOAuthFunction }]
   };
+  // /authorize is the auth origin's default behavior plus one cookie:
+  // thingy_email, the remembered sign-in email (Path=/authorize). Its own
+  // behavior keeps every other auth route cookie-free in both directions.
+  if (!outputs.NativeAuthorizeRequestPolicy) throw new Error('Missing NativeAuthorizeRequestPolicy output');
+  const authorize = {
+    ...structuredClone(next.DefaultCacheBehavior),
+    PathPattern: AUTHORIZE_PATH,
+    OriginRequestPolicyId: outputs.NativeAuthorizeRequestPolicy
+  };
+  const others = (next.CacheBehaviors.Items || []).filter((behavior) => behavior.PathPattern !== AUTHORIZE_PATH);
+  next.CacheBehaviors = { Quantity: others.length + 1, Items: [authorize, ...others] };
   return next;
 }
 async function main() {
