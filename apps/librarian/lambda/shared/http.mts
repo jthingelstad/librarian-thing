@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { LIBRARIAN_CONTRACT_VERSION } from './librarian-contract.mjs';
 
 export interface LibrarianHttpEvent {
@@ -177,6 +178,27 @@ export function clientSourceIp(event?: LibrarianHttpEvent | null) {
     if (IPV4_OR_6.test(last)) return last;
   }
   return event?.requestContext?.http?.sourceIp || event?.requestContext?.identity?.sourceIp || '';
+}
+
+// Abuse forensics without raw IPs in logs: the hashed viewer identity plus
+// the forwarding topology (X-Forwarded-For hop count, and whether the
+// request came through the edge). The 2026-09-02 fleet and the
+// CloudFront-identity bug were both diagnosable only by code-reading; this
+// makes them queryable. A native request has no connection address: it came
+// through the edge exactly when CloudFront stamped a well-formed
+// CloudFront-Viewer-Address (the native origins take signed CloudFront
+// traffic only). Event-shaped requests compare the connection peer with the
+// viewer address, as before.
+export function forwardingShape(event?: LibrarianHttpEvent | null) {
+  const headers = normalizeHeaders(event?.headers || {});
+  const forwarded = String(headers['x-forwarded-for'] || '');
+  const viewer = clientSourceIp(event);
+  const connection = event?.requestContext?.http?.sourceIp || '';
+  return {
+    ip_hash: viewer ? crypto.createHash('sha256').update(viewer).digest('hex').slice(0, 16) : '',
+    xff_depth: forwarded ? forwarded.split(',').length : 0,
+    via_edge: event?.native ? Boolean(viewer) : Boolean(connection && viewer && connection !== viewer)
+  };
 }
 
 export function userAgent(event?: LibrarianHttpEvent | null) {

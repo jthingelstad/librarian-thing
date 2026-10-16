@@ -64,11 +64,33 @@ export function authorizationServerMetadata() {
   };
 }
 
+const PROTECTED_RESOURCE_WELL_KNOWN = '/.well-known/oauth-protected-resource';
+// The protected resources this server names in RFC 9728's path-suffixed
+// form (section 3.1): only the MCP door.
+const PROTECTED_RESOURCE_PATHS = ['/mcp'];
+
+/**
+ * The resource identifier a metadata request asks about, or null when the
+ * path is not a protected-resource metadata URL. The bare well-known URL
+ * (and the older `/mcp/.well-known/...` spelling clients also try) describe
+ * the host; RFC 9728's `/.well-known/oauth-protected-resource/mcp` describes
+ * `<issuer>/mcp`, and its `resource` must be exactly that (section 3.3).
+ */
+export function protectedResourceFor(path: string): string | null {
+  const issuer = oauthIssuer();
+  if (path.endsWith(PROTECTED_RESOURCE_WELL_KNOWN)) return issuer;
+  if (path.startsWith(`${PROTECTED_RESOURCE_WELL_KNOWN}/`)) {
+    const suffix = path.slice(PROTECTED_RESOURCE_WELL_KNOWN.length);
+    if (PROTECTED_RESOURCE_PATHS.includes(suffix)) return `${issuer}${suffix}`;
+  }
+  return null;
+}
+
 // RFC 9728 protected resource metadata.
-export function protectedResourceMetadata() {
+export function protectedResourceMetadata(resource = oauthIssuer()) {
   const issuer = oauthIssuer();
   return {
-    resource: issuer,
+    resource,
     authorization_servers: [issuer],
     bearer_methods_supported: ['header'],
     scopes_supported: OAUTH_SCOPES
@@ -160,9 +182,8 @@ export const checkConnectionMembership: MembershipCheck = async (membership) => 
 
 export function handleOauthMetadata(event: LibrarianHttpEvent) {
   const { path } = methodAndPath(event);
-  const payload = path.endsWith('/.well-known/oauth-protected-resource')
-    ? protectedResourceMetadata()
-    : authorizationServerMetadata();
+  const resource = protectedResourceFor(path);
+  const payload = resource ? protectedResourceMetadata(resource) : authorizationServerMetadata();
   return oauthJson(200, payload, { 'cache-control': 'public, max-age=300' });
 }
 

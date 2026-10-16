@@ -278,7 +278,10 @@ pages. All OAuth rows live in the shared table (`oauthclient#`, `oauthpending#`,
 secrets stored as sha256 hex and ttl set; refresh tokens rotate and reuse
 revokes the whole family via the family row (no GSI). Token/authorize responses
 deliberately skip CORS and the contract header; metadata endpoints are cached
-five minutes. Issuer comes from `LIBRARIAN_OAUTH_ISSUER` (default
+five minutes. Protected-resource metadata answers at the bare well-known URL,
+at `/mcp/.well-known/oauth-protected-resource`, and at RFC 9728's
+path-suffixed `/.well-known/oauth-protected-resource/mcp`, whose `resource` is
+`<issuer>/mcp` (`protectedResourceFor`). Issuer comes from `LIBRARIAN_OAUTH_ISSUER` (default
 `https://librarian.thingelstad.com`). The authorization response carries the
 RFC 9207 `iss` parameter; the consent redirect is a 303; the sign-in pages use
 Thingy's design tokens, prefill the verified email from a first-party

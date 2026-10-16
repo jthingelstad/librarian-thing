@@ -82,7 +82,7 @@ import { recordMcpToolCall } from '../shared/mcp-audit-store.mjs';
 import { touchMcpConnection } from '../shared/mcp-connections.mjs';
 import { fetchPhotos, imageMediaType } from '../shared/photo-view.mjs';
 import { validateAccessToken } from '../shared/oauth-store.mjs';
-import { clientSourceIp, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
+import { clientSourceIp, forwardingShape, methodAndPath, normalizeHeaders, parseBody } from '../shared/http.mjs';
 import { agentSystemPrompt, agentUserPrompt, toolTitle } from '../shared/prompts.mjs';
 import { extractBearer, verifyToken } from '../shared/session.mjs';
 import { guestOriginOk, resolveSessionToken } from '../shared/web-session.mjs';
@@ -811,23 +811,6 @@ async function streamAgentAnswer(
       cache_write_input_tokens: usageTotals.cache_write_input_tokens,
       stop_reason: stopReason
     }
-  };
-}
-
-// Abuse forensics without raw IPs in logs: the hashed viewer identity
-// plus the forwarding topology (X-Forwarded-For hop count, and whether
-// the connection peer differed - i.e. the request came through the
-// edge). The 2026-09-02 fleet and the CloudFront-identity bug were both
-// diagnosable only by code-reading; this makes them queryable.
-function forwardingShape(event: LibrarianHttpEvent) {
-  const headers = normalizeHeaders(event?.headers || {});
-  const forwarded = String(headers['x-forwarded-for'] || '');
-  const viewer = clientSourceIp(event);
-  const connection = event?.requestContext?.http?.sourceIp || '';
-  return {
-    ip_hash: viewer ? crypto.createHash('sha256').update(viewer).digest('hex').slice(0, 16) : '',
-    xff_depth: forwarded ? forwarded.split(',').length : 0,
-    via_edge: Boolean(connection && viewer && connection !== viewer)
   };
 }
 

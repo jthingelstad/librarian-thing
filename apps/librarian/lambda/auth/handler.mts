@@ -70,7 +70,13 @@ import {
 import { errorFields, logEvent } from '../shared/logging.mjs';
 import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
 import { handleSharedConversationView, handleUserConversations } from './conversation-routes.mjs';
-import { handleAuthorize, handleOauthMetadata, handleRegister, handleToken } from './oauth-routes.mjs';
+import {
+  handleAuthorize,
+  handleOauthMetadata,
+  handleRegister,
+  handleToken,
+  protectedResourceFor
+} from './oauth-routes.mjs';
 import { loadUserConversationSummaries } from '../shared/conversation-store.mjs';
 import { dynamoNumber, dynamoString } from '../shared/user-conversations.mjs';
 import { loadRuntimeSecrets } from '../shared/runtime-secrets.mjs';
@@ -1212,7 +1218,7 @@ export async function handleAuthRequest(
       response = await handleSharedConversationView(event, path.slice(path.lastIndexOf('/') + 1), start);
     } else if (method === 'GET' && path.endsWith('/.well-known/oauth-authorization-server')) {
       response = handleOauthMetadata(event);
-    } else if (method === 'GET' && path.endsWith('/.well-known/oauth-protected-resource')) {
+    } else if (method === 'GET' && protectedResourceFor(path)) {
       response = handleOauthMetadata(event);
     } else if (method === 'POST' && path.endsWith('/register')) {
       response = await handleRegister(event);
