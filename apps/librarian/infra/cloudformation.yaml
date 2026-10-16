@@ -1016,6 +1016,28 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions: [!Ref LibrarianAlarmTopic]
 
+  # librarian.thingelstad.com (E18I2CIBERFMB7) is hand-managed through
+  # lambda/scripts/front-door.mjs, so its id is fixed here. Same shape as
+  # thingy-web-distribution-5xx. CloudFront metrics live in us-east-1.
+  LibrarianDistributionErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-distribution-5xx'
+      AlarmDescription: CloudFront returned more than 5% 5xx responses for librarian.thingelstad.com in two of three five-minute windows.
+      Namespace: AWS/CloudFront
+      MetricName: 5xxErrorRate
+      Dimensions:
+        - { Name: DistributionId, Value: E18I2CIBERFMB7 }
+        - { Name: Region, Value: Global }
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      DatapointsToAlarm: 2
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
+
   NativeLibrarianSubscribeFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
     Condition: NativeWebActive
@@ -1137,6 +1159,26 @@ Resources:
           HeadersConfig: { HeaderBehavior: whitelist, Headers: [Authorization] }
           CookiesConfig: { CookieBehavior: none }
           QueryStringsConfig: { QueryStringBehavior: none }
+  # The auth origin's behaviors (the default and /authorize) compress at the
+  # edge: CloudFront compresses only when the cache policy normalizes
+  # Accept-Encoding. The archive behaviors keep the policy above with
+  # compression off, so /chat's SSE is never buffered for compression.
+  NativeCompressedCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: librarian-native-compressed
+        MinTTL: 0
+        DefaultTTL: 0
+        MaxTTL: 1
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: true
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig: { HeaderBehavior: whitelist, Headers: [Authorization] }
+          CookiesConfig: { CookieBehavior: none }
+          QueryStringsConfig: { QueryStringBehavior: none }
+  # User-Agent reaches the origin (health probes are told apart by it) but
+  # stays out of every cache policy, so it never fragments a cache key.
   NativeExternalRequestPolicy:
     Type: AWS::CloudFront::OriginRequestPolicy
     Properties:
@@ -1144,7 +1186,7 @@ Resources:
         Name: librarian-native-external
         HeadersConfig:
           HeaderBehavior: whitelist
-          Headers: [Origin, Content-Type, Accept, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
+          Headers: [Origin, Content-Type, Accept, User-Agent, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
         CookiesConfig: { CookieBehavior: none }
         QueryStringsConfig: { QueryStringBehavior: all }
   # The /authorize behavior alone: the external policy plus the one cookie the
@@ -1157,7 +1199,7 @@ Resources:
         Name: librarian-native-authorize
         HeadersConfig:
           HeaderBehavior: whitelist
-          Headers: [Origin, Content-Type, Accept, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
+          Headers: [Origin, Content-Type, Accept, User-Agent, CloudFront-Viewer-Address, X-Librarian-Contract-Version, MCP-Protocol-Version, Mcp-Session-Id, Last-Event-ID]
         CookiesConfig: { CookieBehavior: whitelist, Cookies: [thingy_email] }
         QueryStringsConfig: { QueryStringBehavior: all }
   NativeOAuthQueryFunction:
@@ -1275,6 +1317,8 @@ Outputs:
   NativeExternalCachePolicy:
     Value: !GetAtt NativeExternalCachePolicy.Id
 
+  NativeCompressedCachePolicy:
+    Value: !GetAtt NativeCompressedCachePolicy.Id
   NativeExternalRequestPolicy:
     Value: !GetAtt NativeExternalRequestPolicy.Id
 

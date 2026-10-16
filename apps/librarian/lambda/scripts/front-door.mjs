@@ -8,6 +8,10 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 const ID = 'E18I2CIBERFMB7';
 export const AUTHORIZE_PATH = '/authorize';
+// Routes the code no longer serves. Their behaviors are dropped so the
+// distribution's route inventory matches the Lambdas (curiosity map retired
+// with the 2026-08 chat streamline; contract.test.mjs pins it gone).
+export const RETIRED_PATHS = ['/curiosity-map'];
 const canonical = (value) =>
   Array.isArray(value)
     ? value.map(canonical)
@@ -51,18 +55,24 @@ export function nativeConfig(config, outputs, mode = 'native') {
       origin.OriginAccessControlId = outputs.NativeExternalOriginAccess;
     }
   }
+  if (!outputs.NativeCompressedCachePolicy) throw new Error('Missing NativeCompressedCachePolicy output');
+  next.CacheBehaviors.Items = (next.CacheBehaviors.Items || []).filter(
+    (behavior) => !RETIRED_PATHS.includes(behavior.PathPattern)
+  );
+  next.CacheBehaviors.Quantity = next.CacheBehaviors.Items.length;
   for (const behavior of [next.DefaultCacheBehavior, ...next.CacheBehaviors.Items]) {
-    if (
-      behavior.TargetOriginId === 'LibrarianApiGatewayOrigin' ||
-      behavior.TargetOriginId === 'LibrarianStreamFunctionUrlOrigin'
-    ) {
+    const isAuth = behavior.TargetOriginId === 'LibrarianApiGatewayOrigin';
+    if (isAuth || behavior.TargetOriginId === 'LibrarianStreamFunctionUrlOrigin') {
       delete behavior.ForwardedValues;
       delete behavior.MinTTL;
       delete behavior.DefaultTTL;
       delete behavior.MaxTTL;
-      behavior.CachePolicyId = outputs.NativeExternalCachePolicy;
+      // The auth origin answers plain request/response JSON and HTML, so its
+      // behaviors compress. Archive behaviors never do: /chat and /mcp stream
+      // SSE, and compression would buffer it.
+      behavior.CachePolicyId = isAuth ? outputs.NativeCompressedCachePolicy : outputs.NativeExternalCachePolicy;
       behavior.OriginRequestPolicyId = outputs.NativeExternalRequestPolicy;
-      behavior.Compress = false;
+      behavior.Compress = isAuth;
     }
   }
   next.DefaultCacheBehavior.FunctionAssociations = {

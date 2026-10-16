@@ -65,6 +65,16 @@ remembered sign-in email, so the page can prefill it and the consent response's 
 the browser (CloudFront strips Set-Cookie where no cookie is forwarded). It never forwards the web
 session cookie. The authorization query function normalizes
 form-encoded spaces while preserving literal pluses and repeated values.
+The auth origin's behaviors (the default and `/authorize`) use
+`NativeCompressedCachePolicy` with compression on; archive behaviors keep
+`NativeExternalCachePolicy` with compression off so SSE is never buffered.
+User-Agent is forwarded by both origin request policies and is in no cache
+policy. Behaviors for retired routes (`RETIRED_PATHS`, now `/curiosity-map`)
+are dropped. Native responses are no-store unless a route sets its own
+cache-control on a GET/HEAD with no Authorization, Cookie, Origin or query
+string and no Set-Cookie (`responseCacheControl` in `lambda/web/server.mts`).
+`weekly-thing-librarian-distribution-5xx` watches this distribution's
+5xxErrorRate (over 5% in two of three five-minute windows).
 
 For a rollback, preserve current artifact parameters and set live revision IDs
 to the protected previous native IDs through CloudFormation, then read both

@@ -467,6 +467,16 @@ def configure_log_retention(stack_name: str, days: int = 30) -> None:
             logs.tag_resource(resourceArn=log_group_arn, tags=REPOSITORY_TAGS)
         except ClientError:
             logs.tag_log_group(logGroupName=log_group_name, tags=REPOSITORY_TAGS)
+    # Lambda Web Functions also write a copy of every native log line to a
+    # `.local` group the platform creates on its own, outside the stack, with
+    # no retention (2026-10-16 audit). Cap it like the stack's groups; never
+    # create one that is not there.
+    for server in ("auth", "archive"):
+        log_group_name = f"/aws/lambda/{stack_name}-web-{server}.local"
+        try:
+            logs.put_retention_policy(logGroupName=log_group_name, retentionInDays=days)
+        except logs.exceptions.ResourceNotFoundException:
+            continue
 
 
 def update_env_file(values: dict[str, str]) -> None:

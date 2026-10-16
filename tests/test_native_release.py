@@ -3,7 +3,7 @@
 import hashlib
 import importlib.util
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 
 import yaml
 
@@ -135,6 +135,38 @@ def test_log_setup_does_not_resolve_deleted_http_functions(monkeypatch):
     monkeypatch.setattr(deploy.boto3, "client", lambda name: clients[name])
     monkeypatch.setattr(deploy.boto3.session, "Session", lambda: Mock(region_name="us-east-1"))
     deploy.configure_log_retention("weekly-thing-librarian")
-    logs.put_retention_policy.assert_called_once_with(
-        logGroupName="/aws/lambda/eval-worker", retentionInDays=30
+    assert logs.put_retention_policy.call_args_list == [
+        call(logGroupName="/aws/lambda/eval-worker", retentionInDays=30),
+        call(logGroupName="/aws/lambda/weekly-thing-librarian-web-auth.local", retentionInDays=30),
+        call(
+            logGroupName="/aws/lambda/weekly-thing-librarian-web-archive.local", retentionInDays=30
+        ),
+    ]
+    logs.create_log_group.assert_called_once_with(logGroupName="/aws/lambda/eval-worker")
+
+
+def test_log_setup_skips_a_missing_web_function_local_group(monkeypatch):
+    cloudformation, logs, sts = Mock(), Mock(), Mock()
+    cloudformation.describe_stack_resource.return_value = {
+        "StackResourceDetail": {"PhysicalResourceId": "eval-worker"}
+    }
+    sts.get_caller_identity.return_value = {"Account": "999153317627"}
+
+    class NotFound(Exception):
+        pass
+
+    logs.exceptions.ResourceNotFoundException = NotFound
+    logs.exceptions.ResourceAlreadyExistsException = type("Exists", (Exception,), {})
+
+    def retention(*, logGroupName, retentionInDays):
+        if logGroupName.endswith("-web-auth.local"):
+            raise NotFound()
+
+    logs.put_retention_policy.side_effect = retention
+    clients = {"cloudformation": cloudformation, "logs": logs, "sts": sts}
+    monkeypatch.setattr(deploy.boto3, "client", lambda name: clients[name])
+    monkeypatch.setattr(deploy.boto3.session, "Session", lambda: Mock(region_name="us-east-1"))
+    deploy.configure_log_retention("weekly-thing-librarian")
+    assert [c.kwargs["logGroupName"] for c in logs.put_retention_policy.call_args_list][-1] == (
+        "/aws/lambda/weekly-thing-librarian-web-archive.local"
     )

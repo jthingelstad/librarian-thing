@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AUTHORIZE_PATH, configurationHash, nativeConfig, verifyPriorConfig } from '../scripts/front-door.mjs';
+import {
+  AUTHORIZE_PATH,
+  RETIRED_PATHS,
+  configurationHash,
+  nativeConfig,
+  verifyPriorConfig
+} from '../scripts/front-door.mjs';
 
 const original = {
   Aliases: { Items: ['librarian.thingelstad.com'] },
@@ -18,6 +24,7 @@ const outputs = {
   NativeArchiveLiveDomain: 'archive.lambda-web.us-east-1.on.aws',
   NativeExternalOriginAccess: 'native-oac',
   NativeExternalCachePolicy: 'native-cache',
+  NativeCompressedCachePolicy: 'native-compressed-cache',
   NativeExternalRequestPolicy: 'native-request',
   NativeAuthorizeRequestPolicy: 'native-authorize-request',
   NativeExternalOAuthFunction: 'native-oauth-function'
@@ -82,7 +89,7 @@ test('/authorize gets its own behavior forwarding the remembered-email cookie, a
   assert.equal(authorize.PathPattern, AUTHORIZE_PATH);
   assert.equal(authorize.TargetOriginId, 'LibrarianApiGatewayOrigin');
   assert.equal(authorize.OriginRequestPolicyId, outputs.NativeAuthorizeRequestPolicy);
-  assert.equal(authorize.CachePolicyId, outputs.NativeExternalCachePolicy);
+  assert.equal(authorize.CachePolicyId, outputs.NativeCompressedCachePolicy);
   assert.deepEqual(authorize.FunctionAssociations, config.DefaultCacheBehavior.FunctionAssociations);
   // Every other behavior, the default included, stays cookie-free.
   for (const behavior of [config.DefaultCacheBehavior, ...rest]) {
@@ -99,5 +106,40 @@ test('/authorize gets its own behavior forwarding the remembered-email cookie, a
   assert.throws(
     () => nativeConfig(withStream, { ...outputs, NativeAuthorizeRequestPolicy: undefined }),
     /NativeAuthorizeRequestPolicy/
+  );
+});
+
+test('auth behaviors compress, archive behaviors never do, and retired routes are dropped', () => {
+  const live = structuredClone(original);
+  live.DefaultCacheBehavior.Compress = false;
+  live.CacheBehaviors = {
+    Quantity: 4,
+    Items: [
+      { PathPattern: '/chat', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin', Compress: false },
+      { PathPattern: '/curiosity-map', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin', Compress: false },
+      { PathPattern: '/retrieve', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin', Compress: false },
+      { PathPattern: '/mcp', TargetOriginId: 'LibrarianStreamFunctionUrlOrigin', Compress: false }
+    ]
+  };
+  const config = nativeConfig(live, outputs);
+  const paths = config.CacheBehaviors.Items.map((behavior) => behavior.PathPattern);
+  assert.deepEqual(paths, [AUTHORIZE_PATH, '/chat', '/retrieve', '/mcp']);
+  assert.equal(config.CacheBehaviors.Quantity, 4);
+  for (const path of RETIRED_PATHS) assert.ok(!paths.includes(path));
+  const [authorize, ...archive] = config.CacheBehaviors.Items;
+  for (const behavior of [config.DefaultCacheBehavior, authorize]) {
+    assert.equal(behavior.Compress, true);
+    assert.equal(behavior.CachePolicyId, outputs.NativeCompressedCachePolicy);
+  }
+  // SSE stays unbuffered: no archive behavior compresses or uses the
+  // Accept-Encoding cache policy.
+  for (const behavior of archive) {
+    assert.equal(behavior.Compress, false, behavior.PathPattern);
+    assert.equal(behavior.CachePolicyId, outputs.NativeExternalCachePolicy, behavior.PathPattern);
+  }
+  assert.equal(configurationHash(nativeConfig(config, outputs)), configurationHash(config));
+  assert.throws(
+    () => nativeConfig(live, { ...outputs, NativeCompressedCachePolicy: undefined }),
+    /NativeCompressedCachePolicy/
   );
 });
