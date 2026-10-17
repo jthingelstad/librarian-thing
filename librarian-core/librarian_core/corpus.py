@@ -36,7 +36,7 @@ from .links import (
     unlink,
     web_domain,
 )
-from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR
+from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR, THINGS_PATH
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
 DEFAULT_EMBEDDING_DIMENSIONS = 1024
@@ -1271,6 +1271,262 @@ def _faq_chunks(*, faq_path: Path, issue_count: int, years_active: int) -> list[
     return out
 
 
+# --- Things I've built (thingelstad.xyz) ------------------------------------
+#
+# Jamie's project registry publishes itself as JSON (things.json: every thing
+# with its status, dates, topics, sources, connections, story and the latest
+# observation per source, plus the sourced history ledger). The sync workflow
+# snapshots it into data/things/things.json (pipeline/things/import_things.py)
+# and these chunks ride the Weekly Thing corpus the way the site pages do:
+# undated (a thing has started and ended dates, not a publish date), an
+# absolute thingelstad.xyz url, ``source_kind: "thing"`` and a stable id
+# ``thing:<id>:<n>`` so the embedded corpus is reproducible across builds.
+# Status is the registry's decision; the observations are evidence and never
+# set it, so the text states both and says which is which.
+
+THING_STATUS_GLOSS = {
+    "active": "being built or operated",
+    "dormant": "not currently worked on, and may return",
+    "retired": "deliberately ended",
+    "archived": "complete and preserved as it is",
+}
+
+
+def _thing_observation_notes(observation: Any) -> list[str]:
+    if not isinstance(observation, dict):
+        return []
+    notes: list[str] = []
+    if observation.get("kind") == "github":
+        if observation.get("description"):
+            notes.append(str(observation["description"]).strip().rstrip("."))
+        if observation.get("archived"):
+            notes.append("the repository is archived on GitHub")
+        for activity in observation.get("activity") or []:
+            latest = (activity or {}).get("latestCommit") or {}
+            if latest.get("date"):
+                notes.append(f"latest commit {str(latest['date'])[:10]}")
+                break
+        release = observation.get("release")
+        if isinstance(release, dict) and release.get("name"):
+            when = f" on {str(release['date'])[:10]}" if release.get("date") else ""
+            notes.append(f"latest release {release['name']}{when}")
+    elif observation.get("kind") == "web":
+        sitemap = observation.get("sitemap")
+        if isinstance(sitemap, dict) and sitemap.get("pages"):
+            note = f"{sitemap['pages']} pages in its sitemap"
+            if sitemap.get("newestModified"):
+                note += f", newest modified {str(sitemap['newestModified'])[:10]}"
+            notes.append(note)
+    return notes
+
+
+def _thing_source_line(source: dict[str, Any]) -> str:
+    kind = str(source.get("kind") or "source")
+    role = str(source.get("role") or "").replace("-", " ")
+    if kind == "github":
+        line = f"GitHub repository {source.get('repository') or source.get('url') or ''}"
+    else:
+        line = f"{kind.capitalize()} {source.get('url') or ''}"
+    if role:
+        line += f" ({role})"
+    notes = _thing_observation_notes(source.get("observation"))
+    if notes:
+        line += ": " + "; ".join(notes)
+    return line + "."
+
+
+def _thing_text(
+    thing: dict[str, Any],
+    *,
+    titles: dict[str, str],
+    topic_titles: dict[str, str],
+    history: list[dict[str, Any]],
+    incoming: list[tuple[dict[str, Any], dict[str, Any]]],
+) -> str:
+    title = str(thing.get("title") or thing["id"])
+    status = str(thing.get("status") or "")
+    paragraphs: list[str] = []
+    summary = str(thing.get("summary") or "").strip()
+    paragraphs.append(f"{title}: {summary}" if summary else title)
+    gloss = f" ({THING_STATUS_GLOSS[status]})" if status in THING_STATUS_GLOSS else ""
+    facts = [f"Status: {status}{gloss}."]
+    if thing.get("collection"):
+        facts.append(f"Collection: {thing['collection']}.")
+    if thing.get("started"):
+        facts.append(f"Started {thing['started']}.")
+    if thing.get("ended"):
+        facts.append(f"Ended {thing['ended']}.")
+    if thing.get("url"):
+        facts.append(f"Website: {thing['url']}.")
+    latest = thing.get("latest")
+    if isinstance(latest, dict) and latest.get("date"):
+        label = latest.get("label") or "Latest activity"
+        facts.append(f"{label} {str(latest['date'])[:10]} (an observation, not a status).")
+    paragraphs.append(" ".join(facts))
+    topics = [topic_titles.get(str(t), str(t)) for t in thing.get("topics") or []]
+    if topics:
+        paragraphs.append("Topics: " + ", ".join(topics) + ".")
+    relations: list[str] = []
+    for connection in thing.get("connections") or []:
+        target = titles.get(str(connection.get("to")), str(connection.get("to")))
+        relations.append(_thing_relation(title, connection, target))
+    for other, connection in incoming:
+        relations.append(_thing_relation(str(other.get("title") or other["id"]), connection, title))
+    if relations:
+        paragraphs.append("Connections: " + " ".join(relations))
+    sources = [_thing_source_line(s) for s in thing.get("sources") or [] if isinstance(s, dict)]
+    if sources:
+        paragraphs.append("Sources: " + " ".join(sources))
+    events = [e for e in history if thing["id"] in (e.get("things") or [])]
+    if events:
+        lines = ["History:"]
+        for event in events:
+            line = f"- {event.get('date')}: {event.get('title')}"
+            if event.get("summary"):
+                line += f". {str(event['summary']).strip().rstrip('.')}"
+            if event.get("source"):
+                line += f" ({event['source']})"
+            lines.append(line + ".")
+        paragraphs.append("\n".join(lines))
+    body = str(thing.get("body") or "").strip()
+    if body:
+        paragraphs.append(body)
+    return "\n\n".join(paragraphs)
+
+
+def _thing_relation(subject: str, connection: dict[str, Any], target: str) -> str:
+    line = f"{subject} {connection.get('label') or 'is connected to'} {target}"
+    if connection.get("detail"):
+        line += f": {str(connection['detail']).strip().rstrip('.')}"
+    return line + "."
+
+
+def _thing_chunk(
+    *,
+    chunk_id: str,
+    subject: str,
+    section: str,
+    url: str,
+    text: str,
+    thing: dict[str, Any] | None,
+) -> dict[str, Any]:
+    record: dict[str, Any] = {
+        "id": chunk_id,
+        "issue_number": None,
+        "subject": subject,
+        "publish_date": None,
+        "issue_year": None,
+        "url": url,
+        "section": section,
+        "text": text,
+        "word_count": len(words(text)),
+        "content_kind": "thing",
+        "topics": [],
+        "source_kind": "thing",
+    }
+    if thing is not None:
+        record["thing_id"] = thing["id"]
+        record["thing_status"] = thing.get("status")
+        record["started"] = thing.get("started")
+        record["ended"] = thing.get("ended")
+    return record
+
+
+def _things_chunks(*, things_path: Path) -> list[dict[str, Any]]:
+    """Build ``thing`` chunks from the things.json snapshot: one source per
+    thing (facts, topics, connections both ways, sources with their latest
+    observation, its history events, then its story), plus one registry
+    index chunk listing every thing by status. Returns [] when the snapshot
+    is missing or malformed; the corpus simply ships without things."""
+    if not things_path.exists():
+        return []
+    try:
+        data = json.loads(things_path.read_text(encoding="utf-8"))
+    except ValueError, TypeError:
+        return []
+    if not isinstance(data, dict):
+        return []
+    things = [t for t in data.get("things") or [] if isinstance(t, dict) and t.get("id")]
+    if not things:
+        return []
+    site = str(data.get("site") or "https://thingelstad.xyz").rstrip("/")
+    history = [e for e in data.get("history") or [] if isinstance(e, dict)]
+    history.sort(key=lambda event: (str(event.get("date")), str(event.get("id"))))
+    titles = {str(t["id"]): str(t.get("title") or t["id"]) for t in things}
+    topic_titles = {
+        str(topic.get("id")): str(topic.get("title") or topic.get("id"))
+        for topic in data.get("topics") or []
+        if isinstance(topic, dict)
+    }
+    incoming: dict[str, list[tuple[dict[str, Any], dict[str, Any]]]] = {}
+    for thing in things:
+        for connection in thing.get("connections") or []:
+            if isinstance(connection, dict) and connection.get("to"):
+                incoming.setdefault(str(connection["to"]), []).append((thing, connection))
+
+    out: list[dict[str, Any]] = []
+    for thing in sorted(things, key=lambda t: str(t["id"])):
+        title = titles[str(thing["id"])]
+        url = str(thing.get("page") or f"{site}/things/{thing['id']}/")
+        text = _thing_text(
+            thing,
+            titles=titles,
+            topic_titles=topic_titles,
+            history=history,
+            incoming=incoming.get(str(thing["id"]), []),
+        )
+        budget = embed_text_budget({"issue_number": None, "subject": title, "section": "Thing"})
+        for index, chunk_text in enumerate(chunk_section(text, max_chars=budget)):
+            out.append(
+                _thing_chunk(
+                    chunk_id=f"thing:{thing['id']}:{index}",
+                    subject=title,
+                    section="Thing",
+                    url=url,
+                    text=chunk_text,
+                    thing=thing,
+                )
+            )
+
+    # The registry as a whole: how many things, and which ones carry each
+    # status, so "what has Jamie built?" has one place to land.
+    by_status: dict[str, list[str]] = {}
+    for thing in things:
+        by_status.setdefault(str(thing.get("status") or "unknown"), []).append(
+            titles[str(thing["id"])]
+        )
+    index_subject = "Things I've built"
+    lines = [
+        f"{index_subject} is Jamie Thingelstad's registry of his projects at {site}/: "
+        f"{len(things)} things, each with a status Jamie decides (active, dormant, retired or "
+        "archived), the topics it belongs to, its sources, and a sourced history ledger. "
+        "Activity observed from repositories and feeds is evidence and never sets a status."
+    ]
+    for status in ("active", "dormant", "retired", "archived"):
+        names = sorted(by_status.get(status, []))
+        if names:
+            gloss = THING_STATUS_GLOSS[status]
+            lines.append(
+                f"{status.capitalize()} ({gloss}), {len(names)}: " + ", ".join(names) + "."
+            )
+    text = "\n\n".join(lines)
+    budget = embed_text_budget(
+        {"issue_number": None, "subject": index_subject, "section": "Things"}
+    )
+    for index, chunk_text in enumerate(chunk_section(text, max_chars=budget)):
+        out.append(
+            _thing_chunk(
+                chunk_id=f"thing:index:{index}",
+                subject=index_subject,
+                section="Things",
+                url=f"{site}/",
+                text=chunk_text,
+                thing=None,
+            )
+        )
+    return out
+
+
 def _privacy_audit(chunks: list[dict[str, Any]]) -> None:
     """Defensive: refuse to ship a corpus that carries subscriber-count
     text. Catches a regression where a future njk template change might
@@ -1300,6 +1556,7 @@ def build_corpus(
     faq_path: Path | None = None,
     blog_dir: Path | None = None,
     podcast_dir: Path | None = None,
+    things_path: Path | None = None,
 ) -> dict[str, Any]:
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
@@ -1641,6 +1898,8 @@ def build_corpus(
             years_active=years_active,
         )
         chunks.extend(faq_chunks)
+    if things_path is not None or THINGS_PATH.exists():
+        chunks.extend(_things_chunks(things_path=things_path or THINGS_PATH))
     _privacy_audit(chunks)
 
     return {

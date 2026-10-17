@@ -16,7 +16,7 @@ export function absoluteSourceUrl(url: unknown): string | undefined {
 }
 
 // WT chunks are stored with source_kind "chunk" (a corpus-build term); the
-// public vocabulary is weekly_thing / blog / podcast, plus site_page and faq
+// public vocabulary is weekly_thing / blog / podcast, plus site_page, faq and thing
 // for the Weekly Thing's own about and FAQ pages.
 export function publicSourceKind(source: { source_kind?: unknown; issue_number?: unknown; url?: unknown }): string {
   const kind = String(source.source_kind || '');

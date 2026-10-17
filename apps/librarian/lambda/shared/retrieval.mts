@@ -491,6 +491,7 @@ function sourceHeader(source: CorpusChunk) {
     const episode = source.episode_number ? ` episode ${source.episode_number}` : '';
     return `Another Thing podcast${episode}: ${source.subject || ''}`;
   }
+  if (kind === 'thing') return `Things I've built (thingelstad.xyz): ${source.subject || ''}`;
   return `Weekly Thing #${source.issue_number}: ${source.subject || ''}`;
 }
 
@@ -657,7 +658,7 @@ export function voiceList(value: unknown) {
 const IMAGE_MARKUP = /!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>/gi;
 // Site copy and FAQ answers are the site speaking, not Jamie writing on a
 // topic: no voice matches them.
-const VOICELESS_KINDS = new Set(['faq', 'site_page']);
+const VOICELESS_KINDS = new Set(['faq', 'site_page', 'thing']);
 
 // The chunk's text in the wanted voices only, in reading order. No spans
 // means the whole chunk is Jamie's.

@@ -1,0 +1,4794 @@
+{
+  "site": "https://thingelstad.xyz",
+  "things": [
+    {
+      "id": "612-poap-challenge",
+      "title": "612 POAP Challenge",
+      "summary": "A summer scavenger hunt around Minneapolis, pairing location POAPs with the 612 Series.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://612.poapchallenge.com/",
+      "started": "2025-05-31",
+      "ended": "2025-09-01",
+      "page": "https://thingelstad.xyz/things/612-poap-challenge/",
+      "markdown": "https://thingelstad.xyz/things/612-poap-challenge.md",
+      "topics": [
+        "poap",
+        "crypto",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://612.poapchallenge.com/",
+          "role": "reference",
+          "observation": null
+        },
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/2025/05/31/poap-challenge-collect-them-now.html",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "another-thing",
+      "title": "Another Thing",
+      "summary": "Podcast",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://another.thingelstad.com/",
+      "page": "https://thingelstad.xyz/things/another-thing/",
+      "markdown": "https://thingelstad.xyz/things/another-thing.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/another.thingelstad.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/another.thingelstad.com",
+            "url": "https://github.com/jthingelstad/another.thingelstad.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-04-09T23:16:18.000Z",
+            "archived": false,
+            "description": "Website for Another Thing, a podcast by Jamie Thingelstad — an Eleventy static site (a publishing surface of the Studio brain).",
+            "languages": [
+              {
+                "name": "Nunjucks",
+                "bytes": 23286
+              },
+              {
+                "name": "CSS",
+                "bytes": 18861
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 16034
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 17,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 10
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 5
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:01:35.000Z",
+                  "url": "https://github.com/jthingelstad/another.thingelstad.com/commit/c750bf8c9d1eda9726fa328e43db05039de1f7d2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://another.thingelstad.com/",
+          "role": "website",
+          "sitemap": "https://another.thingelstad.com/sitemap.xml",
+          "feed": "https://another.thingelstad.com/podcast.xml",
+          "observation": {
+            "kind": "web",
+            "url": "https://another.thingelstad.com/",
+            "observedAt": "2026-10-17T13:16:08.424Z",
+            "sitemap": {
+              "url": "https://another.thingelstad.com/sitemap.xml",
+              "pages": 6,
+              "newestModified": "2025-10-05T23:48:44.000Z",
+              "months": [],
+              "complete": true
+            },
+            "feed": {
+              "url": "https://another.thingelstad.com/podcast.xml",
+              "title": "Another Thing",
+              "items": 1,
+              "newestPublished": "2025-10-05T23:48:44.000Z",
+              "months": []
+            }
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "librarian",
+          "label": "transcripts are indexed by",
+          "detail": "Another Thing transcripts are imported into Librarian’s podcast corpus.",
+          "source": "https://thingy.thingelstad.com/about/"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:01:35.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/another.thingelstad.com/commit/c750bf8c9d1eda9726fa328e43db05039de1f7d2"
+      }
+    },
+    {
+      "id": "another-thing-builder",
+      "title": "Another Thing Builder",
+      "summary": "Earlier podcast authoring application",
+      "collection": "Publishing",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/at-builder",
+      "ended": "2026-10-11",
+      "page": "https://thingelstad.xyz/things/another-thing-builder/",
+      "markdown": "https://thingelstad.xyz/things/another-thing-builder.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/at-builder",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/at-builder",
+            "url": "https://github.com/jthingelstad/at-builder",
+            "repositoryCreatedAt": "2026-08-28T21:31:56.000Z",
+            "archived": true,
+            "description": "Authoring application for the Another Thing podcast",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 304475
+              },
+              {
+                "name": "CSS",
+                "bytes": 26494
+              },
+              {
+                "name": "HTML",
+                "bytes": 1157
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:03.593Z",
+                "until": "2026-10-14T12:28:03.593Z",
+                "count": 32,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-08",
+                    "count": 9
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 21
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 2
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-11T17:32:44.000Z",
+                  "url": "https://github.com/jthingelstad/at-builder/commit/d8470e994555c4eebb17ab50447ddc5fc897d888"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:03.593Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "wt-builder",
+          "label": "was succeeded by",
+          "detail": "The earlier podcast authoring application was retired when WT Builder took on Another Thing in October 2026.",
+          "source": "https://github.com/jthingelstad/wt-builder/commit/bea76c7ef4fc79a878072feebf694ce18ad217ea",
+          "kind": "lineage"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-11T17:32:44.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/at-builder/commit/d8470e994555c4eebb17ab50447ddc5fc897d888"
+      }
+    },
+    {
+      "id": "charlie-brown-tree",
+      "title": "Charlie Brown Tree",
+      "summary": "A Charlie Brown tree at Magic Pines, made with Adam Gale of Rust N Grain.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/magic-pines/charlie-brown-tree/",
+      "page": "https://thingelstad.xyz/things/charlie-brown-tree/",
+      "markdown": "https://thingelstad.xyz/things/charlie-brown-tree.md",
+      "topics": [],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/magic-pines/charlie-brown-tree/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "clash-royale-api-agent-reference",
+      "title": "Clash Royale API Agent Reference",
+      "summary": "Agent-oriented API documentation",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/cr-agent-api-docs",
+      "page": "https://thingelstad.xyz/things/clash-royale-api-agent-reference/",
+      "markdown": "https://thingelstad.xyz/things/clash-royale-api-agent-reference.md",
+      "topics": [
+        "agents",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/cr-agent-api-docs",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/cr-agent-api-docs",
+            "url": "https://github.com/jthingelstad/cr-agent-api-docs",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-03-10T00:39:15.000Z",
+            "archived": false,
+            "description": "Agent-first reference documentation for the public Clash Royale API (api.clashroyale.com/v1) — built for LLM agents, automation workflows, and API clients.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 87352
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 19846
+              },
+              {
+                "name": "Shell",
+                "bytes": 2407
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 81,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 2
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 2
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 71
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 6
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-06T16:03:31.000Z",
+                  "url": "https://github.com/jthingelstad/cr-agent-api-docs/commit/ab340ca82671d779a5fd82a84a5cb6cde4478f1a"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-06T16:03:31.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/cr-agent-api-docs/commit/ab340ca82671d779a5fd82a84a5cb6cde4478f1a"
+      }
+    },
+    {
+      "id": "elixir",
+      "title": "Elixir",
+      "summary": "Clash Royale history, recorded.",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://elixir.poapkings.com/",
+      "page": "https://thingelstad.xyz/things/elixir/",
+      "markdown": "https://thingelstad.xyz/things/elixir.md",
+      "topics": [
+        "agents",
+        "mcp",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-mcp",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-mcp",
+            "url": "https://github.com/jthingelstad/elixir-mcp",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-09-03T14:18:34.000Z",
+            "archived": false,
+            "description": "Clash Royale history recorder + remote MCP server. Unofficial; not endorsed by Supercell.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 9458222
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 998974
+              },
+              {
+                "name": "CSS",
+                "bytes": 169029
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 122303
+              },
+              {
+                "name": "PLpgSQL",
+                "bytes": 15998
+              },
+              {
+                "name": "Shell",
+                "bytes": 5846
+              },
+              {
+                "name": "HTML",
+                "bytes": 5417
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 300
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:58:40.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/45eabc5f983589e52c2a0a697b6b8a3d9bc688fb"
+                }
+              },
+              {
+                "path": "packages/clan",
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 69,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 69
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-13T20:54:37.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/a7138a92d14093ab7affe3c34fc1f4c83189fa35"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://elixir.poapkings.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [
+        {
+          "to": "elixir-mcp-discord",
+          "label": "provides recorded facts to",
+          "detail": "The configurable Discord agent gets its game facts through Elixir MCP tools.",
+          "source": "https://github.com/jthingelstad/elixir-mcp-discord"
+        },
+        {
+          "to": "elixir-clan",
+          "label": "includes",
+          "detail": "Clan management is a feature of the same Elixir platform and shares its recorded history, application, and runtime.",
+          "source": "https://elixir.poapkings.com/docs"
+        },
+        {
+          "to": "elixir-ladder",
+          "label": "includes",
+          "detail": "Elixir Ladder is the platform’s browser feature for exploring ladder history.",
+          "source": "https://elixir.poapkings.com/docs"
+        },
+        {
+          "to": "poap-kings",
+          "label": "supplies clan data to",
+          "detail": "The POAP KINGS website reads clan and roster data from Elixir’s JSON API.",
+          "source": "https://poapkings.com/elixir/"
+        }
+      ],
+      "story": {
+        "color": "#8860d9",
+        "introduction": "The game remembers the present. Elixir remembers what happened.",
+        "engineering": [
+          "Independent collectors fetch public game observations from machines with allowlisted IP addresses.",
+          "One recorded history serves the browser application, a remote MCP server, and a versioned JSON API.",
+          "Clan management and Ladder are features of the same platform, sharing its record and application shell."
+        ],
+        "stack": [
+          "React",
+          "TypeScript",
+          "PostgreSQL",
+          "AWS",
+          "MCP"
+        ],
+        "related": [
+          "elixir-drop",
+          "elixir-mcp-discord",
+          "elixir-mcp-collector",
+          "poap-kings"
+        ],
+        "questions": [
+          "How does Elixir keep the history?",
+          "What grew out of Elixir Bot?"
+        ],
+        "source": "https://elixir.poapkings.com/docs",
+        "sourceLabel": "Documentation"
+      },
+      "body": "The Clash Royale API offers a current snapshot and a short, rotating battle log. Elixir continuously records observations so players, clans, and their agents can ask questions about the history.",
+      "latest": {
+        "date": "2026-10-16T11:58:40.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/elixir-mcp/commit/45eabc5f983589e52c2a0a697b6b8a3d9bc688fb"
+      }
+    },
+    {
+      "id": "elixir-bot",
+      "title": "Elixir Bot",
+      "summary": "Original clan agent preserved as history",
+      "collection": "Games and communities",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/elixir-bot",
+      "ended": "2026-09-26",
+      "page": "https://thingelstad.xyz/things/elixir-bot/",
+      "markdown": "https://thingelstad.xyz/things/elixir-bot.md",
+      "topics": [
+        "agents",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-bot",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-bot",
+            "url": "https://github.com/jthingelstad/elixir-bot",
+            "repositoryCreatedAt": "2026-02-27T21:09:06.000Z",
+            "archived": true,
+            "description": "LLM-powered, channel-native Discord agent for the POAP KINGS Clash Royale clan — event-sourced reactive engine, scoped public/leadership memory, and GitHub-backed poapkings.com publishing.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 5427524
+              },
+              {
+                "name": "Shell",
+                "bytes": 15430
+              }
+            ],
+            "release": {
+              "name": "decisive-dart-goblin",
+              "date": "2026-08-03T00:26:23.000Z",
+              "url": "https://github.com/jthingelstad/elixir-bot/releases/tag/decisive-dart-goblin"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:20.654Z",
+                "until": "2026-10-14T12:28:20.654Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 58
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 190
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 52
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-09-26T20:54:41.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-bot/commit/555d743ceb72a7779a6e47fab4912ae5d024e70e"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:20.654Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "elixir",
+          "label": "gave rise to",
+          "detail": "The original Elixir Bot was retired in September 2026. Recorded game history became the broader Elixir platform.",
+          "source": "https://github.com/jthingelstad/elixir-bot",
+          "kind": "lineage"
+        },
+        {
+          "to": "elixir-mcp-discord",
+          "label": "was succeeded by",
+          "detail": "The configurable Elixir MCP Discord agent took over the original bot’s Discord role.",
+          "source": "https://github.com/jthingelstad/elixir-bot",
+          "kind": "lineage"
+        },
+        {
+          "to": "elixir-mcp-collector",
+          "label": "gave rise to",
+          "detail": "The original bot’s game observation work grew into a separate Collector that feeds Elixir’s recorded history.",
+          "source": "https://github.com/jthingelstad/elixir-bot",
+          "kind": "lineage"
+        },
+        {
+          "to": "elixir-clan",
+          "label": "gave rise to",
+          "detail": "The original bot’s clan management work carried forward into Elixir Clan, now a feature of the shared Elixir platform.",
+          "source": "https://github.com/jthingelstad/elixir-bot",
+          "kind": "lineage"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-09-26T20:54:41.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/elixir-bot/commit/555d743ceb72a7779a6e47fab4912ae5d024e70e"
+      }
+    },
+    {
+      "id": "elixir-clan",
+      "title": "Elixir Clan",
+      "summary": "Clan management feature within Elixir",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://elixir.poapkings.com/clan",
+      "page": "https://thingelstad.xyz/things/elixir-clan/",
+      "markdown": "https://thingelstad.xyz/things/elixir-clan.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-mcp",
+          "role": "implementation",
+          "path": "packages/clan",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-mcp",
+            "url": "https://github.com/jthingelstad/elixir-mcp",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-09-03T14:18:34.000Z",
+            "archived": false,
+            "description": "Clash Royale history recorder + remote MCP server. Unofficial; not endorsed by Supercell.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 9458222
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 998974
+              },
+              {
+                "name": "CSS",
+                "bytes": 169029
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 122303
+              },
+              {
+                "name": "PLpgSQL",
+                "bytes": 15998
+              },
+              {
+                "name": "Shell",
+                "bytes": 5846
+              },
+              {
+                "name": "HTML",
+                "bytes": 5417
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 300
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:58:40.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/45eabc5f983589e52c2a0a697b6b8a3d9bc688fb"
+                }
+              },
+              {
+                "path": "packages/clan",
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 69,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 69
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-13T20:54:37.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/a7138a92d14093ab7affe3c34fc1f4c83189fa35"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://elixir.poapkings.com/clan",
+          "role": "website",
+          "observation": null
+        },
+        {
+          "kind": "github",
+          "repository": "jthingelstad/clan.poapkings.com",
+          "role": "historical",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/clan.poapkings.com",
+            "url": "https://github.com/jthingelstad/clan.poapkings.com",
+            "repositoryCreatedAt": "2026-09-12T18:42:54.000Z",
+            "archived": true,
+            "description": "Moved: Elixir Clan now lives in jthingelstad/elixir-mcp as clan/ (2026-09-28), history included. Archived.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 1256936
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 24341
+              },
+              {
+                "name": "Shell",
+                "bytes": 2387
+              },
+              {
+                "name": "HTML",
+                "bytes": 1020
+              },
+              {
+                "name": "CSS",
+                "bytes": 856
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:51.707Z",
+                "until": "2026-10-14T12:28:51.707Z",
+                "count": 115,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 115
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-09-28T23:40:13.000Z",
+                  "url": "https://github.com/jthingelstad/clan.poapkings.com/commit/2bb5b6052b2a3c72b5a58f3feb61a34082b8b402"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:51.707Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-13T20:54:37.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/elixir-mcp/commit/a7138a92d14093ab7affe3c34fc1f4c83189fa35"
+      }
+    },
+    {
+      "id": "elixir-drop",
+      "title": "Elixir Drop",
+      "summary": "Card recognition and elixir cost training game",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://drop.poapkings.com/",
+      "page": "https://thingelstad.xyz/things/elixir-drop/",
+      "markdown": "https://thingelstad.xyz/things/elixir-drop.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/drop.poapkings.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/drop.poapkings.com",
+            "url": "https://github.com/jthingelstad/drop.poapkings.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-06-13T13:16:27.000Z",
+            "archived": false,
+            "description": "Elixir Drop — a fast little game for learning Clash Royale cards and elixir costs, run by the POAP KINGS clan. A self-contained Preact/TypeScript single-page app.",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 2926773
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 332150
+              },
+              {
+                "name": "CSS",
+                "bytes": 248678
+              },
+              {
+                "name": "HTML",
+                "bytes": 5261
+              },
+              {
+                "name": "Shell",
+                "bytes": 4044
+              }
+            ],
+            "release": {
+              "name": "principled-p-e-k-k-a",
+              "date": "2026-08-15T01:45:49.000Z",
+              "url": "https://github.com/jthingelstad/drop.poapkings.com/releases/tag/principled-p-e-k-k-a"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-08",
+                    "count": 207
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 69
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 24
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T12:02:20.000Z",
+                  "url": "https://github.com/jthingelstad/drop.poapkings.com/commit/f371e275ab6103b9167dd393ef5389280f3511dd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://drop.poapkings.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T12:02:20.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/drop.poapkings.com/commit/f371e275ab6103b9167dd393ef5389280f3511dd"
+      }
+    },
+    {
+      "id": "elixir-ladder",
+      "title": "Elixir Ladder",
+      "summary": "Ladder feature within Elixir",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://elixir.poapkings.com/",
+      "page": "https://thingelstad.xyz/things/elixir-ladder/",
+      "markdown": "https://thingelstad.xyz/things/elixir-ladder.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-mcp",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-mcp",
+            "url": "https://github.com/jthingelstad/elixir-mcp",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-09-03T14:18:34.000Z",
+            "archived": false,
+            "description": "Clash Royale history recorder + remote MCP server. Unofficial; not endorsed by Supercell.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 9458222
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 998974
+              },
+              {
+                "name": "CSS",
+                "bytes": 169029
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 122303
+              },
+              {
+                "name": "PLpgSQL",
+                "bytes": 15998
+              },
+              {
+                "name": "Shell",
+                "bytes": 5846
+              },
+              {
+                "name": "HTML",
+                "bytes": 5417
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 300
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:58:40.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/45eabc5f983589e52c2a0a697b6b8a3d9bc688fb"
+                }
+              },
+              {
+                "path": "packages/clan",
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 69,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 69
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-13T20:54:37.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp/commit/a7138a92d14093ab7affe3c34fc1f4c83189fa35"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://elixir.poapkings.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:58:40.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/elixir-mcp/commit/45eabc5f983589e52c2a0a697b6b8a3d9bc688fb"
+      }
+    },
+    {
+      "id": "elixir-mcp-collector",
+      "title": "Elixir MCP Collector",
+      "summary": "Volunteer fetch worker",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/elixir-mcp-collector",
+      "page": "https://thingelstad.xyz/things/elixir-mcp-collector/",
+      "markdown": "https://thingelstad.xyz/things/elixir-mcp-collector.md",
+      "topics": [
+        "agents",
+        "mcp"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-mcp-collector",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-mcp-collector",
+            "url": "https://github.com/jthingelstad/elixir-mcp-collector",
+            "repositoryCreatedAt": "2026-09-04T16:09:29.000Z",
+            "archived": false,
+            "description": "The operator-run collector for Elixir MCP — fetches Clash Royale history (via your own IP-bound API key) so AI agents can query it. Zero-trust: no cloud access. Unofficial; not endorsed by Supercell.",
+            "languages": [
+              {
+                "name": "Go",
+                "bytes": 225288
+              },
+              {
+                "name": "Shell",
+                "bytes": 57986
+              },
+              {
+                "name": "PowerShell",
+                "bytes": 17513
+              }
+            ],
+            "release": {
+              "name": "v3.0.6",
+              "date": "2026-09-28T00:58:56.000Z",
+              "url": "https://github.com/jthingelstad/elixir-mcp-collector/releases/tag/v3.0.6"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:17.043Z",
+                "until": "2026-10-14T12:28:17.043Z",
+                "count": 65,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 65
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-09-28T00:57:12.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp-collector/commit/d60ce8beb4c4211120edae1831f1eff6f9ab595e"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:17.043Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "elixir",
+          "label": "gathers observations for",
+          "detail": "Collectors lease work from Elixir, fetch public observations from the Clash Royale API, and submit the results.",
+          "source": "https://elixir.poapkings.com/docs/operators"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-09-28T00:58:56.000Z",
+        "label": "Release v3.0.6",
+        "url": "https://github.com/jthingelstad/elixir-mcp-collector/releases/tag/v3.0.6"
+      }
+    },
+    {
+      "id": "elixir-mcp-discord",
+      "title": "Elixir MCP Discord",
+      "summary": "Configurable Discord agent for clans",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/elixir-mcp-discord",
+      "page": "https://thingelstad.xyz/things/elixir-mcp-discord/",
+      "markdown": "https://thingelstad.xyz/things/elixir-mcp-discord.md",
+      "topics": [
+        "agents",
+        "mcp"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/elixir-mcp-discord",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/elixir-mcp-discord",
+            "url": "https://github.com/jthingelstad/elixir-mcp-discord",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-09-08T02:08:00.000Z",
+            "archived": false,
+            "description": "A Discord bot for a Clash Royale clan powered entirely by Elixir MCP. No local game database, no Clash Royale API key, no fallback - every fact comes from an MCP tool call.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 945277
+              },
+              {
+                "name": "Shell",
+                "bytes": 12142
+              },
+              {
+                "name": "Dockerfile",
+                "bytes": 2328
+              }
+            ],
+            "release": {
+              "name": "v0.3.1",
+              "date": "2026-10-02T17:03:28.000Z",
+              "url": "https://github.com/jthingelstad/elixir-mcp-discord/releases/tag/v0.3.1"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 166,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 116
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 50
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T12:13:02.000Z",
+                  "url": "https://github.com/jthingelstad/elixir-mcp-discord/commit/ab3e51e2efb607cb72713b59aac45a3faacb4650"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T12:13:02.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/elixir-mcp-discord/commit/ab3e51e2efb607cb72713b59aac45a3faacb4650"
+      }
+    },
+    {
+      "id": "escaping-things",
+      "title": "Escaping Things",
+      "summary": "Escape room team, rooms, trips and statistics",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://escape.thingelstad.com/",
+      "page": "https://thingelstad.xyz/things/escaping-things/",
+      "markdown": "https://thingelstad.xyz/things/escaping-things.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/escape.thingelstad.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/escape.thingelstad.com",
+            "url": "https://github.com/jthingelstad/escape.thingelstad.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-02-11T23:10:54.000Z",
+            "archived": false,
+            "description": "The Escaping Things escape-room team site — an Eleventy static site built from a normalized Airtable dataset (rooms played, countries, stats).",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 134346
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 89595
+              },
+              {
+                "name": "CSS",
+                "bytes": 53878
+              },
+              {
+                "name": "Python",
+                "bytes": 47325
+              },
+              {
+                "name": "Shell",
+                "bytes": 741
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 28,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 2
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 19
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 6
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:07:25.000Z",
+                  "url": "https://github.com/jthingelstad/escape.thingelstad.com/commit/cd1854801565ae57234f1c9b550916b1bf246de3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://escape.thingelstad.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:07:25.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/escape.thingelstad.com/commit/cd1854801565ae57234f1c9b550916b1bf246de3"
+      }
+    },
+    {
+      "id": "filament",
+      "title": "Filament",
+      "summary": "MediaWiki project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/filament",
+      "page": "https://thingelstad.xyz/things/filament/",
+      "markdown": "https://thingelstad.xyz/things/filament.md",
+      "topics": [
+        "mediawiki"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/filament",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/filament",
+            "url": "https://github.com/jthingelstad/filament",
+            "repositoryCreatedAt": "2013-06-06T18:58:29.000Z",
+            "archived": true,
+            "description": "MediaWiki skin based of the Pure CSS framework.",
+            "languages": [
+              {
+                "name": "CSS",
+                "bytes": 37162
+              },
+              {
+                "name": "PHP",
+                "bytes": 6721
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 773
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "master",
+                "since": "2026-07-16T12:28:42.947Z",
+                "until": "2026-10-14T12:28:42.947Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2013-11-29T14:10:32.000Z",
+                  "url": "https://github.com/jthingelstad/filament/commit/7964bfe3d6e530e06c9ebc1979cfb2290eb04bc9"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:42.947Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2013-11-29T14:10:32.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/filament/commit/7964bfe3d6e530e06c9ebc1979cfb2290eb04bc9"
+      }
+    },
+    {
+      "id": "flight-path",
+      "title": "Flight Path",
+      "summary": "A globe of the POAP Airport Rally, built entirely on an iPhone with Claude Code. Its host no longer answers.",
+      "collection": "Games and communities",
+      "status": "retired",
+      "url": "https://weekly.thingelstad.com/archive/342/",
+      "started": "2026-02-25",
+      "page": "https://thingelstad.xyz/things/flight-path/",
+      "markdown": "https://thingelstad.xyz/things/flight-path.md",
+      "topics": [
+        "poap",
+        "agents"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://weekly.thingelstad.com/archive/342/",
+          "role": "reference",
+          "observation": null
+        },
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/2026/02/25/it-is-bonkers-to-me.html",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "Flight Path lived at flightpath.poaprally.com: a rotating globe with every airport in the POAP Airport Rally, the number of claims at each, a leaderboard, and each collector’s own path. Jamie built it in one evening on an iPhone, from a CLAUDE.md written with ChatGPT and a cloud Claude Code session attached to a fresh repository, as told in Weekly Thing 342. The site read live POAP claims, and the host stopped answering after POAP wound down in 2026.",
+      "latest": null
+    },
+    {
+      "id": "foreground",
+      "title": "Foreground",
+      "summary": "MediaWiki skin project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/foreground",
+      "page": "https://thingelstad.xyz/things/foreground/",
+      "markdown": "https://thingelstad.xyz/things/foreground.md",
+      "topics": [
+        "mediawiki"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/foreground",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/foreground",
+            "url": "https://github.com/jthingelstad/foreground",
+            "repositoryCreatedAt": "2013-05-21T22:19:22.000Z",
+            "archived": true,
+            "description": "A MediaWiki skin that focuses on putting your content in the foreground.",
+            "languages": [
+              {
+                "name": "CSS",
+                "bytes": 47266
+              },
+              {
+                "name": "PHP",
+                "bytes": 11721
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 761
+              }
+            ],
+            "release": {
+              "name": "v2.4.0",
+              "date": "2021-02-11T20:42:20.000Z",
+              "url": "https://github.com/jthingelstad/foreground/releases/tag/v2.4.0"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "develop",
+                "since": "2026-07-16T12:28:40.462Z",
+                "until": "2026-10-14T12:28:40.462Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2022-07-28T10:46:13.000Z",
+                  "url": "https://github.com/jthingelstad/foreground/commit/4d90744f75a7bbd1282580b74bd3a17136230210"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:40.462Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2022-07-28T10:46:13.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/foreground/commit/4d90744f75a7bbd1282580b74bd3a17136230210"
+      }
+    },
+    {
+      "id": "homebrew-mb-tap",
+      "title": "Homebrew mb tap",
+      "summary": "Homebrew distribution for mb",
+      "collection": "Developer tools and systems",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/homebrew-tap",
+      "page": "https://thingelstad.xyz/things/homebrew-mb-tap/",
+      "markdown": "https://thingelstad.xyz/things/homebrew-mb-tap.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/homebrew-tap",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/homebrew-tap",
+            "url": "https://github.com/jthingelstad/homebrew-tap",
+            "repositoryCreatedAt": "2026-10-04T20:06:48.000Z",
+            "archived": false,
+            "description": "Homebrew tap for MB, the Micro.blog CLI and MCP server",
+            "languages": [
+              {
+                "name": "Ruby",
+                "bytes": 10258
+              }
+            ],
+            "release": {
+              "name": "mb-2.2.1",
+              "date": "2026-10-05T22:39:10.000Z",
+              "url": "https://github.com/jthingelstad/homebrew-tap/releases/tag/mb-2.2.1"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:37.264Z",
+                "until": "2026-10-14T12:28:37.264Z",
+                "count": 24,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 24
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-05T22:39:07.000Z",
+                  "url": "https://github.com/jthingelstad/homebrew-tap/commit/2e70b135454ceae1c58c27dbc0567bed7707a643"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:37.264Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "mb",
+          "label": "distributes",
+          "detail": "The Homebrew tap provides an installation and distribution path for mb.",
+          "source": "https://github.com/jthingelstad/homebrew-tap"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-05T22:39:10.000Z",
+        "label": "Release mb-2.2.1",
+        "url": "https://github.com/jthingelstad/homebrew-tap/releases/tag/mb-2.2.1"
+      }
+    },
+    {
+      "id": "jamie-thingelstad-blog",
+      "title": "Jamie Thingelstad blog",
+      "summary": "More than 20 years of personal writing on the web.",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://www.thingelstad.com/",
+      "page": "https://thingelstad.xyz/things/jamie-thingelstad-blog/",
+      "markdown": "https://thingelstad.xyz/things/jamie-thingelstad-blog.md",
+      "topics": [
+        "open-web",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/",
+          "role": "website",
+          "sitemap": "https://www.thingelstad.com/sitemap.xml",
+          "feed": "https://www.thingelstad.com/feed.json",
+          "observation": {
+            "kind": "web",
+            "url": "https://www.thingelstad.com/",
+            "observedAt": "2026-10-17T13:15:39.209Z",
+            "sitemap": {
+              "url": "https://www.thingelstad.com/sitemap.xml",
+              "pages": 10470,
+              "newestModified": "2026-10-17T00:24:31.000Z",
+              "months": [
+                {
+                  "month": "2025-11",
+                  "count": 48
+                },
+                {
+                  "month": "2025-12",
+                  "count": 47
+                },
+                {
+                  "month": "2026-01",
+                  "count": 51
+                },
+                {
+                  "month": "2026-02",
+                  "count": 45
+                },
+                {
+                  "month": "2026-03",
+                  "count": 87
+                },
+                {
+                  "month": "2026-04",
+                  "count": 34
+                },
+                {
+                  "month": "2026-05",
+                  "count": 54
+                },
+                {
+                  "month": "2026-06",
+                  "count": 16
+                },
+                {
+                  "month": "2026-07",
+                  "count": 17
+                },
+                {
+                  "month": "2026-08",
+                  "count": 19
+                },
+                {
+                  "month": "2026-09",
+                  "count": 35
+                },
+                {
+                  "month": "2026-10",
+                  "count": 22
+                }
+              ],
+              "complete": true
+            },
+            "feed": {
+              "url": "https://www.thingelstad.com/feed.json",
+              "title": "Jamie Thingelstad",
+              "items": 25,
+              "newestPublished": "2026-10-17T00:24:31.000Z",
+              "months": [
+                {
+                  "month": "2026-09",
+                  "count": 3
+                },
+                {
+                  "month": "2026-10",
+                  "count": 22
+                }
+              ]
+            }
+          }
+        },
+        {
+          "kind": "github",
+          "repository": "jthingelstad/thing-hugo",
+          "role": "theme",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/thing-hugo",
+            "url": "https://github.com/jthingelstad/thing-hugo",
+            "repositoryCreatedAt": "2026-04-20T03:24:21.000Z",
+            "archived": false,
+            "description": "",
+            "languages": [
+              {
+                "name": "HTML",
+                "bytes": 14820
+              },
+              {
+                "name": "CSS",
+                "bytes": 11361
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:01.101Z",
+                "until": "2026-10-14T12:28:01.101Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2026-04-20T03:50:34.000Z",
+                  "url": "https://github.com/jthingelstad/thing-hugo/commit/c31752f3efdefd788fdaa1358b5529ef498377be"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:01.101Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "librarian",
+          "label": "is indexed by",
+          "detail": "The blog contributes writing to the archive that Librarian retrieves from. Micro.blog remains the blog’s source of authority.",
+          "source": "https://thingy.thingelstad.com/about/"
+        },
+        {
+          "to": "weekly-thing",
+          "label": "posts are syndicated in",
+          "detail": "Weekly Thing republishes Jamie’s blog posts, connecting the newsletter to his ongoing personal writing.",
+          "source": "https://weekly.thingelstad.com/"
+        }
+      ],
+      "story": {
+        "color": "#a36852",
+        "introduction": "A personal life, written in public.",
+        "engineering": [
+          "The publishing platform has evolved from .Text to WordPress and now Micro.blog.",
+          "Micro.blog is the current publishing authority; Thing Hugo provides its public theme.",
+          "Longer writing, shorter updates, and photographs share one personal archive.",
+          "Weekly Thing republishes blog posts as part of the newsletter."
+        ],
+        "stack": [
+          "Micro.blog",
+          "Hugo",
+          "Open web"
+        ],
+        "related": [],
+        "questions": [
+          "How has the blog changed over time?",
+          "How does the blog connect to Weekly Thing?"
+        ],
+        "source": "https://www.thingelstad.com/",
+        "sourceLabel": "Read the blog",
+        "started": "More than 20 years of personal publishing"
+      },
+      "body": "Jamie started blogging when writing on the web was becoming a common way to share ideas. He discovered that he enjoyed writing in public: telling stories about his experiences and sharing the projects he was working on. That enjoyment became a habit that continues today.\n\nWith roughly 10,000 posts across more than 20 years, the blog is a long-running record of one person’s life. It is personal and noncommercial, bringing together everyday experiences, photographs, and things Jamie builds.\n\nThe blog has moved from .Text, a Windows .NET blogging package, through WordPress to Micro.blog. Its writing has expanded from mainly longer articles to include shorter updates and, increasingly, photographs as mobile publishing made sharing them easier. It is a foundation for the wider collection, and its posts are syndicated in Weekly Thing.",
+      "latest": {
+        "date": "2026-10-17T00:24:31.000Z",
+        "label": "Latest publication",
+        "url": "https://www.thingelstad.com/feed.json"
+      }
+    },
+    {
+      "id": "librarian",
+      "title": "Librarian",
+      "summary": "Archive retrieval API and MCP server",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://librarian.thingelstad.com/mcp",
+      "page": "https://thingelstad.xyz/things/librarian/",
+      "markdown": "https://thingelstad.xyz/things/librarian.md",
+      "topics": [
+        "agents",
+        "mcp",
+        "open-web",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/librarian-thing",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/librarian-thing",
+            "url": "https://github.com/jthingelstad/librarian-thing",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-06-03T23:21:50.000Z",
+            "archived": false,
+            "description": "Studio — the brain behind Jamie Thingelstad's publishing: capture, research, the editorial source of truth, the production pipeline, and the authoring agents. Downstream surfaces (blog, newsletter, podcast, Thingy) consume what it produces.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 1324601
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 986489
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 688888
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 9233
+              },
+              {
+                "name": "Shell",
+                "bytes": 3340
+              },
+              {
+                "name": "Makefile",
+                "bytes": 2215
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 125
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 175
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:38:01.000Z",
+                  "url": "https://github.com/jthingelstad/librarian-thing/commit/da8e79bbfde0c7b9e43b453ccdc37cc0fb2ea3d2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://librarian.thingelstad.com/mcp",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [
+        {
+          "to": "thingy",
+          "label": "powers",
+          "detail": "Thingy is the web query surface for the Librarian archive and retrieval API.",
+          "source": "https://thingy.thingelstad.com/connect/"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:38:01.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/librarian-thing/commit/da8e79bbfde0c7b9e43b453ccdc37cc0fb2ea3d2"
+      }
+    },
+    {
+      "id": "link-blog",
+      "title": "Link Blog",
+      "summary": "Existing blog portfolio entry",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://www.thingelstad.com/projects/link-blog/",
+      "page": "https://thingelstad.xyz/things/link-blog/",
+      "markdown": "https://thingelstad.xyz/things/link-blog.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/projects/link-blog/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "mb",
+      "title": "mb",
+      "summary": "Micro.blog from the command line.",
+      "collection": "Developer tools and systems",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/mb",
+      "page": "https://thingelstad.xyz/things/mb/",
+      "markdown": "https://thingelstad.xyz/things/mb.md",
+      "topics": [
+        "agents",
+        "mcp",
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/mb",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/mb",
+            "url": "https://github.com/jthingelstad/mb",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-03-01T20:48:59.000Z",
+            "archived": false,
+            "description": "Micro.blog CLI and local MCP server built for agents: structured output, composable commands, reviewable writes. brew install jthingelstad/tap/mb",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 610328
+              }
+            ],
+            "release": {
+              "name": "v2.2.1",
+              "date": "2026-10-05T22:22:14.000Z",
+              "url": "https://github.com/jthingelstad/mb/releases/tag/v2.2.1"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 39,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 37
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-05T22:21:58.000Z",
+                  "url": "https://github.com/jthingelstad/mb/commit/bacbb98475e1ffc983bbaf9b37acee80b9b83da0"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "jamie-thingelstad-blog",
+          "label": "works with its platform",
+          "detail": "mb is a CLI and MCP interface for Micro.blog, the platform on which Jamie publishes his blog.",
+          "source": "https://github.com/jthingelstad/mb"
+        }
+      ],
+      "story": {
+        "color": "#24272d",
+        "introduction": "An open-web tool built for people, scripts, and agents.",
+        "engineering": [
+          "The CLI and MCP tools share the same service layer.",
+          "Write operations return durable receipts so an uncertain result can be checked before a request is sent again.",
+          "An optional MCP server exposes 23 typed tools. Homebrew provides a distribution path."
+        ],
+        "stack": [
+          "Python",
+          "CLI",
+          "MCP",
+          "Micro.blog"
+        ],
+        "related": [
+          "mb-audit",
+          "homebrew-mb-tap",
+          "weekly-thing"
+        ],
+        "questions": [
+          "How does mb work with AI agents?",
+          "What is interesting about its write receipts?"
+        ],
+        "source": "https://github.com/jthingelstad/mb"
+      },
+      "body": "Give Micro.blog a compact, pipeable command-line interface that works without interactive prompts. The same services can be exposed to an AI client through a local MCP server.",
+      "latest": {
+        "date": "2026-10-05T22:22:14.000Z",
+        "label": "Release v2.2.1",
+        "url": "https://github.com/jthingelstad/mb/releases/tag/v2.2.1"
+      }
+    },
+    {
+      "id": "mb-audit",
+      "title": "mb-audit",
+      "summary": "Audit a live Micro.blog site against backups",
+      "collection": "Developer tools and systems",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/mb-audit",
+      "page": "https://thingelstad.xyz/things/mb-audit/",
+      "markdown": "https://thingelstad.xyz/things/mb-audit.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/mb-audit",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/mb-audit",
+            "url": "https://github.com/jthingelstad/mb-audit",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-05-03T00:53:21.000Z",
+            "archived": false,
+            "description": "Audit a Micro.blog site against BAR backup files: detect missing posts and broken media via Micropub API + public-site cross-check.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 139569
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 3,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-09-07T13:17:40.000Z",
+                  "url": "https://github.com/jthingelstad/mb-audit/commit/1d42b9bb9c3a0b950bdf78a8ba126d7fca19a7bf"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "jamie-thingelstad-blog",
+          "label": "audits its platform",
+          "detail": "mb-audit compares a Micro.blog site with its BAR backups to check that the published content remains intact.",
+          "source": "https://github.com/jthingelstad/mb-audit"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-09-07T13:17:40.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/mb-audit/commit/1d42b9bb9c3a0b950bdf78a8ba126d7fca19a7bf"
+      }
+    },
+    {
+      "id": "nnxyz",
+      "title": "NNXYZ",
+      "summary": "An art gallery of collected nnxyz and scrimshaw works.",
+      "collection": "Art & archives",
+      "status": "active",
+      "url": "https://nnxyz.thingelstad.xyz/",
+      "page": "https://thingelstad.xyz/things/nnxyz/",
+      "markdown": "https://thingelstad.xyz/things/nnxyz.md",
+      "topics": [
+        "crypto",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/nnxyz",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/nnxyz",
+            "url": "https://github.com/jthingelstad/nnxyz",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-10-13T17:26:51.000Z",
+            "archived": false,
+            "description": "An art-first SVG gallery of nnxyz and scrimshaw, with archived brush-stroke replay and AI curation",
+            "languages": [
+              {
+                "name": "HTML",
+                "bytes": 6368669
+              },
+              {
+                "name": "Python",
+                "bytes": 877381
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 135895
+              },
+              {
+                "name": "Astro",
+                "bytes": 114343
+              },
+              {
+                "name": "TypeScript",
+                "bytes": 93697
+              },
+              {
+                "name": "CSS",
+                "bytes": 46617
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 101,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 101
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-17T12:08:23.000Z",
+                  "url": "https://github.com/jthingelstad/nnxyz/commit/7af31c4b78904e2ed13dbf3006cbb5ec268b4507"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://nnxyz.thingelstad.xyz/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "story": {
+        "color": "#8062a8",
+        "introduction": "Collected art, with room to look closely.",
+        "engineering": [
+          "Static artwork pages are built from a structured collection catalog.",
+          "Native SVG and archived stroke data let visitors inspect and replay how a drawing was made.",
+          "Saved curatorial readings and related works support exploration without a live model call."
+        ],
+        "stack": [
+          "Astro",
+          "TypeScript",
+          "SVG",
+          "AWS"
+        ],
+        "related": [],
+        "questions": [
+          "How does the gallery replay a drawing?",
+          "Show me other archive projects."
+        ],
+        "source": "https://github.com/jthingelstad/nnxyz"
+      },
+      "body": "An online gallery of collected nnxyz and scrimshaw artwork, with native SVG viewing, brush-stroke playback, saved curatorial readings, and paths through the collection.",
+      "latest": {
+        "date": "2026-10-17T12:08:23.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/nnxyz/commit/7af31c4b78904e2ed13dbf3006cbb5ec268b4507"
+      }
+    },
+    {
+      "id": "numbers2words",
+      "title": "Numbers2Words",
+      "summary": "MediaWiki project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/Number2Words",
+      "page": "https://thingelstad.xyz/things/numbers2words/",
+      "markdown": "https://thingelstad.xyz/things/numbers2words.md",
+      "topics": [
+        "mediawiki"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/Number2Words",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/Number2Words",
+            "url": "https://github.com/jthingelstad/Number2Words",
+            "repositoryCreatedAt": "2011-07-20T03:27:57.000Z",
+            "archived": true,
+            "description": "MediaWiki parser extension to turn a write out a number in words.",
+            "languages": [
+              {
+                "name": "PHP",
+                "bytes": 1720
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "master",
+                "since": "2026-07-16T12:28:46.011Z",
+                "until": "2026-10-14T12:28:46.011Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2015-11-28T20:19:50.000Z",
+                  "url": "https://github.com/jthingelstad/Number2Words/commit/f41457d862e0781d563edafc1c9116b6e3d8de9d"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:46.011Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2015-11-28T20:19:50.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/Number2Words/commit/f41457d862e0781d563edafc1c9116b6e3d8de9d"
+      }
+    },
+    {
+      "id": "oliver",
+      "title": "Oliver",
+      "summary": "Book club agent and member application",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/oliver/",
+      "markdown": "https://thingelstad.xyz/things/oliver.md",
+      "topics": [
+        "agents"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/rwbookclub.com",
+          "role": "implementation",
+          "path": "agent",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/rwbookclub.com",
+            "url": "https://github.com/jthingelstad/rwbookclub.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-04-09T23:16:42.000Z",
+            "archived": false,
+            "description": "Monorepo for the R/W Book Club: the public website, the shared knowledge corpus, and Oliver — the club's Discord agent.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 1549739
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 70510
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 57485
+              },
+              {
+                "name": "HTML",
+                "bytes": 52461
+              },
+              {
+                "name": "CSS",
+                "bytes": 43895
+              },
+              {
+                "name": "Shell",
+                "bytes": 16041
+              }
+            ],
+            "release": {
+              "name": "quiet-quicksilver",
+              "date": "2026-07-03T22:07:58.000Z",
+              "url": "https://github.com/jthingelstad/rwbookclub.com/releases/tag/quiet-quicksilver"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 64,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 31
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 21
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 10
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 2
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T10:55:48.000Z",
+                  "url": "https://github.com/jthingelstad/rwbookclub.com/commit/a272d7bc2bd6c8e872de31460664b23bb2683b1d"
+                }
+              },
+              {
+                "path": "agent",
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 30,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 13
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 11
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 5
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-15T13:41:30.000Z",
+                  "url": "https://github.com/jthingelstad/rwbookclub.com/commit/c87b04514a29833f721d90af958285342cd0859c"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-15T13:41:30.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/rwbookclub.com/commit/c87b04514a29833f721d90af958285342cd0859c"
+      }
+    },
+    {
+      "id": "open-loop",
+      "title": "Open Loop",
+      "summary": "A nine-episode podcast with Garrick van Buren in 2012 and 2013, archived with transcripts and a feed.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/projects/open-loop/",
+      "started": "2012-06-01",
+      "ended": "2013-04-12",
+      "page": "https://thingelstad.xyz/things/open-loop/",
+      "markdown": "https://thingelstad.xyz/things/open-loop.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/projects/open-loop/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "otto",
+      "title": "Otto",
+      "summary": "Personal OpenClaw agent workspace",
+      "collection": "Developer tools and systems",
+      "status": "active",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/otto/",
+      "markdown": "https://thingelstad.xyz/things/otto.md",
+      "topics": [
+        "agents"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "parseurl",
+      "title": "ParseURL",
+      "summary": "MediaWiki project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/ParseURL",
+      "page": "https://thingelstad.xyz/things/parseurl/",
+      "markdown": "https://thingelstad.xyz/things/parseurl.md",
+      "topics": [
+        "mediawiki"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/ParseURL",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/ParseURL",
+            "url": "https://github.com/jthingelstad/ParseURL",
+            "repositoryCreatedAt": "2013-07-15T22:13:35.000Z",
+            "archived": true,
+            "description": "MediaWiki extension to allow easy parsing of URLs.",
+            "languages": [
+              {
+                "name": "PHP",
+                "bytes": 2067
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "master",
+                "since": "2026-07-16T12:28:44.444Z",
+                "until": "2026-10-14T12:28:44.444Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2013-07-15T22:57:06.000Z",
+                  "url": "https://github.com/jthingelstad/ParseURL/commit/167e63df3e35d7ed0568ea071d7be7d4c6f7fed3"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:44.444Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2013-07-15T22:57:06.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/ParseURL/commit/167e63df3e35d7ed0568ea071d7be7d4c6f7fed3"
+      }
+    },
+    {
+      "id": "planet-kubb",
+      "title": "Planet Kubb",
+      "summary": "Original Kubb community site and wiki",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://www.thingelstad.com/projects/planet-kubb/",
+      "page": "https://thingelstad.xyz/things/planet-kubb/",
+      "markdown": "https://thingelstad.xyz/things/planet-kubb.md",
+      "topics": [
+        "mediawiki",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/projects/planet-kubb/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "planet-kubb-score",
+      "title": "Planet Kubb Score",
+      "summary": "Kubb notation, grammar, scoresheets and calculator",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/planet-kubb-score/",
+      "markdown": "https://thingelstad.xyz/things/planet-kubb-score.md",
+      "topics": [
+        "play",
+        "archives"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "poap-kings",
+      "title": "POAP KINGS",
+      "summary": "Clash Royale clan website",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://poapkings.com/",
+      "page": "https://thingelstad.xyz/things/poap-kings/",
+      "markdown": "https://thingelstad.xyz/things/poap-kings.md",
+      "topics": [
+        "poap",
+        "crypto",
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/poapkings.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/poapkings.com",
+            "url": "https://github.com/jthingelstad/poapkings.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-02-05T04:14:14.000Z",
+            "archived": false,
+            "description": "Proof of Arena Push — the official website for the POAP KINGS Clash Royale clan (#J2RGCRVG). Eleventy static site on GitHub Pages.",
+            "languages": [
+              {
+                "name": "JavaScript",
+                "bytes": 115622
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 111706
+              },
+              {
+                "name": "CSS",
+                "bytes": 82917
+              },
+              {
+                "name": "Shell",
+                "bytes": 2072
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 108,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 23
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 46
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 36
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 3
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:36:05.000Z",
+                  "url": "https://github.com/jthingelstad/poapkings.com/commit/977791777838bfa6d37ac973135728751acc6bbb"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://poapkings.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [
+        {
+          "to": "elixir-drop",
+          "label": "runs",
+          "detail": "POAP KINGS runs Elixir Drop, its card-recognition and elixir-cost training game.",
+          "source": "https://poapkings.com/elixir-drop/"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:36:05.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/poapkings.com/commit/977791777838bfa6d37ac973135728751acc6bbb"
+      }
+    },
+    {
+      "id": "poap2rss",
+      "title": "POAP2RSS",
+      "summary": "POAP activity as RSS feeds, retired when the POAP API went offline in July 2026.",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://poap2rss.com/",
+      "started": "2025-07-04",
+      "ended": "2026-07-31",
+      "page": "https://thingelstad.xyz/things/poap2rss/",
+      "markdown": "https://thingelstad.xyz/things/poap2rss.md",
+      "topics": [
+        "poap",
+        "crypto",
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/POAP2RSS",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/POAP2RSS",
+            "url": "https://github.com/jthingelstad/POAP2RSS",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2025-07-01T03:53:32.000Z",
+            "archived": true,
+            "description": "POAP2RSS creates a standard RSS feed for any POAP event. Drop an event ID in the URL and you have a live feed of new claims ready for any reader or automation platform. POAP2RSS makes POAPs more open, programmable, and connected to the wider web.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 31072
+              },
+              {
+                "name": "CSS",
+                "bytes": 7582
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 6438
+              },
+              {
+                "name": "Shell",
+                "bytes": 4880
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 307
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 2,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 2
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-07-24T16:07:21.000Z",
+                  "url": "https://github.com/jthingelstad/POAP2RSS/commit/b50f2d2a8595f474263bf7e6ddd816ec88657c44"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://poap2rss.com/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-07-24T16:07:21.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/POAP2RSS/commit/b50f2d2a8595f474263bf7e6ddd816ec88657c44"
+      }
+    },
+    {
+      "id": "projects-systems-administration",
+      "title": "Projects Systems Administration",
+      "summary": "Host backups, recovery and infrastructure tooling",
+      "collection": "Developer tools and systems",
+      "status": "active",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/projects-systems-administration/",
+      "markdown": "https://thingelstad.xyz/things/projects-systems-administration.md",
+      "topics": [
+        "agents"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "proof-of-a-person",
+      "title": "Proof of a Person",
+      "summary": "A POAP time capsule of Jamie’s collecting and issuing, and the people who collected his drops. In progress, to live at poap.thingelstad.xyz.",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/poap-archive",
+      "started": "2026-10",
+      "page": "https://thingelstad.xyz/things/proof-of-a-person/",
+      "markdown": "https://thingelstad.xyz/things/proof-of-a-person.md",
+      "topics": [
+        "poap",
+        "crypto",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/poap-archive",
+          "role": "archive",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/poap-archive",
+            "url": "https://github.com/jthingelstad/poap-archive",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-10-17T11:31:15.000Z",
+            "archived": false,
+            "description": "Jamie Thingelstad's POAP time capsule: collecting, issuing, writing, and network, captured after the 2026 protocol sunset",
+            "languages": [
+              {
+                "name": "HTML",
+                "bytes": 4512212
+              },
+              {
+                "name": "Python",
+                "bytes": 21243
+              },
+              {
+                "name": "CSS",
+                "bytes": 11976
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 10,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 10
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-17T12:32:56.000Z",
+                  "url": "https://github.com/jthingelstad/poap-archive/commit/a1cad73f1ed2da37406c1db92c1bad9e93da64b0"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "poap2rss",
+          "label": "preserves the record of",
+          "detail": "The archive captures Jamie’s POAP collecting, issuing, and writing after the protocol wound down, including the drops and claims POAP2RSS once syndicated.",
+          "source": "https://github.com/jthingelstad/poap-archive"
+        }
+      ],
+      "body": "After POAP wound down in 2026, Jamie captured his whole POAP life in a public archive: the tokens collected since 2021, the drops issued, the moments, and the network of collectors who met him through them. Proof of a Person is the tribute site built from that archive, a timeline with the collector on one side and the issuer on the other.",
+      "latest": {
+        "date": "2026-10-17T12:32:56.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/poap-archive/commit/a1cad73f1ed2da37406c1db92c1bad9e93da64b0"
+      }
+    },
+    {
+      "id": "q2a-number-captcha",
+      "title": "q2a-number-captcha",
+      "summary": "Existing code project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": "https://github.com/jthingelstad/q2a-number-captcha",
+      "page": "https://thingelstad.xyz/things/q2a-number-captcha/",
+      "markdown": "https://thingelstad.xyz/things/q2a-number-captcha.md",
+      "topics": [],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/q2a-number-captcha",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/q2a-number-captcha",
+            "url": "https://github.com/jthingelstad/q2a-number-captcha",
+            "repositoryCreatedAt": "2014-11-16T01:39:31.000Z",
+            "archived": true,
+            "description": "CAPTCHA Plugin for Question2Answer that requires finding a digit in a large number.",
+            "languages": [
+              {
+                "name": "PHP",
+                "bytes": 7556
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "master",
+                "since": "2026-07-16T12:28:47.579Z",
+                "until": "2026-10-14T12:28:47.579Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2015-11-28T20:16:07.000Z",
+                  "url": "https://github.com/jthingelstad/q2a-number-captcha/commit/4fe465110e5df62a1d3b22817527b16e12a97b03"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:47.579Z"
+          }
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2015-11-28T20:16:07.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/q2a-number-captcha/commit/4fe465110e5df62a1d3b22817527b16e12a97b03"
+      }
+    },
+    {
+      "id": "r-w-book-club",
+      "title": "R/W Book Club",
+      "summary": "A shared archive of the Read / Write Book Club’s reading.",
+      "collection": "Games and communities",
+      "status": "active",
+      "url": "https://rwbookclub.com/",
+      "page": "https://thingelstad.xyz/things/r-w-book-club/",
+      "markdown": "https://thingelstad.xyz/things/r-w-book-club.md",
+      "topics": [
+        "reading"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/rwbookclub.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/rwbookclub.com",
+            "url": "https://github.com/jthingelstad/rwbookclub.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-04-09T23:16:42.000Z",
+            "archived": false,
+            "description": "Monorepo for the R/W Book Club: the public website, the shared knowledge corpus, and Oliver — the club's Discord agent.",
+            "languages": [
+              {
+                "name": "Python",
+                "bytes": 1549739
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 70510
+              },
+              {
+                "name": "Nunjucks",
+                "bytes": 57485
+              },
+              {
+                "name": "HTML",
+                "bytes": 52461
+              },
+              {
+                "name": "CSS",
+                "bytes": 43895
+              },
+              {
+                "name": "Shell",
+                "bytes": 16041
+              }
+            ],
+            "release": {
+              "name": "quiet-quicksilver",
+              "date": "2026-07-03T22:07:58.000Z",
+              "url": "https://github.com/jthingelstad/rwbookclub.com/releases/tag/quiet-quicksilver"
+            },
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 64,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 31
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 21
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 10
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 2
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T10:55:48.000Z",
+                  "url": "https://github.com/jthingelstad/rwbookclub.com/commit/a272d7bc2bd6c8e872de31460664b23bb2683b1d"
+                }
+              },
+              {
+                "path": "agent",
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 30,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 13
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 11
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 5
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-15T13:41:30.000Z",
+                  "url": "https://github.com/jthingelstad/rwbookclub.com/commit/c87b04514a29833f721d90af958285342cd0859c"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://rwbookclub.com/",
+          "role": "website",
+          "sitemap": "https://rwbookclub.com/sitemap.xml",
+          "feed": "https://rwbookclub.com/feed.xml",
+          "observation": {
+            "kind": "web",
+            "url": "https://rwbookclub.com/",
+            "observedAt": "2026-10-17T13:16:08.424Z",
+            "sitemap": {
+              "url": "https://rwbookclub.com/sitemap.xml",
+              "pages": 380,
+              "newestModified": "2026-09-15T00:00:00.000Z",
+              "months": [
+                {
+                  "month": "2025-11",
+                  "count": 1
+                },
+                {
+                  "month": "2026-01",
+                  "count": 1
+                },
+                {
+                  "month": "2026-05",
+                  "count": 1
+                },
+                {
+                  "month": "2026-06",
+                  "count": 1
+                },
+                {
+                  "month": "2026-07",
+                  "count": 1
+                },
+                {
+                  "month": "2026-09",
+                  "count": 199
+                }
+              ],
+              "complete": true
+            },
+            "feed": {
+              "url": "https://rwbookclub.com/feed.xml",
+              "title": "R/W Book Club",
+              "items": 20,
+              "newestPublished": "2026-09-15T00:00:00.000Z",
+              "months": [
+                {
+                  "month": "2025-11",
+                  "count": 1
+                },
+                {
+                  "month": "2026-01",
+                  "count": 1
+                },
+                {
+                  "month": "2026-05",
+                  "count": 1
+                },
+                {
+                  "month": "2026-06",
+                  "count": 1
+                },
+                {
+                  "month": "2026-07",
+                  "count": 1
+                },
+                {
+                  "month": "2026-09",
+                  "count": 1
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "oliver",
+          "label": "includes",
+          "detail": "Oliver is the book club’s Discord agent and member application, sharing the same club database and corpus.",
+          "source": "https://rwbookclub.com/"
+        }
+      ],
+      "story": {
+        "color": "#507b68",
+        "introduction": "A long-running reading group, with a shared record.",
+        "engineering": [
+          "The website presents the club’s reading history and members’ commentary.",
+          "Public llms.txt and llms-full.txt files make the reading record accessible to agents for analysis.",
+          "An iCal feed lets members subscribe to the meeting calendar.",
+          "Earlier approaches included MediaWiki and a shared Airtable database."
+        ],
+        "stack": [
+          "Static web",
+          "LLM context files",
+          "iCalendar"
+        ],
+        "related": [],
+        "questions": [
+          "How can an agent explore the club’s reading history?",
+          "How has the book club website evolved?"
+        ],
+        "source": "https://rwbookclub.com/llms.txt",
+        "sourceLabel": "Reading history for agents"
+      },
+      "body": "R/W stands for Read / Write Book Club. The club was started by Jamie’s professor, Dr. John Riedl; Jamie joined when the group was replacing a member. Jamie built the website, not the club.\n\nThe members have been meeting for many years, reading mostly nonfiction across a variety of subjects. The website documents the books they have read and provides a shared place for members’ commentary.\n\nThe group’s reading record has taken several forms, including a MediaWiki site and an Airtable database used across the club. The current website makes that history accessible to both people and agents: LLM context files provide an easily parsed reading record, and an iCal feed puts meetings on members’ calendars. The website shares an interest in reading with Jamie’s Reading Things newsletter.",
+      "latest": {
+        "date": "2026-10-16T10:55:48.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/rwbookclub.com/commit/a272d7bc2bd6c8e872de31460664b23bb2683b1d"
+      }
+    },
+    {
+      "id": "reading-things",
+      "title": "Reading Things",
+      "summary": "A family newsletter, published for a year and now retired.",
+      "collection": "Publishing",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/reading-things/",
+      "markdown": "https://thingelstad.xyz/things/reading-things.md",
+      "topics": [
+        "reading"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "release-notes",
+      "title": "Release Notes",
+      "summary": "Daily version-number email and personal journal",
+      "collection": "Personal tools and making",
+      "status": "active",
+      "url": "https://notes.yourversionnumber.com/",
+      "page": "https://thingelstad.xyz/things/release-notes/",
+      "markdown": "https://thingelstad.xyz/things/release-notes.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/yvn-release-notes",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/yvn-release-notes",
+            "url": "https://github.com/jthingelstad/yvn-release-notes",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-10-07T10:00:44.000Z",
+            "archived": false,
+            "description": "Release Notes: a daily version-number email from Your Version Number; replies become the day's notes",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 1638725
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 85944
+              },
+              {
+                "name": "CSS",
+                "bytes": 27002
+              },
+              {
+                "name": "Shell",
+                "bytes": 19740
+              },
+              {
+                "name": "HTML",
+                "bytes": 1314
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 196,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 196
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-17T13:23:43.000Z",
+                  "url": "https://github.com/jthingelstad/yvn-release-notes/commit/2fb3d92d6cb4e6583bf0d263942b8271a2cd68c3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://notes.yourversionnumber.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-17T13:23:43.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/yvn-release-notes/commit/2fb3d92d6cb4e6583bf0d263942b8271a2cd68c3"
+      }
+    },
+    {
+      "id": "road-sign-math",
+      "title": "Road Sign Math",
+      "summary": "Find an equation hiding in plain sight.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/projects/road-sign-math/",
+      "started": "2005-02",
+      "ended": "2014",
+      "page": "https://thingelstad.xyz/things/road-sign-math/",
+      "markdown": "https://thingelstad.xyz/things/road-sign-math.md",
+      "topics": [
+        "mediawiki",
+        "play",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/projects/road-sign-math/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "story": {
+        "color": "#287454",
+        "introduction": "A little mathematics. A lot of looking around.",
+        "engineering": [
+          "Historical wiki content is recovered into structured Markdown, with numbers, equations, places, and photo provenance.",
+          "The recovered collection includes 251 signs, alongside the original rules and other project pages.",
+          "Recovered images distinguish camera originals, archived originals, poster crops, and missing photos."
+        ],
+        "stack": [
+          "Python",
+          "Markdown",
+          "Archives",
+          "Mathematics"
+        ],
+        "related": [
+          "planet-kubb-score",
+          "planet-kubb",
+          "open-loop"
+        ],
+        "questions": [
+          "How was Road Sign Math recovered?",
+          "Show me other earlier experiments."
+        ],
+        "started": "A project from 2005–2014"
+      },
+      "body": "A driving game with a simple invitation: find a road sign whose numbers make a valid equation, photograph it, and share the discovery. The historical project now has a locally recovered archive of signs and images.",
+      "latest": null
+    },
+    {
+      "id": "smaller-than-a-redwood",
+      "title": "Smaller Than a Redwood",
+      "summary": "Archived publication",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/smaller-than-a-redwood/",
+      "markdown": "https://thingelstad.xyz/things/smaller-than-a-redwood.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "thing-hugo",
+      "title": "Thing Hugo",
+      "summary": "Public blog theme",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://github.com/jthingelstad/thing-hugo",
+      "page": "https://thingelstad.xyz/things/thing-hugo/",
+      "markdown": "https://thingelstad.xyz/things/thing-hugo.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/thing-hugo",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/thing-hugo",
+            "url": "https://github.com/jthingelstad/thing-hugo",
+            "repositoryCreatedAt": "2026-04-20T03:24:21.000Z",
+            "archived": false,
+            "description": "",
+            "languages": [
+              {
+                "name": "HTML",
+                "bytes": 14820
+              },
+              {
+                "name": "CSS",
+                "bytes": 11361
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-16T12:28:01.101Z",
+                "until": "2026-10-14T12:28:01.101Z",
+                "count": 0,
+                "complete": true,
+                "months": [],
+                "latestCommit": {
+                  "date": "2026-04-20T03:50:34.000Z",
+                  "url": "https://github.com/jthingelstad/thing-hugo/commit/c31752f3efdefd788fdaa1358b5529ef498377be"
+                }
+              }
+            ],
+            "observedAt": "2026-10-14T12:28:01.101Z"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "jamie-thingelstad-blog",
+          "label": "is its theme",
+          "detail": "Thing Hugo is the public Hugo theme developed for the blog’s Micro.blog publishing environment.",
+          "source": "https://github.com/jthingelstad/thing-hugo"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-04-20T03:50:34.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/thing-hugo/commit/c31752f3efdefd788fdaa1358b5529ef498377be"
+      }
+    },
+    {
+      "id": "thinglesbot",
+      "title": "Thinglesbot",
+      "summary": "Archived publication",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/thinglesbot/",
+      "markdown": "https://thingelstad.xyz/things/thinglesbot.md",
+      "topics": [],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "things-4-good",
+      "title": "Things 4 Good",
+      "summary": "Handmade candles. Family fundraising.",
+      "collection": "Personal tools and making",
+      "status": "active",
+      "url": "https://things4good.xyz/",
+      "page": "https://thingelstad.xyz/things/things-4-good/",
+      "markdown": "https://thingelstad.xyz/things/things-4-good.md",
+      "topics": [],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/things4good.xyz",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/things4good.xyz",
+            "url": "https://github.com/jthingelstad/things4good.xyz",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-06-04T03:37:10.000Z",
+            "archived": false,
+            "description": "Things 4 Good — a handmade candle fundraiser site. Built with Eleventy.",
+            "languages": [
+              {
+                "name": "Nunjucks",
+                "bytes": 68723
+              },
+              {
+                "name": "CSS",
+                "bytes": 59352
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 13983
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 6,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 2
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 2
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:03:43.000Z",
+                  "url": "https://github.com/jthingelstad/things4good.xyz/commit/c519d1f7f00dffdd930ab376b4f0829eac42d054"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://things4good.xyz/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "story": {
+        "color": "#dda73f",
+        "introduction": "Build something small. Do some good.",
+        "engineering": [
+          "One event dataset records each sale and its allocations to supported organizations.",
+          "Totals, charts, and other impact figures are calculated from that shared dataset.",
+          "An Eleventy build delivers a static site, with small interactive enhancements for exploration."
+        ],
+        "stack": [
+          "Eleventy",
+          "JavaScript",
+          "Data-driven content"
+        ],
+        "related": [
+          "wicky-thing-candles",
+          "things-4-good-fall-fundraiser"
+        ],
+        "questions": [
+          "How is the fundraiser’s impact calculated?",
+          "Show me other community projects."
+        ]
+      },
+      "body": "The Thingelstad family’s annual handmade-candle fundraiser supports nonprofits chosen by the family. Its website brings together the sale, Maker Night, the organizations supported, and the impact over time.",
+      "latest": {
+        "date": "2026-10-16T11:03:43.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/things4good.xyz/commit/c519d1f7f00dffdd930ab376b4f0829eac42d054"
+      }
+    },
+    {
+      "id": "things-4-good-fall-fundraiser",
+      "title": "Things 4 Good Fall Fundraiser",
+      "summary": "An annual give-back event from 2021 to 2023, selling handmade wooden wick candles for causes.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/projects/fall-fundraiser/",
+      "started": "2021",
+      "ended": "2023",
+      "page": "https://thingelstad.xyz/things/things-4-good-fall-fundraiser/",
+      "markdown": "https://thingelstad.xyz/things/things-4-good-fall-fundraiser.md",
+      "topics": [],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/projects/fall-fundraiser/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "things-ive-built",
+      "title": "Things I’ve Built",
+      "summary": "An index and archive of Jamie’s projects, including the ones he has stepped away from.",
+      "collection": "Art & archives",
+      "status": "active",
+      "url": "https://thingelstad.xyz/",
+      "started": "2026-10",
+      "page": "https://thingelstad.xyz/things/things-ive-built/",
+      "markdown": "https://thingelstad.xyz/things/things-ive-built.md",
+      "topics": [
+        "archives",
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/thingelstad.xyz",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/thingelstad.xyz",
+            "url": "https://github.com/jthingelstad/thingelstad.xyz",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-10-13T16:41:47.000Z",
+            "archived": false,
+            "description": "Things I've built. Jamie Thingelstad's interactive project gallery.",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 203144
+              },
+              {
+                "name": "CSS",
+                "bytes": 45696
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 30739
+              },
+              {
+                "name": "HTML",
+                "bytes": 1083
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 9,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-10",
+                    "count": 9
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-17T03:40:32.000Z",
+                  "url": "https://github.com/jthingelstad/thingelstad.xyz/commit/e61ae85275ea52389de79341553e987b152baf99"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://thingelstad.xyz/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [
+        {
+          "to": "librarian",
+          "label": "publishes a catalog for",
+          "detail": "The registry is published as things.json and llms.txt so Librarian and Thingy can answer questions about Jamie’s projects without this site running a model.",
+          "source": "https://github.com/jthingelstad/thingelstad.xyz"
+        }
+      ],
+      "body": "Jamie keeps thingelstad.xyz for point-in-time project things. This site is the index: every project, active or retired, with its sources, its connections to other projects, and a sourced history of what happened when. The registry is written as Markdown and YAML in a public repository, evidence is collected weekly from GitHub, sitemaps, and feeds, and the result is a static site with an RSS feed and llms.txt.",
+      "latest": {
+        "date": "2026-10-17T03:40:32.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/thingelstad.xyz/commit/e61ae85275ea52389de79341553e987b152baf99"
+      }
+    },
+    {
+      "id": "thingy",
+      "title": "Thingy",
+      "summary": "Archive chat and discovery",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://thingy.thingelstad.com/",
+      "page": "https://thingelstad.xyz/things/thingy/",
+      "markdown": "https://thingelstad.xyz/things/thingy.md",
+      "topics": [
+        "agents",
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/thingy.thingelstad.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/thingy.thingelstad.com",
+            "url": "https://github.com/jthingelstad/thingy.thingelstad.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-06-03T23:20:15.000Z",
+            "archived": false,
+            "description": "Thingy — the standalone web home for Jamie Thingelstad's archive agent: a query surface over the Studio corpus, with a web app and a Discord bridge.",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 487315
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 139838
+              },
+              {
+                "name": "CSS",
+                "bytes": 102610
+              },
+              {
+                "name": "HTML",
+                "bytes": 92557
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 170,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 3
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 29
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 93
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 45
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:44:02.000Z",
+                  "url": "https://github.com/jthingelstad/thingy.thingelstad.com/commit/b67dfffabde119d86e03e2ac604606e1dbb49fc3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://thingy.thingelstad.com/",
+          "role": "website",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T11:44:02.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/thingy.thingelstad.com/commit/b67dfffabde119d86e03e2ac604606e1dbb49fc3"
+      }
+    },
+    {
+      "id": "velotweets",
+      "title": "Velotweets",
+      "summary": "Archived Rails source project",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/velotweets/",
+      "markdown": "https://thingelstad.xyz/things/velotweets.md",
+      "topics": [],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "weekly-thing",
+      "title": "Weekly Thing",
+      "summary": "A weekly collection of links and ideas.",
+      "collection": "Publishing",
+      "status": "active",
+      "url": "https://weekly.thingelstad.com/",
+      "started": "2017-05-13",
+      "page": "https://thingelstad.xyz/things/weekly-thing/",
+      "markdown": "https://thingelstad.xyz/things/weekly-thing.md",
+      "topics": [
+        "open-web",
+        "archives"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/weekly.thingelstad.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/weekly.thingelstad.com",
+            "url": "https://github.com/jthingelstad/weekly.thingelstad.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-04-07T23:18:30.000Z",
+            "archived": false,
+            "description": "Public website and archive for The Weekly Thing, Jamie Thingelstad's weekend newsletter since 2017 — a render surface of the Studio publishing brain.",
+            "languages": [
+              {
+                "name": "Nunjucks",
+                "bytes": 131644
+              },
+              {
+                "name": "CSS",
+                "bytes": 83475
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 55701
+              },
+              {
+                "name": "Makefile",
+                "bytes": 1192
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 158,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-07",
+                    "count": 1
+                  },
+                  {
+                    "month": "2026-08",
+                    "count": 15
+                  },
+                  {
+                    "month": "2026-09",
+                    "count": 57
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 85
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T11:40:33.000Z",
+                  "url": "https://github.com/jthingelstad/weekly.thingelstad.com/commit/24d0689ac6845edebbf6a800e7eb9b871ca1dd6e"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://weekly.thingelstad.com/",
+          "role": "website",
+          "sitemap": "https://weekly.thingelstad.com/sitemap.xml",
+          "feed": "https://weekly.thingelstad.com/feed.xml",
+          "observation": {
+            "kind": "web",
+            "url": "https://weekly.thingelstad.com/",
+            "observedAt": "2026-10-17T13:15:37.976Z",
+            "sitemap": {
+              "url": "https://weekly.thingelstad.com/sitemap.xml",
+              "pages": 1134,
+              "newestModified": "2026-10-10T12:00:00.000Z",
+              "months": [
+                {
+                  "month": "2025-11",
+                  "count": 30
+                },
+                {
+                  "month": "2025-12",
+                  "count": 17
+                },
+                {
+                  "month": "2026-01",
+                  "count": 16
+                },
+                {
+                  "month": "2026-02",
+                  "count": 29
+                },
+                {
+                  "month": "2026-03",
+                  "count": 20
+                },
+                {
+                  "month": "2026-04",
+                  "count": 17
+                },
+                {
+                  "month": "2026-05",
+                  "count": 48
+                },
+                {
+                  "month": "2026-09",
+                  "count": 31
+                },
+                {
+                  "month": "2026-10",
+                  "count": 30
+                }
+              ],
+              "complete": true
+            },
+            "feed": {
+              "url": "https://weekly.thingelstad.com/feed.xml",
+              "title": "Weekly Thing",
+              "items": 354,
+              "newestPublished": "2026-10-10T12:00:00.000Z",
+              "months": [
+                {
+                  "month": "2025-11",
+                  "count": 4
+                },
+                {
+                  "month": "2025-12",
+                  "count": 2
+                },
+                {
+                  "month": "2026-01",
+                  "count": 2
+                },
+                {
+                  "month": "2026-02",
+                  "count": 3
+                },
+                {
+                  "month": "2026-03",
+                  "count": 2
+                },
+                {
+                  "month": "2026-04",
+                  "count": 2
+                },
+                {
+                  "month": "2026-05",
+                  "count": 4
+                },
+                {
+                  "month": "2026-09",
+                  "count": 2
+                },
+                {
+                  "month": "2026-10",
+                  "count": 2
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "librarian",
+          "label": "is indexed by",
+          "detail": "Librarian builds a searchable corpus from Weekly Thing content.",
+          "source": "https://thingy.thingelstad.com/about/"
+        }
+      ],
+      "story": {
+        "color": "#eaa18f",
+        "introduction": "Curiosity, collected and shared.",
+        "engineering": [
+          "WT Builder keeps an issue structured until it is sent, then renders different editions for the website, email, and audio.",
+          "The public archive is an Eleventy site. Librarian builds the searchable archive that Thingy answers from.",
+          "Authoring, public publishing, and archive retrieval have explicit ownership boundaries."
+        ],
+        "stack": [
+          "Eleventy",
+          "Publishing",
+          "Email",
+          "Audio"
+        ],
+        "related": [
+          "wt-builder",
+          "librarian",
+          "thingy",
+          "another-thing"
+        ],
+        "questions": [
+          "What is behind the publishing workflow?",
+          "How do Weekly Thing and Thingy connect?"
+        ],
+        "source": "https://weekly.thingelstad.com/",
+        "sourceLabel": "Read the archive",
+        "started": "Published since 2017"
+      },
+      "body": "A weekly collection of interesting links, ideas, and observations from across the internet. Its publishing tools grew alongside the newsletter, from a Shortcuts workflow into a dedicated authoring application.",
+      "latest": {
+        "date": "2026-10-16T11:40:33.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/weekly.thingelstad.com/commit/24d0689ac6845edebbf6a800e7eb9b871ca1dd6e"
+      }
+    },
+    {
+      "id": "wicky-thing-candles",
+      "title": "Wicky Thing Candles",
+      "summary": "Handmade wooden wick candles, the craft behind the Things 4 Good fundraisers.",
+      "collection": "Historical projects",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/candles/",
+      "page": "https://thingelstad.xyz/things/wicky-thing-candles/",
+      "markdown": "https://thingelstad.xyz/things/wicky-thing-candles.md",
+      "topics": [],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/candles/",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "wikiapiary",
+      "title": "WikiApiary",
+      "summary": "A wiki that monitors MediaWiki sites, started in 2012 and now operated by others.",
+      "collection": "Historical projects",
+      "status": "dormant",
+      "url": "https://wikiapiary.com/wiki/Main_Page",
+      "started": "2012",
+      "page": "https://thingelstad.xyz/things/wikiapiary/",
+      "markdown": "https://thingelstad.xyz/things/wikiapiary.md",
+      "topics": [
+        "mediawiki",
+        "semantic-mediawiki"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://wikiapiary.com/wiki/Main_Page",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "wikinosh",
+      "title": "Wikinosh",
+      "summary": "Existing blog portfolio entry",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/wikinosh/",
+      "markdown": "https://thingelstad.xyz/things/wikinosh.md",
+      "topics": [
+        "mediawiki",
+        "semantic-mediawiki"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "wikiwonders",
+      "title": "WikiWonders",
+      "summary": "Archived project material",
+      "collection": "Historical projects",
+      "status": "retired",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/wikiwonders/",
+      "markdown": "https://thingelstad.xyz/things/wikiwonders.md",
+      "topics": [
+        "mediawiki"
+      ],
+      "sources": [],
+      "connections": [],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "wt-builder",
+      "title": "WT Builder",
+      "summary": "Newsletter and podcast authoring application",
+      "collection": "Publishing",
+      "status": "active",
+      "url": null,
+      "page": "https://thingelstad.xyz/things/wt-builder/",
+      "markdown": "https://thingelstad.xyz/things/wt-builder.md",
+      "topics": [
+        "open-web"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/wt-builder",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/wt-builder",
+            "url": "https://github.com/jthingelstad/wt-builder",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-07-27T04:23:50.000Z",
+            "archived": false,
+            "description": "Item-first authoring and publishing application for The Weekly Thing",
+            "languages": [
+              {
+                "name": "TypeScript",
+                "bytes": 2267481
+              },
+              {
+                "name": "CSS",
+                "bytes": 97752
+              },
+              {
+                "name": "Python",
+                "bytes": 52549
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 2464
+              },
+              {
+                "name": "HTML",
+                "bytes": 301
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 300,
+                "complete": false,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 218
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 82
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-16T13:13:06.000Z",
+                  "url": "https://github.com/jthingelstad/wt-builder/commit/da06a4195c2ab3e7b1e9976c35054e6c5c7bae95"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "weekly-thing",
+          "label": "publishes",
+          "detail": "WT Builder authors issues and sends the website, email, and audio editions of Weekly Thing.",
+          "source": "https://weekly.thingelstad.com/"
+        },
+        {
+          "to": "another-thing",
+          "label": "authors",
+          "detail": "Another Thing podcast authoring moved into WT Builder in October 2026.",
+          "source": "https://another.thingelstad.com/"
+        }
+      ],
+      "body": "",
+      "latest": {
+        "date": "2026-10-16T13:13:06.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/wt-builder/commit/da06a4195c2ab3e7b1e9976c35054e6c5c7bae95"
+      }
+    },
+    {
+      "id": "yearly-thing-2025",
+      "title": "Yearly Thing 2025",
+      "summary": "A book collecting a year of the Weekly Thing, subtitled Agents, Attention, Artifacts.",
+      "collection": "Publishing",
+      "status": "archived",
+      "url": "https://www.thingelstad.com/2026/01/20/i-made-a-book-yearly.html",
+      "started": "2025-12",
+      "ended": "2026-01",
+      "page": "https://thingelstad.xyz/things/yearly-thing-2025/",
+      "markdown": "https://thingelstad.xyz/things/yearly-thing-2025.md",
+      "topics": [
+        "archives",
+        "reading"
+      ],
+      "sources": [
+        {
+          "kind": "website",
+          "url": "https://www.thingelstad.com/2026/01/20/i-made-a-book-yearly.html",
+          "role": "reference",
+          "observation": null
+        }
+      ],
+      "connections": [
+        {
+          "to": "weekly-thing",
+          "label": "collects a year of",
+          "detail": "All 324 links Jamie commented on across 31 issues of the Weekly Thing in 2025, reorganized into ten topic chapters, in print and eBook form. Proceeds support the Weekly Thing Supporting Membership program.",
+          "source": "https://www.thingelstad.com/2026/01/20/i-made-a-book-yearly.html"
+        }
+      ],
+      "body": "",
+      "latest": null
+    },
+    {
+      "id": "your-version-number",
+      "title": "Your Version Number",
+      "summary": "Life, versioned.",
+      "collection": "Personal tools and making",
+      "status": "active",
+      "url": "https://yourversionnumber.com/",
+      "page": "https://thingelstad.xyz/things/your-version-number/",
+      "markdown": "https://thingelstad.xyz/things/your-version-number.md",
+      "topics": [
+        "play"
+      ],
+      "sources": [
+        {
+          "kind": "github",
+          "repository": "jthingelstad/yourversionnumber.com",
+          "role": "implementation",
+          "observation": {
+            "kind": "github",
+            "repository": "jthingelstad/yourversionnumber.com",
+            "url": "https://github.com/jthingelstad/yourversionnumber.com",
+            "observedAt": "2026-10-17T13:32:02.761Z",
+            "repositoryCreatedAt": "2026-05-01T05:46:33.000Z",
+            "archived": false,
+            "description": "Bookmarkable static page that shows a person's age as a v MAJOR.MINOR.PATCH version number.",
+            "languages": [
+              {
+                "name": "CSS",
+                "bytes": 369374
+              },
+              {
+                "name": "HTML",
+                "bytes": 118016
+              },
+              {
+                "name": "JavaScript",
+                "bytes": 101084
+              },
+              {
+                "name": "Shell",
+                "bytes": 2055
+              }
+            ],
+            "release": null,
+            "activity": [
+              {
+                "path": null,
+                "branch": "main",
+                "since": "2026-07-19T13:32:02.761Z",
+                "until": "2026-10-17T13:32:02.761Z",
+                "count": 64,
+                "complete": true,
+                "months": [
+                  {
+                    "month": "2026-09",
+                    "count": 63
+                  },
+                  {
+                    "month": "2026-10",
+                    "count": 1
+                  }
+                ],
+                "latestCommit": {
+                  "date": "2026-10-07T10:01:36.000Z",
+                  "url": "https://github.com/jthingelstad/yourversionnumber.com/commit/da1e3220158bd18126ba29e28d96461838772c53"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "website",
+          "url": "https://yourversionnumber.com/",
+          "role": "website",
+          "sitemap": "https://yourversionnumber.com/sitemap.xml",
+          "observation": {
+            "kind": "web",
+            "url": "https://yourversionnumber.com/",
+            "observedAt": "2026-10-17T13:16:08.424Z",
+            "sitemap": {
+              "url": "https://yourversionnumber.com/sitemap.xml",
+              "pages": 11,
+              "newestModified": null,
+              "months": [],
+              "complete": true
+            },
+            "feed": null
+          }
+        }
+      ],
+      "connections": [
+        {
+          "to": "release-notes",
+          "label": "grew into",
+          "detail": "Release Notes uses Your Version Number’s birthday arithmetic in a daily email and personal journal.",
+          "source": "https://github.com/jthingelstad/yvn-release-notes",
+          "kind": "lineage"
+        }
+      ],
+      "story": {
+        "color": "#1763ff",
+        "introduction": "A different way to count the days.",
+        "engineering": [
+          "A framework-free static site calculates its numbers in the browser.",
+          "Dates, people, themes, and signed cards travel in the URL, making a view shareable without an account.",
+          "The related Release Notes product adds daily email and a personal journal. It has its own server and storage."
+        ],
+        "stack": [
+          "JavaScript",
+          "CSS",
+          "Static web",
+          "URL state"
+        ],
+        "related": [
+          "release-notes",
+          "mb"
+        ],
+        "questions": [
+          "How does the version number work?",
+          "How is Release Notes related?"
+        ],
+        "source": "https://github.com/jthingelstad/yourversionnumber.com",
+        "started": "The idea began in 2018"
+      },
+      "body": "Write a birthday the way you would version a piece of software: decades, years into the decade, and days since the last birthday. The same idea has a Work Edition for career milestones.",
+      "latest": {
+        "date": "2026-10-07T10:01:36.000Z",
+        "label": "Latest commit",
+        "url": "https://github.com/jthingelstad/yourversionnumber.com/commit/da1e3220158bd18126ba29e28d96461838772c53"
+      }
+    }
+  ],
+  "topics": [
+    {
+      "id": "agents",
+      "title": "Agents",
+      "description": "Software that observes, remembers, and acts. A thread from personal tools to community companions.",
+      "page": "/topics/agents/",
+      "things": [
+        "clash-royale-api-agent-reference",
+        "elixir",
+        "elixir-bot",
+        "elixir-mcp-collector",
+        "elixir-mcp-discord",
+        "flight-path",
+        "librarian",
+        "mb",
+        "oliver",
+        "otto",
+        "projects-systems-administration",
+        "thingy"
+      ]
+    },
+    {
+      "id": "archives",
+      "title": "Archives",
+      "description": "Preserving content, collections, and the evidence behind them.",
+      "page": "/topics/archives/",
+      "things": [
+        "jamie-thingelstad-blog",
+        "librarian",
+        "nnxyz",
+        "planet-kubb-score",
+        "proof-of-a-person",
+        "road-sign-math",
+        "things-ive-built",
+        "weekly-thing",
+        "yearly-thing-2025"
+      ]
+    },
+    {
+      "id": "crypto",
+      "title": "Crypto",
+      "description": "Experiments with onchain participation and digital collectibles, through the POAP ecosystem.",
+      "page": "/topics/crypto/",
+      "things": [
+        "612-poap-challenge",
+        "nnxyz",
+        "poap-kings",
+        "poap2rss",
+        "proof-of-a-person"
+      ]
+    },
+    {
+      "id": "mcp",
+      "title": "MCP",
+      "description": "Giving agents a useful interface to recorded knowledge and everyday tools.",
+      "page": "/topics/mcp/",
+      "things": [
+        "elixir",
+        "elixir-mcp-collector",
+        "elixir-mcp-discord",
+        "librarian",
+        "mb"
+      ]
+    },
+    {
+      "id": "mediawiki",
+      "title": "MediaWiki",
+      "description": "Wikis as a place to build: communities, extensions, skins, and structured knowledge.",
+      "page": "/topics/mediawiki/",
+      "things": [
+        "filament",
+        "foreground",
+        "numbers2words",
+        "parseurl",
+        "planet-kubb",
+        "road-sign-math",
+        "wikiapiary",
+        "wikinosh",
+        "wikiwonders"
+      ]
+    },
+    {
+      "id": "open-web",
+      "title": "The open web",
+      "description": "Publishing, feeds, archives, and tools that keep information portable.",
+      "page": "/topics/open-web/",
+      "things": [
+        "another-thing",
+        "another-thing-builder",
+        "homebrew-mb-tap",
+        "jamie-thingelstad-blog",
+        "librarian",
+        "link-blog",
+        "mb",
+        "mb-audit",
+        "open-loop",
+        "poap2rss",
+        "smaller-than-a-redwood",
+        "thing-hugo",
+        "things-ive-built",
+        "thingy",
+        "weekly-thing",
+        "wt-builder"
+      ]
+    },
+    {
+      "id": "play",
+      "title": "Play",
+      "description": "Games, playful arithmetic, and the communities that form around them.",
+      "page": "/topics/play/",
+      "things": [
+        "612-poap-challenge",
+        "clash-royale-api-agent-reference",
+        "elixir",
+        "elixir-bot",
+        "elixir-clan",
+        "elixir-drop",
+        "elixir-ladder",
+        "escaping-things",
+        "planet-kubb",
+        "planet-kubb-score",
+        "poap-kings",
+        "release-notes",
+        "road-sign-math",
+        "your-version-number"
+      ]
+    },
+    {
+      "id": "poap",
+      "title": "POAP",
+      "description": "Proof of participation, collected memories, and tools that connect tokens to the open web.",
+      "page": "/topics/poap/",
+      "things": [
+        "612-poap-challenge",
+        "flight-path",
+        "poap-kings",
+        "poap2rss",
+        "proof-of-a-person"
+      ]
+    },
+    {
+      "id": "reading",
+      "title": "Reading",
+      "description": "Books, reading, and the ways a family or community shares them.",
+      "page": "/topics/reading/",
+      "things": [
+        "r-w-book-club",
+        "reading-things",
+        "yearly-thing-2025"
+      ]
+    },
+    {
+      "id": "semantic-mediawiki",
+      "title": "Semantic MediaWiki",
+      "description": "A wiki can be a database, too. Structured properties make knowledge queryable.",
+      "page": "/topics/semantic-mediawiki/",
+      "things": [
+        "wikiapiary",
+        "wikinosh"
+      ]
+    }
+  ],
+  "history": [
+    {
+      "id": "road-sign-math-launch",
+      "date": "2005-02",
+      "kind": "launch",
+      "title": "Road Sign Math begins",
+      "summary": "A road sign with a mathematical relationship becomes a game for finding more. The retrospective identifies February 2005 as the launch month.",
+      "source": "https://weekly.thingelstad.com/archive/267/#history",
+      "things": [
+        "road-sign-math"
+      ]
+    },
+    {
+      "id": "wikiapiary-origin",
+      "date": "2012",
+      "kind": "launch",
+      "title": "A wiki to track other wikis",
+      "summary": "WikiApiary begins as a holiday-break project, built with MediaWiki and Semantic MediaWiki.",
+      "source": "https://www.thingelstad.com/2013/12/22/one-year-for.html",
+      "things": [
+        "wikiapiary"
+      ]
+    },
+    {
+      "id": "open-loop-first",
+      "date": "2012-06-01",
+      "kind": "launch",
+      "title": "Open Loop: the first episode",
+      "summary": "The published episode archive begins with “But No Shoes.”",
+      "source": "https://www.thingelstad.com/projects/open-loop/0-but-no-shoes/",
+      "things": [
+        "open-loop"
+      ]
+    },
+    {
+      "id": "planet-kubb-archive",
+      "date": "2012-07-23",
+      "kind": "archive",
+      "title": "Kubb, notation, and a community on the web",
+      "summary": "Open Loop’s Kubb Fever episode links Planet Kubb Notation and Scoresheet. This dates the public record, not the original launch.",
+      "source": "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/",
+      "things": [
+        "planet-kubb",
+        "planet-kubb-score"
+      ]
+    },
+    {
+      "id": "wikinosh-semantic",
+      "date": "2013-07-30",
+      "kind": "milestone",
+      "title": "Making wiki data portable",
+      "summary": "Work on paging Semantic MediaWiki datasets supports exporting Wikinosh nutrition data for offline mobile access.",
+      "source": "https://www.thingelstad.com/2013/07/30/paging-large-datasets.html",
+      "things": [
+        "wikinosh"
+      ]
+    },
+    {
+      "id": "wikiapiary-year-one",
+      "date": "2013-12-22",
+      "kind": "milestone",
+      "title": "One year of WikiApiary",
+      "summary": "A first-year retrospective describes the growing wiki community and credits Foreground as the site’s skin.",
+      "source": "https://www.thingelstad.com/2013/12/22/one-year-for.html",
+      "things": [
+        "wikiapiary",
+        "foreground"
+      ]
+    },
+    {
+      "id": "weekly-thing-one",
+      "date": "2017-05-13",
+      "kind": "launch",
+      "title": "The first Weekly Thing",
+      "summary": "A newsletter experiment begins with issue one.",
+      "source": "https://weekly.thingelstad.com/archive/1/",
+      "things": [
+        "weekly-thing"
+      ]
+    },
+    {
+      "id": "612-poap-challenge-launch",
+      "date": "2025-05-31",
+      "kind": "launch",
+      "title": "The 612 POAP Challenge begins",
+      "summary": "A summer scavenger hunt around Minneapolis pairs location POAPs with the 612 Series, open until Labor Day.",
+      "source": "https://www.thingelstad.com/2025/05/31/poap-challenge-collect-them-now.html",
+      "things": [
+        "612-poap-challenge"
+      ]
+    },
+    {
+      "id": "poap2rss-launch",
+      "date": "2025-07-04",
+      "kind": "launch",
+      "title": "POAP meets RSS",
+      "summary": "POAP2RSS is declared officially launched: POAP activity becomes available in feeds.",
+      "source": "https://www.thingelstad.com/categories/poap2rss/page/2/",
+      "things": [
+        "poap2rss"
+      ]
+    },
+    {
+      "id": "612-poap-challenge-close",
+      "date": "2025-09-01",
+      "kind": "archive",
+      "title": "The 612 POAP Challenge closes",
+      "summary": "As Labor Day ends, the challenge comes to a close and the site keeps the record of every claim.",
+      "source": "https://612.poapchallenge.com/",
+      "things": [
+        "612-poap-challenge"
+      ]
+    },
+    {
+      "id": "yearly-thing-2025-published",
+      "date": "2026-01-20",
+      "kind": "launch",
+      "title": "Yearly Thing 2025 is published",
+      "summary": "A year of the Weekly Thing becomes a book, in print from Lulu and as an eBook, organized into ten topic chapters.",
+      "source": "https://www.thingelstad.com/2026/01/20/i-made-a-book-yearly.html",
+      "things": [
+        "yearly-thing-2025",
+        "weekly-thing"
+      ]
+    },
+    {
+      "id": "poap-kings-recorded-development",
+      "date": "2026-02-04",
+      "kind": "development",
+      "title": "POAP KINGS: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/poapkings.com/commit/0716a099e57528016fa3a2cd8d86d6dd18e1e313",
+      "things": [
+        "poap-kings"
+      ]
+    },
+    {
+      "id": "escaping-things-recorded-development",
+      "date": "2026-02-11",
+      "kind": "development",
+      "title": "Escaping Things: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/escape.thingelstad.com/commit/1cab836b57c32990f4f2a7b815d1bb3c6a0cfe4c",
+      "things": [
+        "escaping-things"
+      ]
+    },
+    {
+      "id": "flight-path-built",
+      "date": "2026-02-25",
+      "kind": "launch",
+      "title": "Flight Path takes off",
+      "summary": "Jamie builds Flight Path, extending the POAP Airport Rally, entirely on an iPhone with Claude Code.",
+      "source": "https://www.thingelstad.com/2026/02/25/it-is-bonkers-to-me.html",
+      "things": [
+        "flight-path"
+      ]
+    },
+    {
+      "id": "elixir-bot-recorded-development",
+      "date": "2026-02-27",
+      "kind": "development",
+      "title": "Elixir Bot: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/elixir-bot/commit/161b7f4e0c98d2acb84bb770981a12ba256bebc8",
+      "things": [
+        "elixir-bot"
+      ]
+    },
+    {
+      "id": "mb-recorded-development",
+      "date": "2026-03-01",
+      "kind": "development",
+      "title": "mb: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/mb/commit/2b20c09c6350db018860bc026f88b839da296346",
+      "things": [
+        "mb"
+      ]
+    },
+    {
+      "id": "librarian-recorded-development",
+      "date": "2026-04-07",
+      "kind": "development",
+      "title": "Librarian: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/librarian-thing/commit/95fed22aba9a066a74df067d2072ae0ca6cf2690",
+      "things": [
+        "librarian"
+      ]
+    },
+    {
+      "id": "weekly-thing-recorded-development",
+      "date": "2026-04-07",
+      "kind": "development",
+      "title": "Weekly Thing: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/weekly.thingelstad.com/commit/e5074139a6e6fb37a0c83713e8808878e6af3205",
+      "things": [
+        "weekly-thing"
+      ]
+    },
+    {
+      "id": "another-thing-recorded-development",
+      "date": "2026-04-09",
+      "kind": "development",
+      "title": "Another Thing: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/another.thingelstad.com/commit/0ef36d2472cfa45e39e1dc831a8f5553fb005822",
+      "things": [
+        "another-thing"
+      ]
+    },
+    {
+      "id": "r-w-book-club-recorded-development",
+      "date": "2026-04-09",
+      "kind": "development",
+      "title": "R/W Book Club: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/rwbookclub.com/commit/25852563166cc04650a451f4bb3bdf27c83c4424",
+      "things": [
+        "r-w-book-club"
+      ]
+    },
+    {
+      "id": "thing-hugo-recorded-development",
+      "date": "2026-04-19",
+      "kind": "development",
+      "title": "Thing Hugo: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/thing-hugo/commit/fc501f80535d8219b4dd943eae64477c223a824a",
+      "things": [
+        "thing-hugo"
+      ]
+    },
+    {
+      "id": "your-version-number-recorded-development",
+      "date": "2026-05-01",
+      "kind": "development",
+      "title": "Your Version Number: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/yourversionnumber.com/commit/b2f68c8bc83cdde695b925d0aa3d37b796dd944a",
+      "things": [
+        "your-version-number"
+      ]
+    },
+    {
+      "id": "mb-audit-recorded-development",
+      "date": "2026-05-02",
+      "kind": "development",
+      "title": "mb-audit: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/mb-audit/commit/75fbad973b08899d25cef567506cd4519148ee5e",
+      "things": [
+        "mb-audit"
+      ]
+    },
+    {
+      "id": "thingy-recorded-development",
+      "date": "2026-05-14",
+      "kind": "development",
+      "title": "Thingy: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/thingy.thingelstad.com/commit/8167c8fdb7a4f9edd30cd4d8087fb34982e6c5ba",
+      "things": [
+        "thingy"
+      ]
+    },
+    {
+      "id": "things-4-good-recorded-development",
+      "date": "2026-06-03",
+      "kind": "development",
+      "title": "Things 4 Good: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/things4good.xyz/commit/cec22f314718ff19c8b99247cb09ea43c87eea77",
+      "things": [
+        "things-4-good"
+      ]
+    },
+    {
+      "id": "elixir-drop-recorded-development",
+      "date": "2026-06-13",
+      "kind": "development",
+      "title": "Elixir Drop: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/drop.poapkings.com/commit/4476c93f92f7f997582e3726d0d72eaba6516c25",
+      "things": [
+        "elixir-drop"
+      ]
+    },
+    {
+      "id": "wt-builder-recorded-development",
+      "date": "2026-07-26",
+      "kind": "development",
+      "title": "WT Builder: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/wt-builder/commit/918b6fea5b489773738ac64a89765864574b0ee3",
+      "things": [
+        "wt-builder"
+      ]
+    },
+    {
+      "id": "poap2rss-retired",
+      "date": "2026-07-31",
+      "kind": "retirement",
+      "title": "POAP2RSS retires with the POAP API",
+      "summary": "POAP wound down its platform on July 31, 2026. POAP2RSS read live claim activity through the POAP API, so it stopped working and was retired.",
+      "source": "https://poap2rss.com/",
+      "things": [
+        "poap2rss"
+      ]
+    },
+    {
+      "id": "elixir-recorded-development",
+      "date": "2026-09-03",
+      "kind": "development",
+      "title": "Elixir: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/elixir-mcp/commit/e2e126a9dc1b150db9ee64213fc48224f8c09ba2",
+      "things": [
+        "elixir"
+      ]
+    },
+    {
+      "id": "collector-split",
+      "date": "2026-09-04",
+      "kind": "milestone",
+      "title": "Collectors become their own thing",
+      "summary": "The operator worker is split from Elixir MCP into its own repository.",
+      "source": "https://github.com/jthingelstad/elixir-mcp-collector/commit/47ac57c5b28c4aa33bdc7c8daa3f8ef085c57f2f",
+      "things": [
+        "elixir-mcp-collector",
+        "elixir"
+      ]
+    },
+    {
+      "id": "elixir-mcp-discord-recorded-development",
+      "date": "2026-09-07",
+      "kind": "development",
+      "title": "Elixir MCP Discord: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/elixir-mcp-discord/commit/1479a4601af90658fc3cd57cbdb269884a54f49d",
+      "things": [
+        "elixir-mcp-discord"
+      ]
+    },
+    {
+      "id": "elixir-bot-retired",
+      "date": "2026-09-26",
+      "kind": "retirement",
+      "title": "Elixir Bot retires. Its ideas keep going.",
+      "summary": "The retirement record names the projects that grew out of the original clan agent, including Elixir MCP, Collector, Discord, and Clan.",
+      "source": "https://github.com/jthingelstad/elixir-bot/commit/555d743ceb72a7779a6e47fab4912ae5d024e70e",
+      "things": [
+        "elixir-bot",
+        "elixir",
+        "elixir-mcp-discord",
+        "elixir-mcp-collector",
+        "elixir-clan"
+      ]
+    },
+    {
+      "id": "open-loop-feed",
+      "date": "2026-10",
+      "kind": "milestone",
+      "title": "Open Loop returns as a podcast feed",
+      "summary": "All nine episodes are republished as a podcast feed with speaker-labelled transcripts, cleaned up with AI in October 2026.",
+      "source": "https://www.thingelstad.com/projects/open-loop/",
+      "things": [
+        "open-loop"
+      ]
+    },
+    {
+      "id": "clan-shared-platform",
+      "date": "2026-10-02",
+      "kind": "milestone",
+      "title": "Clan moves into the shared Elixir application",
+      "summary": "Clan is mounted in the shared application, carrying its management capabilities into the platform.",
+      "source": "https://github.com/jthingelstad/elixir-mcp/commit/5b9621672282ee9dbbddaf6fd3f201367f3b7848",
+      "things": [
+        "elixir-clan",
+        "elixir"
+      ]
+    },
+    {
+      "id": "mb-221",
+      "date": "2026-10-05",
+      "kind": "milestone",
+      "title": "mb 2.2.1",
+      "summary": "A versioned release of the Micro.blog command-line tool.",
+      "source": "https://github.com/jthingelstad/mb/commit/bacbb98475e1ffc983bbaf9b37acee80b9b83da0",
+      "things": [
+        "mb"
+      ]
+    },
+    {
+      "id": "release-notes-recorded-development",
+      "date": "2026-10-07",
+      "kind": "development",
+      "title": "Release Notes: recorded development begins",
+      "summary": "The earliest commit in this repository is a development record; the project or idea may predate it.",
+      "source": "https://github.com/jthingelstad/yvn-release-notes/commit/76f54b3e4a49c39c94c8e28ba0354f3023e79981",
+      "things": [
+        "release-notes"
+      ]
+    },
+    {
+      "id": "wt-podcast-authoring",
+      "date": "2026-10-11",
+      "kind": "milestone",
+      "title": "Two publications, one builder",
+      "summary": "Another Thing becomes a second product in WT Builder; its earlier authoring application is retired.",
+      "source": "https://github.com/jthingelstad/wt-builder/commit/bea76c7ef4fc79a878072feebf694ce18ad217ea",
+      "things": [
+        "wt-builder",
+        "another-thing",
+        "another-thing-builder"
+      ]
+    },
+    {
+      "id": "nnxyz-recorded-development",
+      "date": "2026-10-13",
+      "kind": "development",
+      "title": "NNXYZ: recorded development",
+      "summary": "A public repository records development of the artwork gallery. This is development evidence, not its launch date.",
+      "source": "https://github.com/jthingelstad/nnxyz/commit/826089753b46f7f4d4ae5d994243feb73cb4c299",
+      "things": [
+        "nnxyz"
+      ]
+    },
+    {
+      "id": "release-notes-upcoming",
+      "date": "2026-10-13",
+      "kind": "milestone",
+      "title": "A place for upcoming dates",
+      "summary": "Release Notes adds personal upcoming dates and daily email reminders.",
+      "source": "https://github.com/jthingelstad/yvn-release-notes/commit/5cc2442ecf8623d074b0d7e639285c08c3f78f89",
+      "things": [
+        "release-notes"
+      ]
+    },
+    {
+      "id": "things-ive-built-recorded-development",
+      "date": "2026-10-13",
+      "kind": "development",
+      "title": "Things I’ve Built: recorded development",
+      "summary": "A public repository records development of the project index. This is development evidence, not its launch date.",
+      "source": "https://github.com/jthingelstad/thingelstad.xyz",
+      "things": [
+        "things-ive-built"
+      ]
+    }
+  ]
+}

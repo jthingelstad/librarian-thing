@@ -11,6 +11,7 @@ export interface LensItem {
   episode_number?: string | number;
   microblog_id?: string | number;
   page_id?: string | number;
+  thing_id?: string;
   show?: string;
   subject?: string;
   title?: string;
@@ -258,8 +259,17 @@ export function lensSourceId(item: LensItem) {
     .replace(/\/+$/, '')
     .split('/')
     .at(-1);
+  if (isThing(item)) return `thing-${item.thing_id || 'index'}`;
   if (isSitePage(item)) return `site-${tail || 'unknown'}`;
   return `${normalizeLensSourceKind(item.source_kind)}-${tail || 'unknown'}`;
+}
+
+// Things I've built (thingelstad.xyz) rides the Weekly Thing corpus too:
+// one source per thing (thing-<id>, its page on the site) plus the registry
+// index (thing-index). Undated like a site page: a thing has started and
+// ended dates, never a publish date.
+export function isThing(item: LensItem) {
+  return String(item.source_kind || '') === 'thing';
 }
 
 // The about, members and FAQ pages ride the Weekly Thing corpus with no

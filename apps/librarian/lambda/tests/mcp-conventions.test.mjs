@@ -183,7 +183,7 @@ function emittedIds(value, found = new Set()) {
   } else if (value && typeof value === 'object') {
     for (const [key, entry] of Object.entries(value)) {
       if (key === 'sources_by_id') for (const id of Object.keys(entry)) found.add(id);
-      if (key === 'id' && typeof entry === 'string' && /^(wt|blog|ep)-/.test(entry)) found.add(entry);
+      if (key === 'id' && typeof entry === 'string' && /^(wt|blog|ep|thing)-/.test(entry)) found.add(entry);
       emittedIds(entry, found);
     }
   }

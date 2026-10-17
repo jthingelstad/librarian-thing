@@ -22,6 +22,7 @@ on:
       - 'data/issues/**'
       - 'data/blog/**'
       - 'data/podcast/**'
+      - 'data/things/**'
       # The vision-description sidecar rebuilds both corpora (change
       # detection below); without it here a sidecar-only commit ran nothing.
       - 'data/librarian/media-descriptions.json'
@@ -170,6 +171,7 @@ jobs:
           if has_change \
             '^data/issues/' \
             '^data/blog/' \
+            '^data/things/' \
             '^data/librarian/media-descriptions\.json$' \
             '^pipeline/corpus/build\.py$' \
             '^pipeline/corpus/describe_media\.py$' \
