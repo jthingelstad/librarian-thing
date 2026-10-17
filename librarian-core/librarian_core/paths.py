@@ -41,3 +41,10 @@ ANOTHER_THING_REPO = PROJECTS_DIR / "another.thingelstad.com"
 ANOTHER_THING_EPISODES_DIR = ANOTHER_THING_REPO / "content" / "episodes"
 PODCAST_DIR = REPO / "data" / "podcast" / "another-thing" / "episodes"
 PODCAST_CORPUS_PATH = REPO / "data" / "librarian" / "podcast_corpus.json"
+
+# Things I've built - Jamie's project registry at thingelstad.xyz, which
+# publishes itself as JSON. pipeline/things/import_things.py snapshots it
+# here and the Weekly Thing corpus build turns it into undated "thing"
+# chunks (see _things_chunks in corpus.py and data/things/README.md).
+THINGS_URL = "https://thingelstad.xyz/things.json"
+THINGS_PATH = REPO / "data" / "things" / "things.json"

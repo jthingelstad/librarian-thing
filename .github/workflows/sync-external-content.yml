@@ -5,8 +5,10 @@ name: Librarian — Sync External Content
 #
 #   Micro.blog thingelstad.com posts -> data/blog/posts/
 #   another.thingelstad.com episodes -> data/podcast/another-thing/episodes/
+#   thingelstad.xyz/things.json       -> data/things/things.json
 #
-# A commit from this workflow changes data/blog/** or data/podcast/**, which
+# A commit from this workflow changes data/blog/**, data/podcast/** or
+# data/things/**, which
 # triggers the production workflow to rebuild and upload the relevant Librarian
 # corpus artifacts.
 
@@ -20,6 +22,8 @@ on:
       - blog-published
       - podcast-published
       - external-content-updated
+      # thingelstad.xyz sends this when Things I've built publishes.
+      - things-published
 
 permissions:
   contents: write
@@ -95,11 +99,16 @@ jobs:
             --source-dir external/another.thingelstad.com/content/episodes \
             --output-dir data/podcast/another-thing/episodes
 
+      - name: Import Things I've built registry
+        # thingelstad.xyz publishes its registry as JSON; the snapshot in
+        # data/things/ is what the Weekly Thing corpus build reads.
+        run: uv run --locked --no-dev python pipeline/things/import_things.py
+
       - name: Commit synced content
         run: |
           git config user.name "librarian-thing-bot"
           git config user.email "librarian-thing-bot@users.noreply.github.com"
-          git add data/blog data/podcast
+          git add data/blog data/podcast data/things
           if git diff --cached --quiet; then
             echo "No external content changes to commit."
             exit 0

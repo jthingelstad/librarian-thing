@@ -3,6 +3,7 @@ import {
   buildArchiveLens,
   compileTopicMatcher,
   isSitePage,
+  isThing,
   lensMatchReasons,
   lensSourceId,
   matchesLensTopic,
@@ -2143,7 +2144,7 @@ function inferSourceKindFromInput(input: ToolArgs = {}) {
   if (id.startsWith('wt-')) return 'weekly_thing';
   if (id.startsWith('blog-') || id.startsWith('page-')) return 'blog';
   if (id.startsWith('ep-')) return 'podcast';
-  if (id.startsWith('site-')) return 'weekly_thing';
+  if (id.startsWith('site-') || id.startsWith('thing-')) return 'weekly_thing';
   if (input.issue_number || input.number || input.issue) return 'weekly_thing';
   if (input.microblog_id || input.post_id || input.page_id) return 'blog';
   if (input.episode_number || input.episode) return 'podcast';
@@ -2220,13 +2221,14 @@ async function sourceIndex(corpus: Corpus, kind: string) {
   return index;
 }
 
-// The Weekly Thing's own pages (about, members, FAQ) as one source each:
-// every chunk at that url, read whole like a blog post.
+// The Weekly Thing's own pages (about, members, FAQ) and the things from
+// Things I've built (thing-<id>, thing-index) as one source each: every chunk
+// at that url, read whole like a blog post.
 function sitePageBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
   const id = String(input.id || '');
   const url = input.url || input.permalink;
-  if (!id.startsWith('site-') && !url) return null;
-  const pages = ((corpus.chunks || []) as ArchiveRecord[]).filter((chunk) => isSitePage(chunk));
+  if (!id.startsWith('site-') && !id.startsWith('thing-') && !url) return null;
+  const pages = ((corpus.chunks || []) as ArchiveRecord[]).filter((chunk) => isSitePage(chunk) || isThing(chunk));
   const first = pages.find((chunk) => (id ? lensSourceId(chunk) === id : urlKey(chunk.url) === urlKey(url)));
   if (!first) return null;
   const chunks = pages.filter((chunk) => urlKey(chunk.url) === urlKey(first.url));
@@ -2234,7 +2236,8 @@ function sitePageBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
     source_kind: first.source_kind,
     subject: first.source_kind === 'faq' ? 'Weekly Thing FAQ' : first.subject,
     url: first.url,
-    section: 'Page'
+    section: isThing(first) ? 'Thing' : 'Page',
+    ...(first.thing_id ? { thing_id: first.thing_id } : {})
   };
   return { kind: 'site', corpus, record, key: `site\0${urlKey(first.url)}`, chunks, links: [] };
 }

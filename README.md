@@ -29,11 +29,13 @@ the canonical archives, the corpus builds, and the API that serves them.
 | `pipeline/corpus/` | Corpus builds (Weekly Thing, podcast) |
 | `pipeline/blog/` | Blog ingest from Micro.blog, and maintenance utilities |
 | `pipeline/podcast/` | Another Thing episode import |
+| `pipeline/things/` | Things I've built registry snapshot (thingelstad.xyz) |
 | `pipeline/graph/` | Topic graph build (powers the site's topic pages) |
 | `pipeline/deploy/` | Corpus uploads, Lambda deploy, graph handoff |
 | `pipeline/audits/`, `pipeline/one-shot/` | Archive maintenance and completed migrations |
 | `data/issues/` | Canonical issue content — written by WT Builder for new issues |
 | `data/blog/`, `data/podcast/` | Ingested blog and podcast content |
+| `data/things/` | Snapshot of the Things I've built registry (thingelstad.xyz/things.json) |
 | `data/librarian/` | Built corpus and graph artifacts |
 | `docs/`, `notes/`, `reference/` | Architecture and editorial reference |
 
@@ -43,6 +45,9 @@ the canonical archives, the corpus builds, and the API that serves them.
   (`data/issues/{N}/archive.md`, `links.json`, `metadata.json`).
 - **Blog and podcast** content is pulled by the sync workflow from Micro.blog
   and `another.thingelstad.com`.
+- **Things I've built**, Jamie's project registry at thingelstad.xyz, is
+  snapshotted by the same workflow from its published `things.json`; the
+  Weekly Thing corpus turns it into undated `thing` chunks (`thing-<id>`).
 - Any change under `data/` triggers the production workflow: rebuild the
   affected corpora, embed, upload to S3, and hand the topic graph to
   `weekly.thingelstad.com` — the one cross-repo push this repo still makes.

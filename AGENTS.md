@@ -24,10 +24,11 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 - `apps/librarian/` — Librarian API (Lambda + infra + admin). Deployed from here.
 - `librarian-core/` — shared `librarian_core` package (corpus/graph/retrieval/links).
 - `pipeline/corpus/`, `pipeline/graph/`, `pipeline/deploy/` — builds and deploys.
-- `pipeline/blog/`, `pipeline/podcast/` — content ingest and maintenance.
+- `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/` — content ingest and maintenance.
 - `pipeline/audits/`, `pipeline/one-shot/` — archive maintenance, completed migrations.
 - `data/issues/` — canonical issue content. **WT Builder writes new issues here.**
 - `data/blog/`, `data/podcast/` — ingested content.
+- `data/things/` — snapshot of thingelstad.xyz/things.json (Things I've built); `thing` chunks ride the Weekly Thing corpus. Written by `pipeline/things/import_things.py` only.
 - `data/librarian/` — built corpus and graph artifacts.
 - `tests/` — Python tests (corpus / content shape / conversation review / deploy security).
 

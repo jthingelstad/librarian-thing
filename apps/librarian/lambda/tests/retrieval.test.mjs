@@ -114,7 +114,12 @@ test('journal twins dedupe by canonical blog URL - blog always wins', async () =
     url: 'https://www.thingelstad.com/2026/05/09/post-one.html',
     _retrieval_score: 0.9
   };
-  const unrelated = { id: 'blog-2', source_kind: 'blog', url: 'https://www.thingelstad.com/other.html', _retrieval_score: 0.5 };
+  const unrelated = {
+    id: 'blog-2',
+    source_kind: 'blog',
+    url: 'https://www.thingelstad.com/other.html',
+    _retrieval_score: 0.5
+  };
 
   // Blog scored higher: the journal chunk drops.
   let out = dedupeJournalTwins([journal, blogTwin, unrelated]);
@@ -166,11 +171,33 @@ test('compactSource names every source: id, label, absolute url, public source_k
 
   const micropost = compactSource({ source_kind: 'blog', subject: '', publish_date: '2024-05-02', text: 'x' });
   assert.equal(micropost.label, 'Blog post, 2024-05-02');
-  const episode = compactSource({ source_kind: 'podcast', episode_number: 1, url: 'https://another.thingelstad.com/e', text: 'x' });
+  const episode = compactSource({
+    source_kind: 'podcast',
+    episode_number: 1,
+    url: 'https://another.thingelstad.com/e',
+    text: 'x'
+  });
   assert.equal(episode.label, 'AT1');
-  const about = compactSource({ source_kind: 'site_page', subject: 'About the Weekly Thing', url: '/about/', text: 'x' });
+  const about = compactSource({
+    source_kind: 'site_page',
+    subject: 'About the Weekly Thing',
+    url: '/about/',
+    text: 'x'
+  });
   assert.equal(about.source_kind, 'site_page');
   assert.equal(about.url, 'https://weekly.thingelstad.com/about/');
+  const thing = compactSource({
+    id: 'thing:weekly-thing:0',
+    source_kind: 'thing',
+    subject: 'Weekly Thing',
+    url: 'https://thingelstad.xyz/things/weekly-thing/',
+    thing_id: 'weekly-thing',
+    text: 'x'
+  });
+  assert.equal(thing.source_kind, 'thing');
+  assert.equal(thing.label, 'Weekly Thing');
+  assert.equal(thing.url, 'https://thingelstad.xyz/things/weekly-thing/');
+  assert.equal(thing.issue_year, undefined);
 });
 
 test('age labels agree in number', async () => {
