@@ -274,6 +274,8 @@ const CORPUS_BY_DOMAIN: Record<string, string> = {
   'micro.thingelstad.com': 'blog',
   'jthingelstad.micro.blog': 'blog',
   'weekly.thingelstad.com': 'weekly_thing',
+  // Things I've built rides the Weekly Thing corpus (thing-<id> sources).
+  'thingelstad.xyz': 'weekly_thing',
   'another.thingelstad.com': 'podcast'
 };
 
