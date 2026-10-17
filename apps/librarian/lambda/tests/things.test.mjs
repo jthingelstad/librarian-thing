@@ -83,6 +83,13 @@ test('get_source opens a thing whole, every chunk at its page, and the index too
   assert.match(body, /The first Weekly Thing/);
   assert.doesNotMatch(body, /registry of his projects/);
 
+  const byUrl = await ARCHIVE_TOOLS.get_source({ id: THING_URL, format: 'outline' }, { scope: 'all' });
+  assert.equal(byUrl.source?.id, 'thing-weekly-thing', JSON.stringify(byUrl).slice(0, 300));
+  assert.ok(
+    byUrl.source.sections?.length > 0 && byUrl.source.word_count > 0,
+    JSON.stringify(byUrl.source).slice(0, 300)
+  );
+
   const index = await ARCHIVE_TOOLS.get_source({ id: 'thing-index' }, { scope: 'all' });
   assert.equal(index.source.id, 'thing-index');
   assert.equal(index.source.url, 'https://thingelstad.xyz/');

@@ -463,14 +463,17 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
       const result = await call('get_source', { id: `ep-${episode.number}`, format: 'outline' });
       if (result.source?.subject !== episode.subject) missing.push(`ep-${episode.number}`);
     }
-    // The Weekly Thing's own pages: one source per url, every chunk in it.
+    // The Weekly Thing's own pages, and the things from Things I've built
+    // (thing-<id>, thing-index): one source per url, every chunk in it.
     const pages = new Map();
+    const pageIds = new Map();
     for (const chunk of wt.chunks || []) {
       if (chunk.issue_number != null && chunk.issue_number !== '') continue;
       pages.set(chunk.url, (pages.get(chunk.url) || 0) + 1);
+      if (chunk.source_kind === 'thing') pageIds.set(chunk.url, `thing-${chunk.thing_id || 'index'}`);
     }
     for (const [url, chunkCount] of pages) {
-      const id = `site-${url.replace(/\/+$/, '').split('/').at(-1)}`;
+      const id = pageIds.get(url) || `site-${url.replace(/\/+$/, '').split('/').at(-1)}`;
       const byId = await call('get_source', { id, format: 'outline' });
       const byUrl = await call('get_source', { id: url, format: 'outline' });
       if (byId.source?.id !== id || byUrl.source?.id !== id) missing.push(id);
@@ -1092,8 +1095,10 @@ export async function runCompletenessChecks({ corpora, call, check, counts, retr
       pages.size > 0 && wrong.length === 0,
       `${pages.size} pages: ${wrong.join(', ')}`
     );
+    // wt-347 and wt-348 link it; later sources (the 2026-10-07 blog post on
+    // Thingy) add to the count, so this pins the floor, not the number.
     const members = await call('source_neighborhood', { id: 'site-members' });
-    check('completeness site-members incoming_count 2', members.incoming_count === 2, String(members.incoming_count));
+    check('completeness site-members incoming_count >= 2', members.incoming_count >= 2, String(members.incoming_count));
   }
 
   // 8m. Where a blog post appears in The Weekly Thing, two lists (Jamie,
