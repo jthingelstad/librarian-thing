@@ -2,7 +2,7 @@
 page_id: 57866
 url: "https://www.thingelstad.com/projects/open-loop/1-big-fuzzy-dead-cat/"
 title: "Open Loop #1 - Big Fuzzy Dead Cat"
-updated: "2026-10-07T19:00:13+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

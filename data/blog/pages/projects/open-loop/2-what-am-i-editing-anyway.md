@@ -2,7 +2,7 @@
 page_id: 57867
 url: "https://www.thingelstad.com/projects/open-loop/2-what-am-i-editing-anyway/"
 title: "Open Loop #2 - What am I Editing Anyway?"
-updated: "2026-10-07T19:00:14+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

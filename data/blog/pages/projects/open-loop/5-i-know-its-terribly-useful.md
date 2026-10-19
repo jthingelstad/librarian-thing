@@ -2,7 +2,7 @@
 page_id: 57870
 url: "https://www.thingelstad.com/projects/open-loop/5-i-know-its-terribly-useful/"
 title: "Open Loop #5 - I Know It's Terribly Useful"
-updated: "2026-10-07T19:00:19+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

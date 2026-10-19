@@ -2,7 +2,7 @@
 page_id: 451148
 url: "https://www.thingelstad.com/collections/switzerland-italy-2023/"
 title: "Switzerland & Italy 2023"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-17T13:15:42+00:00"
 post_kind: page
 categories: []
 ---

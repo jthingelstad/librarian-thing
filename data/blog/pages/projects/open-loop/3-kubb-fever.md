@@ -2,7 +2,7 @@
 page_id: 57868
 url: "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/"
 title: "Open Loop #3 - Kubb Fever"
-updated: "2026-10-07T19:00:16+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

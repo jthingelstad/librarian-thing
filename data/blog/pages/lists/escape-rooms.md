@@ -2,7 +2,7 @@
 page_id: 58780
 url: "https://www.thingelstad.com/lists/escape-rooms/"
 title: "Escape Rooms"
-updated: "2026-03-20T13:19:33+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

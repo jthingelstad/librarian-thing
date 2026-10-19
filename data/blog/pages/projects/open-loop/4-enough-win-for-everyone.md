@@ -2,7 +2,7 @@
 page_id: 57869
 url: "https://www.thingelstad.com/projects/open-loop/4-enough-win-for-everyone/"
 title: "Open Loop #4 - Enough Win for Everyone"
-updated: "2026-10-07T19:00:17+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

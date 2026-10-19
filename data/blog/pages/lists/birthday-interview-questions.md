@@ -2,7 +2,7 @@
 page_id: 62424
 url: "https://www.thingelstad.com/lists/birthday-interview-questions/"
 title: "Birthday Interview Questions"
-updated: "2026-02-10T00:36:08+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

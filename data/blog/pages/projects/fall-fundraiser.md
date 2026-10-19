@@ -2,7 +2,7 @@
 page_id: 520037
 url: "https://www.thingelstad.com/projects/fall-fundraiser/"
 title: "Things 4 Good Fall Fundraiser"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-17T13:15:42+00:00"
 post_kind: page
 categories: []
 ---

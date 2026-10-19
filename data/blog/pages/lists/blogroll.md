@@ -2,7 +2,7 @@
 page_id: 66529
 url: "https://www.thingelstad.com/lists/blogroll/"
 title: "Blogroll"
-updated: "2026-10-01T20:11:48+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

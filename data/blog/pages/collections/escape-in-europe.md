@@ -2,7 +2,7 @@
 page_id: 1017901
 url: "https://www.thingelstad.com/collections/escape-in-europe/"
 title: "Escape in Europe"
-updated: "2026-04-19T12:24:46+00:00"
+updated: "2026-10-17T13:15:42+00:00"
 post_kind: page
 categories: []
 ---

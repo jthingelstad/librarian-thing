@@ -2,7 +2,7 @@
 page_id: 289133
 url: "https://www.thingelstad.com/collections/iceland-2022/"
 title: "Iceland 2022: Ring Road"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

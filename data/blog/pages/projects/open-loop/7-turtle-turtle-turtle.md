@@ -2,7 +2,7 @@
 page_id: 57872
 url: "https://www.thingelstad.com/projects/open-loop/7-turtle-turtle-turtle/"
 title: "Open Loop #7 - Turtle Turtle Turtle"
-updated: "2026-10-07T19:00:21+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

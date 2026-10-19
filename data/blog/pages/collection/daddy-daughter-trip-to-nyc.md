@@ -2,7 +2,7 @@
 page_id: 94905
 url: "https://www.thingelstad.com/collection/daddy-daughter-trip-to-nyc/"
 title: "Daddy/Daughter Trip to NYC"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

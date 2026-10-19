@@ -2,7 +2,7 @@
 page_id: 63509
 url: "https://www.thingelstad.com/about/insights-discovery-profile/"
 title: "Insights Discovery Profile"
-updated: "2025-12-06T18:37:30+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

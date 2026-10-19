@@ -2,7 +2,7 @@
 page_id: 71319
 url: "https://www.thingelstad.com/contact/"
 title: "Contact Me"
-updated: "2026-01-22T21:45:16+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

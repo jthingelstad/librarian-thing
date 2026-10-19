@@ -2,7 +2,7 @@
 page_id: 57850
 url: "https://www.thingelstad.com/projects/open-loop/"
 title: "Open Loop"
-updated: "2026-10-07T19:00:53+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

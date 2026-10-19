@@ -2,7 +2,7 @@
 page_id: 57854
 url: "https://www.thingelstad.com/projects/open-loop/0-but-no-shoes/"
 title: "Open Loop #0 - But No Shoes"
-updated: "2026-10-07T18:58:58+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---

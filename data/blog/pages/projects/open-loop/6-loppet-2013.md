@@ -2,7 +2,7 @@
 page_id: 57871
 url: "https://www.thingelstad.com/projects/open-loop/6-loppet-2013/"
 title: "Open Loop #6 - Loppet 2013"
-updated: "2026-10-07T19:00:20+00:00"
+updated: "2026-10-14T17:02:28+00:00"
 post_kind: page
 categories: []
 ---
