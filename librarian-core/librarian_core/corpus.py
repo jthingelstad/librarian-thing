@@ -1288,6 +1288,7 @@ THING_STATUS_GLOSS = {
     "active": "being built or operated",
     "dormant": "not currently worked on, and may return",
     "retired": "deliberately ended",
+    "abandoned": "tried, and given up before it worked out",
     "archived": "complete and preserved as it is",
 }
 
@@ -1498,11 +1499,11 @@ def _things_chunks(*, things_path: Path) -> list[dict[str, Any]]:
     index_subject = "Things I've built"
     lines = [
         f"{index_subject} is Jamie Thingelstad's registry of his projects at {site}/: "
-        f"{len(things)} things, each with a status Jamie decides (active, dormant, retired or "
-        "archived), the topics it belongs to, its sources, and a sourced history ledger. "
+        f"{len(things)} things, each with a status Jamie decides (active, dormant, retired, "
+        "abandoned or archived), the topics it belongs to, its sources, and a sourced history ledger. "
         "Activity observed from repositories and feeds is evidence and never sets a status."
     ]
-    for status in ("active", "dormant", "retired", "archived"):
+    for status in ("active", "dormant", "retired", "abandoned", "archived"):
         names = sorted(by_status.get(status, []))
         if names:
             gloss = THING_STATUS_GLOSS[status]

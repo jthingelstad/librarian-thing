@@ -25,7 +25,7 @@ import requests
 from librarian_core.paths import THINGS_PATH, THINGS_URL
 
 REQUIRED_THING_FIELDS = ("id", "title", "status", "page")
-STATUSES = {"active", "dormant", "retired", "archived"}
+STATUSES = {"active", "dormant", "retired", "abandoned", "archived"}
 
 
 def normalize(payload: Any) -> dict[str, Any]:
