@@ -2,13 +2,12 @@
 page_id: 60160
 url: "https://www.thingelstad.com/collections/"
 title: "Collections"
-updated: "2026-09-12T18:07:35+00:00"
+updated: "2026-10-19T21:49:01+00:00"
 post_kind: page
 categories: []
 ---
 
 - [Best of](/collections/best-of/)
-- [Art](/art/)
 - [TeamSPS Events](/collections/team-sps-events/)
 
 ### Events
