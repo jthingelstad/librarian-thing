@@ -21,6 +21,12 @@
  *   our own plumbing.
  * - `off` skips the check.
  *
+ * The mode is per site (Jamie, 2026-10-20: enforce on the Weekly Thing
+ * website first). `TURNSTILE_MODE_WEEKLY`, `TURNSTILE_MODE_THINGY` and
+ * `TURNSTILE_MODE_MCP` each override `TURNSTILE_MODE` for the forms on
+ * weekly.thingelstad.com (any `/auth` source but `thingy`), the Thingy
+ * sign-in page, and the MCP connector's email step.
+ *
  * One token serves one address for five minutes. The subscribe form checks
  * and then subscribes, and the sign-in page offers subscribe/resend after a
  * check; a Turnstile token is single-use at Cloudflare, so the verdict is
@@ -39,8 +45,15 @@ import { stableHash } from './session.mjs';
 /** Public: it is in every page that renders the widget. */
 export const TURNSTILE_SITE_KEY = '0x4AAAAAAFWqGqZVkNAWfIQn';
 export const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-/** Flip to 'enforce' once the observe-mode numbers show readers pass. */
+/** The mode for a site with no override of its own. */
 export const DEFAULT_TURNSTILE_MODE: TurnstileMode = 'observe';
+/** The weekly site enforces unless the stack says otherwise (2026-10-20). */
+export const DEFAULT_SITE_MODES: Readonly<Record<TurnstileSite, TurnstileMode | undefined>> = {
+  weekly: 'enforce',
+  thingy: undefined,
+  mcp: undefined
+};
+export const TURNSTILE_SITES: readonly TurnstileSite[] = ['weekly', 'thingy', 'mcp'];
 
 const TOKEN_VALID_SECONDS = 300;
 const MAX_TOKEN_USES = 3;
@@ -49,6 +62,12 @@ const STATS_PK = 'turnstile#stats';
 const STATS_TTL_DAYS = 45;
 
 export type TurnstileMode = 'off' | 'observe' | 'enforce';
+/**
+ * Where the request came from, which decides the mode: the Weekly Thing
+ * website's forms, the Thingy sign-in page, or the MCP connector's email
+ * step. A `/auth` call is `thingy` only when its `source` says so.
+ */
+export type TurnstileSite = 'weekly' | 'thingy' | 'mcp';
 /** check: the address check that signs a reader in (or tells the form to subscribe). */
 export type TurnstileSurface = 'subscribe' | 'resend' | 'check' | 'mcp_signin';
 /**
@@ -60,6 +79,7 @@ export type TurnstileResult = 'pass' | 'fail' | 'missing' | 'error' | 'unconfigu
 export interface TurnstileVerdict {
   result: TurnstileResult;
   mode: TurnstileMode;
+  site: TurnstileSite;
   /** True when this request may go ahead. Always true outside enforce mode. */
   allowed: boolean;
   codes: string[];
@@ -74,11 +94,37 @@ interface Deps {
   now?: () => number;
 }
 
-export function turnstileMode(): TurnstileMode {
-  const raw = String(process.env.TURNSTILE_MODE || '')
+function parseMode(raw: unknown): TurnstileMode | undefined {
+  const value = String(raw || '')
     .trim()
     .toLowerCase();
-  return raw === 'off' || raw === 'observe' || raw === 'enforce' ? raw : DEFAULT_TURNSTILE_MODE;
+  return value === 'off' || value === 'observe' || value === 'enforce' ? value : undefined;
+}
+
+/**
+ * The mode for one site: its own `TURNSTILE_MODE_<SITE>`, else
+ * `TURNSTILE_MODE`, else the site's default. Without a site, the global
+ * setting alone.
+ */
+export function turnstileMode(site?: TurnstileSite): TurnstileMode {
+  const global = parseMode(process.env.TURNSTILE_MODE);
+  if (!site) return global || DEFAULT_TURNSTILE_MODE;
+  return (
+    parseMode(process.env[`TURNSTILE_MODE_${site.toUpperCase()}`]) ||
+    global ||
+    DEFAULT_SITE_MODES[site] ||
+    DEFAULT_TURNSTILE_MODE
+  );
+}
+
+/** Every site's mode, for the digest's note. */
+export function turnstileModes(): Record<TurnstileSite, TurnstileMode> {
+  return { weekly: turnstileMode('weekly'), thingy: turnstileMode('thingy'), mcp: turnstileMode('mcp') };
+}
+
+/** The site behind a `/auth` call: Thingy says so in `source`; the rest is the weekly website. */
+export function turnstileSiteForSource(source: string): TurnstileSite {
+  return source === 'thingy' ? 'thingy' : 'weekly';
 }
 
 export function turnstileSiteKey() {
@@ -257,18 +303,26 @@ async function siteverify(
  * says whether to go ahead (`allowed`) and what to record (`result`).
  */
 export async function checkTurnstile(
-  input: { token: string; event: LibrarianHttpEvent; emailHash: string; surface: TurnstileSurface },
+  input: {
+    token: string;
+    event: LibrarianHttpEvent;
+    emailHash: string;
+    surface: TurnstileSurface;
+    site: TurnstileSite;
+  },
   deps: Deps = {}
 ): Promise<TurnstileVerdict> {
   const db = deps.db || dynamodb;
   const fetchImpl = deps.fetchImpl || fetch;
   const nowMs = (deps.now || Date.now)();
-  const mode = turnstileMode();
+  const site = input.site;
+  const mode = turnstileMode(site);
   const done = async (result: TurnstileResult, codes: string[] = [], reused = false, extra = {}) => {
-    const verdict = { result, mode, allowed: turnstileAllows(mode, result), codes, reused };
+    const verdict = { result, mode, site, allowed: turnstileAllows(mode, result), codes, reused };
     if (mode !== 'off') await bumpStats(db, input.surface, result, nowMs);
     logEvent(result === 'error' || result === 'unconfigured' ? 'warning' : 'info', 'turnstile_checked', {
       surface: input.surface,
+      site,
       result,
       mode,
       allowed: verdict.allowed,
@@ -280,7 +334,7 @@ export async function checkTurnstile(
     return verdict;
   };
 
-  if (mode === 'off') return { result: 'off', mode, allowed: true, codes: [], reused: false };
+  if (mode === 'off') return { result: 'off', mode, site, allowed: true, codes: [], reused: false };
   const token = String(input.token || '');
   if (!token) return done('missing');
   const secret = String(process.env.TURNSTILE_SECRET_KEY || '').trim();

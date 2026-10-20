@@ -48,6 +48,18 @@ Parameters:
     Default: 30
     MinValue: 1
     Description: Maximum auth attempts per client identity per hour.
+  TurnstileModeWeekly:
+    Type: String
+    Default: enforce
+    AllowedValues:
+      - off
+      - observe
+      - enforce
+    Description: >-
+      Turnstile mode for the Weekly Thing website's forms (every /auth source
+      but thingy). Enforce refuses a missing or failed token; observe records
+      and lets everything through. Thingy sign-in and the MCP email step keep
+      the observe default in shared/turnstile.mts. Enforced 2026-10-20.
   ThingyMagicLinkFromEmail:
     Type: String
     Default: thingy@thingelstad.com
@@ -719,6 +731,7 @@ Resources:
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           AUTH_RATE_LIMIT_MAX: !Ref AuthRateLimitMax
+          TURNSTILE_MODE_WEEKLY: !Ref TurnstileModeWeekly
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
           THINGY_MAGIC_LINK_BASE_URL: !Ref ThingyMagicLinkBaseUrl
           # Anthropic API model ids (2026-10), all on the 5 family: they
@@ -897,6 +910,8 @@ Resources:
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           THINGY_MAGIC_LINK_FROM_EMAIL: !Ref ThingyMagicLinkFromEmail
+          # The digest's Turnstile line names each site's mode.
+          TURNSTILE_MODE_WEEKLY: !Ref TurnstileModeWeekly
       Handler: digest/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1

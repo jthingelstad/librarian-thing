@@ -120,11 +120,20 @@ field); the widget `thingelstad.com sign-in and subscribe` (site key
 librarian .thingelstad.com. Its secret is `TURNSTILE_SECRET_KEY` in the
 runtime secret; it was made with the `cf` CLI on Otto.
 
-- **Mode** is `DEFAULT_TURNSTILE_MODE` (`observe`), overridable with
-  `TURNSTILE_MODE` (`off` / `observe` / `enforce`). Observe checks, records
-  and never refuses. Enforce refuses a missing or failed token (403
-  `turnstile_failed`, a sentence pointing at Jamie's email); a Cloudflare
-  outage, a rejected secret or no secret always goes ahead.
+- **Mode is per site (2026-10-20).** A check belongs to one of three
+  sites: `weekly` (the Weekly Thing website's forms: every `/auth` source
+  but `thingy`), `thingy` (the sign-in page, `source: thingy`) and `mcp`
+  (the connector's email step). `turnstileMode(site)` reads
+  `TURNSTILE_MODE_<SITE>`, then `TURNSTILE_MODE`, then the site's default:
+  `enforce` for `weekly` (Jamie, 2026-10-20: "On Weekly Thing website I
+  think we should start enforcing turnstile"), `DEFAULT_TURNSTILE_MODE`
+  (`observe`) for the others. The stack's `TurnstileModeWeekly` parameter
+  (`--turnstile-mode-weekly`, default `enforce`) sets the weekly one;
+  observe checks, records and never refuses; enforce refuses a missing or
+  failed token (403 `turnstile_failed`, a sentence pointing at Jamie's
+  email); a Cloudflare outage, a rejected secret or no secret always goes
+  ahead. The weekly forms post without a token after three seconds, so
+  under enforce they wait longer and retry once when refused.
 - **One token, one address, five minutes.** Tokens are single-use at
   Cloudflare and the forms check and then subscribe, so the verdict is kept
   in the table (`turnstile#<sha256 of token>`, bound to the email hash, three
@@ -239,7 +248,8 @@ resolved into plaintext configuration. A new credential goes into the secret (by
 | `LOG_LEVEL` | both | `INFO` default |
 | `AUTH_RATE_LIMIT_MAX` | auth | Hourly cap per IP |
 | `SUBSCRIBE_ADDRESS_RATE_LIMIT_MAX` | auth | Optional; hourly subscribe + resend cap per address, default 5 |
-| `TURNSTILE_MODE` | auth | Optional; `off` / `observe` / `enforce`, default `DEFAULT_TURNSTILE_MODE` in `shared/turnstile.mts` (`observe`) |
+| `TURNSTILE_MODE` | auth, digest | Optional; `off` / `observe` / `enforce` for every site without its own setting, default `DEFAULT_TURNSTILE_MODE` in `shared/turnstile.mts` (`observe`) |
+| `TURNSTILE_MODE_WEEKLY`, `TURNSTILE_MODE_THINGY`, `TURNSTILE_MODE_MCP` | auth, digest | Optional per-site overrides; the stack sets `TURNSTILE_MODE_WEEKLY` from `TurnstileModeWeekly` (`enforce` since 2026-10-20) |
 | `TURNSTILE_SECRET_KEY` | auth | From the runtime secret; without it every check records `unconfigured` and goes ahead |
 | `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-5-5` (Anthropic API id); main chat/default persona work |
 | `THINGY_FAST_MODEL` | all | `claude-haiku-5-5` (2026-10-08, was `claude-haiku-4-5`); small structured/background work (preflight, welcome, thank-you, the eval reviewer) |

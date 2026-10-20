@@ -25,7 +25,7 @@ import {
 } from '../shared/magic-login.mjs';
 import type { MagicRedeemResult, Subscriber } from '../shared/magic-login.mjs';
 import { checkRateLimit } from '../shared/rate-limit.mjs';
-import { checkTurnstile, turnstileTokenFrom } from '../shared/turnstile.mjs';
+import { checkTurnstile, turnstileSiteForSource, turnstileTokenFrom } from '../shared/turnstile.mjs';
 import type { TurnstileSurface } from '../shared/turnstile.mjs';
 import {
   chatDailyQuota,
@@ -840,12 +840,14 @@ async function authHandler(event: LibrarianHttpEvent) {
   }
 
   // Every action below can send mail to the typed address, so a person must
-  // have asked (shared/turnstile.mts). Observe mode records and never refuses.
+  // have asked (shared/turnstile.mts). The mode is the site's: the weekly
+  // website's forms enforce (2026-10-20); Thingy's sign-in observes.
   const turnstile = await checkTurnstile({
     token: turnstileTokenFrom(body),
     event,
     emailHash: hashedEmail || '',
-    surface: TURNSTILE_SURFACE[action] || 'check'
+    surface: TURNSTILE_SURFACE[action] || 'check',
+    site: turnstileSiteForSource(source)
   });
 
   if (action === 'subscribe') {

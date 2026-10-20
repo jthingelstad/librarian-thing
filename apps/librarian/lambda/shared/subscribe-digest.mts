@@ -25,8 +25,8 @@ import { listBlockedSince } from './buttondown.mjs';
 import { sendJmapEmail } from './jmap-mail.mjs';
 import { logEvent } from './logging.mjs';
 import { NEEDS_JAMIE, TRANSIENT, listAttemptsSince, type LedgerRow } from './subscribe-ledger.mjs';
-import { readTurnstileStats, statsDay, turnstileMode } from './turnstile.mjs';
-import type { TurnstileMode, TurnstileResult, TurnstileSurface } from './turnstile.mjs';
+import { TURNSTILE_SITES, readTurnstileStats, statsDay, turnstileModes } from './turnstile.mjs';
+import type { TurnstileMode, TurnstileResult, TurnstileSite, TurnstileSurface } from './turnstile.mjs';
 
 export type TurnstileStats = Partial<Record<TurnstileSurface, Partial<Record<TurnstileResult, number>>>>;
 /** Bot runs that vary one address collapse to one line from this many. */
@@ -87,7 +87,31 @@ function when(iso: string) {
 }
 
 /** One line per surface that saw traffic: `subscribe 8 passed, 2 failed`. */
-export function turnstileSummary(stats: TurnstileStats, mode: TurnstileMode) {
+const SITE_WORDS: Record<TurnstileSite, string> = {
+  weekly: 'the weekly site',
+  thingy: 'Thingy sign-in',
+  mcp: 'MCP sign-in'
+};
+
+/** "enforcing on the weekly site; observing Thingy sign-in and MCP sign-in (nobody refused)". */
+export function turnstileModeNote(modes: TurnstileModes) {
+  const groups = new Map<TurnstileMode, string[]>();
+  for (const site of TURNSTILE_SITES) {
+    const mode = modes[site] || 'observe';
+    groups.set(mode, [...(groups.get(mode) || []), SITE_WORDS[site]]);
+  }
+  const list = (names: string[]) =>
+    names.length > 2 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names.join(' and ');
+  const parts: string[] = [];
+  if (groups.has('enforce')) parts.push(`enforcing on ${list(groups.get('enforce')!)}`);
+  if (groups.has('observe')) parts.push(`observing ${list(groups.get('observe')!)} (nobody refused)`);
+  if (groups.has('off')) parts.push(`off for ${list(groups.get('off')!)}`);
+  return parts.join('; ');
+}
+
+export type TurnstileModes = Partial<Record<TurnstileSite, TurnstileMode>>;
+
+export function turnstileSummary(stats: TurnstileStats, modes: TurnstileModes | TurnstileMode) {
   const parts = (Object.keys(SURFACE_WORDS) as TurnstileSurface[])
     .filter((surface) => stats[surface] && Object.values(stats[surface]!).some(Boolean))
     .map((surface) => {
@@ -99,8 +123,8 @@ export function turnstileSummary(stats: TurnstileStats, mode: TurnstileMode) {
       return `${SURFACE_WORDS[surface]} ${tally}`;
     });
   if (!parts.length) return '';
-  const note = mode === 'observe' ? ' (observe mode: nobody was refused)' : mode === 'enforce' ? ' (enforcing)' : '';
-  return `Turnstile yesterday${note}: ${parts.join('; ')}.`;
+  const perSite: TurnstileModes = typeof modes === 'string' ? { weekly: modes, thingy: modes, mcp: modes } : modes;
+  return `Turnstile yesterday (${turnstileModeNote(perSite)}): ${parts.join('; ')}.`;
 }
 
 /** The email as text and HTML, or null when there is nothing to say. */
@@ -108,7 +132,7 @@ export function composeDigest(
   attempts: LedgerRow[],
   blocked: { email: string; creation_date: string }[],
   now = new Date(),
-  turnstile: { stats?: TurnstileStats; mode?: TurnstileMode } = {}
+  turnstile: { stats?: TurnstileStats; mode?: TurnstileModes | TurnstileMode } = {}
 ): { subject: string; text: string; html: string } | null {
   const blockedEmails = new Set(blocked.map((b) => b.email.toLowerCase()));
   const formEmails = new Set(attempts.map((a) => a.email.toLowerCase()));
@@ -260,7 +284,7 @@ export async function runSubscribeDigest(now = new Date()) {
   } catch (error) {
     logEvent('error', 'subscribe_digest_turnstile_stats_failed', { error_type: (error as Error)?.name || 'Error' });
   }
-  const mail = composeDigest(attempts, blocked, now, { stats, mode: turnstileMode() });
+  const mail = composeDigest(attempts, blocked, now, { stats, mode: turnstileModes() });
   if (!mail) {
     logEvent('info', 'subscribe_digest_quiet', { attempts: attempts.length });
     return { sent: false, attempts: attempts.length, blocked: 0 };

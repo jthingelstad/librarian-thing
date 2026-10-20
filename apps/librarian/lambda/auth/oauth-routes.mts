@@ -471,7 +471,8 @@ async function handleEmailStep(
     token: turnstileTokenFrom(body),
     event,
     emailHash: emailHash(email),
-    surface: 'mcp_signin'
+    surface: 'mcp_signin',
+    site: 'mcp'
   });
   if (!turnstile.allowed) {
     return emailStepPage(

@@ -336,6 +336,7 @@ def deploy_stack(
     thingy_magic_link_base_url: str,
     log_level: str,
     auth_rate_limit_max: str,
+    turnstile_mode_weekly: str,
     cloudformation_role_arn: str | None,
     native_parameters: list[dict] | None = None,
 ) -> dict[str, str]:
@@ -362,6 +363,7 @@ def deploy_stack(
         {"ParameterKey": "PodcastCorpusKey", "ParameterValue": podcast_corpus_key},
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
+        {"ParameterKey": "TurnstileModeWeekly", "ParameterValue": turnstile_mode_weekly},
         {
             "ParameterKey": "ThingyMagicLinkFromEmail",
             "ParameterValue": thingy_magic_link_from_email,
@@ -583,6 +585,13 @@ def main() -> int:
         "--auth-rate-limit-max", default=os.environ.get("LIBRARIAN_AUTH_RATE_LIMIT_MAX", "30")
     )
     parser.add_argument(
+        "--turnstile-mode-weekly",
+        choices=["off", "observe", "enforce"],
+        # The Weekly Thing website's forms enforce Turnstile (Jamie,
+        # 2026-10-20). Thingy sign-in and the MCP email step observe.
+        default=os.environ.get("LIBRARIAN_TURNSTILE_MODE_WEEKLY", "enforce"),
+    )
+    parser.add_argument(
         "--thingy-magic-link-from-email",
         default=os.environ.get("THINGY_MAGIC_LINK_FROM_EMAIL", "thingy@thingelstad.com"),
     )
@@ -657,6 +666,7 @@ def main() -> int:
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
         log_level=args.log_level.upper(),
         auth_rate_limit_max=str(args.auth_rate_limit_max),
+        turnstile_mode_weekly=args.turnstile_mode_weekly,
         cloudformation_role_arn=args.cloudformation_role_arn,
         native_parameters=native,
     )

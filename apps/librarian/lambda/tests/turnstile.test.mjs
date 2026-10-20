@@ -13,9 +13,12 @@ import {
   readTurnstileStats,
   statsDay,
   turnstileAllows,
+  turnstileMode,
+  turnstileModes,
+  turnstileSiteForSource,
   turnstileTokenFrom
 } from '../dist/shared/turnstile.mjs';
-import { composeDigest, turnstileSummary } from '../dist/shared/subscribe-digest.mjs';
+import { composeDigest, turnstileModeNote, turnstileSummary } from '../dist/shared/subscribe-digest.mjs';
 import { subscriberStatus } from '../dist/shared/buttondown.mjs';
 
 /** A DynamoDB stand-in holding items by pk/sk; enough for Get/Put/Update. */
@@ -106,6 +109,84 @@ test('observe mode is the default and lets a missing token through, counted', as
     const stats = await readTurnstileStats(statsDay(), db);
     assert.equal(stats.subscribe.missing, 1);
   });
+});
+
+// 2026-10-20: the Weekly Thing website enforces; Thingy sign-in and the MCP
+// email step keep observing until Jamie says otherwise.
+test('the mode is per site: the weekly site enforces by default, the others observe', async () => {
+  const SITE_ENV = {
+    TURNSTILE_MODE: undefined,
+    TURNSTILE_MODE_WEEKLY: undefined,
+    TURNSTILE_MODE_THINGY: undefined,
+    TURNSTILE_MODE_MCP: undefined
+  };
+  await withEnv(SITE_ENV, async () => {
+    assert.equal(turnstileMode(), 'observe', 'no site: the global default');
+    assert.equal(turnstileMode('weekly'), 'enforce');
+    assert.equal(turnstileMode('thingy'), 'observe');
+    assert.equal(turnstileMode('mcp'), 'observe');
+    assert.deepEqual(turnstileModes(), { weekly: 'enforce', thingy: 'observe', mcp: 'observe' });
+  });
+  // The stack's parameter turns the weekly site back to observe.
+  await withEnv({ ...SITE_ENV, TURNSTILE_MODE_WEEKLY: 'observe' }, async () => {
+    assert.equal(turnstileMode('weekly'), 'observe');
+    assert.equal(turnstileMode('thingy'), 'observe');
+  });
+  // A global setting covers every site that has no override of its own.
+  await withEnv({ ...SITE_ENV, TURNSTILE_MODE: 'enforce', TURNSTILE_MODE_MCP: 'off' }, async () => {
+    assert.equal(turnstileMode('weekly'), 'enforce');
+    assert.equal(turnstileMode('thingy'), 'enforce');
+    assert.equal(turnstileMode('mcp'), 'off');
+  });
+  await withEnv({ ...SITE_ENV, TURNSTILE_MODE_WEEKLY: 'nonsense' }, async () => {
+    assert.equal(turnstileMode('weekly'), 'enforce', 'an unknown value is ignored');
+  });
+  // Only Thingy says so in `source`; every weekly form source is the weekly site.
+  assert.equal(turnstileSiteForSource('thingy'), 'thingy');
+  for (const source of ['site', 'hero', 'footer', 'issue', 'about', 'mid1']) {
+    assert.equal(turnstileSiteForSource(source), 'weekly');
+  }
+});
+
+test('a missing token is refused on the weekly site and let through on Thingy sign-in', async () => {
+  const db = fakeDb();
+  await withEnv({ ...ENV, TURNSTILE_MODE_WEEKLY: undefined, TURNSTILE_MODE_THINGY: undefined }, async () => {
+    const weekly = await checkTurnstile(
+      { token: '', event, emailHash: 'h1', surface: 'subscribe', site: 'weekly' },
+      { db }
+    );
+    assert.equal(weekly.mode, 'enforce');
+    assert.equal(weekly.site, 'weekly');
+    assert.equal(weekly.result, 'missing');
+    assert.equal(weekly.allowed, false);
+
+    const thingy = await checkTurnstile(
+      { token: '', event, emailHash: 'h1', surface: 'check', site: 'thingy' },
+      { db }
+    );
+    assert.equal(thingy.mode, 'observe');
+    assert.equal(thingy.result, 'missing');
+    assert.equal(thingy.allowed, true);
+
+    const mcp = await checkTurnstile({ token: '', event, emailHash: 'h1', surface: 'mcp_signin', site: 'mcp' }, { db });
+    assert.equal(mcp.mode, 'observe');
+    assert.equal(mcp.allowed, true);
+  });
+});
+
+test('the digest names each site’s mode', () => {
+  assert.equal(
+    turnstileModeNote({ weekly: 'enforce', thingy: 'observe', mcp: 'observe' }),
+    'enforcing on the weekly site; observing Thingy sign-in and MCP sign-in (nobody refused)'
+  );
+  assert.equal(
+    turnstileModeNote({ weekly: 'enforce', thingy: 'enforce', mcp: 'enforce' }),
+    'enforcing on the weekly site, Thingy sign-in and MCP sign-in'
+  );
+  assert.equal(
+    turnstileModeNote({ weekly: 'observe', thingy: 'off', mcp: 'observe' }),
+    'observing the weekly site and MCP sign-in (nobody refused); off for Thingy sign-in'
+  );
 });
 
 test('enforce mode refuses a failed token and sends the visitor IP to Cloudflare', async () => {
@@ -287,9 +368,13 @@ test('observe mode lists what went ahead without passing, and the day’s tally'
   assert.doesNotMatch(mail.text, /fine@example.com/);
   assert.match(
     mail.text,
-    /Turnstile yesterday \(observe mode: nobody was refused\): subscribe 8 passed, 2 failed, 1 no token; address check \/ sign-in 12 passed\./
+    /Turnstile yesterday \(observing the weekly site, Thingy sign-in and MCP sign-in \(nobody refused\)\): subscribe 8 passed, 2 failed, 1 no token; address check \/ sign-in 12 passed\./
   );
   assert.equal(turnstileSummary({}, 'observe'), '');
+  assert.match(
+    turnstileSummary({ subscribe: { pass: 1 } }, { weekly: 'enforce', thingy: 'observe', mcp: 'observe' }),
+    /^Turnstile yesterday \(enforcing on the weekly site; observing Thingy sign-in and MCP sign-in \(nobody refused\)\): subscribe 1 passed\.$/
+  );
 });
 
 test('a clean day stays silent even with a Turnstile tally', () => {

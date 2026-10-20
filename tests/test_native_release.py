@@ -77,6 +77,7 @@ def test_routine_deploy_preserves_native_settings_and_accepts_first_bootstrap(mo
             thingy_magic_link_base_url="https://thingy.thingelstad.com",
             log_level="INFO",
             auth_rate_limit_max="30",
+            turnstile_mode_weekly="enforce",
             cloudformation_role_arn="arn:example:role/cfn",
         )
         parameters = client.update_stack.call_args.kwargs["Parameters"]
