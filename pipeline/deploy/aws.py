@@ -33,7 +33,7 @@ PRIVATE_CORPUS_KEY = "artifacts/corpus.json"
 PRIVATE_GRAPH_KEY = "artifacts/graph.json"
 PRIVATE_BLOG_CORPUS_KEY = "artifacts/blog_corpus.json"
 PRIVATE_PODCAST_CORPUS_KEY = "artifacts/podcast_corpus.json"
-DEFAULT_ALLOWED_ORIGINS = "https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4178,http://127.0.0.1:4178"
+DEFAULT_ALLOWED_ORIGINS = "https://weekly.thingelstad.com,https://thingy.thingelstad.com,https://www.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4178,http://127.0.0.1:4178"
 
 
 # The account tag standard (projects-sysadmin docs/AWS-TAGS.md). Stack tags

@@ -84,7 +84,22 @@ import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared
 
 const AUTH_RATE_LIMIT_MAX = 30;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const ALLOWED_SOURCES = new Set(['thingy', 'site', 'hero', 'mid1', 'mid2', 'footer', 'about', 'issue']);
+// Where a form sits: the Weekly Thing website's placements, Thingy, and the
+// blog's Weekly Thing card (www.thingelstad.com, beside the home greeting
+// and under a post; 2026-10-21). Every source but `thingy` is the weekly
+// site for Turnstile.
+const ALLOWED_SOURCES = new Set([
+  'thingy',
+  'site',
+  'hero',
+  'mid1',
+  'mid2',
+  'footer',
+  'about',
+  'issue',
+  'blog-home',
+  'blog-post'
+]);
 
 type JsonRecord = Record<string, unknown>;
 

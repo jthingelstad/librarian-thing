@@ -4,7 +4,7 @@ Description: Weekly Thing Archive Librarian API
 Parameters:
   AllowedOrigin:
     Type: CommaDelimitedList
-    Default: https://weekly.thingelstad.com,https://thingy.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080
+    Default: https://weekly.thingelstad.com,https://thingy.thingelstad.com,https://www.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080
   CodeBucket:
     Type: String
     Description: S3 bucket containing the packaged Lambda code.

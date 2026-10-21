@@ -98,6 +98,15 @@ The site's form calls this before anything reaches Buttondown. Since
   Turnstile result) and "straight to Buttondown" (bots; a `+tag@domain`
   run of three or more is one line).
 
+### The blog's form (2026-10-21)
+
+The blog (www.thingelstad.com, the thing-hugo theme) carries the same
+Weekly Thing form as the weekly site, posting the same `/auth` calls:
+`https://www.thingelstad.com` is in `AllowedOrigin`, its placements are the
+sources `blog-home` and `blog-post`, and it sends attribution `ref: blog`,
+so Buttondown tags those subscribers `source:blog`. Turnstile treats it as
+the weekly site. Tests: `lambda/tests/blog-signup.test.mjs`.
+
 ### `check` signs in only for Thingy (2026-10-14)
 
 `/auth` `check` sends a sign-in link only when `source` is `thingy`. From

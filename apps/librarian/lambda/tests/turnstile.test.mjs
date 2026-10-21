@@ -143,7 +143,7 @@ test('the mode is per site: the weekly site enforces by default, the others obse
   });
   // Only Thingy says so in `source`; every weekly form source is the weekly site.
   assert.equal(turnstileSiteForSource('thingy'), 'thingy');
-  for (const source of ['site', 'hero', 'footer', 'issue', 'about', 'mid1']) {
+  for (const source of ['site', 'hero', 'footer', 'issue', 'about', 'mid1', 'blog-home', 'blog-post']) {
     assert.equal(turnstileSiteForSource(source), 'weekly');
   }
 });
