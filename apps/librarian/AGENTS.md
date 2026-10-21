@@ -105,7 +105,8 @@ Weekly Thing form as the weekly site, posting the same `/auth` calls:
 `https://www.thingelstad.com` is in `AllowedOrigin`, its placements are the
 sources `blog-home` and `blog-post`, and it sends attribution `ref: blog`,
 so Buttondown tags those subscribers `source:blog`. Turnstile treats it as
-the weekly site. Tests: `lambda/tests/blog-signup.test.mjs`.
+the weekly site. Tests: `lambda/tests/blog-signup.test.mjs`. Live since
+thing-hugo 2.0.11 (2026-10-21).
 
 ### `check` signs in only for Thingy (2026-10-14)
 
@@ -125,8 +126,9 @@ mails a typed address checks a Cloudflare Turnstile token first
 `check`, and the MCP `/authorize` email step. The token arrives as
 `turnstile_token` (JSON) or `cf-turnstile-response` (the widget's form
 field); the widget `thingelstad.com sign-in and subscribe` (site key
-`0x4AAAAAAFWqGqZVkNAWfIQn`, public, managed mode) lists weekly, thingy and
-librarian .thingelstad.com. Its secret is `TURNSTILE_SECRET_KEY` in the
+`0x4AAAAAAFWqGqZVkNAWfIQn`, public, managed mode) lists weekly, thingy,
+librarian and www .thingelstad.com (www added 2026-10-21 for the blog's
+form: a page on an unlisted host gets no token). Its secret is `TURNSTILE_SECRET_KEY` in the
 runtime secret; it was made with the `cf` CLI on Otto.
 
 - **Mode is per site (2026-10-20).** A check belongs to one of three
