@@ -1,17 +1,10 @@
-# Plan: the Librarian tends the blog (2026-10-22)
+# Plan: the Library Agent (2026-10-22)
 
 **Status: proposed, waiting for Jamie's go.** Nothing is built and nothing has
 been written to micro.blog. Every number below was measured read-only on
 2026-10-22 (a full Micropub `q=source` pull, the Tinylytics API with the
 read-only key, the Anthropic Models API, and the overhaul's cache in
 `../www.thingelstad.com/dev/cache/categories/`).
-
-**Revised the same day.** Jamie cut the scope to two jobs: "Lets remove
-typo/grammer checking and link additions from the goal. Focus only on the alt
-text and category management. That removes the need for a feedback loop and I
-didn't like the GitHub issues approach anyway." Jamie also asked for it to be
-"a librarian agent that is looking at my blog daily and tending to these
-tasks", automated in Codex. This version is that plan.
 
 Jamie, 2026-10-22: "The Librarian decides; micro.blog keeps them and stays the
 source of authority for the blog." The Librarian becomes the authority for the
@@ -20,20 +13,37 @@ its **alt text**. micro.blog still holds every post; the Librarian never
 creates, deletes, retitles or re-dates one, and never changes a word Jamie
 wrote.
 
+**Revised twice the same day.** First Jamie cut the scope: "Lets remove
+typo/grammer checking and link additions from the goal. Focus only on the alt
+text and category management. That removes the need for a feedback loop and I
+didn't like the GitHub issues approach anyway." Then Jamie reframed the agent:
+"yes featured should stay … I think a Library Agent is a better framing than
+"tend the blog"… I also think it could change some of the other agent team… I
+think the agent should end each run with any suggested category changes… or
+any other content related items it wants to highlight. I do NOT think it
+shoudl ignore posts that are waiting for a weekly thing issue… it should not
+care about weekly thing issues." And: "WT Builder should automatically pick up
+an edit/improvment to the blog post when it does it's scan on open." This
+version is that plan.
+
 ## What Jamie decided
 
 - "I never actually assign categories to a post." The Librarian owns the whole
   list. The one exception is **Weekly Thing**, which WT Builder sets.
 - "It could create new categories." New trips and topics when the archive
   calls for them, telling Jamie after.
-- "I would love it if the librarian managed features too. The librarian could
-  get an API key for tinylytics to assist with that too!" Criteria and a count
-  come first (below), before any post is chosen.
+- **Featured stays**, chosen with Tinylytics' help ("The librarian could get
+  an API key for tinylytics to assist with that too!").
 - "Also agree on the alt text. It should own that. The librarian is my partner
   for this." Fill empty alt only; never replace alt Jamie wrote.
 - "Agree it would move to daily. Yes to alt fills. Yes it should use its own
   model key."
-- Typo checking and link additions are out of scope (above).
+- **A Library Agent**, and the agent team can change around it.
+- **Every run ends with suggestions:** category changes and anything else
+  about the content worth Jamie's eye.
+- **Weekly Thing issues don't matter to it.** Every post is tended the same,
+  whether or not an issue will carry it.
+- Typo checking, link additions and a GitHub-issue channel are out.
 
 ## What I measured first
 
@@ -73,6 +83,13 @@ description in `data/librarian/media-descriptions.json`. All time: 224 empty,
 of which 158 are dead 2017 uploads and about 8 were marked unfillable in the
 June backfill.
 
+**WT Builder and the open issue.** WT Builder's scan takes micro.blog's edit
+of any post Jamie has not edited in WT Builder ("adopted the Micro.blog edit"
+in its log, `src/server/reconcile.ts`). Only a post edited on both sides asks
+Keep mine or Take theirs, and its own write-back is compare-and-set, so it
+never overwrites the Librarian's alt unseen. An alt filled on a post headed for
+WT354 arrives in the issue already filled.
+
 **Featured.** Three posts today, all 2026 (5863188, 5872650, 5904586). The
 overhaul's labels give every post a substance score: 1 (2,373), 2 (5,641),
 3 (2,112), 4 (325), 5 (18); 297 posts are 4+ and evergreen. Tinylytics (blog
@@ -93,70 +110,103 @@ Codex account, not on an API key.
 `pipeline/blog/anthropic_client.py` still maps `sonnet` to `claude-sonnet-5`
 and `opus` to `claude-opus-4-7`; both still answer but are a generation old.
 
-## The Librarian agent: Tend the Blog
+## The Library Agent, and the team around it
 
-A fourth objective owner in `AGENT-TEAM/`, **Tend the Blog**
-(`tend-the-blog.md`), run by a Codex app automation **every day at 5:30 a.m.
-Central** (between Run the Librarian at 5:15 and Improve Thingy at 6:00), on
-`gpt-5.6-terra` like the other daily owner. Its question: *is every post on
-the blog filed and described the way the Librarian would file it?*
+The Library Agent keeps the collection: everything that is in the library, how
+it is filed, and how it is described. Its question: *is everything in the
+library current, correct, filed and described?*
 
-This changes `AGENT-TEAM/README.md`, which says "Do not add more agents; new
-names would split outcomes these three already own." Tending the blog is a new
-outcome, the first one that writes to Jamie's live site every day, so it gets
-its own lease, its own run history and its own report rather than a daily
-branch inside Keep the Archive True's three-day objective.
+It **replaces Keep the Archive True** (whose work is the collection already)
+and takes **photo descriptions and summaries** from Run the Librarian (step 8
+of `run-librarian.md`, content work in an infrastructure owner's run). The
+team stays three, so the README's "Do not add more agents" stands:
 
-**Who decides what.** The agent tends; the repo's tools do the repeatable
+| Owner | When | Owns |
+|---|---|---|
+| **Library Agent** | daily, 5:00 a.m. | the archive data and its ingest, corpus and graph freshness, photo descriptions and summaries, and on the blog: categories, Featured and alt text |
+| **Run the Librarian** | daily, 5:15 a.m. | the API, MCP surface, deploys, alarms, cost (unchanged, minus step 8) |
+| **Improve Thingy** | every three days, 6:00 a.m. | Thingy's answers (unchanged) |
+
+The Library Agent takes Keep the Archive True's 5:00 slot and drops its
+three-day date guard, on `gpt-5.6-terra` at high effort like the owner it
+replaces. The checkout lease is shared, so on mornings the Library Agent is
+still writing at 5:15, Run the Librarian runs read-only and checks the deploy
+the Library Agent just pushed.
+
+**Who decides what.** The agent judges; the repo's tools do the repeatable
 work, so new posts are filed exactly the way the 9,459 already filed were:
 
-- `make tend` (`pipeline/blog/tend/`) reads micro.blog, proposes categories
-  with the overhaul's labeller (Opus 5.5, its schema and mapping), writes alt
-  with the June backfill's vision call (Sonnet 5.5), and carries every guard
-  below in code. Those calls use the Librarian's own Anthropic key.
+- `make blog-round` (`pipeline/blog/round/`) reads micro.blog, proposes
+  categories with the overhaul's labeller (Opus 5.5, its schema and mapping),
+  writes alt with the June backfill's vision call (Sonnet 5.5), and carries
+  every guard below in code. Those calls use the Librarian's own Anthropic key.
 - The agent reads each day's proposals against the posts before anything is
   written (a normal day is zero to six posts), decides the calls that need
   judgment (a new category, a post someone else changed, Featured), writes
-  with `make tend ARGS=--write`, checks the live pages, and reports.
+  with `make blog-round ARGS=--write`, checks the live pages, and reports.
 
-**The daily round:**
+## The daily round
 
 1. **Sync.** Read every post and page from micro.blog (21 `q=source` pages)
-   and rewrite the `data/blog/` files whose rendered text changed. The GitHub
-   workflow uses the same refresh and moves from Mondays to a daily backstop
-   at 12:17 UTC (7:17 a.m. CDT, 6:17 a.m. CST).
-2. **Describe new photos** (`describe_media.py`, Haiku 5.5) and **write
-   summaries** for new or changed posts (`abstracts.py`, Sonnet 5.5). Both
-   leave `run-librarian.md` step 8 and become daily.
-3. **File categories** on posts the Librarian has never filed.
-4. **Fill alt** on posts older than the newest sent Weekly Thing issue.
-5. **Featured:** note candidates daily; decide on Sundays.
-6. **Verify and close out.** Read each written post's live page (the
+   and rewrite the `data/blog/` files whose rendered text changed; podcast as
+   today. The GitHub workflow uses the same refresh and moves from Mondays to
+   a daily backstop at 12:17 UTC (7:17 a.m. CDT, 6:17 a.m. CST).
+2. **The archive checks** Keep the Archive True runs today: new issues match
+   WT Builder's archive-leg receipts, the corpora and graph match their data,
+   the graph push happened, tests are green, content shape holds.
+3. **Describe new photos** (`describe_media.py`, Haiku 5.5) and **write
+   summaries** for new or changed posts (`abstracts.py`, Sonnet 5.5).
+4. **File categories** on posts the Librarian has never filed.
+5. **Fill alt** on any post with an empty one.
+6. **Featured:** note candidates daily; decide on Sundays.
+7. **Verify and close out.** Read each written post's live page (the
    categories in its footer), refresh those `data/blog/` files, make one
-   commit (`data/blog/`, the sidecars, `data/blog-steward/`), push. The push
+   commit (`data/blog/`, the sidecars, `data/blog-catalog/`), push. The push
    runs `deploy.yml` once, through the corpus gate.
+8. **Report**, then suggestions (below).
 
 ## How Jamie hears from it
 
-No issues and no inbox to tend. The agent ends each run with the team's
-report block in the Codex app:
+No issues and no inbox to tend. Each run ends in the Codex app with the
+team's report block, then a **Suggestions** list (an illustrative morning;
+the category names are made up):
 
 ```text
-Outcome: HEALTHY | CHANGED | WATCHING | BLOCKED | NEEDS JAMIE
-Objective: Tend the Blog
-Evidence: 4 posts filed, 3 alts filled, Kubb 2026 created (10th post)
-Action: ...
-Next check: ...
-Jamie: <one yes/no question, or None>
+Outcome: CHANGED
+Objective: Library Agent
+Evidence: 4 posts filed, 3 alts filled, Lisbon 2026 created (10th post)
+Action: 7 category writes, 3 alt edits, verified live
+Next check: tomorrow 5:00 a.m.
+Jamie: None
+
+Suggestions
+- "Home Automation" (9 posts) could merge into "Smart Home" (41); the old page would 404.
+- 11 posts since 2023 about board games carry no topic; one more makes a category.
+- 5918023 (2021-11-19) is a backdated POAP Claims post the old sync never saw.
 ```
 
-- **Told after** (CHANGED): new categories, Featured changes, alt counts,
-  posts it left alone because someone else had changed them.
+- **Told after** (in Evidence and Action): new categories, Featured changes,
+  alt counts, posts it left alone because someone else had changed them.
+- **Suggestions** are what it would like Jamie to decide or know, never a
+  question it waits on:
+  - **Category changes it will not make itself**, because they move or remove
+    pages: rename, merge, split or retire a category; a topic nearing the bar;
+    a collection page that could become a category.
+  - **Anything else about the content** it noticed while doing its work: a
+    broken or missing photo, a post that looks duplicated or empty, a
+    backdated post, a trip under way, a post it would feature next. It is not
+    a typo or link hunt.
+  - A suggestion shows once, when new. Sunday's run lists the ones still open.
+    One goes away when Jamie acts on it, says no, or its reason is gone. They
+    are kept in `data/blog-catalog/suggestions.jsonl`.
+  - To act on one, Jamie tells the Library Agent in Codex (the README's "Run
+    <objective> now" form works) or does it on micro.blog. Nothing waits.
 - **NEEDS JAMIE** only for the first Featured list, and for a forced rebuild
   if live pages stay stale after a re-file.
-- **Run notes:** on any day it wrote, `AGENT-TEAM/notes/YYYY-MM-DD-blog-tend.md`
-  lists each post with before and after. A quiet day gets no note. The weekly
-  rollup in `AGENT-TEAM/summaries/` carries a Tend the Blog section.
+- **Run notes:** on any day it wrote to micro.blog,
+  `AGENT-TEAM/notes/YYYY-MM-DD-library.md` lists each post with before and
+  after. A quiet day gets no note. The weekly rollup in `AGENT-TEAM/summaries/`
+  carries a Library section.
 - **The ledger in git** is the full audit trail.
 
 ## What moves into librarian-thing
@@ -164,7 +214,7 @@ Jamie: <one yes/no question, or None>
 The overhaul's tools stay in `../www.thingelstad.com/scripts/categories/` as
 the record of the one-time run. The tools here are written fresh (the repo
 rule: never copy code between repos), and the data becomes committed files in
-`data/blog-steward/`:
+`data/blog-catalog/`, the library's catalogue of the blog:
 
 | File | From | Holds |
 |---|---|---|
@@ -172,6 +222,7 @@ rule: never copy code between repos), and the data becomes committed files in
 | `collections.json` | `collections.json` | Jamie's 43 collection pages and the categories they map to |
 | `labels.jsonl` | `labels.json` | one line per post: topics, subjects, gist, kind, substance, evergreen |
 | `ledger.jsonl` | `assignments.json` + `writeback/log.jsonl` | one line per post: the categories the Librarian last wrote, Featured, alt it filled, Jamie-set flags |
+| `suggestions.jsonl` | new | open and closed suggestions |
 
 Sorted one-line-per-post files keep each day's diff to the posts it touched.
 The ledger is seeded from what the write-back actually wrote (4,786 + 4,672
@@ -186,24 +237,19 @@ category keep their empty row, so nothing already filed is classified again.
   they are not what the ledger says the Librarian last wrote, someone else
   changed them: write nothing, mark the post Jamie-set, adopt the live list
   and say so in the report. The Librarian never argues with a hand edit.
-- **Weekly Thing** is WT Builder's. The Librarian never adds or removes it,
-  and adds its own categories around it in the usual order.
+- **The Weekly Thing category** is WT Builder's. The Librarian never adds or
+  removes it, and adds its own categories around it in the usual order.
 - **Alt edits:** re-fetch right before the write, change only the empty alt
   attribute, confirm every other byte is unchanged, never turn an `<img>` into
   markdown.
-- **The open issue is WT Builder's.** Posts published after the newest issue
-  in `data/issues/` (today WT353, 10-10) are Journal candidates in the open
-  draft, where WT Builder's alt wand and reconcile work. No alt edits on them
-  until that issue is sent; categories are fine, since WT Builder does not
-  mirror them.
 - **Never:** create or delete a post, change a title, date, status or any
   text, delete a category, or bring back Book or Travel Log.
 - **Names compare by slug** ("Pokémon" is `pokemon`), so a spelling never
   creates a twin.
 - **Daily caps:** 50 category writes and 20 alt edits. Past either, the run
   stops with NEEDS JAMIE.
-- **Off switch:** a `data/blog-steward/PAUSED` file. `make tend` is a dry run
-  unless given `--write`.
+- **Off switch:** a `data/blog-catalog/PAUSED` file. `make blog-round` is a
+  dry run unless given `--write`.
 
 ## Pacing and rebuilds
 
@@ -233,6 +279,8 @@ Jamie after:
   existing name. **Order on a post:** trip, series, project, topics, kept;
   Featured last.
 
+Renames, merges, splits and retirements are suggestions, never its own move.
+
 ## Featured: criteria and how many
 
 What Featured drives today: the blog's `/categories/featured/` page, the
@@ -240,8 +288,8 @@ Featured section of `llms.txt` (newest 25), and each archive year's photo tile
 (the year's first Featured post with a camera photo, else the first photo from
 July).
 
-**Proposal: about 60 posts, two or three a year from 2004, never more than
-100.** Featured is the shelf a new reader starts from: essays, how-tos,
+**About 60 posts, two or three a year from 2004, never more than 100.**
+Featured is the shelf a new reader starts from: essays, how-tos,
 remembrances, announcements of things Jamie built, the best trip logs and
 reviews.
 
@@ -269,26 +317,30 @@ Featured posts today stay.
 - The writer is `alt_text.generate_alt`, the one-line Sonnet vision call with
   post context that did the June backfill (moved to Sonnet 5.5). The vision
   description sidecar is context, not the alt.
-- **Catch-up:** the 50 empty since July (posts since 10-10 wait for WT354),
-  then the older ones that can still be fetched, 20 a day. The 158 dead 2017
-  uploads and the ones marked unfillable stay as they are.
-- From then on, daily, on posts past the newest sent issue.
+- **Catch-up:** the 50 empty since July, then the older ones that can still be
+  fetched, 20 a day. The 158 dead 2017 uploads and the ones marked unfillable
+  stay as they are.
+- From then on, daily, on every new post.
 
-## Doc updates (with the build)
+## Doc and code updates (with the build)
 
-- `AGENT-TEAM/README.md`: four owners; the "Do not add more agents" line
-  names Tend the Blog as the deliberate exception. New
-  `AGENT-TEAM/tend-the-blog.md`; label `objective:blog`.
-- `AGENT-TEAM/automations.toml` and `SCHEDULE.md`: the new daily entry,
-  rendered by `projects-sysadmin/scripts/render_automation_schedules.py`, then
-  installed in the Codex app.
+- `AGENT-TEAM/README.md`: the team table (Library Agent, Run the Librarian,
+  Improve Thingy), the routing rules, and label `objective:library` for
+  `objective:archive` (no open issue carries it today).
+- `AGENT-TEAM/library-agent.md` replaces `keep-archive-true.md`;
+  `run-librarian.md` loses step 8; `WORKFLOW.md`'s report gains the
+  Suggestions list for the Library Agent.
+- `AGENT-TEAM/scripts/objective_lease.py`: objective `library` for `archive`;
+  `tests/test_agent_team_objectives.py` pins the new id and schedule.
+- `AGENT-TEAM/automations.toml` and `SCHEDULE.md`: `library-agent` daily at
+  5:00 without the date guard, rendered by
+  `projects-sysadmin/scripts/render_automation_schedules.py`; in the Codex
+  app, Keep the Archive True is removed and the Library Agent installed.
 - `AGENTS.md` (this repo): "This repo does not publish" stays true, plus: the
-  Librarian tends the blog's categories and alt text on micro.blog. The
+  Library Agent keeps the blog's categories and alt text on micro.blog. The
   micro.blog key here, and in CI, writes metadata only.
 - `ALIGNMENT.md`: a boundary row (blog categories and alt: the Librarian
   decides, micro.blog keeps).
-- `run-librarian.md` step 8 points at Tend the Blog;
-  `keep-archive-true.md` drops the weekly-sync check for the daily one.
 - `docs/featured-posts.md`: rewritten (it still describes Studio's Featured
   section). New `docs/blog-categories.md`: the naming and filing rules.
 - `../AGENTS.md` (thingelstad.com): the publishing rule gains "the blog's
@@ -302,10 +354,12 @@ Each step is its own commit; tests with each.
 
 1. **Refresh sync** (no micro.blog write): compare-every-post ingest, daily
    workflow, then one full refresh commit. Deploys through the corpus gate.
-2. **Data:** `data/blog-steward/` seeded and checked against the live pull
+2. **Data:** `data/blog-catalog/` seeded and checked against the live pull
    (expect exactly the 7 Jamie-set posts to differ).
-3. **`make tend` in dry run**, then the Tend the Blog objective and its
-   automation, also dry run for one morning. Jamie reads that report.
+3. **`make blog-round` in dry run**, then the Library Agent replaces Keep the
+   Archive True in the team and the Codex app. Its archive work runs as Keep
+   the Archive True's does today; its blog writes stay dry for one morning,
+   and Jamie reads that report.
 4. **Writes on:** categories and alt daily; the alt catch-up at 20 a day.
 5. **Featured:** the first list to Jamie; written on Jamie's go.
 6. **Docs.**
@@ -317,9 +371,8 @@ Under $5 a month in the usual run, plus the Codex run itself.
 
 ## Decisions for Jamie
 
-1. **Featured stays in?** It is a category, so this plan keeps it. If yes:
-   about 60, two or three a year, first list shown before writing? (Or 25,
-   just enough for `llms.txt`; or about 100.)
-2. **A fourth owner**, Tend the Blog, daily at 5:30 a.m.? (The alternative is
-   a daily branch inside Keep the Archive True.)
-3. **A new topic** at 12 posts over two years: the right bar?
+1. **The team change:** the Library Agent replaces Keep the Archive True and
+   takes photo descriptions and summaries from Run the Librarian, daily at
+   5:00 a.m.; the team stays three.
+2. **A new topic** at 12 posts over two years: the right bar? (Used unless
+   Jamie says otherwise.)
