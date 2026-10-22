@@ -15,6 +15,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import REPO
 
+from tests.archive import requires_archive
+
 
 def _load(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -110,6 +112,7 @@ class UntiedJournalPhotoTest(unittest.TestCase):
 
 
 class GateCommandTest(unittest.TestCase):
+    @requires_archive
     def test_blog_only_candidate_is_checked(self):
         # An empty blog candidate holds none of the real posts' code or
         # embeds, so the blog checks fail it even with no WT candidate.

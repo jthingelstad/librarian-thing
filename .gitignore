@@ -47,12 +47,10 @@ _site/pagefind/
 # Local audit/working files
 tmp/
 
-# Generated librarian artifacts (rebuilt by `make librarian-corpus` and
-# `make librarian-graph`; the deploy script regenerates them before upload).
-data/librarian/corpus.json
-data/librarian/graph.json
-data/librarian/podcast_corpus.json
-data/librarian/*.embedded.json
+# The archive is the library (library.db in S3, see pipeline/library/);
+# data/ is the working copy `library.py export` writes, with the corpus and
+# graph builds beside it. Never committed since 2026-10-22.
+/data/
 
 # Generated pipeline status report (rebuilt by `pipeline/status.py` at
 # build time; powers /ops/ and /status.json).

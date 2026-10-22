@@ -19,7 +19,9 @@ from unittest import mock
 import pytest
 from librarian_core import audio
 from librarian_core.corpus import _embed_input, build_corpus
-from librarian_core.paths import REPO
+from librarian_core.paths import REPO, WEEKLY_ARCHIVE_DIR
+
+from tests.archive import requires_archive
 
 DEPLOY = REPO / "pipeline" / "deploy"
 
@@ -181,11 +183,9 @@ def test_missing_site_dir_merges_nothing_and_never_fails(tmp_path, capsys):
     assert "no weekly site archive" in capsys.readouterr().out
 
 
-def test_default_dir_is_the_sibling_checkout_or_the_env_override(monkeypatch, tmp_path):
+def test_default_dir_is_the_librarys_weekly_pages_or_the_env_override(monkeypatch, tmp_path):
     monkeypatch.delenv(audio.SITE_ARCHIVE_ENV, raising=False)
-    assert audio.default_site_archive_dir() == (
-        REPO.parent / "weekly.thingelstad.com" / "apps" / "site" / "archive"
-    )
+    assert audio.default_site_archive_dir() == WEEKLY_ARCHIVE_DIR
 
     monkeypatch.setenv(audio.SITE_ARCHIVE_ENV, str(tmp_path))
     assert audio.default_site_archive_dir() == tmp_path
@@ -320,6 +320,7 @@ def test_handoff_pushes_the_s3_graph_not_the_local_file(tmp_path):
     assert content == (json.dumps(GRAPH, ensure_ascii=False, indent=2) + "\n").encode()
 
 
+@requires_archive
 def test_handoff_dry_run_from_s3_reads_plain_json_too(capsys):
     s3 = _S3(json.dumps(GRAPH).encode())
     get = mock.Mock(return_value={"tree": []})

@@ -2,6 +2,8 @@ import importlib.util
 import unittest
 from pathlib import Path
 
+from tests.archive import requires_archive
+
 REPO = Path(__file__).resolve().parents[1]
 STATUS_PATH = REPO / "pipeline" / "status.py"
 spec = importlib.util.spec_from_file_location("archive_status", STATUS_PATH)
@@ -10,6 +12,7 @@ spec.loader.exec_module(status)
 
 
 class ArchiveStatusTests(unittest.TestCase):
+    @requires_archive
     def test_reports_canonical_store_without_historic_studio_dependencies(self):
         original_deployed_artifacts = status.deployed_artifacts
         status.deployed_artifacts = lambda: {
@@ -24,7 +27,6 @@ class ArchiveStatusTests(unittest.TestCase):
         summary = report["summary"]
         self.assertGreater(summary["total_issues"], 0)
         self.assertEqual(summary["archive_missing"], 0)
-        self.assertEqual(summary["metadata_missing"], 0)
         self.assertEqual(summary["librarian_likely_stale"], None)
 
 

@@ -5,17 +5,17 @@ the archive side of *The Weekly Thing*.
 
 It used to be Studio, the publishing system. Publishing moved to
 [WT Builder](https://github.com/jthingelstad/wt-builder), which authors and
-sends each issue directly to the website, Buttondown, and the podcast — and
-commits the canonical issue text *here*, into `data/issues/`, so Thingy can
-retrieve and cite it. What remains in this repo is exactly that boundary:
-the canonical archives, the corpus builds, and the API that serves them.
+sends each issue directly to the website, Buttondown, and the podcast, then
+nudges the Librarian to pull it, so Thingy can retrieve and cite it. What
+remains in this repo is exactly that boundary: the library (the Librarian's
+copy of the archive), the corpus builds, and the API that serves them.
 
 ## Architecture
 
 | Repo / host | Role |
 |---|---|
-| **librarian-thing** (this repo) | Canonical archives, corpus builds, Librarian API |
-| wt-builder | Authors and publishes each issue; commits issue text into `data/issues/` |
+| **librarian-thing** (this repo) | The library, corpus builds, Librarian API |
+| wt-builder | Authors and publishes each issue; its send nudges the library round |
 | weekly.thingelstad.com | Public newsletter site and archive render surface |
 | thingy.thingelstad.com | Query surface backed by the Librarian API |
 | librarian.thingelstad.com | The API's public domain: chat/auth endpoints, OAuth 2.1, and the MCP server at `/mcp` |
@@ -32,25 +32,23 @@ the canonical archives, the corpus builds, and the API that serves them.
 | `pipeline/things/` | Things I've built registry snapshot (thingelstad.xyz) |
 | `pipeline/graph/` | Topic graph build (powers the site's topic pages) |
 | `pipeline/deploy/` | Corpus uploads, Lambda deploy, graph handoff |
+| `pipeline/library/` | The library: `library.db` in S3, its pulls, export and upload |
 | `pipeline/audits/`, `pipeline/one-shot/` | Archive maintenance and completed migrations |
-| `data/issues/` | Canonical issue content — written by WT Builder for new issues |
-| `data/blog/`, `data/podcast/` | Ingested blog and podcast content |
-| `data/things/` | Snapshot of the Things I've built registry (thingelstad.xyz/things.json) |
-| `data/librarian/` | Built corpus and graph artifacts |
+| `data/` (not in git) | The library's export, and the built corpus and graph beside it |
 | `docs/`, `notes/`, `reference/` | Architecture and editorial reference |
 
 ## How content flows
 
-- **Issues** arrive as commits from WT Builder after each issue publishes
-  (`data/issues/{N}/archive.md`, `links.json`, `metadata.json`).
-- **Blog and podcast** content is pulled by the sync workflow from Micro.blog
-  and `another.thingelstad.com`.
-- **Things I've built**, Jamie's project registry at thingelstad.xyz, is
-  snapshotted by the same workflow from its published `things.json`; the
-  Weekly Thing corpus turns it into undated `thing` chunks (`thing-<id>`).
-- Any change under `data/` triggers the production workflow: rebuild the
-  affected corpora, embed, upload to S3, and hand the topic graph to
-  `weekly.thingelstad.com` — the one cross-repo push this repo still makes.
+- **The library** (`library.db` in S3, `pipeline/library/README.md`) holds
+  the Librarian's copy of every source. The library round pulls them daily,
+  on demand, and when one publishes: **issues** from weekly.thingelstad.com's
+  archive pages (WT Builder's send nudges it), **the blog** from micro.blog,
+  **the podcast** from `another.thingelstad.com`, and **Things I've built**
+  from thingelstad.xyz's `things.json` (undated `thing` chunks, `thing-<id>`).
+- When the library moves past what a corpus was built from, the production
+  workflow exports it, rebuilds that corpus, embeds, uploads to S3, and hands
+  the topic graph to `weekly.thingelstad.com` — the one cross-repo push this
+  repo still makes. Friday and Saturday the build waits for the send.
 - The Lambda redeploys when its code changes or any corpus rebuilds (it
   caches each corpus for a container's life). The `/retrieve` endpoint is a
   versioned contract; Thingy is a live client across a repo boundary.

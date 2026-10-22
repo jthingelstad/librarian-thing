@@ -195,7 +195,7 @@ Deploy steps:
 6. Configure 30-day log retention on the auto-created log groups.
 7. Update `.env` with the latest stack outputs (`LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`).
 
-CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step (`.github/workflows/deploy.yml`). It also redeploys after any corpus upload: a container loads each corpus once and keeps it, so a new corpus is only served by fresh containers. New blog/podcast content enters through `.github/workflows/sync-external-content.yml`, which commits `data/blog/**` / `data/podcast/**` updates so the production workflow can rebuild and upload corpora. Manual deploys are for local validation before commit.
+CI auto-detects code/infra changes in `apps/librarian/` and runs the deploy step (`.github/workflows/deploy.yml`). It also redeploys after any corpus upload: a container loads each corpus once and keeps it, so a new corpus is only served by fresh containers. New content enters the library through the library round (`.github/workflows/library-round.yml`), which starts the production workflow when a corpus is stale. Manual deploys are for local validation before commit.
 
 ## Tests
 

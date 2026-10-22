@@ -62,10 +62,10 @@ Corpus build/upload is source-specific but treated as one API concern:
 - thingelstad.com blog corpus: `pipeline/deploy/upload_blog_corpus.py`
 - Another Thing podcast corpus: `pipeline/deploy/upload_podcast_corpus.py`
 
-New external content arrives through the sync workflow
-(`Librarian — Sync External Content` in Actions). It ingests Micro.blog posts into
-`data/blog/`, imports podcast episodes into `data/podcast/`, commits those
-changes, and the production workflow then uploads the updated corpus artifacts.
+New content arrives through the library round (`Librarian — Library Round` in
+Actions, and the Library Agent on the Mac). It pulls micro.blog, weekly's issue
+pages, the podcast and Things I've built into the library (`library.db` in S3),
+and starts the production workflow when a corpus is stale.
 
 ## Endpoints
 

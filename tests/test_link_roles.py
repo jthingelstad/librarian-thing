@@ -14,6 +14,8 @@ import unittest
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR, REPO
 
+from tests.archive import requires_archive
+
 _spec = importlib.util.spec_from_file_location(
     "test_link_roles_gate", REPO / "pipeline" / "corpus" / "corpus_gate.py"
 )
@@ -83,6 +85,7 @@ class LinkRoleTests(unittest.TestCase):
         corpus["issues"][0]["sections"][0]["section_family"] = "Journal"
         self.assertEqual(gate.headline_shaped_commentary(corpus), [])
 
+    @requires_archive
     def test_real_archive(self):
         wt = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         wt50 = [

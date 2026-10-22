@@ -341,12 +341,12 @@ make librarian-deploy-full
 
 `make librarian-deploy` queues a code-only GitHub OIDC deployment of committed remote `main`; `make librarian-deploy-full` also rebuilds and uploads all corpora. Neither needs a local AWS session. Both print a run URL: wait for its result before reporting acceptance. The workflow invokes `pipeline/deploy/aws.py` to package and upload Lambda code and update the stack.
 
-New external publishing content has its own ingest step before corpus upload:
+Content reaches the corpus through the library (`pipeline/library/README.md`):
 
-- Blog posts: `.github/workflows/sync-external-content.yml` runs `pipeline/blog/ingest_blog.py --since-last` against Micro.blog and commits changes to `data/blog/**`.
-- Podcast episodes: the same workflow checks out `another.thingelstad.com`, runs `pipeline/podcast/import_another_thing.py`, and commits changes to `data/podcast/**`.
+- `.github/workflows/library-round.yml` pulls the sources into `library.db` daily at 12:17 UTC, on demand, and when a source publishes: micro.blog with `pipeline/blog/ingest_blog.py --prune`, weekly's issue pages, `another.thingelstad.com`'s episodes with `pipeline/podcast/import_another_thing.py`, and thingelstad.xyz's registry. WT Builder's send dispatches `issue-sent`.
+- When the library has moved past what a corpus was built from, the round starts the production workflow, which exports the library and rebuilds and uploads that corpus. Friday and Saturday (US Central) the build waits for the send.
 
-Those commits trigger the production workflow, which rebuilds and uploads the updated corpus artifacts. A newly published blog post will not reach Thingy unless this sync workflow runs successfully with `MICROBLOG_API_KEY` configured.
+A newly published blog post will not reach Thingy unless the round runs with `MICROBLOG_API_KEY` configured.
 
 The deploy script packages native HTTP servers and Event workers from one Node source tree:
 

@@ -1,0 +1,171 @@
+name: Librarian — Library Round
+
+# The GitHub round: pull the sources into the library (library.db in S3) and
+# start the corpus build when the library has moved past what the corpus was
+# built from. The Library Agent runs the same round on the Mac each morning;
+# this one is the backstop for a morning it missed, and the way a publish
+# reaches the library at once:
+#
+#   issue-sent          WT Builder after a send: weekly's archive pages, then
+#                       the build for that issue (it ends the weekend hold)
+#   blog-published      the blog, from micro.blog
+#   podcast-published   another.thingelstad.com's episodes
+#   things-published    thingelstad.xyz's registry
+#   anything else       every source
+#
+# Nothing here writes to a source. The library upload only replaces the copy
+# this run downloaded, so a round that races another one runs again. From
+# Friday until the send the build waits (pipeline/library/library.py stale).
+
+on:
+  schedule:
+    - cron: '17 12 * * *'  # 07:17 CDT / 06:17 CST, after the Mac's morning round
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Sources to pull, comma-separated (blog, weekly, another, things)'
+        type: string
+        default: 'blog,weekly,another,things'
+      issue:
+        description: 'The issue a send just published (ends the Friday and Saturday hold)'
+        type: string
+        default: ''
+  repository_dispatch:
+    types:
+      # WT Builder sends this after an issue's website leg, with {"issue": N}.
+      - issue-sent
+      - blog-published
+      - podcast-published
+      # thingelstad.xyz sends this when Things I've built publishes.
+      - things-published
+      - external-content-updated
+
+permissions:
+  contents: read
+  # OIDC: the round reads and writes artifacts/library.db with the deploy role.
+  id-token: write
+  # To start deploy.yml (a workflow_dispatch from GITHUB_TOKEN does run).
+  actions: write
+
+# One group per kind of event, so a blog publish never cancels a pending
+# issue-sent round; rounds that do overlap meet at the conditional upload.
+concurrency:
+  group: librarian-library-round-${{ github.event.action || github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  round:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: library-round-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
+
+      # Pinned to a commit: this job holds OIDC deploy credentials.
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+          prune-cache: true
+
+      - run: uv sync --locked --no-dev
+
+      - name: What to pull
+        id: plan
+        env:
+          ACTION: ${{ github.event.action }}
+          ONLY: ${{ inputs.only }}
+          ISSUE: ${{ inputs.issue || github.event.client_payload.issue }}
+          MICROBLOG_API_KEY: ${{ secrets.MICROBLOG_API_KEY }}
+        run: |
+          set -euo pipefail
+          case "${{ github.event_name }}:$ACTION" in
+            repository_dispatch:issue-sent) only=weekly ;;
+            repository_dispatch:blog-published) only=blog ;;
+            repository_dispatch:podcast-published) only=another ;;
+            repository_dispatch:things-published) only=things ;;
+            workflow_dispatch:*) only="${ONLY:-blog,weekly,another,things}" ;;
+            *) only=blog,weekly,another,things ;;
+          esac
+          if [[ -n "$ISSUE" && ! "$ISSUE" =~ ^[0-9]+$ ]]; then
+            echo "::error::issue must be a number, got '$ISSUE'"
+            exit 1
+          fi
+          # Without the key the blog cannot be pulled, but the other sources
+          # still are, so half an outage does not become a whole one. The run
+          # fails at the end instead: a green run hid a two-month blog gap once.
+          if [[ -z "$MICROBLOG_API_KEY" && ",$only," == *",blog,"* ]]; then
+            echo "::error title=Blog pull skipped::MICROBLOG_API_KEY is not configured, so the blog was NOT pulled into the library."
+            echo "BLOG_PULL_SKIPPED=1" >> "$GITHUB_ENV"
+            only="$(tr ',' '\n' <<< "$only" | grep -vx blog | paste -sd, -)"
+          fi
+          echo "only=$only" >> "$GITHUB_OUTPUT"
+          echo "issue=$ISSUE" >> "$GITHUB_OUTPUT"
+          echo "Pulling: ${only:-nothing}${ISSUE:+ (WT$ISSUE sent)}"
+
+      - name: Pull the sources into the library
+        if: steps.plan.outputs.only != ''
+        env:
+          ONLY: ${{ steps.plan.outputs.only }}
+          MICROBLOG_API_KEY: ${{ secrets.MICROBLOG_API_KEY }}
+          MICROBLOG_MICROPUB_URL: ${{ secrets.MICROBLOG_MICROPUB_URL }}
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+        run: |
+          # git holds no data/ since 2026-10-22; a commit into it (WT
+          # Builder's archive leg before its nudge PR) is replaced here.
+          if [[ -n "$(git ls-files data | head -n 1)" ]]; then
+            echo "::warning title=data/ in git::git tracks files under data/ again; the library export replaces them"
+          fi
+          rm -rf data
+          uv run --locked --no-dev python pipeline/library/library.py round --only "$ONLY"
+
+      # The send's receipt: the issue's archive page is in the library now.
+      - name: The sent issue arrived
+        if: steps.plan.outputs.issue != ''
+        env:
+          ISSUE: ${{ steps.plan.outputs.issue }}
+        run: |
+          if [[ ! -f "data/weekly/archive/$ISSUE.md" ]]; then
+            echo "::error title=WT$ISSUE missing::weekly.thingelstad.com has no apps/site/archive/$ISSUE.md yet, so the library does not hold the issue. Re-send the archive leg once the website leg has landed."
+            exit 1
+          fi
+          echo "WT$ISSUE is in the library."
+
+      - name: What the library moved past
+        id: stale
+        if: steps.plan.outputs.only != ''
+        env:
+          ISSUE: ${{ steps.plan.outputs.issue }}
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ -n "$ISSUE" ]]; then args=(--issue "$ISSUE"); fi
+          uv run --locked --no-dev python pipeline/library/library.py stale "${args[@]}"
+
+      - name: Start the corpus build
+        if: steps.stale.outputs.weekly_corpus == 'true' || steps.stale.outputs.blog_corpus == 'true' || steps.stale.outputs.podcast_corpus == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ steps.plan.outputs.issue }}
+        run: |
+          set -euo pipefail
+          args=(-f scope=library)
+          if [[ -n "$ISSUE" ]]; then args+=(-f "issue=$ISSUE"); fi
+          gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main "${args[@]}"
+          echo "Started deploy.yml (scope=library${ISSUE:+, issue=$ISSUE})."
+
+      - name: Fail if the blog was skipped
+        if: always() && env.BLOG_PULL_SKIPPED == '1'
+        run: |
+          echo "The blog was not pulled because MICROBLOG_API_KEY is not configured."
+          echo "The other sources were. Failing so this does not report green."
+          exit 1

@@ -3,9 +3,10 @@
 The audio edition's record lives only in the render copy of each issue,
 ``weekly.thingelstad.com/apps/site/archive/N.md``: WT Builder (and the audio
 back-catalogue job) write ``audio_url``, ``audio_duration_seconds`` and
-``audio_chapters`` into that page's frontmatter, and nothing copies them into
-``data/issues/``. The build reads them from the sibling checkout and stamps
-each issue record with::
+``audio_chapters`` into that page's frontmatter, and the library's derived
+``issues/N/archive.md`` drops them. The build reads them from the library's
+copy of the pages (``data/weekly/archive``) and stamps each issue record
+with::
 
     audio: {url, duration_seconds, chapters: [{start, title}]}
 
@@ -15,8 +16,8 @@ embedding input are never touched. Chapters that link to Thingy (the Echoes
 questions) are Thingy's words and are dropped, as the corpus drops the
 from-thingy blocks.
 
-A missing site checkout is normal for local builds and CI runs that did not
-fetch it: the annotation merges nothing and the build goes on.
+A missing copy (a checkout with no library export) merges nothing and the
+build goes on; the corpus gate refuses to ship a corpus built that way.
 """
 
 from __future__ import annotations
@@ -29,12 +30,12 @@ from urllib.parse import urlparse
 
 import yaml
 
-from librarian_core.paths import PROJECTS_DIR
+from librarian_core.paths import WEEKLY_ARCHIVE_DIR
 
-# Sibling-relative: the thingelstad.com repos move as a unit. CI checks the
-# site out inside its workspace and points here with the env var.
+# The weekly site's archive pages as the library pulled them. The env var
+# points a build at another copy (the twin build's old side).
 SITE_ARCHIVE_ENV = "WEEKLY_SITE_ARCHIVE_DIR"
-DEFAULT_SITE_ARCHIVE_DIR = PROJECTS_DIR / "weekly.thingelstad.com" / "apps" / "site" / "archive"
+DEFAULT_SITE_ARCHIVE_DIR = WEEKLY_ARCHIVE_DIR
 
 _FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*(?:\n|$)", re.S)
 THINGY_HOST = "thingy.thingelstad.com"

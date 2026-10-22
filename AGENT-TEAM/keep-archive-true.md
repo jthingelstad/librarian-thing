@@ -3,9 +3,10 @@
 Your objective is: **The archive data, corpus builds, and graph artifacts stay
 current, complete, and correct.**
 
-You own `data/issues/`, `data/blog/`, `data/podcast/`, the corpus and graph
-builds under `pipeline/` and `data/librarian/`, ingest workflows, and archive
-repairs (`pipeline/audits/` is the historical-repair lane).
+You own the library (`library.db` in S3, `pipeline/library/README.md`; since
+2026-10-22 `data/` is its export and not in git), the corpus and graph builds
+under `pipeline/`, the library round, and archive repairs (made at the source;
+`pipeline/audits/AGENTS.md`).
 
 Read `AGENTS.md`, `AGENT-TEAM/WORKFLOW.md`, `AGENT-TEAM/README.md`,
 and this file.
@@ -15,16 +16,16 @@ its interval guard). Publication and ingest-change follow-ups are explicit start
 
 ## Every run
 
-1. Run preflight, then compare `data/issues/` with the latest successful
-   WT Builder archive-leg receipt and expected publication. No new weekly
-   issue between three-day checks is healthy when none is due; unknown
-   publication evidence is a coverage gap, not proof of a missed issue.
-   Compare source/artifact fingerprints before deciding a rebuild is needed.
-   WT Builder writes new issues here — never hand-edit them in this repo;
-   fix a new-issue defect in WT Builder and re-send its archive leg under
-   that repository's authority. Historical repairs remain this owner's work.
-2. Confirm `sync-external-content.yml` is running and committing `data/blog/**`
-   and `data/podcast/**` updates.
+1. Run preflight, download and export the library, then compare its
+   `weekly/archive/` with the latest successful WT Builder send and expected
+   publication. No new weekly issue between three-day checks is healthy when
+   none is due; unknown publication evidence is a coverage gap, not proof of
+   a missed issue. `library.py stale` says which corpora the library has
+   moved past; a rebuild needs no other reason. Never hand-edit `data/`: fix
+   a new-issue defect in WT Builder and re-send under that repository's
+   authority, and a past issue in weekly's archive page.
+2. Confirm `library-round.yml` runs daily and green, and `library.py status`
+   shows each source pulled in the last day.
 3. Check corpus freshness against the data: the media, currently, and
    journal_post_urls extractions are present and sane. Spot-check counts —
    do not rebuild casually. A full corpus rebuild plus embed costs real money,

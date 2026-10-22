@@ -25,6 +25,8 @@ from librarian_core import graph
 from librarian_core.corpus import build_corpus
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 SIGNED = (
     "https://assets.buttondown.email/61dxQnj2kzL.jpg?AWSAccessKeyId=AKIAJEXF6S6TCOKT7N3Q"
     "&Signature=VWPWjTZujXfZDcLsoDBSl0Ncj0U%3D&Expires=1707554322"
@@ -122,6 +124,7 @@ class GraphEntityTests(unittest.TestCase):
         # Ranking still weighs a link double.
         self.assertEqual(graph.entity_counts({**issue, "links": issue["links"][:1]})["om.co"], 2)
 
+    @requires_archive
     def test_real_archive_graph(self):
         corpus = build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         built = graph.build_graph(corpus)

@@ -11,9 +11,13 @@ Repeatable archive audit + repair tooling. No README — this directory is opera
 | `audit_missing_micropost_photos.py` | Finds micropost photos silently lost during the MailChimp → Buttondown migration (no `mp-photo-alt[]=` marker). | Free |
 | `build_missing_posts_report.py` | Enriches the "missing micro.blog posts" report with Wayback snapshots, newsletter heading, body paragraph. | Free (uses Wayback API) |
 
+## Where a repair goes (since 2026-10-22)
+
+weekly.thingelstad.com is the source of authority for issues, and the library (`library.db` in S3) pulls its archive pages. `data/issues/{N}/archive.md` is derived from those pages on every export, so **an edit there is overwritten**: a repair is a commit to weekly's `apps/site/archive/{N}.md`, and the next library round (or `gh workflow run library-round.yml -f only=weekly`) carries it into the corpus. Strip nothing WT Builder wrote (`audio_*`, `buttondown_id`) when editing a page.
+
 ## The repair scripts
 
-These take an audit's output and apply fixes back to `data/issues/{N}/archive.md`. **Always read what they propose before running** — they mutate the canonical archive store.
+These take an audit's output and apply fixes to `data/issues/{N}/archive.md`. **They predate the library:** before running one again, point it at weekly's archive pages (most hard-code `data/issues/`; `repair_journal_permalinks.py` already writes both). **Always read what they propose before running.**
 
 - `fix_micropost_photos.py` — restores photos where `mp-photo-alt[]=` markers survived in the body (146 photos across 21 issues at last run).
 - `restore_missing_micropost_photos.py` — restores silently-lost single-photo microposts (407 photos across 60 issues at last run).
@@ -41,8 +45,8 @@ The [`notes/audits/README.md`](../../notes/audits/README.md) documents what each
 1. Run the audit (`audit_archive.py` or `llm_audit_archive.py`).
 2. Triage the findings — group by pattern (era-specific cruft? specific template? individual issues?).
 3. If a pattern: write a fix in `pipeline/audits/<descriptive>.py`. Idempotent. Operator-runnable.
-4. If a one-off: hand-edit `data/issues/{N}/archive.md` directly. Commit with a clear message.
-5. Merge to `main`: `deploy.yml` rebuilds and re-embeds the Weekly Thing corpus from `data/issues/`. Nothing here regenerates weekly.thingelstad.com's render copies (`apps/site/archive/{N}.md`) of past issues — the Studio site handoff retired at the 2026-08-28 split — so a repair reaches Thingy and MCP clients, not the public page — unless the repair writes the render copy too (as `repair_journal_permalinks.py` does) or someone runs wt-builder `npm run rerender:archive`.
+4. If a one-off: hand-edit weekly's `apps/site/archive/{N}.md` in weekly.thingelstad.com. Commit with a clear message.
+5. The library round pulls the page, and `deploy.yml` rebuilds and re-embeds the Weekly Thing corpus from the library. The public page and the corpus now read the same text.
 6. Optionally re-run the audit to confirm the fix.
 7. Snapshot the new audit output into `notes/audits/`.
 

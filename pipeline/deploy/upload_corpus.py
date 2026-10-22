@@ -46,8 +46,8 @@ def build_wt_corpus(
 
     Issue records also get their audio pointers from the weekly site's
     archive pages (librarian_core.audio); `site_archive_dir` defaults to the
-    sibling checkout or WEEKLY_SITE_ARCHIVE_DIR, and a missing one merges
-    nothing."""
+    library's copy (data/weekly/archive) or WEEKLY_SITE_ARCHIVE_DIR, and a
+    missing one merges nothing."""
     corpus = build_corpus(archive_dir or ARCHIVE_DIR, include_issue_bodies=True, **build_kwargs)
     annotated = annotate_media_descriptions(corpus, sidecar_path or MEDIA_DESCRIPTIONS_PATH)
     print(f"media descriptions merged: {annotated}/{len(corpus.get('media', []))}")

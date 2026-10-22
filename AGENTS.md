@@ -6,14 +6,16 @@ overview and `ALIGNMENT.md` for the cross-repo map.
 ## What this repo is
 
 The **Librarian API and the corpora it answers from** — the archive side of
-The Weekly Thing. Canonical issue, blog, and podcast content lives in
-`data/`; the corpus builds live in `pipeline/`; the API lives in
-`apps/librarian/`.
+The Weekly Thing. The archive is the library, one SQLite file in S3
+(`pipeline/library/README.md`): the pulled copies of every source plus what
+the Librarian makes. `data/` is its exported working copy and is not in git;
+the corpus builds live in `pipeline/`; the API lives in `apps/librarian/`.
 
-This repo does not publish. WT Builder authors and sends each issue, and
-commits the canonical issue text into `data/issues/` afterwards. Blog and
-podcast content is ingested by the sync workflow. This repo's job is to keep
-the archive true, build the corpora, and serve retrieval.
+This repo does not publish. WT Builder authors and sends each issue; its send
+nudges the library round (`.github/workflows/library-round.yml`), which pulls
+the issue from weekly.thingelstad.com. The same round pulls the blog, the
+podcast and Things I've built. This repo's job is to keep the archive true,
+build the corpora, and serve retrieval.
 
 Until 2026-08-28 this repo was Studio, the publishing system. The workshop
 bot, Eddy, the site handoff, and the audio pipeline are preserved in git
@@ -24,12 +26,10 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 - `apps/librarian/` — Librarian API (Lambda + infra + admin). Deployed from here.
 - `librarian-core/` — shared `librarian_core` package (corpus/graph/retrieval/links).
 - `pipeline/corpus/`, `pipeline/graph/`, `pipeline/deploy/` — builds and deploys.
-- `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/` — content ingest and maintenance.
+- `pipeline/library/` — the library: download, export, the pulls, upload, `stale`.
+- `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/` — the ingesters the pulls run, and maintenance.
 - `pipeline/audits/`, `pipeline/one-shot/` — archive maintenance, completed migrations.
-- `data/issues/` — canonical issue content. **WT Builder writes new issues here.**
-- `data/blog/`, `data/podcast/` — ingested content.
-- `data/things/` — snapshot of thingelstad.xyz/things.json (Things I've built); `thing` chunks ride the Weekly Thing corpus. Written by `pipeline/things/import_things.py` only.
-- `data/librarian/` — built corpus and graph artifacts.
+- `data/` (not in git) — the library's export: `weekly/archive/` (weekly's issue pages), `issues/` (derived from them), `blog/`, `podcast/`, `site/`, `things/`, and `librarian/` (the Librarian's sidecars plus the built corpus and graph). `pipeline/library/README.md` has the table.
 - `tests/` — Python tests (corpus / content shape / conversation review / deploy security).
 
 ## Hard constraints
@@ -42,10 +42,11 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
   chunk, count, topic, link or summary is built (`strip_thingy_blocks` in
   `librarian-core`). The frame is a cross-repo contract, pinned by tests here
   and in wt-builder `tests/echoes.test.ts`.
-- **`data/issues/` is written by WT Builder.** Do not hand-edit new issues
-  here; fix them in WT Builder and re-send the archive leg. Historical
-  repairs (pre-Builder issues) are fine and are what `pipeline/audits/` is
-  for.
+- **Fix content at its source.** weekly.thingelstad.com is the source of
+  authority for issues and micro.blog for the blog; the library pulls them.
+  `data/issues/` is derived on every export, so an edit there is lost: fix a
+  new issue in WT Builder and re-send, a past one in weekly's
+  `apps/site/archive/<n>.md` (`pipeline/audits/AGENTS.md`).
 - **One cross-repo push remains:** `data/librarian/graph.json` to
   `weekly.thingelstad.com` (topic pages). Do not add others — publishing
   handoffs belong to WT Builder.
@@ -61,6 +62,14 @@ git status --short
 ```
 
 There may be user work in progress. Do not revert unrelated changes.
+
+A fresh checkout has no `data/`, and the real-archive tests skip without it.
+To build or test against the archive:
+
+```sh
+uv run --locked python pipeline/library/library.py download
+uv run --locked python pipeline/library/library.py export
+```
 
 ## Python environment
 

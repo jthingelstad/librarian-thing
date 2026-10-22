@@ -16,6 +16,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import BLOG_DIR, REPO
 
+from tests.archive import requires_archive
+
 
 def _load(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -95,6 +97,7 @@ class BlogHtmlStripTests(unittest.TestCase):
             failures = gate.blog_source_failures(corpus, Path(tmp) / "posts")
         self.assertEqual(len(failures), 3, failures)
 
+    @requires_archive
     def test_real_cacti_script_is_whole(self):
         [path] = BLOG_DIR.glob("2011/10/2011-10-02-detect-slow-cacti.md")
         _, body = core.read_issue(path)

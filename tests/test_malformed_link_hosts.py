@@ -15,6 +15,8 @@ from librarian_core import corpus as core
 from librarian_core.links import repair_url, web_domain
 from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR, PODCAST_DIR
 
+from tests.archive import requires_archive
+
 
 class RepairUrlTests(unittest.TestCase):
     def test_repairs(self):
@@ -76,6 +78,7 @@ class RepairUrlTests(unittest.TestCase):
 
 
 class RealCorporaDomainTests(unittest.TestCase):
+    @requires_archive
     def test_no_link_has_a_malformed_domain(self):
         wt = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         blog = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)

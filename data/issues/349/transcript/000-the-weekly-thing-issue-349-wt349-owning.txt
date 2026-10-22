@@ -1,7 +1,0 @@
-The Weekly Thing, issue 349. WT349 — Owning the Rails. Published May 23, twenty twenty six. By Jamie Thingelstad.
-
-Here we are at Memorial Day weekend and the official Minnesota start of summer! This is when many in our state "go to the lake" and some would like to not return until the leaves are off the trees. One of the great things about having harsh winters is the delight one gets in the summer when it is so nice to be outside.
-
-You're reading the first Weekly Thing created start-to-finish in the new Workshop that I've built. I'm still getting the kinks worked out but I feel confident enough in this model that I'm charging forward. This is by far the biggest change I've ever made to the Weekly Thing automation, and it is working well. This new setup has allowed me to change the way I construct the issues and you may notice some slight improvements. The audio text-to-speech for the podcast version is going to see some of the biggest improvements.
-
-Another big shout out to more new subscribers from Dense Discovery! I hope that you find the Weekly Thing a fun place to learn together.

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Report the current state of the Librarian archive and its artifacts.
 
-The canonical Weekly Thing source is ``data/issues/{number}/archive.md``.
-This report checks that store, the checked-in corpus/graph build artifacts, and
-(when credentials are available) the deployed S3 artifacts. It intentionally
-does not inspect the retired Studio audio and site-publishing pipeline.
+Reads the library's export in ``data/`` (``issues/{number}/archive.md`` is
+derived from weekly.thingelstad.com's archive pages), the local corpus/graph
+build artifacts, and (when credentials are available) the deployed S3
+artifacts. The deployed corpus is stale when the library fingerprint it records
+is not the export's. It intentionally does not inspect the retired Studio audio
+and site-publishing pipeline.
 """
 
 from __future__ import annotations
@@ -16,6 +18,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from librarian_core.library import read_marker
+from librarian_core.library.store import FINGERPRINT_META
 from librarian_core.paths import DATA
 
 REPO = Path(__file__).resolve().parents[1]
@@ -63,7 +67,6 @@ def collect_issues() -> list[dict]:
     )
     for issue_dir in issue_dirs:
         archive_path = issue_dir / "archive.md"
-        metadata_path = issue_dir / "metadata.json"
         frontmatter = load_frontmatter(archive_path) if archive_path.exists() else {}
         rows.append(
             {
@@ -71,7 +74,6 @@ def collect_issues() -> list[dict]:
                 "subject": frontmatter.get("subject", ""),
                 "publish_date": frontmatter.get("publish_date", ""),
                 "archive": {"exists": archive_path.exists()},
-                "metadata": {"exists": metadata_path.exists()},
             }
         )
     return rows
@@ -95,6 +97,7 @@ def s3_object_metadata(bucket: str, key: str) -> dict | None:
         if head.get("LastModified")
         else None,
         "etag": head.get("ETag", "").strip('"'),
+        "library_fingerprint": head.get("Metadata", {}).get(FINGERPRINT_META),
     }
     if key.endswith("corpus.json"):
         try:
@@ -143,33 +146,23 @@ def local_artifact_summary(name: str) -> dict:
 def build_report() -> dict:
     issues = collect_issues()
     deployed = deployed_artifacts()
-    archive_paths = [ISSUES_ROOT / row["number"] / "archive.md" for row in issues]
-    latest_archive_mtime = max(
-        (path.stat().st_mtime for path in archive_paths if path.exists()), default=None
-    )
-    latest_archive_modified_at = (
-        datetime.fromtimestamp(latest_archive_mtime, tz=timezone.utc)
-        .replace(microsecond=0)
-        .isoformat()
-        .replace("+00:00", "Z")
-        if latest_archive_mtime is not None
-        else None
-    )
+    marker = read_marker(DATA) or {}
+    library_fingerprint = (marker.get("fingerprints") or {}).get("corpus")
     deployed_corpus_at = deployed["corpus"].get("last_modified")
     likely_stale = None
-    if latest_archive_modified_at and deployed_corpus_at:
-        likely_stale = latest_archive_modified_at > deployed_corpus_at
+    if library_fingerprint and deployed_corpus_at:
+        likely_stale = deployed["corpus"].get("library_fingerprint") != library_fingerprint
     local_corpus = local_artifact_summary("corpus.json")
     return {
         "generated_at": now_iso(),
         "summary": {
             "total_issues": len(issues),
             "archive_missing": sum(not row["archive"]["exists"] for row in issues),
-            "metadata_missing": sum(not row["metadata"]["exists"] for row in issues),
             "local_corpus_issue_count": local_corpus.get("issue_count"),
             "local_corpus_matches_archive": local_corpus.get("issue_count") == len(issues),
             "deployed_corpus_uploaded_at": deployed_corpus_at,
-            "latest_archive_modified_at": latest_archive_modified_at,
+            "library_exported_at": marker.get("absorbed_at") or marker.get("exported_at"),
+            "library_fingerprint": library_fingerprint,
             "librarian_likely_stale": likely_stale,
         },
         "local_artifacts": {
@@ -189,7 +182,7 @@ def print_table(report: dict) -> None:
     print(f"Archive status — generated {report['generated_at']}")
     print(
         f"  issues: {summary['total_issues']}  archive missing: {summary['archive_missing']}"
-        f"  metadata missing: {summary['metadata_missing']}  deployed corpus: {state}"
+        f"  deployed corpus: {state}"
     )
     corpus = report["local_artifacts"]["corpus"]
     if not corpus.get("missing"):
@@ -200,8 +193,8 @@ def print_table(report: dict) -> None:
         )
     if summary["deployed_corpus_uploaded_at"]:
         print(
-            f"  deployed corpus: {summary['deployed_corpus_uploaded_at']}  latest archive change:"
-            f" {summary['latest_archive_modified_at']}"
+            f"  deployed corpus: {summary['deployed_corpus_uploaded_at']}  library export:"
+            f" {summary['library_exported_at']}"
         )
 
 

@@ -1,5 +1,0 @@
-Quote.
-In short, all four hyperscalers are giving the fat tree’s economic logic the thumbs down when it comes to AI workloads. Each has its own proprietary response. And you can bet your last penny that none of them is going to license their answer to the others. This is the same pattern that played out with custom silicon (TPUs, Trainium, Maia, MTIA), switches, and other gear. The hyperscalers see the workloads first, at scale, and they build the infrastructure to match. And they optimize, and optimize. The rest of the industry catches up later, if at all.
-End quote.
-
-This section really hit me.

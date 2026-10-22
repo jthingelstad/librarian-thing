@@ -12,6 +12,8 @@ import unittest
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 CURRENTLY = "\n\n".join(
     [
         "**Reading:** [Some Book](https://example.com/book) and loving it.",
@@ -32,6 +34,7 @@ class CurrentlyLabelTests(unittest.TestCase):
         )
         self.assertTrue(entries[1]["text"].startswith("We finally tried Oro by Nixta"))
 
+    @requires_archive
     def test_every_real_currently_section_yields_entries(self):
         corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         with_entries = {entry["issue_number"] for entry in corpus["currently"]}
@@ -62,6 +65,7 @@ class CurrentlyFullTextTests(unittest.TestCase):
         [book] = core.extract_now_reading_entries(f"## Now Reading 📚\n\n### Book\n\n{blurb}\n")
         self.assertTrue(book["text"].endswith("The last line."))
 
+    @requires_archive
     def test_real_long_entries_are_whole(self):
         corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         texts = {}
@@ -123,6 +127,7 @@ class NowReadingEraTests(unittest.TestCase):
             ["https://www.amazon.com/Collapse/dp/0143117009/"],
         )
 
+    @requires_archive
     def test_every_now_reading_issue_has_an_entry(self):
         corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         reading_era = {

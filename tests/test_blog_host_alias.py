@@ -15,6 +15,8 @@ from librarian_core import corpus as core
 from librarian_core.domain_exclusions import is_excluded
 from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR
 
+from tests.archive import requires_archive
+
 ALIAS = "http://jthingelstad.micro.blog/2017/04/28/poking-around-microblog.html"
 
 
@@ -62,6 +64,7 @@ class BlogHostAliasTests(unittest.TestCase):
             [("internal", "resolved_post", 7664), ("internal", "resolved_post", 7664)],
         )
 
+    @requires_archive
     def test_real_journal_entries_match_alias_posts_by_permalink(self):
         wt = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         # An entry whose permalink is the alias post's own path matches it by

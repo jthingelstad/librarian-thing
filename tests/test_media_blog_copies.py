@@ -17,6 +17,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 BASE = "https://www.thingelstad.com"
 DECK = f"{BASE}/uploads/2017/5b1cabc144.jpg"
 PHONE = f"{BASE}/uploads/2017/IMG_1234.jpg"
@@ -275,6 +277,7 @@ class MediaBlogCopyTests(unittest.TestCase):
 
 
 class RealMediaBlogCopyTests(unittest.TestCase):
+    @requires_archive
     def test_real_archive(self):
         wt = core.build_corpus(ARCHIVE_DIR)
         copies = [row for row in wt["media"] if row.get("copy_of_microblog_id")]

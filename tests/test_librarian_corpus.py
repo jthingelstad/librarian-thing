@@ -6,6 +6,8 @@ from pathlib import Path
 
 from librarian_core import corpus as core
 
+from tests.archive import requires_archive
+
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = REPO / "pipeline" / "corpus" / "build.py"
 
@@ -330,6 +332,7 @@ if __name__ == "__main__":
 
 
 class DefaultSiteGroundingTest(unittest.TestCase):
+    @requires_archive
     def test_repo_site_snapshots_produce_grounding_chunks(self):
         # Regression guard for the 2026-08 repo split: the about/support
         # templates left this repo and the corpus silently built with zero
@@ -339,7 +342,7 @@ class DefaultSiteGroundingTest(unittest.TestCase):
 
         self.assertTrue(
             (SITE_DIR / "about.njk").exists(),
-            f"site grounding snapshot missing: {SITE_DIR}/about.njk (see data/site/README.md)",
+            f"site grounding snapshot missing: {SITE_DIR}/about.njk (see pipeline/library/README.md)",
         )
         chunks = core_corpus._site_page_chunks(
             site_dir=SITE_DIR, issue_count=350, years_active=9, latest_issue_number=350

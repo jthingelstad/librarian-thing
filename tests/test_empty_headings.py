@@ -10,6 +10,8 @@ import unittest
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 
 def sections(body):
     return [(s.heading, s.family, s.parent, s.text) for s in core.split_issue_sections(body)]
@@ -122,6 +124,7 @@ class EmptyHeadingTests(unittest.TestCase):
                 missing.append((metadata["number"], raw[:80]))
         self.assertEqual(missing, [])
 
+    @requires_archive
     def test_real_links_under_empty_headings(self):
         corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         links = {(link["issue_number"], link["domain"]) for link in corpus["links"]}

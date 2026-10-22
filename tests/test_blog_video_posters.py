@@ -14,6 +14,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR, REPO
 
+from tests.archive import requires_archive
+
 _spec = importlib.util.spec_from_file_location(
     "test_blog_video_posters_gate", REPO / "pipeline" / "corpus" / "corpus_gate.py"
 )
@@ -104,6 +106,7 @@ class VideoPosterTests(unittest.TestCase):
             f"{core.VIDEO_NO_POSTER_CONTEXT}. Time-elapsed video of my morning drive.",
         )
 
+    @requires_archive
     def test_real_blog_posters(self):
         corpus = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
         posters = [

@@ -16,6 +16,8 @@ from pathlib import Path
 
 from librarian_core import corpus as core
 
+from tests.archive import requires_archive
+
 
 def _post(blog: Path, mid: int, url: str, published: str | None, body: str) -> None:
     path = blog / "2017" / f"{mid}.md"
@@ -111,6 +113,7 @@ class BlotPlaceholderTests(unittest.TestCase):
 
 
 class RealBlogChunkPublishedTests(unittest.TestCase):
+    @requires_archive
     def test_every_chunk_has_its_posts_published(self):
         corpus = core.build_blog_corpus()
         published = {

@@ -53,6 +53,6 @@ PODCAST_CORPUS_PATH = DATA / "librarian" / "podcast_corpus.json"
 # Things I've built - Jamie's project registry at thingelstad.xyz, which
 # publishes itself as JSON. pipeline/things/import_things.py snapshots it
 # here and the Weekly Thing corpus build turns it into undated "thing"
-# chunks (see _things_chunks in corpus.py and data/things/README.md).
+# chunks (see _things_chunks in corpus.py and pipeline/library/README.md).
 THINGS_URL = "https://thingelstad.xyz/things.json"
 THINGS_PATH = DATA / "things" / "things.json"

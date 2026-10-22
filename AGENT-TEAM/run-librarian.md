@@ -18,7 +18,7 @@ alarm and incident follow-ups are explicit starts.
 ## Every run
 
 1. Run preflight, then check the latest GitHub Actions runs with `gh run list`
-   for `deploy.yml`, `tests.yml`, and `sync-external-content.yml`. A green
+   for `deploy.yml`, `tests.yml`, and `library-round.yml`. A green
    deploy is not proof the running revision is the intended one.
    When `NativeWebEnabled=true`, read back the live and rollback endpoint
    revision weights, private IAM auth and disabled auto deployment. Follow

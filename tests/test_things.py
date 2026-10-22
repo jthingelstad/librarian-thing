@@ -9,6 +9,8 @@ from pathlib import Path
 from librarian_core import corpus
 from librarian_core.paths import THINGS_PATH
 
+from tests.archive import requires_archive
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "pipeline" / "things" / "import_things.py"
 spec = importlib.util.spec_from_file_location("pipeline_things_import", SCRIPT)
@@ -181,15 +183,18 @@ class ThingsChunksTest(unittest.TestCase):
             empty.write_text(json.dumps({"site": "x", "things": []}), encoding="utf-8")
             self.assertEqual(corpus._things_chunks(things_path=empty), [])
 
+    @requires_archive
     def test_repo_snapshot_grounds_the_weekly_thing_corpus(self):
-        # The snapshot is committed (sync workflow refreshes it) so every
-        # corpus build ships the registry. Guard against it going missing.
-        self.assertTrue(THINGS_PATH.exists(), f"missing {THINGS_PATH} (see data/things/README.md)")
+        # The library pulls the registry with everything else, so every
+        # corpus build ships it. Guard against it going missing.
+        self.assertTrue(
+            THINGS_PATH.exists(), f"missing {THINGS_PATH} (see pipeline/library/README.md)"
+        )
         chunks = corpus._things_chunks(things_path=THINGS_PATH)
         ids = {c["id"].rsplit(":", 1)[0] for c in chunks}
         self.assertIn("thing:index", ids)
         self.assertIn("thing:weekly-thing", ids)
-        self.assertIn("thing:librarian", ids)
+        self.assertIn("thing:thingy", ids)
         for chunk in chunks:
             self.assertTrue(chunk["url"].startswith("https://thingelstad.xyz/"), chunk["id"])
             self.assertIsNone(chunk["publish_date"])

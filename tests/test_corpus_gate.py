@@ -17,6 +17,8 @@ from pathlib import Path
 import yaml
 from librarian_core.paths import DATA, REPO
 
+from tests.archive import requires_archive
+
 AUDIO_URL = "https://files.thingelstad.com/weekly-thing/274/weekly-thing-274-aa.mp3"
 
 
@@ -185,21 +187,62 @@ class WorkflowTest(unittest.TestCase):
         self.steps = self.workflow["jobs"]["produce"]["steps"]
         self.names = [step.get("name", "") for step in self.steps]
 
-    def test_freshness_runs_sunday_to_thursday(self):
+    def test_the_round_starts_builds_not_a_schedule(self):
         # PyYAML reads the bare `on:` key as True.
-        crons = [entry["cron"] for entry in self.workflow[True]["schedule"]]
-        self.assertEqual(crons, ["30 12 * * 0-4"])
+        self.assertNotIn("schedule", self.workflow[True])
+        self.assertIn(
+            "library", self.workflow[True]["workflow_dispatch"]["inputs"]["scope"]["options"]
+        )
 
-    def test_freshness_decides_before_detect_changes(self):
-        fresh = self.names.index("Audio freshness (site audio editions vs the live corpus)")
-        self.assertLess(fresh, self.names.index("Detect changes"))
+    def test_the_library_is_exported_and_decides_before_detect_changes(self):
+        export = self.names.index("Export the library to data/")
+        stale = self.names.index("What the library moved past")
+        self.assertLess(export, stale)
+        self.assertLess(stale, self.names.index("Detect changes"))
+        self.assertIn("library.py stale", self.steps[stale]["run"])
+        self.assertIn("rm -rf data", self.steps[export]["run"])
+
+    def test_tests_require_the_exported_archive(self):
+        tests = self.names.index("Run Python tests")
+        self.assertLess(self.names.index("Export the library to data/"), tests)
+        self.assertEqual(self.steps[tests]["env"]["LIBRARIAN_REQUIRE_ARCHIVE"], "1")
 
     def test_archive_gate_runs_before_the_upload(self):
         archive = self.names.index("Corpus gate (archive checks on the staged candidates)")
         upload = self.names.index("Upload Weekly Thing corpus + graph to S3")
         self.assertLess(archive, upload)
         self.assertIn("corpus_gate.py gate", self.steps[archive]["run"])
+        self.assertIn("--site-archive data/weekly/archive", self.steps[archive]["run"])
         self.assertIn("blog_corpus == 'true'", self.steps[archive]["if"])
+
+
+class RoundWorkflowTest(unittest.TestCase):
+    """library-round.yml: the pulls, and the build it starts."""
+
+    def setUp(self):
+        self.workflow = yaml.safe_load(
+            (REPO / ".github" / "workflows" / "library-round.yml").read_text()
+        )
+        self.steps = self.workflow["jobs"]["round"]["steps"]
+        self.by_name = {step.get("name", ""): step for step in self.steps}
+
+    def test_a_send_pulls_weekly_and_ends_the_hold(self):
+        self.assertIn("issue-sent", self.workflow[True]["repository_dispatch"]["types"])
+        plan = self.by_name["What to pull"]
+        self.assertIn("repository_dispatch:issue-sent) only=weekly", plan["run"])
+        self.assertIn("client_payload.issue", plan["env"]["ISSUE"])
+        self.assertIn('--issue "$ISSUE"', self.by_name["What the library moved past"]["run"])
+
+    def test_it_starts_the_build_only_for_a_stale_corpus(self):
+        start = self.by_name["Start the corpus build"]
+        self.assertIn("gh workflow run deploy.yml", start["run"])
+        self.assertIn("scope=library", start["run"])
+        for output in ("weekly_corpus", "blog_corpus", "podcast_corpus"):
+            self.assertIn(f"steps.stale.outputs.{output} == 'true'", start["if"])
+
+    def test_it_never_pushes(self):
+        self.assertEqual(self.workflow["permissions"]["contents"], "read")
+        self.assertNotIn("STUDIO_PAT_TOKEN", json.dumps(self.workflow))
 
 
 class BlogDateGateTest(unittest.TestCase):
@@ -299,6 +342,7 @@ class JournalRepairTest(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 repair.confirmed_rows(path)
 
+    @requires_archive
     def test_the_reviewed_map_is_applied_to_the_canonical_archive(self):
         rows = repair.confirmed_rows(repair.MAP)
         self.assertEqual(sum(len(pairs) for pairs in rows.values()), 432)

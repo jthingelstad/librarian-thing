@@ -15,6 +15,8 @@ import unittest
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 J1 = "Jamie paragraph one."
 J2 = "Jamie closing paragraph that must survive."
 T = "Thingy says hello."
@@ -101,6 +103,7 @@ class ThingyStripTests(unittest.TestCase):
         body = f'{J1}\n\n```\n# comment\n```\n\n<div class="from-thingy">\n\n{T}\n\n</div>\n'
         self.assertEqual(strip(body).rstrip(), f"{J1}\n\n```\n# comment\n```")
 
+    @requires_archive
     def test_real_issues_lose_only_the_thingy_blocks(self):
         touched = {}
         for path in sorted(ARCHIVE_DIR.glob("*/archive.md")):

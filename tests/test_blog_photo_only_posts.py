@@ -12,6 +12,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR
 
+from tests.archive import requires_archive
+
 
 def _post(blog: Path, *, mid: int, date: str, slug: str, title: str, body: str) -> None:
     y, m, d = date.split("-")
@@ -46,6 +48,7 @@ class PhotoOnlyPostTests(unittest.TestCase):
         )
         self.assertEqual(corpus["chunks"], [])
 
+    @requires_archive
     def test_every_real_post_file_is_a_post(self):
         corpus = core.build_blog_corpus(BLOG_DIR, ARCHIVE_DIR)
         files = list(BLOG_DIR.rglob("*.md"))

@@ -1,14 +1,16 @@
 # Project Alignment
 
-This repository is the **Librarian**: the canonical archives of Jamie's
-publishing, the corpora built from them, and the API that answers questions
+This repository is the **Librarian**: the library (its copy of Jamie's
+publishing), the corpora built from it, and the API that answers questions
 from them. It is deliberately not a publishing system anymore.
 
 ## North Star
 
 **The Librarian keeps the archive true and answerable.**
 
-- Canonical issue, blog, and podcast content lives here.
+- The sources keep the content and its history (weekly.thingelstad.com for
+  issues, micro.blog for the blog); the library holds the Librarian's copy
+  and what it makes, in `library.db` in S3, not git.
 - The corpus builds and the `/retrieve` contract are the product.
 - Publishing belongs to WT Builder; rendering belongs to the surfaces.
 - Nothing here writes to a reader.
@@ -17,8 +19,8 @@ from them. It is deliberately not a publishing system anymore.
 
 | Repo / host | Role |
 |---|---|
-| **librarian-thing** | Canonical archives, corpus builds, Librarian API |
-| **wt-builder** | Authors and publishes each issue; commits issue text into `data/issues/` after publication |
+| **librarian-thing** | The library, corpus builds, Librarian API |
+| **wt-builder** | Authors and publishes each issue; its send nudges the library round to pull it from weekly |
 | **weekly.thingelstad.com** | Public newsletter render/deploy surface |
 | **another.thingelstad.com** | Podcast publish surface; episodes are ingested here |
 | **thingy.thingelstad.com** | Query surface — live client of the Librarian API (S3/CloudFront, same-origin `/api/*`, cookie sessions; registers WebMCP page tools via `/tools`) |
@@ -28,12 +30,14 @@ is the archive, the corpus, or the retrieval path, it lives here.
 
 ## Content flow
 
-1. WT Builder publishes an issue, then commits its canonical text into
-   `data/issues/{N}/`.
-2. The sync workflow pulls blog posts from Micro.blog and podcast episodes
-   from `another.thingelstad.com` into `data/`.
-3. Any `data/` change rebuilds the affected corpora, embeds them, uploads to
-   S3, and hands the topic graph to `weekly.thingelstad.com`.
+1. WT Builder publishes an issue to weekly.thingelstad.com, then nudges the
+   library round (`repository_dispatch` `issue-sent`).
+2. The library round pulls weekly's issue pages, micro.blog, the podcast and
+   Things I've built into `library.db` (daily, and when a source publishes).
+3. When the library moves past what a corpus was built from, the production
+   workflow rebuilds that corpus, embeds it, uploads to S3, and hands the
+   topic graph to `weekly.thingelstad.com`. Friday and Saturday it waits for
+   the send.
 4. Thingy chat answers from the deployed corpus through the Librarian's
    agent loop; WT Builder retrieves through the versioned `/retrieve`
    contract; MCP clients (Claude, ChatGPT, Codex) use the same tool

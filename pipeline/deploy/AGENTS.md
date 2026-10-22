@@ -44,7 +44,7 @@ The `--skip-corpus-upload` flag is the default for any **code-only** change (Lam
 - The embed model has changed (Cohere v3 → v4, hypothetically)
 - The corpus schema has changed (e.g., new chunk metadata field)
 
-CI in `.github/workflows/deploy.yml` uploads all three corpus artifacts when production runs. External content first enters Studio through `.github/workflows/sync-external-content.yml`, which commits changes under `data/blog/**` and `data/podcast/**`; those commits then trigger production. Manual deploys are for local validation before commit.
+CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds and uploads the corpora the library or the code moved past. Content enters the library through the library round (`.github/workflows/library-round.yml`, and the Library Agent on the Mac), which starts `deploy.yml` when a corpus is stale (`pipeline/library/README.md`). Manual deploys are for local validation before commit.
 
 ## `aws.py` flow
 

@@ -1,49 +1,41 @@
 name: Librarian — Corpus & API
 
 # This repo owns the corpus the Librarian API answers from, and the API
-# itself. On a push that touches canonical data or the pipeline, it rebuilds
-# the affected corpora, uploads the embedded artifacts to S3, redeploys the
-# Lambda when its code changed, and hands the topic graph to
-# weekly.thingelstad.com — the one cross-repo push left here. Publishing is
-# WT Builder's job; issue text arrives in data/issues/ as commits from it.
+# itself. The archive is the library (library.db in S3), not git: every run
+# exports it to data/ first. It rebuilds the corpora the library or the code
+# has moved past, uploads the embedded artifacts to S3, redeploys the Lambda,
+# and hands the topic graph to weekly.thingelstad.com, the one cross-repo
+# push left here. Publishing is WT Builder's job.
 #
-# A schedule pulls the audio editions in: WT Builder and the back-catalogue
-# job write them to the site's issue pages, not here, so each morning the
-# freshness check compares the site with the live corpus and rebuilds the
-# Weekly Thing corpus only when they differ (pipeline/corpus/corpus_gate.py).
-# An audio pointer changes no chunk text, so every embedding comes from the
-# cache. Sunday to Thursday only: a send rebuilds the corpus on its own, and
-# nothing automatic changes the corpus from Friday until the issue is sent.
+# What starts a build: a push to the pipeline or the API, and the library
+# round (library-round.yml, or the Library Agent on the Mac) when its pull
+# moved the library past what the corpus was built from. Each corpus records
+# the library fingerprint it was built from; `library.py stale` compares.
+# From Friday until the issue is sent (Friday and Saturday, US Central)
+# nothing automatic changes the corpus: the round still updates the library
+# and the build waits, until WT Builder's send names the issue.
 
 on:
   push:
     branches: [main]
     paths:
-      - 'data/issues/**'
-      - 'data/blog/**'
-      - 'data/podcast/**'
-      - 'data/things/**'
-      # The vision-description sidecar rebuilds both corpora (change
-      # detection below); without it here a sidecar-only commit ran nothing.
-      - 'data/librarian/media-descriptions.json'
-      # Blog abstracts (display metadata on blog post records) rebuild the
-      # blog corpus, like the description sidecar.
-      - 'data/librarian/blog-abstracts.json'
       - 'pipeline/**'
       - 'librarian-core/**'
       - 'apps/librarian/**'
       - '.github/workflows/deploy.yml'
       - 'pyproject.toml'
       - 'uv.lock'
-  schedule:
-    - cron: '30 12 * * 0-4'  # 07:30 CDT / 06:30 CST, after the 02:15 back-catalogue run
   workflow_dispatch:
     inputs:
       scope:
-        description: 'Code deploy, or full corpus rebuild and code deploy'
+        description: 'code: deploy the API. library: build what the library moved past. full: rebuild every corpus.'
         type: choice
-        options: [code, full]
+        options: [code, library, full]
         default: code
+      issue:
+        description: 'The issue a send just published (ends the Friday and Saturday hold)'
+        type: string
+        default: ''
       push_graph:
         description: 'Commit data/librarian/graph.json to the website repo'
         type: boolean
@@ -100,20 +92,37 @@ jobs:
       - name: Lint
         run: uv run --locked ruff check .
 
-      - name: Check out weekly site archive pages for the audio check (read-only)
-        if: github.event_name == 'schedule'
-        uses: actions/checkout@v7
-        with:
-          repository: jthingelstad/weekly.thingelstad.com
-          persist-credentials: false
-          path: .weekly-site
-          sparse-checkout: apps/site/archive
-
-      - name: Audio freshness (site audio editions vs the live corpus)
-        id: audio
-        if: github.event_name == 'schedule'
-        run: uv run --locked python pipeline/corpus/corpus_gate.py freshness --site-archive .weekly-site/apps/site/archive --from-s3
+      # Every build and test reads data/, the library's export: the weekly
+      # site's archive pages (audio pointers included) and site pages, the
+      # blog, the podcast, the things registry and the Librarian's sidecars.
+      - name: Export the library to data/
+        run: |
+          # git holds no data/ since 2026-10-22; a commit into it (WT
+          # Builder's archive leg before its nudge PR) is replaced here.
+          if [[ -n "$(git ls-files data | head -n 1)" ]]; then
+            echo "::warning title=data/ in git::git tracks files under data/ again; the library export replaces them"
+          fi
+          rm -rf data
+          uv run --locked python pipeline/library/library.py download
+          uv run --locked python pipeline/library/library.py export
         env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      # Which corpora were built from an older library than this one. On a
+      # held day every answer is no, unless a send named its issue.
+      - name: What the library moved past
+        id: library
+        if: github.event_name == 'push' || inputs.scope == 'library'
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ -n "$ISSUE" ]]; then
+            [[ "$ISSUE" =~ ^[0-9]+$ ]] || { echo "::error::issue must be a number, got '$ISSUE'"; exit 1; }
+            args=(--issue "$ISSUE")
+          fi
+          uv run --locked python pipeline/library/library.py stale "${args[@]}"
+        env:
+          ISSUE: ${{ inputs.issue }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Detect changes
@@ -121,19 +130,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            stale="${{ steps.audio.outputs.stale }}"
-            [[ "$stale" == "true" ]] || stale=false
-            {
-              echo "weekly_corpus=$stale"
-              echo "blog_corpus=false"
-              echo "podcast_corpus=false"
-              echo "lambda=$stale"
-            } >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.scope }}" != "library" ]]; then
             corpus=false
             if [[ "${{ inputs.scope }}" == "full" ]]; then corpus=true; fi
             {
@@ -145,15 +142,24 @@ jobs:
             exit 0
           fi
 
-          base="${{ github.event.before }}"
-          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
-            base="HEAD~1"
+          # The library's answer, then (on a push) the code's.
+          weekly_corpus="${{ steps.library.outputs.weekly_corpus }}"
+          blog_corpus="${{ steps.library.outputs.blog_corpus }}"
+          podcast_corpus="${{ steps.library.outputs.podcast_corpus }}"
+          lambda=false
+
+          changed=""
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            base="${{ github.event.before }}"
+            if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+              base="HEAD~1"
+            fi
+            if ! changed="$(git diff --name-only "$base" HEAD)"; then
+              echo "Could not diff against $base; falling back to HEAD commit files."
+              changed="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+            fi
+            printf '%s\n' "$changed"
           fi
-          if ! changed="$(git diff --name-only "$base" HEAD)"; then
-            echo "Could not diff against $base; falling back to HEAD commit files."
-            changed="$(git diff-tree --no-commit-id --name-only -r HEAD)"
-          fi
-          printf '%s\n' "$changed"
 
           has_change() {
             local pattern
@@ -165,14 +171,7 @@ jobs:
             return 1
           }
 
-          # data/blog/ too: the Weekly Thing build ties each Journal copy to
-          # its blog post, and a new issue's posts often sync after it ships.
-          weekly_corpus=false
           if has_change \
-            '^data/issues/' \
-            '^data/blog/' \
-            '^data/things/' \
-            '^data/librarian/media-descriptions\.json$' \
             '^pipeline/corpus/build\.py$' \
             '^pipeline/corpus/describe_media\.py$' \
             '^pipeline/deploy/upload_corpus\.py$' \
@@ -182,24 +181,14 @@ jobs:
             weekly_corpus=true
           fi
 
-          # data/issues/ too: each post's also_in_issues and linked_from_issues
-          # come from the issues, and the gate checks them against the new
-          # Weekly Thing corpus.
-          blog_corpus=false
           if has_change \
-            '^data/issues/' \
-            '^data/blog/' \
-            '^data/librarian/media-descriptions\.json$' \
-            '^data/librarian/blog-abstracts\.json$' \
             '^pipeline/blog/' \
             '^pipeline/deploy/upload_blog_corpus\.py$' \
             '^librarian-core/'; then
             blog_corpus=true
           fi
 
-          podcast_corpus=false
           if has_change \
-            '^data/podcast/' \
             '^pipeline/podcast/' \
             '^pipeline/corpus/build_podcast\.py$' \
             '^pipeline/deploy/upload_podcast_corpus\.py$' \
@@ -207,7 +196,6 @@ jobs:
             podcast_corpus=true
           fi
 
-          lambda=false
           if has_change \
             '^apps/librarian/' \
             '^pipeline/deploy/aws\.py$' \
@@ -233,8 +221,11 @@ jobs:
             echo "lambda=$lambda"
           } >> "$GITHUB_OUTPUT"
 
+      # The real-archive tests skip without an export; here one is required.
       - name: Run Python tests
         run: uv run --locked pytest tests/ -q
+        env:
+          LIBRARIAN_REQUIRE_ARCHIVE: '1'
 
       - name: Run Lambda tests
         run: npm --prefix apps/librarian/lambda run verify
@@ -249,26 +240,12 @@ jobs:
           # gate below checks the baseline against the candidates instead.
           EVAL_SKIP_BASELINE: ${{ (steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true') && '1' || '0' }}
 
-      # Audio pointers on issue records (librarian_core.audio): the audio
-      # edition's record lives only in the site's archive page frontmatter.
-      # A read of a sibling repo, not a push: the site repo is public, so no
-      # PAT, and only the archive pages are checked out. Never a blocker -
-      # without it the issues ship without audio.
-      - name: Check out weekly site archive pages (read-only)
-        if: steps.changes.outputs.weekly_corpus == 'true'
-        continue-on-error: true
-        uses: actions/checkout@v7
-        with:
-          repository: jthingelstad/weekly.thingelstad.com
-          persist-credentials: false
-          path: .weekly-site
-          sparse-checkout: apps/site/archive
-
+      # Audio pointers on issue records (librarian_core.audio) come from the
+      # weekly site's archive pages, which the library carries in
+      # data/weekly/archive.
       - name: Build Weekly Thing corpus
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build.py
-        env:
-          WEEKLY_SITE_ARCHIVE_DIR: .weekly-site/apps/site/archive
 
       - name: Build podcast corpus
         if: steps.changes.outputs.podcast_corpus == 'true'
@@ -284,7 +261,6 @@ jobs:
         run: uv run --locked python pipeline/deploy/upload_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
-          WEEKLY_SITE_ARCHIVE_DIR: .weekly-site/apps/site/archive
 
       - name: Embed blog corpus (candidate)
         if: steps.changes.outputs.blog_corpus == 'true'
@@ -311,14 +287,14 @@ jobs:
           EVAL_CORPUS_FALLBACK: s3
 
       # Journal copies unmatched at or under the post-repair ceiling, and every
-      # site audio edition on its issue: a failed site checkout fails here
-      # instead of shipping a corpus with no audio pointers. A staged blog
+      # site audio edition on its issue: an export without the weekly pages
+      # fails here instead of shipping a corpus with no audio pointers. A staged blog
       # candidate files every post by its Chicago day, and the ingest checks
       # (corpus_gate.ingest_failures) read it too, so this runs for a
       # blog-only rebuild as well.
       - name: Corpus gate (archive checks on the staged candidates)
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true'
-        run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive .weekly-site/apps/site/archive
+        run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive data/weekly/archive
 
       - name: Upload Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'
@@ -351,15 +327,11 @@ jobs:
       # Everything else the old site handoff shipped is WT Builder's to send.
       # --from-s3 pushes the graph the WT upload built from the embedded
       # corpus (the one the Librarian serves), so the site gets real
-      # similar_issues; a graph built here, before embedding, had none.
+      # similar_issues; a graph built here, before embedding, had none. An
+      # unchanged graph pushes nothing.
       - name: Hand off graph.json to the website repo
         if: steps.changes.outputs.weekly_corpus == 'true' || inputs.push_graph == true
-        run: |
-          if [[ "${{ github.event_name }}" == "push" || "${{ inputs.push_graph }}" == "true" ]]; then
-            uv run --locked python pipeline/deploy/push_graph.py --from-s3 --push
-          else
-            uv run --locked python pipeline/deploy/push_graph.py --from-s3
-          fi
+        run: uv run --locked python pipeline/deploy/push_graph.py --from-s3 --push
         env:
           GITHUB_PAT_TOKEN: ${{ secrets.STUDIO_PAT_TOKEN }}
           GITHUB_REPO_NWO: jthingelstad/weekly.thingelstad.com

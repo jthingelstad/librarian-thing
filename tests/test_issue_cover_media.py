@@ -16,6 +16,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR
 
+from tests.archive import requires_archive
+
 PLACEHOLDER = "https://buttondown-attachments.s3.us-west-2.amazonaws.com/cb69.jpg"
 
 
@@ -56,6 +58,7 @@ class IssueCoverTests(unittest.TestCase):
         self.assertEqual(media[0][2], "Cover image")
         self.assertNotEqual(media[1][2], "Cover image")
 
+    @requires_archive
     def test_real_archive_covers(self):
         corpus = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         covers = {

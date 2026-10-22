@@ -15,6 +15,8 @@ from pathlib import Path
 from librarian_core import corpus as core
 from librarian_core.paths import ARCHIVE_DIR, BLOG_DIR
 
+from tests.archive import requires_archive
+
 
 def _post(blog: Path, mid: int, url: str, published: str, body: str, title: str = "") -> None:
     path = blog / published[:4] / f"{mid}.md"
@@ -388,6 +390,7 @@ class JournalReferenceTests(unittest.TestCase):
 
 
 class RealJournalCopyTests(unittest.TestCase):
+    @requires_archive
     def test_real_archive(self):
         wt = core.build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
         stats = wt["journal_copy_stats"]
