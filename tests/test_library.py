@@ -2,6 +2,7 @@
 the conditional upload that keeps a second writer from overwriting."""
 
 import importlib.util
+import io
 import json
 import sys
 import tempfile
@@ -9,6 +10,7 @@ import unittest
 from pathlib import Path
 
 import boto3
+from botocore.response import StreamingBody
 from botocore.stub import ANY, Stubber
 from librarian_core.library import (
     LibraryError,
@@ -354,6 +356,27 @@ class ConditionalUploadTests(unittest.TestCase):
         self._expect_put({"IfMatch": '"old"'}, error="PreconditionFailed")
         with self.stub, self.assertRaises(store.LibraryConflict):
             store.upload(self.db, '"old"', client=self.client)
+
+    def test_download_writes_the_copy_and_returns_its_etag(self):
+        data = b"SQLite format 3\x00" + bytes(3 << 20)
+        self.stub.add_response(
+            "get_object",
+            {"Body": StreamingBody(io.BytesIO(data), len(data)), "ETag": '"cur"'},
+            {"Bucket": store.DEFAULT_BUCKET, "Key": store.KEY},
+        )
+        dest = Path(self._tmp.name) / "copy" / "library.db"
+        with self.stub:
+            self.assertEqual(store.download(dest, client=self.client), '"cur"')
+        self.assertEqual(dest.read_bytes(), data)
+        self.assertFalse(dest.with_name("library.db.part").exists())
+
+    def test_download_with_no_library_yet_leaves_the_file_alone(self):
+        self.stub.add_client_error(
+            "get_object", service_error_code="NoSuchKey", http_status_code=404
+        )
+        with self.stub:
+            self.assertIsNone(store.download(self.db, client=self.client))
+        self.assertEqual(self.db.read_bytes(), b"SQLite format 3\x00")
 
 
 def _load(name: str, path: Path):

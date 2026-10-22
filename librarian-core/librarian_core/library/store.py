@@ -39,9 +39,15 @@ def download(dest: str | Path, *, client=None, key: str = KEY) -> str | None:
         return None
     dest.parent.mkdir(parents=True, exist_ok=True)
     partial = dest.with_name(dest.name + ".part")
-    with response["Body"] as body, partial.open("wb") as out:
-        for chunk in body.iter_chunks(1 << 20):
-            out.write(chunk)
+    # StreamingBody's context manager yields the raw urllib3 stream, which
+    # has no iter_chunks, so close it by hand.
+    body = response["Body"]
+    try:
+        with partial.open("wb") as out:
+            for chunk in body.iter_chunks(1 << 20):
+                out.write(chunk)
+    finally:
+        body.close()
     partial.replace(dest)
     return response["ETag"]
 
