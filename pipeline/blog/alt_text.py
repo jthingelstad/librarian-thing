@@ -65,6 +65,9 @@ _run_purpose = "general"
 # seeded from the on-disk log by begin_run(dead_url_log=...).
 _dead_urls: set[str] = set()
 _dead_url_log: Optional[str] = None
+# Tokens the vision calls used since begin_run(), so a caller can price the
+# run (the blog round reports it).
+_spent: dict[str, int] = {}
 
 _PROMPT_BASE = (
     "Generate alt text for the attached image, for a screen-reader user "
@@ -113,6 +116,7 @@ def begin_run(purpose: str = "general", dead_url_log: Optional[str] = None) -> N
     _calls_remaining = _cap()
     _run_purpose = purpose
     _dead_url_log = dead_url_log
+    _spent.clear()
     if dead_url_log:
         _load_dead_urls(dead_url_log)
 
@@ -148,6 +152,16 @@ def _record_dead_url(url: str) -> None:
 
 def calls_remaining() -> int:
     return _calls_remaining
+
+
+def known_dead(url: str) -> bool:
+    """True when ``url`` answered 404/410 this run or is in the dead-url log."""
+    return url in _dead_urls
+
+
+def spent() -> dict[str, int]:
+    """Input, output and cache tokens the vision calls used since begin_run()."""
+    return dict(_spent)
 
 
 def _sniff_image_type(head: bytes) -> Optional[str]:
@@ -348,9 +362,24 @@ def _generate_via_vision(*, image_url: str, context: str, caption: Optional[str]
                 context=context,
                 caption=caption,
             ),
+            # Sonnet 5.5 thinks by default, and thinking counts against
+            # max_tokens; between_tools is its thinking-off setting.
+            thinking={"type": "between_tools"},
+            output_config={"effort": "low"},
         )
     except Exception as exc:  # noqa: BLE001
         logger.warning("alt_text: vision call failed for %s: %s", image_url, exc)
+        return ""
+    usage = getattr(resp, "usage", None)
+    for key, field in (
+        ("input_tokens", "input_tokens"),
+        ("output_tokens", "output_tokens"),
+        ("cache_read_tokens", "cache_read_input_tokens"),
+        ("cache_create_tokens", "cache_creation_input_tokens"),
+    ):
+        _spent[key] = _spent.get(key, 0) + (getattr(usage, field, 0) or 0)
+    if resp.stop_reason == "refusal":
+        logger.warning("alt_text: the model declined %s", image_url)
         return ""
     text = "".join(b.text for b in resp.content if getattr(b, "type", None) == "text")
     cleaned = _clean_alt(text)

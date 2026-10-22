@@ -110,6 +110,13 @@ CREATE TABLE IF NOT EXISTS events (
   dry_run INTEGER NOT NULL DEFAULT 0,
   result TEXT
 );
+-- Made: images the blog round leaves without alt, and why (gone from
+-- micro.blog, or left on purpose); it never drafts alt for one of these.
+CREATE TABLE IF NOT EXISTS alt_skips (
+  url TEXT PRIMARY KEY,
+  reason TEXT NOT NULL,
+  noted_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS suggestions (
   id INTEGER PRIMARY KEY,
   opened_at TEXT NOT NULL,
@@ -238,6 +245,7 @@ def counts(conn: sqlite3.Connection) -> dict[str, int]:
         "labels",
         "filings",
         "events",
+        "alt_skips",
         "reader_days",
         "kudos",
     ):

@@ -1,4 +1,4 @@
-.PHONY: build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
+.PHONY: blog-round build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
 
 PYTHON ?= uv run --locked python
 
@@ -41,6 +41,11 @@ librarian-deploy:
 
 librarian-deploy-full:
 	gh workflow run deploy.yml --ref main -f scope=full
+
+# The Library Agent's blog round: propose categories, alt and Featured
+# candidates (a dry run); ARGS="--recheck 10" or ARGS="--write <file>".
+blog-round:
+	$(PYTHON) pipeline/blog/round/blog_round.py $(ARGS)
 
 # Build every generated Librarian artifact.
 build:

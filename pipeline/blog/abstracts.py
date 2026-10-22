@@ -66,6 +66,10 @@ MODEL = anthropic_client.MODELS["sonnet"]
 RATE_MODEL = MODEL
 BATCH_DISCOUNT = 0.5
 MAX_TOKENS = 300
+# Sonnet 5.5 thinks by default, and thinking counts against MAX_TOKENS:
+# between_tools is its thinking-off setting (low effort), so the whole
+# budget is the abstract.
+THINKING_OFF = {"thinking": {"type": "between_tools"}, "output_config": {"effort": "low"}}
 # More pending posts than this go through the Batches API; a normal week's
 # handful is quicker as direct calls.
 DIRECT_MAX = 25
@@ -220,6 +224,7 @@ def request_params(post: dict[str, Any]) -> dict[str, Any]:
         "max_tokens": MAX_TOKENS,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user_message(post)}],
+        **THINKING_OFF,
     }
 
 
@@ -294,6 +299,7 @@ def repair_pronouns(
                 max_tokens=MAX_TOKENS,
                 system=PRONOUN_PROMPT,
                 messages=[{"role": "user", "content": content}],
+                **THINKING_OFF,
             )
         except anthropic.RateLimitError, anthropic.APIStatusError, anthropic.APIConnectionError:
             print(f"  pronoun repair failed: {key} (next run retries)")
