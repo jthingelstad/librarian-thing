@@ -160,5 +160,40 @@ class WeeklyThingUploadMediaDescriptionTests(unittest.TestCase):
             put.assert_not_called()
 
 
+class EmbeddingCacheTests(unittest.TestCase):
+    """A cached vector is reused only for the same id AND the same embed
+    input: a site page's or a thing's chunk keeps its id when its text
+    changes, and matching on id alone served the old vector."""
+
+    def _corpus(self, text: str, embedding=None) -> dict:
+        chunk = {
+            "id": "site:about:0",
+            "issue_number": 0,
+            "subject": "About",
+            "section": "About",
+            "text": text,
+        }
+        if embedding:
+            chunk["embedding"] = embedding
+        return {
+            "embedding_model": "m",
+            "embedding_dimensions": 2,
+            "embed_recipe": upload.EMBED_RECIPE_VERSION,
+            "chunks": [chunk],
+        }
+
+    def test_unchanged_input_reuses_the_vector(self):
+        cache = upload.build_chunk_cache(self._corpus("Hello.", [0.1, 0.2]), "m", 2)
+        corpus = self._corpus("Hello.")
+        self.assertEqual(upload.merge_cached_embeddings(corpus, cache), 1)
+        self.assertEqual(corpus["chunks"][0]["embedding"], [0.1, 0.2])
+
+    def test_changed_text_under_the_same_id_is_embedded_again(self):
+        cache = upload.build_chunk_cache(self._corpus("Hello.", [0.1, 0.2]), "m", 2)
+        corpus = self._corpus("Hello, again.")
+        self.assertEqual(upload.merge_cached_embeddings(corpus, cache), 0)
+        self.assertNotIn("embedding", corpus["chunks"][0])
+
+
 if __name__ == "__main__":
     unittest.main()

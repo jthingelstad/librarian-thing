@@ -22,6 +22,7 @@ from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
     DEFAULT_EMBEDDING_MODEL,
     EMBED_RECIPE_VERSION,
+    _embed_input,
     add_bedrock_embeddings,
     annotate_media_descriptions,
     build_corpus,
@@ -127,8 +128,11 @@ def fetch_existing_corpus(bucket: str, key: str) -> dict | None:
     return corpus
 
 
-def build_chunk_cache(old_corpus: dict, model: str, dimensions: int) -> dict[str, list[float]]:
-    """Build a {chunk_id: embedding} map from the previously-deployed corpus.
+def build_chunk_cache(
+    old_corpus: dict, model: str, dimensions: int
+) -> dict[str, tuple[str, list[float]]]:
+    """Build a {chunk_id: (embed input, embedding)} map from the
+    previously-deployed corpus.
 
     Returns an empty dict when the cached corpus's embedding model or
     dimensions don't match the requested ones — that forces a full re-embed
@@ -150,30 +154,41 @@ def build_chunk_cache(old_corpus: dict, model: str, dimensions: int) -> dict[str
         )
         return {}
     return {
-        chunk["id"]: chunk["embedding"]
+        chunk["id"]: (_embed_input(chunk), chunk["embedding"])
         for chunk in old_corpus.get("chunks", [])
         if chunk.get("id") and chunk.get("embedding")
     }
 
 
-def merge_cached_embeddings(corpus: dict, cache: dict[str, list[float]]) -> int:
-    """Attach cached embeddings to chunks whose chunk_id is in the cache.
+def merge_cached_embeddings(corpus: dict, cache: dict[str, tuple[str, list[float]]]) -> int:
+    """Attach cached embeddings to chunks whose chunk_id is in the cache and
+    whose embed input is unchanged.
 
-    Returns the number of embeddings reused. Chunks already carrying an
-    embedding are left alone (idempotent).
+    Most chunk ids hash their text, but a site page's, a thing's and the
+    index's are fixed, and the header (subject, issue summary) is not in any
+    id: matching on id alone kept the old vector when those changed. Returns
+    the number of embeddings reused. Chunks already carrying an embedding are
+    left alone (idempotent).
     """
     if not cache:
         return 0
-    reused = 0
+    reused = stale = 0
     for chunk in corpus.get("chunks", []):
         if chunk.get("embedding"):
             continue
         cached = cache.get(chunk.get("id"))
-        if cached:
-            chunk["embedding"] = cached
-            reused += 1
+        if not cached:
+            continue
+        if cached[0] != _embed_input(chunk):
+            stale += 1
+            continue
+        chunk["embedding"] = cached[1]
+        reused += 1
     total = len(corpus.get("chunks", []))
-    print(f"Reused {reused} of {total} chunk embeddings (incremental refresh)")
+    print(
+        f"Reused {reused} of {total} chunk embeddings (incremental refresh); "
+        f"{stale} re-embedded because their input changed under the same id"
+    )
     return reused
 
 
