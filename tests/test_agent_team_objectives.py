@@ -31,18 +31,18 @@ def test_registry_has_three_active_objective_owners():
     assert plan["repo"] == "."
     assert plan["timezone"] == "America/Chicago"
     assert len(entries) == 3
-    assert {entry["objective"] for entry in entries} == {"run", "archive", "improve"}
+    assert {entry["objective"] for entry in entries} == {"run", "library", "improve"}
     assert all(entry["status"] == "ACTIVE" for entry in entries)
     assert all(entry["execution_environment"] == "local" for entry in entries)
     assert all((ROOT / entry["objective_file"]).is_file() for entry in entries)
     assert {entry["id"] for entry in entries} == {
         "run-the-librarian",
-        "keep-the-archive-true",
+        "library-agent",
         "improve-thingy",
     }
     assert {entry["objective"]: entry["rrule"] for entry in entries} == {
         "run": "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=15",
-        "archive": "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=0",
+        "library": "RRULE:FREQ=DAILY;BYHOUR=5;BYMINUTE=0",
         "improve": "RRULE:FREQ=DAILY;BYHOUR=6;BYMINUTE=0",
     }
 
@@ -101,7 +101,7 @@ def test_checkout_lease_is_atomic_and_release_is_fail_closed(tmp_path: Path, mon
     assert "holder_pid" not in claimed
     assert lease_path.stat().st_mode & 0o777 == 0o600
     with pytest.raises(SystemExit, match="already held"):
-        objective_lease.claim("archive")
+        objective_lease.claim("library")
     checkout["dirty"] = True
     with pytest.raises(SystemExit, match="dirty"):
         objective_lease.release("run", "lease-1")
@@ -165,7 +165,7 @@ def test_stale_clear_requires_durable_proof_or_explicit_manual_clear(tmp_path: P
     monkeypatch.setattr(objective_lease.socket, "gethostname", lambda: "test-host")
     monkeypatch.setattr(objective_lease, "git", lambda *args: "" if args[0] == "status" else "abc")
     objective_lease.claim(
-        "archive",
+        "library",
         current_time=datetime(2026, 8, 29, 0, 0, tzinfo=timezone.utc),
         holder_id="thread-3",
         hostname="test-host",

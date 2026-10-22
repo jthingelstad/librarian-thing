@@ -91,7 +91,9 @@ read).
 - evergreen: true when it reads as well years later; false when it is tied \
 to its moment.
 
-Then file it, using only the categories listed below:
+Then file it, using only the categories listed below. Two more exist and \
+are not yours, so they are not listed: Weekly Thing, which the newsletter's \
+own tool puts on its posts, and Featured. Never pick or suggest either.
 - trip: the trip it belongs to, when it is part of one listed (its dates \
 and the posts around it tell you). Otherwise "".
 - new_trip: when it is plainly part of a trip, vacation, conference or event \

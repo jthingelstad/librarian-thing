@@ -411,6 +411,19 @@ class DryRoundTests(Library):
         self.assertEqual([row["source_id"] for row in work.made.labels], ["blog-200"])
         self.assertFalse([e for e in work.made.events if e["target"] == "blog-300"])
 
+    def test_a_missing_category_the_catalog_has_is_dropped(self):
+        def labeller(catalog, source_id):
+            return _filing(source_id, ["Coffee"], missing="Weekly Thing")
+
+        _work, result = blog_round.run_round(
+            self.conn,
+            micropub=self.micropub,
+            labeller=labeller,
+            alt_writer=self.alt_writer,
+            today=TODAY,
+        )
+        self.assertEqual(result["categories"][0]["missing"], "")
+
     def test_featured_candidates_are_a_week_old_titled_posts(self):
         _work, result = self.round()
         [candidate] = result["featured"]

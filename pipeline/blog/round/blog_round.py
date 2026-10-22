@@ -209,6 +209,8 @@ class Round:
                     self._proposal(post, None, check, f"the labeller stopped ({result.stop})")
                 )
                 continue
+            if result.missing and guards.twin_of(result.missing, self.catalog.name_list()):
+                result.missing = ""  # a category the catalog already has
             if not check:
                 self.made.labels.append(self._label(result))
             target = guards.target_categories(live["categories"], result.picks, self.catalog.kinds)

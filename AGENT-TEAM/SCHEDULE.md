@@ -12,5 +12,5 @@ Event follow-ups are explicit starts. Due subtasks use completion receipts.
 | Activity | Status | Schedule | Primary owner |
 |---|---|---|---|
 | Run the Librarian | ACTIVE | Daily at 05:15 | `run-the-librarian` |
-| Keep the Archive True | ACTIVE | Full objective every 3 days from 2026-09-10; wake: Daily at 05:00. Prompt date guard skips other dates | `keep-the-archive-true` |
+| Library Agent | ACTIVE | Daily at 05:00 | `library-agent` |
 | Improve Thingy | ACTIVE | Full objective every 3 days from 2026-09-10; wake: Daily at 06:00. Prompt date guard skips other dates | `improve-thingy` |

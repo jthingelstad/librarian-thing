@@ -48,34 +48,14 @@ alarm and incident follow-ups are explicit starts.
    specific `quota#`/`rate#` rows only when investigating a concrete symptom.
 7. Keep Bedrock spend in view: embed, rerank, and the three chat models. A
    lower bill wins only when it preserves answer quality.
-8. Describe the week's new photos so `media_search` and `view_photo` see them.
-   `uv run --locked python pipeline/corpus/describe_media.py --dry-run` counts
-   the Weekly Thing and blog images missing from
-   `data/librarian/media-descriptions.json`; a normal week is a few dozen. Run
-   it again without `--dry-run` (Claude Haiku vision, cents; the script reads
-   its Anthropic key from the local `.env` itself, so never print or source
-   it). A count in the hundreds means something else changed: stop and find
-   out why first. Commit the sidecar; a push of it alone starts `deploy.yml`,
-   which rebuilds both the WT and blog corpora with the new descriptions. A URL that
-   fails is recorded with an `error` and never retried; delete its entry to
-   retry. This is not a CI step because it would need a new GitHub secret.
-
-   In the same pass, `uv run --locked python pipeline/blog/abstracts.py` (try
-   `--dry-run` first) writes abstracts for new or edited titled blog posts
-   into `data/librarian/blog-abstracts.json`; a normal week is a handful and
-   costs cents, so a count in the hundreds means stop and find out why.
-   The same run rewrites any pronoun the model gave Jamie ("his wife Tammy")
-   out of new abstracts; it prints how many it checked and how many are left
-   for the next run. Commit that sidecar too; it rebuilds the blog corpus the
-   same way.
-9. Commit and push the verified change, then wait for the automatic GitHub OIDC
+8. Commit and push the verified change, then wait for the automatic GitHub OIDC
    deployment and inspect its result. For a manual retry of committed `main`,
    `make librarian-deploy ARGS="--skip-corpus-upload"` launches the same workflow
    and prints its run URL; wait for that run before reporting acceptance. It
    does not deploy uncommitted local files or need a local AWS session.
    A full corpus upload is slow and paid; it happens only when
-   an artifact is genuinely stale, and staleness belongs to Keep the Archive
-   True.
+   an artifact is genuinely stale, and staleness belongs to the Library Agent,
+   which also describes new photos and writes the blog abstracts.
 
 ## Success
 

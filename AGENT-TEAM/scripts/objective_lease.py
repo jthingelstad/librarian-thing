@@ -21,7 +21,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 LEASE_PATH = REPO / ".git" / "agent-team-lease.json"
-OBJECTIVES = ("archive", "improve", "run")
+OBJECTIVES = ("improve", "library", "run")
 LEGACY_HOLDER_ID = "legacy-unidentified"
 
 

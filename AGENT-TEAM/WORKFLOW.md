@@ -18,7 +18,7 @@ the Lambda stack is in scope, and `ALIGNMENT.md` when a question crosses repos.
 3. Decide whether a real objective gap exists. A healthy no-op is a complete,
    successful run.
 4. Only when a safe, authorized gap requires mutation, claim the checkout with
-   `python3 AGENT-TEAM/scripts/objective_lease.py claim <run|archive|improve>`.
+   `python3 AGENT-TEAM/scripts/objective_lease.py claim <run|library|improve>`.
    Retain the returned `lease_id`; a held lease leaves the run read-only, and
    never clear one merely because it looks old. A normal claim records the
    Codex thread as its holder, not the short-lived claim subprocess.

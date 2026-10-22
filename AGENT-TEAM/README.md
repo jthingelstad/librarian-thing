@@ -12,7 +12,7 @@ outcomes these three already own.
 | Objective | File | Primary question |
 |---|---|---|
 | **Run the Librarian** | `run-librarian.md` | Is the Librarian API, MCP surface, and deploy pipeline healthy, observable, secure enough, and inexpensive? |
-| **Keep the Archive True** | `keep-archive-true.md` | Are the archive data, corpus builds, and graph artifacts current, complete, and correct? |
+| **Library Agent** | `library-agent.md` | Is the library whole and true, do the corpora and graph match it, and is the blog kept (filed, alt, Featured)? |
 | **Improve Thingy** | `improve-thingy.md` | Are Thingy's answers grounded, cited, honest, and improving? |
 
 Calendar cadence: [generated schedule](SCHEDULE.md), sourced from `automations.toml`.
@@ -21,8 +21,9 @@ Choose the owner by the primary failed outcome, not by the file being edited:
 
 - **Run the Librarian** when execution, delivery, uptime, alarms, auth, deploy
   mechanics, or cost is wrong.
-- **Keep the Archive True** when canonical content, ingest, corpus builds, or
-  graph artifacts are stale, missing, or wrong.
+- **Library Agent** when the library, its pulls, corpus builds, graph
+  artifacts, or the blog's categories, Featured or alt are stale, missing, or
+  wrong.
 - **Improve Thingy** when the archive and infrastructure are sound but the
   answers — grounding, citation, honesty, tool use — are not.
 
@@ -55,7 +56,7 @@ Every open issue carries exactly one objective label:
 | Label | Owner |
 |---|---|
 | `objective:run` | Run the Librarian |
-| `objective:archive` | Keep the Archive True |
+| `objective:library` | Library Agent |
 | `objective:improve` | Improve Thingy |
 
 Descriptive labels stay descriptive; `decision` means Jamie must answer before
