@@ -13,7 +13,7 @@ its **alt text**. micro.blog still holds every post; the Librarian never
 creates, deletes, retitles or re-dates one, and never changes a word Jamie
 wrote.
 
-**Revised twice the same day.** First Jamie cut the scope: "Lets remove
+**Revised three times the same day.** First Jamie cut the scope: "Lets remove
 typo/grammer checking and link additions from the goal. Focus only on the alt
 text and category management. That removes the need for a feedback loop and I
 didn't like the GitHub issues approach anyway." Then Jamie reframed the agent:
@@ -23,8 +23,10 @@ think the agent should end each run with any suggested category changes… or
 any other content related items it wants to highlight. I do NOT think it
 shoudl ignore posts that are waiting for a weekly thing issue… it should not
 care about weekly thing issues." And: "WT Builder should automatically pick up
-an edit/improvment to the blog post when it does it's scan on open." This
-version is that plan.
+an edit/improvment to the blog post when it does it's scan on open." Last:
+"we've lost anything from looking at Tinylytics data… I had hoped we would
+bring that into the corpus too … that way view information and kudos become
+additional metadata to augment on posts." This version is that plan.
 
 ## What Jamie decided
 
@@ -43,6 +45,8 @@ version is that plan.
   about the content worth Jamie's eye.
 - **Weekly Thing issues don't matter to it.** Every post is tended the same,
   whether or not an issue will carry it.
+- **Reader numbers join the corpus:** Tinylytics views and kudos become
+  metadata on every post, issue, episode and thing.
 - Typo checking, link additions and a GitHub-issue channel are out.
 
 ## What I measured first
@@ -110,6 +114,59 @@ Codex account, not on an API key.
 `pipeline/blog/anthropic_client.py` still maps `sonnet` to `claude-sonnet-5`
 and `opus` to `claude-opus-4-7`; both still answer but are a generation old.
 
+## Reader numbers from Tinylytics
+
+**What Tinylytics holds** (read-only key, measured 2026-10-22):
+
+| Site | Tracked since | What it counts |
+|---|---|---|
+| Blog (1521) | 2024-07-10 | views of each post and page; 57 kudos, all on posts |
+| Weekly Thing (3063) | 2026-01-09 | per issue: web views (`/archive/<n>/` and the old slugs), email opens (the pixel WT Builder puts in each email, `/email/<n>/`, since WT339), feed reads (`/feed/<n>/`); 7 kudos |
+| Another Thing (3059) | 2026-01-05 | 444 views, nearly all the home page; 1 kudo, on an episode |
+| Things I've built (3823) | 2026-10-13 | 128 views, mostly the home page |
+
+Thingy's site (3424) counts the chat, not content, and stays out. Tinylytics
+keeps crawlers out of hits.
+
+- **Blog:** of 60,167 views in two years, 34,061 land on 6,607 posts and pages
+  matched by URL. The rest is the home page (10,995), list, category and
+  archive pages (9,158), and pages still to match (5,953: `/lists/…`,
+  `/collections/…`, `/about/…`).
+- **Weekly Thing:** 328 issues have web views, 14 have email opens, 91 have
+  feed reads. WT350: 1,190 email opens, 351 web views, 41 feed reads.
+
+**What the corpus gets.** A sidecar, `data/librarian/reader-stats.json`,
+written by `pipeline/corpus/reader_stats.py` with the read-only key in the
+local `.env` (CI reads the committed file and needs no new secret). Each
+source record gains a `reader` block, display metadata like the blog
+abstracts and never chunk text, so nothing re-embeds:
+
+- every post, page, issue, episode and thing: `views`, `views_30d`, `kudos`
+  (an issue's views are its web page's);
+- each with its site's `tracked_since` and the refresh date, so a count never
+  passes for an all-time number: a 2009 post's views are its views since July
+  2024.
+
+**The file is public.** librarian-thing is a public repository and the
+sidecars are committed (the corpus itself is not), so whatever goes in
+`reader-stats.json` is on GitHub. That is why **email opens and feed reads
+stay out of it**: they are the newsletter's own numbers. The Library Agent
+reads them from Tinylytics during its round and uses them in its report
+without writing them down anywhere public. Putting them in Thingy too would
+need a CI secret or a private store, and Jamie's word first.
+
+**Where it shows.** `get_source` carries the block; `list_content` can sort by
+most read and most kudos; Thingy reads both through its tools, so "my
+most-read posts this year" or "which issues got kudos" has an answer. Search
+ranking does not change: popularity is not relevance, and making it a ranking
+signal would be its own decision. The fields are additive (a minor MCP
+version, no `/retrieve` major).
+
+**How the Library Agent uses it.** Refreshed in each morning's round and
+committed with the day's work. It weighs Featured and feeds the suggestions:
+an old post drawing readers this week, kudos that arrived, an issue whose
+opens stand out.
+
 ## The Library Agent, and the team around it
 
 The Library Agent keeps the collection: everything that is in the library, how
@@ -123,7 +180,7 @@ team stays three, so the README's "Do not add more agents" stands:
 
 | Owner | When | Owns |
 |---|---|---|
-| **Library Agent** | daily, 5:00 a.m. | the archive data and its ingest, corpus and graph freshness, photo descriptions and summaries, and on the blog: categories, Featured and alt text |
+| **Library Agent** | daily, 5:00 a.m. | the archive data and its ingest, corpus and graph freshness, photo descriptions, summaries and reader numbers, and on the blog: categories, Featured and alt text |
 | **Run the Librarian** | daily, 5:15 a.m. | the API, MCP surface, deploys, alarms, cost (unchanged, minus step 8) |
 | **Improve Thingy** | every three days, 6:00 a.m. | Thingy's answers (unchanged) |
 
@@ -154,15 +211,19 @@ work, so new posts are filed exactly the way the 9,459 already filed were:
 2. **The archive checks** Keep the Archive True runs today: new issues match
    WT Builder's archive-leg receipts, the corpora and graph match their data,
    the graph push happened, tests are green, content shape holds.
-3. **Describe new photos** (`describe_media.py`, Haiku 5.5) and **write
-   summaries** for new or changed posts (`abstracts.py`, Sonnet 5.5).
+3. **Describe new photos** (`describe_media.py`, Haiku 5.5), **write
+   summaries** for new or changed posts (`abstracts.py`, Sonnet 5.5), and
+   **refresh reader numbers** from Tinylytics (`reader_stats.py`).
 4. **File categories** on posts the Librarian has never filed.
 5. **Fill alt** on any post with an empty one.
 6. **Featured:** note candidates daily; decide on Sundays.
 7. **Verify and close out.** Read each written post's live page (the
    categories in its footer), refresh those `data/blog/` files, make one
    commit (`data/blog/`, the sidecars, `data/blog-catalog/`), push. The push
-   runs `deploy.yml` once, through the corpus gate.
+   runs `deploy.yml` once, through the corpus gate (about 15 minutes, every
+   embedding from the cache). That is Fridays and Saturdays too, so
+   `deploy.yml`'s note that nothing automatic changes the corpus from Friday
+   until the send stops being true and is rewritten.
 8. **Report**, then suggestions (below).
 
 ## How Jamie hears from it
@@ -182,6 +243,7 @@ Jamie: None
 Suggestions
 - "Home Automation" (9 posts) could merge into "Smart Home" (41); the old page would 404.
 - 11 posts since 2023 about board games carry no topic; one more makes a category.
+- A 2014 smoker post drew 140 views this week, most from search; a Featured candidate.
 - 5918023 (2021-11-19) is a backdated POAP Claims post the old sync never saw.
 ```
 
@@ -341,6 +403,10 @@ Featured posts today stay.
   micro.blog key here, and in CI, writes metadata only.
 - `ALIGNMENT.md`: a boundary row (blog categories and alt: the Librarian
   decides, micro.blog keeps).
+- Reader numbers: `deploy.yml` watches `data/librarian/reader-stats.json`
+  like the other sidecars; `librarian-core` attaches the `reader` block;
+  the Lambda's `get_source` and `list_content` show and sort by it, with
+  tests and the MCP reference (`mcp-surface.json`, `/connect/reference/`).
 - `docs/featured-posts.md`: rewritten (it still describes Studio's Featured
   section). New `docs/blog-categories.md`: the naming and filing rules.
 - `../AGENTS.md` (thingelstad.com): the publishing rule gains "the blog's
@@ -354,25 +420,34 @@ Each step is its own commit; tests with each.
 
 1. **Refresh sync** (no micro.blog write): compare-every-post ingest, daily
    workflow, then one full refresh commit. Deploys through the corpus gate.
-2. **Data:** `data/blog-catalog/` seeded and checked against the live pull
+2. **Reader numbers:** the Tinylytics sidecar, the `reader` block in the
+   corpus, and `get_source` and `list_content` in the Lambda. Deploys through
+   the corpus gate.
+3. **Data:** `data/blog-catalog/` seeded and checked against the live pull
    (expect exactly the 7 Jamie-set posts to differ).
-3. **`make blog-round` in dry run**, then the Library Agent replaces Keep the
+4. **`make blog-round` in dry run**, then the Library Agent replaces Keep the
    Archive True in the team and the Codex app. Its archive work runs as Keep
    the Archive True's does today; its blog writes stay dry for one morning,
    and Jamie reads that report.
-4. **Writes on:** categories and alt daily; the alt catch-up at 20 a day.
-5. **Featured:** the first list to Jamie; written on Jamie's go.
-6. **Docs.**
+5. **Writes on:** categories and alt daily; the alt catch-up at 20 a day.
+6. **Featured:** the first list to Jamie; written on Jamie's go.
+7. **Docs.**
 
 **Cost.** The overhaul labelled 10,469 posts for about $19 at batch prices, a
 fifth of a cent a post. A day's handful at full price is a few cents; alt is
-one vision call a photo; the first Featured selection is a few dollars once.
-Under $5 a month in the usual run, plus the Codex run itself.
+one vision call a photo; the first Featured selection is a few dollars once;
+Tinylytics reads cost nothing. Under $5 a month in the usual run, plus the
+Codex run itself.
 
 ## Decisions for Jamie
 
 1. **The team change:** the Library Agent replaces Keep the Archive True and
    takes photo descriptions and summaries from Run the Librarian, daily at
    5:00 a.m.; the team stays three.
-2. **A new topic** at 12 posts over two years: the right bar? (Used unless
+2. **Who sees reader numbers:** views and kudos in the public repository,
+   Thingy and the MCP, or only in the Librarian's own work (Featured,
+   suggestions, "most read" order with no count shown)? Recommended: views
+   and kudos for everyone; email opens and feed reads for the Library Agent
+   only.
+3. **A new topic** at 12 posts over two years: the right bar? (Used unless
    Jamie says otherwise.)
