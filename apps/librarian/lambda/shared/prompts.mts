@@ -95,7 +95,12 @@ export function promptFingerprint(): string {
 //        Projects, Open Loop); librarian://page/{id}; a page is undated
 //        (publish_date null, updated = its last edit), so date-anchored
 //        tools leave it out; links into a page resolve to target_page_id.
-export const MCP_SERVER_VERSION = '2.6.0';
+// 2.7.0 (2026-10-22): reader numbers. get_source carries readers (what
+//        Tinylytics counted since each site was first counted: views with a
+//        trend, an issue's email opens and feed reads, kudos), and
+//        list_content sorts by them (sort most_read, most_read_30d,
+//        most_read_90d, most_kudos, rising). Search ranking is unchanged.
+export const MCP_SERVER_VERSION = '2.7.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

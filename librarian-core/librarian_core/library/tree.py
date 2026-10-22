@@ -18,6 +18,7 @@ import sqlite3
 from pathlib import Path
 
 from librarian_core.library.db import LibraryError, meta_get, now, sha256
+from librarian_core.library.readers import readers_export, readers_fingerprint
 
 # Path prefixes the library owns in the tree, and the source each came from.
 # Everything else in the tree (built corpora, the graph, derived issues) is
@@ -32,6 +33,9 @@ MANAGED: tuple[tuple[str, str], ...] = (
     ("librarian/blog-abstracts.json", "librarian"),
 )
 DERIVED_DIR = "issues"
+# The reader numbers as the corpus build reads them: written from the
+# library's reader tables on every export, never absorbed.
+READERS_FILE = "librarian/readers.json"
 MARKER = ".library.json"
 # Hand-written notes that sat beside the content in git; not content.
 _IGNORED_NAMES = {"README.md", ".DS_Store", MARKER}
@@ -127,13 +131,27 @@ def issue_from_weekly_page(text: str) -> str:
 
 
 def fingerprints(conn: sqlite3.Connection) -> dict[str, str]:
-    """Each corpus's fingerprint: what the library holds of its inputs."""
+    """Each corpus's fingerprint: what the library holds of its inputs,
+    reader numbers included (a day's counts make the corpus stale)."""
     rows = conn.execute("SELECT path, sha256 FROM files ORDER BY path").fetchall()
+    readers = readers_export(conn)
     out = {}
     for corpus, prefixes in CORPUS_INPUTS.items():
         lines = [f"{path} {digest}" for path, digest in rows if path.startswith(prefixes)]
+        if readers["sources"] or readers["sites"]:
+            lines.append(f"{READERS_FILE} {readers_fingerprint(readers, corpus)}")
         out[corpus] = sha256("\n".join(lines))[:32]
     return out
+
+
+def write_readers(conn: sqlite3.Connection, tree: str | Path) -> int:
+    """Write the reader numbers the corpus build reads. Returns how many
+    sources carry numbers."""
+    export = readers_export(conn)
+    path = Path(tree) / READERS_FILE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(export, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+    return len(export["sources"])
 
 
 def read_marker(tree: str | Path) -> dict | None:
@@ -210,6 +228,7 @@ def export_tree(conn: sqlite3.Connection, tree: str | Path, *, force: bool = Fal
         written += 1
         if row["path"].startswith("weekly/archive/"):
             _derive_issue(tree, row["path"], row["content"])
+    write_readers(conn, tree)
     (tree / MARKER).unlink(missing_ok=True)
     _write_marker(conn, tree, exported_at=now(), files=written)
     return written

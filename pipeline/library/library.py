@@ -6,6 +6,7 @@ working copy of it. The local copy lives in ``.library/`` with the ETag it
 was downloaded at, so ``upload`` only replaces the copy it started from.
 
     python pipeline/library/library.py round          # the whole morning pull
+    python pipeline/library/library.py round --only readers   # Tinylytics only
     python pipeline/library/library.py download       # .library/library.db + its ETag
     python pipeline/library/library.py export         # library -> data/
     python pipeline/library/library.py pull           # sources -> data/ -> library
@@ -19,8 +20,9 @@ was downloaded at, so ``upload`` only replaces the copy it started from.
 micro.blog; weekly.thingelstad.com's archive, about and support pages and
 another.thingelstad.com's episodes from shallow sparse clones of their public
 repos (or ``--weekly-dir`` / ``--another-dir`` checkouts); and the
-thingelstad.xyz registry. Then it absorbs what changed. Nothing here writes to
-any source.
+thingelstad.xyz registry; and Tinylytics' reader numbers (``readers``, which
+needs ``TINYLYTICS_API_KEY``, so the GitHub round leaves it out). Then it
+absorbs what changed. Nothing here writes to any source.
 """
 
 from __future__ import annotations
@@ -38,19 +40,25 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from dotenv import load_dotenv
 from librarian_core.library import absorb_tree, connect, export_tree, fingerprints, reindex
 from librarian_core.library.db import LibraryError, counts, meta_get, now
 from librarian_core.library.store import LibraryConflict, built_from, download, upload
+from librarian_core.library.tree import write_readers
 from librarian_core.paths import DATA, REPO
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import tinylytics  # noqa: E402
 
 LIBRARY_DIR = REPO / ".library"
 DB_PATH = LIBRARY_DIR / "library.db"
 STATE_PATH = LIBRARY_DIR / "state.json"
-SOURCES = ("blog", "weekly", "another", "things")
+SOURCES = ("blog", "weekly", "another", "things", "readers")
 WEEKLY_REPO = "https://github.com/jthingelstad/weekly.thingelstad.com.git"
 ANOTHER_REPO = "https://github.com/jthingelstad/another.thingelstad.com.git"
 WEEKLY_SITE_FILES = ("about.njk", "support.njk", "_data/support.json")
 # Which origins each pull refreshes, so an absorb compares only those.
+# Reader numbers live in their own tables, not in files.
 ORIGINS = {"blog": "micro.blog", "weekly": "weekly", "another": "another", "things": "xyz"}
 # deploy.yml's step outputs, one per corpus.
 OUTPUTS = {
@@ -228,11 +236,31 @@ def cmd_pull(
                 pull_another(tree, another_dir)
             elif source == "things":
                 _run([sys.executable, "pipeline/things/import_things.py"], tree)
-        changes = absorb_tree(conn, tree, origins={ORIGINS[s] for s in only}, note="pull")
+        changes = absorb_tree(
+            conn, tree, origins={ORIGINS[s] for s in only if s in ORIGINS}, note="pull"
+        )
         kinds = reindex(conn)
+        if "readers" in only:
+            load_dotenv(REPO / ".env")
+            report = tinylytics.pull_readers(conn, tinylytics.http_fetch(tinylytics.api_key()))
+            _report_readers(report)
+        write_readers(conn, tree)
     _report(changes)
     print(f"sources: {kinds}")
     return changes
+
+
+def _report_readers(report: dict) -> None:
+    for site, line in report.items():
+        if site == "paths":
+            print(f"  reader paths: {line}")
+        elif line.get("days"):
+            print(
+                f"  readers {site}: {line['from']}..{line['through']}, "
+                f"{line['views']:,} views, {line['kudos']} kudos"
+            )
+        else:
+            print(f"  readers {site}: current")
 
 
 def cmd_absorb(tree: Path, allow_removals: bool) -> int:
@@ -314,6 +342,11 @@ def cmd_status() -> int:
         print(json.dumps(_state(), indent=2))
         for name, value in counts(conn).items():
             print(f"  {name}: {value:,}")
+        for row in conn.execute("SELECT * FROM reader_sites ORDER BY site"):
+            print(
+                f"  readers {row['site']} ({row['tinylytics_id']}): since "
+                f"{row['tracked_since']}, through {row['pulled_through']}"
+            )
         print("recent pulls:")
         for row in conn.execute("SELECT * FROM pulls ORDER BY id DESC LIMIT 8"):
             print(

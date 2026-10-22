@@ -27,6 +27,7 @@ import yaml
 from dotenv import load_dotenv
 
 from .embed_tokens import COHERE_EMBED_MAX_TOKENS, embed_token_count
+from .library.readers import corpus_readers
 from .links import (
     extract_domains,
     link_label_text,
@@ -36,7 +37,15 @@ from .links import (
     unlink,
     web_domain,
 )
-from .paths import ARCHIVE_DIR, BLOG_DIR, FAQ_PATH, PODCAST_DIR, SITE_DIR, THINGS_PATH
+from .paths import (
+    ARCHIVE_DIR,
+    BLOG_DIR,
+    FAQ_PATH,
+    PODCAST_DIR,
+    READERS_PATH,
+    SITE_DIR,
+    THINGS_PATH,
+)
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
 DEFAULT_EMBEDDING_DIMENSIONS = 1024
@@ -1550,6 +1559,17 @@ def chunk_id(issue_number: Any, section: str, index: int, text: str) -> str:
     return digest[:16]
 
 
+def _readers_block(corpus: str, readers_path: Path | None) -> dict[str, Any]:
+    """``{"readers": ...}`` for one corpus: Tinylytics numbers by source id,
+    from the library's export. Display metadata only, never chunk text or
+    embedding input. Empty when the tree has no reader numbers (a test tree,
+    an export from before them)."""
+    path = readers_path or READERS_PATH
+    if not path.exists():
+        return {}
+    return {"readers": corpus_readers(json.loads(path.read_text(encoding="utf-8")), corpus)}
+
+
 def build_corpus(
     archive_dir: Path = ARCHIVE_DIR,
     include_issue_bodies: bool = False,
@@ -1558,6 +1578,7 @@ def build_corpus(
     blog_dir: Path | None = None,
     podcast_dir: Path | None = None,
     things_path: Path | None = None,
+    readers_path: Path | None = None,
 ) -> dict[str, Any]:
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
@@ -1918,6 +1939,7 @@ def build_corpus(
         "chunks": chunks,
         "media": media,
         "currently": currently,
+        **_readers_block("corpus", readers_path),
         "journal_copy_stats": {
             "entries": len(all_entries),
             "matched": sum(1 for entry in all_entries if entry["matched_by"]),
@@ -3208,6 +3230,7 @@ def build_blog_corpus(
     include_xref: bool = True,
     podcast_dir: Path = PODCAST_DIR,
     pages_dir: Path | None = None,
+    readers_path: Path | None = None,
 ) -> dict[str, Any]:
     """Build the blog corpus from ``data/blog/posts/**/*.md`` and the site's
     pages, ``data/blog/pages/**/*.md`` (``pages_dir``, default beside
@@ -3536,6 +3559,7 @@ def build_blog_corpus(
         "issues": [],
         "media": media,
         "posts": posts,
+        **_readers_block("blog_corpus", readers_path),
         "topics": [],
         "links": links,
         "chunks": chunks,
@@ -3613,7 +3637,9 @@ def _podcast_show_note_links(
     return records
 
 
-def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
+def build_podcast_corpus(
+    podcast_dir: Path = PODCAST_DIR, readers_path: Path | None = None
+) -> dict[str, Any]:
     """Build the Another Thing podcast corpus from normalized episode JSON.
 
     ``pipeline/podcast/import_another_thing.py`` writes one JSON record per
@@ -3728,6 +3754,7 @@ def build_podcast_corpus(podcast_dir: Path = PODCAST_DIR) -> dict[str, Any]:
         "link_count": len(links),
         "issues": [],
         "episodes": episodes,
+        **_readers_block("podcast_corpus", readers_path),
         "topics": [],
         "links": links,
         "chunks": chunks,

@@ -4,7 +4,7 @@ One row per post, page, issue, episode, thing and site page, with the ids the
 Librarian uses everywhere (``blog-<id>``, ``page-<id>``, ``wt-<n>``,
 ``ep-<n>``, ``thing-<id>``), and one row per image with its alt as published.
 Rebuilt whole from ``files`` after every absorb, so it can never drift from
-the content it indexes.
+the content it indexes; the reader numbers' path index is rebuilt with it.
 """
 
 from __future__ import annotations
@@ -18,6 +18,8 @@ from pathlib import PurePosixPath
 from typing import Any
 
 import yaml
+
+from librarian_core.library.readers import index_readers
 
 _IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.IGNORECASE)
 _MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(\s*<?([^)\s>]+)")
@@ -184,6 +186,8 @@ def reindex(conn: sqlite3.Connection) -> dict[str, int]:
         conn.executemany(
             "INSERT INTO media (source_id, position, url, alt) VALUES (?, ?, ?, ?)", media
         )
+    # Reader numbers follow the sources they belong to.
+    index_readers(conn)
     kinds: dict[str, int] = {}
     for row in sources.values():
         kinds[row[1]] = kinds.get(row[1], 0) + 1

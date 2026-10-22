@@ -20,6 +20,14 @@ import {
   urlShaped
 } from './matcher.mjs';
 import { allowedImageUrl, imageUrlRefusal } from './photo-view.mjs';
+import {
+  compactReaders,
+  corpusReaders,
+  readerSort,
+  readerSortKey,
+  readersCounted,
+  readersSummary
+} from './readers.mjs';
 import type { TopicMatcher } from './archive-lens.mjs';
 import type { CanonicalMatcher } from './matcher.mjs';
 import { STOPWORDS, countsByPublishYear, yearCountSummary, yearlyContentSignals } from './corpus-stats.mjs';
@@ -1350,6 +1358,9 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
     link_count: sectionLinks.filter(isHeadlineLink).length,
     commentary_link_count: sectionLinks.filter((link) => !isHeadlineLink(link)).length
   };
+  // Reader numbers (2.7.0): counts only, since the site was first counted.
+  const readers = readersSummary(bundle.corpus, lensSourceId(record), sourceDate(record));
+  if (readers) source.readers = readers;
   // links are the headline picks; the links inside Jamie's commentary
   // and Journal ride separately so a section's picks stay readable.
   const headlineLinks = sectionLinks.filter(isHeadlineLink);
@@ -2737,7 +2748,7 @@ async function matchedContent(input: ToolArgs, scope: unknown) {
     aliases,
     caseSensitive: input.case_sensitive === true
   });
-  const matched: Array<{ record: ArchiveRecord; chunks: ArchiveRecord[]; links: ArchiveRecord[] }> = [];
+  const matched: Array<{ kind: string; record: ArchiveRecord; chunks: ArchiveRecord[]; links: ArchiveRecord[] }> = [];
   for (const kind of scopeKinds(scope)) {
     if (requestedSource && kind !== requestedSource) continue;
     if (alsoIn.active && kind !== 'blog') continue;
@@ -2766,7 +2777,7 @@ async function matchedContent(input: ToolArgs, scope: unknown) {
       if (linkCategory && !links.some((link) => String(link.link_category || '').toLowerCase() === linkCategory))
         continue;
       if (targetResolved !== null && !links.some((link) => resolvedAs(link, targetResolved))) continue;
-      matched.push({ record, chunks, links });
+      matched.push({ kind, record, chunks, links });
     }
   }
   return { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched };
@@ -2778,10 +2789,12 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
   const { requestedSource, topic, domain, linkKind, linkCategory, alsoIn, audio, aliases, topicMatcher, matched } =
     await matchedContent(input, scope);
   const byRecord = new Map(matched.map((entry) => [entry.record, entry]));
-  const ordered = latestByDate(
+  const newest = latestByDate(
     matched.map((entry) => entry.record),
     { keepUndated: true }
   );
+  const readersSort = await readerOrder(input, matched, newest);
+  const ordered = readersSort.ordered;
   const page = pageOf('list_content', ordered, input);
   let sectionsOmitted = 0;
   const results = page.shown.map((record) => {
@@ -2807,11 +2820,21 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
         linkCategory,
         audio: boolFilter(input.has_audio)
       }),
-      matching_sections: sections.slice(0, LIST_MATCHING_SECTIONS)
+      matching_sections: sections.slice(0, LIST_MATCHING_SECTIONS),
+      ...(readersSort.sort
+        ? {
+            readers: compactReaders(
+              readersSort.corpora.get(byRecord.get(record)!.kind),
+              lensSourceId(record),
+              sourceDate(record)
+            )
+          }
+        : {})
     };
   });
   return markTruncated(
     {
+      ...(input.sort !== undefined ? { applied: { sort: readersSort.sort || 'newest' } } : {}),
       scope: effectiveScope(
         scope,
         requestedSource || (alsoIn.active ? 'blog' : '') || (audio.active ? 'weekly_thing' : '')
@@ -2829,6 +2852,17 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
         ordered.map((record) => record.source_kind),
         'source_kind'
       ),
+      ...(readersSort.sort
+        ? {
+            readers_counted: readersCounted(
+              ordered.map((record) => ({
+                corpus: readersSort.corpora.get(byRecord.get(record)!.kind),
+                id: lensSourceId(record)
+              }))
+            )
+          }
+        : {}),
+      ...(readersSort.note ? { note: readersSort.note } : {}),
       results
     },
     {
@@ -2844,6 +2878,50 @@ async function toolListContent(input: ToolArgs = {}, { scope }: ToolContext = {}
         .join(' ')
     }
   );
+}
+
+// list_content's sort (2.7.0): newest first, or by what Tinylytics counted.
+// A reader sort orders by its number, highest first, and ties keep date
+// order. Search ranking never uses these: popularity is not relevance. A
+// corpus without numbers (one built before 2.7.0) counts zero for each of
+// its sources and the hint says so; with none anywhere the list stays
+// newest first.
+async function readerOrder(
+  input: ToolArgs,
+  matched: Array<{ kind: string; record: ArchiveRecord }>,
+  newest: ArchiveRecord[]
+) {
+  const sort = readerSort(input.sort);
+  const kinds = [...new Set(matched.map((entry) => entry.kind))];
+  const corpora = new Map<string, Corpus>();
+  if (!sort) return { sort: null, ordered: newest, corpora, note: '' };
+  for (const kind of kinds) corpora.set(kind, await loadCorpus(kind));
+  const uncounted = kinds.filter((kind) => !corpusReaders(corpora.get(kind)));
+  if (kinds.length && uncounted.length === kinds.length) {
+    return {
+      sort: null,
+      ordered: newest,
+      corpora,
+      note: `sort ${sort} needs reader numbers, and this corpus has none yet: listed newest first.`
+    };
+  }
+  const kindOf = new Map(matched.map((entry) => [entry.record, entry.kind]));
+  const rank = new Map(newest.map((record, index) => [record, index]));
+  const keys = new Map(
+    newest.map((record) => [
+      record,
+      readerSortKey(corpora.get(kindOf.get(record)!), lensSourceId(record), sort, sourceDate(record))
+    ])
+  );
+  const ordered = [...newest].sort((a, b) => {
+    const [groupA, valueA] = keys.get(a)!;
+    const [groupB, valueB] = keys.get(b)!;
+    return groupB - groupA || valueB - valueA || rank.get(a)! - rank.get(b)!;
+  });
+  const note = uncounted.length
+    ? `No reader numbers yet for ${uncounted.join(', ')}: those sources count zero (readers null).`
+    : '';
+  return { sort, ordered, corpora, note };
 }
 
 // The words around the first hit, found by the matcher that found it, so a

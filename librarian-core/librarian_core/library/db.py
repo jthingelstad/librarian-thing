@@ -119,6 +119,44 @@ CREATE TABLE IF NOT EXISTS suggestions (
   note TEXT
 );
 
+-- Measured: what Tinylytics counted (librarian_core/library/readers.py).
+-- Counts only: views per site, path and US Central day, and each kudo's path
+-- and time. No visitor, referrer, country or browser is kept.
+CREATE TABLE IF NOT EXISTS reader_sites (
+  site TEXT PRIMARY KEY,
+  tinylytics_id INTEGER NOT NULL,
+  tracked_since TEXT NOT NULL,
+  pulled_through TEXT,
+  pulled_at TEXT
+);
+CREATE TABLE IF NOT EXISTS reader_days (
+  site TEXT NOT NULL,
+  path TEXT NOT NULL,
+  day TEXT NOT NULL,
+  views INTEGER NOT NULL,
+  PRIMARY KEY (site, path, day)
+);
+CREATE TABLE IF NOT EXISTS kudos (
+  site TEXT NOT NULL,
+  id INTEGER NOT NULL,
+  path TEXT NOT NULL,
+  at TEXT NOT NULL,
+  PRIMARY KEY (site, id)
+);
+-- Each counted path, the source it belongs to (NULL when none, or when two
+-- sources share the address) and the measure; rebuilt by reindex().
+CREATE TABLE IF NOT EXISTS reader_paths (
+  site TEXT NOT NULL,
+  path TEXT NOT NULL,
+  source_id TEXT,
+  measure TEXT NOT NULL,
+  PRIMARY KEY (site, path)
+);
+CREATE INDEX IF NOT EXISTS reader_paths_source ON reader_paths (source_id);
+CREATE VIEW IF NOT EXISTS reader_months AS
+  SELECT site, path, substr(day, 1, 7) AS month, sum(views) AS views
+  FROM reader_days GROUP BY site, path, month;
+
 -- Made: the vision description of each image and each blog post's abstract,
 -- read from the sidecars the describe and abstract tools keep in the tree.
 CREATE VIEW IF NOT EXISTS descriptions AS
@@ -192,7 +230,17 @@ def meta_set(conn: sqlite3.Connection, key: str, value: str) -> None:
 def counts(conn: sqlite3.Connection) -> dict[str, int]:
     """Rows per table, plus files and sources per origin and kind."""
     out: dict[str, int] = {}
-    for table in ("files", "sources", "media", "categories", "labels", "filings", "events"):
+    for table in (
+        "files",
+        "sources",
+        "media",
+        "categories",
+        "labels",
+        "filings",
+        "events",
+        "reader_days",
+        "kudos",
+    ):
         out[table] = conn.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
     for origin, n in conn.execute("SELECT origin, count(*) FROM files GROUP BY origin"):
         out[f"files:{origin}"] = n

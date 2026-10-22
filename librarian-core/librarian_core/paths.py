@@ -29,6 +29,10 @@ CORPUS_PATH = DATA / "librarian" / "corpus.json"
 # pipeline/corpus/describe_media.py, merged into media entries at build.
 MEDIA_DESCRIPTIONS_PATH = DATA / "librarian" / "media-descriptions.json"
 GRAPH_PATH = DATA / "librarian" / "graph.json"
+# Reader numbers from Tinylytics, written from the library on every export
+# (librarian_core/library/readers.py) and carried on each corpus as
+# ``readers``: display metadata, never chunk text or embedding input.
+READERS_PATH = DATA / "librarian" / "readers.json"
 
 # thingelstad.com blog — Jamie's 20-year personal blog, ingested by
 # pipeline/blog/ingest_blog.py. Its own corpus (separate from the Weekly

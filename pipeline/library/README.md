@@ -35,9 +35,34 @@ of a source's files (and more than 5) is refused.
 | `things/things.json` | thingelstad.xyz/things.json | Things I've built, normalized by `pipeline/things/import_things.py`. The registry decides a thing's status; its observations are evidence, never a status |
 | `librarian/media-descriptions.json` | the Librarian | photo descriptions, `pipeline/corpus/describe_media.py` |
 | `librarian/blog-abstracts.json` | the Librarian | `pipeline/blog/abstracts.py` |
+| `librarian/readers.json` | derived | the reader numbers each corpus carries (`readers_export`); never absorbed |
 
 `data/librarian/corpus.json`, `graph.json` and the other build outputs are
 built from the tree and never enter the library.
+
+## Reader numbers
+
+`round --only readers` (the Library Agent's round includes it; the GitHub
+round never does, because the Tinylytics key is only on otto) reads each
+site's raw hits from Tinylytics (`pipeline/library/tinylytics.py`) and keeps
+counts only: views per site, path and US Central day (`reader_days`), and
+each kudo's path and time (`kudos`). No visitor, referrer, country or browser
+is kept. The first pull reads from the day Tinylytics began counting the
+site; after that a round re-reads the last three days it holds, so hits
+Tinylytics later drops as spam drop here too, and reads through yesterday.
+`reader_months` is a view over the days. `reindex` rebuilds `reader_paths`,
+which ties each counted path to its source and measure: an issue's
+`/archive/<n>/` (and the old Buttondown slugs) are views, `/email/<n>/` email
+opens, `/feed/<n>/` feed reads; a path two sources share stays unattributed.
+
+`export` writes `librarian/readers.json`, and each corpus build carries its
+part as `readers` (`librarian_core/library/readers.py`): views by month since
+tracking began, by day for the last 90 days, email opens and feed reads for
+issues, kudos with their days, and each site's `tracked_since`. A count is
+never all time: the blog has been counted since 2024-07-09. The numbers are
+part of each corpus's fingerprint, so a round that moved them makes the
+corpora stale; the Lambda shows them in `get_source` and sorts `list_content`
+by them (MCP 2.7.0). Search ranking never uses them.
 
 ## A fix to the archive
 
