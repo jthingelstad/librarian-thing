@@ -11,6 +11,7 @@ was downloaded at, so ``upload`` only replaces the copy it started from.
     python pipeline/library/library.py pull           # sources -> data/ -> library
     python pipeline/library/library.py upload         # .library/library.db -> S3, If-Match
     python pipeline/library/library.py status         # what the local copy holds
+    python pipeline/library/library.py stale          # which corpora the library has moved past
     python pipeline/library/library.py create --from-tree data   # a new library (once)
 
 ``pull`` runs the same ingesters as always against the exported tree
@@ -33,11 +34,13 @@ import sys
 import tempfile
 from collections.abc import Iterator
 from contextlib import contextmanager
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
-from librarian_core.library import absorb_tree, connect, export_tree, reindex
+from librarian_core.library import absorb_tree, connect, export_tree, fingerprints, reindex
 from librarian_core.library.db import LibraryError, counts, meta_get, now
-from librarian_core.library.store import LibraryConflict, download, upload
+from librarian_core.library.store import LibraryConflict, built_from, download, upload
 from librarian_core.paths import DATA, REPO
 
 LIBRARY_DIR = REPO / ".library"
@@ -49,6 +52,17 @@ ANOTHER_REPO = "https://github.com/jthingelstad/another.thingelstad.com.git"
 WEEKLY_SITE_FILES = ("about.njk", "support.njk", "_data/support.json")
 # Which origins each pull refreshes, so an absorb compares only those.
 ORIGINS = {"blog": "micro.blog", "weekly": "weekly", "another": "another", "things": "xyz"}
+# deploy.yml's step outputs, one per corpus.
+OUTPUTS = {
+    "corpus": "weekly_corpus",
+    "blog_corpus": "blog_corpus",
+    "podcast_corpus": "podcast_corpus",
+}
+# From Friday until the issue is sent nothing automatic changes the corpus:
+# the round still updates the library, and the build waits. A send ends the
+# hold (WT Builder names the issue). Weekdays in US Central, Monday = 0.
+HELD_WEEKDAYS = {4: "Friday", 5: "Saturday"}
+CENTRAL = ZoneInfo("America/Chicago")
 
 
 @contextmanager
@@ -259,6 +273,41 @@ def cmd_round(tree: Path, only: list[str], weekly_dir: Path | None) -> int:
     return 1
 
 
+def held_today(at: datetime | None = None) -> str | None:
+    """The day's name when today (US Central) is a held day, else None."""
+    return HELD_WEEKDAYS.get((at or datetime.now(CENTRAL)).astimezone(CENTRAL).weekday())
+
+
+def cmd_stale(issue: str | None, at: datetime | None = None) -> dict[str, bool]:
+    """Which corpora were built from an older library than the local copy,
+    and so need building. On a held day every answer is no, unless a send
+    named its issue. Writes one output per corpus for deploy.yml."""
+    with _library() as conn:
+        current = fingerprints(conn)
+    held = None if issue else held_today(at)
+    stale: dict[str, bool] = {}
+    for corpus, fingerprint in current.items():
+        live = built_from(corpus)
+        stale[corpus] = live != fingerprint and not held
+        state = "current" if live == fingerprint else f"behind (built from {live or 'git'})"
+        print(f"{corpus}: {state}; library {fingerprint}")
+    if held:
+        print(f"{held}: the build waits for the send; nothing automatic changes the corpus")
+    elif issue:
+        print(f"WT{issue} was sent: building whatever the library has moved past")
+    _set_outputs({OUTPUTS[corpus]: "true" if value else "false" for corpus, value in stale.items()})
+    return stale
+
+
+def _set_outputs(values: dict[str, str]) -> None:
+    path = os.environ.get("GITHUB_OUTPUT")
+    if not path:
+        return
+    with open(path, "a", encoding="utf-8") as out:
+        for name, value in values.items():
+            out.write(f"{name}={value}\n")
+
+
 def cmd_status() -> int:
     with _library() as conn:
         print(f"library {meta_get(conn, 'library_id')} (created {meta_get(conn, 'created_at')})")
@@ -280,6 +329,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("download")
     sub.add_parser("upload")
     sub.add_parser("status")
+    stale = sub.add_parser("stale")
+    stale.add_argument("--issue", help="the issue a send just published; ends the weekend hold")
     create = sub.add_parser("create")
     create.add_argument("--from-tree", type=Path, required=True)
     create.add_argument("--force", action="store_true")
@@ -308,6 +359,9 @@ def main(argv: list[str] | None = None) -> int:
             return cmd_upload()
         if args.command == "status":
             return cmd_status()
+        if args.command == "stale":
+            cmd_stale(args.issue or None)
+            return 0
         if args.command == "create":
             return cmd_create(args.from_tree, args.force)
         if args.command == "export":

@@ -17,6 +17,14 @@ from botocore.exceptions import ClientError
 
 DEFAULT_BUCKET = "weekly-thing-librarian"
 KEY = "artifacts/library.db"
+# Where each corpus the Librarian serves lives, and the S3 metadata key its
+# upload records the library fingerprint it was built from under.
+CORPUS_KEYS = {
+    "corpus": "artifacts/corpus.json",
+    "blog_corpus": "artifacts/blog_corpus.json",
+    "podcast_corpus": "artifacts/podcast_corpus.json",
+}
+FINGERPRINT_META = "library-fingerprint"
 _CONFLICT_CODES = {"PreconditionFailed", "ConditionalRequestConflict"}
 
 
@@ -75,3 +83,17 @@ def upload(src: str | Path, etag: str | None, *, client=None, key: str = KEY) ->
             ) from exc
         raise
     return response["ETag"]
+
+
+def built_from(corpus: str, *, client=None) -> str | None:
+    """The library fingerprint the live ``corpus`` was built from, or None
+    when it records none (built before the library, or from a tree no export
+    wrote) or does not exist."""
+    s3 = client or boto3.client("s3")
+    try:
+        head = s3.head_object(Bucket=bucket(), Key=CORPUS_KEYS[corpus])
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") in {"404", "NoSuchKey", "NotFound"}:
+            return None
+        raise
+    return head.get("Metadata", {}).get(FINGERPRINT_META)

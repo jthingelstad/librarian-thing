@@ -23,13 +23,23 @@ uploads only if S3 still holds the copy it downloaded (``store``).
 
 from librarian_core.library.db import LibraryError, connect
 from librarian_core.library.index import reindex
-from librarian_core.library.tree import absorb_tree, export_tree, issue_from_weekly_page
+from librarian_core.library.tree import (
+    CORPUS_INPUTS,
+    absorb_tree,
+    export_tree,
+    fingerprints,
+    issue_from_weekly_page,
+    read_marker,
+)
 
 __all__ = [
+    "CORPUS_INPUTS",
     "LibraryError",
     "absorb_tree",
     "connect",
     "export_tree",
+    "fingerprints",
     "issue_from_weekly_page",
+    "read_marker",
     "reindex",
 ]

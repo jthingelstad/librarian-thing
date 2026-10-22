@@ -28,7 +28,9 @@ from librarian_core.corpus import (
     build_corpus,
 )
 from librarian_core.graph import build_graph
-from librarian_core.paths import ARCHIVE_DIR, MEDIA_DESCRIPTIONS_PATH
+from librarian_core.library import read_marker
+from librarian_core.library.store import FINGERPRINT_META
+from librarian_core.paths import ARCHIVE_DIR, DATA, MEDIA_DESCRIPTIONS_PATH
 
 
 def build_wt_corpus(
@@ -60,16 +62,23 @@ def upload_json_gzip(bucket: str, key: str, path) -> None:
     The corpus is ~10x smaller compressed, which is most of the Lambda cold
     start. The Lambda loader sniffs the gzip magic bytes, so plain and
     compressed objects both work during the transition.
+
+    A corpus built from an export of the library records the library
+    fingerprint it was built from (the tree's export marker) as S3 metadata,
+    so the next run can tell whether the library has moved on since.
     """
     import gzip as _gzip
 
     data = Path(path).read_bytes()
+    marker = read_marker(DATA) or {}
+    fingerprint = (marker.get("fingerprints") or {}).get(Path(key).stem)
     boto3.client("s3").put_object(
         Bucket=bucket,
         Key=key,
         Body=_gzip.compress(data, 6),
         ContentType="application/json",
         ContentEncoding="gzip",
+        Metadata={FINGERPRINT_META: fingerprint} if fingerprint else {},
     )
 
 

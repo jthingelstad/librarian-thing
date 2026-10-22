@@ -4,10 +4,14 @@ the conditional upload that keeps a second writer from overwriting."""
 import importlib.util
 import io
 import json
+import os
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
+from datetime import datetime
 from pathlib import Path
+from unittest import mock
 
 import boto3
 from botocore.response import StreamingBody
@@ -17,7 +21,9 @@ from librarian_core.library import (
     absorb_tree,
     connect,
     export_tree,
+    fingerprints,
     issue_from_weekly_page,
+    read_marker,
     reindex,
     store,
 )
@@ -408,6 +414,133 @@ class BlogPruneTests(unittest.TestCase):
             self.assertTrue(kept.exists())
             self.assertFalse(gone.exists())
             self.assertFalse((blog / "posts" / "2014").exists())
+
+
+class FingerprintTests(unittest.TestCase):
+    """A corpus is rebuilt when the library it would be built from moved:
+    each corpus hashes only its own inputs, and the tree's marker carries the
+    library's fingerprints after an export or an absorb."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        seed = self.tmp / "seed"
+        _write(seed, _tree_files())
+        self.conn = connect(self.tmp / "library.db", create=True)
+        absorb_tree(self.conn, seed, seed=True)
+        self.tree = self.tmp / "tree"
+        export_tree(self.conn, self.tree)
+
+    def tearDown(self):
+        self.conn.close()
+        self._tmp.cleanup()
+
+    def test_each_corpus_moves_only_with_its_own_inputs(self):
+        before = fingerprints(self.conn)
+        _write(self.tree, {"site/about.njk": "---\npageTitle: About\n---\n<p>New</p>\n"})
+        absorb_tree(self.conn, self.tree)
+        after_site = fingerprints(self.conn)
+        self.assertNotEqual(after_site["corpus"], before["corpus"])
+        self.assertEqual(after_site["blog_corpus"], before["blog_corpus"])
+        self.assertEqual(after_site["podcast_corpus"], before["podcast_corpus"])
+        _write(self.tree, {"podcast/another-thing/episodes/001.json": '{"number": "1"}'})
+        absorb_tree(self.conn, self.tree)
+        after_episode = fingerprints(self.conn)
+        self.assertTrue(all(after_episode[c] != after_site[c] for c in after_episode))
+
+    def test_the_marker_carries_the_fingerprints_after_export_and_absorb(self):
+        self.assertEqual(read_marker(self.tree)["fingerprints"], fingerprints(self.conn))
+        _write(self.tree, {"blog/pages/now.md": PAGE.replace("71862", "71863")})
+        absorb_tree(self.conn, self.tree)
+        self.assertEqual(read_marker(self.tree)["fingerprints"], fingerprints(self.conn))
+
+    def test_absorb_derives_the_issue_of_a_changed_or_removed_page_again(self):
+        page = self.tree / "weekly" / "archive" / "353.md"
+        page.write_text(WEEKLY_PAGE.replace("## Currently", "## Lately"), encoding="utf-8")
+        _write(self.tree, {"weekly/archive/354.md": WEEKLY_PAGE.replace("353", "354")})
+        absorb_tree(self.conn, self.tree)
+        issues = self.tree / "issues"
+        self.assertIn("## Lately", (issues / "353" / "archive.md").read_text())
+        self.assertTrue((issues / "354" / "archive.md").exists())
+        (self.tree / "weekly" / "archive" / "354.md").unlink()
+        absorb_tree(self.conn, self.tree)
+        self.assertFalse((issues / "354").exists())
+
+
+class StaleTests(unittest.TestCase):
+    """library.py stale: which corpora deploy.yml builds, with the hold."""
+
+    def setUp(self):
+        self.library = _load("library_cli_for_stale", ROOT / "pipeline" / "library" / "library.py")
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        conn = connect(self.tmp / "library.db", create=True)
+        seed = self.tmp / "seed"
+        _write(seed, _tree_files())
+        absorb_tree(conn, seed, seed=True)
+        self.current = fingerprints(conn)
+        conn.close()
+        self.output = self.tmp / "github_output"
+        self.patches = [
+            mock.patch.object(self.library, "DB_PATH", self.tmp / "library.db"),
+            mock.patch.dict(os.environ, {"GITHUB_OUTPUT": str(self.output)}),
+        ]
+        for patch in self.patches:
+            patch.start()
+
+    def tearDown(self):
+        for patch in self.patches:
+            patch.stop()
+        self._tmp.cleanup()
+
+    def _stale(self, live: dict, *, issue=None, day: int = 22) -> dict:
+        at = datetime(2026, 10, day, 12, 0, tzinfo=self.library.CENTRAL)
+        with mock.patch.object(self.library, "built_from", side_effect=lambda c: live.get(c)):
+            with redirect_stdout(io.StringIO()):
+                return self.library.cmd_stale(issue, at)
+
+    def test_a_corpus_built_from_an_older_library_is_stale(self):
+        live = {**self.current, "blog_corpus": "older"}
+        self.assertEqual(
+            self._stale(live), {"corpus": False, "blog_corpus": True, "podcast_corpus": False}
+        )
+        self.assertEqual(
+            self.output.read_text().splitlines(),
+            ["weekly_corpus=false", "blog_corpus=true", "podcast_corpus=false"],
+        )
+
+    def test_a_corpus_that_records_no_library_is_stale(self):
+        self.assertTrue(all(self._stale({}).values()))
+
+    def test_friday_and_saturday_hold_until_a_send_names_its_issue(self):
+        self.assertFalse(any(self._stale({}, day=23).values()))  # Friday
+        self.assertFalse(any(self._stale({}, day=24).values()))  # Saturday
+        self.assertTrue(all(self._stale({}, day=24, issue="355").values()))
+        self.assertTrue(all(self._stale({}, day=25).values()))  # Sunday
+
+
+class FingerprintUploadTests(unittest.TestCase):
+    def test_a_corpus_upload_records_the_exported_library(self):
+        upload = _load(
+            "upload_corpus_for_fingerprint", ROOT / "pipeline" / "deploy" / "upload_corpus.py"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = Path(tmp)
+            (tree / ".library.json").write_text(
+                json.dumps({"fingerprints": {"blog_corpus": "abc", "corpus": "def"}})
+            )
+            artifact = tree / "blog_corpus.json"
+            artifact.write_text("{}")
+            client = mock.Mock()
+            with (
+                mock.patch.object(upload, "DATA", tree),
+                mock.patch.object(upload.boto3, "client", return_value=client),
+            ):
+                upload.upload_json_gzip("b", "artifacts/blog_corpus.json", artifact)
+                upload.upload_json_gzip("b", "artifacts/graph.json", artifact)
+        first, second = client.put_object.call_args_list
+        self.assertEqual(first.kwargs["Metadata"], {"library-fingerprint": "abc"})
+        self.assertEqual(second.kwargs["Metadata"], {})
 
 
 if __name__ == "__main__":
