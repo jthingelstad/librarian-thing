@@ -1,291 +1,309 @@
-# Plan: the Library Agent (2026-10-22)
+# Plan: the Library and the Library Agent (2026-10-22)
 
 **Status: proposed, waiting for Jamie's go.** Nothing is built and nothing has
 been written to micro.blog. Every number below was measured read-only on
 2026-10-22 (a full Micropub `q=source` pull, the Tinylytics API with the
 read-only key, the Anthropic Models API, the overhaul's cache in
-`../www.thingelstad.com/dev/cache/categories/`, and the Librarian's S3 bucket
-settings).
+`../www.thingelstad.com/dev/cache/categories/`, the weekly.thingelstad.com and
+WT Builder checkouts, and the Librarian's S3 bucket, lifecycle and CI policy).
 
-Jamie, 2026-10-22: "The Librarian decides; micro.blog keeps them and stays the
-source of authority for the blog." The Librarian becomes the authority for the
-blog's **categories** (Featured included, since Featured is a category) and
-its **alt text**. micro.blog still holds every post; the Librarian never
-creates, deletes, retitles or re-dates one, and never changes a word Jamie
-wrote.
-
-Revised four times the same day as Jamie answered; Jamie's words are under
-What Jamie decided. This version is v5.
+This is v6. v5 kept published text in git, the catalog in SQLite and reader
+numbers in a third file. Jamie: "I'm not confident in our plan on how this data
+is being managed and what is going in git versus s3 versus sqlite. It seems
+very scattered." So v6 starts with one rule for where data lives (Part 1), and
+the agent that keeps the blog's categories and alt text is built on it
+(Part 2).
 
 ## What Jamie decided
 
-- "I never actually assign categories to a post." The Librarian owns the whole
-  list. The one exception is **Weekly Thing**, which WT Builder sets.
-- "It could create new categories." It tells Jamie after.
-- "Also agree on the alt text. It should own that. The librarian is my partner
-  for this." Fill empty alt only; never replace alt Jamie wrote.
-- "Agree it would move to daily. Yes to alt fills. Yes it should use its own
-  model key."
-- **Scope:** "Lets remove typo/grammer checking and link additions from the
-  goal. Focus only on the alt text and category management. That removes the
-  need for a feedback loop and I didn't like the GitHub issues approach
-  anyway."
-- **A Library Agent**, "a better framing than "tend the blog"", and "it could
-  change some of the other agent team". Then: "Good on Library Agent replacing
-  Keep the Archive True."
-- **Featured stays.** **Every run ends with suggestions:** "any suggested
-  category changes… or any other content related items it wants to
-  highlight."
-- **Weekly Thing issues don't matter to it:** "it should not care about weekly
-  thing issues." "WT Builder should automatically pick up an edit/improvment
-  to the blog post when it does it's scan on open" (it does; below).
-- **Reader numbers join the corpus:** "view information and kudos become
-  additional metadata to augment on posts", bucketed in time "so Thingy can
-  know if something is trending up or down", and kept private: "this data
-  should all be private in the corpus… don't think this should be part of the
-  repo. Would generate a lot of commit noise." Kudos are coming to Things I've
-  built too.
-- **Judgment, not counts:** "I'd rather avoid quantitative rules like this and
-  have it be more informed by an agent looking at the content and trying to
+- "The Librarian decides; micro.blog keeps them and stays the source of
+  authority for the blog." It owns the blog's **categories** ("I never
+  actually assign categories to a post"; "It could create new categories") and
+  its **alt text** ("It should own that. The librarian is my partner for
+  this."). The **Weekly Thing** category stays WT Builder's.
+- Daily, on its own model key. Typos, links and GitHub issues are cut: "Focus
+  only on the alt text and category management."
+- A **Library Agent** replaces Keep the Archive True. **Featured stays.**
+  **Every run ends with suggestions.** It "should not care about weekly thing
+  issues", and WT Builder picks up its blog edits when it scans.
+- **Reader numbers** become "additional metadata to augment on posts",
+  bucketed in time "so Thingy can know if something is trending up or down",
+  private and not in the repo. Kudos are coming to Things I've built.
+- **Judgment, not counts:** "an agent looking at the content and trying to
   deliver the right experience for visitors."
-- **Categories carry a description:** "micro.blog has a place for category
-  descriptions."
-- **Collections:** "Why not just remove collections entirely and swap them in
-  for categories."
-- **The catalog:** "should labels, ledger, etc… should this be a sqlite DB that
-  we keep alongside the content? wondering if we need to think about the
-  corpus differently."
+- **Categories carry a description**, and **collections fold into
+  categories**.
+- **Where the data lives:** "it seems odd to have the blog posts in git". WT
+  Builder publishes to Buttondown, its own S3 bucket and weekly.thingelstad.com,
+  and "the copy sent to library is yet a 4th copy and a distinct publish… that
+  could easily be switched to pulling from the copy in weekly.thingelstad.com".
+  "The content versions are a problem the SOURCES should handle, not the
+  library." Any run can start "uncached" in a GitHub Action, downloading from
+  S3. On SQLite: "It feels like having a database for that would make corpus
+  wide analysis easier, but maybe not?" (answered below: yes).
 
-## What I measured first
+# Part 1: The library
 
-**Monday's sync will not bring in the category changes.** The sync workflow
-runs `ingest_blog.py --since-last`, which fetches only posts it has never seen
-and stops at the first page it already knows. Edits to existing posts never
-reach `data/blog/`. Against the live blog today:
+## The rule
 
-| Posts | What differs from `data/blog/` |
+- **Sources keep the content and its history.** micro.blog (the blog and its
+  pages), weekly.thingelstad.com (Weekly Thing issues as WT Builder sends
+  them), another.thingelstad.com (episodes), thingelstad.xyz (Things I've
+  built), Tinylytics (reader numbers). Content is edited there and only there.
+- **The library is one SQLite file**, `library.db`, in the Librarian's private
+  S3 bucket: a copy of what every source published, plus everything the
+  Librarian makes or measures about it.
+- **The corpus is built from the library**, and only from it. Thingy and the
+  MCP answer from the corpus.
+- **librarian-thing in git is code, tests and docs.** No content.
+
+```text
+micro.blog ──┐
+weekly ──────┤                      ┌─> corpora, graph, embeddings ─> Thingy, MCP
+another ─────┼─> pull ─> library.db ┤
+xyz ─────────┤        (S3, private) └─> Library Agent ─> categories, alt ─> micro.blog
+Tinylytics ──┘
+```
+
+## What changes
+
+| Today | After |
 |---|---|
-| 9,422 | categories only |
-| 38 | body or title too (WT Builder link and alt write-backs, whitespace, the three shared-address posts 1074797/1074798/1074800) |
-| 1,008 | nothing |
-| 1 | never ingested (5918023, 2021-11-19, a backdated POAP Claims post) |
+| `data/blog/`: 10,585 files in git, synced Mondays, new posts only, so the 9,422 posts re-filed in the overhaul never arrive | pulled from micro.blog every morning, every post compared |
+| `data/issues/`: 1,075 files, the fourth copy WT Builder commits after each send | pulled from weekly.thingelstad.com's `apps/site/archive/<n>.md` |
+| `data/podcast/`, `data/things/`, `data/site/` | pulled from another.thingelstad.com, thingelstad.xyz, and weekly's about and support pages |
+| `data/librarian/`: 12,278 photo descriptions and the blog summaries, committed | tables in the library |
+| the catalog and reader numbers (v5: SQLite plus `reader.json`) | tables in the library; reader numbers ride in the corpus |
+| the corpus build reads git | reads the library: same corpora, same chunk ids, same gate |
 
-So `data/blog/` and Thingy still show the old categories, and Monday 10-26
-changes nothing. The fix is step 1 of the build: a refresh that compares every
-post and rewrites only the files that changed. It busts nothing:
+## Facts, checked
 
-- Categories are not in chunk text, so blog chunk ids (`blog:<id>:<n>:<hash>`)
-  do not move and nothing re-embeds for the 9,422. The 38 body changes
-  re-embed (cents).
-- Abstracts key on `body_hash`; only the 38 can change. No new photos, so
-  `describe_media` has nothing to do.
-- Thingy's `list_content` `category` filter reads the corpus's own category
-  set, so after the deploy it accepts the new names and refuses old ones
-  (Book, Travel Log) with the list of real ones. No eval names a category.
-- The push rebuilds the Weekly Thing and blog corpora through the corpus gate,
-  as any `data/blog/**` change does.
+- **WT Builder publishes three places:** Buttondown, the podcast audio and
+  covers to its CDN bucket, and `apps/site/archive/<n>.md` on
+  weekly.thingelstad.com. A fourth leg, "the archive feed" in
+  `src/server/publish.ts`, commits the same issue to `data/issues/<n>/` here.
+- **weekly has everything the library needs.** 351 of 353 issue bodies match
+  the library's copy byte for byte. Its front matter is a superset (it adds the
+  audio fields, layout, permalink and tags). `links.json` repeats the front
+  matter's links, domains and word count; `metadata.json` repeats the rest.
+- **They match because WT Builder made them match:** `rerender:archive`
+  renders WT1 to WT349's pages on weekly from the library's copy, so the fall
+  repairs are on weekly too. (I said earlier the repairs lived only here. That
+  was wrong.)
+- **The two that differ are WT Builder's first two sends.** WT350: the
+  library's copy adds image width and height. WT351: the library's copy points
+  five images at files.thingelstad.com, weekly's at micro.blog uploads, and
+  weekly has a magazine image the library's lacks. weekly is the authority
+  (Jamie, 10-01), so the library takes weekly's; WT351's five photos are
+  described again (cents).
+- **Nothing else in WT Builder reads the library's copy.** linked-before reads
+  WT Builder's own records. (I said otherwise earlier. Also wrong.)
+- **The corpus build already reads weekly:** `deploy.yml` checks out weekly's
+  archive pages for the audio fields.
 
-**New posts.** The newest post is 6049062 (10-17). The micro.blog filters are
-gone, so every post from now on is uncategorised until the Librarian runs.
+## library.db
 
-**Alt text.** Since 2026-07-01 the blog has 81 `<img>` tags and 50 empty alts
-(67 before WT Builder's wand filled some). 46 of the 50 already have a vision
-description in `data/librarian/media-descriptions.json`. All time: 224 empty,
-of which 158 are dead 2017 uploads and about 8 were marked unfillable in the
-June backfill.
+`s3://weekly-thing-librarian/artifacts/library.db`, about 90 MB. The bucket
+blocks public access, is encrypted and versioned, and its existing rule
+`expire-replaced-corpus-builds` keeps a replaced copy under `artifacts/` for 30
+days. One current copy, and 30 days to undo a bad round. That window is for
+recovery, not history: history is the sources' job.
 
-**WT Builder and the open issue.** WT Builder's scan takes micro.blog's edit
-of any post Jamie has not edited in WT Builder ("adopted the Micro.blog edit"
-in its log, `src/server/reconcile.ts`). Only a post edited on both sides asks
-Keep mine or Take theirs, and its own write-back is compare-and-set, so it
-never overwrites the Librarian's alt unseen.
-
-**Categories on micro.blog.** 125 live. Micropub `q=category` returns names
-only. A category's description is micro.blog's **Intro** field, set in the
-web editor when editing a category (Manton, 2025-08-11, "Category
-improvements"); no API for it turned up. thing-hugo already renders it at the
-top of the category page (the term page's `.Content`).
-
-**Collections.** 43 hand-made pages under `/collections/` linking 624 posts.
-27 are trips or series that already have their own category, which the
-overhaul filled from these pages. Four match an existing category: Minnebar
-(Minnestar), TeamSPS Events (TeamSPS), Crypto (Crypto) and Best of …
-(Featured). The Wordle Games index and its ten pages hold the games
-themselves, not posts. `/collections/` is the index, and `/categories/` is
-live.
-
-**Featured.** Three posts today, all 2026 (5863188, 5872650, 5904586). The
-overhaul's labels give every post a substance score; 297 posts score 4+ and
-are evergreen. Blog views are led by search traffic to old posts (Big Green
-Egg 2009, Peppa Pig DVD 2009). Kudos: 57 in all, on 45 posts. 3,897 posts
-are linked from a Weekly Thing issue, mostly as Journal items.
-
-**Keys.** `.env` has `ANTHROPIC_GENERAL_API_KEY`, `TINYLYTICS_API_KEY`
-(read-only, `tly-ro-`) and `MICROBLOG_API_KEY`. `TINYLYTICS_SITE_UID` is the
-Weekly Thing site's uid, not the blog's; the Librarian names the blog by its
-id, 1521. `OPENAI_API_KEY` is not needed: the Codex agent runs on Jamie's
-Codex account.
-
-**Models** (live Models API, 2026-10-22): `claude-opus-5-5`,
-`claude-sonnet-5-5`, `claude-haiku-5-5` and `claude-fable-5-1` are current.
-`pipeline/blog/anthropic_client.py` still maps `sonnet` to `claude-sonnet-5`
-and `opus` to `claude-opus-4-7`; both still answer but are a generation old.
-
-## Where the library's data lives
-
-The corpus is already not in git. CI builds the corpora, graph and embeddings
-from what is in git and uploads them to S3 (`weekly-thing-librarian`), where
-the Lambda reads them. What is in git is the input, and v4 of this plan was
-going to add the Librarian's catalog and reader numbers to it. v5 splits the
-data by what it is:
-
-| What | Where | Why |
+| | Table | Holds |
 |---|---|---|
-| **What was published:** issues, posts, pages, episodes, things | git, `data/` (unchanged) | Public text already. Its diffs show what changed on micro.blog. WT Builder commits issues there, and CI builds the corpus from it. |
-| **What the Librarian knows and decides:** categories, labels, filings, the event log, suggestions, reader numbers | **`library.db`**, one SQLite file in S3 | Private, changes every day, and is the Librarian's own working state. None of it is public or belongs in commits. |
-| **What Thingy answers from:** the corpora, graph, embeddings | S3 (unchanged) | Built by CI from git, joined with reader numbers when it answers. |
+| **Pulled** | `sources` | one row per post, page, issue, episode, thing and site page: its id (`blog-<id>`, `wt-<n>`, `page-<id>`, `ep-<n>`, `thing-<id>`), kind, URL, title, dates, the body and properties as the source has them, a hash, and when it was pulled |
+| | `media` | each image in a source, with its alt as published |
+| **Made** | `descriptions` | the vision description of each image |
+| | `summaries` | each blog post's abstract, keyed by body hash |
+| | `categories` | name, slug, kind (trip, series, project, topic, kept, Featured), **description**, why it exists, who made it, created, retired |
+| | `labels` | per post: topics, subjects, gist, kind, substance, evergreen, model, when |
+| | `filings` | per post: the categories the Librarian last wrote, Featured, the alt it filled, and whether Jamie set it by hand |
+| | `events` | every write to micro.blog: when, which post or category, before, after, which run |
+| | `suggestions` | opened, text, status, closed |
+| **Measured** | `reader_paths` | each Tinylytics path and the source it belongs to (old Weekly Thing slugs included) |
+| | `reader_days`, `reader_months` | per source, day or month, and measure (views, email opens, feed reads): a count |
+| | `kudos` | per source: each kudo and its date |
 
-Photo descriptions and summaries are the Librarian's knowledge too, but they
-stay committed sidecars for now: CI builds the corpus from them and they hold
-nothing private. Moving them in later would end their commits, with CI reading
-`library.db` from S3. Worth revisiting once the agent has run a few weeks.
-
-**`library.db`** lives at `s3://weekly-thing-librarian/library/library.db`.
-The bucket blocks public access, is encrypted, and is **versioned**, so every
-day's copy is kept and any day can be restored. The Library Agent is its only
-writer. Each round downloads it, works on the local copy, and uploads it only
-if S3 still holds the copy it downloaded (a conditional write on the ETag), so
-two runs can never overwrite each other. The tools live in
-`pipeline/library/`.
-
-| Table | Holds |
-|---|---|
-| `categories` | name, slug, kind (trip, series, project, topic, kept, Featured), **description**, why it exists, who made it, created, retired |
-| `labels` | per post: topics, subjects, gist, kind, substance, evergreen, model, when |
-| `filings` | per post: the categories the Librarian last wrote, Featured, the alt it filled, and whether Jamie set it by hand (what compare-and-set reads) |
-| `events` | every write: when, which post or category, before, after, which run |
-| `suggestions` | opened, text, status, closed |
-| `reader_paths` | each Tinylytics path and the source id it belongs to (old Weekly Thing slugs included) |
-| `reader_days` | per source, day and measure (views, email opens, feed reads): a count |
-| `reader_months` | the same by month, for history before the daily rows begin |
-| `kudos` | per source: each kudo and its date |
+A pull replaces a source's row in place; there is no revisions table. The
+made and measured tables exist nowhere else, which is what the 30 days of
+copies protect. The Recovery Manager's Saturday restore check should open the
+newest copy and check its counts (a projects-sysadmin change).
 
 **Seeded from the overhaul**, so nothing already filed is classified again:
-labels for 10,469 posts, the 125 categories and 56 trips, and filings from
-what the write-back actually wrote (4,786 + 4,672 `ok` rows), checked against
-the live pull before the first write. The 7 shadowed posts (377970, 1074798,
-1074800, 1074801, 1075452, 1076156, 1076174) are seeded as **Jamie-set** and
-never touched; the 129 posts filed with no category keep their empty filing.
-The overhaul's tools stay in `../www.thingelstad.com/scripts/categories/` as
-the record of that run; the tools here are written fresh.
+labels for 10,469 posts, the 125 categories and 56 trips, and filings from what
+the write-back actually wrote (4,786 + 4,672 `ok` rows), checked against the
+live pull. The 7 shadowed posts (377970, 1074798, 1074800, 1074801, 1075452,
+1076156, 1076174) are seeded as **Jamie-set** and never touched; the 129 posts
+filed with no category keep their empty filing.
+
+## Why SQLite
+
+Jamie asked whether it is a good idea. It is, for this:
+
+- **One file, one writer, about 90 MB.** It downloads in seconds, needs no
+  server, and costs nothing to keep.
+- **Questions across the whole archive become a query:** posts per category per
+  year, kudos by category, photos still without alt, which issues linked a
+  post, what is climbing this month. Today each is a script over 10,000 files.
+- **Easy to look inside:** `sqlite3` or Datasette on the Mac, and DuckDB reads
+  the same file for heavier analysis. Python has it built in.
+
+What it costs:
+
+- The whole file moves every run. Fine at 90 MB; it would not be at 10 GB.
+- One writer at a time. The conditional upload below makes a second writer
+  fail instead of overwrite.
+- Changes are no longer readable as git diffs. The `events` table records
+  every write the agent makes, and each source keeps its own history.
+- About 20 Python files and 5 test files read `data/` today, most through
+  `librarian_core/paths.py`. They move to one small library reader in one step.
+
+Not chosen: JSON files in S3 (no queries), Postgres on RDS (a server for one
+writer), DynamoDB (poor at the analysis). The corpus the Lambda reads stays
+JSON; serving it from SQLite is a separate question for later.
+
+## How a run uses it
+
+Every run, wherever it runs:
+
+1. Download `library.db` and note its ETag.
+2. Pull the sources and do its work on the local copy.
+3. Upload only if S3 still holds the copy it downloaded (a conditional write
+   on the ETag). If another run got there first, download again and redo the
+   round. That is safe because every pull and every micro.blog write is
+   compare-and-set.
+
+So no machine keeps state worth losing. The Library Agent runs the round on
+the Mac each morning. The same round runs "uncached" in a GitHub Action from
+nothing but the S3 copy. `make library ARGS=--from-sources` rebuilds the
+pulled tables from the sources into a fresh file and keeps the made and
+measured ones.
+
+- **GitHub:** `sync-external-content.yml` becomes the GitHub round: a daily
+  pull at 12:17 UTC as a backstop for a morning the Mac missed, and a full
+  round on demand. The pull uses the micro.blog secrets already there. A full
+  round (describing photos, Tinylytics) needs the Anthropic and Tinylytics keys
+  added as repository secrets, by Jamie.
+- **CI's access:** `WeeklyThingLibrarianDeployScoped` allows S3 key by key and
+  cannot read the library yet. It needs `artifacts/library.db` (get and put).
+  That policy is not in a stack, so this is an IAM edit outside a deploy and
+  waits for Jamie's go.
+
+## Building the corpus from it
+
+- `deploy.yml` downloads the library, builds the corpora and graph from it, and
+  runs the corpus gate as today. Embeddings stay cached by chunk id, and a
+  chunk id does not depend on where its text was read, so the move re-embeds
+  nothing.
+- Reader numbers ride in the corpus as metadata on each source (Part 2). No
+  separate reader file, and the Lambda's read policy does not change.
+- **What starts a build:** the Library Agent at the end of a round that
+  changed the library, WT Builder after a send, the daily schedule as a
+  backstop, and code pushes as today. The rule that nothing automatic changes
+  the corpus from Friday until the send stays: on those days the round updates
+  the library and the build waits.
+- The graph push to weekly's topic pages is unchanged.
+
+## WT Builder after the switch
+
+A WT Builder pull request, under its two-tier workflow.
+
+- **The archive leg stops sending text.** It starts the Librarian's build for
+  issue N instead, which pulls the issue from weekly, and keeps its receipt so
+  the Library Agent can check that every sent issue arrived. (The alternative
+  is dropping the leg; a send then reaches Thingy the next morning.)
+- **`rerender:archive` retires.** A back-catalogue repair becomes an edit to
+  the page on weekly, through the same `editTree` path the audio backfill
+  uses, and the library pulls it. `pipeline/audits/` points at weekly's pages.
+- This repo's AGENTS.md loses "`data/issues/` is written by WT Builder", and
+  WT Builder's `docs/decisions.md` records the change.
+
+## The switch, checked before it ships
+
+Build today's corpora twice, from git and from the library, and compare them
+chunk by chunk. Only these differences are expected: 9,422 posts' categories,
+38 changed bodies (WT Builder's link and alt write-backs, whitespace, the three
+shared-address posts), post 5918023 (a backdated POAP Claims post the old sync
+never saw), WT350's image attributes and WT351's images. Anything else stops
+the switch. Then `data/` leaves git in one commit (history keeps it), and the
+first deploy from the library is when Thingy sees the new categories.
+
+# Part 2: The Library Agent
 
 ## Reader numbers from Tinylytics
 
 | Site | Tracked since | What it counts |
 |---|---|---|
-| Blog (1521) | 2024-07-10 | views of each post and page; 57 kudos |
-| Weekly Thing (3063) | 2026-01-09 | per issue: web views (`/archive/<n>/` and old slugs), email opens (WT Builder's pixel, `/email/<n>/`, since WT339), feed reads (`/feed/<n>/`); 7 kudos |
+| Blog (1521) | 2024-07-10 | views of each post and page; 57 kudos on 45 posts |
+| Weekly Thing (3063) | 2026-01-09 | per issue: web views (`/archive/<n>/` and old slugs), email opens (`/email/<n>/`, since WT339), feed reads (`/feed/<n>/`); 7 kudos |
 | Another Thing (3059) | 2026-01-05 | 444 views, nearly all the home page; 1 kudo |
 | Things I've built (3823) | 2026-10-13 | 128 views, mostly the home page; kudos coming |
 
 Thingy's site (3424) counts the chat, not content, and stays out. Blog: of
 60,167 views in two years, 34,061 land on 6,607 posts and pages matched by
-URL; the rest is the home page, list and archive pages, and pages still to
-match. Weekly Thing: 328 issues have web views, 14 have email opens, 91 have
-feed reads (WT350: 1,190 opens, 351 web views, 41 feed reads).
+URL. Weekly Thing: 328 issues have web views, 14 have email opens, 91 have
+feed reads.
 
-**Bucketed by time.** Daily counts per source from the first run on, monthly
-before that (the blog back to July 2024). Each morning one Tinylytics call per
-site adds yesterday (10-21 was 171 blog views on 64 paths). The
-first fill is monthly calls back to when each site began plus daily calls for
-the last 90 days. Kudos come with their date. Email opens are per issue,
-never per recipient.
-
-**What Thingy gets.** At the end of each round the agent exports
-`reader/reader.json` to the same bucket. For each post, page, issue, episode
-and thing it holds views by month since tracking began, views by day for the
-last 90 days, kudos with their dates, email opens and feed reads for issues,
-and when tracking began. A 2009 post's count is views since July 2024, never
-all time. The Lambda reads that one file next to the corpus and checks for a
-new copy at most hourly, so the morning's numbers show without a deploy. Its
-read policy gains that one key, not `library.db`.
-
-- **Trending:** Thingy reads the series and can say whether something is
-  rising or falling. `list_content` sorts by most read in a window (30 days, a
-  year, all tracked time), by most kudos, and by the biggest change between
-  the last 30 days and the 30 before.
-- **`get_source`** carries the numbers. Search ranking does not change:
-  popularity is not relevance.
-- **Private:** never committed and never in chunk text. Thingy and the MCP use
-  the numbers to answer, counts included. If Jamie would rather Thingy speak
-  to readers in ranks and direction without exact counts, that is one switch.
-- The fields are additive (a minor MCP version, no `/retrieve` major).
-
-The Library Agent uses them for Featured and in its suggestions: an old post
-drawing readers this week, kudos that arrived, an issue whose opens stand
-out.
+- **Bucketed by time:** daily counts per source from the first run on, monthly
+  before that (the blog back to July 2024). Each round adds yesterday with one
+  Tinylytics call per site. Email opens are per issue, never per recipient.
+- **In the corpus:** each source carries views by month since tracking began,
+  views by day for the last 90 days, kudos with their dates, email opens and
+  feed reads for issues, and when tracking began. A 2009 post's count is views
+  since July 2024, never all time. Never in chunk text.
+- **What Thingy does with it:** says whether something is rising or falling;
+  `list_content` sorts by most read in a window, by kudos, and by the biggest
+  change between the last 30 days and the 30 before; `get_source` shows the
+  numbers. Search ranking does not change: popularity is not relevance. An
+  additive MCP minor version.
 
 ## The Library Agent, and the team around it
 
-The Library Agent keeps the collection: everything that is in the library, how
-it is filed, and how it is described. Its question: is everything in the
-library current, correct, filed and described?
-
-It **replaces Keep the Archive True** (approved) and takes **photo
-descriptions and summaries** from Run the Librarian (step 8 of
-`run-librarian.md`). The team stays three:
+It keeps the collection: everything in the library, how it is filed, and how it
+is described. Its question: is everything current, correct, filed and
+described? It **replaces Keep the Archive True** and takes photo descriptions
+and summaries from Run the Librarian (step 8 of `run-librarian.md`). The team
+stays three:
 
 | Owner | When | Owns |
 |---|---|---|
-| **Library Agent** | daily, 5:00 a.m. | the archive data and its ingest, corpus and graph freshness, photo descriptions, summaries, the catalog and reader numbers, and on the blog: categories, their descriptions, Featured and alt text |
+| **Library Agent** | daily, 5:00 a.m. | the library and its pulls, corpus and graph freshness, photo descriptions, summaries, reader numbers, and on the blog: categories, their descriptions, Featured and alt text |
 | **Run the Librarian** | daily, 5:15 a.m. | the API, MCP surface, deploys, alarms, cost (unchanged, minus step 8) |
 | **Improve Thingy** | every three days, 6:00 a.m. | Thingy's answers (unchanged) |
 
-It takes Keep the Archive True's 5:00 slot without the three-day guard, on
-`gpt-5.6-terra` at high effort. The checkout lease is shared, so on mornings
-the Library Agent is still writing at 5:15, Run the Librarian runs read-only
-and checks the deploy the Library Agent just pushed.
-
-**Who decides what.** The agent judges; the tools do the repeatable work.
-`make blog-round` (`pipeline/blog/round/`) reads micro.blog, proposes
-categories for new posts with the overhaul's labeller (Opus 5.5, its schema and
-mapping), drafts alt with the June backfill's vision call (Sonnet 5.5), and
-carries every guard below in code, on the Librarian's own Anthropic key. The
-agent reads the proposals against the posts (a normal day is zero to six),
-makes the calls that need judgment (a new category and its description, a post
-someone else changed, Featured), writes with `ARGS=--write`, checks the live
-pages and reports.
+It runs on `gpt-5.6-terra` at high effort in Keep the Archive True's slot. The
+agent judges; the tools do the repeatable work. `make blog-round`
+(`pipeline/blog/round/`) proposes categories for new posts with the overhaul's
+labeller (Opus 5.5), drafts alt with the June backfill's vision call (Sonnet
+5.5), and carries every guard below in code, on the Librarian's own Anthropic
+key. The agent reads the proposals against the posts, makes the calls that
+need judgment (a new category and its description, a post someone else
+changed, Featured), writes with `ARGS=--write`, checks the live pages and
+reports. `anthropic_client.py`'s `sonnet` and `opus` move to the 5.5 models
+(they map to `claude-sonnet-5` and `claude-opus-4-7` today).
 
 ## The daily round
 
-1. **Sync.** Read every post and page from micro.blog (21 `q=source` pages)
-   and rewrite the `data/blog/` files whose rendered text changed; podcast as
-   today. The GitHub workflow uses the same refresh and moves from Mondays to
-   a daily backstop at 12:17 UTC (7:17 a.m. CDT, 6:17 a.m. CST).
-2. **The archive checks** Keep the Archive True runs today: new issues match
-   WT Builder's archive-leg receipts, the corpora and graph match their data,
-   the graph push happened, tests are green, content shape holds.
-3. **Describe new photos** (Haiku 5.5) and **write summaries** for new or
-   changed posts (Sonnet 5.5).
-4. **Reader numbers:** yesterday's counts and new kudos into `library.db`.
+1. **Pull** every source into the library (micro.blog is 21 `q=source` pages).
+2. **Check** what Keep the Archive True checks today: every sent issue
+   arrived, the corpora and graph match the library, the graph push happened,
+   tests are green.
+3. **Describe** new photos (Haiku 5.5) and **summarise** new or changed posts
+   (Sonnet 5.5).
+4. **Reader numbers:** yesterday's counts and new kudos.
 5. **File categories** on new posts, creating a category (with its
    description) when the archive calls for one.
 6. **Fill alt** on any post with an empty one.
 7. **Featured:** note candidates daily; decide on Sundays.
-8. **Close out.** Read each written post's live page, upload `library.db`,
-   export `reader.json`, and commit only what changed in `data/` (the blog
-   refresh, the photo and summary sidecars). A push runs `deploy.yml` once
-   through the corpus gate; a day with no content change makes no commit and
-   no deploy. Content can change on a Friday or Saturday now, so `deploy.yml`'s
-   note that nothing automatic changes the corpus from Friday until the send
-   is rewritten.
+8. **Close out:** read each written post's live page, upload the library, and
+   start the corpus build if the library changed (not Friday or Saturday
+   before the send). No commit.
 9. **Report**, then suggestions.
 
 ## How Jamie hears from it
 
-No issues and no inbox to tend. Each run ends in the Codex app with the
-team's report block, then **Suggestions** (an illustrative morning; the names
-are made up):
+No issues and no inbox. Each run ends in the Codex app with the team's report
+block, then **Suggestions** (an illustrative morning; the names are made up):
 
 ```text
 Outcome: CHANGED
@@ -299,190 +317,154 @@ Suggestions
 - "Home Automation" could fold into "Smart Home"; the old page would 404.
 - Board games keep coming up since 2023 with nowhere to go; worth a category if it continues.
 - A 2014 smoker post is climbing: 140 views this week against about 10 a week before.
-- 5918023 (2021-11-19) is a backdated POAP Claims post the old sync never saw.
 ```
 
 - **Told after:** new categories, Featured changes, alt counts, posts it left
   alone because someone else had changed them.
 - **Suggestions** are what it would like Jamie to decide or know, never a
-  question it waits on: category changes it will not make itself because they
-  move or remove pages (rename, merge, split, retire), and anything else about
-  the content it noticed while working (a broken photo, a duplicate, a
-  backdated post, a trip under way, what is climbing). It is not a typo or
-  link hunt. A suggestion shows once when new; Sunday's run lists the ones
-  still open; they are kept in `library.db`. To act on one, Jamie tells the
-  Library Agent in Codex or does it on micro.blog. Nothing waits.
-- **NEEDS JAMIE** only for the first Featured list, and for a forced rebuild
-  if live pages stay stale after a re-file.
-- **Run notes:** on a day it wrote to micro.blog,
-  `AGENT-TEAM/notes/YYYY-MM-DD-library.md` lists each post with before and
-  after. The `events` table is the full audit trail.
+  question it waits on: renames, merges, splits and retirements (they move or
+  remove pages), and anything about the content it noticed (a broken photo, a
+  duplicate, a backdated post, a trip under way, what is climbing). Not a typo
+  or link hunt. A suggestion shows once when new; Sunday lists the open ones.
+  Jamie acts on one by telling the agent in Codex or on micro.blog.
+- **NEEDS JAMIE** only for the first Featured list, and a forced rebuild if
+  live pages stay stale after a re-file.
+- The `events` table is the audit trail; there are no run-note commits.
 
-## Guards (in code, not just in the prompt)
+## Guards (in code, not just the prompt)
 
-- **Compare and set.** Before writing a post's categories, read them live. If
-  they are not what `filings` says the Librarian last wrote, someone else
-  changed them: write nothing, mark the post Jamie-set, adopt the live list
-  and say so. The Librarian never argues with a hand edit.
-- **The Weekly Thing category** is WT Builder's. The Librarian never adds or
-  removes it.
+- **Compare and set.** Read a post's categories live before writing. If they
+  are not what `filings` says the Librarian last wrote, someone else changed
+  them: write nothing, mark the post Jamie-set, adopt the live list, say so.
+- **The Weekly Thing category** is WT Builder's; never added or removed.
 - **Alt edits:** re-fetch right before the write, change only the empty alt
   attribute, confirm every other byte is unchanged, never turn an `<img>` into
   markdown.
 - **Never:** create or delete a post, change a title, date, status or any
   text, delete a category, or bring back Book or Travel Log.
-- **Names compare by slug** ("Pokémon" is `pokemon`), so a spelling never
-  creates a twin.
-- **Pace caps:** 50 category writes and 20 alt edits a day. They pace
-  micro.blog's rebuilds (the 10-22 burst left half the pages stale), not
-  judge content. Past either, the run stops with NEEDS JAMIE.
+- **Names compare by slug** ("Pokémon" is `pokemon`), so a spelling never makes
+  a twin.
+- **Pace caps:** 50 category writes and 20 alt edits a day, to pace
+  micro.blog's rebuilds (the 10-22 burst left half the pages stale). Past
+  either, the run stops with NEEDS JAMIE.
 - **Off switch:** a `PAUSED` file in `pipeline/blog/round/`. `make blog-round`
   is a dry run unless given `--write`.
 
 ## Categories: judgment, not counts
 
-The Library Agent creates a category when a visitor would be better served by
-one: a trip someone would read start to finish, a subject Jamie keeps coming
-back to, a series, a project on thingelstad.xyz. It decides by reading the
-posts, not by counting them. The labels and the overhaul's trip runs are
-evidence it reads, not rules it applies. A re-file of older posts into a new
-category goes at the pace caps.
+The agent creates a category when a visitor would be better served by one: a
+trip someone would read start to finish, a subject Jamie keeps coming back to,
+a series, a project on thingelstad.xyz. It decides by reading the posts; the
+labels and trip runs are evidence, not rules.
 
-- **Every category has a description**: a sentence or two in plain words
-  telling a visitor what they will find there. The agent writes one for each
-  new category and drafts the rest of the 125, keeping any intro Jamie already
-  wrote (it reads each live category page first).
+- **Every category has a description:** a sentence or two telling a visitor
+  what they will find. It writes one for each new category and drafts the rest
+  of the 125, keeping any intro Jamie already wrote.
 - **Names:** Title Case, short, no "/" ("&" is fine), never a near-twin.
   **Order on a post:** trip, series, project, topics, kept; Featured last.
-- **Renames, merges, splits and retirements** are suggestions, never its own
-  move, because they move or remove pages.
 
-**Descriptions reach micro.blog by hand.** Without an API for the Intro, the
-first full set is applied once, in a session on the Mac with Claude in Chrome,
-on Jamie's go. After that a new or changed description appears in the report
-for Jamie to paste. Asking Manton for Intro in the API would let the agent do
-it itself.
+**Descriptions reach micro.blog by hand.** A category's description is
+micro.blog's **Intro** field, set in the web editor (Manton, 2025-08-11,
+"Category improvements"); no API for it turned up, and thing-hugo already
+renders it on the category page. The first full set is applied once from the
+Mac with Claude in Chrome, on Jamie's go; after that a new description appears
+in the report for Jamie to paste. Asking Manton for Intro in the API would let
+the agent do it.
 
 ## Collections become categories
 
-Jamie's idea, and the data supports it: the collection pages are hand-kept
-lists of posts, and categories now do that job on their own.
-
-| Collection pages | Becomes |
+| Collection pages (43, linking 624 posts) | Becomes |
 |---|---|
 | 27 trips and series (Iceland, Yellowstone 2020, Pi Day, Morgan Remodel, …) | their own category, already filed |
 | Minnebar, TeamSPS Events, Crypto, Best of … | Minnestar, TeamSPS, Crypto, Featured |
-| Wordle Games and its ten pages | stay pages (they hold the games, not posts), linked from Lists |
+| Wordle Games and its ten pages | stay pages (they hold the games), linked from Lists |
 | `/collections/` | `/categories/` |
 
-Each collection page's own words become its category's description, then the
-page becomes a redirect to the category (a micro.blog page whose body is only a
-URL redirects), so old links and search results keep working. A trip reads
-start to finish, so the theme step checks that trip category pages list oldest
-first, as the collection pages do. The nav's Collections link becomes
-Categories. This is a one-time set of page edits on micro.blog with its own
-approval line, not daily work; the Librarian's ingest drops the redirected
-pages from the corpus.
+Each collection page's words become its category's description, then the page
+becomes a redirect to the category (a micro.blog page whose body is only a URL
+redirects), so old links keep working. Trip category pages list oldest first,
+as the collection pages do. The nav's Collections link becomes Categories. A
+one-time set of page edits with its own approval line.
 
 ## Featured
 
-What Featured drives: the blog's `/categories/featured/` page, the Featured
-section of `llms.txt` (newest 25), and each archive year's photo tile.
-
-Featured is the shelf a new visitor starts from: the posts that best show who
-Jamie is and what the blog is, across all the years, not only the recent ones.
-No target count and no quota per year; small enough to browse. The agent
-picks by reading, with evidence:
-
-- **Jamie's own signals first:** a post Jamie linked back to later, a Notable,
-  kudos, a Best of … link.
-- **Readers':** views and their trend, discounting the search-only traffic
-  that floats Big Green Egg and Peppa Pig.
-- **The labels:** substance and evergreen.
-- **Never:** link posts, photo-only microposts, POAP claims, imported tweets,
-  anything time-bound, or a post Jamie took off Featured (the `events` table
-  remembers).
-
-The first selection goes to Jamie as a list before anything is written,
-because it changes year tiles at once. After that the agent considers each new
-post a week after it goes up, looks over the whole shelf each quarter, and
-reports changes. Today's three stay.
+Featured drives `/categories/featured/`, the Featured section of `llms.txt`
+and each archive year's photo tile. It is the shelf a new visitor starts from:
+the posts that best show who Jamie is, across all the years. No target count.
+The agent picks by reading, with evidence: Jamie's own signals first (a post
+Jamie linked back to, a Notable, kudos, a Best of … link), then readers'
+(views and their trend, discounting search-only traffic like the 2009 Big
+Green Egg and Peppa Pig posts), then the labels (substance, evergreen). Never
+link posts, photo-only microposts, POAP claims, imported tweets, anything
+time-bound, or a post Jamie took off Featured. The first selection goes to
+Jamie as a list before anything is written; after that each new post is
+considered a week after it goes up and the shelf reviewed each quarter. The
+three there today stay.
 
 ## Alt text
 
-- Fill empty alt only. Any alt Jamie wrote stays, even a short one.
-- The writer is `alt_text.generate_alt`, the one-line vision call with post
-  context that did the June backfill (moved to Sonnet 5.5). The vision
-  description sidecar is context, not the alt.
-- **Catch-up:** the 50 empty since July, then the older ones that can still be
-  fetched, at the pace cap. The 158 dead 2017 uploads and the ones marked
-  unfillable stay as they are.
-- From then on, daily, on every new post.
+- Fill empty alt only; any alt Jamie wrote stays, even a short one.
+- The writer is `alt_text.generate_alt`, the vision call with post context
+  that did the June backfill, moved to Sonnet 5.5. The photo description is
+  context, not the alt.
+- **Catch-up:** the 50 empty since July (46 already described), then older
+  ones that can still be fetched, at the pace cap. The 158 dead 2017 uploads
+  and those marked unfillable in June stay as they are.
 
-## Doc and code updates (with the build)
+## Doc and code updates
 
-- `AGENT-TEAM/README.md`: the team table, the routing rules, label
-  `objective:library` for `objective:archive`.
-- `AGENT-TEAM/library-agent.md` replaces `keep-archive-true.md`;
-  `run-librarian.md` loses step 8; `WORKFLOW.md`'s report gains Suggestions.
-- `AGENT-TEAM/scripts/objective_lease.py`: objective `library` for `archive`;
-  `tests/test_agent_team_objectives.py` pins it.
-- `AGENT-TEAM/automations.toml` and `SCHEDULE.md`: `library-agent` daily at
-  5:00, rendered by `projects-sysadmin/scripts/render_automation_schedules.py`;
-  in the Codex app, Keep the Archive True is removed and the Library Agent
-  installed.
-- `pipeline/library/`: `library.db` schema, download and conditional upload,
-  the seed from the overhaul, the Tinylytics reader, the `reader.json` export.
-- The Lambda: reads `reader/reader.json` (one key added to its read policy in
-  `cloudformation.yaml`); `get_source` and `list_content` show and sort by it;
+- `pipeline/library/`: the schema, the pulls, download and conditional upload,
+  the seed, the Tinylytics reader, `--from-sources`.
+- `librarian_core/paths.py` and the readers of `data/` move to the library;
+  tests use a small fixture library built from a handful of sources.
+- `deploy.yml` and `sync-external-content.yml` as above; `data/` removed.
+- The Lambda: `get_source` and `list_content` show and sort by reader numbers;
   tests and the MCP reference (`mcp-surface.json`, `/connect/reference/`).
-- `AGENTS.md` (this repo): the Library Agent keeps the blog's categories,
-  descriptions and alt text on micro.blog; `library.db` is the catalog. The
-  micro.blog key here writes metadata only.
-- `ALIGNMENT.md`: a boundary row (blog categories and alt: the Librarian
-  decides, micro.blog keeps).
-- `docs/featured-posts.md`: rewritten. New `docs/blog-categories.md`: how the
-  agent decides, names, descriptions.
-- `../AGENTS.md` (thingelstad.com): "the blog's categories and alt text are
-  the Librarian's; micro.blog keeps them".
-- `../www.thingelstad.com/AGENTS.md`: the categories scripts are the
-  overhaul's record; collections retired into categories.
+- WT Builder: the archive leg, `rerender:archive`, `docs/decisions.md`.
+- `AGENT-TEAM/`: `library-agent.md` replaces `keep-archive-true.md`;
+  `run-librarian.md` loses step 8; the README team table and routing;
+  `objective_lease.py` and its test (`library` for `archive`);
+  `automations.toml` and `SCHEDULE.md` (rendered by projects-sysadmin); in the
+  Codex app, Keep the Archive True is removed and the Library Agent installed.
+- `AGENTS.md`, `ALIGNMENT.md`, `README.md` here; `../AGENTS.md`; the
+  `../www.thingelstad.com/AGENTS.md` note that collections retired;
+  `docs/featured-posts.md` rewritten; a new `docs/blog-categories.md`.
 
 ## Build order
 
-Each step is its own commit; tests with each.
+Each step is its own commit, with tests.
 
-1. **Refresh sync** (no micro.blog write): compare-every-post ingest, daily
-   workflow, then one full refresh commit. Deploys through the corpus gate.
-2. **The catalog:** `library.db` built, seeded from the overhaul, checked
-   against the live pull (expect exactly the 7 Jamie-set posts to differ), and
-   in S3.
-3. **Reader numbers:** Tinylytics history and daily counts into `library.db`,
-   `reader.json`, and the Lambda reading it (a stack deploy).
-4. **`make blog-round` in dry run**, then the Library Agent replaces Keep the
-   Archive True in the team and the Codex app. Its archive work runs as Keep
-   the Archive True's does today; its blog writes stay dry for one morning,
-   and Jamie reads that report.
+1. **The library:** schema, pulls from every source, descriptions and
+   summaries imported, the catalog seeded, uploaded to S3. Nothing reads it
+   yet.
+2. **The switch:** CI's policy gains `artifacts/library.db`; the corpus built
+   from the library and checked against the build from git; `deploy.yml` and
+   the GitHub round; the WT Builder pull request; `data/` leaves git. Deploys
+   through the corpus gate, and Thingy sees the new categories.
+3. **Reader numbers:** Tinylytics history and daily counts, carried in the
+   corpus, shown and sorted by Thingy and the MCP (a stack deploy).
+4. **`make blog-round` in dry run,** and the Library Agent replaces Keep the
+   Archive True. Its blog writes stay dry for one morning; Jamie reads that
+   report.
 5. **Writes on:** categories and alt daily; the alt catch-up at the pace cap.
-6. **Descriptions:** drafted for all 125 categories, applied once on
-   micro.blog on Jamie's go.
-7. **Collections into categories:** the page redirects and the nav, on
-   Jamie's go.
-8. **Featured:** the first list to Jamie; written on Jamie's go.
+6. **Descriptions** drafted for all 125 categories, applied on Jamie's go.
+7. **Collections into categories,** on Jamie's go.
+8. **Featured:** the first list to Jamie, written on Jamie's go.
 9. **Docs.**
 
 **Cost.** The overhaul labelled 10,469 posts for about $19 at batch prices. A
-day's handful at full price is a few cents; alt is one vision call a photo;
-the 125 descriptions and the first Featured selection are a few dollars once.
-Tinylytics reads and the S3 files cost nothing worth counting. Under $5 a
-month in the usual run, plus the Codex run itself.
+day's handful is a few cents; the 125 descriptions and the first Featured list
+are a few dollars once. A month of 90 MB copies in S3 is about six cents.
+Under $5 a month, plus the Codex run.
 
 ## Decisions for Jamie
 
-1. **Collections:** the swap above, with Wordle Games staying pages linked
-   from Lists. Recommended.
-2. **Descriptions on micro.blog:** the first set applied once with Claude in
-   Chrome, then pasted from the report, and Manton asked for an API.
-   Recommended, unless Jamie knows a way to set Intro from the API.
+1. **Collections:** the swap above. Recommended.
+2. **Descriptions:** applied once with Claude in Chrome, then pasted from the
+   report, and Manton asked for an API. Recommended.
 3. **Exact counts in Thingy's answers** to readers, or only ranks and
-   direction? The plan uses counts (the reading of "private in the corpus").
+   direction? The plan uses counts.
+4. **WT Builder's archive leg:** becomes the nudge that starts the build
+   (recommended), or goes, and a send reaches Thingy the next morning.
+5. **Repository secrets** (Anthropic, Tinylytics) for a full round from
+   GitHub. Not needed to build; the pull and the corpus build need none.
