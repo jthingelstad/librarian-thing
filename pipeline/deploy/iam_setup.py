@@ -86,6 +86,29 @@ def simulate(session: boto3.Session) -> None:
             True,
             {},
         ),
+        # The library: CI downloads it to build the corpus and its pull
+        # round uploads it (If-Match). Nothing else under artifacts/ opens up.
+        (
+            "deploy",
+            "s3:GetObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/library.db",
+            True,
+            {},
+        ),
+        (
+            "deploy",
+            "s3:PutObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/library.db",
+            True,
+            {},
+        ),
+        (
+            "deploy",
+            "s3:PutObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/library.db.bak",
+            False,
+            {},
+        ),
         (
             "deploy",
             "s3:PutObject",
@@ -484,16 +507,21 @@ def verify(session: boto3.Session) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("validate", "apply", "verify"))
+    parser.add_argument("command", choices=("validate", "apply", "deploy-policy", "verify"))
     parser.add_argument("--profile", required=True)
     parser.add_argument("--snapshot-dir", type=Path)
     args = parser.parse_args()
     session = boto3.Session(profile_name=args.profile, region_name="us-east-1")
     if session.client("sts").get_caller_identity()["Account"] != ACCOUNT:
         raise RuntimeError("Wrong AWS account")
-    if args.command in ("validate", "apply"):
+    if args.command in ("validate", "apply", "deploy-policy"):
         validate(session)
-    if args.command == "apply":
+    if args.command == "deploy-policy":
+        # Only the OIDC role's scoped policy: a new default version when the
+        # reviewed document changed, nothing else touched.
+        put_managed(session.client("iam"), DEPLOY_POLICY, document("deploy"))
+        verify(session)
+    elif args.command == "apply":
         if args.snapshot_dir is None:
             parser.error("apply requires --snapshot-dir outside the repository")
         if args.snapshot_dir.resolve().is_relative_to(DOCUMENTS.parents[2]):

@@ -29,7 +29,8 @@ See `apps/librarian/infra/NATIVE-WEB.md` for release ordering and rollback.
 
 ## Authority
 
-- `deploy.json`: private `code/*` and four corpus/graph objects, bucket-security
+- `deploy.json`: private `code/*`, four corpus/graph objects and the library
+  (`artifacts/library.db`, read and written by CI since 2026-10-22), bucket-security
   inspection, current embedding/model smoke checks, log retention, and updates
   to the one stack using the exact CloudFormation service role. No direct
   Lambda, DynamoDB, IAM-policy, or bucket-security administration.
@@ -74,6 +75,10 @@ bash pipeline/deploy/setup-oidc.sh verify --profile cloud-engineer
 on any finding, saves private IAM rollback metadata outside the repository,
 installs application boundaries before delegating their management, installs the
 CloudFormation service role, and replaces the OIDC role's legacy attachments.
+`deploy-policy` validates the same way, then installs only a changed
+`deploy.json` as a new default version of `WeeklyThingLibrarianDeployScoped`
+and verifies: the step for a reviewed change to CI's access, such as the
+library's object on 2026-10-22.
 `verify` compares live IAM policies and trust with source. Never widen the
 standing auditor merely to get past an access denial; use an authorized reader.
 
