@@ -43,6 +43,7 @@ from typing import Any, Iterator
 
 import yaml
 from dotenv import load_dotenv
+from librarian_core.paths import DATA
 
 sys.stdout.reconfigure(line_buffering=True)
 load_dotenv()
@@ -53,7 +54,7 @@ sys.path.insert(0, str(REPO))
 import alt_text  # noqa: E402
 import microblog  # noqa: E402
 
-BLOG_POSTS_DIR = REPO / "data" / "blog" / "posts"
+BLOG_POSTS_DIR = DATA / "blog" / "posts"
 RUN_DIR = REPO / "tmp" / "blog-alt"
 BACKUP_DIR = RUN_DIR / "backups"
 # Image URLs that 404/410'd on a prior run — skipped (no fetch, no budget) on

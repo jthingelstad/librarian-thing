@@ -60,3 +60,6 @@ apps/site/_data/status.json
 
 # Generated site inputs — built transiently, handed off to the website repo, never committed here
 apps/site/
+
+# The library's local copy (library.db and its ETag; see pipeline/library/)
+.library/

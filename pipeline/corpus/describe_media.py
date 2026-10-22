@@ -61,9 +61,10 @@ import anthropic
 import requests
 from dotenv import load_dotenv
 from librarian_core.corpus import build_blog_corpus, build_corpus
+from librarian_core.paths import MEDIA_DESCRIPTIONS_PATH
 
 ROOT = Path(__file__).resolve().parents[2]
-SIDECAR = ROOT / "data" / "librarian" / "media-descriptions.json"
+SIDECAR = MEDIA_DESCRIPTIONS_PATH
 
 # Haiku 5.5 (2026-10-08). It thinks by default and the thinking counts
 # against max_tokens, so the 30-word answer gets low effort and a budget well

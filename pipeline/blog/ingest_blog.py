@@ -38,11 +38,18 @@ embedding text; the canonical store keeps them for a future image pass).
 Idempotent: re-running UPSERTs by ``microblog_id`` and rewrites unchanged posts
 byte-identically (fixed front-matter key order) so the embed cache stays warm.
 
+``--prune`` makes a full walk authoritative: posts micro.blog no longer
+returns (deleted, unpublished) leave the manifest, and post files the walk did
+not write (those, and old paths of posts whose URL changed) are removed. It
+refuses, writing nothing, when the walk saw fewer than 90% of the posts the
+manifest knows, since a short walk is an outage, not a mass deletion.
+
 Usage::
 
     python pipeline/blog/ingest_blog.py --dry-run --limit 50   # spike
     python pipeline/blog/ingest_blog.py                        # full backfill
     python pipeline/blog/ingest_blog.py --since-last           # incremental top-up
+    python pipeline/blog/ingest_blog.py --prune                # full walk, drop what is gone
 """
 
 from __future__ import annotations
@@ -59,6 +66,7 @@ from urllib.parse import urlparse
 
 import requests
 from dotenv import load_dotenv
+from librarian_core.paths import DATA
 
 sys.stdout.reconfigure(line_buffering=True)
 load_dotenv()
@@ -72,7 +80,7 @@ sys.path.insert(0, str(REPO))
 # to markdown.
 from microblog import _content_to_markdown  # noqa: E402
 
-BLOG_DIR = REPO / "data" / "blog"
+BLOG_DIR = DATA / "blog"
 PAGES_DIR = BLOG_DIR / "pages"
 INDEX_PATH = BLOG_DIR / "index.json"
 
@@ -97,6 +105,8 @@ PAGE_SITE_PATHS = frozenset(
 
 DEFAULT_MICROPUB_URL = "https://micro.blog/micropub"
 PAGE_SIZE = 500
+# --prune refuses a walk that saw fewer than this share of the known posts.
+PRUNE_FLOOR = 0.9
 _TIMEOUT = 60.0
 _UA = "WeeklyThing-BlogIngest/1.0"
 _URL_DATE_RE = re.compile(r"/(\d{4})/(\d{2})/(\d{2})/")
@@ -427,6 +437,23 @@ def write_pages(pages: list[dict[str, Any]]) -> int:
     return removed
 
 
+def prune_posts(written: set[Path]) -> int:
+    """Delete post files a full walk did not write (posts gone from micro.blog,
+    and the old file of a post whose URL changed). Returns the number removed."""
+    keep = {path.resolve() for path in written}
+    posts_dir = BLOG_DIR / "posts"
+    removed = 0
+    if posts_dir.exists():
+        for stale in sorted(posts_dir.rglob("*.md")):
+            if stale.resolve() not in keep:
+                stale.unlink()
+                removed += 1
+        for directory in sorted(posts_dir.rglob("*"), reverse=True):
+            if directory.is_dir() and not any(directory.iterdir()):
+                directory.rmdir()
+    return removed
+
+
 def write_post(post: dict[str, Any]) -> Path:
     path = BLOG_DIR / post["path"]
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -477,7 +504,14 @@ def main() -> int:
         help="incremental: only posts not already in the manifest",
     )
     ap.add_argument("--dry-run", action="store_true", help="fetch + report, write nothing")
+    ap.add_argument(
+        "--prune",
+        action="store_true",
+        help="full walk only: drop posts micro.blog no longer returns and files the walk did not write",
+    )
     args = ap.parse_args()
+    if args.prune and (args.since_last or args.limit):
+        ap.error("--prune needs a full walk (no --since-last, no --limit)")
 
     index = load_index()
     known_uids: set[int] | None = None
@@ -492,6 +526,15 @@ def main() -> int:
         flush=True,
     )
     posts = iter_posts(limit=args.limit, known_uids=known_uids)
+    known_count = len(index.get("posts", {}))
+    if args.prune and len(posts) < PRUNE_FLOOR * known_count:
+        print(
+            f"refusing to prune: the walk saw {len(posts)} post(s), under "
+            f"{PRUNE_FLOOR:.0%} of the {known_count} the manifest knows; nothing written",
+            file=sys.stderr,
+            flush=True,
+        )
+        return 1
 
     print("\n── ingest report ──", flush=True)
     print(f"  posts:        {len(posts)}", flush=True)
@@ -522,8 +565,8 @@ def main() -> int:
         return 0
 
     written = 0
-    posts_index: dict[str, Any] = dict(index.get("posts", {}))
-    highest = int(index.get("highest_id") or 0)
+    posts_index: dict[str, Any] = {} if args.prune else dict(index.get("posts", {}))
+    highest = 0 if args.prune else int(index.get("highest_id") or 0)
     claimed: dict[str, int] = {}
     for p in posts:
         # Disambiguate the rare case where two posts resolve to the same
@@ -540,6 +583,7 @@ def main() -> int:
             "title": p["title"],
         }
         highest = max(highest, p["id"])
+    pruned = prune_posts({BLOG_DIR / p["path"] for p in posts}) if args.prune else 0
     removed = write_pages(pages)
     new_index = {
         "highest_id": highest,
@@ -572,7 +616,8 @@ def main() -> int:
         write_index(new_index)
     print(
         f"\nwrote {written} post file(s) and {len(pages)} page(s) ({removed} stale page file(s) removed); "
-        f"manifest tracks {len(posts_index)} post(s), highest_id={highest}",
+        + (f"pruned {pruned} post file(s) the walk did not write; " if args.prune else "")
+        + f"manifest tracks {len(posts_index)} post(s), highest_id={highest}",
         flush=True,
     )
     return 0

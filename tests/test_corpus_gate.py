@@ -15,7 +15,7 @@ import unittest.mock
 from pathlib import Path
 
 import yaml
-from librarian_core.paths import REPO
+from librarian_core.paths import DATA, REPO
 
 AUDIO_URL = "https://files.thingelstad.com/weekly-thing/274/weekly-thing-274-aa.mp3"
 
@@ -303,7 +303,7 @@ class JournalRepairTest(unittest.TestCase):
         rows = repair.confirmed_rows(repair.MAP)
         self.assertEqual(sum(len(pairs) for pairs in rows.values()), 432)
         for issue, pairs in rows.items():
-            body = (REPO / "data" / "issues" / str(issue) / "archive.md").read_text()
+            body = (DATA / "issues" / str(issue) / "archive.md").read_text()
             for old, new in pairs.items():
                 self.assertNotIn(f"]({old})", body, f"WT{issue}")
                 self.assertIn(f"]({new})", body, f"WT{issue}")

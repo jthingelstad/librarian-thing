@@ -44,6 +44,7 @@ from typing import Any, Optional
 
 import yaml
 from dotenv import load_dotenv
+from librarian_core.paths import DATA
 
 sys.stdout.reconfigure(line_buffering=True)
 load_dotenv()
@@ -53,7 +54,7 @@ sys.path.insert(0, str(REPO))
 
 import anthropic_client  # noqa: E402
 
-BLOG_POSTS_DIR = REPO / "data" / "blog" / "posts"
+BLOG_POSTS_DIR = DATA / "blog" / "posts"
 RUN_DIR = REPO / "tmp" / "blog-typos"
 
 # Front matter is `---\n<inner>\n---\n` at the very top (byte-stable, written by

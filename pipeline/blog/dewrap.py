@@ -51,6 +51,7 @@ from typing import Any, Optional
 
 import yaml
 from dotenv import load_dotenv
+from librarian_core.paths import DATA
 
 sys.stdout.reconfigure(line_buffering=True)
 load_dotenv()
@@ -60,7 +61,7 @@ sys.path.insert(0, str(REPO))
 
 import microblog  # noqa: E402
 
-BLOG_POSTS_DIR = REPO / "data" / "blog" / "posts"
+BLOG_POSTS_DIR = DATA / "blog" / "posts"
 RUN_DIR = REPO / "tmp" / "blog-dewrap"
 BACKUP_DIR = RUN_DIR / "backups"
 

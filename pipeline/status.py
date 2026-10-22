@@ -16,9 +16,11 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from librarian_core.paths import DATA
+
 REPO = Path(__file__).resolve().parents[1]
-ISSUES_ROOT = REPO / "data" / "issues"
-ARTIFACTS_ROOT = REPO / "data" / "librarian"
+ISSUES_ROOT = DATA / "issues"
+ARTIFACTS_ROOT = DATA / "librarian"
 LIBRARIAN_BUCKET = os.environ.get("LIBRARIAN_BUCKET", "weekly-thing-librarian")
 LIBRARIAN_CORPUS_KEY = os.environ.get("LIBRARIAN_CORPUS_KEY", "artifacts/corpus.json")
 LIBRARIAN_GRAPH_KEY = os.environ.get("LIBRARIAN_GRAPH_KEY", "artifacts/graph.json")

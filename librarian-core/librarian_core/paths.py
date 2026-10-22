@@ -6,32 +6,40 @@ extra env vars: librarian-core/ lives at the repo root, so parents[2] is REPO.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 PROJECTS_DIR = REPO.parent
-ARCHIVE_DIR = REPO / "data" / "issues"
-# Site grounding pages moved to the weekly.thingelstad.com repo in the
-# 2026-08 split; the corpus build reads the snapshots in data/site/ so it
-# stays self-contained (see data/site/README.md for the re-copy step).
-SITE_DIR = REPO / "data" / "site"
+# The data tree every reader and builder works on. The library
+# (librarian_core/library, one SQLite file in S3) holds the archive; data/ is
+# a working copy of it, and LIBRARIAN_DATA_DIR points the same code at
+# another copy (the twin build, a test tree).
+DATA = Path(os.environ.get("LIBRARIAN_DATA_DIR") or REPO / "data").resolve()
+ARCHIVE_DIR = DATA / "issues"
+# weekly.thingelstad.com's archive pages as pulled (apps/site/archive/<n>.md);
+# the library derives issues/<n>/archive.md from them.
+WEEKLY_ARCHIVE_DIR = DATA / "weekly" / "archive"
+# Site grounding pages (about, support) pulled from weekly.thingelstad.com's
+# apps/site/, read by the corpus build as site_page chunks.
+SITE_DIR = DATA / "site"
 FAQ_PATH = REPO / "apps" / "librarian" / "lambda" / "shared" / "faq.json"
-CORPUS_PATH = REPO / "data" / "librarian" / "corpus.json"
+CORPUS_PATH = DATA / "librarian" / "corpus.json"
 # Vision descriptions for archive images, keyed by image URL - written by
 # pipeline/corpus/describe_media.py, merged into media entries at build.
-MEDIA_DESCRIPTIONS_PATH = REPO / "data" / "librarian" / "media-descriptions.json"
-GRAPH_PATH = REPO / "data" / "librarian" / "graph.json"
+MEDIA_DESCRIPTIONS_PATH = DATA / "librarian" / "media-descriptions.json"
+GRAPH_PATH = DATA / "librarian" / "graph.json"
 
 # thingelstad.com blog — Jamie's 20-year personal blog, ingested by
 # pipeline/blog/ingest_blog.py. Its own corpus (separate from the Weekly
 # Thing corpus above) so blog scope loads lazily and never crowds out
 # Weekly-Thing retrieval. See build_blog_corpus in corpus.py.
-BLOG_DIR = REPO / "data" / "blog" / "posts"
-BLOG_CORPUS_PATH = REPO / "data" / "librarian" / "blog_corpus.json"
+BLOG_DIR = DATA / "blog" / "posts"
+BLOG_CORPUS_PATH = DATA / "librarian" / "blog_corpus.json"
 # Generated abstracts for titled blog posts, keyed by microblog_id - written
 # by pipeline/blog/abstracts.py, merged onto post records only (display
 # metadata, never chunk text or embedding input; see librarian_core/abstracts.py).
-BLOG_ABSTRACTS_PATH = REPO / "data" / "librarian" / "blog-abstracts.json"
+BLOG_ABSTRACTS_PATH = DATA / "librarian" / "blog-abstracts.json"
 
 # Another Thing podcast episodes are authored/published by the sibling
 # another.thingelstad.com repo, then normalized into Studio-owned data so
@@ -39,12 +47,12 @@ BLOG_ABSTRACTS_PATH = REPO / "data" / "librarian" / "blog-abstracts.json"
 # pages.
 ANOTHER_THING_REPO = PROJECTS_DIR / "another.thingelstad.com"
 ANOTHER_THING_EPISODES_DIR = ANOTHER_THING_REPO / "content" / "episodes"
-PODCAST_DIR = REPO / "data" / "podcast" / "another-thing" / "episodes"
-PODCAST_CORPUS_PATH = REPO / "data" / "librarian" / "podcast_corpus.json"
+PODCAST_DIR = DATA / "podcast" / "another-thing" / "episodes"
+PODCAST_CORPUS_PATH = DATA / "librarian" / "podcast_corpus.json"
 
 # Things I've built - Jamie's project registry at thingelstad.xyz, which
 # publishes itself as JSON. pipeline/things/import_things.py snapshots it
 # here and the Weekly Thing corpus build turns it into undated "thing"
 # chunks (see _things_chunks in corpus.py and data/things/README.md).
 THINGS_URL = "https://thingelstad.xyz/things.json"
-THINGS_PATH = REPO / "data" / "things" / "things.json"
+THINGS_PATH = DATA / "things" / "things.json"

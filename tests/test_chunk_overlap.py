@@ -12,6 +12,7 @@ import unittest
 from pathlib import Path
 
 from librarian_core import corpus as core
+from librarian_core.paths import DATA
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -90,7 +91,7 @@ class ArchiveOverlapRegressionTests(unittest.TestCase):
         return [core.chunk_section(section) for _name, section in core.split_sections(body)]
 
     def test_wt302_journal_continuation_opens_with_the_sentence(self):
-        sections = self._chunks(REPO / "data" / "issues" / "302" / "archive.md")
+        sections = self._chunks(DATA / "issues" / "302" / "archive.md")
         for chunks in sections:
             _assert_verbatim_overlaps(self, chunks, 60)
         openers = [c[:59] for chunks in sections for c in chunks[1:] if "1st issue" in c[:120]]
@@ -101,7 +102,7 @@ class ArchiveOverlapRegressionTests(unittest.TestCase):
             "2024/11/2024-11-17-thoughts-after-writing.md",
             "2007/05/2007-05-11-openid-makes-identity.md",
         ):
-            path = REPO / "data" / "blog" / "posts" / relative
+            path = DATA / "blog" / "posts" / relative
             if not path.exists():
                 self.skipTest(f"{path} not in this checkout")
             _metadata, body = core.read_issue(path)

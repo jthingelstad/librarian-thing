@@ -33,12 +33,13 @@ import sys
 from pathlib import Path
 
 import boto3
+from librarian_core.paths import GRAPH_PATH
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import github_repo  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-GRAPH = REPO_ROOT / "data" / "librarian" / "graph.json"
+GRAPH = GRAPH_PATH
 
 
 def fetch_s3_graph(bucket: str, key: str) -> bytes:
