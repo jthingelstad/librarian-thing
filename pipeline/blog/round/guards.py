@@ -35,11 +35,11 @@ ALT_CAP = 20
 WEEKLY_THING = "weekly-thing"
 FEATURED = "featured"
 RETIRED = frozenset({"book", "travel-log"})
-# Seven posts share an address with an earlier post, so Micropub reaches the
+# Four posts share an address with an earlier post, so Micropub reaches the
 # other one; Jamie sets these by hand (2026-10-22: "Don't treat them as drift").
-SHARED_ADDRESS = frozenset(
-    f"blog-{n}" for n in (377970, 1074798, 1074800, 1074801, 1075452, 1076156, 1076174)
-)
+# The three 2014-12-21 posts left the list the same day: each has its own
+# address now, and Micropub answers for each by it.
+SHARED_ADDRESS = frozenset(f"blog-{n}" for n in (377970, 1075452, 1076156, 1076174))
 
 # Order on a post: trip, series, project, topics, kept; Featured last. The
 # theme's "Keep going" takes the first category with an earlier titled post.
