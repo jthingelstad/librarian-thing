@@ -16,8 +16,8 @@ event for every write it would make (``dry_run`` 1), and the images it found
 gone (``alt_skips``). It downloads the library first and uploads it with the
 ETag it started from, once more from a fresh copy if the library moved.
 
-``--write`` applies a reviewed proposals file and refuses until plan step 5
-turns writes on (``guards.WRITES_ON``). ``--recheck`` and ``--posts`` re-file
+``--write`` applies a reviewed proposals file, and refuses while
+``guards.WRITES_ON`` is off (on since plan step 5). ``--recheck`` and ``--posts`` re-file
 posts already filed to show how the labeller reads them; they are never
 written. Every guard is in ``guards.py``; a ``PAUSED`` file beside it stops
 the round.
@@ -621,7 +621,9 @@ def report(day: str, result: dict[str, Any]) -> str:
     categories = [p for p in result["categories"] if not p["check"]]
     checks = [p for p in result["categories"] if p["check"]]
     would = [p for p in categories if not p["problem"] and not _same(p)]
-    lines.append(f"Run {result['run']}, dry run: nothing was written to micro.blog.")
+    lines.append(
+        f"Run {result['run']} proposes; nothing reaches micro.blog until `--write` applies it."
+    )
     lines += ["", f"## Categories for new posts ({len(would)} would be written)", ""]
     if not categories:
         lines.append("No unfiled posts.")

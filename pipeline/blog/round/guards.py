@@ -12,7 +12,7 @@ tests share them:
 - an alt edit changes only one empty alt and leaves every other byte alone,
   and never turns an ``<img>`` into markdown;
 - pace caps of 50 category writes and 20 alt edits a day, a ``PAUSED`` file
-  that stops the round, and writes that stay off until plan step 5.
+  that stops the round, and a switch that turns every write off.
 """
 
 from __future__ import annotations
@@ -23,9 +23,10 @@ import re
 import unicodedata
 from pathlib import Path
 
-# Plan step 5 ("Writes on") turns this on, on Jamie's go. Until then --write
-# refuses and the round only proposes.
-WRITES_ON = False
+# Plan step 5 ("Writes on") turned this on, on Jamie's go (2026-10-22). Set
+# False, --write refuses and the round only proposes; a PAUSED file stops the
+# whole round without a commit.
+WRITES_ON = True
 PAUSE_FILE = Path(__file__).with_name("PAUSED")
 
 CATEGORY_CAP = 50
@@ -77,9 +78,7 @@ def check_running(*, writing: bool) -> None:
     if PAUSE_FILE.exists():
         raise RoundStop(f"PAUSED: {PAUSE_FILE} exists; remove it to run the round")
     if writing and not WRITES_ON:
-        raise RoundStop(
-            "writes are off until Jamie's go (plan step 5): the round only proposes for now"
-        )
+        raise RoundStop("writes are off (guards.WRITES_ON): the round only proposes")
 
 
 def target_categories(

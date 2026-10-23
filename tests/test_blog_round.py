@@ -331,7 +331,9 @@ class GateTests(Library):
             self.round()
 
     def test_writes_are_refused_while_off_and_nothing_is_posted(self):
-        self.assertFalse(guards.WRITES_ON)
+        off = mock.patch.object(guards, "WRITES_ON", False)
+        off.start()
+        self.addCleanup(off.stop)
         with self.assertRaises(guards.RoundStop):
             self.micropub.replace_categories(COFFEE, ["Coffee"])
         with self.assertRaises(guards.RoundStop):
@@ -438,7 +440,7 @@ class DryRoundTests(Library):
         n = self.conn.execute("SELECT count(*) AS n FROM events WHERE dry_run = 1").fetchone()["n"]
         self.assertEqual(n, 2)  # one category write, one alt
         text = blog_round.report("2026-10-17", result)
-        self.assertIn("nothing was written to micro.blog", text)
+        self.assertIn("nothing reaches micro.blog until `--write`", text)
         self.assertIn("blog-300", text)
 
 

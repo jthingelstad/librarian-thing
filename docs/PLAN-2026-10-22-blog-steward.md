@@ -447,6 +447,7 @@ Each step is its own commit, with tests.
    Archive True. Its blog writes stay dry for one morning; Jamie reads that
    report.
 5. **Writes on:** categories and alt daily; the alt catch-up at the pace cap.
+   On 2026-10-22, on Jamie's go.
 6. **Descriptions** drafted for all 125 categories, applied on Jamie's go.
 7. **Collections into categories,** on Jamie's go.
 8. **Featured:** the first list to Jamie, written on Jamie's go.

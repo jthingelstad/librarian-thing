@@ -72,9 +72,9 @@ Weekly Thing never added or removed, Book and Travel Log never back, nothing
 removed from a post, no near-twin names, only one empty alt changed and never
 an `<img>` turned into markdown, 50 category writes and 20 alt edits a day.
 
-- **Writes stay off until Jamie's go (plan step 5).** `--write` refuses while
-  `guards.WRITES_ON` is false. Never change it yourself; until it is on,
-  report what the round would write.
+- **Writes are on since Jamie's go on 2026-10-22 (plan step 5).**
+  `guards.WRITES_ON` is the switch: never change it yourself. If Jamie turns
+  it off, `--write` refuses; report what the round would have written.
 - A `PAUSED` file in `pipeline/blog/round/` stops the round. Jamie makes it;
   never remove it.
 - micro.blog is written only through `make blog-round`. Never rename, merge,
