@@ -6,8 +6,8 @@
  * script is layers 2 and 3.
  *
  * Corpus source: EVAL_CORPUS_DIR (corpus.json / blog_corpus.json /
- * podcast_corpus.json / reference_corpus.json / graph.json as plain or
- * gzipped JSON) or S3 via
+ * podcast_corpus.json / reference_corpus.json / links_corpus.json /
+ * graph.json as plain or gzipped JSON) or S3 via
  * CORPUS_BUCKET credentials. With EVAL_CORPUS_FALLBACK=s3 a file missing
  * from the dir is read from S3 instead: the deploy's corpus gate stages
  * only the corpora it rebuilt and evals them beside the live rest.
@@ -52,6 +52,9 @@ const CORPUS_FILES = {
   // pages and the reference documents. Absent (not uploaded yet), the
   // Weekly Thing and blog corpora still carry the rows, as before.
   reference: 'reference_corpus.json',
+  // The saved links of Linking Things (2026-10-24), read only when a call
+  // names source_kind link. Absent (not uploaded yet), it is empty.
+  link: 'links_corpus.json',
   // The topic graph feeds list_topics, archive_lens topic cards and
   // similar issues; without it those tools ran degraded in CI.
   graph: 'graph.json'
@@ -720,6 +723,51 @@ if (corpora.reference?.chunks?.length) {
     'KA search_archive consults the reference base under source_kind podcast',
     kinds.includes('site_page'),
     kinds.join(', ')
+  );
+}
+// The saved links of Linking Things (2026-10-24) are read only when a call
+// names source_kind link, and then alone (beside the reference base).
+if (corpora.link?.chunks?.length) {
+  const savedCount = corpora.link.chunks.length;
+  const plain = await run('search_archive', { query: 'Minnebar community', limit: 12 });
+  const leaked = (plain?.results || []).filter((group) => String(group.id).startsWith('link-'));
+  check(
+    'KA search_archive reads no saved link unless source_kind names link',
+    leaked.length === 0,
+    leaked.map((group) => group.id).join(', ')
+  );
+  const saved = await run('search_archive', { query: 'Minnebar community', limit: 12, source_kind: 'link' });
+  const groups = saved?.results || [];
+  const dated = groups.filter((group) => /^(wt|blog|ep)-/.test(String(group.id)));
+  check(
+    'KA search_archive source_kind link returns saved links and no dated prose',
+    groups.some((group) => group.source_kind === 'link') && dated.length === 0,
+    groups.map((group) => group.id).join(', ')
+  );
+  const first = groups.find((group) => group.source_kind === 'link');
+  if (first) {
+    const read = await run('get_source', { id: first.id }, { scope: 'weekly_thing' });
+    check(
+      'KA get_source reads a saved link whatever the scope, at its Linking Things page',
+      read?.source?.id === first.id &&
+        /^https:\/\/links\.thingelstad\.xyz\/links\/[0-9a-f]{12}\/$/.test(read?.source?.url),
+      JSON.stringify(read?.source?.url)
+    );
+  }
+  const stats = await run('corpus_stats', { source_kind: 'link' });
+  const entry = (stats?.sources || [])[0] || {};
+  const yearTotal = (entry.counts_by_year || []).reduce((sum, row) => sum + row.count, 0);
+  check(
+    'KA corpus_stats source_kind link counts every saved link, each in a year',
+    entry.source_kind === 'link' && entry.item_count === savedCount && yearTotal === savedCount,
+    `${entry.item_count} items, ${yearTotal} in years, of ${savedCount}`
+  );
+  const plainStats = await run('corpus_stats', {});
+  const pointer = (plainStats?.sources || []).find((row) => row.source_kind === 'link');
+  check(
+    'KA corpus_stats names the saved links without counting them by default',
+    Boolean(pointer) && pointer.searched_by_default === false && pointer.item_count === undefined,
+    JSON.stringify(pointer)
   );
 }
 // QA2 I2-1: WT212's Journal links back to a 2021 post; that is a reference,

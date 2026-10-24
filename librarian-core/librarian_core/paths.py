@@ -79,3 +79,19 @@ REFERENCE_INTAKE_DIR = REPO / "reference-documents"
 REFERENCE_DIR = DATA / "reference"
 REFERENCE_UNPUBLISHED_DIR = DATA / "reference-unpublished"
 REFERENCE_CORPUS_PATH = DATA / "librarian" / "reference_corpus.json"
+
+# Linking Things (Jamie, 2026-10-23): every public link Jamie has saved since
+# 2005, published as a static database at links.thingelstad.xyz and rebuilt
+# there nightly at 00:30 US Central. That site owns the links; the Librarian
+# depends on it and never the reverse. pipeline/links/import_links.py
+# snapshots links.json (one row per saved link) and issues.json (the links
+# each Weekly Thing issue carried, joined to the saved links) into the
+# library's links/, and build_links_corpus in corpus.py turns them into the
+# links corpus: one passage per saved link, selectable as source_kind link.
+LINKS_SITE = "https://links.thingelstad.xyz"
+LINKS_URL = f"{LINKS_SITE}/links.json"
+LINK_ISSUES_URL = f"{LINKS_SITE}/issues.json"
+LINKS_DIR = DATA / "links"
+LINKS_PATH = LINKS_DIR / "links.json"
+LINK_ISSUES_PATH = LINKS_DIR / "issues.json"
+LINKS_CORPUS_PATH = DATA / "librarian" / "links_corpus.json"

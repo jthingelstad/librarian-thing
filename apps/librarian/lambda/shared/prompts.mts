@@ -111,7 +111,22 @@ export function promptFingerprint(): string {
 //        take doc-<name>. A document's passages are its H2 sections and carry
 //        document_source and document_date (its front matter's source and
 //        date: citation metadata, never a publish date).
-export const MCP_SERVER_VERSION = '2.8.0';
+// 2.9.0 (2026-10-24): the saved links of Linking Things (links.thingelstad.xyz),
+//        source_kind link, one passage a link (link-<id>, labelled by title,
+//        dated by the Chicago day Jamie saved it). No scope or default holds
+//        them: search_archive, find_evidence, quote_search, list_content,
+//        latest_content, on_this_day, corpus_stats, compare_eras and
+//        archive_lens read them only when source_kind is link, and then only
+//        them; find_links, media_search, top_references and archive_gems
+//        refuse it. get_source and source_neighborhood take link-<id> (or its
+//        Linking Things url) whatever the scope; librarian://link/{id}.
+//        corpus_stats with source_kind link counts them by year, link_type,
+//        note_voice and host; with no source_kind it names them in one entry
+//        without counts. A link passage carries link_id, link_url, host,
+//        link_type, tags, note_voice and shared_in_issues. find_links rows
+//        that are a saved link, or link its page, name it as saved_link, and
+//        find_links with a link-<id> lists them.
+export const MCP_SERVER_VERSION = '2.9.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

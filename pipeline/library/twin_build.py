@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The switch's check: build today's corpora from two data trees and compare.
 
-Builds the Weekly Thing, blog, podcast and reference corpora, unembedded and exactly as
+Builds the Weekly Thing, blog, podcast, reference and links corpora, unembedded and exactly as
 the upload scripts compose them, once from each tree (``LIBRARIAN_DATA_DIR``
 in a child process, since the paths resolve at import), then compares them
 chunk by chunk and record by record. Prints every source whose chunk text
@@ -28,18 +28,19 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
-CORPORA = ("corpus", "blog_corpus", "podcast_corpus", "reference_corpus")
+CORPORA = ("corpus", "blog_corpus", "podcast_corpus", "reference_corpus", "links_corpus")
 # Build stamps, not content.
 VOLATILE = {"generated_at", "built_at"}
 
 
 def build(out: Path) -> None:
-    """In the child: build the four corpora from LIBRARIAN_DATA_DIR into ``out``."""
+    """In the child: build the five corpora from LIBRARIAN_DATA_DIR into ``out``."""
     sys.path.insert(0, str(REPO / "pipeline" / "deploy"))
     from librarian_core.abstracts import annotate_blog_abstracts
     from librarian_core.corpus import (
         annotate_media_descriptions,
         build_blog_corpus,
+        build_links_corpus,
         build_podcast_corpus,
         build_reference_corpus,
     )
@@ -54,6 +55,7 @@ def build(out: Path) -> None:
     corpora["blog_corpus"] = blog
     corpora["podcast_corpus"] = build_podcast_corpus()
     corpora["reference_corpus"] = build_reference_corpus()
+    corpora["links_corpus"] = build_links_corpus()
     for name, corpus in corpora.items():
         (out / f"{name}.json").write_text(json.dumps(corpus, ensure_ascii=False), encoding="utf-8")
         print(f"{out.name}/{name}: {corpus.get('chunk_count')} chunks")
@@ -74,6 +76,8 @@ def _source(record: dict[str, Any]) -> str:
         return f"thing-{record['thing_id']}"
     if record.get("doc_id") is not None:
         return f"doc-{record['doc_id']}"
+    if record.get("link_id") is not None and record.get("source_kind") == "link":
+        return f"link-{record['link_id']}"
     return str(record.get("id") or record.get("url") or "?")
 
 

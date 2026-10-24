@@ -21,7 +21,7 @@ The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and a
 - Amazon Bedrock Cohere Embed v3 for query-to-archive retrieval.
 - Amazon Bedrock Cohere Rerank 3.5 after archive searches.
 - DynamoDB for magic-link tokens, sessions, rate limits, canonical conversations, turns, artifacts, feedback, eval metadata, and per-user memory.
-- S3 for embedded Weekly Thing, blog, podcast and reference corpora plus the offline graph artifact. The reference corpus (the Weekly Thing's site pages and FAQ, Things I've built, thingelstad.com's pages, and documents about Jamie from `reference-documents/` and the library's `reference-unpublished/`) is consulted by every search whatever the scope or source kind, and no caller selects it (2026-10-23).
+- S3 for embedded Weekly Thing, blog, podcast, reference and links corpora plus the offline graph artifact. The reference corpus (the Weekly Thing's site pages and FAQ, Things I've built, thingelstad.com's pages, and documents about Jamie from `reference-documents/` and the library's `reference-unpublished/`) is consulted by every search whatever the scope or source kind, and no caller selects it (2026-10-23).
 - CloudWatch Logs for structured JSON request, retrieval, upstream, and error logs.
 
 Chat streams from `site.librarianStreamUrl + /chat`; there is no buffered API Gateway chat fallback. Welcome messages are generated agentically by `/welcome`, using authenticated profile, local-time context, previous conversations, and active entitlements. Conversations are server-side and canonical; the browser no longer sends the full history as the source of truth.
@@ -86,6 +86,7 @@ Local `.env` values used by upload/build scripts:
 - `LIBRARIAN_BLOG_CORPUS_KEY` (optional; defaults to `artifacts/blog_corpus.json`)
 - `LIBRARIAN_PODCAST_CORPUS_KEY` (optional; defaults to `artifacts/podcast_corpus.json`)
 - `LIBRARIAN_REFERENCE_CORPUS_KEY` (optional; defaults to `artifacts/reference_corpus.json`)
+- `LIBRARIAN_LINKS_CORPUS_KEY` (optional; defaults to `artifacts/links_corpus.json`)
 - `AWS_DEFAULT_REGION`
 - `LIBRARIAN_API_URL` (written by deploy; the Thingy web repo reads its copy from its own CI variables)
 - `LIBRARIAN_STREAM_URL` (written by deploy; same)

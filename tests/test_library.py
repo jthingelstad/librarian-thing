@@ -512,6 +512,7 @@ class StaleTests(unittest.TestCase):
                 "blog_corpus": True,
                 "podcast_corpus": False,
                 "reference_corpus": False,
+                "links_corpus": False,
             },
         )
         self.assertEqual(
@@ -521,6 +522,7 @@ class StaleTests(unittest.TestCase):
                 "blog_corpus=true",
                 "podcast_corpus=false",
                 "reference_corpus=false",
+                "links_corpus=false",
             ],
         )
 

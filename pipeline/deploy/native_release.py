@@ -52,6 +52,7 @@ def prepare(s3, outputs, pins, build_dir: Path, root: Path, zip_build) -> list[d
         "blog_corpus.json",
         "podcast_corpus.json",
         "reference_corpus.json",
+        "links_corpus.json",
         "graph.json",
     ):
         hashes.append(

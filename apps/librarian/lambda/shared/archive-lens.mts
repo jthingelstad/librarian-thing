@@ -12,6 +12,7 @@ export interface LensItem {
   microblog_id?: string | number;
   page_id?: string | number;
   thing_id?: string;
+  link_id?: string;
   show?: string;
   subject?: string;
   title?: string;
@@ -245,9 +246,11 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
 // Readable stable id for the sources_by_id map: wt-300, blog-987, page-57851, ep-4,
 // site-about / site-members / site-faq for the Weekly Thing's own pages
 // (they had come out as weekly_thing-about, which nothing opened),
-// doc-<name> for a reference document, or the url tail.
+// doc-<name> for a reference document, link-<id> for a saved link, or the
+// url tail.
 export function lensSourceId(item: LensItem) {
   if (isDocument(item)) return `doc-${item.doc_id}`;
+  if (isLink(item)) return `link-${item.link_id}`;
   if (item.issue_number !== undefined && item.issue_number !== null && String(item.issue_number) !== '') {
     return `wt-${item.issue_number}`;
   }
@@ -269,6 +272,14 @@ export function lensSourceId(item: LensItem) {
 // alone carries it, one source per file, doc-<name> (Jamie, 2026-10-23).
 export function isDocument(item: LensItem) {
   return String(item.source_kind || '') === 'document' && Boolean(item.doc_id);
+}
+
+// A saved link from Linking Things (links.thingelstad.xyz): the links
+// corpus alone carries it, one source per link, link-<id> (Jamie,
+// 2026-10-23). A Weekly Thing or blog link record that names the saved
+// link it is (link_id) is still its issue's or post's link, never one.
+export function isLink(item: LensItem) {
+  return String(item.source_kind || '') === 'link' && Boolean(item.link_id);
 }
 
 // Things I've built (thingelstad.xyz) rides the Weekly Thing corpus too:
@@ -319,6 +330,7 @@ function sourceKey(item: LensItem) {
   // A blog post is its microblog_id before its url: several posts share
   // one permalink.
   const identity =
+    (isLink(item) ? `link:${item.link_id}` : '') ||
     String(item.issue_number ?? '') ||
     String(item.episode_number ?? '') ||
     blogKeyPart(item) ||
@@ -327,8 +339,9 @@ function sourceKey(item: LensItem) {
 }
 
 // "chunk" is an internal storage type; the public enum is
-// weekly_thing | blog | podcast (defect: chunk leaked into lens results).
-const PUBLIC_SOURCE_KINDS = new Set(['weekly_thing', 'blog', 'podcast']);
+// weekly_thing | blog | podcast (defect: chunk leaked into lens results),
+// and link for a saved link, which a lens reads only when asked for.
+const PUBLIC_SOURCE_KINDS = new Set(['weekly_thing', 'blog', 'podcast', 'link']);
 function normalizeLensSourceKind(value: unknown) {
   const raw = String(value || '').toLowerCase();
   return PUBLIC_SOURCE_KINDS.has(raw) ? raw : 'weekly_thing';
@@ -341,6 +354,7 @@ function sourceFromChunk(chunk: LensItem): LensItem {
     microblog_id: chunk.microblog_id,
     page_id: chunk.page_id,
     episode_number: chunk.episode_number,
+    ...(isLink(chunk) ? { link_id: chunk.link_id } : {}),
     show: chunk.show,
     subject: chunk.subject || '',
     publish_date: chunk.publish_date || '',

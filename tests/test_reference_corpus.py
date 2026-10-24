@@ -568,6 +568,7 @@ class LibraryTests(unittest.TestCase):
                 "blog_corpus": False,
                 "podcast_corpus": False,
                 "reference_corpus": True,
+                "links_corpus": False,
             },
         )
         self.conn = connect(self.tmp / "library.db")

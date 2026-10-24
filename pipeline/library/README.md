@@ -35,6 +35,7 @@ of a source's files (and more than 5) is refused.
 | `things/things.json` | thingelstad.xyz/things.json | Things I've built, normalized by `pipeline/things/import_things.py`, in the reference corpus. The registry decides a thing's status; its observations are evidence, never a status |
 | `reference/<name>.md` | this repo's `reference-documents/` on main | published documents about Jamie (a bio, a resume), checked and mirrored by `pipeline/reference/import_reference.py`; the repo is public, so these are public. A file deleted on main is deleted here |
 | `reference-unpublished/<name>.md` | by hand, never git | documents about Jamie kept out of the public repo (old wiki pages, forum posts). No pull touches them; Jamie places them with `export`, `absorb`, `upload` (below). Still searched by the Librarian for every reader: unpublished is not hidden |
+| `links/links.json`, `links/issues.json` | links.thingelstad.xyz (Linking Things) | every public link Jamie has saved, and the links each Weekly Thing issue carried joined to them, snapshotted by `pipeline/links/import_links.py` over HTTPS. Linking Things rebuilds nightly at 00:30 US Central, so the morning round carries the night's links. A feed with over a tenth fewer links than the snapshot is refused |
 | `librarian/media-descriptions.json` | the Librarian | photo descriptions, `pipeline/corpus/describe_media.py` |
 | `librarian/blog-abstracts.json` | the Librarian | `pipeline/blog/abstracts.py` |
 | `librarian/readers.json` | derived | the reader numbers each corpus carries (`readers_export`); never absorbed |
@@ -44,7 +45,11 @@ built from the tree and never enter the library. `reference_corpus.json`
 reads `weekly/archive/` (for the archive's size, which the site pages and
 the FAQ quote), `site/`, `things/`, `blog/pages/`, `reference/` and
 `reference-unpublished/`; the Weekly Thing corpus no longer reads `site/`
-or `things/`.
+or `things/`. `links_corpus.json` reads only `links/`. The Weekly Thing
+corpus reads `links/` too and the blog corpus `links/links.json`, for the
+`link_id` their link records carry, so a night of new saved links makes
+them stale as well (their rebuilds embed nothing new: link records are not
+passages).
 
 ## Reader numbers
 
@@ -120,6 +125,38 @@ output (no S3, no git):
 
 Add `--embed` to embed it with Bedrock (Cohere), as the deploy does; without
 it the candidate has no vectors and a local search ranks by words alone.
+
+## Saved links (Linking Things)
+
+The links corpus (`build_links_corpus`) is one passage per link Jamie has
+saved since 2005, as Linking Things (links.thingelstad.xyz) publishes them.
+That site owns the links: the Librarian reads its static database and never
+writes to it, and nothing there reads the Librarian. A link's id is Linking
+Things' own (the first 12 hex characters of the md5 of the URL as saved),
+taken as published and never recomputed; its source id is `link-<id>`.
+
+Each passage is dated by the US Central day the link was saved, cited at its
+page on Linking Things, and names the Weekly Thing issues that shared it.
+The title and the lines under it are the `link` voice (the page's words),
+and the note keeps its own: a note from 2007 to 2016 is mostly the page's
+words the bookmarklet saved (`excerpt`), a later one Jamie's (`jamie`), and
+one that quotes inside Jamie's words is `mixed`. No search reads the corpus
+unless it names source kind `link`.
+
+A candidate from the library, written nowhere but its output (no S3, no git):
+
+    uv run --locked python pipeline/library/library.py download
+    uv run --locked python pipeline/library/library.py export
+    uv run --locked python pipeline/corpus/build_links.py --output /tmp/links_corpus.json
+
+Until the round has pulled `links` into the library the export has no
+`links/`; a snapshot straight from the site works the same way:
+
+    uv run --locked python pipeline/links/import_links.py --output-dir /tmp/links
+    uv run --locked python pipeline/corpus/build_links.py \
+        --links-dir /tmp/links --output /tmp/links_corpus.json
+
+Add `--embed` to embed it with Bedrock (Cohere), about 16,500 passages.
 
 ## What starts a corpus build
 

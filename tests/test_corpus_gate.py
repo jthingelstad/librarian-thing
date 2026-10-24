@@ -262,7 +262,13 @@ class RoundWorkflowTest(unittest.TestCase):
         start = self.by_name["Start the corpus build"]
         self.assertIn("gh workflow run deploy.yml", start["run"])
         self.assertIn("scope=library", start["run"])
-        for output in ("weekly_corpus", "blog_corpus", "podcast_corpus", "reference_corpus"):
+        for output in (
+            "weekly_corpus",
+            "blog_corpus",
+            "podcast_corpus",
+            "reference_corpus",
+            "links_corpus",
+        ):
             self.assertIn(f"steps.stale.outputs.{output} == 'true'", start["if"])
 
     def test_a_reference_document_merged_to_main_pulls_the_reference(self):
@@ -270,7 +276,7 @@ class RoundWorkflowTest(unittest.TestCase):
         self.assertEqual(self.workflow[True]["push"]["paths"], ["reference-documents/**"])
         plan = self.by_name["What to pull"]["run"]
         self.assertIn("push:*) only=reference ;;", plan)
-        self.assertIn("*) only=blog,weekly,another,things,reference ;;", plan)
+        self.assertIn("*) only=blog,weekly,another,things,reference,links ;;", plan)
 
     def test_it_never_pushes(self):
         self.assertEqual(self.workflow["permissions"]["contents"], "read")

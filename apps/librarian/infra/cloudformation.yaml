@@ -43,6 +43,14 @@ Parameters:
       the blog's pages and reference documents. The native archive loads it
       for every retrieval whatever the scope, and no source kind selects it.
       Uploaded on its own cadence by pipeline/deploy/upload_reference_corpus.py.
+  LinksCorpusKey:
+    Type: String
+    Default: artifacts/links_corpus.json
+    Description: >
+      S3 key for the links corpus - every public link Jamie saved, one passage
+      each, from Linking Things (links.thingelstad.xyz). The native archive
+      lazy-loads it only when a request names source kind link or a link-id.
+      Uploaded on its own cadence by pipeline/deploy/upload_links_corpus.py.
   LogLevel:
     Type: String
     Default: INFO
@@ -229,6 +237,7 @@ Resources:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${BlogCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${PodcastCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${ReferenceCorpusKey}
+                  - !Sub arn:aws:s3:::${CorpusBucket}/${LinksCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/artifacts/dispatches/*
               # Dispatch was removed 2026-08; profile deletion still cleans
               # up historical dispatch artifacts, so keep delete access here.
@@ -828,6 +837,7 @@ Resources:
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           REFERENCE_CORPUS_KEY: !Ref ReferenceCorpusKey
+          LINKS_CORPUS_KEY: !Ref LinksCorpusKey
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           # Anthropic API model ids (2026-10), all on the 5 family: they

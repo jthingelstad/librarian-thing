@@ -1,4 +1,4 @@
-.PHONY: blog-round build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-reference-import librarian-reference-corpus librarian-reference-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
+.PHONY: blog-round build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-reference-import librarian-reference-corpus librarian-reference-corpus-upload librarian-links-import librarian-links-corpus librarian-links-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
 
 PYTHON ?= uv run --locked python
 
@@ -31,11 +31,23 @@ librarian-reference-corpus:
 librarian-reference-corpus-upload:
 	$(PYTHON) pipeline/deploy/upload_reference_corpus.py
 
+# Snapshot Linking Things (links.json and issues.json) into data/links/ (the
+# round pulls it into the library; this one is for a local build).
+librarian-links-import:
+	$(PYTHON) pipeline/links/import_links.py
+
+librarian-links-corpus:
+	$(PYTHON) pipeline/corpus/build_links.py
+
+librarian-links-corpus-upload:
+	$(PYTHON) pipeline/deploy/upload_links_corpus.py
+
 librarian-corpora-upload:
 	$(PYTHON) pipeline/deploy/upload_corpus.py
 	$(PYTHON) pipeline/deploy/upload_blog_corpus.py
 	$(PYTHON) pipeline/deploy/upload_podcast_corpus.py
 	$(PYTHON) pipeline/deploy/upload_reference_corpus.py
+	$(PYTHON) pipeline/deploy/upload_links_corpus.py
 
 librarian-graph:
 	$(PYTHON) pipeline/graph/build.py
@@ -63,6 +75,7 @@ blog-round:
 build:
 	$(PYTHON) pipeline/corpus/build.py
 	$(PYTHON) pipeline/corpus/build_reference.py
+	$(PYTHON) pipeline/corpus/build_links.py
 	$(PYTHON) pipeline/graph/build.py
 
 clean:
