@@ -77,6 +77,7 @@ def test_routine_deploy_preserves_native_settings_and_accepts_first_bootstrap(mo
             allowed_origin="https://thingy.thingelstad.com",
             thingy_magic_link_from_email="thingy@example.test",
             thingy_magic_link_base_url="https://thingy.thingelstad.com",
+            thingy_effort="medium",
             log_level="INFO",
             auth_rate_limit_max="30",
             turnstile_mode_weekly="enforce",

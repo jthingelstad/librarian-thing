@@ -35,7 +35,14 @@ export function verifyPriorConfig(prior, current, outputs) {
         ? digest(current)
         : createHash('sha256').update(JSON.stringify(current)).digest('hex');
     if (hash !== prior.appliedHash) throw new Error('Distribution changed outside this release; refusing');
+  } else if (prior.hashFormat === 'canonical-json-v1' && prior.intendedHash) {
+    // The receipt recorded what it meant to apply; compare with that, not
+    // with a rebuild from today's outputs, which may have moved since
+    // (Codex review, #78).
+    if (digest(current) !== prior.intendedHash)
+      throw new Error('Unverified prior update differs from its intent; refusing');
   } else {
+    // A legacy receipt kept no intended hash: rebuild the intent it had.
     const intended = nativeConfig(prior.original, outputs, prior.mode);
     if (digest(current) !== digest(intended))
       throw new Error('Unverified prior update differs from its intent; refusing');

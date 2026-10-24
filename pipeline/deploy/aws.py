@@ -338,6 +338,7 @@ def deploy_stack(
     allowed_origin: str,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
+    thingy_effort: str,
     log_level: str,
     auth_rate_limit_max: str,
     turnstile_mode_weekly: str,
@@ -375,6 +376,7 @@ def deploy_stack(
             "ParameterValue": thingy_magic_link_from_email,
         },
         {"ParameterKey": "ThingyMagicLinkBaseUrl", "ParameterValue": thingy_magic_link_base_url},
+        {"ParameterKey": "ThingyEffort", "ParameterValue": thingy_effort},
     ]
     # Preserve every native setting on routine code/corpus deployments. Omitting
     # a parameter resets it to its template default and can disable compute.
@@ -642,6 +644,14 @@ def main() -> int:
         # already forces /signin/ onto emailed links regardless.
         default=os.environ.get("THINGY_MAGIC_LINK_BASE_URL", "https://thingy.thingelstad.com/"),
     )
+    parser.add_argument(
+        "--thingy-effort",
+        choices=["low", "medium", "high", "xhigh", "max"],
+        # The chat agent's effort on the 5.5 models. Before the stack's
+        # ThingyEffort parameter carried it, the documented .env override
+        # never reached a Lambda (Codex review, #70).
+        default=os.environ.get("THINGY_EFFORT", "medium"),
+    )
     parser.add_argument("--skip-corpus-upload", action="store_true")
     parser.add_argument(
         "--native",
@@ -706,6 +716,7 @@ def main() -> int:
         allowed_origin=args.allowed_origin,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,
+        thingy_effort=args.thingy_effort,
         log_level=args.log_level.upper(),
         auth_rate_limit_max=str(args.auth_rate_limit_max),
         turnstile_mode_weekly=args.turnstile_mode_weekly,
