@@ -40,12 +40,16 @@ from .links import (
 from .paths import (
     ARCHIVE_DIR,
     BLOG_DIR,
+    BLOG_PAGES_DIR,
     FAQ_PATH,
     PODCAST_DIR,
     READERS_PATH,
+    REFERENCE_DIR,
+    REFERENCE_UNPUBLISHED_DIR,
     SITE_DIR,
     THINGS_PATH,
 )
+from .reference import document_sections, read_reference_documents
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
 DEFAULT_EMBEDDING_DIMENSIONS = 1024
@@ -1559,6 +1563,31 @@ def chunk_id(issue_number: Any, section: str, index: int, text: str) -> str:
     return digest[:16]
 
 
+def _archive_facts(archive_dir: Path) -> dict[str, Any]:
+    """What the site pages and the FAQ say about the archive itself: how many
+    issues, over how many years, and the newest issue's number. Read from the
+    issue files the way ``build_corpus`` files them (every archive.md is an
+    issue, numbered by its front matter or its folder, in issue order)."""
+    issues = []
+    for path in sorted(
+        archive_dir.glob("*/archive.md"), key=lambda p: issue_sort_key(p.parent.name)
+    ):
+        metadata, _body = read_issue(path)
+        issues.append(
+            {
+                "number": metadata.get("number") or path.parent.name,
+                "publish_date": metadata.get("publish_date") or "",
+            }
+        )
+    years = [parse_year(issue["publish_date"]) for issue in issues if issue["publish_date"]]
+    years = [year for year in years if year]
+    return {
+        "issue_count": len(issues),
+        "years_active": max(years) - min(years) + 1 if years else 0,
+        "latest_issue_number": issues[-1]["number"] if issues else None,
+    }
+
+
 def _readers_block(corpus: str, readers_path: Path | None) -> dict[str, Any]:
     """``{"readers": ...}`` for one corpus: Tinylytics numbers by source id,
     from the library's export. Display metadata only, never chunk text or
@@ -1573,13 +1602,14 @@ def _readers_block(corpus: str, readers_path: Path | None) -> dict[str, Any]:
 def build_corpus(
     archive_dir: Path = ARCHIVE_DIR,
     include_issue_bodies: bool = False,
-    site_dir: Path | None = None,
-    faq_path: Path | None = None,
     blog_dir: Path | None = None,
     podcast_dir: Path | None = None,
-    things_path: Path | None = None,
     readers_path: Path | None = None,
 ) -> dict[str, Any]:
+    """The Weekly Thing corpus: the issues, their links, media and topics.
+    The site pages, FAQ and Things I've built that rode it until 2026-10-23
+    are the reference corpus's now (``build_reference_corpus``), so nothing
+    is indexed twice."""
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
     currently: list[dict[str, Any]] = []
@@ -1893,35 +1923,6 @@ def build_corpus(
                 related.update(topic for topic in issue.get("topics", []) if topic != entry["name"])
         entry["related_topics"] = sorted(related)[:8]
 
-    # Non-archive sources — origin / membership / FAQ. Embedded alongside
-    # issue chunks so semantic retrieval surfaces them naturally without
-    # needing dedicated tools. See ``_site_page_chunks`` / ``_faq_chunks``
-    # docstrings for the privacy boundary (no subscriber counts).
-    years_active = 0
-    issue_years = [
-        parse_year(issue.get("publish_date")) for issue in issues if issue.get("publish_date")
-    ]
-    issue_years = [y for y in issue_years if y]
-    if issue_years:
-        years_active = max(issue_years) - min(issue_years) + 1
-    latest_issue_number = issues[-1]["number"] if issues else None
-    if site_dir is not None or SITE_DIR.exists():
-        site_chunks = _site_page_chunks(
-            site_dir=site_dir or SITE_DIR,
-            issue_count=len(issues),
-            years_active=years_active,
-            latest_issue_number=latest_issue_number,
-        )
-        chunks.extend(site_chunks)
-    if faq_path is not None or FAQ_PATH.exists():
-        faq_chunks = _faq_chunks(
-            faq_path=faq_path or FAQ_PATH,
-            issue_count=len(issues),
-            years_active=years_active,
-        )
-        chunks.extend(faq_chunks)
-    if things_path is not None or THINGS_PATH.exists():
-        chunks.extend(_things_chunks(things_path=things_path or THINGS_PATH))
     _privacy_audit(chunks)
 
     return {
@@ -3224,6 +3225,115 @@ def chicago_day(published: str | None) -> str | None:
     return stamp.astimezone(_CHICAGO).date().isoformat() if stamp else None
 
 
+def _blog_page_inputs(pages_root: Path) -> list[dict[str, Any]]:
+    """thingelstad.com's pages (``data/blog/pages/**/*.md``) as the blog
+    build's source inputs: ``page_id`` (never ``microblog_id``), post_kind
+    "page", section "Page", no ``publish_date`` (micro.blog reports only a
+    page's last edit, kept as ``updated``). A page with nothing to embed and
+    no photo is left out, as a post is."""
+    inputs: list[dict[str, Any]] = []
+    for path in sorted(pages_root.rglob("*.md")) if pages_root.exists() else []:
+        metadata, body = read_issue(path)
+        page_id = metadata.get("page_id")
+        if page_id is None:
+            raise RuntimeError(f"{path} is missing page_id in front matter")
+        url = str(metadata.get("url") or "").strip()
+        embed_text = _blog_embed_text(body)
+        if not (
+            embed_text
+            or extract_images(body)
+            or extract_video_posters(body)
+            or extract_posterless_videos(body)
+        ):
+            continue
+        title = str(metadata.get("title") or "").strip()
+        subject = title or _short_label(embed_text) or "Page"
+        inputs.append(
+            {
+                "body": body,
+                "microblog_id": None,
+                "page_id": page_id,
+                "url": url,
+                "subject": subject,
+                "publish_date": None,
+                "post_kind": "page",
+                "section": "Page",
+                "also_in_issues": None,
+                "linked_from_issues": None,
+                "embed_text": embed_text,
+                "published": None,
+                "updated": str(metadata.get("updated") or "") or None,
+                "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
+            }
+        )
+    return inputs
+
+
+def _blog_source_chunks(
+    post_input: dict[str, Any], post_domains: list[str]
+) -> list[dict[str, Any]]:
+    """One blog source's passages: a post's for the blog corpus, a page's for
+    the reference corpus. One chunk per ``chunk_section`` piece,
+    ``source_kind: "blog"``."""
+    page_id = post_input.get("page_id")
+    microblog_id = post_input["microblog_id"]
+    identity = {"page_id": page_id} if page_id is not None else {"microblog_id": microblog_id}
+    subject = post_input["subject"]
+    publish_date = post_input["publish_date"]
+    section = post_input["section"]
+    budget = embed_text_budget(
+        {
+            "source_kind": "blog",
+            "publish_date": publish_date,
+            "subject": subject,
+            "section": section,
+        }
+    )
+    chunks: list[dict[str, Any]] = []
+    for index, chunk_text in enumerate(chunk_section(post_input["embed_text"], max_chars=budget)):
+        # Content-deterministic id (text hash suffix): when a post's body is
+        # edited in place (alt-text inlined, de-wrap, typo fix) without
+        # changing its chunk count, the id still changes, so the
+        # incremental embed cache (keyed on id) re-embeds it instead of
+        # reusing the stale vector. Readable mbid:index prefix kept for
+        # debugging. Mirrors the issue corpus's content-hashed `chunk_id`.
+        chunk = {
+            "id": (
+                f"page:{page_id}:{index}:{body_hash(chunk_text)}"
+                if page_id is not None
+                else f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}"
+            ),
+            **identity,
+            "issue_number": None,
+            "subject": subject,
+            "publish_date": publish_date,
+            "issue_year": parse_year(publish_date),
+            "url": post_input["url"],
+            "section": section,
+            "text": chunk_text,
+            "spans": voice_spans(chunk_text),
+            "word_count": len(words(chunk_text)),
+            "content_kind": "blog",
+            "topics": chunk_topics(subject, chunk_text),
+            "source_kind": "blog",
+            "domains": post_domains,
+        }
+        # The post's own timestamp: the Lambda shows each day in Chicago
+        # time, and publish_date is that day (the permalink's date named
+        # another day for 121 posts: the UTC day, or a permalink shared by
+        # several posts, "2006/09/09/000000.html").
+        if post_input["published"]:
+            chunk["published"] = post_input["published"]
+        if post_input.get("updated"):
+            chunk["updated"] = post_input["updated"]
+        if post_input["also_in_issues"]:
+            chunk["also_in_issues"] = post_input["also_in_issues"]
+        if post_input["linked_from_issues"]:
+            chunk["linked_from_issues"] = post_input["linked_from_issues"]
+        chunks.append(chunk)
+    return chunks
+
+
 def build_blog_corpus(
     blog_dir: Path = BLOG_DIR,
     archive_dir: Path = ARCHIVE_DIR,
@@ -3236,9 +3346,11 @@ def build_blog_corpus(
     pages, ``data/blog/pages/**/*.md`` (``pages_dir``, default beside
     ``blog_dir``). A page is a blog source with its own id space: it carries
     ``page_id`` (never ``microblog_id``; page 71862 and post 71862 differ),
-    ``post_kind: "page"``, section "Page", chunk ids ``page:{page_id}:...``,
-    no ``publish_date`` (micro.blog reports only a page's last edit, kept as
-    ``updated``), so date-anchored tools leave pages out. One chunk per
+    ``post_kind: "page"``, section "Page", no ``publish_date`` (micro.blog
+    reports only a page's last edit, kept as ``updated``), so date-anchored
+    tools leave pages out. A page's record, links and photos are here; its
+    passages (chunk ids ``page:{page_id}:...``) are the reference corpus's
+    (``build_reference_corpus``), so this corpus's chunks are posts'. One chunk per
     ``chunk_section`` piece, ``source_kind: "blog"``, content-deterministic id
     ``blog:{microblog_id}:{index}:{body_hash}``. The corpus also carries a
     post-level outbound-link graph (``links`` / ``link_count`` plus chunk
@@ -3329,44 +3441,13 @@ def build_blog_corpus(
 
     page_lookup: dict[str, dict[str, Any]] = {}
     pages_root = pages_dir if pages_dir is not None else blog_dir.parent / "pages"
-    for path in sorted(pages_root.rglob("*.md")) if pages_root.exists() else []:
-        metadata, body = read_issue(path)
-        page_id = metadata.get("page_id")
-        if page_id is None:
-            raise RuntimeError(f"{path} is missing page_id in front matter")
-        url = str(metadata.get("url") or "").strip()
-        embed_text = _blog_embed_text(body)
-        if not (
-            embed_text
-            or extract_images(body)
-            or extract_video_posters(body)
-            or extract_posterless_videos(body)
-        ):
-            continue
-        title = str(metadata.get("title") or "").strip()
-        subject = title or _short_label(embed_text) or "Page"
-        page_input = {
-            "body": body,
-            "microblog_id": None,
-            "page_id": page_id,
-            "url": url,
-            "subject": subject,
-            "publish_date": None,
-            "post_kind": "page",
-            "section": "Page",
-            "also_in_issues": None,
-            "linked_from_issues": None,
-            "embed_text": embed_text,
-            "published": None,
-            "updated": str(metadata.get("updated") or "") or None,
-            "categories": [str(c) for c in metadata.get("categories") or [] if str(c).strip()],
-        }
-        page_path = _site_page_path(url)
+    for page_input in _blog_page_inputs(pages_root):
+        page_path = _site_page_path(page_input["url"])
         if page_path:
             page_lookup[page_path] = {
-                "page_id": page_id,
-                "url": url,
-                "subject": subject,
+                "page_id": page_input["page_id"],
+                "url": page_input["url"],
+                "subject": page_input["subject"],
                 "publish_date": None,
             }
         post_inputs.append(page_input)
@@ -3486,55 +3567,11 @@ def build_blog_corpus(
                     "media_kind": "video",
                 }
             )
-        budget = embed_text_budget(
-            {
-                "source_kind": "blog",
-                "publish_date": publish_date,
-                "subject": subject,
-                "section": section,
-            }
-        )
-        for index, chunk_text in enumerate(chunk_section(embed_text, max_chars=budget)):
-            # Content-deterministic id (text hash suffix): when a post's body is
-            # edited in place (alt-text inlined, de-wrap, typo fix) without
-            # changing its chunk count, the id still changes — so the
-            # incremental embed cache (keyed on id) re-embeds it instead of
-            # reusing the stale vector. Readable mbid:index prefix kept for
-            # debugging. Mirrors the issue corpus's content-hashed `chunk_id`.
-            chunk = {
-                "id": (
-                    f"page:{page_id}:{index}:{body_hash(chunk_text)}"
-                    if page_id is not None
-                    else f"blog:{microblog_id}:{index}:{body_hash(chunk_text)}"
-                ),
-                **identity,
-                "issue_number": None,
-                "subject": subject,
-                "publish_date": publish_date,
-                "issue_year": parse_year(publish_date),
-                "url": url,
-                "section": section,
-                "text": chunk_text,
-                "spans": voice_spans(chunk_text),
-                "word_count": len(words(chunk_text)),
-                "content_kind": "blog",
-                "topics": chunk_topics(subject, chunk_text),
-                "source_kind": "blog",
-                "domains": post_domains,
-            }
-            # The post's own timestamp: the Lambda shows each day in Chicago
-            # time, and publish_date is that day (the permalink's date named
-            # another day for 121 posts: the UTC day, or a permalink shared by
-            # several posts, "2006/09/09/000000.html").
-            if post_input["published"]:
-                chunk["published"] = post_input["published"]
-            if post_input.get("updated"):
-                chunk["updated"] = post_input["updated"]
-            if also_in_issues:
-                chunk["also_in_issues"] = also_in_issues
-            if linked_from_issues:
-                chunk["linked_from_issues"] = linked_from_issues
-            chunks.append(chunk)
+        # A page's passages are the reference corpus's (build_reference_corpus):
+        # its record, links and photos stay here, where find_links,
+        # list_content, get_source and media_search read them.
+        if page_id is None:
+            chunks.extend(_blog_source_chunks(post_input, post_domains))
 
     _privacy_audit(chunks)
 
@@ -3761,6 +3798,169 @@ def build_podcast_corpus(
     }
 
 
+# --- reference corpus ----------------------------------------------------
+#
+# The reference base (Jamie, 2026-10-23): what the Librarian always consults
+# and no caller selects. The Weekly Thing's own pages (about, members and the
+# nonprofit history), its FAQ, Things I've built, thingelstad.com's pages, and
+# documents about Jamie (reference-documents/ in git and data/reference/ in
+# the tree, or data/reference-unpublished/, placed in the library by hand and
+# never in git). Every one is undated, so the date-anchored tools never
+# return it: a document's own date is citation metadata, not a publish date.
+# Its own corpus, so nothing is indexed twice: the Weekly Thing and blog
+# builds no longer emit these passages. The chunks keep the ids, fields and
+# embedding inputs they had in those corpora.
+
+
+def _document_chunks(document: dict[str, Any]) -> list[dict[str, Any]]:
+    """A reference document's passages (``librarian_core.reference``), cut by
+    its H2 sections (``document_sections``): the text before the first
+    ``## `` heading is one section, then one per heading. A section too long
+    for one embedding input splits the way site pages do (``chunk_section``
+    under ``embed_text_budget``), so no document is assumed to be short.
+
+    Every passage carries the document's title (``subject``) and its
+    section's heading (``section``; the title for the text before the first
+    heading), ``source_kind: "document"``, the document's ``url`` (None when
+    it has none), ``updated``, and its ``document_source`` and
+    ``document_date`` (the front matter's ``source`` and ``date``, None when
+    left out: citation metadata, never a date the archive tools anchor on;
+    ``publish_date`` and ``issue_year`` stay None). The id,
+    ``doc:{doc_id}:{index}:{hash}``, hashes the whole embedding input, so a
+    retitled document or a renamed section is embedded again."""
+    doc_id = document["doc_id"]
+    subject = document["title"]
+    chunks: list[dict[str, Any]] = []
+    for heading, section_text in document_sections(document["body"]):
+        section = heading or subject
+        fields = {
+            "doc_id": doc_id,
+            "issue_number": None,
+            "subject": subject,
+            "publish_date": None,
+            "issue_year": None,
+            "url": document["url"],
+            "section": section,
+            "source_kind": "document",
+            "document_source": document.get("source"),
+        }
+        for chunk_text in chunk_section(section_text, max_chars=embed_text_budget(fields)):
+            index = len(chunks)
+            chunk = {
+                "id": "",
+                **fields,
+                "text": chunk_text,
+                "spans": voice_spans(chunk_text),
+                "word_count": len(words(chunk_text)),
+                "content_kind": "document",
+                "topics": chunk_topics(subject, chunk_text),
+                "updated": document["updated"],
+                "document_date": document.get("date"),
+            }
+            chunk["id"] = f"doc:{doc_id}:{index}:{body_hash(_embed_input(chunk))}"
+            chunks.append(chunk)
+    return chunks
+
+
+def build_reference_corpus(
+    *,
+    archive_dir: Path = ARCHIVE_DIR,
+    site_dir: Path | None = None,
+    faq_path: Path | None = None,
+    things_path: Path | None = None,
+    pages_dir: Path | None = None,
+    reference_dir: Path | None = None,
+    unpublished_dir: Path | None = None,
+) -> dict[str, Any]:
+    """The reference corpus: site_page, faq, thing, page (``source_kind``
+    "blog" with ``page_id``) and document passages. The archive is read only
+    for what the site pages and the FAQ say about it (issue count, years,
+    the newest issue). Documents come from ``reference_dir`` (published, from
+    git) and ``unpublished_dir`` (placed in the library by hand); a malformed
+    document, or a name in both, raises naming its file."""
+    facts = _archive_facts(archive_dir)
+    chunks: list[dict[str, Any]] = []
+    if site_dir is not None or SITE_DIR.exists():
+        chunks.extend(_site_page_chunks(site_dir=site_dir or SITE_DIR, **facts))
+    if faq_path is not None or FAQ_PATH.exists():
+        chunks.extend(
+            _faq_chunks(
+                faq_path=faq_path or FAQ_PATH,
+                issue_count=facts["issue_count"],
+                years_active=facts["years_active"],
+            )
+        )
+    if things_path is not None or THINGS_PATH.exists():
+        chunks.extend(_things_chunks(things_path=things_path or THINGS_PATH))
+    page_count = 0
+    for page_input in _blog_page_inputs(pages_dir if pages_dir is not None else BLOG_PAGES_DIR):
+        # Chunk domains are the hosts a page links to; resolving the targets
+        # (the blog corpus's links) changes none of them.
+        links = _blog_outbound_links(
+            page_input["body"],
+            microblog_id=None,
+            subject=page_input["subject"],
+            publish_date=None,
+            post_kind="page",
+            post_url=page_input["url"],
+            post_lookup={},
+            page_id=page_input["page_id"],
+        )
+        chunks.extend(_blog_source_chunks(page_input, extract_domains(links)))
+        page_count += 1
+    documents: list[dict[str, Any]] = []
+    for document in read_reference_documents(
+        reference_dir if reference_dir is not None else REFERENCE_DIR,
+        unpublished_dir if unpublished_dir is not None else REFERENCE_UNPUBLISHED_DIR,
+    ):
+        document_chunks = _document_chunks(document)
+        chunks.extend(document_chunks)
+        documents.append(
+            {
+                "doc_id": document["doc_id"],
+                "title": document["title"],
+                "folder": document["folder"],
+                "url": document["url"],
+                "updated": document["updated"],
+                "source": document["source"],
+                "date": document["date"],
+                "body_hash": body_hash(document["body"]),
+                "char_count": len(document["body"]),
+                "word_count": len(words(document["body"])),
+                "chunk_count": len(document_chunks),
+            }
+        )
+    ids = [chunk["id"] for chunk in chunks]
+    if len(set(ids)) != len(ids):
+        repeated = sorted({chunk_id for chunk_id in ids if ids.count(chunk_id) > 1})
+        raise RuntimeError(f"reference corpus chunk ids repeat: {', '.join(repeated[:5])}")
+    _privacy_audit(chunks)
+    kinds: dict[str, int] = {}
+    for chunk in chunks:
+        # A page rides as a blog source (page-<id>); here it is a page.
+        kind = "page" if chunk.get("page_id") is not None else chunk["source_kind"]
+        kinds[kind] = kinds.get(kind, 0) + 1
+    return {
+        "version": 2,
+        "source": "reference",
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "embedding_model": None,
+        "embed_recipe": EMBED_RECIPE_VERSION,
+        "issue_count": 0,
+        "page_count": page_count,
+        "document_count": len(documents),
+        "chunk_count": len(chunks),
+        "chunk_counts_by_kind": dict(sorted(kinds.items())),
+        "link_count": 0,
+        "documents": documents,
+        "issues": [],
+        "topics": [],
+        "links": [],
+        "media": [],
+        "chunks": chunks,
+    }
+
+
 # Version of the embed-input construction below. The incremental embed cache
 # is keyed on chunk id, and ids hash only the chunk TEXT - so an edit to the
 # header lines handed to the embedding model would silently reuse stale
@@ -3776,6 +3976,18 @@ def _embed_header(chunk: dict[str, Any]) -> list[str]:
         if chunk.get("subject"):
             lines.append(f"Post: {chunk['subject']}")
         lines.append(f"Section: {chunk['section']}")
+        return lines
+    if chunk.get("source_kind") == "document":
+        # New with the reference corpus (2026-10-23): no cached vector was
+        # ever embedded under another document header. A document chunk's id
+        # hashes this whole input, so a change here re-embeds documents only.
+        lines = ["Jamie Thingelstad, reference document"]
+        if chunk.get("subject"):
+            lines.append(f"Document: {chunk['subject']}")
+        if chunk.get("section") and chunk["section"] != chunk.get("subject"):
+            lines.append(f"Section: {chunk['section']}")
+        if chunk.get("document_source"):
+            lines.append(f"Source: {chunk['document_source']}")
         return lines
     if chunk.get("source_kind") == "podcast":
         episode = chunk.get("episode_number")

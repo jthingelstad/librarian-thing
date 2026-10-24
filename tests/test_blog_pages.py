@@ -14,7 +14,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from librarian_core.corpus import body_hash, build_blog_corpus
+from librarian_core.corpus import body_hash, build_blog_corpus, build_reference_corpus
 from librarian_core.paths import REPO
 
 # ingest_blog imports its sibling microblog.py, as it does when run as a script.
@@ -139,6 +139,17 @@ class PageCorpusTests(unittest.TestCase):
         archive = root / "archive"
         archive.mkdir()
         self.corpus = build_blog_corpus(blog_dir=root / "posts", archive_dir=archive)
+        # A page's passages are the reference corpus's (2026-10-23); its
+        # record, links and media stay in the blog corpus.
+        self.reference = build_reference_corpus(
+            archive_dir=archive,
+            site_dir=root / "no-site",
+            faq_path=root / "no-faq.json",
+            things_path=root / "no-things.json",
+            pages_dir=pages,
+            reference_dir=root / "no-reference",
+            unpublished_dir=root / "no-unpublished",
+        )
 
     def test_page_is_its_own_source(self):
         self.assertEqual(self.corpus["page_count"], 1)
@@ -150,8 +161,10 @@ class PageCorpusTests(unittest.TestCase):
         self.assertEqual(page["post_kind"], "page")
 
     def test_page_chunks_and_media_key_by_page_id(self):
-        chunks = [c for c in self.corpus["chunks"] if c.get("page_id")]
+        self.assertEqual([c for c in self.corpus["chunks"] if c.get("page_id")], [])
+        chunks = [c for c in self.reference["chunks"] if c.get("page_id")]
         self.assertTrue(chunks)
+        self.assertEqual(self.reference["page_count"], 1)
         for chunk in chunks:
             self.assertEqual(
                 chunk["id"], f"page:71862:{chunk['id'].split(':')[2]}:{body_hash(chunk['text'])}"
@@ -161,7 +174,8 @@ class PageCorpusTests(unittest.TestCase):
         media = [m for m in self.corpus["media"] if m["url"].endswith("tree.jpg")]
         self.assertEqual([m.get("page_id") for m in media], [71862])
         self.assertIsNone(media[0].get("microblog_id"))
-        for row in self.corpus["posts"] + self.corpus["chunks"] + self.corpus["media"]:
+        rows = self.corpus["posts"] + self.corpus["chunks"] + self.corpus["media"] + chunks
+        for row in rows:
             self.assertFalse(row.get("page_id") and row.get("microblog_id"), row)
 
     def test_a_post_link_to_a_page_resolves_to_the_page(self):

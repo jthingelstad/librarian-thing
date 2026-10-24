@@ -47,7 +47,7 @@ The deploy script must run through the locked uv environment so dependencies suc
 # Code + infra only (skip the slow + paid corpus reupload) — the default for code changes
 make librarian-deploy ARGS="--skip-corpus-upload"
 
-# Full deploy (rebuilds + embeds + uploads Weekly Thing, blog, and podcast corpora)
+# Full deploy (rebuilds + embeds + uploads Weekly Thing, blog, podcast and reference corpora)
 make librarian-deploy
 
 # Run Node tests
@@ -61,11 +61,17 @@ Corpus build/upload is source-specific but treated as one API concern:
 - Weekly Thing corpus + graph: `pipeline/deploy/upload_corpus.py`
 - thingelstad.com blog corpus: `pipeline/deploy/upload_blog_corpus.py`
 - Another Thing podcast corpus: `pipeline/deploy/upload_podcast_corpus.py`
+- Reference base (site pages, FAQ, Things I've built, thingelstad.com's pages,
+  reference documents; searched by every retrieval, never a filter):
+  `pipeline/deploy/upload_reference_corpus.py`
 
 New content arrives through the library round (`Librarian — Library Round` in
 Actions, and the Library Agent on the Mac). It pulls micro.blog, weekly's issue
-pages, the podcast and Things I've built into the library (`library.db` in S3),
-and starts the production workflow when a corpus is stale.
+pages, the podcast, Things I've built and the reference documents in
+`reference-documents/` into the library (`library.db` in S3), and starts the
+production workflow when a corpus is stale. Unpublished reference documents
+never pass through git: Jamie places them in the library's
+`reference-unpublished/` folder by hand (see `reference-documents/README.md`).
 
 ## Endpoints
 

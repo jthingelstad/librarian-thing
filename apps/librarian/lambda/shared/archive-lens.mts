@@ -244,9 +244,10 @@ export function lensMatchReasons(item: LensItem, topic: unknown, matcher?: Topic
 
 // Readable stable id for the sources_by_id map: wt-300, blog-987, page-57851, ep-4,
 // site-about / site-members / site-faq for the Weekly Thing's own pages
-// (they had come out as weekly_thing-about, which nothing opened), or the
-// url tail.
+// (they had come out as weekly_thing-about, which nothing opened),
+// doc-<name> for a reference document, or the url tail.
 export function lensSourceId(item: LensItem) {
+  if (isDocument(item)) return `doc-${item.doc_id}`;
   if (item.issue_number !== undefined && item.issue_number !== null && String(item.issue_number) !== '') {
     return `wt-${item.issue_number}`;
   }
@@ -262,6 +263,12 @@ export function lensSourceId(item: LensItem) {
   if (isThing(item)) return `thing-${item.thing_id || 'index'}`;
   if (isSitePage(item)) return `site-${tail || 'unknown'}`;
   return `${normalizeLensSourceKind(item.source_kind)}-${tail || 'unknown'}`;
+}
+
+// A reference document about Jamie (a bio, a resume): the reference corpus
+// alone carries it, one source per file, doc-<name> (Jamie, 2026-10-23).
+export function isDocument(item: LensItem) {
+  return String(item.source_kind || '') === 'document' && Boolean(item.doc_id);
 }
 
 // Things I've built (thingelstad.xyz) rides the Weekly Thing corpus too:

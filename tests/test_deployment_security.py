@@ -166,6 +166,7 @@ def test_template_runtime_permissions_fit_reviewed_boundaries():
         "GraphKey": "artifacts/graph.json",
         "BlogCorpusKey": "artifacts/blog_corpus.json",
         "PodcastCorpusKey": "artifacts/podcast_corpus.json",
+        "ReferenceCorpusKey": "artifacts/reference_corpus.json",
     }
 
     def resolve(resource):

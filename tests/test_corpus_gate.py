@@ -214,6 +214,31 @@ class WorkflowTest(unittest.TestCase):
         self.assertIn("corpus_gate.py gate", self.steps[archive]["run"])
         self.assertIn("--site-archive data/weekly/archive", self.steps[archive]["run"])
         self.assertIn("blog_corpus == 'true'", self.steps[archive]["if"])
+        self.assertIn("reference_corpus == 'true'", self.steps[archive]["if"])
+
+    def test_the_reference_corpus_is_built_gated_and_uploaded_like_the_others(self):
+        # Jamie, 2026-10-23: the reference base is its own corpus, staged,
+        # gated and uploaded in the same order as the podcast's.
+        build = self.names.index("Build reference corpus")
+        embed = self.names.index("Embed reference corpus (candidate)")
+        gate_eval = self.names.index("Corpus gate (eval the candidate corpora)")
+        upload = self.names.index("Upload reference corpus to S3")
+        deploy = self.names.index("Deploy Thingy Lambda")
+        self.assertLess(build, embed)
+        self.assertLess(embed, gate_eval)
+        self.assertLess(gate_eval, upload)
+        self.assertLess(upload, deploy)
+        self.assertIn("--stage .candidate", self.steps[embed]["run"])
+        self.assertIn("--upload-staged .candidate", self.steps[upload]["run"])
+        for index in (build, embed, upload):
+            self.assertEqual(
+                self.steps[index]["if"], "steps.changes.outputs.reference_corpus == 'true'"
+            )
+        self.assertIn("reference_corpus == 'true'", self.steps[gate_eval]["if"])
+        detect = self.steps[self.names.index("Detect changes")]["run"]
+        self.assertIn("steps.library.outputs.reference_corpus", detect)
+        self.assertIn('echo "reference_corpus=$reference_corpus"', detect)
+        self.assertIn("'^apps/librarian/lambda/shared/faq\\.json$'", detect)
 
 
 class RoundWorkflowTest(unittest.TestCase):
@@ -237,8 +262,15 @@ class RoundWorkflowTest(unittest.TestCase):
         start = self.by_name["Start the corpus build"]
         self.assertIn("gh workflow run deploy.yml", start["run"])
         self.assertIn("scope=library", start["run"])
-        for output in ("weekly_corpus", "blog_corpus", "podcast_corpus"):
+        for output in ("weekly_corpus", "blog_corpus", "podcast_corpus", "reference_corpus"):
             self.assertIn(f"steps.stale.outputs.{output} == 'true'", start["if"])
+
+    def test_a_reference_document_merged_to_main_pulls_the_reference(self):
+        self.assertEqual(self.workflow[True]["push"]["branches"], ["main"])
+        self.assertEqual(self.workflow[True]["push"]["paths"], ["reference-documents/**"])
+        plan = self.by_name["What to pull"]["run"]
+        self.assertIn("push:*) only=reference ;;", plan)
+        self.assertIn("*) only=blog,weekly,another,things,reference ;;", plan)
 
     def test_it_never_pushes(self):
         self.assertEqual(self.workflow["permissions"]["contents"], "read")

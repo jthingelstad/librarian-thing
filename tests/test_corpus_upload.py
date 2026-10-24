@@ -59,10 +59,8 @@ def _fixture(root: Path) -> tuple[Path, Path, Path]:
 class WeeklyThingUploadMediaDescriptionTests(unittest.TestCase):
     def test_build_merges_sidecar_descriptions_into_media(self):
         with tempfile.TemporaryDirectory() as tmp:
-            archive, sidecar, site = _fixture(Path(tmp))
-            corpus = upload.build_wt_corpus(
-                archive, sidecar, site_dir=site, faq_path=Path(tmp) / "missing.json"
-            )
+            archive, sidecar, _site = _fixture(Path(tmp))
+            corpus = upload.build_wt_corpus(archive, sidecar)
 
         media = {entry["url"]: entry for entry in corpus["media"]}
         self.assertEqual(

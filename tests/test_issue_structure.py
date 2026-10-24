@@ -301,8 +301,6 @@ class BuildCorpusStructureTests(unittest.TestCase):
         return core.build_corpus(
             archive,
             include_issue_bodies=True,
-            site_dir=root / "no-site",
-            faq_path=root / "no-faq.json",
             blog_dir=blog,
             podcast_dir=podcast,
         )

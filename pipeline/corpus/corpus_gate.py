@@ -22,7 +22,9 @@ anything reaches S3. It fails the deploy when:
 - an ingest check fails (``ingest_failures``, QA 2026-10-01 round 3): a
   regression in the build's strips or media ties that would otherwise ship
   without a sound. The blog checks run on the blog candidate when one is
-  staged; or
+  staged, reading the blog's pages' text from the reference candidate (the
+  page chunks live there since 2026-10-23); with no reference candidate
+  staged, the pages' text checks wait for the build that stages one; or
 - a staged blog candidate files a post by any day but the Chicago day of its
   ``published`` moment, or keeps a 05:00Z date-only placeholder (QA2 I2-8,
   Q16).
@@ -240,6 +242,7 @@ def ingest_failures(
     corpus: dict[str, Any] | None,
     blog: dict[str, Any] | None,
     blog_source_dir: Path = BLOG_DIR.parent,
+    reference: dict[str, Any] | None = None,
 ) -> list[str]:
     failures = []
     if corpus is not None:
@@ -257,7 +260,7 @@ def ingest_failures(
                 f"(M2-2), e.g. {untied[:3]}"
             )
     if blog is not None:
-        failures.extend(blog_source_failures(blog, blog_source_dir))
+        failures.extend(blog_source_failures(blog, blog_source_dir, reference))
     for name, built in (("Weekly Thing", corpus), ("blog", blog)):
         if built is not None and (repeated := repeated_media(built)):
             failures.append(
@@ -418,14 +421,22 @@ def _embed_urls(body: str) -> list[str]:
     return urls
 
 
-def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
+def blog_source_failures(
+    blog: dict[str, Any], source_dir: Path, reference: dict[str, Any] | None = None
+) -> list[str]:
     """QA3 R2-6 and F16, against the blog's markdown: every fenced code line
     (12+ chars) is in its post's chunk text, every embedded tweet, video and
     iframe is one of its post's links, and no <style> rule is chunk text.
     QA3 I2-5: every <video> is a media record of its post, by its poster
-    still or, with no poster, by the video itself."""
+    still or, with no poster, by the video itself. A page's chunks are the
+    reference corpus's, so its text is checked only when ``reference`` (the
+    staged reference candidate) is given; its links and media are the
+    blog's either way."""
     texts: dict[tuple[str, str], list[str]] = {}
-    for chunk in blog.get("chunks") or []:
+    page_chunks = [
+        chunk for chunk in (reference or {}).get("chunks") or [] if chunk.get("page_id") is not None
+    ]
+    for chunk in [*(blog.get("chunks") or []), *page_chunks]:
         key = (
             ("page_id", str(chunk["page_id"]))
             if chunk.get("page_id") is not None
@@ -455,7 +466,11 @@ def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
             continue
         key, body = post
         text = _fold("\n".join(texts.get(key, [])))
-        code_missing += [f"{key[1]}: {line[:60]}" for line in _code_lines(body) if line not in text]
+        checks_text = key[0] != "page_id" or reference is not None
+        if checks_text:
+            code_missing += [
+                f"{key[1]}: {line[:60]}" for line in _code_lines(body) if line not in text
+            ]
         urls = links.get(key, [])
         embeds_missing += [
             f"{key[1]}: {want}" for want in _embed_urls(body) if not any(want in u for u in urls)
@@ -465,7 +480,7 @@ def blog_source_failures(blog: dict[str, Any], source_dir: Path) -> list[str]:
             want = next((m.group(1) for m in found if m and m.group(1)), None)
             if want and want not in media.get(key, set()):
                 videos_missing.append(f"{key[1]}: {want}")
-        for style in _GATE_STYLE_RE.finditer(body):
+        for style in _GATE_STYLE_RE.finditer(body) if checks_text else ():
             css_kept += [
                 f"{key[1]}: {line[:60]}"
                 for line in map(_fold, style.group(1).splitlines())
@@ -524,15 +539,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "gate":
         candidate = args.candidate / "corpus.json"
         blog_candidate = args.candidate / "blog_corpus.json"
+        reference_candidate = args.candidate / "reference_corpus.json"
         corpus = load_json(candidate) if candidate.is_file() else None
         blog = load_json(blog_candidate) if blog_candidate.is_file() else None
-        if corpus is None and blog is None:
+        reference = load_json(reference_candidate) if reference_candidate.is_file() else None
+        if corpus is None and blog is None and reference is None:
             print(f"corpus gate: no candidate corpus in {args.candidate}; nothing to check")
             return 0
         failures = gate_failures(corpus, args.site_archive) if corpus is not None else []
         if blog is not None:
             failures.extend(blog_date_failures(blog))
-        failures.extend(ingest_failures(corpus, blog))
+        failures.extend(ingest_failures(corpus, blog, reference=reference))
         _, pending = journal_unmatched_new(corpus) if corpus is not None else ([], [])
         if pending:
             report = (
@@ -542,7 +559,11 @@ def main(argv: list[str] | None = None) -> int:
             print(report)
             if os.environ.get("GITHUB_ACTIONS"):
                 print(f"::warning title=Journal copies unmatched::{report}")
-        for name, staged in (("corpus.json", corpus), ("blog_corpus.json", blog)):
+        for name, staged in (
+            ("corpus.json", corpus),
+            ("blog_corpus.json", blog),
+            ("reference_corpus.json", reference),
+        ):
             if staged is None:
                 continue
             truncated, report = embed_truncation_report(name, staged)

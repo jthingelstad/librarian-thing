@@ -21,7 +21,7 @@ ARCHIVE_DIR = DATA / "issues"
 # the library derives issues/<n>/archive.md from them.
 WEEKLY_ARCHIVE_DIR = DATA / "weekly" / "archive"
 # Site grounding pages (about, support) pulled from weekly.thingelstad.com's
-# apps/site/, read by the corpus build as site_page chunks.
+# apps/site/, read by the reference corpus build as site_page chunks.
 SITE_DIR = DATA / "site"
 FAQ_PATH = REPO / "apps" / "librarian" / "lambda" / "shared" / "faq.json"
 CORPUS_PATH = DATA / "librarian" / "corpus.json"
@@ -56,7 +56,26 @@ PODCAST_CORPUS_PATH = DATA / "librarian" / "podcast_corpus.json"
 
 # Things I've built - Jamie's project registry at thingelstad.xyz, which
 # publishes itself as JSON. pipeline/things/import_things.py snapshots it
-# here and the Weekly Thing corpus build turns it into undated "thing"
-# chunks (see _things_chunks in corpus.py and pipeline/library/README.md).
+# here and the reference corpus build turns it into undated "thing" chunks
+# (see _things_chunks in corpus.py and pipeline/library/README.md).
 THINGS_URL = "https://thingelstad.xyz/things.json"
 THINGS_PATH = DATA / "things" / "things.json"
+
+# thingelstad.com's pages (About, Lists, Collections, Open Loop), pulled with
+# the blog by pipeline/blog/ingest_blog.py.
+BLOG_PAGES_DIR = DATA / "blog" / "pages"
+
+# The reference base (Jamie, 2026-10-23): what the Librarian always consults
+# and no caller selects. Its own corpus, built by build_reference_corpus in
+# corpus.py from the Weekly Thing's site pages and FAQ, Things I've built,
+# thingelstad.com's pages, and documents about Jamie (a bio, a resume).
+# Documents come in two folders. Published ones are written in git under
+# reference-documents/ (see its README; the repository is public), pulled
+# into the library by pipeline/reference/import_reference.py and exported to
+# data/reference/. Unpublished ones are never in git: they are placed in the
+# library's reference-unpublished/ by hand (export, add, absorb, upload) and
+# exported to data/reference-unpublished/. The build reads both.
+REFERENCE_INTAKE_DIR = REPO / "reference-documents"
+REFERENCE_DIR = DATA / "reference"
+REFERENCE_UNPUBLISHED_DIR = DATA / "reference-unpublished"
+REFERENCE_CORPUS_PATH = DATA / "librarian" / "reference_corpus.json"

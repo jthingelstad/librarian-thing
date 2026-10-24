@@ -21,7 +21,7 @@ The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and a
 - Amazon Bedrock Cohere Embed v3 for query-to-archive retrieval.
 - Amazon Bedrock Cohere Rerank 3.5 after archive searches.
 - DynamoDB for magic-link tokens, sessions, rate limits, canonical conversations, turns, artifacts, feedback, eval metadata, and per-user memory.
-- S3 for embedded Weekly Thing, blog, and podcast corpora plus the offline graph artifact.
+- S3 for embedded Weekly Thing, blog, podcast and reference corpora plus the offline graph artifact. The reference corpus (the Weekly Thing's site pages and FAQ, Things I've built, thingelstad.com's pages, and documents about Jamie from `reference-documents/` and the library's `reference-unpublished/`) is consulted by every search whatever the scope or source kind, and no caller selects it (2026-10-23).
 - CloudWatch Logs for structured JSON request, retrieval, upstream, and error logs.
 
 Chat streams from `site.librarianStreamUrl + /chat`; there is no buffered API Gateway chat fallback. Welcome messages are generated agentically by `/welcome`, using authenticated profile, local-time context, previous conversations, and active entitlements. Conversations are server-side and canonical; the browser no longer sends the full history as the source of truth.
@@ -45,7 +45,7 @@ identity: `GET /` is a small Librarian page and `/favicon.ico` /
 for the connector icon). The authorize pages prefill the verified email from
 a first-party `thingy_email` cookie (CloudFront forwards only that cookie).
 
-The FAQ content lives in `apps/librarian/lambda/shared/faq.json`. The streaming Lambda packages that file so Thingy can answer site, subscription, membership, RSS, privacy, and logistics questions through the `search_faq` tool. (The Eleventy `/faq/` page retired with the Studio site; the Lambda is now the file's only consumer.)
+The FAQ content lives in `apps/librarian/lambda/shared/faq.json`. The streaming Lambda packages that file so Thingy can answer site, subscription, membership, RSS, privacy, and logistics questions through the `search_faq` tool; its answers are also passages of the reference corpus, so every search finds them. (The Eleventy `/faq/` page retired with the Studio site; the Lambda is now the file's only consumer.)
 
 ## Commands
 
@@ -85,6 +85,7 @@ Local `.env` values used by upload/build scripts:
 - `LIBRARIAN_GRAPH_KEY` (optional; defaults to `artifacts/graph.json`)
 - `LIBRARIAN_BLOG_CORPUS_KEY` (optional; defaults to `artifacts/blog_corpus.json`)
 - `LIBRARIAN_PODCAST_CORPUS_KEY` (optional; defaults to `artifacts/podcast_corpus.json`)
+- `LIBRARIAN_REFERENCE_CORPUS_KEY` (optional; defaults to `artifacts/reference_corpus.json`)
 - `AWS_DEFAULT_REGION`
 - `LIBRARIAN_API_URL` (written by deploy; the Thingy web repo reads its copy from its own CI variables)
 - `LIBRARIAN_STREAM_URL` (written by deploy; same)

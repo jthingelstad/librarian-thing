@@ -112,19 +112,8 @@ def _archive(root: Path) -> Path:
     return archive
 
 
-def _empty_site_dir(root: Path) -> Path:
-    site = root / "site"
-    (site / "_data").mkdir(parents=True)
-    return site
-
-
 def _corpus(root: Path) -> dict:
-    return build_corpus(
-        _archive(root),
-        include_issue_bodies=True,
-        site_dir=_empty_site_dir(root),
-        faq_path=root / "missing-faq.json",
-    )
+    return build_corpus(_archive(root), include_issue_bodies=True)
 
 
 def _issue(corpus: dict, number: int) -> dict:
@@ -215,8 +204,6 @@ def test_production_build_stamps_audio(tmp_path):
         _archive(tmp_path),
         tmp_path / "no-sidecar.json",
         site_archive_dir=site,
-        site_dir=_empty_site_dir(tmp_path),
-        faq_path=tmp_path / "missing-faq.json",
     )
 
     assert _issue(corpus, 351)["audio"]["duration_seconds"] == 854
@@ -228,8 +215,6 @@ def test_production_build_without_the_site_still_builds(tmp_path):
         _archive(tmp_path),
         tmp_path / "no-sidecar.json",
         site_archive_dir=tmp_path / "absent",
-        site_dir=_empty_site_dir(tmp_path),
-        faq_path=tmp_path / "missing-faq.json",
     )
 
     assert len(corpus["issues"]) == 4

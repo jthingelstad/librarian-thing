@@ -10,6 +10,7 @@ was downloaded at, so ``upload`` only replaces the copy it started from.
     python pipeline/library/library.py download       # .library/library.db + its ETag
     python pipeline/library/library.py export         # library -> data/
     python pipeline/library/library.py pull           # sources -> data/ -> library
+    python pipeline/library/library.py absorb         # data/ as edited by hand -> library
     python pipeline/library/library.py upload         # .library/library.db -> S3, If-Match
     python pipeline/library/library.py status         # what the local copy holds
     python pipeline/library/library.py stale          # which corpora the library has moved past
@@ -19,10 +20,21 @@ was downloaded at, so ``upload`` only replaces the copy it started from.
 (``LIBRARIAN_DATA_DIR``): the blog ingest as a full, pruning walk of
 micro.blog; weekly.thingelstad.com's archive, about and support pages and
 another.thingelstad.com's episodes from shallow sparse clones of their public
-repos (or ``--weekly-dir`` / ``--another-dir`` checkouts); and the
-thingelstad.xyz registry; and Tinylytics' reader numbers (``readers``, which
+repos (or ``--weekly-dir`` / ``--another-dir`` checkouts); the
+thingelstad.xyz registry; the reference documents from main's
+``reference-documents/`` (a sparse clone of this repo, so a checkout on a
+branch never pulls its copy; ``--reference-dir`` for a local folder); and
+Tinylytics' reader numbers (``readers``, which
 needs ``TINYLYTICS_API_KEY``, so the GitHub round leaves it out). Then it
 absorbs what changed. Nothing here writes to any source.
+
+``absorb`` takes back what was changed in the tree by hand, all origins at
+once. It is how reference documents kept out of the public repository reach
+the library: export, put the files in ``data/reference-unpublished/``,
+absorb (which checks every reference document first, as the build will),
+upload. No pull touches that folder, so no round removes them; the next
+round's ``stale`` sees the reference corpus's inputs move and starts the
+build. Uploading is Jamie's step, never an agent's.
 """
 
 from __future__ import annotations
@@ -46,6 +58,12 @@ from librarian_core.library.db import LibraryError, counts, meta_get, now
 from librarian_core.library.store import LibraryConflict, built_from, download, upload
 from librarian_core.library.tree import write_readers
 from librarian_core.paths import DATA, REPO
+from librarian_core.reference import (
+    PUBLISHED_FOLDER,
+    UNPUBLISHED_FOLDER,
+    ReferenceDocumentError,
+    read_reference_documents,
+)
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tinylytics  # noqa: E402
@@ -53,18 +71,29 @@ import tinylytics  # noqa: E402
 LIBRARY_DIR = REPO / ".library"
 DB_PATH = LIBRARY_DIR / "library.db"
 STATE_PATH = LIBRARY_DIR / "state.json"
-SOURCES = ("blog", "weekly", "another", "things", "readers")
+SOURCES = ("blog", "weekly", "another", "things", "reference", "readers")
 WEEKLY_REPO = "https://github.com/jthingelstad/weekly.thingelstad.com.git"
 ANOTHER_REPO = "https://github.com/jthingelstad/another.thingelstad.com.git"
+# This repo: the reference documents are pulled from main, like the other
+# sources from their published homes.
+LIBRARIAN_REPO = "https://github.com/jthingelstad/librarian-thing.git"
+REFERENCE_FOLDER = "reference-documents"
 WEEKLY_SITE_FILES = ("about.njk", "support.njk", "_data/support.json")
 # Which origins each pull refreshes, so an absorb compares only those.
 # Reader numbers live in their own tables, not in files.
-ORIGINS = {"blog": "micro.blog", "weekly": "weekly", "another": "another", "things": "xyz"}
+ORIGINS = {
+    "blog": "micro.blog",
+    "weekly": "weekly",
+    "another": "another",
+    "things": "xyz",
+    "reference": "reference",
+}
 # deploy.yml's step outputs, one per corpus.
 OUTPUTS = {
     "corpus": "weekly_corpus",
     "blog_corpus": "blog_corpus",
     "podcast_corpus": "podcast_corpus",
+    "reference_corpus": "reference_corpus",
 }
 # From Friday until the issue is sent nothing automatic changes the corpus:
 # the round still updates the library, and the build waits. A send ends the
@@ -221,8 +250,38 @@ def pull_another(tree: Path, another_dir: Path | None) -> None:
         )
 
 
+def pull_reference(tree: Path, reference_dir: Path | None) -> None:
+    """main's reference-documents/ into the tree's reference/, every
+    document checked on the way (pipeline/reference/import_reference.py),
+    and none named like one in reference-unpublished/, which it never
+    touches."""
+    with tempfile.TemporaryDirectory() as tmp:
+        if reference_dir is None:
+            clone = _sparse_clone(
+                LIBRARIAN_REPO, [f"/{REFERENCE_FOLDER}/"], Path(tmp) / "librarian"
+            )
+            reference_dir = clone / REFERENCE_FOLDER
+        _run(
+            [
+                sys.executable,
+                "pipeline/reference/import_reference.py",
+                "--source-dir",
+                str(reference_dir),
+                "--output-dir",
+                str(tree / PUBLISHED_FOLDER),
+                "--unpublished-dir",
+                str(tree / UNPUBLISHED_FOLDER),
+            ],
+            tree,
+        )
+
+
 def cmd_pull(
-    tree: Path, only: list[str], weekly_dir: Path | None, another_dir: Path | None
+    tree: Path,
+    only: list[str],
+    weekly_dir: Path | None,
+    another_dir: Path | None,
+    reference_dir: Path | None = None,
 ) -> dict:
     with _library() as conn:
         if not (tree / ".library.json").exists():
@@ -236,6 +295,8 @@ def cmd_pull(
                 pull_another(tree, another_dir)
             elif source == "things":
                 _run([sys.executable, "pipeline/things/import_things.py"], tree)
+            elif source == "reference":
+                pull_reference(tree, reference_dir)
         changes = absorb_tree(
             conn, tree, origins={ORIGINS[s] for s in only if s in ORIGINS}, note="pull"
         )
@@ -264,6 +325,12 @@ def _report_readers(report: dict) -> None:
 
 
 def cmd_absorb(tree: Path, allow_removals: bool) -> int:
+    # A reference document the build would refuse never reaches the library.
+    try:
+        read_reference_documents(tree / PUBLISHED_FOLDER, tree / UNPUBLISHED_FOLDER)
+    except ReferenceDocumentError as exc:
+        print(f"library: {exc}; nothing absorbed", file=sys.stderr)
+        return 1
     with _library() as conn:
         changes = absorb_tree(conn, tree, allow_removals=allow_removals, note="absorb")
         reindex(conn)
@@ -377,6 +444,9 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--weekly-dir", type=Path)
         if name == "pull":
             command.add_argument("--another-dir", type=Path)
+            command.add_argument(
+                "--reference-dir", type=Path, help="a local reference-documents folder, not main's"
+            )
         if name == "absorb":
             command.add_argument("--allow-removals", action="store_true")
     args = parser.parse_args(argv)
@@ -400,7 +470,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "export":
             return cmd_export(args.tree, args.force)
         if args.command == "pull":
-            cmd_pull(args.tree, only, args.weekly_dir, args.another_dir)
+            cmd_pull(args.tree, only, args.weekly_dir, args.another_dir, args.reference_dir)
             return 0
         if args.command == "absorb":
             return cmd_absorb(args.tree, args.allow_removals)

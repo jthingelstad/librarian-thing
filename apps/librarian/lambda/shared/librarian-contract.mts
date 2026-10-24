@@ -79,7 +79,20 @@
 // serves the same address for five minutes. A refused request answers 403
 // {status: 'turnstile_failed', error}. Observe mode until enforced: a missing
 // token is recorded and the request goes ahead (2026-10-14; additive).
-export const LIBRARIAN_CONTRACT_VERSION = '4.17.0';
+// 4.18.0: the reference base (Jamie, 2026-10-23). The Weekly Thing's site
+// pages and FAQ, Things I've built, thingelstad.com's pages and the
+// reference documents about Jamie (a bio, a resume: source_kind document,
+// labelled by title) are one corpus that /retrieve always consults, whatever
+// the scope, sourceKinds or excludeSourceKinds say. The other filters hold,
+// and it is undated, so yearRange, before and calendar keep none of it.
+// filters.sourceKinds names weekly_thing, blog or podcast, and
+// excludeSourceKinds those or site_page, faq and thing (which leave nothing
+// out now); any other kind is a 400 {error}, where it used to match nothing
+// (no known caller sends one). Passages keep their source_kind, id and label;
+// a document passage's section is its H2 heading (the title for the text
+// before the first one) and it carries document_source and document_date,
+// the document's own provenance as citation metadata (never a publish_date).
+export const LIBRARIAN_CONTRACT_VERSION = '4.18.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -227,6 +240,8 @@ const retrievePassage = object(
     linked_from_issues: unknownArray,
     section_family: string,
     content_kind: string,
+    document_source: string,
+    document_date: string,
     voice: unknownArray,
     text: string
   },
@@ -477,8 +492,12 @@ export const LIBRARIAN_CONTRACT = {
           filters: object({
             yearRange: unknownArray,
             section: string,
-            sourceKinds: unknownArray,
-            excludeSourceKinds: unknownArray,
+            // 4.18: the dated sources only; the reference base is always in.
+            sourceKinds: arrayOf({ type: 'string', enum: ['weekly_thing', 'blog', 'podcast'] }),
+            excludeSourceKinds: arrayOf({
+              type: 'string',
+              enum: ['weekly_thing', 'blog', 'podcast', 'site_page', 'faq', 'thing']
+            }),
             excludeIssues: unknownArray,
             before: string,
             issueNumber: { anyOf: [string, number] },

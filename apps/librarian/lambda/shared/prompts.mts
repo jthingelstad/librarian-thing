@@ -100,7 +100,18 @@ export function promptFingerprint(): string {
 //        trend, an issue's email opens and feed reads, kudos), and
 //        list_content sorts by them (sort most_read, most_read_30d,
 //        most_read_90d, most_kudos, rising). Search ranking is unchanged.
-export const MCP_SERVER_VERSION = '2.7.0';
+// 2.8.0 (2026-10-23): the reference base. Site pages, the FAQ, things,
+//        thingelstad.com's pages and the reference documents about Jamie
+//        (doc-<name>: a bio, a resume) are searched on every call whatever
+//        source_kind or scope says, and no source_kind selects them; a
+//        document is undated, so date-anchored tools leave it out.
+//        corpus_stats lists them as one more entry (source_kind reference,
+//        always_searched, counts_by_kind, documents, no years) when no
+//        source_kind or year is asked for; get_source and source_neighborhood
+//        take doc-<name>. A document's passages are its H2 sections and carry
+//        document_source and document_date (its front matter's source and
+//        date: citation metadata, never a publish date).
+export const MCP_SERVER_VERSION = '2.8.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;
