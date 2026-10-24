@@ -1,8 +1,9 @@
 """The ``sources`` and ``media`` index over the library's files.
 
-One row per post, page, issue, episode, thing and site page, with the ids the
-Librarian uses everywhere (``blog-<id>``, ``page-<id>``, ``wt-<n>``,
-``ep-<n>``, ``thing-<id>``), and one row per image with its alt as published.
+One row per post, page, issue, episode, thing, site page and reference
+document, with the ids the Librarian uses everywhere (``blog-<id>``,
+``page-<id>``, ``wt-<n>``, ``ep-<n>``, ``thing-<id>``, ``doc-<name>``), and
+one row per image with its alt as published.
 Rebuilt whole from ``files`` after every absorb, so it can never drift from
 the content it indexes; the reader numbers' path index is rebuilt with it.
 """
@@ -135,6 +136,22 @@ def _rows(path: str, content: str) -> Iterator[tuple[dict[str, Any], str]]:
                 },
                 "",
             )
+    elif path.startswith(("reference/", "reference-unpublished/")) and path.endswith(".md"):
+        # One id space over both folders: a name in both is two files
+        # claiming one id, which reindex refuses.
+        meta, body = _front_matter(content)
+        yield (
+            {
+                "id": f"doc-{PurePosixPath(path).stem}",
+                "kind": "document",
+                "url": _text(meta.get("url")),
+                "title": _text(meta.get("title")),
+                "published": None,
+                "updated": _text(meta.get("updated")),
+                "categories": [],
+            },
+            body,
+        )
     elif path.startswith("site/") and path.endswith(".njk"):
         meta, body = _front_matter(content)
         permalink = str(meta.get("permalink") or f"/{PurePosixPath(path).stem}/")

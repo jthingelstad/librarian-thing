@@ -35,6 +35,14 @@ Parameters:
       S3 key for the Another Thing podcast corpus. The native archive
       lazy-loads it only when a request's scope includes podcast or all.
       Uploaded on its own cadence by pipeline/deploy/upload_podcast_corpus.py.
+  ReferenceCorpusKey:
+    Type: String
+    Default: artifacts/reference_corpus.json
+    Description: >
+      S3 key for the reference base - site pages, the FAQ, Things I've built,
+      the blog's pages and reference documents. The native archive loads it
+      for every retrieval whatever the scope, and no source kind selects it.
+      Uploaded on its own cadence by pipeline/deploy/upload_reference_corpus.py.
   LogLevel:
     Type: String
     Default: INFO
@@ -220,6 +228,7 @@ Resources:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${GraphKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${BlogCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${PodcastCorpusKey}
+                  - !Sub arn:aws:s3:::${CorpusBucket}/${ReferenceCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/artifacts/dispatches/*
               # Dispatch was removed 2026-08; profile deletion still cleans
               # up historical dispatch artifacts, so keep delete access here.
@@ -818,6 +827,7 @@ Resources:
           GRAPH_KEY: !Ref GraphKey
           BLOG_CORPUS_KEY: !Ref BlogCorpusKey
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
+          REFERENCE_CORPUS_KEY: !Ref ReferenceCorpusKey
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           # Anthropic API model ids (2026-10), all on the 5 family: they

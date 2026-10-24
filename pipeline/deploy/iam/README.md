@@ -29,7 +29,7 @@ See `apps/librarian/infra/NATIVE-WEB.md` for release ordering and rollback.
 
 ## Authority
 
-- `deploy.json`: private `code/*`, four corpus/graph objects and the library
+- `deploy.json`: private `code/*`, five corpus/graph objects and the library
   (`artifacts/library.db`, read and written by CI since 2026-10-22), bucket-security
   inspection, current embedding/model smoke checks, log retention, and updates
   to the one stack using the exact CloudFormation service role. No direct

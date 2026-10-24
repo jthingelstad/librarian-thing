@@ -17,12 +17,27 @@ spec.loader.exec_module(corpus)
 
 
 def _empty_site(root: Path) -> Path:
-    """Build a site_dir scaffold that has no about/support content — used
-    to keep the issue-only tests from picking up the real ``apps/site``."""
+    """A site_dir scaffold with no about/support content, for a site page
+    test to fill (never the real ``apps/site``)."""
     site = root / "site"
     site.mkdir()
     (site / "_data").mkdir()
     return site
+
+
+def _reference(archive: Path, *, site: Path, faq: Path | None = None) -> dict:
+    """The reference corpus from just these site pages (and FAQ): no things,
+    pages or documents, and never the repo's own FAQ."""
+    root = archive.parent
+    return core.build_reference_corpus(
+        archive_dir=archive,
+        site_dir=site,
+        faq_path=faq or root / "missing-faq.json",
+        things_path=root / "no-things.json",
+        pages_dir=root / "no-pages",
+        reference_dir=root / "no-reference",
+        unpublished_dir=root / "no-unpublished",
+    )
 
 
 class LibrarianCorpusTests(unittest.TestCase):
@@ -43,11 +58,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            result = corpus.build_corpus(
-                archive,
-                site_dir=_empty_site(Path(tmp)),
-                faq_path=Path(tmp) / "missing-faq.json",
-            )
+            result = corpus.build_corpus(archive)
 
         self.assertEqual(result["issue_count"], 1)
         self.assertGreaterEqual(result["chunk_count"], 1)
@@ -90,12 +101,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            result = corpus.build_corpus(
-                archive,
-                include_issue_bodies=True,
-                site_dir=_empty_site(Path(tmp)),
-                faq_path=Path(tmp) / "missing-faq.json",
-            )
+            result = corpus.build_corpus(archive, include_issue_bodies=True)
             xref = core.journal_blog_xref(archive)
 
         dump = json.dumps(result, default=str)
@@ -140,11 +146,7 @@ class LibrarianCorpusTests(unittest.TestCase):
             )
 
             with self.assertRaisesRegex(RuntimeError, "Template/generated content leaked"):
-                corpus.build_corpus(
-                    archive,
-                    site_dir=_empty_site(Path(tmp)),
-                    faq_path=Path(tmp) / "missing-faq.json",
-                )
+                corpus.build_corpus(archive)
 
     def _seed_archive(self, archive: Path) -> None:
         (archive / "1").mkdir(parents=True, exist_ok=True)
@@ -173,11 +175,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 "<p>Selected issues are also available as audio via the podcast feed.</p>",
                 encoding="utf-8",
             )
-            result = corpus.build_corpus(
-                archive,
-                site_dir=site,
-                faq_path=Path(tmp) / "missing-faq.json",
-            )
+            result = _reference(archive, site=site)
         about = [
             c for c in result["chunks"] if c["source_kind"] == "site_page" and c["url"] == "/about/"
         ]
@@ -227,11 +225,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            result = corpus.build_corpus(
-                archive,
-                site_dir=site,
-                faq_path=Path(tmp) / "missing-faq.json",
-            )
+            result = _reference(archive, site=site)
         members = [
             c
             for c in result["chunks"]
@@ -289,7 +283,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            result = corpus.build_corpus(archive, site_dir=site, faq_path=faq_path)
+            result = _reference(archive, site=site, faq=faq_path)
         faq = [c for c in result["chunks"] if c["source_kind"] == "faq"]
         self.assertEqual(len(faq), 3)
         # Stable id shape — section slug + entry index.
@@ -320,11 +314,7 @@ class LibrarianCorpusTests(unittest.TestCase):
                 encoding="utf-8",
             )
             with self.assertRaisesRegex(RuntimeError, "Privacy denylist"):
-                corpus.build_corpus(
-                    archive,
-                    site_dir=site,
-                    faq_path=Path(tmp) / "missing-faq.json",
-                )
+                _reference(archive, site=site)
 
 
 if __name__ == "__main__":

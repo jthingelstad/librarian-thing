@@ -72,6 +72,7 @@ def test_routine_deploy_preserves_native_settings_and_accepts_first_bootstrap(mo
             graph_key="artifacts/graph.json",
             blog_corpus_key="artifacts/blog_corpus.json",
             podcast_corpus_key="artifacts/podcast_corpus.json",
+            reference_corpus_key="artifacts/reference_corpus.json",
             allowed_origin="https://thingy.thingelstad.com",
             thingy_magic_link_from_email="thingy@example.test",
             thingy_magic_link_base_url="https://thingy.thingelstad.com",

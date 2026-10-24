@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://thingy.thingelstad.com/contracts/librarian-api.json",
   "title": "Thingy Librarian API Contract",
-  "version": "4.17.0",
+  "version": "4.18.0",
   "compatibility": "breaking",
   "$defs": {
     "mode": {
@@ -359,6 +359,12 @@
           "type": "string"
         },
         "content_kind": {
+          "type": "string"
+        },
+        "document_source": {
+          "type": "string"
+        },
+        "document_date": {
           "type": "string"
         },
         "voice": {
@@ -1246,10 +1252,29 @@
                 "type": "string"
               },
               "sourceKinds": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "weekly_thing",
+                    "blog",
+                    "podcast"
+                  ]
+                }
               },
               "excludeSourceKinds": {
-                "type": "array"
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "weekly_thing",
+                    "blog",
+                    "podcast",
+                    "site_page",
+                    "faq",
+                    "thing"
+                  ]
+                }
               },
               "excludeIssues": {
                 "type": "array"

@@ -5,11 +5,12 @@ import { createHash } from 'node:crypto';
 import { s3, bedrock } from '../dist/shared/aws-clients.mjs';
 import { loadCorpus, loadGraph, retrieve } from '../dist/shared/retrieval.mjs';
 const directory = process.argv[2];
-if (!directory) throw new Error('Supply a directory with the four *.json.gz artifacts');
+if (!directory) throw new Error('Supply a directory with the five *.json.gz artifacts');
 process.env.CORPUS_BUCKET = 'fixture';
 process.env.CORPUS_KEY = 'corpus.json';
 process.env.BLOG_CORPUS_KEY = 'blog_corpus.json';
 process.env.PODCAST_CORPUS_KEY = 'podcast_corpus.json';
+process.env.REFERENCE_CORPUS_KEY = 'reference_corpus.json';
 process.env.GRAPH_KEY = 'graph.json';
 const reads = {};
 s3.send = async ({ input }) => {
@@ -25,7 +26,9 @@ const report = (phase) =>
   );
 report('start');
 await Promise.all(
-  Array.from({ length: 8 }, () => Promise.all(['weekly_thing', 'blog', 'podcast'].map((kind) => loadCorpus(kind))))
+  Array.from({ length: 8 }, () =>
+    Promise.all(['weekly_thing', 'blog', 'podcast', 'reference'].map((kind) => loadCorpus(kind)))
+  )
 );
 await loadGraph();
 report('loaded');

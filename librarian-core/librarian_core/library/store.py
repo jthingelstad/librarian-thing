@@ -23,6 +23,7 @@ CORPUS_KEYS = {
     "corpus": "artifacts/corpus.json",
     "blog_corpus": "artifacts/blog_corpus.json",
     "podcast_corpus": "artifacts/podcast_corpus.json",
+    "reference_corpus": "artifacts/reference_corpus.json",
 }
 FINGERPRINT_META = "library-fingerprint"
 _CONFLICT_CODES = {"PreconditionFailed", "ConditionalRequestConflict"}

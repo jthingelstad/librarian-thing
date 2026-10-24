@@ -32,12 +32,18 @@ is the archive, the corpus, or the retrieval path, it lives here.
 
 1. WT Builder publishes an issue to weekly.thingelstad.com, then nudges the
    library round (`repository_dispatch` `issue-sent`).
-2. The library round pulls weekly's issue pages, micro.blog, the podcast and
-   Things I've built into `library.db` (daily, and when a source publishes).
+2. The library round pulls weekly's issue pages, micro.blog, the podcast,
+   Things I've built and this repo's `reference-documents/` into
+   `library.db` (daily, and when a source publishes). Documents about Jamie
+   that must stay out of this public repo are placed in the library's
+   `reference-unpublished/` by hand.
 3. When the library moves past what a corpus was built from, the production
    workflow rebuilds that corpus, embeds it, uploads to S3, and hands the
    topic graph to `weekly.thingelstad.com`. Friday and Saturday it waits for
-   the send.
+   the send. There are four corpora: the Weekly Thing, the blog, the podcast,
+   and the reference base (the site pages, the FAQ, Things I've built, the
+   blog's pages and the documents about Jamie), which every search consults
+   and no caller selects.
 4. Thingy chat answers from the deployed corpus through the Librarian's
    agent loop; WT Builder retrieves through the versioned `/retrieve`
    contract; MCP clients (Claude, ChatGPT, Codex) use the same tool

@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import {
   buildArchiveLens,
   compileTopicMatcher,
+  isDocument,
   isSitePage,
   isThing,
   lensMatchReasons,
@@ -347,9 +348,15 @@ function citationsFor(chunks: ArchiveRecord[]) {
     // WT chunks dedupe by issue+section; external sources have no issue
     // number, so dedupe them by source kind + URL.
     const external = isExternalSource(chunk);
-    const key = external
-      ? `${chunk.source_kind || 'external'}\0${chunk.url || chunk.source_url || ''}`
-      : `${chunk.issue_number}\0${chunk.section || ''}`;
+    // A reference document by its name and section: its url is optional, and
+    // two documents can share a heading. A search passage carries its chunk
+    // id (doc:<name>:...), not doc_id.
+    const key =
+      chunk.source_kind === 'document'
+        ? `document\0${chunk.doc_id || String(chunk.id || '').split(':')[1] || chunk.subject || ''}\0${chunk.section || ''}`
+        : external
+          ? `${chunk.source_kind || 'external'}\0${chunk.url || chunk.source_url || ''}`
+          : `${chunk.issue_number}\0${chunk.section || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
     // The contract types these fields as strings; source records sometimes
@@ -372,7 +379,10 @@ function citationsFor(chunks: ArchiveRecord[]) {
       episode_number: chunk.episode_number,
       show: text(chunk.show),
       also_in_issues: Array.isArray(chunk.also_in_issues) ? chunk.also_in_issues : undefined,
-      linked_from_issues: Array.isArray(chunk.linked_from_issues) ? chunk.linked_from_issues : undefined
+      linked_from_issues: Array.isArray(chunk.linked_from_issues) ? chunk.linked_from_issues : undefined,
+      // A reference document's provenance, cited with it.
+      document_source: text(chunk.document_source),
+      document_date: text(chunk.document_date)
     });
   }
   return citations;
@@ -852,7 +862,9 @@ const SOURCE_LEVEL_FIELDS = [
   'show',
   'topics',
   'also_in_issues',
-  'linked_from_issues'
+  'linked_from_issues',
+  'document_source',
+  'document_date'
 ] as const;
 
 // A passage longer than its room shows the stretch where the query's words
@@ -1304,6 +1316,15 @@ async function toolGetSource(input: ToolArgs = {}, context: ToolContext = {}) {
         ? sections.map((section) => `## ${section.name}\n${section.text || ''}`).join('\n\n')
         : issue.body
     );
+  } else if (kind === 'document') {
+    // A document reads in its own order, H2 by H2, with its headings back.
+    sections = documentSections(chunks, String(record.subject || ''), wantedSection);
+    body = sections
+      .map((section) => (section.heading ? `## ${section.name}\n\n${section.text}` : section.text))
+      .join('\n\n');
+    if (wantedSection && !sections.length) {
+      return noSuchSection(wantedSection, record, documentSections(chunks, String(record.subject || '')), body);
+    }
   } else {
     sections = sectionsFromChunks(chunks, wantedSection);
     body = sourceTextFromChunks(chunks, wantedSection);
@@ -1931,6 +1952,8 @@ function urlKey(value: unknown) {
 }
 
 export function sourceKeyFromChunk(chunk: ArchiveRecord, fallbackKind = '') {
+  // A reference document is keyed by its name: its url is optional.
+  if (isDocument(chunk)) return `document\0${chunk.doc_id}`;
   const kind = normalizeSourceKind(chunk?.source_kind || fallbackKind) || fallbackKind;
   if (kind === 'weekly_thing' || chunk?.issue_number) return `weekly_thing\0${issueKey(chunk.issue_number)}`;
   if (kind === 'blog') return `blog\0${blogKeyPart(chunk) || urlKey(chunk.url)}`;
@@ -2011,6 +2034,10 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     categories: record.categories,
     // A page's last edit: it has no written date, so publish_date is null.
     updated: record.updated,
+    // A reference document's provenance (front matter source and date):
+    // citation metadata, never the date the archive tools anchor on.
+    document_source: record.document_source ?? undefined,
+    document_date: record.document_date ?? undefined,
     audio_duration_seconds: record.audio_duration_seconds
   };
 }
@@ -2131,6 +2158,35 @@ function sourceTextFromChunks(chunks: ArchiveRecord[], section = '') {
   return chunkTexts(pickBySection(chunks || [], wanted, (chunk) => chunk)).join('\n\n');
 }
 
+// A reference document's sections in document order: one per H2 (each
+// chunk's section is its heading; the text before the first heading carries
+// the title instead), so a heading that repeats (two forum threads with one
+// title) stays two sections where they fall, and a section split over
+// several chunks reads whole.
+function documentSections(chunks: ArchiveRecord[], title: string, section = '') {
+  const wanted = String(section || '')
+    .toLowerCase()
+    .trim();
+  const runs: Array<{ name: string; heading: boolean; chunks: ArchiveRecord[] }> = [];
+  for (const chunk of chunks || []) {
+    const name = String(chunk.section || title);
+    const last = runs[runs.length - 1];
+    if (last && last.name === name) last.chunks.push(chunk);
+    else runs.push({ name, heading: runs.length > 0 || name !== title, chunks: [chunk] });
+  }
+  const picked = wanted ? runs.filter((run) => matchesSection({ section: run.name }, wanted)) : runs;
+  const exact = picked.filter((run) => headingKey(run.name) === headingKey(wanted));
+  return (exact.length ? exact : picked).map((run) => {
+    const parts = chunkTexts(run.chunks);
+    return {
+      name: run.name,
+      heading: run.heading,
+      word_count: tokenize(parts.join(' ')).length,
+      text: parts.join('\n\n')
+    };
+  });
+}
+
 function sectionsFromChunks(chunks: ArchiveRecord[], section = '') {
   const wanted = String(section || '')
     .toLowerCase()
@@ -2205,6 +2261,8 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   if (blog) return { ...rest, id: `${blog[1].toLowerCase()}-${blog[2]}` };
   const episode = raw.match(/^ep-(\d+)$/i);
   if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
+  const documentId = raw.match(/^doc-([a-z0-9][a-z0-9-]*)$/i);
+  if (documentId) return { ...rest, id: `doc-${documentId[1].toLowerCase()}` };
   if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
   // An archive url pasted without its scheme (QA2 links L2-7:
   // thingelstad.com/2004/07/06/learn-to-row.html was not_found).
@@ -2255,6 +2313,31 @@ function sitePageBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
   return { kind: 'site', corpus, record, key: `site\0${urlKey(first.url)}`, chunks, links: [] };
 }
 
+// A reference document (doc-<name>), read whole like a page: the reference
+// corpus alone carries it, and it is reachable whatever the scope, as the
+// reference base is in every search (Jamie, 2026-10-23).
+function documentBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
+  const id = String(input.id || '');
+  const url = input.url || input.permalink;
+  if (!id.startsWith('doc-') && !url) return null;
+  const documents = ((corpus.chunks || []) as ArchiveRecord[]).filter((chunk) => isDocument(chunk));
+  const first = documents.find((chunk) =>
+    id ? lensSourceId(chunk) === id : Boolean(chunk.url) && urlKey(chunk.url) === urlKey(url)
+  );
+  if (!first) return null;
+  const chunks = documents.filter((chunk) => chunk.doc_id === first.doc_id);
+  const record: ArchiveRecord = {
+    source_kind: 'document',
+    doc_id: first.doc_id,
+    subject: first.subject,
+    url: first.url,
+    updated: first.updated,
+    document_source: first.document_source,
+    document_date: first.document_date
+  };
+  return { kind: 'document', corpus, record, key: `document\0${first.doc_id}`, chunks, links: [] };
+}
+
 // A corpus's source records once, by the id tools emit (get_source had
 // rebuilt all 10,442 blog records per call).
 const RECORD_LOOKUP = new WeakMap<
@@ -2281,6 +2364,7 @@ async function findSourceBundle(
   { scope }: ToolContext = {}
 ): Promise<SourceBundle | { ambiguous: ArchiveRecord[] } | null> {
   const input = canonicalSourceInput(rawInput);
+  if (String(input.id || '').startsWith('doc-')) return documentBundle(await loadCorpus('reference'), input);
   const requestedKind = inferSourceKindFromInput(input);
   const kinds = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
   for (const kind of kinds) {
@@ -2316,7 +2400,8 @@ async function findSourceBundle(
     const index = await sourceIndex(corpus, kind);
     return { kind, corpus, record, key, chunks: index.chunks.get(key) || [], links: index.links.get(key) || [] };
   }
-  return null;
+  // A document's own url, if it has one.
+  return input.url || input.permalink ? documentBundle(await loadCorpus('reference'), input) : null;
 }
 
 function ambiguousSource(found: { ambiguous: ArchiveRecord[] }) {
@@ -2569,6 +2654,13 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     }
     sources.push(stats);
   }
+  // The reference base (Jamie, 2026-10-23): one entry, in no year. Every
+  // search consults it whatever the scope, so it is listed whatever the
+  // scope; a source_kind or a year_range asks about the dated corpora.
+  if (!requestedSource && !statsStartYear && !statsEndYear) {
+    const reference = referenceStats(await loadCorpus('reference'));
+    if (reference) sources.push(reference);
+  }
   return compactLensPayload(
     markTruncated(
       {
@@ -2598,6 +2690,46 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     ),
     { params: ['source_kind', 'year_range', 'limit'] }
   );
+}
+
+// The reference base as corpus_stats lists it: its sources (a page, the
+// FAQ, a thing, a document) and passages by kind, with no years. None when
+// no reference corpus is loaded (an older Weekly Thing and blog corpus
+// still count those rows themselves).
+function referenceStats(reference: Corpus) {
+  const rows = (reference.chunks || []) as ArchiveRecord[];
+  if (!rows.length) return null;
+  const sourcesByKind = new Map<string, Set<string>>();
+  const chunksByKind = new Map<string, number>();
+  for (const row of rows) {
+    const rowKind = row.page_id != null && row.page_id !== '' ? 'page' : String(row.source_kind || '');
+    if (!sourcesByKind.has(rowKind)) sourcesByKind.set(rowKind, new Set());
+    sourcesByKind.get(rowKind)!.add(lensSourceId(row));
+    chunksByKind.set(rowKind, (chunksByKind.get(rowKind) || 0) + 1);
+  }
+  const itemCounts = new Map([...sourcesByKind].map(([rowKind, ids]) => [rowKind, ids.size]));
+  // The documents about Jamie by name, with where each came from: what the
+  // base holds beyond the sites' own pages.
+  const documents = new Map<string, ArchiveRecord>();
+  for (const row of rows)
+    if (isDocument(row) && !documents.has(String(row.doc_id))) documents.set(String(row.doc_id), row);
+  return {
+    source_kind: 'reference',
+    always_searched: true,
+    generated_at: reference.generated_at,
+    item_count: [...itemCounts.values()].reduce((sum, count) => sum + count, 0),
+    chunk_count: rows.length,
+    counts_by_kind: sortedCountList(itemCounts, 'kind'),
+    chunk_counts_by_kind: sortedCountList(chunksByKind, 'kind'),
+    documents: [...documents.values()].map((row) => ({
+      id: lensSourceId(row),
+      title: row.subject,
+      url: row.url ? absoluteSourceUrl(row.url) : undefined,
+      updated: row.updated,
+      document_source: row.document_source ?? undefined,
+      document_date: row.document_date ?? undefined
+    }))
+  };
 }
 
 // A filter on also_in_issues is a question about blog posts (the only

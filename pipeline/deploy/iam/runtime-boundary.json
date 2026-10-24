@@ -37,6 +37,7 @@
         "arn:aws:s3:::weekly-thing-librarian/artifacts/graph.json",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/blog_corpus.json",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/podcast_corpus.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/reference_corpus.json",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/dispatches/*"
       ]
     },

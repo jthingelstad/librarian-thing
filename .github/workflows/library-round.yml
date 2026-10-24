@@ -11,6 +11,8 @@ name: Librarian — Library Round
 #   blog-published      the blog, from micro.blog
 #   podcast-published   another.thingelstad.com's episodes
 #   things-published    thingelstad.xyz's registry
+#   a push to main      the reference documents, when reference-documents/
+#                       changed
 #   anything else       every source
 #
 # Nothing here writes to a source. The library upload only replaces the copy
@@ -18,14 +20,18 @@ name: Librarian — Library Round
 # Friday until the send the build waits (pipeline/library/library.py stale).
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'reference-documents/**'
   schedule:
     - cron: '17 12 * * *'  # 07:17 CDT / 06:17 CST, after the Mac's morning round
   workflow_dispatch:
     inputs:
       only:
-        description: 'Sources to pull, comma-separated (blog, weekly, another, things)'
+        description: 'Sources to pull, comma-separated (blog, weekly, another, things, reference)'
         type: string
-        default: 'blog,weekly,another,things'
+        default: 'blog,weekly,another,things,reference'
       issue:
         description: 'The issue a send just published (ends the Friday and Saturday hold)'
         type: string
@@ -92,8 +98,9 @@ jobs:
             repository_dispatch:blog-published) only=blog ;;
             repository_dispatch:podcast-published) only=another ;;
             repository_dispatch:things-published) only=things ;;
-            workflow_dispatch:*) only="${ONLY:-blog,weekly,another,things}" ;;
-            *) only=blog,weekly,another,things ;;
+            push:*) only=reference ;;
+            workflow_dispatch:*) only="${ONLY:-blog,weekly,another,things,reference}" ;;
+            *) only=blog,weekly,another,things,reference ;;
           esac
           if [[ -n "$ISSUE" && ! "$ISSUE" =~ ^[0-9]+$ ]]; then
             echo "::error::issue must be a number, got '$ISSUE'"
@@ -152,7 +159,7 @@ jobs:
           uv run --locked --no-dev python pipeline/library/library.py stale "${args[@]}"
 
       - name: Start the corpus build
-        if: steps.stale.outputs.weekly_corpus == 'true' || steps.stale.outputs.blog_corpus == 'true' || steps.stale.outputs.podcast_corpus == 'true'
+        if: steps.stale.outputs.weekly_corpus == 'true' || steps.stale.outputs.blog_corpus == 'true' || steps.stale.outputs.podcast_corpus == 'true' || steps.stale.outputs.reference_corpus == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           ISSUE: ${{ steps.plan.outputs.issue }}

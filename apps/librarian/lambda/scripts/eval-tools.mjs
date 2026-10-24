@@ -6,7 +6,8 @@
  * script is layers 2 and 3.
  *
  * Corpus source: EVAL_CORPUS_DIR (corpus.json / blog_corpus.json /
- * podcast_corpus.json / graph.json as plain or gzipped JSON) or S3 via
+ * podcast_corpus.json / reference_corpus.json / graph.json as plain or
+ * gzipped JSON) or S3 via
  * CORPUS_BUCKET credentials. With EVAL_CORPUS_FALLBACK=s3 a file missing
  * from the dir is read from S3 instead: the deploy's corpus gate stages
  * only the corpora it rebuilt and evals them beside the live rest.
@@ -47,6 +48,10 @@ const CORPUS_FILES = {
   weekly_thing: 'corpus.json',
   blog: 'blog_corpus.json',
   podcast: 'podcast_corpus.json',
+  // The reference base (2026-10-23): site pages, the FAQ, things, the blog's
+  // pages and the reference documents. Absent (not uploaded yet), the
+  // Weekly Thing and blog corpora still carry the rows, as before.
+  reference: 'reference_corpus.json',
   // The topic graph feeds list_topics, archive_lens topic cards and
   // similar issues; without it those tools ran degraded in CI.
   graph: 'graph.json'
@@ -87,7 +92,30 @@ async function loadCorpora() {
       if (corpora[kind] && dir) console.log(`corpus ${name}: live S3 copy (not staged)`);
     }
   }
-  return corpora;
+  return withReferenceRows(corpora);
+}
+
+// The Lambda hands the reference base's site pages, FAQ and things back to
+// the Weekly Thing corpus and its pages back to the blog at load, so the
+// oracles below read them there too (written here, not imported, so an
+// oracle never shares the code it checks). Documents live only in the
+// reference corpus.
+function withReferenceRows(corpora) {
+  const reference = corpora.reference?.chunks || [];
+  if (!reference.length) return corpora;
+  const isPage = (chunk) => chunk.source_kind === 'blog' && chunk.page_id != null && chunk.page_id !== '';
+  const siteKinds = new Set(['site_page', 'faq', 'thing']);
+  const isReference = (chunk) => siteKinds.has(chunk.source_kind) || chunk.source_kind === 'document' || isPage(chunk);
+  const merge = (corpus, belongs) =>
+    corpus && {
+      ...corpus,
+      chunks: [...(corpus.chunks || []).filter((chunk) => !isReference(chunk)), ...reference.filter(belongs)]
+    };
+  return {
+    ...corpora,
+    weekly_thing: merge(corpora.weekly_thing, (chunk) => siteKinds.has(chunk.source_kind)),
+    blog: merge(corpora.blog, isPage)
+  };
 }
 
 // --- reporting ------------------------------------------------------------
@@ -679,6 +707,21 @@ await run('search_archive', { query: 'data ownership', limit: 4 }).then((out) =>
   );
   check('KA search_archive passage audio starts at its chapter', badAudio.length === 0, badAudio.join(', '));
 });
+// The reference base (2026-10-23) is searched whatever the source_kind: the
+// Supporting Membership page answers a podcast-only search.
+if (corpora.reference?.chunks?.length) {
+  const out = await run('search_archive', {
+    query: 'Supporting Membership nonprofit',
+    limit: 8,
+    source_kind: 'podcast'
+  });
+  const kinds = (out?.results || []).map((group) => group.source_kind);
+  check(
+    'KA search_archive consults the reference base under source_kind podcast',
+    kinds.includes('site_page'),
+    kinds.join(', ')
+  );
+}
 // QA2 I2-1: WT212's Journal links back to a 2021 post; that is a reference,
 // not a copy, so the post surfacing never drops the passage, and the
 // passage never names the post as its original.

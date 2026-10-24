@@ -47,7 +47,13 @@ def prepare(s3, outputs, pins, build_dir: Path, root: Path, zip_build) -> list[d
         settings[f"Native{door}CodeVersion"] = uploaded["VersionId"]
     # Corpus-only updates must publish a new configuration too, so warm
     # environments can't retain a previous corpus indefinitely.
-    for key in ("corpus.json", "blog_corpus.json", "podcast_corpus.json", "graph.json"):
+    for key in (
+        "corpus.json",
+        "blog_corpus.json",
+        "podcast_corpus.json",
+        "reference_corpus.json",
+        "graph.json",
+    ):
         hashes.append(
             s3.head_object(Bucket="weekly-thing-librarian", Key=f"artifacts/{key}")["VersionId"]
         )

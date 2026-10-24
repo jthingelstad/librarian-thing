@@ -137,6 +137,7 @@ jobs:
               echo "weekly_corpus=$corpus"
               echo "blog_corpus=$corpus"
               echo "podcast_corpus=$corpus"
+              echo "reference_corpus=$corpus"
               echo "lambda=true"
             } >> "$GITHUB_OUTPUT"
             exit 0
@@ -146,6 +147,7 @@ jobs:
           weekly_corpus="${{ steps.library.outputs.weekly_corpus }}"
           blog_corpus="${{ steps.library.outputs.blog_corpus }}"
           podcast_corpus="${{ steps.library.outputs.podcast_corpus }}"
+          reference_corpus="${{ steps.library.outputs.reference_corpus }}"
           lambda=false
 
           changed=""
@@ -196,6 +198,17 @@ jobs:
             podcast_corpus=true
           fi
 
+          # The reference base: site pages, the FAQ (in the Lambda's shared/),
+          # things, the blog's pages and the reference documents.
+          if has_change \
+            '^pipeline/reference/' \
+            '^pipeline/corpus/build_reference\.py$' \
+            '^pipeline/deploy/upload_reference_corpus\.py$' \
+            '^apps/librarian/lambda/shared/faq\.json$' \
+            '^librarian-core/'; then
+            reference_corpus=true
+          fi
+
           if has_change \
             '^apps/librarian/' \
             '^pipeline/deploy/aws\.py$' \
@@ -210,7 +223,7 @@ jobs:
           # fresh code key every time, which restarts the containers even
           # when the code is unchanged. 2026-09-30: the blog abstracts sat in
           # S3 unserved until a manual redeploy.
-          if [[ "$weekly_corpus" == true || "$blog_corpus" == true || "$podcast_corpus" == true ]]; then
+          if [[ "$weekly_corpus" == true || "$blog_corpus" == true || "$podcast_corpus" == true || "$reference_corpus" == true ]]; then
             lambda=true
           fi
 
@@ -218,6 +231,7 @@ jobs:
             echo "weekly_corpus=$weekly_corpus"
             echo "blog_corpus=$blog_corpus"
             echo "podcast_corpus=$podcast_corpus"
+            echo "reference_corpus=$reference_corpus"
             echo "lambda=$lambda"
           } >> "$GITHUB_OUTPUT"
 
@@ -238,7 +252,7 @@ jobs:
         env:
           # A push that rebuilds a corpus moves recall on purpose; the corpus
           # gate below checks the baseline against the candidates instead.
-          EVAL_SKIP_BASELINE: ${{ (steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true') && '1' || '0' }}
+          EVAL_SKIP_BASELINE: ${{ (steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true') && '1' || '0' }}
 
       # Audio pointers on issue records (librarian_core.audio) come from the
       # weekly site's archive pages, which the library carries in
@@ -250,6 +264,11 @@ jobs:
       - name: Build podcast corpus
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/corpus/build_podcast.py
+
+      # A malformed reference document fails here, naming its file.
+      - name: Build reference corpus
+        if: steps.changes.outputs.reference_corpus == 'true'
+        run: uv run --locked python pipeline/corpus/build_reference.py
 
       # Embed every corpus the Librarian API can load, into .candidate/
       # first. Each build reuses cached embeddings from the previous S3
@@ -274,13 +293,19 @@ jobs:
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
+      - name: Embed reference corpus (candidate)
+        if: steps.changes.outputs.reference_corpus == 'true'
+        run: uv run --locked python pipeline/deploy/upload_reference_corpus.py --stage .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
       # The corpus gate: the same eval over the candidate corpora (the live
       # S3 copy of any corpus not rebuilt) BEFORE anything is uploaded. A
       # corpus that breaks an invariant or a known answer never reaches the
       # Librarian (Jamie, 2026-09-30: the MCP must never silently miss
       # things). The eval above checks the new code against live corpora.
       - name: Corpus gate (eval the candidate corpora)
-        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true'
+        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true'
         run: node apps/librarian/lambda/scripts/eval-tools.mjs
         env:
           EVAL_CORPUS_DIR: .candidate
@@ -291,9 +316,10 @@ jobs:
       # fails here instead of shipping a corpus with no audio pointers. A staged blog
       # candidate files every post by its Chicago day, and the ingest checks
       # (corpus_gate.ingest_failures) read it too, so this runs for a
-      # blog-only rebuild as well.
+      # blog-only rebuild as well. The blog's pages' text is in a staged
+      # reference candidate, so a reference rebuild runs it too.
       - name: Corpus gate (archive checks on the staged candidates)
-        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true'
+        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true'
         run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive data/weekly/archive
 
       - name: Upload Weekly Thing corpus + graph to S3
@@ -311,6 +337,12 @@ jobs:
       - name: Upload podcast corpus to S3
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py --upload-staged .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Upload reference corpus to S3
+        if: steps.changes.outputs.reference_corpus == 'true'
+        run: uv run --locked python pipeline/deploy/upload_reference_corpus.py --upload-staged .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 

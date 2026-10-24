@@ -49,6 +49,8 @@ MEASURES = ("views", "email_opens", "feed_reads")
 RECENT_DAYS = 90
 
 # Which source ids each corpus carries numbers for (the ids its tools emit).
+# The reference corpus carries none: the Lambda shows a site page's, a
+# thing's and a page's from these, where get_source and list_content read them.
 CORPUS_READERS: dict[str, tuple[str, ...]] = {
     "corpus": ("wt-", "site-", "thing-"),
     "blog_corpus": ("blog-", "page-"),
@@ -144,7 +146,9 @@ def index_readers(conn: sqlite3.Connection) -> dict[str, int]:
     left unattributed rather than counted twice. Returns paths per measure,
     plus ``unattributed``."""
     by_path: dict[tuple[str, str], list[str]] = {}
-    for row in conn.execute("SELECT id, kind, url FROM sources"):
+    # A reference document's url is wherever else it is published (a page,
+    # a profile); the numbers there are that page's, never the document's.
+    for row in conn.execute("SELECT id, kind, url FROM sources WHERE kind != 'document'"):
         located = _site_of(row["url"])
         if located:
             by_path.setdefault(located, []).append(

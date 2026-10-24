@@ -440,13 +440,17 @@ class FingerprintTests(unittest.TestCase):
         _write(self.tree, {"site/about.njk": "---\npageTitle: About\n---\n<p>New</p>\n"})
         absorb_tree(self.conn, self.tree)
         after_site = fingerprints(self.conn)
-        self.assertNotEqual(after_site["corpus"], before["corpus"])
+        # The site pages are the reference corpus's (2026-10-23).
+        self.assertNotEqual(after_site["reference_corpus"], before["reference_corpus"])
+        self.assertEqual(after_site["corpus"], before["corpus"])
         self.assertEqual(after_site["blog_corpus"], before["blog_corpus"])
         self.assertEqual(after_site["podcast_corpus"], before["podcast_corpus"])
         _write(self.tree, {"podcast/another-thing/episodes/001.json": '{"number": "1"}'})
         absorb_tree(self.conn, self.tree)
         after_episode = fingerprints(self.conn)
-        self.assertTrue(all(after_episode[c] != after_site[c] for c in after_episode))
+        dated = ("corpus", "blog_corpus", "podcast_corpus")
+        self.assertTrue(all(after_episode[c] != after_site[c] for c in dated))
+        self.assertEqual(after_episode["reference_corpus"], after_site["reference_corpus"])
 
     def test_the_marker_carries_the_fingerprints_after_export_and_absorb(self):
         self.assertEqual(read_marker(self.tree)["fingerprints"], fingerprints(self.conn))
@@ -502,11 +506,22 @@ class StaleTests(unittest.TestCase):
     def test_a_corpus_built_from_an_older_library_is_stale(self):
         live = {**self.current, "blog_corpus": "older"}
         self.assertEqual(
-            self._stale(live), {"corpus": False, "blog_corpus": True, "podcast_corpus": False}
+            self._stale(live),
+            {
+                "corpus": False,
+                "blog_corpus": True,
+                "podcast_corpus": False,
+                "reference_corpus": False,
+            },
         )
         self.assertEqual(
             self.output.read_text().splitlines(),
-            ["weekly_corpus=false", "blog_corpus=true", "podcast_corpus=false"],
+            [
+                "weekly_corpus=false",
+                "blog_corpus=true",
+                "podcast_corpus=false",
+                "reference_corpus=false",
+            ],
         )
 
     def test_a_corpus_that_records_no_library_is_stale(self):

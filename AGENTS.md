@@ -27,9 +27,10 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 - `librarian-core/` — shared `librarian_core` package (corpus/graph/retrieval/links).
 - `pipeline/corpus/`, `pipeline/graph/`, `pipeline/deploy/` — builds and deploys.
 - `pipeline/library/` — the library: download, export, the pulls, upload, `stale`.
-- `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/` — the ingesters the pulls run, and maintenance.
+- `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/`, `pipeline/reference/`: the ingesters the pulls run, and maintenance.
+- `reference-documents/`: published documents about Jamie (a bio, a resume) for the reference corpus, the base every search consults and no caller selects. This repo is public, so documents that must not be published go in the library's `reference-unpublished/` instead, placed by Jamie by hand. Its README is the guide.
 - `pipeline/audits/`, `pipeline/one-shot/` — archive maintenance, completed migrations.
-- `data/` (not in git) — the library's export: `weekly/archive/` (weekly's issue pages), `issues/` (derived from them), `blog/`, `podcast/`, `site/`, `things/`, and `librarian/` (the Librarian's sidecars plus the built corpus and graph). `pipeline/library/README.md` has the table.
+- `data/` (not in git): the library's export: `weekly/archive/` (weekly's issue pages), `issues/` (derived from them), `blog/`, `podcast/`, `site/`, `things/`, `reference/`, `reference-unpublished/`, and `librarian/` (the Librarian's sidecars plus the built corpus and graph). `pipeline/library/README.md` has the table.
 - `tests/` — Python tests (corpus / content shape / conversation review / deploy security).
 
 ## Hard constraints

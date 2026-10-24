@@ -113,7 +113,59 @@ interface ChunkSpan {
 let corpusCache: Corpus | undefined;
 let blogCorpusCache: Corpus | undefined;
 let podcastCorpusCache: Corpus | undefined;
+let referenceCorpusCache: Corpus | undefined;
 let graphCache: Record<string, unknown> | undefined;
+
+// The reference base (Jamie, 2026-10-23): the Weekly Thing's site pages and
+// FAQ, Things I've built, thingelstad.com's pages and the reference
+// documents about Jamie (a bio, a resume), built as their own corpus
+// (reference_corpus.json, REFERENCE_CORPUS_KEY). retrieve() always consults
+// it, whatever the scope and whatever sourceKinds or excludeSourceKinds
+// say; it is never a source kind a caller selects. It is undated, so no
+// date filter keeps it. Its rows keep the source_kind and ids they always
+// had (site_page, faq, thing, a blog row with a page_id, and document), and
+// the corpora that carried them before are given them back at load
+// (withReferenceRows), so get_source, list_content, search_faq and the
+// resources find a page, the FAQ or a thing where they always did. A
+// document lives only here. Without a reference corpus (one not uploaded
+// yet), an older Weekly Thing or blog corpus still carries those rows and
+// retrieval scans them with it, as before.
+const REFERENCE_KINDS = new Set(['site_page', 'faq', 'thing', 'document']);
+
+function isBlogPage(chunk: CorpusChunk) {
+  return String(chunk.source_kind || '') === 'blog' && chunk.page_id != null && chunk.page_id !== '';
+}
+
+export function isReferenceRow(chunk: CorpusChunk): boolean {
+  return REFERENCE_KINDS.has(String(chunk.source_kind || '')) || isBlogPage(chunk);
+}
+
+function hasReferenceBase(reference: Corpus | undefined = referenceCorpusCache) {
+  return Boolean(reference?.chunks?.length);
+}
+
+// The corpus a kind's tools read: its own rows, then the reference rows that
+// belong to it (the site pages, FAQ and things for the Weekly Thing, the
+// pages for the blog) in place of any an older build still carries.
+export function withReferenceRows(corpus: Corpus | undefined, reference: Corpus | undefined, kind: string) {
+  if (!corpus || !hasReferenceBase(reference) || (kind !== 'weekly_thing' && kind !== 'blog')) return corpus;
+  const belongs = (chunk: CorpusChunk) =>
+    kind === 'blog' ? isBlogPage(chunk) : ['site_page', 'faq', 'thing'].includes(String(chunk.source_kind || ''));
+  return {
+    ...corpus,
+    chunks: [
+      ...(corpus.chunks || []).filter((chunk) => !isReferenceRow(chunk)),
+      ...(reference!.chunks || []).filter(belongs)
+    ]
+  };
+}
+
+// A kind's own rows, for its retrieval index: the reference rows are
+// scanned once, from the reference corpus.
+function ownRows(corpus: Corpus): Corpus {
+  if (!hasReferenceBase()) return corpus;
+  return { chunks: (corpus.chunks || []).filter((chunk) => !isReferenceRow(chunk)) };
+}
 
 // A blog post's identity is its microblog_id, never its url: micro.blog gave
 // several posts one permalink (6 urls, 14 posts, mostly 000000.html imports),
@@ -176,20 +228,28 @@ export function primeCorpusCachesForTests(fixtures: {
   weekly_thing?: Corpus;
   blog?: Corpus;
   podcast?: Corpus;
+  reference?: Corpus;
   graph?: Record<string, unknown>;
 }) {
-  corpusCache = fixtures.weekly_thing;
-  blogCorpusCache = withBlogAppearances(withBlogIdentity(fixtures.blog), fixtures.weekly_thing);
+  // No reference fixture is an empty one: the older corpora carry the rows.
+  referenceCorpusCache = fixtures.reference || { ...EMPTY_CORPUS };
+  corpusCache = withReferenceRows(fixtures.weekly_thing, referenceCorpusCache, 'weekly_thing');
+  blogCorpusCache = withBlogAppearances(
+    withReferenceRows(withBlogIdentity(fixtures.blog), referenceCorpusCache, 'blog'),
+    corpusCache
+  );
   podcastCorpusCache = fixtures.podcast;
   graphCache = fixtures.graph;
   sectionNamesCache = undefined;
   indexedCache = undefined;
   blogIndexedCache = undefined;
   podcastIndexedCache = undefined;
+  referenceIndexedCache = undefined;
 }
 let indexedCache: CorpusChunk[] | undefined;
 let blogIndexedCache: CorpusChunk[] | undefined;
 let podcastIndexedCache: CorpusChunk[] | undefined;
+let referenceIndexedCache: CorpusChunk[] | undefined;
 
 function logEvent(level: string, message: string, fields: Record<string, unknown> = {}) {
   sharedLogEvent(level, message, fields, SERVICE_NAME);
@@ -220,6 +280,7 @@ async function bodyToJson(body: unknown) {
 async function loadCorpusUnshared(kind = 'weekly_thing'): Promise<Corpus> {
   if (kind === 'blog') return loadBlogCorpus();
   if (kind === 'podcast') return loadPodcastCorpus();
+  if (kind === 'reference') return loadReferenceCorpus();
   if (corpusCache) return corpusCache;
   const bucket = process.env.CORPUS_BUCKET;
   const key = process.env.CORPUS_KEY || 'librarian/corpus.json';
@@ -227,7 +288,8 @@ async function loadCorpusUnshared(kind = 'weekly_thing'): Promise<Corpus> {
   const start = performance.now();
   const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
   if (!response.Body) throw new Error('Corpus object body is empty');
-  corpusCache = (await bodyToJson(response.Body)) as Corpus;
+  const loaded = (await bodyToJson(response.Body)) as Corpus;
+  corpusCache = withReferenceRows(loaded, await loadReferenceCorpus(), 'weekly_thing')!;
   sectionNamesCache = undefined;
   withBlogAppearances(blogCorpusCache, corpusCache);
   logEvent('info', 'corpus_loaded', {
@@ -282,13 +344,15 @@ async function loadOptionalCorpus({
     });
     return { ...EMPTY_CORPUS };
   }
-  return cache || (kind === 'blog' ? blogCorpusCache : podcastCorpusCache) || { ...EMPTY_CORPUS };
+  const loaded = kind === 'blog' ? blogCorpusCache : kind === 'reference' ? referenceCorpusCache : podcastCorpusCache;
+  return cache || loaded || { ...EMPTY_CORPUS };
 }
 
 // Optional non-WT corpora load lazily and cache separately from the WT corpus.
 // When an env key is unset, return an empty corpus so source-specific requests
 // degrade to no hits.
 async function loadBlogCorpusUnshared() {
+  const reference = blogCorpusCache ? referenceCorpusCache : await loadReferenceCorpus();
   const blog = await loadOptionalCorpus({
     kind: 'blog',
     envKey: 'BLOG_CORPUS_KEY',
@@ -296,7 +360,7 @@ async function loadBlogCorpusUnshared() {
     failedEvent: 'blog_corpus_load_failed',
     cache: blogCorpusCache,
     setCache: (value) => {
-      blogCorpusCache = value;
+      blogCorpusCache = withReferenceRows(value, reference, 'blog');
     }
   });
   // also_in_issues splits against the Weekly Thing's Journal copies; a
@@ -316,6 +380,19 @@ async function loadPodcastCorpusUnshared() {
     cache: podcastCorpusCache,
     setCache: (value) => {
       podcastCorpusCache = value;
+    }
+  });
+}
+
+async function loadReferenceCorpusUnshared() {
+  return loadOptionalCorpus({
+    kind: 'reference',
+    envKey: 'REFERENCE_CORPUS_KEY',
+    disabledEvent: 'reference_corpus_disabled',
+    failedEvent: 'reference_corpus_load_failed',
+    cache: referenceCorpusCache,
+    setCache: (value) => {
+      referenceCorpusCache = value;
     }
   });
 }
@@ -383,14 +460,18 @@ function buildLexicalIndex(corpus: Corpus): CorpusChunk[] {
 
 async function indexedChunksUnshared(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
   if (kind === 'blog') {
-    if (!blogIndexedCache) blogIndexedCache = buildLexicalIndex(await loadCorpus('blog'));
+    if (!blogIndexedCache) blogIndexedCache = buildLexicalIndex(ownRows(await loadCorpus('blog')));
     return blogIndexedCache;
   }
   if (kind === 'podcast') {
     if (!podcastIndexedCache) podcastIndexedCache = buildLexicalIndex(await loadCorpus('podcast'));
     return podcastIndexedCache;
   }
-  if (!indexedCache) indexedCache = buildLexicalIndex(await loadCorpus('weekly_thing'));
+  if (kind === 'reference') {
+    if (!referenceIndexedCache) referenceIndexedCache = buildLexicalIndex(await loadCorpus('reference'));
+    return referenceIndexedCache;
+  }
+  if (!indexedCache) indexedCache = buildLexicalIndex(ownRows(await loadCorpus('weekly_thing')));
   return indexedCache;
 }
 
@@ -472,6 +553,12 @@ export function compactSource(source: CorpusChunk, textLimit = 2000) {
     linked_from_issues: source.linked_from_issues,
     section_family: text(source.section_family),
     content_kind: text(source.content_kind),
+    // A reference document's provenance from its front matter (source: where
+    // it came from; date: when it was first written), so an answer can say
+    // where a fact came from ("from Jamie's 2011 wiki"). Citation metadata
+    // only: the document stays undated, and publish_date stays empty.
+    document_source: text(source.document_source),
+    document_date: text(source.document_date),
     // Present only when a voice filter rewrote the text to those spans.
     voice: Array.isArray(source.voice) ? source.voice : undefined,
     text: String(source.text || '').slice(0, textLimit)
@@ -492,6 +579,10 @@ function sourceHeader(source: CorpusChunk) {
     return `Another Thing podcast${episode}: ${source.subject || ''}`;
   }
   if (kind === 'thing') return `Things I've built (thingelstad.xyz): ${source.subject || ''}`;
+  if (kind === 'document') {
+    const from = source.document_source ? ` (from ${source.document_source})` : '';
+    return `Jamie Thingelstad, reference document${from}: ${source.subject || ''}`;
+  }
   return `Weekly Thing #${source.issue_number}: ${source.subject || ''}`;
 }
 
@@ -721,6 +812,11 @@ let sectionNamesCache: Set<string> | undefined;
 export function knownSectionNames() {
   if (sectionNamesCache) return sectionNamesCache;
   const names = new Set<string>();
+  // Not the reference corpus's own rows: its site pages, FAQ, things and
+  // pages ride the Weekly Thing and blog corpora above, and a document's H2
+  // headings (86 forum threads in one) must not turn a section filter that
+  // names one of them from "inside the heading" into "exactly this heading"
+  // for every other source.
   for (const corpus of [corpusCache, blogCorpusCache, podcastCorpusCache]) {
     for (const chunk of corpus?.chunks || []) {
       if (chunk.section) names.add(headingKey(chunk.section));
@@ -869,9 +965,29 @@ export function parseCalendar(value: unknown): CalendarWindow | string | null {
   return { month, day, window: Math.min(Math.floor(requested), CALENDAR_MAX_WINDOW_DAYS), targetYear };
 }
 
-// The 4.12 filters a caller can get wrong in a way that would otherwise
-// quietly widen the result: an unknown voice or a malformed calendar.
+// The source kinds a request selects among (4.18.0): the dated corpora.
+// The reference base is in every answer, so it is never named: sourceKinds
+// with reference, document, a reference row's kind or a kind no source has
+// would have come back with the reference base alone, and is a 400.
+// excludeSourceKinds also takes site_page, faq and thing, which callers sent
+// before the reference base (WT Builder's Echoes); they leave nothing out.
+export const SELECTABLE_SOURCE_KINDS = ['weekly_thing', 'blog', 'podcast'] as const;
+const EXCLUDABLE_SOURCE_KINDS = [...SELECTABLE_SOURCE_KINDS, 'site_page', 'faq', 'thing'];
+
+// The filters a caller can get wrong in a way that would otherwise quietly
+// widen or empty the result: an unknown voice or a malformed calendar
+// (4.12), and a source kind outside the vocabulary (4.18).
 export function retrievalFilterError(filters: RetrievalFilters = {}) {
+  const selected = stringList(filters.sourceKinds).find(
+    (kind) => !(SELECTABLE_SOURCE_KINDS as readonly string[]).includes(kind)
+  );
+  if (selected !== undefined) {
+    return `sourceKinds must name ${SELECTABLE_SOURCE_KINDS.join(', ')}; the reference base (site pages, the FAQ, things, pages and documents) is always searched and never selected.`;
+  }
+  const excluded = stringList(filters.excludeSourceKinds).find((kind) => !EXCLUDABLE_SOURCE_KINDS.includes(kind));
+  if (excluded !== undefined) {
+    return `excludeSourceKinds must name ${EXCLUDABLE_SOURCE_KINDS.join(', ')}; the reference base is always searched.`;
+  }
   const unknownVoice = voiceList(filters.voice).find((voice) => !(VOICES as readonly string[]).includes(voice));
   if (unknownVoice) return `voice must be one of ${VOICES.join(', ')}.`;
   const calendar = parseCalendar(filters.calendar);
@@ -1066,20 +1182,31 @@ export async function retrieve(
   const kinds = scopeKinds(filters.scope);
   const candidateLimit = Math.max(limit * 5, 100);
   const byScore = (a: CorpusChunk, b: CorpusChunk) => (b._retrieval_score || 0) - (a._retrieval_score || 0);
-  const keep = (chunk: CorpusChunk) => matchesFilters(chunk, filters);
+  // The reference base is its own pool in every retrieval: the scope's
+  // corpora leave its rows to it, and no scope or source kind reaches it,
+  // so none can leave it out. The other filters hold (it is undated, so a
+  // year, before or calendar filter keeps none of it).
+  const separate = hasReferenceBase(await loadCorpus('reference'));
+  const keep = (chunk: CorpusChunk) => (!separate || !isReferenceRow(chunk)) && matchesFilters(chunk, filters);
+  const referenceFilters = { ...filters, sourceKinds: undefined, excludeSourceKinds: undefined };
+  const keepReference = (chunk: CorpusChunk) => matchesFilters(chunk, referenceFilters);
+  const pools: Array<[string, (chunk: CorpusChunk) => boolean]> = [
+    ...kinds.map((kind): [string, (chunk: CorpusChunk) => boolean] => [kind, keep]),
+    ...(separate ? [['reference', keepReference] as [string, (chunk: CorpusChunk) => boolean]] : [])
+  ];
 
   const lexical: CorpusChunk[] = [];
-  for (const kind of kinds) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keep)));
+  for (const [kind, keepIn] of pools) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keepIn)));
   lexical.sort(byScore);
 
   const semantic: CorpusChunk[] = [];
   try {
     let queryEmbedding = null;
-    for (const kind of kinds) {
+    for (const [kind, keepIn] of pools) {
       const corpus = await loadCorpus(kind);
       if (!(corpus.chunks || []).some((chunk) => chunk.embedding)) continue;
       if (!queryEmbedding) queryEmbedding = await embedForCorpus(query, corpus);
-      semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit, keep));
+      semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit, keepIn));
     }
     semantic.sort(byScore);
   } catch (error) {
@@ -1389,6 +1516,9 @@ function loadBlogCorpus(): Promise<Corpus> {
 }
 function loadPodcastCorpus(): Promise<Corpus> {
   return loadOnce('podcast', loadPodcastCorpusUnshared);
+}
+function loadReferenceCorpus(): Promise<Corpus> {
+  return loadOnce('reference', loadReferenceCorpusUnshared);
 }
 export function loadGraph(): Promise<Record<string, unknown>> {
   return loadOnce('graph', loadGraphUnshared);

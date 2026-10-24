@@ -33,6 +33,7 @@ PRIVATE_CORPUS_KEY = "artifacts/corpus.json"
 PRIVATE_GRAPH_KEY = "artifacts/graph.json"
 PRIVATE_BLOG_CORPUS_KEY = "artifacts/blog_corpus.json"
 PRIVATE_PODCAST_CORPUS_KEY = "artifacts/podcast_corpus.json"
+PRIVATE_REFERENCE_CORPUS_KEY = "artifacts/reference_corpus.json"
 DEFAULT_ALLOWED_ORIGINS = "https://weekly.thingelstad.com,https://thingy.thingelstad.com,https://www.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4178,http://127.0.0.1:4178"
 
 
@@ -331,6 +332,7 @@ def deploy_stack(
     graph_key: str,
     blog_corpus_key: str,
     podcast_corpus_key: str,
+    reference_corpus_key: str,
     allowed_origin: str,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
@@ -361,6 +363,7 @@ def deploy_stack(
         {"ParameterKey": "GraphKey", "ParameterValue": graph_key},
         {"ParameterKey": "BlogCorpusKey", "ParameterValue": blog_corpus_key},
         {"ParameterKey": "PodcastCorpusKey", "ParameterValue": podcast_corpus_key},
+        {"ParameterKey": "ReferenceCorpusKey", "ParameterValue": reference_corpus_key},
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
         {"ParameterKey": "TurnstileModeWeekly", "ParameterValue": turnstile_mode_weekly},
@@ -500,10 +503,11 @@ def update_env_file(values: dict[str, str]) -> None:
 def upload_librarian_corpora(args: argparse.Namespace, bucket: str) -> None:
     """Build/embed/upload every corpus the Librarian API can load.
 
-    The stream Lambda now answers over three independent S3 artifacts:
-    Weekly Thing (plus graph), thingelstad.com blog, and Another Thing
-    podcast. A "full" deploy should refresh all three so code/schema changes
-    don't leave the optional corpora on an older shape.
+    The stream Lambda answers over four independent S3 artifacts: Weekly
+    Thing (plus graph), thingelstad.com blog, Another Thing podcast, and the
+    reference base (site pages, FAQ, things, the blog's pages and reference
+    documents). A "full" deploy should refresh all four so code/schema
+    changes don't leave the optional corpora on an older shape.
     """
     tmp_dir = REPO / "tmp"
     tmp_dir.mkdir(parents=True, exist_ok=True)
@@ -545,6 +549,18 @@ def upload_librarian_corpora(args: argparse.Namespace, bucket: str) -> None:
             str(tmp_dir / "librarian_embedded_podcast_corpus.json"),
         ]
     )
+    run(
+        [
+            sys.executable,
+            "pipeline/deploy/upload_reference_corpus.py",
+            "--bucket",
+            bucket,
+            "--key",
+            args.reference_corpus_key,
+            "--keep-output",
+            str(tmp_dir / "librarian_embedded_reference_corpus.json"),
+        ]
+    )
 
 
 def main() -> int:
@@ -574,6 +590,10 @@ def main() -> int:
     parser.add_argument(
         "--podcast-corpus-key",
         default=os.environ.get("LIBRARIAN_PODCAST_CORPUS_KEY", PRIVATE_PODCAST_CORPUS_KEY),
+    )
+    parser.add_argument(
+        "--reference-corpus-key",
+        default=os.environ.get("LIBRARIAN_REFERENCE_CORPUS_KEY", PRIVATE_REFERENCE_CORPUS_KEY),
     )
     parser.add_argument(
         "--cloudformation-role-arn",
@@ -661,6 +681,7 @@ def main() -> int:
         graph_key=args.graph_key,
         blog_corpus_key=args.blog_corpus_key,
         podcast_corpus_key=args.podcast_corpus_key,
+        reference_corpus_key=args.reference_corpus_key,
         allowed_origin=args.allowed_origin,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,

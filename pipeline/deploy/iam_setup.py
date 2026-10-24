@@ -86,6 +86,13 @@ def simulate(session: boto3.Session) -> None:
             True,
             {},
         ),
+        (
+            "deploy",
+            "s3:PutObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/reference_corpus.json",
+            True,
+            {},
+        ),
         # The library: CI downloads it to build the corpus and its pull
         # round uploads it (If-Match). Nothing else under artifacts/ opens up.
         (
