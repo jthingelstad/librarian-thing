@@ -821,6 +821,18 @@ const IMAGE_MARKUP = /!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>/gi;
 // topic: no voice matches them.
 const VOICELESS_KINDS = new Set(['faq', 'site_page', 'thing']);
 
+// A span's offsets count code points: Python's len() wrote them
+// (voice_spans, _link_chunk in librarian_core), and String.prototype.slice
+// counts UTF-16 units, so an emoji ahead of a span (a heading's, a saved
+// link's title) moved every later cut by one and a note began with the tail
+// of its header (Codex review, PR #87). Text with no surrogate pair cuts the
+// same either way.
+const SURROGATE = /[\uD800-\uDFFF]/;
+export function spanText(text: string, start: number, end?: number) {
+  if (!SURROGATE.test(text)) return text.slice(start, end);
+  return Array.from(text).slice(start, end).join('');
+}
+
 // The chunk's text in the wanted voices only, in reading order. No spans
 // means the whole chunk is Jamie's.
 export function voicedText(chunk: CorpusChunk, voices: string[]) {
@@ -836,7 +848,7 @@ export function voicedText(chunk: CorpusChunk, voices: string[]) {
   if (!spans) return voices.includes('jamie') ? unimaged(text) : '';
   return spans
     .filter((span) => voices.includes(String(span.voice || '')))
-    .map((span) => unimaged(text.slice(Number(span.start) || 0, Number(span.end) || 0)))
+    .map((span) => unimaged(spanText(text, Number(span.start) || 0, Number(span.end) || 0)))
     .filter(Boolean)
     .join('\n\n');
 }
@@ -897,6 +909,26 @@ export function knownSectionNames() {
   if (corpusCache) for (const placed of sectionGroups(corpusCache).values()) for (const key of placed) names.add(key);
   names.delete('');
   sectionNamesCache = names;
+  return names;
+}
+
+// The reference documents' H2 headings, as heading keys. They stay out of
+// knownSectionNames (above), but a section filter may name one: a search
+// for a document-only section ("Employment history") was refused as a
+// heading nowhere in the archive (Codex review, PR #86).
+const DOCUMENT_SECTION_NAMES = new WeakMap<Corpus, Set<string>>();
+
+export function documentSectionNames(reference: Corpus | undefined = referenceCorpusCache) {
+  if (!reference) return new Set<string>();
+  let names = DOCUMENT_SECTION_NAMES.get(reference);
+  if (!names) {
+    names = new Set<string>();
+    for (const chunk of reference.chunks || []) {
+      if (String(chunk.source_kind || '') === 'document' && chunk.section) names.add(headingKey(chunk.section));
+    }
+    names.delete('');
+    DOCUMENT_SECTION_NAMES.set(reference, names);
+  }
   return names;
 }
 
