@@ -27,7 +27,10 @@ anything reaches S3. It fails the deploy when:
   staged, the pages' text checks wait for the build that stages one; or
 - a staged blog candidate files a post by any day but the Chicago day of its
   ``published`` moment, or keeps a 05:00Z date-only placeholder (QA2 I2-8,
-  Q16).
+  Q16); or
+- a staged links candidate files a saved link by any day but the Chicago day
+  of its ``saved`` moment, or points a passage anywhere but its own page on
+  links.thingelstad.xyz.
 
 It also reports, without failing, how many staged chunks run past Cohere
 Embed v3's 512-token cap (QA2 I2-4): the model drops the tail of each with
@@ -75,6 +78,7 @@ from librarian_core.embed_tokens import (  # noqa: E402
     embed_token_count,
 )
 from librarian_core.paths import BLOG_DIR  # noqa: E402
+from librarian_core.saved_links import LINK_ID_RE, link_page_url  # noqa: E402
 
 # Journal copies the build could not tie to a blog post, reviewed after the
 # 2026-10-01 repair. Five of the 33 have since found their post (QA2 I2-7,
@@ -205,6 +209,31 @@ def blog_date_failures(blog: dict[str, Any]) -> list[str]:
             )
         elif blog_published(published, post.get("permalink_date") or day) != published:
             failures.append(f"{name}: 05:00Z placeholder {published} kept")
+    return failures
+
+
+def links_date_failures(links: dict[str, Any]) -> list[str]:
+    """One line per saved link filed by a day or year other than the Chicago
+    day of its ``published`` (the saved moment), or whose passage is not cut
+    to its own page: a malformed id, or a url that is not the link's page."""
+    failures = []
+    for chunk in links.get("chunks") or []:
+        link_id = str(chunk.get("link_id") or "")
+        name = f"link-{link_id}"
+        if not LINK_ID_RE.fullmatch(link_id):
+            failures.append(f"{name}: malformed link id")
+            continue
+        if chunk.get("url") != link_page_url(link_id):
+            failures.append(f"{name}: url {chunk.get('url')} is not the link's page")
+        published = chunk.get("published")
+        day = chicago_day(published)
+        if not day:
+            failures.append(f"{name}: saved moment {published!r} has no Chicago day")
+        elif chunk.get("publish_date") != day or chunk.get("issue_year") != int(day[:4]):
+            failures.append(
+                f"{name}: filed {chunk.get('publish_date')} ({chunk.get('issue_year')}), "
+                f"saved {published} is {day} in Chicago"
+            )
     return failures
 
 
@@ -540,15 +569,19 @@ def main(argv: list[str] | None = None) -> int:
         candidate = args.candidate / "corpus.json"
         blog_candidate = args.candidate / "blog_corpus.json"
         reference_candidate = args.candidate / "reference_corpus.json"
+        links_candidate = args.candidate / "links_corpus.json"
         corpus = load_json(candidate) if candidate.is_file() else None
         blog = load_json(blog_candidate) if blog_candidate.is_file() else None
         reference = load_json(reference_candidate) if reference_candidate.is_file() else None
-        if corpus is None and blog is None and reference is None:
+        links = load_json(links_candidate) if links_candidate.is_file() else None
+        if corpus is None and blog is None and reference is None and links is None:
             print(f"corpus gate: no candidate corpus in {args.candidate}; nothing to check")
             return 0
         failures = gate_failures(corpus, args.site_archive) if corpus is not None else []
         if blog is not None:
             failures.extend(blog_date_failures(blog))
+        if links is not None:
+            failures.extend(links_date_failures(links))
         failures.extend(ingest_failures(corpus, blog, reference=reference))
         _, pending = journal_unmatched_new(corpus) if corpus is not None else ([], [])
         if pending:
@@ -563,6 +596,7 @@ def main(argv: list[str] | None = None) -> int:
             ("corpus.json", corpus),
             ("blog_corpus.json", blog),
             ("reference_corpus.json", reference),
+            ("links_corpus.json", links),
         ):
             if staged is None:
                 continue

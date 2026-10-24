@@ -320,7 +320,8 @@ test("a document's headings do not change how a section filter reads other sourc
 });
 
 test('no request can name the reference base as a source kind', () => {
-  assert.deepEqual([...SELECTABLE_SOURCE_KINDS], ['weekly_thing', 'blog', 'podcast']);
+  // 4.19 adds link, the saved links of Linking Things: still never the base.
+  assert.deepEqual([...SELECTABLE_SOURCE_KINDS], ['weekly_thing', 'blog', 'podcast', 'link']);
   for (const kind of ['reference', 'document', 'site_page', 'faq', 'thing', 'page', 'nonsense']) {
     assert.match(String(retrievalFilterError({ sourceKinds: [kind] })), /sourceKinds must name/, kind);
   }

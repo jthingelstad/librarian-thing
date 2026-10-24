@@ -92,7 +92,16 @@
 // a document passage's section is its H2 heading (the title for the text
 // before the first one) and it carries document_source and document_date,
 // the document's own provenance as citation metadata (never a publish_date).
-export const LIBRARIAN_CONTRACT_VERSION = '4.18.0';
+// 4.19.0: the saved links of Linking Things (Jamie, 2026-10-23). sourceKinds
+// and excludeSourceKinds also take link. No scope holds the links corpus:
+// /retrieve reads it only when sourceKinds names link, and sourceKinds
+// [link] alone reads it and the reference base, nothing else. A link
+// passage's id is link-<id>, its label the saved page's title, its url its
+// page on Linking Things and its publish_date the Chicago day Jamie saved
+// it; it carries link_id, link_url (the page it saved), host, link_type,
+// tags, note_voice and shared_in_issues. A request without link is answered
+// as before (additive).
+export const LIBRARIAN_CONTRACT_VERSION = '4.19.0';
 // Majors the server still answers for. 2.x clients predate the chat
 // streamline (curiosity map + experiences removed); 3.x tabs open before
 // the share release still list/get/chat fine (their mail button 400s).
@@ -242,6 +251,13 @@ const retrievePassage = object(
     content_kind: string,
     document_source: string,
     document_date: string,
+    link_id: string,
+    link_url: string,
+    host: string,
+    link_type: string,
+    tags: unknownArray,
+    note_voice: string,
+    shared_in_issues: unknownArray,
     voice: unknownArray,
     text: string
   },
@@ -493,10 +509,11 @@ export const LIBRARIAN_CONTRACT = {
             yearRange: unknownArray,
             section: string,
             // 4.18: the dated sources only; the reference base is always in.
-            sourceKinds: arrayOf({ type: 'string', enum: ['weekly_thing', 'blog', 'podcast'] }),
+            // 4.19: link, the saved links, read only when named here.
+            sourceKinds: arrayOf({ type: 'string', enum: ['weekly_thing', 'blog', 'podcast', 'link'] }),
             excludeSourceKinds: arrayOf({
               type: 'string',
-              enum: ['weekly_thing', 'blog', 'podcast', 'site_page', 'faq', 'thing']
+              enum: ['weekly_thing', 'blog', 'podcast', 'link', 'site_page', 'faq', 'thing']
             }),
             excludeIssues: unknownArray,
             before: string,

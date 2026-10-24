@@ -8,6 +8,7 @@
  *   librarian://wt/{n}             one Weekly Thing issue, as markdown
  *   librarian://blog/{id}          one blog post by micro.blog id, as markdown
  *   librarian://page/{id}          one thingelstad.com page (About, a list, ...), as markdown
+ *   librarian://link/{id}          one saved link from Linking Things, as markdown
  *   librarian://topic/{slug}       a topic's catalogue card and timeline
  *   librarian://year/{yyyy}        what the archive holds for one year
  *   librarian://on-this-day/{mm-dd} that calendar day in every year, this one included
@@ -21,7 +22,7 @@ import { absoluteSourceUrl } from './source-identity.mjs';
 
 type JsonRecord = Record<string, unknown>;
 
-export type ResourceKind = 'wt' | 'blog' | 'page' | 'topic' | 'year' | 'on-this-day';
+export type ResourceKind = 'wt' | 'blog' | 'page' | 'link' | 'topic' | 'year' | 'on-this-day';
 
 export const RESOURCE_TEMPLATES = [
   {
@@ -44,6 +45,14 @@ export const RESOURCE_TEMPLATES = [
     title: 'Page',
     description:
       'One thingelstad.com page (About, Resume, a list, a collection, an Open Loop episode) by its page id, the number in page-<id>, e.g. librarian://page/57851.',
+    mimeType: 'text/markdown'
+  },
+  {
+    uriTemplate: 'librarian://link/{id}',
+    name: 'saved-link',
+    title: 'Saved link',
+    description:
+      'One link Jamie saved on Linking Things (links.thingelstad.xyz) by its id, the 12 characters in link-<id>, e.g. librarian://link/734afb8ff14f: the page it saved, when, its tags, the issues that shared it and its note.',
     mimeType: 'text/markdown'
   },
   {
@@ -81,6 +90,7 @@ const PATTERNS: Array<[ResourceKind, RegExp]> = [
   ['wt', /^(\d{1,4}(?:-[a-z]+)?)$/],
   ['blog', /^(\d{1,12})$/],
   ['page', /^(\d{1,12})$/],
+  ['link', /^([0-9a-f]{12})$/],
   ['topic', /^([a-z0-9]+(?:-[a-z0-9]+)*)$/],
   ['year', /^((?:19|20)\d{2})$/],
   ['on-this-day', /^((?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))$/]
@@ -141,10 +151,16 @@ function listenLine(source: JsonRecord) {
 export function sourceMarkdown(source: JsonRecord, truncated: JsonRecord = {}) {
   const title = String(source.subject || source.title || source.id || 'Untitled');
   const url = absoluteSourceUrl(source.url);
+  // A saved link was saved, not published: its date is the day Jamie saved
+  // it, and the page it saved is its own line beside its Linking Things url.
+  const saved = source.source_kind === 'link';
+  const shared = Array.isArray(source.shared_in_issues) ? source.shared_in_issues : [];
   const facts = [
     source.id ? `- id: ${source.id}` : '',
-    source.publish_date ? `- Published: ${String(source.publish_date).slice(0, 10)}` : '',
+    source.publish_date ? `- ${saved ? 'Saved' : 'Published'}: ${String(source.publish_date).slice(0, 10)}` : '',
     url ? `- URL: ${url}` : '',
+    saved && source.link_url ? `- Saved page: ${String(source.link_url)}` : '',
+    saved && shared.length ? `- Shared in: ${shared.map((number) => `WT${String(number)}`).join(', ')}` : '',
     listenLine(source)
   ].filter(Boolean);
   const skim = String(source.description || source.abstract || '').trim();
@@ -229,6 +245,7 @@ export async function readResource(resource: ParsedResource, reader: ResourceRea
   if (resource.kind === 'wt') return readSource(resource, `wt-${resource.value.replace(/^0+(?=\d)/, '')}`, reader);
   if (resource.kind === 'blog') return readSource(resource, `blog-${resource.value}`, reader);
   if (resource.kind === 'page') return readSource(resource, `page-${resource.value}`, reader);
+  if (resource.kind === 'link') return readSource(resource, `link-${resource.value}`, reader);
   if (resource.kind === 'year') {
     const year = Number(resource.value);
     return readTool(resource, 'corpus_stats', { year_range: [year, year] }, reader);

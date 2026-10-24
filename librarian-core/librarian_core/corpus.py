@@ -42,6 +42,8 @@ from .paths import (
     BLOG_DIR,
     BLOG_PAGES_DIR,
     FAQ_PATH,
+    LINKS_DIR,
+    LINKS_SITE,
     PODCAST_DIR,
     READERS_PATH,
     REFERENCE_DIR,
@@ -50,6 +52,21 @@ from .paths import (
     THINGS_PATH,
 )
 from .reference import document_sections, read_reference_documents
+from .saved_links import (
+    LINKS_HOST,
+    attach_link_ids,
+    host_of,
+    issue_link_ids,
+    issue_number_of,
+    link_id_from_page_url,
+    link_page_url,
+    note_spans,
+    note_voice,
+    prepare_note,
+    read_link_issues,
+    read_saved_links,
+    saved_link_ids,
+)
 
 DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
 DEFAULT_EMBEDDING_DIMENSIONS = 1024
@@ -1605,21 +1622,27 @@ def build_corpus(
     blog_dir: Path | None = None,
     podcast_dir: Path | None = None,
     readers_path: Path | None = None,
+    links_dir: Path | None = None,
 ) -> dict[str, Any]:
     """The Weekly Thing corpus: the issues, their links, media and topics.
     The site pages, FAQ and Things I've built that rode it until 2026-10-23
     are the reference corpus's now (``build_reference_corpus``), so nothing
-    is indexed twice."""
+    is indexed twice. A link record whose URL is a saved link (Linking
+    Things, ``links_dir``, default the tree's ``links/`` beside
+    ``archive_dir``) carries its ``link_id``."""
     chunks: list[dict[str, Any]] = []
     media: list[dict[str, Any]] = []
     currently: list[dict[str, Any]] = []
     issues = []
     links: list[dict[str, Any]] = []
     topic_index: dict[str, dict[str, Any]] = {}
+    links_tree = links_dir if links_dir is not None else archive_dir.parent / "links"
+    saved = read_saved_links(links_tree / "links.json")
     targets: dict[str, Any] = {
         "weekly": weekly_issue_lookup(archive_dir),
         "blog": blog_post_lookup(blog_dir or BLOG_DIR),
         "podcast": podcast_episode_lookup(podcast_dir or PODCAST_DIR),
+        "links": {str(link["id"]) for link in saved},
     }
     issue_files = [
         (path, *read_issue(path))
@@ -1924,6 +1947,13 @@ def build_corpus(
         entry["related_topics"] = sorted(related)[:8]
 
     _privacy_audit(chunks)
+    # An issue's link is the saved link Linking Things joined it to; any
+    # other link record, the saved link with its URL exactly as saved.
+    saved_link_count = attach_link_ids(
+        links,
+        by_url=saved_link_ids(saved),
+        by_issue=issue_link_ids(read_link_issues(links_tree / "issues.json")),
+    )
 
     return {
         "version": 2,
@@ -1934,6 +1964,7 @@ def build_corpus(
         "issue_count": len(issues),
         "chunk_count": len(chunks),
         "link_count": len(links),
+        "saved_link_count": saved_link_count,
         "issues": issues,
         "topics": sorted(topic_index.values(), key=lambda item: item["name"]),
         "links": links,
@@ -2769,15 +2800,27 @@ def resolve_link_target(
     weekly: dict[str, Any] | None = None,
     blog: dict[str, dict[str, Any]] | None = None,
     podcast: dict[str, dict[str, Any]] | None = None,
+    links: set[str] | None = None,
 ) -> dict[str, Any]:
     """Target fields for a link to one of Jamie's sources: ``target_source_kind``,
     ``target_resolved`` and the target's number or id. Empty for a link
-    anywhere else, including a source's home page (weekly.thingelstad.com/)."""
+    anywhere else, including a source's home page (weekly.thingelstad.com/).
+    A saved link's page on Linking Things (links.thingelstad.xyz/links/<id>/)
+    is the ``link`` source ``link-<id>``, resolved when ``links`` holds the id."""
     try:
         parsed = urlparse(url)
     except ValueError:
         return {}
     host = (parsed.hostname or "").lower()
+    if host == LINKS_HOST:
+        link_id = link_id_from_page_url(url)
+        if not link_id:
+            return {}
+        return {
+            "target_source_kind": "link",
+            "target_resolved": link_id in (links or set()),
+            "target_link_id": link_id,
+        }
     if host == "weekly.thingelstad.com":
         match = _WEEKLY_ARCHIVE_PATH_RE.match(parsed.path or "")
         if not match:
@@ -3341,6 +3384,7 @@ def build_blog_corpus(
     podcast_dir: Path = PODCAST_DIR,
     pages_dir: Path | None = None,
     readers_path: Path | None = None,
+    links_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Build the blog corpus from ``data/blog/posts/**/*.md`` and the site's
     pages, ``data/blog/pages/**/*.md`` (``pages_dir``, default beside
@@ -3356,7 +3400,9 @@ def build_blog_corpus(
     post-level outbound-link graph (``links`` / ``link_count`` plus chunk
     ``domains``) so Thingy can answer domain/link questions over the blog the
     same way it can over Weekly Thing. Posts that also appear in a Weekly Thing
-    Journal get an ``also_in_issues`` cross-reference."""
+    Journal get an ``also_in_issues`` cross-reference. A link record whose
+    URL is a saved link (Linking Things, ``links_dir``, default the tree's
+    ``links/`` beside ``archive_dir``) carries its ``link_id``."""
     xref = journal_blog_xref(archive_dir) if include_xref else {}
     copied_in = journal_copy_issues(archive_dir, blog_dir) if include_xref else {}
     weekly_lookup = weekly_issue_lookup(archive_dir) if include_xref else {}
@@ -3574,6 +3620,14 @@ def build_blog_corpus(
             chunks.extend(_blog_source_chunks(post_input, post_domains))
 
     _privacy_audit(chunks)
+    saved = read_saved_links(
+        (links_dir if links_dir is not None else archive_dir.parent / "links") / "links.json"
+    )
+    saved_ids = {str(link["id"]) for link in saved}
+    for record in links:
+        if urlparse(str(record.get("url") or "")).hostname == LINKS_HOST:
+            record.update(resolve_link_target(str(record["url"]), links=saved_ids))
+    saved_link_count = attach_link_ids(links, by_url=saved_link_ids(saved))
 
     return {
         "version": 2,
@@ -3586,6 +3640,7 @@ def build_blog_corpus(
         "page_count": page_count,
         "chunk_count": len(chunks),
         "link_count": len(links),
+        "saved_link_count": saved_link_count,
         # (post, issue) pairs in each list. Its presence also tells the
         # Lambda the two lists are stored; on an older corpus it splits
         # also_in_issues itself.
@@ -3961,6 +4016,174 @@ def build_reference_corpus(
     }
 
 
+# --- links corpus --------------------------------------------------------
+#
+# Linking Things (links.thingelstad.xyz, Jamie, 2026-10-23): every public link
+# Jamie has saved since 2005. Its own corpus and S3 key, selectable as
+# source_kind "link" and never searched unless a caller asks for it: the
+# three prose corpora stay the default. One passage per saved link, so a
+# saved link is one source, link-<id>, whose page is its record on Linking
+# Things. The snapshot (librarian_core/saved_links.py) is taken as published:
+# the id is Linking Things', never recomputed.
+
+LINK_SECTION = "Saved link"
+_LINK_KIND_LABELS = {
+    "page": "Page",
+    "video": "Video",
+    "repository": "Repository",
+    "newsletter": "Newsletter",
+    "paper": "Paper",
+    "article": "Article",
+    "podcast": "Podcast",
+    "book": "Book",
+}
+
+
+def _long_day(day: str) -> str:
+    """``2026-10-22`` as ``October 22, 2026``."""
+    parsed = _date.fromisoformat(day)
+    return f"{parsed:%B} {parsed.day}, {parsed.year}"
+
+
+def link_appearances(issues: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    """``{link id: [{issue_number, section, issue_url, publish_date}]}``: the
+    Weekly Thing issues that carried each saved link, oldest first, one per
+    issue and section, as Linking Things joined them (issues.json)."""
+    out: dict[str, list[dict[str, Any]]] = {}
+    for issue in issues:
+        number = issue_number_of(issue)
+        if number is None:
+            continue
+        seen: set[tuple[str, str]] = set()
+        for link in issue.get("links") or []:
+            link_id = link.get("id")
+            section = str(link.get("section") or "").strip()
+            if not link_id or (link_id, section) in seen:
+                continue
+            seen.add((link_id, section))
+            out.setdefault(str(link_id), []).append(
+                {
+                    "issue_number": number,
+                    "section": section or None,
+                    "issue_url": f"/archive/{number}/",
+                    "publish_date": chicago_day(issue.get("date")),
+                }
+            )
+    return out
+
+
+def _appearance_line(appearances: list[dict[str, Any]]) -> str:
+    shared = "; ".join(
+        f"WT{item['issue_number']}" + (f", {item['section']}" if item.get("section") else "")
+        for item in appearances
+    )
+    return f"Shared in {shared}" if shared else ""
+
+
+def _link_chunk(link: dict[str, Any], appearances: list[dict[str, Any]]) -> dict[str, Any]:
+    """One saved link's passage: its title (the page's own words), what it is
+    and where it lives, its tags and the issues that shared it (all in the
+    ``link`` voice), then the note in its own voice."""
+    link_id = str(link["id"])
+    saved = str(link.get("saved") or "")
+    publish_date = chicago_day(saved)
+    year = parse_year(publish_date or "") or 0
+    url = str(link.get("url") or "")
+    host = host_of(url)
+    kind = str(link.get("kind") or "page")
+    title = " ".join(str(link.get("title") or "").split()) or url
+    tags = [str(tag) for tag in link.get("tags") or [] if str(tag).strip()]
+    note = prepare_note(str(link.get("note") or ""))
+    voice = note_voice(str(link.get("note") or ""), year)
+    facts = f"{_LINK_KIND_LABELS.get(kind, kind.capitalize())} from {host or url}"
+    if publish_date:
+        facts += f", saved {_long_day(publish_date)}"
+    head_lines = [title, facts]
+    if tags:
+        head_lines.append("Tags: " + ", ".join(tags))
+    if line := _appearance_line(appearances):
+        head_lines.append(line)
+    head = "\n".join(head_lines)
+    text = f"{head}\n\n{note}" if note else head
+    spans = [{"voice": "link", "start": 0, "end": len(head) + (2 if note else 0)}]
+    spans.extend(note_spans(note, voice, offset=len(head) + 2))
+    chunk: dict[str, Any] = {
+        "source_kind": "link",
+        "link_id": link_id,
+        "issue_number": None,
+        "subject": title,
+        "section": LINK_SECTION,
+        "publish_date": publish_date,
+        "issue_year": year or None,
+        "published": saved,
+        "url": str(link.get("permalink") or link_page_url(link_id)),
+        "link_url": url,
+        "host": host,
+        "domains": [host] if host else [],
+        # What Linking Things calls the saved thing (page, video, paper...);
+        # link_type, not kind, so it never reads as find_links' link_kind.
+        "link_type": kind,
+        "tags": tags,
+        "note_voice": voice,
+        "appearances": appearances,
+        # Topics for a saved link come later (Jamie, 2026-10-23): the field
+        # is here, empty, so every record has the same shape when they do.
+        "topics": [],
+        "content_kind": "link",
+        "text": text,
+        "spans": spans,
+        "word_count": len(words(text)),
+    }
+    chunk["id"] = f"link:{link_id}:{body_hash(_embed_input(chunk))}"
+    return chunk
+
+
+def build_links_corpus(*, links_dir: Path | None = None) -> dict[str, Any]:
+    """The links corpus: one ``link`` passage per saved link in the library's
+    Linking Things snapshot (``links_dir``, default the tree's ``links/``),
+    oldest first. Each is dated by the US Central day it was saved
+    (``publish_date``, ``issue_year``), cited at its page on Linking Things
+    (``url``), and names the issues that shared it (``appearances``). With
+    no snapshot in the library yet the corpus is empty, and says so in
+    ``missing``; a snapshot that is not one raises."""
+    links_tree = links_dir if links_dir is not None else LINKS_DIR
+    saved = read_saved_links(links_tree / "links.json")
+    appearances = link_appearances(read_link_issues(links_tree / "issues.json"))
+    ordered = sorted(saved, key=lambda link: (str(link.get("saved") or ""), str(link["id"])))
+    chunks = [_link_chunk(link, appearances.get(str(link["id"]), [])) for link in ordered]
+    ids = [chunk["id"] for chunk in chunks]
+    if len(set(ids)) != len(ids):
+        repeated = sorted({chunk_id for chunk_id in ids if ids.count(chunk_id) > 1})
+        raise RuntimeError(f"links corpus chunk ids repeat: {', '.join(repeated[:5])}")
+    kinds: dict[str, int] = {}
+    voices: dict[str, int] = {}
+    for chunk in chunks:
+        kinds[chunk["link_type"]] = kinds.get(chunk["link_type"], 0) + 1
+        voice = chunk["note_voice"] or "none"
+        voices[voice] = voices.get(voice, 0) + 1
+    return {
+        "version": 2,
+        "source": "links",
+        "site": LINKS_SITE,
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "embedding_model": None,
+        "embed_recipe": EMBED_RECIPE_VERSION,
+        "missing": not saved,
+        "issue_count": 0,
+        "saved_link_count": len(chunks),
+        "chunk_count": len(chunks),
+        "chunk_counts_by_link_type": dict(sorted(kinds.items())),
+        "note_voice_counts": dict(sorted(voices.items())),
+        "shared_link_count": sum(1 for chunk in chunks if chunk["appearances"]),
+        "link_count": 0,
+        "issues": [],
+        "topics": [],
+        "links": [],
+        "media": [],
+        "chunks": chunks,
+    }
+
+
 # Version of the embed-input construction below. The incremental embed cache
 # is keyed on chunk id, and ids hash only the chunk TEXT - so an edit to the
 # header lines handed to the embedding model would silently reuse stale
@@ -3989,6 +4212,13 @@ def _embed_header(chunk: dict[str, Any]) -> list[str]:
         if chunk.get("document_source"):
             lines.append(f"Source: {chunk['document_source']}")
         return lines
+    if chunk.get("source_kind") == "link":
+        # New with the links corpus (2026-10-23): no cached vector was ever
+        # embedded under another link header, and a link chunk's id hashes
+        # its whole input.
+        return [
+            f"A link Jamie Thingelstad saved on {chunk.get('publish_date') or 'an unknown day'}"
+        ]
     if chunk.get("source_kind") == "podcast":
         episode = chunk.get("episode_number")
         label = f"Episode {episode}" if episode is not None else "Episode"
@@ -4016,8 +4246,13 @@ def _embed_input(chunk: dict[str, Any]) -> str:
     """The text handed to the embedding model for one chunk. Blog chunks get a
     blog-shaped header; everything else keeps the original Weekly-Thing header
     verbatim so existing corpus.json embed inputs stay byte-identical (cache
-    stays warm)."""
-    return "\n".join([*_embed_header(chunk), chunk["text"]])
+    stays warm). A saved link is one passage however long its note, so its
+    text is cut to the embedding's room here (title, facts and the note's
+    opening are embedded; the whole note stays searchable by its words)."""
+    text = chunk["text"]
+    if chunk.get("source_kind") == "link":
+        text = text[: embed_text_budget(chunk)]
+    return "\n".join([*_embed_header(chunk), text])
 
 
 # The fewest characters a chunk's text is ever given, so a freak header

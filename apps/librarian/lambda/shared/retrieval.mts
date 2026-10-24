@@ -114,7 +114,20 @@ let corpusCache: Corpus | undefined;
 let blogCorpusCache: Corpus | undefined;
 let podcastCorpusCache: Corpus | undefined;
 let referenceCorpusCache: Corpus | undefined;
+let linksCorpusCache: Corpus | undefined;
 let graphCache: Record<string, unknown> | undefined;
+
+// The links corpus (Jamie, 2026-10-23): every public link Jamie has saved
+// since 2005, from Linking Things (links.thingelstad.xyz), one passage per
+// saved link (links_corpus.json, LINKS_CORPUS_KEY). It is source kind
+// "link", selectable and never in a scope: retrieve() scans it only when
+// sourceKinds names link, so the three prose corpora stay every default
+// and a turn that never asks about saved links never loads it (about 250
+// MB of JSON). A saved link is one source, link-<id>, cited by its title at
+// its page on Linking Things; its passage is the page's title, what it is,
+// its tags and the issues that shared it (link voice), then Jamie's note
+// in its own voice.
+export const LINK_KIND = 'link';
 
 // The reference base (Jamie, 2026-10-23): the Weekly Thing's site pages and
 // FAQ, Things I've built, thingelstad.com's pages and the reference
@@ -229,6 +242,7 @@ export function primeCorpusCachesForTests(fixtures: {
   blog?: Corpus;
   podcast?: Corpus;
   reference?: Corpus;
+  link?: Corpus;
   graph?: Record<string, unknown>;
 }) {
   // No reference fixture is an empty one: the older corpora carry the rows.
@@ -239,17 +253,21 @@ export function primeCorpusCachesForTests(fixtures: {
     corpusCache
   );
   podcastCorpusCache = fixtures.podcast;
+  // No links fixture is an empty links corpus, as before it was uploaded.
+  linksCorpusCache = fixtures.link || { ...EMPTY_CORPUS };
   graphCache = fixtures.graph;
   sectionNamesCache = undefined;
   indexedCache = undefined;
   blogIndexedCache = undefined;
   podcastIndexedCache = undefined;
   referenceIndexedCache = undefined;
+  linksIndexedCache = undefined;
 }
 let indexedCache: CorpusChunk[] | undefined;
 let blogIndexedCache: CorpusChunk[] | undefined;
 let podcastIndexedCache: CorpusChunk[] | undefined;
 let referenceIndexedCache: CorpusChunk[] | undefined;
+let linksIndexedCache: CorpusChunk[] | undefined;
 
 function logEvent(level: string, message: string, fields: Record<string, unknown> = {}) {
   sharedLogEvent(level, message, fields, SERVICE_NAME);
@@ -281,6 +299,7 @@ async function loadCorpusUnshared(kind = 'weekly_thing'): Promise<Corpus> {
   if (kind === 'blog') return loadBlogCorpus();
   if (kind === 'podcast') return loadPodcastCorpus();
   if (kind === 'reference') return loadReferenceCorpus();
+  if (kind === LINK_KIND) return loadLinksCorpus();
   if (corpusCache) return corpusCache;
   const bucket = process.env.CORPUS_BUCKET;
   const key = process.env.CORPUS_KEY || 'librarian/corpus.json';
@@ -344,7 +363,14 @@ async function loadOptionalCorpus({
     });
     return { ...EMPTY_CORPUS };
   }
-  const loaded = kind === 'blog' ? blogCorpusCache : kind === 'reference' ? referenceCorpusCache : podcastCorpusCache;
+  const loaded =
+    kind === 'blog'
+      ? blogCorpusCache
+      : kind === 'reference'
+        ? referenceCorpusCache
+        : kind === LINK_KIND
+          ? linksCorpusCache
+          : podcastCorpusCache;
   return cache || loaded || { ...EMPTY_CORPUS };
 }
 
@@ -393,6 +419,19 @@ async function loadReferenceCorpusUnshared() {
     cache: referenceCorpusCache,
     setCache: (value) => {
       referenceCorpusCache = value;
+    }
+  });
+}
+
+async function loadLinksCorpusUnshared() {
+  return loadOptionalCorpus({
+    kind: LINK_KIND,
+    envKey: 'LINKS_CORPUS_KEY',
+    disabledEvent: 'links_corpus_disabled',
+    failedEvent: 'links_corpus_load_failed',
+    cache: linksCorpusCache,
+    setCache: (value) => {
+      linksCorpusCache = value;
     }
   });
 }
@@ -470,6 +509,10 @@ async function indexedChunksUnshared(kind = 'weekly_thing'): Promise<CorpusChunk
   if (kind === 'reference') {
     if (!referenceIndexedCache) referenceIndexedCache = buildLexicalIndex(await loadCorpus('reference'));
     return referenceIndexedCache;
+  }
+  if (kind === LINK_KIND) {
+    if (!linksIndexedCache) linksIndexedCache = buildLexicalIndex(await loadCorpus(LINK_KIND));
+    return linksIndexedCache;
   }
   if (!indexedCache) indexedCache = buildLexicalIndex(ownRows(await loadCorpus('weekly_thing')));
   return indexedCache;
@@ -559,9 +602,35 @@ export function compactSource(source: CorpusChunk, textLimit = 2000) {
     // only: the document stays undated, and publish_date stays empty.
     document_source: text(source.document_source),
     document_date: text(source.document_date),
+    // A saved link's facts (4.19.0): the page it saved (url is its record
+    // on Linking Things, the page a citation links), that page's host, what
+    // Linking Things calls it (page, video, paper...), its tags, whose words
+    // its note is and the Weekly Thing issues that shared it. Present only on
+    // a link passage.
+    ...(kind === LINK_KIND ? linkPassageFields(source) : {}),
     // Present only when a voice filter rewrote the text to those spans.
     voice: Array.isArray(source.voice) ? source.voice : undefined,
     text: String(source.text || '').slice(0, textLimit)
+  };
+}
+
+function linkPassageFields(source: CorpusChunk) {
+  const appearances = Array.isArray(source.appearances) ? (source.appearances as Array<Record<string, unknown>>) : [];
+  const shared = [
+    ...new Set(
+      appearances.map((item) => Number(item?.issue_number)).filter((number) => Number.isInteger(number) && number > 0)
+    )
+  ];
+  return {
+    link_id: source.link_id == null ? undefined : String(source.link_id),
+    link_url: source.link_url == null ? undefined : String(source.link_url),
+    host: source.host == null ? undefined : String(source.host),
+    link_type: source.link_type == null ? undefined : String(source.link_type),
+    tags: Array.isArray(source.tags) ? source.tags.map(String) : undefined,
+    // Whose words the note is: jamie, excerpt (the saved page's own words)
+    // or mixed; absent when the link has no note.
+    note_voice: source.note_voice == null ? undefined : String(source.note_voice),
+    shared_in_issues: shared.length ? shared : undefined
   };
 }
 
@@ -579,6 +648,7 @@ function sourceHeader(source: CorpusChunk) {
     return `Another Thing podcast${episode}: ${source.subject || ''}`;
   }
   if (kind === 'thing') return `Things I've built (thingelstad.xyz): ${source.subject || ''}`;
+  if (kind === LINK_KIND) return `Linking Things, a link Jamie saved: ${source.subject || ''}`;
   if (kind === 'document') {
     const from = source.document_source ? ` (from ${source.document_source})` : '';
     return `Jamie Thingelstad, reference document${from}: ${source.subject || ''}`;
@@ -812,7 +882,8 @@ let sectionNamesCache: Set<string> | undefined;
 export function knownSectionNames() {
   if (sectionNamesCache) return sectionNamesCache;
   const names = new Set<string>();
-  // Not the reference corpus's own rows: its site pages, FAQ, things and
+  // Not the links corpus (its one section is "Saved link"), and not the
+  // reference corpus's own rows: its site pages, FAQ, things and
   // pages ride the Weekly Thing and blog corpora above, and a document's H2
   // headings (86 forum threads in one) must not turn a section filter that
   // names one of them from "inside the heading" into "exactly this heading"
@@ -965,13 +1036,15 @@ export function parseCalendar(value: unknown): CalendarWindow | string | null {
   return { month, day, window: Math.min(Math.floor(requested), CALENDAR_MAX_WINDOW_DAYS), targetYear };
 }
 
-// The source kinds a request selects among (4.18.0): the dated corpora.
-// The reference base is in every answer, so it is never named: sourceKinds
+// The source kinds a request selects among (4.18.0): the dated corpora,
+// and (4.19.0) link, the saved links of Linking Things, which only a
+// request that names it searches. The reference base is in every answer,
+// so it is never named: sourceKinds
 // with reference, document, a reference row's kind or a kind no source has
 // would have come back with the reference base alone, and is a 400.
 // excludeSourceKinds also takes site_page, faq and thing, which callers sent
 // before the reference base (WT Builder's Echoes); they leave nothing out.
-export const SELECTABLE_SOURCE_KINDS = ['weekly_thing', 'blog', 'podcast'] as const;
+export const SELECTABLE_SOURCE_KINDS = ['weekly_thing', 'blog', 'podcast', 'link'] as const;
 const EXCLUDABLE_SOURCE_KINDS = [...SELECTABLE_SOURCE_KINDS, 'site_page', 'faq', 'thing'];
 
 // The filters a caller can get wrong in a way that would otherwise quietly
@@ -1179,7 +1252,7 @@ export async function retrieve(
   if (filters.category && !(filters.categoryPostIds instanceof Set)) {
     filters = { ...filters, categoryPostIds: await blogCategoryPostIds(filters.category) };
   }
-  const kinds = scopeKinds(filters.scope);
+  const kinds = retrievalKinds(filters);
   const candidateLimit = Math.max(limit * 5, 100);
   const byScore = (a: CorpusChunk, b: CorpusChunk) => (b._retrieval_score || 0) - (a._retrieval_score || 0);
   // The reference base is its own pool in every retrieval: the scope's
@@ -1232,6 +1305,17 @@ export async function retrieve(
   // than final ordering precision. Answer-path retrieval always reranks.
   if (opts.rerank === false) return withAgeLabel(pageWithoutTwins(fused, limit));
   return withAgeLabel(pageWithoutTwins(await rerankSources(query, fused, limit, fused.length), limit));
+}
+
+// The corpora a retrieval scans: the scope's, and the links corpus when
+// sourceKinds names link (whatever the scope: no scope holds it). A request
+// for link alone scans only the links corpus, since sourceKinds would keep
+// nothing from the others; the reference base joins in retrieve() as always.
+export function retrievalKinds(filters: RetrievalFilters = {}): string[] {
+  const selected = stringList(filters.sourceKinds);
+  const wantsLinks = selected.includes(LINK_KIND);
+  const linksOnly = wantsLinks && selected.every((kind) => kind === LINK_KIND);
+  return [...(linksOnly ? [] : scopeKinds(filters.scope)), ...(wantsLinks ? [LINK_KIND] : [])];
 }
 
 // The page: the ranked list cut at limit, less each Journal copy whose
@@ -1519,6 +1603,9 @@ function loadPodcastCorpus(): Promise<Corpus> {
 }
 function loadReferenceCorpus(): Promise<Corpus> {
   return loadOnce('reference', loadReferenceCorpusUnshared);
+}
+function loadLinksCorpus(): Promise<Corpus> {
+  return loadOnce('links', loadLinksCorpusUnshared);
 }
 export function loadGraph(): Promise<Record<string, unknown>> {
   return loadOnce('graph', loadGraphUnshared);

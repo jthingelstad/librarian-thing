@@ -192,7 +192,7 @@ test('resource URIs parse to one kind each, or to nothing', () => {
   }
 });
 
-test('resources/templates/list names the six templates', async () => {
+test('resources/templates/list names the seven templates', async () => {
   const { context } = liveContext();
   const reply = await rpc('resources/templates/list', {}, context);
   assert.deepEqual(
@@ -201,6 +201,7 @@ test('resources/templates/list names the six templates', async () => {
       'librarian://wt/{n}',
       'librarian://blog/{id}',
       'librarian://page/{id}',
+      'librarian://link/{id}',
       'librarian://topic/{slug}',
       'librarian://year/{yyyy}',
       'librarian://on-this-day/{mm-dd}'

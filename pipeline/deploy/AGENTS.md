@@ -11,6 +11,7 @@ AWS deploy tooling for the Thingy Lambda stack. No README — this directory is 
 | `upload_blog_corpus.py` | Builds the thingelstad.com blog corpus from `data/blog/posts`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_podcast_corpus.py` | Builds the Another Thing podcast corpus from `data/podcast/another-thing/episodes`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_reference_corpus.py` | Builds the reference base (site pages, FAQ, Things I've built, thingelstad.com's pages, reference documents) from `data/`, embeds via Bedrock Cohere with S3 cache reuse, uploads `reference_corpus.json` to S3. Called by `aws.py` during full corpus deploys. |
+| `upload_links_corpus.py` | Builds the links corpus (Linking Things' saved links, one passage each) from `data/links/`, embeds via Bedrock Cohere with S3 cache reuse, uploads `links_corpus.json` to S3. Called by `aws.py` during full corpus deploys. |
 | `bedrock_logging.py` | Configures Bedrock model invocation logging (CloudWatch destination + S3 archive). One-time setup. |
 
 ## Invocation
@@ -53,7 +54,7 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 2. **Verify private bucket security** (`verify_private_bucket(bucket)`). Administrator-only `--bootstrap-bucket` creates or hardens it. Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
 3. **Package shared modules and Event workers**, then create two native root entries (`web/auth.mjs`, `web/archive.mjs`) in versioned immutable bundles.
 4. **Upload the Event worker zip** under `code/auth-lambda/` and immutable native bundles to the versioned source bucket. Snapshot live/rollback pins, probe candidates, then promote explicitly.
-5. **Optional**: all corpus uploaders run: Weekly Thing corpus + graph, blog corpus, podcast corpus, reference corpus.
+5. **Optional**: all corpus uploaders run: Weekly Thing corpus + graph, blog corpus, podcast corpus, reference corpus, links corpus.
 6. **CloudFormation update-stack** with the new code keys and settings. No credentials: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 7. **30-day log retention** on the auto-created log groups (`configure_log_retention`).
 8. **Update `.env`** with the latest stack outputs: `LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`.
@@ -64,9 +65,10 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 2. Blog: `upload_blog_corpus.py` builds from `data/blog/posts/**/*.md`, reuses cached embeddings by chunk id, uploads `blog_corpus.json`.
 3. Podcast: `upload_podcast_corpus.py` builds from `data/podcast/another-thing/episodes/*.json`, reuses cached embeddings by chunk id, uploads `podcast_corpus.json`.
 4. Reference: `upload_reference_corpus.py` builds from `data/site/`, `data/things/`, `data/blog/pages/`, `data/reference/`, `data/reference-unpublished/` and the FAQ, reuses cached embeddings by chunk id, uploads `reference_corpus.json`. A malformed reference document fails the build with its file name.
-5. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, `loadPodcastCorpus()` and the reference loader (`REFERENCE_CORPUS_KEY`, searched by every retrieval) pick up new files on the next cold start or after `aws.py` triggers a new deployment.
+5. Links: `upload_links_corpus.py` builds from `data/links/` (Linking Things' links.json and issues.json, snapshotted by `pipeline/links/import_links.py`), reuses cached embeddings by chunk id, uploads `links_corpus.json`. With no snapshot in the library the corpus is empty and the build says so.
+6. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, `loadPodcastCorpus()`, the reference loader (`REFERENCE_CORPUS_KEY`, searched by every retrieval) and the links loader (`LINKS_CORPUS_KEY`, read only when a request names source kind `link`) pick up new files on the next cold start or after `aws.py` triggers a new deployment.
 
-Use `make librarian-corpora-upload` when code is unchanged and only the four S3 corpus artifacts need refresh.
+Use `make librarian-corpora-upload` when code is unchanged and only the five S3 corpus artifacts need refresh.
 
 ## Secrets
 

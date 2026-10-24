@@ -3,6 +3,7 @@ import {
   buildArchiveLens,
   compileTopicMatcher,
   isDocument,
+  isLink,
   isSitePage,
   isThing,
   lensMatchReasons,
@@ -39,6 +40,7 @@ import {
   headingKey,
   journalCopyPosts,
   knownSectionNames,
+  LINK_KIND,
   loadCorpus,
   loadGraph,
   onThisDayYear,
@@ -680,12 +682,13 @@ function rankedLink(link: ArchiveRecord, requestedSource: string, kind = linkCor
 }
 
 function linkMeasure(requestedSource: string) {
+  if (requestedSource === LINK_KIND) return 'saved links (Linking Things), by the host of the page each saved';
   return requestedSource && requestedSource !== 'weekly_thing'
     ? `${requestedSource} links (they connect to other sites; they are not editorial picks)`
     : 'editorial picks: Weekly Thing headline links (Notable, Briefly and the like)';
 }
 
-const CORPUS_SOURCE_KINDS = new Set(['blog', 'weekly_thing', 'podcast']);
+const CORPUS_SOURCE_KINDS = new Set(['blog', 'weekly_thing', 'podcast', 'link']);
 
 function normalizeSourceKind(value: unknown) {
   const raw = String(value || '')
@@ -698,9 +701,37 @@ function normalizeSourceKind(value: unknown) {
   if (['blog', 'thingelstad', 'thingelstad_com', 'post', 'posts', 'micropost', 'page', 'pages'].includes(raw))
     return 'blog';
   if (['podcast', 'podcasts', 'another', 'another_thing', 'episode', 'episodes'].includes(raw)) return 'podcast';
+  if (['link', 'links', 'saved_link', 'saved_links', 'linking_things', 'bookmark', 'bookmarks'].includes(raw))
+    return LINK_KIND;
   if (raw === 'site') return 'site';
   return '';
 }
+
+// The corpora a tool reads (MCP 2.9.0): the scope's, narrowed to source_kind
+// when one is named, or the links corpus alone for source_kind link. No
+// scope holds the saved links of Linking Things, so a tool reads them only
+// when a call names link, and every default stays the three prose corpora.
+function toolKinds(scope: unknown, requestedSource: string): string[] {
+  if (requestedSource === LINK_KIND) return [LINK_KIND];
+  return scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
+}
+
+// The tools that read the links corpus when source_kind names link. The
+// others (find_links, media_search, top_references, archive_gems) read the
+// prose corpora alone: a saved link carries no links of its own and no
+// photos, and is not an editorial pick.
+export const LINK_SOURCE_TOOLS = new Set([
+  'search_archive',
+  'find_evidence',
+  'quote_search',
+  'list_content',
+  'latest_content',
+  'on_this_day',
+  'corpus_stats',
+  'compare_eras',
+  'archive_lens'
+]);
+const LINK_REFUSING_TOOLS = new Set(['find_links', 'media_search', 'top_references', 'archive_gems']);
 
 function linkCorpusKind(link: ArchiveRecord) {
   return normalizeSourceKind(link.corpus_kind || link.source_kind || (link.issue_number ? 'weekly_thing' : ''));
@@ -775,7 +806,8 @@ const LINK_RECORDS = new WeakMap<Corpus, ArchiveRecord[]>();
 
 async function linkRecords(scope: unknown = 'weekly_thing') {
   const links: ArchiveRecord[] = [];
-  for (const kind of scopeKinds(scope)) {
+  // A saved link carries no links of its own: the links corpus has none.
+  for (const kind of scope === LINK_KIND ? [LINK_KIND] : scopeKinds(scope)) {
     const corpus = await loadCorpus(kind);
     let normalized = LINK_RECORDS.get(corpus);
     if (!normalized) {
@@ -1033,6 +1065,15 @@ async function searchFilterProblem(input: ToolArgs) {
       .filter(Boolean);
   const topics = wanted(input.topic);
   let resolvedTopics: string[] | undefined;
+  // Saved links carry no topic clusters yet (their topics are empty until
+  // they are labelled): a topic would have kept none of them.
+  if (topics.length && normalizeSourceKind(input.source_kind || '') === LINK_KIND) {
+    return {
+      error:
+        'topic does not apply to source_kind link: saved links carry no topic clusters yet. Put the subject in query.',
+      code: 'bad_request'
+    };
+  }
   if (topics.length) {
     const clusters = ((await loadCorpus('weekly_thing')).topics as Array<{ name?: string }> | undefined) || [];
     const names = clusters.map((cluster) => String(cluster.name || '')).filter(Boolean);
@@ -1107,7 +1148,9 @@ async function toolSearchArchive(input: ToolArgs = {}, { scope }: ToolContext = 
     sourceKinds: normalizeSourceKind(input.source_kind || '') || undefined,
     scope
   });
-  const records = await recordsByKey(scopeKinds(scope));
+  const records = await recordsByKey(
+    normalizeSourceKind(input.source_kind || '') === LINK_KIND ? [LINK_KIND] : scopeKinds(scope)
+  );
   return {
     query,
     results: groupPassagesBySource(results as ArchiveRecord[], records, query),
@@ -1585,7 +1628,9 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   if (inSource && 'ambiguous' in inSource) return ambiguousSource(inSource);
   // An id and a source_kind that disagree can only answer 0 (QA2 links
   // L2-4: wt-351 with source_kind blog said 0 links, silently).
-  if (inSource && sourceKind && inSource.kind !== sourceKind) {
+  // A saved link's id lists the Weekly Thing and blog links that are it or
+  // point to its page, so a source_kind narrows those.
+  if (inSource && sourceKind && inSource.kind !== sourceKind && inSource.kind !== LINK_KIND) {
     return {
       error: `id ${lensSourceId(inSource.record)} is a ${inSource.kind} source; drop source_kind or pass source_kind ${inSource.kind}.`,
       code: 'bad_request'
@@ -1605,7 +1650,9 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   for (const link of await linkRecords(scope)) {
     const linkSourceKind = linkCorpusKind(link);
     const year = Number(link.issue_year || link.post_year || 0);
-    if (inSource && sourceKeyFromLink(link) !== inSource.key) continue;
+    if (inSource && inSource.kind === LINK_KIND) {
+      if (savedLinkOf(link) !== String(inSource.record.link_id || '')) continue;
+    } else if (inSource && sourceKeyFromLink(link) !== inSource.key) continue;
     if (sourceKind && linkSourceKind !== sourceKind) continue;
     if (domain && !domainMatches(linkDomain(link), domain)) continue;
     if (linkKind && inferredLinkKind(link) !== linkKind) continue;
@@ -1643,8 +1690,12 @@ async function toolFindLinks(input: ToolArgs = {}, { scope }: ToolContext = {}) 
     const sourceUrl =
       link.source_url || (link.issue_number ? `/archive/${link.issue_number}/` : link.post_url || link.url);
     const id = linkSourceId(link);
+    const saved = savedLinkOf(link);
     return {
       ...(id ? { id } : {}),
+      // The saved link (Linking Things) this link is, or whose page it links:
+      // get_source and source_neighborhood take it (MCP 2.9.0).
+      ...(saved ? { saved_link: `link-${saved}` } : {}),
       issue_number: link.issue_number ?? null,
       source_kind: link.source_kind,
       corpus_kind: linkCorpusKind(link),
@@ -1743,6 +1794,13 @@ const FIND_LINKS_TOP_DOMAINS = 20;
 // link never resolves, so false had matched all 27,021 of them.
 function resolvedAs(link: ArchiveRecord, wanted: boolean) {
   return inferredLinkKind(link) === 'internal' && Boolean(link.target_resolved) === wanted;
+}
+
+// The saved link a Weekly Thing or blog link is (link_id: Linking Things
+// joined it to the issue, or saved the same url), or whose page on Linking
+// Things it links (target_link_id); '' for any other link.
+function savedLinkOf(link: ArchiveRecord) {
+  return String(link.link_id || link.target_link_id || '');
 }
 
 // The id of the source a link sits in (wt-351, blog-<id>, page-<id>, ep-<n>), for
@@ -1862,6 +1920,30 @@ function skimFields(kind: string, raw: ArchiveRecord): ArchiveRecord {
 }
 
 function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
+  if (kind === LINK_KIND) {
+    // One saved link a passage: the record is its passage's facts.
+    return ((corpus.chunks || []) as ArchiveRecord[]).filter(isLink).map((chunk) => ({
+      source_kind: LINK_KIND,
+      link_id: chunk.link_id,
+      subject: chunk.subject,
+      publish_date: chunk.publish_date,
+      issue_year: chunk.issue_year,
+      published: chunk.published,
+      url: chunk.url,
+      section: chunk.section,
+      link_url: chunk.link_url,
+      host: chunk.host,
+      link_type: chunk.link_type,
+      tags: Array.isArray(chunk.tags) ? chunk.tags : [],
+      note: linkNote(chunk),
+      note_voice: chunk.note_voice ?? null,
+      shared_in_issues: issueList(
+        (Array.isArray(chunk.appearances) ? chunk.appearances : []).map((item) => (item as ArchiveRecord)?.issue_number)
+      ).filter((number, at, all) => all.indexOf(number) === at),
+      topics: Array.isArray(chunk.topics) ? chunk.topics : [],
+      domains: chunk.domains || []
+    }));
+  }
   if (kind === 'blog') {
     const posts = Array.isArray(corpus.posts) ? (corpus.posts as ArchiveRecord[]) : [];
     return posts.map((post) => ({
@@ -1910,7 +1992,17 @@ function contentRecords(corpus: Corpus, kind: string): ArchiveRecord[] {
   });
 }
 
+// A saved link's note: its passage after the facts (the link-voice head
+// span), in its own voice. '' when the link has none.
+function linkNote(chunk: ArchiveRecord) {
+  const spans = Array.isArray(chunk.spans) ? (chunk.spans as Array<{ voice?: unknown; end?: unknown }>) : [];
+  const head = spans.find((span) => span?.voice === 'link');
+  const text = String(chunk.text || '');
+  return head ? text.slice(Number(head.end) || 0).trim() : '';
+}
+
 export function sourceRecordKey(record: ArchiveRecord) {
+  if (isLink(record)) return `link\0${record.link_id}`;
   const kind =
     normalizeSourceKind(record?.source_kind || '') ||
     (record?.episode_number
@@ -1954,6 +2046,8 @@ function urlKey(value: unknown) {
 export function sourceKeyFromChunk(chunk: ArchiveRecord, fallbackKind = '') {
   // A reference document is keyed by its name: its url is optional.
   if (isDocument(chunk)) return `document\0${chunk.doc_id}`;
+  // A saved link by its Linking Things id.
+  if (isLink(chunk)) return `link\0${chunk.link_id}`;
   const kind = normalizeSourceKind(chunk?.source_kind || fallbackKind) || fallbackKind;
   if (kind === 'weekly_thing' || chunk?.issue_number) return `weekly_thing\0${issueKey(chunk.issue_number)}`;
   if (kind === 'blog') return `blog\0${blogKeyPart(chunk) || urlKey(chunk.url)}`;
@@ -2038,7 +2132,22 @@ function compactContentRecord(record: ArchiveRecord): ArchiveRecord {
     // citation metadata, never the date the archive tools anchor on.
     document_source: record.document_source ?? undefined,
     document_date: record.document_date ?? undefined,
-    audio_duration_seconds: record.audio_duration_seconds
+    audio_duration_seconds: record.audio_duration_seconds,
+    // A saved link (MCP 2.9.0): the page it saved (url is its record on
+    // Linking Things, the page to cite), what it is, its tags, the opening
+    // of its note and whose words the note is (jamie, excerpt: the page's
+    // own words, or mixed), and the issues that shared it.
+    ...(isLink(record)
+      ? {
+          link_url: record.link_url,
+          host: record.host,
+          link_type: record.link_type,
+          tags: record.tags,
+          note: record.note ? clipText(record.note, SKIM_ABSTRACT_CHARS) : undefined,
+          note_voice: record.note_voice ?? undefined,
+          shared_in_issues: issueList(record.shared_in_issues).length ? record.shared_in_issues : undefined
+        }
+      : {})
   };
 }
 
@@ -2214,6 +2323,7 @@ function inferSourceKindFromInput(input: ToolArgs = {}) {
   if (id.startsWith('blog-') || id.startsWith('page-')) return 'blog';
   if (id.startsWith('ep-')) return 'podcast';
   if (id.startsWith('site-') || id.startsWith('thing-')) return 'weekly_thing';
+  if (id.startsWith('link-')) return LINK_KIND;
   if (input.issue_number || input.number || input.issue) return 'weekly_thing';
   if (input.microblog_id || input.post_id || input.page_id) return 'blog';
   if (input.episode_number || input.episode) return 'podcast';
@@ -2263,6 +2373,12 @@ export function canonicalSourceInput(input: ToolArgs = {}): ToolArgs {
   if (episode) return { ...rest, id: `ep-${Number(episode[1])}` };
   const documentId = raw.match(/^doc-([a-z0-9][a-z0-9-]*)$/i);
   if (documentId) return { ...rest, id: `doc-${documentId[1].toLowerCase()}` };
+  // A saved link: link-<id>, or its page on Linking Things, with or
+  // without the scheme.
+  const savedLink =
+    raw.match(/^link-([0-9a-f]{12})$/i) ||
+    raw.match(/^(?:https?:\/\/)?links\.thingelstad\.xyz\/links\/([0-9a-f]{12})\/?(?:[?#].*)?$/i);
+  if (savedLink) return { ...rest, id: `link-${savedLink[1].toLowerCase()}` };
   if (/^(https?:\/\/|\/)/i.test(raw)) return { ...rest, url: raw };
   // An archive url pasted without its scheme (QA2 links L2-7:
   // thingelstad.com/2004/07/06/learn-to-row.html was not_found).
@@ -2338,6 +2454,20 @@ function documentBundle(corpus: Corpus, input: ToolArgs): SourceBundle | null {
   return { kind: 'document', corpus, record, key: `document\0${first.doc_id}`, chunks, links: [] };
 }
 
+// A saved link (link-<id>), read whole: the links corpus alone carries it,
+// and it is reachable whatever the scope, as a document is (MCP 2.9.0).
+// Its links are the Weekly Thing and blog links that are it (find_links
+// with its id lists them); it carries none of its own.
+async function linkBundle(input: ToolArgs): Promise<SourceBundle | null> {
+  const corpus = await loadCorpus(LINK_KIND);
+  const id = String(input.id || '');
+  const record = recordLookup(corpus, LINK_KIND).byId.get(id)?.[0];
+  if (!record) return null;
+  const key = sourceRecordKey(record);
+  const index = await sourceIndex(corpus, LINK_KIND);
+  return { kind: LINK_KIND, corpus, record, key, chunks: index.chunks.get(key) || [], links: [] };
+}
+
 // A corpus's source records once, by the id tools emit (get_source had
 // rebuilt all 10,442 blog records per call).
 const RECORD_LOOKUP = new WeakMap<
@@ -2365,6 +2495,7 @@ async function findSourceBundle(
 ): Promise<SourceBundle | { ambiguous: ArchiveRecord[] } | null> {
   const input = canonicalSourceInput(rawInput);
   if (String(input.id || '').startsWith('doc-')) return documentBundle(await loadCorpus('reference'), input);
+  if (String(input.id || '').startsWith('link-')) return linkBundle(input);
   const requestedKind = inferSourceKindFromInput(input);
   const kinds = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
   for (const kind of kinds) {
@@ -2497,7 +2628,7 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     if (statsEndYear && (!year || year > statsEndYear)) return false;
     return true;
   };
-  const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
+  const kinds = toolKinds(scope, requestedSource);
   const sources = [];
   let yearsOmitted = 0;
   const omitted: Record<string, number> = {};
@@ -2505,6 +2636,10 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
   for (const kind of kinds) {
     const corpus = await loadCorpus(kind);
     const records = latestByDate(contentRecords(corpus, kind)).filter(inStatsYears);
+    if (kind === LINK_KIND) {
+      sources.push(linksStats(corpus, records, Boolean(statsStartYear || statsEndYear), listLimit, omitted));
+      continue;
+    }
     const links = (await linkRecords(kind)).filter((link) => inStatsYears(link as ArchiveRecord));
     const linkKindCounts = new Map<string, number>();
     const categoryCounts = new Map<string, number>();
@@ -2660,6 +2795,13 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
   if (!requestedSource && !statsStartYear && !statsEndYear) {
     const reference = referenceStats(await loadCorpus('reference'));
     if (reference) sources.push(reference);
+    // The saved links, named and not counted: counting them loads the
+    // links corpus, which only a call naming source_kind link does.
+    sources.push({
+      source_kind: LINK_KIND,
+      searched_by_default: false,
+      hint: 'Linking Things, every public link Jamie has saved: pass source_kind link for its counts by the year each was saved, by kind and by host. No search reads saved links unless it names source_kind link.'
+    });
   }
   return compactLensPayload(
     markTruncated(
@@ -2690,6 +2832,66 @@ async function toolCorpusStats(input: ToolArgs = {}, { scope }: ToolContext = {}
     ),
     { params: ['source_kind', 'year_range', 'limit'] }
   );
+}
+
+// The links corpus as corpus_stats lists it (MCP 2.9.0): the saved links
+// in range by the year Jamie saved each (its Chicago day), what Linking
+// Things calls each, whose words its note is, how many an issue shared,
+// and the hosts saved most.
+function linksStats(
+  corpus: Corpus,
+  records: ArchiveRecord[],
+  rangeActive: boolean,
+  listLimit: number,
+  omitted: Record<string, number>
+) {
+  const types = new Map<string, number>();
+  const voices = new Map<string, number>();
+  const hosts = new Map<string, number>();
+  let shared = 0;
+  for (const record of records) {
+    const type = String(record.link_type || 'page');
+    types.set(type, (types.get(type) || 0) + 1);
+    const voice = String(record.note_voice || 'none');
+    voices.set(voice, (voices.get(voice) || 0) + 1);
+    const host = String(record.host || '');
+    if (host) hosts.set(host, (hosts.get(host) || 0) + 1);
+    if (issueList(record.shared_in_issues).length) shared += 1;
+  }
+  const countsByYear = countsByPublishYear(records);
+  const hostRows = sortedCountList(hosts, 'host');
+  if (hostRows.length > listLimit) {
+    omitted['sources[].top_hosts'] = (omitted['sources[].top_hosts'] || 0) + hostRows.length - listLimit;
+  }
+  const edge = (record: ArchiveRecord | undefined) =>
+    record
+      ? {
+          id: lensSourceId(record),
+          subject: record.subject,
+          date: sourceDate(record),
+          url: record.url,
+          host: record.host
+        }
+      : null;
+  const total = Number(corpus.saved_link_count || 0) || (corpus.chunks || []).length;
+  return {
+    source_kind: LINK_KIND,
+    searched_by_default: false,
+    generated_at: corpus.generated_at,
+    item_count: rangeActive ? records.length : total,
+    // One passage a saved link.
+    chunk_count: records.length,
+    ...(rangeActive ? { item_count_total: total || undefined } : {}),
+    oldest: edge(records[records.length - 1]),
+    newest: edge(records[0]),
+    counts_by_year: countsByYear,
+    year_count_summary: yearCountSummary(countsByYear),
+    counts_by_link_type: sortedCountList(types, 'link_type'),
+    counts_by_note_voice: sortedCountList(voices, 'note_voice'),
+    shared_in_issues_count: shared,
+    host_count: hostRows.length,
+    top_hosts: hostRows.slice(0, listLimit)
+  };
 }
 
 // The reference base as corpus_stats lists it: its sources (a page, the
@@ -2783,8 +2985,7 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
   const alsoIn = alsoInFilter(input);
   const audio = audioFilter(input);
   const items = [];
-  for (const kind of scopeKinds(scope)) {
-    if (requestedSource && kind !== requestedSource) continue;
+  for (const kind of toolKinds(scope, requestedSource)) {
     if (alsoIn.active && kind !== 'blog') continue;
     if (audio.active && kind !== 'weekly_thing') continue;
     const corpus = await loadCorpus(kind);
@@ -2800,7 +3001,11 @@ async function toolLatestContent(input: ToolArgs = {}, { scope }: ToolContext = 
       ),
       source_kind: requestedSource || null,
       total_count: ordered.length,
-      results: page.shown.map((record) => ({ id: lensSourceId(record), ...record, date: sourceDate(record) }))
+      results: page.shown.map((record) =>
+        isLink(record)
+          ? compactContentRecord(record)
+          : { id: lensSourceId(record), ...record, date: sourceDate(record) }
+      )
     },
     { omitted: { results: page.omitted }, next_offset: page.nextOffset, hint: page.hint }
   );
@@ -2881,8 +3086,7 @@ async function matchedContent(input: ToolArgs, scope: unknown) {
     caseSensitive: input.case_sensitive === true
   });
   const matched: Array<{ kind: string; record: ArchiveRecord; chunks: ArchiveRecord[]; links: ArchiveRecord[] }> = [];
-  for (const kind of scopeKinds(scope)) {
-    if (requestedSource && kind !== requestedSource) continue;
+  for (const kind of toolKinds(scope, requestedSource)) {
     if (alsoIn.active && kind !== 'blog') continue;
     if (audio.active && kind !== 'weekly_thing') continue;
     const corpus = await loadCorpus(kind);
@@ -3093,7 +3297,7 @@ async function toolQuoteSearch(input: ToolArgs = {}, { scope }: ToolContext = {}
     const year = recordYear(record);
     return !(startYear && (!year || year < startYear)) && !(endYear && (!year || year > endYear));
   };
-  const kinds = scopeKinds(scope).filter((kind) => !requestedSource || kind === requestedSource);
+  const kinds = toolKinds(scope, requestedSource);
   // A voice matches within that voice's spans only: voice=jamie never finds
   // a phrase Jamie quoted. Spans live on chunks, so a voiced search reads
   // every corpus (the Weekly Thing too) chunk by chunk.
@@ -3271,8 +3475,7 @@ async function eraCounts(topic: string, era: unknown, input: ToolArgs, scope: un
   const [startYear, endYear] = parseYearRange(era);
   const requestedSource = normalizeSourceKind(input.source_kind || '');
   let published = 0;
-  for (const kind of scopeKinds(scope)) {
-    if (requestedSource && kind !== requestedSource) continue;
+  for (const kind of toolKinds(scope, requestedSource)) {
     for (const record of contentRecords(await loadCorpus(kind), kind)) {
       const year = recordYear(record);
       if (year && (!startYear || year >= startYear) && (!endYear || year <= endYear)) published += 1;
@@ -3487,8 +3690,7 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   const voices = voiceList(input.voice);
   const records = [];
   const chunks = [];
-  for (const kind of scopeKinds(scope)) {
-    if (requestedSource && kind !== requestedSource) continue;
+  for (const kind of toolKinds(scope, requestedSource)) {
     const corpus = await loadCorpus(kind);
     const kindRecords = contentRecords(corpus, kind);
     // A voice is a property of spans, and records have none: with a voice
@@ -3529,7 +3731,13 @@ async function toolArchiveLens(input: ToolArgs = {}, { scope }: ToolContext = {}
   // picks (source_kind blog or podcast: that source's links) to other
   // sites, by host with www merged (QA2 links L9, L10).
   const linkDomains = new Map<string, Map<string, number>>();
-  for (const link of await linkRecords(scope)) {
+  // A saved link counts the host of the page it saved, once.
+  if (requestedSource === LINK_KIND) {
+    for (const record of records.length ? records : contentRecords(await loadCorpus(LINK_KIND), LINK_KIND)) {
+      if (record.host) linkDomains.set(lensSourceId(record), new Map([[String(record.host), 1]]));
+    }
+  }
+  for (const link of requestedSource === LINK_KIND ? [] : await linkRecords(scope)) {
     if (requestedSource && linkCorpusKind(link) !== requestedSource) continue;
     if (inferredLinkKind(link) === 'internal' || !rankedLink(link, requestedSource)) continue;
     const domain = linkDomain(link);
@@ -3587,6 +3795,9 @@ function lensAliases(topic: string, given: unknown) {
 
 function targetMatchesSource(link: ArchiveRecord, record: ArchiveRecord) {
   if (!link || !record) return false;
+  // A saved link's incoming links are the issue and post links that are it
+  // or point to its page on Linking Things.
+  if (isLink(record)) return savedLinkOf(link) === String(record.link_id);
   if (record.source_kind === 'blog') {
     if (link.target_microblog_id && String(link.target_microblog_id) === String(record.microblog_id)) return true;
     if (link.target_page_id != null && String(link.target_page_id) === String(record.page_id)) return true;
@@ -3713,7 +3924,9 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
     (link) => sourceKeyFromLink(link) !== bundle.key && targetMatchesSource(link, bundle.record)
   );
   const related = [];
-  const kinds = scopeKinds(scope);
+  // A saved link's neighbours include other saved links; any other source
+  // stays among the prose corpora (no scope holds the links corpus).
+  const kinds: string[] = bundle.kind === LINK_KIND ? [...scopeKinds(scope), LINK_KIND] : scopeKinds(scope);
   const corpora = await Promise.all(kinds.map((kind) => loadCorpus(kind)));
   const indexes = await Promise.all(kinds.map((kind, at) => relatedIndex(kind, corpora[at])));
   const base = distinctiveTerms(relatedTerms(bundle.record, bundle.chunks, bundle.links), indexes);
@@ -4567,7 +4780,8 @@ function collapsePhotoCopies(found: Array<Record<string, unknown>>) {
 const ON_THIS_DAY_TIMEZONE = 'America/Chicago';
 const ON_THIS_DAY_WINDOWED_PER_YEAR = 2;
 // Within a day: the issue, then the episode, then blog posts (Jamie, 2026-09-30).
-const KIND_ORDER: Record<string, number> = { weekly_thing: 0, podcast: 1, blog: 2 };
+// A saved link, asked for by source_kind link, comes after them.
+const KIND_ORDER: Record<string, number> = { weekly_thing: 0, podcast: 1, blog: 2, link: 3 };
 
 export function chicagoToday(now = new Date()) {
   return new Intl.DateTimeFormat('en-CA', {
@@ -4617,8 +4831,7 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
   const byYear = new Map<number, Array<Record<string, unknown>>>();
   // Each item's published instant, kept off the item (QA3 Q17).
   const timeOfDay = new Map<Record<string, unknown>, number | null>();
-  for (const kind of scopeKinds(scope)) {
-    if (requestedSource && kind !== requestedSource) continue;
+  for (const kind of toolKinds(scope, requestedSource)) {
     const corpus = await loadCorpus(kind);
     const records = contentRecords(corpus, kind);
     let chunksBySource: Map<string, ArchiveRecord[]> | null = null;
@@ -4646,7 +4859,8 @@ async function toolOnThisDay(input: ToolArgs = {}, { scope }: ToolContext = {}) 
       if (endYear && published > endYear) continue;
       // The skim first: an issue's dek, a post's abstract (a generated one
       // is labelled), else the opening of the source itself.
-      let excerpt = clipText(record.description || record.abstract, 280);
+      // A saved link's is its note.
+      let excerpt = clipText(record.description || record.abstract || record.note, 280);
       if (!excerpt && kind === 'weekly_thing') {
         const summary = rawIssues.get(issueKey(record.issue_number))?.summary as ArchiveRecord | undefined;
         excerpt = clipText(summary?.abstract, 280);
@@ -4748,7 +4962,7 @@ function byTimeOfDay(a: number | null | undefined, b: number | null | undefined)
 }
 
 const ON_THIS_DAY_BASIS =
-  "each source's Chicago date (a Weekly Thing issue's send time, a blog post's published time, an episode's date); the date's own year is included; year and year_range are the publish year";
+  "each source's Chicago date (a Weekly Thing issue's send time, a blog post's published time, an episode's date, a saved link's saved time); the date's own year is included; year and year_range are the publish year";
 
 // What Jamie was reading / playing / watching / listening to, from the
 // Currently sections, typed at corpus build.
@@ -5277,6 +5491,13 @@ export function argumentProblems(name: string, input: ToolArgs = {}): string | n
     }
   }
   if (present(args.url) && !linkUrlKey(args.url)) return `url "${String(args.url).trim()}" names no page`;
+  if (
+    present(args.source_kind) &&
+    normalizeSourceKind(args.source_kind) === LINK_KIND &&
+    LINK_REFUSING_TOOLS.has(name)
+  ) {
+    return `source_kind link (the saved links of Linking Things) is not read by ${name}; ${[...LINK_SOURCE_TOOLS].join(', ')} take it`;
+  }
   if (
     name === 'media_search' &&
     present(args.issue_number) &&

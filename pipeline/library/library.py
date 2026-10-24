@@ -21,7 +21,9 @@ was downloaded at, so ``upload`` only replaces the copy it started from.
 micro.blog; weekly.thingelstad.com's archive, about and support pages and
 another.thingelstad.com's episodes from shallow sparse clones of their public
 repos (or ``--weekly-dir`` / ``--another-dir`` checkouts); the
-thingelstad.xyz registry; the reference documents from main's
+thingelstad.xyz registry; Linking Things' saved links and the issues that
+carried them (``links``, over HTTPS from links.thingelstad.xyz, which
+rebuilds itself nightly at 00:30 US Central); the reference documents from main's
 ``reference-documents/`` (a sparse clone of this repo, so a checkout on a
 branch never pulls its copy; ``--reference-dir`` for a local folder); and
 Tinylytics' reader numbers (``readers``, which
@@ -71,7 +73,7 @@ import tinylytics  # noqa: E402
 LIBRARY_DIR = REPO / ".library"
 DB_PATH = LIBRARY_DIR / "library.db"
 STATE_PATH = LIBRARY_DIR / "state.json"
-SOURCES = ("blog", "weekly", "another", "things", "reference", "readers")
+SOURCES = ("blog", "weekly", "another", "things", "reference", "links", "readers")
 WEEKLY_REPO = "https://github.com/jthingelstad/weekly.thingelstad.com.git"
 ANOTHER_REPO = "https://github.com/jthingelstad/another.thingelstad.com.git"
 # This repo: the reference documents are pulled from main, like the other
@@ -87,6 +89,7 @@ ORIGINS = {
     "another": "another",
     "things": "xyz",
     "reference": "reference",
+    "links": "links",
 }
 # deploy.yml's step outputs, one per corpus.
 OUTPUTS = {
@@ -94,6 +97,7 @@ OUTPUTS = {
     "blog_corpus": "blog_corpus",
     "podcast_corpus": "podcast_corpus",
     "reference_corpus": "reference_corpus",
+    "links_corpus": "links_corpus",
 }
 # From Friday until the issue is sent nothing automatic changes the corpus:
 # the round still updates the library, and the build waits. A send ends the
@@ -297,6 +301,8 @@ def cmd_pull(
                 _run([sys.executable, "pipeline/things/import_things.py"], tree)
             elif source == "reference":
                 pull_reference(tree, reference_dir)
+            elif source == "links":
+                _run([sys.executable, "pipeline/links/import_links.py"], tree)
         changes = absorb_tree(
             conn, tree, origins={ORIGINS[s] for s in only if s in ORIGINS}, note="pull"
         )
