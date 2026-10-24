@@ -62,6 +62,16 @@ test('a pending receipt resumes only after its full intended config is verified'
   assert.throws(() => verifyPriorConfig(prior, current, outputs), /differs from its intent/);
 });
 
+test('a pending canonical receipt is checked against the hash it recorded, not a rebuild from moved outputs', () => {
+  const intended = nativeConfig(original, outputs);
+  const prior = { original, mode: 'native', hashFormat: 'canonical-json-v1', intendedHash: configurationHash(intended) };
+  const moved = { ...outputs, NativeAuthLiveDomain: 'auth-2.lambda-web.us-east-1.on.aws' };
+  // CloudFront applied the intent, then a stack output moved before recovery: still the recorded intent.
+  assert.doesNotThrow(() => verifyPriorConfig(prior, reorder(intended), moved));
+  // The distribution matches a rebuild from the moved outputs, but not what the receipt meant.
+  assert.throws(() => verifyPriorConfig(prior, nativeConfig(original, moved), moved), /differs from its intent/);
+});
+
 test('both origins use native endpoints and retired routing modes are refused', () => {
   const current = nativeConfig(original, outputs);
   assert.deepEqual(

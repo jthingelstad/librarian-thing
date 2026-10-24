@@ -233,10 +233,13 @@ stack-generated `weekly-thing-librarian-golden-retrieval`, which never
 regenerates. Rotating any of these means changing every copy. `loadRuntimeSecrets()`
 (`shared/runtime-secrets.mts`) reads it once per cold start into `process.env`
 before the handler runs, so the readers below are unchanged. It logs
-`runtime_secrets_loaded` with key names only (`keys`, `empty`, and `missing`
-for a name the secret lacks) and fails closed: no secret and no
-value already present is a 503, never an unkeyed run (an empty
-`THINGY_WEB_ORIGIN_TOKEN` would switch the origin check off). Do not put a
+`runtime_secrets_loaded` with key names only (`keys`, `empty`, `missing`)
+and fails closed: no secret, or a name missing or blank
+(`runtime_secrets_incomplete`, names only), is a 503, never an unkeyed run
+(an empty `THINGY_WEB_ORIGIN_TOKEN` would switch the origin check off; Codex
+review, #71). The next invocation reads again, so a corrected secret
+recovers on its own; retire a name from `RUNTIME_SECRET_KEYS` before
+removing it from the secret. Do not put a
 `{{resolve:secretsmanager}}` reference in a function's `Environment`: it is
 resolved into plaintext configuration. A new credential goes into the secret (by hand) and
 `RUNTIME_SECRET_KEYS`. The runtime boundary allows reading this secret only
@@ -267,7 +270,7 @@ resolved into plaintext configuration. A new credential goes into the secret (by
 | `THINGY_DEFAULT_MODEL` | all | `claude-sonnet-5-5` (Anthropic API id); main chat/default persona work |
 | `THINGY_FAST_MODEL` | all | `claude-haiku-5-5` (2026-10-08, was `claude-haiku-4-5`); small structured/background work (preflight, welcome, thank-you, the eval reviewer) |
 | `THINGY_PREMIUM_MODEL` | all | `claude-opus-5-5`; chat answers for supporting members and the owner (entitlement-routed, 2026-09-02; replaces the never-invoked Dispatch-era THINGY_ADVANCED_MODEL) |
-| `THINGY_EFFORT` | stream | Optional; effort for the chat agent on the 5.5 models (`low`/`medium`/`high`/`xhigh`/`max`), default `medium` |
+| `THINGY_EFFORT` | all | Effort for the chat agent on the 5.5 models (`low`/`medium`/`high`/`xhigh`/`max`). The stack's `ThingyEffort` parameter carries it (`--thingy-effort`, `.env` `THINGY_EFFORT`, default `medium`); setting it in `.env` alone reaches no Lambda |
 | `ANTHROPIC_API_KEY` | all | From the runtime secret |
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |

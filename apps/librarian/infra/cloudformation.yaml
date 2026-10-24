@@ -84,6 +84,11 @@ Parameters:
     Type: String
     Default: https://thingy.thingelstad.com/
     Description: Public Thingy URL used when building sign-in magic links.
+  ThingyEffort:
+    Type: String
+    Default: medium
+    AllowedValues: [low, medium, high, xhigh, max]
+    Description: Effort level for the chat agent on the 5.5 models, read as THINGY_EFFORT.
   NativeWebEnabled:
     Type: String
     Default: 'false'
@@ -302,6 +307,7 @@ Resources:
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
+          THINGY_EFFORT: !Ref ThingyEffort
       Handler: eval/handler.handler
       MemorySize: 1024
       ReservedConcurrentExecutions: 1
@@ -758,6 +764,7 @@ Resources:
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
+          THINGY_EFFORT: !Ref ThingyEffort
           LIBRARIAN_NATIVE_HTTP: '1'
           LIBRARIAN_SOURCE_REVISION: !Ref NativeBuildId
 
@@ -846,6 +853,7 @@ Resources:
           THINGY_DEFAULT_MODEL: "claude-sonnet-5-5"
           THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
+          THINGY_EFFORT: !Ref ThingyEffort
           BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"

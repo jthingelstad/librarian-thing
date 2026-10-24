@@ -10,9 +10,13 @@ import { errorFields, logEvent } from './logging.mjs';
 // SESSION_SECRET and the rest keeps working unchanged; the values exist only
 // in this process's memory.
 //
-// Fails closed: without the secret the handler refuses the request instead
-// of running unkeyed (an empty THINGY_WEB_ORIGIN_TOKEN, for one, would switch
-// off the origin check). A failed read is retried on the next invocation.
+// Fails closed: without the secret, or with a name missing or blank, the
+// handler refuses the request instead of running unkeyed (an empty
+// THINGY_WEB_ORIGIN_TOKEN would switch off the origin check, an empty
+// SESSION_SECRET would sign sessions with nothing). A failed or incomplete
+// read is retried on the next invocation, so a corrected secret recovers on
+// its own. Retire a name from RUNTIME_SECRET_KEYS before removing it from
+// the secret.
 
 export const RUNTIME_SECRET_KEYS = [
   'BUTTONDOWN_API_KEY',
@@ -47,16 +51,21 @@ export function runtimeSecretValues(secretString: unknown): Record<string, strin
 async function load(secretId: string, secrets: SecretsClient) {
   const response = await secrets.send(new GetSecretValueCommand({ SecretId: secretId }));
   const values = runtimeSecretValues(response.SecretString);
+  // Names only, never values. A name the hand-kept secret lacks or holds
+  // blank is logged and refused before any value is placed, so a slip in the
+  // console shows up here instead of as a gate quietly switched off (Codex
+  // review, #71).
+  const keys = Object.keys(values).sort();
+  const empty = keys.filter((key) => !values[key]);
+  const missing = RUNTIME_SECRET_KEYS.filter((key) => !(key in values)).sort();
+  if (empty.length || missing.length) {
+    logEvent('error', 'runtime_secrets_incomplete', { keys, empty, missing });
+    throw new Error(
+      `runtime secret is incomplete (missing: ${missing.join(', ') || 'none'}; empty: ${empty.join(', ') || 'none'})`
+    );
+  }
   for (const [key, value] of Object.entries(values)) process.env[key] = value;
-  // Names only, never values. A name the hand-kept secret lacks is logged as
-  // missing, so a slip in the console shows up here.
-  logEvent('info', 'runtime_secrets_loaded', {
-    keys: Object.keys(values).sort(),
-    empty: Object.keys(values)
-      .filter((key) => !values[key])
-      .sort(),
-    missing: RUNTIME_SECRET_KEYS.filter((key) => !(key in values)).sort()
-  });
+  logEvent('info', 'runtime_secrets_loaded', { keys, empty, missing });
 }
 
 /**

@@ -1,7 +1,7 @@
 // The Lambdas read their credentials from one Secrets Manager secret at cold
 // start instead of plaintext function configuration: values land in
 // process.env, only names are logged, the read is cached, a failure retries,
-// and a failed read refuses rather than running unkeyed.
+// and a failed or incomplete read refuses rather than running unkeyed.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
@@ -19,7 +19,7 @@ const SECRET = {
   FASTMAIL_JMAP_TOKEN: 'jmap-value',
   LIBRARIAN_RETRIEVE_SECRET: 'retrieve-value',
   LIBRARIAN_GOLDEN_RETRIEVE_SECRET: 'golden-value',
-  ANTHROPIC_API_KEY: '',
+  ANTHROPIC_API_KEY: 'anthropic-value',
   TURNSTILE_SECRET_KEY: 'turnstile-value',
   // A retired name left in the secret is ignored.
   BRAVE_SEARCH_API_KEY: '',
@@ -88,18 +88,38 @@ test('the secret fills process.env once, and the log names keys but never values
       assert.equal(logged.includes(value), false, `the log must not carry ${value}`);
     }
     const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_loaded')));
-    assert.deepEqual(event.empty, ['ANTHROPIC_API_KEY']);
+    assert.deepEqual(event.empty, []);
     assert.deepEqual(event.missing, []);
   });
 });
 
-test('a name the secret lacks is logged as missing', async () => {
+test('a name the secret lacks is logged as missing, and the request is refused', async () => {
   const { FASTMAIL_JMAP_TOKEN, ...partial } = SECRET;
   await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID }, async (lines) => {
-    await loadRuntimeSecrets(fakeClient([JSON.stringify(partial)]));
-    const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_loaded')));
+    await assert.rejects(
+      loadRuntimeSecrets(fakeClient([JSON.stringify(partial)])),
+      /Runtime credentials are unavailable/
+    );
+    const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_incomplete')));
     assert.deepEqual(event.missing, ['FASTMAIL_JMAP_TOKEN']);
+    assert.equal(process.env.SESSION_SECRET, undefined, 'no value is placed from an incomplete secret');
     assert.equal(lines.join('\n').includes(FASTMAIL_JMAP_TOKEN), false);
+  });
+});
+
+test('a blank value is refused the same way, and a corrected secret loads on the next call', async () => {
+  await withEnv({ LIBRARIAN_RUNTIME_SECRET_ID: SECRET_ID }, async (lines) => {
+    const client = fakeClient([
+      JSON.stringify({ ...SECRET, THINGY_WEB_ORIGIN_TOKEN: '' }),
+      JSON.stringify(SECRET)
+    ]);
+    await assert.rejects(loadRuntimeSecrets(client), /Runtime credentials are unavailable/);
+    const event = JSON.parse(lines.find((line) => line.includes('runtime_secrets_incomplete')));
+    assert.deepEqual(event.empty, ['THINGY_WEB_ORIGIN_TOKEN']);
+    assert.equal(process.env.THINGY_WEB_ORIGIN_TOKEN, undefined, 'a blank token must not switch the origin check off');
+    await loadRuntimeSecrets(client);
+    assert.equal(client.calls.length, 2);
+    assert.equal(process.env.THINGY_WEB_ORIGIN_TOKEN, 'origin-value');
   });
 });
 
