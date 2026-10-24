@@ -5,7 +5,13 @@
 // against the old S3 corpora first.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { aggregateLinkDomains, isHeadlineLink, linkRole, linkUrlKey, matchesSection } from '../dist/shared/archive-tools.mjs';
+import {
+  aggregateLinkDomains,
+  isHeadlineLink,
+  linkRole,
+  linkUrlKey,
+  matchesSection
+} from '../dist/shared/archive-tools.mjs';
 import {
   compactSource,
   matchesFilters,
@@ -52,6 +58,21 @@ test('voicedText keeps only the wanted voice, and no spans means all Jamie', () 
   assert.equal(voicedText({ text }, ['quoted']), '');
 });
 
+test('voicedText cuts spans by code points, so an emoji ahead of a span moves nothing', () => {
+  // Offsets as voice_spans writes them (Python len(): code points).
+  const points = (value) => Array.from(value).length;
+  const framing = 'Notable Links 📌 had this one, and I keep 🎈 thinking about it.';
+  const quote = 'The best way to predict the future is to invent it.';
+  const emoji = `${framing}\n\n> ${quote}`;
+  const cut = points(framing) + 2;
+  const emojiSpans = [
+    { voice: 'jamie', start: 0, end: cut },
+    { voice: 'quoted', start: cut, end: points(emoji) }
+  ];
+  assert.equal(voicedText({ text: emoji, spans: emojiSpans }, ['jamie']), framing);
+  assert.equal(voicedText({ text: emoji, spans: emojiSpans }, ['quoted']), `> ${quote}`);
+});
+
 test('a voice filter drops a chunk with too little of that voice', () => {
   assert.equal(matchesFilters({ text, spans }, { voice: 'jamie' }), true);
   assert.equal(matchesFilters({ text, spans }, { voice: 'link' }), false);
@@ -73,7 +94,10 @@ test('the calendar window is this week in EARLIER years only', () => {
   assert.equal(matchesFilters({ publish_date: '2026-10-01' }, { calendar }), false, 'this year is not a past year');
   assert.equal(matchesFilters({ publish_date: '' }, { calendar }), false);
   // Across a year boundary: Dec 30 is within 7 days of Jan 3.
-  assert.equal(matchesFilters({ publish_date: '2020-12-30' }, { calendar: { date: '2026-01-03', window_days: 7 } }), true);
+  assert.equal(
+    matchesFilters({ publish_date: '2020-12-30' }, { calendar: { date: '2026-01-03', window_days: 7 } }),
+    true
+  );
   assert.deepEqual(parseCalendar({ date: '2026-10-04', window_days: 30 }), {
     month: 10,
     day: 4,
@@ -93,7 +117,14 @@ test('/retrieve rejects an unknown voice or a malformed calendar instead of wide
 });
 
 test('passages carry section_family and content_kind, and voice only when filtered', () => {
-  const base = { id: 'c1', issue_number: 351, section: 'Sunday', section_family: 'Journal', content_kind: 'personal', text };
+  const base = {
+    id: 'c1',
+    issue_number: 351,
+    section: 'Sunday',
+    section_family: 'Journal',
+    content_kind: 'personal',
+    text
+  };
   const plain = compactSource(base);
   assert.equal(plain.section_family, 'Journal');
   assert.equal(plain.content_kind, 'personal');
@@ -125,11 +156,8 @@ test('link roles: old Weekly Thing links are headlines, and rankings count headl
     { issue_number: 3, domain: 'a.com' }
   ];
   assert.deepEqual([...aggregateLinkDomains(links, { excludeInternal: false })], [['a.com', 2]]);
-  assert.deepEqual(
-    [...aggregateLinkDomains(links, { excludeInternal: false, headlineOnly: false })].sort(),
-    [
-      ['a.com', 2],
-      ['b.com', 2]
-    ]
-  );
+  assert.deepEqual([...aggregateLinkDomains(links, { excludeInternal: false, headlineOnly: false })].sort(), [
+    ['a.com', 2],
+    ['b.com', 2]
+  ]);
 });

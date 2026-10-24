@@ -499,6 +499,49 @@ test('get_source reads a reference document by doc-<name>, in any scope', async 
   assert.ok(missing.error, 'an unknown document is not found');
 });
 
+test('get_source opens a site page, a thing, the FAQ and a blog page in a scope whose corpora lack them', async () => {
+  primeCorpusCachesForTests(fixtures());
+  // The base is in every search, so a podcast-scoped search returns these;
+  // the same scope must open them (Codex review, PR #86).
+  for (const [scope, id, text] of [
+    ['podcast', 'site-about', /began in 2017/],
+    ['podcast', 'site-faq', /Every Saturday/],
+    ['podcast', 'thing-weekly-thing', /tidepools of ideas/],
+    ['podcast', 'page-71862', /stood beside the tidepools/],
+    ['blog', 'site-about', /began in 2017/],
+    ['blog', 'thing-weekly-thing', /tidepools of ideas/],
+    ['weekly_thing', 'page-71862', /stood beside the tidepools/]
+  ]) {
+    const read = await ARCHIVE_TOOLS.get_source({ id }, { scope });
+    assert.equal(read.source?.id, id, `${id} in ${scope}: ${JSON.stringify(read).slice(0, 300)}`);
+    assert.match(JSON.stringify(read.source), text, `${id} in ${scope}`);
+  }
+  const near = await ARCHIVE_TOOLS.source_neighborhood({ id: 'page-71862' }, { scope: 'podcast' });
+  assert.ok(!near.error, JSON.stringify(near).slice(0, 300));
+  const rows = await ARCHIVE_TOOLS.find_links({ id: 'page-71862' }, { scope: 'podcast' });
+  assert.ok(!rows.error, JSON.stringify(rows).slice(0, 300));
+  // A dated source outside the scope stays out of reach.
+  const post = await ARCHIVE_TOOLS.get_source({ id: 'blog-5001' }, { scope: 'podcast' });
+  assert.ok(post.error, JSON.stringify(post).slice(0, 300));
+  const issue = await ARCHIVE_TOOLS.get_source({ id: 'wt-300' }, { scope: 'blog' });
+  assert.ok(issue.error, JSON.stringify(issue).slice(0, 300));
+});
+
+test('a heading only a reference document has is a section search_archive accepts', async () => {
+  primeCorpusCachesForTests(fixtures());
+  // "Winter weekends" heads one document section and nothing else; it was
+  // refused as a heading nowhere in the archive (Codex review, PR #86).
+  const found = await ARCHIVE_TOOLS.search_archive({ query: 'tidepools', section: 'Winter weekends' }, CTX);
+  assert.ok(!found.error, JSON.stringify(found).slice(0, 300));
+  assert.deepEqual(
+    found.results.map((group) => group.id),
+    ['doc-family-weekends']
+  );
+  const unknown = await ARCHIVE_TOOLS.search_archive({ query: 'tidepools', section: 'Nowhere at all' }, CTX);
+  assert.equal(unknown.code, 'bad_request');
+  assert.match(unknown.error, /names no section heading/);
+});
+
 test('date-anchored tools never return the reference base, a dated document included', async () => {
   primeCorpusCachesForTests(fixtures());
   const docs = /doc-bio|doc-resume|doc-family-weekends|family-weekends|Family weekends/;

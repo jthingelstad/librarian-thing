@@ -130,7 +130,7 @@ function linksCorpus(chunks = LINK_ROWS) {
 
 const prose = (fields) => ({ topics: [], ...fields, word_count: words(fields.text) });
 
-function fixtures({ links = true } = {}) {
+function fixtures({ links = true, rows = LINK_ROWS } = {}) {
   return {
     weekly_thing: {
       issues: [
@@ -225,7 +225,7 @@ function fixtures({ links = true } = {}) {
       media: []
     },
     podcast: { episodes: [], chunks: [], links: [] },
-    ...(links ? { link: linksCorpus() } : {})
+    ...(links ? { link: linksCorpus(rows) } : {})
   };
 }
 
@@ -355,6 +355,47 @@ test('get_source reads a saved link by link-<id> or its page, in any scope', asy
   }
   const missing = await ARCHIVE_TOOLS.get_source({ id: 'link-000000000000' }, CTX);
   assert.ok(missing.error, 'an unknown saved link is not found');
+});
+
+test("a saved link's note stays whole when its title carries an emoji: offsets count code points", async () => {
+  const id = 'e0e0e0e0e0e0';
+  const emoji = savedLink({
+    id,
+    title: 'Kelpforest 🌊🐙 field notes 📝',
+    host: 'notes.example.org',
+    url: 'https://notes.example.org/kelp',
+    saved: '2026-10-23',
+    tags: ['🌊 ocean', 'kelpforest'],
+    note: 'My own opinion: these kelpforest notes are worth reading twice, slowly, with a map.',
+    voice: 'jamie'
+  });
+  // The spans as build_links_corpus writes them: Python's len() counts
+  // code points, where String.prototype.slice counts UTF-16 units (an
+  // emoji is two). Sliced by units, the note began with the header's tail
+  // (Codex review, PR #87).
+  const points = (value) => Array.from(value).length;
+  const head = emoji.text.slice(0, emoji.text.indexOf('\n\n'));
+  emoji.spans = [
+    { voice: 'link', start: 0, end: points(head) + 2 },
+    { voice: 'jamie', start: points(head) + 2, end: points(emoji.text) }
+  ];
+  primeCorpusCachesForTests(fixtures({ rows: [...LINK_ROWS, emoji] }));
+  const read = await ARCHIVE_TOOLS.get_source({ id: `link-${id}` }, CTX);
+  assert.equal(
+    read.source?.note,
+    'My own opinion: these kelpforest notes are worth reading twice, slowly, with a map.',
+    JSON.stringify(read).slice(0, 300)
+  );
+  const listed = await ARCHIVE_TOOLS.list_content({ source_kind: 'link' }, CTX);
+  assert.equal(
+    listed.results.find((row) => row.id === `link-${id}`)?.note,
+    'My own opinion: these kelpforest notes are worth reading twice, slowly, with a map.'
+  );
+  const found = await retrieve('kelpforest opinion', 30, { scope: 'all', sourceKinds: ['link'], voice: 'jamie' });
+  assert.equal(
+    found.find((row) => row.id === emoji.id)?.text,
+    'My own opinion: these kelpforest notes are worth reading twice, slowly, with a map.'
+  );
 });
 
 test('find_links names the saved link a row is, and lists the rows that are one', async () => {

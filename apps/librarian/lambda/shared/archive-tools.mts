@@ -37,7 +37,9 @@ import { faqQueryTerms, searchFaqAll } from './faq.mjs';
 import { loadToolSpecs, serverVersion } from './prompts.mjs';
 import {
   compactSource,
+  documentSectionNames,
   headingKey,
+  isReferenceRow,
   journalCopyPosts,
   knownSectionNames,
   LINK_KIND,
@@ -46,6 +48,7 @@ import {
   onThisDayYear,
   parseYearRange,
   retrieve,
+  spanText,
   tokenize,
   voicedText,
   localDay,
@@ -1093,11 +1096,13 @@ async function searchFilterProblem(input: ToolArgs) {
     }
   }
   // A section that names no heading, family or H2 group anywhere matched
-  // nothing and read as "nothing in the archive" (QA2 R2-2).
+  // nothing and read as "nothing in the archive" (QA2 R2-2). A reference
+  // document's H2 headings count too: matchesFilters reads them, though
+  // they stay out of the exact-match decision (knownSectionNames).
   if (input.section != null && String(input.section).trim()) {
     const section = headingKey(input.section);
-    await Promise.all(scopeKinds('all').map((kind) => loadCorpus(kind)));
-    const names = knownSectionNames();
+    await Promise.all([...scopeKinds('all'), 'reference'].map((kind) => loadCorpus(kind)));
+    const names = new Set([...knownSectionNames(), ...documentSectionNames()]);
     if (!section || (!names.has(section) && ![...names].some((name) => name.includes(section)))) {
       return {
         error: `section "${String(input.section)}" names no section heading in the archive. Pass a heading from a Weekly Thing body or a section_family: ${SEARCH_SECTION_FAMILIES}.`,
@@ -1998,7 +2003,7 @@ function linkNote(chunk: ArchiveRecord) {
   const spans = Array.isArray(chunk.spans) ? (chunk.spans as Array<{ voice?: unknown; end?: unknown }>) : [];
   const head = spans.find((span) => span?.voice === 'link');
   const text = String(chunk.text || '');
-  return head ? text.slice(Number(head.end) || 0).trim() : '';
+  return head ? spanText(text, Number(head.end) || 0).trim() : '';
 }
 
 export function sourceRecordKey(record: ArchiveRecord) {
@@ -2497,42 +2502,61 @@ async function findSourceBundle(
   if (String(input.id || '').startsWith('doc-')) return documentBundle(await loadCorpus('reference'), input);
   if (String(input.id || '').startsWith('link-')) return linkBundle(input);
   const requestedKind = inferSourceKindFromInput(input);
-  const kinds = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
+  const kinds: string[] = scopeKinds(scope).filter((kind) => !requestedKind || kind === requestedKind);
   for (const kind of kinds) {
-    const corpus = await loadCorpus(kind);
-    const lookup = recordLookup(corpus, kind);
-    const id = input.id === undefined || input.id === null ? '' : String(input.id);
-    const url = input.url || input.permalink;
-    const byNumber = [
-      'issue_number',
-      'issue',
-      'number',
-      'microblog_id',
-      'post_id',
-      'page_id',
-      'episode_number',
-      'episode'
-    ].some((field) => (input as Record<string, unknown>)[field] !== undefined);
-    const matches = id
-      ? lookup.byId.get(id) || []
-      : url && !byNumber
-        ? lookup.byUrl.get(urlKey(url)) || []
-        : lookup.records.filter((item) => recordMatchesIdentifier(item, input));
-    // A url several blog posts share names none of them: say which ids it
-    // could mean rather than open the first (or all of them merged).
-    if (matches.length > 1) return { ambiguous: matches };
-    const record = matches[0];
-    if (!record) {
-      const page = kind === 'weekly_thing' ? sitePageBundle(corpus, input) : null;
-      if (page) return page;
-      continue;
-    }
-    const key = sourceRecordKey(record);
-    const index = await sourceIndex(corpus, kind);
-    return { kind, corpus, record, key, chunks: index.chunks.get(key) || [], links: index.links.get(key) || [] };
+    const found = await bundleIn(kind, input);
+    if (found) return found;
+  }
+  // The reference base is in every search whatever the scope (Jamie,
+  // 2026-10-23), so a site page, a thing, the FAQ or a blog page a scoped
+  // search returned opens in that scope too: the corpora outside the scope
+  // are read for those rows and for nothing else of theirs (Codex review,
+  // PR #86: a podcast-scoped get_source of site-about was "Source not
+  // found").
+  for (const kind of scopeKinds('all').filter((kind) => !kinds.includes(kind))) {
+    const found = await bundleIn(kind, input, { referenceOnly: true });
+    if (found) return found;
   }
   // A document's own url, if it has one.
   return input.url || input.permalink ? documentBundle(await loadCorpus('reference'), input) : null;
+}
+
+// The source `input` names in one corpus: its record, chunks and links; the
+// ids a shared url could mean; or null. With referenceOnly, only a
+// reference row (a site page, a thing, the FAQ, a blog page) answers.
+async function bundleIn(
+  kind: string,
+  input: ToolArgs,
+  { referenceOnly = false } = {}
+): Promise<SourceBundle | { ambiguous: ArchiveRecord[] } | null> {
+  const corpus = await loadCorpus(kind);
+  const lookup = recordLookup(corpus, kind);
+  const id = input.id === undefined || input.id === null ? '' : String(input.id);
+  const url = input.url || input.permalink;
+  const byNumber = [
+    'issue_number',
+    'issue',
+    'number',
+    'microblog_id',
+    'post_id',
+    'page_id',
+    'episode_number',
+    'episode'
+  ].some((field) => (input as Record<string, unknown>)[field] !== undefined);
+  let matches = id
+    ? lookup.byId.get(id) || []
+    : url && !byNumber
+      ? lookup.byUrl.get(urlKey(url)) || []
+      : lookup.records.filter((item) => recordMatchesIdentifier(item, input));
+  if (referenceOnly) matches = matches.filter((record) => isReferenceRow(record));
+  // A url several blog posts share names none of them: say which ids it
+  // could mean rather than open the first (or all of them merged).
+  if (matches.length > 1) return { ambiguous: matches };
+  const record = matches[0];
+  if (!record) return kind === 'weekly_thing' ? sitePageBundle(corpus, input) : null;
+  const key = sourceRecordKey(record);
+  const index = await sourceIndex(corpus, kind);
+  return { kind, corpus, record, key, chunks: index.chunks.get(key) || [], links: index.links.get(key) || [] };
 }
 
 function ambiguousSource(found: { ambiguous: ArchiveRecord[] }) {
