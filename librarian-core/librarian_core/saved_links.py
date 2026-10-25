@@ -37,9 +37,6 @@ _BLOCKQUOTE_RE = re.compile(r"<blockquote[^>]*>([\s\S]*?)</blockquote>", re.I)
 _BLOCKQUOTE_TAG_RE = re.compile(r"</?blockquote[^>]*>", re.I)
 _BLOCK_SPLIT_RE = re.compile(r"\n\s*\n")
 _OPENING_QUOTE_RE = re.compile(r"^[\"“‘«„]")
-# Before the Weekly Thing (2017) the bookmarklet saved the page's own words;
-# 2005 and 2006 (from del.icio.us) are short descriptions in Jamie's words.
-EXCERPT_YEARS = range(2007, 2017)
 
 
 def link_page_url(link_id: str) -> str:
@@ -86,11 +83,13 @@ def prepare_note(note: str) -> str:
     return _BLOCKQUOTE_TAG_RE.sub("\n\n", text).strip()
 
 
-def note_voice(note: str, year: int) -> str | None:
-    """Whose words a note is, as Linking Things labels it (its ``voiceOf``):
-    ``excerpt`` (the page's own words), ``mixed`` (Jamie quoting something
-    inside his own words), ``jamie``, or None for no note. ``year`` is the
-    US Central year the link was saved."""
+def note_voice(note: str) -> str | None:
+    """Whose words a note is, as Linking Things labels it (its ``voiceOf``),
+    read from the note's form alone: ``excerpt`` (a ``>`` blockquote, the
+    page's own words), ``mixed`` (Jamie quoting something inside his own
+    words), ``jamie`` (bare text), or None for no note. There is no year
+    rule: the page excerpts the bookmarklet saved as bare text before 2017
+    were quoted at the source on 2026-10-24."""
     text = prepare_note(note)
     if not text:
         return None
@@ -102,8 +101,6 @@ def note_voice(note: str, year: int) -> str | None:
         return "mixed"
     if _OPENING_QUOTE_RE.match(text):
         return "mixed" if len(blocks) > 1 else "excerpt"
-    if year in EXCERPT_YEARS:
-        return "excerpt"
     return "jamie"
 
 

@@ -92,7 +92,8 @@ def _links_feed() -> dict:
                 OLD,
                 "https://example.org/old",
                 "2012-05-01T15:00:00Z",
-                note="The page's own words, saved by the bookmarklet.",
+                # As the 2026-10-24 cleanup left the bookmarklet's excerpts: quoted.
+                note="> The page's own words, saved by the bookmarklet.",
             ),
             _link(
                 QUOTE,
@@ -198,19 +199,17 @@ class SavedLinkRuleTests(unittest.TestCase):
         )
 
     def test_whose_words_a_note_is(self):
-        self.assertIsNone(note_voice("", 2020))
-        self.assertIsNone(note_voice("   ", 2020))
-        self.assertEqual(note_voice("My own words.", 2020), "jamie")
-        # 2007 to 2016: the bookmarklet saved the page's own words.
-        self.assertEqual(note_voice("Words.", 2007), "excerpt")
-        self.assertEqual(note_voice("Words.", 2016), "excerpt")
-        self.assertEqual(note_voice("Words.", 2006), "jamie")
-        self.assertEqual(note_voice("Words.", 2017), "jamie")
-        self.assertEqual(note_voice("> All quoted.\n\n> Still quoted.", 2020), "excerpt")
-        self.assertEqual(note_voice("> Quoted.\n\nMine.", 2020), "mixed")
-        self.assertEqual(note_voice("“Quoted words.”", 2020), "excerpt")
-        self.assertEqual(note_voice('"Quoted words."\n\nMine.', 2020), "mixed")
-        self.assertEqual(note_voice("<blockquote>Quoted.</blockquote>", 2020), "excerpt")
+        self.assertIsNone(note_voice(""))
+        self.assertIsNone(note_voice("   "))
+        self.assertEqual(note_voice("My own words."), "jamie")
+        # No year rule: the bookmarklet-era page excerpts were quoted at the
+        # source (2026-10-24), so a bare note from 2012 is Jamie's too.
+        self.assertEqual(note_voice("Words I wrote in 2012."), "jamie")
+        self.assertEqual(note_voice("> All quoted.\n\n> Still quoted."), "excerpt")
+        self.assertEqual(note_voice("> Quoted.\n\nMine."), "mixed")
+        self.assertEqual(note_voice("“Quoted words.”"), "excerpt")
+        self.assertEqual(note_voice('"Quoted words."\n\nMine.'), "mixed")
+        self.assertEqual(note_voice("<blockquote>Quoted.</blockquote>"), "excerpt")
 
     def test_spans_cover_the_note_end_to_end(self):
         self.assertEqual(note_spans("", "jamie"), [])
