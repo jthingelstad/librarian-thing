@@ -138,10 +138,11 @@ taken as published and never recomputed; its source id is `link-<id>`.
 Each passage is dated by the US Central day the link was saved, cited at its
 page on Linking Things, and names the Weekly Thing issues that shared it.
 The title and the lines under it are the `link` voice (the page's words),
-and the note keeps its own: a note from 2007 to 2016 is mostly the page's
-words the bookmarklet saved (`excerpt`), a later one Jamie's (`jamie`), and
-one that quotes inside Jamie's words is `mixed`. No search reads the corpus
-unless it names source kind `link`.
+and the note keeps its own, read from its form: a `>` blockquote is the
+page's words (`excerpt`), bare text is Jamie's (`jamie`), and one that quotes
+inside Jamie's words is `mixed`. The year plays no part: the page excerpts the
+bookmarklet saved as bare text before 2017 were quoted at the source on
+2026-10-24. No search reads the corpus unless it names source kind `link`.
 
 A candidate from the library, written nowhere but its output (no S3, no git):
 

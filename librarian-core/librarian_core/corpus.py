@@ -4094,7 +4094,7 @@ def _link_chunk(link: dict[str, Any], appearances: list[dict[str, Any]]) -> dict
     title = " ".join(str(link.get("title") or "").split()) or url
     tags = [str(tag) for tag in link.get("tags") or [] if str(tag).strip()]
     note = prepare_note(str(link.get("note") or ""))
-    voice = note_voice(str(link.get("note") or ""), year)
+    voice = note_voice(str(link.get("note") or ""))
     facts = f"{_LINK_KIND_LABELS.get(kind, kind.capitalize())} from {host or url}"
     if publish_date:
         facts += f", saved {_long_day(publish_date)}"
