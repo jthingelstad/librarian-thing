@@ -122,9 +122,15 @@ export function turnstileModes(): Record<TurnstileSite, TurnstileMode> {
   return { weekly: turnstileMode('weekly'), thingy: turnstileMode('thingy'), mcp: turnstileMode('mcp') };
 }
 
-/** The site behind a `/auth` call: Thingy says so in `source`; the rest is the weekly website. */
+/**
+ * The site behind a `/auth` call: Thingy says so in `source`; the rest is the
+ * weekly website. Release Notes (notes.yourversionnumber.com, 2026-10-25)
+ * asks from its server for an address it has already proved with an emailed
+ * code, so there is no widget and no token: it is checked as Thingy is
+ * (Jamie: "Can't you do this the same way Thingy does?").
+ */
 export function turnstileSiteForSource(source: string): TurnstileSite {
-  return source === 'thingy' ? 'thingy' : 'weekly';
+  return source === 'thingy' || source === 'release-notes' ? 'thingy' : 'weekly';
 }
 
 export function turnstileSiteKey() {

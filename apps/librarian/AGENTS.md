@@ -108,6 +108,23 @@ so Buttondown tags those subscribers `source:blog`. Turnstile treats it as
 the weekly site. Tests: `lambda/tests/blog-signup.test.mjs`. Live since
 thing-hugo 2.0.11 (2026-10-21).
 
+### Release Notes asks like Thingy (2026-10-25)
+
+Release Notes (notes.yourversionnumber.com, the `yvn-release-notes` repo)
+comes with the Weekly Thing: a new account needs its address on the list,
+and Supporting Members get warmer words. Its server posts the same `/auth`
+calls Thingy's page does (Jamie: "Use the librarians api to see if a member.
+It should be like Thingy and offer to sign people up directly in release
+notes."): `check` with `source: release-notes` for an address it has
+already proved with an emailed code (status only, nothing mailed; again
+every nine days), and `subscribe` with `attribution: {ref: release-notes}`
+when the person asks to be added, so Buttondown tags them
+`source:release-notes` and the ledger and digest name the
+`release-notes form`. A server has no widget, so Turnstile treats the
+source as the `thingy` site (observe); its subscribes are listed in the
+digest as going ahead without a token. Tests:
+`lambda/tests/release-notes-signup.test.mjs`.
+
 ### `check` signs in only for Thingy (2026-10-14)
 
 `/auth` `check` sends a sign-in link only when `source` is `thingy`. From
@@ -133,7 +150,8 @@ runtime secret; it was made with the `cf` CLI on Otto.
 
 - **Mode is per site (2026-10-20).** A check belongs to one of three
   sites: `weekly` (the Weekly Thing website's forms: every `/auth` source
-  but `thingy`), `thingy` (the sign-in page, `source: thingy`) and `mcp`
+  but `thingy`), `thingy` (the sign-in page, `source: thingy`, and Release Notes'
+  server, `source: release-notes`) and `mcp`
   (the connector's email step). `turnstileMode(site)` reads
   `TURNSTILE_MODE_<SITE>`, then `TURNSTILE_MODE`, then the site's default:
   `enforce` for `weekly` (Jamie, 2026-10-20: "On Weekly Thing website I
