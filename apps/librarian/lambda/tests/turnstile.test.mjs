@@ -141,8 +141,10 @@ test('the mode is per site: the weekly site enforces by default, the others obse
   await withEnv({ ...SITE_ENV, TURNSTILE_MODE_WEEKLY: 'nonsense' }, async () => {
     assert.equal(turnstileMode('weekly'), 'enforce', 'an unknown value is ignored');
   });
-  // Only Thingy says so in `source`; every weekly form source is the weekly site.
+  // Thingy and Release Notes' server say so in `source`; every weekly form
+  // source is the weekly site.
   assert.equal(turnstileSiteForSource('thingy'), 'thingy');
+  assert.equal(turnstileSiteForSource('release-notes'), 'thingy');
   for (const source of ['site', 'hero', 'footer', 'issue', 'about', 'mid1', 'blog-home', 'blog-post']) {
     assert.equal(turnstileSiteForSource(source), 'weekly');
   }

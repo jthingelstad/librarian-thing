@@ -84,12 +84,14 @@ import { LIBRARIAN_CONTRACT_VERSION, supportsRequestedContract } from '../shared
 
 const AUTH_RATE_LIMIT_MAX = 30;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-// Where a form sits: the Weekly Thing website's placements, Thingy, and the
+// Where a form sits: the Weekly Thing website's placements, Thingy, the
 // blog's Weekly Thing card (www.thingelstad.com, beside the home greeting
-// and under a post; 2026-10-21). Every source but `thingy` is the weekly
-// site for Turnstile.
+// and under a post; 2026-10-21), and Release Notes (2026-10-25), whose
+// server asks the way Thingy's page does. Every source but `thingy` and
+// `release-notes` is the weekly site for Turnstile.
 const ALLOWED_SOURCES = new Set([
   'thingy',
+  'release-notes',
   'site',
   'hero',
   'mid1',
