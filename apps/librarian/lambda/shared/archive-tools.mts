@@ -4047,10 +4047,11 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
 // ── list_topics ─────────────────────────────────────────────────────────
 // The card catalogue. Two layers: the nine topic clusters every Weekly
 // Thing chunk is filed under (corpus.topics; search_archive topic= takes
-// one), and the site's topic pages - graph entities named in 3 or more
-// issues. The page rule, display names and slugs are the site's own
-// (weekly.thingelstad.com apps/site/_data/topics.js), so every url resolves;
-// change them together.
+// one), and the site's topic pages. The graph names those pages in
+// graph.topics (librarian_core.graph.site_topics, since 2026-10-26), and
+// weekly.thingelstad.com builds its pages from the same list, so every url
+// resolves. A graph without it falls back to the old rule: graph entities
+// named in 3 or more issues.
 const SITE_TOPIC_MIN_ISSUES = 3;
 const SITE_TOPIC_RELATED = 5;
 
@@ -4093,7 +4094,24 @@ export function siteTopics(graph: Record<string, unknown>): SiteTopic[] {
     return [...bucket.entries()].sort((a, b) => b[1] - a[1])[0][0];
   };
   const bySlug = new Map<string, SiteTopic>();
-  for (const [lower, list] of Object.entries(index)) {
+  const lowerToSlug = new Map<string, string>();
+  const named = Array.isArray(graph.topics)
+    ? (graph.topics as { slug?: unknown; name?: unknown; keys?: unknown; issues?: unknown }[])
+    : null;
+  for (const topic of named || []) {
+    const slug = String(topic.slug || '');
+    const list = Array.isArray(topic.issues) ? topic.issues.map(String) : [];
+    if (!slug || !list.length) continue;
+    bySlug.set(slug, {
+      name: String(topic.name || slug),
+      slug,
+      issues: new Set(list),
+      count: list.length,
+      related: []
+    });
+    for (const key of Array.isArray(topic.keys) ? topic.keys : []) lowerToSlug.set(String(key), slug);
+  }
+  for (const [lower, list] of named ? [] : Object.entries(index)) {
     if (!Array.isArray(list) || list.length < SITE_TOPIC_MIN_ISSUES) continue;
     const name = displayName(lower);
     const slug = siteTopicSlug(name);
@@ -4108,10 +4126,11 @@ export function siteTopics(graph: Record<string, unknown>): SiteTopic[] {
     bySlug.set(slug, { name, slug, issues: new Set(list.map(String)), count: list.length, related: [] });
   }
   // Related topics: co-mentioned in the same issues.
-  const lowerToSlug = new Map<string, string>();
-  for (const lower of Object.keys(index)) {
-    const slug = siteTopicSlug(displayName(lower));
-    if (slug && bySlug.has(slug)) lowerToSlug.set(lower, slug);
+  if (!named) {
+    for (const lower of Object.keys(index)) {
+      const slug = siteTopicSlug(displayName(lower));
+      if (slug && bySlug.has(slug)) lowerToSlug.set(lower, slug);
+    }
   }
   const coCount = new Map<string, Map<string, number>>();
   for (const issue of Object.values(issues)) {
