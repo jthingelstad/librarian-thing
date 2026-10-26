@@ -359,10 +359,251 @@ def named_twice(issue: dict[str, Any]) -> set[str]:
     return {key for key, count in lowered.items() if count >= 2}
 
 
-# A name is a site topic (a weekly.thingelstad.com topic page, a list_topics
-# entry) once 3 issues file it; the site's topics.js and the Lambda read the
-# same threshold.
+# A name's issue list is uncapped (every issue that names it twice) once 3
+# issues file it. Which of those names are site topics is site_topics().
 TOPIC_MIN_ISSUES = 3
+
+# The site's topics (weekly.thingelstad.com topic pages, list_topics) are
+# for people, so they are tidier than the graph's names (Jamie, 2026-10-26:
+# "be ever more tidy and conservative with topics"). Google left most of the
+# 777 topic pages unindexed, and they held words like "Find", "Okay" and
+# "Few Thoughts", and twins like The Verge and theverge.com. The graph
+# carries the result as "topics", and the site and the Lambda read it
+# rather than each deriving topics from entity_index.
+SITE_TOPIC_MIN_ISSUES = 5
+# A word the archive mostly writes in lowercase is a word, not a name
+# ("people", "find"). One mostly capitalized only at the start of a
+# sentence is a sentence opener ("Thanks", "Maybe", "Introducing").
+SITE_TOPIC_MAX_LOWERCASE = 0.5
+SITE_TOPIC_MIN_MID_SENTENCE = 0.3
+# Fragments of longer names, and titles, that pass both tests.
+SITE_TOPIC_NOT_NAMES = {
+    "pro",
+    "max",
+    "plus",
+    "series",
+    "review",
+    "edition",
+    "ceo",
+    "ceos",
+    "cto",
+    "url",
+    "don",
+    "university",
+    "lessons",
+    "weeklything",
+}
+# Sites that are where a link lives, not what the issue is about, and
+# Jamie's own.
+SITE_TOPIC_NOT_DOMAINS = {
+    "en.wikipedia.org",
+    "linkedin.com",
+    "youtube.com",
+    "github.com",
+    "medium.com",
+    "twitter.com",
+    "reddit.com",
+    "apps.apple.com",
+    "itunes.apple.com",
+    "apple.com",
+    "web.archive.org",
+    "archive.org",
+    "amazon.com",
+    "goodreads.com",
+    "imdb.com",
+    "rottentomatoes.com",
+    "buttondown.email",
+    "app.ens.domains",
+    "app.poap.xyz",
+    "collectors.poap.xyz",
+    "members.onepeloton.com",
+    "world.hey.com",
+    "blog.google",
+}
+# One topic under several names.
+SITE_TOPIC_ALIASES = {
+    "mnufc": "minnesota united",
+    "mn united": "minnesota united",
+    "covid": "covid-19",
+    "coronavirus": "covid-19",
+    "apple watch series": "apple watch",
+    "nytimes.com": "the new york times",
+    "startribune.com": "star tribune",
+}
+
+
+def site_topic_slug(name: str) -> str:
+    """The topic page slug; the same as the site's slugify (topics.js)."""
+    lowered = re.sub(r"['‘’]", "", str(name).lower())
+    return re.sub(r"[^a-z0-9]+", "-", lowered).strip("-")
+
+
+def _is_own_domain(key: str) -> bool:
+    return key == "thingelstad.com" or key.endswith(".thingelstad.com")
+
+
+def _is_domain(key: str) -> bool:
+    return " " not in key and re.fullmatch(r"[a-z0-9-]+(\.[a-z0-9-]+)+", key) is not None
+
+
+def _twin_key(key: str) -> str:
+    """What makes two names one topic: no leading "the", no possessive, no
+    punctuation ("The Verge", "the verge", "Apple's")."""
+    key = re.sub(r"^the\s+", "", key)
+    key = re.sub(r"['’]s$", "", key)
+    return re.sub(r"[^a-z0-9]", "", key)
+
+
+def _domain_twin_keys(domain: str) -> list[str]:
+    """The twin keys a domain's name could have: theverge.com is "theverge"
+    or "verge" ("The Verge"). A subdomain other than blog. or m. is its own
+    site and has none."""
+    if domain in SITE_TOPIC_ALIASES:
+        return [_twin_key(SITE_TOPIC_ALIASES[domain])]
+    parts = domain.removeprefix("www.").split(".")
+    if len(parts) > 2 and parts[0] in {"blog", "m"}:
+        parts = parts[1:]
+    if len(parts) != 2:
+        return []
+    key = _twin_key(parts[0])
+    return [key, key.removeprefix("the")] if key.startswith("the") else [key]
+
+
+class _Capitalization:
+    """How the archive writes each word and phrase."""
+
+    _WORD_RE = re.compile(r"(?<![\w'’])[A-Za-z][A-Za-z0-9'’-]*")
+
+    def __init__(self, corpus_issues: list[dict[str, Any]]):
+        self.text = "\n".join(
+            f"{issue.get('subject') or ''}\n{entity_text(str(issue.get('body') or ''))}"
+            for issue in corpus_issues
+        )
+        self.total: dict[str, int] = {}
+        self.lower: dict[str, int] = {}
+        self.capital: dict[str, int] = {}
+        self.mid_sentence: dict[str, int] = {}
+        for match in self._WORD_RE.finditer(self.text):
+            word = match.group(0)
+            key = word.lower()
+            self.total[key] = self.total.get(key, 0) + 1
+            if word == key:
+                self.lower[key] = self.lower.get(key, 0) + 1
+                continue
+            self.capital[key] = self.capital.get(key, 0) + 1
+            before = self.text[max(0, match.start() - 3) : match.start()]
+            if re.search(r"[a-z0-9,;:)]\s{1,2}$", before):
+                self.mid_sentence[key] = self.mid_sentence.get(key, 0) + 1
+
+    def lowercase_share(self, key: str) -> float:
+        if " " not in key and key in self.total:
+            return self.lower.get(key, 0) / self.total[key]
+        pattern = re.compile(r"(?<![\w'’])" + re.escape(key) + r"(?![\w'’])", re.I)
+        found = [match.group(0) for match in pattern.finditer(self.text)]
+        return sum(1 for text in found if text == text.lower()) / len(found) if found else 0.0
+
+    def mid_sentence_share(self, key: str) -> float:
+        capital = self.capital.get(key, 0)
+        return self.mid_sentence.get(key, 0) / capital if capital else 1.0
+
+
+def site_topics(
+    corpus_issues: list[dict[str, Any]],
+    issues: dict[str, dict[str, Any]],
+    entity_index: dict[str, list[str]],
+) -> list[dict[str, Any]]:
+    """The site's topics: names (not words) filed by TOPIC_MIN_ISSUES issues,
+    twins folded into one, kept at SITE_TOPIC_MIN_ISSUES issues. Each is
+    {slug, name, keys, issues}: keys are the entity_index keys it folds,
+    which map an issue's entities onto its topics."""
+    capitalization = _Capitalization(corpus_issues)
+    candidates = {
+        key: numbers for key, numbers in entity_index.items() if len(numbers) >= TOPIC_MIN_ISSUES
+    }
+    groups: dict[str, list[str]] = {}
+    domains = sorted(key for key in candidates if _is_domain(key))
+    # A name a linked site goes by is a name, however the archive writes it:
+    # Wired and TechCrunch mostly open a line, as a link's source.
+    site_names = {
+        twin
+        for domain in domains
+        if domain not in SITE_TOPIC_NOT_DOMAINS
+        for twin in _domain_twin_keys(domain)
+    }
+    for key in candidates:
+        if _is_domain(key):
+            continue
+        if key in SITE_TOPIC_NOT_NAMES or key.removesuffix("s") in SITE_TOPIC_NOT_NAMES:
+            continue
+        if _twin_key(key) not in site_names and (
+            capitalization.lowercase_share(key) >= SITE_TOPIC_MAX_LOWERCASE
+            or (
+                " " not in key
+                and capitalization.mid_sentence_share(key) < SITE_TOPIC_MIN_MID_SENTENCE
+            )
+        ):
+            continue
+        twin = _twin_key(SITE_TOPIC_ALIASES.get(key, key))
+        if twin:
+            groups.setdefault(twin, []).append(key)
+    # A plural folds into its singular (NFTs, NFT).
+    for twin in sorted(groups):
+        singular = twin.removesuffix("s")
+        if singular != twin and singular in groups:
+            groups[singular] += groups.pop(twin)
+    for domain in domains:
+        if domain in SITE_TOPIC_NOT_DOMAINS or _is_own_domain(domain):
+            continue
+        twin = next((key for key in _domain_twin_keys(domain) if key in groups), None)
+        groups.setdefault(twin or _twin_key(domain), []).append(domain)
+
+    # The most frequent spelling across the issues' entities names a topic.
+    spellings: dict[str, dict[str, int]] = {}
+    for entry in issues.values():
+        for entity in entry.get("entities", []):
+            bucket = spellings.setdefault(str(entity).lower(), {})
+            bucket[str(entity)] = bucket.get(str(entity), 0) + 1
+
+    def display(key: str) -> str:
+        bucket = spellings.get(key)
+        return max(sorted(bucket.items()), key=lambda item: item[1])[0] if bucket else key
+
+    topics: dict[str, dict[str, Any]] = {}
+    for keys in groups.values():
+        numbers: set[str] = set()
+        for key in keys:
+            numbers.update(str(number) for number in candidates[key])
+        if len(numbers) < SITE_TOPIC_MIN_ISSUES:
+            continue
+        # An alias's target, then a name before a domain, then the key with
+        # the most issues.
+        lead = min(
+            keys,
+            key=lambda key: (
+                key in SITE_TOPIC_ALIASES,
+                _is_domain(key),
+                -len(candidates[key]),
+                key,
+            ),
+        )
+        name = display(lead)
+        slug = site_topic_slug(name)
+        if not slug:
+            continue
+        if slug in topics:
+            topics[slug]["keys"] = sorted(set(topics[slug]["keys"]) | set(keys))
+            numbers |= set(topics[slug]["issues"])
+        else:
+            topics[slug] = {"slug": slug, "name": name, "keys": sorted(keys)}
+        topics[slug]["issues"] = sorted(numbers, key=_issue_sort_key)
+    return sorted(topics.values(), key=lambda topic: (-len(topic["issues"]), topic["name"].lower()))
+
+
+def _issue_sort_key(number: str) -> tuple[float, str]:
+    try:
+        return (float(number.split("-")[0]), number)
+    except ValueError:
+        return (math.inf, number)
 
 
 def heuristic_tropes(issue: dict[str, Any]) -> list[str]:
@@ -507,4 +748,5 @@ def build_graph(
         # stops calling its counts a top-40 sample).
         "entity_index_uncapped": True,
         "trope_index": trope_index,
+        "topics": site_topics(corpus.get("issues", []), issues, entity_index),
     }

@@ -121,6 +121,38 @@ test('site topics follow the site: 3+ issues, most frequent spelling, merged slu
   assert.equal(siteTopicSlug('C++ / Rust'), 'c-rust');
 });
 
+test('site topics come from graph.topics when the graph names them', () => {
+  const topics = siteTopics({
+    ...graph(),
+    topics: [
+      { slug: 'claude', name: 'Claude', keys: ['claude', 'anthropic.com'], issues: ['1', '2', '3'] },
+      { slug: 'kubb', name: 'Kubb', keys: ['kubb', "jamie's kubb"], issues: ['3', '4'] }
+    ]
+  });
+  assert.deepEqual(
+    topics.map((topic) => [topic.name, topic.slug, topic.count]),
+    [
+      ['Claude', 'claude', 3],
+      ['Kubb', 'kubb', 2]
+    ]
+  );
+  // AWS and Coffee pass the old 3-issue rule, but the graph's list decides.
+  assert.deepEqual(topics.find((topic) => topic.slug === 'kubb').related, ['Claude']);
+});
+
+test('list_topics finds a topic by a name it folds', async () => {
+  const data = fixtures();
+  data.graph.topics = [
+    { slug: 'minnesota-united', name: 'Minnesota United', keys: ['minnesota united', 'mnufc'], issues: ['1', '2', '3'] }
+  ];
+  primeCorpusCachesForTests(data);
+  const out = await ARCHIVE_TOOLS.list_topics({ query: 'MNUFC' });
+  assert.deepEqual(
+    out.topics.map((topic) => topic.name),
+    ['Minnesota United']
+  );
+});
+
 test('list_topics returns the clusters and the site pages with urls, and narrows by query', async () => {
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.list_topics({});

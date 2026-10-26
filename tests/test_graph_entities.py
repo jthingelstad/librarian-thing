@@ -163,3 +163,51 @@ class GraphEntityTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SiteTopicTests(unittest.TestCase):
+    """Jamie, 2026-10-26: topics are for people, so be "ever more tidy and
+    conservative" with them. Google left most of the 777 topic pages
+    unindexed; they held words ("Find", "Okay", "Few Thoughts") and twins
+    (The Verge and theverge.com)."""
+
+    def test_slug_matches_the_site(self):
+        self.assertEqual(graph.site_topic_slug("Let's Encrypt"), "lets-encrypt")
+        self.assertEqual(graph.site_topic_slug("micro.blog"), "micro-blog")
+
+    def test_a_domain_finds_its_name(self):
+        self.assertEqual(graph._domain_twin_keys("theverge.com"), ["theverge", "verge"])
+        self.assertEqual(graph._domain_twin_keys("blog.cloudflare.com"), ["cloudflare"])
+        self.assertEqual(graph._domain_twin_keys("aws.amazon.com"), [])
+        self.assertEqual(graph._twin_key("the verge"), graph._twin_key("verge"))
+
+    @requires_archive
+    def test_real_archive_topics(self):
+        corpus = build_corpus(ARCHIVE_DIR, include_issue_bodies=True)
+        built = graph.build_graph(corpus)
+        topics = built["topics"]
+        by_slug = {topic["slug"]: topic for topic in topics}
+        self.assertEqual(len(by_slug), len(topics))
+        for topic in topics:
+            self.assertGreaterEqual(len(topic["issues"]), graph.SITE_TOPIC_MIN_ISSUES)
+            self.assertEqual(topic["slug"], graph.site_topic_slug(topic["name"]))
+        # Words, sentence openers and Jamie's own sites are not topics.
+        for slug in [
+            "find",
+            "okay",
+            "people",
+            "thanks",
+            "thank",
+            "maybe",
+            "few-thoughts",
+            "thingelstad-com",
+            "en-wikipedia-org",
+        ]:
+            self.assertNotIn(slug, by_slug)
+        # Twins are one topic.
+        self.assertIn("theverge.com", by_slug["the-verge"]["keys"])
+        self.assertNotIn("theverge-com", by_slug)
+        self.assertIn("nfts", by_slug["nft"]["keys"])
+        # Names stay.
+        for slug in ["apple", "big-green-egg", "new-york", "wired", "minnesota-united"]:
+            self.assertIn(slug, by_slug)
