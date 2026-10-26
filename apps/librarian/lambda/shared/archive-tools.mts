@@ -4061,6 +4061,9 @@ interface SiteTopic {
   issues: Set<string>;
   count: number;
   related: string[];
+  // The graph's names this topic folds (MNUFC, theverge.com); a query for
+  // any of them finds it.
+  keys: string[];
 }
 
 export function siteTopicSlug(name: string) {
@@ -4107,7 +4110,8 @@ export function siteTopics(graph: Record<string, unknown>): SiteTopic[] {
       slug,
       issues: new Set(list),
       count: list.length,
-      related: []
+      related: [],
+      keys: Array.isArray(topic.keys) ? topic.keys.map(String) : []
     });
     for (const key of Array.isArray(topic.keys) ? topic.keys : []) lowerToSlug.set(String(key), slug);
   }
@@ -4121,9 +4125,10 @@ export function siteTopics(graph: Record<string, unknown>): SiteTopic[] {
       for (const number of list) existing.issues.add(String(number));
       if (list.length > existing.count) existing.name = name;
       existing.count = existing.issues.size;
+      existing.keys.push(lower);
       continue;
     }
-    bySlug.set(slug, { name, slug, issues: new Set(list.map(String)), count: list.length, related: [] });
+    bySlug.set(slug, { name, slug, issues: new Set(list.map(String)), count: list.length, related: [], keys: [lower] });
   }
   // Related topics: co-mentioned in the same issues.
   if (!named) {
@@ -4201,7 +4206,9 @@ async function toolListTopics(input: ToolArgs = {}) {
   // or more (entity_index_uncapped); an older one counts only the issues
   // whose 40 most-extracted names hold it, and says so.
   const sampled = !graph.entity_index_uncapped;
-  const matched = query ? topics.filter((topic) => named(topic.name) || topic.slug === querySlug) : topics;
+  const matched = query
+    ? topics.filter((topic) => named(topic.name) || topic.slug === querySlug || topic.keys.some(named))
+    : topics;
   const page = pageOf('list_topics', matched, input, 'topics');
   return markTruncated(
     {

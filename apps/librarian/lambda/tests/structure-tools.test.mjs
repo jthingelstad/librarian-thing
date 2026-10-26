@@ -140,6 +140,19 @@ test('site topics come from graph.topics when the graph names them', () => {
   assert.deepEqual(topics.find((topic) => topic.slug === 'kubb').related, ['Claude']);
 });
 
+test('list_topics finds a topic by a name it folds', async () => {
+  const data = fixtures();
+  data.graph.topics = [
+    { slug: 'minnesota-united', name: 'Minnesota United', keys: ['minnesota united', 'mnufc'], issues: ['1', '2', '3'] }
+  ];
+  primeCorpusCachesForTests(data);
+  const out = await ARCHIVE_TOOLS.list_topics({ query: 'MNUFC' });
+  assert.deepEqual(
+    out.topics.map((topic) => topic.name),
+    ['Minnesota United']
+  );
+});
+
 test('list_topics returns the clusters and the site pages with urls, and narrows by query', async () => {
   primeCorpusCachesForTests(fixtures());
   const out = await ARCHIVE_TOOLS.list_topics({});
