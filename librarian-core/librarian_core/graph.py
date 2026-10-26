@@ -535,11 +535,17 @@ def site_topics(
             continue
         if key in SITE_TOPIC_NOT_NAMES or key.removesuffix("s") in SITE_TOPIC_NOT_NAMES:
             continue
-        if _twin_key(key) not in site_names and (
-            capitalization.lowercase_share(key) >= SITE_TOPIC_MAX_LOWERCASE
-            or (
-                " " not in key
-                and capitalization.mid_sentence_share(key) < SITE_TOPIC_MIN_MID_SENTENCE
+        # An alias is a name by decision; the tests would drop MNUFC, which
+        # mostly opens a line.
+        if (
+            key not in SITE_TOPIC_ALIASES
+            and _twin_key(key) not in site_names
+            and (
+                capitalization.lowercase_share(key) >= SITE_TOPIC_MAX_LOWERCASE
+                or (
+                    " " not in key
+                    and capitalization.mid_sentence_share(key) < SITE_TOPIC_MIN_MID_SENTENCE
+                )
             )
         ):
             continue

@@ -208,6 +208,7 @@ class SiteTopicTests(unittest.TestCase):
         self.assertIn("theverge.com", by_slug["the-verge"]["keys"])
         self.assertNotIn("theverge-com", by_slug)
         self.assertIn("nfts", by_slug["nft"]["keys"])
+        self.assertIn("mnufc", by_slug["minnesota-united"]["keys"])
         # Names stay.
         for slug in ["apple", "big-green-egg", "new-york", "wired", "minnesota-united"]:
             self.assertIn(slug, by_slug)

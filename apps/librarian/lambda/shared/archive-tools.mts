@@ -4232,11 +4232,11 @@ async function toolListTopics(input: ToolArgs = {}) {
         ? { note: 'The topic graph is not loaded, so only the clusters are listed.' }
         : query && !matched.length
           ? // A site topic is a name among the 40 most-extracted names of
-            // 3 or more issues, so a real one can be missing (Mastodon, in
+            // 5 or more issues, so a real one can be missing (Mastodon, in
             // 11 issues, before 2026-10-01): say where every mention is
             // counted (QA2 I2-3). Its count is not capped (Q18).
             {
-              note: `No site topic is named "${query}". Topics come from each issue's 40 most-extracted names, so a name can be missing; list_content or archive_lens with topic "${query}" counts every source that mentions it.`
+              note: `No site topic is named "${query}". Topics are names in 5 or more issues, from each issue's 40 most-extracted names, so a name can be missing; list_content or archive_lens with topic "${query}" counts every source that mentions it.`
             }
           : sampled && matched.length
             ? {
