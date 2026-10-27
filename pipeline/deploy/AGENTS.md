@@ -94,9 +94,9 @@ captures a baseline before uploads and a second snapshot after a healthy
 native promotion. Thingy's pinned reusable workflow compares them; missing
 or mismatched versions cannot become an arrival. Both receipt lanes remain
 off until their scoped grant and the administrator-owned deploy boundary
-are reviewed (`iam/README.md`). Jamie, 2026-10-26: "nothing in the public
-files but ids, times and titles"; reference documents and reader tables
-never enter these receipts.
+are reviewed (`iam/README.md`). The public files carry only ids, times
+and titles; reference documents and reader tables never enter these
+receipts.
 
 ## Secrets
 
