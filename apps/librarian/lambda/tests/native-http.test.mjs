@@ -147,9 +147,22 @@ test('actual native route layers retain contract refusals and bearerless MCP cha
   try {
     const auth = makeServer({ auth: handleAuthRequest }, 35);
     const archive = makeServer({ archive: handleStreamRequest }, 300);
-    const health = await archive.request('/health');
-    assert.equal(health.status, 200);
-    assert.equal((await health.json()).ok, true);
+    process.env.LIBRARIAN_SOURCE_REVISION = 'build-fixture';
+    process.env.LIBRARIAN_CORPUS_VERSIONS = '{"artifacts/corpus.json":"v-fixture"}';
+    try {
+      const health = await archive.request('/health');
+      assert.equal(health.status, 200);
+      const body = await health.json();
+      assert.equal(body.ok, true);
+      // Both doors say what they were built from (the sync page reads it).
+      assert.equal(body.source_revision, 'build-fixture');
+      assert.deepEqual(body.corpus_versions, { 'artifacts/corpus.json': 'v-fixture' });
+      const authHealth = await auth.request('/health');
+      assert.equal((await authHealth.json()).source_revision, 'build-fixture');
+    } finally {
+      delete process.env.LIBRARIAN_SOURCE_REVISION;
+      delete process.env.LIBRARIAN_CORPUS_VERSIONS;
+    }
     const metadata = await auth.request('/.well-known/oauth-authorization-server');
     assert.equal(metadata.status, 200);
     assert.equal((await metadata.json()).issuer, 'https://librarian.thingelstad.com');

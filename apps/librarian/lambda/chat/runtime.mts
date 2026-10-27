@@ -5,6 +5,7 @@ import { once } from 'node:events';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
 import { agentModel, dynamodb, embeddingModel, fastModel, premiumModel, rerankModel } from '../shared/aws-clients.mjs';
+import { buildInfo } from '../shared/build-info.mjs';
 import {
   CACHE_BREAKPOINT,
   agentInferenceConfig,
@@ -1591,7 +1592,8 @@ export async function handleStreamRequest(
         fast_model: fastModel(),
         premium_model: premiumModel(),
         embedding_model: embeddingModel(),
-        rerank_model: rerankModel()
+        rerank_model: rerankModel(),
+        ...buildInfo()
       })
     );
     stream.end();

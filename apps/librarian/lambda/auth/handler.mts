@@ -1,5 +1,6 @@
 import { DeleteItemCommand, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { dynamodb, agentModel, fastModel } from '../shared/aws-clients.mjs';
+import { buildInfo } from '../shared/build-info.mjs';
 import { CACHE_BREAKPOINT, anthropic, oneShotInferenceConfig, oneShotText } from '../shared/anthropic.mjs';
 import {
   createSubscriber,
@@ -1152,7 +1153,8 @@ function healthHandler(event: LibrarianHttpEvent) {
       ok: true,
       service: 'weekly-thing-librarian-auth',
       model: agentModel(),
-      contract_version: LIBRARIAN_CONTRACT_VERSION
+      contract_version: LIBRARIAN_CONTRACT_VERSION,
+      ...buildInfo()
     },
     event
   );

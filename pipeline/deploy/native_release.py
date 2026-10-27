@@ -47,6 +47,7 @@ def prepare(s3, outputs, pins, build_dir: Path, root: Path, zip_build) -> list[d
         settings[f"Native{door}CodeVersion"] = uploaded["VersionId"]
     # Corpus-only updates must publish a new configuration too, so warm
     # environments can't retain a previous corpus indefinitely.
+    versions = {}
     for key in (
         "corpus.json",
         "blog_corpus.json",
@@ -55,10 +56,17 @@ def prepare(s3, outputs, pins, build_dir: Path, root: Path, zip_build) -> list[d
         "links_corpus.json",
         "graph.json",
     ):
-        hashes.append(
-            s3.head_object(Bucket="weekly-thing-librarian", Key=f"artifacts/{key}")["VersionId"]
-        )
+        versions[f"artifacts/{key}"] = s3.head_object(
+            Bucket="weekly-thing-librarian", Key=f"artifacts/{key}"
+        )["VersionId"]
+    hashes.extend(versions.values())
     settings["NativeBuildId"] = hashlib.sha256("\n".join(hashes).encode()).hexdigest()
+    # The same versions in the clear, so /health can say which corpus
+    # objects this build was deployed against (the sync page compares them
+    # with the objects' current versions: equal means Thingy serves the
+    # newest corpus, different means the redeploy after an upload is still
+    # to come).
+    settings["NativeCorpusVersions"] = json.dumps(versions, separators=(",", ":"), sort_keys=True)
     return [{"ParameterKey": key, "ParameterValue": value} for key, value in settings.items()]
 
 

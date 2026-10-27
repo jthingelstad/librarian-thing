@@ -192,7 +192,7 @@ The Eval Lambda is triggered by DynamoDB Streams. It reviews updated conversatio
 
 The reader UI lets users upvote/downvote responses and optionally explain downvotes. Feedback is stored on the matching turn and appears in operator review.
 
-`GET /health` is available as a cheap smoke-test endpoint. It verifies API Gateway and Lambda routing without calling Buttondown, Bedrock, DynamoDB, or S3.
+`GET /health` is available as a cheap smoke-test endpoint. It verifies the routing without calling Buttondown, Bedrock, DynamoDB, or S3. Since 2026-10-26 it also says what the deployment was built from: `source_revision` (the stack's `NativeBuildId`) and `corpus_versions` (the S3 versions of the six corpus objects that build was deployed against), which the sync page (sync.thingelstad.xyz) reads beside each corpus object's own metadata (`newest-id`, `newest-at`, `item-count`, `built-at`, written by the uploaders) to answer whether a new issue is in the Librarian and served by Thingy.
 
 `POST /feedback` is served by the native archive Web Function and requires a valid session token. It accepts `request_id`, `reaction` (`up` or `down`), and optional `comment`, then updates the matching turn when it belongs to the same subscriber hash.
 
