@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  ACCESS_LOG,
   AUTHORIZE_PATH,
+  accessLogPlan,
   RETIRED_PATHS,
   configurationHash,
   nativeConfig,
@@ -64,7 +66,12 @@ test('a pending receipt resumes only after its full intended config is verified'
 
 test('a pending canonical receipt is checked against the hash it recorded, not a rebuild from moved outputs', () => {
   const intended = nativeConfig(original, outputs);
-  const prior = { original, mode: 'native', hashFormat: 'canonical-json-v1', intendedHash: configurationHash(intended) };
+  const prior = {
+    original,
+    mode: 'native',
+    hashFormat: 'canonical-json-v1',
+    intendedHash: configurationHash(intended)
+  };
   const moved = { ...outputs, NativeAuthLiveDomain: 'auth-2.lambda-web.us-east-1.on.aws' };
   // CloudFront applied the intent, then a stack output moved before recovery: still the recorded intent.
   assert.doesNotThrow(() => verifyPriorConfig(prior, reorder(intended), moved));
@@ -152,4 +159,64 @@ test('auth behaviors compress, archive behaviors never do, and retired routes ar
     () => nativeConfig(live, { ...outputs, NativeCompressedCachePolicy: undefined }),
     /NativeCompressedCachePolicy/
   );
+});
+
+const matching = () => ({
+  logGroup: { logGroupName: '/librarian/web-access', retentionInDays: 14 },
+  logGroupTags: { ...ACCESS_LOG.tags },
+  source: { logType: 'ACCESS_LOGS', resourceArns: ['arn:aws:cloudfront::999153317627:distribution/E18I2CIBERFMB7'] },
+  destination: {
+    outputFormat: 'json',
+    deliveryDestinationConfiguration: {
+      destinationResourceArn: 'arn:aws:logs:us-east-1:999153317627:log-group:/librarian/web-access:*'
+    }
+  },
+  deliveries: [
+    { deliverySourceName: 'links-web-access', recordFields: ['timestamp(ms)'] },
+    {
+      deliverySourceName: 'librarian-web-access',
+      deliveryDestinationArn: 'arn:aws:logs:us-east-1:999153317627:delivery-destination:librarian-web-access',
+      recordFields: [...ACCESS_LOG.fields]
+    }
+  ]
+});
+
+test('access logging records no client IP, query string or path (share tokens ride in it)', () => {
+  assert.equal(ACCESS_LOG.fields.length, 13);
+  for (const field of ACCESS_LOG.fields)
+    assert.ok(!/c-ip|query|uri-stem|referer|cookie|x-forwarded/i.test(field), field);
+  assert.equal(ACCESS_LOG.retentionDays, 14);
+  assert.equal(ACCESS_LOG.tags.Project, 'librarian');
+});
+
+test('access logging is a no-op when everything matches', () => {
+  assert.deepEqual(accessLogPlan(matching()), { create: [], mismatches: [] });
+});
+
+test('access logging creates every missing piece and only those', () => {
+  assert.deepEqual(accessLogPlan({ logGroup: null, source: null, destination: null, deliveries: [] }), {
+    create: ['logGroup', 'source', 'destination', 'delivery'],
+    mismatches: []
+  });
+  const partial = { ...matching(), deliveries: [] };
+  assert.deepEqual(accessLogPlan(partial), { create: ['delivery'], mismatches: [] });
+});
+
+test('access logging refuses a piece that exists but differs', () => {
+  const cases = [
+    (s) => (s.logGroup.retentionInDays = 30),
+    (s) => delete s.logGroupTags.Project,
+    (s) => (s.source.resourceArns = ['arn:aws:cloudfront::999153317627:distribution/OTHER']),
+    (s) => (s.destination.outputFormat = 'plain'),
+    (s) => (s.destination.deliveryDestinationConfiguration.destinationResourceArn = 'arn:aws:s3:::bucket'),
+    (s) => s.deliveries[1].recordFields.push('c-ip'),
+    (s) => (s.deliveries[1].recordFields = [...ACCESS_LOG.fields].reverse()),
+    (s) => s.deliveries.push({ ...s.deliveries[1] })
+  ];
+  for (const change of cases) {
+    const state = matching();
+    change(state);
+    const plan = accessLogPlan(state);
+    assert.equal(plan.mismatches.length, 1, JSON.stringify(plan));
+  }
 });
