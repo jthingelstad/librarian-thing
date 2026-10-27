@@ -351,7 +351,7 @@ jobs:
       # Capture the running versions before any new corpus reaches S3.
       - name: Snapshot native serving identities before promotion
         if: steps.changes.outputs.lambda == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
-        run: uv run --locked python pipeline/deploy/sync_snapshot.py --output .sync/sync-before.json
+        run: uv run --locked python pipeline/deploy/sync_snapshot.py --output sync-evidence/sync-before.json
 
       - name: Upload Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'
@@ -398,7 +398,7 @@ jobs:
         id: sync_after
         if: steps.changes.outputs.lambda == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
         run: |
-          uv run --locked python pipeline/deploy/sync_snapshot.py --output .sync/sync-after.json
+          uv run --locked python pipeline/deploy/sync_snapshot.py --output sync-evidence/sync-after.json
           echo 'ready=true' >> "$GITHUB_OUTPUT"
 
       - name: Keep metadata-only serving evidence
@@ -406,7 +406,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: sync-serving-evidence
-          path: .sync/sync-*.json
+          path: sync-evidence/sync-*.json
           retention-days: 7
           if-no-files-found: error
 
