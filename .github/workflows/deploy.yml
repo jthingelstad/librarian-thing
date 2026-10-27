@@ -55,6 +55,8 @@ jobs:
   produce:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    outputs:
+      sync_evidence: ${{ steps.sync_after.outputs.ready }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -346,6 +348,11 @@ jobs:
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true'
         run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive data/weekly/archive
 
+      # Capture the running versions before any new corpus reaches S3.
+      - name: Snapshot native serving identities before promotion
+        if: steps.changes.outputs.lambda == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
+        run: uv run --locked python pipeline/deploy/sync_snapshot.py --output .sync/sync-before.json
+
       - name: Upload Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_corpus.py --upload-staged .candidate
@@ -387,6 +394,22 @@ jobs:
           LIBRARIAN_BUCKET: weekly-thing-librarian
           LIBRARIAN_CLOUDFORMATION_ROLE_ARN: arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation
 
+      - name: Snapshot verified native promotion
+        id: sync_after
+        if: steps.changes.outputs.lambda == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
+        run: |
+          uv run --locked python pipeline/deploy/sync_snapshot.py --output .sync/sync-after.json
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+
+      - name: Keep metadata-only serving evidence
+        if: steps.sync_after.outputs.ready == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: sync-serving-evidence
+          path: .sync/sync-*.json
+          retention-days: 7
+          if-no-files-found: error
+
       # The one cross-repo push: the topic graph, to the render surface.
       # Everything else the old site handoff shipped is WT Builder's to send.
       # --from-s3 pushes the graph the WT upload built from the embedded
@@ -400,3 +423,16 @@ jobs:
           GITHUB_PAT_TOKEN: ${{ secrets.STUDIO_PAT_TOKEN }}
           GITHUB_REPO_NWO: jthingelstad/weekly.thingelstad.com
           LIBRARIAN_BUCKET: weekly-thing-librarian
+
+  report-serving-arrival:
+    needs: produce
+    if: needs.produce.outputs.sync_evidence == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    uses: jthingelstad/thingy.thingelstad.com/.github/workflows/report-sync-receipt.yml@d4c22fe1b0645e7ed36b0999ed88726f32ba6a68
+    with:
+      sender_ref: d4c22fe1b0645e7ed36b0999ed88726f32ba6a68
+      bus: ${{ vars.SYNC_THINGY_RECEIVED_BUS }}
+      dry_run: false

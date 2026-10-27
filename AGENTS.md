@@ -27,6 +27,8 @@ history at the rename boundary (studio-thing → librarian-thing), not here.
 - `librarian-core/` — shared `librarian_core` package (corpus/graph/retrieval/links).
 - `pipeline/corpus/`, `pipeline/graph/`, `pipeline/deploy/` — builds and deploys.
 - `pipeline/library/` — the library: download, export, the pulls, upload, `stale`.
+- `pipeline/library/sync_receipts.py` — public identities newly held by a successful round. Off without `SYNC_RECEIVED_BUS`; no receipt before the conditional upload succeeds.
+- `pipeline/deploy/sync_snapshot.py` — public health and corpus HEAD metadata before uploads and after native promotion. Thingy's pinned reusable checker reports the serving arrival; a frontend deploy cannot prove it.
 - `pipeline/blog/`, `pipeline/podcast/`, `pipeline/things/`, `pipeline/reference/`, `pipeline/links/`: the ingesters the pulls run, and maintenance. `pipeline/links/` snapshots Linking Things (links.thingelstad.xyz, every public link Jamie has saved), which the Librarian depends on and which never depends on the Librarian.
 - `reference-documents/`: published documents about Jamie (a bio, a resume) for the reference corpus, the base every search consults and no caller selects. This repo is public, so documents that must not be published go in the library's `reference-unpublished/` instead, placed by Jamie by hand. Its README is the guide.
 - `pipeline/audits/`, `pipeline/one-shot/` — archive maintenance, completed migrations.

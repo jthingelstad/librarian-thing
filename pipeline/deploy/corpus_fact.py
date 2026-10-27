@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 # S3 user metadata keys. S3 lowercases them and serves them back as
 # x-amz-meta-<key>; a reader sees the names below.
@@ -87,6 +88,22 @@ def corpus_fact(name: str, payload: dict[str, Any]) -> dict[str, str]:
 
     if newest_id and newest_id.isascii():
         fact[NEWEST_ID_META] = newest_id
+    # The numeric micro.blog id is not the publication bus's permalink id.
+    # Preserve the actual public URL, never reconstruct a slug from a title.
+    if stem == "blog_corpus" and newest:
+        url = str(newest.get("url") or "")
+        try:
+            parts = urlsplit(url)
+            if (
+                url.isascii()
+                and parts.scheme == "https"
+                and parts.netloc == "www.thingelstad.com"
+                and not parts.query
+                and not parts.fragment
+            ):
+                fact["newest-url"] = url
+        except ValueError:
+            pass
     if _instant(newest_at):
         fact[NEWEST_AT_META] = _instant(newest_at)
     if count is not None:

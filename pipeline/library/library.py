@@ -68,6 +68,7 @@ from librarian_core.reference import (
 )
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sync_receipts  # noqa: E402
 import tinylytics  # noqa: E402
 
 LIBRARY_DIR = REPO / ".library"
@@ -364,9 +365,31 @@ def cmd_round(tree: Path, only: list[str], weekly_dir: Path | None) -> int:
         if cmd_download():
             return 1
         cmd_export(tree, force=False)
+        bus = os.environ.get("SYNC_RECEIVED_BUS", "")
+        before = None
+        if bus:
+            try:
+                with _library() as conn:
+                    before = sync_receipts.snapshot(conn)
+            except Exception:
+                print(
+                    "::warning::Sync has no known library baseline; no arrival will be reported.",
+                    file=sys.stderr,
+                )
         cmd_pull(tree, only, weekly_dir, None)
         try:
-            return cmd_upload()
+            result = cmd_upload()
+            if result == 0 and bus:
+                try:
+                    with _library() as conn:
+                        after = sync_receipts.snapshot(conn)
+                    sync_receipts.announce(before, after, bus, now())
+                except Exception:
+                    print(
+                        "::warning::The library receipt could not be prepared; the upload remains successful.",
+                        file=sys.stderr,
+                    )
+            return result
         except LibraryConflict as exc:
             if attempt == 2:
                 raise
