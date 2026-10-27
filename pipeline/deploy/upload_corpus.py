@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 import tempfile
 from pathlib import Path
 
@@ -31,6 +32,12 @@ from librarian_core.graph import build_graph
 from librarian_core.library import read_marker
 from librarian_core.library.store import FINGERPRINT_META
 from librarian_core.paths import ARCHIVE_DIR, DATA, MEDIA_DESCRIPTIONS_PATH
+
+# Sibling import, the way the other uploaders import this script: run as
+# `python pipeline/deploy/upload_corpus.py` its directory is on sys.path;
+# loaded by a test from its path, it is not, so put it there.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from corpus_fact import corpus_fact, read_fact, write_fact  # noqa: E402
 
 
 def build_wt_corpus(
@@ -56,7 +63,7 @@ def build_wt_corpus(
     return corpus
 
 
-def upload_json_gzip(bucket: str, key: str, path) -> None:
+def upload_json_gzip(bucket: str, key: str, path, facts: dict[str, str] | None = None) -> None:
     """Upload a JSON artifact gzip-compressed with ContentEncoding: gzip.
 
     The corpus is ~10x smaller compressed, which is most of the Lambda cold
@@ -65,20 +72,27 @@ def upload_json_gzip(bucket: str, key: str, path) -> None:
 
     A corpus built from an export of the library records the library
     fingerprint it was built from (the tree's export marker) as S3 metadata,
-    so the next run can tell whether the library has moved on since.
+    so the next run can tell whether the library has moved on since. Beside
+    it goes the corpus fact (pipeline/deploy/corpus_fact.py): the newest item
+    the artifact holds and its count, so the sync page can say whether an
+    issue has reached the Librarian from a HEAD. ``facts`` is that fact;
+    left out, the one ``write_staged`` wrote beside the file is used.
     """
     import gzip as _gzip
 
     data = Path(path).read_bytes()
     marker = read_marker(DATA) or {}
     fingerprint = (marker.get("fingerprints") or {}).get(Path(key).stem)
+    metadata = {**(read_fact(path) if facts is None else facts)}
+    if fingerprint:
+        metadata[FINGERPRINT_META] = fingerprint
     boto3.client("s3").put_object(
         Bucket=bucket,
         Key=key,
         Body=_gzip.compress(data, 6),
         ContentType="application/json",
         ContentEncoding="gzip",
-        Metadata={FINGERPRINT_META: fingerprint} if fingerprint else {},
+        Metadata=metadata,
     )
 
 
@@ -90,6 +104,9 @@ def write_staged(stage_dir: str | Path, name: str, payload: dict) -> Path:
     path = Path(stage_dir) / name
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    # The fact rides along to the upload step, which cannot afford to parse
+    # the staged file again just to find the newest item.
+    write_fact(path, corpus_fact(name, payload))
     print(f"Staged {path} for the corpus gate")
     return path
 
@@ -276,7 +293,7 @@ def main() -> int:
             handle.write(json.dumps(corpus, ensure_ascii=False) + "\n")
             upload_path = Path(handle.name)
 
-    upload_json_gzip(args.bucket, args.key, upload_path)
+    upload_json_gzip(args.bucket, args.key, upload_path, facts=corpus_fact("corpus.json", corpus))
     print(f"Uploaded embedded librarian corpus to s3://{args.bucket}/{args.key}")
     if not args.skip_graph:
         graph = build_graph(corpus)

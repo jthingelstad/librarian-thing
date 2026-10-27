@@ -96,6 +96,12 @@ Parameters:
   NativeBuildId:
     Type: String
     Default: 'disabled'
+  # The corpus object versions NativeBuildId was computed from, as JSON
+  # {"artifacts/<name>": "<VersionId>"}; /health reports them as
+  # corpus_versions. Set by native_release.prepare on every native deploy.
+  NativeCorpusVersions:
+    Type: String
+    Default: ''
   NativeAuthCodeKey:
     Type: String
     Default: 'disabled'
@@ -767,6 +773,7 @@ Resources:
           THINGY_EFFORT: !Ref ThingyEffort
           LIBRARIAN_NATIVE_HTTP: '1'
           LIBRARIAN_SOURCE_REVISION: !Ref NativeBuildId
+          LIBRARIAN_CORPUS_VERSIONS: !Ref NativeCorpusVersions
 
   NativeAuthLiveEndpoint:
     Type: AWS::Lambda::WebFunctionEndpoint
@@ -860,6 +867,7 @@ Resources:
           # Deployed-revision stamp for recorded turns; the timestamped code
           # key already uniquely names each deployed artifact.
           LIBRARIAN_SOURCE_REVISION: !Ref NativeBuildId
+          LIBRARIAN_CORPUS_VERSIONS: !Ref NativeCorpusVersions
           # Guest chat lane (2026-09): per-visitor taste + global fail-closed
           # circuit breaker. THINGY_GUEST_CHAT=off is the kill switch.
           THINGY_GUEST_CHAT: "on"

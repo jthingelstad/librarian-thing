@@ -17,6 +17,7 @@ import os
 import tempfile
 from pathlib import Path
 
+from corpus_fact import corpus_fact
 from dotenv import load_dotenv
 from librarian_core.corpus import (
     DEFAULT_EMBEDDING_DIMENSIONS,
@@ -121,7 +122,7 @@ def main() -> int:
             handle.write(json.dumps(corpus, ensure_ascii=False) + "\n")
             out_path = Path(handle.name)
 
-    upload_json_gzip(args.bucket, args.key, out_path)
+    upload_json_gzip(args.bucket, args.key, out_path, facts=corpus_fact(STAGED_NAME, corpus))
     print(f"Uploaded embedded links corpus to s3://{args.bucket}/{args.key}")
     return 0
 

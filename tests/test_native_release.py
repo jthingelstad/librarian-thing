@@ -2,6 +2,7 @@
 
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
 from unittest.mock import Mock, call
 
@@ -174,3 +175,41 @@ def test_log_setup_skips_a_missing_web_function_local_group(monkeypatch):
     assert [c.kwargs["logGroupName"] for c in logs.put_retention_policy.call_args_list][-1] == (
         "/aws/lambda/weekly-thing-librarian-web-archive.local"
     )
+
+
+def test_prepare_publishes_the_corpus_versions_beside_the_build_id(tmp_path):
+    # The sync page compares /health's corpus_versions with the objects'
+    # current versions, so the parameter must name every artifact the
+    # build id hashes, with the same version the hash used.
+    from pipeline.deploy.native_release import prepare
+
+    s3 = Mock()
+    s3.put_object.return_value = {"VersionId": "zip-version"}
+    s3.head_object.side_effect = lambda Bucket, Key: {"VersionId": f"v-{Path(Key).stem}"}
+    build_dir = tmp_path / "build"
+    build_dir.mkdir()
+    (tmp_path / "tmp").mkdir()
+
+    def zip_build(_source, archive):
+        archive.write_bytes(b"zip")
+
+    parameters = {
+        p["ParameterKey"]: p["ParameterValue"]
+        for p in prepare(s3, {"NativeSourceBucketName": "src"}, {}, build_dir, tmp_path, zip_build)
+    }
+    versions = {
+        f"artifacts/{name}": f"v-{Path(name).stem}"
+        for name in (
+            "corpus.json",
+            "blog_corpus.json",
+            "podcast_corpus.json",
+            "reference_corpus.json",
+            "links_corpus.json",
+            "graph.json",
+        )
+    }
+    assert json.loads(parameters["NativeCorpusVersions"]) == versions
+    digest = hashlib.sha256(b"zip").hexdigest()
+    expected = hashlib.sha256("\n".join([digest, digest, *versions.values()]).encode()).hexdigest()
+    assert parameters["NativeBuildId"] == expected
+    assert parameters["NativeWebEnabled"] == "true"

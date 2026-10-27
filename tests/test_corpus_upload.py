@@ -95,7 +95,7 @@ class WeeklyThingUploadMediaDescriptionTests(unittest.TestCase):
                 mock.patch.object(upload, "fetch_existing_corpus", return_value=None),
                 mock.patch.object(upload, "add_bedrock_embeddings"),
                 mock.patch.object(
-                    upload, "upload_json_gzip", side_effect=lambda b, k, p: uploaded.append(k)
+                    upload, "upload_json_gzip", side_effect=lambda b, k, p, **kw: uploaded.append(k)
                 ),
                 mock.patch.object(sys, "argv", argv + ["--keep-output", str(out)]),
             ):
@@ -125,7 +125,7 @@ class WeeklyThingUploadMediaDescriptionTests(unittest.TestCase):
                 mock.patch.object(
                     upload,
                     "upload_json_gzip",
-                    side_effect=lambda b, k, p: uploaded.append((k, Path(p).name)),
+                    side_effect=lambda b, k, p, **kw: uploaded.append((k, Path(p).name)),
                 ),
             )
             for patch in patches:

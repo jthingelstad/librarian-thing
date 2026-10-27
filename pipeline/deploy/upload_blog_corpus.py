@@ -18,6 +18,7 @@ import os
 import tempfile
 from pathlib import Path
 
+from corpus_fact import corpus_fact
 from dotenv import load_dotenv
 from librarian_core.abstracts import annotate_blog_abstracts
 from librarian_core.corpus import (
@@ -41,6 +42,8 @@ from upload_corpus import (  # noqa: E402
     upload_json_gzip,
     write_staged,
 )
+
+STAGED_NAME = "blog_corpus.json"
 
 
 def main() -> int:
@@ -81,7 +84,7 @@ def main() -> int:
         raise RuntimeError("Provide --bucket or LIBRARIAN_BUCKET")
 
     if args.upload_staged:
-        upload_json_gzip(args.bucket, args.key, staged_path(args.upload_staged, "blog_corpus.json"))
+        upload_json_gzip(args.bucket, args.key, staged_path(args.upload_staged, STAGED_NAME))
         print(f"Uploaded staged blog corpus to s3://{args.bucket}/{args.key}")
         return 0
 
@@ -108,7 +111,7 @@ def main() -> int:
     add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
 
     if args.stage:
-        write_staged(args.stage, "blog_corpus.json", corpus)
+        write_staged(args.stage, STAGED_NAME, corpus)
         return 0
 
     if args.keep_output:
@@ -130,7 +133,7 @@ def main() -> int:
             handle.write(json.dumps(corpus, ensure_ascii=False) + "\n")
             out_path = Path(handle.name)
 
-    upload_json_gzip(args.bucket, args.key, out_path)
+    upload_json_gzip(args.bucket, args.key, out_path, facts=corpus_fact(STAGED_NAME, corpus))
     print(f"Uploaded embedded blog corpus to s3://{args.bucket}/{args.key}")
     return 0
 

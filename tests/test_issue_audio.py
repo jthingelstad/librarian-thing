@@ -232,7 +232,7 @@ def _fake_embed(corpus, *_args, **_kwargs):
 def test_uploaded_graph_is_built_from_the_embedded_corpus(tmp_path):
     uploaded: dict[str, dict] = {}
 
-    def capture(_bucket, key, path):
+    def capture(_bucket, key, path, **_kw):
         uploaded[key] = json.loads(Path(path).read_text(encoding="utf-8"))
 
     argv = ["upload_corpus.py", "--bucket", "b", "--key", "artifacts/corpus.json"]

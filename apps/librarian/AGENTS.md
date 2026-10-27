@@ -293,7 +293,8 @@ resolved into plaintext configuration. A new credential goes into the secret (by
 | `BEDROCK_EMBEDDING_MODEL` | stream | `cohere.embed-english-v3` |
 | `BEDROCK_RERANK_MODEL` | stream | `cohere.rerank-v3-5:0` |
 | `BEDROCK_RERANK_REGION` | stream | `us-west-2` (only region with the rerank model) |
-| `LIBRARIAN_SOURCE_REVISION` | stream | Set by CFN to `StreamCodeKey`; stamped onto tool traces |
+| `LIBRARIAN_SOURCE_REVISION` | both | Set by CFN to `NativeBuildId` (a digest of the two native bundles and the six corpus object versions); stamped onto tool traces and reported by `/health` as `source_revision` |
+| `LIBRARIAN_CORPUS_VERSIONS` | both | Set by CFN to `NativeCorpusVersions`, the corpus object versions `NativeBuildId` was computed from (`{"artifacts/<name>": "<VersionId>"}`); `/health` reports it as `corpus_versions` (`shared/build-info.mts`), and the sync page compares it with the objects' current versions to say whether Thingy serves the newest corpus. Null when unset |
 | `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `WEB_TOOLS_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 200 per reader per day (doubled for supporting members, owner exempt) |
 | `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm`. Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
 | `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |

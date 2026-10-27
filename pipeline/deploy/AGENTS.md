@@ -67,6 +67,21 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 4. Reference: `upload_reference_corpus.py` builds from `data/site/`, `data/things/`, `data/blog/pages/`, `data/reference/`, `data/reference-unpublished/` and the FAQ, reuses cached embeddings by chunk id, uploads `reference_corpus.json`. A malformed reference document fails the build with its file name.
 5. Links: `upload_links_corpus.py` builds from `data/links/` (Linking Things' links.json and issues.json, snapshotted by `pipeline/links/import_links.py`), reuses cached embeddings by chunk id, uploads `links_corpus.json`. With no snapshot in the library the corpus is empty and the build says so.
 6. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, `loadPodcastCorpus()`, the reference loader (`REFERENCE_CORPUS_KEY`, searched by every retrieval) and the links loader (`LINKS_CORPUS_KEY`, read only when a request names source kind `link`) pick up new files on the next cold start or after `aws.py` triggers a new deployment.
+7. Every corpus object carries its **fact** as S3 user metadata, beside the
+   library fingerprint (`corpus_fact.py`): `newest-id` (the newest item's
+   public id: `wt-354`, `blog-<microblog id>`, `ep-<n>`, `link-<id>`),
+   `newest-at`, `item-count` and `built-at`; the reference base carries
+   count and build time only. The uploader computes it from the corpus in
+   memory at `--stage` time and writes it beside the staged file as
+   `<name>.fact.json` (`.candidate/corpus.fact.json`), and `--upload-staged`
+   reads it back, since the staged file is too big to parse again. A direct
+   upload passes it inline. The sync page (sync.thingelstad.xyz) HEADs the
+   objects to say whether an issue has reached the Librarian, and compares
+   `/health`'s `corpus_versions` (the `NativeCorpusVersions` parameter
+   `native_release.prepare` sets from the same HEADs that make
+   `NativeBuildId`) with the objects' current versions to say whether Thingy
+   serves it yet. A fact is ids, instants and counts, never a title: S3
+   metadata is ASCII and small.
 
 Use `make librarian-corpora-upload` when code is unchanged and only the five S3 corpus artifacts need refresh.
 
