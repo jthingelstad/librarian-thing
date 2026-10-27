@@ -64,7 +64,7 @@ only `librarian` or `thingy`, `received` or `ping`, on the publishing bus in
 this account. It changes the administrator-owned boundary as well as CI's
 scoped policy. This night does not apply it. Jamie must review and explicitly
 apply the narrow policy update with `setup-oidc.sh deploy-policy` before
-enabling either Actions variable. The sync stack's optional role grant
+enabling either Actions variable. The sync stack's `ReceiverRoles` grant
 cannot override a boundary denial. Thingy's reusable workflow retains this
 caller's OIDC identity; the static frontend role needs no such permission.
 The service role and boundaries are installed directly in this personal AWS
