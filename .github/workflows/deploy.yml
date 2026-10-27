@@ -434,5 +434,6 @@ jobs:
     uses: jthingelstad/thingy.thingelstad.com/.github/workflows/report-sync-receipt.yml@d4c22fe1b0645e7ed36b0999ed88726f32ba6a68
     with:
       sender_ref: d4c22fe1b0645e7ed36b0999ed88726f32ba6a68
+      artifact: sync-serving-evidence
       bus: ${{ vars.SYNC_THINGY_RECEIVED_BUS }}
       dry_run: false
