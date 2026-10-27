@@ -77,6 +77,18 @@ Jamie: <one yes/no question, or None>
 
 Report the measured outcome and remaining risk, not workflow ceremony.
 
+Then post that block to Jamie's activity stream, using this run's installed
+automation id (`run-the-librarian`, `keep-the-archive-true`, `improve-thingy` or
+`library-agent`):
+
+```sh
+/Users/otto/Projects/projects-sysadmin/scripts/activity post --agent <automation id> --text "<the block>"
+```
+
+It goes to #publishing-log, and to #needs-jamie when the outcome is `BLOCKED` or
+`NEEDS JAMIE`. Add `--url` for the PR or issue the run is about. A failed post is
+noted in the report, never retried in a loop; the run's own result stands.
+
 ## Calendar and due work
 
 `automations.toml` owns the calendar; `SCHEDULE.md` is its generated view.
