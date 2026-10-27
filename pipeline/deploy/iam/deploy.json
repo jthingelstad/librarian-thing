@@ -148,6 +148,24 @@
         "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-auth/endpoint/candidate",
         "arn:aws:lambda:us-east-1:999153317627:web-function/weekly-thing-librarian-web-archive/endpoint/candidate"
       ]
+    },
+    {
+      "Sid": "PublishingArrivalReceipts",
+      "Effect": "Allow",
+      "Action": "events:PutEvents",
+      "Resource": "arn:aws:events:us-east-1:999153317627:event-bus/thingelstad-publishing",
+      "Condition": {
+        "StringEquals": {
+          "events:source": [
+            "librarian",
+            "thingy"
+          ],
+          "events:detail-type": [
+            "received",
+            "ping"
+          ]
+        }
+      }
     }
   ]
 }

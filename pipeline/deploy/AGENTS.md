@@ -70,7 +70,10 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 7. Every corpus object carries its **fact** as S3 user metadata, beside the
    library fingerprint (`corpus_fact.py`): `newest-id` (the newest item's
    public id: `wt-354`, `blog-<microblog id>`, `ep-<n>`, `link-<id>`),
-   `newest-at`, `item-count` and `built-at`; the reference base carries
+   `newest-at`, `item-count` and `built-at`; a blog fact also carries
+   `newest-url` when the corpus supplies its actual public permalink (the
+   numeric micro.blog uid is not the publishing bus's post id). Never guess
+   a slug. The reference base carries
    count and build time only. The uploader computes it from the corpus in
    memory at `--stage` time and writes it beside the staged file as
    `<name>.fact.json` (`.candidate/corpus.fact.json`), and `--upload-staged`
@@ -84,6 +87,16 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
    metadata is ASCII and small.
 
 Use `make librarian-corpora-upload` when code is unchanged and only the five S3 corpus artifacts need refresh.
+
+`sync_snapshot.py` reads public health and four corpus HEADs, never their
+bodies or runtime configuration. With `SYNC_THINGY_RECEIVED_BUS` set, CI
+captures a baseline before uploads and a second snapshot after a healthy
+native promotion. Thingy's pinned reusable workflow compares them; missing
+or mismatched versions cannot become an arrival. Both receipt lanes remain
+off until their scoped grant and the administrator-owned deploy boundary
+are reviewed (`iam/README.md`). Jamie, 2026-10-26: "nothing in the public
+files but ids, times and titles"; reference documents and reader tables
+never enter these receipts.
 
 ## Secrets
 

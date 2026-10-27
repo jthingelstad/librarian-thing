@@ -126,6 +126,7 @@ jobs:
           MICROBLOG_API_KEY: ${{ secrets.MICROBLOG_API_KEY }}
           MICROBLOG_MICROPUB_URL: ${{ secrets.MICROBLOG_MICROPUB_URL }}
           LIBRARIAN_BUCKET: weekly-thing-librarian
+          SYNC_RECEIVED_BUS: ${{ vars.SYNC_RECEIVED_BUS }}
         run: |
           # git holds no data/ since 2026-10-22; a commit into it (WT
           # Builder's archive leg before its nudge PR) is replaced here.

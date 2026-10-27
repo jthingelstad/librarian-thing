@@ -8,6 +8,28 @@ left git on 2026-10-22 and is now a working copy that `export` writes and
 nobody commits. The sources keep the content and its history; the library is
 the Librarian's copy. Plan: `docs/PLAN-2026-10-22-blog-steward.md`.
 
+## Publishing bus receipts (off until enabled)
+
+`SYNC_RECEIVED_BUS=thingelstad-publishing` opts a round into metadata-only
+arrival reports. `sync_receipts.py` compares public source identities before
+the pull with the newly held newest item of each kind, and sends only after
+the conditional library upload succeeds. Unknown baselines, backfills,
+unchanged identities and metadata edits send nothing. Blog ids are their
+actual public permalinks. A saved-link receipt also requires the published
+source receipt's matching change stamp; no stamp is guessed from a hash.
+Reference documents, readers and bodies never enter an event.
+
+The GitHub round reads the Actions variable `SYNC_RECEIVED_BUS`; empty is
+off. Leave it empty until the reviewed sync stack grant and the existing
+administrator-owned deploy boundary both permit this source. The separate
+`SYNC_THINGY_RECEIVED_BUS` variable enables before/after native-serving
+metadata for Thingy's pinned checker, after a successful backend promotion.
+See `pipeline/deploy/iam/README.md` and Thingy's `docs/SYNC-RECEIPTS.md`.
+Reports are best effort with per-entry acknowledgements and fixed warnings;
+a transport failure never undoes a successful archive upload. Polling is
+the backstop; this is not a durable event outbox. Rehearse on fixtures or
+with `ping`, never a live `published` test.
+
     uv run --locked python pipeline/library/library.py download   # .library/library.db + its ETag
     uv run --locked python pipeline/library/library.py export     # library -> data/
     uv run --locked python pipeline/library/library.py round      # download, export, pull, upload
