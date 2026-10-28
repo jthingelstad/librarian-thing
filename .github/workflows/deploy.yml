@@ -167,6 +167,11 @@ jobs:
             printf '%s\n' "$changed"
           fi
 
+          # Upload telemetry changes neither corpus inputs nor retrieval. Do
+          # not force five paid builds for these exact files. The library's
+          # ordinary staleness checks above still apply to actual input changes.
+          changed="$(printf '%s\n' "$changed" | grep -vE '^librarian-core/librarian_core/library/(store|registry)\.py$' || true)"
+
           has_change() {
             local pattern
             for pattern in "$@"; do

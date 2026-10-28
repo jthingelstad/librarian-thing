@@ -1,5 +1,8 @@
 # The library
 
+[Public registry archive observation](REGISTRY.md) records the versioned
+revision on ordinary uploads, its privacy boundary and acceptance limits.
+
 The Librarian's archive is one SQLite file, `library.db`, at
 `s3://weekly-thing-librarian/artifacts/library.db`. It holds the pulled copies
 of every source, byte for byte, and everything the Librarian makes or measures

@@ -10,10 +10,16 @@ writer fails instead of overwriting: it downloads again and redoes its round.
 from __future__ import annotations
 
 import os
+import sqlite3
+import tempfile
+import warnings
+from contextlib import closing
 from pathlib import Path
 
 import boto3
 from botocore.exceptions import ClientError
+
+from librarian_core.library.registry import snapshot_metadata
 
 DEFAULT_BUCKET = "weekly-thing-librarian"
 KEY = "artifacts/library.db"
@@ -28,6 +34,7 @@ CORPUS_KEYS = {
 }
 FINGERPRINT_META = "library-fingerprint"
 _CONFLICT_CODES = {"PreconditionFailed", "ConditionalRequestConflict"}
+_REGISTRY_METADATA_ERRORS = (ValueError, TypeError, UnicodeError, OverflowError)
 
 
 class LibraryConflict(RuntimeError):
@@ -68,15 +75,35 @@ def upload(src: str | Path, etag: str | None, *, client=None, key: str = KEY) ->
     LibraryConflict when another run got there first."""
     s3 = client or boto3.client("s3")
     condition = {"IfMatch": etag} if etag else {"IfNoneMatch": "*"}
+    # One immutable SQLite backup supplies both the metadata and the bytes.
+    # Reading a live local DB and later opening it for upload would race a writer
+    # (and miss WAL contents). This does not change the S3 compare-and-swap.
     try:
-        with Path(src).open("rb") as body:
-            response = s3.put_object(
-                Bucket=bucket(),
-                Key=key,
-                Body=body,
-                ContentType="application/vnd.sqlite3",
-                **condition,
-            )
+        with tempfile.TemporaryDirectory(prefix="library-upload-") as tmp:
+            frozen = Path(tmp) / "library.db"
+            with (
+                closing(
+                    sqlite3.connect(Path(src).resolve().as_uri() + "?mode=ro", uri=True)
+                ) as source,
+                closing(sqlite3.connect(frozen)) as snapshot,
+            ):
+                source.backup(snapshot)
+                try:
+                    metadata = snapshot_metadata(snapshot)
+                except _REGISTRY_METADATA_ERRORS:
+                    warnings.warn(
+                        "Public registry revision unavailable for this snapshot.", stacklevel=2
+                    )
+                    metadata = {}
+            with frozen.open("rb") as body:
+                response = s3.put_object(
+                    Bucket=bucket(),
+                    Key=key,
+                    Body=body,
+                    ContentType="application/vnd.sqlite3",
+                    Metadata=metadata,
+                    **condition,
+                )
     except ClientError as exc:
         if exc.response.get("Error", {}).get("Code") in _CONFLICT_CODES:
             raise LibraryConflict(

@@ -1,0 +1,205 @@
+{
+  "algorithm": "things-snapshot-v1",
+  "vectors": [
+    {
+      "name": "base",
+      "payload": {
+        "site": "https://thingelstad.xyz",
+        "generated": "2026-10-28T00:00:00Z",
+        "featured": [
+          "ignored-top-level"
+        ],
+        "things": [
+          {
+            "id": "z",
+            "title": "Z",
+            "status": "active",
+            "page": "https://example.test/z/",
+            "body": "Synthetic public text",
+            "metrics": {
+              "count": 0,
+              "ok": true,
+              "none": null
+            }
+          },
+          {
+            "id": "a",
+            "title": "A",
+            "status": "retired",
+            "page": "https://example.test/a/",
+            "body": ""
+          }
+        ],
+        "topics": [
+          {
+            "id": "z"
+          },
+          {
+            "id": "a"
+          }
+        ],
+        "history": [
+          {
+            "id": "z",
+            "date": "2026-01-02"
+          },
+          {
+            "id": "a",
+            "date": "2026-01-01"
+          }
+        ]
+      },
+      "revision": "74e48c01732d5fa346cec9141ea3d6e284c0f52af72d6b10ec225758ca3b990f"
+    },
+    {
+      "name": "reordered-clock",
+      "payload": {
+        "history": [
+          {
+            "id": "a",
+            "date": "2026-01-01"
+          },
+          {
+            "id": "z",
+            "date": "2026-01-02"
+          }
+        ],
+        "topics": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "z"
+          }
+        ],
+        "things": [
+          {
+            "id": "a",
+            "title": "A",
+            "status": "retired",
+            "page": "https://example.test/a/",
+            "body": ""
+          },
+          {
+            "id": "z",
+            "title": "Z",
+            "status": "active",
+            "page": "https://example.test/z/",
+            "body": "Synthetic public text",
+            "metrics": {
+              "count": 0,
+              "ok": true,
+              "none": null
+            }
+          }
+        ],
+        "site": "https://thingelstad.xyz",
+        "generated": "2099-01-01",
+        "featured": []
+      },
+      "revision": "74e48c01732d5fa346cec9141ea3d6e284c0f52af72d6b10ec225758ca3b990f"
+    },
+    {
+      "name": "unicode-integers",
+      "payload": {
+        "site": "https://thingelstad.xyz",
+        "generated": "2026-10-28T00:00:00Z",
+        "featured": [
+          "ignored-top-level"
+        ],
+        "things": [
+          {
+            "id": "z",
+            "title": "Z",
+            "status": "active",
+            "page": "https://example.test/z/",
+            "body": "Quotes \" \\ café 😀\n line\t",
+            "metrics": {
+              "😀": -9007199254740991,
+              "": 9007199254740991,
+              "count": 1,
+              "ok": false,
+              "none": null
+            }
+          },
+          {
+            "id": "a",
+            "title": "A",
+            "status": "retired",
+            "page": "https://example.test/a/",
+            "body": ""
+          }
+        ],
+        "topics": [
+          {
+            "id": "z"
+          },
+          {
+            "id": "a"
+          }
+        ],
+        "history": [
+          {
+            "id": "z",
+            "date": "2026-01-02"
+          },
+          {
+            "id": "a",
+            "date": "2026-01-01"
+          }
+        ]
+      },
+      "revision": "da7fe7fa342bf03a0d653c53c73c910f1438de9061a0676eed59f4a839653c41"
+    },
+    {
+      "name": "changed-body",
+      "payload": {
+        "site": "https://thingelstad.xyz",
+        "generated": "2026-10-28T00:00:00Z",
+        "featured": [
+          "ignored-top-level"
+        ],
+        "things": [
+          {
+            "id": "z",
+            "title": "Z",
+            "status": "active",
+            "page": "https://example.test/z/",
+            "body": "Synthetic public text changed",
+            "metrics": {
+              "count": 0,
+              "ok": true,
+              "none": null
+            }
+          },
+          {
+            "id": "a",
+            "title": "A",
+            "status": "retired",
+            "page": "https://example.test/a/",
+            "body": ""
+          }
+        ],
+        "topics": [
+          {
+            "id": "z"
+          },
+          {
+            "id": "a"
+          }
+        ],
+        "history": [
+          {
+            "id": "z",
+            "date": "2026-01-02"
+          },
+          {
+            "id": "a",
+            "date": "2026-01-01"
+          }
+        ]
+      },
+      "revision": "f310b7014050a9a8726d6ec73bd25338e91151cab5a6e451c267b8468b032137"
+    }
+  ]
+}

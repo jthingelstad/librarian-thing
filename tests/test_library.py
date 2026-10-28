@@ -324,11 +324,16 @@ class SchemaTests(unittest.TestCase):
 
 class ConditionalUploadTests(unittest.TestCase):
     def setUp(self):
-        self.client = boto3.client("s3", region_name="us-east-1")
+        self.client = boto3.client(
+            "s3",
+            region_name="us-east-1",
+            aws_access_key_id="testing",
+            aws_secret_access_key="testing",
+        )
         self.stub = Stubber(self.client)
         self._tmp = tempfile.TemporaryDirectory()
         self.db = Path(self._tmp.name) / "library.db"
-        self.db.write_bytes(b"SQLite format 3\x00")
+        connect(self.db, create=True).close()
 
     def tearDown(self):
         self._tmp.cleanup()
@@ -339,6 +344,7 @@ class ConditionalUploadTests(unittest.TestCase):
             "Key": store.KEY,
             "Body": ANY,
             "ContentType": "application/vnd.sqlite3",
+            "Metadata": {},
             **condition,
         }
         if error:
@@ -377,12 +383,13 @@ class ConditionalUploadTests(unittest.TestCase):
         self.assertFalse(dest.with_name("library.db.part").exists())
 
     def test_download_with_no_library_yet_leaves_the_file_alone(self):
+        original = self.db.read_bytes()
         self.stub.add_client_error(
             "get_object", service_error_code="NoSuchKey", http_status_code=404
         )
         with self.stub:
             self.assertIsNone(store.download(self.db, client=self.client))
-        self.assertEqual(self.db.read_bytes(), b"SQLite format 3\x00")
+        self.assertEqual(self.db.read_bytes(), original)
 
 
 def _load(name: str, path: Path):
