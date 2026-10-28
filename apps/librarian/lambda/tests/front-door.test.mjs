@@ -162,7 +162,7 @@ test('auth behaviors compress, archive behaviors never do, and retired routes ar
 });
 
 const matching = () => ({
-  logGroup: { logGroupName: '/librarian/web-access', retentionInDays: 14 },
+  logGroup: { logGroupName: '/librarian/web-access', retentionInDays: 731 },
   logGroupTags: { ...ACCESS_LOG.tags },
   source: { logType: 'ACCESS_LOGS', resourceArns: ['arn:aws:cloudfront::999153317627:distribution/E18I2CIBERFMB7'] },
   destination: {
@@ -185,7 +185,7 @@ test('access logging records no client IP, query string or path (share tokens ri
   assert.equal(ACCESS_LOG.fields.length, 13);
   for (const field of ACCESS_LOG.fields)
     assert.ok(!/c-ip|query|uri-stem|referer|cookie|x-forwarded/i.test(field), field);
-  assert.equal(ACCESS_LOG.retentionDays, 14);
+  assert.equal(ACCESS_LOG.retentionDays, 731);
   assert.equal(ACCESS_LOG.tags.Project, 'librarian');
 });
 
