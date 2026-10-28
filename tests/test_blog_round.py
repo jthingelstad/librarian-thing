@@ -393,6 +393,12 @@ class DryRoundTests(Library):
         self.assertEqual(len(self.drafts), 1)
         self.assertEqual(result["alt"][0]["context"], "drafted by an earlier dry run")
 
+    def test_cached_drafts_still_count_toward_the_proposal_cap(self):
+        work, _result = self.round()
+        blog_round.apply(self.conn, work.made)
+        _work, result = self.round(alt_limit=0)
+        self.assertEqual(result["alt"], [])
+
     def test_a_gone_image_goes_to_alt_skips(self):
         with mock.patch.object(alt_text, "known_dead", return_value=True):
             work, result = blog_round.run_round(
@@ -481,6 +487,36 @@ class WriteTests(Library):
         self.assertEqual(json.loads(filings["blog-100"]["alt_filled"]), [LAKE_PHOTO])
         self.assertEqual(filings["blog-100"]["filed_by"], "overhaul")
 
+    def test_alt_can_follow_a_category_filing_in_the_same_round(self):
+        self.conn.execute("DELETE FROM filings WHERE source_id = 'blog-100'")
+        self.conn.commit()
+        proposals = {
+            "categories": [
+                {
+                    "source_id": "blog-100",
+                    "url": LAKE,
+                    "live": ["Family"],
+                    "picks": ["Coffee"],
+                    "new_trip": "",
+                    "check": False,
+                    "problem": None,
+                }
+            ],
+            "alt": [
+                {
+                    "source_id": "blog-100",
+                    "url": LAKE,
+                    "src": LAKE_PHOTO,
+                    "alt": "A dock on a calm lake at dusk",
+                    "problem": None,
+                }
+            ],
+        }
+        said = self.work.write(proposals)
+        self.assertEqual(self.session.posts[LAKE]["categories"], ["Coffee", "Family"])
+        self.assertIn('alt="A dock on a calm lake at dusk"', self.session.posts[LAKE]["content"])
+        self.assertEqual(len(said["written"]), 2)
+
     def test_compare_and_set_adopts_a_change_made_since_the_proposal(self):
         proposals = self._proposals()
         self.session.posts[COFFEE]["categories"] = ["Family"]
@@ -521,6 +557,27 @@ class WriteTests(Library):
             said = self.work.write(proposals)
         self.assertEqual(self.session.posts[COFFEE]["categories"], [])
         self.assertEqual(said["needs_jamie"], ["past 0 category writes today"])
+
+    def test_an_already_filled_alt_does_not_trip_the_pace_cap_on_retry(self):
+        self.session.posts[LAKE]["content"] = LAKE_BODY.replace(
+            'alt=""', 'alt="A dock on a calm lake at dusk"'
+        )
+        proposals = {
+            "categories": [],
+            "alt": [
+                {
+                    "source_id": "blog-100",
+                    "url": LAKE,
+                    "src": LAKE_PHOTO,
+                    "alt": "A dock on a calm lake at dusk",
+                    "problem": None,
+                }
+            ],
+        }
+        with mock.patch.object(guards, "ALT_CAP", 0):
+            said = self.work.write(proposals)
+        self.assertEqual(said["needs_jamie"], [])
+        self.assertEqual(self.session.posted, [])
 
     def test_alt_waits_for_a_post_to_be_filed(self):
         proposals = {

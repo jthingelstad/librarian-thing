@@ -304,9 +304,10 @@ class Round:
 
     def propose_alt(self, limit: int) -> list[dict[str, Any]]:
         out = []
-        drafted = 0
         for row in self.alt_candidates():
-            if drafted >= limit:
+            # Cached drafts are still proposals that could become live edits.
+            # Cap the reviewed set, not just newly billed vision calls.
+            if len(out) >= limit:
                 break
             proposal = {
                 "source_id": row["source_id"],
@@ -333,7 +334,6 @@ class Round:
                 proposal["problem"] = why
                 continue
             alt, how = self._draft(row["source_id"], row["src"], live["content"])
-            drafted += how == "drafted"
             if not alt:
                 proposal["problem"] = how
                 continue
@@ -460,10 +460,25 @@ class Round:
             if proposal["problem"] or not proposal["alt"]:
                 continue
             if done["alt"] >= guards.ALT_CAP:
-                said["needs_jamie"].append(f"past {guards.ALT_CAP} alt edits today")
-                break
+                if self._alt_requires_write(proposal):
+                    said["needs_jamie"].append(f"past {guards.ALT_CAP} alt edits today")
+                    break
+                continue
             done["alt"] += self._write_alt(proposal, said)
         return said
+
+    def _alt_requires_write(self, proposal: dict[str, Any]) -> bool:
+        """Whether a proposal would still edit the current source body.
+
+        When a retry meets today's cap, already-filled proposals are harmless
+        no-ops. Only an empty, safely spliceable alt is an additional edit
+        that must stop the round for Jamie.
+        """
+        live = self.micropub.source(proposal["url"], uid(proposal["source_id"]))
+        if live is None or live["content"] is None:
+            return False
+        edited, _why = guards.splice_alt(live["content"], proposal["src"], proposal["alt"])
+        return edited is not None
 
     def _write_categories(
         self,
@@ -523,7 +538,8 @@ class Round:
     def _write_alt(self, proposal: dict[str, Any], said: dict[str, list[str]]) -> int:
         source_id, src = proposal["source_id"], proposal["src"]
         post = self._post(source_id)
-        if post is None or post["filed"] is None:
+        staged = next((row for row in self.made.filings if row["source_id"] == source_id), None)
+        if post is None or (post["filed"] is None and staged is None):
             said["left"].append(f"{source_id}: not filed yet, so its alt waits (file it first)")
             return 0
         live = self.micropub.source(proposal["url"], uid(source_id))
