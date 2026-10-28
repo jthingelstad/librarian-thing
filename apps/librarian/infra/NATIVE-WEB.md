@@ -59,7 +59,7 @@ The existing Librarian distribution is manually managed. `front-door.mjs` owns
 its release changes with ETag compare-and-swap and a private original-config
 receipt. Its sole `native` command preserves the hostname and route inventory.
 Its `access-logs` command (`--check` only reads) makes the distribution's access log: the
-CloudWatch log group `/librarian/web-access`, kept 14 days, with no client IP, query string or path
+CloudWatch log group `/librarian/web-access`, kept 24 months (731 days), with no client IP, query string or path
 (`/share/{token}` carries a share token). It creates only missing pieces and refuses, before any
 write, when a live piece differs. Legacy `auth`/`rollback` modes are refused. External requests forward no cookies or X-Thingy-Origin, and
 `/tools` remains outside this door. The one exception is the `/authorize` behavior the writer adds

@@ -117,14 +117,14 @@ export function nativeConfig(config, outputs, mode = 'native') {
 // Access logging for the distribution (Jamie, 2026-10-26: "Approved: add
 // /librarian/web-access CloudFront access logging for E18I2CIBERFMB7 through
 // librarian-thing's front-door.mjs, outside the stack"). The same shape as
-// Linking Things and Weekly Thing: CloudWatch Logs vended delivery, JSON, 14
-// days, and no client IP, query string or path in the record: GET
-// /share/{token} carries a share token in the path. The service role
+// Linking Things and Weekly Thing: CloudWatch Logs vended delivery, JSON, 731
+// days (24 months; Jamie, 2026-10-28), and no client IP, query string or
+// path in the record: GET /share/{token} carries a share token in the path. The service role
 // cannot manage these, so this operator command owns them, like the
 // distribution itself.
 export const ACCESS_LOG = Object.freeze({
   logGroup: '/librarian/web-access',
-  retentionDays: 14,
+  retentionDays: 731,
   source: 'librarian-web-access',
   destination: 'librarian-web-access',
   distributionArn: `arn:aws:cloudfront::${ACCOUNT}:distribution/${ID}`,
