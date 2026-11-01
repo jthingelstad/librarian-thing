@@ -72,7 +72,7 @@ class TokenCountTests(unittest.TestCase):
         client = unittest.mock.Mock()
         client.invoke_model.return_value = response
         out = StringIO()
-        with unittest.mock.patch.object(core.boto3, "client", return_value=client):
+        with unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client):
             with redirect_stdout(out):
                 core.fetch_bedrock_embeddings(inputs, core.DEFAULT_EMBEDDING_MODEL)
         self.assertIn("embed_input_truncated: 1 of 2 inputs over 512 tokens", out.getvalue())
@@ -122,6 +122,123 @@ class GateReportTests(unittest.TestCase):
                 with redirect_stdout(out):
                     self.assertEqual(gate.main(argv), 0)
         self.assertIn("::warning title=Embed truncation (QA2 I2-4)::", out.getvalue())
+
+    def test_the_gate_reads_the_cap_of_the_corpus_model(self):
+        # Embed v4 reads 128K tokens: no live chunk comes near it.
+        corpus = {**self.corpus(), "embedding_model": "cohere.embed-v4:0"}
+        self.assertEqual(gate.embed_truncation(corpus), [])
+        count, line = gate.embed_truncation_report("blog_corpus.json", corpus)
+        self.assertEqual(count, 0)
+        self.assertIn("past 128000 tokens (cohere.embed-v4:0)", line)
+
+
+class EmbedModelTests(unittest.TestCase):
+    """Embed v4 takes its vector length in the request and answers keyed by
+    type; v3's body and parse stay as they were."""
+
+    V4 = "cohere.embed-v4:0"
+
+    def invoke(self, inputs, model, dimensions, answer):
+        client = unittest.mock.Mock()
+        client.invoke_model.return_value = {"body": StringIO(json.dumps(answer))}
+        with unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client):
+            with redirect_stdout(StringIO()):
+                vectors = core.fetch_bedrock_embeddings(inputs, model, dimensions=dimensions)
+        return vectors, json.loads(client.invoke_model.call_args.kwargs["body"])
+
+    def test_v3_body_is_unchanged(self):
+        vectors, body = self.invoke(
+            ["a"], core.DEFAULT_EMBEDDING_MODEL, 1024, {"embeddings": [[1.0]]}
+        )
+        self.assertEqual(vectors, [[1.0]])
+        self.assertEqual(body, {"texts": ["a"], "input_type": "search_document", "truncate": "END"})
+
+    def test_v4_asks_for_its_length_and_reads_the_float_vectors(self):
+        answer = {"response_type": "embeddings_by_type", "embeddings": {"float": [[0.5, 0.5]]}}
+        vectors, body = self.invoke(["a"], self.V4, 2, answer)
+        self.assertEqual(vectors, [[0.5, 0.5]])
+        self.assertEqual(body["output_dimension"], 2)
+        self.assertEqual(body["embedding_types"], ["float"])
+        self.assertEqual(body["truncate"], "RIGHT")
+
+    def test_v4_keeps_text_past_v3s_character_cap(self):
+        long = "word " * 1000
+        _, body = self.invoke([long], self.V4, 1, {"embeddings": {"float": [[1.0]]}})
+        self.assertEqual(body["texts"], [long])
+        _, body = self.invoke([long], core.DEFAULT_EMBEDDING_MODEL, None, {"embeddings": [[1.0]]})
+        self.assertEqual(len(body["texts"][0]), core.COHERE_EMBED_MAX_TEXT_CHARS)
+
+    def test_a_wrong_length_vector_fails_the_build(self):
+        with self.assertRaisesRegex(RuntimeError, "asked for 512"):
+            self.invoke(["a"], self.V4, 512, {"embeddings": {"float": [[0.0] * 1536]}})
+
+    def test_an_inference_profile_is_the_same_model(self):
+        self.assertTrue(core.is_embed_v4("us.cohere.embed-v4:0"))
+        self.assertFalse(core.is_embed_v4(core.DEFAULT_EMBEDDING_MODEL))
+
+    def test_a_throttled_batch_waits_and_tries_again(self):
+        from botocore.exceptions import ClientError
+
+        throttled = ClientError({"Error": {"Code": "ThrottlingException"}}, "InvokeModel")
+        answer = {"body": StringIO(json.dumps({"embeddings": {"float": [[1.0]]}}))}
+        client = unittest.mock.Mock()
+        client.invoke_model.side_effect = [throttled, throttled, answer]
+        with unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client):
+            with unittest.mock.patch.object(core.time, "sleep") as sleep:
+                with redirect_stdout(StringIO()):
+                    vectors = core.fetch_bedrock_embeddings(["a"], self.V4, dimensions=1)
+        self.assertEqual(vectors, [[1.0]])
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [5, 10])
+
+    def test_a_v4_build_paces_its_batches_under_the_minute_limit(self):
+        answer = lambda: {"body": StringIO(json.dumps({"embeddings": {"float": [[1.0]]}}))}  # noqa: E731
+        client = unittest.mock.Mock()
+        client.invoke_model.side_effect = [answer(), answer(), answer()]
+        clock = [1000.0]
+        waits = []
+
+        def sleep(seconds):
+            waits.append(seconds)
+            clock[0] += seconds
+
+        text = "x" * 350  # 100 estimated tokens
+        with (
+            unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client),
+            unittest.mock.patch.object(core, "EMBED_V4_TOKENS_PER_MINUTE", 250),
+            unittest.mock.patch.object(core, "_embed_sent", core.collections.deque()),
+            unittest.mock.patch.object(core.time, "monotonic", lambda: clock[0]),
+            unittest.mock.patch.object(core.time, "sleep", sleep),
+        ):
+            for _ in range(3):
+                core.fetch_bedrock_embeddings([text], self.V4, dimensions=1)
+        # Two batches fit in the minute; the third waits for the first to age out.
+        self.assertEqual(len(waits), 1)
+        self.assertAlmostEqual(waits[0], 60.1)
+
+    def test_v3_is_not_paced(self):
+        answer = lambda: {"body": StringIO(json.dumps({"embeddings": [[1.0]]}))}  # noqa: E731
+        client = unittest.mock.Mock()
+        client.invoke_model.side_effect = [answer(), answer(), answer()]
+        with (
+            unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client),
+            unittest.mock.patch.object(core, "EMBED_V4_TOKENS_PER_MINUTE", 1),
+            unittest.mock.patch.object(core, "_embed_sent", core.collections.deque()),
+            unittest.mock.patch.object(core.time, "sleep") as sleep,
+        ):
+            for _ in range(3):
+                core.fetch_bedrock_embeddings(["x" * 400], "cohere.embed-english-v3")
+        sleep.assert_not_called()
+
+    def test_any_other_error_fails_at_once(self):
+        from botocore.exceptions import ClientError
+
+        denied = ClientError({"Error": {"Code": "AccessDeniedException"}}, "InvokeModel")
+        client = unittest.mock.Mock()
+        client.invoke_model.side_effect = denied
+        with unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client):
+            with self.assertRaises(ClientError):
+                core.fetch_bedrock_embeddings(["a"], self.V4, dimensions=1)
+        self.assertEqual(client.invoke_model.call_count, 1)
 
 
 if __name__ == "__main__":

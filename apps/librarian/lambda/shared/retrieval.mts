@@ -533,20 +533,90 @@ function cosine(left: ArrayLike<number> | undefined, right: ArrayLike<number> | 
   return leftNorm && rightNorm ? dot / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm)) : 0;
 }
 
-async function embedQuery(query: unknown, model: string, dimensions: number): Promise<number[]> {
+// What a corpus was embedded with. The query must be embedded the same way:
+// a vector from another model, or of another length, scores nonsense (or,
+// for another length, nothing at all) against the corpus's vectors.
+export type RetrievalEngine = 'lexical' | 'semantic';
+
+export interface EmbeddingSignature {
+  model: string;
+  dimensions: number;
+}
+
+export function embeddingSignature(corpus: Corpus): EmbeddingSignature {
+  return {
+    model: corpus.embedding_model || embeddingModel(),
+    dimensions: Number(corpus.embedding_dimensions || DEFAULT_EMBEDDING_DIMENSIONS)
+  };
+}
+
+// The embedding model the loaded corpora were built with, for /health and
+// /retrieve: the corpora's own record, not the environment's default, which
+// only fills in for a corpus that names none. Several when a migration has
+// one corpus on a new model before the rest, comma-joined so the field stays
+// one string.
+export function loadedEmbeddingModel(): string {
+  const models = new Set<string>();
+  for (const corpus of [corpusCache, blogCorpusCache, podcastCorpusCache, referenceCorpusCache, linksCorpusCache]) {
+    if (corpus?.chunks?.some((chunk) => chunk.embedding)) models.add(embeddingSignature(corpus).model);
+  }
+  return models.size ? [...models].sort().join(', ') : embeddingModel();
+}
+
+function signatureKey(signature: EmbeddingSignature) {
+  return `${signature.model}|${signature.dimensions}`;
+}
+
+// Cohere Embed v4 takes its vector length and number type in the request
+// (output_dimension, embedding_types) and answers with the vectors keyed
+// by type; v3 has one length and answers with a bare list. v4's truncate
+// values are NONE/LEFT/RIGHT, not v3's START/END.
+export function isEmbedV4(model: string) {
+  return /cohere\.embed-v4/.test(model);
+}
+
+export function embedQueryBody(query: unknown, signature: EmbeddingSignature) {
+  if (isEmbedV4(signature.model)) {
+    return {
+      texts: [String(query ?? '')],
+      input_type: 'search_query',
+      embedding_types: ['float'],
+      output_dimension: signature.dimensions,
+      truncate: 'RIGHT'
+    };
+  }
+  return { texts: [query], input_type: 'search_query', truncate: 'END' };
+}
+
+export function embeddingsFromResponse(data: { embeddings?: unknown }): number[][] {
+  const embeddings = data?.embeddings;
+  if (Array.isArray(embeddings)) return embeddings as number[][];
+  if (embeddings && typeof embeddings === 'object') {
+    const float = (embeddings as Record<string, unknown>).float;
+    if (Array.isArray(float)) return float as number[][];
+  }
+  return [];
+}
+
+async function embedQuery(query: unknown, signature: EmbeddingSignature): Promise<number[]> {
   const start = performance.now();
+  const { model, dimensions } = signature;
   const response = await bedrock.send(
     new InvokeModelCommand({
       modelId: model,
       accept: 'application/json',
       contentType: 'application/json',
-      body: JSON.stringify({ texts: [query], input_type: 'search_query', truncate: 'END' })
+      body: JSON.stringify(embedQueryBody(query, signature))
     })
   );
-  const data = JSON.parse(new TextDecoder().decode(response.body)) as { embeddings?: number[][] };
-  if (!data.embeddings?.length) throw new Error('Bedrock embedding response did not include embeddings');
+  const embeddings = embeddingsFromResponse(JSON.parse(new TextDecoder().decode(response.body)));
+  if (!embeddings.length) throw new Error('Bedrock embedding response did not include embeddings');
+  const vector = embeddings[0];
+  if (vector.length !== dimensions) {
+    throw new Error(`Bedrock returned a ${vector.length}-dimension query vector for a ${dimensions}-dimension corpus`);
+  }
   logEvent('info', 'query_embedded', { model, dimensions, duration_ms: Math.round(performance.now() - start) });
-  return data.embeddings[0];
+  return vector;
 }
 
 function publicChunk(chunk: CorpusChunk): CorpusChunk {
@@ -660,10 +730,16 @@ function sourceHeader(source: CorpusChunk) {
 // retrieve() cuts the page itself, and a Journal copy dropped from it is
 // refilled from below the cut (QA2 R2-3). Rerank cost is per document sent,
 // not per result returned.
-async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8, depth = limit): Promise<CorpusChunk[]> {
+async function rerankSources(
+  query: unknown,
+  sources: CorpusChunk[],
+  limit = 8,
+  depth = limit,
+  poolSize = Math.max(limit * 5, 100)
+): Promise<CorpusChunk[]> {
   if (!sources.length || !truthyEnv('LIBRARIAN_RERANK_ENABLED', '1')) return sources.slice(0, depth);
   const start = performance.now();
-  const top = sources.slice(0, Math.max(limit * 5, 100));
+  const top = sources.slice(0, poolSize);
   const rerankInputs: RerankSource[] = top.map((source) => {
     const header = sourceHeader(source);
     return {
@@ -728,10 +804,15 @@ async function rerankSources(query: unknown, sources: CorpusChunk[], limit = 8, 
   return sources.slice(0, depth);
 }
 
-async function embedForCorpus(query: unknown, corpus: Corpus) {
-  const model = corpus.embedding_model || embeddingModel();
-  const dimensions = Number(corpus.embedding_dimensions || DEFAULT_EMBEDDING_DIMENSIONS);
-  return embedQuery(query, model, dimensions);
+// One query vector per embedding signature: corpora embedded the same way
+// share it, and a corpus embedded another way (mid-migration, one corpus on a
+// new model before the rest) gets its own rather than a vector it cannot be
+// compared with.
+async function embedForCorpus(query: unknown, corpus: Corpus, vectors: Map<string, Promise<number[]>>) {
+  const signature = embeddingSignature(corpus);
+  const key = signatureKey(signature);
+  if (!vectors.has(key)) vectors.set(key, embedQuery(query, signature));
+  return vectors.get(key) as Promise<number[]>;
 }
 
 // Pure cosine scoring over one corpus's embedded chunks. Attaches
@@ -1245,17 +1326,35 @@ function chunkKey(source: CorpusChunk) {
 // comparable scale. A chunk found by both engines gets both contributions;
 // the single downstream rerank then orders the fused pool on relevance.
 const RRF_K = 60;
-export function fuseCandidates(semantic: CorpusChunk[], lexical: CorpusChunk[], limit: number): CorpusChunk[] {
+
+// How the two engines' lists become the reranker's pool. Each engine's
+// reciprocal-rank contribution is scaled by its weight (1 each by default),
+// and poolSize is how many fused candidates the reranker sees (by default
+// max(limit x 5, 100)). The meaning eval sets these to measure other
+// fusions; no caller passes them.
+export interface FusionOptions {
+  semanticWeight?: number;
+  lexicalWeight?: number;
+  poolSize?: number;
+}
+
+export function fuseCandidates(
+  semantic: CorpusChunk[],
+  lexical: CorpusChunk[],
+  limit: number,
+  fusion: FusionOptions = {}
+): CorpusChunk[] {
   const fused = new Map<string, CorpusChunk>();
-  const lists: Array<[CorpusChunk[], string]> = [
-    [semantic, 'semantic'],
-    [lexical, 'lexical']
+  const lists: Array<[CorpusChunk[], string, number]> = [
+    [semantic, 'semantic', fusion.semanticWeight ?? 1],
+    [lexical, 'lexical', fusion.lexicalWeight ?? 1]
   ];
-  for (const [list, mode] of lists) {
+  for (const [list, mode, weight] of lists) {
+    if (!(weight > 0)) continue;
     list.forEach((source, rank) => {
       const key = chunkKey(source);
       const existing = fused.get(key);
-      const contribution = 1 / (RRF_K + rank + 1);
+      const contribution = weight / (RRF_K + rank + 1);
       if (existing) {
         existing._retrieval_score = (existing._retrieval_score || 0) + contribution;
         existing.retrieval_modes = [...new Set([...(existing.retrieval_modes || []), mode])];
@@ -1279,7 +1378,14 @@ export async function retrieve(
   query: unknown,
   limit = 8,
   filters: RetrievalFilters = {},
-  opts: { rerank?: boolean } = {}
+  opts: {
+    rerank?: boolean;
+    engines?: RetrievalEngine[];
+    fusion?: FusionOptions;
+    // Sees the fused pool before the rerank (the meaning eval measures
+    // whether the answer reached the reranker at all).
+    inspectPool?: (pool: CorpusChunk[]) => void;
+  } = {}
 ) {
   if (filters.category && !(filters.categoryPostIds instanceof Set)) {
     filters = { ...filters, categoryPostIds: await blogCategoryPostIds(filters.category) };
@@ -1300,34 +1406,50 @@ export async function retrieve(
     ...(separate ? [['reference', keepReference] as [string, (chunk: CorpusChunk) => boolean]] : [])
   ];
 
-  const lexical: CorpusChunk[] = [];
-  for (const [kind, keepIn] of pools) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keepIn)));
-  lexical.sort(byScore);
+  // engines narrows the run to one engine (the retrieval eval measures each
+  // alone). Callers leave it out: both engines always run.
+  const engines = new Set<RetrievalEngine>(opts.engines?.length ? opts.engines : ['lexical', 'semantic']);
 
+  const lexical: CorpusChunk[] = [];
+  if (engines.has('lexical')) {
+    for (const [kind, keepIn] of pools) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keepIn)));
+    lexical.sort(byScore);
+  }
+
+  // Semantic is best-effort per corpus: a failed embedding call or a corpus
+  // whose vectors do not match costs that corpus its semantic candidates,
+  // logged, and the others keep theirs.
   const semantic: CorpusChunk[] = [];
-  try {
-    let queryEmbedding = null;
+  const vectors = new Map<string, Promise<number[]>>();
+  if (engines.has('semantic')) {
     for (const [kind, keepIn] of pools) {
       const corpus = await loadCorpus(kind);
       if (!(corpus.chunks || []).some((chunk) => chunk.embedding)) continue;
-      if (!queryEmbedding) queryEmbedding = await embedForCorpus(query, corpus);
-      semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit, keepIn));
+      const signature = embeddingSignature(corpus);
+      try {
+        const queryEmbedding = await embedForCorpus(query, corpus, vectors);
+        semantic.push(...semanticScore(corpus, queryEmbedding, candidateLimit, keepIn));
+      } catch (error) {
+        logEvent(
+          'error',
+          'semantic_retrieval_failed',
+          errorFields(error, {
+            corpus: kind,
+            embedding_model: signature.model,
+            embedding_dimensions: signature.dimensions,
+            scope: normalizeScope(filters.scope),
+            source_kinds: kinds,
+            query_chars: String(query || '').length
+          })
+        );
+      }
     }
     semantic.sort(byScore);
-  } catch (error) {
-    logEvent(
-      'error',
-      'semantic_retrieval_failed',
-      errorFields(error, {
-        scope: normalizeScope(filters.scope),
-        source_kinds: kinds,
-        query_chars: String(query || '').length
-      })
-    );
   }
 
   const voices = voiceList(filters.voice);
-  let fused = fuseCandidates(semantic, lexical, candidateLimit);
+  const poolSize = opts.fusion?.poolSize || candidateLimit;
+  let fused = fuseCandidates(semantic, lexical, poolSize, opts.fusion);
   // A voice filter rewrites each passage to that voice's spans BEFORE the
   // rerank, so a chunk that matched on a quotation ranks on Jamie's framing
   // alone, and the caller never receives the quoted words as Jamie's.
@@ -1335,8 +1457,9 @@ export async function retrieve(
   // rerank: false skips the cross-region rerank call - RRF order is good
   // enough for grounding pools (welcome chips) where latency matters more
   // than final ordering precision. Answer-path retrieval always reranks.
+  opts.inspectPool?.(fused);
   if (opts.rerank === false) return withAgeLabel(pageWithoutTwins(fused, limit));
-  return withAgeLabel(pageWithoutTwins(await rerankSources(query, fused, limit, fused.length), limit));
+  return withAgeLabel(pageWithoutTwins(await rerankSources(query, fused, limit, fused.length, poolSize), limit));
 }
 
 // The corpora a retrieval scans: the scope's, and the links corpus when

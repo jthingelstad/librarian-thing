@@ -281,6 +281,12 @@ Resources:
                   - arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
                   - arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1
                   - !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/cohere.embed-english-v3
+                  # Embed v4 through its us. cross-region profile, which routes
+                  # to these three regions (2026-11-01).
+                  - !Sub arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/us.cohere.embed-v4:0
+                  - arn:aws:bedrock:us-east-1::foundation-model/cohere.embed-v4:0
+                  - arn:aws:bedrock:us-east-2::foundation-model/cohere.embed-v4:0
+                  - arn:aws:bedrock:us-west-2::foundation-model/cohere.embed-v4:0
                   - !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/cohere.rerank-v3-5:0
                   - arn:aws:bedrock:us-west-2::foundation-model/cohere.rerank-v3-5:0
                   - arn:aws:bedrock:ca-central-1::foundation-model/cohere.rerank-v3-5:0

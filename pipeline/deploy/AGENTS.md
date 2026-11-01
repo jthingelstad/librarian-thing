@@ -43,7 +43,7 @@ uv run --locked python pipeline/deploy/aws.py --skip-corpus-upload
 The `--skip-corpus-upload` flag is the default for any **code-only** change (Lambda code, CloudFormation tweaks, env-var changes). Full corpus reupload refreshes **Weekly Thing + blog + podcast** and is **slow/paid**. Each source-specific uploader reuses embeddings from the previously deployed S3 artifact when chunk ids match. Only do a full deploy when:
 
 - The corpus itself is stale (new issues to embed)
-- The embed model has changed (Cohere v3 → v4, hypothetically)
+- The embed model or its dimensions have changed: every chunk re-embeds, because the cache matches on both (`docs/PLAN-2026-11-01-embeddings.md` has the cost and the time on Embed v4)
 - The corpus schema has changed (e.g., new chunk metadata field)
 
 CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds and uploads the corpora the library or the code moved past. Content enters the library through the library round (`.github/workflows/library-round.yml`, and the Library Agent on the Mac), which starts `deploy.yml` when a corpus is stale (`pipeline/library/README.md`). Manual deploys are for local validation before commit.

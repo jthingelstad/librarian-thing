@@ -8,11 +8,13 @@ the graph builder.
 
 from __future__ import annotations
 
+import collections
 import functools
 import hashlib
 import html
 import json
 import re
+import time
 import unicodedata
 from dataclasses import dataclass, replace
 from datetime import date as _date
@@ -24,6 +26,8 @@ from zoneinfo import ZoneInfo
 
 import boto3
 import yaml
+from botocore.config import Config
+from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
 from .embed_tokens import COHERE_EMBED_MAX_TOKENS, embed_token_count
@@ -4270,41 +4274,153 @@ def embed_text_budget(chunk: dict[str, Any]) -> int:
     return max(COHERE_EMBED_MAX_TEXT_CHARS - len(header) - 1, MIN_EMBED_TEXT_CHARS)
 
 
+# What each embedding model reads of one text. Cohere Embed v3 stops at 2,048
+# characters and 512 tokens and drops the rest without a word (truncate END);
+# Embed v4 reads 128K tokens, which no chunk comes near, so it has no
+# character cap and its token cap only guards against a pasted blob.
+EMBED_V3_LIMITS = {"max_chars": COHERE_EMBED_MAX_TEXT_CHARS, "max_tokens": COHERE_EMBED_MAX_TOKENS}
+EMBED_V4_LIMITS = {"max_chars": None, "max_tokens": 128_000}
+
+
+def is_embed_v4(model: str) -> bool:
+    """Whether ``model`` is Cohere Embed v4 (the model id or a profile of it)."""
+    return "cohere.embed-v4" in (model or "")
+
+
+def embed_limits(model: str) -> dict[str, int | None]:
+    """The character and token caps ``model`` reads one text to."""
+    return EMBED_V4_LIMITS if is_embed_v4(model) else EMBED_V3_LIMITS
+
+
+def bedrock_embed_body(
+    inputs: list[str], model: str, input_type: str, dimensions: int | None = None
+) -> dict[str, Any]:
+    """The InvokeModel body for ``model``. v4 takes its vector length and
+    number type in the request, and RIGHT where v3 takes END."""
+    if is_embed_v4(model):
+        body: dict[str, Any] = {
+            "texts": inputs,
+            "input_type": input_type,
+            "embedding_types": ["float"],
+            "truncate": "RIGHT",
+        }
+        if dimensions:
+            body["output_dimension"] = int(dimensions)
+        return body
+    return {"texts": inputs, "input_type": input_type, "truncate": "END"}
+
+
+def embeddings_from_response(data: dict[str, Any]) -> list[list[float]]:
+    """The float vectors in a Bedrock Cohere embed response: a bare list (v3)
+    or keyed by type (v4, always, whatever was asked)."""
+    embeddings = data.get("embeddings")
+    if isinstance(embeddings, list):
+        return embeddings
+    if isinstance(embeddings, dict) and isinstance(embeddings.get("float"), list):
+        return embeddings["float"]
+    return []
+
+
+# Embed v4 on demand takes 150,000 tokens a minute and 8.1M a day, neither
+# adjustable; its us. cross-region profile takes 300,000 a minute (adjustable)
+# and 16.2M a day (service quotas, 2026-11-01). The whole archive is 7.4M
+# tokens (measured 2026-11-01). A v4 build paces its batches under the minute limit, and a
+# throttled call waits and tries again rather than failing the deploy. The
+# pace counts 3.5 characters a token: the Weekly Thing corpus ran 3.66 on v4
+# (11.56M characters, 3.16M tokens, 2026-11-01). v3's limits have never been
+# reached, so it is not paced.
+EMBED_THROTTLE_RETRIES = 10
+EMBED_V4_TOKENS_PER_MINUTE = 280_000
+EMBED_V4_CHARS_PER_TOKEN = 3.5
+_embed_sent: collections.deque[tuple[float, int]] = collections.deque()
+
+
+def _pace_embed(model: str, inputs: list[str]) -> None:
+    if not is_embed_v4(model):
+        return
+    estimate = int(sum(len(text) for text in inputs) / EMBED_V4_CHARS_PER_TOKEN)
+    while True:
+        now = time.monotonic()
+        while _embed_sent and now - _embed_sent[0][0] > 60:
+            _embed_sent.popleft()
+        if not _embed_sent or sum(n for _, n in _embed_sent) + estimate <= (
+            EMBED_V4_TOKENS_PER_MINUTE
+        ):
+            _embed_sent.append((now, estimate))
+            return
+        time.sleep(60 - (now - _embed_sent[0][0]) + 0.1)
+
+
+@functools.cache
+def _bedrock_runtime() -> Any:
+    return boto3.client(
+        "bedrock-runtime",
+        config=Config(retries={"max_attempts": 6, "mode": "adaptive"}, read_timeout=120),
+    )
+
+
+def _invoke_embed(model: str, body: dict[str, Any]) -> Any:
+    for attempt in range(EMBED_THROTTLE_RETRIES + 1):
+        try:
+            return _bedrock_runtime().invoke_model(
+                modelId=model,
+                body=json.dumps(body),
+                accept="application/json",
+                contentType="application/json",
+            )
+        except ClientError as error:
+            throttled = error.response.get("Error", {}).get("Code") == "ThrottlingException"
+            if not throttled or attempt == EMBED_THROTTLE_RETRIES:
+                raise
+            wait = min(60, 5 * 2**attempt)
+            print(f"embed_throttled: waiting {wait}s (attempt {attempt + 1})")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")
+
+
 def fetch_bedrock_embeddings(
-    inputs: list[str], model: str, input_type: str = "search_document"
+    inputs: list[str],
+    model: str,
+    input_type: str = "search_document",
+    dimensions: int | None = None,
 ) -> list[list[float]]:
+    limits = embed_limits(model)
+    max_chars = limits["max_chars"]
+    max_tokens = limits["max_tokens"]
     # The builders size every chunk to fit (embed_text_budget), so this cut
     # is a backstop that should never bite. Say so when it does: text past
     # it is in no embedding.
-    over = sum(1 for text in inputs if len(text) > COHERE_EMBED_MAX_TEXT_CHARS)
-    if over:
-        print(
-            f"embed_input_truncated: {over} of {len(inputs)} inputs over "
-            f"{COHERE_EMBED_MAX_TEXT_CHARS} chars; their tails are in no embedding"
-        )
-    inputs = [text[:COHERE_EMBED_MAX_TEXT_CHARS] for text in inputs]
-    # QA2 I2-4: the model also stops at 512 tokens, and truncate END drops
-    # the rest without a word. Characters do not bound tokens (URLs, emoji
-    # and pasted blobs run two or three characters a token), so count them.
-    over_tokens = sum(1 for text in inputs if embed_token_count(text) > COHERE_EMBED_MAX_TOKENS)
+    if max_chars:
+        over = sum(1 for text in inputs if len(text) > max_chars)
+        if over:
+            print(
+                f"embed_input_truncated: {over} of {len(inputs)} inputs over "
+                f"{max_chars} chars; their tails are in no embedding"
+            )
+        inputs = [text[:max_chars] for text in inputs]
+    # QA2 I2-4: the model also stops at a token count, and drops the rest
+    # without a word. Characters do not bound tokens (URLs, emoji and pasted
+    # blobs run two or three characters a token), so count them. The count
+    # is v3's tokenizer; for v4's far larger cap it is an estimate.
+    over_tokens = sum(1 for text in inputs if embed_token_count(text) > max_tokens)
     if over_tokens:
         print(
             f"embed_input_truncated: {over_tokens} of {len(inputs)} inputs over "
-            f"{COHERE_EMBED_MAX_TOKENS} tokens; Cohere drops the tail past token "
-            f"{COHERE_EMBED_MAX_TOKENS}"
+            f"{max_tokens} tokens; Cohere drops the tail past token {max_tokens}"
         )
-    response = boto3.client("bedrock-runtime").invoke_model(
-        modelId=model,
-        body=json.dumps({"texts": inputs, "input_type": input_type, "truncate": "END"}),
-        accept="application/json",
-        contentType="application/json",
-    )
-    data = json.loads(response["body"].read())
-    embeddings = data.get("embeddings") or []
+    _pace_embed(model, inputs)
+    response = _invoke_embed(model, bedrock_embed_body(inputs, model, input_type, dimensions))
+    embeddings = embeddings_from_response(json.loads(response["body"].read()))
     if len(embeddings) != len(inputs):
         raise RuntimeError(
             f"Bedrock returned {len(embeddings)} embeddings for {len(inputs)} inputs"
         )
+    if dimensions and is_embed_v4(model):
+        wrong = {len(vector) for vector in embeddings if len(vector) != int(dimensions)}
+        if wrong:
+            raise RuntimeError(
+                f"Bedrock returned {sorted(wrong)}-dimension vectors; asked for {dimensions}"
+            )
     return embeddings
 
 
@@ -4331,7 +4447,7 @@ def add_bedrock_embeddings(
     for start in range(0, len(pending), batch_size):
         batch = pending[start : start + batch_size]
         inputs = [_embed_input(chunk) for chunk in batch]
-        embeddings = fetch_bedrock_embeddings(inputs, model)
+        embeddings = fetch_bedrock_embeddings(inputs, model, dimensions=dimensions)
         for chunk, embedding in zip(batch, embeddings):
             chunk["embedding"] = embedding
         print(f"Embedded chunks {start + 1}-{start + len(batch)} of {len(pending)} pending")

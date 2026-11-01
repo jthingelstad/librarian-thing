@@ -4,7 +4,7 @@ import type Anthropic from '@anthropic-ai/sdk';
 import { once } from 'node:events';
 import type { Writable } from 'node:stream';
 import type { LibrarianHttpEvent } from '../shared/http.mjs';
-import { agentModel, dynamodb, embeddingModel, fastModel, premiumModel, rerankModel } from '../shared/aws-clients.mjs';
+import { agentModel, dynamodb, fastModel, premiumModel, rerankModel } from '../shared/aws-clients.mjs';
 import { buildInfo } from '../shared/build-info.mjs';
 import {
   CACHE_BREAKPOINT,
@@ -42,7 +42,7 @@ import {
 import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/citations.mjs';
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
-import { compactSource, retrievalFilterError, retrieve } from '../shared/retrieval.mjs';
+import { compactSource, loadedEmbeddingModel, retrievalFilterError, retrieve } from '../shared/retrieval.mjs';
 import { loadSharedConversationSnapshot, sharedSnapshotHistory } from '../shared/share-store.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../shared/feedback.mjs';
 import {
@@ -1591,7 +1591,7 @@ export async function handleStreamRequest(
         model: agentModel(),
         fast_model: fastModel(),
         premium_model: premiumModel(),
-        embedding_model: embeddingModel(),
+        embedding_model: loadedEmbeddingModel(),
         rerank_model: rerankModel(),
         ...buildInfo()
       })
@@ -1696,7 +1696,7 @@ export async function handleStreamRequest(
       s200.write(
         JSON.stringify({
           passages: compact,
-          embedding_model: embeddingModel(),
+          embedding_model: loadedEmbeddingModel(),
           rerank_model: rerankModel(),
           request_id: requestId
         })
