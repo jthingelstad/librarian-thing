@@ -5,8 +5,8 @@
   "server": {
     "name": "librarian",
     "title": "The Librarian - Jamie Thingelstad's archive",
-    "version": "2.9.0",
-    "version_format": "2.9.0+tools.<fingerprint>: the fingerprint hashes every packaged prompt file, the tool specs included, so it changes whenever the declared tools do",
+    "version": "2.10.0",
+    "version_format": "2.10.0+tools.<fingerprint>: the fingerprint hashes every packaged prompt file, the tool specs included, so it changes whenever the declared tools do",
     "website_url": "https://thingy.thingelstad.com/",
     "icons": [
       {
@@ -1960,7 +1960,7 @@
         "readOnlyHint": true,
         "openWorldHint": false
       },
-      "description": "What surrounds one source (by id): its outgoing and incoming links, links between Jamie's own sites, similar issues by meaning, and related sources: sharing at least 3 distinctive words or picked domains (each used by fewer than max(2% of the sources in scope, 20) sources).",
+      "description": "What surrounds one source (by id): its outgoing and incoming links, links between Jamie's own sites, similar issues or similar blog posts by meaning, and related sources: sharing at least 3 distinctive words or picked domains (each used by fewer than max(2% of the sources in scope, 20) sources).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -1992,6 +1992,10 @@
           },
           "similar_issues": {
             "type": "array"
+          },
+          "similar_posts": {
+            "type": "array",
+            "description": "A blog post's nearest other posts by meaning, best first: posts from the same trip left out, at most one from each other trip. Each has id, label, subject, publish_date, url, section, abstract when there is one, categories and score (cosine; compare scores within one list, never across posts)."
           },
           "outgoing_count": {
             "type": "integer",
@@ -2061,7 +2065,7 @@
           "server_version"
         ]
       },
-      "chat_description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, page-<page id>, ep-<n>, link-<id>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning, and related sources (related means sharing at least 3 distinctive terms: words of five or more letters from the title and opening, or domains it linked as picks, each used by fewer than max(2% of the sources in scope, 20) sources; related_count counts them all, related_sources lists the top limit). Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. A saved link (link-<id>) is read whatever the scope: its incoming links are the issue and post links that are it or link its page, and its related sources include other saved links. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
+      "chat_description": "Explore what connects to one known archive source. Given a source id (wt-351, blog-<microblog id>, page-<page id>, ep-<n>, link-<id>, as other tools emit it), return outgoing links, incoming links when known (outgoing_count and incoming_count say how many there are; up to 30 of each are listed; find_links with id pages through every link in a source, and find_links with url lists every link to it; each link names its source id) (an entry with link_category cross_source links Jamie's corpora to each other; cross_source_count totals them), similar issues by meaning (for an issue), similar posts by meaning (for a blog post: its nearest other posts, leaving out posts from the same trip and taking at most one from each other trip, each with a score that ranks within this list only), and related sources (related means sharing at least 3 distinctive terms: words of five or more letters from the title and opening, or domains it linked as picks, each used by fewer than max(2% of the sources in scope, 20) sources; related_count counts them all, related_sources lists the top limit). Use for connected-archive questions like \"what else is near this?\", \"where did this link lead?\", \"did this blog post connect to Weekly Thing?\", or to build rabbit-hole style follow-ups. A saved link (link-<id>) is read whatever the scope: its incoming links are the issue and post links that are it or link its page, and its related sources include other saved links. URLs in results are citation metadata for the app; do not quote or narrate raw URLs/paths in the answer.",
       "doors": {
         "mcp": true,
         "webmcp": true,

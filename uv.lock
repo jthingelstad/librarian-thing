@@ -288,6 +288,7 @@ version = "0.1.0"
 source = { editable = "librarian-core" }
 dependencies = [
     { name = "boto3" },
+    { name = "numpy" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "rank-bm25" },
@@ -296,6 +297,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "boto3" },
+    { name = "numpy" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "rank-bm25" },

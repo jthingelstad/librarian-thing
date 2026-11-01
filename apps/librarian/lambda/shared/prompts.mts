@@ -126,7 +126,13 @@ export function promptFingerprint(): string {
 //        link_type, tags, note_voice and shared_in_issues. find_links rows
 //        that are a saved link, or link its page, name it as saved_link, and
 //        find_links with a link-<id> lists them.
-export const MCP_SERVER_VERSION = '2.9.0';
+// 2.10.0 (2026-11-01): similar posts. source_neighborhood gives a blog post
+//        similar_posts, its nearest other posts by meaning from the blog
+//        corpus build (mean chunk embedding, cosine floor 0.45, posts from
+//        the same trip left out, one from each other trip, diversity over
+//        the 60 nearest; librarian_core/related_posts.py): the candidates
+//        Thingy chooses its related-post suggestions from.
+export const MCP_SERVER_VERSION = '2.10.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

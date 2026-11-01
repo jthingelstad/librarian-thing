@@ -9,6 +9,7 @@ description = "Shared retrieval primitives for The Weekly Thing archive (corpus 
 requires-python = ">=3.11"
 dependencies = [
     "boto3",
+    "numpy",
     "python-dotenv",
     "pyyaml",
     "rank_bm25",

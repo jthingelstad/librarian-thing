@@ -89,7 +89,11 @@ function fixtures() {
           post_kind: 'post',
           categories: ['Coffee'],
           abstract: 'A generated summary of the pour-over post.',
-          abstract_source: 'generated'
+          abstract_source: 'generated',
+          similar_posts: [
+            { microblog_id: 78, score: 0.61234 },
+            { microblog_id: 404, score: 0.55 }
+          ]
         },
         {
           microblog_id: 78,
@@ -213,6 +217,35 @@ test('source_neighborhood gives a Weekly Thing issue its similar_issues from the
       score: 0.912
     }
   ]);
+});
+
+test('source_neighborhood gives a blog post its similar_posts from the blog corpus (2.10.0)', async () => {
+  primeCorpusCachesForTests(fixtures());
+  const out = await ARCHIVE_TOOLS.source_neighborhood({ id: 'blog-77' }, { scope: 'blog' });
+  assert.deepEqual(
+    out.similar_posts,
+    [
+      {
+        id: 'blog-78',
+        label: 'Kubb day',
+        subject: 'Kubb day',
+        publish_date: '2020-01-03',
+        url: 'https://www.thingelstad.com/2020/01/03/kubb.html',
+        section: 'Blog post',
+        categories: ['Kubb'],
+        score: 0.612
+      }
+    ],
+    'a candidate missing from the corpus is dropped, the rest resolve like similar_issues'
+  );
+  assert.equal(out.source.similar_posts, undefined, 'the raw candidates never ride the source record');
+  assert.equal(out.similar_issues, undefined);
+  const kubb = await ARCHIVE_TOOLS.source_neighborhood({ id: 'blog-78' }, { scope: 'blog' });
+  assert.equal(kubb.similar_posts, undefined, 'a post with no candidates has no list');
+  const issue = await ARCHIVE_TOOLS.source_neighborhood({ id: 'wt-1' }, { scope: 'weekly_thing' });
+  assert.equal(issue.similar_posts, undefined);
+  const post = await ARCHIVE_TOOLS.get_source({ id: 'blog-77' }, { scope: 'blog' });
+  assert.equal(post.source.similar_posts, undefined, 'get_source does not carry them');
 });
 
 test('source records carry the skim; get_source adds key_points and audio chapters', async () => {
