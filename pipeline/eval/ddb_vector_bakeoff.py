@@ -232,6 +232,7 @@ class QueryVectors:
             )
             value = response["body"].read().decode()
             self.cache[key] = value
+            self.path.parent.mkdir(parents=True, exist_ok=True)
             with self.path.open("a") as handle:
                 handle.write(json.dumps({"key": key, "value": value}) + "\n")
         else:
