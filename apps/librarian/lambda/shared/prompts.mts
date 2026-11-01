@@ -132,7 +132,13 @@ export function promptFingerprint(): string {
 //        the same trip left out, one from each other trip, diversity over
 //        the 60 nearest; librarian_core/related_posts.py): the candidates
 //        Thingy chooses its related-post suggestions from.
-export const MCP_SERVER_VERSION = '2.10.0';
+// 2.11.0 (2026-11-01): Embed v4. Every corpus is embedded with Cohere
+//        Embed v4 at 1024 (us.cohere.embed-v4:0) and each query as a
+//        document, so search by meaning finds more (source MRR 0.62 to 0.65
+//        reranked on the meaning eval) and orders differently; similar_posts
+//        are rebuilt on v4 with the cosine floor at 0.4365. No tool, argument
+//        or field changes.
+export const MCP_SERVER_VERSION = '2.11.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

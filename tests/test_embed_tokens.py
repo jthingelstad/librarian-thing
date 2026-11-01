@@ -74,7 +74,7 @@ class TokenCountTests(unittest.TestCase):
         out = StringIO()
         with unittest.mock.patch.object(core, "_bedrock_runtime", return_value=client):
             with redirect_stdout(out):
-                core.fetch_bedrock_embeddings(inputs, core.DEFAULT_EMBEDDING_MODEL)
+                core.fetch_bedrock_embeddings(inputs, "cohere.embed-english-v3")
         self.assertIn("embed_input_truncated: 1 of 2 inputs over 512 tokens", out.getvalue())
 
 
@@ -98,7 +98,11 @@ class GateReportTests(unittest.TestCase):
         return chunk
 
     def corpus(self):
-        return {"chunks": [self.chunk(probe) for probe in PROBES["probes"]]}
+        # The probes measure Embed English v3's 512-token cap; v4 is the default.
+        return {
+            "embedding_model": "cohere.embed-english-v3",
+            "chunks": [self.chunk(probe) for probe in PROBES["probes"]],
+        }
 
     def test_the_gate_counts_chunks_past_the_cap(self):
         over = gate.embed_truncation(self.corpus())
@@ -137,6 +141,7 @@ class EmbedModelTests(unittest.TestCase):
     type; v3's body and parse stay as they were."""
 
     V4 = "cohere.embed-v4:0"
+    V3 = "cohere.embed-english-v3"
 
     def invoke(self, inputs, model, dimensions, answer):
         client = unittest.mock.Mock()
@@ -147,9 +152,7 @@ class EmbedModelTests(unittest.TestCase):
         return vectors, json.loads(client.invoke_model.call_args.kwargs["body"])
 
     def test_v3_body_is_unchanged(self):
-        vectors, body = self.invoke(
-            ["a"], core.DEFAULT_EMBEDDING_MODEL, 1024, {"embeddings": [[1.0]]}
-        )
+        vectors, body = self.invoke(["a"], self.V3, 1024, {"embeddings": [[1.0]]})
         self.assertEqual(vectors, [[1.0]])
         self.assertEqual(body, {"texts": ["a"], "input_type": "search_document", "truncate": "END"})
 
@@ -165,7 +168,7 @@ class EmbedModelTests(unittest.TestCase):
         long = "word " * 1000
         _, body = self.invoke([long], self.V4, 1, {"embeddings": {"float": [[1.0]]}})
         self.assertEqual(body["texts"], [long])
-        _, body = self.invoke([long], core.DEFAULT_EMBEDDING_MODEL, None, {"embeddings": [[1.0]]})
+        _, body = self.invoke([long], self.V3, None, {"embeddings": [[1.0]]})
         self.assertEqual(len(body["texts"][0]), core.COHERE_EMBED_MAX_TEXT_CHARS)
 
     def test_a_wrong_length_vector_fails_the_build(self):
@@ -174,7 +177,11 @@ class EmbedModelTests(unittest.TestCase):
 
     def test_an_inference_profile_is_the_same_model(self):
         self.assertTrue(core.is_embed_v4("us.cohere.embed-v4:0"))
-        self.assertFalse(core.is_embed_v4(core.DEFAULT_EMBEDDING_MODEL))
+        self.assertFalse(core.is_embed_v4(self.V3))
+
+    def test_the_default_is_v4_through_its_profile(self):
+        self.assertEqual(core.DEFAULT_EMBEDDING_MODEL, "us.cohere.embed-v4:0")
+        self.assertEqual(core.DEFAULT_EMBEDDING_DIMENSIONS, 1024)
 
     def test_a_throttled_batch_waits_and_tries_again(self):
         from botocore.exceptions import ClientError

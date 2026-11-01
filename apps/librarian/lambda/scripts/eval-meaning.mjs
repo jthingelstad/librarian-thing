@@ -64,8 +64,9 @@ const distDir = process.env.EVAL_DIST_DIR || path.join(here, '..', 'dist');
 const vectorsDir = flag('vectors', '');
 const vectorDims = Number(flag('dims', '0'));
 const useInt8 = process.argv.includes('--int8');
-// The query's input type, which the Lambda sends as search_query; another
-// one (search_document, clustering) is rewritten into the request here.
+// The query's input type. The Lambda sends search_query on v3 and
+// search_document on v4 (2026-11-01); another one is rewritten into the
+// request here.
 const queryInputType = flag('query-input-type', '');
 const fusion = Object.fromEntries(
   (flag('fusion', '') || '')
@@ -332,7 +333,7 @@ for (const [corpus, rows] of corpusGroups) {
 mkdirSync(path.dirname(outPath), { recursive: true });
 writeFileSync(
   outPath,
-  `${JSON.stringify({ label, corpus_dir: corpusDir, vectors: vectorsDir || null, int8: useInt8, query_input_type: queryInputType || 'search_query', fusion, signatures, limit, scope: scopeOverride || 'per item', modes, calls, summary, results }, null, 1)}\n`
+  `${JSON.stringify({ label, corpus_dir: corpusDir, vectors: vectorsDir || null, int8: useInt8, query_input_type: queryInputType || 'as the Lambda sends it', fusion, signatures, limit, scope: scopeOverride || 'per item', modes, calls, summary, results }, null, 1)}\n`
 );
 
 const pct = (value) => `${Math.round(value * 100)}`.padStart(3);

@@ -56,7 +56,7 @@ export function modelWritesProgressUpdates(modelId: string) {
 }
 
 export function embeddingModel() {
-  return process.env.BEDROCK_EMBEDDING_MODEL || 'cohere.embed-english-v3';
+  return process.env.BEDROCK_EMBEDDING_MODEL || 'us.cohere.embed-v4:0';
 }
 
 export function rerankModel() {

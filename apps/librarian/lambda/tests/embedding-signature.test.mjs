@@ -82,7 +82,7 @@ const honest = (modelId, body) =>
     ? { response_type: 'embeddings_by_type', embeddings: { float: [unit(body.output_dimension, 0)] } }
     : { embeddings: [unit(1024, 0)] };
 
-test('the v3 query body is unchanged; v4 asks for its length and float vectors', () => {
+test('the v3 query body is unchanged; v4 asks for its length and float vectors, as a document', () => {
   assert.deepEqual(embedQueryBody('q', { model: V3, dimensions: 1024 }), {
     texts: ['q'],
     input_type: 'search_query',
@@ -90,7 +90,7 @@ test('the v3 query body is unchanged; v4 asks for its length and float vectors',
   });
   assert.deepEqual(embedQueryBody('q', { model: V4, dimensions: 512 }), {
     texts: ['q'],
-    input_type: 'search_query',
+    input_type: 'search_document',
     embedding_types: ['float'],
     output_dimension: 512,
     truncate: 'RIGHT'

@@ -154,7 +154,7 @@ budget, or OAuth lifetime; `verify` fails while the artifact is stale.
 
 - **Node 24** (arm64) — Lambda runtime
 - **AWS SDK v3** — `@aws-sdk/client-bedrock-runtime`, `client-bedrock-agent-runtime`, `client-dynamodb`, `client-s3`
-- **Bedrock** — Cohere `embed-english-v3` (us-east-1), Cohere `rerank-v3-5:0` (us-west-2), Claude Sonnet 4.6 (cross-region inference)
+- **Bedrock** — Cohere `embed-v4:0` at 1024 (the `us.` cross-region profile), Cohere `rerank-v3-5:0` (us-west-2), Claude Sonnet 4.6 (cross-region inference)
 - **DynamoDB** — conversation log, rate limits, per-user profile row
 - **S3** — pre-embedded corpus, graph artifacts
 - **API Gateway** + **Lambda Function URL** (response streaming) — two HTTP front doors; the Eval Lambda is event-driven by DynamoDB Streams

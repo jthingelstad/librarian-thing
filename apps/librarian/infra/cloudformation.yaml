@@ -867,7 +867,7 @@ Resources:
           THINGY_FAST_MODEL: "claude-haiku-5-5"
           THINGY_PREMIUM_MODEL: "claude-opus-5-5"
           THINGY_EFFORT: !Ref ThingyEffort
-          BEDROCK_EMBEDDING_MODEL: "cohere.embed-english-v3"
+          BEDROCK_EMBEDDING_MODEL: "us.cohere.embed-v4:0"
           BEDROCK_RERANK_MODEL: "cohere.rerank-v3-5:0"
           BEDROCK_RERANK_REGION: "us-west-2"
           # Deployed-revision stamp for recorded turns; the timestamped code
