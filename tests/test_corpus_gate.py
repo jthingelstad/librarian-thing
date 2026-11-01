@@ -216,6 +216,37 @@ class WorkflowTest(unittest.TestCase):
         self.assertIn("blog_corpus == 'true'", self.steps[archive]["if"])
         self.assertIn("reference_corpus == 'true'", self.steps[archive]["if"])
 
+    def test_every_long_step_starts_with_a_fresh_aws_session(self):
+        # The OIDC session lasts an hour; the 2026-11-01 Embed v4 switch lost
+        # it 60 minutes in, a third of the way through the blog embed.
+        first = self.steps[self.names.index("Configure AWS credentials (OIDC)")]
+        long_steps = [
+            "Embed Weekly Thing corpus + graph (candidate)",
+            "Embed blog corpus (candidate)",
+            "Embed podcast corpus (candidate)",
+            "Embed reference corpus (candidate)",
+            "Embed links corpus (candidate)",
+            "Corpus gate (eval the candidate corpora)",
+        ]
+        for name in long_steps:
+            index = self.names.index(name)
+            refresh = self.steps[index - 1]
+            self.assertEqual(refresh["name"], "Refresh AWS credentials (OIDC)", name)
+            self.assertEqual(refresh["uses"], first["uses"], name)
+            self.assertEqual(refresh["with"], first["with"], name)
+            self.assertEqual(refresh["if"], self.steps[index]["if"], name)
+        # One fresh session covers the uploads and the deploy, unconditionally.
+        before = self.steps[
+            self.names.index("Snapshot native serving identities before promotion") - 1
+        ]
+        self.assertEqual(before["name"], "Refresh AWS credentials (OIDC)")
+        self.assertEqual(before["with"], first["with"])
+        self.assertNotIn("if", before)
+        self.assertLess(
+            self.names.index("Corpus gate (archive checks on the staged candidates)"),
+            self.names.index("Snapshot native serving identities before promotion"),
+        )
+
     def test_the_reference_corpus_is_built_gated_and_uploaded_like_the_others(self):
         # Jamie, 2026-10-23: the reference base is its own corpus, staged,
         # gated and uploaded in the same order as the podcast's.
