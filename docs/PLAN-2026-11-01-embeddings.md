@@ -346,11 +346,12 @@ direct 0.97 → 0.96.
   candidate eval's rerank fails with AccessDenied and the gate never scores the
   reranked order (deploy run 41285778936). Granting it adds rerank cost to
   every deploy, so it is Jamie's call.
-- **Vectors as binary, not JSON.** Embeddings are about 80% of the 675 MB of
-  corpus JSON and are held as float64. A binary file per corpus (float32 or
-  int8; int8 scores as float) cuts the cold load and the memory, which is
-  what lets the Web Function take more than one request per environment
-  (below).
+- **The semantic leg on a DynamoDB vector index** (Jamie, 2026-11-01, after
+  the review below): `PLAN-2026-11-01-dynamodb-vectors.md` has the bake-off
+  and the steps. Its step 2 is the binary vectors: embeddings are about 80%
+  of the 675 MB of corpus JSON and are held as float64, and moving them out
+  of the Lambda is what lets the Web Function take more than one request per
+  environment (below).
 - **OpenAI embeddings,** one eval run if Jamie wants the comparison. Its key
   must reach the run without passing through an agent.
 
