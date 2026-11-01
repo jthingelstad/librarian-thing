@@ -1,7 +1,7 @@
 # Plan: Thingy suggests related posts (2026-11-01)
 
-**Status: steps 1 and 2 in progress; step 3 stops at a 20-post sample for
-Jamie's review.** Nothing is written to micro.blog by this plan until Jamie
+**Status: steps 1 and 2 live (PR #103, MCP 2.10.0); step 3's job is built
+and its 21-post sample waits on Jamie's review.** Nothing is written to micro.blog by this plan until Jamie
 approves the writer (step 5).
 
 ## What Jamie decided
@@ -83,18 +83,25 @@ real decision to Thingy.
 3. **Thingy's picks.** A job gives Thingy's model each post (title, date,
    abstract, categories, opening text) and its candidates (the same fields),
    with Thingy's voice from `prompts/agent-system.md`. Thingy chooses up to
-   three, each with a why line of at most about 110 characters, and may choose
+   three, each with a why line (the prompt asks for 100 characters; up to 110
+   is fine, up to 140 is kept and flagged, under 30 is dropped), and may choose
    none. Rules: say only what the two posts show (no invented connection);
    prefer variety; at most one from a series; refer to Jamie as he/him, as the
    chat does. The output is a sidecar keyed by microblog id with a hash of its
    inputs, so an unchanged post is never asked again.
    - Thingy's words never enter the corpus (a hard constraint): the sidecar
      lives beside it in S3, not in any chunk.
-   - **First run: about 20 posts, then stop for Jamie's review** (Camelback,
+   - **First run: 21 posts, then stop for Jamie's review** (Camelback,
      Kubb King, the back-scratcher, Zuoz, a POAP claim, the Kindle order,
-     espresso, ChatGPT, IndieWeb, Things 4 Good, a Mazie birthday, Hellweek,
-     and more across the years and kinds). Only after Jamie's go does it run
-     over the blog.
+     espresso, Weekly Thing GPT, IndieWeb, Things 4 Good, a Mazie birthday,
+     Hellweek, and more across the years and kinds). Only after Jamie's go
+     does it run over the blog. `pipeline/blog/thingy_related.py`, Opus 5.5 at
+     medium effort: $0.39 for the 21 (about $0.019 a post, so about $200 for
+     the blog asked directly, about $100 through the Batches API). Thingy
+     chose 3 for 15 posts, 2 for 3, 1 for 2, and none for the back-scratcher
+     (one candidate). One first-run answer was a one-letter line, now refused
+     and asked again. Review page: `www.thingelstad.com/design/prototypes/
+     thingy-related/review/` (local, not published).
 4. **Theme: Thingy's panel** (thing-hugo, a separate release). `data/related.json`
    entries become `{url, why}`; the panel is headed as Thingy's, each pick shows
    its why line, and the panel ends with a link into Thingy about the post. A
