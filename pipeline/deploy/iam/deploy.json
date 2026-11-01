@@ -159,7 +159,7 @@
       "Action": "events:PutEvents",
       "Resource": "arn:aws:events:us-east-1:999153317627:event-bus/thingelstad-publishing",
       "Condition": {
-        "StringEquals": {
+        "ForAllValues:StringEquals": {
           "events:source": [
             "librarian",
             "thingy"
@@ -168,6 +168,10 @@
             "received",
             "ping"
           ]
+        },
+        "Null": {
+          "events:source": "false",
+          "events:detail-type": "false"
         }
       }
     }
