@@ -1,7 +1,7 @@
 # Plan: Thingy suggests related posts (2026-11-01)
 
 **Status: steps 1 and 2 live (PR #103, MCP 2.10.0); step 3's job is built
-and its 21-post sample waits on Jamie's review.** Nothing is written to micro.blog by this plan until Jamie
+(Sonnet, Batches API) and its 21-post sample waits on Jamie's review.** Nothing is written to micro.blog by this plan until Jamie
 approves the writer (step 5).
 
 ## What Jamie decided
@@ -81,27 +81,43 @@ real decision to Thingy.
    abstract, categories, score. MCP 2.10.0. Thingy's chat gets it for free
    ("what else did Jamie write like this?").
 3. **Thingy's picks.** A job gives Thingy's model each post (title, date,
-   abstract, categories, opening text) and its candidates (the same fields),
-   with Thingy's voice from `prompts/agent-system.md`. Thingy chooses up to
-   three, each with a why line (the prompt asks for 100 characters; up to 110
-   is fine, up to 140 is kept and flagged, under 30 is dropped), and may choose
-   none. Rules: say only what the two posts show (no invented connection);
-   prefer variety; at most one from a series; refer to Jamie as he/him, as the
-   chat does. The output is a sidecar keyed by microblog id with a hash of its
-   inputs, so an unchanged post is never asked again.
+   kind, categories and its whole text with photo alt text and captions, up to
+   6,000 characters, so 99.4% of posts whole) and its candidates (the same, up
+   to 1,500 characters, 92% whole, plus a generated summary for a long one),
+   with Thingy's voice. Thingy chooses up to three, or none, and for each gives
+   evidence (words copied from the other post) and a line of at most 16 words.
+   Rules: say only what the posts show; never a reason the posts don't state;
+   prefer variety; at most one from a series; he/him for Jamie. The output is
+   a sidecar keyed by microblog id with a hash of its inputs, so an unchanged
+   post is never asked again.
+   - The job checks every line and drops one that does not hold: evidence not
+     in the other post, a number in neither post (or not the years between
+     them), a line outside 30 to 125 characters, or one that does not end as a
+     sentence (Sonnet once let JSON into a line). A dropped line asks Thingy
+     again, once, directly.
    - Thingy's words never enter the corpus (a hard constraint): the sidecar
      lives beside it in S3, not in any chunk.
+   - **Model: Sonnet 5.5 at medium effort through the Batches API** (Jamie,
+     2026-11-01: "Opus seems like overkill for this. Try sonnet and use the
+     batch api."). On the 21 sample posts, with the same inputs:
+     - Sonnet v3 (this job): $0.13, every post answered, every claim checked
+       held, 3 lines between 110 and 125 characters, no "Another" openers.
+     - Sonnet at high effort: about as many tokens, more "Another" openers
+       and a weaker pick (a ride chosen for its GPS map).
+     - Opus at medium: accurate lines, but on 4 of 21 posts it wrote a
+       placeholder ("x"), and on 3 of those kept thinking until the token
+       limit, all of it billed. The cap is now 4,000 tokens (an answer takes
+       about 200).
+   - The whole blog: 10,417 posts with candidates (74 have none), in parts of
+     2,000 requests (a batch is capped at 256 MB). Projected from the
+     sample's tokens: about $40 to $52 batched plus about $10 of direct
+     retries.
    - **First run: 21 posts, then stop for Jamie's review** (Camelback,
      Kubb King, the back-scratcher, Zuoz, a POAP claim, the Kindle order,
      espresso, Weekly Thing GPT, IndieWeb, Things 4 Good, a Mazie birthday,
      Hellweek, and more across the years and kinds). Only after Jamie's go
-     does it run over the blog. `pipeline/blog/thingy_related.py`, Opus 5.5 at
-     medium effort: $0.39 for the 21 (about $0.019 a post, so about $200 for
-     the blog asked directly, about $100 through the Batches API). Thingy
-     chose 3 for 15 posts, 2 for 3, 1 for 2, and none for the back-scratcher
-     (one candidate). One first-run answer was a one-letter line, now refused
-     and asked again. Review page: `www.thingelstad.com/design/prototypes/
-     thingy-related/review/` (local, not published).
+     does it run over the blog. Review page: `www.thingelstad.com/design/
+     prototypes/thingy-related/review/` (local, not published).
 4. **Theme: Thingy's panel** (thing-hugo, a separate release). `data/related.json`
    entries become `{url, why}`; the panel is headed as Thingy's, each pick shows
    its why line, and the panel ends with a link into Thingy about the post. A
@@ -113,9 +129,19 @@ real decision to Thingy.
 
 ## Open calls for Jamie
 
+Jamie, 2026-11-01: "I envision Thingy's image being on each post and we
+probably dump the other post to post navigation and only use this." What that
+touches, under a post today: the trip card (1,585 posts are on a trip), the
+Weekly Thing card, Related, Keep going (a category pick), Earlier / Later.
+
+- Keep going and Earlier / Later go; the Thingy panel is the way onward.
+- The trip card: same-trip posts are left out of Thingy's candidates because
+  the card links a trip's days. If the card goes too, they must come back in.
+- A post with no picks (about 1 in 20, and the 74 with no candidates) and a
+  new post before the next run: the panel still shows Thingy's image and the
+  link into Thingy, so every post has it.
+- The Weekly Thing card is not navigation and stays.
 - The heading ("Thingy suggests") and whether the "Explore with Thingy" pill
   stays beside the panel's own link into Thingy.
-- Same-trip posts stay out (the trip navigation covers them)?
 - Posts only, or Weekly Thing issues and Another Thing episodes as
   suggestions too?
-- Does the panel replace Keep going's category pick?
