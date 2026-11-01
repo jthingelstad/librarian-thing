@@ -24,6 +24,7 @@ BOUNDARIES = {
     "BedrockEvaluationRole": ("WeeklyThingLibrarianEvaluationBoundary", "evaluation-boundary"),
 }
 DEPLOY_POLICY = "WeeklyThingLibrarianDeployScoped"
+PUBLISHING_BUS = f"arn:aws:events:us-east-1:{ACCOUNT}:event-bus/thingelstad-publishing"
 NATIVE_CFN_POLICY = "WeeklyThingLibrarianNativeCloudFormation"
 # The account tag standard (projects-sysadmin docs/AWS-TAGS.md) for IAM made here,
 # outside the stack.
@@ -310,6 +311,45 @@ def simulate(session: boto3.Session) -> None:
             False,
             {},
         ),
+        # Arrival receipts: one PutEvents call carries a batch, so every
+        # entry's source and type must be on the list, and a call naming none
+        # is refused (ForAllValues alone would allow it).
+        (
+            "deploy",
+            "events:PutEvents",
+            PUBLISHING_BUS,
+            True,
+            {"events:source": ["librarian"], "events:detail-type": ["received"]},
+        ),
+        (
+            "deploy",
+            "events:PutEvents",
+            PUBLISHING_BUS,
+            True,
+            {"events:source": ["thingy", "librarian"], "events:detail-type": ["ping", "received"]},
+        ),
+        (
+            "deploy",
+            "events:PutEvents",
+            PUBLISHING_BUS,
+            False,
+            {"events:source": ["librarian", "wt-builder"], "events:detail-type": ["received"]},
+        ),
+        (
+            "deploy",
+            "events:PutEvents",
+            PUBLISHING_BUS,
+            False,
+            {"events:source": ["librarian"], "events:detail-type": ["published"]},
+        ),
+        ("deploy", "events:PutEvents", PUBLISHING_BUS, False, {}),
+        (
+            "deploy",
+            "events:PutEvents",
+            f"arn:aws:events:us-east-1:{ACCOUNT}:event-bus/default",
+            False,
+            {"events:source": ["librarian"], "events:detail-type": ["received"]},
+        ),
     ]
     for name, action, resource, allowed, context in cases:
         result = iam.simulate_custom_policy(
@@ -317,7 +357,11 @@ def simulate(session: boto3.Session) -> None:
             ActionNames=[action],
             ResourceArns=[resource],
             ContextEntries=[
-                {"ContextKeyName": key, "ContextKeyValues": [value], "ContextKeyType": "string"}
+                {
+                    "ContextKeyName": key,
+                    "ContextKeyValues": value if isinstance(value, list) else [value],
+                    "ContextKeyType": "stringList" if isinstance(value, list) else "string",
+                }
                 for key, value in context.items()
             ],
         )["EvaluationResults"][0]
