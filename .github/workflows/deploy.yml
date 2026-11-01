@@ -303,11 +303,35 @@ jobs:
       # artifact when chunk ids match. The WT stage also builds the graph
       # from the embedded corpus (real similar_issues); the site handoff
       # below pushes that graph once it is uploaded.
+      #
+      # The OIDC session lasts an hour, and a full re-embed runs longer than
+      # that: on 2026-11-01 the Embed v4 switch lost its session 60 minutes
+      # in, a third of the way through the blog. Each step that can run long
+      # starts with a fresh session: every embed, the gate, and the uploads
+      # and deploy. The job's 120-minute timeout bounds the whole run.
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.weekly_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
+
       - name: Embed Weekly Thing corpus + graph (candidate)
         if: steps.changes.outputs.weekly_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.blog_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
 
       - name: Embed blog corpus (candidate)
         if: steps.changes.outputs.blog_corpus == 'true'
@@ -315,11 +339,29 @@ jobs:
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.podcast_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
+
       - name: Embed podcast corpus (candidate)
         if: steps.changes.outputs.podcast_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_podcast_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.reference_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
 
       - name: Embed reference corpus (candidate)
         if: steps.changes.outputs.reference_corpus == 'true'
@@ -327,11 +369,29 @@ jobs:
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.links_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
+
       - name: Embed links corpus (candidate)
         if: steps.changes.outputs.links_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_links_corpus.py --stage .candidate
         env:
           LIBRARIAN_BUCKET: weekly-thing-librarian
+
+      - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
 
       # The corpus gate: the same eval over the candidate corpora (the live
       # S3 copy of any corpus not rebuilt) BEFORE anything is uploaded. A
@@ -355,6 +415,14 @@ jobs:
       - name: Corpus gate (archive checks on the staged candidates)
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true'
         run: uv run --locked python pipeline/corpus/corpus_gate.py gate --candidate .candidate --site-archive data/weekly/archive
+
+      - name: Refresh AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
 
       # Capture the running versions before any new corpus reaches S3.
       - name: Snapshot native serving identities before promotion

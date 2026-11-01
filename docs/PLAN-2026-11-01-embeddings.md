@@ -248,6 +248,18 @@ says the lexical leg itself is weak (What's left).
   measured 3.66) and wait
   out a throttle, and the CI job's ceiling is 120 minutes, up from 60 (a run
   takes about 20 minutes before any re-embed).
+- **The first switch deploy (2026-11-01, run 41324848961) failed safely,**
+  before the gate, so nothing reached S3 or the Lambda. Two causes. The job's
+  OIDC session lasts an hour, and the run lost it at 60 minutes, a third of
+  the way through the blog; each long step now starts with a fresh session.
+  And the profile throttled long before 16.2M: Weekly Thing embedded at
+  about 230,000 a minute (3.16M in 13.5 minutes), then from 10:40 a.m. CST
+  every call throttled and the rate fell to about 10,000 a minute, with
+  11.2M on the profile (plus 1.25M on the plain id) in the past 24 hours.
+  That is roughly 16.2M spread over a day. The morning's eval had embedded
+  the whole archive on the profile without one throttle, from a quiet
+  window. So a full re-embed needs a quiet 24 hours, not the cap's
+  arithmetic.
 - v3 costs $0.10 a million and has never hit a limit.
 
 ## What ships
@@ -274,8 +286,10 @@ free):** v4 at 1024 for every corpus; the query embedded as a document on
 v4; `SIMILAR_POSTS_FLOOR` 0.45 → 0.4365, which keeps the same 95.7% share of
 each post's ten nearest; MCP 2.10.0 → 2.11.0; graph.json and similar_posts
 rebuilt by the same run. CI re-embeds everything (7.4M tokens, $0.89, about
-25 minutes), and the corpus gate stages, evaluates and promotes it like any
-build. No change to `/retrieve`'s shape.
+25 minutes of embedding in a run of over an hour), and the corpus gate
+stages, evaluates and promotes it like any build. No change to
+`/retrieve`'s shape. Merged 2026-11-01 as #109 (65af3824); its deploy failed
+before the gate (Quotas and cost), so the corpora are still v3.
 
 ## similar_posts for the 21 posts
 
@@ -332,8 +346,11 @@ direct 0.97 → 0.96.
 
 ## What's left
 
-- **The switch PR** above. Jamie's OIDC apply put the v4 grants live on
-  2026-11-01 at 9:39 a.m. CST (deploy policy v6, runtime boundary v5).
+- **The switch's re-embed.** #109 is merged and Jamie's OIDC apply put the
+  v4 grants live on 2026-11-01 at 9:39 a.m. CST (deploy policy v6, runtime
+  boundary v5), but the corpora are still v3 (Quotas and cost). Run
+  `deploy.yml` with scope `full` once the profile has had a quiet 24 hours.
+  Until then each corpus answers on v3 and the query matches it.
 - **The keyword leg.** It is a TF-IDF cosine (no BM25, stemming, phrases or
   title weight). On its own it scores 0.26; fused with v4 it pulls semantic's
   0.55 down to 0.41, and only the reranker restores the order. Measure a
@@ -358,10 +375,12 @@ direct 0.97 → 0.96.
 
 ## AWS review (Jamie, 2026-11-01)
 
-- **Quotas are not the limit.** The throttling was the on-demand model id
-  (150,000 tokens a minute); the cross-region profile takes 300,000, which is
-  25 minutes for the whole archive. Only the 16.2M-a-day cap matters, and
-  only for two full embeds in one day.
+- **Quotas are not the limit for one full embed.** The throttling was the
+  on-demand model id (150,000 tokens a minute); the cross-region profile
+  takes 300,000, which is 25 minutes for the whole archive. The day's quota
+  is the limit for a second one: on 2026-11-01 the switch deploy, after the
+  eval's full embed that morning, throttled at about 11M in 24 hours, below
+  the 16.2M cap (Quotas and cost).
 - **Lambda Web Functions: already in use** since 2026-10-13
   (`NativeArchiveFunction`), at one request per environment and up to five
   environments. October cost $10.47: memory time $9.43, CPU $0.84, because
