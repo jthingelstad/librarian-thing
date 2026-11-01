@@ -1,9 +1,9 @@
 """Embed a folder of corpora with another model, for the meaning eval.
 
 Writes the vectors beside the corpora rather than into them: for each corpus
-``<kind>.ids.json`` (chunk ids in order), ``<kind>.f32`` (float32, n by
-dimensions) and, for Embed v4, ``<kind>.i8`` (its int8 vectors from the same
-call). ``apps/librarian/lambda/scripts/eval-meaning.mjs --vectors`` swaps
+``<kind>.ids.json`` (chunk ids in order), ``<kind>.sha256.json`` (each row's
+embed input, hashed), ``<kind>.f32`` (float32, n by dimensions) and, for
+Embed v4, ``<kind>.i8`` (its int8 vectors from the same call). ``apps/librarian/lambda/scripts/eval-meaning.mjs --vectors`` swaps
 them into the corpora it serves. Embed v4's shorter vectors are the leading
 part of its 1536 (checked 2026-11-01: cosine 1.0 at 256, 512 and 1024), so
 one pass at 1536 measures every length.
@@ -29,6 +29,7 @@ limit, and a throttled call waits and tries again.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import threading
@@ -66,6 +67,23 @@ def embed_input(chunk: dict[str, Any], link_text: str) -> str:
     if link_text == "full" and chunk.get("source_kind") == "link":
         return "\n".join([*_embed_header(chunk), chunk.get("text") or ""])
     return _embed_input(chunk)
+
+
+def input_hash(text: str) -> str:
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def same_model(left: str, right: str) -> bool:
+    # A cross-region profile (us.cohere.embed-v4:0) serves the same model as
+    # its base id and returns the same vectors (cosine 0.9998, 2026-11-01).
+    def base(model: str) -> str:
+        return (
+            model.split(".", 1)[1]
+            if model.split(".", 1)[0] in {"us", "eu", "apac", "global"}
+            else model
+        )
+
+    return base(left) == base(right)
 
 
 class Embedder:
@@ -142,26 +160,30 @@ class Reuse:
     there (``--reuse <dir>``): a variant that changes a few inputs pays only
     for those."""
 
-    def __init__(self, folder: Path | None, kind: str, dimensions: int):
+    def __init__(self, folder: Path | None, kind: str, dimensions: int, model: str):
         self.rows: dict[str, int] = {}
-        self.inputs: dict[str, str] = {}
-        self.link_text = "cut"
+        self.hashes: list[str] = []
         if not folder or not (folder / f"{kind}.ids.json").exists():
             return
         meta = json.loads((folder / "meta.json").read_text())
+        if not same_model(str(meta.get("model") or ""), model):
+            raise SystemExit(f"--reuse {folder} holds {meta.get('model')} vectors, not {model}")
         if int(meta.get("dimensions") or 0) != dimensions:
             raise SystemExit(f"--reuse {folder} holds {meta.get('dimensions')} dimensions")
-        self.link_text = meta.get("link_text", "cut")
         ids = json.loads((folder / f"{kind}.ids.json").read_text())
+        # The hash of the input each vector was made from, written with it:
+        # some chunk ids are fixed (a site page's, a thing's), so an id alone
+        # does not say the text is the same, and the run's corpus folder may
+        # have been rebuilt since.
+        hashes_path = folder / f"{kind}.sha256.json"
+        if not hashes_path.exists():
+            raise SystemExit(
+                f"--reuse {folder} has no {hashes_path.name}; its inputs cannot be checked"
+            )
+        self.hashes = json.loads(hashes_path.read_text())
+        if len(self.hashes) != len(ids):
+            raise SystemExit(f"{hashes_path} does not match {kind}.ids.json")
         self.rows = {chunk_id: index for index, chunk_id in enumerate(ids)}
-        # The inputs those vectors were made from: some chunk ids are fixed
-        # (a site page's, a thing's), so an id alone does not say the text
-        # is the same.
-        source = Path(meta["corpus_dir"]) / CORPUS_FILES[kind]
-        self.inputs = {
-            str(chunk.get("id")): embed_input(chunk, self.link_text)
-            for chunk in json.loads(source.read_text())["chunks"]
-        }
         self.f32 = np.memmap(folder / f"{kind}.f32", dtype=np.float32, mode="r").reshape(
             len(ids), dimensions
         )
@@ -173,9 +195,8 @@ class Reuse:
         )
 
     def find(self, chunk: dict[str, Any], link_text: str) -> int | None:
-        chunk_id = str(chunk.get("id"))
-        index = self.rows.get(chunk_id)
-        if index is None or self.inputs.get(chunk_id) != embed_input(chunk, link_text):
+        index = self.rows.get(str(chunk.get("id")))
+        if index is None or self.hashes[index] != input_hash(embed_input(chunk, link_text)):
             return None
         return index
 
@@ -221,12 +242,17 @@ def run_corpus(
     reuse: Reuse,
 ) -> None:
     ids_path = out / f"{kind}.ids.json"
+    hashes_path = out / f"{kind}.sha256.json"
     f32_path = out / f"{kind}.f32"
     i8_path = out / f"{kind}.i8"
     done = json.loads(ids_path.read_text()) if ids_path.exists() else []
+    hashes = json.loads(hashes_path.read_text()) if hashes_path.exists() else []
     expected = [str(chunk.get("id")) for chunk in chunks]
-    if done != expected[: len(done)]:
-        raise SystemExit(f"{ids_path} does not match the corpus order; delete it to start over")
+    expected_hashes = [input_hash(embed_input(chunk, link_text)) for chunk in chunks]
+    if done != expected[: len(done)] or hashes != expected_hashes[: len(done)]:
+        raise SystemExit(
+            f"{ids_path} does not match the corpus's order or inputs; delete the run to start over"
+        )
     pending = chunks[len(done) :]
     if not pending:
         print(f"{kind}: all {len(chunks)} chunks already embedded")
@@ -248,6 +274,8 @@ def run_corpus(
                         i8.write(int8.tobytes())
             for rows in group:
                 done.extend(str(row.get("id")) for row in rows)
+            hashes = expected_hashes[: len(done)]
+            hashes_path.write_text(json.dumps(hashes))
             ids_path.write_text(json.dumps(done))
             print(f"  {kind}: {len(done)} of {len(chunks)} (tokens so far {embed.tokens:,})")
 
@@ -273,7 +301,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.only and kind not in args.only:
             continue
         chunks = json.loads((args.corpus_dir / name).read_text())["chunks"]
-        reuse = Reuse(args.reuse, kind, args.dimensions)
+        reuse = Reuse(args.reuse, kind, args.dimensions, args.model)
         run_corpus(kind, chunks, args.out, embed, args.link_text, args.batch, reuse)
     price = PRICE_PER_MILLION["v4" if is_embed_v4(args.model) else "v3"]
     meta_path = args.out / "meta.json"
