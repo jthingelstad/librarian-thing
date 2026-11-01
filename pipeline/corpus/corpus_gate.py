@@ -67,16 +67,14 @@ sys.path.insert(0, str(ROOT / "librarian-core"))
 
 from librarian_core.audio import audio_record, read_site_frontmatter  # noqa: E402
 from librarian_core.corpus import (  # noqa: E402
-    COHERE_EMBED_MAX_TEXT_CHARS,
+    DEFAULT_EMBEDDING_MODEL,
     _embed_input,
     _journal_window,
     blog_published,
     chicago_day,
+    embed_limits,
 )
-from librarian_core.embed_tokens import (  # noqa: E402
-    COHERE_EMBED_MAX_TOKENS,
-    embed_token_count,
-)
+from librarian_core.embed_tokens import embed_token_count  # noqa: E402
 from librarian_core.paths import BLOG_DIR  # noqa: E402
 from librarian_core.saved_links import LINK_ID_RE, link_page_url  # noqa: E402
 
@@ -239,14 +237,18 @@ def links_date_failures(links: dict[str, Any]) -> list[str]:
 
 def embed_truncation(corpus: dict[str, Any]) -> list[tuple[str, int]]:
     """(chunk id, tokens) for every chunk whose embedding input runs past
-    Cohere Embed v3's 512-token cap, longest first (QA2 I2-4). Measured
-    2026-10-01 on the live corpora: 1,308 of 10,051 Weekly Thing inputs and
-    630 of 11,973 blog inputs; Bedrock refuses the 537-token one when told
-    not to truncate."""
+    the cap of the model the corpus is embedded with, longest first (QA2
+    I2-4). Cohere Embed v3 reads 2,048 characters and 512 tokens: measured
+    2026-10-01 on the live corpora, 1,308 of 10,051 Weekly Thing inputs and
+    630 of 11,973 blog inputs ran past it, and Bedrock refuses the 537-token
+    one when told not to truncate. Embed v4 reads 128K tokens."""
+    limits = embed_limits(corpus.get("embedding_model") or DEFAULT_EMBEDDING_MODEL)
+    max_chars = limits["max_chars"]
     over = []
     for chunk in corpus.get("chunks") or []:
-        tokens = embed_token_count(_embed_input(chunk)[:COHERE_EMBED_MAX_TEXT_CHARS])
-        if tokens > COHERE_EMBED_MAX_TOKENS:
+        text = _embed_input(chunk)
+        tokens = embed_token_count(text[:max_chars] if max_chars else text)
+        if tokens > limits["max_tokens"]:
             over.append((str(chunk.get("id")), tokens))
     return sorted(over, key=lambda item: (-item[1], item[0]))
 
@@ -255,10 +257,11 @@ def embed_truncation_report(name: str, corpus: dict[str, Any]) -> tuple[int, str
     """How many of ``corpus``'s chunks are truncated, and the line saying so."""
     over = embed_truncation(corpus)
     total = len(corpus.get("chunks") or [])
+    model = corpus.get("embedding_model") or DEFAULT_EMBEDDING_MODEL
     worst = ", ".join(f"{chunk_id} ({tokens})" for chunk_id, tokens in over[:5])
     line = (
         f"embed truncation: {name} {len(over)} of {total} chunk inputs run past "
-        f"{COHERE_EMBED_MAX_TOKENS} tokens; Cohere drops their tails"
+        f"{embed_limits(model)['max_tokens']} tokens ({model}); Cohere drops their tails"
     )
     return len(over), (f"{line} (longest: {worst})" if over else line)
 
