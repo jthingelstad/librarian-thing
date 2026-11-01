@@ -1,7 +1,12 @@
 # Plan: Thingy suggests related posts (2026-11-01)
 
 **Status: steps 1 and 2 live (PR #103, MCP 2.10.0); step 3's job is built
-(Sonnet, Batches API) and its 21-post sample waits on Jamie's review.** Nothing is written to micro.blog by this plan until Jamie
+(Sonnet, Batches API) and its 21-post sample waits on Jamie's review. The
+whole-blog run waits for the embedding work first** (Jamie, 2026-11-01: "We
+need to fix that embedding problem first"): `similar_posts` ranks by the
+embeddings, and Cohere Embed v3 reads only the first 512 tokens of a chunk.
+When the embeddings change, `similar_posts` is rebuilt and the 21-post sample
+is run again before the go. Nothing is written to micro.blog by this plan until Jamie
 approves the writer (step 5).
 
 ## What Jamie decided
