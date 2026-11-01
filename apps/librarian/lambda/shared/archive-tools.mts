@@ -3970,6 +3970,7 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
   );
   const limit = toolLimit('source_neighborhood', input);
   const similar = await similarIssues(bundle.record, limit);
+  const similarBlogPosts = await similarPosts(bundle.record, limit);
   const outgoingAll = [...bundle.links].sort((a, b) => Number(!isHeadlineLink(a)) - Number(!isHeadlineLink(b)));
   const outgoing = outgoingAll.slice(0, NEIGHBORHOOD_LINKS);
   const incomingAll = [...incoming].sort((a, b) =>
@@ -4009,6 +4010,9 @@ async function toolSourceNeighborhood(input: ToolArgs = {}, { scope }: ToolConte
       // domains (related_sources) say what an issue LINKED; this says what it
       // was ABOUT.
       ...(similar.length ? { similar_issues: similar } : {}),
+      // The same for a blog post: its nearest posts, from the blog corpus
+      // build (MCP 2.10.0).
+      ...(similarBlogPosts.length ? { similar_posts: similarBlogPosts } : {}),
       outgoing_count: outgoingAll.length,
       outgoing_links: outgoing.map(compactLink),
       incoming_count: incomingAll.length,
@@ -4280,6 +4284,43 @@ async function similarIssues(record: ArchiveRecord, limit: number) {
         publish_date: issue.publish_date,
         url: absoluteSourceUrl(issue.url),
         ...(issue.description ? { description: issue.description } : {}),
+        ...(typeof item.score === 'number' ? { score: Math.round(item.score * 1000) / 1000 } : {})
+      }
+    ];
+  });
+}
+
+// A blog post's nearest posts by meaning (MCP 2.10.0), from the blog corpus
+// build (posts[].similar_posts: {microblog_id, score}, in pick order;
+// librarian_core/related_posts.py). Other posts from the same trip are left
+// out and each other trip gives one, so the list is not one series. Pages
+// take no part. The candidates Thingy chooses related-post suggestions from.
+async function similarPosts(record: ArchiveRecord, limit: number) {
+  if (normalizeSourceKind(record.source_kind || '') !== 'blog' || !present(record.microblog_id)) return [];
+  const corpus = await loadCorpus('blog');
+  const raw = ((corpus.posts || []) as ArchiveRecord[]).find(
+    (post) => String(post.microblog_id) === String(record.microblog_id)
+  );
+  const similar = Array.isArray(raw?.similar_posts) ? (raw.similar_posts as ArchiveRecord[]) : [];
+  if (!similar.length) return [];
+  const posts = new Map<string, ArchiveRecord>();
+  for (const post of contentRecords(corpus, 'blog')) {
+    if (present(post.microblog_id)) posts.set(String(post.microblog_id), post);
+  }
+  return similar.slice(0, limit).flatMap((item) => {
+    const post = posts.get(String(item.microblog_id));
+    if (!post) return [];
+    const compact = compactContentRecord(post);
+    return [
+      {
+        id: compact.id,
+        label: sourceLabel(post),
+        subject: post.subject || undefined,
+        publish_date: post.publish_date,
+        url: compact.url,
+        section: post.section,
+        ...(compact.abstract ? { abstract: compact.abstract, abstract_source: compact.abstract_source } : {}),
+        ...(compact.categories ? { categories: compact.categories } : {}),
         ...(typeof item.score === 'number' ? { score: Math.round(item.score * 1000) / 1000 } : {})
       }
     ];

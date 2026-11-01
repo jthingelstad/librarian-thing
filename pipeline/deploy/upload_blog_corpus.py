@@ -29,6 +29,7 @@ from librarian_core.corpus import (
     build_blog_corpus,
 )
 from librarian_core.paths import BLOG_ABSTRACTS_PATH, MEDIA_DESCRIPTIONS_PATH
+from librarian_core.related_posts import annotate_similar_posts
 
 # Reuse the WT uploader's incremental-cache helpers verbatim — they are
 # corpus-shape agnostic (they key on chunk["id"]/chunk["embedding"]).
@@ -109,6 +110,10 @@ def main() -> int:
             merge_cached_embeddings(corpus, cache)
 
     add_bedrock_embeddings(corpus, args.embedding_model, args.embedding_dimensions)
+    # Needs the embeddings: each post's nearest posts by meaning, the
+    # candidates Thingy chooses its related-post suggestions from.
+    similar = annotate_similar_posts(corpus)
+    print(f"similar posts: {similar}/{corpus['post_count']} posts have candidates")
 
     if args.stage:
         write_staged(args.stage, STAGED_NAME, corpus)
