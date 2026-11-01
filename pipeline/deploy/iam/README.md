@@ -31,8 +31,10 @@ See `apps/librarian/infra/NATIVE-WEB.md` for release ordering and rollback.
 
 - `deploy.json`: private `code/*`, six corpus/graph objects and the library
   (`artifacts/library.db`, read and written by CI since 2026-10-22), bucket-security
-  inspection, current embedding/model smoke checks, log retention, and updates
-  to the one stack using the exact CloudFormation service role. No direct
+  inspection, current embedding/model smoke checks, the rerank (`bedrock:Rerank`
+  and `cohere.rerank-v3-5:0` in us-west-2, since 2026-11-01, so the corpus gate
+  scores the order readers get), log retention, and updates to the one stack
+  using the exact CloudFormation service role. No direct
   Lambda, DynamoDB, IAM-policy, or bucket-security administration.
 - `cloudformation.json`: service control-plane operations for the existing
   Librarian resources. No table-item reads or writes. API and event-source

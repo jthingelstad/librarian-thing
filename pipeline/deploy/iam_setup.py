@@ -311,6 +311,31 @@ def simulate(session: boto3.Session) -> None:
             False,
             {},
         ),
+        # The corpus gate reranks as the Librarian does (Jamie, 2026-11-01):
+        # the Rerank API needs bedrock:Rerank and InvokeModel on the reranker,
+        # in us-west-2, the one region the Lambda calls. No other model.
+        ("deploy", "bedrock:Rerank", "*", True, {}),
+        (
+            "deploy",
+            "bedrock:InvokeModel",
+            "arn:aws:bedrock:us-west-2::foundation-model/cohere.rerank-v3-5:0",
+            True,
+            {},
+        ),
+        (
+            "deploy",
+            "bedrock:InvokeModel",
+            "arn:aws:bedrock:us-west-2::foundation-model/amazon.rerank-v1:0",
+            False,
+            {},
+        ),
+        (
+            "deploy",
+            "bedrock:InvokeModel",
+            "arn:aws:bedrock:us-east-1::foundation-model/cohere.rerank-v3-5:0",
+            False,
+            {},
+        ),
         # Arrival receipts: one PutEvents call carries a batch, so every
         # entry's source and type must be on the list, and a call naming none
         # is refused (ForAllValues alone would allow it).

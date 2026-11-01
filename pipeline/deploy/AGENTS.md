@@ -106,7 +106,7 @@ Secrets Manager console; see "Env vars set in CloudFormation" in
 `apps/librarian/AGENTS.md`. AWS deployment credentials come from GitHub OIDC
 in CI (temporary per run).
 
-The CloudFormation stack uses the scoped `weekly-thing-librarian-cloudformation` service role. CI also needs scoped corpus reads, Bedrock invocation, bucket-security inspection, and log setup. See `iam/README.md` for source policies and legacy local-consumer retirement.
+The CloudFormation stack uses the scoped `weekly-thing-librarian-cloudformation` service role. CI also needs scoped corpus reads, Bedrock invocation (the embed models, and since 2026-11-01 the rerank, so the corpus gate scores the reranked order readers get), bucket-security inspection, and log setup. See `iam/README.md` for source policies and legacy local-consumer retirement.
 
 ## Bedrock regions
 
