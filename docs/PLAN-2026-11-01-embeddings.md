@@ -360,10 +360,13 @@ direct 0.97 → 0.96.
   gains most.
 - **Weekly Thing's pool.** A quarter of its answers never reach the reranker.
   Neither chunking nor fusion fixed it; the keyword leg is the next suspect.
-- **CI cannot rerank.** The deploy role lacks `bedrock:Rerank`, so the
-  candidate eval's rerank fails with AccessDenied and the gate never scores the
-  reranked order (deploy run 41285778936). Granting it adds rerank cost to
-  every deploy, so it is Jamie's call.
+- **CI reranks** since 2026-11-01 (Jamie: "Approved: grant the
+  librarian-thing deploy role bedrock:Rerank on cohere.rerank-v3-5:0 through
+  setup-oidc.sh apply"). Before, the candidate eval's rerank failed with
+  AccessDenied and the gate scored the fused order (deploy run 41285778936),
+  which is how the v4 switch's one failed known answer showed only in CI. An
+  eval run makes 22 rerank calls; both corpora pass every check reranked
+  (17,699 on v3 and v4).
 - **The semantic leg on a DynamoDB vector index** (Jamie, 2026-11-01, after
   the review below): `PLAN-2026-11-01-dynamodb-vectors.md` has the bake-off
   and the steps. Its step 2 is the binary vectors: embeddings are about 80%
