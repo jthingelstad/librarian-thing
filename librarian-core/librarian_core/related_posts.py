@@ -30,7 +30,9 @@ import numpy as np
 
 SIMILAR_POSTS_VERSION = 1
 SIMILAR_POSTS_LIMIT = 10
-SIMILAR_POSTS_FLOOR = 0.45
+# On Embed v4 at 1024 (2026-11-01): 0.4365 keeps the share of each post's ten
+# nearest that 0.45 kept on v3 (95.7%), docs/PLAN-2026-11-01-embeddings.md.
+SIMILAR_POSTS_FLOOR = 0.4365
 SIMILAR_POSTS_POOL = 60
 SIMILAR_POSTS_LAMBDA = 0.75
 

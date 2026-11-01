@@ -18,7 +18,7 @@ The backend is defined in `apps/librarian/infra/cloudformation.yaml`. Auth and a
 
 - Buttondown API for subscriber lookup.
 - Amazon Bedrock Claude Sonnet 4.6 for premium messages and the agent loop.
-- Amazon Bedrock Cohere Embed v3 for query-to-archive retrieval.
+- Amazon Bedrock Cohere Embed v4 (1024 dimensions, the `us.cohere.embed-v4:0` cross-region profile; v3 until 2026-11-01) for query-to-archive retrieval.
 - Amazon Bedrock Cohere Rerank 3.5 after archive searches.
 - DynamoDB for magic-link tokens, sessions, rate limits, canonical conversations, turns, artifacts, feedback, eval metadata, and per-user memory.
 - S3 for embedded Weekly Thing, blog, podcast, reference and links corpora plus the offline graph artifact. The reference corpus (the Weekly Thing's site pages and FAQ, Things I've built, thingelstad.com's pages, and documents about Jamie from `reference-documents/` and the library's `reference-unpublished/`) is consulted by every search whatever the scope or source kind, and no caller selects it (2026-10-23).
@@ -93,7 +93,7 @@ Local `.env` values used by upload/build scripts:
 - `THINGY_DEFAULT_MODEL` (optional; defaults to `us.anthropic.claude-sonnet-4-6`, the US Bedrock inference profile for Claude Sonnet 4.6)
 - `THINGY_FAST_MODEL` (optional; defaults to `claude-haiku-5-5`, an Anthropic API id, used for small structured/background work)
 - `THINGY_PREMIUM_MODEL` (CloudFormation sets `us.anthropic.claude-opus-4-6-v1` for high-synthesis work; code fallback remains Sonnet)
-- `BEDROCK_EMBEDDING_MODEL` (optional; defaults to `cohere.embed-english-v3`)
+- `BEDROCK_EMBEDDING_MODEL` (optional; defaults to `us.cohere.embed-v4:0`, and is used only for a corpus that records no `embedding_model`)
 - `BEDROCK_RERANK_MODEL` (optional; defaults to `cohere.rerank-v3-5:0`)
 - `BEDROCK_RERANK_REGION` (optional; defaults to `us-west-2`, where the Bedrock Rerank API exposes Cohere Rerank 3.5)
 - `LIBRARIAN_LOG_LEVEL` (optional; defaults to `INFO`)
@@ -301,7 +301,7 @@ Corpus build, 2026-10-01 (second pass): Journal clock labels ("Saturday @ 7:16 P
 
 Thingy uses magic-link auth, rate limits, server-side history, and DynamoDB logging. Tool status is emitted over the native archive Web Function as `status` events, and the UI keeps the archive work visible/collapsible after completion.
 
-The graph artifact is built offline from the corpus and archive front matter. It stores per-issue entities, recurring tropes/stances, and top-K similar issues from issue-level embedding averages. The blog corpus build gives each blog post its own `similar_posts` the same way (MCP 2.10.0, `librarian_core/related_posts.py`): its nearest other posts by mean chunk embedding, cosine 0.45 or more, posts from the same trip left out, one from each other trip, and maximal marginal relevance over the 60 nearest so one series does not fill the list. `source_neighborhood` returns them for a blog post; they are the candidates Thingy chooses its related-post suggestions from (`docs/PLAN-2026-11-01-related-posts.md`). `pipeline/graph/build.py --use-bedrock-extraction` can use Sonnet for entity/trope extraction; the default heuristic mode is available for cheap local refreshes.
+The graph artifact is built offline from the corpus and archive front matter. It stores per-issue entities, recurring tropes/stances, and top-K similar issues from issue-level embedding averages. The blog corpus build gives each blog post its own `similar_posts` the same way (MCP 2.10.0, `librarian_core/related_posts.py`): its nearest other posts by mean chunk embedding, cosine 0.4365 or more (0.45 on v3), posts from the same trip left out, one from each other trip, and maximal marginal relevance over the 60 nearest so one series does not fill the list. `source_neighborhood` returns them for a blog post; they are the candidates Thingy chooses its related-post suggestions from (`docs/PLAN-2026-11-01-related-posts.md`). `pipeline/graph/build.py --use-bedrock-extraction` can use Sonnet for entity/trope extraction; the default heuristic mode is available for cheap local refreshes.
 
 Typical cost is controlled by prompt caching on the stable system prompt and tool definitions, reranking only the top search candidates, limiting tool turns, and clipping tool result text. The target remains under $0.20 for typical questions and under $0.50 for worst-case multi-hop questions.
 

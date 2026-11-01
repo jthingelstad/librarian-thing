@@ -72,7 +72,10 @@ from .saved_links import (
     saved_link_ids,
 )
 
-DEFAULT_EMBEDDING_MODEL = "cohere.embed-english-v3"
+# Embed v4 through its us. cross-region profile (300,000 tokens a minute; the
+# plain model id has half that), at 1024 (2026-11-01,
+# docs/PLAN-2026-11-01-embeddings.md).
+DEFAULT_EMBEDDING_MODEL = "us.cohere.embed-v4:0"
 DEFAULT_EMBEDDING_DIMENSIONS = 1024
 COHERE_EMBED_MAX_TEXT_CHARS = 2048
 GENERATED_NOTICE_RE = re.compile(

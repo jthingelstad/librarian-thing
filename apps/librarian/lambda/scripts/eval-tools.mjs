@@ -794,13 +794,18 @@ if (corpora.link?.chunks?.length) {
 // neighbours swap between limits (blog-5854492 and blog-5267019). And no
 // page carries a copy beside every post it copies, when each of those
 // posts is one passage (QA3 Q7: a longer post's other passage keeps it).
+// The query names the copy's heading: on Embed v4 "Minnebar session I
+// attended" finds session notes, not the 2020 online event, and without the
+// rerank (CI has none) neither of the pair made the first 36 (2026-11-01).
+// "the mini minnebar" reaches wt-147 in the top 7 on v3 and v4, reranked
+// or fused, so the ranks this reads off the page stay the dedupe's.
 {
   const passagesOf = new Map();
   for (const chunk of corpora.blog?.chunks || []) {
     const id = `blog-${chunk.microblog_id}`;
     passagesOf.set(id, (passagesOf.get(id) || 0) + 1);
   }
-  const query = 'Minnebar session I attended';
+  const query = 'the mini minnebar';
   const { TOOL_LIMITS } = await import(path.join(distDir, 'shared/archive-tools.mjs'));
   const deepest = TOOL_LIMITS.search_archive.max;
   const deep = (await run('search_archive', { query, limit: deepest }))?.results || [];

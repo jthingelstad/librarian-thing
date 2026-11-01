@@ -570,7 +570,10 @@ function signatureKey(signature: EmbeddingSignature) {
 // Cohere Embed v4 takes its vector length and number type in the request
 // (output_dimension, embedding_types) and answers with the vectors keyed
 // by type; v3 has one length and answers with a bare list. v4's truncate
-// values are NONE/LEFT/RIGHT, not v3's START/END.
+// values are NONE/LEFT/RIGHT, not v3's START/END. On v4 the query goes in as
+// a document, against Cohere's guidance: the meaning eval scored it better
+// (source MRR 0.55 against 0.52 semantic, 0.65 against 0.64 reranked;
+// 2026-11-01, docs/PLAN-2026-11-01-embeddings.md).
 export function isEmbedV4(model: string) {
   return /cohere\.embed-v4/.test(model);
 }
@@ -579,7 +582,7 @@ export function embedQueryBody(query: unknown, signature: EmbeddingSignature) {
   if (isEmbedV4(signature.model)) {
     return {
       texts: [String(query ?? '')],
-      input_type: 'search_query',
+      input_type: 'search_document',
       embedding_types: ['float'],
       output_dimension: signature.dimensions,
       truncate: 'RIGHT'

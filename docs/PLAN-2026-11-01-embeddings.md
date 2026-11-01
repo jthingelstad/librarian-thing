@@ -332,7 +332,8 @@ direct 0.97 → 0.96.
 
 ## What's left
 
-- **The switch PR** above, after Jamie applies the OIDC grants.
+- **The switch PR** above. Jamie's OIDC apply put the v4 grants live on
+  2026-11-01 at 9:39 a.m. CST (deploy policy v6, runtime boundary v5).
 - **The keyword leg.** It is a TF-IDF cosine (no BM25, stemming, phrases or
   title weight). On its own it scores 0.26; fused with v4 it pulls semantic's
   0.55 down to 0.41, and only the reranker restores the order. Measure a
