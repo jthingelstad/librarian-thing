@@ -297,3 +297,54 @@ def test_a_line_with_json_in_it_is_dropped():
     picks, notes = script.validate(raw, candidates)
     assert [pick["microblog_id"] for pick in picks] == [30]
     assert sum("does not end as a sentence" in note for note in notes) == 2
+
+
+def message(stop_reason: str, answer: dict | None = None):
+    return SimpleNamespace(
+        stop_reason=stop_reason,
+        content=[SimpleNamespace(type="text", text=json.dumps(answer or {}))],
+        usage=SimpleNamespace(
+            input_tokens=10,
+            output_tokens=5,
+            cache_read_input_tokens=0,
+            cache_creation_input_tokens=0,
+        ),
+    )
+
+
+def retry_client(reply):
+    create = lambda **_: reply  # noqa: E731
+    return SimpleNamespace(beta=SimpleNamespace(messages=SimpleNamespace(create=create)))
+
+
+FIRST = {
+    "picks": [
+        {"candidate": 1, "evidence": WHY[:40], "why": WHY},
+        {"candidate": 2, "evidence": "not in the post at all", "why": WHY},
+    ]
+}
+
+
+def test_a_failed_retry_keeps_the_first_answers_picks():
+    job = jobs_for([1])[0]
+    job = (job[0], [candidate(10), candidate(20)], job[2], job[3], (job[4][0], job[4][1] * 2))
+    usage = script.Usage()
+    entry = script.answer_once_more(
+        retry_client(message("max_tokens")), job, FIRST, usage, "claude-sonnet-5-5"
+    )
+    assert [pick["microblog_id"] for pick in entry["picks"]] == [10]
+    assert any(note.startswith("second answer: ran out of tokens") for note in entry["notes"])
+    assert usage.direct["output_tokens"] == 5
+
+
+def test_an_empty_retry_does_not_replace_good_picks():
+    job = jobs_for([1])[0]
+    job = (job[0], [candidate(10), candidate(20)], job[2], job[3], (job[4][0], job[4][1] * 2))
+    entry = script.answer_once_more(
+        retry_client(message("end_turn", {"picks": []})),
+        job,
+        FIRST,
+        script.Usage(),
+        "claude-sonnet-5-5",
+    )
+    assert [pick["microblog_id"] for pick in entry["picks"]] == [10]

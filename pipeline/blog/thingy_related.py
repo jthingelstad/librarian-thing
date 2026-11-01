@@ -481,21 +481,26 @@ def answer_once_more(client, job, raw, usage: Usage, model: str):
         try:
             again, more = ask_thingy(client, prompt, model)
         except NoAnswer as error:
+            # A failed retry is no answer at all: keep the first one's picks.
             usage.add(error.usage, batch=False)
-            again = {"picks": []}
-            notes = [*notes, f"asked again: {error}"]
+            notes = [*notes, f"second answer: {error}"]
         else:
             usage.add(more, batch=False)
-        retry_picks, retry_notes = validate(again, candidates, seen_views)
-        # Fewer lost picks wins; on a tie, more kept picks.
-        if (dropped(retry_notes), -len(retry_picks)) < (dropped(notes), -len(picks)):
-            first = [f"first answer: {note}" for note in notes if note.startswith("dropped")]
-            picks, notes = retry_picks, [*retry_notes, *first]
-        else:
-            notes = [
-                *notes,
-                *(f"second answer: {note}" for note in retry_notes if note.startswith("dropped")),
-            ]
+            retry_picks, retry_notes = validate(again, candidates, seen_views)
+            # Every kept pick passed the checks, so more of them wins; on a
+            # tie, fewer lost picks.
+            if (-len(retry_picks), dropped(retry_notes)) < (-len(picks), dropped(notes)):
+                first = [f"first answer: {note}" for note in notes if note.startswith("dropped")]
+                picks, notes = retry_picks, [*retry_notes, *first]
+            else:
+                notes = [
+                    *notes,
+                    *(
+                        f"second answer: {note}"
+                        for note in retry_notes
+                        if note.startswith("dropped")
+                    ),
+                ]
         notes = [*notes, "asked twice: the first answer had a dropped pick"]
     return make_entry(digest, candidates, picks, notes, model)
 
