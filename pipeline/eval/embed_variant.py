@@ -232,6 +232,21 @@ def embed_rows(
     return floats, int8 if has_int8 else None
 
 
+def open_output(out: Path, model: str, dimensions: int) -> dict[str, Any]:
+    """The --out folder's meta. A folder resumes only the model and dimensions
+    it was started with: its vectors are kept by input, and an input does not
+    say which model embedded it."""
+    meta_path = out / "meta.json"
+    meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
+    if any(out.glob("*.ids.json")) and not meta.get("model"):
+        raise SystemExit(f"--out {out} holds vectors but no meta.json names their model")
+    if meta.get("model") and not same_model(str(meta["model"]), model):
+        raise SystemExit(f"--out {out} holds {meta['model']} vectors, not {model}")
+    if meta.get("dimensions") and int(meta["dimensions"]) != dimensions:
+        raise SystemExit(f"--out {out} holds {meta['dimensions']} dimensions, not {dimensions}")
+    return meta
+
+
 def run_corpus(
     kind: str,
     chunks: list[dict[str, Any]],
@@ -296,6 +311,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     args.out.mkdir(parents=True, exist_ok=True)
+    meta = open_output(args.out, args.model, args.dimensions)
+    meta.setdefault("tokens", 0)
+    meta.update(
+        {
+            "model": meta.get("model") or args.model,
+            "dimensions": args.dimensions,
+            "link_text": args.link_text,
+            "corpus_dir": str(args.corpus_dir),
+        }
+    )
+    # Written before the first vector, so a run that stops still names its model.
+    meta_path = args.out / "meta.json"
+    meta_path.write_text(json.dumps(meta, indent=1) + "\n")
     embed = Embedder(args.model, args.dimensions, args.tpm)
     for kind, name in CORPUS_FILES.items():
         if args.only and kind not in args.only:
@@ -304,17 +332,7 @@ def main(argv: list[str] | None = None) -> int:
         reuse = Reuse(args.reuse, kind, args.dimensions, args.model)
         run_corpus(kind, chunks, args.out, embed, args.link_text, args.batch, reuse)
     price = PRICE_PER_MILLION["v4" if is_embed_v4(args.model) else "v3"]
-    meta_path = args.out / "meta.json"
-    meta = json.loads(meta_path.read_text()) if meta_path.exists() else {"tokens": 0}
-    meta.update(
-        {
-            "model": args.model,
-            "dimensions": args.dimensions,
-            "link_text": args.link_text,
-            "corpus_dir": str(args.corpus_dir),
-            "tokens": meta["tokens"] + embed.tokens,
-        }
-    )
+    meta["tokens"] += embed.tokens
     meta["cost_usd"] = round(meta["tokens"] / 1e6 * price, 4)
     meta_path.write_text(json.dumps(meta, indent=1) + "\n")
     print(
