@@ -65,8 +65,22 @@ def test_prompt_numbers_the_candidates_and_keeps_generated_summaries_only():
     assert '<candidate n="1">' in prompt and '<candidate n="2">' in prompt
     assert "Summary: A hike in Guarda." in prompt
     assert "Jamie's own words." not in prompt
-    assert script.input_hash(prompt) == script.input_hash(prompt)
-    assert script.input_hash(prompt) != script.input_hash(prompt + " ")
+    digest = script.input_hash(prompt, [found, own])
+    assert digest == script.input_hash(prompt, [found, own])
+    assert digest != script.input_hash(prompt + " ", [found, own])
+
+
+def test_input_hash_follows_candidate_ids_urls_and_order():
+    post, first, second = candidate(1), candidate(2), candidate(3)
+    texts = {1: "Post.", 2: "Same words.", 3: "Same words."}
+    prompt = script.build_prompt(post, [first, second], texts)
+    digest = script.input_hash(prompt, [first, second])
+    moved = first | {"url": "https://www.thingelstad.com/moved.html"}
+    assert script.build_prompt(post, [moved, second], texts) == prompt
+    assert script.input_hash(prompt, [moved, second]) != digest
+    assert script.input_hash(prompt, [second, first]) != digest
+    swapped = first | {"microblog_id": 99}
+    assert script.input_hash(prompt, [swapped, second]) != digest
 
 
 def test_validate_resolves_picks_and_refuses_bad_ones():

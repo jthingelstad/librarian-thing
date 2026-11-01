@@ -217,8 +217,12 @@ def build_prompt(
     return "\n\n".join(blocks)
 
 
-def input_hash(prompt: str) -> str:
-    seed = f"{PROMPT_VERSION}\0{MODEL}\0{SYSTEM_PROMPT}\0{prompt}"
+def input_hash(prompt: str, candidates: list[dict[str, Any]]) -> str:
+    """What a cached entry was made from. The prompt carries no id or URL,
+    yet the picks store both, so the ordered candidates are hashed too: a
+    moved permalink or a swapped candidate asks Thingy again."""
+    identities = "\n".join(f"{c['microblog_id']} {c.get('url') or ''}" for c in candidates)
+    seed = f"{PROMPT_VERSION}\0{MODEL}\0{SYSTEM_PROMPT}\0{prompt}\0{identities}"
     return hashlib.sha256(seed.encode("utf-8")).hexdigest()[:16]
 
 
@@ -332,7 +336,7 @@ def main() -> int:
             if item["microblog_id"] in posts
         ]
         prompt = build_prompt(post, candidates, texts)
-        digest = input_hash(prompt)
+        digest = input_hash(prompt, candidates)
         if entries.get(str(microblog_id), {}).get("input_hash") == digest:
             continue
         jobs.append((microblog_id, candidates, prompt, digest))
