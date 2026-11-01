@@ -502,6 +502,10 @@ def answer_once_more(client, job, raw, usage: Usage, model: str):
                     ),
                 ]
         notes = [*notes, "asked twice: the first answer had a dropped pick"]
+        if not picks and dropped(notes):
+            # Neither answer was usable, which is not Thingy choosing none:
+            # save nothing, so the next run asks again.
+            raise RuntimeError(f"no usable answer for {microblog_id}: {'; '.join(notes)}")
     return make_entry(digest, candidates, picks, notes, model)
 
 

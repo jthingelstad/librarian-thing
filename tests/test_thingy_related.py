@@ -12,6 +12,8 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = REPO / "pipeline" / "blog" / "thingy_related.py"
 
@@ -348,3 +350,29 @@ def test_an_empty_retry_does_not_replace_good_picks():
         "claude-sonnet-5-5",
     )
     assert [pick["microblog_id"] for pick in entry["picks"]] == [10]
+
+
+def test_two_unusable_answers_leave_the_post_to_ask_again():
+    job = jobs_for([1])[0]
+    placeholder = {"picks": [{"candidate": 1, "evidence": WHY[:40], "why": "x"}]}
+    with pytest.raises(RuntimeError, match="no usable answer"):
+        script.answer_once_more(
+            retry_client(message("end_turn", placeholder)),
+            job,
+            placeholder,
+            script.Usage(),
+            "claude-sonnet-5-5",
+        )
+
+
+def test_a_valid_empty_retry_is_thingy_choosing_none():
+    job = jobs_for([1])[0]
+    placeholder = {"picks": [{"candidate": 1, "evidence": WHY[:40], "why": "x"}]}
+    entry = script.answer_once_more(
+        retry_client(message("end_turn", {"picks": []})),
+        job,
+        placeholder,
+        script.Usage(),
+        "claude-sonnet-5-5",
+    )
+    assert entry["picks"] == []
