@@ -8,9 +8,9 @@ hand the build to Codex". On 2026-11-02 Jamie moved the build here: "We would
 not have Codex build it… we would build it here in Claude. Codex reviews PRs."
 and "Approved: build the SQLite keyword index in librarian-thing here in Claude, from docs/BRIEF-2026-11-02-keyword-index-build.md, as one PR that Codex reviews".
 
-**Status: built 2026-11-02** (MCP 2.12.0, one PR; see Built below). Served
-once the merge deploy promotes it; the measurement repeats on the served
-engine then.
+**Status: served since 2026-11-02, 4:30 p.m. CST** (MCP 2.12.0, PR #117;
+see Built and Served below). The TF-IDF scan stays as the logged fallback
+until a week of serving, then goes in its own PR.
 
 It is the only active retrieval project after the v4 re-embed (Jamie,
 2026-11-01: "Approved: park the DynamoDB vector plan in librarian-thing; keyword search is the only active retrieval project after the v4 re-embed"); a change
@@ -168,6 +168,37 @@ As the brief says, with these choices:
 - **Measured before the PR** on the live corpora with the eval
   (`scripts/eval-tools.mjs`): every keyword retrieval served by fts5, the
   recall baseline within its band.
+
+## Served (2026-11-02)
+
+The administrator applied the deploy policy (v8) and the runtime boundary
+(v6) with `setup-oidc.sh` at 4:07 p.m. CST, and #117 merged. Its deploy
+(run 41534574537, green at 4:30 p.m.) built the index from the live corpora
+(38,913 rows: Weekly Thing 9,947, blog 11,544, podcast 9, reference 848,
+links 16,565; 45.8 MB, built in 1.5 s, coverage checked) and uploaded it
+before the Lambda deploy. The candidate downloaded and opened it in 566 ms on
+its keyword probe (`keyword_index_loaded`, no `keyword_index_unavailable`),
+and `/health` lists `artifacts/keyword_index.db` in `corpus_versions`.
+
+The measurement, repeated on the served path: `scripts/eval-meaning.mjs`
+with no `--lexical`, so `retrieve()` runs as the Lambda does, on the corpora
+at the versions `/health` reports and the index downloaded from S3 by
+`KEYWORD_INDEX_KEY`. `retrieve()` uses the index only when its stamps match
+the loaded corpora, and the keyword set alone at 0.94 (TF-IDF gives 0.60)
+shows it did; the eval silences the load log. Source MRR, keyword set (161) /
+meaning set (282):
+
+| | Alone: keyword / meaning | Fused | Reranked | Pool (meaning, WT) |
+|---|---|---|---|---|
+| TF-IDF (before) | 0.60 / 0.27 | 0.61 / 0.41 | 0.91 / 0.64 | 84%, 73% |
+| FTS5, measured | 0.94 / 0.35 | 0.63 / 0.45 | 0.92 / 0.65 | 88%, 75% |
+| FTS5, served | 0.94 / 0.35 | 0.63 / 0.44 | 0.92 / 0.65 | 87%, 75% |
+
+The keyword set is identical; the meaning set is within a point, from rows
+the corpora gained between the two runs. 344 rerank calls, about $0.69; no
+embeddings. No CI floor added. `eval-meaning.mjs` still labels the served
+path `tf-idf` (its `--lexical` default predates the index): fix the label
+with the scan's removal.
 
 ## Who builds
 
