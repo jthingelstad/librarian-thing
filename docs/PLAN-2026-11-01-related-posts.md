@@ -16,8 +16,9 @@ What is left, and where:
   the `thingy-related-picks` branch, PR #104, closed unmerged and kept. It
   never ran beyond the 21-post samples recorded below.
 - thing-hugo 2.0.40 removed the Related section that 2.0.39 added (the
-  revert of 16fec74 and d6f48cf). The Camelback test file in the blog's
-  custom root theme is removed separately, with Jamie's go.
+  revert of 16fec74 and d6f48cf), installed 2026-11-01. The Camelback test
+  file was deleted from the blog's custom root theme the same day, with
+  Jamie's go, so that theme is empty again.
 
 Everything below is the plan as it stood when it was dropped.
 
