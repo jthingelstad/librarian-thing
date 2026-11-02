@@ -46,7 +46,10 @@ export async function loadCorpora({ log = console.log } = {}) {
   let s3;
   const fetchKey = async (key) => {
     const { GetObjectCommand, S3Client } = await import('@aws-sdk/client-s3');
-    s3 ||= new S3Client({});
+    // The JS SDK reads AWS_REGION only; .env (.env.example) and boto3 use
+    // AWS_DEFAULT_REGION, so a local run carries that one over.
+    const region = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION;
+    s3 ||= new S3Client(region ? { region } : {});
     const bucket = process.env.CORPUS_BUCKET || 'weekly-thing-librarian';
     try {
       const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));

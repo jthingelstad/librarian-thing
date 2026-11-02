@@ -52,9 +52,12 @@ librarian-corpora-upload:
 	$(PYTHON) pipeline/deploy/upload_links_corpus.py
 	$(MAKE) librarian-keyword-index-upload
 
+# The uploaders read .env (load_dotenv), which a recipe cannot pass on, so
+# the build reads it too (the shell's values win, as with load_dotenv): an
+# AWS_PROFILE set there reaches both. Codex review, #117.
 librarian-keyword-index-upload:
 	npm --prefix apps/librarian/lambda run build
-	env -u EVAL_CORPUS_DIR -u EVAL_CORPUS_FALLBACK node apps/librarian/lambda/scripts/build-keyword-index.mjs tmp/keyword-index/keyword_index.db
+	env -u EVAL_CORPUS_DIR -u EVAL_CORPUS_FALLBACK node --env-file-if-exists=.env apps/librarian/lambda/scripts/build-keyword-index.mjs tmp/keyword-index/keyword_index.db
 	$(PYTHON) pipeline/deploy/upload_keyword_index.py --upload-staged tmp/keyword-index
 
 librarian-graph:
