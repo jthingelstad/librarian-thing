@@ -29,6 +29,9 @@
  * query is embedded to match, as the Lambda would. --fusion
  * semanticWeight=1,lexicalWeight=0.5,poolSize=200 measures another fusion,
  * and --query-input-type search_document another query input type.
+ * --lexical fts5:tokenizer=porter,weights=3:2:1,query=phrase replaces the
+ * TF-IDF keyword leg with SQLite full-text search (scripts/fts5-lexical.mjs);
+ * the semantic leg, the fusion and the rerank are unchanged.
  */
 import { createHash } from 'node:crypto';
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -68,6 +71,9 @@ const useInt8 = process.argv.includes('--int8');
 // search_document on v4 (2026-11-01); another one is rewritten into the
 // request here.
 const queryInputType = flag('query-input-type', '');
+// Which keyword engine the lexical leg runs: tf-idf (the Lambda's) or
+// fts5:<options>.
+const lexicalSpec = flag('lexical', 'tf-idf');
 const fusion = Object.fromEntries(
   (flag('fusion', '') || '')
     .split(',')
@@ -80,6 +86,14 @@ const fusion = Object.fromEntries(
 
 const { bedrock, bedrockAgentRuntime } = await import(path.join(distDir, 'shared/aws-clients.mjs'));
 const { primeCorpusCachesForTests, retrieve } = await import(path.join(distDir, 'shared/retrieval.mjs'));
+let lexicalEngine;
+if (lexicalSpec.startsWith('fts5')) {
+  const { fts5Engine } = await import(path.join(here, 'fts5-lexical.mjs'));
+  lexicalEngine = fts5Engine(lexicalSpec.slice('fts5'.length).replace(/^:/, ''));
+} else if (lexicalSpec !== 'tf-idf') {
+  console.error(`eval-meaning: --lexical ${lexicalSpec} is not tf-idf or fts5:<options>`);
+  process.exit(2);
+}
 
 // --- Bedrock, cached ------------------------------------------------------
 mkdirSync(cacheDir, { recursive: true });
@@ -204,6 +218,17 @@ for (const [kind, name] of Object.entries(CORPUS_FILES)) {
   };
 }
 primeCorpusCachesForTests(corpora);
+// A global keyword index sees every corpus's rows before the first question.
+if (lexicalEngine?.options?.merge === 'global') {
+  lexicalEngine.collect(true);
+  await retrieve(
+    'collect',
+    1,
+    { scope: 'all', sourceKinds: Object.keys(CORPUS_FILES).filter((kind) => kind !== 'reference') },
+    { rerank: false, engines: ['lexical'], lexicalEngine }
+  );
+  lexicalEngine.collect(false);
+}
 
 // --- judging --------------------------------------------------------------
 // The generator's source_key and normalize, written again here (an oracle
@@ -230,10 +255,10 @@ function normalize(text) {
 }
 
 const MODE_OPTS = {
-  lexical: { rerank: false, engines: ['lexical'] },
+  lexical: { rerank: false, engines: ['lexical'], lexicalEngine },
   semantic: { rerank: false, engines: ['semantic'] },
-  fused: { rerank: false, fusion },
-  reranked: { fusion }
+  fused: { rerank: false, fusion, lexicalEngine },
+  reranked: { fusion, lexicalEngine }
 };
 
 async function judge(item, mode) {
@@ -333,7 +358,7 @@ for (const [corpus, rows] of corpusGroups) {
 mkdirSync(path.dirname(outPath), { recursive: true });
 writeFileSync(
   outPath,
-  `${JSON.stringify({ label, corpus_dir: corpusDir, vectors: vectorsDir || null, int8: useInt8, query_input_type: queryInputType || 'as the Lambda sends it', fusion, signatures, limit, scope: scopeOverride || 'per item', modes, calls, summary, results }, null, 1)}\n`
+  `${JSON.stringify({ label, corpus_dir: corpusDir, lexical: lexicalSpec, vectors: vectorsDir || null, int8: useInt8, query_input_type: queryInputType || 'as the Lambda sends it', fusion, signatures, limit, scope: scopeOverride || 'per item', modes, calls, summary, results }, null, 1)}\n`
 );
 
 const pct = (value) => `${Math.round(value * 100)}`.padStart(3);
@@ -344,6 +369,7 @@ console.log(
     .join('  ')
 );
 if (Object.keys(fusion).length) console.log('fusion:', fusion);
+console.log('lexical:', lexicalSpec);
 console.log(
   'corpus        kind        mode       | source r@1 r@5 r@10 r@20  mrr | span r@1 r@5 r@10 r@20  mrr |  n | pool'
 );
