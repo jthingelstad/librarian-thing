@@ -118,7 +118,7 @@ Don't move the rerank region.
 
 ## CloudFormation template
 
-Lives at `apps/librarian/infra/cloudformation.yaml`. Two native HTTP Web Functions (auth/archive), two Event Functions (eval/digest), DynamoDB (canonical conversations + rate limits + user memory, with Streams enabled for eval), IAM role + policies, CloudWatch log groups, Bedrock IAM policies for embed/rerank/invoke, and a DynamoDB Stream event source mapping for the eval Lambda. See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) for the runtime side of what's deployed.
+Lives at `apps/librarian/infra/cloudformation.yaml`. Two native HTTP Web Functions (auth/archive), two Event Functions (eval/digest), DynamoDB (canonical conversations + rate limits + user memory, with Streams enabled for eval), IAM role + policies, CloudWatch log groups, Bedrock IAM policies for embed/rerank/invoke, a DynamoDB Stream event source mapping for the eval Lambda, and librarian.thingelstad.com's CloudFront distribution with its `/mcp` headers policy and access log (imported 2026-11-02, all Retain). See [`../../apps/librarian/AGENTS.md`](../../apps/librarian/AGENTS.md) for the runtime side of what's deployed.
 
 ## Conventions
 

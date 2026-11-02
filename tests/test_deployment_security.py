@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from fnmatch import fnmatchcase
 from pathlib import Path
 from unittest.mock import Mock
@@ -356,3 +357,144 @@ def test_alarm_retirement_preserves_final_failures_and_guest_budget():
         "LibrarianOauthFailuresAlarm",
     ):
         assert name not in resources
+
+
+# librarian.thingelstad.com has lived in the stack since 2026-11-02 (it was
+# written by lambda/scripts/front-door.mjs before). These carry that writer's
+# rules over to the template.
+DOOR = [
+    "LibrarianDistribution",
+    "McpChallengeHeaders",
+    "LibrarianAccessLogGroup",
+    "LibrarianAccessLogSource",
+    "LibrarianAccessLogDestination",
+    "LibrarianAccessLogDelivery",
+]
+AUTH_ORIGIN = "LibrarianApiGatewayOrigin"
+ARCHIVE_ORIGIN = "LibrarianStreamFunctionUrlOrigin"
+
+
+def librarian_template():
+    text = (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text()
+    return text, yaml.load(text, Loader=yaml.BaseLoader)["Resources"]
+
+
+def test_the_door_is_retained_and_keeps_the_shared_web_acl():
+    text, resources = librarian_template()
+    for name in DOOR:
+        assert resources[name]["DeletionPolicy"] == "Retain", name
+        assert resources[name]["UpdateReplacePolicy"] == "Retain", name
+    config = resources["LibrarianDistribution"]["Properties"]["DistributionConfig"]
+    assert config["Aliases"] == ["librarian.thingelstad.com"]
+    assert "WebACLId: !ImportValue edge-waf-WebAclArn" in text
+    alarm = resources["LibrarianDistributionErrorAlarm"]
+    assert alarm["Properties"]["Dimensions"][0] == {
+        "Name": "DistributionId",
+        "Value": "LibrarianDistribution",
+    }
+    assert alarm["Condition"] == resources["LibrarianDistribution"]["Condition"]
+    # The id lives in the stack now; nothing in the template pins it.
+    assert "E18I2CIBERFMB7" not in text
+
+
+def test_the_door_routes_to_the_native_endpoints_and_authorize_comes_first():
+    _, resources = librarian_template()
+    config = resources["LibrarianDistribution"]["Properties"]["DistributionConfig"]
+    origins = {origin["Id"]: origin for origin in config["Origins"]}
+    assert origins[AUTH_ORIGIN]["DomainName"] == "NativeAuthLiveEndpoint.DomainName"
+    assert origins[ARCHIVE_ORIGIN]["DomainName"] == "NativeArchiveLiveEndpoint.DomainName"
+    for origin in origins.values():
+        assert origin["OriginAccessControlId"] == "NativeExternalOriginAccess.Id"
+    default = config["DefaultCacheBehavior"]
+    behaviors = config["CacheBehaviors"]
+    # /authorize is first so no wider pattern ever claims it. /tools stays off
+    # this door, and retired routes (curiosity map, 2026-08) have no behavior.
+    assert [b["PathPattern"] for b in behaviors] == [
+        "/authorize",
+        "/chat",
+        "/welcome",
+        "/feedback",
+        "/retrieve",
+        "/mcp",
+    ]
+    authorize, *rest = behaviors
+    assert authorize["TargetOriginId"] == AUTH_ORIGIN
+    assert authorize["OriginRequestPolicyId"] == "NativeAuthorizeRequestPolicy.Id"
+    assert authorize["FunctionAssociations"] == default["FunctionAssociations"]
+    # Only /authorize forwards a cookie (thingy_email); the default and every
+    # other behavior use the cookie-free request policy.
+    for behavior in [default, *rest]:
+        assert behavior["OriginRequestPolicyId"] == "NativeExternalRequestPolicy.Id"
+    # The auth origin compresses; the archive never does, so SSE on /chat and
+    # /mcp is never buffered.
+    for behavior in [default, *behaviors]:
+        auth = behavior["TargetOriginId"] == AUTH_ORIGIN
+        assert behavior["Compress"] == ("true" if auth else "false")
+        assert behavior["CachePolicyId"] == (
+            "NativeCompressedCachePolicy.Id" if auth else "NativeExternalCachePolicy.Id"
+        )
+        assert behavior["ViewerProtocolPolicy"] == "https-only"
+    assert [b["PathPattern"] for b in rest if b["TargetOriginId"] != ARCHIVE_ORIGIN] == []
+    # Only /mcp restores the OAuth challenge header.
+    assert [b["PathPattern"] for b in [default, *behaviors] if "ResponseHeadersPolicyId" in b] == [
+        "/mcp"
+    ]
+    assert behaviors[-1]["ResponseHeadersPolicyId"] == "McpChallengeHeaders"
+
+
+def test_mcp_challenge_names_the_protected_resource_and_never_overrides():
+    _, resources = librarian_template()
+    config = resources["McpChallengeHeaders"]["Properties"]["ResponseHeadersPolicyConfig"]
+    assert set(config) == {"Name", "Comment", "CustomHeadersConfig"}
+    [header] = config["CustomHeadersConfig"]["Items"]
+    assert header["Header"] == "WWW-Authenticate"
+    assert header["Value"] == (
+        'Bearer resource_metadata="https://librarian.thingelstad.com'
+        '/.well-known/oauth-protected-resource"'
+    )
+    assert header["Override"] == "false"
+
+
+def test_door_access_log_records_no_client_ip_query_or_path():
+    _, resources = librarian_template()
+    group = resources["LibrarianAccessLogGroup"]["Properties"]
+    assert group == {"LogGroupName": "/librarian/web-access", "RetentionInDays": "731"}
+    source = resources["LibrarianAccessLogSource"]["Properties"]
+    assert source["LogType"] == "ACCESS_LOGS"
+    assert "${LibrarianDistribution}" in source["ResourceArn"]
+    destination = resources["LibrarianAccessLogDestination"]["Properties"]
+    assert destination["OutputFormat"] == "json"
+    assert destination["DestinationResourceArn"].endswith(":log-group:${LibrarianAccessLogGroup}")
+    delivery = resources["LibrarianAccessLogDelivery"]["Properties"]
+    assert delivery["DeliverySourceName"] == "LibrarianAccessLogSource"
+    assert delivery["DeliveryDestinationArn"] == "LibrarianAccessLogDestination.Arn"
+    fields = delivery["RecordFields"]
+    # GET /share/{token} carries a share token in the path.
+    assert len(fields) == 13
+    for field in fields:
+        assert not re.search(r"c-ip|query|uri-stem|referer|cookie|x-forwarded", field, re.I), field
+
+
+def test_cloudformation_keeps_the_door_but_cannot_make_or_delete_a_distribution():
+    statements = policy("native-cloudformation")["Statement"]
+    actions = [
+        (action, statement["Resource"])
+        for statement in statements
+        for action in (
+            statement["Action"] if isinstance(statement["Action"], list) else [statement["Action"]]
+        )
+    ]
+    for action, resource in actions:
+        assert not fnmatchcase("cloudfront:CreateDistribution", action), action
+        assert not fnmatchcase("cloudfront:DeleteDistribution", action), action
+        # The access log's pieces can be read, tagged and updated, never removed.
+        arns = resource if isinstance(resource, list) else [resource]
+        if any("web-access" in arn or ":delivery:" in arn for arn in arns):
+            assert not action.startswith(("logs:Delete", "logs:Create")), action
+    door = "arn:aws:cloudfront::999153317627:distribution/E18I2CIBERFMB7"
+    assert [
+        resource for action, resource in actions if action == "cloudfront:UpdateDistribution"
+    ] == [door]
+    assert [(a, r) for a, r in actions if a.startswith("wafv2:")] == [
+        ("wafv2:GetWebACL", "arn:aws:wafv2:us-east-1:999153317627:global/webacl/edge/*")
+    ]

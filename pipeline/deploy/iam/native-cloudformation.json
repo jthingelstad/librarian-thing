@@ -134,6 +134,75 @@
         "cloudfront:ListTagsForResource"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "LibrarianDoor",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:GetDistribution",
+        "cloudfront:GetDistributionConfig",
+        "cloudfront:UpdateDistribution",
+        "cloudfront:AllowVendedLogDeliveryForResource"
+      ],
+      "Resource": "arn:aws:cloudfront::999153317627:distribution/E18I2CIBERFMB7"
+    },
+    {
+      "Sid": "LibrarianDoorChallengeHeaders",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:GetResponseHeadersPolicy",
+        "cloudfront:UpdateResponseHeadersPolicy"
+      ],
+      "Resource": "arn:aws:cloudfront::999153317627:response-headers-policy/a16d54cd-ba08-4234-bb18-6b2b0961eeaf"
+    },
+    {
+      "Sid": "EdgeWebAcl",
+      "Effect": "Allow",
+      "Action": "wafv2:GetWebACL",
+      "Resource": "arn:aws:wafv2:us-east-1:999153317627:global/webacl/edge/*"
+    },
+    {
+      "Sid": "LogGroupLookups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups",
+        "logs:DescribeIndexPolicies",
+        "logs:DescribeResourcePolicies"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LibrarianDoorAccessLogGroup",
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutRetentionPolicy",
+        "logs:GetDataProtectionPolicy",
+        "logs:TagResource",
+        "logs:UntagResource",
+        "logs:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:999153317627:log-group:/librarian/web-access*"
+    },
+    {
+      "Sid": "LibrarianDoorAccessLogDelivery",
+      "Effect": "Allow",
+      "Action": [
+        "logs:GetDeliverySource",
+        "logs:PutDeliverySource",
+        "logs:GetDeliveryDestination",
+        "logs:GetDeliveryDestinationPolicy",
+        "logs:PutDeliveryDestination",
+        "logs:GetDelivery",
+        "logs:UpdateDeliveryConfiguration",
+        "logs:TagResource",
+        "logs:UntagResource",
+        "logs:ListTagsForResource"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-east-1:999153317627:delivery-source:librarian-web-access",
+        "arn:aws:logs:us-east-1:999153317627:delivery-destination:librarian-web-access",
+        "arn:aws:logs:us-east-1:999153317627:delivery:Y4nZlxqO4ALlvbmu"
+      ]
     }
   ]
 }

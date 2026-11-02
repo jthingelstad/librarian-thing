@@ -26,6 +26,9 @@ BOUNDARIES = {
 DEPLOY_POLICY = "WeeklyThingLibrarianDeployScoped"
 PUBLISHING_BUS = f"arn:aws:events:us-east-1:{ACCOUNT}:event-bus/thingelstad-publishing"
 NATIVE_CFN_POLICY = "WeeklyThingLibrarianNativeCloudFormation"
+DOOR = f"arn:aws:cloudfront::{ACCOUNT}:distribution/E18I2CIBERFMB7"
+THINGY_DOOR = f"arn:aws:cloudfront::{ACCOUNT}:distribution/E1B4701J4D74H7"
+LOGS = f"arn:aws:logs:us-east-1:{ACCOUNT}"
 # The account tag standard (projects-sysadmin docs/AWS-TAGS.md) for IAM made here,
 # outside the stack.
 TAGS = [
@@ -375,6 +378,44 @@ def simulate(session: boto3.Session) -> None:
             False,
             {"events:source": ["librarian"], "events:detail-type": ["received"]},
         ),
+        # The stack keeps librarian.thingelstad.com (imported 2026-11-02): it can
+        # update that one distribution and its access log, never make or delete
+        # a distribution, and never touch Thingy's.
+        *[
+            ("native-cloudformation", action, resource, allowed, {})
+            for action, resource, allowed in (
+                ("cloudfront:UpdateDistribution", DOOR, True),
+                ("cloudfront:GetDistributionConfig", DOOR, True),
+                ("cloudfront:DeleteDistribution", DOOR, False),
+                ("cloudfront:CreateDistribution", "*", False),
+                ("cloudfront:UpdateDistribution", THINGY_DOOR, False),
+                (
+                    "wafv2:GetWebACL",
+                    f"arn:aws:wafv2:us-east-1:{ACCOUNT}:global/webacl/edge/x",
+                    True,
+                ),
+                (
+                    "wafv2:AssociateWebACL",
+                    f"arn:aws:wafv2:us-east-1:{ACCOUNT}:global/webacl/edge/x",
+                    False,
+                ),
+                # CloudFormation's log group read lists at account level (the
+                # service checks log-group::log-stream:, CloudTrail 2026-11-02).
+                # The simulator models these three as "*"-only actions.
+                ("logs:DescribeLogGroups", "*", True),
+                ("logs:DescribeIndexPolicies", "*", True),
+                ("logs:DescribeResourcePolicies", "*", True),
+                ("logs:PutRetentionPolicy", f"{LOGS}:log-group:/librarian/web-access", True),
+                ("logs:DeleteLogGroup", f"{LOGS}:log-group:/librarian/web-access", False),
+                ("logs:UpdateDeliveryConfiguration", f"{LOGS}:delivery:Y4nZlxqO4ALlvbmu", True),
+                ("logs:DeleteDelivery", f"{LOGS}:delivery:Y4nZlxqO4ALlvbmu", False),
+                (
+                    "logs:DeleteDeliverySource",
+                    f"{LOGS}:delivery-source:librarian-web-access",
+                    False,
+                ),
+            )
+        ],
     ]
     for name, action, resource, allowed, context in cases:
         result = iam.simulate_custom_policy(
@@ -590,19 +631,25 @@ def verify(session: boto3.Session) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("validate", "apply", "deploy-policy", "verify"))
+    parser.add_argument(
+        "command", choices=("validate", "apply", "deploy-policy", "native-policy", "verify")
+    )
     parser.add_argument("--profile", required=True)
     parser.add_argument("--snapshot-dir", type=Path)
     args = parser.parse_args()
     session = boto3.Session(profile_name=args.profile, region_name="us-east-1")
     if session.client("sts").get_caller_identity()["Account"] != ACCOUNT:
         raise RuntimeError("Wrong AWS account")
-    if args.command in ("validate", "apply", "deploy-policy"):
+    if args.command in ("validate", "apply", "deploy-policy", "native-policy"):
         validate(session)
     if args.command == "deploy-policy":
         # Only the OIDC role's scoped policy: a new default version when the
         # reviewed document changed, nothing else touched.
         put_managed(session.client("iam"), DEPLOY_POLICY, document("deploy"))
+        verify(session)
+    elif args.command == "native-policy":
+        # Only the CloudFormation role's native policy, the same way.
+        put_managed(session.client("iam"), NATIVE_CFN_POLICY, document("native-cloudformation"))
         verify(session)
     elif args.command == "apply":
         if args.snapshot_dir is None:

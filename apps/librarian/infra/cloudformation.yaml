@@ -980,18 +980,18 @@ Resources:
       TreatMissingData: notBreaching
       AlarmActions: [!Ref LibrarianAlarmTopic]
 
-  # librarian.thingelstad.com (E18I2CIBERFMB7) is hand-managed through
-  # lambda/scripts/front-door.mjs, so its id is fixed here. Same shape as
+  # librarian.thingelstad.com's 5xx rate. Same shape as
   # thingy-web-distribution-5xx. CloudFront metrics live in us-east-1.
   LibrarianDistributionErrorAlarm:
     Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
     Properties:
       AlarmName: !Sub '${AWS::StackName}-distribution-5xx'
       AlarmDescription: CloudFront returned more than 5% 5xx responses for librarian.thingelstad.com in two of three five-minute windows.
       Namespace: AWS/CloudFront
       MetricName: 5xxErrorRate
       Dimensions:
-        - { Name: DistributionId, Value: E18I2CIBERFMB7 }
+        - { Name: DistributionId, Value: !Ref LibrarianDistribution }
         - { Name: Region, Value: Global }
       Statistic: Average
       Period: 300
@@ -1150,6 +1150,190 @@ Resources:
           if (changed) request.querystring = query.join('&');
           return request;
         }
+
+  # librarian.thingelstad.com, the door MCP clients, WT Builder and Thingy's
+  # OAuth use. It was made by hand in 2026-08 and kept by a release script
+  # (front-door.mjs) until 2026-11-02, when it, its /mcp headers policy and its
+  # access log were imported into this stack unchanged (Jamie: "If you think we
+  # should lets make that happen"). Everything is Retain: deleting the stack or
+  # turning NativeWebEnabled off leaves the hostname serving. The origin ids
+  # keep their pre-native names; renaming one is a normal update.
+  # The auth origin's behaviors (the default and /authorize) compress; the
+  # archive behaviors never do, so /chat's and /mcp's SSE is never buffered.
+  # /authorize alone forwards the thingy_email cookie. /tools is deliberately
+  # not routed here, and retired routes (/curiosity-map) have no behavior.
+  LibrarianDistribution:
+    Type: AWS::CloudFront::Distribution
+    Condition: NativeWebActive
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      DistributionConfig:
+        Comment: Thingy Librarian REST API (API Gateway origin)
+        Enabled: true
+        Aliases: [librarian.thingelstad.com]
+        HttpVersion: http2
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
+        # projects-sysadmin's shared web ACL; its rules count only until tuned.
+        WebACLId: !ImportValue edge-waf-WebAclArn
+        ViewerCertificate:
+          AcmCertificateArn: !Sub 'arn:${AWS::Partition}:acm:us-east-1:${AWS::AccountId}:certificate/ccdaa698-257f-4803-bea3-056ddf4896af'
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        Origins:
+          - Id: LibrarianStreamFunctionUrlOrigin
+            DomainName: !GetAtt NativeArchiveLiveEndpoint.DomainName
+            OriginAccessControlId: !GetAtt NativeExternalOriginAccess.Id
+            ConnectionAttempts: 3
+            ConnectionTimeout: 10
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: [TLSv1.2]
+              OriginReadTimeout: 30
+              OriginKeepaliveTimeout: 5
+          - Id: LibrarianApiGatewayOrigin
+            DomainName: !GetAtt NativeAuthLiveEndpoint.DomainName
+            OriginAccessControlId: !GetAtt NativeExternalOriginAccess.Id
+            ConnectionAttempts: 3
+            ConnectionTimeout: 10
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: [TLSv1.2]
+              OriginReadTimeout: 35
+              OriginKeepaliveTimeout: 5
+        DefaultCacheBehavior:
+          TargetOriginId: LibrarianApiGatewayOrigin
+          ViewerProtocolPolicy: https-only
+          AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+          CachedMethods: [GET, HEAD, OPTIONS]
+          Compress: true
+          CachePolicyId: !GetAtt NativeCompressedCachePolicy.Id
+          OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt NativeOAuthQueryFunction.FunctionMetadata.FunctionARN
+        CacheBehaviors:
+          - PathPattern: /authorize
+            TargetOriginId: LibrarianApiGatewayOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: true
+            CachePolicyId: !GetAtt NativeCompressedCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeAuthorizeRequestPolicy.Id
+            FunctionAssociations:
+              - EventType: viewer-request
+                FunctionARN: !GetAtt NativeOAuthQueryFunction.FunctionMetadata.FunctionARN
+          - PathPattern: /chat
+            TargetOriginId: LibrarianStreamFunctionUrlOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: false
+            CachePolicyId: !GetAtt NativeExternalCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+          - PathPattern: /welcome
+            TargetOriginId: LibrarianStreamFunctionUrlOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: false
+            CachePolicyId: !GetAtt NativeExternalCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+          - PathPattern: /feedback
+            TargetOriginId: LibrarianStreamFunctionUrlOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: false
+            CachePolicyId: !GetAtt NativeExternalCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+          - PathPattern: /retrieve
+            TargetOriginId: LibrarianStreamFunctionUrlOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: false
+            CachePolicyId: !GetAtt NativeExternalCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+          - PathPattern: /mcp
+            TargetOriginId: LibrarianStreamFunctionUrlOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD, OPTIONS]
+            Compress: false
+            CachePolicyId: !GetAtt NativeExternalCachePolicy.Id
+            OriginRequestPolicyId: !GetAtt NativeExternalRequestPolicy.Id
+            ResponseHeadersPolicyId: !Ref McpChallengeHeaders
+
+  # An MCP client finds the sign-in from the 401's WWW-Authenticate header,
+  # which the Lambda origin's own answer does not keep. CloudFront adds it on
+  # /mcp; Override false, so a challenge the server does send wins.
+  McpChallengeHeaders:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: librarian-mcp-www-authenticate
+        Comment: Restores the static WWW-Authenticate challenge that Lambda Function URLs remap
+        CustomHeadersConfig:
+          Items:
+            - Header: WWW-Authenticate
+              Value: Bearer resource_metadata="https://librarian.thingelstad.com/.well-known/oauth-protected-resource"
+              Override: false
+
+  # The distribution's access log (Jamie, 2026-10-26; 24 months since
+  # 2026-10-28): CloudWatch Logs vended delivery, JSON. The record fields are
+  # fixed and never include c-ip, cs-uri-query or cs-uri-stem:
+  # GET /share/{token} carries a share token in the path.
+  LibrarianAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: /librarian/web-access
+      RetentionInDays: 731
+  LibrarianAccessLogSource:
+    Type: AWS::Logs::DeliverySource
+    Condition: NativeWebActive
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: librarian-web-access
+      LogType: ACCESS_LOGS
+      ResourceArn: !Sub 'arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${LibrarianDistribution}'
+  LibrarianAccessLogDestination:
+    Type: AWS::Logs::DeliveryDestination
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: librarian-web-access
+      OutputFormat: json
+      DestinationResourceArn: !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${LibrarianAccessLogGroup}'
+  LibrarianAccessLogDelivery:
+    Type: AWS::Logs::Delivery
+    Condition: NativeWebActive
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      DeliverySourceName: !Ref LibrarianAccessLogSource
+      DeliveryDestinationArn: !GetAtt LibrarianAccessLogDestination.Arn
+      RecordFields:
+        - timestamp(ms)
+        - cs-method
+        - sc-status
+        - sc-bytes
+        - sc-range-start
+        - sc-range-end
+        - time-taken
+        - time-to-first-byte
+        - x-edge-result-type
+        - x-edge-detailed-result-type
+        - x-edge-location
+        - cs-protocol
+        - cs(User-Agent)
 
   LibrarianDigestLogGroup:
     Type: AWS::Logs::LogGroup

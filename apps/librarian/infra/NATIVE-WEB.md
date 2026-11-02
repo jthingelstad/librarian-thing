@@ -55,29 +55,32 @@ HttpOnly cookie and contract-header requirements. Native origins use regional
 SigV4 OAC with `always-amz-auth`, explicit Authorization forwarding and no-store
 responses. Trusted viewer addresses replace the final X-Forwarded-For proxy hop.
 
-The existing Librarian distribution is manually managed. `front-door.mjs` owns
-its release changes with ETag compare-and-swap and a private original-config
-receipt. Its sole `native` command preserves the hostname and route inventory,
-and every run sets `WebACLId` to projects-sysadmin's shared `edge` web ACL
-(count mode), read at run time from the CloudFormation export
-`edge-waf-WebAclArn`; a missing export refuses before any write. `native ...
---check` only reads and prints the config paths a run would change.
-Its `access-logs` command (`--check` only reads) makes the distribution's access log: the
-CloudWatch log group `/librarian/web-access`, kept 24 months (731 days), with no client IP, query string or path
-(`/share/{token}` carries a share token). It creates only missing pieces and refuses, before any
-write, when a live piece differs. Legacy `auth`/`rollback` modes are refused. External requests forward no cookies or X-Thingy-Origin, and
-`/tools` remains outside this door. The one exception is the `/authorize` behavior the writer adds
-in front of the default: `NativeAuthorizeRequestPolicy` forwards exactly `thingy_email`, the
-remembered sign-in email, so the page can prefill it and the consent response's Set-Cookie reaches
-the browser (CloudFront strips Set-Cookie where no cookie is forwarded). It never forwards the web
-session cookie. The authorization query function normalizes
-form-encoded spaces while preserving literal pluses and repeated values.
+The Librarian distribution (librarian.thingelstad.com) is `LibrarianDistribution`
+in this stack. It was made by hand in 2026-08 and kept by a release script,
+`front-door.mjs`, until 2026-11-02, when it, its `/mcp` headers policy and its
+access log were imported into the stack unchanged. Every piece is Retain:
+deleting the stack or setting `NativeWebEnabled=false` leaves the hostname
+serving. A route change is a template change and ships with the next deploy;
+`tests/test_deployment_security.py` pins the rules here. `WebACLId` is
+projects-sysadmin's shared `edge` web ACL (count mode), from the export
+`edge-waf-WebAclArn`. The access log is CloudWatch Logs vended delivery to
+`/librarian/web-access`, kept 24 months (731 days), with no client IP, query
+string or path (`/share/{token}` carries a share token). External requests
+forward no cookies or X-Thingy-Origin, and `/tools` remains outside this door.
+The one exception is the `/authorize` behavior, first in the list:
+`NativeAuthorizeRequestPolicy` forwards exactly `thingy_email`, the remembered
+sign-in email, so the page can prefill it and the consent response's Set-Cookie
+reaches the browser (CloudFront strips Set-Cookie where no cookie is forwarded).
+It never forwards the web session cookie. The authorization query function
+normalizes form-encoded spaces while preserving literal pluses and repeated
+values. `/mcp` alone adds the `WWW-Authenticate` challenge naming the protected
+resource metadata (`McpChallengeHeaders`), which the Lambda origin's own answer
+does not keep; it never overrides a challenge the server sends.
 The auth origin's behaviors (the default and `/authorize`) use
 `NativeCompressedCachePolicy` with compression on; archive behaviors keep
 `NativeExternalCachePolicy` with compression off so SSE is never buffered.
 User-Agent is forwarded by both origin request policies and is in no cache
-policy. Behaviors for retired routes (`RETIRED_PATHS`, now `/curiosity-map`)
-are dropped. Native responses are no-store unless a route sets its own
+policy. Retired routes (`/curiosity-map`) have no behavior. Native responses are no-store unless a route sets its own
 cache-control on a GET/HEAD with no Authorization, Cookie, Origin or query
 string and no Set-Cookie (`responseCacheControl` in `lambda/web/server.mts`).
 `weekly-thing-librarian-distribution-5xx` watches this distribution's
