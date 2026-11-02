@@ -1,6 +1,7 @@
 // Explicit owner of the existing manually managed Librarian distribution.
 // Save a private rollback receipt before a CAS update; never touch Thingy's
 // CloudFormation-owned distribution through this writer.
+import { CloudFormationClient, ListExportsCommand } from '@aws-sdk/client-cloudformation';
 import { CloudFrontClient, GetDistributionConfigCommand, UpdateDistributionCommand } from '@aws-sdk/client-cloudfront';
 import {
   CloudWatchLogsClient,
@@ -26,6 +27,26 @@ export const AUTHORIZE_PATH = '/authorize';
 // distribution's route inventory matches the Lambdas (curiosity map retired
 // with the 2026-08 chat streamline; contract.test.mjs pins it gone).
 export const RETIRED_PATHS = ['/curiosity-map'];
+// The shared edge web ACL (Jamie, 2026-11-02: "Approved: build one shared AWS
+// WAF web ACL in count mode in projects-sysadmin and attach it to all 22
+// CloudFront distributions through their stacks"). projects-sysadmin's edge-waf
+// stack owns it and exports its ARN; this writer reads the export on every run
+// and never keeps the ARN, so the stack can move it.
+export const EDGE_WEB_ACL_EXPORT = 'edge-waf-WebAclArn';
+const EDGE_WEB_ACL_ARN = /^arn:aws:wafv2:us-east-1:\d{12}:global\/webacl\/edge\/[0-9a-f-]+$/;
+export async function edgeWebAclArn(cloudformation) {
+  let nextToken;
+  do {
+    const page = await cloudformation.send(new ListExportsCommand({ NextToken: nextToken }));
+    const found = (page.Exports || []).find((item) => item.Name === EDGE_WEB_ACL_EXPORT);
+    if (found) {
+      if (!EDGE_WEB_ACL_ARN.test(found.Value || '')) throw new Error(`${EDGE_WEB_ACL_EXPORT} is not the edge web ACL`);
+      return found.Value;
+    }
+    nextToken = page.NextToken;
+  } while (nextToken);
+  throw new Error(`Missing CloudFormation export ${EDGE_WEB_ACL_EXPORT}`);
+}
 const canonical = (value) =>
   Array.isArray(value)
     ? value.map(canonical)
@@ -111,7 +132,26 @@ export function nativeConfig(config, outputs, mode = 'native') {
   };
   const others = (next.CacheBehaviors.Items || []).filter((behavior) => behavior.PathPattern !== AUTHORIZE_PATH);
   next.CacheBehaviors = { Quantity: others.length + 1, Items: [authorize, ...others] };
+  // Every write carries the shared web ACL, so no release strips it.
+  if (!EDGE_WEB_ACL_ARN.test(outputs.EdgeWebAclArn || '')) throw new Error('Missing EdgeWebAclArn (the edge web ACL)');
+  next.WebACLId = outputs.EdgeWebAclArn;
   return next;
+}
+
+// The paths where two configs differ, for `native --check`. Paths only, never
+// values.
+export function configChanges(before, after, path = '') {
+  const a = canonical(before);
+  const b = canonical(after);
+  if (JSON.stringify(a) === JSON.stringify(b)) return [];
+  const isObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
+  if (isObject(a) && isObject(b))
+    return [...new Set([...Object.keys(a), ...Object.keys(b)])]
+      .sort()
+      .flatMap((key) => configChanges(a[key], b[key], path ? `${path}.${key}` : key));
+  if (Array.isArray(a) && Array.isArray(b) && a.length === b.length)
+    return a.flatMap((item, i) => configChanges(item, b[i], `${path}[${i}]`));
+  return [path || '(root)'];
 }
 
 // Access logging for the distribution (Jamie, 2026-10-26: "Approved: add
@@ -283,19 +323,37 @@ async function accessLogs(checkOnly) {
   console.log(JSON.stringify({ distribution: ID, accessLogs: 'ok', created: plan.create }));
 }
 
+// `native outputs.json receipt-dir` applies; with `--check` it only reads and
+// prints the paths the run would change.
 async function main() {
   if (process.argv[2] === 'access-logs') return accessLogs(process.argv[3] === '--check');
-  const [mode, outputFile, receiptDir] = process.argv.slice(2);
+  const checkOnly = process.argv.includes('--check');
+  const [mode, outputFile, receiptDir] = process.argv.slice(2).filter((arg) => arg !== '--check');
   if (mode !== 'native' || !receiptDir)
-    throw new Error('Expected native outputs.json private-receipt-dir; legacy routing is retired');
+    throw new Error('Expected native outputs.json private-receipt-dir [--check]; legacy routing is retired');
   const cloudfront = new CloudFrontClient({ region: 'us-east-1', maxAttempts: 1 });
   const current = await cloudfront.send(new GetDistributionConfigCommand({ Id: ID }));
-  mkdirSync(receiptDir, { recursive: true, mode: 0o700 });
   const path = resolve(receiptDir, 'librarian-distribution.json');
   const prior = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
-  const outputs = JSON.parse(readFileSync(outputFile, 'utf8'));
+  // The web ACL comes from the edge-waf export at run time, never from the file.
+  const outputs = {
+    ...JSON.parse(readFileSync(outputFile, 'utf8')),
+    EdgeWebAclArn: await edgeWebAclArn(new CloudFormationClient({ region: 'us-east-1', maxAttempts: 3 }))
+  };
   verifyPriorConfig(prior, current.DistributionConfig, outputs);
   const desired = nativeConfig(current.DistributionConfig, outputs, mode);
+  if (checkOnly) {
+    console.log(
+      JSON.stringify({
+        distribution: ID,
+        mode,
+        check: true,
+        changes: configChanges(current.DistributionConfig, desired)
+      })
+    );
+    return;
+  }
+  mkdirSync(receiptDir, { recursive: true, mode: 0o700 });
   const receipt = {
     original: prior?.original || current.DistributionConfig,
     priorETag: current.ETag,

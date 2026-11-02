@@ -96,6 +96,8 @@ The Lambda lives in `apps/librarian/`. For Lambda work, read
 npm --prefix apps/librarian/lambda test
 ```
 
+librarian.thingelstad.com is outside the stack: `apps/librarian/lambda/scripts/front-door.mjs` writes it and keeps projects-sysadmin's shared `edge` web ACL (count mode, export `edge-waf-WebAclArn`) on it (`infra/NATIVE-WEB.md`).
+
 Deploy code-only Librarian changes with the corpus upload skipped:
 
 ```sh

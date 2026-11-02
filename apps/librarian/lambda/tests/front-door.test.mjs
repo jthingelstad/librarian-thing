@@ -4,8 +4,11 @@ import {
   ACCESS_LOG,
   AUTHORIZE_PATH,
   accessLogPlan,
+  EDGE_WEB_ACL_EXPORT,
   RETIRED_PATHS,
+  configChanges,
   configurationHash,
+  edgeWebAclArn,
   nativeConfig,
   verifyPriorConfig
 } from '../scripts/front-door.mjs';
@@ -29,7 +32,9 @@ const outputs = {
   NativeCompressedCachePolicy: 'native-compressed-cache',
   NativeExternalRequestPolicy: 'native-request',
   NativeAuthorizeRequestPolicy: 'native-authorize-request',
-  NativeExternalOAuthFunction: 'native-oauth-function'
+  NativeExternalOAuthFunction: 'native-oauth-function',
+  // main() sets this from the edge-waf export at run time.
+  EdgeWebAclArn: 'arn:aws:wafv2:us-east-1:123456789012:global/webacl/edge/0f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b'
 };
 const reorder = (value) =>
   Array.isArray(value)
@@ -219,4 +224,60 @@ test('access logging refuses a piece that exists but differs', () => {
     const plan = accessLogPlan(state);
     assert.equal(plan.mismatches.length, 1, JSON.stringify(plan));
   }
+});
+
+test('every native write carries the shared edge web ACL, and refuses without it', () => {
+  const live = { ...structuredClone(original), WebACLId: '' };
+  const config = nativeConfig(live, outputs);
+  assert.equal(config.WebACLId, outputs.EdgeWebAclArn);
+  // A later release over the attached config keeps it, and changes nothing.
+  assert.equal(configurationHash(nativeConfig(config, outputs)), configurationHash(config));
+  for (const EdgeWebAclArn of [
+    undefined,
+    '',
+    'arn:aws:wafv2:us-east-1:123456789012:regional/webacl/edge/x',
+    'arn:aws:wafv2:us-east-1:123456789012:global/webacl/other/0f1e'
+  ])
+    assert.throws(() => nativeConfig(live, { ...outputs, EdgeWebAclArn }), /EdgeWebAclArn/);
+});
+
+test('on an already-native distribution the only change is the web ACL', () => {
+  const attached = nativeConfig(original, outputs);
+  const before = { ...structuredClone(attached), WebACLId: '' };
+  assert.deepEqual(configChanges(before, nativeConfig(before, outputs)), ['WebACLId']);
+  assert.deepEqual(configChanges(attached, reorder(attached)), []);
+  const moved = structuredClone(attached);
+  moved.Origins.Items[1].DomainName = 'archive-2.lambda-web.us-east-1.on.aws';
+  assert.deepEqual(configChanges(attached, moved), ['Origins.Items[1].DomainName']);
+});
+
+const exportsClient = (pages) => {
+  const calls = [];
+  return {
+    calls,
+    send: async (command) => {
+      calls.push(command.input.NextToken);
+      return pages[calls.length - 1];
+    }
+  };
+};
+
+test('the web ACL ARN is read from the edge-waf export, across pages', async () => {
+  const client = exportsClient([
+    { Exports: [{ Name: 'other-export', Value: 'x' }], NextToken: 'page-2' },
+    { Exports: [{ Name: EDGE_WEB_ACL_EXPORT, Value: outputs.EdgeWebAclArn }] }
+  ]);
+  assert.equal(await edgeWebAclArn(client), outputs.EdgeWebAclArn);
+  assert.deepEqual(client.calls, [undefined, 'page-2']);
+});
+
+test('a missing or foreign edge-waf export refuses before any write', async () => {
+  await assert.rejects(
+    edgeWebAclArn(exportsClient([{ Exports: [] }])),
+    /Missing CloudFormation export edge-waf-WebAclArn/
+  );
+  await assert.rejects(
+    edgeWebAclArn(exportsClient([{ Exports: [{ Name: EDGE_WEB_ACL_EXPORT, Value: 'arn:aws:s3:::bucket' }] }])),
+    /not the edge web ACL/
+  );
 });
