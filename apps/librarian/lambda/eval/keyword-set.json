@@ -1,0 +1,3253 @@
+{
+ "about": "Keyword-retrieval eval set; built by pipeline/eval/build_keyword_set.py",
+ "seed": 20261102,
+ "common_share": 0.005,
+ "name_sources": [
+  2,
+  12
+ ],
+ "items": [
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "want to share nearly",
+   "answer_quote": "want to share nearly",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 170,
+    "url": "/archive/170/",
+    "subject": "Weekly Thing #170 / MeetingBar, Platforms, Wikipedia",
+    "publish_date": "2021-01-23T13:00:00Z"
+   },
+   "target_chunk_id": "5b63ddb4f088d481",
+   "target_source": "weekly_thing:170",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k001"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "beautiful in the same time",
+   "answer_quote": "beautiful in the same time",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 151,
+    "url": "/archive/151/",
+    "subject": "Weekly Thing #151 / George Floyd, I Can’t Breathe, Black Lives Matter",
+    "publish_date": "2020-06-06T12:00:00Z"
+   },
+   "target_chunk_id": "164d2a1e646bbf89",
+   "target_source": "weekly_thing:151",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k002"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "great day and truly hope",
+   "answer_quote": "great day and truly hope",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 301,
+    "url": "/archive/301/",
+    "subject": "Weekly Thing 301 / TinyTroupe, Monarch, Leaving",
+    "publish_date": "2024-11-17T12:00:00Z"
+   },
+   "target_chunk_id": "3d9a2901dfc29923",
+   "target_source": "weekly_thing:301",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k003"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "one of the nice things",
+   "answer_quote": "one of the nice things",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 196,
+    "url": "/archive/196/",
+    "subject": "Weekly Thing #196 / iPhone 13, iOS 15, watchOS 8",
+    "publish_date": "2021-09-25T12:00:00Z"
+   },
+   "target_chunk_id": "7ec3a32e1eacb6bc",
+   "target_source": "weekly_thing:196",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k004"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "apple workflow is your personal automation",
+   "answer_quote": "apple workflow is your personal automation",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 45,
+    "url": "/archive/45/",
+    "subject": "Weekly Thing #45 / Mar 17, 2018",
+    "publish_date": "2018-03-17T12:00:00Z"
+   },
+   "target_chunk_id": "32ec76d0ccc6e772",
+   "target_source": "weekly_thing:45",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k005"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "big data and surveillance",
+   "answer_quote": "big data and surveillance",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 7,
+    "url": "/archive/7/",
+    "subject": "Weekly Thing for June 24, 2017",
+    "publish_date": "2017-06-24T13:00:00Z"
+   },
+   "target_chunk_id": "0174163403dfd04f",
+   "target_source": "weekly_thing:7",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k006"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "part i think is valuable",
+   "answer_quote": "part i think is valuable",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 248,
+    "url": "/archive/248/",
+    "subject": "Weekly Thing #248 / Bicycle, Attention, Shapella",
+    "publish_date": "2023-04-01T12:00:00Z"
+   },
+   "target_chunk_id": "80a588595c7cc938",
+   "target_source": "weekly_thing:248",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k007"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "morning and done a significant",
+   "answer_quote": "morning and done a significant",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 175,
+    "url": "/archive/175/",
+    "subject": "Weekly Thing #175 / Crontab, Fry's, Daft Punk",
+    "publish_date": "2021-02-27T13:00:00Z"
+   },
+   "target_chunk_id": "08eaac9821e4d5d8",
+   "target_source": "weekly_thing:175",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k008"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "comments from the first thing last",
+   "answer_quote": "comments from the first thing last",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 2,
+    "url": "/archive/2/",
+    "subject": "Weekly Thing for May 20, 2017",
+    "publish_date": "2017-05-20T13:00:00Z"
+   },
+   "target_chunk_id": "82d9d2e3b2775a52",
+   "target_source": "weekly_thing:2",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k009"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "phrase",
+   "question": "ring and that it didn't",
+   "answer_quote": "ring and that it didn't",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 134,
+    "url": "/archive/134/",
+    "subject": "Weekly Thing #134 / Platform & Product, Corporate Athlete, Mindfulness",
+    "publish_date": "2020-02-08T13:00:00Z"
+   },
+   "target_chunk_id": "1f8e460de3d9da1f",
+   "target_source": "weekly_thing:134",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k010"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "quoted",
+   "question": "\"short so we can get back\"",
+   "answer_quote": "short so we can get back",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 266,
+    "url": "/archive/266/",
+    "subject": "Weekly Thing 266 / Obsessed, DiceRight, Omnivore",
+    "publish_date": "2023-10-21T12:00:00Z"
+   },
+   "target_chunk_id": "1592ed8e262ce360",
+   "target_source": "weekly_thing:266",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k011"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "quoted",
+   "question": "\"task manager and set\"",
+   "answer_quote": "task manager and set",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 132,
+    "url": "/archive/132/",
+    "subject": "Weekly Thing #132 / Backdoors, Espresso, Technical Debt, Coaching, Studio Ghibli",
+    "publish_date": "2020-01-25T13:00:00Z"
+   },
+   "target_chunk_id": "3b6e5c51388d8fee",
+   "target_source": "weekly_thing:132",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k012"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "quoted",
+   "question": "\"business great article walking\"",
+   "answer_quote": "business great article walking",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 327,
+    "url": "/archive/327/",
+    "subject": "Weekly Thing 327 / Prototypes, Tahoe, UTF-8",
+    "publish_date": "2025-09-20T11:00:00Z"
+   },
+   "target_chunk_id": "91107112b09660f2",
+   "target_source": "weekly_thing:327",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k013"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "quoted",
+   "question": "\"share multiple links powerful\"",
+   "answer_quote": "share multiple links powerful",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 208,
+    "url": "/archive/208/",
+    "subject": "Weekly Thing #208 / GPS, Intel, Omicron",
+    "publish_date": "2022-01-22T13:00:00Z"
+   },
+   "target_chunk_id": "463fa91d63022421",
+   "target_source": "weekly_thing:208",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k014"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "quoted",
+   "question": "\"many kind words from friends\"",
+   "answer_quote": "many kind words from friends",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 197,
+    "url": "/archive/197/",
+    "subject": "Weekly Thing #197 / Cloudflare, Bunches, Float",
+    "publish_date": "2021-10-02T12:00:00Z"
+   },
+   "target_chunk_id": "ee57bc88471d86bc",
+   "target_source": "weekly_thing:197",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k015"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Crocs playtime",
+   "answer_quote": "crocs meet lego in the sun ☀️ playtime",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 340,
+    "url": "/archive/340/",
+    "subject": "Weekly Thing 340 / Moltbook, Frontier, Poster",
+    "publish_date": "2026-02-08T14:44:36.479380Z"
+   },
+   "target_chunk_id": "ec4f886d1b4096df",
+   "target_source": "weekly_thing:340",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Crocs",
+    "word": "playtime"
+   },
+   "id": "k016"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Sioux augustana",
+   "answer_quote": "augustana university in sioux",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 308,
+    "url": "/archive/308/",
+    "subject": "Weekly Thing 308 / Tapestry, Terminal, Tab",
+    "publish_date": "2025-02-09T12:00:00Z"
+   },
+   "target_chunk_id": "b9109ab419710167",
+   "target_source": "weekly_thing:308",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Sioux",
+    "word": "augustana"
+   },
+   "id": "k017"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Toppling gates",
+   "answer_quote": "gates watches silicon valley? huh! 📺 - mini kubb | table top block toppling",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 81,
+    "url": "/archive/81/",
+    "subject": "Weekly Thing #81 / Nov 24, 2018",
+    "publish_date": "2018-11-24T13:00:00Z"
+   },
+   "target_chunk_id": "76bbee685f8cb88f",
+   "target_source": "weekly_thing:81",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Toppling",
+    "word": "gates"
+   },
+   "id": "k018"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Szpakowski welcomes",
+   "answer_quote": "welcomes your hate - the atlantic mesmerizing drawings. → the paris review - waclaw szpakowski",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 304,
+    "url": "/archive/304/",
+    "subject": "Weekly Thing 304 / Connections, Vince, Markwhen",
+    "publish_date": "2024-12-08T12:00:00Z"
+   },
+   "target_chunk_id": "4e3f12d325e61f50",
+   "target_source": "weekly_thing:304",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Szpakowski",
+    "word": "welcomes"
+   },
+   "id": "k019"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Haskell learning",
+   "answer_quote": "haskell. its concurrency model is inspired by go-style processes and channels. 👨‍💻 --- learning",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 166,
+    "url": "/archive/166/",
+    "subject": "Weekly Thing #166 / Chess, Disruption, M1 Macs, Five Hindrances",
+    "publish_date": "2020-11-21T13:00:00Z"
+   },
+   "target_chunk_id": "7af7e948cee36b30",
+   "target_source": "weekly_thing:166",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Haskell",
+    "word": "learning"
+   },
+   "id": "k020"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Sagrada enjoy",
+   "answer_quote": "enjoy the links and have a great day! --- incredible light coming into sagrada",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 345,
+    "url": "/archive/345/",
+    "subject": "Weekly Thing 345 / Codex, Headless, Wikiwise",
+    "publish_date": "2026-04-26T12:00:00Z"
+   },
+   "target_chunk_id": "51376b720a7d09db",
+   "target_source": "weekly_thing:345",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Sagrada",
+    "word": "enjoy"
+   },
+   "id": "k021"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Smalltalk argentina",
+   "answer_quote": "argentina we have a very active and strong community on the smalltalk",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 183,
+    "url": "/archive/183/",
+    "subject": "Weekly Thing #183 / Visidata, FTP, Amazon",
+    "publish_date": "2021-04-24T12:00:00Z"
+   },
+   "target_chunk_id": "5480330ce8e96148",
+   "target_source": "weekly_thing:183",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Smalltalk",
+    "word": "argentina"
+   },
+   "id": "k022"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Accord compromised",
+   "answer_quote": "compromised, mps told | uk news | the guardian - cybersecurity tech accord",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 50,
+    "url": "/archive/50/",
+    "subject": "Weekly Thing #50 / Apr 21, 2018",
+    "publish_date": "2018-04-21T12:00:00Z"
+   },
+   "target_chunk_id": "3207e866eec1e71b",
+   "target_source": "weekly_thing:50",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Accord",
+    "word": "compromised"
+   },
+   "id": "k023"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "Mythos vertical",
+   "answer_quote": "mythos finds a curl vulnerability | daniel.haxx.se vertical",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 348,
+    "url": "/archive/348/",
+    "subject": "WT348 — Agents as Collaborators",
+    "publish_date": "2026-05-17T11:00:00Z"
+   },
+   "target_chunk_id": "0e6b1832b835ebea",
+   "target_source": "weekly_thing:348",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Mythos",
+    "word": "vertical"
+   },
+   "id": "k024"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "name",
+   "question": "GDPR collapse",
+   "answer_quote": "gdpr - the verge www.theverge.com - will kubernetes collapse",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 56,
+    "url": "/archive/56/",
+    "subject": "Weekly Thing #56 / Jun 2, 2018",
+    "publish_date": "2018-06-02T12:00:00Z"
+   },
+   "target_chunk_id": "204a83a1dcab2925",
+   "target_source": "weekly_thing:56",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "GDPR",
+    "word": "collapse"
+   },
+   "id": "k025"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Salvador possibility",
+   "answer_quote": "possibilities – six colors el salvador",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 190,
+    "url": "/archive/190/",
+    "subject": "Weekly Thing #190 / WWDC, Passport, Roll",
+    "publish_date": "2021-06-12T12:00:00Z"
+   },
+   "target_chunk_id": "194f86ce2e407a1a",
+   "target_source": "weekly_thing:190",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Salvador",
+    "word": "possibilities",
+    "typed": "possibility"
+   },
+   "id": "k026"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Refraction overviews",
+   "answer_quote": "refraction with css and svg — kube.io comprehensive overview",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 326,
+    "url": "/archive/326/",
+    "subject": "Weekly Thing 326 / Tempo, Seedship, Refraction",
+    "publish_date": "2025-09-14T11:00:00Z"
+   },
+   "target_chunk_id": "8b822c502a1f9452",
+   "target_source": "weekly_thing:326",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Refraction",
+    "word": "overview",
+    "typed": "overviews"
+   },
+   "id": "k027"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Blais interface",
+   "answer_quote": "blais bridging databases with streaming interfaces",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 346,
+    "url": "/archive/346/",
+    "subject": "Weekly Thing 346 / Wuphf, Landsat, Eclipse",
+    "publish_date": "2026-05-03T13:54:35.604000Z"
+   },
+   "target_chunk_id": "508814cdeb8df9ac",
+   "target_source": "weekly_thing:346",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Blais",
+    "word": "interfaces",
+    "typed": "interface"
+   },
+   "id": "k028"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Erlang chain",
+   "answer_quote": "chains, like ethereum, are simply erlang",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 17,
+    "url": "/archive/17/",
+    "subject": "Weekly Thing for September 2, 2017",
+    "publish_date": "2017-09-02T13:00:00Z"
+   },
+   "target_chunk_id": "b9bd9c38ce419e0e",
+   "target_source": "weekly_thing:17",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Erlang",
+    "word": "chains",
+    "typed": "chain"
+   },
+   "id": "k029"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Gygax novels",
+   "answer_quote": "gygax and the creation of d&d. the graphic novel",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 3,
+    "url": "/archive/3/",
+    "subject": "Weekly Thing for May 27, 2017",
+    "publish_date": "2017-05-27T13:00:00Z"
+   },
+   "target_chunk_id": "d9c465dcbaaf3b10",
+   "target_source": "weekly_thing:3",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Gygax",
+    "word": "novel",
+    "typed": "novels"
+   },
+   "id": "k030"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "inflected",
+   "question": "Essex hug",
+   "answer_quote": "essex home heated by code— tech hugs",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 333,
+    "url": "/archive/333/",
+    "subject": "Weekly Thing 333 / Gemini, LangChain, Illusion",
+    "publish_date": "2025-11-23T15:08:05.936493Z"
+   },
+   "target_chunk_id": "0bf5d0747818f4a9",
+   "target_source": "weekly_thing:333",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Essex",
+    "word": "hugs",
+    "typed": "hug"
+   },
+   "id": "k031"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "iPhone 12 Pro Max Camera Review Zion — Austin Mann 💬",
+   "answer_quote": "field review of the new iphone 12 pro",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 165,
+    "url": "/archive/165/",
+    "subject": "Weekly Thing #165 / Sessions, Friluftsliv, Everlong",
+    "publish_date": "2020-11-14T13:00:00Z"
+   },
+   "target_chunk_id": "9516f53af8cb2f64",
+   "target_source": "weekly_thing:165",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k032"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Opinion | Dave Eggers: Flattening the Truth on Coronavirus - The New York Times",
+   "answer_quote": "i love eggers writing and this is spot",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 147,
+    "url": "/archive/147/",
+    "subject": "Weekly Thing #147 / Do The Work, Good Writing, Bye Amazon",
+    "publish_date": "2020-05-09T12:00:00Z"
+   },
+   "target_chunk_id": "203bdab7f65ff5d4",
+   "target_source": "weekly_thing:147",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k033"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Nomorobo Robocall Blocking",
+   "answer_quote": "by telephone science corporation nomorobo blocks annoying robocalls,",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 55,
+    "url": "/archive/55/",
+    "subject": "Weekly Thing #55 / May 26, 2018",
+    "publish_date": "2018-05-26T12:00:00Z"
+   },
+   "target_chunk_id": "1394717689fbbd6f",
+   "target_source": "weekly_thing:55",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k034"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Jared Sinclair | Blog | Apple Watch Series 3 First Impression:...",
+   "answer_quote": "this article exactly captures why i decided to",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 21,
+    "url": "/archive/21/",
+    "subject": "Weekly Thing for September 30, 2017",
+    "publish_date": "2017-09-30T13:00:00Z"
+   },
+   "target_chunk_id": "79ca57d4e12f994c",
+   "target_source": "weekly_thing:21",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k035"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Drafts - Quickly Capture Notes, Share Anywhere!",
+   "answer_quote": "by agile tortoise drafts, where text starts. quickly",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 11,
+    "url": "/archive/11/",
+    "subject": "Weekly Thing for July 22, 2017",
+    "publish_date": "2017-07-22T13:00:00Z"
+   },
+   "target_chunk_id": "1d301d9e41a0720a",
+   "target_source": "weekly_thing:11",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k036"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Opinion | Here Comes the Coronavirus Pandemic - The New York Times",
+   "answer_quote": "there is much to do to respond to",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 138,
+    "url": "/archive/138/",
+    "subject": "Weekly Thing #138 / Covid-19, Credibility, Clearview AI, Hair Freezing",
+    "publish_date": "2020-03-07T13:00:00Z"
+   },
+   "target_chunk_id": "80d5094b159e4f1e",
+   "target_source": "weekly_thing:138",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k037"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "Opinion | It’s Time to Panic About Privacy - The New York Times",
+   "answer_quote": "a visual explainer on privacy matters. introduces the",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 102,
+    "url": "/archive/102/",
+    "subject": "Weekly Thing #102 / Apr 20, 2019",
+    "publish_date": "2019-04-20T12:00:00Z"
+   },
+   "target_chunk_id": "215d35a654fb4752",
+   "target_source": "weekly_thing:102",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k038"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "title",
+   "question": "The Subtle Power of Changing Your Identity - zen habits zen habits",
+   "answer_quote": "i think this is an important article. it",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 156,
+    "url": "/archive/156/",
+    "subject": "Weekly Thing #156 / Identity, AI, Peloton, UPSERT",
+    "publish_date": "2020-09-12T12:00:00Z"
+   },
+   "target_chunk_id": "4986758fb01cdfc0",
+   "target_source": "weekly_thing:156",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k039"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "Jamie on Atrocious alarm",
+   "answer_quote": "alarm clock atrocious",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 354,
+    "url": "/archive/354/",
+    "subject": "WT354 — A museum for nnxyz art",
+    "publish_date": "2026-10-24T12:00:00Z"
+   },
+   "target_chunk_id": "eb3fbd40534e91fe",
+   "target_source": "weekly_thing:354",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Atrocious",
+    "word": "alarm"
+   },
+   "id": "k040"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "what did Jamie write about Jared and walrus",
+   "answer_quote": "walrus. jared",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 227,
+    "url": "/archive/227/",
+    "subject": "Weekly Thing #227 / Attention, Minnedemo, Learning",
+    "publish_date": "2022-09-24T12:00:00Z"
+   },
+   "target_chunk_id": "2110e4cb0c2c7e1d",
+   "target_source": "weekly_thing:227",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Jared",
+    "word": "walrus"
+   },
+   "id": "k041"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Nerdle oliver?",
+   "answer_quote": "oliver shared nerdle",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 212,
+    "url": "/archive/212/",
+    "subject": "Weekly Thing #212 / Words, Mermaid, Beats",
+    "publish_date": "2022-02-19T20:43:05.052802Z"
+   },
+   "target_chunk_id": "e20e5de154d520e5",
+   "target_source": "weekly_thing:212",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Nerdle",
+    "word": "oliver"
+   },
+   "id": "k042"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Huntsville sunset?",
+   "answer_quote": "sunset. mar 19, 2022 at 7:10 pm u.s. space & rocket center, huntsville",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 216,
+    "url": "/archive/216/",
+    "subject": "Weekly Thing #216 / NFT, DST, PDP",
+    "publish_date": "2022-03-20T12:00:00Z"
+   },
+   "target_chunk_id": "b9493682a94a3d1a",
+   "target_source": "weekly_thing:216",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Huntsville",
+    "word": "sunset"
+   },
+   "id": "k043"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "what did Jamie write about Howard and regex",
+   "answer_quote": "howard hughes. - regex",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 67,
+    "url": "/archive/67/",
+    "subject": "Weekly Thing #67 / Aug 18, 2018",
+    "publish_date": "2018-08-18T12:00:00Z"
+   },
+   "target_chunk_id": "dfeb70dd5c031d6e",
+   "target_source": "weekly_thing:67",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Howard",
+    "word": "regex"
+   },
+   "id": "k044"
+  },
+  {
+   "corpus": "weekly_thing",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Dixon serverless?",
+   "answer_quote": "serverless space with an open source solution. why decentralization matters – chris dixon",
+   "target": {
+    "source_kind": "chunk",
+    "issue_number": 42,
+    "url": "/archive/42/",
+    "subject": "Weekly Thing #42 / Feb 24, 2018",
+    "publish_date": "2018-02-24T13:00:00Z"
+   },
+   "target_chunk_id": "fb5cb0720dde8064",
+   "target_source": "weekly_thing:42",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Dixon",
+    "word": "serverless"
+   },
+   "id": "k045"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "course of time this adds",
+   "answer_quote": "course of time this adds",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 5291180,
+    "url": "https://www.thingelstad.com/2025/04/03/blogging-as-a-gift.html",
+    "subject": "Blogging as a Gift",
+    "publish_date": "2025-04-03"
+   },
+   "target_chunk_id": "blog:5291180:0:b46717ee41303b76",
+   "target_source": "blog:5291180",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k046"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "publishing it here for easy",
+   "answer_quote": "publishing it here for easy",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1752642,
+    "url": "https://www.thingelstad.com/2022/12/11/what-in-ethereum.html",
+    "subject": "What in Ethereum ecosystem excites me",
+    "publish_date": "2022-12-11"
+   },
+   "target_chunk_id": "blog:1752642:0:ebd1d419c6052fe5",
+   "target_source": "blog:1752642",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k047"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "products on long tables in a modern",
+   "answer_quote": "products on long tables in a modern",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 3263769,
+    "url": "https://www.thingelstad.com/2023/06/19/juneteenth.html",
+    "subject": "Juneteenth",
+    "publish_date": "2023-06-19"
+   },
+   "target_chunk_id": "blog:3263769:0:c61cc42d6acd2733",
+   "target_source": "blog:3263769",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k048"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "cloudy and cold in evening",
+   "answer_quote": "cloudy and cold in evening",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1630136,
+    "url": "https://www.thingelstad.com/2022/07/24/iceland-log-day.html",
+    "subject": "Iceland Log Day 2",
+    "publish_date": "2022-07-24"
+   },
+   "target_chunk_id": "blog:1630136:0:0175fe2f50817493",
+   "target_source": "blog:1630136",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k049"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "love trip was never",
+   "answer_quote": "love trip was never",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075850,
+    "url": "https://www.thingelstad.com/2008/06/08/expansive-powerful-and.html",
+    "subject": "Expansive, Powerful and Majestic",
+    "publish_date": "2008-06-08"
+   },
+   "target_chunk_id": "blog:1075850:0:908b45c0e03ac124",
+   "target_source": "blog:1075850",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k050"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "green machine box on a store",
+   "answer_quote": "green machine box on a store",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 808422,
+    "url": "http://micro.thingelstad.com/2013/11/23/remembering-how-epic.html",
+    "subject": "Remembering how epic the Green Machine was as a kid. Huffy Green…",
+    "publish_date": "2013-11-23"
+   },
+   "target_chunk_id": "blog:808422:0:e1247699c1a8c760",
+   "target_source": "blog:808422",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k051"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "order the first three",
+   "answer_quote": "order the first three",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 4167235,
+    "url": "https://www.thingelstad.com/2024/06/23/helped-tyler-order.html",
+    "subject": "Helped Tyler order the first three components for his Gaming PC from…",
+    "publish_date": "2024-06-23"
+   },
+   "target_chunk_id": "blog:4167235:0:b80594f592454bef",
+   "target_source": "blog:4167235",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k052"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "decided to take a very brief",
+   "answer_quote": "decided to take a very brief",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1143246,
+    "url": "https://www.thingelstad.com/2020/07/19/theodore-roosevelt-national.html",
+    "subject": "Theodore Roosevelt National Park",
+    "publish_date": "2020-07-19"
+   },
+   "target_chunk_id": "blog:1143246:0:a7c37bca4dbf43ea",
+   "target_source": "blog:1143246",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k053"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "place and the people who ran",
+   "answer_quote": "place and the people who ran",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076503,
+    "url": "https://www.thingelstad.com/2004/06/19/paintball.html",
+    "subject": "Paintball",
+    "publish_date": "2004-06-19"
+   },
+   "target_chunk_id": "blog:1076503:0:f819852e90e201e1",
+   "target_source": "blog:1076503",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k054"
+  },
+  {
+   "corpus": "blog",
+   "kind": "phrase",
+   "question": "seems to not want to go",
+   "answer_quote": "seems to not want to go",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076065,
+    "url": "https://www.thingelstad.com/2007/04/13/000000.html",
+    "subject": "Mr. Mom Weekend via Twitter",
+    "publish_date": "2007-04-13"
+   },
+   "target_chunk_id": "blog:1076065:0:919d3122e777fcf8",
+   "target_source": "blog:1076065",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k055"
+  },
+  {
+   "corpus": "blog",
+   "kind": "quoted",
+   "question": "\"four people holding large\"",
+   "answer_quote": "four people holding large",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1378800,
+    "url": "https://www.thingelstad.com/2021/08/03/ice-cream-at.html",
+    "subject": "Ice cream at Sleeping Giant Ice Cream in Kerhonkson. 🍦 Four people…",
+    "publish_date": "2021-08-03"
+   },
+   "target_chunk_id": "blog:1378800:0:cdafdaf3e1e73bcc",
+   "target_source": "blog:1378800",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k056"
+  },
+  {
+   "corpus": "blog",
+   "kind": "quoted",
+   "question": "\"room at the museum\"",
+   "answer_quote": "room at the museum",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 477519,
+    "url": "http://micro.thingelstad.com/2018/04/03/array-of-d.html",
+    "subject": "Array of 3D printers at Museum of Science & Industry. Numbered red…",
+    "publish_date": "2018-04-03"
+   },
+   "target_chunk_id": "blog:477519:0:fb5e6f0623dd0859",
+   "target_source": "blog:477519",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k057"
+  },
+  {
+   "corpus": "blog",
+   "kind": "quoted",
+   "question": "\"ready for special event\"",
+   "answer_quote": "ready for special event",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 5337196,
+    "url": "https://www.thingelstad.com/2025/05/04/growth-cup-goes-to-warsaw.html",
+    "subject": "Growth Cup Goes to Warsaw",
+    "publish_date": "2025-05-04"
+   },
+   "target_chunk_id": "blog:5337196:0:1950a7216629ac01",
+   "target_source": "blog:5337196",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k058"
+  },
+  {
+   "corpus": "blog",
+   "kind": "quoted",
+   "question": "\"things with mazie and tammy i need\"",
+   "answer_quote": "things with mazie and tammy i need",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075793,
+    "url": "https://www.thingelstad.com/2008/10/01/too-fat-losing.html",
+    "subject": "Too Fat, Losing Weight",
+    "publish_date": "2008-10-01"
+   },
+   "target_chunk_id": "blog:1075793:0:3e6c11f1159a13a0",
+   "target_source": "blog:1075793",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k059"
+  },
+  {
+   "corpus": "blog",
+   "kind": "quoted",
+   "question": "\"crowd of seated and standing audience\"",
+   "answer_quote": "crowd of seated and standing audience",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1173010,
+    "url": "https://www.thingelstad.com/2018/06/16/brandi-carlile-at.html",
+    "subject": "Brandi Carlile at the Big Top Chautauqua",
+    "publish_date": "2018-06-16"
+   },
+   "target_chunk_id": "blog:1173010:0:0d9aaa74de4f9c74",
+   "target_source": "blog:1173010",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k060"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Pandora farewell",
+   "answer_quote": "pandora instead. one of the tweets highlighted in my marketwatch farewell",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 672726,
+    "url": "http://micro.thingelstad.com/2008/02/20/t737747852.html",
+    "subject": "Back in hotel room. TV doesn't work in this room. I find…",
+    "publish_date": "2008-02-20"
+   },
+   "target_chunk_id": "blog:672726:0:ba32a7d52dde81b9",
+   "target_source": "blog:672726",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Pandora",
+    "word": "farewell"
+   },
+   "id": "k061"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Franti theater",
+   "answer_quote": "franti show tonight! amazing show! 🎶 six people posing together in front of a theater",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1207350,
+    "url": "https://www.thingelstad.com/2019/10/22/232825.html",
+    "subject": "Michael Franti and Spearhead Concert",
+    "publish_date": "2019-10-22"
+   },
+   "target_chunk_id": "blog:1207350:0:2d618d80f3cca36c",
+   "target_source": "blog:1207350",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Franti",
+    "word": "theater"
+   },
+   "id": "k062"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Rasmussen retire",
+   "answer_quote": "retire the livestrong bracelet. rasmussen",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076283,
+    "url": "https://www.thingelstad.com/2005/07/24/lance-wins.html",
+    "subject": "Lance Wins #7",
+    "publish_date": "2005-07-24"
+   },
+   "target_chunk_id": "blog:1076283:0:c9efc808e1473b8d",
+   "target_source": "blog:1076283",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Rasmussen",
+    "word": "retire"
+   },
+   "id": "k063"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "XHTML compliant",
+   "answer_quote": "xhtml compliant",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076127,
+    "url": "https://www.thingelstad.com/2006/11/25/migrating-text-to.html",
+    "subject": "Migrating .Text to WordPress",
+    "publish_date": "2006-11-25"
+   },
+   "target_chunk_id": "blog:1076127:5:2c5472de20b926f6",
+   "target_source": "blog:1076127",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "XHTML",
+    "word": "compliant"
+   },
+   "id": "k064"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Eiffel flaming",
+   "answer_quote": "flaming torch with big ben and eiffel",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1201304,
+    "url": "https://www.thingelstad.com/2020/10/10/family-movie-night.html",
+    "subject": "Family movie night, National Treasure 2: Book of Secrets. Fun movie. Very…",
+    "publish_date": "2020-10-10"
+   },
+   "target_chunk_id": "blog:1201304:0:446ecfde105427f8",
+   "target_source": "blog:1201304",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Eiffel",
+    "word": "flaming"
+   },
+   "id": "k065"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Ralph seats",
+   "answer_quote": "ralph. dad holding the seats",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 805968,
+    "url": "http://micro.thingelstad.com/2008/09/20/yeah-mazie-got.html",
+    "subject": "- Queueing to get in Ralph's World concert. Mazie very excited! -…",
+    "publish_date": "2008-09-20"
+   },
+   "target_chunk_id": "blog:805968:0:be0f1ddb2cbd6b29",
+   "target_source": "blog:805968",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Ralph",
+    "word": "seats"
+   },
+   "id": "k066"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "QuestyCaptcha combinations",
+   "answer_quote": "combinations. it's not obvious that this type of configuration works with questycaptcha",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1074914,
+    "url": "https://www.thingelstad.com/2013/07/09/stopping-mediawiki-spam.html",
+    "subject": "Stopping MediaWiki Spam with Dynamic Questy Captchas",
+    "publish_date": "2013-07-09"
+   },
+   "target_chunk_id": "blog:1074914:3:53cb6bef30b6c263",
+   "target_source": "blog:1074914",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "QuestyCaptcha",
+    "word": "combinations"
+   },
+   "id": "k067"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Hoffman jonah",
+   "answer_quote": "jonah hill and philip seymour hoffman",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075027,
+    "url": "https://www.thingelstad.com/2011/10/29/moneyball-the-movie.html",
+    "subject": "Moneyball the movie",
+    "publish_date": "2011-10-29"
+   },
+   "target_chunk_id": "blog:1075027:0:2289daf30c8f6671",
+   "target_source": "blog:1075027",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Hoffman",
+    "word": "jonah"
+   },
+   "id": "k068"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "Moravian pergola",
+   "answer_quote": "pergola with a glowing yellow moravian",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1763171,
+    "url": "https://www.thingelstad.com/2022/12/24/the-snow-subzero.html",
+    "subject": "The snow, subzero temps, and frozen lid on the Big Green Egg…",
+    "publish_date": "2022-12-24"
+   },
+   "target_chunk_id": "blog:1763171:0:1701649ad574a5b1",
+   "target_source": "blog:1763171",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Moravian",
+    "word": "pergola"
+   },
+   "id": "k069"
+  },
+  {
+   "corpus": "blog",
+   "kind": "name",
+   "question": "PTON peaking",
+   "answer_quote": "pton stock chart showing 2-year price history, peaking",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1490929,
+    "url": "https://www.thingelstad.com/2022/01/20/peloton-has-given.html",
+    "subject": "Peloton has given back all of the pandemic gains experienced. Either $PTON…",
+    "publish_date": "2022-01-20"
+   },
+   "target_chunk_id": "blog:1490929:0:ff0de2f2a4492981",
+   "target_source": "blog:1490929",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "PTON",
+    "word": "peaking"
+   },
+   "id": "k070"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Disneyland fountain",
+   "answer_quote": "disneyland paris. disneyland paris hotel entrance with fountains",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 5804385,
+    "url": "https://www.thingelstad.com/2026/03/22/disnelyland-paris.html",
+    "subject": "Disneyland Paris. Disneyland Paris Hotel entrance with fountains in the foreground, a…",
+    "publish_date": "2026-03-22"
+   },
+   "target_chunk_id": "blog:5804385:0:3733f0e1f342279f",
+   "target_source": "blog:5804385",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Disneyland",
+    "word": "fountains",
+    "typed": "fountain"
+   },
+   "id": "k071"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Krampus surroundings",
+   "answer_quote": "krampus 1 . circular badge reading kickin it with krampus poapathon 2022 surrounding",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 5474420,
+    "url": "https://www.thingelstad.com/2022/12/24/poap-at-kickin-it-with.html",
+    "subject": "POAP 6152193 at Kickin' it with Krampus #1 . Circular badge reading…",
+    "publish_date": "2022-12-24"
+   },
+   "target_chunk_id": "blog:5474420:0:46c3746037b72213",
+   "target_source": "blog:5474420",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Krampus",
+    "word": "surrounding",
+    "typed": "surroundings"
+   },
+   "id": "k072"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Honeymoon selfies",
+   "answer_quote": "honeymoon 20 years ago. couple taking a selfie",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1663490,
+    "url": "https://www.thingelstad.com/2022/09/10/first-time-returning.html",
+    "subject": "First time returning to Hotel Monaco in Denver since our Honeymoon 20…",
+    "publish_date": "2022-09-10"
+   },
+   "target_chunk_id": "blog:1663490:0:a783a753ea813115",
+   "target_source": "blog:1663490",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Honeymoon",
+    "word": "selfie",
+    "typed": "selfies"
+   },
+   "id": "k073"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Schwab errors",
+   "answer_quote": "error on the schwab",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075651,
+    "url": "https://www.thingelstad.com/2009/02/12/flashback-bigcharts-partnership.html",
+    "subject": "Flashback: BigCharts Partnership Portfolio from 1997",
+    "publish_date": "2009-02-12"
+   },
+   "target_chunk_id": "blog:1075651:0:7516bc4fdaaa5a06",
+   "target_source": "blog:1075651",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Schwab",
+    "word": "error",
+    "typed": "errors"
+   },
+   "id": "k074"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Cupworks kettles",
+   "answer_quote": "cupworks colombia coffee bag and box, gooseneck kettle",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 4550258,
+    "url": "https://www.thingelstad.com/2024/12/24/starting-christmas-eve-with-an.html",
+    "subject": "Starting Christmas Eve with an amazing cup of Dreamy Melon from the…",
+    "publish_date": "2024-12-24"
+   },
+   "target_chunk_id": "blog:4550258:0:81d82a05e58bb128",
+   "target_source": "blog:4550258",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Cupworks",
+    "word": "kettle",
+    "typed": "kettles"
+   },
+   "id": "k075"
+  },
+  {
+   "corpus": "blog",
+   "kind": "inflected",
+   "question": "Thermapen patients",
+   "answer_quote": "patient and put a thermapen",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075667,
+    "url": "https://www.thingelstad.com/2009/01/25/thermapen-grill-like.html",
+    "subject": "Thermapen, Grill Like a Pro",
+    "publish_date": "2009-01-25"
+   },
+   "target_chunk_id": "blog:1075667:0:228f8097fa5cc34a",
+   "target_source": "blog:1075667",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Thermapen",
+    "word": "patient",
+    "typed": "patients"
+   },
+   "id": "k076"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "Interviewing Your Kid?",
+   "answer_quote": "mazie is about to turn 4 years old",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075510,
+    "url": "https://www.thingelstad.com/2009/06/05/interviewing-your-kid.html",
+    "subject": "Interviewing Your Kid?",
+    "publish_date": "2009-06-05"
+   },
+   "target_chunk_id": "blog:1075510:0:29833e86d13044ee",
+   "target_source": "blog:1075510",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k077"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "Mac OS 10.4, Tiger?",
+   "answer_quote": "if you have been reading my site for",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076328,
+    "url": "https://www.thingelstad.com/2005/05/01/mac-os-tiger.html",
+    "subject": "Mac OS 10.4, Tiger?",
+    "publish_date": "2005-05-01"
+   },
+   "target_chunk_id": "blog:1076328:0:9de15a27ba68d8d3",
+   "target_source": "blog:1076328",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k078"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "DirecTV v. iTunes & Apple TV",
+   "answer_quote": "i recently was doing a review of some",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075751,
+    "url": "https://www.thingelstad.com/2008/12/08/directv-v-itunes.html",
+    "subject": "DirecTV v. iTunes & Apple TV",
+    "publish_date": "2008-12-08"
+   },
+   "target_chunk_id": "blog:1075751:0:13937773c06f6fc0",
+   "target_source": "blog:1075751",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k079"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "Mazie's Phone Essay",
+   "answer_quote": "we are talking to our daughter about getting",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1074749,
+    "url": "https://www.thingelstad.com/2016/03/13/mazies-phone-essay.html",
+    "subject": "Mazie's Phone Essay",
+    "publish_date": "2016-03-13"
+   },
+   "target_chunk_id": "blog:1074749:0:b11deec451e691e8",
+   "target_source": "blog:1074749",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k080"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "RAGBRAI 2009 Full Route Announced",
+   "answer_quote": "the full ragbrai route for 2009 was published",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075609,
+    "url": "https://www.thingelstad.com/2009/03/10/ragbrai-full-route.html",
+    "subject": "RAGBRAI 2009 Full Route Announced",
+    "publish_date": "2009-03-10"
+   },
+   "target_chunk_id": "blog:1075609:0:4dcb5af56c0146c6",
+   "target_source": "blog:1075609",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k081"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "The Soul of a New Machine by Tracy Kidder",
+   "answer_quote": "i expressed my ignorance and he was dumbfounded.",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1075845,
+    "url": "https://www.thingelstad.com/2008/06/15/the-soul-of.html",
+    "subject": "The Soul of a New Machine by Tracy Kidder",
+    "publish_date": "2008-06-15"
+   },
+   "target_chunk_id": "blog:1075845:1:6f2709ce57540453",
+   "target_source": "blog:1075845",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k082"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "Mother's Kitchen Demolition",
+   "answer_quote": "tammy and i went and helped my mom",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076483,
+    "url": "https://www.thingelstad.com/2004/07/10/mothers-kitchen-demolition.html",
+    "subject": "Mother's Kitchen Demolition",
+    "publish_date": "2004-07-10"
+   },
+   "target_chunk_id": "blog:1076483:0:34da2a014a18a2b3",
+   "target_source": "blog:1076483",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k083"
+  },
+  {
+   "corpus": "blog",
+   "kind": "title",
+   "question": "Twitter 14th Anniversary",
+   "answer_quote": "i remember giving a presentation to a bunch",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1234760,
+    "url": "https://www.thingelstad.com/2020/12/20/twitter-th-anniversary.html",
+    "subject": "Twitter 14th Anniversary",
+    "publish_date": "2020-12-20"
+   },
+   "target_chunk_id": "blog:1234760:1:acfdb433a6c8eee6",
+   "target_source": "blog:1234760",
+   "run": {
+    "scope": "blog"
+   },
+   "id": "k084"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "what did Jamie write about Glarus and printed",
+   "answer_quote": "glarus wisconsin belgian red ale beside a pint glass printed",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 161031,
+    "url": "http://micro.thingelstad.com/2017/10/28/new-glarus-belgain.html",
+    "subject": "New Glarus' Wisconsin Belgain Red is one of my favorite beers! 🍺🍒…",
+    "publish_date": "2017-10-28"
+   },
+   "target_chunk_id": "blog:161031:0:512b3af12f3bc8ee",
+   "target_source": "blog:161031",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Glarus",
+    "word": "printed"
+   },
+   "id": "k085"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "what did Jamie write about Morales and ellis",
+   "answer_quote": "morales on renewal - josh ellis",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 5333393,
+    "url": "https://www.thingelstad.com/2025/04/30/renewal-indieweb-carnival-roundup.html",
+    "subject": "Renewal — IndieWeb Carnival Roundup",
+    "publish_date": "2025-04-30"
+   },
+   "target_chunk_id": "blog:5333393:1:e8480b636cabed46",
+   "target_source": "blog:5333393",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Morales",
+    "word": "ellis"
+   },
+   "id": "k086"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "what did Jamie write about HealthKit and streak",
+   "answer_quote": "healthkit hooks in streak",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1074721,
+    "url": "https://www.thingelstad.com/2017/12/29/what-apps-make.html",
+    "subject": "What apps make you better?",
+    "publish_date": "2017-12-29"
+   },
+   "target_chunk_id": "blog:1074721:1:8c31fa7195605c4a",
+   "target_source": "blog:1074721",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "HealthKit",
+    "word": "streak"
+   },
+   "id": "k087"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "what did Jamie write about Asheville and finish",
+   "answer_quote": "finish the drive into asheville",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1076167,
+    "url": "https://www.thingelstad.com/2006/09/16/east-coast-adventure.html",
+    "subject": "East Coast Adventure '06 - Day 23",
+    "publish_date": "2006-09-16"
+   },
+   "target_chunk_id": "blog:1076167:2:2577ae83d3b036ae",
+   "target_source": "blog:1076167",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Asheville",
+    "word": "finish"
+   },
+   "id": "k088"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "Jamie on Fitz holiday",
+   "answer_quote": "holiday show at the fitz",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 806675,
+    "url": "http://micro.thingelstad.com/2009/12/05/020757.html",
+    "subject": "Getting ready for The New Standards Holiday Show at the Fitz! See…",
+    "publish_date": "2009-12-05"
+   },
+   "target_chunk_id": "blog:806675:0:31139704ea21bceb",
+   "target_source": "blog:806675",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Fitz",
+    "word": "holiday"
+   },
+   "id": "k089"
+  },
+  {
+   "corpus": "blog",
+   "kind": "question",
+   "question": "what did Jamie write about Flora and disney",
+   "answer_quote": "flora & ulysses. it is a fun story about a squirrel with superpowers. 🍿 disney",
+   "target": {
+    "source_kind": "blog",
+    "microblog_id": 1278512,
+    "url": "https://www.thingelstad.com/2021/03/06/it-was-family.html",
+    "subject": "It was family movie night and we watched Flora & Ulysses. It…",
+    "publish_date": "2021-03-06"
+   },
+   "target_chunk_id": "blog:1278512:0:e6527c02d9d9ca14",
+   "target_source": "blog:1278512",
+   "run": {
+    "scope": "blog"
+   },
+   "terms": {
+    "name": "Flora",
+    "word": "disney"
+   },
+   "id": "k090"
+  },
+  {
+   "corpus": "reference",
+   "kind": "phrase",
+   "question": "hope it's not because jamie",
+   "answer_quote": "hope it's not because jamie",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57869,
+    "url": "https://www.thingelstad.com/projects/open-loop/4-enough-win-for-everyone/",
+    "subject": "Open Loop #4 - Enough Win for Everyone"
+   },
+   "target_chunk_id": "page:57869:18:7aafc64c58080a9a",
+   "target_source": "page:57869",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k091"
+  },
+  {
+   "corpus": "reference",
+   "kind": "phrase",
+   "question": "enough to get started",
+   "answer_quote": "enough to get started",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57866,
+    "url": "https://www.thingelstad.com/projects/open-loop/1-big-fuzzy-dead-cat/",
+    "subject": "Open Loop #1 - Big Fuzzy Dead Cat"
+   },
+   "target_chunk_id": "page:57866:8:b31487aac8ff0250",
+   "target_source": "page:57866",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k092"
+  },
+  {
+   "corpus": "reference",
+   "kind": "phrase",
+   "question": "commerce where i lead the technology",
+   "answer_quote": "commerce where i lead the technology",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57853,
+    "url": "https://www.thingelstad.com/about/fun-facts/",
+    "subject": "Fun Facts"
+   },
+   "target_chunk_id": "page:57853:0:5ae37fc570cad820",
+   "target_source": "page:57853",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k093"
+  },
+  {
+   "corpus": "reference",
+   "kind": "phrase",
+   "question": "wrote in april 2017",
+   "answer_quote": "wrote in april 2017",
+   "target": {
+    "source_kind": "thing",
+    "thing_id": "wikiapiary",
+    "url": "https://thingelstad.xyz/things/wikiapiary/",
+    "subject": "WikiApiary"
+   },
+   "target_chunk_id": "thing:wikiapiary:2",
+   "target_source": "thing:wikiapiary",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k094"
+  },
+  {
+   "corpus": "reference",
+   "kind": "quoted",
+   "question": "\"direction that next generation blogging\"",
+   "answer_quote": "direction that next generation blogging",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57867,
+    "url": "https://www.thingelstad.com/projects/open-loop/2-what-am-i-editing-anyway/",
+    "subject": "Open Loop #2 - What am I Editing Anyway?"
+   },
+   "target_chunk_id": "page:57867:10:1abb4a8039b0db1b",
+   "target_source": "page:57867",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k095"
+  },
+  {
+   "corpus": "reference",
+   "kind": "quoted",
+   "question": "\"price from price brewing\"",
+   "answer_quote": "price from price brewing",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57872,
+    "url": "https://www.thingelstad.com/projects/open-loop/7-turtle-turtle-turtle/",
+    "subject": "Open Loop #7 - Turtle Turtle Turtle"
+   },
+   "target_chunk_id": "page:57872:8:6018d323859f8255",
+   "target_source": "page:57872",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k096"
+  },
+  {
+   "corpus": "reference",
+   "kind": "name",
+   "question": "Gotland shoes",
+   "answer_quote": "shoes on gotland",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57854,
+    "url": "https://www.thingelstad.com/projects/open-loop/0-but-no-shoes/",
+    "subject": "Open Loop #0 - But No Shoes"
+   },
+   "target_chunk_id": "page:57854:24:5a9439e898214e67",
+   "target_source": "page:57854",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Gotland",
+    "word": "shoes"
+   },
+   "id": "k097"
+  },
+  {
+   "corpus": "reference",
+   "kind": "name",
+   "question": "Eleventy replaces",
+   "answer_quote": "replaces the gallery. eleventy",
+   "target": {
+    "source_kind": "thing",
+    "thing_id": "things-ive-built",
+    "url": "https://thingelstad.xyz/things/things-ive-built/",
+    "subject": "Things I’ve built"
+   },
+   "target_chunk_id": "thing:things-ive-built:0",
+   "target_source": "thing:things-ive-built",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Eleventy",
+    "word": "replaces"
+   },
+   "id": "k098"
+  },
+  {
+   "corpus": "reference",
+   "kind": "name",
+   "question": "Koffee invite",
+   "answer_quote": "koffee on the schedule. garrick: yes. jamie: and we need to invite",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57868,
+    "url": "https://www.thingelstad.com/projects/open-loop/3-kubb-fever/",
+    "subject": "Open Loop #3 - Kubb Fever"
+   },
+   "target_chunk_id": "page:57868:29:7ab40a22f1bb1ab5",
+   "target_source": "page:57868",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Koffee",
+    "word": "invite"
+   },
+   "id": "k099"
+  },
+  {
+   "corpus": "reference",
+   "kind": "name",
+   "question": "Lunr thingelstad",
+   "answer_quote": "lunr.js search to link thing (https://weekly.thingelstad",
+   "target": {
+    "source_kind": "thing",
+    "thing_id": "link-blog",
+    "url": "https://thingelstad.xyz/things/link-blog/",
+    "subject": "Link Blog"
+   },
+   "target_chunk_id": "thing:link-blog:0",
+   "target_source": "thing:link-blog",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Lunr",
+    "word": "thingelstad"
+   },
+   "id": "k100"
+  },
+  {
+   "corpus": "reference",
+   "kind": "name",
+   "question": "WebVTT undoing",
+   "answer_quote": "webvtt and json. jamie: this has a cork. this maudite does. i'm undoing",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57870,
+    "url": "https://www.thingelstad.com/projects/open-loop/5-i-know-its-terribly-useful/",
+    "subject": "Open Loop #5 - I Know It's Terribly Useful"
+   },
+   "target_chunk_id": "page:57870:0:b2417f817b036ebb",
+   "target_source": "page:57870",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "WebVTT",
+    "word": "undoing"
+   },
+   "id": "k101"
+  },
+  {
+   "corpus": "reference",
+   "kind": "inflected",
+   "question": "QuestyCaptcha challenges",
+   "answer_quote": "challenge for mediawiki's questycaptcha",
+   "target": {
+    "source_kind": "thing",
+    "thing_id": "numbers2words",
+    "url": "https://thingelstad.xyz/things/numbers2words/",
+    "subject": "Numbers2Words"
+   },
+   "target_chunk_id": "thing:numbers2words:1",
+   "target_source": "thing:numbers2words",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "QuestyCaptcha",
+    "word": "challenge",
+    "typed": "challenges"
+   },
+   "id": "k102"
+  },
+  {
+   "corpus": "reference",
+   "kind": "inflected",
+   "question": "YOLO votes",
+   "answer_quote": "vote in: - gnosis dao - lilnouns dao - foodnouns dao - yolo",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 353102,
+    "url": "https://www.thingelstad.com/lists/dao-vote/",
+    "subject": "Vote in DAOs"
+   },
+   "target_chunk_id": "page:353102:0:b69b83ebdc6c3b34",
+   "target_source": "page:353102",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "YOLO",
+    "word": "vote",
+    "typed": "votes"
+   },
+   "id": "k103"
+  },
+  {
+   "corpus": "reference",
+   "kind": "title",
+   "question": "FAQ — Subscribing & Reading",
+   "answer_quote": "q. can i read it without subscribing? a.",
+   "target": {
+    "source_kind": "faq",
+    "url": "/faq/",
+    "subject": "FAQ — Subscribing & Reading"
+   },
+   "target_chunk_id": "faq:subscribing-reading:2",
+   "target_source": "faq:/faq/:FAQ — Subscribing & Reading",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k104"
+  },
+  {
+   "corpus": "reference",
+   "kind": "title",
+   "question": "Wordle Games 200",
+   "answer_quote": "sharing your game results by emoji is also",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 224772,
+    "url": "https://www.thingelstad.com/collections/wordle-games/200/",
+    "subject": "Wordle Games 200"
+   },
+   "target_chunk_id": "page:224772:0:79762212f46971fa",
+   "target_source": "page:224772",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k105"
+  },
+  {
+   "corpus": "reference",
+   "kind": "title",
+   "question": "Wordle Games 375",
+   "answer_quote": "sharing your game results by emoji is also",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 289134,
+    "url": "https://www.thingelstad.com/collections/wordle-games/375/",
+    "subject": "Wordle Games 375"
+   },
+   "target_chunk_id": "page:289134:0:856b2810ec732e8d",
+   "target_source": "page:289134",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k106"
+  },
+  {
+   "corpus": "reference",
+   "kind": "title",
+   "question": "Wordle Games 275",
+   "answer_quote": "sharing your game results by emoji is also",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 238759,
+    "url": "https://www.thingelstad.com/collections/wordle-games/275/",
+    "subject": "Wordle Games 275"
+   },
+   "target_chunk_id": "page:238759:0:e687b4e56325dfbb",
+   "target_source": "page:238759",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k107"
+  },
+  {
+   "corpus": "reference",
+   "kind": "title",
+   "question": "FAQ — The Basics",
+   "answer_quote": "q. are there any scheduled breaks? a. yes",
+   "target": {
+    "source_kind": "faq",
+    "url": "/faq/",
+    "subject": "FAQ — The Basics"
+   },
+   "target_chunk_id": "faq:the-basics:3",
+   "target_source": "faq:/faq/:FAQ — The Basics",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "id": "k108"
+  },
+  {
+   "corpus": "reference",
+   "kind": "question",
+   "question": "Jamie on Atwood blogger",
+   "answer_quote": "atwood: atwood is one of the founders of discourse and a blogger",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 66529,
+    "url": "https://www.thingelstad.com/lists/blogroll/",
+    "subject": "Blogroll"
+   },
+   "target_chunk_id": "page:66529:3:b1e9c45fec9f8fa9",
+   "target_source": "page:66529",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Atwood",
+    "word": "blogger"
+   },
+   "id": "k109"
+  },
+  {
+   "corpus": "reference",
+   "kind": "question",
+   "question": "has Jamie ever mentioned IBUs malt?",
+   "answer_quote": "malt. but the hops, or the ibus",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 57873,
+    "url": "https://www.thingelstad.com/projects/open-loop/8-dont-eat-the-cupcake/",
+    "subject": "Open Loop #8 - Don't Eat the Cupcake"
+   },
+   "target_chunk_id": "page:57873:2:ece97e7ad3125fdb",
+   "target_source": "page:57873",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "IBUs",
+    "word": "malt"
+   },
+   "id": "k110"
+  },
+  {
+   "corpus": "reference",
+   "kind": "question",
+   "question": "Jamie on Snelling nerstrand",
+   "answer_quote": "snelling state park - nerstrand",
+   "target": {
+    "source_kind": "blog",
+    "page_id": 64124,
+    "url": "https://www.thingelstad.com/lists/minnesota-state-parks/",
+    "subject": "Minnesota State Parks"
+   },
+   "target_chunk_id": "page:64124:1:c71e613d372dc2b7",
+   "target_source": "page:64124",
+   "run": {
+    "scope": "weekly_thing"
+   },
+   "terms": {
+    "name": "Snelling",
+    "word": "nerstrand"
+   },
+   "id": "k111"
+  },
+  {
+   "corpus": "link",
+   "kind": "phrase",
+   "question": "percent increase from the previous",
+   "answer_quote": "percent increase from the previous",
+   "target": {
+    "source_kind": "link",
+    "link_id": "9da36b664d28",
+    "url": "https://links.thingelstad.xyz/links/9da36b664d28/",
+    "subject": "Cargill charitable giving tops $58M in 2009",
+    "publish_date": "2009-10-29"
+   },
+   "target_chunk_id": "link:9da36b664d28:c8f1303a5322b097",
+   "target_source": "link:9da36b664d28",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k112"
+  },
+  {
+   "corpus": "link",
+   "kind": "phrase",
+   "question": "software company that he chairs",
+   "answer_quote": "software company that he chairs",
+   "target": {
+    "source_kind": "link",
+    "link_id": "2eb3d33fa0a9",
+    "url": "https://links.thingelstad.xyz/links/2eb3d33fa0a9/",
+    "subject": "A Fireside Chat With Charlie Munger",
+    "publish_date": "2016-03-07"
+   },
+   "target_chunk_id": "link:2eb3d33fa0a9:faeb0ac35452a0a0",
+   "target_source": "link:2eb3d33fa0a9",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k113"
+  },
+  {
+   "corpus": "link",
+   "kind": "phrase",
+   "question": "2015 this person does seem way",
+   "answer_quote": "2015 this person does seem way",
+   "target": {
+    "source_kind": "link",
+    "link_id": "195be35f0e24",
+    "url": "https://links.thingelstad.xyz/links/195be35f0e24/",
+    "subject": "just another scala quant - just another scala quant",
+    "publish_date": "2015-06-12"
+   },
+   "target_chunk_id": "link:195be35f0e24:5605be471b2e52a8",
+   "target_source": "link:195be35f0e24",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k114"
+  },
+  {
+   "corpus": "link",
+   "kind": "phrase",
+   "question": "2013 there are lots",
+   "answer_quote": "2013 there are lots",
+   "target": {
+    "source_kind": "link",
+    "link_id": "79fa4fd81686",
+    "url": "https://links.thingelstad.xyz/links/79fa4fd81686/",
+    "subject": "MediaWiki on Nginx - Bigdinosaur Blog",
+    "publish_date": "2013-05-14"
+   },
+   "target_chunk_id": "link:79fa4fd81686:4af60d713d0e01fe",
+   "target_source": "link:79fa4fd81686",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k115"
+  },
+  {
+   "corpus": "link",
+   "kind": "phrase",
+   "question": "publish your stuff from one mac",
+   "answer_quote": "publish your stuff from one mac",
+   "target": {
+    "source_kind": "link",
+    "link_id": "6b9cc230a164",
+    "url": "https://links.thingelstad.xyz/links/6b9cc230a164/",
+    "subject": "Martian SlingShot",
+    "publish_date": "2007-07-29"
+   },
+   "target_chunk_id": "link:6b9cc230a164:19b6fa5c043a0791",
+   "target_source": "link:6b9cc230a164",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k116"
+  },
+  {
+   "corpus": "link",
+   "kind": "quoted",
+   "question": "\"minneapolis highlighted in jim\"",
+   "answer_quote": "minneapolis highlighted in jim",
+   "target": {
+    "source_kind": "link",
+    "link_id": "128fecabc79d",
+    "url": "https://links.thingelstad.xyz/links/128fecabc79d/",
+    "subject": "Mapping Prejudice",
+    "publish_date": "2020-07-08"
+   },
+   "target_chunk_id": "link:128fecabc79d:522a974f53716b67",
+   "target_source": "link:128fecabc79d",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k117"
+  },
+  {
+   "corpus": "link",
+   "kind": "quoted",
+   "question": "\"2010 amazon has just launched\"",
+   "answer_quote": "2010 amazon has just launched",
+   "target": {
+    "source_kind": "link",
+    "link_id": "95509540acd2",
+    "url": "https://links.thingelstad.xyz/links/95509540acd2/",
+    "subject": "Amazon Launches Facebook e-Commerce Store",
+    "publish_date": "2010-10-01"
+   },
+   "target_chunk_id": "link:95509540acd2:ba7c27b0f4fbc14e",
+   "target_source": "link:95509540acd2",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k118"
+  },
+  {
+   "corpus": "link",
+   "kind": "quoted",
+   "question": "\"design as a way of helping\"",
+   "answer_quote": "design as a way of helping",
+   "target": {
+    "source_kind": "link",
+    "link_id": "d403d378f0e8",
+    "url": "https://links.thingelstad.xyz/links/d403d378f0e8/",
+    "subject": "Nudge",
+    "publish_date": "2008-12-18"
+   },
+   "target_chunk_id": "link:d403d378f0e8:6664d321fdbb7710",
+   "target_source": "link:d403d378f0e8",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k119"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Jenkins setting",
+   "answer_quote": "setting up the jenkins",
+   "target": {
+    "source_kind": "link",
+    "link_id": "a797c9a353db",
+    "url": "https://links.thingelstad.xyz/links/a797c9a353db/",
+    "subject": "Setting Up the Jenkins Plugin for AWS CodeDeploy - AWS DevOps Blog",
+    "publish_date": "2015-12-15"
+   },
+   "target_chunk_id": "link:a797c9a353db:c80303492f4f4001",
+   "target_source": "link:a797c9a353db",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Jenkins",
+    "word": "setting"
+   },
+   "id": "k120"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "TextMate prompted",
+   "answer_quote": "prompted by a passing thought about textmate",
+   "target": {
+    "source_kind": "link",
+    "link_id": "b96fae920450",
+    "url": "https://links.thingelstad.xyz/links/b96fae920450/",
+    "subject": "Text Editors in The Lord of the Rings",
+    "publish_date": "2011-08-01"
+   },
+   "target_chunk_id": "link:b96fae920450:c79b820f3db39107",
+   "target_source": "link:b96fae920450",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "TextMate",
+    "word": "prompted"
+   },
+   "id": "k121"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Slyce comprised",
+   "answer_quote": "slyce for drivetrain is comprised",
+   "target": {
+    "source_kind": "link",
+    "link_id": "7c4f2215d693",
+    "url": "https://links.thingelstad.xyz/links/7c4f2215d693/",
+    "subject": "Slyce-The Want Engine-Acquires Mobile App Agency Drivetrain; Appoints Prominent CTO to Drive Global Market Expansion",
+    "publish_date": "2014-10-23"
+   },
+   "target_chunk_id": "link:7c4f2215d693:64bef7ade56b36ce",
+   "target_source": "link:7c4f2215d693",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Slyce",
+    "word": "comprised"
+   },
+   "id": "k122"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Dopplr scobleizer",
+   "answer_quote": "dopplr: cool online service for frequent business travelers page from scobleizer",
+   "target": {
+    "source_kind": "link",
+    "link_id": "d20c67fa682e",
+    "url": "https://links.thingelstad.xyz/links/d20c67fa682e/",
+    "subject": "Dopplr: cool online service for frequent business travelers",
+    "publish_date": "2007-12-11"
+   },
+   "target_chunk_id": "link:d20c67fa682e:c2a0cbaaa10cc9d6",
+   "target_source": "link:d20c67fa682e",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Dopplr",
+    "word": "scobleizer"
+   },
+   "id": "k123"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Pleo unboxing",
+   "answer_quote": "pleo unboxing",
+   "target": {
+    "source_kind": "link",
+    "link_id": "e159c0a3e769",
+    "url": "https://links.thingelstad.xyz/links/e159c0a3e769/",
+    "subject": "Pleo unboxing, er, hatching -- photos and video",
+    "publish_date": "2007-12-03"
+   },
+   "target_chunk_id": "link:e159c0a3e769:99b27bdada014e3e",
+   "target_source": "link:e159c0a3e769",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Pleo",
+    "word": "unboxing"
+   },
+   "id": "k124"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Dini inbox",
+   "answer_quote": "inbox | kourosh dini",
+   "target": {
+    "source_kind": "link",
+    "link_id": "b20bbc1c1fa6",
+    "url": "https://links.thingelstad.xyz/links/b20bbc1c1fa6/",
+    "subject": "The Power of The Inbox | Kourosh Dini",
+    "publish_date": "2019-12-19"
+   },
+   "target_chunk_id": "link:b20bbc1c1fa6:26a9bcafaa35bc2c",
+   "target_source": "link:b20bbc1c1fa6",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Dini",
+    "word": "inbox"
+   },
+   "id": "k125"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Wikidata techcrunch",
+   "answer_quote": "wikidata, a machine-readable, user-editable database page from techcrunch",
+   "target": {
+    "source_kind": "link",
+    "link_id": "91785b74c506",
+    "url": "https://links.thingelstad.xyz/links/91785b74c506/",
+    "subject": "Wikipedias Next Big Thing: Wikidata, A Machine-Readable, User-Editable Database",
+    "publish_date": "2012-04-02"
+   },
+   "target_chunk_id": "link:91785b74c506:30bc864fca7a5f6a",
+   "target_source": "link:91785b74c506",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Wikidata",
+    "word": "techcrunch"
+   },
+   "id": "k126"
+  },
+  {
+   "corpus": "link",
+   "kind": "name",
+   "question": "Wildflower coverage",
+   "answer_quote": "wildflower (can we get some live st coverage",
+   "target": {
+    "source_kind": "link",
+    "link_id": "e9ee40798225",
+    "url": "https://links.thingelstad.xyz/links/e9ee40798225/",
+    "subject": "Chris McCormack, Macca Conference Call - April 17, 2008",
+    "publish_date": "2008-04-18"
+   },
+   "target_chunk_id": "link:e9ee40798225:d6610e5305244fdf",
+   "target_source": "link:e9ee40798225",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Wildflower",
+    "word": "coverage"
+   },
+   "id": "k127"
+  },
+  {
+   "corpus": "link",
+   "kind": "inflected",
+   "question": "Blaine architects",
+   "answer_quote": "architect blaine",
+   "target": {
+    "source_kind": "link",
+    "link_id": "8e9ab1b0e7a7",
+    "url": "https://links.thingelstad.xyz/links/8e9ab1b0e7a7/",
+    "subject": "Twitter cans another engineer",
+    "publish_date": "2008-04-24"
+   },
+   "target_chunk_id": "link:8e9ab1b0e7a7:f87e61c7d20b96b0",
+   "target_source": "link:8e9ab1b0e7a7",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Blaine",
+    "word": "architect",
+    "typed": "architects"
+   },
+   "id": "k128"
+  },
+  {
+   "corpus": "link",
+   "kind": "inflected",
+   "question": "Kinesis speaks",
+   "answer_quote": "speak to amazon kinesis",
+   "target": {
+    "source_kind": "link",
+    "link_id": "4b4dcabe25d6",
+    "url": "https://links.thingelstad.xyz/links/4b4dcabe25d6/",
+    "subject": "Speak to Amazon Kinesis in Python",
+    "publish_date": "2014-10-21"
+   },
+   "target_chunk_id": "link:4b4dcabe25d6:7a4f879494694334",
+   "target_source": "link:4b4dcabe25d6",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Kinesis",
+    "word": "speak",
+    "typed": "speaks"
+   },
+   "id": "k129"
+  },
+  {
+   "corpus": "link",
+   "kind": "inflected",
+   "question": "Muhammad titans",
+   "answer_quote": "muhammad ali dies at 74: titan",
+   "target": {
+    "source_kind": "link",
+    "link_id": "8759e7201142",
+    "url": "https://links.thingelstad.xyz/links/8759e7201142/",
+    "subject": "Muhammad Ali Dies at 74: Titan of Boxing and the 20th Century - The New York Times",
+    "publish_date": "2016-06-04"
+   },
+   "target_chunk_id": "link:8759e7201142:0da8783824ade6dd",
+   "target_source": "link:8759e7201142",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Muhammad",
+    "word": "titan",
+    "typed": "titans"
+   },
+   "id": "k130"
+  },
+  {
+   "corpus": "link",
+   "kind": "inflected",
+   "question": "Xeon courses",
+   "answer_quote": "xeon with 3gb of ram. of course",
+   "target": {
+    "source_kind": "link",
+    "link_id": "79de48ce8379",
+    "url": "https://links.thingelstad.xyz/links/79de48ce8379/",
+    "subject": "Computer Upgrades",
+    "publish_date": "2008-03-09"
+   },
+   "target_chunk_id": "link:79de48ce8379:a691e57173bc05df",
+   "target_source": "link:79de48ce8379",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Xeon",
+    "word": "course",
+    "typed": "courses"
+   },
+   "id": "k131"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Candle Touch™- The First Smart, Connected, Real-Flame Candle by Candletouch — Kickstarter",
+   "answer_quote": "candle touch™- the first smart, connected, real-flame candle",
+   "target": {
+    "source_kind": "link",
+    "link_id": "543a3c924fd4",
+    "url": "https://links.thingelstad.xyz/links/543a3c924fd4/",
+    "subject": "Candle Touch™- The First Smart, Connected, Real-Flame Candle by Candletouch — Kickstarter",
+    "publish_date": "2020-02-26"
+   },
+   "target_chunk_id": "link:543a3c924fd4:fcaf8db52cc4b663",
+   "target_source": "link:543a3c924fd4",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k132"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Berners-Lee Warns Against Facebook Fragmenting The Web",
+   "answer_quote": "berners-lee warns against facebook fragmenting the web page",
+   "target": {
+    "source_kind": "link",
+    "link_id": "8a06cf3c7df9",
+    "url": "https://links.thingelstad.xyz/links/8a06cf3c7df9/",
+    "subject": "Berners-Lee Warns Against Facebook Fragmenting The Web",
+    "publish_date": "2010-11-22"
+   },
+   "target_chunk_id": "link:8a06cf3c7df9:0c9c27ac07bf2851",
+   "target_source": "link:8a06cf3c7df9",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k133"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Luma Labs: Loop 3",
+   "answer_quote": "luma labs: loop 3 page from luma-labs.com, saved",
+   "target": {
+    "source_kind": "link",
+    "link_id": "311eaa857863",
+    "url": "https://links.thingelstad.xyz/links/311eaa857863/",
+    "subject": "Luma Labs: Loop 3",
+    "publish_date": "2014-10-16"
+   },
+   "target_chunk_id": "link:311eaa857863:84882ef84c948bf9",
+   "target_source": "link:311eaa857863",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k134"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Programmers are having a huge discussion about the unethical and illegal things they've been asked to do | Business Insider",
+   "answer_quote": "programmers are having a huge discussion about the",
+   "target": {
+    "source_kind": "link",
+    "link_id": "e010970f428b",
+    "url": "https://links.thingelstad.xyz/links/e010970f428b/",
+    "subject": "Programmers are having a huge discussion about the unethical and illegal things they've been asked to do | Business Insider",
+    "publish_date": "2016-11-24"
+   },
+   "target_chunk_id": "link:e010970f428b:ff0c51271c176aaf",
+   "target_source": "link:e010970f428b",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k135"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Email Overload: Research and Statistics",
+   "answer_quote": "email overload: research and statistics page from blog.sanebox.com,",
+   "target": {
+    "source_kind": "link",
+    "link_id": "4243a6c60626",
+    "url": "https://links.thingelstad.xyz/links/4243a6c60626/",
+    "subject": "Email Overload: Research and Statistics",
+    "publish_date": "2016-02-19"
+   },
+   "target_chunk_id": "link:4243a6c60626:c134bf9115ec8053",
+   "target_source": "link:4243a6c60626",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k136"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Legacy is greater than Currency.",
+   "answer_quote": "legacy is greater than currency. page from garyvaynerchuk.com,",
+   "target": {
+    "source_kind": "link",
+    "link_id": "716ded8a13d5",
+    "url": "https://links.thingelstad.xyz/links/716ded8a13d5/",
+    "subject": "Legacy is greater than Currency.",
+    "publish_date": "2008-03-28"
+   },
+   "target_chunk_id": "link:716ded8a13d5:320f94fd94161bfa",
+   "target_source": "link:716ded8a13d5",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k137"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "My website is 20 years old today. | Jeffrey Zeldman Presents The Daily Report: Web Design News & Insights Since 1995",
+   "answer_quote": "my website is 20 years old today. |",
+   "target": {
+    "source_kind": "link",
+    "link_id": "a0a5f9814c84",
+    "url": "https://links.thingelstad.xyz/links/a0a5f9814c84/",
+    "subject": "My website is 20 years old today. | Jeffrey Zeldman Presents The Daily Report: Web Design News & Insights Since 1995",
+    "publish_date": "2015-05-31"
+   },
+   "target_chunk_id": "link:a0a5f9814c84:9b87ed82124d1f15",
+   "target_source": "link:a0a5f9814c84",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k138"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "8x8 Named a Leader in Gartner Magic Quadrant for Unified Communications as a Service, Worldwide For Fourth Consecutive Year - MarketWatch",
+   "answer_quote": "8x8 named a leader in gartner magic quadrant",
+   "target": {
+    "source_kind": "link",
+    "link_id": "ba0c09fbad8a",
+    "url": "https://links.thingelstad.xyz/links/ba0c09fbad8a/",
+    "subject": "8x8 Named a Leader in Gartner Magic Quadrant for Unified Communications as a Service, Worldwide For Fourth Consecutive Year - MarketWatch",
+    "publish_date": "2015-09-18"
+   },
+   "target_chunk_id": "link:ba0c09fbad8a:c1609fb03f099181",
+   "target_source": "link:ba0c09fbad8a",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k139"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "Understanding How Dilution Affects You At A Startup",
+   "answer_quote": "understanding how dilution affects you at a startup",
+   "target": {
+    "source_kind": "link",
+    "link_id": "65eee74c524a",
+    "url": "https://links.thingelstad.xyz/links/65eee74c524a/",
+    "subject": "Understanding How Dilution Affects You At A Startup",
+    "publish_date": "2011-10-13"
+   },
+   "target_chunk_id": "link:65eee74c524a:b4ce12b71b5addc8",
+   "target_source": "link:65eee74c524a",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k140"
+  },
+  {
+   "corpus": "link",
+   "kind": "title",
+   "question": "altercation/solarized at master - GitHub",
+   "answer_quote": "altercation/solarized at master - github repository from github.com,",
+   "target": {
+    "source_kind": "link",
+    "link_id": "b758b1cad960",
+    "url": "https://links.thingelstad.xyz/links/b758b1cad960/",
+    "subject": "altercation/solarized at master - GitHub",
+    "publish_date": "2011-04-01"
+   },
+   "target_chunk_id": "link:b758b1cad960:8c2f2f5defa93fa6",
+   "target_source": "link:b758b1cad960",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "id": "k141"
+  },
+  {
+   "corpus": "link",
+   "kind": "question",
+   "question": "what did Jamie write about Norwegian and marginalrevolution",
+   "answer_quote": "norwegian ban on smart phones in middle schools - marginal revolution page from marginalrevolution",
+   "target": {
+    "source_kind": "link",
+    "link_id": "e3769f24e551",
+    "url": "https://links.thingelstad.xyz/links/e3769f24e551/",
+    "subject": "The Norwegian ban on smart phones in middle schools - Marginal REVOLUTION",
+    "publish_date": "2024-04-25"
+   },
+   "target_chunk_id": "link:e3769f24e551:18de90b00885eeee",
+   "target_source": "link:e3769f24e551",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Norwegian",
+    "word": "marginalrevolution"
+   },
+   "id": "k142"
+  },
+  {
+   "corpus": "link",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Groupon reuters?",
+   "answer_quote": "reuters.com, saved may 5, 2011 best thing i've read about groupon",
+   "target": {
+    "source_kind": "link",
+    "link_id": "c03d8f56b0d5",
+    "url": "https://links.thingelstad.xyz/links/c03d8f56b0d5/",
+    "subject": "Grouponomics | Felix Salmon",
+    "publish_date": "2011-05-05"
+   },
+   "target_chunk_id": "link:c03d8f56b0d5:4902e8e10014e9f0",
+   "target_source": "link:c03d8f56b0d5",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Groupon",
+    "word": "reuters"
+   },
+   "id": "k143"
+  },
+  {
+   "corpus": "link",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Slyce canadian?",
+   "answer_quote": "slyce - techdotmn page from tech.mn, saved october 21, 2014 slyce, a canadian",
+   "target": {
+    "source_kind": "link",
+    "link_id": "2e9f356542ca",
+    "url": "https://links.thingelstad.xyz/links/2e9f356542ca/",
+    "subject": "TECHdotMN Drivetrain sold to Toronto shopping tech company Slyce - TECHdotMN",
+    "publish_date": "2014-10-21"
+   },
+   "target_chunk_id": "link:2e9f356542ca:ff3b339784372cd3",
+   "target_source": "link:2e9f356542ca",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Slyce",
+    "word": "canadian"
+   },
+   "id": "k144"
+  },
+  {
+   "corpus": "link",
+   "kind": "question",
+   "question": "has Jamie ever mentioned Malibar emailed?",
+   "answer_quote": "malibar made after i emailed",
+   "target": {
+    "source_kind": "link",
+    "link_id": "cc1ee08a5bcd",
+    "url": "https://links.thingelstad.xyz/links/cc1ee08a5bcd/",
+    "subject": "Taunted",
+    "publish_date": "2012-07-22"
+   },
+   "target_chunk_id": "link:cc1ee08a5bcd:b2ab72d31422ed46",
+   "target_source": "link:cc1ee08a5bcd",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Malibar",
+    "word": "emailed"
+   },
+   "id": "k145"
+  },
+  {
+   "corpus": "link",
+   "kind": "question",
+   "question": "Jamie on Sachs fluid",
+   "answer_quote": "sachs asset management. fluid",
+   "target": {
+    "source_kind": "link",
+    "link_id": "76d839242c55",
+    "url": "https://links.thingelstad.xyz/links/76d839242c55/",
+    "subject": "Newsmakers - E-commerce services firm Fluid raises $24 million - Internet Retailer",
+    "publish_date": "2012-02-23"
+   },
+   "target_chunk_id": "link:76d839242c55:aadb2ddd31d5a751",
+   "target_source": "link:76d839242c55",
+   "run": {
+    "scope": "weekly_thing",
+    "sourceKinds": [
+     "link"
+    ]
+   },
+   "terms": {
+    "name": "Sachs",
+    "word": "fluid"
+   },
+   "id": "k146"
+  },
+  {
+   "corpus": "podcast",
+   "kind": "phrase",
+   "question": "section of the art fair",
+   "answer_quote": "section of the art fair",
+   "target": {
+    "source_kind": "podcast",
+    "episode_number": 1,
+    "url": "https://another.thingelstad.com/2025/10/05/how-do-you-start-a.html",
+    "subject": "How do you start a podcast?",
+    "publish_date": "2025-10-05"
+   },
+   "target_chunk_id": "podcast:another-thing:001:transcript:4:78a799508a290878",
+   "target_source": "podcast:1",
+   "run": {
+    "scope": "podcast"
+   },
+   "id": "k147"
+  },
+  {
+   "corpus": "podcast",
+   "kind": "quoted",
+   "question": "\"know that you're always learning\"",
+   "answer_quote": "know that you're always learning",
+   "target": {
+    "source_kind": "podcast",
+    "episode_number": 1,
+    "url": "https://another.thingelstad.com/2025/10/05/how-do-you-start-a.html",
+    "subject": "How do you start a podcast?",
+    "publish_date": "2025-10-05"
+   },
+   "target_chunk_id": "podcast:another-thing:001:transcript:4:78a799508a290878",
+   "target_source": "podcast:1",
+   "run": {
+    "scope": "podcast"
+   },
+   "id": "k148"
+  },
+  {
+   "corpus": "podcast",
+   "kind": "name",
+   "question": "Carlis important",
+   "answer_quote": "carlis had said, which was, quote, \"it's important",
+   "target": {
+    "source_kind": "podcast",
+    "episode_number": 1,
+    "url": "https://another.thingelstad.com/2025/10/05/how-do-you-start-a.html",
+    "subject": "How do you start a podcast?",
+    "publish_date": "2025-10-05"
+   },
+   "target_chunk_id": "podcast:another-thing:001:transcript:6:1d667cd2db8d7843",
+   "target_source": "podcast:1",
+   "run": {
+    "scope": "podcast"
+   },
+   "terms": {
+    "name": "Carlis",
+    "word": "important"
+   },
+   "id": "k149"
+  },
+  {
+   "corpus": "podcast",
+   "kind": "question",
+   "question": "what did Jamie write about Carlis and important",
+   "answer_quote": "carlis had said, which was, quote, \"it's important",
+   "target": {
+    "source_kind": "podcast",
+    "episode_number": 1,
+    "url": "https://another.thingelstad.com/2025/10/05/how-do-you-start-a.html",
+    "subject": "How do you start a podcast?",
+    "publish_date": "2025-10-05"
+   },
+   "target_chunk_id": "podcast:another-thing:001:transcript:6:1d667cd2db8d7843",
+   "target_source": "podcast:1",
+   "run": {
+    "scope": "podcast"
+   },
+   "terms": {
+    "name": "Carlis",
+    "word": "important"
+   },
+   "id": "k150"
+  }
+ ]
+}

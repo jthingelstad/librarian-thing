@@ -122,5 +122,6 @@ partition, not a new system.
 6. **Switch.** Flip to `dynamodb`, compare a week of `/health` and latency,
    then drop `embedding` from the corpus JSON, measure memory, raise the
    per-environment concurrency. MCP minor version bump at the flip.
-7. **BM25** keyword leg on FTS5 (`PLAN-2026-11-01-embeddings.md`, What's left),
-   its own plan.
+7. **BM25** keyword leg on FTS5: its own plan,
+   `PLAN-2026-11-01-keyword-search.md`, independent of these steps (both
+   legs feed the fusion).

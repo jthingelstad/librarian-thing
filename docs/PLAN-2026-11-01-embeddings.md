@@ -357,7 +357,8 @@ direct 0.97 → 0.96.
   BM25 leg (SQLite FTS5, which Node's built-in SQLite has, or BM25 in
   process) with this set plus a new set of name, quote and phrase questions,
   and release it through the corpus gate. Every path that does not rerank
-  gains most.
+  gains most. `PLAN-2026-11-01-keyword-search.md` is its plan, with the
+  keyword set (built 2026-11-01) and today's leg measured on it.
 - **Weekly Thing's pool.** A quarter of its answers never reach the reranker.
   Neither chunking nor fusion fixed it; the keyword leg is the next suspect.
 - **CI reranks** since 2026-11-01 (Jamie: "Approved: grant the
