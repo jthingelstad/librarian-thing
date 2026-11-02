@@ -368,12 +368,13 @@ direct 0.97 → 0.96.
   which is how the v4 switch's one failed known answer showed only in CI. An
   eval run makes 22 rerank calls; both corpora pass every check reranked
   (17,699 on v3 and v4).
-- **The semantic leg on a DynamoDB vector index** (Jamie, 2026-11-01, after
-  the review below): `PLAN-2026-11-01-dynamodb-vectors.md` has the bake-off
-  and the steps. Its step 2 is the binary vectors: embeddings are about 80%
-  of the 675 MB of corpus JSON and are held as float64, and moving them out
-  of the Lambda is what lets the Web Function take more than one request per
-  environment (below).
+- **The semantic leg on a DynamoDB vector index:** parked 2026-11-01
+  (Jamie: "keyword search is the only active retrieval project after the v4
+  re-embed"); reopen only for an observed memory or latency problem.
+  `PLAN-2026-11-01-dynamodb-vectors.md` has the bake-off
+  and the steps. Embeddings are about 80% of the 675 MB of corpus JSON and
+  are held as float64; if that ever shows as a problem, compact binary
+  vector files beside the corpora are the small fix.
 - **OpenAI embeddings,** one eval run if Jamie wants the comparison. Its key
   must reach the run without passing through an agent.
 

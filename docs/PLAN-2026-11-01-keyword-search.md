@@ -6,6 +6,11 @@ scale." And then: "Approved: start keyword search in librarian-thing: write
 the keyword test set now, measure SQLite BM25 after tomorrow's re-embed, then
 hand the build to Codex".
 
+It is the only active retrieval project after the v4 re-embed (Jamie,
+2026-11-01: "Approved: park the DynamoDB vector plan in librarian-thing; keyword search is the only active retrieval project after the v4 re-embed"); a change
+belongs on the list only when it moves the meaning or keyword set, or fixes a
+problem someone has seen.
+
 This follows `PLAN-2026-11-01-embeddings.md`. The Embed v4 re-embed lands
 first and alone, so the keyword change is measured against the baseline
 readers get.
