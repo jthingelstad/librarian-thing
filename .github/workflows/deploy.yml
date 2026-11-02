@@ -234,6 +234,7 @@ jobs:
             '^apps/librarian/' \
             '^pipeline/deploy/aws\.py$' \
             '^pipeline/deploy/native_release\.py$' \
+            '^pipeline/deploy/upload_keyword_index\.py$' \
             '^pipeline/deploy/iam/' \
             '^.github/workflows/deploy\.yml$'; then
             lambda=true
@@ -385,6 +386,31 @@ jobs:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Refresh AWS credentials (OIDC)
+        if: steps.changes.outputs.lambda == 'true'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::999153317627:role/WeeklyThingLibrarianDeployOidc
+          role-session-name: librarian-${{ github.run_id }}
+          allowed-account-ids: '999153317627'
+          aws-region: us-east-1
+
+      # The keyword index (apps/librarian/lambda/shared/keyword-index.mts):
+      # one SQLite full-text file over every corpus, the keyword leg of
+      # retrieval, built from the candidates and the live copy of the rest,
+      # the way the Lambda loads them. It needs no Bedrock and takes seconds,
+      # so every deploy builds one and the Lambda never serves an index of
+      # other corpora. The build refuses an index that misses or adds a row
+      # (scripts/keyword-index-coverage.mjs); the corpus gate below evals the
+      # retrievals it serves. It reads S3 after embeds that can run past the
+      # hour, so it starts with a fresh session too.
+      - name: Build keyword index (candidate)
+        if: steps.changes.outputs.lambda == 'true'
+        run: node apps/librarian/lambda/scripts/build-keyword-index.mjs .candidate/keyword_index.db
+        env:
+          EVAL_CORPUS_DIR: .candidate
+          EVAL_CORPUS_FALLBACK: s3
+
+      - name: Refresh AWS credentials (OIDC)
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true'
         uses: aws-actions/configure-aws-credentials@v5
         with:
@@ -398,12 +424,14 @@ jobs:
       # corpus that breaks an invariant or a known answer never reaches the
       # Librarian (Jamie, 2026-09-30: the MCP must never silently miss
       # things). The eval above checks the new code against live corpora.
+      # It reads the keyword index built above, the file the upload ships.
       - name: Corpus gate (eval the candidate corpora)
         if: steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true'
         run: node apps/librarian/lambda/scripts/eval-tools.mjs
         env:
           EVAL_CORPUS_DIR: .candidate
           EVAL_CORPUS_FALLBACK: s3
+          KEYWORD_INDEX_PATH: .candidate/keyword_index.db
 
       # Journal copies unmatched at or under the post-repair ceiling, and every
       # site audio edition on its issue: an export without the weekly pages
@@ -428,6 +456,14 @@ jobs:
       - name: Snapshot native serving identities before promotion
         if: steps.changes.outputs.lambda == 'true' && vars.SYNC_THINGY_RECEIVED_BUS != ''
         run: uv run --locked python pipeline/deploy/sync_snapshot.py --output sync-evidence/sync-before.json
+
+      # First of the uploads, so a run that cannot write it ships nothing.
+      # Until the Lambda deploy below, the serving code does not read it.
+      - name: Upload keyword index to S3
+        if: steps.changes.outputs.lambda == 'true'
+        run: uv run --locked python pipeline/deploy/upload_keyword_index.py --upload-staged .candidate
+        env:
+          LIBRARIAN_BUCKET: weekly-thing-librarian
 
       - name: Upload Weekly Thing corpus + graph to S3
         if: steps.changes.outputs.weekly_corpus == 'true'
@@ -454,7 +490,7 @@ jobs:
           LIBRARIAN_BUCKET: weekly-thing-librarian
 
       # Before the Lambda deploy: the native release reads every corpus
-      # key's version, links_corpus.json included.
+      # key's version, links_corpus.json and keyword_index.db included.
       - name: Upload links corpus to S3
         if: steps.changes.outputs.links_corpus == 'true'
         run: uv run --locked python pipeline/deploy/upload_links_corpus.py --upload-staged .candidate

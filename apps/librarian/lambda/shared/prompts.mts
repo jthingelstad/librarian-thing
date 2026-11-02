@@ -138,7 +138,15 @@ export function promptFingerprint(): string {
 //        reranked on the meaning eval) and orders differently; similar_posts
 //        are rebuilt on v4 with the cosine floor at 0.4365. No tool, argument
 //        or field changes.
-export const MCP_SERVER_VERSION = '2.11.0';
+// 2.12.0 (2026-11-02): the keyword index. The keyword leg of every search
+//        reads one SQLite full-text file over all five corpora
+//        (shared/keyword-index.mts): words are stemmed, a reader's words in
+//        order (or a quoted span) rank first, and one set of word counts
+//        serves every corpus. Source MRR on the keyword set goes from 0.60
+//        to 0.94 for the leg alone, 0.91 to 0.92 reranked; more answers
+//        reach the reranker (84% to 88% on the meaning set). The TF-IDF scan
+//        stays as the logged fallback. No tool, argument or field changes.
+export const MCP_SERVER_VERSION = '2.12.0';
 
 export function serverVersion() {
   return `${MCP_SERVER_VERSION}+tools.${promptFingerprint()}`;

@@ -2,7 +2,21 @@ import { InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
 import { RerankCommand } from '@aws-sdk/client-bedrock-agent-runtime';
 import type { RerankSource } from '@aws-sdk/client-bedrock-agent-runtime';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { createWriteStream } from 'node:fs';
+import { rename, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { createGunzip } from 'node:zlib';
 import { readCorpusJson, singleFlight } from './corpus-loader.mjs';
+import {
+  KEYWORD_INDEX_KINDS,
+  keywordIndexStamp,
+  openKeywordIndex,
+  type KeywordIndex,
+  type KeywordIndexSource
+} from './keyword-index.mjs';
 import { bedrock, bedrockAgentRuntime, embeddingModel, rerankModel, s3 } from './aws-clients.mjs';
 import { errorFields, logEvent as sharedLogEvent, truthyEnv } from './logging.mjs';
 import { normalizeScope, scopeKinds } from './scope.mjs';
@@ -52,6 +66,7 @@ export interface Corpus {
   chunk_count?: number;
   embedding_dimensions?: number;
   embedding_model?: string;
+  generated_at?: string;
   [key: string]: unknown;
 }
 
@@ -257,12 +272,20 @@ export function primeCorpusCachesForTests(fixtures: {
   linksCorpusCache = fixtures.link || { ...EMPTY_CORPUS };
   graphCache = fixtures.graph;
   sectionNamesCache = undefined;
+  lexicalRowsCache.clear();
+  rowIdCache.clear();
+  keywordIndexState?.index?.close();
+  keywordIndexState = undefined;
   indexedCache = undefined;
   blogIndexedCache = undefined;
   podcastIndexedCache = undefined;
   referenceIndexedCache = undefined;
   linksIndexedCache = undefined;
 }
+// Each corpus's keyword rows, and the same by id (the keyword index names
+// rows by id). Both hold the corpus's own objects, never copies.
+const lexicalRowsCache = new Map<string, CorpusChunk[]>();
+const rowIdCache = new Map<string, Map<string, CorpusChunk>>();
 let indexedCache: CorpusChunk[] | undefined;
 let blogIndexedCache: CorpusChunk[] | undefined;
 let podcastIndexedCache: CorpusChunk[] | undefined;
@@ -497,25 +520,169 @@ function buildLexicalIndex(corpus: Corpus): CorpusChunk[] {
   return indexed;
 }
 
+// The TF-IDF index, built only when the keyword index cannot serve (it held
+// 176 MB of heap per environment when it served every retrieval).
 async function indexedChunksUnshared(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
-  if (kind === 'blog') {
-    if (!blogIndexedCache) blogIndexedCache = buildLexicalIndex(ownRows(await loadCorpus('blog')));
-    return blogIndexedCache;
+  const build = async () => buildLexicalIndex({ chunks: await lexicalRows(kind) });
+  if (kind === 'blog') return (blogIndexedCache ||= await build());
+  if (kind === 'podcast') return (podcastIndexedCache ||= await build());
+  if (kind === 'reference') return (referenceIndexedCache ||= await build());
+  if (kind === LINK_KIND) return (linksIndexedCache ||= await build());
+  return (indexedCache ||= await build());
+}
+
+// A corpus's rows for its keyword scan: the Weekly Thing's and the blog's
+// own rows (the reference base is scanned once, as its own pool), and every
+// row of the others. The keyword index is built from exactly these.
+async function lexicalRowsUnshared(kind: string): Promise<CorpusChunk[]> {
+  const cached = lexicalRowsCache.get(kind);
+  if (cached) return cached;
+  const corpus = await loadCorpus(kind);
+  const rows = (kind === 'weekly_thing' || kind === 'blog' ? ownRows(corpus) : corpus).chunks || [];
+  lexicalRowsCache.set(kind, rows);
+  return rows;
+}
+
+async function rowsByIdUnshared(kind: string): Promise<Map<string, CorpusChunk>> {
+  const cached = rowIdCache.get(kind);
+  if (cached) return cached;
+  const byId = new Map((await lexicalRows(kind)).map((row) => [String(row.id), row]));
+  rowIdCache.set(kind, byId);
+  return byId;
+}
+
+// The rows the keyword index is built from, per corpus, as this module
+// loaded them (scripts/build-keyword-index.mjs primes it with the corpora a
+// deploy ships, the way the Lambda loads them from S3).
+export async function keywordIndexSources(): Promise<KeywordIndexSource[]> {
+  const sources: KeywordIndexSource[] = [];
+  for (const kind of KEYWORD_INDEX_KINDS) {
+    const corpus = await loadCorpus(kind);
+    sources.push({ kind, generated_at: corpus.generated_at, rows: await lexicalRows(kind) });
   }
-  if (kind === 'podcast') {
-    if (!podcastIndexedCache) podcastIndexedCache = buildLexicalIndex(await loadCorpus('podcast'));
-    return podcastIndexedCache;
+  return sources;
+}
+
+// The keyword index (shared/keyword-index.mts): KEYWORD_INDEX_PATH names a
+// local file (the evals, the corpus gate); in the Lambda KEYWORD_INDEX_KEY
+// names the S3 object, downloaded once to /tmp. Neither set, or the file
+// will not open, and retrieval keeps the TF-IDF scan for the container's
+// life, logged as keyword_index_unavailable (error) when it was configured.
+type KeywordIndexState = { index: KeywordIndex; reason?: undefined } | { index: null; reason: string };
+let keywordIndexState: KeywordIndexState | undefined;
+// /tmp in the Lambda.
+const KEYWORD_INDEX_FILE = join(tmpdir(), 'keyword_index.db');
+
+async function loadKeywordIndexUnshared(): Promise<KeywordIndexState> {
+  if (keywordIndexState) return keywordIndexState;
+  const local = process.env.KEYWORD_INDEX_PATH;
+  const bucket = process.env.CORPUS_BUCKET;
+  const key = process.env.KEYWORD_INDEX_KEY;
+  if (!local && !(bucket && key)) {
+    logEvent('info', 'keyword_index_disabled', { has_bucket: Boolean(bucket), has_key: Boolean(key) });
+    return (keywordIndexState = { index: null, reason: 'unconfigured' });
   }
-  if (kind === 'reference') {
-    if (!referenceIndexedCache) referenceIndexedCache = buildLexicalIndex(await loadCorpus('reference'));
-    return referenceIndexedCache;
+  const start = performance.now();
+  try {
+    const index = await openKeywordIndex(local || (await downloadKeywordIndex(bucket!, key!)));
+    const rows = Object.values(index.meta.kinds).reduce((total, entry) => total + entry.rows, 0);
+    logEvent('info', 'keyword_index_loaded', {
+      source: local ? 'file' : 's3',
+      ...(local ? {} : { bucket, key }),
+      built_at: index.meta.built_at,
+      rows,
+      duration_ms: Math.round(performance.now() - start)
+    });
+    keywordIndexState = { index };
+  } catch (error) {
+    logEvent('error', 'keyword_index_unavailable', errorFields(error, { reason: 'open_failed', key: key || null }));
+    keywordIndexState = { index: null, reason: 'open_failed' };
   }
-  if (kind === LINK_KIND) {
-    if (!linksIndexedCache) linksIndexedCache = buildLexicalIndex(await loadCorpus(LINK_KIND));
-    return linksIndexedCache;
+  return keywordIndexState;
+}
+
+// The object is gzipped (pipeline/deploy/upload_keyword_index.py); a plain
+// one works too. Written beside the file, then renamed, so a cut download
+// never opens.
+async function downloadKeywordIndex(bucket: string, key: string): Promise<string> {
+  const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
+  if (!response.Body) throw new Error('keyword index object body is empty');
+  const body = response.Body as unknown;
+  const bytes: AsyncIterable<Uint8Array> =
+    body && typeof body === 'object' && Symbol.asyncIterator in body
+      ? (body as AsyncIterable<Uint8Array>)
+      : (async function* () {
+          yield await (body as { transformToByteArray: () => Promise<Uint8Array> }).transformToByteArray();
+        })();
+  const iterator = bytes[Symbol.asyncIterator]();
+  const first = await iterator.next();
+  const head = first.done ? new Uint8Array() : first.value;
+  const source = Readable.from(
+    (async function* () {
+      if (head.length) yield head;
+      for (;;) {
+        const item = await iterator.next();
+        if (item.done) return;
+        yield item.value;
+      }
+    })()
+  );
+  const part = `${KEYWORD_INDEX_FILE}.part`;
+  await rm(part, { force: true });
+  if (head[0] === 0x1f && head[1] === 0x8b) await pipeline(source, createGunzip(), createWriteStream(part));
+  else await pipeline(source, createWriteStream(part));
+  await rename(part, KEYWORD_INDEX_FILE);
+  return KEYWORD_INDEX_FILE;
+}
+
+// The index serves a retrieval only when it was built from the corpora this
+// container loaded: the same build stamp and row count for every pool's
+// corpus. A corpus uploaded without a new index (a local upload, a failed
+// step) leaves the container on TF-IDF for good, logged, since a container's
+// corpora never change.
+async function servedKeywordIndex(kinds: string[]): Promise<KeywordIndex | null> {
+  const state = await keywordIndex();
+  if (!state.index) return null;
+  for (const kind of kinds) {
+    const built = state.index.meta.kinds[kind];
+    const loaded = keywordIndexStamp((await loadCorpus(kind)).generated_at);
+    const rows = (await lexicalRows(kind)).length;
+    if (built && built.rows === rows && built.generated_at === loaded) continue;
+    logEvent('error', 'keyword_index_unavailable', {
+      reason: 'stale',
+      corpus: kind,
+      index_rows: built?.rows ?? null,
+      corpus_rows: rows,
+      index_generated_at: built?.generated_at ?? null,
+      corpus_generated_at: loaded
+    });
+    // Not closed: a retrieval already holding it may still read it.
+    keywordIndexState = { index: null, reason: 'stale' };
+    return null;
   }
-  if (!indexedCache) indexedCache = buildLexicalIndex(ownRows(await loadCorpus('weekly_thing')));
-  return indexedCache;
+  return state.index;
+}
+
+// For the release probe (/health?probe=keyword): whether the index opens and
+// answers a keyword question in this runtime. It loads no corpus.
+export async function keywordIndexProbe(query = 'the mini minnebar') {
+  const state = await keywordIndex();
+  if (!state.index) return { ok: false, engine: 'tf-idf', reason: state.reason };
+  let top: { kind: string; id: string; score: number } | null = null;
+  for (const kind of KEYWORD_INDEX_KINDS) {
+    for (const hit of state.index.search(query, kind)) {
+      if (!top || hit.score > top.score) top = { kind, ...hit };
+      break;
+    }
+  }
+  const rows = Object.values(state.index.meta.kinds).reduce((total, entry) => total + entry.rows, 0);
+  return {
+    ok: Boolean(top),
+    engine: 'fts5',
+    built_at: state.index.meta.built_at,
+    rows,
+    top: top ? { kind: top.kind, id: top.id } : null
+  };
 }
 
 function cosine(left: ArrayLike<number> | undefined, right: ArrayLike<number> | undefined) {
@@ -862,6 +1029,36 @@ async function retrieveLexical(
     .map(({ score, chunk }) => ({ ...publicChunk(chunk), _retrieval_score: score }));
   logEvent('info', 'retrieval_completed', {
     mode: 'lexical',
+    engine: 'tf-idf',
+    scope: kind,
+    result_count: result.length,
+    duration_ms: Math.round(performance.now() - start)
+  });
+  return result;
+}
+
+// The served keyword leg: one corpus's matches from the keyword index, mapped
+// back to the rows this container loaded, through the same filters and
+// limit as the TF-IDF scan.
+async function retrieveKeyword(
+  index: KeywordIndex,
+  query: unknown,
+  limit: number,
+  kind: string,
+  keep: (chunk: CorpusChunk) => boolean
+): Promise<CorpusChunk[]> {
+  const start = performance.now();
+  const byId = await rowsById(kind);
+  const result: CorpusChunk[] = [];
+  for (const { id, score } of index.search(query, kind)) {
+    const chunk = byId.get(id);
+    if (!chunk || !keep(chunk)) continue;
+    result.push({ ...publicChunk(chunk), _retrieval_score: score });
+    if (result.length >= limit) break;
+  }
+  logEvent('info', 'retrieval_completed', {
+    mode: 'lexical',
+    engine: 'fts5',
     scope: kind,
     result_count: result.length,
     duration_ms: Math.round(performance.now() - start)
@@ -886,7 +1083,7 @@ async function retrieveLexicalWith(
   kind: string,
   keep: (chunk: CorpusChunk) => boolean
 ): Promise<CorpusChunk[]> {
-  const rows = await indexedChunks(kind);
+  const rows = await lexicalRows(kind);
   const result: CorpusChunk[] = [];
   for (const { index, score } of await engine(String(query || ''), kind, rows)) {
     const chunk = rows[index];
@@ -1416,9 +1613,8 @@ export async function retrieve(
     // Sees the fused pool before the rerank (the meaning eval measures
     // whether the answer reached the reranker at all).
     inspectPool?: (pool: CorpusChunk[]) => void;
-    // Replaces the TF-IDF scan with another keyword engine over the same
-    // rows (the eval measures SQLite full-text search this way). No caller
-    // passes it.
+    // Replaces the keyword leg with another engine over the same rows (the
+    // eval measures FTS5 variants this way). No caller passes it.
     lexicalEngine?: LexicalEngine;
   } = {}
 ) {
@@ -1445,13 +1641,19 @@ export async function retrieve(
   // alone). Callers leave it out: both engines always run.
   const engines = new Set<RetrievalEngine>(opts.engines?.length ? opts.engines : ['lexical', 'semantic']);
 
+  // The keyword leg: the keyword index when it was built from these corpora,
+  // else the TF-IDF scan. One engine for every pool of a retrieval, since
+  // their scores are sorted together.
   const lexical: CorpusChunk[] = [];
   if (engines.has('lexical')) {
+    const index = opts.lexicalEngine ? null : await servedKeywordIndex(pools.map(([kind]) => kind));
     for (const [kind, keepIn] of pools) {
       lexical.push(
         ...(opts.lexicalEngine
           ? await retrieveLexicalWith(opts.lexicalEngine, query, candidateLimit, kind, keepIn)
-          : await retrieveLexical(query, candidateLimit, kind, keepIn))
+          : index
+            ? await retrieveKeyword(index, query, candidateLimit, kind, keepIn)
+            : await retrieveLexical(query, candidateLimit, kind, keepIn))
       );
     }
     lexical.sort(byScore);
@@ -1809,4 +2011,13 @@ export function loadGraph(): Promise<Record<string, unknown>> {
 
 function indexedChunks(kind = 'weekly_thing'): Promise<CorpusChunk[]> {
   return loadOnce('index:' + kind, () => indexedChunksUnshared(kind));
+}
+function lexicalRows(kind: string): Promise<CorpusChunk[]> {
+  return loadOnce('rows:' + kind, () => lexicalRowsUnshared(kind));
+}
+function rowsById(kind: string): Promise<Map<string, CorpusChunk>> {
+  return loadOnce('row-ids:' + kind, () => rowsByIdUnshared(kind));
+}
+function keywordIndex(): Promise<KeywordIndexState> {
+  return loadOnce('keyword-index', loadKeywordIndexUnshared);
 }

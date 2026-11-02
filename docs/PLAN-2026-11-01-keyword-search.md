@@ -4,7 +4,13 @@ Jamie, 2026-11-01: "What is the plan for the keyword search -- I agree that
 is our weakest link right now. OpenSearch seemed not tenable for our hobby
 scale." And then: "Approved: start keyword search in librarian-thing: write
 the keyword test set now, measure SQLite BM25 after tomorrow's re-embed, then
-hand the build to Codex".
+hand the build to Codex". On 2026-11-02 Jamie moved the build here: "We would
+not have Codex build it… we would build it here in Claude. Codex reviews PRs."
+and "Approved: build the SQLite keyword index in librarian-thing here in Claude, from docs/BRIEF-2026-11-02-keyword-index-build.md, as one PR that Codex reviews".
+
+**Status: built 2026-11-02** (MCP 2.12.0, one PR; see Built below). Served
+once the merge deploy promotes it; the measurement repeats on the served
+engine then.
 
 It is the only active retrieval project after the v4 re-embed (Jamie,
 2026-11-01: "Approved: park the DynamoDB vector plan in librarian-thing; keyword search is the only active retrieval project after the v4 re-embed"); a change
@@ -127,12 +133,42 @@ in 1 ms, and answers a six-word OR query in about 3 ms (Node 26 on the
 Mac). The measurement cost about $2.65 of rerank calls (1,323 at $0.002)
 and a few thousand embedding tokens.
 
-## Open questions
+## Built (2026-11-02, MCP 2.12.0)
 
-- `node:sqlite` with FTS5 on the Lambda's own Node 24 build: the release
-  probe asks a keyword question of the candidate before it is promoted.
-- `/tmp` room on the Web Functions for a 45 MB file.
+As the brief says, with these choices:
+
+- **The files.** `apps/librarian/lambda/shared/keyword-index.mts` (the
+  table, `ftsQuery`, write and open), `scripts/build-keyword-index.mjs`
+  (refuses unless all five corpora load; writes `<stem>.fact.json`),
+  `scripts/keyword-index-coverage.mjs` (the coverage oracle: its own copy of
+  which rows a corpus scans, sharing no code with the Lambda),
+  `scripts/load-corpora.mjs` (the eval's corpus loader, now shared with the
+  build), `pipeline/deploy/upload_keyword_index.py`. `scripts/fts5-lexical.mjs`
+  imports `ftsQuery` from `shared/`.
+- **Every Lambda deploy builds it,** not only a corpus rebuild: it needs no
+  Bedrock and takes seconds, and building it each time covers the first
+  deploy without a check for the missing object. It uploads first, so a run
+  that cannot write it ships nothing.
+- **Fresh or not at all.** The index records each corpus's row count and
+  `generated_at`. A container compares them with the corpora it loaded once,
+  on its first retrieval; any difference, or a file that will not download or
+  open, logs `keyword_index_unavailable` (error, with the reason) and keeps
+  TF-IDF for the container's life. No `KEYWORD_INDEX_KEY` logs
+  `keyword_index_disabled` (info).
+- **The release probe.** `/health?probe=keyword` asks the served engine "the
+  mini minnebar"; `native-release.mjs` refuses a candidate whose answer is
+  not `engine: fts5`, so a runtime without FTS5, without `/tmp` room or
+  without read access to the file never goes live. `native_release.py` counts
+  `keyword_index.db` in `NativeCorpusVersions` and `NativeBuildId` when it
+  exists, and deploys without it (the first deploy) but never without a corpus.
+- **IAM.** The deploy policy writes `artifacts/keyword_index.db` and the
+  runtime boundary reads it (`pipeline/deploy/iam/`); both are applied by an
+  administrator with `setup-oidc.sh` before the merge deploy, or the upload
+  fails (nothing ships) or the probe fails (nothing is promoted).
+- **Measured before the PR** on the live corpora with the eval
+  (`scripts/eval-tools.mjs`): every keyword retrieval served by fts5, the
+  recall baseline within its band.
 
 ## Who builds
 
-Codex, from `BRIEF-2026-11-02-keyword-index-build.md`, as one PR.
+Claude, in this repo, as one PR that Codex reviews (Jamie, 2026-11-02).

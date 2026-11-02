@@ -51,6 +51,15 @@ Parameters:
       each, from Linking Things (links.thingelstad.xyz). The native archive
       lazy-loads it only when a request names source kind link or a link-id.
       Uploaded on its own cadence by pipeline/deploy/upload_links_corpus.py.
+  KeywordIndexKey:
+    Type: String
+    Default: artifacts/keyword_index.db
+    Description: >
+      S3 key for the keyword index - one SQLite full-text file over every
+      corpus, the keyword leg of retrieval. The native archive downloads it
+      to /tmp once and opens it read-only; without it, or when it was built
+      from other corpora, retrieval keeps the TF-IDF scan. Built and uploaded
+      by every deploy (pipeline/deploy/upload_keyword_index.py).
   LogLevel:
     Type: String
     Default: INFO
@@ -249,6 +258,7 @@ Resources:
                   - !Sub arn:aws:s3:::${CorpusBucket}/${PodcastCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${ReferenceCorpusKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/${LinksCorpusKey}
+                  - !Sub arn:aws:s3:::${CorpusBucket}/${KeywordIndexKey}
                   - !Sub arn:aws:s3:::${CorpusBucket}/artifacts/dispatches/*
               # Dispatch was removed 2026-08; profile deletion still cleans
               # up historical dispatch artifacts, so keep delete access here.
@@ -765,6 +775,7 @@ Resources:
           PODCAST_CORPUS_KEY: !Ref PodcastCorpusKey
           REFERENCE_CORPUS_KEY: !Ref ReferenceCorpusKey
           LINKS_CORPUS_KEY: !Ref LinksCorpusKey
+          KEYWORD_INDEX_KEY: !Ref KeywordIndexKey
           LIBRARIAN_RUNTIME_SECRET_ID: weekly-thing-librarian-runtime
           LOG_LEVEL: !Ref LogLevel
           # Anthropic API model ids (2026-10), all on the 5 family: they

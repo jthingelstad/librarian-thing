@@ -1,4 +1,4 @@
-.PHONY: blog-round build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-reference-import librarian-reference-corpus librarian-reference-corpus-upload librarian-links-import librarian-links-corpus librarian-links-corpus-upload librarian-corpora-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
+.PHONY: blog-round build clean librarian-corpus librarian-corpus-upload librarian-blog-corpus-upload librarian-podcast-import librarian-podcast-corpus librarian-podcast-corpus-upload librarian-reference-import librarian-reference-corpus librarian-reference-corpus-upload librarian-links-import librarian-links-corpus librarian-links-corpus-upload librarian-corpora-upload librarian-keyword-index-upload librarian-graph librarian-graph-upload librarian-graph-push librarian-deploy librarian-deploy-full test test-lambda check
 
 PYTHON ?= uv run --locked python
 
@@ -42,12 +42,20 @@ librarian-links-corpus:
 librarian-links-corpus-upload:
 	$(PYTHON) pipeline/deploy/upload_links_corpus.py
 
+# The keyword index follows the corpora: built from the live copies just
+# uploaded, so retrieval does not fall back to the TF-IDF scan.
 librarian-corpora-upload:
 	$(PYTHON) pipeline/deploy/upload_corpus.py
 	$(PYTHON) pipeline/deploy/upload_blog_corpus.py
 	$(PYTHON) pipeline/deploy/upload_podcast_corpus.py
 	$(PYTHON) pipeline/deploy/upload_reference_corpus.py
 	$(PYTHON) pipeline/deploy/upload_links_corpus.py
+	$(MAKE) librarian-keyword-index-upload
+
+librarian-keyword-index-upload:
+	npm --prefix apps/librarian/lambda run build
+	env -u EVAL_CORPUS_DIR -u EVAL_CORPUS_FALLBACK node apps/librarian/lambda/scripts/build-keyword-index.mjs tmp/keyword-index/keyword_index.db
+	$(PYTHON) pipeline/deploy/upload_keyword_index.py --upload-staged tmp/keyword-index
 
 librarian-graph:
 	$(PYTHON) pipeline/graph/build.py

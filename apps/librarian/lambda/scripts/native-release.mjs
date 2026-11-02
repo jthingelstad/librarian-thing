@@ -98,14 +98,28 @@ export async function probe(outputs) {
   });
   for (const door of ['Auth', 'Archive']) {
     const hostname = outputs['Native' + door + 'CandidateDomain'];
+    // The archive also opens its keyword index and asks it a keyword
+    // question: a candidate that cannot read it is not promoted.
+    const query = door === 'Archive' ? { probe: 'keyword' } : undefined;
     const signed = await signer.sign(
-      new HttpRequest({ protocol: 'https:', hostname, method: 'GET', path: '/health', headers: { host: hostname } })
+      new HttpRequest({
+        protocol: 'https:',
+        hostname,
+        method: 'GET',
+        path: '/health',
+        query,
+        headers: { host: hostname }
+      })
     );
-    const response = await fetch('https://' + hostname + '/health', {
+    const response = await fetch('https://' + hostname + '/health' + (query ? '?probe=keyword' : ''), {
       headers: signed.headers,
       signal: AbortSignal.timeout(30000)
     });
-    if (response.status !== 200 || !(await response.json()).ok) throw new Error(door + ' native HTTP probe failed');
+    const body = response.status === 200 ? await response.json() : {};
+    if (!body.ok) throw new Error(door + ' native HTTP probe failed');
+    if (query && !(body.keyword_index?.ok && body.keyword_index.engine === 'fts5')) {
+      throw new Error(door + ' keyword index probe failed: ' + JSON.stringify(body.keyword_index ?? null));
+    }
   }
 }
 async function main() {

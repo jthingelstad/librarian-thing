@@ -216,6 +216,37 @@ class WorkflowTest(unittest.TestCase):
         self.assertIn("blog_corpus == 'true'", self.steps[archive]["if"])
         self.assertIn("reference_corpus == 'true'", self.steps[archive]["if"])
 
+    def test_keyword_index_is_built_from_the_candidates_and_uploaded_first(self):
+        # The keyword index (shared/keyword-index.mts) is built on every
+        # Lambda deploy after the last embed, from the candidates and the
+        # live copy of the rest, with a fresh session; the gate evals the
+        # file the upload ships, and it uploads before any corpus.
+        build = self.names.index("Build keyword index (candidate)")
+        step = self.steps[build]
+        self.assertEqual(step["if"], "steps.changes.outputs.lambda == 'true'")
+        self.assertIn("build-keyword-index.mjs .candidate/keyword_index.db", step["run"])
+        self.assertEqual(
+            step["env"], {"EVAL_CORPUS_DIR": ".candidate", "EVAL_CORPUS_FALLBACK": "s3"}
+        )
+        self.assertLess(self.names.index("Embed links corpus (candidate)"), build)
+        refresh = self.steps[build - 1]
+        self.assertEqual(refresh["name"], "Refresh AWS credentials (OIDC)")
+        self.assertEqual(refresh["if"], step["if"])
+        gate = self.names.index("Corpus gate (eval the candidate corpora)")
+        self.assertLess(build, gate)
+        self.assertEqual(
+            self.steps[gate]["env"]["KEYWORD_INDEX_PATH"], ".candidate/keyword_index.db"
+        )
+        upload = self.names.index("Upload keyword index to S3")
+        self.assertEqual(self.steps[upload]["if"], step["if"])
+        self.assertIn(
+            "upload_keyword_index.py --upload-staged .candidate", self.steps[upload]["run"]
+        )
+        self.assertEqual(
+            self.names.index("Snapshot native serving identities before promotion") + 1, upload
+        )
+        self.assertLess(upload, self.names.index("Upload Weekly Thing corpus + graph to S3"))
+
     def test_every_long_step_starts_with_a_fresh_aws_session(self):
         # The OIDC session lasts an hour; the 2026-11-01 Embed v4 switch lost
         # it 60 minutes in, a third of the way through the blog embed.
