@@ -57,7 +57,11 @@ responses. Trusted viewer addresses replace the final X-Forwarded-For proxy hop.
 
 The existing Librarian distribution is manually managed. `front-door.mjs` owns
 its release changes with ETag compare-and-swap and a private original-config
-receipt. Its sole `native` command preserves the hostname and route inventory.
+receipt. Its sole `native` command preserves the hostname and route inventory,
+and every run sets `WebACLId` to projects-sysadmin's shared `edge` web ACL
+(count mode), read at run time from the CloudFormation export
+`edge-waf-WebAclArn`; a missing export refuses before any write. `native ...
+--check` only reads and prints the config paths a run would change.
 Its `access-logs` command (`--check` only reads) makes the distribution's access log: the
 CloudWatch log group `/librarian/web-access`, kept 24 months (731 days), with no client IP, query string or path
 (`/share/{token}` carries a share token). It creates only missing pieces and refuses, before any
