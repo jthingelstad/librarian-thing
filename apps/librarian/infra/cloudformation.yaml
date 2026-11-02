@@ -437,50 +437,9 @@ Resources:
       AlarmActions:
         - !Ref LibrarianAlarmTopic
 
-  LibrarianEvalErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy eval Lambda has errors.
-      Namespace: AWS/Lambda
-      MetricName: Errors
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref LibrarianEvalFunction
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # OAuth abuse and failure visibility: token/register rejections are 4xx
-  # responses, invisible to the Lambda Errors metric. A log metric filter
-  # counts the structured warning events the OAuth routes emit.
-  LibrarianOauthFailuresAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy OAuth endpoints are seeing a burst of auth failures.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianOauthAuthFailures
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 10
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # The native archive handles its own exceptions (the SSE catch answers the
-  # reader and returns normally), so the built-in Lambda Errors metric stays
-  # at zero even when every chat turn is failing. These filters count the
-  # structured terminal events the runtime emits instead: request_failed /
-  # retrieve_failed for server-side failures, and chat_request_rejected for
-  # handled rejections (session_invalid, mode_denied, rate limits, quota).
+  # Handled stream/retrieval exceptions need outcome monitoring because
+  # the runtime answers the reader and returns normally. Routine request
+  # refusals remain in structured logs, without a separate paid counter.
   LibrarianStreamFailuresAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -492,22 +451,6 @@ Resources:
       EvaluationPeriods: 1
       DatapointsToAlarm: 1
       Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  LibrarianChatRejectionsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy chat/welcome endpoints are seeing a burst of rejected requests.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianChatRejections
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 10
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
       AlarmActions:
@@ -588,24 +531,6 @@ Resources:
                   - arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1
 
 
-  # The 2026-09-02 crawler fleet's tell: direct-to-origin guest traffic
-  # bouncing off the origin-marker gate. Distinct from quota noise.
-  LibrarianGuestOriginAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Direct-to-origin guest traffic is bouncing off the origin-marker gate (scripted fleet).
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianGuestOriginRejections
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 25
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
   # A dead archive tool (S3 corpus, rerank region) degrades
   # every answer while the loop works around it - the handled-failures
   # alarm never fires for this.
@@ -620,24 +545,6 @@ Resources:
       EvaluationPeriods: 1
       DatapointsToAlarm: 1
       Threshold: 5
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # Credential-stuffing / email-bombing against /auth is all 4xx -
-  # invisible to Lambda Errors. Count the auth-side abuse rejections.
-  LibrarianAuthAbuseAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: The auth endpoints are seeing a burst of rate-limited or exhausted attempts.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianAuthAbuseRejections
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 15
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
       AlarmActions:
@@ -1106,17 +1013,6 @@ Resources:
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
 
-  NativeLibrarianOauthFailuresMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Condition: NativeWebActive
-    Properties:
-      LogGroupName: !Ref NativeAuthLogs
-      FilterPattern: '?"oauth_token_pkce_failed" ?"oauth_token_code_binding_mismatch" ?"oauth_refresh_client_mismatch" ?"oauth_register_rejected" ?"oauth_token_code_rejected" ?"oauth_register_global_capped" ?"oauth_register_rate_limited" ?"oauth_token_rate_limited"'
-      MetricTransformations:
-        - MetricName: LibrarianOauthAuthFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   NativeLibrarianStreamFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
     Condition: NativeWebActive
@@ -1125,17 +1021,6 @@ Resources:
       FilterPattern: '?"request_failed" ?"retrieve_failed"'
       MetricTransformations:
         - MetricName: LibrarianStreamHandledFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
-  NativeLibrarianChatRejectionsMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Condition: NativeWebActive
-    Properties:
-      LogGroupName: !Ref NativeArchiveLogs
-      FilterPattern: '"chat_request_rejected"'
-      MetricTransformations:
-        - MetricName: LibrarianChatRejections
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
 
@@ -1150,17 +1035,6 @@ Resources:
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
 
-  NativeLibrarianGuestOriginMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Condition: NativeWebActive
-    Properties:
-      LogGroupName: !Ref NativeArchiveLogs
-      FilterPattern: '"guest_origin_required"'
-      MetricTransformations:
-        - MetricName: LibrarianGuestOriginRejections
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
   NativeLibrarianToolFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
     Condition: NativeWebActive
@@ -1169,17 +1043,6 @@ Resources:
       FilterPattern: '"tool_call_failed"'
       MetricTransformations:
         - MetricName: LibrarianToolFailures
-          MetricNamespace: WeeklyThingLibrarian
-          MetricValue: "1"
-
-  NativeLibrarianAuthAbuseMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Condition: NativeWebActive
-    Properties:
-      LogGroupName: !Ref NativeAuthLogs
-      FilterPattern: '?"auth_rate_limited" ?"auth_magic_link_rate_limited" ?"auth_code_attempts_exhausted" ?"auth_code_rate_limited"'
-      MetricTransformations:
-        - MetricName: LibrarianAuthAbuseRejections
           MetricNamespace: WeeklyThingLibrarian
           MetricValue: "1"
 

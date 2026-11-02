@@ -319,3 +319,40 @@ def test_only_the_authorize_policy_forwards_a_cookie_and_only_thingy_email():
         assert cache["ParametersInCacheKeyAndForwardedToOrigin"]["CookiesConfig"] == {
             "CookieBehavior": "none"
         }
+
+
+def test_alarm_retirement_preserves_final_failures_and_guest_budget():
+    template = yaml.load(
+        (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
+    )
+    resources = template["Resources"]
+    mapping = resources["LibrarianEvalEventSource"]["Properties"]
+    assert mapping["MaximumRetryAttempts"] == "3"
+    assert mapping["DestinationConfig"]["OnFailure"]["Destination"] == "LibrarianEvalDlq.Arn"
+    alarm = resources["LibrarianEvalDlqAlarm"]["Properties"]
+    assert alarm["MetricName"] == "ApproximateNumberOfMessagesVisible"
+    assert alarm["Dimensions"][0]["Value"] == "LibrarianEvalDlq.QueueName"
+    assert alarm["Threshold"] == "1"
+    for name in (
+        "LibrarianEvalDlqAlarm",
+        "LibrarianStreamFailuresAlarm",
+        "LibrarianToolFailuresAlarm",
+        "LibrarianButtondownFailuresAlarm",
+        "LibrarianSubscribeFailuresAlarm",
+        "LibrarianGuestBreakerAlarm",
+        "NativeAuthErrorsAlarm",
+        "NativeArchiveErrorsAlarm",
+        "NativeAuthCapacityAlarm",
+        "NativeArchiveCapacityAlarm",
+    ):
+        assert resources[name]["Properties"]["AlarmActions"] == ["LibrarianAlarmTopic"]
+    # Rejections still happen in the runtime; paying for a second counter is
+    # not needed to retain the independent service-failure and budget controls.
+    for name in (
+        "LibrarianEvalErrorsAlarm",
+        "LibrarianChatRejectionsAlarm",
+        "LibrarianGuestOriginAlarm",
+        "LibrarianAuthAbuseAlarm",
+        "LibrarianOauthFailuresAlarm",
+    ):
+        assert name not in resources
