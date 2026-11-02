@@ -260,6 +260,15 @@ says the lexical leg itself is weak (What's left).
   the whole archive on the profile without one throttle, from a quiet
   window. So a full re-embed needs a quiet 24 hours, not the cap's
   arithmetic.
+- **The quota refills like a token bucket,** about 11,000 tokens a minute
+  (16.2M a day). On 2026-11-01 a push deploy (run 41371261253, 7:12 p.m.
+  CST) re-embedded the stale corpora, throttled from 7:41 p.m. at about 6M
+  and was cancelled during the links at 9:12 p.m., with nothing uploaded.
+  After about 11.7 quiet hours the 2026-11-02 push deploy embedded all
+  7.46M without one throttle. Every push deploy (a merge to main under
+  `pipeline/`, `librarian-core/` or `apps/librarian/`) re-embeds a stale
+  corpus, so a model switch's re-embed starts on the next such merge
+  whether or not anyone planned it.
 - v3 costs $0.10 a million and has never hit a limit.
 
 ## What ships
@@ -346,11 +355,17 @@ direct 0.97 → 0.96.
 
 ## What's left
 
-- **The switch's re-embed.** #109 is merged and Jamie's OIDC apply put the
-  v4 grants live on 2026-11-01 at 9:39 a.m. CST (deploy policy v6, runtime
-  boundary v5), but the corpora are still v3 (Quotas and cost). Run
-  `deploy.yml` with scope `full` once the profile has had a quiet 24 hours.
-  Until then each corpus answers on v3 and the query matches it.
+- **The switch's re-embed: done 2026-11-02.** It ran in the push deploy for
+  #114 (run 41463688986), not in the planned `scope=full` dispatch, because
+  a push deploy re-embeds every corpus whose recorded model is not the
+  default. All five corpora embedded on v4 from 8:53 to 9:23 a.m. CST; the
+  candidate gate passed (eval-tools 17,708 checks, every query embedded on
+  v4 at 1024; archive checks 0 failed; no `rerank_failed`); the corpora and
+  graph.json reached S3 by 9:31, and the Lambda and the graph.json handoff
+  by 9:33. `/health` serves the new object versions, each corpus records
+  `us.cohere.embed-v4:0` at 1024, and "the mini minnebar" still finds wt-147
+  first. The profile counted about 7.46M tokens (about $0.90) with no
+  throttles.
 - **The keyword leg.** It is a TF-IDF cosine (no BM25, stemming, phrases or
   title weight). On its own it scores 0.26; fused with v4 it pulls semantic's
   0.55 down to 0.41, and only the reranker restores the order. Measure a
