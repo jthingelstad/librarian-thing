@@ -1,7 +1,8 @@
 # Bake-off: a DynamoDB vector index for the Librarian (2026-11-01)
 
 The measurements behind
-[`PLAN-2026-11-01-dynamodb-vectors.md`](PLAN-2026-11-01-dynamodb-vectors.md).
+[`PLAN-2026-11-01-dynamodb-vectors.md`](PLAN-2026-11-01-dynamodb-vectors.md),
+which is parked (2026-11-01).
 Rerun with `pipeline/eval/ddb_vector_bakeoff.py` (`load`, `run`, `delete`;
 `--layout year` for the second table); results land in `tmp/eval/results/`.
 

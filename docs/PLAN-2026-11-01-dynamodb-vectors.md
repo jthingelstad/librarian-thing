@@ -1,5 +1,13 @@
 # Plan: the semantic leg on a DynamoDB vector index (2026-11-01)
 
+**Parked, 2026-11-01.** Jamie: "Approved: park the DynamoDB vector plan in librarian-thing; keyword search is the only active retrieval project after the v4 re-embed".
+Nothing in it was built. It moves the vectors to change memory and cold
+start, not answers (the index at best matched the exact scan), and no one
+has seen a memory, latency or concurrency problem it would fix. Reopen it,
+or the smaller fix (the vectors as compact binary files beside the corpora,
+still scanned exactly in memory), only for an observed problem. The
+bake-off's tables are deleted. What follows is kept as the record.
+
 Jamie, 2026-11-01: "I think DynamoDB vector index is going to be the way to
 go… OpenSearch doesn't work at our scale, and S3 Vectors had issues. Lets move
 forward with that path."
@@ -122,5 +130,6 @@ partition, not a new system.
 6. **Switch.** Flip to `dynamodb`, compare a week of `/health` and latency,
    then drop `embedding` from the corpus JSON, measure memory, raise the
    per-environment concurrency. MCP minor version bump at the flip.
-7. **BM25** keyword leg on FTS5 (`PLAN-2026-11-01-embeddings.md`, What's left),
-   its own plan.
+7. **BM25** keyword leg on FTS5: its own plan,
+   `PLAN-2026-11-01-keyword-search.md`, independent of these steps (both
+   legs feed the fusion).
