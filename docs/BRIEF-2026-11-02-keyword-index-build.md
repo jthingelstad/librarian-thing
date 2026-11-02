@@ -1,4 +1,9 @@
-# Brief: the keyword index (for Codex, 2026-11-02)
+# Brief: the keyword index (2026-11-02)
+
+Built in Claude, as one PR that Codex reviews (Jamie, 2026-11-02: "We would
+not have Codex build it… we would build it here in Claude. Codex reviews
+PRs."). What was built, and the choices the brief left open, are in the
+plan's Built section.
 
 One PR. Replace the Librarian's in-memory TF-IDF keyword leg with one SQLite
 full-text (FTS5) file over every corpus. The design and the numbers are in

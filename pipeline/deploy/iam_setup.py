@@ -104,6 +104,29 @@ def simulate(session: boto3.Session) -> None:
             True,
             {},
         ),
+        # The keyword index (2026-11-02): CI uploads it, the Lambdas read it
+        # and never write it.
+        (
+            "deploy",
+            "s3:PutObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/keyword_index.db",
+            True,
+            {},
+        ),
+        (
+            "runtime-boundary",
+            "s3:GetObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/keyword_index.db",
+            True,
+            {},
+        ),
+        (
+            "runtime-boundary",
+            "s3:PutObject",
+            "arn:aws:s3:::weekly-thing-librarian/artifacts/keyword_index.db",
+            False,
+            {},
+        ),
         # The library: CI downloads it to build the corpus and its pull
         # round uploads it (If-Match). Nothing else under artifacts/ opens up.
         (
@@ -632,7 +655,15 @@ def verify(session: boto3.Session) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "command", choices=("validate", "apply", "deploy-policy", "native-policy", "verify")
+        "command",
+        choices=(
+            "validate",
+            "apply",
+            "deploy-policy",
+            "native-policy",
+            "runtime-boundary",
+            "verify",
+        ),
     )
     parser.add_argument("--profile", required=True)
     parser.add_argument("--snapshot-dir", type=Path)
@@ -640,7 +671,7 @@ def main() -> None:
     session = boto3.Session(profile_name=args.profile, region_name="us-east-1")
     if session.client("sts").get_caller_identity()["Account"] != ACCOUNT:
         raise RuntimeError("Wrong AWS account")
-    if args.command in ("validate", "apply", "deploy-policy", "native-policy"):
+    if args.command in ("validate", "apply", "deploy-policy", "native-policy", "runtime-boundary"):
         validate(session)
     if args.command == "deploy-policy":
         # Only the OIDC role's scoped policy: a new default version when the
@@ -650,6 +681,12 @@ def main() -> None:
     elif args.command == "native-policy":
         # Only the CloudFormation role's native policy, the same way.
         put_managed(session.client("iam"), NATIVE_CFN_POLICY, document("native-cloudformation"))
+        verify(session)
+    elif args.command == "runtime-boundary":
+        # Only the Lambdas' boundary, the same way. The role keeps it
+        # attached; a new default version is all that changes.
+        name, filename = BOUNDARIES["LibrarianFunctionRole"]
+        put_managed(session.client("iam"), name, document(filename))
         verify(session)
     elif args.command == "apply":
         if args.snapshot_dir is None:

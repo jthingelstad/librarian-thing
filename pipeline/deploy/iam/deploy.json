@@ -18,6 +18,7 @@
         "arn:aws:s3:::weekly-thing-librarian/artifacts/podcast_corpus.json",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/reference_corpus.json",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/links_corpus.json",
+        "arn:aws:s3:::weekly-thing-librarian/artifacts/keyword_index.db",
         "arn:aws:s3:::weekly-thing-librarian/artifacts/library.db"
       ]
     },

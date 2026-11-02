@@ -100,6 +100,11 @@ library's object on 2026-10-22.
 `native-policy` does the same for `native-cloudformation.json`
 (`WeeklyThingLibrarianNativeCloudFormation`, on the CloudFormation role), as for
 the librarian.thingelstad.com import on 2026-11-02.
+`runtime-boundary` does the same for `runtime-boundary.json`
+(`WeeklyThingLibrarianRuntimeBoundary`, on the Lambdas' role), as for the
+keyword index's read on 2026-11-02. A change to what the Lambdas read needs
+both: `deploy-policy` so CI can upload the object, `runtime-boundary` so the
+role the stack grants can read it.
 `verify` compares live IAM policies and trust with source. Never widen the
 standing auditor merely to get past an access denial; use an authorized reader.
 

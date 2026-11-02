@@ -35,6 +35,7 @@ PRIVATE_BLOG_CORPUS_KEY = "artifacts/blog_corpus.json"
 PRIVATE_PODCAST_CORPUS_KEY = "artifacts/podcast_corpus.json"
 PRIVATE_REFERENCE_CORPUS_KEY = "artifacts/reference_corpus.json"
 PRIVATE_LINKS_CORPUS_KEY = "artifacts/links_corpus.json"
+PRIVATE_KEYWORD_INDEX_KEY = "artifacts/keyword_index.db"
 DEFAULT_ALLOWED_ORIGINS = "https://weekly.thingelstad.com,https://thingy.thingelstad.com,https://www.thingelstad.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4178,http://127.0.0.1:4178"
 
 
@@ -119,8 +120,8 @@ def smoke_test_thingy_models(models: dict[str, str]) -> None:
         smoke_test_model(model_id, label)
 
 
-def run(args: list[str], cwd: Path = REPO) -> None:
-    subprocess.run(args, cwd=cwd, check=True)
+def run(args: list[str], cwd: Path = REPO, env: dict[str, str] | None = None) -> None:
+    subprocess.run(args, cwd=cwd, check=True, env=env)
 
 
 def ensure_lambda_dist() -> None:
@@ -335,6 +336,7 @@ def deploy_stack(
     podcast_corpus_key: str,
     reference_corpus_key: str,
     links_corpus_key: str,
+    keyword_index_key: str,
     allowed_origin: str,
     thingy_magic_link_from_email: str,
     thingy_magic_link_base_url: str,
@@ -368,6 +370,7 @@ def deploy_stack(
         {"ParameterKey": "PodcastCorpusKey", "ParameterValue": podcast_corpus_key},
         {"ParameterKey": "ReferenceCorpusKey", "ParameterValue": reference_corpus_key},
         {"ParameterKey": "LinksCorpusKey", "ParameterValue": links_corpus_key},
+        {"ParameterKey": "KeywordIndexKey", "ParameterValue": keyword_index_key},
         {"ParameterKey": "LogLevel", "ParameterValue": log_level},
         {"ParameterKey": "AuthRateLimitMax", "ParameterValue": auth_rate_limit_max},
         {"ParameterKey": "TurnstileModeWeekly", "ParameterValue": turnstile_mode_weekly},
@@ -579,6 +582,33 @@ def upload_librarian_corpora(args: argparse.Namespace, bucket: str) -> None:
             str(tmp_dir / "librarian_embedded_links_corpus.json"),
         ]
     )
+    # The keyword index, from the five corpora just uploaded: a corpus
+    # uploaded without it leaves retrieval on the TF-IDF scan. The build
+    # checks it covers every row before anything is uploaded.
+    index_dir = tmp_dir / "keyword-index"
+    env = {k: v for k, v in os.environ.items() if not k.startswith("EVAL_")}
+    env["CORPUS_BUCKET"] = bucket
+    ensure_lambda_dist()
+    run(
+        [
+            "node",
+            str(LAMBDA_DIR / "scripts" / "build-keyword-index.mjs"),
+            str(index_dir / "keyword_index.db"),
+        ],
+        env=env,
+    )
+    run(
+        [
+            sys.executable,
+            "pipeline/deploy/upload_keyword_index.py",
+            "--bucket",
+            bucket,
+            "--key",
+            args.keyword_index_key,
+            "--upload-staged",
+            str(index_dir),
+        ]
+    )
 
 
 def main() -> int:
@@ -616,6 +646,10 @@ def main() -> int:
     parser.add_argument(
         "--links-corpus-key",
         default=os.environ.get("LIBRARIAN_LINKS_CORPUS_KEY", PRIVATE_LINKS_CORPUS_KEY),
+    )
+    parser.add_argument(
+        "--keyword-index-key",
+        default=os.environ.get("LIBRARIAN_KEYWORD_INDEX_KEY", PRIVATE_KEYWORD_INDEX_KEY),
     )
     parser.add_argument(
         "--cloudformation-role-arn",
@@ -713,6 +747,7 @@ def main() -> int:
         podcast_corpus_key=args.podcast_corpus_key,
         reference_corpus_key=args.reference_corpus_key,
         links_corpus_key=args.links_corpus_key,
+        keyword_index_key=args.keyword_index_key,
         allowed_origin=args.allowed_origin,
         thingy_magic_link_from_email=args.thingy_magic_link_from_email,
         thingy_magic_link_base_url=args.thingy_magic_link_base_url,

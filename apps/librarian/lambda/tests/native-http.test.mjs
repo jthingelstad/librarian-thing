@@ -157,6 +157,12 @@ test('actual native route layers retain contract refusals and bearerless MCP cha
       // Both doors say what they were built from (the sync page reads it).
       assert.equal(body.source_revision, 'build-fixture');
       assert.deepEqual(body.corpus_versions, { 'artifacts/corpus.json': 'v-fixture' });
+      assert.equal(body.keyword_index, undefined, 'only the release probe opens the keyword index');
+      // The release probe's question: here no index is configured, so the
+      // probe says so and the candidate would not be promoted.
+      const probed = await (await archive.request('/health?probe=keyword')).json();
+      assert.equal(probed.ok, true);
+      assert.deepEqual(probed.keyword_index, { ok: false, engine: 'tf-idf', reason: 'unconfigured' });
       const authHealth = await auth.request('/health');
       assert.equal((await authHealth.json()).source_revision, 'build-fixture');
     } finally {

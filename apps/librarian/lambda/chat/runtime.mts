@@ -42,7 +42,13 @@ import {
 import { evidencedIssueNumbers, prioritizeCitationsForAnswer } from '../shared/citations.mjs';
 import type { Citation } from '../shared/citations.mjs';
 import { normalizeScope, scopePromptLine } from '../shared/scope.mjs';
-import { compactSource, loadedEmbeddingModel, retrievalFilterError, retrieve } from '../shared/retrieval.mjs';
+import {
+  compactSource,
+  keywordIndexProbe,
+  loadedEmbeddingModel,
+  retrievalFilterError,
+  retrieve
+} from '../shared/retrieval.mjs';
 import { loadSharedConversationSnapshot, sharedSnapshotHistory } from '../shared/share-store.mjs';
 import { normalizeFeedbackReaction, validFeedbackRequestId } from '../shared/feedback.mjs';
 import {
@@ -1582,6 +1588,12 @@ export async function handleStreamRequest(
   }
 
   if (method === 'GET' && path.endsWith('/health')) {
+    // ?probe=keyword (the release probe, scripts/native-release.mjs) also
+    // opens the keyword index and asks it a fixed keyword question, so a
+    // runtime that cannot read it fails before promotion. No reader input
+    // reaches the query.
+    const keywordIndex =
+      event.queryStringParameters?.probe === 'keyword' ? { keyword_index: await keywordIndexProbe() } : {};
     const stream = jsonResponseStream(responseStream, 200);
     stream.write(
       JSON.stringify({
@@ -1593,7 +1605,8 @@ export async function handleStreamRequest(
         premium_model: premiumModel(),
         embedding_model: loadedEmbeddingModel(),
         rerank_model: rerankModel(),
-        ...buildInfo()
+        ...buildInfo(),
+        ...keywordIndex
       })
     );
     stream.end();

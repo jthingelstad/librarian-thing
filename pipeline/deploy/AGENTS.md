@@ -12,6 +12,7 @@ AWS deploy tooling for the Thingy Lambda stack. No README — this directory is 
 | `upload_podcast_corpus.py` | Builds the Another Thing podcast corpus from `data/podcast/another-thing/episodes`, embeds via Bedrock Cohere with S3 cache reuse, uploads to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_reference_corpus.py` | Builds the reference base (site pages, FAQ, Things I've built, thingelstad.com's pages, reference documents) from `data/`, embeds via Bedrock Cohere with S3 cache reuse, uploads `reference_corpus.json` to S3. Called by `aws.py` during full corpus deploys. |
 | `upload_links_corpus.py` | Builds the links corpus (Linking Things' saved links, one passage each) from `data/links/`, embeds via Bedrock Cohere with S3 cache reuse, uploads `links_corpus.json` to S3. Called by `aws.py` during full corpus deploys. |
+| `upload_keyword_index.py` | Uploads the keyword index (`keyword_index.db`, one SQLite full-text file over every corpus, built by `apps/librarian/lambda/scripts/build-keyword-index.mjs`) to `artifacts/keyword_index.db`, gzipped, with its fact. `--upload-staged <dir>` only: it ships the file the build checked. Called by `aws.py` after a full corpus upload and by CI on every Lambda deploy. |
 | `bedrock_logging.py` | Configures Bedrock model invocation logging (CloudWatch destination + S3 archive). One-time setup. |
 
 ## Invocation
@@ -54,7 +55,7 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 2. **Verify private bucket security** (`verify_private_bucket(bucket)`). Administrator-only `--bootstrap-bucket` creates or hardens it. Default bucket: `LIBRARIAN_BUCKET` env var or `weekly-thing-librarian`.
 3. **Package shared modules and Event workers**, then create two native root entries (`web/auth.mjs`, `web/archive.mjs`) in versioned immutable bundles.
 4. **Upload the Event worker zip** under `code/auth-lambda/` and immutable native bundles to the versioned source bucket. Snapshot live/rollback pins, probe candidates, then promote explicitly.
-5. **Optional**: all corpus uploaders run: Weekly Thing corpus + graph, blog corpus, podcast corpus, reference corpus, links corpus.
+5. **Optional**: all corpus uploaders run: Weekly Thing corpus + graph, blog corpus, podcast corpus, reference corpus, links corpus, then the keyword index is built from them and uploaded.
 6. **CloudFormation update-stack** with the new code keys and settings. No credentials: the Lambdas read them from the hand-kept `weekly-thing-librarian-runtime` secret.
 7. **30-day log retention** on the auto-created log groups (`configure_log_retention`).
 8. **Update `.env`** with the latest stack outputs: `LIBRARIAN_API_URL`, `LIBRARIAN_STREAM_URL`.
@@ -66,15 +67,19 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
 3. Podcast: `upload_podcast_corpus.py` builds from `data/podcast/another-thing/episodes/*.json`, reuses cached embeddings by chunk id, uploads `podcast_corpus.json`.
 4. Reference: `upload_reference_corpus.py` builds from `data/site/`, `data/things/`, `data/blog/pages/`, `data/reference/`, `data/reference-unpublished/` and the FAQ, reuses cached embeddings by chunk id, uploads `reference_corpus.json`. A malformed reference document fails the build with its file name.
 5. Links: `upload_links_corpus.py` builds from `data/links/` (Linking Things' links.json and issues.json, snapshotted by `pipeline/links/import_links.py`), reuses cached embeddings by chunk id, uploads `links_corpus.json`. With no snapshot in the library the corpus is empty and the build says so.
-6. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, `loadPodcastCorpus()`, the reference loader (`REFERENCE_CORPUS_KEY`, searched by every retrieval) and the links loader (`LINKS_CORPUS_KEY`, read only when a request names source kind `link`) pick up new files on the next cold start or after `aws.py` triggers a new deployment.
-7. Every corpus object carries its **fact** as S3 user metadata, beside the
+6. Keyword index: `build-keyword-index.mjs` builds `keyword_index.db` from the five corpora as the deploy ships them (the candidates, the live copy of the rest), the rows each corpus's keyword scan reads, and refuses an index that misses a row, adds one or holds one twice (`scripts/keyword-index-coverage.mjs`, which shares no code with the Lambda). It needs no Bedrock and takes seconds, so CI builds it on every Lambda deploy, before the corpus gate (which evals the retrievals it serves) and uploads it first, before any corpus: a run that cannot write it ships nothing. A Lambda that finds the index built from other corpora than it loaded logs `keyword_index_unavailable` and scans with TF-IDF, so a corpus uploaded by hand needs the index after it (`make librarian-corpora-upload` does both; `make librarian-keyword-index-upload` the index alone).
+7. The Lambda's `loadCorpus()`, `loadBlogCorpus()`, `loadPodcastCorpus()`, the reference loader (`REFERENCE_CORPUS_KEY`, searched by every retrieval) and the links loader (`LINKS_CORPUS_KEY`, read only when a request names source kind `link`) pick up new files on the next cold start or after `aws.py` triggers a new deployment.
+8. Every corpus object carries its **fact** as S3 user metadata, beside the
    library fingerprint (`corpus_fact.py`): `newest-id` (the newest item's
    public id: `wt-354`, `blog-<microblog id>`, `ep-<n>`, `link-<id>`),
    `newest-at`, `item-count` and `built-at`; a blog fact also carries
    `newest-url` when the corpus supplies its actual public permalink (the
    numeric micro.blog uid is not the publishing bus's post id). Never guess
    a slug. The reference base carries
-   count and build time only. The uploader computes it from the corpus in
+   count and build time only, and the keyword index `built-at`, `item-count`
+   (its rows), `index-schema`, `index-sha256` and `from-<corpus>` (each
+   corpus's `generated_at` it was built from: `from-weekly-thing`,
+   `from-blog`, `from-podcast`, `from-reference`, `from-link`). The uploader computes it from the corpus in
    memory at `--stage` time and writes it beside the staged file as
    `<name>.fact.json` (`.candidate/corpus.fact.json`), and `--upload-staged`
    reads it back, since the staged file is too big to parse again. A direct
@@ -86,7 +91,7 @@ CI in `.github/workflows/deploy.yml` exports the library to `data/` and builds a
    serves it yet. A fact is ids, instants and counts, never a title: S3
    metadata is ASCII and small.
 
-Use `make librarian-corpora-upload` when code is unchanged and only the five S3 corpus artifacts need refresh.
+Use `make librarian-corpora-upload` when code is unchanged and only the five S3 corpus artifacts (and the keyword index after them) need refresh.
 
 `sync_snapshot.py` reads public health and four corpus HEADs, never their
 bodies or runtime configuration. With `SYNC_THINGY_RECEIVED_BUS` set, CI

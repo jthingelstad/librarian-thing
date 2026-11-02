@@ -169,6 +169,7 @@ def test_template_runtime_permissions_fit_reviewed_boundaries():
         "PodcastCorpusKey": "artifacts/podcast_corpus.json",
         "ReferenceCorpusKey": "artifacts/reference_corpus.json",
         "LinksCorpusKey": "artifacts/links_corpus.json",
+        "KeywordIndexKey": "artifacts/keyword_index.db",
     }
 
     def resolve(resource):

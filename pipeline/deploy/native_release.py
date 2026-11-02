@@ -11,6 +11,14 @@ import json
 import subprocess
 from pathlib import Path
 
+from botocore.exceptions import ClientError
+
+# Serving artifacts a deploy may run without: the keyword index
+# (keyword_index.db, 2.12.0) is absent until its first upload, and the Lambda
+# keeps the TF-IDF scan without it, so its version joins the build id when it
+# exists and is left out when it does not.
+OPTIONAL_ARTIFACTS = ("keyword_index.db",)
+
 
 def run_owner(action: str, outputs: dict[str, str], root: Path) -> dict[str, str]:
     path = root / "tmp" / "native-outputs.json"
@@ -55,10 +63,16 @@ def prepare(s3, outputs, pins, build_dir: Path, root: Path, zip_build) -> list[d
         "reference_corpus.json",
         "links_corpus.json",
         "graph.json",
+        *OPTIONAL_ARTIFACTS,
     ):
-        versions[f"artifacts/{key}"] = s3.head_object(
-            Bucket="weekly-thing-librarian", Key=f"artifacts/{key}"
-        )["VersionId"]
+        try:
+            head = s3.head_object(Bucket="weekly-thing-librarian", Key=f"artifacts/{key}")
+        except ClientError as error:
+            code = error.response.get("Error", {}).get("Code", "")
+            if key in OPTIONAL_ARTIFACTS and code in {"404", "NoSuchKey", "NotFound"}:
+                continue
+            raise
+        versions[f"artifacts/{key}"] = head["VersionId"]
     hashes.extend(versions.values())
     settings["NativeBuildId"] = hashlib.sha256("\n".join(hashes).encode()).hexdigest()
     # The same versions in the clear, so /health can say which corpus

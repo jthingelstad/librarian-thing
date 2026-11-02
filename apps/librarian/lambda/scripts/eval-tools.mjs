@@ -20,10 +20,12 @@
  * accept a reviewed change. Known-answer identities (first ENS post etc.)
  * are exact and never auto-accepted.
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { gunzipSync } from 'node:zlib';
+import { keywordIndexCoverage } from './keyword-index-coverage.mjs';
+import { loadCorpora } from './load-corpora.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const distDir = process.env.EVAL_DIST_DIR || path.join(here, '..', 'dist');
@@ -44,59 +46,9 @@ const { mcpToolDeclarations, renderToolCallResult, validateToolArguments } = awa
 const { runCompletenessChecks } = await import('./eval-completeness.mjs');
 
 // --- corpus loading -------------------------------------------------------
-const CORPUS_FILES = {
-  weekly_thing: 'corpus.json',
-  blog: 'blog_corpus.json',
-  podcast: 'podcast_corpus.json',
-  // The reference base (2026-10-23): site pages, the FAQ, things, the blog's
-  // pages and the reference documents. Absent (not uploaded yet), the
-  // Weekly Thing and blog corpora still carry the rows, as before.
-  reference: 'reference_corpus.json',
-  // The saved links of Linking Things (2026-10-24), read only when a call
-  // names source_kind link. Absent (not uploaded yet), it is empty.
-  link: 'links_corpus.json',
-  // The topic graph feeds list_topics, archive_lens topic cards and
-  // similar issues; without it those tools ran degraded in CI.
-  graph: 'graph.json'
-};
-
-function parseJsonBytes(bytes) {
-  const text = bytes[0] === 0x1f && bytes[1] === 0x8b ? gunzipSync(bytes).toString('utf8') : bytes.toString('utf8');
-  return JSON.parse(text);
-}
-
-async function loadCorpora() {
-  const dir = process.env.EVAL_CORPUS_DIR;
-  const fallback = process.env.EVAL_CORPUS_FALLBACK === 's3';
-  let s3;
-  const fetchKey = async (key) => {
-    if (!s3) {
-      const { S3Client } = await import('@aws-sdk/client-s3');
-      s3 = new S3Client({});
-    }
-    const { GetObjectCommand } = await import('@aws-sdk/client-s3');
-    const bucket = process.env.CORPUS_BUCKET || 'weekly-thing-librarian';
-    try {
-      const response = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
-      return parseJsonBytes(Buffer.from(await response.Body.transformToByteArray()));
-    } catch (error) {
-      console.log(`corpus ${key} unavailable: ${error.name}`);
-      return undefined;
-    }
-  };
-  const corpora = {};
-  for (const [kind, name] of Object.entries(CORPUS_FILES)) {
-    const file = dir ? path.join(dir, name) : '';
-    if (file && existsSync(file)) {
-      corpora[kind] = parseJsonBytes(readFileSync(file));
-      console.log(`corpus ${name}: ${file}`);
-    } else if (!dir || fallback) {
-      corpora[kind] = await fetchKey(`artifacts/${name}`);
-      if (corpora[kind] && dir) console.log(`corpus ${name}: live S3 copy (not staged)`);
-    }
-  }
-  return withReferenceRows(corpora);
-}
+// scripts/load-corpora.mjs reads the files as a deploy ships them.
+const loaded = await loadCorpora();
+const rawCorpora = loaded.corpora;
 
 // The Lambda hands the reference base's site pages, FAQ and things back to
 // the Weekly Thing corpus and its pages back to the blog at load, so the
@@ -345,12 +297,42 @@ function checkAccounting(tool, body, label) {
 }
 
 // --- run ------------------------------------------------------------------
-const corpora = await loadCorpora();
+const corpora = withReferenceRows(rawCorpora);
 if (!corpora.weekly_thing) {
   console.error('eval-tools: no weekly_thing corpus available; set EVAL_CORPUS_DIR or AWS credentials');
   process.exit(2);
 }
 primeCorpusCachesForTests(corpora);
+
+// --- keyword index --------------------------------------------------------
+// The keyword leg reads the keyword index (shared/keyword-index.mts). The
+// corpus gate names the one the deploy built and will upload
+// (KEYWORD_INDEX_PATH); otherwise one is built here from these corpora with
+// the code under test, so the eval reads the engine readers get. Either way
+// the coverage oracle checks it against the corpus files. An older build
+// (EVAL_DIST_DIR) with no keyword index keeps its TF-IDF scan.
+let keywordIndexDir;
+const keywordModule = await import(path.join(distDir, 'shared/keyword-index.mjs')).catch(() => null);
+if (keywordModule && retrieval.keywordIndexSources) {
+  if (!process.env.KEYWORD_INDEX_PATH) {
+    keywordIndexDir = mkdtempSync(path.join(tmpdir(), 'eval-keyword-index-'));
+    process.env.KEYWORD_INDEX_PATH = path.join(keywordIndexDir, 'keyword_index.db');
+    await keywordModule.writeKeywordIndex(process.env.KEYWORD_INDEX_PATH, await retrieval.keywordIndexSources());
+    console.log(`keyword index: built for this eval (${process.env.KEYWORD_INDEX_PATH})`);
+  } else {
+    console.log(`keyword index: ${process.env.KEYWORD_INDEX_PATH}`);
+  }
+  const { problems } = keywordIndexCoverage(process.env.KEYWORD_INDEX_PATH, rawCorpora);
+  check('keyword index covers every corpus row, once', !problems.length, problems.slice(0, 5).join('; '));
+  const probe = await retrieval.keywordIndexProbe();
+  check(
+    'keyword index opens and answers a keyword question',
+    probe.ok && probe.engine === 'fts5',
+    JSON.stringify(probe)
+  );
+} else {
+  console.log('keyword index: none in this build; the keyword leg is TF-IDF');
+}
 
 const counts = {};
 async function run(tool, args, options = {}) {
@@ -1974,6 +1956,7 @@ if (updateBaseline) {
   failures.push('baseline missing - run with --update-baseline once and commit eval/baseline.json');
 }
 
+if (keywordIndexDir) rmSync(keywordIndexDir, { recursive: true, force: true });
 console.log(`\neval-tools: ${passes.length} checks passed, ${failures.length} failed`);
 for (const failure of failures) console.log(`  FAIL ${failure}`);
 process.exit(failures.length ? 1 : 0);

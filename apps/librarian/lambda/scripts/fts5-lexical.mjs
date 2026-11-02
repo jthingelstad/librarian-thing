@@ -2,7 +2,9 @@
  * A keyword engine on SQLite full-text search (FTS5, built into node:sqlite),
  * for the meaning eval to measure against today's TF-IDF scan
  * (docs/PLAN-2026-11-01-keyword-search.md). retrieve() takes it as
- * opts.lexicalEngine; nothing that serves readers passes one.
+ * opts.lexicalEngine; nothing that serves readers passes one. The served
+ * keyword index (shared/keyword-index.mts) is the variant it chose:
+ * tokenizer=porter,query=adjacent,merge=global.
  *
  * Each corpus's rows are indexed once, in memory, in three columns (subject,
  * section, text), with the row's index as its rowid. Options:
@@ -29,23 +31,12 @@
  *                       called once over every corpus, then collect(false)
  */
 import { DatabaseSync } from 'node:sqlite';
+// The query builder is the served one (shared/keyword-index.mts), so the
+// eval measures the words readers' questions become.
+import { ftsQuery } from '../dist/shared/keyword-index.mjs';
 
-// A common list of English stopwords, written here rather than shared with
-// the keyword set's generator (an oracle shares no code with what it checks).
-const STOPWORDS = new Set(
-  `a about above after again against all am an and any are as at be because been before being below between both but
-  by can could did do does doing down during each few for from further had has have having he her here hers herself him
-  himself his how i if in into is it its itself just me more most my myself no nor not now of off on once only or other
-  our ours ourselves out over own same she should so some such than that the their theirs them themselves then there
-  these they this those through to too under until up very was we were what when where which while who whom why will
-  with would you your yours yourself yourselves`
-    .split(/\s+/)
-    .filter(Boolean)
-);
+export { ftsQuery };
 
-const WORD_RE = /[\p{L}\p{N}]+/gu;
-const words = (text) => Array.from(String(text || '').matchAll(WORD_RE), (match) => match[0].toLowerCase());
-const quote = (word) => `"${word.replaceAll('"', '""')}"`;
 const stripUrls = (text) =>
   String(text || '')
     .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
@@ -65,31 +56,6 @@ export function parseFtsOptions(spec = '') {
   if (!['raw', 'max', 'global'].includes(options.merge)) throw new Error(`merge ${options.merge}`);
   if (options.weights.length !== 3 || options.weights.some((w) => !(w > 0))) throw new Error('weights a:b:c');
   return options;
-}
-
-// The FTS5 query for a reader's words: the OR'd terms, and the phrases whose
-// rows rank first.
-export function ftsQuery(text, options) {
-  const phrases = [];
-  let rest = String(text || '');
-  if (options.query === 'phrase' || options.query === 'adjacent') {
-    rest = rest.replace(/["“”]([^"“”]+)["“”]/g, (_, span) => {
-      const spanWords = words(span);
-      if (spanWords.length > 1) phrases.push(spanWords);
-      return ` ${span} `;
-    });
-  }
-  let terms = words(rest);
-  if (options.query === 'adjacent' && !phrases.length && terms.length > 1) phrases.push(terms);
-  if (options.query !== 'or') {
-    const kept = terms.filter((word) => !STOPWORDS.has(word));
-    if (kept.length) terms = kept;
-  }
-  terms = [...new Set(terms)];
-  return {
-    match: terms.map(quote).join(' OR '),
-    phrases: phrases.map((spanWords) => spanWords.map(quote).join(' + '))
-  };
 }
 
 export function fts5Engine(spec = '') {

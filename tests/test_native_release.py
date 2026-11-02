@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from unittest.mock import Mock, call
 
+import pytest
 import yaml
 
 from pipeline.deploy.native_release import promotion
@@ -75,6 +76,7 @@ def test_routine_deploy_preserves_native_settings_and_accepts_first_bootstrap(mo
             podcast_corpus_key="artifacts/podcast_corpus.json",
             reference_corpus_key="artifacts/reference_corpus.json",
             links_corpus_key="artifacts/links_corpus.json",
+            keyword_index_key="artifacts/keyword_index.db",
             allowed_origin="https://thingy.thingelstad.com",
             thingy_magic_link_from_email="thingy@example.test",
             thingy_magic_link_base_url="https://thingy.thingelstad.com",
@@ -206,6 +208,7 @@ def test_prepare_publishes_the_corpus_versions_beside_the_build_id(tmp_path):
             "reference_corpus.json",
             "links_corpus.json",
             "graph.json",
+            "keyword_index.db",
         )
     }
     assert json.loads(parameters["NativeCorpusVersions"]) == versions
@@ -213,3 +216,42 @@ def test_prepare_publishes_the_corpus_versions_beside_the_build_id(tmp_path):
     expected = hashlib.sha256("\n".join([digest, digest, *versions.values()]).encode()).hexdigest()
     assert parameters["NativeBuildId"] == expected
     assert parameters["NativeWebEnabled"] == "true"
+
+
+def test_prepare_deploys_without_a_keyword_index_but_never_without_a_corpus(tmp_path):
+    # Before the first keyword index upload there is no object to version;
+    # the Lambda keeps its TF-IDF scan, so the deploy goes ahead without it.
+    # A missing corpus is still an error.
+    from botocore.exceptions import ClientError
+
+    from pipeline.deploy.native_release import prepare
+
+    def head(missing):
+        def head_object(Bucket, Key):
+            if Key == missing:
+                raise ClientError({"Error": {"Code": "404"}}, "HeadObject")
+            return {"VersionId": f"v-{Path(Key).stem}"}
+
+        return head_object
+
+    build_dir = tmp_path / "build"
+    build_dir.mkdir()
+    (tmp_path / "tmp").mkdir()
+
+    def zip_build(_source, archive):
+        archive.write_bytes(b"zip")
+
+    s3 = Mock()
+    s3.put_object.return_value = {"VersionId": "zip-version"}
+    s3.head_object.side_effect = head("artifacts/keyword_index.db")
+    parameters = {
+        p["ParameterKey"]: p["ParameterValue"]
+        for p in prepare(s3, {"NativeSourceBucketName": "src"}, {}, build_dir, tmp_path, zip_build)
+    }
+    versions = json.loads(parameters["NativeCorpusVersions"])
+    assert "artifacts/keyword_index.db" not in versions
+    assert "artifacts/corpus.json" in versions
+
+    s3.head_object.side_effect = head("artifacts/blog_corpus.json")
+    with pytest.raises(ClientError):
+        prepare(s3, {"NativeSourceBucketName": "src"}, {}, build_dir, tmp_path, zip_build)
