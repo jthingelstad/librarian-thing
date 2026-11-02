@@ -869,6 +869,34 @@ async function retrieveLexical(
   return result;
 }
 
+// Another keyword engine, given the rows the TF-IDF scan reads for a corpus
+// (the same objects every call, so it may index them once). It answers row
+// indexes best first with positive scores; the scan's filters, the limit and
+// the public shape are applied here, as retrieveLexical applies them.
+export type LexicalEngine = (
+  query: string,
+  kind: string,
+  rows: CorpusChunk[]
+) => Array<{ index: number; score: number }> | Promise<Array<{ index: number; score: number }>>;
+
+async function retrieveLexicalWith(
+  engine: LexicalEngine,
+  query: unknown,
+  limit: number,
+  kind: string,
+  keep: (chunk: CorpusChunk) => boolean
+): Promise<CorpusChunk[]> {
+  const rows = await indexedChunks(kind);
+  const result: CorpusChunk[] = [];
+  for (const { index, score } of await engine(String(query || ''), kind, rows)) {
+    const chunk = rows[index];
+    if (!chunk || !keep(chunk)) continue;
+    result.push({ ...publicChunk(chunk), _retrieval_score: score });
+    if (result.length >= limit) break;
+  }
+  return result;
+}
+
 export function parseYearRange(value: unknown): [number | null, number | null] {
   if (!value) return [null, null];
   if (Array.isArray(value) && value.length >= 2) return [Number(value[0]) || null, Number(value[1]) || null];
@@ -1388,6 +1416,10 @@ export async function retrieve(
     // Sees the fused pool before the rerank (the meaning eval measures
     // whether the answer reached the reranker at all).
     inspectPool?: (pool: CorpusChunk[]) => void;
+    // Replaces the TF-IDF scan with another keyword engine over the same
+    // rows (the eval measures SQLite full-text search this way). No caller
+    // passes it.
+    lexicalEngine?: LexicalEngine;
   } = {}
 ) {
   if (filters.category && !(filters.categoryPostIds instanceof Set)) {
@@ -1415,7 +1447,13 @@ export async function retrieve(
 
   const lexical: CorpusChunk[] = [];
   if (engines.has('lexical')) {
-    for (const [kind, keepIn] of pools) lexical.push(...(await retrieveLexical(query, candidateLimit, kind, keepIn)));
+    for (const [kind, keepIn] of pools) {
+      lexical.push(
+        ...(opts.lexicalEngine
+          ? await retrieveLexicalWith(opts.lexicalEngine, query, candidateLimit, kind, keepIn)
+          : await retrieveLexical(query, candidateLimit, kind, keepIn))
+      );
+    }
     lexical.sort(byScore);
   }
 

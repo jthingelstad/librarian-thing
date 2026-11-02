@@ -74,28 +74,65 @@ phrase matches only that phrase; `bm25()` takes column weights.
   `/retrieve` contract do not change. The in-memory TF-IDF index goes.
 - **Release:** an MCP version bump; the gate holds both sets.
 
-## Measure first (after the re-embed)
+## Measured (2026-11-02, on the v4 corpora)
 
-The measurement runs offline in the eval harness against the v4 corpora:
+`scripts/eval-meaning.mjs --lexical fts5:<options>` puts SQLite full-text
+search (`scripts/fts5-lexical.mjs`, built in memory with `node:sqlite`) in
+place of the TF-IDF leg; `retrieve()` takes it as `opts.lexicalEngine`,
+which nothing that serves readers passes. Source MRR, keyword set (161) and
+meaning set (282):
 
-1. Today's TF-IDF against FTS5 variants: `unicode61` against `porter`;
-   column weights for subject and section; what a full question becomes
-   (every term OR'd, stopwords dropped, a quoted span kept as a phrase).
-   FTS5's `bm25()` fixes k1 at 1.2 and b at 0.75; they are not tuned.
-2. Each one alone, fused with v4 (and other `lexicalWeight` values), and
-   fused then reranked, on the keyword set and the meaning set, with the
-   Weekly Thing pool recall.
-3. Pick the variant by the numbers. Ship only if the keyword set improves
-   and the meaning set's reranked order does not get worse.
+| Keyword leg | Alone: keyword / meaning | Fused: keyword / meaning | Reranked: keyword / meaning | Pool (meaning, WT) |
+|---|---|---|---|---|
+| TF-IDF (today) | 0.60 / 0.27 | 0.61 / 0.41 | 0.91 / 0.64 | 84%, 73% |
+| FTS5, chosen | 0.94 / 0.35 | 0.63 / 0.45 | 0.92 / 0.65 | 88%, 75% |
+| the same, `lexicalWeight` 0.5 | | 0.55 / 0.47 | 0.92 / 0.65 | 88%, 77% |
+
+Semantic alone is 0.43 / 0.54. The chosen variant: the `porter unicode61`
+tokenizer, stopwords dropped, the rest OR'd; a quoted span is a phrase, and
+an unquoted query of two or more words is one too, and rows holding a phrase
+rank first; equal weights for subject, section and text; and **one index
+over every corpus**. Alone on the keyword set:
+
+- **Stemming** carries the other form of a word (inflected 0.35 to 0.91);
+  without it 0.45.
+- **The in-order phrase** carries the passage's own wording (phrase 0.41 to
+  1.00, quoted 0.44 to 0.95). The phrase questions were cut to be unique
+  in the archive, so 1.00 flatters it.
+- **Subject and section weights** (3:2:1, 1:2:1) lift titles and cost
+  phrases and questions: worse overall. Stripping URLs from the text is a
+  wash.
+- **One index per corpus failed the small ones.** `retrieve()` sorts the
+  keyword lists of every corpus it scans together, and bm25 is computed
+  from each corpus's own word counts, so the podcast (one episode) fell from
+  1.00 to 0.00 to 0.50. Dividing each corpus's scores by its best restored
+  the podcast and cost reference and documents. One index over every
+  corpus shares one set of counts: podcast 1.00, documents 1.00, and the
+  best totals.
+
+**What it means for readers.** Every answer path reranks (only the welcome
+suggestions' grounding does not), and the reranker was already covering
+for the weak leg: with TF-IDF, 99% of the keyword answers reached its pool.
+So the reranked gain is small, +0.01 on each set, and the plan's rule
+holds: the keyword set improves and the meaning set's reranked order does
+not get worse. The answer reaches the reranker more often (84% to 88%;
+Weekly Thing 73% to 75%), and the unreranked order improves. The fusion
+weight stays 1: 0.5 helps the meaning set's fused order and costs the
+keyword set's, and reranked they are the same.
+
+**The cost side.** Today's TF-IDF index holds 176 MB of heap in every Lambda
+environment (peaks run 1.0 to 1.4 GB of 2 GB, `NATIVE-WEB.md`). One FTS5
+file over all 38,906 rows is 45 MB on disk, builds in under a second, opens
+in 1 ms, and answers a six-word OR query in about 3 ms (Node 26 on the
+Mac). The measurement cost about $2.65 of rerank calls (1,323 at $0.002)
+and a few thousand embedding tokens.
 
 ## Open questions
 
-- The index file's size, and the cold start's time to fetch and open it.
-- `/tmp` room on the Web Functions.
-- `node:sqlite` on the Lambda's own Node 24 build: the release probe asks a
-  keyword question of the candidate before it is promoted.
+- `node:sqlite` with FTS5 on the Lambda's own Node 24 build: the release
+  probe asks a keyword question of the candidate before it is promoted.
+- `/tmp` room on the Web Functions for a 45 MB file.
 
 ## Who builds
 
-Design and measurement here; the build is one PR for Codex, written from this
-plan and the measurement's numbers.
+Codex, from `BRIEF-2026-11-02-keyword-index-build.md`, as one PR.

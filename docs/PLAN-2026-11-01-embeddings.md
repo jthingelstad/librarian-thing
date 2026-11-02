@@ -375,7 +375,10 @@ direct 0.97 → 0.96.
   gains most. `PLAN-2026-11-01-keyword-search.md` is its plan, with the
   keyword set (built 2026-11-01) and today's leg measured on it.
 - **Weekly Thing's pool.** A quarter of its answers never reach the reranker.
-  Neither chunking nor fusion fixed it; the keyword leg is the next suspect.
+  Neither chunking nor fusion fixed it, and a far better keyword leg moves it
+  only from 73% to 75% (keyword plan, Measured, 2026-11-02): the keyword leg
+  is not the cause. What is left is the size of a source (one issue is one
+  source, and its chunks compete with each other); nothing is planned.
 - **CI reranks** since 2026-11-01 (Jamie: "Approved: grant the
   librarian-thing deploy role bedrock:Rerank on cohere.rerank-v3-5:0 through
   setup-oidc.sh apply"). Before, the candidate eval's rerank failed with
