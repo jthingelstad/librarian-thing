@@ -162,13 +162,21 @@
       "Resource": "arn:aws:wafv2:us-east-1:999153317627:global/webacl/edge/*"
     },
     {
-      "Sid": "LibrarianDoorAccessLogGroup",
+      "Sid": "LogGroupLookups",
       "Effect": "Allow",
       "Action": [
         "logs:DescribeLogGroups",
+        "logs:DescribeIndexPolicies",
+        "logs:DescribeResourcePolicies"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LibrarianDoorAccessLogGroup",
+      "Effect": "Allow",
+      "Action": [
         "logs:PutRetentionPolicy",
         "logs:GetDataProtectionPolicy",
-        "logs:DescribeIndexPolicies",
         "logs:TagResource",
         "logs:UntagResource",
         "logs:ListTagsForResource"

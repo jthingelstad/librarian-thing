@@ -25,7 +25,10 @@ bucket, native log-group and edge-policy lifecycle, and since 2026-11-02 the
 read, update and tagging (never creation or deletion) of librarian.thingelstad.com's
 distribution, its `/mcp` headers policy and its access log, plus `wafv2:GetWebACL`
 on the shared `edge` web ACL: CloudFront checks that as the caller on every update
-that carries `WebACLId`. It is separate because
+that carries `WebACLId`. CloudFormation's log group read handler lists log groups
+and resource policies at account level (`logs:DescribeLogGroups`,
+`logs:DescribeIndexPolicies`, `logs:DescribeResourcePolicies`, which name no
+single log group), so those three read-only lookups are on `*`. It is separate because
 adding it to the existing inline policies exceeds the role's 10 KiB limit.
 The OIDC policy adds immutable-source upload, the sole endpoint-policy writer and
 candidate health invocation. Existing stateful resources and trust stay unchanged.

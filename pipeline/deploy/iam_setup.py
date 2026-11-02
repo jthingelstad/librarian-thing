@@ -399,6 +399,12 @@ def simulate(session: boto3.Session) -> None:
                     f"arn:aws:wafv2:us-east-1:{ACCOUNT}:global/webacl/edge/x",
                     False,
                 ),
+                # CloudFormation's log group read lists at account level (the
+                # service checks log-group::log-stream:, CloudTrail 2026-11-02).
+                # The simulator models these three as "*"-only actions.
+                ("logs:DescribeLogGroups", "*", True),
+                ("logs:DescribeIndexPolicies", "*", True),
+                ("logs:DescribeResourcePolicies", "*", True),
                 ("logs:PutRetentionPolicy", f"{LOGS}:log-group:/librarian/web-access", True),
                 ("logs:DeleteLogGroup", f"{LOGS}:log-group:/librarian/web-access", False),
                 ("logs:UpdateDeliveryConfiguration", f"{LOGS}:delivery:Y4nZlxqO4ALlvbmu", True),
