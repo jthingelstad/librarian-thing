@@ -82,8 +82,7 @@ def test_every_item_leads_to_exactly_one_source(corpora):
         quote = item["answer_quote"]
         holders = {key for key, text in archive.text.items() if quote in text}
         assert item["target_source"] in holders
-        if item["kind"] in ("phrase", "quoted", "title"):
-            assert holders == {item["target_source"]}, item
+        assert holders == {item["target_source"]}, item
         if item["kind"] in ("name", "inflected", "question"):
             terms = item["terms"]
             pair = archive.holding([terms["name"].lower(), terms["word"]])
@@ -91,6 +90,7 @@ def test_every_item_leads_to_exactly_one_source(corpora):
             if item["kind"] == "inflected":
                 assert terms["typed"] != terms["word"]
                 assert terms["typed"] not in archive.text[item["target_source"]].split()
+                assert not archive.holding([terms["name"].lower(), terms["typed"]])
 
 
 def test_quoted_items_are_phrases_in_quotes(corpora):
@@ -110,3 +110,28 @@ def test_document_questions_stay_private(corpora):
     assert all(item["corpus"] != "document" for item in public)
     assert all(item["corpus"] == "document" for item in private)
     assert all(item["id"].startswith("kp") for item in private)
+
+
+def test_an_inflected_pair_has_no_competing_source(tmp_path, monkeypatch):
+    # Post 1 holds "Kasparov session", post 2 "Kasparov sessions": asking
+    # "Kasparov sessions" of post 1 would mark a right answer wrong.
+    monkeypatch.setattr(keyword, "PAIR_MAX_SHARE", 1.0)
+    texts = [
+        "Kasparov ran one session at the club downtown with friends today.",
+        "Kasparov ran two sessions at the club with other friends today.",
+        "Kasparov again at the club today with friends and nothing else.",
+        "A session at the club with friends today and nothing else.",
+        "More sessions at the club with friends today and nothing else.",
+        "The club met today with friends and talked about a session.",
+    ]
+    (tmp_path / "blog_corpus.json").write_text(
+        json.dumps({"chunks": [chunk(index, text) for index, text in enumerate(texts, 1)]})
+    )
+    corpora = meaning.Corpora(tmp_path)
+    archive = keyword.Archive(corpora)
+    # Without the competing source, post 1's pair would qualify.
+    assert archive.holding(["kasparov", "session"]) == {"blog:1"}
+    assert archive.holding(["kasparov", "sessions"]) == {"blog:2"}
+    for post in corpora.chunks["blog"][:2]:
+        found = keyword.name_pair(archive, post, random.Random(1), inflected=True)
+        assert not found or found[1] not in ("session", "sessions"), found

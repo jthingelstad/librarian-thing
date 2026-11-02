@@ -166,6 +166,12 @@ class Archive:
     def holding_phrase(self, phrase: str, words: list[str]) -> set[str]:
         return {key for key in self.holding(words) if phrase in self.text[key]}
 
+    def holding_quote(self, quote: str) -> set[str]:
+        words = TOKEN_RE.findall(quote)
+        if words:
+            return self.holding_phrase(quote, words)
+        return {key for key, text in self.text.items() if quote in text}
+
 
 def target_fields(chunk: dict[str, Any]) -> dict[str, Any]:
     return {field: chunk[field] for field in meaning.IDENTITY_FIELDS if chunk.get(field)}
@@ -258,6 +264,10 @@ def name_pair(archive: Archive, chunk: dict[str, Any], rng: random.Random, infle
                         continue
                     if re.search(rf"\b{re.escape(typed)}\b", archive.text[key]):
                         continue
+                    # A source with the name and the typed form competes:
+                    # a stemming search rightly finds both.
+                    if archive.holding([lowered, typed]):
+                        continue
                 if archive.holding([lowered, word]) != {key}:
                     continue
                 first, last = sorted((place, index))
@@ -305,10 +315,15 @@ def title_item(archive: Archive, group: str, chunk: dict[str, Any], rng: random.
     words = TOKEN_RE.findall(folded)
     if archive.holding_phrase(folded, words) != {meaning.source_key(chunk)}:
         return None
-    opening = meaning.normalize(chunk.get("text") or "").split(" ")[:8]
-    if len(opening) < 4:
-        return None
-    return make_item(group, kind, chunk, title, " ".join(opening))
+    # The first eight words no other source holds: pages in a series open
+    # alike, and a span hit counts any source that holds the quote.
+    words_in = meaning.normalize(chunk.get("text") or "").split(" ")
+    key = meaning.source_key(chunk)
+    for start in range(0, max(len(words_in) - 7, 0)):
+        quote = " ".join(words_in[start : start + 8])
+        if archive.holding_quote(quote) == {key}:
+            return make_item(group, kind, chunk, title, quote)
+    return None
 
 
 BUILDERS = {
@@ -360,6 +375,8 @@ def build(corpora: meaning.Corpora, seed: int) -> tuple[list[dict], list[dict]]:
                         continue
                     if item["answer_quote"] not in meaning.normalize(chunk.get("text") or ""):
                         raise AssertionError(f"{item['question']!r}: quote not in its chunk")
+                    if archive.holding_quote(item["answer_quote"]) != {key}:
+                        raise AssertionError(f"{item['question']!r}: quote in another source")
                     used.add(key)
                     (private if group == "document" else public).append(item)
                     made += 1

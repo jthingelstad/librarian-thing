@@ -23,7 +23,8 @@ of the Weekly Thing answers never reach the reranker's pool.
 
 `pipeline/eval/build_keyword_set.py` cuts questions from the archive by rule,
 with no model, so it is free to rebuild. Each one leads to exactly one source
-in all five corpora. It writes `apps/librarian/lambda/eval/keyword-set.json`
+in all five corpora, and so does its answer quote (Codex review, #113). It
+writes `apps/librarian/lambda/eval/keyword-set.json`
 (150 questions) and, for the unpublished reference documents,
 `tmp/eval/keyword-set-private.json` (11, never committed). The items have the
 meaning set's shape, so `scripts/eval-meaning.mjs --set eval/keyword-set.json`
@@ -43,10 +44,11 @@ source MRR:
 
 | | phrase | quoted | name | inflected | title | question | all |
 |---|---|---|---|---|---|---|---|
-| all corpora | 0.34 | 0.42 | 0.73 | 0.42 | 0.87 | 0.45 | **0.57** |
+| all corpora | 0.37 | 0.44 | 0.76 | 0.31 | 0.87 | 0.52 | **0.58** |
 
-By corpus: Weekly Thing 0.48 (phrase 0.21, question 0.28), blog 0.54,
-reference 0.57, links 0.69. Weekly Thing is weakest, as the meaning set's pool
+By corpus: Weekly Thing 0.48 (phrase 0.21, question 0.20), blog 0.56,
+reference 0.53, links 0.72. A word in its other form is found first only 6%
+of the time. Weekly Thing is weakest, as the meaning set's pool
 recall said: one source is a whole issue, and common words drown in it.
 
 ## The design
