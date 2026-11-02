@@ -21,7 +21,11 @@ exceptional local operation requiring valid AWS credentials.
 
 `native-cloudformation.json` is installed as `WeeklyThingLibrarianNativeCloudFormation`
 on the existing CloudFormation role. It contains native compute, retained source
-bucket, native log-group and edge-policy lifecycle only. It is separate because
+bucket, native log-group and edge-policy lifecycle, and since 2026-11-02 the
+read, update and tagging (never creation or deletion) of librarian.thingelstad.com's
+distribution, its `/mcp` headers policy and its access log, plus `wafv2:GetWebACL`
+on the shared `edge` web ACL: CloudFront checks that as the caller on every update
+that carries `WebACLId`. It is separate because
 adding it to the existing inline policies exceeds the role's 10 KiB limit.
 The OIDC policy adds immutable-source upload, the sole endpoint-policy writer and
 candidate health invocation. Existing stateful resources and trust stay unchanged.
@@ -39,7 +43,7 @@ See `apps/librarian/infra/NATIVE-WEB.md` for release ordering and rollback.
 - `cloudformation.json`: service control-plane operations for the existing
   Librarian resources. No table-item reads or writes. API and event-source
   mapping identifiers are deliberately pinned to production: replacing those
-  resources or enabling the optional CloudFront distribution needs a reviewed
+  resources or creating a CloudFront distribution needs a reviewed
   administrator policy update first.
 - `cloudformation-iam.json`: only the application's two role-name families.
   New roles must have the corresponding reviewed permissions boundary. The
@@ -90,6 +94,9 @@ CloudFormation service role, and replaces the OIDC role's legacy attachments.
 `deploy.json` as a new default version of `WeeklyThingLibrarianDeployScoped`
 and verifies: the step for a reviewed change to CI's access, such as the
 library's object on 2026-10-22.
+`native-policy` does the same for `native-cloudformation.json`
+(`WeeklyThingLibrarianNativeCloudFormation`, on the CloudFormation role), as for
+the librarian.thingelstad.com import on 2026-11-02.
 `verify` compares live IAM policies and trust with source. Never widen the
 standing auditor merely to get past an access denial; use an authorized reader.
 

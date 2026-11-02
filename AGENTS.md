@@ -96,7 +96,7 @@ The Lambda lives in `apps/librarian/`. For Lambda work, read
 npm --prefix apps/librarian/lambda test
 ```
 
-librarian.thingelstad.com is outside the stack: `apps/librarian/lambda/scripts/front-door.mjs` writes it and keeps projects-sysadmin's shared `edge` web ACL (count mode, export `edge-waf-WebAclArn`) on it (`infra/NATIVE-WEB.md`).
+librarian.thingelstad.com is `LibrarianDistribution` in the stack (imported 2026-11-02, Retain), with its access log and projects-sysadmin's shared `edge` web ACL (count mode, export `edge-waf-WebAclArn`); change it in the template (`apps/librarian/infra/NATIVE-WEB.md`).
 
 Deploy code-only Librarian changes with the corpus upload skipped:
 
