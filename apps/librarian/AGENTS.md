@@ -92,9 +92,9 @@ The site's form calls this before anything reaches Buttondown. Since
   `weekly-thing-librarian-sign-in-failures`, watches web-auth's live 5xx
   count (`AWS/Lambda/Web` `HTTPResponseStatusClass5XX`): two five-minute
   windows with a 5xx inside an hour. Members sign in to Thingy and Release
-  Notes through `/auth`, and each our-side failure there answers 5xx (the
-  MCP connector's `/authorize` pages answer a failed lookup with a 200 page,
-  so they are not counted);
+  Notes through `/auth` and to the MCP connector through `/authorize`, and
+  each our-side failure in either answers 5xx (the `/authorize` pages answer
+  a failed Buttondown lookup with a 502 page since 2026-11-03);
   a Buttondown lookup failure on the redeem step and a failed sign-in email
   are in no metric filter, which is why it is the 5xx count and not
   `LibrarianButtondownFailures`.

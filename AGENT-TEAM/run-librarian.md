@@ -32,6 +32,7 @@ alarm and incident follow-ups are explicit starts.
    `WeeklyThingLibrarian` failure metrics, and the digest Lambda's errors.
    When the sign-in alarm fires, read web-auth's log for
    `buttondown_lookup_failed`, `auth_magic_link_buttondown_lookup_failed`,
+   `oauth_authorize_buttondown_lookup_failed` (the MCP connector's sign-in),
    `auth_magic_link_send_failed`, `runtime_secrets_*` and `request_failed`;
    never sign in as a member to test it.
 3. Review structured `logEvent` JSON in the Lambda log groups. Retention is 30
