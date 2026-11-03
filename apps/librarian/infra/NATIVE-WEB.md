@@ -83,8 +83,8 @@ User-Agent is forwarded by both origin request policies and is in no cache
 policy. Retired routes (`/curiosity-map`) have no behavior. Native responses are no-store unless a route sets its own
 cache-control on a GET/HEAD with no Authorization, Cookie, Origin or query
 string and no Set-Cookie (`responseCacheControl` in `lambda/web/server.mts`).
-`weekly-thing-librarian-distribution-5xx` watches this distribution's
-5xxErrorRate (over 5% in two of three five-minute windows).
+No alarm watches this distribution since 2026-11-03; its 5xxErrorRate is a
+standard CloudFront metric and its access logs are in CloudWatch Logs.
 
 For a rollback, preserve current artifact parameters and set live revision IDs
 to the protected previous native IDs through CloudFormation, then read both
@@ -101,6 +101,7 @@ CORS, corpus single-flight failure/retry, and exact retrieval behavior. Run live
 retrieval goldens and read-only OAuth/MCP probes after deployment. Never sign in,
 send email, modify conversations or create reader records as production QA.
 
-Native error, capacity and rate alarms feed the existing ops topic. Application
-filters also follow native log groups; evaluator/DLQ and digest alarms remain.
+This stack has no CloudWatch alarms since 2026-11-03 (Jamie kept a handful
+account-wide, none here). Application metric filters follow the native log
+groups; native 5xx, capacity and rate are standard Lambda Web metrics.
 Web Function control-plane Active state does not establish HTTP readiness.

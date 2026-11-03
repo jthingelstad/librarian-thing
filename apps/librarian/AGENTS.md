@@ -84,9 +84,10 @@ The site's form calls this before anything reaches Buttondown. Since
   attempt of the last day that did not end on the list, plus subscribers the
   firewall accepted-as-blocked, or nothing on a clean day
   (`shared/subscribe-digest.mts`, via JMAP from the magic-link sender).
-- **Our-side failures alarm.** `LibrarianSubscribeFailuresAlarm` counts
-  lookup/create/reminder/ledger failures (not suppressions) and goes to the
-  ops queue within the hour.
+- **Our-side failures metric.** The `LibrarianSubscribeFailures` metric
+  counts lookup/create/reminder/ledger failures (not suppressions). Its alarm
+  was retired 2026-11-03 with the rest of this stack's alarms; the morning
+  digest and the structured logs carry them.
 - **Firewalled is not subscribed (2026-10-14).** Buttondown answers a create
   its firewall catches with 2xx and files the address as `type: blocked`.
   The ledger records `blocked` (it said `subscribed` before, and the digest
@@ -298,7 +299,7 @@ resolved into plaintext configuration. A new credential goes into the secret (by
 | `LIBRARIAN_SOURCE_REVISION` | both | Set by CFN to `NativeBuildId` (a digest of the two native bundles and the corpus object versions: the six corpora and, once uploaded, the keyword index); stamped onto tool traces and reported by `/health` as `source_revision` |
 | `LIBRARIAN_CORPUS_VERSIONS` | both | Set by CFN to `NativeCorpusVersions`, the corpus object versions `NativeBuildId` was computed from (`{"artifacts/<name>": "<VersionId>"}`); `/health` reports it as `corpus_versions` (`shared/build-info.mts`), and the sync page compares it with the objects' current versions to say whether Thingy serves the newest corpus. Null when unset |
 | `CHAT_DAILY_QUOTA`, `MCP_DAILY_QUOTA`, `WEB_TOOLS_DAILY_QUOTA` | both | Optional overrides; defaults 50 / 500 / 200 per reader per day (doubled for supporting members, owner exempt) |
-| `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker and trips the `LibrarianGuestBreakerAlarm`. Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
+| `THINGY_GUEST_CHAT`, `GUEST_DAILY_QUOTA`, `GUEST_GLOBAL_DAILY_QUOTA` | stream | Guest chat lane (2026-09): `off` is the kill switch; per-visitor (3) and global (25, lowered from 100 after the 2026-09-02 scraper fleet) daily caps, both FAIL-CLOSED (`consumeDailyQuotaStrict`) - the global cap is the dollar circuit breaker (it counts `LibrarianGuestBreakerTrips`; its alarm was retired 2026-11-03). Guest `/chat` additionally requires the `X-Thingy-Origin` marker when `THINGY_WEB_ORIGIN_TOKEN` is configured (`guestOriginOk`) - direct-to-Lambda guest traffic is rejected `guest_origin_required` before any quota spend |
 | `LIBRARIAN_OAUTH_ISSUER` | auth | Optional; OAuth issuer, default `https://librarian.thingelstad.com` |
 
 ## Model gotchas
