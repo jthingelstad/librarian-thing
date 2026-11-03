@@ -56,6 +56,9 @@ OUT_DIR = REPO / "tmp" / "blog-round"
 BLOG_KINDS = ("post", "micropost")
 # Labels that keep a post off Featured whatever its numbers (plan, "Featured").
 NOT_FEATURED = frozenset({"link", "photo", "quote", "checkin", "automated"})
+# Before this, an alt edit replaced only the body and micro.blog emptied the
+# post's categories (31 posts, 10-22 to 10-28); from here it sends them too.
+ALT_KEPT_CATEGORIES_SINCE = "2026-11-03T13:15:00Z"
 FEATURED_AFTER_DAYS = 7
 
 
@@ -191,19 +194,33 @@ class Round:
 
     def lost_to_alt(self) -> list[dict[str, Any]]:
         """Drifted posts whose categories the round's own alt edit emptied:
-        live is empty, the filing is the Librarian's (never Jamie-set), and
-        the round wrote an alt to the post. micro.blog emptied them on a
-        content-only replace; the restore writes the filing back."""
-        alt_edited = {
-            json.loads(row["before"]).get("source_id")
+        live is empty, the filing is the Librarian's (never Jamie-set), the
+        round wrote an alt to the post before alt edits carried categories
+        (``ALT_KEPT_CATEGORIES_SINCE``), and no category write has reached the
+        post since. A post emptied any other way is someone else's change."""
+        last_alt: dict[str, str] = {}
+        for row in self.conn.execute(
+            "SELECT at, before FROM events WHERE action = 'alt' AND dry_run = 0 "
+            "AND result = 'ok' AND at < ?",
+            (ALT_KEPT_CATEGORIES_SINCE,),
+        ):
+            source_id = json.loads(row["before"]).get("source_id")
+            last_alt[source_id] = max(last_alt.get(source_id, ""), row["at"])
+        written_since = {
+            row["target"]
             for row in self.conn.execute(
-                "SELECT before FROM events WHERE action = 'alt' AND dry_run = 0 AND result = 'ok'"
+                "SELECT target, at FROM events WHERE action = 'categories' AND dry_run = 0"
             )
+            if row["target"] in last_alt and row["at"] > last_alt[row["target"]]
         }
         return [
             {"source_id": d["source_id"], "url": d["url"], "filed": d["filed"]}
             for d in self.drift()
-            if not d["live"] and d["filed"] and not d["jamie_set"] and d["source_id"] in alt_edited
+            if not d["live"]
+            and d["filed"]
+            and not d["jamie_set"]
+            and d["source_id"] in last_alt
+            and d["source_id"] not in written_since
         ]
 
     # Categories.

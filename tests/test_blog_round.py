@@ -571,6 +571,20 @@ class WriteTests(Library):
         said = self.work.write({"restore": lost})
         self.assertIn("left alone", said["left"][0])
 
+    def test_restore_ignores_alt_edits_made_after_the_fix_and_restored_posts(self):
+        self._emptied_by_alt()
+        self.conn.execute("UPDATE events SET at = '2026-11-04T10:00:00Z' WHERE action = 'alt'")
+        self.conn.commit()
+        self.assertEqual(self.work.lost_to_alt(), [])
+        self.conn.execute("UPDATE events SET at = '2026-10-28T10:09:40Z' WHERE action = 'alt'")
+        self.conn.execute(
+            "INSERT INTO events (at, run, action, target, before, after, dry_run, result) "
+            "VALUES ('2026-11-03T15:00:00Z', 'r', 'categories', 'blog-100', '[]', "
+            "'[\"Family\"]', 0, 'ok')"
+        )
+        self.conn.commit()
+        self.assertEqual(self.work.lost_to_alt(), [])
+
     def test_restore_ignores_drift_with_no_alt_edit(self):
         self.conn.execute("UPDATE sources SET categories = '[]' WHERE id = 'blog-100'")
         self.conn.commit()
