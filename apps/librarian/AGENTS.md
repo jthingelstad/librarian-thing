@@ -88,6 +88,16 @@ The site's form calls this before anything reaches Buttondown. Since
   counts lookup/create/reminder/ledger failures (not suppressions). Its alarm
   was retired 2026-11-03 with the rest of this stack's alarms; the morning
   digest and the structured logs carry them.
+- **Sign-in alarm (2026-11-03).** The stack's one alarm,
+  `weekly-thing-librarian-sign-in-failures`, watches web-auth's live 5xx
+  count (`AWS/Lambda/Web` `HTTPResponseStatusClass5XX`): two five-minute
+  windows with a 5xx inside an hour. Members sign in to Thingy and Release
+  Notes through `/auth`, and each our-side failure there answers 5xx (the
+  MCP connector's `/authorize` pages answer a failed lookup with a 200 page,
+  so they are not counted);
+  a Buttondown lookup failure on the redeem step and a failed sign-in email
+  are in no metric filter, which is why it is the 5xx count and not
+  `LibrarianButtondownFailures`.
 - **Firewalled is not subscribed (2026-10-14).** Buttondown answers a create
   its firewall catches with 2xx and files the address as `type: blocked`.
   The ledger records `blocked` (it said `subscribed` before, and the digest

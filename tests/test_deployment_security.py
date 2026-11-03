@@ -321,7 +321,7 @@ def test_only_the_authorize_policy_forwards_a_cookie_and_only_thingy_email():
         }
 
 
-def test_eval_failures_still_reach_the_dlq_and_the_stack_has_no_alarms():
+def test_eval_failures_still_reach_the_dlq_and_sign_in_is_the_one_alarm():
     template = yaml.load(
         (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
     )
@@ -329,9 +329,32 @@ def test_eval_failures_still_reach_the_dlq_and_the_stack_has_no_alarms():
     mapping = resources["LibrarianEvalEventSource"]["Properties"]
     assert mapping["MaximumRetryAttempts"] == "3"
     assert mapping["DestinationConfig"]["OnFailure"]["Destination"] == "LibrarianEvalDlq.Arn"
-    # Every alarm in this stack was retired 2026-11-03 (Jamie kept a handful
-    # account-wide, none here). The topic stays: sibling site stacks name it.
-    assert not [n for n, r in resources.items() if r["Type"] == "AWS::CloudWatch::Alarm"]
+    # Every alarm in this stack was retired 2026-11-03 and the sign-in alarm
+    # came back the same day (Jamie: "add a Librarian sign-in failure
+    # alarm"). It is the only one, and it watches one AWS-vended metric:
+    # the account's ten free alarm metrics are a budget shared by every
+    # project, so no metric math and no second metric.
+    alarms = [n for n, r in resources.items() if r["Type"] == "AWS::CloudWatch::Alarm"]
+    assert alarms == ["LibrarianSignInFailuresAlarm"]
+    alarm = resources["LibrarianSignInFailuresAlarm"]
+    props = alarm["Properties"]
+    assert alarm["Condition"] == resources["NativeAuthFunction"]["Condition"]
+    assert "Metrics" not in props
+    assert props["Namespace"] == "AWS/Lambda/Web"
+    assert props["MetricName"] == "HTTPResponseStatusClass5XX"
+    assert props["Dimensions"] == [
+        {"Name": "FunctionName", "Value": "${AWS::StackName}-web-auth"},
+        {"Name": "EndpointName", "Value": "live"},
+    ]
+    # One reader's failed attempt does not page; two five-minute windows
+    # with a 5xx inside an hour does.
+    assert (props["Period"], props["EvaluationPeriods"], props["DatapointsToAlarm"]) == (
+        "300",
+        "12",
+        "2",
+    )
+    assert props["TreatMissingData"] == "notBreaching"
+    assert props["AlarmActions"] == ["LibrarianAlarmTopic"]
     assert resources["LibrarianAlarmTopic"]["Properties"]["TopicName"] == (
         "weekly-thing-librarian-alarms"
     )

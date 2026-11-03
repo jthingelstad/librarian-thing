@@ -24,10 +24,16 @@ alarm and incident follow-ups are explicit starts.
    revision weights, private IAM auth and disabled auto deployment. Follow
    `apps/librarian/infra/NATIVE-WEB.md`; control-plane Active state alone is
    not HTTP acceptance.
-2. This stack has no CloudWatch alarms since 2026-11-03 (Jamie kept a
-   handful account-wide, none here), so read the signals directly: the eval
-   DLQ (`weekly-thing-librarian-eval-dlq`) depth, the `WeeklyThingLibrarian`
-   failure metrics, and the digest Lambda's errors.
+2. This stack has one CloudWatch alarm since 2026-11-03,
+   `weekly-thing-librarian-sign-in-failures` (web-auth answered a 5xx in two
+   five-minute windows within an hour; it posts to #needs-jamie and the
+   projects-ops-alerts queue). For everything else read the signals
+   directly: the eval DLQ (`weekly-thing-librarian-eval-dlq`) depth, the
+   `WeeklyThingLibrarian` failure metrics, and the digest Lambda's errors.
+   When the sign-in alarm fires, read web-auth's log for
+   `buttondown_lookup_failed`, `auth_magic_link_buttondown_lookup_failed`,
+   `auth_magic_link_send_failed`, `runtime_secrets_*` and `request_failed`;
+   never sign in as a member to test it.
 3. Review structured `logEvent` JSON in the Lambda log groups. Retention is 30
    days, so evidence expires — group warning/error signatures each run,
    including the `oauth_*` warning family.
