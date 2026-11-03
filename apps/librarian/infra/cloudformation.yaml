@@ -381,39 +381,13 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !GetAtt LibrarianSubscribeDigestRule.Arn
 
-  # A subscribe that failed on OUR side - Buttondown down, a lookup or create
-  # that timed out, the ledger unwritable - is infrastructure, and goes to the
-  # ops queue the same hour. A suppressed address is not counted here: that
-  # is a person for Jamie, and the morning digest carries it.
-  #
-  # None of the metric filters in this stack sets DefaultValue (2026-09-24).
-  # A default writes a zero on every log event, which bills the metric for
-  # every hour the function logs anything; without one a metric exists only
-  # in the hours something matched, and the alarms (TreatMissingData
-  # notBreaching) fire exactly as before. A metric here exists to back an
-  # alarm; there is no dashboard, since no one reads CloudWatch by hand.
-  LibrarianSubscribeFailuresAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: A Weekly Thing subscribe failed on our side (Buttondown or the ledger). The address is in the subscribe ledger.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianSubscribeFailures
-      Statistic: Sum
-      Period: 3600
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # Alarms previously had no AlarmActions - they fired into the void and
-  # nobody was notified when Thingy broke. Everything routes here now.
-  # Delivery is the sysadmin AGENT-TEAM's projects-ops-alerts SQS queue
-  # (subscription managed in projects-sysadmin; the Operator drains it
-  # daily). The direct email subscription was removed 2026-09-03 - it
-  # duplicated the queue into Jamie's inbox.
+  # This stack's own alarms were retired 2026-11-03 (Jamie cut the account to
+  # a handful of alarms; nobody acted on these). The topic stays: it is free,
+  # sibling site stacks name it, and its projects-ops-alerts SQS subscription
+  # is managed in projects-sysadmin. Failures stay in the structured logs and
+  # this stack's metric filters. None of the filters sets DefaultValue
+  # (2026-09-24): a default writes a zero on every log event and bills the
+  # metric for every hour the function logs anything.
   LibrarianAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -427,63 +401,6 @@ Resources:
     Properties:
       QueueName: weekly-thing-librarian-eval-dlq
       MessageRetentionPeriod: 1209600
-
-  LibrarianEvalDlqAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy eval stream mapping dead-lettered a record.
-      Namespace: AWS/SQS
-      MetricName: ApproximateNumberOfMessagesVisible
-      Dimensions:
-        - Name: QueueName
-          Value: !GetAtt LibrarianEvalDlq.QueueName
-      Statistic: Maximum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # Handled stream/retrieval exceptions need outcome monitoring because
-  # the runtime answers the reader and returns normally. Routine request
-  # refusals remain in structured logs, without a separate paid counter.
-  LibrarianStreamFailuresAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Thingy stream Lambda answered a request with a handled server-side failure.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianStreamHandledFailures
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # The guest circuit breaker tripping is worth knowing about the day it
-  # happens - either Thingy is having a moment (raise the cap) or someone
-  # is farming the guest lane (leave it, or flip THINGY_GUEST_CHAT off).
-  LibrarianGuestBreakerAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: The Thingy guest-chat global daily circuit breaker tripped.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianGuestBreakerTrips
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
 
   BedrockEvaluationRole:
     Type: AWS::IAM::Role
@@ -540,67 +457,6 @@ Resources:
                   - arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0
                   - arn:aws:bedrock:us-west-2::foundation-model/anthropic.claude-opus-4-6-v1
 
-
-  # A dead archive tool (S3 corpus, rerank region) degrades
-  # every answer while the loop works around it - the handled-failures
-  # alarm never fires for this.
-  LibrarianToolFailuresAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Archive tools are failing inside the chat loop - answers are degrading silently.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianToolFailures
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 5
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # A Buttondown outage silently degrades sign-in and entitlement checks.
-  LibrarianButtondownFailuresAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Buttondown lookups are failing - sign-in and entitlement verification are degraded.
-      Namespace: WeeklyThingLibrarian
-      MetricName: LibrarianButtondownFailures
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 3
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # The one shared table backs rate limits, quotas, sessions, and
-  # conversations; a throttle brownout CHANGES SECURITY BEHAVIOR (guest
-  # lane fails closed, reader quota fails open) - it must alarm.
-  LibrarianTableThrottlesAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: The Librarian DynamoDB table is throttling requests.
-      Namespace: AWS/DynamoDB
-      MetricName: ThrottledRequests
-      Dimensions:
-        - Name: TableName
-          Value: !Ref LibrarianTable
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      DatapointsToAlarm: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions:
-        - !Ref LibrarianAlarmTopic
-
-  # Stream duration creep toward the 300s cap is invisible until it
-  # becomes timeouts; the app deadline is 180s.
   NativeSourceBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
@@ -878,140 +734,6 @@ Resources:
       Role: !GetAtt LibrarianFunctionRole.Arn
       Runtime: nodejs24.x
       Timeout: 35
-
-  NativeAuthErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-auth-errors'
-      Namespace: AWS/Lambda/Web
-      MetricName: HTTPResponseStatusClass5XX
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
-        - { Name: EndpointName, Value: live }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  NativeAuthCapacityAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-auth-capacity'
-      Namespace: AWS/Lambda/Web/Usage
-      MetricName: EndpointActiveEnvironmentThrottles
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
-        - { Name: EndpointName, Value: live }
-        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  NativeAuthRateAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-auth-rate'
-      Namespace: AWS/Lambda/Web/Usage
-      MetricName: EndpointRequestThrottles
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
-        - { Name: EndpointName, Value: live }
-        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  NativeArchiveErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-archive-errors'
-      Namespace: AWS/Lambda/Web
-      MetricName: HTTPResponseStatusClass5XX
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
-        - { Name: EndpointName, Value: live }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  NativeArchiveCapacityAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-archive-capacity'
-      Namespace: AWS/Lambda/Web/Usage
-      MetricName: EndpointActiveEnvironmentThrottles
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
-        - { Name: EndpointName, Value: live }
-        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  NativeArchiveRateAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-web-archive-rate'
-      Namespace: AWS/Lambda/Web/Usage
-      MetricName: EndpointRequestThrottles
-      Dimensions:
-        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-archive' }
-        - { Name: EndpointName, Value: live }
-        - { Name: ExecutionRegion, Value: !Ref AWS::Region }
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
-  # librarian.thingelstad.com's 5xx rate. Same shape as
-  # thingy-web-distribution-5xx. CloudFront metrics live in us-east-1.
-  LibrarianDistributionErrorAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: NativeWebActive
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-distribution-5xx'
-      AlarmDescription: CloudFront returned more than 5% 5xx responses for librarian.thingelstad.com in two of three five-minute windows.
-      Namespace: AWS/CloudFront
-      MetricName: 5xxErrorRate
-      Dimensions:
-        - { Name: DistributionId, Value: !Ref LibrarianDistribution }
-        - { Name: Region, Value: Global }
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 3
-      DatapointsToAlarm: 2
-      Threshold: 5
-      ComparisonOperator: GreaterThanThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
 
   NativeLibrarianSubscribeFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
@@ -1353,21 +1075,6 @@ Resources:
     Properties:
       LogGroupName: !Sub '/aws/lambda/${LibrarianDigestFunction}'
       RetentionInDays: 30
-  LibrarianDigestErrorsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: !Sub '${AWS::StackName}-digest-errors'
-      Namespace: AWS/Lambda
-      MetricName: Errors
-      Dimensions: [{ Name: FunctionName, Value: !Ref LibrarianDigestFunction }]
-      Statistic: Sum
-      Period: 300
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
-      AlarmActions: [!Ref LibrarianAlarmTopic]
-
   LibrarianDigestHandledFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
     Properties:

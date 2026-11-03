@@ -270,7 +270,7 @@ def test_bucket_bootstrap_keeps_logs_and_old_builds_one_month(monkeypatch) -> No
     assert "someone-elses-rule" in rules
 
 
-def test_digest_handled_failure_still_feeds_subscription_alarm():
+def test_digest_handled_failure_still_feeds_the_subscribe_failures_metric():
     template = yaml.load(
         (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
     )
@@ -281,14 +281,12 @@ def test_digest_handled_failure_still_feeds_subscription_alarm():
         if resource["Type"] == "AWS::Logs::MetricFilter"
         and resource["Properties"]["LogGroupName"] == "LibrarianDigestLogGroup"
     ]
-    assert any("subscribe_digest_blocked_list_failed" in f["FilterPattern"] for f in filters)
     metric = next(
         f for f in filters if "subscribe_digest_blocked_list_failed" in f["FilterPattern"]
     )
     transformation = metric["MetricTransformations"][0]
-    alarm = resources["LibrarianSubscribeFailuresAlarm"]["Properties"]
-    assert transformation["MetricNamespace"] == alarm["Namespace"]
-    assert transformation["MetricName"] == alarm["MetricName"]
+    assert transformation["MetricNamespace"] == "WeeklyThingLibrarian"
+    assert transformation["MetricName"] == "LibrarianSubscribeFailures"
 
 
 def test_only_the_authorize_policy_forwards_a_cookie_and_only_thingy_email():
@@ -323,7 +321,7 @@ def test_only_the_authorize_policy_forwards_a_cookie_and_only_thingy_email():
         }
 
 
-def test_alarm_retirement_preserves_final_failures_and_guest_budget():
+def test_eval_failures_still_reach_the_dlq_and_the_stack_has_no_alarms():
     template = yaml.load(
         (ROOT / "apps/librarian/infra/cloudformation.yaml").read_text(), Loader=yaml.BaseLoader
     )
@@ -331,33 +329,12 @@ def test_alarm_retirement_preserves_final_failures_and_guest_budget():
     mapping = resources["LibrarianEvalEventSource"]["Properties"]
     assert mapping["MaximumRetryAttempts"] == "3"
     assert mapping["DestinationConfig"]["OnFailure"]["Destination"] == "LibrarianEvalDlq.Arn"
-    alarm = resources["LibrarianEvalDlqAlarm"]["Properties"]
-    assert alarm["MetricName"] == "ApproximateNumberOfMessagesVisible"
-    assert alarm["Dimensions"][0]["Value"] == "LibrarianEvalDlq.QueueName"
-    assert alarm["Threshold"] == "1"
-    for name in (
-        "LibrarianEvalDlqAlarm",
-        "LibrarianStreamFailuresAlarm",
-        "LibrarianToolFailuresAlarm",
-        "LibrarianButtondownFailuresAlarm",
-        "LibrarianSubscribeFailuresAlarm",
-        "LibrarianGuestBreakerAlarm",
-        "NativeAuthErrorsAlarm",
-        "NativeArchiveErrorsAlarm",
-        "NativeAuthCapacityAlarm",
-        "NativeArchiveCapacityAlarm",
-    ):
-        assert resources[name]["Properties"]["AlarmActions"] == ["LibrarianAlarmTopic"]
-    # Rejections still happen in the runtime; paying for a second counter is
-    # not needed to retain the independent service-failure and budget controls.
-    for name in (
-        "LibrarianEvalErrorsAlarm",
-        "LibrarianChatRejectionsAlarm",
-        "LibrarianGuestOriginAlarm",
-        "LibrarianAuthAbuseAlarm",
-        "LibrarianOauthFailuresAlarm",
-    ):
-        assert name not in resources
+    # Every alarm in this stack was retired 2026-11-03 (Jamie kept a handful
+    # account-wide, none here). The topic stays: sibling site stacks name it.
+    assert not [n for n, r in resources.items() if r["Type"] == "AWS::CloudWatch::Alarm"]
+    assert resources["LibrarianAlarmTopic"]["Properties"]["TopicName"] == (
+        "weekly-thing-librarian-alarms"
+    )
 
 
 # librarian.thingelstad.com has lived in the stack since 2026-11-02 (it was
@@ -388,12 +365,6 @@ def test_the_door_is_retained_and_keeps_the_shared_web_acl():
     config = resources["LibrarianDistribution"]["Properties"]["DistributionConfig"]
     assert config["Aliases"] == ["librarian.thingelstad.com"]
     assert "WebACLId: !ImportValue edge-waf-WebAclArn" in text
-    alarm = resources["LibrarianDistributionErrorAlarm"]
-    assert alarm["Properties"]["Dimensions"][0] == {
-        "Name": "DistributionId",
-        "Value": "LibrarianDistribution",
-    }
-    assert alarm["Condition"] == resources["LibrarianDistribution"]["Condition"]
     # The id lives in the stack now; nothing in the template pins it.
     assert "E18I2CIBERFMB7" not in text
 

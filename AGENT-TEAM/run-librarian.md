@@ -24,10 +24,10 @@ alarm and incident follow-ups are explicit starts.
    revision weights, private IAM auth and disabled auto deployment. Follow
    `apps/librarian/infra/NATIVE-WEB.md`; control-plane Active state alone is
    not HTTP acceptance.
-2. Check CloudWatch alarm states. Every alarm notifies the SNS topic
-   `weekly-thing-librarian-alarms`; the eval DLQ
-   (`weekly-thing-librarian-eval-dlq`) and the OAuth-failures metric alarm are
-   part of the watched surface, not optional extras.
+2. This stack has no CloudWatch alarms since 2026-11-03 (Jamie kept a
+   handful account-wide, none here), so read the signals directly: the eval
+   DLQ (`weekly-thing-librarian-eval-dlq`) depth, the `WeeklyThingLibrarian`
+   failure metrics, and the digest Lambda's errors.
 3. Review structured `logEvent` JSON in the Lambda log groups. Retention is 30
    days, so evidence expires — group warning/error signatures each run,
    including the `oauth_*` warning family.
