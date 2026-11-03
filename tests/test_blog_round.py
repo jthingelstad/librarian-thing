@@ -117,10 +117,12 @@ class FakeSession:
     def post(self, url, json=None, headers=None, timeout=None):
         self.posted.append(json)
         replace = json["replace"]
-        if "category" in replace:
-            self.posts[json["url"]]["categories"] = list(replace["category"])
         if "content" in replace:
             self.posts[json["url"]]["content"] = replace["content"][0]
+            # micro.blog empties a post's categories on a content-only replace.
+            self.posts[json["url"]]["categories"] = []
+        if "category" in replace:
+            self.posts[json["url"]]["categories"] = list(replace["category"])
         return FakeResponse(202)
 
 
@@ -337,7 +339,7 @@ class GateTests(Library):
         with self.assertRaises(guards.RoundStop):
             self.micropub.replace_categories(COFFEE, ["Coffee"])
         with self.assertRaises(guards.RoundStop):
-            self.micropub.replace_content(LAKE, "x")
+            self.micropub.replace_content(LAKE, "x", ["Family"])
         work = blog_round.Round(
             self.conn,
             micropub=self.micropub,
@@ -516,6 +518,63 @@ class WriteTests(Library):
         self.assertEqual(self.session.posts[LAKE]["categories"], ["Coffee", "Family"])
         self.assertIn('alt="A dock on a calm lake at dusk"', self.session.posts[LAKE]["content"])
         self.assertEqual(len(said["written"]), 2)
+
+    def test_an_alt_edit_keeps_the_posts_categories(self):
+        self.work.write(self._proposals())
+        self.assertEqual(self.session.posts[LAKE]["categories"], ["Family"])
+        sent = [p for p in self.session.posted if "content" in p["replace"]]
+        self.assertEqual(sent[0]["replace"]["category"], ["Family"])
+
+    def test_an_alt_edit_that_loses_categories_is_not_ok(self):
+        real_post = self.session.post
+
+        def drops_categories(url, json=None, headers=None, timeout=None):
+            answer = real_post(url, json=json, headers=headers, timeout=timeout)
+            if "content" in json["replace"]:
+                self.session.posts[json["url"]]["categories"] = []
+            return answer
+
+        self.session.post = drops_categories
+        said = self.work.write({"alt": self._proposals()["alt"]})
+        self.assertTrue(any("read-back differs" in line for line in said["left"]))
+
+    def _emptied_by_alt(self) -> None:
+        """blog-100 as the 10-28 round left it: its alt written, then its
+        categories emptied by micro.blog."""
+        self.conn.execute(
+            "INSERT INTO events (at, run, action, target, before, after, dry_run, result) "
+            "VALUES ('2026-10-28T10:09:40Z', 'r', 'alt', ?, ?, '{}', 0, 'ok')",
+            (LAKE_PHOTO, json.dumps({"source_id": "blog-100", "alt": ""})),
+        )
+        self.conn.execute("UPDATE sources SET categories = '[]' WHERE id = 'blog-100'")
+        self.conn.commit()
+        self.session.posts[LAKE]["categories"] = []
+
+    def test_restores_categories_the_alt_edit_emptied(self):
+        self._emptied_by_alt()
+        lost = self.work.lost_to_alt()
+        self.assertEqual([d["source_id"] for d in lost], ["blog-100"])
+        said = self.work.write({"restore": lost})
+        self.assertEqual(self.session.posts[LAKE]["categories"], ["Family"])
+        self.assertEqual(said["written"], ["blog-100: restored Family"])
+
+    def test_restore_leaves_jamie_set_and_refilled_posts_alone(self):
+        self._emptied_by_alt()
+        lost = self.work.lost_to_alt()
+        self.session.posts[LAKE]["categories"] = ["Coffee"]
+        said = self.work.write({"restore": lost})
+        self.assertEqual(self.session.posts[LAKE]["categories"], ["Coffee"])
+        self.assertIn("categories again", said["left"][0])
+        self.conn.execute("UPDATE filings SET jamie_set = 1 WHERE source_id = 'blog-100'")
+        self.conn.commit()
+        self.assertEqual(self.work.lost_to_alt(), [])
+        said = self.work.write({"restore": lost})
+        self.assertIn("left alone", said["left"][0])
+
+    def test_restore_ignores_drift_with_no_alt_edit(self):
+        self.conn.execute("UPDATE sources SET categories = '[]' WHERE id = 'blog-100'")
+        self.conn.commit()
+        self.assertEqual(self.work.lost_to_alt(), [])
 
     def test_compare_and_set_adopts_a_change_made_since_the_proposal(self):
         proposals = self._proposals()

@@ -189,6 +189,23 @@ class Round:
             )
         return out
 
+    def lost_to_alt(self) -> list[dict[str, Any]]:
+        """Drifted posts whose categories the round's own alt edit emptied:
+        live is empty, the filing is the Librarian's (never Jamie-set), and
+        the round wrote an alt to the post. micro.blog emptied them on a
+        content-only replace; the restore writes the filing back."""
+        alt_edited = {
+            json.loads(row["before"]).get("source_id")
+            for row in self.conn.execute(
+                "SELECT before FROM events WHERE action = 'alt' AND dry_run = 0 AND result = 'ok'"
+            )
+        }
+        return [
+            {"source_id": d["source_id"], "url": d["url"], "filed": d["filed"]}
+            for d in self.drift()
+            if not d["live"] and d["filed"] and not d["jamie_set"] and d["source_id"] in alt_edited
+        ]
+
     # Categories.
 
     def propose_categories(self, source_ids: list[str], *, check: bool) -> list[dict[str, Any]]:
@@ -449,6 +466,11 @@ class Round:
                 said["left"].append(f"new category {entry['name']}: {problem}")
                 continue
             accepted[guards.slug(entry["name"])] = entry
+        for entry in proposals.get("restore", []):
+            if done["categories"] >= guards.CATEGORY_CAP:
+                said["needs_jamie"].append(f"past {guards.CATEGORY_CAP} category writes today")
+                break
+            done["categories"] += self._restore_categories(entry, said)
         for proposal in proposals.get("categories", []):
             if proposal["check"] or proposal["problem"] or not proposal["picks"]:
                 continue
@@ -535,6 +557,38 @@ class Round:
         )
         return 1
 
+    def _restore_categories(self, entry: dict[str, Any], said: dict[str, list[str]]) -> int:
+        """Write back a filing the round's own alt edit emptied, only while
+        the post still matches ``lost_to_alt`` and micro.blog still shows it
+        empty (compare and set)."""
+        source_id = entry["source_id"]
+        lost = {d["source_id"]: d for d in self.lost_to_alt()}.get(source_id)
+        if lost is None:
+            said["left"].append(f"{source_id}: not a post the alt edit emptied; left alone")
+            return 0
+        live = self.micropub.source(lost["url"], uid(source_id))
+        if live is None:
+            said["left"].append(f"{source_id}: micro.blog did not answer for it")
+            return 0
+        if live["categories"]:
+            said["left"].append(f"{source_id}: it has categories again; left alone")
+            return 0
+        target = list(lost["filed"])
+        problem = guards.check_target([], target)
+        if problem:
+            said["left"].append(f"{source_id}: {problem}")
+            return 0
+        self.micropub.replace_categories(lost["url"], target)
+        back = self.micropub.source(lost["url"], uid(source_id))
+        ok = back is not None and guards.same_set(back["categories"], target)
+        self._event("categories", source_id, [], target, dry=False, ok=ok)
+        said["written" if ok else "left"].append(
+            f"{source_id}: restored {', '.join(target)}"
+            if ok
+            else f"{source_id}: the read-back differs"
+        )
+        return 1
+
     def _write_alt(self, proposal: dict[str, Any], said: dict[str, list[str]]) -> int:
         source_id, src = proposal["source_id"], proposal["src"]
         post = self._post(source_id)
@@ -550,9 +604,13 @@ class Round:
         if edited is None:
             said["left"].append(f"{source_id} {src}: {why}")
             return 0
-        self.micropub.replace_content(proposal["url"], edited)
+        self.micropub.replace_content(proposal["url"], edited, live["categories"])
         back = self.micropub.source(proposal["url"], uid(source_id))
-        ok = back is not None and back["content"] == edited
+        ok = (
+            back is not None
+            and back["content"] == edited
+            and guards.same_set(back["categories"], live["categories"])
+        )
         if ok:
             self._filing(source_id, post, add_alt=src)
         self._event(
@@ -672,8 +730,12 @@ def report(day: str, result: dict[str, Any]) -> str:
         said = f'"{a["alt"]}"' if a["alt"] and not a["problem"] else f"left: {a['problem']}"
         lines.append(f"- {a['source_id']} {a['src']}: {said}")
     lines += ["", f"## Someone else changed ({len(result['drift'])})", ""]
+    restoring = {r["source_id"] for r in result.get("restore", [])}
     for d in result["drift"]:
-        lines.append(f"- {d['source_id']}: filed {d['filed']}, live {d['live']}")
+        line = f"- {d['source_id']}: filed {d['filed']}, live {d['live']}"
+        if d["source_id"] in restoring:
+            line += " (emptied by the round's own alt edit; --write restores it)"
+        lines.append(line)
     if not result["drift"]:
         lines.append("Every filed post still carries what the Librarian last wrote.")
     lines += ["", f"## Featured candidates ({len(result['featured'])})", ""]
@@ -744,6 +806,7 @@ def run_round(
         "new_categories": work.new_categories(proposals),
         "alt": work.propose_alt(alt_limit),
         "drift": work.drift(),
+        "restore": work.lost_to_alt(),
         "featured": work.featured_candidates(),
         "notes": work.notes,
     }

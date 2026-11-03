@@ -84,5 +84,11 @@ class Micropub:
             raise MicropubError("the round never empties a post's categories")
         self._update(url, {"replace": {"category": categories}})
 
-    def replace_content(self, url: str, content: str) -> None:
-        self._update(url, {"replace": {"content": [content]}})
+    def replace_content(self, url: str, content: str, categories: list[str]) -> None:
+        """Replace the body, sending the post's live categories with it:
+        micro.blog empties a post's categories on a content-only replace
+        (31 posts lost theirs that way between 10-22 and 10-28)."""
+        change: dict[str, Any] = {"content": [content]}
+        if categories:
+            change["category"] = list(categories)
+        self._update(url, {"replace": change})
