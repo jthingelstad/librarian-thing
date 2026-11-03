@@ -104,10 +104,10 @@ send email, modify conversations or create reader records as production QA.
 This stack has one CloudWatch alarm since 2026-11-03:
 `weekly-thing-librarian-sign-in-failures` (`LibrarianSignInFailuresAlarm`),
 web-auth's live-endpoint `HTTPResponseStatusClass5XX`, at least one in two of
-twelve five-minute windows, missing data not breaching. Every `/auth` sign-in
-step that fails on our side answers a 5xx (Buttondown lookup on request or
-redeem, the sign-in email, the runtime secret, anything unhandled); correct
-refusals are 4xx. The MCP `/authorize` pages answer a failed lookup with a 200
-page, so the connector's sign-in is not counted. Application metric filters follow the native log groups; archive 5xx,
+twelve five-minute windows, missing data not breaching. Every sign-in step
+that fails on our side, on `/auth` or the MCP connector's `/authorize` pages,
+answers a 5xx (Buttondown lookup on request or redeem, the sign-in email, the
+runtime secret, anything unhandled; `/authorize` renders its usual page with a
+502); correct refusals never do. Application metric filters follow the native log groups; archive 5xx,
 capacity and rate are standard Lambda Web metrics with no alarm.
 Web Function control-plane Active state does not establish HTTP readiness.

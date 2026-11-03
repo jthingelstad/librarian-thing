@@ -357,6 +357,14 @@ ${hiddenPendingField(pendingId)}
   return htmlResponse(200, pageHtml('Approve access', inner));
 }
 
+// Buttondown could not be asked. The reader sees the same page, but it
+// answers 502, as /auth does for the same failure, so the sign-in alarm
+// (web-auth's live 5xx count) sees the connector's failures too (Jamie,
+// 2026-11-03).
+function lookupFailedPage(page: LibrarianHttpResponse): LibrarianHttpResponse {
+  return { ...page, statusCode: 502 };
+}
+
 function redirectWithParams(redirectUri: string, params: Record<string, string>): LibrarianHttpResponse {
   const url = new URL(redirectUri);
   for (const [key, value] of Object.entries(params)) {
@@ -487,7 +495,9 @@ async function handleEmailStep(
     subscriber = await fetchSubscriber(email);
   } catch (error) {
     logEvent('error', 'oauth_authorize_buttondown_lookup_failed', errorFields(error, { email_hash: emailHash(email) }));
-    return emailStepPage(pending.id, client.clientName, 'Could not check that subscription right now. Try again.');
+    return lookupFailedPage(
+      emailStepPage(pending.id, client.clientName, 'Could not check that subscription right now. Try again.')
+    );
   }
   const status = subscriberStatus(subscriber);
   if (status !== 'active' && status !== 'premium') {
@@ -525,7 +535,9 @@ async function handleCodeStep(event: LibrarianHttpEvent, pending: OauthPending, 
     return codeStepPage(pending.id, pending.email, 'That code is not right or has expired. Check the newest email.');
   }
   if (result.status === 'subscriber_unavailable') {
-    return codeStepPage(pending.id, pending.email, 'Could not confirm your subscription right now. Try again.');
+    return lookupFailedPage(
+      codeStepPage(pending.id, pending.email, 'Could not confirm your subscription right now. Try again.')
+    );
   }
   if (result.status === 'not_active') {
     return emailStepPage(pending.id, client.clientName, 'That subscription is not active.');

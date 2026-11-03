@@ -738,13 +738,13 @@ Resources:
 
   # The one alarm in this stack (Jamie, 2026-11-03: "add a Librarian sign-in
   # failure alarm"). Members sign in to Thingy and Release Notes through
-  # web-auth's /auth, and every step there that fails on our side answers a
-  # 5xx: the Buttondown lookup when the link is asked for or redeemed (502),
-  # the sign-in email send (502), the runtime secret (503) and anything
-  # unhandled (500). The MCP connector's /authorize pages answer a failed
-  # lookup with a 200 page that says so, which this does not count; a
-  # Buttondown outage still shows here through the /auth sign-ins. Refusals that are correct (not subscribed, bad link,
-  # Turnstile, rate limits) are 4xx and never count. One metric, AWS-vended,
+  # web-auth's /auth and to the MCP connector through its /authorize pages,
+  # and every step that fails on our side answers a 5xx: the Buttondown lookup
+  # when the link or code is asked for or redeemed (502; /authorize renders its
+  # page with a 502), the sign-in email send, the runtime secret (503) and
+  # anything unhandled (500). Refusals that are correct (not subscribed, bad
+  # link or code, Turnstile, rate limits) are 4xx, or a 200 page on
+  # /authorize, and never count. One metric, AWS-vended,
   # so the alarm costs one free-tier alarm metric and no filter. Two of the
   # last twelve five-minute windows with a 5xx: one reader's failed attempt,
   # retries included, does not page; an outage, or two people, does. No
@@ -754,7 +754,7 @@ Resources:
     Condition: NativeWebActive
     Properties:
       AlarmName: !Sub '${AWS::StackName}-sign-in-failures'
-      AlarmDescription: Librarian web-auth answered 5xx in two five-minute windows within an hour - members may be unable to sign in to Thingy or Release Notes.
+      AlarmDescription: Librarian web-auth answered 5xx in two five-minute windows within an hour - members may be unable to sign in to Thingy, the MCP connector or Release Notes.
       Namespace: AWS/Lambda/Web
       MetricName: HTTPResponseStatusClass5XX
       Dimensions:
