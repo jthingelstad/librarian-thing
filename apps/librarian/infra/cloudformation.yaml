@@ -381,11 +381,12 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !GetAtt LibrarianSubscribeDigestRule.Arn
 
-  # This stack's own alarms were retired 2026-11-03 (Jamie cut the account to
-  # a handful of alarms; nobody acted on these). The topic stays: it is free,
-  # sibling site stacks name it, and its projects-ops-alerts SQS subscription
-  # is managed in projects-sysadmin. Failures stay in the structured logs and
-  # this stack's metric filters. None of the filters sets DefaultValue
+  # This stack's alarms were retired 2026-11-03 (Jamie cut the account to a
+  # handful of alarms; nobody acted on these), and the same day the one
+  # sign-in alarm came back (LibrarianSignInFailuresAlarm, below). The topic
+  # is free, sibling site stacks name it, and its projects-ops-alerts SQS
+  # subscription is managed in projects-sysadmin. Other failures stay in the
+  # structured logs and this stack's metric filters. None of the filters sets DefaultValue
   # (2026-09-24): a default writes a zero on every log event and bills the
   # metric for every hour the function logs anything.
   LibrarianAlarmTopic:
@@ -734,6 +735,37 @@ Resources:
       Role: !GetAtt LibrarianFunctionRole.Arn
       Runtime: nodejs24.x
       Timeout: 35
+
+  # The one alarm in this stack (Jamie, 2026-11-03: "add a Librarian sign-in
+  # failure alarm"). Members sign in to Thingy, the MCP connector and Release
+  # Notes through web-auth, and every step that fails on our side answers a
+  # 5xx: the Buttondown lookup when the link is asked for or redeemed (502),
+  # the sign-in email send (502), the runtime secret (503) and anything
+  # unhandled (500). Refusals that are correct (not subscribed, bad link,
+  # Turnstile, rate limits) are 4xx and never count. One metric, AWS-vended,
+  # so the alarm costs one free-tier alarm metric and no filter. Two of the
+  # last twelve five-minute windows with a 5xx: one reader's failed attempt,
+  # retries included, does not page; an outage, or two people, does. No
+  # OKActions: the activity poster hears every state change from EventBridge.
+  LibrarianSignInFailuresAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: NativeWebActive
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-sign-in-failures'
+      AlarmDescription: Librarian web-auth answered 5xx in two five-minute windows within an hour - members may be unable to sign in to Thingy or Release Notes.
+      Namespace: AWS/Lambda/Web
+      MetricName: HTTPResponseStatusClass5XX
+      Dimensions:
+        - { Name: FunctionName, Value: !Sub '${AWS::StackName}-web-auth' }
+        - { Name: EndpointName, Value: live }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 12
+      DatapointsToAlarm: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref LibrarianAlarmTopic]
 
   NativeLibrarianSubscribeFailuresMetricFilter:
     Type: AWS::Logs::MetricFilter
