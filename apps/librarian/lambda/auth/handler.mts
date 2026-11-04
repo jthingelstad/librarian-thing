@@ -234,7 +234,7 @@ async function authSuccessResponse(
         email_hash: emailHash(email),
         error_type: errorName(error)
       });
-      payload.message = 'Thanks for being a Weekly Thing Supporting Member!';
+      payload.message = 'Thanks for being a Weekly Thing Supporting Member.';
     }
   }
   // Every sign-in also sets the HttpOnly session cookie; the body token stays
@@ -1203,7 +1203,7 @@ export async function handleAuthRequest(
           '<link rel="icon" href="https://thingy.thingelstad.com/img/thingy.png">',
           '<link rel="apple-touch-icon" href="https://thingy.thingelstad.com/img/thingy.png">',
           '<meta property="og:image" content="https://thingy.thingelstad.com/img/thingy.png">',
-          '<meta name="description" content="The Librarian - the archive API behind Thingy, Jamie Thingelstad\u2019s archive agent.">',
+          '<meta name="description" content="The Librarian - the archive API behind Thingy, Jamie Thingelstad\u2019s sidekick.">',
           '<style>:root{color-scheme:light dark;--bg:#f6f8f5;--text:#17211f;--accent:#14776f}',
           '@media (prefers-color-scheme:dark){:root{--bg:#101716;--text:#eaf0ed;--accent:#65c8bc}}',
           'body{background:var(--bg);color:var(--text)}a{color:var(--accent)}</style>',

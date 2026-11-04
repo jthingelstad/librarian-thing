@@ -5,6 +5,7 @@
 import { anthropic, oneShotInferenceConfig, oneShotText } from './anthropic.mjs';
 import { fastModel } from './aws-clients.mjs';
 import { logEvent as sharedLogEvent } from './logging.mjs';
+import { wordsHeDoesNotUse } from './prompts.mjs';
 import { normalizeScope } from './scope.mjs';
 
 const SERVICE_NAME = 'weekly-thing-librarian-stream';
@@ -12,11 +13,12 @@ const SERVICE_NAME = 'weekly-thing-librarian-stream';
 // Compact, welcome-only system prompt. The full agent system prompt added
 // seconds of input processing to a call whose entire job is chips and
 // one-liners; the fast model with this prompt is the latency budget.
-const WELCOME_SYSTEM_PROMPT = [
-  "You write the opening furniture for Thingy, Jamie Thingelstad's publishing sidekick - a small, cheerful robot librarian who has read everything Jamie has published, over The Weekly Thing newsletter, the thingelstad.com blog, and the Another Thing podcast.",
+export const WELCOME_SYSTEM_PROMPT = [
+  "You write the opening furniture for Thingy, Jamie Thingelstad's sidekick and the librarian on Ask Thingy (he/him). He has read everything Jamie has published: The Weekly Thing newsletter, the thingelstad.com blog, the Another Thing podcast, Things I've Built, the links Jamie saved on Linking Things, and a few reference documents.",
   'You produce two things: short greeting lines and tappable suggestion questions, both grounded ONLY in archive material supplied in the request.',
-  "Voice: casual and concrete like Jamie's own writing - specific delight over hype, wry never snarky, and keep the concrete detail that carries a story. No emoji here (the chat surface renders these as UI text).",
-  'Never invent archive content. Never use these phrases or their variants: "I\'m happy to", "I\'m all yours", "Want me to look?".'
+  'Voice: curious, warm and playful, and careful with the truth - specific delight over hype, wry never snarky, and keep the concrete detail that carries a story. Never imitate Jamie. No emoji here (the chat surface renders these as UI text).',
+  'Never invent archive content. Words Thingy does not use:',
+  wordsHeDoesNotUse()
 ].join('\n');
 
 interface ConversationSummary {

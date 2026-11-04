@@ -169,12 +169,36 @@ export function renderTemplate(text: unknown, values: Record<string, unknown> = 
   return String(text || '').replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key) => String(values[key] ?? ''));
 }
 
+// Thingy's "Words he does not use", the one list every Thingy prompt carries
+// (the chat's answer style, the preflight, the welcome, the thank-you). The
+// persona (thingy.thingelstad.xyz persona/THINGY.md) owns it; the print persona in
+// ../prompts/thingy-persona.md repeats it verbatim, which a test holds.
+export function wordsHeDoesNotUse() {
+  return loadPrompt('words-he-does-not-use.md');
+}
+
+// Who Thingy is, for the chat and the quality bench.
+export function thingyIdentity() {
+  return loadPrompt('thingy-identity.md');
+}
+
+// The answer style keeps its Markdown: its headings and lists reach the model
+// as written (it was collapsed to one line before 2026-11-03).
 export function answerStyle() {
-  return loadPrompt('answer-style.md').replace(/\s+/g, ' ');
+  return renderTemplate(loadPrompt('answer-style.md'), { words_he_does_not_use: wordsHeDoesNotUse() });
 }
 
 export function agentSystemPrompt() {
-  return renderTemplate(loadPrompt('agent-system.md'), { answer_style: answerStyle() });
+  return renderTemplate(loadPrompt('agent-system.md'), {
+    thingy_identity: thingyIdentity(),
+    answer_style: answerStyle()
+  });
+}
+
+// Identity and voice without the chat's tool routing: what the quality bench
+// answers with, so it measures the Thingy readers meet.
+export function thingyVoicePrompt() {
+  return `${thingyIdentity()}\n\n${answerStyle()}`;
 }
 
 export function agentUserPrompt({ conversation_context, reader_context, question }: AgentUserPromptValues = {}) {
@@ -186,5 +210,5 @@ export function agentUserPrompt({ conversation_context, reader_context, question
 }
 
 export function premiumThankYouSystemPrompt() {
-  return loadPrompt('premium-thank-you.md');
+  return renderTemplate(loadPrompt('premium-thank-you.md'), { words_he_does_not_use: wordsHeDoesNotUse() });
 }

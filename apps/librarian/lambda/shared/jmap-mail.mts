@@ -238,7 +238,7 @@ function emailIntro(context: ReaderEmailContext = {}) {
   if (context.returning && Number(context.turn_count || 0) > 0) {
     return 'Your archive thread is waiting. Use this private link to step back into Thingy.';
   }
-  return "Use this private link to meet Thingy, Jamie Thingelstad's archive agent.";
+  return "Use this private link to meet Thingy, Jamie Thingelstad's sidekick.";
 }
 
 function emailMemberLine(context: ReaderEmailContext = {}) {
@@ -260,8 +260,8 @@ export function magicLinkEmailText({ magicLink, expiresMinutes, context = {}, co
     magicLink,
     '',
     code
-      ? `The code and link expire in ${expiresMinutes} minutes and either one can only be used once. The link opens the archive agent in your browser.`
-      : `This link expires in ${expiresMinutes} minutes and can only be used once. It opens the archive agent in your browser.`,
+      ? `The code and link expire in ${expiresMinutes} minutes and either one can only be used once. The link opens Thingy in your browser.`
+      : `This link expires in ${expiresMinutes} minutes and can only be used once. It opens Thingy in your browser.`,
     emailMemberLine(context),
     '',
     'If you did not request this, you can ignore this email.'

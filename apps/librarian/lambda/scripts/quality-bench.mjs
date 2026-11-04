@@ -6,15 +6,29 @@
 // (2) legitimate Bedrock usage on the account (AWS gates the newest
 // model generation on usage history; see memory/thingy-model-tiers).
 //
+// Thingy answers with the chat's own identity and voice (thingyVoicePrompt in
+// shared/prompts.mts: prompts/thingy-identity.md and answer-style.md, the
+// tool routing left out), so the bench measures the Thingy readers meet.
+//
 // Usage:
+//   npm run build
 //   AWS_PROFILE=cloud-engineer node scripts/quality-bench.mjs [--questions N] [--opus N]
 // Results: ~/.local/share/thingy-bench/bench-<date>.jsonl
-// Cost: measured ~$0.11-0.15 per default run (35 answers, 2026-09-02).
+// Cost: measured ~$0.11-0.15 per default run (35 answers, 2026-09-02), before
+// the shared system prompt (about 1,300 input tokens an answer, ~$0.14 more).
 
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { BedrockRuntimeClient, ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
+
+const builtPrompts = path.resolve(import.meta.dirname, '../dist/shared/prompts.mjs');
+if (!fs.existsSync(builtPrompts)) {
+  process.stderr.write('dist/ is missing - run npm run build first.\n');
+  process.exit(1);
+}
+const { thingyVoicePrompt } = await import(builtPrompts);
+const SYSTEM_PROMPT = thingyVoicePrompt();
 
 const RETRIEVE_URL = process.env.LIBRARIAN_RETRIEVE_URL || 'https://librarian.thingelstad.com/retrieve';
 const DEFAULT_MODEL = process.env.BENCH_DEFAULT_MODEL || 'us.anthropic.claude-sonnet-4-6';
@@ -51,8 +65,7 @@ function groundedPrompt(question, passages) {
     .map((p, i) => `[${i + 1}] ${p.title || p.subject || ''} (${p.publish_date || 'n.d.'})\n${p.label || ''}`)
     .join('\n\n');
   return [
-    "You are Thingy, the archive librarian for Jamie Thingelstad's published writing.",
-    'Answer the question using ONLY the archive passages below. Cite Weekly Thing sources as #NNN when an issue number is evident; cite blog and podcast sources by title. If the passages do not answer the question, say so plainly.',
+    'Answer the question using ONLY the archive passages below. Cite Weekly Thing sources as WT295, or (WT295, WT297) for two, when an issue number is evident; cite blog and podcast sources by title. If the passages do not answer the question, say so plainly.',
     '',
     `Archive passages:\n${sources}`,
     '',
@@ -65,6 +78,7 @@ async function answer(bedrock, modelId, prompt) {
   const response = await bedrock.send(
     new ConverseCommand({
       modelId,
+      system: [{ text: SYSTEM_PROMPT }],
       messages: [{ role: 'user', content: [{ text: prompt }] }],
       inferenceConfig: { maxTokens: MAX_TOKENS, temperature: 0.45 }
     })

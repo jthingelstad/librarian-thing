@@ -71,7 +71,7 @@
         },
         {
           "question": "What's Thingy?",
-          "answer": "[Thingy](https://thingy.thingelstad.com/) is Jamie's AI-assisted archive agent. It can answer across The Weekly Thing newsletter, the thingelstad.com blog, and Another Thing podcast transcripts, using the source scope you choose. Ask it to find themes, rediscover links you half-remember, compare sources, or trace what Jamie has written and talked about over time."
+          "answer": "[Thingy](https://thingy.thingelstad.com/) is Jamie's sidekick, an AI agent Jamie built. He has read everything Jamie has published: The Weekly Thing newsletter, the thingelstad.com blog, Another Thing podcast transcripts, every project in Things I've Built, the links Jamie has saved on Linking Things, and a few reference documents. You don't pick a source; he decides where to look. Ask him to find themes, rediscover links you half-remember, compare sources, or trace what Jamie has written and talked about over time. He answers from the archive with citations, and says so when a question lives outside it."
         },
         {
           "question": "Do issues have numbers?",
