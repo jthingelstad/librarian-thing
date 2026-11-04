@@ -7,11 +7,34 @@ Function. The daily subscription digest has a separate Event Function on the
 existing schedule.
 
 The native archive loads gzip JSON incrementally, stores embeddings in
-binary64 arrays, and shares pending corpus/index loads. `profile-memory.mjs`
-replays downloaded public artifacts with SDK fakes and eight parallel requests;
-no model calls or reader records are involved. Before increasing concurrency,
-measure peak RSS and latency with all corpora and indexes loaded. The initial
-archive ceiling is one request per environment and five environments.
+binary64 arrays, and shares pending corpus/index loads. The archive ceiling is
+four requests per environment and five environments.
+
+`profile-memory.mjs <directory> [parallel=8]` replays downloaded public artifacts
+with SDK fakes; every client that could write, spend or reach the network
+refuses, so no model calls or reader records are involved. Before increasing
+concurrency again, rerun it with all corpora, links, the keyword index and the
+tool indexes loaded, inside a 2 GB, two-CPU Linux arm64 container, and read the
+archive path again for per-request state outside the request.
+
+Measured 2026-11-04 on live artifact versions (`node:24-slim`, Apple M4), at 1 / 4 / 8
+parallel. The pass rule, set before measuring: peak RSS at 4 at most 1,500 MB
+(75% of the 2 GB environment), retrieval p95 at 4 not both over twice p95 at 1
+and more than 250 ms above it, longest event-loop stall under 1,000 ms.
+
+| Measure | 1 | 4 | 8 |
+| --- | --- | --- | --- |
+| Peak RSS | 1,117 MB | 1,125 MB | 1,097 MB |
+| Retrieval p95, 30 questions | 280 to 293 ms | 344 to 372 ms | 509 ms |
+| Warm tools p95, 20 calls | 569 to 620 ms | 786 to 787 ms | 876 ms |
+| Longest stall, warm tools | 440 ms | 475 ms | 432 ms |
+| Longest stall, first tool-index build | 581 to 741 ms | 764 to 789 ms | 718 ms |
+
+Answers matched between alone and in flight (`archive_gems` is random by design
+and is not compared). Lambda runs slower than this Mac, 1.1 to 3 times on the
+same steps, so the first tool-index build in an environment may stall its other
+requests for more than a second. The profile does not cover chat model streams
+or `view_photo`.
 
 ## Source and promotion
 
