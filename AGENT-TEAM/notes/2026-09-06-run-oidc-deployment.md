@@ -12,7 +12,7 @@ that GitHub deployments would not require an active local AWS CLI session.
   also installed as its permissions boundary. The six inherited managed-policy
   attachments and inline Bedrock policy were removed from this role.
 - The live stack is `UPDATE_COMPLETE` and uses
-  `arn:aws:iam::999153317627:role/weekly-thing-librarian-cloudformation`.
+  `arn:aws:iam::<account>:role/weekly-thing-librarian-cloudformation`.
   CloudTrail confirms all three Lambda code updates by that service role.
 - The application and Bedrock evaluation roles have reviewed permissions boundaries.
 - GitHub repository secrets `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` were
@@ -86,7 +86,7 @@ without exposing their values, and the file remains mode 0600. The example
 configuration and operator documentation now describe profile-based local access.
 
 Verification loaded `.env` through the same dotenv/default-Boto3 credential path
-used by local admin tools. STS returned `arn:aws:iam::999153317627:user/jamie`,
+used by local admin tools. STS returned `arn:aws:iam::<account>:user/jamie`,
 with profile `jamie` and provider `shared-credentials-file`, not environment keys.
 CloudFormation stack/resource inspection and metadata reads of all four actual
 `artifacts/*` corpus objects succeeded. An initial probe omitted the `artifacts/`
