@@ -25,9 +25,9 @@ and more than 250 ms above it, longest event-loop stall under 1,000 ms.
 | Measure | 1 | 4 | 8 |
 | --- | --- | --- | --- |
 | Peak RSS | 1,117 MB | 1,125 MB | 1,097 MB |
-| Retrieval p95, 30 questions | 281 to 293 ms | 344 to 372 ms | 509 ms |
-| Warm tools p95, 20 calls | 569 to 591 ms | 786 to 787 ms | 876 ms |
-| Longest stall, warm tools | | 475 ms | 432 ms |
+| Retrieval p95, 30 questions | 280 to 293 ms | 344 to 372 ms | 509 ms |
+| Warm tools p95, 20 calls | 569 to 620 ms | 786 to 787 ms | 876 ms |
+| Longest stall, warm tools | 440 ms | 475 ms | 432 ms |
 | Longest stall, first tool-index build | 581 to 741 ms | 764 to 789 ms | 718 ms |
 
 Answers matched between alone and in flight (`archive_gems` is random by design
