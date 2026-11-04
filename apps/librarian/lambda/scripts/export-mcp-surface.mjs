@@ -266,7 +266,7 @@ const surface = {
     chat: {
       path: '/chat',
       auth: 'the signed-in Thingy web session',
-      runtime: 'Amazon Bedrock Converse agent loop, tools called in-process',
+      runtime: 'Anthropic Messages API agent loop, tools called in-process',
       tools: tools.filter((tool) => tool.doors.chat).map((tool) => tool.name),
       max_tool_turns: intConstant('chat/runtime.mjs', 'DEFAULT_MAX_TOOL_TURNS'),
       daily_quota: {
@@ -280,7 +280,7 @@ const surface = {
     guest_chat: {
       path: '/chat',
       auth: 'none (guest preview lane)',
-      runtime: 'Amazon Bedrock Converse agent loop, tools called in-process',
+      runtime: 'Anthropic Messages API agent loop, tools called in-process',
       tools: tools.filter((tool) => tool.doors.guest_chat).map((tool) => tool.name),
       max_tool_turns: intConstant('chat/runtime.mjs', 'DEFAULT_MAX_TOOL_TURNS'),
       daily_quota: {
