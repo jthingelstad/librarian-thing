@@ -754,6 +754,7 @@ test('buttondown subscriber status maps active and inactive states', () => {
   assert.equal(subscriberStatus(null), 'not_found');
   assert.equal(subscriberStatus({ type: 'regular' }), 'active');
   assert.equal(subscriberStatus({ type: 'premium' }), 'premium');
+  assert.equal(subscriberStatus({ type: 'gifted' }), 'premium');
   assert.equal(subscriberStatus({ type: 'unactivated' }), 'unconfirmed');
   assert.equal(subscriberStatus({ type: 'regular', unsubscription_date: '2026-01-01' }), 'inactive');
   assert.equal(subscriberStatus({ type: 'disabled' }), 'inactive');
