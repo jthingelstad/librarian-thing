@@ -12,6 +12,7 @@ import {
   agentSystemPrompt,
   answerStyle,
   premiumThankYouSystemPrompt,
+  thankYouClaimsToSustain,
   thingyIdentity,
   thingyVoicePrompt,
   wordsHeDoesNotUse
@@ -84,6 +85,24 @@ test('the print persona keeps the register names WT Builder prompts call', () =>
   assert.match(printPersona, /\*\*Community giving\*\* \(Supporting Membership/);
   assert.match(printPersona, /two\s+bylined drafting prompts/);
   assert.doesNotMatch(printPersona, /\$\d/, 'figures come from support.json, never the persona');
+});
+
+test('a thank-you that credits the money with keeping anything going never reaches a member', () => {
+  assert.match(premiumThankYouSystemPrompt(), /does not keep the Weekly Thing free/);
+  // Lines the model really wrote from the earlier prompt.
+  for (const line of [
+    "Thanks for being a Supporting Member, friend. Your giving keeps the Weekly Thing free for everyone, and I'm glad you're part of it.",
+    'Thank you for being a Supporting Member, friend. Your giving is part of what keeps this little corner of the internet glad to have you in it.',
+    "Thanks for signing in and supporting the Weekly Thing. Your membership sends 100% of its fees to this year's nonprofit, and I'm glad to have you here."
+  ]) {
+    assert.equal(thankYouClaimsToSustain(line), true, line);
+  }
+  for (const line of [
+    "Thanks for being a Supporting Member. Your giving goes straight to the nonprofit chosen each year, and I'm glad to have you along.",
+    "Thank you for giving through the Weekly Thing. Your membership goes to this year's nonprofit, and I'm glad you're part of it."
+  ]) {
+    assert.equal(thankYouClaimsToSustain(line), false, line);
+  }
 });
 
 test('the premium thank-you states no figure it is not given', () => {

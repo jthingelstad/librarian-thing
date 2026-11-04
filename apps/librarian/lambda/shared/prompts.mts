@@ -209,6 +209,18 @@ export function agentUserPrompt({ conversation_context, reader_context, question
   });
 }
 
+// Members read this thank-you unreviewed. The one thing it must never tell
+// them is that their money supports the free newsletter: all of it goes to the
+// nonprofit. The model still reached for that about one time in eight, so a
+// line using these words gets the fixed thanks instead. A false alarm costs
+// nothing but a plainer sentence.
+const SUSTAINING_CLAIM =
+  /\b(keep|keeps|keeping|kept|sustain\w*|free|running|possible|afloat)\b|\bsupport(s|ing)? (the )?weekly thing\b/i;
+
+export function thankYouClaimsToSustain(text: string) {
+  return SUSTAINING_CLAIM.test(text);
+}
+
 export function premiumThankYouSystemPrompt() {
   return renderTemplate(loadPrompt('premium-thank-you.md'), { words_he_does_not_use: wordsHeDoesNotUse() });
 }

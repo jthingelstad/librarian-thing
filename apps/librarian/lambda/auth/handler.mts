@@ -69,7 +69,7 @@ import {
   isOwnerSubscriberHash
 } from '../shared/conversation-modes.mjs';
 import { errorFields, logEvent } from '../shared/logging.mjs';
-import { premiumThankYouSystemPrompt } from '../shared/prompts.mjs';
+import { premiumThankYouSystemPrompt, thankYouClaimsToSustain } from '../shared/prompts.mjs';
 import { handleSharedConversationView, handleUserConversations } from './conversation-routes.mjs';
 import {
   handleAuthorize,
@@ -176,7 +176,9 @@ async function generatePremiumThankYou() {
     ...oneShotInferenceConfig(model, { maxTokens: 120, thinkingMaxTokens: 2000, temperature: 0.7, effort: 'low' })
   });
   const text = oneShotText(response, { call: 'premium_thank_you', model, log: logEvent }).replace(/\s+/g, ' ').trim();
-  if (!text || text.length > 220) throw new Error('Model returned invalid premium thank-you');
+  if (!text || text.length > 220 || thankYouClaimsToSustain(text)) {
+    throw new Error('Model returned invalid premium thank-you');
+  }
   logEvent('info', 'premium_thank_you_generated', {
     model,
     duration_ms: Math.round(performance.now() - start),
