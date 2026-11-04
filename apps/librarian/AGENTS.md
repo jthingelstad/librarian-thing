@@ -18,7 +18,8 @@ The Lambda code is **Node.js** (Node 24 runtime, arm64). Everything else in this
 
 The native auth/archive servers call the same route functions as the legacy
 handlers described below. Auth allows eight requests per environment and two
-environments; archive starts at one request per environment and five environments.
+environments; archive allows four requests per environment and five environments
+(measured 2026-11-04, numbers in `infra/NATIVE-WEB.md`).
 Both have the fixed Web Function memory allocation; their timeouts are 35s and
 300s. The evaluator stays an Event Function. `LibrarianDigestFunction`
 (`lambda/digest/handler.mts`) handles the existing daily subscription schedule.

@@ -616,7 +616,7 @@ Resources:
       ServiceConfig:
         ExecutionRoleArn: !GetAtt LibrarianFunctionRole.Arn
         TimeoutSeconds: 300
-        MaxConcurrencyPerEnvironment: 1
+        MaxConcurrencyPerEnvironment: 4
         TelemetryConfig:
           LoggingConfig:
             LogGroup: !Ref NativeArchiveLogs
