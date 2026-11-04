@@ -53,7 +53,7 @@ const MODE_DEFINITIONS: Record<ConversationMode, ModeDefinition> = {
   thingy: {
     id: 'thingy',
     label: 'Thingy',
-    description: "Explore Jamie Thingelstad's published archive with the default archive agent.",
+    description: "Explore Jamie Thingelstad's published archive with Thingy, Jamie's sidekick.",
     required_entitlement: 'reader'
   },
   research_guide: {

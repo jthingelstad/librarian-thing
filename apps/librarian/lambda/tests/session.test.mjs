@@ -823,7 +823,16 @@ test('preflight normalizer keeps rewrites/direct answers safe and structured', (
   );
   assert.equal(direct.action, 'direct');
   assert.equal(direct.category, 'privacy_refusal');
-  assert.match(direct.direct_answer, /public archive/i);
+  // Thingy declines in character, never in policy voice (persona, 2026-11-03).
+  assert.match(direct.direct_answer, /off my shelves/);
+  assert.doesNotMatch(direct.direct_answer, /cannot help|as phrased/i);
+
+  const outOfScope = normalizePreflightDecision({ action: 'direct', category: 'out_of_scope' }, 'Fix my code.');
+  assert.match(outOfScope.direct_answer, /^That one's outside my shelves\. I only know what Jamie has published/);
+
+  const unclear = normalizePreflightDecision({ action: 'direct', category: 'archive_answer' }, '??');
+  assert.equal(unclear.category, 'clarify');
+  assert.match(unclear.direct_answer, /archive question/);
 
   assert.equal(passThroughPreflight('What did Jamie write about RSS?').action, 'pass');
 });
