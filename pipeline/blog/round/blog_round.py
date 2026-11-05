@@ -17,7 +17,10 @@ gone (``alt_skips``). It downloads the library first and uploads it with the
 ETag it started from, once more from a fresh copy if the library moved.
 
 ``--write`` applies a reviewed proposals file, and refuses while
-``guards.WRITES_ON`` is off (on since plan step 5). ``--recheck`` and ``--posts`` re-file
+``guards.WRITES_ON`` is off (on since plan step 5). Its ``featured_go`` list
+(``source_id`` and ``url``) adds Featured to posts already decided; the round
+never fills that list itself, and ``featured`` stays candidates only.
+``--recheck`` and ``--posts`` re-file
 posts already filed to show how the labeller reads them; they are never
 written. Every guard is in ``guards.py``; a ``PAUSED`` file beside it stops
 the round.
@@ -495,6 +498,11 @@ class Round:
                 said["needs_jamie"].append(f"past {guards.CATEGORY_CAP} category writes today")
                 break
             done["categories"] += self._write_categories(proposal, accepted, said)
+        for entry in proposals.get("featured_go", []):
+            if done["categories"] >= guards.CATEGORY_CAP:
+                said["needs_jamie"].append(f"past {guards.CATEGORY_CAP} category writes today")
+                break
+            done["categories"] += self._write_featured(entry, said)
         for proposal in proposals.get("alt", []):
             if proposal["problem"] or not proposal["alt"]:
                 continue
@@ -505,6 +513,43 @@ class Round:
                 continue
             done["alt"] += self._write_alt(proposal, said)
         return said
+
+    def _write_featured(self, entry: dict[str, str], said: dict[str, list[str]]) -> int:
+        """Add Featured to a post already decided, keeping what is on it. A
+        post someone else changed since its filing is adopted and left alone."""
+        source_id, url = entry["source_id"], entry["url"]
+        post = self._post(source_id)
+        if post is None or post["url"] != url:
+            said["left"].append(f"{source_id}: not that post in the library")
+            return 0
+        label = self.conn.execute(
+            "SELECT kind FROM labels WHERE source_id = ?", (source_id,)
+        ).fetchone()
+        if not post["title"] or (label and label["kind"] in NOT_FEATURED):
+            said["left"].append(f"{source_id}: this kind of post is never Featured")
+            return 0
+        live = self.micropub.source(url, uid(source_id))
+        if live is None:
+            said["left"].append(f"{source_id}: micro.blog did not answer for it")
+            return 0
+        if post["filed"] and not guards.same_set(live["categories"], json.loads(post["filed"])):
+            self._adopt(source_id, live["categories"], post)
+            said["left"].append(f"{source_id}: someone else changed its categories; adopted them")
+            return 0
+        target = guards.with_featured(live["categories"])
+        problem = guards.check_target(live["categories"], target)
+        if problem or guards.same_set(live["categories"], target):
+            said["left"].append(f"{source_id}: {problem or 'already Featured'}")
+            return 0
+        self.micropub.replace_categories(url, target)
+        back = self.micropub.source(url, uid(source_id))
+        ok = back is not None and guards.same_set(back["categories"], target)
+        self._filing(source_id, post, categories=back["categories"] if back else target)
+        self._event("featured", source_id, live["categories"], target, dry=False, ok=ok)
+        said["written" if ok else "left"].append(
+            f"{source_id}: {', '.join(target)}" if ok else f"{source_id}: the read-back differs"
+        )
+        return 1
 
     def _alt_requires_write(self, proposal: dict[str, Any]) -> bool:
         """Whether a proposal would still edit the current source body.
