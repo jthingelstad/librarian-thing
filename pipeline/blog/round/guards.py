@@ -107,6 +107,12 @@ def target_categories(
     return [name for _group, _position, name in sorted(out)]
 
 
+def with_featured(live: list[str]) -> list[str]:
+    """``live`` with Featured added last, for a post Jamie's list or the
+    plan's Featured review has chosen. ``target_categories`` never adds it."""
+    return [name for name in live if slug(name) != FEATURED] + ["Featured"]
+
+
 def check_target(live: list[str], target: list[str]) -> str | None:
     """Why ``target`` may not replace ``live``, or None when it may."""
     if not target:

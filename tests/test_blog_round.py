@@ -590,6 +590,45 @@ class WriteTests(Library):
         self.conn.commit()
         self.assertEqual(self.work.lost_to_alt(), [])
 
+    def test_featured_go_adds_featured_last_and_keeps_the_rest(self):
+        said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": LAKE}]})
+        self.assertEqual(self.session.posts[LAKE]["categories"], ["Family", "Featured"])
+        self.assertEqual(said["written"], ["blog-100: Family, Featured"])
+        filings = {row["source_id"]: row for row in self.work.made.filings}
+        self.assertEqual(json.loads(filings["blog-100"]["categories"]), ["Family", "Featured"])
+        said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": LAKE}]})
+        self.assertEqual(len(self.session.posted), 1)
+
+    def test_featured_writes_count_toward_the_category_cap(self):
+        self.conn.execute(
+            "INSERT INTO events (at, action, target, dry_run, result) "
+            "VALUES (?, 'featured', 'blog-300', 0, 'ok')",
+            (f"{TODAY.isoformat()}T18:00:00Z",),
+        )
+        self.assertEqual(self.work.done_today()["categories"], 1)
+
+    def test_candidates_alone_write_no_featured(self):
+        proposals = {"featured": [{"source_id": "blog-100", "url": LAKE}]}
+        self.work.write(proposals)
+        self.assertEqual(self.session.posted, [])
+
+    def test_featured_go_refuses_a_kind_never_featured(self):
+        self.conn.execute("UPDATE labels SET kind = 'link' WHERE source_id = 'blog-100'")
+        said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": LAKE}]})
+        self.assertEqual(self.session.posted, [])
+        self.assertIn("never Featured", said["left"][0])
+
+    def test_featured_go_leaves_a_post_someone_else_changed(self):
+        self.session.posts[LAKE]["categories"] = ["Coffee"]
+        said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": LAKE}]})
+        self.assertEqual(self.session.posted, [])
+        self.assertIn("someone else changed", said["left"][0])
+
+    def test_featured_go_refuses_a_url_that_is_not_the_post(self):
+        said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": COFFEE}]})
+        self.assertEqual(self.session.posted, [])
+        self.assertIn("not that post", said["left"][0])
+
     def test_compare_and_set_adopts_a_change_made_since_the_proposal(self):
         proposals = self._proposals()
         self.session.posts[COFFEE]["categories"] = ["Family"]

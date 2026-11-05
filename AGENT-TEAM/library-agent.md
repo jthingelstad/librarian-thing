@@ -57,6 +57,8 @@ ingest-change follow-ups are explicit starts.
 7. **Featured.** The report lists the titled posts that went up a week ago,
    with their evidence. Note candidates daily; decide on Sundays, by the
    plan's "Featured". The first list goes to Jamie before anything is written.
+   A decided post goes in the proposals file's `featured_go` list (`source_id`
+   and `url`), which `--write` applies; the round never fills that list itself.
 8. **Close out.** Read each written post's live page. The round uploads the
    library; start the corpus build if `stale` says so
    (`gh workflow run deploy.yml -f scope=library`), never Friday or Saturday
