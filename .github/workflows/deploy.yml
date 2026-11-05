@@ -145,6 +145,7 @@ jobs:
               echo "reference_corpus=$corpus"
               echo "links_corpus=$corpus"
               echo "lambda=true"
+              echo "rerank_eval=true"
             } >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -157,15 +158,29 @@ jobs:
           links_corpus="${{ steps.library.outputs.links_corpus }}"
           lambda=false
 
+          # Whether the tool-surface eval reranks (the step below says why).
+          # False only on a push whose whole diff is known and touches no
+          # retrieval code and no corpus: a library round's dispatch, a force
+          # push, a first commit or a diff that cannot be read all rerank.
+          rerank_eval=false
+          if [[ "${{ github.event_name }}" != "push" || "${{ github.event.forced }}" == "true" ]]; then
+            rerank_eval=true
+          fi
+
           changed=""
           if [[ "${{ github.event_name }}" == "push" ]]; then
             base="${{ github.event.before }}"
             if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
               base="HEAD~1"
+              rerank_eval=true
             fi
             if ! changed="$(git diff --name-only "$base" HEAD)"; then
               echo "Could not diff against $base; falling back to HEAD commit files."
               changed="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+              rerank_eval=true
+            fi
+            if [[ -z "$changed" ]]; then
+              rerank_eval=true
             fi
             printf '%s\n' "$changed"
           fi
@@ -249,6 +264,31 @@ jobs:
             lambda=true
           fi
 
+          # Retrieval code: what the eval imports (scripts/eval-tools.mjs and
+          # everything it reaches), so what can move a search answer, plus how
+          # the eval and the keyword index are built, and tool-evidence, which
+          # reads the rerank's scores. shared/prompts.mts is left out on
+          # purpose: the eval takes only the tool specs, titles and version
+          # from it, none of which can move a rank and all of which the
+          # rerank-free run checks, and the rest of it is Thingy's words.
+          # tests/test_corpus_gate.py holds this list to the eval's imports.
+          if has_change \
+            '^apps/librarian/lambda/shared/(archive-lens|archive-tools|aws-clients|corpus-loader|corpus-stats|faq|keyword-index|logging|matcher|mcp|mcp-prompts|mcp-resources|photo-view|readers|retrieval|scope|source-identity|tool-evidence)\.mts$' \
+            '^apps/librarian/lambda/shared/faq\.json$' \
+            '^apps/librarian/lambda/prompts/tool-(specs|titles)\.json$' \
+            '^apps/librarian/lambda/scripts/(build|build-keyword-index|eval-completeness|eval-tools|keyword-index-coverage|load-corpora)\.mjs$' \
+            '^apps/librarian/lambda/eval/baseline\.json$' \
+            '^apps/librarian/lambda/(package|package-lock|tsconfig\.build)\.json$' \
+            '^pipeline/deploy/upload_keyword_index\.py$' \
+            '^\.github/workflows/deploy\.yml$'; then
+            rerank_eval=true
+          fi
+
+          # A rebuilt corpus moves what the rerank sees.
+          if [[ "$weekly_corpus" == true || "$blog_corpus" == true || "$podcast_corpus" == true || "$reference_corpus" == true || "$links_corpus" == true ]]; then
+            rerank_eval=true
+          fi
+
           {
             echo "weekly_corpus=$weekly_corpus"
             echo "blog_corpus=$blog_corpus"
@@ -256,6 +296,7 @@ jobs:
             echo "reference_corpus=$reference_corpus"
             echo "links_corpus=$links_corpus"
             echo "lambda=$lambda"
+            echo "rerank_eval=$rerank_eval"
           } >> "$GITHUB_OUTPUT"
 
       # The real-archive tests skip without an export; here one is required.
@@ -270,12 +311,19 @@ jobs:
       # Layers 2+3 of the tool-surface eval: response invariants and
       # known-answer fixtures against the real corpora (from S3), plus the
       # committed recall baseline. Failures block the deploy.
+      #
+      # Every run checks everything; a push that touches no retrieval code and
+      # no corpus checks it on the order readers would get if the rerank were
+      # down. Its 22 Cohere rerank calls cost about 8 cents a run, and those
+      # pushes cannot move what the rerank does (Jamie, 2026-11-05). Only the
+      # literal output false turns it off.
       - name: Tool-surface eval (invariants + known answers)
         run: npm --prefix apps/librarian/lambda run build && node apps/librarian/lambda/scripts/eval-tools.mjs
         env:
           # A push that rebuilds a corpus moves recall on purpose; the corpus
           # gate below checks the baseline against the candidates instead.
           EVAL_SKIP_BASELINE: ${{ (steps.changes.outputs.weekly_corpus == 'true' || steps.changes.outputs.blog_corpus == 'true' || steps.changes.outputs.podcast_corpus == 'true' || steps.changes.outputs.reference_corpus == 'true' || steps.changes.outputs.links_corpus == 'true') && '1' || '0' }}
+          LIBRARIAN_RERANK_ENABLED: ${{ steps.changes.outputs.rerank_eval == 'false' && '0' || '1' }}
 
       # Audio pointers on issue records (librarian_core.audio) come from the
       # weekly site's archive pages, which the library carries in

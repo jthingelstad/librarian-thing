@@ -9,6 +9,9 @@ from __future__ import annotations
 import csv
 import importlib.util
 import json
+import os
+import re
+import subprocess
 import tempfile
 import unittest
 import unittest.mock
@@ -201,6 +204,137 @@ class WorkflowTest(unittest.TestCase):
         self.assertLess(stale, self.names.index("Detect changes"))
         self.assertIn("library.py stale", self.steps[stale]["run"])
         self.assertIn("rm -rf data", self.steps[export]["run"])
+
+    def detect_changes(self, *, event="push", scope="", before=None, forced=False, files=("x",)):
+        """Run the workflow's real Detect changes script over a throwaway repo."""
+        script = self.steps[self.names.index("Detect changes")]["run"]
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            repo.mkdir()
+
+            def git(*args):
+                return subprocess.run(
+                    ["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
+                    cwd=repo,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout.strip()
+
+            git("init", "-q")
+            git("commit", "-q", "--allow-empty", "-m", "first")
+            start = git("rev-parse", "HEAD")
+            for name in files:
+                path = repo / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("x")
+            git("add", ".")
+            git("commit", "-q", "--allow-empty", "-m", "change")
+            output = Path(tmp) / "output"
+            for expression, value in {
+                "github.event_name": event,
+                "inputs.scope": scope,
+                "github.event.before": start if before is None else before,
+                "github.event.forced": "true" if forced else "false",
+            }.items():
+                script = script.replace("${{ " + expression + " }}", value)
+            script = re.sub(r"\$\{\{ steps\.library\.outputs\.\w+ \}\}", "false", script)
+            subprocess.run(
+                ["bash", "-c", script],
+                cwd=repo,
+                check=True,
+                capture_output=True,
+                env={**os.environ, "GITHUB_OUTPUT": str(output)},
+            )
+            return dict(line.split("=", 1) for line in output.read_text().splitlines())
+
+    def rerank_eval(self, *files):
+        return self.detect_changes(files=files)["rerank_eval"]
+
+    def test_the_eval_turns_the_rerank_off_only_on_the_literal_false(self):
+        env = self.steps[self.names.index("Tool-surface eval (invariants + known answers)")]["env"]
+        self.assertEqual(
+            env["LIBRARIAN_RERANK_ENABLED"],
+            "${{ steps.changes.outputs.rerank_eval == 'false' && '0' || '1' }}",
+        )
+        gate = self.steps[self.names.index("Corpus gate (eval the candidate corpora)")]
+        self.assertNotIn("LIBRARIAN_RERANK_ENABLED", gate["env"])
+        self.assertNotIn("LIBRARIAN_RERANK_ENABLED", self.workflow.get("env", {}))
+        self.assertNotIn(
+            "LIBRARIAN_RERANK_ENABLED", self.workflow["jobs"]["produce"].get("env", {})
+        )
+
+    def test_a_push_away_from_search_skips_the_rerank(self):
+        for path in (
+            "apps/librarian/infra/cloudformation.yaml",
+            "apps/librarian/lambda/auth/handler.mts",
+            "apps/librarian/lambda/shared/prompts.mts",
+            "apps/librarian/lambda/prompts/premium-thank-you.md",
+            "AGENT-TEAM/run-librarian.md",
+        ):
+            self.assertEqual(self.rerank_eval(path), "false", path)
+
+    def test_retrieval_code_and_corpus_inputs_rerank(self):
+        for path in (
+            "apps/librarian/lambda/shared/retrieval.mts",
+            "apps/librarian/lambda/eval/baseline.json",
+            "apps/librarian/lambda/prompts/tool-specs.json",
+            ".github/workflows/deploy.yml",
+            "pipeline/corpus/build.py",
+            "pipeline/blog/round/blog_round.py",
+            "librarian-core/librarian_core/corpus.py",
+        ):
+            self.assertEqual(self.rerank_eval(path), "true", path)
+
+    def test_every_file_the_eval_imports_reranks(self):
+        # A file that joins the eval's imports joins the list, so a change to
+        # it cannot pass with the rerank off. prompts.mts is the one exception
+        # (deploy.yml says why).
+        lambda_dir = REPO / "apps" / "librarian" / "lambda"
+        eval_tools = lambda_dir / "scripts" / "eval-tools.mjs"
+        pending = [eval_tools]
+        pending += [
+            lambda_dir / "shared" / f"{name}.mts"
+            for name in re.findall(r"distDir, 'shared/([\w-]+)\.mjs'", eval_tools.read_text())
+        ]
+        seen = set()
+        while pending:
+            path = pending.pop()
+            if path in seen:
+                continue
+            seen.add(path)
+            for spec in re.findall(
+                r"""(?:from\s+|import\(\s*)['"](\.[^'"]+)['"]""", path.read_text()
+            ):
+                target = (path.parent / spec).resolve()
+                if not target.exists():
+                    target = target.with_suffix(".mts")
+                self.assertTrue(target.exists(), f"{path}: {spec}")
+                pending.append(target)
+        self.assertIn(lambda_dir / "shared" / "retrieval.mts", seen)
+        paths = [str(path.relative_to(REPO)) for path in seen]
+        paths = [path for path in paths if path != "apps/librarian/lambda/shared/prompts.mts"]
+        self.assertGreater(len(paths), 15)
+        for path in paths:
+            self.assertEqual(self.rerank_eval(path), "true", path)
+
+    def test_an_unknown_diff_reranks(self):
+        safe = ("apps/librarian/infra/cloudformation.yaml",)
+        self.assertEqual(self.detect_changes(files=safe)["rerank_eval"], "false")
+        for before in ("", "0" * 40, "f" * 40):
+            self.assertEqual(
+                self.detect_changes(files=safe, before=before)["rerank_eval"], "true", before
+            )
+        self.assertEqual(self.detect_changes(files=safe, forced=True)["rerank_eval"], "true")
+        self.assertEqual(self.detect_changes(files=())["rerank_eval"], "true")
+
+    def test_a_dispatch_always_reranks(self):
+        for scope in ("code", "full", "library"):
+            self.assertEqual(
+                self.detect_changes(event="workflow_dispatch", scope=scope)["rerank_eval"],
+                "true",
+                scope,
+            )
 
     def test_tests_require_the_exported_archive(self):
         tests = self.names.index("Run Python tests")
