@@ -327,8 +327,11 @@ Suggestions
   duplicate, a backdated post, a trip under way, what is climbing). Not a typo
   or link hunt. A suggestion shows once when new; Sunday lists the open ones.
   Jamie acts on one by telling the agent in Codex or on micro.blog.
-- **NEEDS JAMIE** only for the first Featured list, and a forced rebuild if
-  live pages stay stale after a re-file.
+- **NEEDS JAMIE** only for the first Featured list.
+- **Live pages are micro.blog's to tend** (Jamie, 2026-11-05: rebuilds would
+  be nearly daily otherwise). No forced rebuilds. The report counts writes
+  still behind on the live page; pages behind across rounds become a suggestion
+  with a bug report for Manton, for Jamie to send.
 - The `events` table is the audit trail; there are no run-note commits.
 
 ## Guards (in code, not just the prompt)

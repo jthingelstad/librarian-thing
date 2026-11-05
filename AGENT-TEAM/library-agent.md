@@ -111,7 +111,14 @@ know, never a question you wait on: renames, merges, splits, retirements,
 and what you noticed in the content (a broken photo, a duplicate, a trip
 under way, what is climbing). Not a typo or link hunt. A suggestion shows
 once when new; Sunday lists the open ones. NEEDS JAMIE only for the first
-Featured list, and a forced rebuild when live pages stay stale after a re-file.
+Featured list.
+
+micro.blog tends the live site, and its pages can lag the source by a day or
+more. Never trigger or ask for a rebuild (Jamie, 2026-11-05). In the report,
+say how many of the last round's writes are still behind on the live page,
+after reading the source for any that look lost. When pages stay behind
+across rounds, so micro.blog looks really broken, make it a suggestion with a
+short bug report for Manton, for Jamie to send.
 
 ## Success
 
