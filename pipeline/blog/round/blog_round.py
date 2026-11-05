@@ -466,7 +466,9 @@ class Round:
             ((self.today - timedelta(days=1)).isoformat(),),
         ):
             if central_day(row["at"]) == self.today.isoformat():
-                done[row["action"]] += 1
+                # A Featured write is a category write to the cap.
+                key = "categories" if row["action"] == "featured" else row["action"]
+                done[key] += 1
         return done
 
     def write(self, proposals: dict[str, Any]) -> dict[str, list[str]]:

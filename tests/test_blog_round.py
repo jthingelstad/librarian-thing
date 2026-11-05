@@ -599,6 +599,14 @@ class WriteTests(Library):
         said = self.work.write({"featured_go": [{"source_id": "blog-100", "url": LAKE}]})
         self.assertEqual(len(self.session.posted), 1)
 
+    def test_featured_writes_count_toward_the_category_cap(self):
+        self.conn.execute(
+            "INSERT INTO events (at, action, target, dry_run, result) "
+            "VALUES (?, 'featured', 'blog-300', 0, 'ok')",
+            (f"{TODAY.isoformat()}T18:00:00Z",),
+        )
+        self.assertEqual(self.work.done_today()["categories"], 1)
+
     def test_candidates_alone_write_no_featured(self):
         proposals = {"featured": [{"source_id": "blog-100", "url": LAKE}]}
         self.work.write(proposals)
