@@ -315,8 +315,8 @@ jobs:
       # Every run checks everything; a push that touches no retrieval code and
       # no corpus checks it on the order readers would get if the rerank were
       # down. Its 22 Cohere rerank calls cost about 8 cents a run, and those
-      # pushes cannot move what the rerank does (Jamie, 2026-11-05). Only the
-      # literal output false turns it off.
+      # pushes cannot move what the rerank does. Only the literal output false
+      # turns it off.
       - name: Tool-surface eval (invariants + known answers)
         run: npm --prefix apps/librarian/lambda run build && node apps/librarian/lambda/scripts/eval-tools.mjs
         env:
