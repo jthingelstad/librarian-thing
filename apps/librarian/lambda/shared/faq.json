@@ -25,7 +25,7 @@
         },
         {
           "question": "Who writes it?",
-          "answer": "Just Jamie. There's no staff, no editor, no syndication deal. Every link is read, every comment is written, and every issue is sent by one person. That's the point."
+          "answer": "Jamie, apart from two sections. There's no staff, no editor, no syndication deal. Jamie reads every link, writes every comment and sends every issue. Thingy, Jamie's agent sidekick, writes the Supporting Membership section and Echoes, and both carry his name."
         }
       ]
     },
@@ -92,7 +92,7 @@
         },
         {
           "question": "How is the nonprofit chosen each year?",
-          "answer": "Jamie selects a nonprofit annually and announces it on the [members page](/members/). Past recipients reflect causes Jamie cares about — community, education, and digital citizenship."
+          "answer": "Jamie selects a nonprofit annually and announces it on the [members page](/members/). Past recipients are digital nonprofits that are doing good things."
         },
         {
           "question": "Are there ads or sponsorships?",
@@ -147,7 +147,7 @@
       "entries": [
         {
           "question": "How is this site built?",
-          "answer": "The site is a custom static build using [Eleventy (11ty)](https://www.11ty.dev/) for the archive pages, with [Pagefind](https://pagefind.app/) for search and [Tinylytics](https://tinylytics.app/) for lightweight analytics. Issues are stored as individual markdown files and synced bidirectionally with Buttondown. It's an indie-web project, owned end-to-end."
+          "answer": "The site is a custom static build using [Eleventy (11ty)](https://www.11ty.dev/) for the archive pages, with [Pagefind](https://pagefind.app/) for search and [Tinylytics](https://tinylytics.app/) for lightweight analytics. Issues are stored as individual markdown files, and WT Builder, Jamie's own authoring app, publishes each one. It's an indie-web project, owned end-to-end."
         },
         {
           "question": "Why a custom site instead of using Buttondown's hosted archive?",

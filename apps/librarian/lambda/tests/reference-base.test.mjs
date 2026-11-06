@@ -483,6 +483,18 @@ test('get_source, source_neighborhood and list_content still reach things, pages
   assert.ok(faq.total_count >= 1, JSON.stringify(faq).slice(0, 300));
 });
 
+test('search_faq counts the years running in full years, as the site does', async () => {
+  const corpora = fixtures();
+  const [issue] = corpora.weekly_thing.issues;
+  corpora.weekly_thing.issues = [
+    { ...issue, number: 1, publish_date: '2017-05-13T13:00:00Z' },
+    { ...issue, number: 354, publish_date: '2026-10-24T12:00:00Z' }
+  ];
+  primeCorpusCachesForTests(corpora);
+  const faq = await ARCHIVE_TOOLS.search_faq({ query: 'How long has it been running?' }, CTX);
+  assert.match(JSON.stringify(faq), /over 9 years/, JSON.stringify(faq).slice(0, 300));
+});
+
 test('get_source reads a reference document by doc-<name>, in any scope', async () => {
   primeCorpusCachesForTests(fixtures());
   for (const scope of ['weekly_thing', 'blog', 'all']) {

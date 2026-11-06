@@ -1603,11 +1603,21 @@ def _archive_facts(archive_dir: Path) -> dict[str, Any]:
                 "publish_date": metadata.get("publish_date") or "",
             }
         )
-    years = [parse_year(issue["publish_date"]) for issue in issues if issue["publish_date"]]
-    years = [year for year in years if year]
+    dates = sorted(
+        str(issue["publish_date"])[:10]
+        for issue in issues
+        if re.match(r"\d{4}-\d{2}-\d{2}", str(issue["publish_date"]))
+    )
+    years_active = 0
+    if dates:
+        # Full years from the first issue to the newest, as weekly's archiveStats
+        # counts them: May 2017 to October 2026 is nine years, though it touches ten
+        # calendar years.
+        first, latest = dates[0], dates[-1]
+        years_active = int(latest[:4]) - int(first[:4]) - (0 if latest[5:] >= first[5:] else 1)
     return {
         "issue_count": len(issues),
-        "years_active": max(years) - min(years) + 1 if years else 0,
+        "years_active": years_active,
         "latest_issue_number": issues[-1]["number"] if issues else None,
     }
 
