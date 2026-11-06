@@ -851,11 +851,14 @@ function corpusLinkRecords(corpus: Corpus, kind: string) {
 async function faqReplacements() {
   const corpus = await loadCorpus();
   const issues = (corpus.issues || []).filter((issue) => issue.publish_date);
-  const years = issues.map((issue) => Number(String(issue.publish_date || '').slice(0, 4))).filter((year) => year > 0);
-  const firstYear = years.length ? Math.min(...years) : 2017;
-  const latestYear = years.length ? Math.max(...years) : new Date().getUTCFullYear();
+  const dates = issues.map((issue) => String(issue.publish_date).slice(0, 10)).sort();
+  const first = dates[0] || '2017-05-13';
+  const latest = dates[dates.length - 1] || new Date().toISOString().slice(0, 10);
+  // Full years from the first issue to the newest, as weekly's archiveStats counts
+  // them: May 2017 to October 2026 is nine years, though it touches ten calendar years.
+  const reachedAnniversary = latest.slice(5) >= first.slice(5);
   return {
-    yearsActive: latestYear - firstYear + 1,
+    yearsActive: Number(latest.slice(0, 4)) - Number(first.slice(0, 4)) - (reachedAnniversary ? 0 : 1),
     issueCount: corpus.issue_count || issues.length
   };
 }

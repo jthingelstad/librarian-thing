@@ -160,6 +160,19 @@ class LibrarianCorpusTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def test_years_active_counts_full_years_not_calendar_years(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            archive = Path(tmp) / "archive"
+            archive.mkdir()
+            self._seed_archive(archive)
+            self.assertEqual(core._archive_facts(archive)["years_active"], 9)
+            for latest, years in (("2027-05-12", 9), ("2027-05-13", 10)):
+                (archive / "349" / "archive.md").write_text(
+                    f"---\nnumber: 349\nsubject: WT349\npublish_date: {latest}T12:00:00Z\n---\nLatest.\n",
+                    encoding="utf-8",
+                )
+                self.assertEqual(core._archive_facts(archive)["years_active"], years, latest)
+
     def test_about_page_chunk_carries_origin_story(self):
         # About.njk content lands as a site_page chunk so retrieval can
         # surface the founding date / cadence / podcast availability
@@ -292,9 +305,9 @@ class LibrarianCorpusTests(unittest.TestCase):
         self.assertIn("faq:the-basics:1", ids)
         self.assertIn("faq:membership:0", ids)
         # Interpolation resolved against the archive we seeded (2 issues,
-        # spanning 2017 → 2026, so 10 years active).
+        # from May 2017 to May 2026, so 9 full years active).
         running_text = next(c["text"] for c in faq if c["id"] == "faq:the-basics:1")
-        self.assertIn("10 years and 2 issues", running_text)
+        self.assertIn("9 years and 2 issues", running_text)
         # Section name preserved as the chunk label.
         membership_chunk = next(c for c in faq if c["id"] == "faq:membership:0")
         self.assertEqual(membership_chunk["section"], "Membership")
