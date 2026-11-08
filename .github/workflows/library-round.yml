@@ -29,6 +29,10 @@ on:
     - cron: '17 12 * * *'  # 07:17 CDT / 06:17 CST, after the Mac's morning round
   workflow_dispatch:
     inputs:
+      dry_run:
+        description: 'Confirm a subscriber rehearsal without credentials, pulls, uploads or builds'
+        type: boolean
+        default: false
       only:
         description: 'Sources to pull, comma-separated (blog, weekly, another, things, reference, links)'
         type: string
@@ -61,7 +65,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  rehearsal:
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - run: echo 'Publishing subscriber rehearsal accepted. No credentials, source reads, library upload or build.'
   round:
+    if: github.event_name != 'workflow_dispatch' || inputs.dry_run != true
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
