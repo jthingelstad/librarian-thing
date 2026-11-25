@@ -17,6 +17,11 @@ the issue from weekly.thingelstad.com. The same round pulls the blog, the
 podcast and Things I've built. This repo's job is to keep the archive true,
 build the corpora, and serve retrieval.
 
+The library workflow's `dry_run` input is a subscriber rehearsal: a separate
+job with no credentials, pulls, uploads or builds. Ordinary manual rounds
+keep their existing default. The old WT Builder nudge stays until the bus
+rule has carried a natural real send and its received receipt.
+
 Until 2026-08-28 this repo was Studio, the publishing system. The workshop
 bot, Eddy, the site handoff, and the audio pipeline are preserved in git
 history at the rename boundary (studio-thing → librarian-thing), not here.
