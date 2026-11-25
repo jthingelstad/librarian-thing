@@ -31,11 +31,11 @@
     "@aws-sdk/client-s3": "^3.1090.0",
     "@aws-sdk/client-secrets-manager": "^3.1145.0",
     "@aws-sdk/credential-provider-node": "^3.972.86",
-    "@hono/node-server": "^2.1.5",
+    "@hono/node-server": "^2.1.9",
     "@smithy/protocol-http": "^5.6.2",
     "@smithy/signature-v4": "^5.7.4",
     "@streamparser/json": "^0.0.26",
-    "hono": "^4.13.13",
+    "hono": "^4.13.19",
     "markdown-it": "^14.3.2"
   },
   "devDependencies": {
